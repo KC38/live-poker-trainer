@@ -51,7 +51,6 @@ class TableSession {
     this.error,
     this.showEvAudit = false,
     this.lastAction,
-    this.voiceHintShown = false,
     this.replaying = false,
     this.collectingChips = false,
   });
@@ -62,7 +61,6 @@ class TableSession {
   final String? error;
   final bool showEvAudit;
   final PokerAction? lastAction;
-  final bool voiceHintShown;
 
   /// True while villain actions are being replayed and the hero must wait.
   final bool replaying;
@@ -90,7 +88,6 @@ class TableSession {
     bool? showEvAudit,
     PokerAction? lastAction,
     bool clearLastAction = false,
-    bool? voiceHintShown,
     bool? replaying,
     bool? collectingChips,
   }) {
@@ -101,7 +98,6 @@ class TableSession {
       error: clearError ? null : (error ?? this.error),
       showEvAudit: showEvAudit ?? this.showEvAudit,
       lastAction: clearLastAction ? null : (lastAction ?? this.lastAction),
-      voiceHintShown: voiceHintShown ?? this.voiceHintShown,
       replaying: replaying ?? this.replaying,
       collectingChips: collectingChips ?? this.collectingChips,
     );
@@ -124,7 +120,6 @@ class GameController extends StateNotifier<TableSession> {
 
   /// Current table session id (exposed for tests and future hand logging).
   String get sessionId => _sessionId;
-  bool _voiceHintShown = false;
 
   /// Incremented per deal / hero action so a stale replay loop can bail out.
   int _replayToken = 0;
@@ -145,10 +140,7 @@ class GameController extends StateNotifier<TableSession> {
   /// screen shows an in-table loading state instead of stale cards / audio.
   void prepareTraining() {
     _replayToken++;
-    state = TableSession(
-      loading: true,
-      voiceHintShown: _voiceHintShown,
-    );
+    state = const TableSession(loading: true);
   }
 
   /// Starts (or restarts) unified full-hand training.
@@ -207,7 +199,6 @@ class GameController extends StateNotifier<TableSession> {
       state = TableSession(
         game: _engine!.state,
         loading: false,
-        voiceHintShown: _voiceHintShown,
         coach: CoachFeedback(message: CoachLines.dealIntro(_engine!.state)),
       );
       await _replayUntilHero(pace: ReplayPace.deal, token: token);

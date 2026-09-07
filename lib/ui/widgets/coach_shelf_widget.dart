@@ -71,8 +71,7 @@ class _CoachShelfWidgetState extends State<CoachShelfWidget> {
 
   /// Extra decision context only shown while expanded.
   bool get _hasHiddenContext {
-    return (_feedback.hasVerdict && _optimalLine != null) ||
-        _feedback.voiceNote != null;
+    return _feedback.hasVerdict && _optimalLine != null;
   }
 
   /// Whether the advice benefits from a collapser (long copy or hidden context).
@@ -128,18 +127,6 @@ class _CoachShelfWidgetState extends State<CoachShelfWidget> {
                 fontSize: 9.5,
                 height: 1.35,
                 color: AppColors.slate,
-              ),
-            ),
-          ),
-        if (showExpanded && _feedback.voiceNote != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: Text(
-              _feedback.voiceNote!,
-              style: GoogleFonts.manrope(
-                fontSize: 10.5,
-                color: AppColors.warning,
-                height: 1.3,
               ),
             ),
           ),

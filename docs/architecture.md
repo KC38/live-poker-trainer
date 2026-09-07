@@ -82,7 +82,7 @@ speech is raw 16-bit PCM / L16 (often `audio/pcm;rate=24000`), which
 support directory keyed by a SHA-256 of text + voice + model, bounded by bytes
 and a TTL with LRU eviction, so repeated lines are instant and free. When no
 key, network, or cached clip is available, `flutter_tts` speaks the text and the
-reason is written to the debug log as `CoachVoicePlayback.diagnostic`. Nothing
+reason travels as `CoachVoicePlayback.diagnostic` into `DiagnosticsLog`. Nothing
 about the fallback — least of all API-key configuration — reaches the UI.
 
 ## Lineup

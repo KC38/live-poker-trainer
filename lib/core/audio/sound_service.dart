@@ -9,6 +9,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:live_poker_trainer/core/audio/sfx_ducker.dart';
 import 'package:live_poker_trainer/core/audio/voice_cache.dart';
 import 'package:live_poker_trainer/core/constants/config.dart';
+import 'package:live_poker_trainer/core/diagnostics/diagnostics_log.dart';
 import 'package:live_poker_trainer/services/gemini_service.dart';
 
 /// Result of attempting coach voice playback.
@@ -16,15 +17,19 @@ class CoachVoicePlayback {
   /// Creates a playback result.
   const CoachVoicePlayback({
     required this.spoke,
-    this.note,
+    this.diagnostic,
     this.fromCache = false,
     this.usedDeviceVoice = false,
   });
 
   final bool spoke;
 
-  /// Optional one-shot note (e.g. muted / unlock); may be logged or shown.
-  final String? note;
+  /// Developer-facing reason the preferred path was not used.
+  ///
+  /// Logged to [DiagnosticsLog], never rendered. The coach degrades to the
+  /// device voice (or to silence) without ever asking the player to configure
+  /// anything.
+  final String? diagnostic;
 
   /// Whether the clip came from the on-disk cache (instant playback).
   final bool fromCache;
@@ -283,18 +288,18 @@ class SoundService {
     bool enabled = true,
   }) async {
     if (!enabled || !ttsEnabled) {
-      return const CoachVoicePlayback(
+      return _report(const CoachVoicePlayback(
         spoke: false,
-        note: 'Coach voice is muted in Settings.',
-      );
+        diagnostic: 'coach voice muted in settings',
+      ));
     }
     final cleaned = text.trim();
     if (cleaned.isEmpty) return const CoachVoicePlayback(spoke: false);
     if (!_unlocked) {
-      return const CoachVoicePlayback(
+      return _report(const CoachVoicePlayback(
         spoke: false,
-        note: 'Tap Start training once to unlock coach voice.',
-      );
+        diagnostic: 'audio not unlocked yet',
+      ));
     }
 
     final gemini = this.gemini;
@@ -323,21 +328,34 @@ class SoundService {
       }
     }
 
-    // Last resort: flat device voice.
+    // Last resort: the flat device voice, used quietly. The player is never
+    // told the Gemini voice was skipped, and never asked for a key.
     final spoke = await _speakWithDevice(cleaned);
     if (spoke) {
-      return CoachVoicePlayback(
+      return _report(CoachVoicePlayback(
         spoke: true,
         usedDeviceVoice: true,
-        note: gemini != null && gemini.hasApiKey
-            ? null
-            : 'Device voice — add a Gemini API key for the real coach voice.',
+        diagnostic: 'gemini speech unavailable, used device voice',
+      ));
+    }
+    return _report(const CoachVoicePlayback(
+      spoke: false,
+      diagnostic: 'no voice backend could play the line',
+    ));
+  }
+
+  /// Sends a fallback reason to diagnostics only, so nothing about audio
+  /// configuration can leak into the coach shelf.
+  CoachVoicePlayback _report(CoachVoicePlayback playback) {
+    final diagnostic = playback.diagnostic;
+    if (diagnostic != null) {
+      DiagnosticsLog.info(
+        'SoundService.speakCoachLine',
+        diagnostic,
+        extra: {'hasKey': Config.hasGeminiKey},
       );
     }
-    return const CoachVoicePlayback(
-      spoke: false,
-      note: 'Coach voice failed to play on this device.',
-    );
+    return playback;
   }
 
   /// Pre-synthesizes and caches [text] without playing it.

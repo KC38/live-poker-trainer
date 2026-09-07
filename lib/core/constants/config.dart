@@ -1,8 +1,10 @@
 /// App-wide configuration for Gemini and gameplay defaults.
 ///
-/// API key resolution order:
+/// API key resolution order (developer configuration only — the key ships with
+/// the build and is never requested from the player):
 /// 1. `--dart-define=GEMINI_API_KEY=...`
-/// 2. `.env` via flutter_dotenv
+/// 2. `.env` via flutter_dotenv (declared as an asset in `pubspec.yaml`)
+/// 3. `.env.example` placeholder, which resolves to no key
 library;
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -32,16 +34,27 @@ class Config {
   );
 
   /// Resolved Gemini API key (never log or commit this value).
+  ///
+  /// The key ships with the build — players are never asked to supply one.
   static String get geminiApiKey {
     if (_dartDefineKey.trim().isNotEmpty) {
       return _dartDefineKey.trim();
     }
-    final fromEnv = dotenv.maybeGet('GEMINI_API_KEY') ?? '';
-    return fromEnv.trim();
+    // Reading `dotenv.env` before `load()` throws, which would take down any
+    // caller that runs outside `main` (unit tests, isolates).
+    if (!dotenv.isInitialized) return '';
+    return (dotenv.maybeGet('GEMINI_API_KEY') ?? '').trim();
   }
 
   /// Whether a usable API key is present.
   static bool get hasGeminiKey => geminiApiKey.isNotEmpty;
+
+  /// Where the key came from, for diagnostics. Never includes the key itself.
+  static String get geminiKeySource {
+    if (_dartDefineKey.trim().isNotEmpty) return 'dart-define';
+    if (!dotenv.isInitialized) return 'unloaded';
+    return hasGeminiKey ? 'env-asset' : 'missing';
+  }
 
   /// Gemini generateContent endpoint for [model] (defaults to [geminiModel]).
   static Uri geminiGenerateContentUri({String? model}) {

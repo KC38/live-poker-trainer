@@ -28,7 +28,6 @@ class CoachFeedback {
     this.heroAction,
     this.evDeltaBb = 0,
     this.isSpeaking = false,
-    this.voiceNote,
     this.repeatCount = 0,
     this.improvementStreak = 0,
     this.patternLabel,
@@ -41,9 +40,6 @@ class CoachFeedback {
   final String? heroAction;
   final double evDeltaBb;
   final bool isSpeaking;
-
-  /// One-shot note when coach voice could not play (missing key, muted, etc.).
-  final String? voiceNote;
 
   /// How many times this INCORRECT pattern has now occurred (0 / 1 = not a
   /// repeat, so no indicator is shown).
@@ -73,8 +69,6 @@ class CoachFeedback {
     String? heroAction,
     double? evDeltaBb,
     bool? isSpeaking,
-    String? voiceNote,
-    bool clearVoiceNote = false,
     int? repeatCount,
     int? improvementStreak,
     String? patternLabel,
@@ -87,7 +81,6 @@ class CoachFeedback {
       heroAction: heroAction ?? this.heroAction,
       evDeltaBb: evDeltaBb ?? this.evDeltaBb,
       isSpeaking: isSpeaking ?? this.isSpeaking,
-      voiceNote: clearVoiceNote ? null : (voiceNote ?? this.voiceNote),
       repeatCount: repeatCount ?? this.repeatCount,
       improvementStreak: improvementStreak ?? this.improvementStreak,
       patternLabel: patternLabel ?? this.patternLabel,

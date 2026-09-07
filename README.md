@@ -89,7 +89,7 @@ Screen layout is a strict stack of bands — header, felt, hero rail, coach shel
 
 Settings → **Chip display** chooses Dollars only, BB only, or Both (default) for hand review, EV, and stats. The live felt is always currency-only so the table stays readable.
 
-Coach voice: Gemini TTS audio (voice `Puck`) via the dedicated `Config.geminiTtsModel`, cached on disk so a repeated line replays instantly and never re-hits the API; device TTS (`flutter_tts`) is the last-resort fallback. Fallbacks are **silent** — the shelf shows the coaching line only, and the reason goes to the debug log (`[coach-voice] …`). Mute via Settings or the coach shelf speaker icon.
+Coach voice: Gemini TTS audio (voice `Puck`) via the dedicated `Config.geminiTtsModel`, cached on disk so a repeated line replays instantly and never re-hits the API; device TTS (`flutter_tts`) is the last-resort fallback. Fallbacks are **silent** — the shelf shows the coaching line only, and the reason goes to `DiagnosticsLog` (context `SoundService.speakCoachLine`, with the key *source* but never the key). Mute via Settings or the coach shelf speaker icon.
 
 Settings → **Music** (default On) plays a quiet lounge ambient loop on Home, independent of table SFX. It fades in on appear, fades out when entering Training, and resumes on return. Coach speech ducks both SFX and BGM.
 
