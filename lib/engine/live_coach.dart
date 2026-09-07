@@ -91,7 +91,7 @@ class LiveCoachGrade {
     }
     if (improvement != null) {
       history.write(' Leak history: the player previously '
-          '${improvement.lastWrongAction.name}ed in this spot '
+          '${_pastTense(improvement.lastWrongAction)} in this spot '
           '${improvement.priorMistakes} times '
           '("${improvement.tag.label}") and just got it right, '
           'streak ${improvement.streak}. Explicitly acknowledge the fix and '
@@ -118,6 +118,13 @@ class LiveCoachGrade {
         'Reference the archetype tendency by name. Do not give generic advice.'
         '$history';
   }
+
+  static String _pastTense(ExploitAction a) => switch (a) {
+        ExploitAction.fold => 'folded',
+        ExploitAction.check => 'checked',
+        ExploitAction.call => 'called',
+        ExploitAction.raise => 'raised',
+      };
 }
 
 /// Grades Hero actions against archetype leaks during full-hand play.

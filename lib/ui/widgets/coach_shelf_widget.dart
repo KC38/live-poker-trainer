@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/engine/leak_lines.dart';
 import 'package:live_poker_trainer/models/coach_feedback.dart';
 
 /// Non-overlapping AI coach panel between the hero rail and the action dock.
@@ -158,7 +159,26 @@ class _CoachShelfWidgetState extends State<CoachShelfWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (hasVerdict) ...[
-              _VerdictBadge(verdict: _feedback.verdict),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _VerdictBadge(verdict: _feedback.verdict),
+                  if (_feedback.isRepeat)
+                    _LeakChip(
+                      label: LeakLines.repeatBadge(_feedback.repeatCount),
+                      color: AppColors.warning,
+                      icon: Icons.replay_rounded,
+                    )
+                  else if (_feedback.isImprovement)
+                    _LeakChip(
+                      label: LeakLines.improvementBadge(
+                        _feedback.improvementStreak,
+                      ),
+                      color: AppColors.success,
+                      icon: Icons.trending_up_rounded,
+                    ),
+                ],
+              ),
               const SizedBox(width: 12),
             ],
             Expanded(
@@ -298,6 +318,53 @@ class _CollapseToggle extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Small "Repeat ×N" / "Improved" indicator under the verdict badge.
+///
+/// Lives inside the verdict column so it never widens the shelf or overlaps
+/// the hero rail above.
+class _LeakChip extends StatelessWidget {
+  const _LeakChip({
+    required this.label,
+    required this.color,
+    required this.icon,
+  });
+
+  final String label;
+  final Color color;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 6),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.16),
+          borderRadius: BorderRadius.circular(7),
+          border: Border.all(color: color.withValues(alpha: 0.7), width: 0.8),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 10, color: color),
+            const SizedBox(width: 3),
+            Text(
+              label,
+              style: GoogleFonts.jetBrainsMono(
+                fontWeight: FontWeight.w800,
+                fontSize: 8.5,
+                color: color,
+                letterSpacing: 0.3,
+              ),
+            ),
+          ],
         ),
       ),
     );

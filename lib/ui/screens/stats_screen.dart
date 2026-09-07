@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
+import 'package:live_poker_trainer/ui/widgets/leak_finder_section.dart';
 
 /// Progress / leak-finder screen.
 class StatsScreen extends ConsumerWidget {
@@ -16,6 +17,7 @@ class StatsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final statsAsync = ref.watch(userStatsProvider);
+    final leaksAsync = ref.watch(mistakeStatsProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Progress')),
@@ -50,6 +52,20 @@ class StatsScreen extends ConsumerWidget {
                   value:
                       '${stats.netEvBb >= 0 ? '+' : ''}${stats.netEvBb.toStringAsFixed(2)} BB',
                   subtitle: 'Lifetime practice',
+                ),
+                const SizedBox(height: 28),
+                leaksAsync.when(
+                  loading: () => const SizedBox(
+                    height: 48,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.gold,
+                        strokeWidth: 2,
+                      ),
+                    ),
+                  ),
+                  error: (e, _) => _EmptyHint('Leak Finder unavailable: $e'),
+                  data: (leaks) => LeakFinderSection(stats: leaks),
                 ),
                 const SizedBox(height: 28),
                 Text(

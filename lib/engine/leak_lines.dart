@@ -42,8 +42,8 @@ class LeakLines {
             '$n times now$session',
         'Repeat #$n: $arch, $street, you $did where $better was the play'
             '$session',
-        'This is becoming a pattern: $n times you have $did here against a '
-            '$arch instead of the $better$session',
+        'This is becoming a pattern: $n times you have $did on the $street '
+            'against a $arch instead of the $better$session',
       ];
       return _pick(options, seed: p.key.hashCode);
     }

@@ -68,6 +68,37 @@ and an INCORRECT verdict explains itself. The same grade builds the Gemini
 prompt (`toPrompt`), keeping the online line grounded in the same facts as the
 offline fallback.
 
+## Leak tracking
+
+`MistakePattern.derive` (`models/mistake_model.dart`) reduces a graded decision
+to a fine **mistake key** `street:archetype:taken->best[:small|:large]`, a
+**context key** `street:archetype:best` (the spot without the hero's action), a
+coarse context key `archetype:best`, and ordered `MistakeTag`s — an
+archetype-specific leak first when one applies (`overbluffing_vs_stations`,
+`folding_too_much_vs_maniacs`, `paying_off_nits`, `raising_into_nits`, …), then
+a generic action-shape tag (`raise_when_call_best`, `sizing_too_small`, …).
+Tag ids are persisted; never rename one.
+
+Persistence lives in `AppDatabase` (schema v2): `mistakes` stores session /
+hand / decision ids, street, archetype, hero action + amount, best action +
+sizing, EV Δ in BB and dollars, the key, tags, and the advice shown;
+`improvement_events` stores each acknowledged fix with its streak. Both carry
+`hand_id` / `decision_id` so they can join the hand-history and coach-decision
+logging tables. `MistakeDao` does the queries: `recordMistake` returns a
+`RepeatInfo` (exact-key count, count this session, coarse-tag count, last
+seen); `findImprovement` matches a CORRECT decision against keys repeated ≥ 2
+times by exact context first, then archetype + best action, and computes the
+streak since the last mistake on that key; `loadStats` builds `MistakeStats`
+for the Leak Finder.
+
+The hook is `GameController.heroAct`: after `LiveCoach.grade`, `MistakeTracker`
+records the mistake or improvement, `LeakLines` prefixes the offline copy with
+rotating repeat / improvement phrasing, and `LiveCoachGrade.toPrompt` appends a
+"Leak history" clause so Gemini names the repeat count or the fix. The Gemini
+line is written back onto the mistake row via `saveAdvice`. `CoachFeedback`
+carries `repeatCount` / `improvementStreak` for the shelf chips, and
+`mistakeStatsProvider` feeds `LeakFinderSection` on the Stats screen.
+
 ## Audio
 
 `SoundService` plays `assets/sounds/{deal,chip,knock,fold,win}.wav`, generated

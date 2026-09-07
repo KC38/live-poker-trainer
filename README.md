@@ -85,6 +85,8 @@ The action **replays one seat at a time** instead of arriving resolved: each vil
 
 The coach grades each hero decision when a clear exploit line exists (**CORRECT** / **INCORRECT**) and explains it in terms of the street, the villain type, and what the better line was.
 
+**Leak tracking.** Every INCORRECT decision is persisted (Drift `mistakes` table) under a stable mistake key — `street:archetype:heroAction->bestAction`, e.g. `river:nit:raise->call`, with `:small` / `:large` appended for sizing misses — plus coarse leak tags (bluffing into stations, folding too much vs maniacs, paying off nits, …). When the same key or leak recurs the coach says so by count ("That's the third time you've raised against a nit on the river…") in both the Gemini line and the offline copy, and the shelf shows a **Repeat ×N** chip. When you later get a previously-repeated spot right, the coach acknowledges the fix ("Nice — last time you raised here; calling was the right adjustment"), an `improvement` event is recorded, and the shelf shows **Improved** (with the streak). The Stats screen's **Leak Finder** lists your top repeated mistakes with counts, last seen, and trend (recurring / improving), plus per-archetype and per-street breakdowns.
+
 Screen layout is a strict stack of bands — header, felt, hero rail, coach shelf, action dock — so the coach can never cover the hero's hole cards, down to a 320pt phone at 9 seats.
 
 Settings → **Chip display** chooses Dollars only, BB only, or Both (default) for hand review, EV, and stats. The live felt is always currency-only so the table stays readable.
