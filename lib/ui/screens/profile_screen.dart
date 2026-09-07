@@ -1,10 +1,10 @@
-/// Player profile: identity, playing style, poker stats, and coach review.
+/// Progress ("You"): identity, style metrics, Leak Finder, charts, AI review.
 ///
-/// The screen is deliberately teach-first. Every rate carries the sample it
-/// came from, taps through to a plain-English explanation of what it measures
-/// and what a healthy number looks like, and shows an em dash with a "needs N
-/// more" hint rather than a misleading figure. The style label is withheld
-/// entirely below [StyleThresholds.minHands] hands.
+/// One Home destination replaces the old split Profile + Stats screens. Every
+/// rate carries the sample it came from, taps through to a plain-English
+/// explanation of what it measures and what a healthy number looks like, and
+/// shows an em dash with a "needs N more" hint rather than a misleading figure.
+/// The style label is withheld entirely below [StyleThresholds.minHands] hands.
 library;
 
 import 'package:fl_chart/fl_chart.dart';
@@ -15,26 +15,41 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/engine/hero_profiler.dart';
 import 'package:live_poker_trainer/models/hero_metrics.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
+import 'package:live_poker_trainer/models/mistake_model.dart';
 import 'package:live_poker_trainer/models/user_stats_model.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/providers/profile_provider.dart';
-import 'package:live_poker_trainer/ui/screens/stats_screen.dart';
-import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/ui/widgets/leak_finder_section.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_avatar.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_identity_sheet.dart';
 
-/// The player's own profile.
+/// Consolidated Progress / You screen (profile + stats + leak finder).
 class ProfileScreen extends ConsumerWidget {
-  /// Creates the profile screen.
+  /// Creates the progress screen.
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileAsync = ref.watch(heroProfileControllerProvider);
     final statsAsync = ref.watch(userStatsProvider);
+    final leaksAsync = ref.watch(mistakeStatsProvider);
+    final canPop = Navigator.of(context).canPop();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Player profile')),
+      appBar: AppBar(
+        title: const Text('Progress'),
+        leading: canPop
+            ? IconButton(
+                tooltip: 'Back',
+                onPressed: () => Navigator.of(context).maybePop(),
+                icon: const Icon(
+                  Icons.arrow_back_ios_new,
+                  size: 18,
+                  color: AppColors.slate,
+                ),
+              )
+            : null,
+      ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: RadialGradient(
@@ -51,6 +66,7 @@ class ProfileScreen extends ConsumerWidget {
           data: (profile) => _ProfileBody(
             profile: profile,
             coachingStats: statsAsync.valueOrNull,
+            leaksAsync: leaksAsync,
           ),
         ),
       ),
@@ -59,10 +75,15 @@ class ProfileScreen extends ConsumerWidget {
 }
 
 class _ProfileBody extends ConsumerWidget {
-  const _ProfileBody({required this.profile, required this.coachingStats});
+  const _ProfileBody({
+    required this.profile,
+    required this.coachingStats,
+    required this.leaksAsync,
+  });
 
   final HeroProfileView profile;
   final UserStatsModel? coachingStats;
+  final AsyncValue<MistakeStats> leaksAsync;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -72,7 +93,11 @@ class _ProfileBody extends ConsumerWidget {
     return RefreshIndicator(
       color: AppColors.gold,
       backgroundColor: AppColors.bgElevated,
-      onRefresh: controller.refreshMetrics,
+      onRefresh: () async {
+        await controller.refreshMetrics();
+        ref.invalidate(mistakeStatsProvider);
+        ref.invalidate(userStatsProvider);
+      },
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 40),
         children: [
@@ -83,8 +108,35 @@ class _ProfileBody extends ConsumerWidget {
           ],
           const SizedBox(height: 22),
           _CoachReviewCard(profile: profile),
+          if (coachingStats != null && coachingStats!.totalSpots > 0) ...[
+            const SizedBox(height: 26),
+            const _SectionTitle('Coaching record'),
+            const SizedBox(height: 10),
+            _CoachingRecord(stats: coachingStats!),
+          ],
+          const SizedBox(height: 26),
+          leaksAsync.when(
+            loading: () => const SizedBox(
+              height: 48,
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.gold,
+                  strokeWidth: 2,
+                ),
+              ),
+            ),
+            error: (e, _) => Text(
+              'Leak Finder unavailable: $e',
+              style: GoogleFonts.manrope(color: AppColors.slate),
+            ),
+            data: (leaks) => LeakFinderSection(stats: leaks),
+          ),
           const SizedBox(height: 26),
           _TrendCard(metrics: metrics, coachingStats: coachingStats),
+          if (coachingStats != null) ...[
+            const SizedBox(height: 26),
+            _CoachingBreakdown(stats: coachingStats!),
+          ],
           const SizedBox(height: 26),
           const _SectionTitle('Your numbers'),
           const SizedBox(height: 4),
@@ -109,14 +161,6 @@ class _ProfileBody extends ConsumerWidget {
               if (tendency.hasEnoughData)
                 _ArchetypeRow(tendency: tendency),
           ],
-          if (coachingStats != null && coachingStats!.totalSpots > 0) ...[
-            const SizedBox(height: 26),
-            const _SectionTitle('Coaching record'),
-            const SizedBox(height: 10),
-            _CoachingRecord(stats: coachingStats!),
-          ],
-          const SizedBox(height: 26),
-          const _LeakFinderLink(),
         ],
       ),
     );
@@ -964,62 +1008,97 @@ class _Figure extends StatelessWidget {
   }
 }
 
-class _LeakFinderLink extends ConsumerWidget {
-  const _LeakFinderLink();
+/// Accuracy by archetype / street, previously on the standalone Stats screen.
+class _CoachingBreakdown extends StatelessWidget {
+  const _CoachingBreakdown({required this.stats});
+
+  final UserStatsModel stats;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final leaks = ref.watch(mistakeStatsProvider).valueOrNull;
-    final top = leaks == null || leaks.topMistakes.isEmpty
-        ? null
-        : leaks.topMistakes.first;
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const _SectionTitle('By archetype'),
+        const SizedBox(height: 8),
+        if (stats.archetypeAccuracy.isEmpty)
+          Text(
+            'No archetype data yet.',
+            style: GoogleFonts.manrope(color: AppColors.slate, height: 1.4),
+          )
+        else
+          for (final entry in stats.archetypeAccuracy.entries)
+            _BreakdownRow(
+              label: entry.key,
+              detail: '${entry.value.correct}/${entry.value.played} correct',
+              trailing: '${entry.value.accuracyPct.toStringAsFixed(0)}%',
+            ),
+        const SizedBox(height: 20),
+        const _SectionTitle('By street'),
+        const SizedBox(height: 8),
+        if (stats.streetAccuracy.isEmpty)
+          Text(
+            'No street data yet.',
+            style: GoogleFonts.manrope(color: AppColors.slate, height: 1.4),
+          )
+        else
+          for (final entry in stats.streetAccuracy.entries)
+            _BreakdownRow(
+              label: entry.key,
+              trailing: '${entry.value.accuracyPct.toStringAsFixed(0)}%',
+            ),
+      ],
+    );
+  }
+}
 
-    return InkWell(
-      onTap: () => Navigator.push(context, softFadeRoute(const StatsScreen())),
-      borderRadius: BorderRadius.circular(16),
-      child: _Panel(
-        child: Row(
-          children: [
-            const Icon(
-              Icons.travel_explore_outlined,
-              color: AppColors.goldBright,
-              size: 20,
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Leak finder',
-                    style: GoogleFonts.manrope(
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.cream,
-                    ),
+class _BreakdownRow extends StatelessWidget {
+  const _BreakdownRow({
+    required this.label,
+    required this.trailing,
+    this.detail,
+  });
+
+  final String label;
+  final String trailing;
+  final String? detail;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: GoogleFonts.manrope(
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.cream,
                   ),
-                  const SizedBox(height: 3),
+                ),
+                if (detail != null)
                   Text(
-                    top == null
-                        ? 'Your repeated mistakes and fixes, in one place.'
-                        : 'Top pattern: ${top.title}',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                    detail!,
                     style: GoogleFonts.manrope(
-                      fontSize: 12.5,
-                      height: 1.35,
                       color: AppColors.slate,
+                      fontSize: 12,
                     ),
                   ),
-                ],
-              ),
+              ],
             ),
-            const Icon(
-              Icons.chevron_right,
-              color: AppColors.slate,
-              size: 20,
+          ),
+          Text(
+            trailing,
+            style: GoogleFonts.jetBrainsMono(
+              color: AppColors.gold,
+              fontWeight: FontWeight.w800,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

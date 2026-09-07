@@ -97,7 +97,7 @@ rotating repeat / improvement phrasing, and `LiveCoachGrade.toPrompt` appends a
 "Leak history" clause so Gemini names the repeat count or the fix. The Gemini
 line is written back onto the mistake row via `saveAdvice`. `CoachFeedback`
 carries `repeatCount` / `improvementStreak` for the shelf chips, and
-`mistakeStatsProvider` feeds `LeakFinderSection` on the Stats screen.
+`mistakeStatsProvider` feeds `LeakFinderSection` on the Progress screen.
 
 ## Audio
 

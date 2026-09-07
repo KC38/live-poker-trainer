@@ -18,7 +18,6 @@ import 'package:live_poker_trainer/providers/settings_provider.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
 import 'package:live_poker_trainer/ui/screens/profile_screen.dart';
 import 'package:live_poker_trainer/ui/screens/settings_screen.dart';
-import 'package:live_poker_trainer/ui/screens/stats_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_avatar.dart';
 
@@ -178,17 +177,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                     ),
                     const Spacer(),
-                    IconButton(
-                      tooltip: 'Progress',
-                      onPressed: () => Navigator.push(
-                        context,
-                        softFadeRoute(const StatsScreen()),
-                      ),
-                      icon: const Icon(
-                        Icons.insights_outlined,
-                        color: AppColors.slate,
-                      ),
-                    ),
                     IconButton(
                       tooltip: 'Settings',
                       onPressed: () => Navigator.push(
@@ -601,7 +589,7 @@ class _StepperTile extends StatelessWidget {
 }
 
 
-/// Home's entry point into the player profile.
+/// Home's entry point into Progress (identity, stats, Leak Finder).
 ///
 /// Shows the player's own avatar rather than a generic icon, so the
 /// customization they chose is visible from the landing screen.
@@ -614,7 +602,7 @@ class _ProfileButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: 'Player profile',
+      message: 'Progress',
       child: InkWell(
         onTap: onTap,
         customBorder: const CircleBorder(),
