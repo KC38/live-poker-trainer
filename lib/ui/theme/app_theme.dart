@@ -1,6 +1,8 @@
 /// Luxury dark-felt theme — Cinzel display, Manrope UI, JetBrains Mono data.
 library;
 
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -235,4 +237,33 @@ Route<T> softFadeRoute<T>(Widget page) {
       );
     },
   );
+}
+
+/// Resolves after the current route's enter animation completes (or immediately
+/// if there is no animation / it already finished).
+///
+/// Used so Training can wait until the table is visible before deal SFX.
+Future<void> waitForRoutePresentation(BuildContext context) async {
+  await WidgetsBinding.instance.endOfFrame;
+  if (!context.mounted) return;
+
+  final animation = ModalRoute.of(context)?.animation;
+  if (animation == null || animation.status == AnimationStatus.completed) {
+    return;
+  }
+
+  final done = Completer<void>();
+  late final void Function(AnimationStatus) listener;
+  listener = (status) {
+    if (status == AnimationStatus.completed) {
+      animation.removeStatusListener(listener);
+      if (!done.isCompleted) done.complete();
+    }
+  };
+  animation.addStatusListener(listener);
+  if (animation.status == AnimationStatus.completed) {
+    animation.removeStatusListener(listener);
+    if (!done.isCompleted) done.complete();
+  }
+  await done.future;
 }

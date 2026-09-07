@@ -8,6 +8,7 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
+import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/action_dock_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/archetype_legend_sheet.dart';
 import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
@@ -24,6 +25,9 @@ import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
 ///
 /// After a hand ends, coaching stays in the shelf — no auto Hand Review sheet.
 /// The header **Next** control becomes the clear CTA to deal again.
+///
+/// Hand kickoff (deal + SFX + replay) waits until this route has finished
+/// presenting so audio never plays over the Home landing page.
 class PokerTableScreen extends ConsumerStatefulWidget {
   /// Creates the poker table screen.
   const PokerTableScreen({super.key});
@@ -35,6 +39,35 @@ class PokerTableScreen extends ConsumerStatefulWidget {
 class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
   /// Breakpoint above which the coach moves into its own side column.
   static const double _wideBreakpoint = 900;
+
+  bool _kickoffStarted = false;
+  bool _kickoffCancelled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _kickOffHandWhenVisible();
+    });
+  }
+
+  @override
+  void dispose() {
+    _kickoffCancelled = true;
+    super.dispose();
+  }
+
+  /// Starts the first hand only after the enter transition completes.
+  Future<void> _kickOffHandWhenVisible() async {
+    if (_kickoffStarted || _kickoffCancelled) return;
+    _kickoffStarted = true;
+
+    await waitForRoutePresentation(context);
+    if (!mounted || _kickoffCancelled) return;
+
+    // Home already called [prepareTraining]; deal + SFX begin here.
+    await ref.read(gameControllerProvider.notifier).startTraining();
+  }
 
   void _openLegend(GameState game) {
     ArchetypeLegendSheet.show(

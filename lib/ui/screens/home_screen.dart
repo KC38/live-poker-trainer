@@ -10,6 +10,7 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/core/constants/poker_constants.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
+import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
@@ -56,9 +57,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     final sound = ref.read(soundServiceProvider);
 
-    // Unlock on the user gesture, fade Home BGM, then leave — no table SFX yet.
-    await sound.unlock();
+    // Kick off unlock/BGM fade from this gesture, but do not wait — prepare +
+    // navigate must feel instantaneous. Table SFX still wait for kickoff.
+    unawaited(sound.unlock());
     unawaited(sound.pauseHomeBgm());
+    ref.read(gameControllerProvider.notifier).prepareTraining();
 
     if (!mounted) return;
     await Navigator.push(
