@@ -65,64 +65,78 @@ class PlayerSeatWidget extends StatelessWidget {
       height: size.height,
       child: Opacity(
         opacity: dim ? 0.38 : 1,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Stack(
-              clipBehavior: Clip.none,
+        // A revealed showdown hand adds a card row to an already full seat,
+        // which overflowed the fixed footprint. Scaling down keeps the seat
+        // inside its band instead of bleeding into the hero rail.
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          // FittedBox hands its child unbounded width, so pin the seat to its
+          // own footprint and let only the overflowing height be scaled.
+          child: SizedBox(
+            width: size.width,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                _ArchetypeCard(
-                  player: player,
-                  accent: accent,
-                  isActive: isActive,
-                  compact: compact,
-                ),
-                if (isDealer)
-                  Positioned(
-                    right: -6,
-                    top: -6,
-                    child: _Puck(label: 'D', color: AppColors.cream),
-                  ),
-                if (isSmallBlind)
-                  Positioned(
-                    left: -6,
-                    bottom: -6,
-                    child: _Puck(label: 'SB', color: AppColors.goldMuted),
-                  ),
-                if (isBigBlind)
-                  Positioned(
-                    right: -6,
-                    bottom: -6,
-                    child: _Puck(label: 'BB', color: AppColors.goldBright),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 3),
-            Text(
-              ChipFormat.chips(player.stack, bigBlind, chipDisplayMode),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.jetBrainsMono(
-                fontSize: compact ? 10 : 11,
-                fontWeight: FontWeight.w700,
-                color: AppColors.goldMuted,
-              ),
-            ),
-            if (showCards && player.holeCards.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 2),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
+                Stack(
+                  clipBehavior: Clip.none,
                   children: [
-                    for (final card in player.holeCards)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 1),
-                        child: MiniCard(card: card, size: MiniCardSize.tiny),
+                    _ArchetypeCard(
+                      player: player,
+                      accent: accent,
+                      isActive: isActive,
+                      compact: compact,
+                    ),
+                    if (isDealer)
+                      Positioned(
+                        right: -6,
+                        top: -6,
+                        child: _Puck(label: 'D', color: AppColors.cream),
+                      ),
+                    if (isSmallBlind)
+                      Positioned(
+                        left: -6,
+                        bottom: -6,
+                        child: _Puck(label: 'SB', color: AppColors.goldMuted),
+                      ),
+                    if (isBigBlind)
+                      Positioned(
+                        right: -6,
+                        bottom: -6,
+                        child: _Puck(label: 'BB', color: AppColors.goldBright),
                       ),
                   ],
                 ),
-              ),
-          ],
+                const SizedBox(height: 3),
+                Text(
+                  ChipFormat.chips(player.stack, bigBlind, chipDisplayMode),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.jetBrainsMono(
+                    fontSize: compact ? 10 : 11,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.goldMuted,
+                  ),
+                ),
+                if (showCards && player.holeCards.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        for (final card in player.holeCards)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 1),
+                            child: MiniCard(
+                              card: card,
+                              size: MiniCardSize.tiny,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -157,17 +171,19 @@ class _ArchetypeCard extends StatelessWidget {
         color: AppColors.bgDark.withValues(alpha: 0.88),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: isActive ? AppColors.goldBright : accent.withValues(alpha: 0.9),
+          color:
+              isActive ? AppColors.goldBright : accent.withValues(alpha: 0.9),
           width: isActive ? 2 : 1.2,
         ),
-        boxShadow: isActive
-            ? [
-                BoxShadow(
-                  color: AppColors.goldBright.withValues(alpha: 0.28),
-                  blurRadius: 10,
-                ),
-              ]
-            : null,
+        boxShadow:
+            isActive
+                ? [
+                  BoxShadow(
+                    color: AppColors.goldBright.withValues(alpha: 0.28),
+                    blurRadius: 10,
+                  ),
+                ]
+                : null,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

@@ -396,9 +396,15 @@ class _TableSetupSection extends StatelessWidget {
           ),
           AnimatedCrossFade(
             firstChild: const SizedBox(width: double.infinity),
-            secondChild: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 18),
-              child: child,
+            // The section's own background sits between the settings tiles and
+            // the page Material, which would swallow their ink; a transparent
+            // Material here gives them a nearer surface to paint on.
+            secondChild: Material(
+              type: MaterialType.transparency,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 18),
+                child: child,
+              ),
             ),
             crossFadeState: expanded
                 ? CrossFadeState.showSecond

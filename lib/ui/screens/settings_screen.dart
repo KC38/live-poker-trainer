@@ -53,31 +53,47 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
           children: [
-            SwitchListTile(
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Sound effects',
-                style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
+            // The gradient backdrop sits between these tiles and the page
+            // Material, which would swallow their ink; a transparent Material
+            // gives them a nearer surface to paint on.
+            Material(
+              type: MaterialType.transparency,
+              child: Column(
+                children: [
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(
+                      'Sound effects',
+                      style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
+                    ),
+                    subtitle: Text(
+                      'Cards, chips, knock, fold',
+                      style: GoogleFonts.manrope(
+                        color: AppColors.slate,
+                        fontSize: 13,
+                      ),
+                    ),
+                    value: settings.sfxEnabled,
+                    onChanged: notifier.setSfx,
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(
+                      'Coach voice',
+                      style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
+                    ),
+                    subtitle: Text(
+                      'Spoken feedback after each decision',
+                      style: GoogleFonts.manrope(
+                        color: AppColors.slate,
+                        fontSize: 13,
+                      ),
+                    ),
+                    value: settings.ttsEnabled,
+                    onChanged: notifier.setTts,
+                  ),
+                ],
               ),
-              subtitle: Text(
-                'Cards, chips, knock, fold',
-                style: GoogleFonts.manrope(color: AppColors.slate, fontSize: 13),
-              ),
-              value: settings.sfxEnabled,
-              onChanged: notifier.setSfx,
-            ),
-            SwitchListTile(
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Coach voice',
-                style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
-              ),
-              subtitle: Text(
-                'Spoken feedback after each decision',
-                style: GoogleFonts.manrope(color: AppColors.slate, fontSize: 13),
-              ),
-              value: settings.ttsEnabled,
-              onChanged: notifier.setTts,
             ),
             const SizedBox(height: 12),
             Text(
@@ -133,11 +149,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Model: ${Config.geminiModel}\n'
+              'Coach text: ${Config.geminiModel}\n'
+              'Coach voice: ${Config.geminiTtsModel} · ${Config.coachVoice}\n'
               'Key: Settings override → --dart-define → .env\n'
               'Never commit real keys. Device override stays local.\n'
-              'Coach voice uses Gemini AUDIO when a key is present, '
-              'otherwise device TTS.',
+              'Spoken lines are cached on device, so a repeated line replays '
+              'instantly. Without a key, the device voice is used.',
               style: GoogleFonts.manrope(
                 color: AppColors.slate,
                 fontSize: 13,

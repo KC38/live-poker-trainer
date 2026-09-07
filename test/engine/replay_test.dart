@@ -109,21 +109,18 @@ void main() {
       engine.startHand(resolve: false);
 
       final boardSizes = <int>[];
-      var lastKind = TableEventKind.villainAction;
       var guard = 0;
 
       while (guard++ < 200) {
         final events = _drain(engine);
         for (final event in events) {
-          if (event.kind == TableEventKind.dealStreet) {
-            boardSizes.add(event.state.community.length);
-            expect(
-              lastKind,
-              TableEventKind.collectPot,
-              reason: 'street dealt before street bets were collected',
-            );
-          }
-          lastKind = event.kind;
+          if (event.kind != TableEventKind.dealStreet) continue;
+          boardSizes.add(event.state.community.length);
+          expect(
+            event.state.players.every((p) => p.currentBet <= Money.epsilon),
+            isTrue,
+            reason: 'street dealt while chips were still in front of seats',
+          );
         }
         final state = engine.state;
         if (state.isHandOver) break;

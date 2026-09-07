@@ -173,7 +173,10 @@ class PokerEngine {
     int? dealerIndex,
     bool resolve = true,
   }) {
-    var players = existingPlayers ?? buildLineup(settings: _settings);
+    // Use the engine's own generator so a seeded engine deals a reproducible
+    // lineup as well as a reproducible deck.
+    var players =
+        existingPlayers ?? buildLineup(settings: _settings, random: _random);
     players = _applyAutoRebuy(players);
 
     final n = players.length;
