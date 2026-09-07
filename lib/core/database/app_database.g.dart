@@ -1293,6 +1293,1759 @@ class UserStatsRowsCompanion extends UpdateCompanion<UserStatsRow> {
   }
 }
 
+class $MistakesTable extends Mistakes with TableInfo<$MistakesTable, Mistake> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $MistakesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+    'user_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('local'),
+  );
+  static const VerificationMeta _sessionIdMeta = const VerificationMeta(
+    'sessionId',
+  );
+  @override
+  late final GeneratedColumn<String> sessionId = GeneratedColumn<String>(
+    'session_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _handIdMeta = const VerificationMeta('handId');
+  @override
+  late final GeneratedColumn<String> handId = GeneratedColumn<String>(
+    'hand_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _decisionIdMeta = const VerificationMeta(
+    'decisionId',
+  );
+  @override
+  late final GeneratedColumn<String> decisionId = GeneratedColumn<String>(
+    'decision_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _streetMeta = const VerificationMeta('street');
+  @override
+  late final GeneratedColumn<String> street = GeneratedColumn<String>(
+    'street',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _villainArchetypeMeta = const VerificationMeta(
+    'villainArchetype',
+  );
+  @override
+  late final GeneratedColumn<String> villainArchetype = GeneratedColumn<String>(
+    'villain_archetype',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _heroActionMeta = const VerificationMeta(
+    'heroAction',
+  );
+  @override
+  late final GeneratedColumn<String> heroAction = GeneratedColumn<String>(
+    'hero_action',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _heroAmountMeta = const VerificationMeta(
+    'heroAmount',
+  );
+  @override
+  late final GeneratedColumn<double> heroAmount = GeneratedColumn<double>(
+    'hero_amount',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _bestActionMeta = const VerificationMeta(
+    'bestAction',
+  );
+  @override
+  late final GeneratedColumn<String> bestAction = GeneratedColumn<String>(
+    'best_action',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _bestSizingBbMeta = const VerificationMeta(
+    'bestSizingBb',
+  );
+  @override
+  late final GeneratedColumn<double> bestSizingBb = GeneratedColumn<double>(
+    'best_sizing_bb',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _evDeltaBbMeta = const VerificationMeta(
+    'evDeltaBb',
+  );
+  @override
+  late final GeneratedColumn<double> evDeltaBb = GeneratedColumn<double>(
+    'ev_delta_bb',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _evDeltaDollarsMeta = const VerificationMeta(
+    'evDeltaDollars',
+  );
+  @override
+  late final GeneratedColumn<double> evDeltaDollars = GeneratedColumn<double>(
+    'ev_delta_dollars',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _mistakeKeyMeta = const VerificationMeta(
+    'mistakeKey',
+  );
+  @override
+  late final GeneratedColumn<String> mistakeKey = GeneratedColumn<String>(
+    'mistake_key',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _contextKeyMeta = const VerificationMeta(
+    'contextKey',
+  );
+  @override
+  late final GeneratedColumn<String> contextKey = GeneratedColumn<String>(
+    'context_key',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _primaryTagMeta = const VerificationMeta(
+    'primaryTag',
+  );
+  @override
+  late final GeneratedColumn<String> primaryTag = GeneratedColumn<String>(
+    'primary_tag',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _coarseTagsJsonMeta = const VerificationMeta(
+    'coarseTagsJson',
+  );
+  @override
+  late final GeneratedColumn<String> coarseTagsJson = GeneratedColumn<String>(
+    'coarse_tags_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  );
+  static const VerificationMeta _adviceTextMeta = const VerificationMeta(
+    'adviceText',
+  );
+  @override
+  late final GeneratedColumn<String> adviceText = GeneratedColumn<String>(
+    'advice_text',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    userId,
+    sessionId,
+    handId,
+    decisionId,
+    createdAt,
+    street,
+    villainArchetype,
+    heroAction,
+    heroAmount,
+    bestAction,
+    bestSizingBb,
+    evDeltaBb,
+    evDeltaDollars,
+    mistakeKey,
+    contextKey,
+    primaryTag,
+    coarseTagsJson,
+    adviceText,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'mistakes';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Mistake> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(
+        _userIdMeta,
+        userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta),
+      );
+    }
+    if (data.containsKey('session_id')) {
+      context.handle(
+        _sessionIdMeta,
+        sessionId.isAcceptableOrUnknown(data['session_id']!, _sessionIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sessionIdMeta);
+    }
+    if (data.containsKey('hand_id')) {
+      context.handle(
+        _handIdMeta,
+        handId.isAcceptableOrUnknown(data['hand_id']!, _handIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_handIdMeta);
+    }
+    if (data.containsKey('decision_id')) {
+      context.handle(
+        _decisionIdMeta,
+        decisionId.isAcceptableOrUnknown(data['decision_id']!, _decisionIdMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    if (data.containsKey('street')) {
+      context.handle(
+        _streetMeta,
+        street.isAcceptableOrUnknown(data['street']!, _streetMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_streetMeta);
+    }
+    if (data.containsKey('villain_archetype')) {
+      context.handle(
+        _villainArchetypeMeta,
+        villainArchetype.isAcceptableOrUnknown(
+          data['villain_archetype']!,
+          _villainArchetypeMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_villainArchetypeMeta);
+    }
+    if (data.containsKey('hero_action')) {
+      context.handle(
+        _heroActionMeta,
+        heroAction.isAcceptableOrUnknown(data['hero_action']!, _heroActionMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_heroActionMeta);
+    }
+    if (data.containsKey('hero_amount')) {
+      context.handle(
+        _heroAmountMeta,
+        heroAmount.isAcceptableOrUnknown(data['hero_amount']!, _heroAmountMeta),
+      );
+    }
+    if (data.containsKey('best_action')) {
+      context.handle(
+        _bestActionMeta,
+        bestAction.isAcceptableOrUnknown(data['best_action']!, _bestActionMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_bestActionMeta);
+    }
+    if (data.containsKey('best_sizing_bb')) {
+      context.handle(
+        _bestSizingBbMeta,
+        bestSizingBb.isAcceptableOrUnknown(
+          data['best_sizing_bb']!,
+          _bestSizingBbMeta,
+        ),
+      );
+    }
+    if (data.containsKey('ev_delta_bb')) {
+      context.handle(
+        _evDeltaBbMeta,
+        evDeltaBb.isAcceptableOrUnknown(data['ev_delta_bb']!, _evDeltaBbMeta),
+      );
+    }
+    if (data.containsKey('ev_delta_dollars')) {
+      context.handle(
+        _evDeltaDollarsMeta,
+        evDeltaDollars.isAcceptableOrUnknown(
+          data['ev_delta_dollars']!,
+          _evDeltaDollarsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('mistake_key')) {
+      context.handle(
+        _mistakeKeyMeta,
+        mistakeKey.isAcceptableOrUnknown(data['mistake_key']!, _mistakeKeyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_mistakeKeyMeta);
+    }
+    if (data.containsKey('context_key')) {
+      context.handle(
+        _contextKeyMeta,
+        contextKey.isAcceptableOrUnknown(data['context_key']!, _contextKeyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_contextKeyMeta);
+    }
+    if (data.containsKey('primary_tag')) {
+      context.handle(
+        _primaryTagMeta,
+        primaryTag.isAcceptableOrUnknown(data['primary_tag']!, _primaryTagMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_primaryTagMeta);
+    }
+    if (data.containsKey('coarse_tags_json')) {
+      context.handle(
+        _coarseTagsJsonMeta,
+        coarseTagsJson.isAcceptableOrUnknown(
+          data['coarse_tags_json']!,
+          _coarseTagsJsonMeta,
+        ),
+      );
+    }
+    if (data.containsKey('advice_text')) {
+      context.handle(
+        _adviceTextMeta,
+        adviceText.isAcceptableOrUnknown(data['advice_text']!, _adviceTextMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Mistake map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Mistake(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      userId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}user_id'],
+      )!,
+      sessionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}session_id'],
+      )!,
+      handId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}hand_id'],
+      )!,
+      decisionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}decision_id'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      street: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}street'],
+      )!,
+      villainArchetype: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}villain_archetype'],
+      )!,
+      heroAction: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}hero_action'],
+      )!,
+      heroAmount: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}hero_amount'],
+      )!,
+      bestAction: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}best_action'],
+      )!,
+      bestSizingBb: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}best_sizing_bb'],
+      )!,
+      evDeltaBb: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}ev_delta_bb'],
+      )!,
+      evDeltaDollars: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}ev_delta_dollars'],
+      )!,
+      mistakeKey: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}mistake_key'],
+      )!,
+      contextKey: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}context_key'],
+      )!,
+      primaryTag: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}primary_tag'],
+      )!,
+      coarseTagsJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}coarse_tags_json'],
+      )!,
+      adviceText: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}advice_text'],
+      )!,
+    );
+  }
+
+  @override
+  $MistakesTable createAlias(String alias) {
+    return $MistakesTable(attachedDatabase, alias);
+  }
+}
+
+class Mistake extends DataClass implements Insertable<Mistake> {
+  final int id;
+  final String userId;
+  final String sessionId;
+  final String handId;
+  final String? decisionId;
+  final DateTime createdAt;
+  final String street;
+  final String villainArchetype;
+  final String heroAction;
+  final double heroAmount;
+  final String bestAction;
+  final double bestSizingBb;
+  final double evDeltaBb;
+  final double evDeltaDollars;
+
+  /// Fine-grained key, e.g. `river:nit:raise->call`.
+  final String mistakeKey;
+
+  /// Spot without the hero action, e.g. `river:nit:call`.
+  final String contextKey;
+
+  /// Most specific coarse tag id.
+  final String primaryTag;
+
+  /// JSON list of every coarse tag id.
+  final String coarseTagsJson;
+
+  /// Advice shown to the user (updated once the AI line arrives).
+  final String adviceText;
+  const Mistake({
+    required this.id,
+    required this.userId,
+    required this.sessionId,
+    required this.handId,
+    this.decisionId,
+    required this.createdAt,
+    required this.street,
+    required this.villainArchetype,
+    required this.heroAction,
+    required this.heroAmount,
+    required this.bestAction,
+    required this.bestSizingBb,
+    required this.evDeltaBb,
+    required this.evDeltaDollars,
+    required this.mistakeKey,
+    required this.contextKey,
+    required this.primaryTag,
+    required this.coarseTagsJson,
+    required this.adviceText,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['user_id'] = Variable<String>(userId);
+    map['session_id'] = Variable<String>(sessionId);
+    map['hand_id'] = Variable<String>(handId);
+    if (!nullToAbsent || decisionId != null) {
+      map['decision_id'] = Variable<String>(decisionId);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['street'] = Variable<String>(street);
+    map['villain_archetype'] = Variable<String>(villainArchetype);
+    map['hero_action'] = Variable<String>(heroAction);
+    map['hero_amount'] = Variable<double>(heroAmount);
+    map['best_action'] = Variable<String>(bestAction);
+    map['best_sizing_bb'] = Variable<double>(bestSizingBb);
+    map['ev_delta_bb'] = Variable<double>(evDeltaBb);
+    map['ev_delta_dollars'] = Variable<double>(evDeltaDollars);
+    map['mistake_key'] = Variable<String>(mistakeKey);
+    map['context_key'] = Variable<String>(contextKey);
+    map['primary_tag'] = Variable<String>(primaryTag);
+    map['coarse_tags_json'] = Variable<String>(coarseTagsJson);
+    map['advice_text'] = Variable<String>(adviceText);
+    return map;
+  }
+
+  MistakesCompanion toCompanion(bool nullToAbsent) {
+    return MistakesCompanion(
+      id: Value(id),
+      userId: Value(userId),
+      sessionId: Value(sessionId),
+      handId: Value(handId),
+      decisionId: decisionId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(decisionId),
+      createdAt: Value(createdAt),
+      street: Value(street),
+      villainArchetype: Value(villainArchetype),
+      heroAction: Value(heroAction),
+      heroAmount: Value(heroAmount),
+      bestAction: Value(bestAction),
+      bestSizingBb: Value(bestSizingBb),
+      evDeltaBb: Value(evDeltaBb),
+      evDeltaDollars: Value(evDeltaDollars),
+      mistakeKey: Value(mistakeKey),
+      contextKey: Value(contextKey),
+      primaryTag: Value(primaryTag),
+      coarseTagsJson: Value(coarseTagsJson),
+      adviceText: Value(adviceText),
+    );
+  }
+
+  factory Mistake.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Mistake(
+      id: serializer.fromJson<int>(json['id']),
+      userId: serializer.fromJson<String>(json['userId']),
+      sessionId: serializer.fromJson<String>(json['sessionId']),
+      handId: serializer.fromJson<String>(json['handId']),
+      decisionId: serializer.fromJson<String?>(json['decisionId']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      street: serializer.fromJson<String>(json['street']),
+      villainArchetype: serializer.fromJson<String>(json['villainArchetype']),
+      heroAction: serializer.fromJson<String>(json['heroAction']),
+      heroAmount: serializer.fromJson<double>(json['heroAmount']),
+      bestAction: serializer.fromJson<String>(json['bestAction']),
+      bestSizingBb: serializer.fromJson<double>(json['bestSizingBb']),
+      evDeltaBb: serializer.fromJson<double>(json['evDeltaBb']),
+      evDeltaDollars: serializer.fromJson<double>(json['evDeltaDollars']),
+      mistakeKey: serializer.fromJson<String>(json['mistakeKey']),
+      contextKey: serializer.fromJson<String>(json['contextKey']),
+      primaryTag: serializer.fromJson<String>(json['primaryTag']),
+      coarseTagsJson: serializer.fromJson<String>(json['coarseTagsJson']),
+      adviceText: serializer.fromJson<String>(json['adviceText']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'userId': serializer.toJson<String>(userId),
+      'sessionId': serializer.toJson<String>(sessionId),
+      'handId': serializer.toJson<String>(handId),
+      'decisionId': serializer.toJson<String?>(decisionId),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'street': serializer.toJson<String>(street),
+      'villainArchetype': serializer.toJson<String>(villainArchetype),
+      'heroAction': serializer.toJson<String>(heroAction),
+      'heroAmount': serializer.toJson<double>(heroAmount),
+      'bestAction': serializer.toJson<String>(bestAction),
+      'bestSizingBb': serializer.toJson<double>(bestSizingBb),
+      'evDeltaBb': serializer.toJson<double>(evDeltaBb),
+      'evDeltaDollars': serializer.toJson<double>(evDeltaDollars),
+      'mistakeKey': serializer.toJson<String>(mistakeKey),
+      'contextKey': serializer.toJson<String>(contextKey),
+      'primaryTag': serializer.toJson<String>(primaryTag),
+      'coarseTagsJson': serializer.toJson<String>(coarseTagsJson),
+      'adviceText': serializer.toJson<String>(adviceText),
+    };
+  }
+
+  Mistake copyWith({
+    int? id,
+    String? userId,
+    String? sessionId,
+    String? handId,
+    Value<String?> decisionId = const Value.absent(),
+    DateTime? createdAt,
+    String? street,
+    String? villainArchetype,
+    String? heroAction,
+    double? heroAmount,
+    String? bestAction,
+    double? bestSizingBb,
+    double? evDeltaBb,
+    double? evDeltaDollars,
+    String? mistakeKey,
+    String? contextKey,
+    String? primaryTag,
+    String? coarseTagsJson,
+    String? adviceText,
+  }) => Mistake(
+    id: id ?? this.id,
+    userId: userId ?? this.userId,
+    sessionId: sessionId ?? this.sessionId,
+    handId: handId ?? this.handId,
+    decisionId: decisionId.present ? decisionId.value : this.decisionId,
+    createdAt: createdAt ?? this.createdAt,
+    street: street ?? this.street,
+    villainArchetype: villainArchetype ?? this.villainArchetype,
+    heroAction: heroAction ?? this.heroAction,
+    heroAmount: heroAmount ?? this.heroAmount,
+    bestAction: bestAction ?? this.bestAction,
+    bestSizingBb: bestSizingBb ?? this.bestSizingBb,
+    evDeltaBb: evDeltaBb ?? this.evDeltaBb,
+    evDeltaDollars: evDeltaDollars ?? this.evDeltaDollars,
+    mistakeKey: mistakeKey ?? this.mistakeKey,
+    contextKey: contextKey ?? this.contextKey,
+    primaryTag: primaryTag ?? this.primaryTag,
+    coarseTagsJson: coarseTagsJson ?? this.coarseTagsJson,
+    adviceText: adviceText ?? this.adviceText,
+  );
+  Mistake copyWithCompanion(MistakesCompanion data) {
+    return Mistake(
+      id: data.id.present ? data.id.value : this.id,
+      userId: data.userId.present ? data.userId.value : this.userId,
+      sessionId: data.sessionId.present ? data.sessionId.value : this.sessionId,
+      handId: data.handId.present ? data.handId.value : this.handId,
+      decisionId: data.decisionId.present
+          ? data.decisionId.value
+          : this.decisionId,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      street: data.street.present ? data.street.value : this.street,
+      villainArchetype: data.villainArchetype.present
+          ? data.villainArchetype.value
+          : this.villainArchetype,
+      heroAction: data.heroAction.present
+          ? data.heroAction.value
+          : this.heroAction,
+      heroAmount: data.heroAmount.present
+          ? data.heroAmount.value
+          : this.heroAmount,
+      bestAction: data.bestAction.present
+          ? data.bestAction.value
+          : this.bestAction,
+      bestSizingBb: data.bestSizingBb.present
+          ? data.bestSizingBb.value
+          : this.bestSizingBb,
+      evDeltaBb: data.evDeltaBb.present ? data.evDeltaBb.value : this.evDeltaBb,
+      evDeltaDollars: data.evDeltaDollars.present
+          ? data.evDeltaDollars.value
+          : this.evDeltaDollars,
+      mistakeKey: data.mistakeKey.present
+          ? data.mistakeKey.value
+          : this.mistakeKey,
+      contextKey: data.contextKey.present
+          ? data.contextKey.value
+          : this.contextKey,
+      primaryTag: data.primaryTag.present
+          ? data.primaryTag.value
+          : this.primaryTag,
+      coarseTagsJson: data.coarseTagsJson.present
+          ? data.coarseTagsJson.value
+          : this.coarseTagsJson,
+      adviceText: data.adviceText.present
+          ? data.adviceText.value
+          : this.adviceText,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Mistake(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('sessionId: $sessionId, ')
+          ..write('handId: $handId, ')
+          ..write('decisionId: $decisionId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('street: $street, ')
+          ..write('villainArchetype: $villainArchetype, ')
+          ..write('heroAction: $heroAction, ')
+          ..write('heroAmount: $heroAmount, ')
+          ..write('bestAction: $bestAction, ')
+          ..write('bestSizingBb: $bestSizingBb, ')
+          ..write('evDeltaBb: $evDeltaBb, ')
+          ..write('evDeltaDollars: $evDeltaDollars, ')
+          ..write('mistakeKey: $mistakeKey, ')
+          ..write('contextKey: $contextKey, ')
+          ..write('primaryTag: $primaryTag, ')
+          ..write('coarseTagsJson: $coarseTagsJson, ')
+          ..write('adviceText: $adviceText')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    userId,
+    sessionId,
+    handId,
+    decisionId,
+    createdAt,
+    street,
+    villainArchetype,
+    heroAction,
+    heroAmount,
+    bestAction,
+    bestSizingBb,
+    evDeltaBb,
+    evDeltaDollars,
+    mistakeKey,
+    contextKey,
+    primaryTag,
+    coarseTagsJson,
+    adviceText,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Mistake &&
+          other.id == this.id &&
+          other.userId == this.userId &&
+          other.sessionId == this.sessionId &&
+          other.handId == this.handId &&
+          other.decisionId == this.decisionId &&
+          other.createdAt == this.createdAt &&
+          other.street == this.street &&
+          other.villainArchetype == this.villainArchetype &&
+          other.heroAction == this.heroAction &&
+          other.heroAmount == this.heroAmount &&
+          other.bestAction == this.bestAction &&
+          other.bestSizingBb == this.bestSizingBb &&
+          other.evDeltaBb == this.evDeltaBb &&
+          other.evDeltaDollars == this.evDeltaDollars &&
+          other.mistakeKey == this.mistakeKey &&
+          other.contextKey == this.contextKey &&
+          other.primaryTag == this.primaryTag &&
+          other.coarseTagsJson == this.coarseTagsJson &&
+          other.adviceText == this.adviceText);
+}
+
+class MistakesCompanion extends UpdateCompanion<Mistake> {
+  final Value<int> id;
+  final Value<String> userId;
+  final Value<String> sessionId;
+  final Value<String> handId;
+  final Value<String?> decisionId;
+  final Value<DateTime> createdAt;
+  final Value<String> street;
+  final Value<String> villainArchetype;
+  final Value<String> heroAction;
+  final Value<double> heroAmount;
+  final Value<String> bestAction;
+  final Value<double> bestSizingBb;
+  final Value<double> evDeltaBb;
+  final Value<double> evDeltaDollars;
+  final Value<String> mistakeKey;
+  final Value<String> contextKey;
+  final Value<String> primaryTag;
+  final Value<String> coarseTagsJson;
+  final Value<String> adviceText;
+  const MistakesCompanion({
+    this.id = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.sessionId = const Value.absent(),
+    this.handId = const Value.absent(),
+    this.decisionId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.street = const Value.absent(),
+    this.villainArchetype = const Value.absent(),
+    this.heroAction = const Value.absent(),
+    this.heroAmount = const Value.absent(),
+    this.bestAction = const Value.absent(),
+    this.bestSizingBb = const Value.absent(),
+    this.evDeltaBb = const Value.absent(),
+    this.evDeltaDollars = const Value.absent(),
+    this.mistakeKey = const Value.absent(),
+    this.contextKey = const Value.absent(),
+    this.primaryTag = const Value.absent(),
+    this.coarseTagsJson = const Value.absent(),
+    this.adviceText = const Value.absent(),
+  });
+  MistakesCompanion.insert({
+    this.id = const Value.absent(),
+    this.userId = const Value.absent(),
+    required String sessionId,
+    required String handId,
+    this.decisionId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    required String street,
+    required String villainArchetype,
+    required String heroAction,
+    this.heroAmount = const Value.absent(),
+    required String bestAction,
+    this.bestSizingBb = const Value.absent(),
+    this.evDeltaBb = const Value.absent(),
+    this.evDeltaDollars = const Value.absent(),
+    required String mistakeKey,
+    required String contextKey,
+    required String primaryTag,
+    this.coarseTagsJson = const Value.absent(),
+    this.adviceText = const Value.absent(),
+  }) : sessionId = Value(sessionId),
+       handId = Value(handId),
+       street = Value(street),
+       villainArchetype = Value(villainArchetype),
+       heroAction = Value(heroAction),
+       bestAction = Value(bestAction),
+       mistakeKey = Value(mistakeKey),
+       contextKey = Value(contextKey),
+       primaryTag = Value(primaryTag);
+  static Insertable<Mistake> custom({
+    Expression<int>? id,
+    Expression<String>? userId,
+    Expression<String>? sessionId,
+    Expression<String>? handId,
+    Expression<String>? decisionId,
+    Expression<DateTime>? createdAt,
+    Expression<String>? street,
+    Expression<String>? villainArchetype,
+    Expression<String>? heroAction,
+    Expression<double>? heroAmount,
+    Expression<String>? bestAction,
+    Expression<double>? bestSizingBb,
+    Expression<double>? evDeltaBb,
+    Expression<double>? evDeltaDollars,
+    Expression<String>? mistakeKey,
+    Expression<String>? contextKey,
+    Expression<String>? primaryTag,
+    Expression<String>? coarseTagsJson,
+    Expression<String>? adviceText,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (userId != null) 'user_id': userId,
+      if (sessionId != null) 'session_id': sessionId,
+      if (handId != null) 'hand_id': handId,
+      if (decisionId != null) 'decision_id': decisionId,
+      if (createdAt != null) 'created_at': createdAt,
+      if (street != null) 'street': street,
+      if (villainArchetype != null) 'villain_archetype': villainArchetype,
+      if (heroAction != null) 'hero_action': heroAction,
+      if (heroAmount != null) 'hero_amount': heroAmount,
+      if (bestAction != null) 'best_action': bestAction,
+      if (bestSizingBb != null) 'best_sizing_bb': bestSizingBb,
+      if (evDeltaBb != null) 'ev_delta_bb': evDeltaBb,
+      if (evDeltaDollars != null) 'ev_delta_dollars': evDeltaDollars,
+      if (mistakeKey != null) 'mistake_key': mistakeKey,
+      if (contextKey != null) 'context_key': contextKey,
+      if (primaryTag != null) 'primary_tag': primaryTag,
+      if (coarseTagsJson != null) 'coarse_tags_json': coarseTagsJson,
+      if (adviceText != null) 'advice_text': adviceText,
+    });
+  }
+
+  MistakesCompanion copyWith({
+    Value<int>? id,
+    Value<String>? userId,
+    Value<String>? sessionId,
+    Value<String>? handId,
+    Value<String?>? decisionId,
+    Value<DateTime>? createdAt,
+    Value<String>? street,
+    Value<String>? villainArchetype,
+    Value<String>? heroAction,
+    Value<double>? heroAmount,
+    Value<String>? bestAction,
+    Value<double>? bestSizingBb,
+    Value<double>? evDeltaBb,
+    Value<double>? evDeltaDollars,
+    Value<String>? mistakeKey,
+    Value<String>? contextKey,
+    Value<String>? primaryTag,
+    Value<String>? coarseTagsJson,
+    Value<String>? adviceText,
+  }) {
+    return MistakesCompanion(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      sessionId: sessionId ?? this.sessionId,
+      handId: handId ?? this.handId,
+      decisionId: decisionId ?? this.decisionId,
+      createdAt: createdAt ?? this.createdAt,
+      street: street ?? this.street,
+      villainArchetype: villainArchetype ?? this.villainArchetype,
+      heroAction: heroAction ?? this.heroAction,
+      heroAmount: heroAmount ?? this.heroAmount,
+      bestAction: bestAction ?? this.bestAction,
+      bestSizingBb: bestSizingBb ?? this.bestSizingBb,
+      evDeltaBb: evDeltaBb ?? this.evDeltaBb,
+      evDeltaDollars: evDeltaDollars ?? this.evDeltaDollars,
+      mistakeKey: mistakeKey ?? this.mistakeKey,
+      contextKey: contextKey ?? this.contextKey,
+      primaryTag: primaryTag ?? this.primaryTag,
+      coarseTagsJson: coarseTagsJson ?? this.coarseTagsJson,
+      adviceText: adviceText ?? this.adviceText,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<String>(userId.value);
+    }
+    if (sessionId.present) {
+      map['session_id'] = Variable<String>(sessionId.value);
+    }
+    if (handId.present) {
+      map['hand_id'] = Variable<String>(handId.value);
+    }
+    if (decisionId.present) {
+      map['decision_id'] = Variable<String>(decisionId.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (street.present) {
+      map['street'] = Variable<String>(street.value);
+    }
+    if (villainArchetype.present) {
+      map['villain_archetype'] = Variable<String>(villainArchetype.value);
+    }
+    if (heroAction.present) {
+      map['hero_action'] = Variable<String>(heroAction.value);
+    }
+    if (heroAmount.present) {
+      map['hero_amount'] = Variable<double>(heroAmount.value);
+    }
+    if (bestAction.present) {
+      map['best_action'] = Variable<String>(bestAction.value);
+    }
+    if (bestSizingBb.present) {
+      map['best_sizing_bb'] = Variable<double>(bestSizingBb.value);
+    }
+    if (evDeltaBb.present) {
+      map['ev_delta_bb'] = Variable<double>(evDeltaBb.value);
+    }
+    if (evDeltaDollars.present) {
+      map['ev_delta_dollars'] = Variable<double>(evDeltaDollars.value);
+    }
+    if (mistakeKey.present) {
+      map['mistake_key'] = Variable<String>(mistakeKey.value);
+    }
+    if (contextKey.present) {
+      map['context_key'] = Variable<String>(contextKey.value);
+    }
+    if (primaryTag.present) {
+      map['primary_tag'] = Variable<String>(primaryTag.value);
+    }
+    if (coarseTagsJson.present) {
+      map['coarse_tags_json'] = Variable<String>(coarseTagsJson.value);
+    }
+    if (adviceText.present) {
+      map['advice_text'] = Variable<String>(adviceText.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MistakesCompanion(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('sessionId: $sessionId, ')
+          ..write('handId: $handId, ')
+          ..write('decisionId: $decisionId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('street: $street, ')
+          ..write('villainArchetype: $villainArchetype, ')
+          ..write('heroAction: $heroAction, ')
+          ..write('heroAmount: $heroAmount, ')
+          ..write('bestAction: $bestAction, ')
+          ..write('bestSizingBb: $bestSizingBb, ')
+          ..write('evDeltaBb: $evDeltaBb, ')
+          ..write('evDeltaDollars: $evDeltaDollars, ')
+          ..write('mistakeKey: $mistakeKey, ')
+          ..write('contextKey: $contextKey, ')
+          ..write('primaryTag: $primaryTag, ')
+          ..write('coarseTagsJson: $coarseTagsJson, ')
+          ..write('adviceText: $adviceText')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ImprovementEventsTable extends ImprovementEvents
+    with TableInfo<$ImprovementEventsTable, ImprovementEvent> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ImprovementEventsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+    'user_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('local'),
+  );
+  static const VerificationMeta _sessionIdMeta = const VerificationMeta(
+    'sessionId',
+  );
+  @override
+  late final GeneratedColumn<String> sessionId = GeneratedColumn<String>(
+    'session_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _handIdMeta = const VerificationMeta('handId');
+  @override
+  late final GeneratedColumn<String> handId = GeneratedColumn<String>(
+    'hand_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _decisionIdMeta = const VerificationMeta(
+    'decisionId',
+  );
+  @override
+  late final GeneratedColumn<String> decisionId = GeneratedColumn<String>(
+    'decision_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _mistakeKeyMeta = const VerificationMeta(
+    'mistakeKey',
+  );
+  @override
+  late final GeneratedColumn<String> mistakeKey = GeneratedColumn<String>(
+    'mistake_key',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _primaryTagMeta = const VerificationMeta(
+    'primaryTag',
+  );
+  @override
+  late final GeneratedColumn<String> primaryTag = GeneratedColumn<String>(
+    'primary_tag',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _streetMeta = const VerificationMeta('street');
+  @override
+  late final GeneratedColumn<String> street = GeneratedColumn<String>(
+    'street',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _villainArchetypeMeta = const VerificationMeta(
+    'villainArchetype',
+  );
+  @override
+  late final GeneratedColumn<String> villainArchetype = GeneratedColumn<String>(
+    'villain_archetype',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _heroActionMeta = const VerificationMeta(
+    'heroAction',
+  );
+  @override
+  late final GeneratedColumn<String> heroAction = GeneratedColumn<String>(
+    'hero_action',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _streakMeta = const VerificationMeta('streak');
+  @override
+  late final GeneratedColumn<int> streak = GeneratedColumn<int>(
+    'streak',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(1),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    userId,
+    sessionId,
+    handId,
+    decisionId,
+    createdAt,
+    mistakeKey,
+    primaryTag,
+    street,
+    villainArchetype,
+    heroAction,
+    streak,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'improvement_events';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ImprovementEvent> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(
+        _userIdMeta,
+        userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta),
+      );
+    }
+    if (data.containsKey('session_id')) {
+      context.handle(
+        _sessionIdMeta,
+        sessionId.isAcceptableOrUnknown(data['session_id']!, _sessionIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sessionIdMeta);
+    }
+    if (data.containsKey('hand_id')) {
+      context.handle(
+        _handIdMeta,
+        handId.isAcceptableOrUnknown(data['hand_id']!, _handIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_handIdMeta);
+    }
+    if (data.containsKey('decision_id')) {
+      context.handle(
+        _decisionIdMeta,
+        decisionId.isAcceptableOrUnknown(data['decision_id']!, _decisionIdMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    if (data.containsKey('mistake_key')) {
+      context.handle(
+        _mistakeKeyMeta,
+        mistakeKey.isAcceptableOrUnknown(data['mistake_key']!, _mistakeKeyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_mistakeKeyMeta);
+    }
+    if (data.containsKey('primary_tag')) {
+      context.handle(
+        _primaryTagMeta,
+        primaryTag.isAcceptableOrUnknown(data['primary_tag']!, _primaryTagMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_primaryTagMeta);
+    }
+    if (data.containsKey('street')) {
+      context.handle(
+        _streetMeta,
+        street.isAcceptableOrUnknown(data['street']!, _streetMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_streetMeta);
+    }
+    if (data.containsKey('villain_archetype')) {
+      context.handle(
+        _villainArchetypeMeta,
+        villainArchetype.isAcceptableOrUnknown(
+          data['villain_archetype']!,
+          _villainArchetypeMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_villainArchetypeMeta);
+    }
+    if (data.containsKey('hero_action')) {
+      context.handle(
+        _heroActionMeta,
+        heroAction.isAcceptableOrUnknown(data['hero_action']!, _heroActionMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_heroActionMeta);
+    }
+    if (data.containsKey('streak')) {
+      context.handle(
+        _streakMeta,
+        streak.isAcceptableOrUnknown(data['streak']!, _streakMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ImprovementEvent map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ImprovementEvent(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      userId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}user_id'],
+      )!,
+      sessionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}session_id'],
+      )!,
+      handId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}hand_id'],
+      )!,
+      decisionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}decision_id'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      mistakeKey: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}mistake_key'],
+      )!,
+      primaryTag: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}primary_tag'],
+      )!,
+      street: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}street'],
+      )!,
+      villainArchetype: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}villain_archetype'],
+      )!,
+      heroAction: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}hero_action'],
+      )!,
+      streak: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}streak'],
+      )!,
+    );
+  }
+
+  @override
+  $ImprovementEventsTable createAlias(String alias) {
+    return $ImprovementEventsTable(attachedDatabase, alias);
+  }
+}
+
+class ImprovementEvent extends DataClass
+    implements Insertable<ImprovementEvent> {
+  final int id;
+  final String userId;
+  final String sessionId;
+  final String handId;
+  final String? decisionId;
+  final DateTime createdAt;
+
+  /// The mistake key credited with this fix.
+  final String mistakeKey;
+  final String primaryTag;
+  final String street;
+  final String villainArchetype;
+  final String heroAction;
+
+  /// Consecutive fixes on this key since its last mistake, including this one.
+  final int streak;
+  const ImprovementEvent({
+    required this.id,
+    required this.userId,
+    required this.sessionId,
+    required this.handId,
+    this.decisionId,
+    required this.createdAt,
+    required this.mistakeKey,
+    required this.primaryTag,
+    required this.street,
+    required this.villainArchetype,
+    required this.heroAction,
+    required this.streak,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['user_id'] = Variable<String>(userId);
+    map['session_id'] = Variable<String>(sessionId);
+    map['hand_id'] = Variable<String>(handId);
+    if (!nullToAbsent || decisionId != null) {
+      map['decision_id'] = Variable<String>(decisionId);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['mistake_key'] = Variable<String>(mistakeKey);
+    map['primary_tag'] = Variable<String>(primaryTag);
+    map['street'] = Variable<String>(street);
+    map['villain_archetype'] = Variable<String>(villainArchetype);
+    map['hero_action'] = Variable<String>(heroAction);
+    map['streak'] = Variable<int>(streak);
+    return map;
+  }
+
+  ImprovementEventsCompanion toCompanion(bool nullToAbsent) {
+    return ImprovementEventsCompanion(
+      id: Value(id),
+      userId: Value(userId),
+      sessionId: Value(sessionId),
+      handId: Value(handId),
+      decisionId: decisionId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(decisionId),
+      createdAt: Value(createdAt),
+      mistakeKey: Value(mistakeKey),
+      primaryTag: Value(primaryTag),
+      street: Value(street),
+      villainArchetype: Value(villainArchetype),
+      heroAction: Value(heroAction),
+      streak: Value(streak),
+    );
+  }
+
+  factory ImprovementEvent.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ImprovementEvent(
+      id: serializer.fromJson<int>(json['id']),
+      userId: serializer.fromJson<String>(json['userId']),
+      sessionId: serializer.fromJson<String>(json['sessionId']),
+      handId: serializer.fromJson<String>(json['handId']),
+      decisionId: serializer.fromJson<String?>(json['decisionId']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      mistakeKey: serializer.fromJson<String>(json['mistakeKey']),
+      primaryTag: serializer.fromJson<String>(json['primaryTag']),
+      street: serializer.fromJson<String>(json['street']),
+      villainArchetype: serializer.fromJson<String>(json['villainArchetype']),
+      heroAction: serializer.fromJson<String>(json['heroAction']),
+      streak: serializer.fromJson<int>(json['streak']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'userId': serializer.toJson<String>(userId),
+      'sessionId': serializer.toJson<String>(sessionId),
+      'handId': serializer.toJson<String>(handId),
+      'decisionId': serializer.toJson<String?>(decisionId),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'mistakeKey': serializer.toJson<String>(mistakeKey),
+      'primaryTag': serializer.toJson<String>(primaryTag),
+      'street': serializer.toJson<String>(street),
+      'villainArchetype': serializer.toJson<String>(villainArchetype),
+      'heroAction': serializer.toJson<String>(heroAction),
+      'streak': serializer.toJson<int>(streak),
+    };
+  }
+
+  ImprovementEvent copyWith({
+    int? id,
+    String? userId,
+    String? sessionId,
+    String? handId,
+    Value<String?> decisionId = const Value.absent(),
+    DateTime? createdAt,
+    String? mistakeKey,
+    String? primaryTag,
+    String? street,
+    String? villainArchetype,
+    String? heroAction,
+    int? streak,
+  }) => ImprovementEvent(
+    id: id ?? this.id,
+    userId: userId ?? this.userId,
+    sessionId: sessionId ?? this.sessionId,
+    handId: handId ?? this.handId,
+    decisionId: decisionId.present ? decisionId.value : this.decisionId,
+    createdAt: createdAt ?? this.createdAt,
+    mistakeKey: mistakeKey ?? this.mistakeKey,
+    primaryTag: primaryTag ?? this.primaryTag,
+    street: street ?? this.street,
+    villainArchetype: villainArchetype ?? this.villainArchetype,
+    heroAction: heroAction ?? this.heroAction,
+    streak: streak ?? this.streak,
+  );
+  ImprovementEvent copyWithCompanion(ImprovementEventsCompanion data) {
+    return ImprovementEvent(
+      id: data.id.present ? data.id.value : this.id,
+      userId: data.userId.present ? data.userId.value : this.userId,
+      sessionId: data.sessionId.present ? data.sessionId.value : this.sessionId,
+      handId: data.handId.present ? data.handId.value : this.handId,
+      decisionId: data.decisionId.present
+          ? data.decisionId.value
+          : this.decisionId,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      mistakeKey: data.mistakeKey.present
+          ? data.mistakeKey.value
+          : this.mistakeKey,
+      primaryTag: data.primaryTag.present
+          ? data.primaryTag.value
+          : this.primaryTag,
+      street: data.street.present ? data.street.value : this.street,
+      villainArchetype: data.villainArchetype.present
+          ? data.villainArchetype.value
+          : this.villainArchetype,
+      heroAction: data.heroAction.present
+          ? data.heroAction.value
+          : this.heroAction,
+      streak: data.streak.present ? data.streak.value : this.streak,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ImprovementEvent(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('sessionId: $sessionId, ')
+          ..write('handId: $handId, ')
+          ..write('decisionId: $decisionId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('mistakeKey: $mistakeKey, ')
+          ..write('primaryTag: $primaryTag, ')
+          ..write('street: $street, ')
+          ..write('villainArchetype: $villainArchetype, ')
+          ..write('heroAction: $heroAction, ')
+          ..write('streak: $streak')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    userId,
+    sessionId,
+    handId,
+    decisionId,
+    createdAt,
+    mistakeKey,
+    primaryTag,
+    street,
+    villainArchetype,
+    heroAction,
+    streak,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ImprovementEvent &&
+          other.id == this.id &&
+          other.userId == this.userId &&
+          other.sessionId == this.sessionId &&
+          other.handId == this.handId &&
+          other.decisionId == this.decisionId &&
+          other.createdAt == this.createdAt &&
+          other.mistakeKey == this.mistakeKey &&
+          other.primaryTag == this.primaryTag &&
+          other.street == this.street &&
+          other.villainArchetype == this.villainArchetype &&
+          other.heroAction == this.heroAction &&
+          other.streak == this.streak);
+}
+
+class ImprovementEventsCompanion extends UpdateCompanion<ImprovementEvent> {
+  final Value<int> id;
+  final Value<String> userId;
+  final Value<String> sessionId;
+  final Value<String> handId;
+  final Value<String?> decisionId;
+  final Value<DateTime> createdAt;
+  final Value<String> mistakeKey;
+  final Value<String> primaryTag;
+  final Value<String> street;
+  final Value<String> villainArchetype;
+  final Value<String> heroAction;
+  final Value<int> streak;
+  const ImprovementEventsCompanion({
+    this.id = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.sessionId = const Value.absent(),
+    this.handId = const Value.absent(),
+    this.decisionId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.mistakeKey = const Value.absent(),
+    this.primaryTag = const Value.absent(),
+    this.street = const Value.absent(),
+    this.villainArchetype = const Value.absent(),
+    this.heroAction = const Value.absent(),
+    this.streak = const Value.absent(),
+  });
+  ImprovementEventsCompanion.insert({
+    this.id = const Value.absent(),
+    this.userId = const Value.absent(),
+    required String sessionId,
+    required String handId,
+    this.decisionId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    required String mistakeKey,
+    required String primaryTag,
+    required String street,
+    required String villainArchetype,
+    required String heroAction,
+    this.streak = const Value.absent(),
+  }) : sessionId = Value(sessionId),
+       handId = Value(handId),
+       mistakeKey = Value(mistakeKey),
+       primaryTag = Value(primaryTag),
+       street = Value(street),
+       villainArchetype = Value(villainArchetype),
+       heroAction = Value(heroAction);
+  static Insertable<ImprovementEvent> custom({
+    Expression<int>? id,
+    Expression<String>? userId,
+    Expression<String>? sessionId,
+    Expression<String>? handId,
+    Expression<String>? decisionId,
+    Expression<DateTime>? createdAt,
+    Expression<String>? mistakeKey,
+    Expression<String>? primaryTag,
+    Expression<String>? street,
+    Expression<String>? villainArchetype,
+    Expression<String>? heroAction,
+    Expression<int>? streak,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (userId != null) 'user_id': userId,
+      if (sessionId != null) 'session_id': sessionId,
+      if (handId != null) 'hand_id': handId,
+      if (decisionId != null) 'decision_id': decisionId,
+      if (createdAt != null) 'created_at': createdAt,
+      if (mistakeKey != null) 'mistake_key': mistakeKey,
+      if (primaryTag != null) 'primary_tag': primaryTag,
+      if (street != null) 'street': street,
+      if (villainArchetype != null) 'villain_archetype': villainArchetype,
+      if (heroAction != null) 'hero_action': heroAction,
+      if (streak != null) 'streak': streak,
+    });
+  }
+
+  ImprovementEventsCompanion copyWith({
+    Value<int>? id,
+    Value<String>? userId,
+    Value<String>? sessionId,
+    Value<String>? handId,
+    Value<String?>? decisionId,
+    Value<DateTime>? createdAt,
+    Value<String>? mistakeKey,
+    Value<String>? primaryTag,
+    Value<String>? street,
+    Value<String>? villainArchetype,
+    Value<String>? heroAction,
+    Value<int>? streak,
+  }) {
+    return ImprovementEventsCompanion(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      sessionId: sessionId ?? this.sessionId,
+      handId: handId ?? this.handId,
+      decisionId: decisionId ?? this.decisionId,
+      createdAt: createdAt ?? this.createdAt,
+      mistakeKey: mistakeKey ?? this.mistakeKey,
+      primaryTag: primaryTag ?? this.primaryTag,
+      street: street ?? this.street,
+      villainArchetype: villainArchetype ?? this.villainArchetype,
+      heroAction: heroAction ?? this.heroAction,
+      streak: streak ?? this.streak,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<String>(userId.value);
+    }
+    if (sessionId.present) {
+      map['session_id'] = Variable<String>(sessionId.value);
+    }
+    if (handId.present) {
+      map['hand_id'] = Variable<String>(handId.value);
+    }
+    if (decisionId.present) {
+      map['decision_id'] = Variable<String>(decisionId.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (mistakeKey.present) {
+      map['mistake_key'] = Variable<String>(mistakeKey.value);
+    }
+    if (primaryTag.present) {
+      map['primary_tag'] = Variable<String>(primaryTag.value);
+    }
+    if (street.present) {
+      map['street'] = Variable<String>(street.value);
+    }
+    if (villainArchetype.present) {
+      map['villain_archetype'] = Variable<String>(villainArchetype.value);
+    }
+    if (heroAction.present) {
+      map['hero_action'] = Variable<String>(heroAction.value);
+    }
+    if (streak.present) {
+      map['streak'] = Variable<int>(streak.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ImprovementEventsCompanion(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('sessionId: $sessionId, ')
+          ..write('handId: $handId, ')
+          ..write('decisionId: $decisionId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('mistakeKey: $mistakeKey, ')
+          ..write('primaryTag: $primaryTag, ')
+          ..write('street: $street, ')
+          ..write('villainArchetype: $villainArchetype, ')
+          ..write('heroAction: $heroAction, ')
+          ..write('streak: $streak')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1301,6 +3054,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     this,
   );
   late final $UserStatsRowsTable userStatsRows = $UserStatsRowsTable(this);
+  late final $MistakesTable mistakes = $MistakesTable(this);
+  late final $ImprovementEventsTable improvementEvents =
+      $ImprovementEventsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1309,6 +3065,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     scenarios,
     playedScenarios,
     userStatsRows,
+    mistakes,
+    improvementEvents,
   ];
 }
 
@@ -2226,6 +3984,850 @@ typedef $$UserStatsRowsTableProcessedTableManager =
       UserStatsRow,
       PrefetchHooks Function()
     >;
+typedef $$MistakesTableCreateCompanionBuilder = MistakesCompanion Function({
+  Value<int> id,
+  Value<String> userId,
+  required String sessionId,
+  required String handId,
+  Value<String?> decisionId,
+  Value<DateTime> createdAt,
+  required String street,
+  required String villainArchetype,
+  required String heroAction,
+  Value<double> heroAmount,
+  required String bestAction,
+  Value<double> bestSizingBb,
+  Value<double> evDeltaBb,
+  Value<double> evDeltaDollars,
+  required String mistakeKey,
+  required String contextKey,
+  required String primaryTag,
+  Value<String> coarseTagsJson,
+  Value<String> adviceText,
+});
+typedef $$MistakesTableUpdateCompanionBuilder = MistakesCompanion Function({
+  Value<int> id,
+  Value<String> userId,
+  Value<String> sessionId,
+  Value<String> handId,
+  Value<String?> decisionId,
+  Value<DateTime> createdAt,
+  Value<String> street,
+  Value<String> villainArchetype,
+  Value<String> heroAction,
+  Value<double> heroAmount,
+  Value<String> bestAction,
+  Value<double> bestSizingBb,
+  Value<double> evDeltaBb,
+  Value<double> evDeltaDollars,
+  Value<String> mistakeKey,
+  Value<String> contextKey,
+  Value<String> primaryTag,
+  Value<String> coarseTagsJson,
+  Value<String> adviceText,
+});
+
+class $$MistakesTableFilterComposer
+    extends Composer<_$AppDatabase, $MistakesTable> {
+  $$MistakesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get userId => $composableBuilder(
+    column: $table.userId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sessionId => $composableBuilder(
+    column: $table.sessionId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get handId => $composableBuilder(
+    column: $table.handId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get decisionId => $composableBuilder(
+    column: $table.decisionId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get street => $composableBuilder(
+    column: $table.street,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get villainArchetype => $composableBuilder(
+    column: $table.villainArchetype,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get heroAction => $composableBuilder(
+    column: $table.heroAction,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get heroAmount => $composableBuilder(
+    column: $table.heroAmount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get bestAction => $composableBuilder(
+    column: $table.bestAction,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get bestSizingBb => $composableBuilder(
+    column: $table.bestSizingBb,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get evDeltaBb => $composableBuilder(
+    column: $table.evDeltaBb,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get evDeltaDollars => $composableBuilder(
+    column: $table.evDeltaDollars,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get mistakeKey => $composableBuilder(
+    column: $table.mistakeKey,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get contextKey => $composableBuilder(
+    column: $table.contextKey,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get primaryTag => $composableBuilder(
+    column: $table.primaryTag,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get coarseTagsJson => $composableBuilder(
+    column: $table.coarseTagsJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get adviceText => $composableBuilder(
+    column: $table.adviceText,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$MistakesTableOrderingComposer
+    extends Composer<_$AppDatabase, $MistakesTable> {
+  $$MistakesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get userId => $composableBuilder(
+    column: $table.userId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sessionId => $composableBuilder(
+    column: $table.sessionId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get handId => $composableBuilder(
+    column: $table.handId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get decisionId => $composableBuilder(
+    column: $table.decisionId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get street => $composableBuilder(
+    column: $table.street,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get villainArchetype => $composableBuilder(
+    column: $table.villainArchetype,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get heroAction => $composableBuilder(
+    column: $table.heroAction,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get heroAmount => $composableBuilder(
+    column: $table.heroAmount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get bestAction => $composableBuilder(
+    column: $table.bestAction,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get bestSizingBb => $composableBuilder(
+    column: $table.bestSizingBb,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get evDeltaBb => $composableBuilder(
+    column: $table.evDeltaBb,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get evDeltaDollars => $composableBuilder(
+    column: $table.evDeltaDollars,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get mistakeKey => $composableBuilder(
+    column: $table.mistakeKey,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get contextKey => $composableBuilder(
+    column: $table.contextKey,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get primaryTag => $composableBuilder(
+    column: $table.primaryTag,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get coarseTagsJson => $composableBuilder(
+    column: $table.coarseTagsJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get adviceText => $composableBuilder(
+    column: $table.adviceText,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$MistakesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $MistakesTable> {
+  $$MistakesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  GeneratedColumn<String> get sessionId =>
+      $composableBuilder(column: $table.sessionId, builder: (column) => column);
+
+  GeneratedColumn<String> get handId =>
+      $composableBuilder(column: $table.handId, builder: (column) => column);
+
+  GeneratedColumn<String> get decisionId => $composableBuilder(
+    column: $table.decisionId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<String> get street =>
+      $composableBuilder(column: $table.street, builder: (column) => column);
+
+  GeneratedColumn<String> get villainArchetype => $composableBuilder(
+    column: $table.villainArchetype,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get heroAction => $composableBuilder(
+    column: $table.heroAction,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get heroAmount => $composableBuilder(
+    column: $table.heroAmount,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get bestAction => $composableBuilder(
+    column: $table.bestAction,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get bestSizingBb => $composableBuilder(
+    column: $table.bestSizingBb,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get evDeltaBb =>
+      $composableBuilder(column: $table.evDeltaBb, builder: (column) => column);
+
+  GeneratedColumn<double> get evDeltaDollars => $composableBuilder(
+    column: $table.evDeltaDollars,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get mistakeKey => $composableBuilder(
+    column: $table.mistakeKey,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get contextKey => $composableBuilder(
+    column: $table.contextKey,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get primaryTag => $composableBuilder(
+    column: $table.primaryTag,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get coarseTagsJson => $composableBuilder(
+    column: $table.coarseTagsJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get adviceText => $composableBuilder(
+    column: $table.adviceText,
+    builder: (column) => column,
+  );
+}
+
+class $$MistakesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $MistakesTable,
+          Mistake,
+          $$MistakesTableFilterComposer,
+          $$MistakesTableOrderingComposer,
+          $$MistakesTableAnnotationComposer,
+          $$MistakesTableCreateCompanionBuilder,
+          $$MistakesTableUpdateCompanionBuilder,
+          (Mistake, BaseReferences<_$AppDatabase, $MistakesTable, Mistake>),
+          Mistake,
+          PrefetchHooks Function()
+        > {
+  $$MistakesTableTableManager(_$AppDatabase db, $MistakesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$MistakesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$MistakesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$MistakesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> userId = const Value.absent(),
+                Value<String> sessionId = const Value.absent(),
+                Value<String> handId = const Value.absent(),
+                Value<String?> decisionId = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<String> street = const Value.absent(),
+                Value<String> villainArchetype = const Value.absent(),
+                Value<String> heroAction = const Value.absent(),
+                Value<double> heroAmount = const Value.absent(),
+                Value<String> bestAction = const Value.absent(),
+                Value<double> bestSizingBb = const Value.absent(),
+                Value<double> evDeltaBb = const Value.absent(),
+                Value<double> evDeltaDollars = const Value.absent(),
+                Value<String> mistakeKey = const Value.absent(),
+                Value<String> contextKey = const Value.absent(),
+                Value<String> primaryTag = const Value.absent(),
+                Value<String> coarseTagsJson = const Value.absent(),
+                Value<String> adviceText = const Value.absent(),
+              }) => MistakesCompanion(
+                id: id,
+                userId: userId,
+                sessionId: sessionId,
+                handId: handId,
+                decisionId: decisionId,
+                createdAt: createdAt,
+                street: street,
+                villainArchetype: villainArchetype,
+                heroAction: heroAction,
+                heroAmount: heroAmount,
+                bestAction: bestAction,
+                bestSizingBb: bestSizingBb,
+                evDeltaBb: evDeltaBb,
+                evDeltaDollars: evDeltaDollars,
+                mistakeKey: mistakeKey,
+                contextKey: contextKey,
+                primaryTag: primaryTag,
+                coarseTagsJson: coarseTagsJson,
+                adviceText: adviceText,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> userId = const Value.absent(),
+                required String sessionId,
+                required String handId,
+                Value<String?> decisionId = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                required String street,
+                required String villainArchetype,
+                required String heroAction,
+                Value<double> heroAmount = const Value.absent(),
+                required String bestAction,
+                Value<double> bestSizingBb = const Value.absent(),
+                Value<double> evDeltaBb = const Value.absent(),
+                Value<double> evDeltaDollars = const Value.absent(),
+                required String mistakeKey,
+                required String contextKey,
+                required String primaryTag,
+                Value<String> coarseTagsJson = const Value.absent(),
+                Value<String> adviceText = const Value.absent(),
+              }) => MistakesCompanion.insert(
+                id: id,
+                userId: userId,
+                sessionId: sessionId,
+                handId: handId,
+                decisionId: decisionId,
+                createdAt: createdAt,
+                street: street,
+                villainArchetype: villainArchetype,
+                heroAction: heroAction,
+                heroAmount: heroAmount,
+                bestAction: bestAction,
+                bestSizingBb: bestSizingBb,
+                evDeltaBb: evDeltaBb,
+                evDeltaDollars: evDeltaDollars,
+                mistakeKey: mistakeKey,
+                contextKey: contextKey,
+                primaryTag: primaryTag,
+                coarseTagsJson: coarseTagsJson,
+                adviceText: adviceText,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$MistakesTable, Mistake>(table),
+                  BaseReferences<_$AppDatabase, $MistakesTable, Mistake>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$MistakesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $MistakesTable,
+      Mistake,
+      $$MistakesTableFilterComposer,
+      $$MistakesTableOrderingComposer,
+      $$MistakesTableAnnotationComposer,
+      $$MistakesTableCreateCompanionBuilder,
+      $$MistakesTableUpdateCompanionBuilder,
+      (Mistake, BaseReferences<_$AppDatabase, $MistakesTable, Mistake>),
+      Mistake,
+      PrefetchHooks Function()
+    >;
+typedef $$ImprovementEventsTableCreateCompanionBuilder =
+    ImprovementEventsCompanion Function({
+      Value<int> id,
+      Value<String> userId,
+      required String sessionId,
+      required String handId,
+      Value<String?> decisionId,
+      Value<DateTime> createdAt,
+      required String mistakeKey,
+      required String primaryTag,
+      required String street,
+      required String villainArchetype,
+      required String heroAction,
+      Value<int> streak,
+    });
+typedef $$ImprovementEventsTableUpdateCompanionBuilder =
+    ImprovementEventsCompanion Function({
+      Value<int> id,
+      Value<String> userId,
+      Value<String> sessionId,
+      Value<String> handId,
+      Value<String?> decisionId,
+      Value<DateTime> createdAt,
+      Value<String> mistakeKey,
+      Value<String> primaryTag,
+      Value<String> street,
+      Value<String> villainArchetype,
+      Value<String> heroAction,
+      Value<int> streak,
+    });
+
+class $$ImprovementEventsTableFilterComposer
+    extends Composer<_$AppDatabase, $ImprovementEventsTable> {
+  $$ImprovementEventsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get userId => $composableBuilder(
+    column: $table.userId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sessionId => $composableBuilder(
+    column: $table.sessionId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get handId => $composableBuilder(
+    column: $table.handId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get decisionId => $composableBuilder(
+    column: $table.decisionId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get mistakeKey => $composableBuilder(
+    column: $table.mistakeKey,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get primaryTag => $composableBuilder(
+    column: $table.primaryTag,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get street => $composableBuilder(
+    column: $table.street,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get villainArchetype => $composableBuilder(
+    column: $table.villainArchetype,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get heroAction => $composableBuilder(
+    column: $table.heroAction,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get streak => $composableBuilder(
+    column: $table.streak,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$ImprovementEventsTableOrderingComposer
+    extends Composer<_$AppDatabase, $ImprovementEventsTable> {
+  $$ImprovementEventsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get userId => $composableBuilder(
+    column: $table.userId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sessionId => $composableBuilder(
+    column: $table.sessionId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get handId => $composableBuilder(
+    column: $table.handId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get decisionId => $composableBuilder(
+    column: $table.decisionId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get mistakeKey => $composableBuilder(
+    column: $table.mistakeKey,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get primaryTag => $composableBuilder(
+    column: $table.primaryTag,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get street => $composableBuilder(
+    column: $table.street,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get villainArchetype => $composableBuilder(
+    column: $table.villainArchetype,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get heroAction => $composableBuilder(
+    column: $table.heroAction,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get streak => $composableBuilder(
+    column: $table.streak,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ImprovementEventsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ImprovementEventsTable> {
+  $$ImprovementEventsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  GeneratedColumn<String> get sessionId =>
+      $composableBuilder(column: $table.sessionId, builder: (column) => column);
+
+  GeneratedColumn<String> get handId =>
+      $composableBuilder(column: $table.handId, builder: (column) => column);
+
+  GeneratedColumn<String> get decisionId => $composableBuilder(
+    column: $table.decisionId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<String> get mistakeKey => $composableBuilder(
+    column: $table.mistakeKey,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get primaryTag => $composableBuilder(
+    column: $table.primaryTag,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get street =>
+      $composableBuilder(column: $table.street, builder: (column) => column);
+
+  GeneratedColumn<String> get villainArchetype => $composableBuilder(
+    column: $table.villainArchetype,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get heroAction => $composableBuilder(
+    column: $table.heroAction,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get streak =>
+      $composableBuilder(column: $table.streak, builder: (column) => column);
+}
+
+class $$ImprovementEventsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ImprovementEventsTable,
+          ImprovementEvent,
+          $$ImprovementEventsTableFilterComposer,
+          $$ImprovementEventsTableOrderingComposer,
+          $$ImprovementEventsTableAnnotationComposer,
+          $$ImprovementEventsTableCreateCompanionBuilder,
+          $$ImprovementEventsTableUpdateCompanionBuilder,
+          (
+            ImprovementEvent,
+            BaseReferences<
+              _$AppDatabase,
+              $ImprovementEventsTable,
+              ImprovementEvent
+            >,
+          ),
+          ImprovementEvent,
+          PrefetchHooks Function()
+        > {
+  $$ImprovementEventsTableTableManager(
+    _$AppDatabase db,
+    $ImprovementEventsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ImprovementEventsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ImprovementEventsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ImprovementEventsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> userId = const Value.absent(),
+                Value<String> sessionId = const Value.absent(),
+                Value<String> handId = const Value.absent(),
+                Value<String?> decisionId = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<String> mistakeKey = const Value.absent(),
+                Value<String> primaryTag = const Value.absent(),
+                Value<String> street = const Value.absent(),
+                Value<String> villainArchetype = const Value.absent(),
+                Value<String> heroAction = const Value.absent(),
+                Value<int> streak = const Value.absent(),
+              }) => ImprovementEventsCompanion(
+                id: id,
+                userId: userId,
+                sessionId: sessionId,
+                handId: handId,
+                decisionId: decisionId,
+                createdAt: createdAt,
+                mistakeKey: mistakeKey,
+                primaryTag: primaryTag,
+                street: street,
+                villainArchetype: villainArchetype,
+                heroAction: heroAction,
+                streak: streak,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> userId = const Value.absent(),
+                required String sessionId,
+                required String handId,
+                Value<String?> decisionId = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                required String mistakeKey,
+                required String primaryTag,
+                required String street,
+                required String villainArchetype,
+                required String heroAction,
+                Value<int> streak = const Value.absent(),
+              }) => ImprovementEventsCompanion.insert(
+                id: id,
+                userId: userId,
+                sessionId: sessionId,
+                handId: handId,
+                decisionId: decisionId,
+                createdAt: createdAt,
+                mistakeKey: mistakeKey,
+                primaryTag: primaryTag,
+                street: street,
+                villainArchetype: villainArchetype,
+                heroAction: heroAction,
+                streak: streak,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$ImprovementEventsTable, ImprovementEvent>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $ImprovementEventsTable,
+                    ImprovementEvent
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ImprovementEventsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ImprovementEventsTable,
+      ImprovementEvent,
+      $$ImprovementEventsTableFilterComposer,
+      $$ImprovementEventsTableOrderingComposer,
+      $$ImprovementEventsTableAnnotationComposer,
+      $$ImprovementEventsTableCreateCompanionBuilder,
+      $$ImprovementEventsTableUpdateCompanionBuilder,
+      (
+        ImprovementEvent,
+        BaseReferences<
+          _$AppDatabase,
+          $ImprovementEventsTable,
+          ImprovementEvent
+        >,
+      ),
+      ImprovementEvent,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -2236,4 +4838,8 @@ class $AppDatabaseManager {
       $$PlayedScenariosTableTableManager(_db, _db.playedScenarios);
   $$UserStatsRowsTableTableManager get userStatsRows =>
       $$UserStatsRowsTableTableManager(_db, _db.userStatsRows);
+  $$MistakesTableTableManager get mistakes =>
+      $$MistakesTableTableManager(_db, _db.mistakes);
+  $$ImprovementEventsTableTableManager get improvementEvents =>
+      $$ImprovementEventsTableTableManager(_db, _db.improvementEvents);
 }

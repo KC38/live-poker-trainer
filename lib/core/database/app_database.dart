@@ -50,15 +50,91 @@ class UserStatsRows extends Table {
   Set<Column<Object>> get primaryKey => {userId};
 }
 
+/// Every INCORRECT live-coach verdict, classified into a stable mistake key.
+///
+/// `sessionId` / `handId` / `decisionId` are free-form text so they can be
+/// linked to a future sessions / hand-history / coach-decision log without a
+/// schema change (`decisionId` is nullable until such a log exists).
+class Mistakes extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get userId => text().withDefault(const Constant('local'))();
+  TextColumn get sessionId => text()();
+  TextColumn get handId => text()();
+  TextColumn get decisionId => text().nullable()();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+  TextColumn get street => text()();
+  TextColumn get villainArchetype => text()();
+  TextColumn get heroAction => text()();
+  RealColumn get heroAmount => real().withDefault(const Constant(0))();
+  TextColumn get bestAction => text()();
+  RealColumn get bestSizingBb => real().withDefault(const Constant(0))();
+  RealColumn get evDeltaBb => real().withDefault(const Constant(0))();
+  RealColumn get evDeltaDollars => real().withDefault(const Constant(0))();
+
+  /// Fine-grained key, e.g. `river:nit:raise->call`.
+  TextColumn get mistakeKey => text()();
+
+  /// Spot without the hero action, e.g. `river:nit:call`.
+  TextColumn get contextKey => text()();
+
+  /// Most specific coarse tag id.
+  TextColumn get primaryTag => text()();
+
+  /// JSON list of every coarse tag id.
+  TextColumn get coarseTagsJson => text().withDefault(const Constant('[]'))();
+
+  /// Advice shown to the user (updated once the AI line arrives).
+  TextColumn get adviceText => text().withDefault(const Constant(''))();
+}
+
+/// A CORRECT decision in a spot the user previously got wrong repeatedly.
+class ImprovementEvents extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get userId => text().withDefault(const Constant('local'))();
+  TextColumn get sessionId => text()();
+  TextColumn get handId => text()();
+  TextColumn get decisionId => text().nullable()();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
+  /// The mistake key credited with this fix.
+  TextColumn get mistakeKey => text()();
+  TextColumn get primaryTag => text()();
+  TextColumn get street => text()();
+  TextColumn get villainArchetype => text()();
+  TextColumn get heroAction => text()();
+
+  /// Consecutive fixes on this key since its last mistake, including this one.
+  IntColumn get streak => integer().withDefault(const Constant(1))();
+}
+
 /// Application Drift database (native SQLite + web WASM).
-@DriftDatabase(tables: [Scenarios, PlayedScenarios, UserStatsRows])
+@DriftDatabase(
+  tables: [
+    Scenarios,
+    PlayedScenarios,
+    UserStatsRows,
+    Mistakes,
+    ImprovementEvents,
+  ],
+)
 class AppDatabase extends _$AppDatabase {
   /// Opens the platform-appropriate database connection.
   AppDatabase([QueryExecutor? executor])
       : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+        onCreate: (m) => m.createAll(),
+        onUpgrade: (m, from, to) async {
+          if (from < 2) {
+            await m.createTable(mistakes);
+            await m.createTable(improvementEvents);
+          }
+        },
+      );
 
   static QueryExecutor _openConnection() {
     return driftDatabase(

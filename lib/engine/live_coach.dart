@@ -10,6 +10,7 @@ import 'package:live_poker_trainer/engine/deck_evaluator.dart';
 import 'package:live_poker_trainer/engine/poker_engine.dart';
 import 'package:live_poker_trainer/models/coach_feedback.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
+import 'package:live_poker_trainer/models/mistake_model.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/models/scenario_model.dart';
 
@@ -27,6 +28,8 @@ class LiveCoachGrade {
     this.optimalAction,
     this.optimalSizingBb = 0,
     this.evDeltaBb = 0,
+    this.heroAction = ExploitAction.check,
+    this.heroSizingBb = 0,
   });
 
   final CoachVerdict verdict;
@@ -47,9 +50,53 @@ class LiveCoachGrade {
   final double optimalSizingBb;
   final double evDeltaBb;
 
+  /// Hero action mapped onto the exploit vocabulary.
+  final ExploitAction heroAction;
+
+  /// Hero bet / raise size in big blinds (0 for passive actions).
+  final double heroSizingBb;
+
+  /// Stable leak classification of this decision (null when ungraded).
+  MistakePattern? get pattern {
+    final best = optimalAction;
+    if (!verdict.isGraded || best == null) return null;
+    return MistakePattern.derive(
+      street: street,
+      archetype: villainArchetype,
+      taken: heroAction,
+      best: best,
+      mismatch: mismatch,
+      heroSizingBb: heroSizingBb,
+      bestSizingBb: optimalSizingBb,
+    );
+  }
+
   /// Prompt for the Gemini coach, carrying the full decision context so the
   /// model can never fall back to generic advice.
-  String toPrompt(GameState game) {
+  ///
+  /// [repeat] / [improvement] add leak-history context so the model calls out
+  /// a repeated mistake, or acknowledges a fixed one, by name.
+  String toPrompt(
+    GameState game, {
+    RepeatInfo? repeat,
+    ImprovementInfo? improvement,
+  }) {
+    final history = StringBuffer();
+    if (repeat != null && repeat.isRepeat) {
+      history.write(' Leak history: this is occurrence #${repeat.displayCount} '
+          'of the pattern "${repeat.pattern.primaryTag.label}" '
+          '(${repeat.pattern.key}), ${repeat.sessionCount} in this session. '
+          'Explicitly say it is a repeated mistake, quote the count, and name '
+          'the pattern.');
+    }
+    if (improvement != null) {
+      history.write(' Leak history: the player previously '
+          '${improvement.lastWrongAction.name}ed in this spot '
+          '${improvement.priorMistakes} times '
+          '("${improvement.tag.label}") and just got it right, '
+          'streak ${improvement.streak}. Explicitly acknowledge the fix and '
+          'what they used to do.');
+    }
     final board = game.community.map((c) => c.code).join(' ');
     final hole = game.hero.holeCards.map((c) => c.code).join(' ');
     return 'Street: ${street.label}. '
@@ -68,7 +115,8 @@ class LiveCoachGrade {
         '$heroActionLabel '
         '${verdict == CoachVerdict.correct ? 'works' : 'is worse than the recommended line'} '
         'against a ${villainArchetype.label} on the ${street.label}. '
-        'Reference the archetype tendency by name. Do not give generic advice.';
+        'Reference the archetype tendency by name. Do not give generic advice.'
+        '$history';
   }
 }
 
@@ -174,6 +222,8 @@ class LiveCoach {
       optimalAction: suggested.action,
       optimalSizingBb: suggested.sizingBb,
       evDeltaBb: evDeltaBb,
+      heroAction: mapped,
+      heroSizingBb: heroSizingBb,
     );
   }
 

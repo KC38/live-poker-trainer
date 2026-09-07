@@ -6,14 +6,17 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/core/audio/sound_service.dart';
 import 'package:live_poker_trainer/engine/coach_lines.dart';
+import 'package:live_poker_trainer/engine/leak_lines.dart';
 import 'package:live_poker_trainer/engine/live_coach.dart';
 import 'package:live_poker_trainer/engine/poker_engine.dart';
 import 'package:live_poker_trainer/models/coach_feedback.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
+import 'package:live_poker_trainer/models/mistake_model.dart';
 import 'package:live_poker_trainer/models/user_stats_model.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
+import 'package:live_poker_trainer/services/mistake_tracker.dart';
 
 /// Pacing for the live-table replay. Slow enough to read, fast enough to play.
 class ReplayPace {
@@ -111,6 +114,16 @@ class GameController extends StateNotifier<TableSession> {
 
   final Ref _ref;
   PokerEngine? _engine;
+
+  /// Identifies one sitting at a table; mistakes are grouped by it for
+  /// "N times this session" copy. Refreshed when a fresh table is started.
+  String _sessionId = _newSessionId();
+
+  static String _newSessionId() =>
+      's${DateTime.now().toUtc().millisecondsSinceEpoch}';
+
+  /// Current table session id (exposed for tests and future hand logging).
+  String get sessionId => _sessionId;
   bool _voiceHintShown = false;
 
   /// Incremented per deal / hero action so a stale replay loop can bail out.
@@ -126,7 +139,22 @@ class GameController extends StateNotifier<TableSession> {
     super.dispose();
   }
 
+  /// Marks the table as preparing so Home can navigate before any deal SFX.
+  ///
+  /// Cancels an in-flight replay and clears the prior hand so the Training
+  /// screen shows an in-table loading state instead of stale cards / audio.
+  void prepareTraining() {
+    _replayToken++;
+    state = TableSession(
+      loading: true,
+      voiceHintShown: _voiceHintShown,
+    );
+  }
+
   /// Starts (or restarts) unified full-hand training.
+  ///
+  /// Call only after [PokerTableScreen] is mounted and the route transition
+  /// has finished — Home must not invoke this before navigation.
   Future<void> startTraining({bool continueTable = false}) async {
     final token = ++_replayToken;
     final previousFingerprint = _engine == null
@@ -152,6 +180,7 @@ class GameController extends StateNotifier<TableSession> {
         engine.updateSettings(_settings);
         engine.startHand(existingPlayers: existing, resolve: false);
       } else {
+        _sessionId = _newSessionId();
         _engine = PokerEngine(settings: _settings)
           ..startHand(existingPlayers: existing, resolve: false);
       }
@@ -255,13 +284,78 @@ class GameController extends StateNotifier<TableSession> {
       );
     }
 
+    // Leak history (local DB, fast) decides whether this is a repeat or a fix
+    // before the coach speaks, so both the offline line and the AI prompt can
+    // name it.
+    final leak = await _trackLeak(grade, game, action);
+    if (_disposed || token != _replayToken) return;
+    final localMessage = _applyLeakContext(grade, leak);
+
     await _recordStats(grade, game);
     // Coach narration runs in parallel with the replay so play never stalls
     // waiting on the network.
-    final narration = _narrate(grade, game, action, token);
+    final narration = _narrate(grade, game, token, leak, localMessage);
 
     await _replayUntilHero(pace: ReplayPace.passiveAction, token: token);
     await narration;
+  }
+
+  /// Persists the graded decision into leak history; never throws.
+  Future<LeakCheck> _trackLeak(
+    LiveCoachGrade grade,
+    GameState game,
+    PokerAction action,
+  ) async {
+    if (!grade.verdict.isGraded) return LeakCheck.none;
+    try {
+      final tracker = _ref.read(mistakeTrackerProvider);
+      return await tracker.track(
+        grade: grade,
+        sessionId: _sessionId,
+        handId: '$_sessionId-h${game.handCount}',
+        bigBlind: game.bigBlind,
+        heroAmount: action.amount,
+      );
+    } catch (_) {
+      return LeakCheck.none;
+    }
+  }
+
+  /// Prefixes the local coach line with repeat / improvement copy and sets the
+  /// shelf indicators. Returns the message to fall back to offline.
+  String _applyLeakContext(LiveCoachGrade grade, LeakCheck leak) {
+    var message = grade.message;
+    var coach = state.coach;
+    final repeat = leak.repeat;
+    final improvement = leak.improvement;
+
+    if (repeat != null && repeat.isRepeat) {
+      final prefix = LeakLines.repeatPrefix(
+        repeat,
+        villainName: grade.villainName,
+      );
+      message = '$prefix. $message';
+      coach = coach.copyWith(
+        repeatCount: repeat.displayCount,
+        patternLabel: repeat.pattern.primaryTag.label,
+      );
+    } else if (improvement != null) {
+      final prefix = LeakLines.improvementPrefix(
+        improvement,
+        taken: grade.heroAction,
+      );
+      message = '$prefix. $message';
+      coach = coach.copyWith(
+        improvementStreak: improvement.streak,
+        patternLabel: improvement.tag.label,
+      );
+    }
+
+    state = state.copyWith(coach: coach.copyWith(message: message));
+    if (repeat != null || improvement != null) {
+      _ref.invalidate(mistakeStatsProvider);
+    }
+    return message;
   }
 
   /// Steps the engine forward with realistic pacing until the hero must act.
@@ -357,19 +451,29 @@ class GameController extends StateNotifier<TableSession> {
   }
 
   /// Fetches a spot-specific coach line (Gemini when available) and speaks it.
+  ///
+  /// [localMessage] is the offline line (already carrying repeat / improvement
+  /// copy) used when Gemini is unavailable.
   Future<void> _narrate(
     LiveCoachGrade grade,
     GameState game,
-    PokerAction action,
     int token,
+    LeakCheck leak,
+    String localMessage,
   ) async {
     final settings = _settings;
     final gemini = _ref.read(geminiServiceProvider);
     final sound = _ref.read(soundServiceProvider);
-    var message = grade.message;
+    var message = localMessage;
 
     try {
-      final result = await gemini.coach(prompt: grade.toPrompt(game));
+      final result = await gemini.coach(
+        prompt: grade.toPrompt(
+          game,
+          repeat: leak.repeat,
+          improvement: leak.improvement,
+        ),
+      );
       final text = result.text.trim();
       if (text.isNotEmpty) message = text;
     } catch (_) {
@@ -378,6 +482,12 @@ class GameController extends StateNotifier<TableSession> {
 
     if (_disposed || token != _replayToken) return;
     state = state.copyWith(coach: state.coach.copyWith(message: message));
+    if (leak.mistakeId != null && message != grade.message) {
+      // Store the advice the player actually saw.
+      unawaited(
+        _ref.read(mistakeTrackerProvider).saveAdvice(leak.mistakeId, message),
+      );
+    }
 
     final playback = await sound.speakCoachLine(
       text: message,
@@ -385,17 +495,10 @@ class GameController extends StateNotifier<TableSession> {
     );
     if (_disposed || token != _replayToken) return;
 
-    var voiceNote = playback.note;
-    if (voiceNote != null && _voiceHintShown) voiceNote = null;
-    if (playback.note != null) _voiceHintShown = true;
-
+    // Voice diagnostics stay in logs only — never surface config hints on the
+    // coach shelf (see SoundService / CoachVoicePlayback.diagnostic).
     state = state.copyWith(
-      coach: state.coach.copyWith(
-        voiceNote: voiceNote,
-        clearVoiceNote: voiceNote == null,
-        isSpeaking: playback.spoke,
-      ),
-      voiceHintShown: _voiceHintShown,
+      coach: state.coach.copyWith(isSpeaking: playback.spoke),
     );
   }
 
@@ -437,6 +540,12 @@ final gameControllerProvider =
 final userStatsProvider = FutureProvider<UserStatsModel>((ref) async {
   final dao = ref.watch(userStatsDaoProvider);
   return dao.getStats();
+});
+
+/// Leak-finder aggregates for the Stats screen.
+final mistakeStatsProvider = FutureProvider<MistakeStats>((ref) async {
+  final dao = ref.watch(mistakeDaoProvider);
+  return dao.loadStats();
 });
 
 final unplayedCountProvider = FutureProvider<int>((ref) async {
