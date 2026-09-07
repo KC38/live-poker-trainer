@@ -1,6 +1,8 @@
 /// Shared service providers (DB, Gemini, audio).
 library;
 
+import 'dart:typed_data';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/core/audio/sound_service.dart';
 import 'package:live_poker_trainer/core/audio/voice_cache.dart';
@@ -14,6 +16,7 @@ import 'package:live_poker_trainer/core/database/user_stats_dao.dart';
 import 'package:live_poker_trainer/core/database/voice_clip_dao.dart';
 import 'package:live_poker_trainer/core/diagnostics/diagnostics_log.dart';
 import 'package:live_poker_trainer/engine/scenario_manager.dart';
+import 'package:live_poker_trainer/services/app_session_service.dart';
 import 'package:live_poker_trainer/services/gemini_service.dart';
 import 'package:live_poker_trainer/services/hand_recorder.dart';
 import 'package:live_poker_trainer/services/mistake_tracker.dart';
@@ -54,6 +57,13 @@ final diagnosticsDaoProvider = Provider<DiagnosticsDao>((ref) {
   return dao;
 });
 
+/// App session lifecycle (one row per launch) + uncaught-error capture.
+final appSessionServiceProvider = Provider<AppSessionService>((ref) {
+  final service = AppSessionService(ref.watch(diagnosticsDaoProvider));
+  ref.onDispose(() => service.stop());
+  return service;
+});
+
 /// Hand history + coach decisions.
 final handHistoryDaoProvider = Provider<HandHistoryDao>(
   (ref) => HandHistoryDao(ref.watch(appDatabaseProvider)),
@@ -74,7 +84,11 @@ final handRecorderProvider = Provider<HandRecorder>((ref) {
 });
 
 final geminiServiceProvider = Provider<GeminiService>((ref) {
-  final service = GeminiService(logger: ref.watch(diagnosticsDaoProvider));
+  // The logger resolves the DAO on first use so building the audio / Gemini
+  // graph (e.g. from a Settings read) never opens the database eagerly.
+  final service = GeminiService(
+    logger: _LazyRequestLogger(() => ref.read(diagnosticsDaoProvider)),
+  );
   ref.onDispose(service.dispose);
   return service;
 });
@@ -85,12 +99,62 @@ final soundServiceProvider = Provider<SoundService>((ref) {
     voiceCache: VoiceCache(
       maxBytes: Config.voiceCacheMaxBytes,
       ttl: Config.voiceCacheTtl,
-      store: ref.watch(voiceClipDaoProvider),
+      store: _LazyVoiceClipStore(() => ref.read(voiceClipDaoProvider)),
     ),
   );
   ref.onDispose(service.dispose);
   return service;
 });
+
+class _LazyRequestLogger implements AiRequestLogger {
+  _LazyRequestLogger(this._resolve);
+  final AiRequestLogger Function() _resolve;
+
+  @override
+  Future<int?> logRequest(AiRequestLogEntry entry) =>
+      _resolve().logRequest(entry);
+}
+
+class _LazyVoiceClipStore implements VoiceClipStore {
+  _LazyVoiceClipStore(this._resolve);
+  final VoiceClipStore Function() _resolve;
+
+  @override
+  Future<void> recordPut({
+    required String cacheKey,
+    required String text,
+    required String voice,
+    required String modelId,
+    required int byteSize,
+    required DateTime expiresAt,
+    String? filePath,
+    Uint8List? audioBlob,
+  }) =>
+      _resolve().recordPut(
+        cacheKey: cacheKey,
+        text: text,
+        voice: voice,
+        modelId: modelId,
+        byteSize: byteSize,
+        expiresAt: expiresAt,
+        filePath: filePath,
+        audioBlob: audioBlob,
+      );
+
+  @override
+  Future<void> recordHit(String cacheKey) => _resolve().recordHit(cacheKey);
+
+  @override
+  Future<void> recordEviction(String cacheKey, VoiceEvictionReason reason) =>
+      _resolve().recordEviction(cacheKey, reason);
+
+  @override
+  Future<void> recordClear(VoiceEvictionReason reason) =>
+      _resolve().recordClear(reason);
+
+  @override
+  Future<Uint8List?> readBlob(String cacheKey) => _resolve().readBlob(cacheKey);
+}
 
 final scenarioManagerProvider = Provider<ScenarioManager>(
   (ref) => ScenarioManager(

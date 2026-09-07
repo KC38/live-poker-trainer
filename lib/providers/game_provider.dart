@@ -5,6 +5,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/core/audio/sound_service.dart';
+import 'package:live_poker_trainer/core/diagnostics/diagnostics_log.dart';
 import 'package:live_poker_trainer/engine/coach_lines.dart';
 import 'package:live_poker_trainer/engine/leak_lines.dart';
 import 'package:live_poker_trainer/engine/live_coach.dart';
@@ -16,6 +17,7 @@ import 'package:live_poker_trainer/models/mistake_model.dart';
 import 'package:live_poker_trainer/models/user_stats_model.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
+import 'package:live_poker_trainer/services/hand_recorder.dart';
 import 'package:live_poker_trainer/services/mistake_tracker.dart';
 
 /// Pacing for the live-table replay. Slow enough to read, fast enough to play.
@@ -127,6 +129,12 @@ class GameController extends StateNotifier<TableSession> {
 
   GameSettingsModel get _settings => _ref.read(settingsProvider);
 
+  /// Hand-history recorder; every call is best-effort and non-blocking.
+  HandRecorder get _recorder => _ref.read(handRecorderProvider);
+
+  /// Resolved state of the previous hand at this table (for rebuy logging).
+  GameState? _lastResolved;
+
   @override
   void dispose() {
     _disposed = true;
@@ -193,6 +201,13 @@ class GameController extends StateNotifier<TableSession> {
       }
 
       state = state.copyWith(game: dealt, loading: true);
+      _safeRecord(() {
+        _recorder.startHand(
+          dealt,
+          _settings,
+          previous: continueTable ? _lastResolved : null,
+        );
+      });
       await sound.deal();
       if (_disposed || token != _replayToken) return;
 
@@ -264,6 +279,8 @@ class GameController extends StateNotifier<TableSession> {
     // Apply the hero action right away so the felt reflects the decision.
     final after = engine.submitHeroAction(action);
     state = state.copyWith(game: after);
+    _safeRecord(() => _recorder.recordAction(game, after, game.hero.id, action));
+    final decisionId = _recordDecision(grade, game, action);
 
     // Mid-hand continuations must keep the same hole cards; a new deal here
     // would be the "same spot looping" bug.
@@ -285,7 +302,8 @@ class GameController extends StateNotifier<TableSession> {
     await _recordStats(grade, game);
     // Coach narration runs in parallel with the replay so play never stalls
     // waiting on the network.
-    final narration = _narrate(grade, game, token, leak, localMessage);
+    final narration =
+        _narrate(grade, game, token, leak, localMessage, decisionId);
 
     await _replayUntilHero(pace: ReplayPace.passiveAction, token: token);
     await narration;
@@ -378,6 +396,17 @@ class GameController extends StateNotifier<TableSession> {
 
       switch (event.kind) {
         case TableEventKind.villainAction:
+          final before = current;
+          final seat = event.seatIndex;
+          final villainAction = event.action;
+          if (before != null && seat != null && villainAction != null) {
+            _safeRecord(() => _recorder.recordAction(
+                  before,
+                  event.state,
+                  seat,
+                  villainAction,
+                ));
+          }
           state = state.copyWith(game: event.state, collectingChips: false);
           final type = event.action?.type;
           if (type != null) await _playActionSfx(sound, type);
@@ -390,6 +419,7 @@ class GameController extends StateNotifier<TableSession> {
           await _wait(ReplayPace.collectPot);
           state = state.copyWith(collectingChips: false);
         case TableEventKind.dealStreet:
+          _safeRecord(() => _recorder.recordStreet(event.state));
           state = state.copyWith(game: event.state, collectingChips: false);
           await sound.deal();
           await _wait(ReplayPace.dealStreet);
@@ -418,6 +448,10 @@ class GameController extends StateNotifier<TableSession> {
     if (game == null || !game.isHandOver) return;
     if (_disposed || token != _replayToken) return;
     final sound = _ref.read(soundServiceProvider);
+    if (!identical(_lastResolved, game)) {
+      _lastResolved = game;
+      _safeRecord(() => _recorder.endHand(game));
+    }
     final heroWon = game.resultMessage?.startsWith('Hero') ?? false;
     if (heroWon) await sound.win();
     // Hand review stays in the coach shelf; the header Next CTA is the cue.
@@ -451,11 +485,14 @@ class GameController extends StateNotifier<TableSession> {
     int token,
     LeakCheck leak,
     String localMessage,
+    Future<int?> decisionId,
   ) async {
     final settings = _settings;
     final gemini = _ref.read(geminiServiceProvider);
     final sound = _ref.read(soundServiceProvider);
     var message = localMessage;
+    var adviceSource = 'offline';
+    int? aiRequestId;
 
     try {
       final result = await gemini.coach(
@@ -464,11 +501,17 @@ class GameController extends StateNotifier<TableSession> {
           repeat: leak.repeat,
           improvement: leak.improvement,
         ),
+        handId: await _recorder.currentHandId,
       );
+      aiRequestId = result.aiRequestId;
       final text = result.text.trim();
-      if (text.isNotEmpty) message = text;
-    } catch (_) {
+      if (text.isNotEmpty) {
+        message = text;
+        adviceSource = 'gemini';
+      }
+    } catch (e, st) {
       // Keep the local, spot-specific line.
+      DiagnosticsLog.error('GameController.narrate', e, st);
     }
 
     if (_disposed || token != _replayToken) return;
@@ -484,6 +527,16 @@ class GameController extends StateNotifier<TableSession> {
       text: message,
       enabled: settings.ttsEnabled,
     );
+    final resolvedDecision = await decisionId;
+    _safeRecord(() => _recorder.completeDecision(
+          resolvedDecision,
+          adviceText: message,
+          adviceSource: adviceSource,
+          aiRequestId: aiRequestId,
+          voicePlayed: playback.spoke,
+          voiceFromCache: playback.fromCache,
+          voiceUsedDevice: playback.usedDeviceVoice,
+        ));
     if (_disposed || token != _replayToken) return;
 
     // Voice diagnostics stay in logs only — never surface config hints on the
@@ -491,6 +544,30 @@ class GameController extends StateNotifier<TableSession> {
     state = state.copyWith(
       coach: state.coach.copyWith(isSpeaking: playback.spoke),
     );
+  }
+
+  /// Persists the graded decision; resolves to the `coach_decisions` id.
+  Future<int?> _recordDecision(
+    LiveCoachGrade grade,
+    GameState game,
+    PokerAction action,
+  ) async {
+    if (!grade.verdict.isGraded) return null;
+    try {
+      return await _recorder.recordHeroDecision(grade, game, action);
+    } catch (e, st) {
+      DiagnosticsLog.error('GameController.recordDecision', e, st);
+      return null;
+    }
+  }
+
+  /// Runs a recorder call; hand logging must never affect play.
+  void _safeRecord(void Function() body) {
+    try {
+      body();
+    } catch (e, st) {
+      DiagnosticsLog.error('GameController.record', e, st);
+    }
   }
 
   Future<void> _playActionSfx(SoundService sound, PokerActionType type) {

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/core/constants/config.dart';
+import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/ui/screens/home_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 
@@ -39,9 +40,24 @@ Future<void> _loadEnv() async {
 }
 
 /// Root application widget.
-class PokerLabApp extends StatelessWidget {
+///
+/// Opens the diagnostics session (app_sessions row, lifecycle heartbeats,
+/// uncaught-error capture, retention pruning) once the provider scope exists.
+class PokerLabApp extends ConsumerStatefulWidget {
   /// Creates the app.
   const PokerLabApp({super.key});
+
+  @override
+  ConsumerState<PokerLabApp> createState() => _PokerLabAppState();
+}
+
+class _PokerLabAppState extends ConsumerState<PokerLabApp> {
+  @override
+  void initState() {
+    super.initState();
+    // Fire-and-forget: startup never waits on SQLite.
+    Future<void>.microtask(() => ref.read(appSessionServiceProvider).start());
+  }
 
   @override
   Widget build(BuildContext context) {

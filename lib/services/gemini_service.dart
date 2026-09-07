@@ -102,9 +102,9 @@ When the prompt includes "Leak history" for a repeated mistake, open by saying i
     var out = text;
     final key = Config.geminiApiKey;
     if (key.isNotEmpty) out = out.replaceAll(key, '[REDACTED]');
-    return out.replaceAll(
+    return out.replaceAllMapped(
       RegExp(r'([?&]key=)[^&\s"]+'),
-      r'$1[REDACTED]',
+      (m) => '${m[1]}[REDACTED]',
     );
   }
 
