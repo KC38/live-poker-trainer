@@ -758,6 +758,7 @@ class PokerEngine {
       return state.copyWith(
         players: players,
         mainPot: 0,
+        awardedPot: pot,
         isHandOver: true,
         waitingForHero: false,
         resultMessage: '${winner.name} wins ${ChipFormat.dollars(pot)}',
@@ -954,6 +955,7 @@ class PokerEngine {
     return state.copyWith(
       players: players,
       mainPot: 0,
+      awardedPot: pot,
       street: Street.showdown,
       isHandOver: true,
       waitingForHero: false,

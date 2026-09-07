@@ -92,6 +92,8 @@ GameState _nineHandedGame({
     bbIndex: 5,
     waitingForHero: !handOver,
     isHandOver: handOver,
+    awardedPot: handOver ? 937 : 0,
+    resultMessage: handOver ? 'Seat 1 wins \$937' : null,
   );
 }
 
@@ -335,6 +337,17 @@ void main() {
           (tester) async {
         await _pumpTable(tester, size: size, session: liveSession());
         expect(find.byType(ActionDockWidget), findsOneWidget);
+      });
+
+      testWidgets('showdown keeps the awarded pot on the felt, not \$0',
+          (tester) async {
+        await _pumpTable(tester, size: size, session: reviewSession());
+        await _settleBands(tester);
+
+        expect(find.textContaining('SHOWDOWN'), findsOneWidget);
+        expect(find.textContaining(r'$0'), findsNothing);
+        expect(find.textContaining(r'$937'), findsWidgets);
+        expect(find.text('INCORRECT'), findsWidgets);
       });
 
       testWidgets('action dock leaves the tree once the hero cannot act',

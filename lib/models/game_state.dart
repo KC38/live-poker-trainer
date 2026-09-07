@@ -43,6 +43,7 @@ class GameState {
     required this.mode,
     this.community = const [],
     this.mainPot = 0,
+    this.awardedPot = 0,
     this.street = Street.preflop,
     this.dealerIndex = 0,
     this.sbIndex = 1,
@@ -67,6 +68,9 @@ class GameState {
   final GameMode mode;
   final List<CardModel> community;
   final double mainPot;
+
+  /// Pot awarded at hand end (kept for the SHOWDOWN label after stacks update).
+  final double awardedPot;
   final Street street;
   final int dealerIndex;
   final int sbIndex;
@@ -93,6 +97,12 @@ class GameState {
     return Money.round(mainPot + bets);
   }
 
+  /// Amount shown in the felt center: live pot, or the awarded pot at hand end.
+  double get displayPot {
+    if (isHandOver && awardedPot > Money.epsilon) return awardedPot;
+    return totalPot;
+  }
+
   /// Chips [player] must add to match [highestBet], capped at their stack.
   double callAmountFor(PlayerModel player) {
     final owed = Money.roundNonNegative(highestBet - player.currentBet);
@@ -104,6 +114,7 @@ class GameState {
     GameMode? mode,
     List<CardModel>? community,
     double? mainPot,
+    double? awardedPot,
     Street? street,
     int? dealerIndex,
     int? sbIndex,
@@ -131,6 +142,7 @@ class GameState {
       mode: mode ?? this.mode,
       community: community ?? this.community,
       mainPot: mainPot ?? this.mainPot,
+      awardedPot: awardedPot ?? this.awardedPot,
       street: street ?? this.street,
       dealerIndex: dealerIndex ?? this.dealerIndex,
       sbIndex: sbIndex ?? this.sbIndex,

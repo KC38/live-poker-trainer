@@ -88,8 +88,9 @@ class FeltTableView extends StatelessWidget {
 
           if (player.currentBet > Money.epsilon) {
             // Chips rest between the seat and the pot, then slide the rest of
-            // the way in when the street's bets are collected.
-            final t = collectingChips ? 1.0 : 0.34;
+            // the way in when the street's bets are collected. Bias further
+            // toward the pot so the amount clears the seat box and pucks.
+            final t = collectingChips ? 1.0 : 0.48;
             bets.add(
               _BetChip(
                 key: ValueKey('bet-${player.id}'),
@@ -101,7 +102,6 @@ class FeltTableView extends StatelessWidget {
                   chipDisplayMode,
                 ),
                 faded: collectingChips,
-                width: seatBox.width,
               ),
             );
           }
@@ -141,7 +141,7 @@ class FeltTableView extends StatelessWidget {
                 curve: Curves.easeOutCubic,
                 builder: (context, scale, _) => CommunityCardsView(
                   community: game.community,
-                  pot: game.totalPot,
+                  pot: game.displayPot,
                   street: game.street,
                   bigBlind: game.bigBlind,
                   chipDisplayMode: chipDisplayMode,
@@ -149,8 +149,10 @@ class FeltTableView extends StatelessWidget {
                 ),
               ),
             ),
-            ...bets,
+            // Seats first, then bet chips above them so amounts are never
+            // clipped by the seat box / D / SB / BB pucks.
             ...seats,
+            ...bets,
           ],
         );
       },
@@ -187,59 +189,69 @@ class _BetChip extends StatelessWidget {
     required this.top,
     required this.label,
     required this.faded,
-    required this.width,
   });
 
   final double left;
   final double top;
   final String label;
   final bool faded;
-  final double width;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 380),
       curve: Curves.easeInOutCubic,
-      left: left - width / 2,
-      top: top - 10,
-      width: width,
+      left: left,
+      top: top,
       child: AnimatedOpacity(
         duration: const Duration(milliseconds: 320),
         opacity: faded ? 0 : 1,
-        child: Center(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-            decoration: BoxDecoration(
-              color: AppColors.bgDark.withValues(alpha: 0.82),
-              borderRadius: BorderRadius.circular(9),
-              border: Border.all(
-                color: AppColors.gold.withValues(alpha: 0.65),
+        // Transform anchors the pill on its center without a fixed width that
+        // would clip long amounts under a seat-sized box.
+        child: Transform.translate(
+          offset: const Offset(0, -10),
+          child: FractionalTranslation(
+            translation: const Offset(-0.5, 0),
+            child: Material(
+              color: Colors.transparent,
+              elevation: 6,
+              shadowColor: Colors.black54,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: AppColors.bgDark.withValues(alpha: 0.94),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: AppColors.gold.withValues(alpha: 0.85),
+                    width: 1.1,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 7,
+                      height: 7,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.gold,
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      label,
+                      maxLines: 1,
+                      softWrap: false,
+                      style: GoogleFonts.jetBrainsMono(
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.cream,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 7,
-                  height: 7,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.gold,
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.jetBrainsMono(
-                    fontSize: 9.5,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.cream,
-                  ),
-                ),
-              ],
             ),
           ),
         ),
