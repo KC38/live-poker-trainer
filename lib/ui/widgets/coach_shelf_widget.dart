@@ -9,9 +9,10 @@ import 'package:live_poker_trainer/models/coach_feedback.dart';
 
 /// Non-overlapping AI coach panel between the hero rail and the action dock.
 ///
-/// The panel is height-capped by its parent band and scrolls internally, so a
-/// long coaching line can never grow into the felt or the hero's hole cards.
-class CoachShelfWidget extends StatelessWidget {
+/// Collapsed by default to a short preview so the felt stays readable. Expanding
+/// reveals the full advice plus decision context inside this band (height-capped
+/// by the parent; content scrolls internally and never covers hero hole cards).
+class CoachShelfWidget extends StatefulWidget {
   /// Creates the coach shelf.
   const CoachShelfWidget({
     super.key,
@@ -37,22 +38,118 @@ class CoachShelfWidget extends StatelessWidget {
   final double? maxHeight;
 
   @override
+  State<CoachShelfWidget> createState() => _CoachShelfWidgetState();
+}
+
+class _CoachShelfWidgetState extends State<CoachShelfWidget> {
+  /// Whether the user has opened the full coach copy.
+  ///
+  /// New coach lines keep this preference: stay collapsed by default, but if
+  /// the panel is already open it stays open for the next line.
+  bool _expanded = false;
+
+  CoachFeedback get _feedback => widget.feedback;
+
+  String get _message {
+    if (_feedback.message.isEmpty) {
+      return 'Your move — pick Fold, Check/Call, or Bet/Raise.';
+    }
+    return _feedback.message;
+  }
+
+  String? get _optimalLine {
+    if (_feedback.optimalAction == null) {
+      return null;
+    }
+    return ChipFormat.optimalLine(
+      actionLabel: _feedback.optimalAction!.label,
+      sizingBb: _feedback.optimalSizingBb,
+      bigBlind: widget.bigBlind,
+      mode: widget.chipDisplayMode,
+    );
+  }
+
+  /// Extra decision context only shown while expanded.
+  bool get _hasHiddenContext {
+    return (_feedback.hasVerdict && _optimalLine != null) ||
+        _feedback.voiceNote != null;
+  }
+
+  /// Whether the advice benefits from a collapser (long copy or hidden context).
+  bool get _canCollapse {
+    if (_hasHiddenContext) {
+      return true;
+    }
+    // ~2 lines at 13.5px / 1.35 height on a phone coach column.
+    return _message.length > 90;
+  }
+
+  void _toggleExpanded() {
+    setState(() => _expanded = !_expanded);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final hasVerdict = feedback.hasVerdict;
-    final borderColor = feedback.verdict == CoachVerdict.correct
+    final hasVerdict = _feedback.hasVerdict;
+    final borderColor = _feedback.verdict == CoachVerdict.correct
         ? AppColors.success
-        : feedback.verdict == CoachVerdict.incorrect
+        : _feedback.verdict == CoachVerdict.incorrect
             ? AppColors.danger
             : AppColors.slateDark;
+    final showExpanded = _expanded || !_canCollapse;
+    final optimal = _optimalLine;
+    final maxHeight = widget.maxHeight;
 
-    final optimal = feedback.optimalAction == null
-        ? null
-        : ChipFormat.optimalLine(
-            actionLabel: feedback.optimalAction!.label,
-            sizingBb: feedback.optimalSizingBb,
-            bigBlind: bigBlind,
-            mode: chipDisplayMode,
-          );
+    final body = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _CoachHeader(replaying: widget.replaying),
+        const SizedBox(height: 4),
+        Text(
+          _message,
+          maxLines: showExpanded ? null : 2,
+          overflow: showExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+          style: GoogleFonts.manrope(
+            fontSize: 13.5,
+            height: 1.35,
+            color: AppColors.cream,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        if (showExpanded && hasVerdict && optimal != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Text(
+              'Best: $optimal'
+              '${_feedback.heroAction != null ? '  ·  You: ${_feedback.heroAction}' : ''}'
+              '  ·  ${ChipFormat.evDelta(_feedback.evDeltaBb, widget.bigBlind, widget.chipDisplayMode)}',
+              style: GoogleFonts.jetBrainsMono(
+                fontSize: 9.5,
+                height: 1.35,
+                color: AppColors.slate,
+              ),
+            ),
+          ),
+        if (showExpanded && _feedback.voiceNote != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: Text(
+              _feedback.voiceNote!,
+              style: GoogleFonts.manrope(
+                fontSize: 10.5,
+                color: AppColors.warning,
+                height: 1.3,
+              ),
+            ),
+          ),
+        if (_canCollapse)
+          _CollapseToggle(
+            expanded: showExpanded,
+            onPressed: _toggleExpanded,
+          ),
+      ],
+    );
 
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: maxHeight ?? double.infinity),
@@ -74,87 +171,25 @@ class CoachShelfWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (hasVerdict) ...[
-              _VerdictBadge(verdict: feedback.verdict),
+              _VerdictBadge(verdict: _feedback.verdict),
               const SizedBox(width: 12),
             ],
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          'Coach',
-                          style: GoogleFonts.cinzel(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.goldMuted,
-                            letterSpacing: 1.1,
-                          ),
-                        ),
-                        if (replaying) ...[
-                          const SizedBox(width: 8),
-                          Text(
-                            'TABLE ACTING…',
-                            style: GoogleFonts.jetBrainsMono(
-                              fontSize: 8,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0.6,
-                              color: AppColors.warning,
-                            ),
-                          ),
-                        ],
-                      ],
+              child: maxHeight == null
+                  ? body
+                  : _HeightCappedScroll(
+                      maxHeight: maxHeight,
+                      // Leave room for vertical padding inside the panel.
+                      paddingReserve: 20,
+                      child: body,
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      feedback.message.isEmpty
-                          ? 'Your move — pick Fold, Check/Call, or Bet/Raise.'
-                          : feedback.message,
-                      style: GoogleFonts.manrope(
-                        fontSize: 13.5,
-                        height: 1.35,
-                        color: AppColors.cream,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    if (hasVerdict && optimal != null)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 6),
-                        child: Text(
-                          'Best: $optimal'
-                          '${feedback.heroAction != null ? '  ·  You: ${feedback.heroAction}' : ''}'
-                          '  ·  ${ChipFormat.evDelta(feedback.evDeltaBb, bigBlind, chipDisplayMode)}',
-                          style: GoogleFonts.jetBrainsMono(
-                            fontSize: 9.5,
-                            height: 1.35,
-                            color: AppColors.slate,
-                          ),
-                        ),
-                      ),
-                    if (feedback.voiceNote != null)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5),
-                        child: Text(
-                          feedback.voiceNote!,
-                          style: GoogleFonts.manrope(
-                            fontSize: 10.5,
-                            color: AppColors.warning,
-                            height: 1.3,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
             ),
             IconButton(
-              tooltip: ttsEnabled ? 'Mute coach' : 'Unmute coach',
-              onPressed: onMuteToggle,
+              tooltip: widget.ttsEnabled ? 'Mute coach' : 'Unmute coach',
+              onPressed: widget.onMuteToggle,
               visualDensity: VisualDensity.compact,
               icon: Icon(
-                ttsEnabled
+                widget.ttsEnabled
                     ? Icons.volume_up_outlined
                     : Icons.volume_off_outlined,
                 color: AppColors.slate,
@@ -162,6 +197,120 @@ class CoachShelfWidget extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Sizes to [child] until [maxHeight], then scrolls instead of overflowing.
+class _HeightCappedScroll extends StatelessWidget {
+  const _HeightCappedScroll({
+    required this.maxHeight,
+    required this.paddingReserve,
+    required this.child,
+  });
+
+  final double maxHeight;
+  final double paddingReserve;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final cap = (maxHeight - paddingReserve).clamp(48.0, maxHeight);
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: cap),
+      child: ListView(
+        // Size to the preview when collapsed; scroll only when over the cap.
+        shrinkWrap: true,
+        padding: EdgeInsets.zero,
+        physics: const ClampingScrollPhysics(),
+        children: [child],
+      ),
+    );
+  }
+}
+
+class _CoachHeader extends StatelessWidget {
+  const _CoachHeader({required this.replaying});
+
+  final bool replaying;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          'Coach',
+          style: GoogleFonts.cinzel(
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+            color: AppColors.goldMuted,
+            letterSpacing: 1.1,
+          ),
+        ),
+        if (replaying) ...[
+          const SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              'TABLE ACTING…',
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.jetBrainsMono(
+                fontSize: 8,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.6,
+                color: AppColors.warning,
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+/// Touch-friendly expand / collapse control for the coach copy.
+class _CollapseToggle extends StatelessWidget {
+  const _CollapseToggle({
+    required this.expanded,
+    required this.onPressed,
+  });
+
+  final bool expanded;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Row(
+            children: [
+              Icon(
+                expanded
+                    ? Icons.keyboard_arrow_up_rounded
+                    : Icons.keyboard_arrow_down_rounded,
+                size: 22,
+                color: AppColors.goldMuted,
+              ),
+              const SizedBox(width: 2),
+              Flexible(
+                child: Text(
+                  expanded ? 'Show less' : 'Show more',
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.manrope(
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.goldMuted,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
