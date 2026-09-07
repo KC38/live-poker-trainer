@@ -113,6 +113,11 @@ are synthesized deterministically into sub-40 KB WAVs.
 flutter analyze
 flutter test
 dart run build_runner build   # after Drift schema changes
+
+# Play several full hands on a real device / simulator (~30s per hand).
+# The harness may report a leaked audioplayers frame callback at teardown;
+# the per-hand assertions inside the run are the real signal.
+flutter test integration_test/play_hands_test.dart -d <device-id>
 ```
 
 **Dependency note:** `flutter_riverpod` stays on **2.x** (3.x is a breaking Notifier migration). Other direct deps track latest compatible versions.
