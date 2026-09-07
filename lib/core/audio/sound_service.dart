@@ -16,18 +16,15 @@ class CoachVoicePlayback {
   /// Creates a playback result.
   const CoachVoicePlayback({
     required this.spoke,
-    this.diagnostic,
+    this.note,
     this.fromCache = false,
     this.usedDeviceVoice = false,
   });
 
   final bool spoke;
 
-  /// Developer-facing reason the preferred path was not used.
-  ///
-  /// Logged, never rendered: the coach degrades to the device voice (or to
-  /// silence) without ever asking the player to configure anything.
-  final String? diagnostic;
+  /// Optional one-shot note (e.g. muted / unlock); may be logged or shown.
+  final String? note;
 
   /// Whether the clip came from the on-disk cache (instant playback).
   final bool fromCache;
@@ -286,18 +283,18 @@ class SoundService {
     bool enabled = true,
   }) async {
     if (!enabled || !ttsEnabled) {
-      return _report(const CoachVoicePlayback(
+      return const CoachVoicePlayback(
         spoke: false,
-        diagnostic: 'coach voice muted in settings',
-      ));
+        note: 'Coach voice is muted in Settings.',
+      );
     }
     final cleaned = text.trim();
     if (cleaned.isEmpty) return const CoachVoicePlayback(spoke: false);
     if (!_unlocked) {
-      return _report(const CoachVoicePlayback(
+      return const CoachVoicePlayback(
         spoke: false,
-        diagnostic: 'audio not unlocked yet',
-      ));
+        note: 'Tap Start training once to unlock coach voice.',
+      );
     }
 
     final gemini = this.gemini;
@@ -326,34 +323,21 @@ class SoundService {
       }
     }
 
-    // Last resort: the flat device voice, used quietly. The player is never
-    // told the Gemini voice was skipped, and never asked for a key.
+    // Last resort: flat device voice.
     final spoke = await _speakWithDevice(cleaned);
     if (spoke) {
-      return _report(CoachVoicePlayback(
+      return CoachVoicePlayback(
         spoke: true,
         usedDeviceVoice: true,
-        diagnostic: 'gemini speech unavailable '
-            '(key: ${Config.geminiKeySource}) — used device voice',
-      ));
+        note: gemini != null && gemini.hasApiKey
+            ? null
+            : 'Device voice — add a Gemini API key for the real coach voice.',
+      );
     }
-    return _report(const CoachVoicePlayback(
+    return const CoachVoicePlayback(
       spoke: false,
-      diagnostic: 'no voice backend could play the line',
-    ));
-  }
-
-  /// Sends a fallback reason to the debug log only; playback stays silent
-  /// about configuration so nothing leaks into the coach shelf.
-  CoachVoicePlayback _report(CoachVoicePlayback playback) {
-    final diagnostic = playback.diagnostic;
-    if (diagnostic != null) {
-      assert(() {
-        debugPrint('[coach-voice] $diagnostic');
-        return true;
-      }());
-    }
-    return playback;
+      note: 'Coach voice failed to play on this device.',
+    );
   }
 
   /// Pre-synthesizes and caches [text] without playing it.
