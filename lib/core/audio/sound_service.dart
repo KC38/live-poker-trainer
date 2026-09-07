@@ -409,11 +409,17 @@ class SoundService {
     return data == null ? Future.value(false) : _playBytes(data);
   }
 
+  Future<void> _setVoiceVolume(double volume) async {
+    _voiceVolume = volume;
+    await _voice.setVolume(volume);
+  }
+
   Future<bool> _playFile(String path) async {
     final hold = await _duckForSpeech();
     await _stopAllVoice();
     try {
       await _voice.setReleaseMode(ReleaseMode.stop);
+      _voiceVolume = 1.0;
       await _voice.play(DeviceFileSource(path), volume: 1.0);
       _restoreWhenVoiceEnds(hold);
       return true;
@@ -427,6 +433,7 @@ class SoundService {
     final hold = await _duckForSpeech();
     await _stopAllVoice();
     try {
+      _voiceVolume = 1.0;
       await _voice.play(BytesSource(bytes, mimeType: 'audio/wav'), volume: 1.0);
       _restoreWhenVoiceEnds(hold);
       return true;
@@ -539,13 +546,13 @@ class SoundService {
     _duckWatchdog?.cancel();
     _duckWatchdog = null;
     try {
-      final start = _voice.volume;
+      final start = _voiceVolume;
       if (start > 0.02 && duration.inMilliseconds > 0) {
         const steps = 4;
         final stepMs = (duration.inMilliseconds / steps).ceil();
         for (var i = 1; i <= steps; i++) {
           final t = i / steps;
-          await _voice.setVolume(start * (1 - t));
+          await _setVoiceVolume(start * (1 - t));
           await Future<void>.delayed(Duration(milliseconds: stepMs));
         }
       }
@@ -555,7 +562,7 @@ class SoundService {
     } catch (_) {}
     await _stopAllVoice();
     try {
-      await _voice.setVolume(1.0);
+      await _setVoiceVolume(1.0);
     } catch (_) {}
     _speechBgmHolds.clear();
     await _ducker.releaseAll();
