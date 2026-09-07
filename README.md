@@ -87,6 +87,16 @@ The coach grades each hero decision when a clear exploit line exists (**CORRECT*
 
 **Leak tracking.** Every INCORRECT decision is persisted (Drift `mistakes` table) under a stable mistake key — `street:archetype:heroAction->bestAction`, e.g. `river:nit:raise->call`, with `:small` / `:large` appended for sizing misses — plus coarse leak tags (bluffing into stations, folding too much vs maniacs, paying off nits, …). When the same key or leak recurs the coach says so by count ("That's the third time you've raised against a nit on the river…") in both the Gemini line and the offline copy, and the shelf shows a **Repeat ×N** chip. When you later get a previously-repeated spot right, the coach acknowledges the fix ("Nice — last time you raised here; calling was the right adjustment"), an `improvement` event is recorded, and the shelf shows **Improved** (with the streak). The Stats screen's **Leak Finder** lists your top repeated mistakes with counts, last seen, and trend (recurring / improving), plus per-archetype and per-street breakdowns.
 
+**Player profile.** The avatar button on Home opens **Player profile**: your own numbers, your derived playing style, and a coach review of your game.
+
+Metrics come from `HeroProfiler`, a pure engine over recorded hands (`lib/engine/hero_profiler.dart`): VPIP, PFR, 3-bet, fold-to-3bet, postflop aggression frequency and factor, WTSD, c-bet, fold-to-c-bet and won-at-showdown, plus a bet/call/fold mix per street and per villain archetype with net BB against each, and a ranked leak list.
+
+Every rate is a `MetricSample` that carries its own numerator, denominator and **minimum sample**, and nothing is shown before it earns it — a thin stat renders `—` with a "needs N more" hint instead of a number, and tapping any tile explains in plain English what it measures and what a healthy range looks like. Style is derived from VPIP and the PFR/VPIP ratio (Nit → Tight-Passive → TAG → LAG → Maniac → Loose-Passive, thresholds in `StyleThresholds`) and is **withheld entirely below 20 hands**, where the header reads "Style forming" and says what is still missing. Confidence is banded by sample: low (20) → medium (60) → high (150+).
+
+The review is Gemini JSON (summary / leaks / adjustments, markdown scrubbed), cached in Drift and only regenerated when it stops describing you — 25+ new hands, a changed style label, a summary older than 14 days, or an upgrade from offline copy — so opening the screen does not spend an API call. With no key or no network the same shape is derived locally from your own numbers, labelled "Offline read from your stats". The trend chart plots rolling VPIP, falling back to coached EV Δ until there are enough hands. A **Leak finder** row links through to the Stats breakdown.
+
+**Identity.** The profile header edits your display name and picture. Pick a photo from the library (`image_picker`) or one of eight built-in avatars; photos are centre-cropped and downscaled to a 256px square PNG under `<app documents>/avatars/` with only the path stored, and replacing one deletes the file it replaced. Deletion is restricted to that directory, so a stale database path can never remove anything else. A missing file (cleared app data, restored backup) degrades to initials rather than a broken image, and a denied photo permission points at Settings and the built-in avatars. Your name and avatar then show at the hero seat; the default name renders as `YOU`.
+
 Screen layout is a strict stack of bands — header, felt, hero rail, coach shelf, action dock — so the coach can never cover the hero's hole cards, down to a 320pt phone at 9 seats.
 
 Settings → **Chip display** chooses Dollars only, BB only, or Both (default) for hand review, EV, and stats. The live felt is always currency-only so the table stays readable.
@@ -104,11 +114,21 @@ lib/
 ├── main.dart
 ├── core/          # config, colors, chip format, audio (WAV + TTS), Drift DB
 ├── models/
-├── engine/        # DeckEvaluator, PokerEngine, LiveCoach, ScenarioManager
-├── services/      # GeminiService
+├── engine/        # DeckEvaluator, PokerEngine, LiveCoach, ScenarioManager,
+│                 # HeroProfiler
+├── services/      # GeminiService, AvatarStore, ProfileCoach
 ├── providers/     # Riverpod 2.x
 └── ui/screens/ + ui/widgets/
 ```
+
+Local storage is two Drift databases. `AppDatabase` holds gameplay: scenarios,
+user stats, and the `mistakes` / `improvement_events` leak history.
+`ProfileDatabase` holds the player profile — identity, the metric snapshot, and
+the cached coach review — deliberately kept separate so the profile schema does
+not have to migrate in lockstep with gameplay. It reads the shared hand log
+through `HandHistorySource`, which probes `sqlite_master` first and returns an
+empty history when the log is not there, so the profile screen degrades to
+"needs more hands" instead of failing.
 
 See [docs/architecture.md](docs/architecture.md).
 
