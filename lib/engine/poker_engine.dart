@@ -46,6 +46,47 @@ class PokerAction {
   }
 }
 
+/// One resolved step of a hand, so the UI can replay play at human pace.
+enum TableEventKind {
+  /// A villain checked, called, folded, bet, or raised.
+  villainAction,
+
+  /// The street's bets are ready to slide into the pot.
+  collectPot,
+
+  /// New board cards were dealt for [TableEvent.street].
+  dealStreet,
+
+  /// The hand finished (fold-out or showdown).
+  handOver,
+}
+
+/// A single replayable step produced by [PokerEngine.nextEvent].
+class TableEvent {
+  /// Creates a table event.
+  const TableEvent({
+    required this.kind,
+    required this.state,
+    this.seatIndex,
+    this.action,
+    this.street,
+  });
+
+  final TableEventKind kind;
+
+  /// Snapshot after the step was applied.
+  final GameState state;
+
+  /// Seat that acted, for [TableEventKind.villainAction].
+  final int? seatIndex;
+
+  /// Action taken, for [TableEventKind.villainAction].
+  final PokerAction? action;
+
+  /// Street reached, for [TableEventKind.dealStreet].
+  final Street? street;
+}
+
 /// Mutable poker table engine producing immutable [GameState] snapshots.
 class PokerEngine {
   /// Creates an engine with [settings] and optional [random].
@@ -58,6 +99,10 @@ class PokerEngine {
   final Random _random;
   late GameState _state;
   List<CardModel> _deck = [];
+
+  /// True once a [TableEventKind.collectPot] step has been emitted for the
+  /// current betting round but the street has not advanced yet.
+  bool _collectEmitted = false;
 
   GameState get state => _state;
   GameSettingsModel get settings => _settings;
@@ -119,9 +164,14 @@ class PokerEngine {
   }
 
   /// Starts a full cash-style training hand from preflop.
+  ///
+  /// With [resolve] true the preflop villain action is played out immediately.
+  /// The table screen passes `false` and drives [nextEvent] on a timer so the
+  /// action replays one seat at a time.
   GameState startHand({
     List<PlayerModel>? existingPlayers,
     int? dealerIndex,
+    bool resolve = true,
   }) {
     var players = existingPlayers ?? buildLineup(settings: _settings);
     players = _applyAutoRebuy(players);
@@ -143,6 +193,7 @@ class PokerEngine {
         ),
     ];
 
+    _collectEmitted = false;
     _deck = DeckEvaluator.buildShuffledDeck(_random);
     players = [
       for (final p in players)
@@ -178,8 +229,8 @@ class PokerEngine {
       waitingForHero: players[firstToAct].isHero,
     );
 
-    if (!_state.waitingForHero) {
-      _state = _runVillainsUntilHeroOrEnd(_state);
+    if (resolve && !_state.waitingForHero) {
+      runToHeroOrEnd();
     }
     return _state;
   }
@@ -278,24 +329,103 @@ class PokerEngine {
     return _state;
   }
 
-  /// Applies a hero action and continues the hand through remaining streets.
-  GameState applyHeroAction(PokerAction action) {
+  /// Applies a hero action without playing out the villains.
+  ///
+  /// Pair with [nextEvent] to replay the rest of the street step by step.
+  GameState submitHeroAction(PokerAction action) {
     var state = _state;
     if (!state.waitingForHero || state.isHandOver) return state;
-    final hero = state.hero;
-    if (hero.folded) return state;
+    if (state.hero.folded) return state;
 
     final heroIdx = state.players.indexWhere((p) => p.isHero);
     state = _applyAction(state, heroIdx, action, isHero: true);
+    _state = state.isHandOver ? state : state.copyWith(waitingForHero: false);
+    return _state;
+  }
 
-    if (state.isHandOver) {
-      _state = state;
-      return state;
+  /// Applies a hero action and resolves the rest of the hand immediately.
+  GameState applyHeroAction(PokerAction action) {
+    final before = _state;
+    final after = submitHeroAction(action);
+    if (identical(after, before) || after.isHandOver) return after;
+    return runToHeroOrEnd();
+  }
+
+  /// Produces the next replayable step, or `null` when the hand is over or it
+  /// is the hero's turn.
+  TableEvent? nextEvent() {
+    var s = _state;
+    if (s.isHandOver) return null;
+
+    var guard = 0;
+    while (guard < 96) {
+      guard++;
+      if (s.waitingForHero) {
+        _state = s;
+        return null;
+      }
+
+      if (_isRoundComplete(s)) {
+        final hasBets =
+            s.players.any((p) => p.currentBet > Money.epsilon);
+        if (hasBets && !_collectEmitted) {
+          // Let the UI slide the street's chips into the pot first.
+          _collectEmitted = true;
+          _state = s;
+          return TableEvent(kind: TableEventKind.collectPot, state: s);
+        }
+        _collectEmitted = false;
+        final previousStreet = s.street;
+        s = _advanceStreet(s);
+        _state = s;
+        if (s.isHandOver) {
+          return TableEvent(kind: TableEventKind.handOver, state: s);
+        }
+        if (s.street != previousStreet) {
+          return TableEvent(
+            kind: TableEventKind.dealStreet,
+            state: s,
+            street: s.street,
+          );
+        }
+        continue;
+      }
+
+      final idx = s.activePlayerIndex;
+      final player = s.players[idx];
+      if (!_canStillAct(player)) {
+        s = _advanceToNextPlayer(s);
+        continue;
+      }
+      if (player.isHero) {
+        s = s.copyWith(waitingForHero: true);
+        _state = s;
+        return null;
+      }
+
+      final decision = _villainDecision(s, idx);
+      s = _applyAction(s, idx, decision);
+      _state = s;
+      return TableEvent(
+        kind: s.isHandOver
+            ? TableEventKind.handOver
+            : TableEventKind.villainAction,
+        state: s,
+        seatIndex: idx,
+        action: decision,
+      );
     }
 
-    state = state.copyWith(waitingForHero: false);
-    state = _runVillainsUntilHeroOrEnd(state);
-    _state = state;
+    _state = s;
+    return null;
+  }
+
+  /// Drains [nextEvent] until the hero must act or the hand ends.
+  GameState runToHeroOrEnd() {
+    var guard = 0;
+    while (guard < 512 && nextEvent() != null) {
+      guard++;
+    }
     return _state;
   }
 
@@ -349,35 +479,6 @@ class PokerEngine {
     }
 
     return (correct: actionMatch, sizingErrorBb: sizingError);
-  }
-
-  GameState _runVillainsUntilHeroOrEnd(GameState state) {
-    var guard = 0;
-    var s = state;
-    while (!s.isHandOver && !s.waitingForHero && guard < 64) {
-      guard++;
-      if (_isRoundComplete(s)) {
-        s = _advanceStreet(s);
-        continue;
-      }
-      final idx = s.activePlayerIndex;
-      final player = s.players[idx];
-      if (!_canStillAct(player)) {
-        s = _advanceToNextPlayer(s);
-        continue;
-      }
-      if (player.isHero) {
-        // Never wait on a folded / finished hero.
-        if (player.folded || s.isHandOver) {
-          s = _advanceToNextPlayer(s.copyWith(waitingForHero: false));
-          continue;
-        }
-        return s.copyWith(waitingForHero: true);
-      }
-      final decision = _villainDecision(s, idx);
-      s = _applyAction(s, idx, decision);
-    }
-    return s;
   }
 
   /// Rounds a desired "raise to" amount and caps it at the villain's all-in.
@@ -665,7 +766,9 @@ class PokerEngine {
 
   GameState _advanceToNextPlayer(GameState state) {
     if (_isRoundComplete(state)) {
-      return _advanceStreet(state);
+      // Stop here: [nextEvent] advances the street so the UI can animate the
+      // chips into the pot before board cards appear.
+      return state.copyWith(waitingForHero: false);
     }
     final n = state.players.length;
     var next = (state.activePlayerIndex + 1) % n;
