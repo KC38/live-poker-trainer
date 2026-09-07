@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/models/coach_feedback.dart';
+import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/scenario_model.dart';
 import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
 
@@ -256,5 +257,61 @@ void main() {
     expect(find.text('EV'), findsOneWidget);
     expect(find.text('+\$0.80'), findsOneWidget);
     expect(find.textContaining('EV Δ'), findsNothing);
+  });
+
+  testWidgets('historical tip shows one Previous badge and tip body',
+      (tester) async {
+    const historicalTip = CoachFeedback(
+      verdict: CoachVerdict.correct,
+      message: 'Sammy (LAG) bets preflop — \$12.00 to call, pot \$24.00.',
+      optimalAction: ExploitAction.raise,
+      optimalSizingBb: 6,
+      heroAction: 'RAISE',
+      heroSizingBb: 6,
+      evDeltaBb: 0.4,
+      decisionStreet: Street.preflop,
+      isHistorical: true,
+    );
+    await tester.pumpWidget(_wrap(historicalTip, maxHeight: 190));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Previous · PREFLOP'), findsOneWidget);
+    expect(find.text('CORRECT'), findsNothing);
+    expect(find.textContaining('Sammy (LAG) bets'), findsOneWidget);
+    expect(find.textContaining('Raise is right'), findsNothing);
+    expect(find.text('BEST'), findsOneWidget);
+  });
+
+  testWidgets('live grade replaces tip without stacking tip text', (tester) async {
+    await tester.pumpWidget(
+      const _FeedbackHost(
+        initial: CoachFeedback(
+          message: 'Your turn preflop — \$2.00 vs Ned (Nit), pot \$3.00.',
+        ),
+        maxHeight: 190,
+      ),
+    );
+    expect(find.textContaining('Your turn preflop'), findsOneWidget);
+    expect(find.text('CORRECT'), findsNothing);
+
+    final host = tester.state(find.byType(_FeedbackHost)) as _FeedbackHostState;
+    host.update(
+      const CoachFeedback(
+        verdict: CoachVerdict.correct,
+        message: 'Raise is right preflop. Ned over-folds to aggression.',
+        optimalAction: ExploitAction.raise,
+        optimalSizingBb: 6,
+        heroAction: 'RAISE',
+        heroSizingBb: 6,
+        evDeltaBb: 0.3,
+        decisionStreet: Street.preflop,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Your turn preflop'), findsNothing);
+    expect(find.textContaining('Raise is right'), findsOneWidget);
+    expect(find.text('CORRECT'), findsOneWidget);
+    expect(find.textContaining('Previous ·'), findsNothing);
   });
 }

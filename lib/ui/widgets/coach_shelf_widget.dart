@@ -74,11 +74,6 @@ class _CoachShelfWidgetState extends State<CoachShelfWidget> {
     return _feedback.message;
   }
 
-  String _previousStreetLabel(Street? street) {
-    final label = street?.label ?? 'STREET';
-    return 'Prev · $label';
-  }
-
   String? get _optimalLine {
     if (_feedback.optimalAction == null) {
       return null;
@@ -139,11 +134,7 @@ class _CoachShelfWidgetState extends State<CoachShelfWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _CoachHeader(
-          replaying: widget.replaying,
-          isHistorical: _feedback.isHistorical,
-          decisionStreet: _feedback.decisionStreet,
-        ),
+        _CoachHeader(replaying: widget.replaying),
         const SizedBox(height: 4),
         Text(
           _message,
@@ -168,7 +159,7 @@ class _CoachShelfWidgetState extends State<CoachShelfWidget> {
                 _stripMode,
               ),
               evDeltaBb: _feedback.evDeltaBb,
-              compact: !showExpanded,
+              compact: !showExpanded || _feedback.isHistorical,
             ),
           ),
       ],
@@ -231,7 +222,8 @@ class _CoachShelfWidgetState extends State<CoachShelfWidget> {
                 children: [
                   if (_feedback.isHistorical)
                     _LeakChip(
-                      label: _previousStreetLabel(_feedback.decisionStreet),
+                      label:
+                          'Previous · ${_feedback.decisionStreet?.label ?? 'STREET'}',
                       color: AppColors.slate,
                       icon: Icons.history_rounded,
                     )
@@ -289,25 +281,16 @@ class _HeightCappedScroll extends StatelessWidget {
 }
 
 class _CoachHeader extends StatelessWidget {
-  const _CoachHeader({
-    required this.replaying,
-    this.isHistorical = false,
-    this.decisionStreet,
-  });
+  const _CoachHeader({required this.replaying});
 
   final bool replaying;
-  final bool isHistorical;
-  final Street? decisionStreet;
 
   @override
   Widget build(BuildContext context) {
-    final title = isHistorical
-        ? 'Previous · ${decisionStreet?.label ?? 'STREET'}'
-        : 'Coach';
     return Row(
       children: [
         Text(
-          title,
+          'Coach',
           style: GoogleFonts.cinzel(
             fontSize: 11,
             fontWeight: FontWeight.w600,

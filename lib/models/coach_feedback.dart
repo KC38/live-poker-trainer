@@ -66,6 +66,12 @@ class CoachFeedback {
   bool get hasVerdict =>
       verdict == CoachVerdict.correct || verdict == CoachVerdict.incorrect;
 
+  /// Live CORRECT/INCORRECT for the action just taken (not shelved).
+  bool get isLiveGrade => hasVerdict && !isHistorical;
+
+  /// Pre-action tip is primary body text (no live grade competing).
+  bool get isPreActionTip => !isLiveGrade && message.isNotEmpty;
+
   /// Whether the shelf should show a "Repeat ×N" indicator.
   bool get isRepeat =>
       !isHistorical && verdict == CoachVerdict.incorrect && repeatCount >= 2;
@@ -74,7 +80,7 @@ class CoachFeedback {
   bool get isImprovement =>
       !isHistorical && verdict == CoachVerdict.correct && improvementStreak >= 1;
 
-  /// Marks this feedback as a previous-street review (keeps text, softens UI).
+  /// Marks this feedback as a previous decision (keeps stats, softens UI).
   CoachFeedback asHistorical() => copyWith(isHistorical: true);
 
   CoachFeedback copyWith({

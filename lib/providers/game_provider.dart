@@ -145,6 +145,10 @@ class GameController extends StateNotifier<TableSession> {
   int _replayToken = 0;
   bool _disposed = false;
 
+  /// Bumped whenever the shelf switches tip ↔ grade so late Claude replies
+  /// cannot overwrite a newer decision's primary message.
+  int _coachEpoch = 0;
+
   GameSettingsModel get _settings => _ref.read(settingsProvider);
 
   /// Hand-history recorder; every call is best-effort and non-blocking.
@@ -180,6 +184,7 @@ class GameController extends StateNotifier<TableSession> {
         : PokerEngine.dealFingerprint(_engine!.state);
 
     // Clear prior coach text before the new deal.
+    _coachEpoch++;
     state = state.copyWith(
       loading: true,
       clearError: true,
@@ -311,8 +316,10 @@ class GameController extends StateNotifier<TableSession> {
       return;
     }
 
-    // Grade against the pre-action snapshot.
+    // Grade against the pre-action snapshot — replaces any tip as the single
+    // primary shelf message (never stacks tip + grade).
     final grade = LiveCoach.grade(state: game, action: action);
+    final coachEpoch = ++_coachEpoch;
     state = state.copyWith(
       coach: CoachFeedback(
         verdict: grade.verdict,
@@ -353,11 +360,32 @@ class GameController extends StateNotifier<TableSession> {
     await _recordStats(grade, game);
     // Coach narration runs in parallel with the replay so play never stalls
     // waiting on the network.
-    final narration =
-        _narrate(grade, game, token, leak, localMessage, decisionId);
+    final narration = _narrate(
+      grade,
+      game,
+      token,
+      leak,
+      localMessage,
+      decisionId,
+      coachEpoch,
+    );
 
     await _replayUntilHero(pace: ReplayPace.passiveAction, token: token);
     await narration;
+  }
+
+  /// Publishes one pre-action tip for the spot hero faces now.
+  ///
+  /// Shelves any live grade (same street or earlier) so the shelf never shows
+  /// two competing body texts.
+  void _publishPreActionTip(GameState game) {
+    _coachEpoch++;
+    state = state.copyWith(
+      coach: LiveCoach.preActionFeedback(
+        state: game,
+        prior: state.coach,
+      ),
+    );
   }
 
   /// Persists the graded decision into leak history; never throws.
@@ -500,6 +528,14 @@ class GameController extends StateNotifier<TableSession> {
       replaying: false,
       collectingChips: false,
     );
+
+    // Hero to act again (same street or new): one tip, prior grade shelved.
+    if (resolved.waitingForHero &&
+        !resolved.isHandOver &&
+        !resolved.hero.folded) {
+      _publishPreActionTip(resolved);
+    }
+
     await _finishHandIfOver(myToken);
   }
 
@@ -547,6 +583,7 @@ class GameController extends StateNotifier<TableSession> {
     LeakCheck leak,
     String localMessage,
     Future<int?> decisionId,
+    int coachEpoch,
   ) async {
     final anthropic = _ref.read(anthropicServiceProvider);
     var message = localMessage;
@@ -588,12 +625,11 @@ class GameController extends StateNotifier<TableSession> {
     }
 
     if (_disposed || token != _replayToken) return;
-    // Ignore Claude replies that arrive after the street already advanced.
-    final currentStreet = state.game?.street;
-    final stillCurrentDecision = !state.coach.isHistorical &&
+    // Ignore replies after a newer tip/grade, street advance, or re-decision.
+    final stillCurrentDecision = coachEpoch == _coachEpoch &&
+        state.coach.isLiveGrade &&
         (state.coach.decisionStreet == null ||
-            state.coach.decisionStreet == grade.street) &&
-        (currentStreet == null || currentStreet == grade.street);
+            state.coach.decisionStreet == grade.street);
     if (stillCurrentDecision) {
       state = state.copyWith(
         coach: state.coach.copyWith(

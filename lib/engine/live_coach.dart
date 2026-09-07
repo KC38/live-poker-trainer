@@ -169,6 +169,37 @@ class LiveCoachGrade {
 class LiveCoach {
   LiveCoach._();
 
+  /// Builds shelf state when hero must act: one tip, shelving any prior grade.
+  ///
+  /// Never leaves two live body messages. A previous graded decision becomes
+  /// [CoachFeedback.isHistorical] with compact stats; [message] is the tip.
+  static CoachFeedback preActionFeedback({
+    required GameState state,
+    required CoachFeedback prior,
+  }) {
+    final tip = preActionTip(state);
+    if (prior.hasVerdict) {
+      return prior.asHistorical().copyWith(message: tip);
+    }
+    return CoachFeedback(message: tip);
+  }
+
+  /// Short situational tip for the spot hero faces before acting.
+  static String preActionTip(GameState state) {
+    final callAmt = state.callAmountFor(state.hero);
+    final villainInfo = _primaryVillain(state);
+    final villain = villainInfo.player;
+    return CoachLines.decisionTip(
+      street: state.street,
+      villainName: villain?.name ?? 'the field',
+      archetype: villain?.archetype ?? PlayerArchetype.tag,
+      callAmount: callAmt,
+      pot: state.totalPot,
+      villainIsAggressor: villainInfo.isAggressor,
+      villainPosition: villainInfo.position,
+    );
+  }
+
   /// Grades [action] in the current [state] before it is applied.
   static LiveCoachGrade grade({
     required GameState state,

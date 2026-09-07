@@ -86,6 +86,49 @@ class CoachLines {
         '${headline.value} $plan.';
   }
 
+  /// Short pre-action tip for the decision hero faces right now.
+  ///
+  /// One line only — never stacks with a live grade. Names street, pot, and
+  /// the villain to act against so the shelf stays decision-specific.
+  static String decisionTip({
+    required Street street,
+    required String villainName,
+    required PlayerArchetype archetype,
+    required double callAmount,
+    required double pot,
+    required bool villainIsAggressor,
+    String villainPosition = '',
+  }) {
+    final where = _streetPhrase(street);
+    final potLine = ChipFormat.dollars(pot);
+    final seat = villainPosition.isEmpty ? '' : ' ($villainPosition)';
+    final arch = archetype.shortLabel;
+
+    if (callAmount <= 0) {
+      final options = <String>[
+        'Checked to you $where — pot $potLine. Bet or take the free card.',
+        'Your turn $where vs $villainName$seat ($arch). Pot $potLine.',
+      ];
+      return _pick(options, seed: street.index + archetype.index * 5);
+    }
+
+    final price = ChipFormat.dollars(callAmount);
+    final options = villainIsAggressor
+        ? <String>[
+            '$villainName$seat ($arch) bets $where — $price to call, '
+                'pot $potLine.',
+            'Facing $price $where from $villainName$seat ($arch). '
+                'Pot $potLine.',
+          ]
+        : <String>[
+            '$price to call $where vs $villainName$seat ($arch). '
+                'Pot $potLine.',
+            'Your turn $where — $price vs $villainName$seat ($arch), '
+                'pot $potLine.',
+          ];
+    return _pick(options, seed: street.index * 11 + archetype.index * 3);
+  }
+
   /// Coaching for a spot where no clean exploit line exists.
   static String ambiguous({
     required PlayerArchetype archetype,
