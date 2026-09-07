@@ -6,6 +6,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/core/audio/sound_service.dart';
 import 'package:live_poker_trainer/core/diagnostics/diagnostics_log.dart';
+import 'package:live_poker_trainer/engine/coach_advice_guard.dart';
 import 'package:live_poker_trainer/engine/coach_lines.dart';
 import 'package:live_poker_trainer/engine/leak_lines.dart';
 import 'package:live_poker_trainer/engine/live_coach.dart';
@@ -160,6 +161,9 @@ class GameController extends StateNotifier<TableSession> {
     final previousFingerprint = _engine == null
         ? null
         : PokerEngine.dealFingerprint(_engine!.state);
+
+    // Kill any in-flight coach line before the new deal speaks.
+    unawaited(_ref.read(soundServiceProvider).fadeStopVoice());
 
     state = state.copyWith(
       loading: true,
@@ -478,7 +482,8 @@ class GameController extends StateNotifier<TableSession> {
   /// Fetches a spot-specific coach line (Gemini when available) and speaks it.
   ///
   /// [localMessage] is the offline line (already carrying repeat / improvement
-  /// copy) used when Gemini is unavailable.
+  /// copy) used when Gemini is unavailable. Gemini is only asked on graded
+  /// spots so it cannot invent a CORRECT/INCORRECT story for ambiguous ones.
   Future<void> _narrate(
     LiveCoachGrade grade,
     GameState game,
@@ -494,24 +499,42 @@ class GameController extends StateNotifier<TableSession> {
     var adviceSource = 'offline';
     int? aiRequestId;
 
-    try {
-      final result = await gemini.coach(
-        prompt: grade.toPrompt(
-          game,
-          repeat: leak.repeat,
-          improvement: leak.improvement,
-        ),
-        handId: await _recorder.currentHandId,
-      );
-      aiRequestId = result.aiRequestId;
-      final text = result.text.trim();
-      if (text.isNotEmpty) {
-        message = text;
-        adviceSource = 'gemini';
+    if (grade.verdict.isGraded) {
+      try {
+        final result = await gemini.coach(
+          prompt: grade.toPrompt(
+            game,
+            repeat: leak.repeat,
+            improvement: leak.improvement,
+          ),
+          handId: await _recorder.currentHandId,
+        );
+        aiRequestId = result.aiRequestId;
+        final text = result.text.trim();
+        if (text.isNotEmpty) {
+          final reconciled = CoachAdviceGuard.reconcile(
+            advice: text,
+            fallback: localMessage,
+            bestAction: grade.optimalAction,
+            verdict: grade.verdict,
+          );
+          message = reconciled;
+          adviceSource =
+              reconciled == text ? 'gemini' : 'offline';
+        }
+      } catch (e, st) {
+        // Keep the local, spot-specific line.
+        DiagnosticsLog.error('GameController.narrate', e, st);
       }
-    } catch (e, st) {
-      // Keep the local, spot-specific line.
-      DiagnosticsLog.error('GameController.narrate', e, st);
+    } else {
+      // Ambiguous spots stay on the local line — never let Gemini invent a
+      // verdict badge the shelf cannot show.
+      message = CoachAdviceGuard.reconcile(
+        advice: localMessage,
+        fallback: localMessage,
+        bestAction: grade.optimalAction,
+        verdict: grade.verdict,
+      );
     }
 
     if (_disposed || token != _replayToken) return;

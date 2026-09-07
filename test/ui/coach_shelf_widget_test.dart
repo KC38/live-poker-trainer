@@ -162,4 +162,37 @@ void main() {
     expect(find.text('Show more'), findsNothing);
     expect(find.textContaining('Your move.'), findsOneWidget);
   });
+
+  testWidgets('graded incorrect always shows an INCORRECT badge', (tester) async {
+    await tester.pumpWidget(_wrap(_longIncorrect, maxHeight: 190));
+    expect(find.text('INCORRECT'), findsWidgets);
+    expect(find.text('CORRECT'), findsNothing);
+
+    await tester.tap(find.text('Show more'));
+    await tester.pumpAndSettle();
+    expect(find.text('INCORRECT'), findsWidgets);
+    expect(find.textContaining('Best:'), findsOneWidget);
+    expect(find.textContaining('You: RAISE'), findsOneWidget);
+  });
+
+  testWidgets('autoExpand review keeps the verdict badge visible', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: CoachShelfWidget(
+            feedback: _longIncorrect,
+            bigBlind: 2,
+            chipDisplayMode: ChipDisplayMode.dollars,
+            maxHeight: 220,
+            autoExpand: true,
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('INCORRECT'), findsWidgets);
+    expect(find.text('Show less'), findsOneWidget);
+    expect(find.textContaining('Best:'), findsOneWidget);
+  });
 }

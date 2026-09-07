@@ -99,6 +99,18 @@ class LiveCoachGrade {
     }
     final board = game.community.map((c) => c.code).join(' ');
     final hole = game.hero.holeCards.map((c) => c.code).join(' ');
+    final bestLabel = optimalAction?.label ?? 'no clear exploit';
+    final endorse = switch (optimalAction) {
+      ExploitAction.fold =>
+        'Endorse folding only. Never tell the player to call, defend, or continue.',
+      ExploitAction.call =>
+        'Endorse calling only. Never tell the player to fold.',
+      ExploitAction.check =>
+        'Endorse checking only. Never tell the player to fold or inflate the pot.',
+      ExploitAction.raise =>
+        'Endorse raising/betting only. Never tell the player to fold.',
+      null => 'No graded exploit — stay neutral; do not invent a verdict.',
+    };
     return 'Street: ${street.label}. '
         'Hero hole cards: ${hole.isEmpty ? 'unknown' : hole}. '
         'Board: ${board.isEmpty ? 'none' : board}. '
@@ -108,9 +120,10 @@ class LiveCoachGrade {
         '(VPIP ${villainArchetype.vpip.toStringAsFixed(0)}, '
         'PFR ${villainArchetype.pfr.toStringAsFixed(0)}). '
         'Hero action: $heroActionLabel. '
-        'Recommended: ${optimalAction?.label ?? 'no clear exploit'}'
+        'Recommended: $bestLabel'
         '${optimalSizingBb > 0 ? ' ~${optimalSizingBb.toStringAsFixed(0)} BB' : ''}. '
         'Verdict: ${verdict.name}. Error type: ${mismatch.name}. '
+        '$endorse '
         'In one or two sentences, tell the player specifically why '
         '$heroActionLabel '
         '${verdict == CoachVerdict.correct ? 'works' : 'is worse than the recommended line'} '
