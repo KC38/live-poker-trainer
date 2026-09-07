@@ -9,7 +9,7 @@ Requires **Flutter 3.47+** / **Dart 3.13+** (tested on Flutter 3.47.2 · Dart 3.
 ```bash
 git checkout feat/flutter-poker-lab
 cp .env.example .env
-# Set GEMINI_API_KEY in .env (optional — offline fallback spots work without it)
+# Set GEMINI_API_KEY in .env (optional — device TTS + heuristics work without it)
 
 flutter pub get
 flutter run                 # default device
@@ -50,31 +50,33 @@ flutter run --dart-define=GEMINI_API_KEY=your_key
 | Stack depth | 200 BB |
 | Auto-rebuy | On, top-up when &lt; 50 BB to configured stack |
 | Lineup | Random pool, or **Custom** with per-seat archetype pickers |
+| Chip display | Both ($ and BB) |
 | SFX / Coach TTS | On |
 
-## Modes & UX flow
+## Play flow
 
-Home is teach-first: one primary **Start practice** CTA, secondary **Cash game**, and advanced options in a collapsed **Table setup** section (seats, blinds, stack, rebuy, lineup).
+Home has one primary CTA — **Start training** — plus a collapsed **Table setup** section (seats, blinds, stack, rebuy, lineup).
 
-- **Practice:** Gemini (or cached / offline) tough spots; after you act, the coach shelf shows **CORRECT** or **INCORRECT** (never over hole/board cards), then a punchy line + EV audit.
-- **Cash game:** archetype villains (Maniac / Nit / Calling Station / TAG / LAG) with free-check rule (never fold when check is free). Custom lineup assigns each villain seat under Table setup.
+Training always deals a **full cash-style hand** from preflop (blinds → streets → fold or showdown). Archetype villains (Maniac / Nit / Calling Station / TAG / LAG) play with the free-check rule (never fold when check is free). The coach grades each Hero decision when a clear exploit line is available (**CORRECT** / **INCORRECT**), otherwise delivers punchy coaching. D / SB / BB pucks mark the button and blinds.
+
+Settings → **Chip display** chooses Dollars only, BB only, or Both (default) for stacks, pot, bets, and EV review.
+
+Coach voice: Gemini AUDIO when an API key is present; otherwise device TTS (`flutter_tts`). Mute via Settings or the coach shelf speaker icon.
 
 ## Architecture
 
 ```
 lib/
 ├── main.dart
-├── core/          # config, colors, constants, audio (WAV codec), Drift DB
+├── core/          # config, colors, chip format, audio (WAV + TTS), Drift DB
 ├── models/
-├── engine/        # DeckEvaluator, PokerEngine, ScenarioManager
+├── engine/        # DeckEvaluator, PokerEngine, LiveCoach, ScenarioManager
 ├── services/      # GeminiService
 ├── providers/     # Riverpod 2.x
 └── ui/screens/ + ui/widgets/
 ```
 
 See [docs/architecture.md](docs/architecture.md).
-
-Coach TTS: Gemini AUDIO is usually raw PCM/L16 @ 24 kHz; `WavCodec` wraps it as WAV before `audioplayers` playback.
 
 ## Development
 
@@ -83,7 +85,5 @@ flutter analyze
 flutter test
 dart run build_runner build   # after Drift schema changes
 ```
-
-Prefetch: when unplayed scenarios &lt; 5, `ScenarioManager` requests more from Gemini in the background.
 
 **Dependency note:** `flutter_riverpod` stays on **2.x** (3.x is a breaking Notifier migration). Other direct deps track latest compatible versions.

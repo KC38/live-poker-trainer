@@ -4,20 +4,24 @@ library;
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
+import 'package:live_poker_trainer/providers/settings_provider.dart';
 import 'package:live_poker_trainer/ui/widgets/community_cards_view.dart';
 import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 
 /// Responsive elliptical table view.
-class FeltTableView extends StatelessWidget {
+class FeltTableView extends ConsumerWidget {
   /// Creates the felt table.
   const FeltTableView({super.key, required this.game});
 
   final GameState game;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final chipMode = ref.watch(settingsProvider).chipDisplayMode;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final w = constraints.maxWidth;
@@ -46,8 +50,14 @@ class FeltTableView extends StatelessWidget {
               child: PlayerSeatWidget(
                 player: player,
                 bigBlind: game.bigBlind,
-                isActive: game.activePlayerIndex == i && !game.isHandOver,
+                chipDisplayMode: chipMode,
+                isActive: game.activePlayerIndex == i &&
+                    !game.isHandOver &&
+                    game.waitingForHero &&
+                    player.isHero,
                 isDealer: game.dealerIndex == i,
+                isSmallBlind: game.sbIndex == i,
+                isBigBlind: game.bbIndex == i,
                 micro: micro,
                 showCards: player.isHero || game.isHandOver,
               ),
@@ -65,6 +75,8 @@ class FeltTableView extends StatelessWidget {
                 community: game.community,
                 pot: game.totalPot,
                 street: game.street,
+                bigBlind: game.bigBlind,
+                chipDisplayMode: chipMode,
                 scale: scale,
               ),
             ),

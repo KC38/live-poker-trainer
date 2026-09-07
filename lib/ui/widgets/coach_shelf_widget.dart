@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/coach_feedback.dart';
 
@@ -12,11 +13,15 @@ class CoachShelfWidget extends StatelessWidget {
   const CoachShelfWidget({
     super.key,
     required this.feedback,
+    required this.bigBlind,
+    required this.chipDisplayMode,
     this.onMuteToggle,
     this.ttsEnabled = true,
   });
 
   final CoachFeedback feedback;
+  final double bigBlind;
+  final ChipDisplayMode chipDisplayMode;
   final VoidCallback? onMuteToggle;
   final bool ttsEnabled;
 
@@ -28,6 +33,15 @@ class CoachShelfWidget extends StatelessWidget {
         : feedback.verdict == CoachVerdict.incorrect
             ? AppColors.danger
             : AppColors.slateDark;
+
+    final optimal = feedback.optimalAction == null
+        ? null
+        : ChipFormat.optimalLine(
+            actionLabel: feedback.optimalAction!.label,
+            sizingBb: feedback.optimalSizingBb,
+            bigBlind: bigBlind,
+            mode: chipDisplayMode,
+          );
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 280),
@@ -75,17 +89,29 @@ class CoachShelfWidget extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                if (hasVerdict && feedback.optimalAction != null)
+                if (hasVerdict && optimal != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: Text(
-                      'Best: ${feedback.optimalAction!.label}'
+                      'Best: $optimal'
                       '${feedback.heroAction != null ? '  ·  You: ${feedback.heroAction}' : ''}'
-                      '  ·  EV ${feedback.evDeltaBb >= 0 ? '+' : ''}${feedback.evDeltaBb.toStringAsFixed(2)} BB',
+                      '  ·  ${ChipFormat.evDelta(feedback.evDeltaBb, bigBlind, chipDisplayMode)}',
                       style: GoogleFonts.jetBrainsMono(
                         fontSize: 10,
                         height: 1.35,
                         color: AppColors.slate,
+                      ),
+                    ),
+                  ),
+                if (feedback.voiceNote != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Text(
+                      feedback.voiceNote!,
+                      style: GoogleFonts.manrope(
+                        fontSize: 11,
+                        color: AppColors.warning,
+                        height: 1.3,
                       ),
                     ),
                   ),

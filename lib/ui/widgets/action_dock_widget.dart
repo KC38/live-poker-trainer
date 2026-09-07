@@ -4,13 +4,16 @@ library;
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/engine/poker_engine.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
+import 'package:live_poker_trainer/providers/settings_provider.dart';
 
 /// Hero action controls anchored above the home indicator.
-class ActionDockWidget extends StatefulWidget {
+class ActionDockWidget extends ConsumerStatefulWidget {
   /// Creates the action dock.
   const ActionDockWidget({
     super.key,
@@ -24,17 +27,18 @@ class ActionDockWidget extends StatefulWidget {
   final bool enabled;
 
   @override
-  State<ActionDockWidget> createState() => _ActionDockWidgetState();
+  ConsumerState<ActionDockWidget> createState() => _ActionDockWidgetState();
 }
 
-class _ActionDockWidgetState extends State<ActionDockWidget> {
+class _ActionDockWidgetState extends ConsumerState<ActionDockWidget> {
   double _raiseAmount = 0;
 
   @override
   void didUpdateWidget(covariant ActionDockWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.game.handCount != widget.game.handCount ||
-        oldWidget.game.highestBet != widget.game.highestBet) {
+        oldWidget.game.highestBet != widget.game.highestBet ||
+        oldWidget.game.street != widget.game.street) {
       _raiseAmount = _defaultRaise();
     }
   }
@@ -58,6 +62,11 @@ class _ActionDockWidgetState extends State<ActionDockWidget> {
   Widget build(BuildContext context) {
     final game = widget.game;
     final hero = game.hero;
+    final chipMode = ref.watch(settingsProvider).chipDisplayMode;
+    final canAct = widget.enabled &&
+        game.waitingForHero &&
+        !game.isHandOver &&
+        !hero.folded;
     final callAmt = game.callAmountFor(hero);
     final freeCheck = callAmt <= 0;
     final minRaiseTo = game.highestBet + math.max(game.minRaise, game.bigBlind);
@@ -71,111 +80,121 @@ class _ActionDockWidgetState extends State<ActionDockWidget> {
       });
     }
 
-    return Container(
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 10),
-      decoration: BoxDecoration(
-        color: AppColors.bgMid.withValues(alpha: 0.98),
-        border: Border(
-          top: BorderSide(color: AppColors.slateDark.withValues(alpha: 0.9)),
-        ),
-      ),
-      child: SafeArea(
-        top: false,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              children: [
-                for (final entry in [
-                  ('⅓', 1 / 3),
-                  ('½', 0.5),
-                  ('¾', 0.75),
-                  ('Pot', 1.0),
-                ])
-                  Padding(
-                    padding: const EdgeInsets.only(right: 6),
-                    child: _SizeChip(
-                      label: entry.$1,
-                      onTap:
-                          widget.enabled ? () => setFraction(entry.$2) : null,
-                    ),
-                  ),
-                _SizeChip(
-                  label: 'All-in',
-                  onTap: widget.enabled
-                      ? () => setState(() => _raiseAmount = maxRaiseTo)
-                      : null,
-                ),
-                const Spacer(),
-                Text(
-                  '\$${_raiseAmount.toStringAsFixed(0)}',
-                  style: GoogleFonts.jetBrainsMono(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.gold,
-                  ),
-                ),
-              ],
+    return Opacity(
+      opacity: canAct ? 1 : 0.45,
+      child: IgnorePointer(
+        ignoring: !canAct,
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(14, 12, 14, 10),
+          decoration: BoxDecoration(
+            color: AppColors.bgMid.withValues(alpha: 0.98),
+            border: Border(
+              top: BorderSide(color: AppColors.slateDark.withValues(alpha: 0.9)),
             ),
-            Slider(
-              value: _raiseAmount.clamp(minRaiseTo, maxRaiseTo),
-              min: minRaiseTo.clamp(0, maxRaiseTo),
-              max: maxRaiseTo <= minRaiseTo ? minRaiseTo + 1 : maxRaiseTo,
-              onChanged: widget.enabled
-                  ? (v) => setState(() => _raiseAmount = v)
-                  : null,
-            ),
-            const SizedBox(height: 4),
-            Row(
+          ),
+          child: SafeArea(
+            top: false,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: _DockButton(
-                    label: freeCheck ? '—' : 'Fold',
-                    color: freeCheck ? AppColors.slateDark : AppColors.danger,
-                    enabled: widget.enabled && !freeCheck,
-                    onTap: () => widget.onAction(
-                      const PokerAction(type: PokerActionType.fold),
+                Row(
+                  children: [
+                    for (final entry in [
+                      ('⅓', 1 / 3),
+                      ('½', 0.5),
+                      ('¾', 0.75),
+                      ('Pot', 1.0),
+                    ])
+                      Padding(
+                        padding: const EdgeInsets.only(right: 6),
+                        child: _SizeChip(
+                          label: entry.$1,
+                          onTap: canAct ? () => setFraction(entry.$2) : null,
+                        ),
+                      ),
+                    _SizeChip(
+                      label: 'All-in',
+                      onTap: canAct
+                          ? () => setState(() => _raiseAmount = maxRaiseTo)
+                          : null,
                     ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _DockButton(
-                    label: freeCheck
-                        ? 'Check'
-                        : 'Call \$${callAmt.toStringAsFixed(0)}',
-                    color: AppColors.surfaceMuted,
-                    enabled: widget.enabled,
-                    onTap: () => widget.onAction(
-                      freeCheck
-                          ? const PokerAction(type: PokerActionType.check)
-                          : PokerAction(
-                              type: PokerActionType.call,
-                              amount: callAmt,
-                            ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _DockButton(
-                    label: callAmt <= 0 ? 'Bet' : 'Raise',
-                    color: AppColors.gold,
-                    foreground: AppColors.bgDark,
-                    enabled: widget.enabled && maxRaiseTo > game.highestBet,
-                    onTap: () => widget.onAction(
-                      PokerAction(
-                        type: callAmt <= 0
-                            ? PokerActionType.bet
-                            : PokerActionType.raise,
-                        amount: _raiseAmount,
+                    const Spacer(),
+                    Text(
+                      ChipFormat.chips(
+                        _raiseAmount,
+                        game.bigBlind,
+                        chipMode,
+                      ),
+                      style: GoogleFonts.jetBrainsMono(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.gold,
                       ),
                     ),
-                  ),
+                  ],
+                ),
+                Slider(
+                  value: _raiseAmount.clamp(minRaiseTo, maxRaiseTo),
+                  min: minRaiseTo.clamp(0, maxRaiseTo),
+                  max: maxRaiseTo <= minRaiseTo ? minRaiseTo + 1 : maxRaiseTo,
+                  onChanged: canAct
+                      ? (v) => setState(() => _raiseAmount = v)
+                      : null,
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _DockButton(
+                        label: freeCheck ? '—' : 'Fold',
+                        color:
+                            freeCheck ? AppColors.slateDark : AppColors.danger,
+                        enabled: canAct && !freeCheck,
+                        onTap: () => widget.onAction(
+                          const PokerAction(type: PokerActionType.fold),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: _DockButton(
+                        label: freeCheck
+                            ? 'Check'
+                            : 'Call ${ChipFormat.chips(callAmt, game.bigBlind, chipMode)}',
+                        color: AppColors.surfaceMuted,
+                        enabled: canAct,
+                        onTap: () => widget.onAction(
+                          freeCheck
+                              ? const PokerAction(type: PokerActionType.check)
+                              : PokerAction(
+                                  type: PokerActionType.call,
+                                  amount: callAmt,
+                                ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: _DockButton(
+                        label: callAmt <= 0 ? 'Bet' : 'Raise',
+                        color: AppColors.gold,
+                        foreground: AppColors.bgDark,
+                        enabled: canAct && maxRaiseTo > game.highestBet,
+                        onTap: () => widget.onAction(
+                          PokerAction(
+                            type: callAmt <= 0
+                                ? PokerActionType.bet
+                                : PokerActionType.raise,
+                            amount: _raiseAmount,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -255,7 +274,7 @@ class _DockButton extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           style: GoogleFonts.manrope(
             fontWeight: FontWeight.w800,
-            fontSize: 15,
+            fontSize: 14,
           ),
         ),
       ),

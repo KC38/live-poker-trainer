@@ -1,4 +1,4 @@
-/// Home: one primary CTA, progressive disclosure for table setup.
+/// Home: single Start training CTA, progressive disclosure for table setup.
 library;
 
 import 'package:flutter/material.dart';
@@ -27,17 +27,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool _setupExpanded = false;
 
-  Future<void> _launchPractice() async {
-    await ref.read(gameControllerProvider.notifier).startPractice();
-    if (!mounted) return;
-    await Navigator.push(
-      context,
-      softFadeRoute(const PokerTableScreen()),
-    );
-  }
-
-  Future<void> _launchCash() async {
-    await ref.read(gameControllerProvider.notifier).startCashSim();
+  Future<void> _launchTraining() async {
+    await ref.read(gameControllerProvider.notifier).startTraining();
     if (!mounted) return;
     await Navigator.push(
       context,
@@ -108,7 +99,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final settings = ref.watch(settingsProvider);
     final notifier = ref.read(settingsProvider.notifier);
-    final unplayed = ref.watch(unplayedCountProvider);
 
     return Scaffold(
       body: Container(
@@ -165,33 +155,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               ),
               const SizedBox(height: 10),
-              unplayed.when(
-                data: (c) => Text(
-                  c > 0
-                      ? '$c spots ready offline'
-                      : 'Spots load as you play',
-                  style: GoogleFonts.jetBrainsMono(
-                    fontSize: 11,
-                    color: AppColors.slate.withValues(alpha: 0.85),
-                  ),
+              Text(
+                'Full hands from the deal · live coaching each street',
+                style: GoogleFonts.jetBrainsMono(
+                  fontSize: 11,
+                  color: AppColors.slate.withValues(alpha: 0.85),
                 ),
-                loading: () => const SizedBox.shrink(),
-                error: (_, _) => const SizedBox.shrink(),
               ),
               const SizedBox(height: 36),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _launchPractice,
-                  child: const Text('Start practice'),
-                ),
-              ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: _launchCash,
-                  child: const Text('Cash game'),
+                  onPressed: _launchTraining,
+                  child: const Text('Start training'),
                 ),
               ),
               const SizedBox(height: 28),

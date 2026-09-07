@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
@@ -15,21 +16,26 @@ class CommunityCardsView extends StatelessWidget {
     required this.community,
     required this.pot,
     required this.street,
+    required this.bigBlind,
+    required this.chipDisplayMode,
     this.scale = 1,
   });
 
   final List<CardModel> community;
   final double pot;
   final Street street;
+  final double bigBlind;
+  final ChipDisplayMode chipDisplayMode;
   final double scale;
 
   @override
   Widget build(BuildContext context) {
+    final potLabel = ChipFormat.chips(pot, bigBlind, chipDisplayMode);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          '${street.label}  ·  \$${pot.toStringAsFixed(0)}',
+          '${street.label}  ·  $potLabel',
           style: GoogleFonts.jetBrainsMono(
             fontWeight: FontWeight.w700,
             color: AppColors.goldBright.withValues(alpha: 0.9),

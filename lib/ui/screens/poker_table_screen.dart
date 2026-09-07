@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
-import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
 import 'package:live_poker_trainer/ui/widgets/action_dock_widget.dart';
@@ -43,9 +42,10 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
             context,
             game: next.game!,
             feedback: next.coach,
+            chipDisplayMode: ref.read(settingsProvider).chipDisplayMode,
             onNext: () {
               _auditShown = false;
-              ref.read(gameControllerProvider.notifier).startPractice();
+              ref.read(gameControllerProvider.notifier).nextHand();
             },
           ).whenComplete(() {
             _auditShown = false;
@@ -54,6 +54,11 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
         });
       }
     });
+
+    final canAct = game != null &&
+        game.waitingForHero &&
+        !game.isHandOver &&
+        !game.hero.folded;
 
     return Scaffold(
       body: Container(
@@ -82,9 +87,7 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                     ),
                     Expanded(
                       child: Text(
-                        game?.mode == GameMode.practice
-                            ? 'Practice'
-                            : 'Cash game',
+                        'Training',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.cinzel(
                           fontWeight: FontWeight.w600,
@@ -97,16 +100,7 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                       TextButton(
                         onPressed: () {
                           _auditShown = false;
-                          final mode = game.mode;
-                          if (mode == GameMode.practice) {
-                            ref
-                                .read(gameControllerProvider.notifier)
-                                .startPractice();
-                          } else {
-                            ref
-                                .read(gameControllerProvider.notifier)
-                                .startCashSim(continueTable: true);
-                          }
+                          ref.read(gameControllerProvider.notifier).nextHand();
                         },
                         child: Text(
                           'Next',
@@ -137,7 +131,7 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'Dealing your spot…',
+                          'Dealing…',
                           style: GoogleFonts.manrope(color: AppColors.slate),
                         ),
                       ],
@@ -202,6 +196,8 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                                 alignment: Alignment.bottomCenter,
                                 child: CoachShelfWidget(
                                   feedback: session.coach,
+                                  bigBlind: game.bigBlind,
+                                  chipDisplayMode: settings.chipDisplayMode,
                                   ttsEnabled: settings.ttsEnabled,
                                   onMuteToggle: () => ref
                                       .read(settingsProvider.notifier)
@@ -219,21 +215,19 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                 if (MediaQuery.sizeOf(context).width < 900)
                   CoachShelfWidget(
                     feedback: session.coach,
+                    bigBlind: game.bigBlind,
+                    chipDisplayMode: settings.chipDisplayMode,
                     ttsEnabled: settings.ttsEnabled,
                     onMuteToggle: () => ref
                         .read(settingsProvider.notifier)
                         .setTts(!settings.ttsEnabled),
                   ),
-                if (game.waitingForHero && !game.isHandOver)
-                  ActionDockWidget(
-                    game: game,
-                    enabled: !session.loading,
-                    onAction: (action) => ref
-                        .read(gameControllerProvider.notifier)
-                        .heroAct(action),
-                  )
-                else
-                  const SizedBox(height: 12),
+                ActionDockWidget(
+                  game: game,
+                  enabled: canAct && !session.loading,
+                  onAction: (action) =>
+                      ref.read(gameControllerProvider.notifier).heroAct(action),
+                ),
               ],
             ],
           ),

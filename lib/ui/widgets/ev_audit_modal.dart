@@ -1,25 +1,28 @@
-/// Post-hand EV breakdown and scenario reveal modal.
+/// Post-hand EV breakdown and coaching reveal modal.
 library;
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/coach_feedback.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 
-/// Modal sheet summarizing practice EV audit.
+/// Modal sheet summarizing hand-end EV audit.
 class EvAuditModal extends StatelessWidget {
   /// Creates the EV audit modal.
   const EvAuditModal({
     super.key,
     required this.game,
     required this.feedback,
+    required this.chipDisplayMode,
     required this.onClose,
     this.onNext,
   });
 
   final GameState game;
   final CoachFeedback feedback;
+  final ChipDisplayMode chipDisplayMode;
   final VoidCallback onClose;
   final VoidCallback? onNext;
 
@@ -28,6 +31,7 @@ class EvAuditModal extends StatelessWidget {
     BuildContext context, {
     required GameState game,
     required CoachFeedback feedback,
+    required ChipDisplayMode chipDisplayMode,
     VoidCallback? onNext,
   }) {
     return showModalBottomSheet<void>(
@@ -40,6 +44,7 @@ class EvAuditModal extends StatelessWidget {
       builder: (ctx) => EvAuditModal(
         game: game,
         feedback: feedback,
+        chipDisplayMode: chipDisplayMode,
         onClose: () => Navigator.pop(ctx),
         onNext: onNext,
       ),
@@ -48,8 +53,15 @@ class EvAuditModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scenario = game.activeScenario;
     final correct = feedback.verdict == CoachVerdict.correct;
+    final optimalLabel = feedback.optimalAction == null
+        ? null
+        : ChipFormat.optimalLine(
+            actionLabel: feedback.optimalAction!.label,
+            sizingBb: feedback.optimalSizingBb,
+            bigBlind: game.bigBlind,
+            mode: chipDisplayMode,
+          );
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(22, 14, 22, 28),
@@ -69,7 +81,7 @@ class EvAuditModal extends StatelessWidget {
           ),
           const SizedBox(height: 18),
           Text(
-            'EV Audit',
+            'Hand review',
             style: GoogleFonts.cinzel(
               fontSize: 22,
               fontWeight: FontWeight.w700,
@@ -77,20 +89,21 @@ class EvAuditModal extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 14),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: correct ? AppColors.success : AppColors.danger,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Text(
-              correct ? 'CORRECT' : 'INCORRECT',
-              style: GoogleFonts.jetBrainsMono(
-                fontWeight: FontWeight.w800,
-                color: AppColors.bgDark,
+          if (feedback.hasVerdict)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: correct ? AppColors.success : AppColors.danger,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                correct ? 'CORRECT' : 'INCORRECT',
+                style: GoogleFonts.jetBrainsMono(
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.bgDark,
+                ),
               ),
             ),
-          ),
           const SizedBox(height: 14),
           Text(
             feedback.message,
@@ -100,38 +113,33 @@ class EvAuditModal extends StatelessWidget {
               fontSize: 15,
             ),
           ),
-          if (scenario != null) ...[
+          if (optimalLabel != null) ...[
             const SizedBox(height: 16),
             Text(
-              scenario.name ?? 'Scenario',
-              style: GoogleFonts.cinzel(
-                color: AppColors.goldMuted,
-                fontWeight: FontWeight.w600,
-                fontSize: 15,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              scenario.theoreticalEvExplanation,
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 13,
-                height: 1.4,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Optimal: ${scenario.optimalExploitAction.label}'
-              '${scenario.optimalSizingBb > 0 ? ' · ${scenario.optimalSizingBb.toStringAsFixed(1)} BB' : ''}',
+              'Optimal: $optimalLabel',
               style: GoogleFonts.jetBrainsMono(
                 color: AppColors.gold,
                 fontSize: 12,
               ),
             ),
           ],
+          if (feedback.heroAction != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              'You: ${feedback.heroAction}',
+              style: GoogleFonts.jetBrainsMono(
+                color: AppColors.slate,
+                fontSize: 12,
+              ),
+            ),
+          ],
           const SizedBox(height: 10),
           Text(
-            'EV Δ ${feedback.evDeltaBb >= 0 ? '+' : ''}${feedback.evDeltaBb.toStringAsFixed(2)} BB',
+            ChipFormat.evDelta(
+              feedback.evDeltaBb,
+              game.bigBlind,
+              chipDisplayMode,
+            ),
             style: GoogleFonts.jetBrainsMono(
               color: feedback.evDeltaBb >= 0
                   ? AppColors.success
@@ -157,7 +165,7 @@ class EvAuditModal extends StatelessWidget {
                       onClose();
                       onNext!();
                     },
-                    child: const Text('Next spot'),
+                    child: const Text('Next hand'),
                   ),
                 ),
               ],

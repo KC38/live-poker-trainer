@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
@@ -14,26 +15,34 @@ class PlayerSeatWidget extends StatelessWidget {
     super.key,
     required this.player,
     required this.bigBlind,
+    required this.chipDisplayMode,
     required this.isActive,
     required this.isDealer,
+    this.isSmallBlind = false,
+    this.isBigBlind = false,
     this.micro = false,
     this.showCards = false,
   });
 
   final PlayerModel player;
   final double bigBlind;
+  final ChipDisplayMode chipDisplayMode;
   final bool isActive;
   final bool isDealer;
+  final bool isSmallBlind;
+  final bool isBigBlind;
   final bool micro;
   final bool showCards;
 
   @override
   Widget build(BuildContext context) {
     final opacity = player.folded ? 0.32 : 1.0;
-    final stackBb = bigBlind <= 0 ? 0 : player.stack / bigBlind;
-    final stackLabel = micro
-        ? '${stackBb.toStringAsFixed(0)} BB'
-        : '\$${player.stack.toStringAsFixed(0)}';
+    final stackLabel = ChipFormat.chips(
+      player.stack,
+      bigBlind,
+      chipDisplayMode,
+      bbDecimals: 0,
+    );
 
     return Opacity(
       opacity: opacity,
@@ -72,34 +81,38 @@ class PlayerSeatWidget extends StatelessWidget {
                 Positioned(
                   right: -2,
                   top: -2,
-                  child: Container(
-                    width: 16,
-                    height: 16,
-                    alignment: Alignment.center,
-                    decoration: const BoxDecoration(
-                      color: AppColors.cream,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      'D',
-                      style: GoogleFonts.jetBrainsMono(
-                        fontSize: 9,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.bgDark,
-                      ),
-                    ),
-                  ),
+                  child: _Puck(label: 'D', color: AppColors.cream),
+                ),
+              if (isSmallBlind)
+                Positioned(
+                  left: -4,
+                  bottom: -2,
+                  child: _Puck(label: 'SB', color: AppColors.goldMuted),
+                ),
+              if (isBigBlind)
+                Positioned(
+                  right: -4,
+                  bottom: -2,
+                  child: _Puck(label: 'BB', color: AppColors.goldBright),
                 ),
             ],
           ),
           const SizedBox(height: 4),
-          if (!micro)
+          Text(
+            micro ? player.archetype.badge : player.name,
+            style: GoogleFonts.manrope(
+              fontSize: micro ? 9 : 11,
+              fontWeight: FontWeight.w600,
+              color: AppColors.slate,
+            ),
+          ),
+          if (!micro && !player.isHero)
             Text(
-              player.name,
-              style: GoogleFonts.manrope(
-                fontSize: 11,
+              'V${player.vpip.toStringAsFixed(0)}/P${player.pfr.toStringAsFixed(0)}',
+              style: GoogleFonts.jetBrainsMono(
+                fontSize: 8,
                 fontWeight: FontWeight.w600,
-                color: AppColors.slate,
+                color: AppColors.slate.withValues(alpha: 0.85),
               ),
             ),
           Text(
@@ -114,7 +127,12 @@ class PlayerSeatWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 2),
               child: Text(
-                '\$${player.currentBet.toStringAsFixed(0)}',
+                ChipFormat.chips(
+                  player.currentBet,
+                  bigBlind,
+                  chipDisplayMode,
+                  bbDecimals: 1,
+                ),
                 style: GoogleFonts.jetBrainsMono(
                   fontSize: 9,
                   color: AppColors.cream,
@@ -145,6 +163,36 @@ class PlayerSeatWidget extends StatelessWidget {
               ),
             ),
         ],
+      ),
+    );
+  }
+}
+
+class _Puck extends StatelessWidget {
+  const _Puck({required this.label, required this.color});
+
+  final String label;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final wide = label.length > 1;
+    return Container(
+      width: wide ? 22 : 16,
+      height: 16,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(wide ? 8 : 16),
+        border: Border.all(color: AppColors.bgDark.withValues(alpha: 0.35)),
+      ),
+      child: Text(
+        label,
+        style: GoogleFonts.jetBrainsMono(
+          fontSize: wide ? 8 : 9,
+          fontWeight: FontWeight.w800,
+          color: AppColors.bgDark,
+        ),
       ),
     );
   }

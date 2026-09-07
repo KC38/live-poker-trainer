@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart' hide Config;
+import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/core/constants/config.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
@@ -78,6 +79,47 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               value: settings.ttsEnabled,
               onChanged: notifier.setTts,
             ),
+            const SizedBox(height: 12),
+            Text(
+              'Chip display',
+              style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              'Stacks, pot, bets, and EV audit',
+              style: GoogleFonts.manrope(color: AppColors.slate, fontSize: 13),
+            ),
+            const SizedBox(height: 10),
+            SegmentedButton<ChipDisplayMode>(
+              segments: [
+                for (final mode in ChipDisplayMode.values)
+                  ButtonSegment(
+                    value: mode,
+                    label: Text(
+                      mode == ChipDisplayMode.dollars
+                          ? '\$'
+                          : mode == ChipDisplayMode.bb
+                              ? 'BB'
+                              : 'Both',
+                      style: const TextStyle(fontSize: 13),
+                    ),
+                  ),
+              ],
+              selected: {settings.chipDisplayMode},
+              onSelectionChanged: (s) => notifier.setChipDisplayMode(s.first),
+              style: ButtonStyle(
+                foregroundColor: WidgetStateProperty.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? AppColors.bgDark
+                      : AppColors.slate,
+                ),
+                backgroundColor: WidgetStateProperty.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? AppColors.gold
+                      : AppColors.bgElevated,
+                ),
+              ),
+            ),
             const SizedBox(height: 20),
             Divider(color: AppColors.slateDark.withValues(alpha: 0.8)),
             const SizedBox(height: 16),
@@ -93,7 +135,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             Text(
               'Model: ${Config.geminiModel}\n'
               'Key: Settings override → --dart-define → .env\n'
-              'Never commit real keys. Device override stays local.',
+              'Never commit real keys. Device override stays local.\n'
+              'Coach voice uses Gemini AUDIO when a key is present, '
+              'otherwise device TTS.',
               style: GoogleFonts.manrope(
                 color: AppColors.slate,
                 fontSize: 13,
@@ -130,7 +174,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             Text(
               Config.hasGeminiKey
                   ? 'API key detected'
-                  : 'No API key — Practice uses offline fallback spots',
+                  : 'No API key — coaching uses heuristics + device voice',
               style: GoogleFonts.jetBrainsMono(
                 fontSize: 11,
                 color: Config.hasGeminiKey
