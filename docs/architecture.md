@@ -15,7 +15,7 @@ Home launches a single **Start training** path. Every hand:
 1. Deal from preflop with blinds posted, without resolving villain action (`startHand(resolve: false)`); D / SB / BB pucks on seats.
 2. `GameController` pulls `PokerEngine.nextEvent()` on a timer and applies one step per tick, so villain decisions, pot collection, and board cards animate in order.
 3. On each Hero action, `LiveCoach` grades when a clear exploit line exists; Gemini (or `CoachLines`) supplies a spot-specific line; `SoundService` plays cached Gemini speech or device TTS.
-4. Continue streets until fold-out or showdown; deal a fresh hand on **Next**.
+4. Continue streets until fold-out or showdown; deal a **fresh shuffled hand** on **Next** (hole-card layouts are fingerprinted so consecutive deals cannot clone the prior hand). Mid-hand hero actions never re-deal — the same hole cards continue until the hand ends.
 
 ### Replay events
 

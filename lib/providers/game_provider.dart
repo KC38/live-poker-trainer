@@ -128,7 +128,11 @@ class GameController extends StateNotifier<TableSession> {
 
   /// Starts (or restarts) unified full-hand training.
   Future<void> startTraining({bool continueTable = false}) async {
-    _replayToken++;
+    final token = ++_replayToken;
+    final previousFingerprint = _engine == null
+        ? null
+        : PokerEngine.dealFingerprint(_engine!.state);
+
     state = state.copyWith(
       loading: true,
       clearError: true,
@@ -140,6 +144,8 @@ class GameController extends StateNotifier<TableSession> {
     try {
       final sound = _ref.read(soundServiceProvider);
       await sound.unlock();
+      if (_disposed || token != _replayToken) return;
+
       final existing = continueTable ? state.game?.players : null;
       final engine = _engine;
       if (continueTable && engine != null) {
@@ -149,16 +155,43 @@ class GameController extends StateNotifier<TableSession> {
         _engine = PokerEngine(settings: _settings)
           ..startHand(existingPlayers: existing, resolve: false);
       }
+
+      // Publish the new deal immediately so a later failure cannot leave the
+      // UI stuck on the previous hand's cards.
+      var dealt = _engine!.state;
+      if (previousFingerprint != null &&
+          PokerEngine.dealFingerprint(dealt) == previousFingerprint) {
+        // Defensive: rebuild the engine and deal once more.
+        _engine = PokerEngine(settings: _settings)
+          ..startHand(
+            existingPlayers: dealt.players,
+            dealerIndex: dealt.dealerIndex,
+            resolve: false,
+          );
+        dealt = _engine!.state;
+      }
+
+      state = state.copyWith(game: dealt, loading: true);
       await sound.deal();
+      if (_disposed || token != _replayToken) return;
+
       state = TableSession(
         game: _engine!.state,
         loading: false,
         voiceHintShown: _voiceHintShown,
         coach: CoachFeedback(message: CoachLines.dealIntro(_engine!.state)),
       );
-      await _replayUntilHero(pace: ReplayPace.deal);
+      await _replayUntilHero(pace: ReplayPace.deal, token: token);
     } catch (e) {
-      state = state.copyWith(loading: false, replaying: false, error: '$e');
+      if (_disposed || token != _replayToken) return;
+      // Prefer the engine's deal over the prior UI snapshot when one exists.
+      final engineState = _engine?.state;
+      state = state.copyWith(
+        game: engineState,
+        loading: false,
+        replaying: false,
+        error: '$e',
+      );
     }
   }
 
@@ -178,9 +211,22 @@ class GameController extends StateNotifier<TableSession> {
     final game = state.game;
     if (engine == null || game == null || !state.heroCanAct) return;
 
+    // Lock out double-taps before any await so a second press cannot grade
+    // and re-apply against the same spot.
     final token = ++_replayToken;
+    final handId = game.handCount;
+    final holesBefore =
+        game.hero.holeCards.map((c) => c.code).toList(growable: false);
+    state = state.copyWith(replaying: true);
+
     final sound = _ref.read(soundServiceProvider);
     await _playActionSfx(sound, action.type);
+    if (_disposed || token != _replayToken) return;
+    // Bail if a new hand was dealt while SFX played.
+    if (engine.state.handCount != handId || !engine.state.waitingForHero) {
+      state = state.copyWith(game: engine.state, replaying: false);
+      return;
+    }
 
     // Grade against the pre-action snapshot.
     final grade = LiveCoach.grade(state: game, action: action);
@@ -193,11 +239,21 @@ class GameController extends StateNotifier<TableSession> {
         heroAction: action.label,
         evDeltaBb: grade.evDeltaBb,
       ),
-      replaying: true,
     );
 
     // Apply the hero action right away so the felt reflects the decision.
-    state = state.copyWith(game: engine.submitHeroAction(action));
+    final after = engine.submitHeroAction(action);
+    state = state.copyWith(game: after);
+
+    // Mid-hand continuations must keep the same hole cards; a new deal here
+    // would be the "same spot looping" bug.
+    if (!after.isHandOver) {
+      final holesAfter = after.hero.holeCards.map((c) => c.code).toList();
+      assert(
+        holesAfter.join(',') == holesBefore.join(','),
+        'hero hole cards changed mid-hand',
+      );
+    }
 
     await _recordStats(grade, game);
     // Coach narration runs in parallel with the replay so play never stalls

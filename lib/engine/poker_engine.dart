@@ -90,15 +90,27 @@ class TableEvent {
 /// Mutable poker table engine producing immutable [GameState] snapshots.
 class PokerEngine {
   /// Creates an engine with [settings] and optional [random].
+  ///
+  /// Pass [random] only for deterministic tests. Production deals must use the
+  /// default generator so consecutive hands never share a frozen seed.
   PokerEngine({
     required this._settings,
     Random? random,
-  }) : _random = random ?? Random();
+  })  : _random = random ?? Random(),
+        _deterministic = random != null;
 
   GameSettingsModel _settings;
   final Random _random;
+
+  /// True when the caller injected a seeded [Random] (tests only).
+  final bool _deterministic;
+
   late GameState _state;
   List<CardModel> _deck = [];
+
+  /// Fingerprint of the previous deal's hole cards (all seats), used to refuse
+  /// accidental clone deals when the RNG is recycled or restirred poorly.
+  String? _lastDealFingerprint;
 
   /// True once a [TableEventKind.collectPot] step has been emitted for the
   /// current betting round but the street has not advanced yet.
@@ -106,6 +118,15 @@ class PokerEngine {
 
   GameState get state => _state;
   GameSettingsModel get settings => _settings;
+
+  /// Stable id for the hole-card layout of [state]'s current deal.
+  static String dealFingerprint(GameState state) {
+    final parts = <String>[
+      for (final p in state.players)
+        p.holeCards.map((c) => c.code).join(','),
+    ];
+    return parts.join('|');
+  }
 
   /// Updates settings (stack depth / rebuy / blinds).
   void updateSettings(GameSettingsModel settings) {
@@ -197,18 +218,14 @@ class PokerEngine {
     ];
 
     _collectEmitted = false;
-    _deck = DeckEvaluator.buildShuffledDeck(_random);
-    players = [
-      for (final p in players)
-        p.copyWith(holeCards: [_deck.removeLast(), _deck.removeLast()]),
-    ];
+    final handCount = _tryHandCount() + 1;
+    players = _dealUniqueHoles(players, previousFingerprint: _lastDealFingerprint);
 
     players = _postBlind(players, sb, _settings.smallBlind);
     players = _postBlind(players, bb, _settings.bigBlind);
 
     final highest = _settings.bigBlind;
     final firstToAct = (bb + 1) % n;
-    final handCount = _tryHandCount() + 1;
     final heroBet = players.firstWhere((p) => p.isHero).currentBet;
 
     _state = GameState(
@@ -230,12 +247,48 @@ class PokerEngine {
       handCount: handCount,
       heroInvestedThisHand: heroBet,
       waitingForHero: players[firstToAct].isHero,
+      isHandOver: false,
+      // Never carry a prior hand's result / scenario into the new deal.
+      resultMessage: null,
+      activeScenario: null,
     );
+    _lastDealFingerprint = dealFingerprint(_state);
 
     if (resolve && !_state.waitingForHero) {
       runToHeroOrEnd();
     }
     return _state;
+  }
+
+  /// Shuffles and deals hole cards, reshuffling when the layout matches
+  /// [previousFingerprint] so "Next hand" can never clone the prior deal.
+  List<PlayerModel> _dealUniqueHoles(
+    List<PlayerModel> players, {
+    String? previousFingerprint,
+  }) {
+    const maxAttempts = 8;
+    var dealt = players;
+    for (var attempt = 0; attempt < maxAttempts; attempt++) {
+      if (!_deterministic && attempt > 0) {
+        // Stir extra entropy for production engines only; seeded test RNGs
+        // must stay on a single sequence for reproducibility.
+        _random.nextInt(1 << 20);
+      }
+      final shuffleRng =
+          _deterministic ? _random : Random(_random.nextInt(1 << 32));
+      _deck = DeckEvaluator.buildShuffledDeck(shuffleRng);
+      dealt = [
+        for (final p in players)
+          p.copyWith(holeCards: [_deck.removeLast(), _deck.removeLast()]),
+      ];
+      final fingerprint = [
+        for (final p in dealt) p.holeCards.map((c) => c.code).join(','),
+      ].join('|');
+      if (previousFingerprint == null || fingerprint != previousFingerprint) {
+        return dealt;
+      }
+    }
+    return dealt;
   }
 
   /// Alias for [startHand] (legacy cash-sim entry point).
@@ -341,8 +394,9 @@ class PokerEngine {
     if (state.hero.folded) return state;
 
     final heroIdx = state.players.indexWhere((p) => p.isHero);
-    state = _applyAction(state, heroIdx, action, isHero: true);
-    _state = state.isHandOver ? state : state.copyWith(waitingForHero: false);
+    // [_applyAction] already sets waitingForHero / isHandOver for the next
+    // seat — do not force waitingForHero false or mid-hand can desync.
+    _state = _applyAction(state, heroIdx, action, isHero: true);
     return _state;
   }
 

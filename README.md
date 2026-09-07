@@ -64,7 +64,7 @@ why speech uses the dedicated TTS model.
 
 Home has one primary CTA — **Start training** — plus a collapsed **Table setup** section (seats, blinds, stack, rebuy, lineup).
 
-Training always deals a **full cash-style hand** from preflop (blinds → streets → fold or showdown). Archetype villains (Maniac / Nit / Calling Station / TAG / LAG) play with the free-check rule (never fold when check is free). D / SB / BB pucks mark the button and blinds.
+Training always deals a **full cash-style hand** from preflop (blinds → streets → fold or showdown). Each **Next** hand gets a fresh shuffle — consecutive deals are checked so they cannot clone the previous hole-card layout, and mid-hand actions continue the same deal rather than resetting it. Archetype villains (Maniac / Nit / Calling Station / TAG / LAG) play with the free-check rule (never fold when check is free). D / SB / BB pucks mark the button and blinds.
 
 The action **replays one seat at a time** instead of arriving resolved: each villain decision, the chips sliding into the pot, and every board card lands as its own step with table-realistic pacing, and the hero simply waits its turn. Seats show the archetype as a word plus VPIP/PFR, and the header's people icon opens a legend of every player type at the table with its exploit.
 

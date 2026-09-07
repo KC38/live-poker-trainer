@@ -125,7 +125,11 @@ class HeroRailWidget extends StatelessWidget {
                 for (final card in hero.holeCards)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 3),
-                    child: MiniCard(card: card, size: MiniCardSize.hero),
+                    child: MiniCard(
+                      key: ValueKey('hero-${game.handCount}-${card.code}'),
+                      card: card,
+                      size: MiniCardSize.hero,
+                    ),
                   ),
               ],
             ),

@@ -111,27 +111,77 @@ class ScenarioManager {
   double maxEv(double a, double b) => a > b ? a : b;
 
   ScenarioModel _fallbackScenario() {
-    return ScenarioModel.fromGeminiJson({
-      'name': 'Offline Nit River Probe',
-      'table_size': 6,
-      'hero_position': 'BTN',
-      'hero_hand': ['As', '5s'],
-      'board_cards': ['Js', 'Tc', '4s', '2d', 'Ac'],
-      'pot_size': 45,
-      'villain_seat': 2,
-      'villain_archetype': 'Nit',
-      'previous_action_narrative':
-          'Nit checks river after calling two barrels.',
-      'villain_action': 'CHECK',
-      'call_amount': 0,
-      'min_raise': 2,
-      'max_raise': 200,
-      'optimal_exploit_action': 'RAISE',
-      'optimal_sizing_bb': 35,
-      'theoretical_ev_explanation':
-          'Nits overfold rivers; thin value + bluff with blockers prints.',
-      'exploit_reasoning':
-          'Stan folds second pair to river aggression — fire a probe raise.',
-    });
+    _fallbackRotation++;
+    final variants = <Map<String, dynamic>>[
+      {
+        'name': 'Offline Nit River Probe',
+        'table_size': 6,
+        'hero_position': 'BTN',
+        'hero_hand': ['As', '5s'],
+        'board_cards': ['Js', 'Tc', '4s', '2d', 'Ac'],
+        'pot_size': 45,
+        'villain_seat': 2,
+        'villain_archetype': 'Nit',
+        'previous_action_narrative':
+            'Nit checks river after calling two barrels.',
+        'villain_action': 'CHECK',
+        'call_amount': 0,
+        'min_raise': 2,
+        'max_raise': 200,
+        'optimal_exploit_action': 'RAISE',
+        'optimal_sizing_bb': 35,
+        'theoretical_ev_explanation':
+            'Nits overfold rivers; thin value + bluff with blockers prints.',
+        'exploit_reasoning':
+            'Stan folds second pair to river aggression — fire a probe raise.',
+      },
+      {
+        'name': 'Offline Station Value Barrel',
+        'table_size': 6,
+        'hero_position': 'CO',
+        'hero_hand': ['Kh', 'Kd'],
+        'board_cards': ['Ks', '8c', '2d', '9h'],
+        'pot_size': 32,
+        'villain_seat': 3,
+        'villain_archetype': 'Calling Station',
+        'previous_action_narrative':
+            'Station called flop; turn completes a weak draw.',
+        'villain_action': 'CHECK',
+        'call_amount': 0,
+        'min_raise': 2,
+        'max_raise': 200,
+        'optimal_exploit_action': 'RAISE',
+        'optimal_sizing_bb': 22,
+        'theoretical_ev_explanation':
+            'Stations call down too wide — size up for thin value.',
+        'exploit_reasoning':
+            'Fred peels light; bet bigger for value, never bluff.',
+      },
+      {
+        'name': 'Offline Maniac Flop Continue',
+        'table_size': 8,
+        'hero_position': 'BB',
+        'hero_hand': ['Ah', 'Td'],
+        'board_cards': ['Tc', '7s', '2h'],
+        'pot_size': 18,
+        'villain_seat': 1,
+        'villain_archetype': 'Maniac',
+        'previous_action_narrative': 'Maniac open-raised; you defended BB.',
+        'villain_action': 'RAISE',
+        'call_amount': 12,
+        'min_raise': 24,
+        'max_raise': 200,
+        'optimal_exploit_action': 'CALL',
+        'optimal_sizing_bb': 0,
+        'theoretical_ev_explanation':
+            'Maniacs barrel wide; call top pair and let them bluff.',
+        'exploit_reasoning':
+            'Viktor will keep firing — flatting top pair prints.',
+      },
+    ];
+    final raw = variants[_fallbackRotation % variants.length];
+    return ScenarioModel.fromGeminiJson(raw);
   }
+
+  static int _fallbackRotation = 0;
 }
