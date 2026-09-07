@@ -5,7 +5,16 @@ import 'package:flutter/foundation.dart';
 import 'package:live_poker_trainer/models/scenario_model.dart';
 
 /// Whether the hero matched the optimal exploit line.
-enum CoachVerdict { correct, incorrect, pending, none }
+enum CoachVerdict {
+  correct,
+  incorrect,
+  pending,
+  none;
+
+  /// Whether this verdict represents a real graded decision.
+  bool get isGraded =>
+      this == CoachVerdict.correct || this == CoachVerdict.incorrect;
+}
 
 /// Coach feedback shown in the coach shelf and EV audit.
 @immutable
