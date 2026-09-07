@@ -157,6 +157,17 @@ class HeroIdentity {
   String get seatName =>
       displayName.trim().isEmpty ? defaultDisplayName : displayName.trim();
 
+  /// Whether the player has chosen a name of their own.
+  bool get hasCustomName => seatName != defaultDisplayName;
+
+  /// Label for the hero rail.
+  ///
+  /// The default name is replaced with `YOU`: at the table the player needs
+  /// to spot their own seat instantly, and "HERO" reads as jargon until they
+  /// have deliberately named themselves something.
+  String get railLabel =>
+      hasCustomName ? seatName.toUpperCase() : 'YOU';
+
   /// One or two letters for the avatar fallback.
   String get initials {
     final parts = seatName

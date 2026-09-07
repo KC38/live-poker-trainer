@@ -2,19 +2,22 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/core/constants/money.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
+import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
+import 'package:live_poker_trainer/ui/widgets/profile_avatar.dart';
 
 /// Fixed-height hero band between the felt and the coach shelf.
 ///
 /// Hero hole cards used to be drawn as part of the felt seat ring, where a
 /// tall coach shelf could clip them. Giving the hero its own band makes
 /// overlap structurally impossible.
-class HeroRailWidget extends StatelessWidget {
+class HeroRailWidget extends ConsumerWidget {
   /// Creates the hero rail.
   const HeroRailWidget({
     super.key,
@@ -35,7 +38,8 @@ class HeroRailWidget extends StatelessWidget {
   static const double height = 84;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final identity = ref.watch(heroIdentityProvider);
     final hero = game.hero;
     final heroIndex = game.players.indexWhere((p) => p.isHero);
     final isTurn = game.waitingForHero && !game.isHandOver && !hero.folded;
@@ -65,13 +69,19 @@ class HeroRailWidget extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        'YOU',
-                        style: GoogleFonts.jetBrainsMono(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 0.6,
-                          color: AppColors.gold,
+                      ProfileAvatar(identity: identity, size: 20),
+                      const SizedBox(width: 6),
+                      Flexible(
+                        child: Text(
+                          identity.railLabel,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.jetBrainsMono(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.6,
+                            color: AppColors.gold,
+                          ),
                         ),
                       ),
                       if (position != null) ...[

@@ -9,14 +9,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/core/constants/poker_constants.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
+import 'package:live_poker_trainer/models/hero_profile_model.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
+import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
+import 'package:live_poker_trainer/ui/screens/profile_screen.dart';
 import 'package:live_poker_trainer/ui/screens/settings_screen.dart';
 import 'package:live_poker_trainer/ui/screens/stats_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/ui/widgets/profile_avatar.dart';
 
 /// Landing screen — teach-first, minimal choices above the fold.
 class HomeScreen extends ConsumerStatefulWidget {
@@ -166,6 +170,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 padding: const EdgeInsets.fromLTRB(10, 4, 10, 0),
                 child: Row(
                   children: [
+                    _ProfileButton(
+                      identity: ref.watch(heroIdentityProvider),
+                      onTap: () => Navigator.push(
+                        context,
+                        softFadeRoute(const ProfileScreen()),
+                      ),
+                    ),
                     const Spacer(),
                     IconButton(
                       tooltip: 'Progress',
@@ -585,6 +596,33 @@ class _StepperTile extends StatelessWidget {
           icon: const Icon(Icons.add, color: AppColors.slate),
         ),
       ],
+    );
+  }
+}
+
+
+/// Home's entry point into the player profile.
+///
+/// Shows the player's own avatar rather than a generic icon, so the
+/// customization they chose is visible from the landing screen.
+class _ProfileButton extends StatelessWidget {
+  const _ProfileButton({required this.identity, required this.onTap});
+
+  final HeroIdentity identity;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: 'Player profile',
+      child: InkWell(
+        onTap: onTap,
+        customBorder: const CircleBorder(),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: ProfileAvatar(identity: identity, size: 32),
+        ),
+      ),
     );
   }
 }
