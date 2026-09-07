@@ -4,6 +4,8 @@ Multi-platform Flutter trainer for exploitative No-Limit Hold'em (**iOS**, **And
 
 ## Quick start
 
+Requires **Flutter 3.47+** / **Dart 3.13+** (tested on Flutter 3.47.2 · Dart 3.13.2).
+
 ```bash
 git checkout feat/flutter-poker-lab
 cp .env.example .env
@@ -35,7 +37,7 @@ flutter run --dart-define=GEMINI_API_KEY=your_key
 - **Never commit `.env`** or real API keys (gitignored).
 - Commit only `.env.example`.
 - Key order: Settings device override → `--dart-define=GEMINI_API_KEY` → dotenv `.env` / `.env.example`.
-- Model: **`gemini-3.8-flash`**.
+- Model: **`gemini-3.8-flash`** (single source: `Config.geminiModel`).
 
 ## Defaults
 
@@ -45,34 +47,39 @@ flutter run --dart-define=GEMINI_API_KEY=your_key
 | Seats | 9 (2–9) |
 | Stack depth | 200 BB |
 | Auto-rebuy | On, top-up when &lt; 50 BB to configured stack |
+| Lineup | Random pool, or **Custom** with per-seat archetype pickers |
 | SFX / Coach TTS | On |
 
 ## Modes
 
 - **Practice:** Gemini (or cached / offline) tough spots; after you act, coach shows **CORRECT** or **INCORRECT**, then a punchy line + EV audit.
-- **Cash Sim:** archetype villains (Maniac / Nit / Calling Station / TAG / LAG) with free-check rule (never fold when check is free).
+- **Cash Sim:** archetype villains (Maniac / Nit / Calling Station / TAG / LAG) with free-check rule (never fold when check is free). Custom lineup assigns each villain seat on Home.
 
 ## Architecture
 
 ```
 lib/
 ├── main.dart
-├── core/          # config, colors, constants, audio, Drift DB
+├── core/          # config, colors, constants, audio (WAV codec), Drift DB
 ├── models/
 ├── engine/        # DeckEvaluator, PokerEngine, ScenarioManager
 ├── services/      # GeminiService
-├── providers/     # Riverpod
+├── providers/     # Riverpod 2.x
 └── ui/screens/ + ui/widgets/
 ```
 
 See [docs/architecture.md](docs/architecture.md).
+
+Coach TTS: Gemini AUDIO is usually raw PCM/L16 @ 24 kHz; `WavCodec` wraps it as WAV before `audioplayers` playback.
 
 ## Development
 
 ```bash
 flutter analyze
 flutter test
-dart run build_runner build --delete-conflicting-outputs   # after Drift schema changes
+dart run build_runner build   # after Drift schema changes
 ```
 
 Prefetch: when unplayed scenarios &lt; 5, `ScenarioManager` requests more from Gemini in the background.
+
+**Dependency note:** `flutter_riverpod` stays on **2.x** (3.x is a breaking Notifier migration). Other direct deps track latest compatible versions.

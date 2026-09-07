@@ -25,7 +25,17 @@ Archetype decision trees inspired by the domain demo (not a line-by-line port). 
 
 `SoundService` plays `assets/sounds/{card,chip,knock,fold}.wav`. SFX and TTS toggles are independent. On web, call `unlock()` after a user gesture (done when starting a session).
 
+Gemini coach AUDIO is typically raw 16-bit PCM / L16 (often `audio/pcm;rate=24000` or `audio/L16;codec=pcm;rate=24000`). `WavCodec.ensurePlayable` detects existing WAV/MP3, otherwise wraps PCM in a RIFF/WAVE header so `audioplayers` can play reliably on iOS, Android, and web.
+
+## Lineup
+
+Home supports **Random Pool** and **Custom**. Custom shows a dropdown per villain seat (Seat 2…N); Hero remains seat 1 / bottom. Choices persist via SharedPreferences and feed `PokerEngine.buildLineup`.
+
 ## Breakpoints
 
 - Compact: phone vertical table; coach shelf above dock.
 - Expanded (≥900px width): table + side coach shelf for tablets / desktop web.
+
+## Tooling
+
+Tested on Flutter **3.47.2** / Dart **3.13.2**. `flutter_riverpod` remains on 2.x by design.

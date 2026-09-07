@@ -48,10 +48,9 @@ class PokerAction {
 class PokerEngine {
   /// Creates an engine with [settings] and optional [random].
   PokerEngine({
-    required GameSettingsModel settings,
+    required this._settings,
     Random? random,
-  })  : _settings = settings,
-        _random = random ?? Random();
+  }) : _random = random ?? Random();
 
   GameSettingsModel _settings;
   final Random _random;

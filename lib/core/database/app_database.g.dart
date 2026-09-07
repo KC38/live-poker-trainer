@@ -1312,20 +1312,18 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   ];
 }
 
-typedef $$ScenariosTableCreateCompanionBuilder =
-    ScenariosCompanion Function({
-      Value<int> id,
-      required String contentHash,
-      required String payloadJson,
-      Value<DateTime> createdAt,
-    });
-typedef $$ScenariosTableUpdateCompanionBuilder =
-    ScenariosCompanion Function({
-      Value<int> id,
-      Value<String> contentHash,
-      Value<String> payloadJson,
-      Value<DateTime> createdAt,
-    });
+typedef $$ScenariosTableCreateCompanionBuilder = ScenariosCompanion Function({
+  Value<int> id,
+  required String contentHash,
+  required String payloadJson,
+  Value<DateTime> createdAt,
+});
+typedef $$ScenariosTableUpdateCompanionBuilder = ScenariosCompanion Function({
+  Value<int> id,
+  Value<String> contentHash,
+  Value<String> payloadJson,
+  Value<DateTime> createdAt,
+});
 
 final class $$ScenariosTableReferences
     extends BaseReferences<_$AppDatabase, $ScenariosTable, Scenario> {
@@ -1541,7 +1539,7 @@ class $$ScenariosTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$ScenariosTable, Scenario>(table),
                   $$ScenariosTableReferences(db, table, e),
                 ),
               )
@@ -1909,7 +1907,7 @@ class $$PlayedScenariosTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$PlayedScenariosTable, PlayedScenario>(table),
                   $$PlayedScenariosTableReferences(db, table, e),
                 ),
               )
@@ -1935,19 +1933,15 @@ class $$PlayedScenariosTableTableManager
                     >
                   >(state) {
                     if (scenarioId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.scenarioId,
-                                referencedTable:
-                                    $$PlayedScenariosTableReferences
-                                        ._scenarioIdTable(db),
-                                referencedColumn:
-                                    $$PlayedScenariosTableReferences
-                                        ._scenarioIdTable(db)
-                                        .id,
-                              )
-                              as T;
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.scenarioId,
+                        referencedTable: $$PlayedScenariosTableReferences
+                            ._scenarioIdTable(db),
+                        referencedColumn: $$PlayedScenariosTableReferences
+                            ._scenarioIdTable(db)
+                            .id,
+                      ) as T;
                     }
 
                     return state;
@@ -2199,7 +2193,16 @@ class $$UserStatsRowsTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$UserStatsRowsTable, UserStatsRow>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $UserStatsRowsTable,
+                    UserStatsRow
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),

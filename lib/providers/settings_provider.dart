@@ -15,9 +15,8 @@ final sharedPreferencesProvider = FutureProvider<SharedPreferences>(
 /// Settings controller with disk persistence.
 class SettingsNotifier extends StateNotifier<GameSettingsModel> {
   /// Creates a notifier from [prefs].
-  SettingsNotifier(this._prefs, {SoundServiceSync? soundSync})
-      : _soundSync = soundSync,
-        super(_load(_prefs)) {
+  SettingsNotifier(this._prefs, {this._soundSync})
+      : super(_load(_prefs)) {
     _applySideEffects();
   }
 
