@@ -9,7 +9,7 @@ import 'package:live_poker_trainer/models/player_model.dart';
 /// Lineup selection mode on the Home screen.
 enum LineupMode { randomPool, custom }
 
-/// Persistent settings for blinds, stack, rebuy, SFX, and TTS.
+/// Persistent settings for blinds, stack, rebuy, SFX, music, and TTS.
 @immutable
 class GameSettingsModel {
   /// Creates game settings with plan defaults.
@@ -22,6 +22,7 @@ class GameSettingsModel {
     this.rebuyThresholdBb = PokerConstants.defaultRebuyThresholdBb,
     this.sfxEnabled = PokerConstants.defaultSfxEnabled,
     this.ttsEnabled = PokerConstants.defaultTtsEnabled,
+    this.musicEnabled = PokerConstants.defaultMusicEnabled,
     this.chipDisplayMode = ChipDisplayMode.both,
     this.lineupMode = LineupMode.randomPool,
     this.customArchetypes = const [],
@@ -35,6 +36,9 @@ class GameSettingsModel {
   final int rebuyThresholdBb;
   final bool sfxEnabled;
   final bool ttsEnabled;
+
+  /// Home / lounge ambient loop; independent of table SFX.
+  final bool musicEnabled;
   final ChipDisplayMode chipDisplayMode;
   final LineupMode lineupMode;
   final List<PlayerArchetype> customArchetypes;
@@ -67,6 +71,7 @@ class GameSettingsModel {
     int? rebuyThresholdBb,
     bool? sfxEnabled,
     bool? ttsEnabled,
+    bool? musicEnabled,
     ChipDisplayMode? chipDisplayMode,
     LineupMode? lineupMode,
     List<PlayerArchetype>? customArchetypes,
@@ -93,6 +98,7 @@ class GameSettingsModel {
       rebuyThresholdBb: rebuyThresholdBb ?? this.rebuyThresholdBb,
       sfxEnabled: sfxEnabled ?? this.sfxEnabled,
       ttsEnabled: ttsEnabled ?? this.ttsEnabled,
+      musicEnabled: musicEnabled ?? this.musicEnabled,
       chipDisplayMode: chipDisplayMode ?? this.chipDisplayMode,
       lineupMode: lineupMode ?? this.lineupMode,
       customArchetypes: nextCustom,
@@ -108,6 +114,7 @@ class GameSettingsModel {
         'rebuyThresholdBb': rebuyThresholdBb,
         'sfxEnabled': sfxEnabled,
         'ttsEnabled': ttsEnabled,
+        'musicEnabled': musicEnabled,
         'chipDisplayMode': chipDisplayMode.name,
         'lineupMode': lineupMode.name,
         'customArchetypes':
@@ -142,6 +149,8 @@ class GameSettingsModel {
           prefs['sfxEnabled'] as bool? ?? PokerConstants.defaultSfxEnabled,
       ttsEnabled:
           prefs['ttsEnabled'] as bool? ?? PokerConstants.defaultTtsEnabled,
+      musicEnabled:
+          prefs['musicEnabled'] as bool? ?? PokerConstants.defaultMusicEnabled,
       chipDisplayMode: ChipDisplayMode.values.firstWhere(
         (m) => m.name == chipMode,
         orElse: () => ChipDisplayMode.both,

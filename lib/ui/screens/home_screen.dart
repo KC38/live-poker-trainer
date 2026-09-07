@@ -1,6 +1,8 @@
 /// Home: single Start training CTA, progressive disclosure for table setup.
 library;
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,7 +10,7 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/core/constants/poker_constants.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
-import 'package:live_poker_trainer/providers/game_provider.dart';
+import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
 import 'package:live_poker_trainer/ui/screens/settings_screen.dart';
@@ -26,14 +28,48 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool _setupExpanded = false;
+  bool _launching = false;
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _syncHomeBgm());
+  }
+
+  Future<void> _syncHomeBgm() async {
+    if (!mounted) return;
+    final settings = ref.read(settingsProvider);
+    final sound = ref.read(soundServiceProvider);
+    await sound.unlock();
+    if (!mounted) return;
+    if (settings.musicEnabled) {
+      await sound.startHomeBgm();
+    } else {
+      await sound.stopHomeBgm();
+    }
+  }
+
+  /// Navigates immediately; the table kicks off deal + SFX once it is visible.
   Future<void> _launchTraining() async {
-    await ref.read(gameControllerProvider.notifier).startTraining();
+    if (_launching) return;
+    setState(() => _launching = true);
+
+    final sound = ref.read(soundServiceProvider);
+
+    // Unlock on the user gesture, fade Home BGM, then leave — no table SFX yet.
+    await sound.unlock();
+    unawaited(sound.pauseHomeBgm());
+
     if (!mounted) return;
     await Navigator.push(
       context,
       softFadeRoute(const PokerTableScreen()),
     );
+
+    unawaited(_syncHomeBgm());
+    if (mounted) {
+      setState(() => _launching = false);
+    }
   }
 
   List<Widget> _customSeatPickers(
@@ -100,6 +136,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final settings = ref.watch(settingsProvider);
     final notifier = ref.read(settingsProvider.notifier);
 
+    ref.listen<GameSettingsModel>(settingsProvider, (prev, next) {
+      if (prev?.musicEnabled == next.musicEnabled) return;
+      _syncHomeBgm();
+    });
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -115,207 +156,268 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ),
         child: SafeArea(
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(22, 12, 22, 36),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                children: [
-                  const Spacer(),
-                  IconButton(
-                    tooltip: 'Progress',
-                    onPressed: () => Navigator.push(
-                      context,
-                      softFadeRoute(const StatsScreen()),
-                    ),
-                    icon: const Icon(Icons.insights_outlined, color: AppColors.slate),
-                  ),
-                  IconButton(
-                    tooltip: 'Settings',
-                    onPressed: () => Navigator.push(
-                      context,
-                      softFadeRoute(const SettingsScreen()),
-                    ),
-                    icon: const Icon(Icons.settings_outlined, color: AppColors.slate),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              // Generated brand mark (see tool/gen_app_art.py).
-              Image.asset(
-                'assets/brand/logo_mark.png',
-                width: 76,
-                height: 76,
-                filterQuality: FilterQuality.medium,
-                errorBuilder: (_, _, _) => const Icon(
-                  Icons.style,
-                  size: 56,
-                  color: AppColors.gold,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'Exploitative\nPoker Lab',
-                style: Theme.of(context).textTheme.displayLarge,
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'Learn when to deviate — calm spots, clear coaching.',
-                style: GoogleFonts.manrope(
-                  color: AppColors.slate,
-                  fontSize: 16,
-                  height: 1.4,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Full hands from the deal · live coaching each street',
-                style: GoogleFonts.jetBrainsMono(
-                  fontSize: 11,
-                  color: AppColors.slate.withValues(alpha: 0.85),
-                ),
-              ),
-              const SizedBox(height: 36),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _launchTraining,
-                  child: const Text('Start training'),
-                ),
-              ),
-              const SizedBox(height: 28),
-              _TableSetupSection(
-                expanded: _setupExpanded,
-                summary: _setupSummary(settings),
-                onToggle: () => setState(() => _setupExpanded = !_setupExpanded),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 4, 10, 0),
+                child: Row(
                   children: [
-                    _Label('Seats'),
-                    _StepperTile(
-                      value: '${settings.seatCount}',
-                      onDec: () => notifier.setSeatCount(settings.seatCount - 1),
-                      onInc: () => notifier.setSeatCount(settings.seatCount + 1),
-                    ),
-                    const SizedBox(height: 18),
-                    _Label('Blinds'),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        for (final stake in PokerConstants.stakePresets)
-                          ChoiceChip(
-                            label: Text(
-                              '\$${stake.$1 % 1 == 0 ? stake.$1.toInt() : stake.$1}/'
-                              '\$${stake.$2 % 1 == 0 ? stake.$2.toInt() : stake.$2}',
-                            ),
-                            selected: settings.smallBlind == stake.$1 &&
-                                settings.bigBlind == stake.$2,
-                            onSelected: (_) =>
-                                notifier.setBlinds(stake.$1, stake.$2),
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: 18),
-                    _Label('Stack depth'),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        for (final depth in PokerConstants.stackDepthPresets)
-                          ChoiceChip(
-                            label: Text('$depth BB'),
-                            selected: settings.stackDepthBb == depth,
-                            onSelected: (_) => notifier.setStackDepthBb(depth),
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    SwitchListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(
-                        'Auto-rebuy',
-                        style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
+                    const Spacer(),
+                    IconButton(
+                      tooltip: 'Progress',
+                      onPressed: () => Navigator.push(
+                        context,
+                        softFadeRoute(const StatsScreen()),
                       ),
-                      subtitle: Text(
-                        'Top up below ${settings.rebuyThresholdBb} BB',
-                        style: GoogleFonts.manrope(
-                          color: AppColors.slate,
-                          fontSize: 13,
-                        ),
-                      ),
-                      value: settings.autoRebuy,
-                      onChanged: notifier.setAutoRebuy,
-                    ),
-                    if (settings.autoRebuy)
-                      Row(
-                        children: [
-                          Text(
-                            'Threshold',
-                            style: GoogleFonts.manrope(color: AppColors.slate),
-                          ),
-                          Expanded(
-                            child: Slider(
-                              value: settings.rebuyThresholdBb.toDouble(),
-                              min: 20,
-                              max: 100,
-                              divisions: 16,
-                              label: '${settings.rebuyThresholdBb}',
-                              onChanged: (v) =>
-                                  notifier.setRebuyThresholdBb(v.round()),
-                            ),
-                          ),
-                          Text(
-                            '${settings.rebuyThresholdBb}',
-                            style: GoogleFonts.jetBrainsMono(
-                              color: AppColors.gold,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
-                      ),
-                    const SizedBox(height: 12),
-                    _Label('Lineup'),
-                    SegmentedButton<LineupMode>(
-                      segments: const [
-                        ButtonSegment(
-                          value: LineupMode.randomPool,
-                          label: Text('Random'),
-                        ),
-                        ButtonSegment(
-                          value: LineupMode.custom,
-                          label: Text('Custom'),
-                        ),
-                      ],
-                      selected: {settings.lineupMode},
-                      onSelectionChanged: (s) =>
-                          notifier.setLineupMode(s.first),
-                      style: ButtonStyle(
-                        foregroundColor: WidgetStateProperty.resolveWith(
-                          (states) => states.contains(WidgetState.selected)
-                              ? AppColors.bgDark
-                              : AppColors.slate,
-                        ),
-                        backgroundColor: WidgetStateProperty.resolveWith(
-                          (states) => states.contains(WidgetState.selected)
-                              ? AppColors.gold
-                              : AppColors.bgElevated,
-                        ),
+                      icon: const Icon(
+                        Icons.insights_outlined,
+                        color: AppColors.slate,
                       ),
                     ),
-                    if (settings.lineupMode == LineupMode.custom) ...[
-                      const SizedBox(height: 12),
-                      Text(
-                        'Assign each villain seat. Hero stays at the bottom.',
-                        style: GoogleFonts.manrope(
-                          color: AppColors.slate,
-                          fontSize: 13,
-                        ),
+                    IconButton(
+                      tooltip: 'Settings',
+                      onPressed: () => Navigator.push(
+                        context,
+                        softFadeRoute(const SettingsScreen()),
                       ),
-                      const SizedBox(height: 10),
-                      ..._customSeatPickers(settings, notifier),
-                    ],
+                      icon: const Icon(
+                        Icons.settings_outlined,
+                        color: AppColors.slate,
+                      ),
+                    ),
                   ],
+                ),
+              ),
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return SingleChildScrollView(
+                      padding: const EdgeInsets.fromLTRB(22, 8, 22, 28),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: constraints.maxHeight - 8,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Generated brand mark (see tool/gen_app_art.py).
+                            Image.asset(
+                              'assets/brand/logo_mark.png',
+                              width: 76,
+                              height: 76,
+                              filterQuality: FilterQuality.medium,
+                              errorBuilder: (_, _, _) => const Icon(
+                                Icons.style,
+                                size: 56,
+                                color: AppColors.gold,
+                              ),
+                            ),
+                            const SizedBox(height: 14),
+                            Text(
+                              'Exploitative\nPoker Lab',
+                              style: Theme.of(context).textTheme.displayLarge,
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              'Learn when to deviate — calm spots, clear coaching.',
+                              style: GoogleFonts.manrope(
+                                color: AppColors.slate,
+                                fontSize: 16,
+                                height: 1.4,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              'Full hands from the deal · live coaching each street',
+                              style: GoogleFonts.jetBrainsMono(
+                                fontSize: 11,
+                                color: AppColors.slate.withValues(alpha: 0.85),
+                              ),
+                            ),
+                            const SizedBox(height: 32),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: _launching ? null : _launchTraining,
+                                child: _launching
+                                    ? const SizedBox(
+                                        width: 22,
+                                        height: 22,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2.4,
+                                          color: AppColors.bgDark,
+                                        ),
+                                      )
+                                    : const Text('Start training'),
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            _TableSetupSection(
+                              expanded: _setupExpanded,
+                              summary: _setupSummary(settings),
+                              onToggle: () => setState(
+                                () => _setupExpanded = !_setupExpanded,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  _Label('Seats'),
+                                  _StepperTile(
+                                    value: '${settings.seatCount}',
+                                    onDec: () => notifier
+                                        .setSeatCount(settings.seatCount - 1),
+                                    onInc: () => notifier
+                                        .setSeatCount(settings.seatCount + 1),
+                                  ),
+                                  const SizedBox(height: 18),
+                                  _Label('Blinds'),
+                                  Wrap(
+                                    spacing: 8,
+                                    runSpacing: 8,
+                                    children: [
+                                      for (final stake
+                                          in PokerConstants.stakePresets)
+                                        ChoiceChip(
+                                          label: Text(
+                                            '\$${stake.$1 % 1 == 0 ? stake.$1.toInt() : stake.$1}/'
+                                            '\$${stake.$2 % 1 == 0 ? stake.$2.toInt() : stake.$2}',
+                                          ),
+                                          selected: settings.smallBlind ==
+                                                  stake.$1 &&
+                                              settings.bigBlind == stake.$2,
+                                          onSelected: (_) => notifier.setBlinds(
+                                            stake.$1,
+                                            stake.$2,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 18),
+                                  _Label('Stack depth'),
+                                  Wrap(
+                                    spacing: 8,
+                                    runSpacing: 8,
+                                    children: [
+                                      for (final depth
+                                          in PokerConstants.stackDepthPresets)
+                                        ChoiceChip(
+                                          label: Text('$depth BB'),
+                                          selected:
+                                              settings.stackDepthBb == depth,
+                                          onSelected: (_) =>
+                                              notifier.setStackDepthBb(depth),
+                                        ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  SwitchListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    title: Text(
+                                      'Auto-rebuy',
+                                      style: GoogleFonts.manrope(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      'Top up below ${settings.rebuyThresholdBb} BB',
+                                      style: GoogleFonts.manrope(
+                                        color: AppColors.slate,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    value: settings.autoRebuy,
+                                    onChanged: notifier.setAutoRebuy,
+                                  ),
+                                  if (settings.autoRebuy)
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Threshold',
+                                          style: GoogleFonts.manrope(
+                                            color: AppColors.slate,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Slider(
+                                            value: settings.rebuyThresholdBb
+                                                .toDouble(),
+                                            min: 20,
+                                            max: 100,
+                                            divisions: 16,
+                                            label:
+                                                '${settings.rebuyThresholdBb}',
+                                            onChanged: (v) => notifier
+                                                .setRebuyThresholdBb(v.round()),
+                                          ),
+                                        ),
+                                        Text(
+                                          '${settings.rebuyThresholdBb}',
+                                          style: GoogleFonts.jetBrainsMono(
+                                            color: AppColors.gold,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  const SizedBox(height: 12),
+                                  _Label('Lineup'),
+                                  SegmentedButton<LineupMode>(
+                                    segments: const [
+                                      ButtonSegment(
+                                        value: LineupMode.randomPool,
+                                        label: Text('Random'),
+                                      ),
+                                      ButtonSegment(
+                                        value: LineupMode.custom,
+                                        label: Text('Custom'),
+                                      ),
+                                    ],
+                                    selected: {settings.lineupMode},
+                                    onSelectionChanged: (s) =>
+                                        notifier.setLineupMode(s.first),
+                                    style: ButtonStyle(
+                                      foregroundColor:
+                                          WidgetStateProperty.resolveWith(
+                                        (states) => states.contains(
+                                          WidgetState.selected,
+                                        )
+                                            ? AppColors.bgDark
+                                            : AppColors.slate,
+                                      ),
+                                      backgroundColor:
+                                          WidgetStateProperty.resolveWith(
+                                        (states) => states.contains(
+                                          WidgetState.selected,
+                                        )
+                                            ? AppColors.gold
+                                            : AppColors.bgElevated,
+                                      ),
+                                    ),
+                                  ),
+                                  if (settings.lineupMode ==
+                                      LineupMode.custom) ...[
+                                    const SizedBox(height: 12),
+                                    Text(
+                                      'Assign each villain seat. Hero stays at the bottom.',
+                                      style: GoogleFonts.manrope(
+                                        color: AppColors.slate,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    ..._customSeatPickers(settings, notifier),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],

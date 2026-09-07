@@ -71,17 +71,19 @@ offline fallback.
 ## Audio
 
 `SoundService` plays `assets/sounds/{deal,chip,knock,fold,win}.wav`, generated
-by `tool/gen_sfx.py`. SFX and TTS toggles are independent. On web (and iOS),
-call `unlock()` after a user gesture (done when starting a session). Audio
-session is configured for playback.
+by `tool/gen_sfx.py`, plus `lounge_ambient.mp3` from `tool/gen_ambient.py` for
+the Home screen. SFX, Music, and TTS toggles are independent. On web (and iOS),
+call `unlock()` after a user gesture (done when starting a session / Home appear).
+Audio session is configured for playback.
 
 Coach voice priority: cached clip → fresh Gemini TTS → `flutter_tts`. Gemini
 speech is raw 16-bit PCM / L16 (often `audio/pcm;rate=24000`), which
 `WavCodec.ensurePlayable` wraps as WAV. `VoiceCache` stores clips under the app
 support directory keyed by a SHA-256 of text + voice + model, bounded by bytes
 and a TTL with LRU eviction, so repeated lines are instant and free. When no
-key, network, or cached clip is available, `flutter_tts` speaks the text and a
-one-shot note may surface on the coach shelf.
+key, network, or cached clip is available, `flutter_tts` speaks the text and the
+reason is written to the debug log as `CoachVoicePlayback.diagnostic`. Nothing
+about the fallback — least of all API-key configuration — reaches the UI.
 
 ## Lineup
 
@@ -99,7 +101,8 @@ the iOS `AppIcon.appiconset` and Android `mipmap-*` launchers from the master,
 palette-quantizing so generated felt grain does not balloon the PNGs.
 `tool/gen_sfx.py` synthesizes the table sounds locally (noise bursts and damped
 resonant modes through biquad filters) — deterministic, royalty free, and a few
-kilobytes each.
+kilobytes each. `tool/gen_ambient.py` builds the Home lounge loop and prefers
+an ffmpeg MP3 encode for a compact asset.
 
 ## Tooling
 

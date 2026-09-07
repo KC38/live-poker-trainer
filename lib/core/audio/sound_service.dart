@@ -16,13 +16,18 @@ class CoachVoicePlayback {
   /// Creates a playback result.
   const CoachVoicePlayback({
     required this.spoke,
-    this.note,
+    this.diagnostic,
     this.fromCache = false,
     this.usedDeviceVoice = false,
   });
 
   final bool spoke;
-  final String? note;
+
+  /// Developer-facing reason the preferred path was not used.
+  ///
+  /// Logged, never rendered: the coach degrades to the device voice (or to
+  /// silence) without ever asking the player to configure anything.
+  final String? diagnostic;
 
   /// Whether the clip came from the on-disk cache (instant playback).
   final bool fromCache;
@@ -31,7 +36,7 @@ class CoachVoicePlayback {
   final bool usedDeviceVoice;
 }
 
-/// Bundled table sound effects and coach voice.
+/// Bundled table sound effects, home ambient music, and coach voice.
 class SoundService {
   /// Creates a sound service.
   ///
@@ -52,21 +57,45 @@ class SoundService {
 
   final AudioPlayer _sfx = AudioPlayer();
   final AudioPlayer _voice = AudioPlayer();
+  final AudioPlayer _bgm = AudioPlayer();
   final FlutterTts _tts = FlutterTts();
 
   bool sfxEnabled = true;
   bool ttsEnabled = true;
+  bool musicEnabled = true;
   bool _unlocked = !kIsWeb;
   bool _ttsReady = false;
   bool _audioContextConfigured = false;
+  bool _bgmWanted = false;
+  bool _bgmPlaying = false;
+  int _bgmFadeGen = 0;
+  double _bgmAudibleVolume = 0;
+
+  /// Comfortable lounge level; kept low so it never fights the brand UI.
+  static const double _bgmBaseVolume = 0.28;
+
+  /// Asset path relative to the Flutter `assets/` folder.
+  static const String _bgmAsset = 'sounds/lounge_ambient.mp3';
 
   /// Drops SFX under the coach voice; see [setSfxVolume] for the base level.
   late final SfxDucker _ducker = SfxDucker(
     applyVolume: (volume) => _sfx.setVolume(volume),
   );
 
+  /// Ducks home BGM further when coach speech could overlap (e.g. transitions).
+  late final SfxDucker _bgmDucker = SfxDucker(
+    applyVolume: (volume) async {
+      _bgmAudibleVolume = volume;
+      await _bgm.setVolume(volume);
+    },
+    duckFactor: 0.12,
+  );
+
   StreamSubscription<void>? _voiceDoneSub;
   Timer? _duckWatchdog;
+
+  /// Maps speech-completion token → BGM hold taken for that coach line.
+  final Map<int, int> _speechBgmHolds = <int, int>{};
 
   /// Backstop so a missing completion callback cannot leave SFX quiet forever.
   static const Duration _maxDuckHold = Duration(seconds: 30);
@@ -102,6 +131,7 @@ class SoundService {
       await AudioPlayer.global.setAudioContext(ctx);
       await _sfx.setAudioContext(ctx);
       await _voice.setAudioContext(ctx);
+      await _bgm.setAudioContext(ctx);
       _audioContextConfigured = true;
     } catch (_) {
       // Platform may not support AudioContext configuration.
@@ -129,6 +159,97 @@ class SoundService {
 
   /// Sets the configured SFX level (0..1), keeping any active duck in place.
   Future<void> setSfxVolume(double volume) => _ducker.setBaseVolume(volume);
+
+  /// Applies the Settings music toggle; stops BGM immediately when disabled.
+  Future<void> setMusicEnabled(bool enabled) async {
+    musicEnabled = enabled;
+    if (!enabled) {
+      await stopHomeBgm();
+    } else if (_bgmWanted) {
+      await startHomeBgm();
+    }
+  }
+
+  /// Fades in the Home lounge loop when music is enabled.
+  Future<void> startHomeBgm() async {
+    _bgmWanted = true;
+    if (!musicEnabled || !_unlocked) return;
+    try {
+      await _ensureAudioContext();
+      await _bgmDucker.setBaseVolume(_bgmBaseVolume);
+      if (!_bgmPlaying) {
+        await _bgm.setReleaseMode(ReleaseMode.loop);
+        await _bgm.setVolume(0);
+        await _bgm.play(AssetSource(_bgmAsset), volume: 0);
+        _bgmPlaying = true;
+      } else {
+        await _bgm.resume();
+      }
+      await _fadeBgmTo(_bgmDucker.isDucked
+          ? _bgmDucker.duckedVolume
+          : _bgmBaseVolume);
+    } catch (_) {
+      _bgmPlaying = false;
+    }
+  }
+
+  /// Fades out and pauses the Home loop (e.g. entering Training).
+  Future<void> pauseHomeBgm() async {
+    _bgmWanted = false;
+    if (!_bgmPlaying) return;
+    try {
+      await _fadeBgmTo(0);
+      await _bgm.pause();
+    } catch (_) {}
+  }
+
+  /// Resumes the Home loop after returning from Training, if still wanted.
+  Future<void> resumeHomeBgm() async {
+    _bgmWanted = true;
+    if (!musicEnabled || !_unlocked) return;
+    if (_bgmPlaying) {
+      try {
+        await _bgm.resume();
+        await _fadeBgmTo(_bgmDucker.isDucked
+            ? _bgmDucker.duckedVolume
+            : _bgmBaseVolume);
+      } catch (_) {}
+      return;
+    }
+    await startHomeBgm();
+  }
+
+  /// Stops the Home loop completely (music toggle off / dispose).
+  Future<void> stopHomeBgm() async {
+    _bgmWanted = false;
+    _bgmFadeGen++;
+    _bgmPlaying = false;
+    _bgmAudibleVolume = 0;
+    try {
+      await _bgm.stop();
+      await _bgm.setVolume(0);
+    } catch (_) {}
+  }
+
+  Future<void> _fadeBgmTo(double target) async {
+    final gen = ++_bgmFadeGen;
+    final from = _bgmAudibleVolume;
+    const steps = 10;
+    const stepDelay = Duration(milliseconds: 40);
+    for (var step = 1; step <= steps; step++) {
+      if (gen != _bgmFadeGen) return;
+      final next = from + (target - from) * (step / steps);
+      _bgmAudibleVolume = next.clamp(0.0, 1.0);
+      try {
+        await _bgm.setVolume(_bgmAudibleVolume);
+      } catch (_) {
+        return;
+      }
+      if (step < steps) {
+        await Future<void>.delayed(stepDelay);
+      }
+    }
+  }
 
   /// Plays a short table SFX if enabled, at the current (possibly ducked) level.
   Future<void> playSfx(SfxKind kind) async {
@@ -165,18 +286,18 @@ class SoundService {
     bool enabled = true,
   }) async {
     if (!enabled || !ttsEnabled) {
-      return const CoachVoicePlayback(
+      return _report(const CoachVoicePlayback(
         spoke: false,
-        note: 'Coach voice is muted in Settings.',
-      );
+        diagnostic: 'coach voice muted in settings',
+      ));
     }
     final cleaned = text.trim();
     if (cleaned.isEmpty) return const CoachVoicePlayback(spoke: false);
     if (!_unlocked) {
-      return const CoachVoicePlayback(
+      return _report(const CoachVoicePlayback(
         spoke: false,
-        note: 'Tap Start training once to unlock coach voice.',
-      );
+        diagnostic: 'audio not unlocked yet',
+      ));
     }
 
     final gemini = this.gemini;
@@ -205,21 +326,34 @@ class SoundService {
       }
     }
 
-    // Last resort: flat device voice.
+    // Last resort: the flat device voice, used quietly. The player is never
+    // told the Gemini voice was skipped, and never asked for a key.
     final spoke = await _speakWithDevice(cleaned);
     if (spoke) {
-      return CoachVoicePlayback(
+      return _report(CoachVoicePlayback(
         spoke: true,
         usedDeviceVoice: true,
-        note: gemini != null && gemini.hasApiKey
-            ? null
-            : 'Device voice — add a Gemini API key for the real coach voice.',
-      );
+        diagnostic: 'gemini speech unavailable '
+            '(key: ${Config.geminiKeySource}) — used device voice',
+      ));
     }
-    return const CoachVoicePlayback(
+    return _report(const CoachVoicePlayback(
       spoke: false,
-      note: 'Coach voice failed to play on this device.',
-    );
+      diagnostic: 'no voice backend could play the line',
+    ));
+  }
+
+  /// Sends a fallback reason to the debug log only; playback stays silent
+  /// about configuration so nothing leaks into the coach shelf.
+  CoachVoicePlayback _report(CoachVoicePlayback playback) {
+    final diagnostic = playback.diagnostic;
+    if (diagnostic != null) {
+      assert(() {
+        debugPrint('[coach-voice] $diagnostic');
+        return true;
+      }());
+    }
+    return playback;
   }
 
   /// Pre-synthesizes and caches [text] without playing it.
@@ -287,13 +421,24 @@ class SoundService {
     }
   }
 
-  /// Ducks SFX for one coach line; returns the token used to restore them.
+  /// Ducks SFX and BGM for one coach line; returns the SFX (or BGM) hold token.
   ///
-  /// Returns [SfxDucker.noHold] when SFX are muted, since there is nothing to
-  /// duck; releasing that token is a no-op.
+  /// Returns [SfxDucker.noHold] when neither stream needs ducking. Releasing
+  /// restores both; SFX still uses token matching so an interrupted line cannot
+  /// unduck a newer one.
   Future<int> _duckForSpeech() async {
-    if (!sfxEnabled) return SfxDucker.noHold;
-    final hold = await _ducker.hold();
+    final sfxHold = sfxEnabled ? await _ducker.hold() : SfxDucker.noHold;
+    var bgmHold = SfxDucker.noHold;
+    if (_bgmPlaying || _bgmWanted) {
+      _bgmFadeGen++; // cancel an in-flight fade so duck owns volume
+      bgmHold = await _bgmDucker.hold();
+    }
+    if (sfxHold == SfxDucker.noHold && bgmHold == SfxDucker.noHold) {
+      return SfxDucker.noHold;
+    }
+    // Prefer the SFX token for completion callbacks; fall back to BGM's.
+    final hold = sfxHold != SfxDucker.noHold ? sfxHold : bgmHold;
+    _speechBgmHolds[hold] = bgmHold;
     _duckWatchdog?.cancel();
     _duckWatchdog = Timer(_maxDuckHold, () => _releaseDuck(hold));
     return hold;
@@ -301,7 +446,9 @@ class SoundService {
 
   Future<void> _releaseDuck(int hold) async {
     if (hold == SfxDucker.noHold) return;
+    final bgmHold = _speechBgmHolds.remove(hold) ?? SfxDucker.noHold;
     await _ducker.release(hold);
+    await _bgmDucker.release(bgmHold);
   }
 
   /// Points the device-voice callbacks at [hold] so a late event from an
@@ -343,12 +490,14 @@ class SoundService {
     } catch (_) {}
   }
 
-  /// Stops any in-flight coach voice and restores SFX volume.
+  /// Stops any in-flight coach voice and restores SFX / BGM volume.
   Future<void> stopVoice() async {
     _duckWatchdog?.cancel();
     _duckWatchdog = null;
     await _stopAllVoice();
+    _speechBgmHolds.clear();
     await _ducker.releaseAll();
+    await _bgmDucker.releaseAll();
   }
 
   /// Total bytes of cached coach audio.
@@ -366,8 +515,11 @@ class SoundService {
     _duckWatchdog = null;
     await _voiceDoneSub?.cancel();
     _voiceDoneSub = null;
+    _speechBgmHolds.clear();
+    await stopHomeBgm();
     await _sfx.dispose();
     await _voice.dispose();
+    await _bgm.dispose();
     try {
       await _tts.stop();
     } catch (_) {}

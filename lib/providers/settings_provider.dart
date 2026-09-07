@@ -59,6 +59,9 @@ class SettingsNotifier extends StateNotifier<GameSettingsModel> {
 
   Future<void> setTts(bool value) => update(state.copyWith(ttsEnabled: value));
 
+  Future<void> setMusic(bool value) =>
+      update(state.copyWith(musicEnabled: value));
+
   Future<void> setChipDisplayMode(ChipDisplayMode mode) =>
       update(state.copyWith(chipDisplayMode: mode));
 
@@ -97,12 +100,12 @@ class SettingsNotifier extends StateNotifier<GameSettingsModel> {
   }
 
   void _applySideEffects() {
-    _soundSync?.call(state.sfxEnabled, state.ttsEnabled);
+    _soundSync?.call(state.sfxEnabled, state.ttsEnabled, state.musicEnabled);
   }
 }
 
-/// Callback to push SFX/TTS flags into [SoundService].
-typedef SoundServiceSync = void Function(bool sfx, bool tts);
+/// Callback to push SFX/TTS/music flags into [SoundService].
+typedef SoundServiceSync = void Function(bool sfx, bool tts, bool music);
 
 final settingsProvider =
     StateNotifierProvider<SettingsNotifier, GameSettingsModel>((ref) {
@@ -110,18 +113,20 @@ final settingsProvider =
   return asyncPrefs.maybeWhen(
     data: (prefs) => SettingsNotifier(
       prefs,
-      soundSync: (sfx, tts) {
+      soundSync: (sfx, tts, music) {
         final sound = ref.read(soundServiceProvider);
         sound.sfxEnabled = sfx;
         sound.ttsEnabled = tts;
+        sound.setMusicEnabled(music);
       },
     ),
     orElse: () => SettingsNotifier(
       _MemoryPrefs(),
-      soundSync: (sfx, tts) {
+      soundSync: (sfx, tts, music) {
         final sound = ref.read(soundServiceProvider);
         sound.sfxEnabled = sfx;
         sound.ttsEnabled = tts;
+        sound.setMusicEnabled(music);
       },
     ),
   );

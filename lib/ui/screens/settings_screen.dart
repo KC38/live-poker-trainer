@@ -57,6 +57,22 @@ class SettingsScreen extends ConsumerWidget {
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text(
+                      'Music',
+                      style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
+                    ),
+                    subtitle: Text(
+                      'Quiet lounge ambient on Home',
+                      style: GoogleFonts.manrope(
+                        color: AppColors.slate,
+                        fontSize: 13,
+                      ),
+                    ),
+                    value: settings.musicEnabled,
+                    onChanged: notifier.setMusic,
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(
                       'Coach voice',
                       style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
                     ),
