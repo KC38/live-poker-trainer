@@ -1,13 +1,13 @@
 /// Bottom thumb-zone action dock — simple labels, sizing presets.
 library;
 
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/core/constants/money.dart';
+import 'package:live_poker_trainer/engine/bet_sizing.dart';
 import 'package:live_poker_trainer/engine/poker_engine.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
@@ -51,32 +51,37 @@ class _ActionDockWidgetState extends ConsumerState<ActionDockWidget> {
 
   double _defaultRaise() {
     final game = widget.game;
-    final hero = game.hero;
-    final pot = game.totalPot;
-    final minRaiseTo = game.highestBet + math.max(game.minRaise, game.bigBlind);
-    return (pot * 0.66 + hero.currentBet)
-        .clamp(minRaiseTo, hero.stack + hero.currentBet);
+    final range = RaiseRange.forHero(game);
+    if (!range.allowed) return range.max;
+    return range.forFraction(
+      0.66,
+      pot: game.totalPot,
+      heroBet: game.hero.currentBet,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final game = widget.game;
     final hero = game.hero;
-    final chipMode = ref.watch(settingsProvider).chipDisplayMode;
+    final chipMode = ref.watch(settingsProvider).chipDisplayMode.tableMode;
     final canAct = widget.enabled &&
         game.waitingForHero &&
         !game.isHandOver &&
         !hero.folded;
     final callAmt = game.callAmountFor(hero);
-    final freeCheck = callAmt <= 0;
-    final minRaiseTo = game.highestBet + math.max(game.minRaise, game.bigBlind);
-    final maxRaiseTo = hero.stack + hero.currentBet;
+    final freeCheck = callAmt <= Money.epsilon;
+    final range = RaiseRange.forHero(game);
     final pot = game.totalPot;
+    final raiseAmount = range.clamp(_raiseAmount);
 
     void setFraction(double frac) {
       setState(() {
-        _raiseAmount =
-            (pot * frac + hero.currentBet).clamp(minRaiseTo, maxRaiseTo);
+        _raiseAmount = range.forFraction(
+          frac,
+          pot: pot,
+          heroBet: hero.currentBet,
+        );
       });
     }
 
@@ -109,22 +114,26 @@ class _ActionDockWidgetState extends ConsumerState<ActionDockWidget> {
                         padding: const EdgeInsets.only(right: 6),
                         child: _SizeChip(
                           label: entry.$1,
-                          onTap: canAct ? () => setFraction(entry.$2) : null,
+                          onTap: canAct && range.hasSpread
+                              ? () => setFraction(entry.$2)
+                              : null,
                         ),
                       ),
                     _SizeChip(
                       label: 'All-in',
-                      onTap: canAct
-                          ? () => setState(() => _raiseAmount = maxRaiseTo)
+                      onTap: canAct && range.allowed
+                          ? () => setState(() => _raiseAmount = range.max)
                           : null,
                     ),
                     const Spacer(),
                     Text(
-                      ChipFormat.chips(
-                        _raiseAmount,
-                        game.bigBlind,
-                        chipMode,
-                      ),
+                      range.allowed
+                          ? ChipFormat.chips(
+                              raiseAmount,
+                              game.bigBlind,
+                              chipMode,
+                            )
+                          : '—',
                       style: GoogleFonts.jetBrainsMono(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
@@ -133,14 +142,28 @@ class _ActionDockWidgetState extends ConsumerState<ActionDockWidget> {
                     ),
                   ],
                 ),
-                Slider(
-                  value: _raiseAmount.clamp(minRaiseTo, maxRaiseTo),
-                  min: minRaiseTo.clamp(0, maxRaiseTo),
-                  max: maxRaiseTo <= minRaiseTo ? minRaiseTo + 1 : maxRaiseTo,
-                  onChanged: canAct
-                      ? (v) => setState(() => _raiseAmount = v)
-                      : null,
-                ),
+                if (range.hasSpread)
+                  Slider(
+                    value: raiseAmount,
+                    min: range.min,
+                    max: range.max,
+                    onChanged: canAct
+                        ? (v) => setState(() => _raiseAmount = Money.round(v))
+                        : null,
+                  )
+                else
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    child: Text(
+                      range.isAllInOnly
+                          ? 'Short stack — all-in is the only raise'
+                          : 'No raise available at this price',
+                      style: GoogleFonts.manrope(
+                        fontSize: 11,
+                        color: AppColors.slate,
+                      ),
+                    ),
+                  ),
                 const SizedBox(height: 4),
                 Row(
                   children: [
@@ -176,16 +199,20 @@ class _ActionDockWidgetState extends ConsumerState<ActionDockWidget> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: _DockButton(
-                        label: callAmt <= 0 ? 'Bet' : 'Raise',
+                        label: range.isAllInOnly
+                            ? 'All-in'
+                            : (freeCheck ? 'Bet' : 'Raise'),
                         color: AppColors.gold,
                         foreground: AppColors.bgDark,
-                        enabled: canAct && maxRaiseTo > game.highestBet,
+                        enabled: canAct && range.allowed,
                         onTap: () => widget.onAction(
                           PokerAction(
-                            type: callAmt <= 0
-                                ? PokerActionType.bet
-                                : PokerActionType.raise,
-                            amount: _raiseAmount,
+                            type: range.isAllInOnly
+                                ? PokerActionType.allIn
+                                : (freeCheck
+                                    ? PokerActionType.bet
+                                    : PokerActionType.raise),
+                            amount: raiseAmount,
                           ),
                         ),
                       ),

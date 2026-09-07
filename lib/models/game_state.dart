@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/foundation.dart';
+import 'package:live_poker_trainer/core/constants/money.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/models/scenario_model.dart';
@@ -89,12 +90,13 @@ class GameState {
 
   double get totalPot {
     final bets = players.fold<double>(0, (sum, p) => sum + p.currentBet);
-    return mainPot + bets;
+    return Money.round(mainPot + bets);
   }
 
+  /// Chips [player] must add to match [highestBet], capped at their stack.
   double callAmountFor(PlayerModel player) {
-    final amount = highestBet - player.currentBet;
-    return amount < 0 ? 0 : amount;
+    final owed = Money.roundNonNegative(highestBet - player.currentBet);
+    return owed > player.stack ? Money.roundNonNegative(player.stack) : owed;
   }
 
   GameState copyWith({

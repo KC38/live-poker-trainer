@@ -1,6 +1,8 @@
 /// Chip / currency display helpers for stacks, pots, bets, and EV.
 library;
 
+import 'package:live_poker_trainer/core/constants/money.dart';
+
 /// How monetary amounts are shown across the table UI.
 enum ChipDisplayMode {
   /// Dollar amounts only (`$70`).
@@ -17,6 +19,15 @@ enum ChipDisplayMode {
         ChipDisplayMode.bb => 'BB only',
         ChipDisplayMode.both => 'Both (\$ and BB)',
       };
+
+  /// Mode used on the live felt, where dual amounts on every seat, the pot,
+  /// and each bet make the table unreadable.
+  ///
+  /// `both` collapses to currency only; an explicit `bb` choice is respected
+  /// because a single unit is still uncluttered. Hand review, stats, and table
+  /// setup keep the user's full choice.
+  ChipDisplayMode get tableMode =>
+      this == ChipDisplayMode.both ? ChipDisplayMode.dollars : this;
 }
 
 /// Formats chip amounts according to [mode] and [bigBlind].
@@ -25,10 +36,11 @@ class ChipFormat {
 
   /// Formats a dollar figure without the BB suffix.
   static String dollars(double amount) {
-    if (amount == amount.roundToDouble()) {
-      return '\$${amount.toStringAsFixed(0)}';
+    final value = Money.round(amount);
+    if (value == value.roundToDouble()) {
+      return '\$${value.toStringAsFixed(0)}';
     }
-    return '\$${amount.toStringAsFixed(2)}';
+    return '\$${value.toStringAsFixed(2)}';
   }
 
   /// Formats an amount in big blinds.

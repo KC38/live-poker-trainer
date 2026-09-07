@@ -3,6 +3,8 @@ library;
 
 import 'dart:math';
 
+import 'package:live_poker_trainer/core/constants/chip_format.dart';
+import 'package:live_poker_trainer/core/constants/money.dart';
 import 'package:live_poker_trainer/engine/deck_evaluator.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
@@ -360,7 +362,7 @@ class PokerEngine {
       }
       final idx = s.activePlayerIndex;
       final player = s.players[idx];
-      if (player.folded || (player.stack <= 0 && player.currentBet == 0)) {
+      if (!_canStillAct(player)) {
         s = _advanceToNextPlayer(s);
         continue;
       }
@@ -378,6 +380,17 @@ class PokerEngine {
     return s;
   }
 
+  /// Rounds a desired "raise to" amount and caps it at the villain's all-in.
+  static double _legalRaiseTarget(
+    GameState state,
+    PlayerModel villain,
+    double desired,
+  ) {
+    final allIn = Money.round(villain.stack + villain.currentBet);
+    final floor = Money.round(state.highestBet + state.bigBlind);
+    return Money.clamp(Money.round(desired), min(floor, allIn), allIn);
+  }
+
   PokerAction _villainDecision(GameState state, int playerIdx) {
     final v = state.players[playerIdx];
     final callAmount = state.callAmountFor(v);
@@ -388,24 +401,26 @@ class PokerEngine {
         : 0;
     final arch = v.archetype;
 
-    // Free check rule: never fold when callAmount == 0.
-    if (callAmount <= 0) {
+    // Free check rule: never fold when checking is free.
+    if (callAmount <= Money.epsilon) {
       if (state.street == Street.preflop) {
         return const PokerAction(type: PokerActionType.check);
       }
+      double probe(double fraction) => _legalRaiseTarget(
+            state,
+            v,
+            max(state.bigBlind, pot * fraction),
+          );
       if (arch == PlayerArchetype.maniac && _random.nextDouble() < 0.65) {
-        final target = max(state.bigBlind, (pot * 0.75).roundToDouble());
-        return PokerAction(type: PokerActionType.raise, amount: target);
+        return PokerAction(type: PokerActionType.raise, amount: probe(0.75));
       }
       if (arch == PlayerArchetype.nit &&
           handStrength >= 1000000 &&
           _random.nextDouble() < 0.6) {
-        final target = max(state.bigBlind, (pot * 0.5).roundToDouble());
-        return PokerAction(type: PokerActionType.raise, amount: target);
+        return PokerAction(type: PokerActionType.raise, amount: probe(0.5));
       }
       if (handStrength >= 2000000) {
-        final target = max(state.bigBlind, (pot * 0.65).roundToDouble());
-        return PokerAction(type: PokerActionType.raise, amount: target);
+        return PokerAction(type: PokerActionType.raise, amount: probe(0.65));
       }
       return const PokerAction(type: PokerActionType.check);
     }
@@ -422,8 +437,11 @@ class PokerEngine {
         case PlayerArchetype.maniac:
         case PlayerArchetype.lag:
           if (_random.nextDouble() < 0.4 && callAmount < v.stack) {
-            final target =
-                min(v.stack + v.currentBet, state.highestBet + state.bigBlind * 3);
+            final target = _legalRaiseTarget(
+              state,
+              v,
+              state.highestBet + state.bigBlind * 3,
+            );
             return PokerAction(type: PokerActionType.raise, amount: target);
           }
           return PokerAction(type: PokerActionType.call, amount: callAmount);
@@ -462,9 +480,10 @@ class PokerEngine {
       case PlayerArchetype.maniac:
       case PlayerArchetype.lag:
         if (_random.nextDouble() < 0.35 && v.stack > callAmount * 2) {
-          final target = min(
-            v.stack + v.currentBet,
-            state.highestBet + (pot * 0.8).roundToDouble(),
+          final target = _legalRaiseTarget(
+            state,
+            v,
+            state.highestBet + pot * 0.8,
           );
           return PokerAction(type: PokerActionType.raise, amount: target);
         }
@@ -521,24 +540,28 @@ class PokerEngine {
         ));
         break;
       case PokerActionType.call:
-        final callAmt = min(state.callAmountFor(player), player.stack);
+        final callAmt = Money.roundNonNegative(
+          min(state.callAmountFor(player), player.stack),
+        );
         setPlayer(_postChips(player, callAmt, label: 'CALL'));
-        if (isHero) heroInvested += callAmt;
+        if (isHero) heroInvested = Money.round(heroInvested + callAmt);
         break;
       case PokerActionType.bet:
       case PokerActionType.raise:
       case PokerActionType.allIn:
         final target = action.type == PokerActionType.allIn
-            ? player.stack + player.currentBet
-            : action.amount;
-        final toAdd = min(target - player.currentBet, player.stack);
+            ? Money.round(player.stack + player.currentBet)
+            : Money.round(action.amount);
+        final toAdd = Money.roundNonNegative(
+          min(target - player.currentBet, player.stack),
+        );
         setPlayer(_postChips(
           player,
           toAdd,
           label: action.type == PokerActionType.allIn ? 'ALL-IN' : 'RAISE',
         ));
-        if (player.currentBet > highest) {
-          minRaise = player.currentBet - highest;
+        if (player.currentBet > highest + Money.epsilon) {
+          minRaise = Money.round(player.currentBet - highest);
           highest = player.currentBet;
           lastAggressor = playerIdx;
           // Reset acted flags for others still in.
@@ -552,7 +575,7 @@ class PokerEngine {
                 players[i],
           ];
         }
-        if (isHero) heroInvested += toAdd;
+        if (isHero) heroInvested = Money.round(heroInvested + toAdd);
         break;
     }
 
@@ -564,12 +587,13 @@ class PokerEngine {
     final alive = players.where((p) => !p.folded).toList();
     if (alive.length == 1) {
       final winner = alive.first;
-      final pot = mainPot +
-          players.fold<double>(0, (s, p) => s + p.currentBet);
+      final pot = Money.round(
+        mainPot + players.fold<double>(0, (s, p) => s + p.currentBet),
+      );
       players = [
         for (final p in players)
           if (p.id == winner.id)
-            p.copyWith(stack: p.stack + pot, currentBet: 0)
+            p.copyWith(stack: Money.round(p.stack + pot), currentBet: 0)
           else
             p.copyWith(currentBet: 0),
       ];
@@ -578,7 +602,7 @@ class PokerEngine {
         mainPot: 0,
         isHandOver: true,
         waitingForHero: false,
-        resultMessage: '${winner.name} wins ${pot.toStringAsFixed(0)}',
+        resultMessage: '${winner.name} wins ${ChipFormat.dollars(pot)}',
         heroLine: heroLine,
         heroInvestedThisHand: heroInvested,
         highestBet: 0,
@@ -601,12 +625,12 @@ class PokerEngine {
   }
 
   PlayerModel _postChips(PlayerModel player, double amount, {String? label}) {
-    final pay = min(amount, player.stack);
-    final newStack = player.stack - pay;
+    final pay = Money.roundNonNegative(min(amount, player.stack));
+    final newStack = Money.roundNonNegative(player.stack - pay);
     return player.copyWith(
       stack: newStack,
-      currentBet: player.currentBet + pay,
-      allIn: newStack <= 0,
+      currentBet: Money.round(player.currentBet + pay),
+      allIn: newStack <= Money.epsilon,
       hasActedThisRound: true,
       lastActionLabel: label,
     );
@@ -625,13 +649,19 @@ class PokerEngine {
   bool _isRoundComplete(GameState state) {
     final active = state.players.where((p) => !p.folded).toList();
     if (active.length <= 1) return true;
-    final needAct = active.where((p) => p.stack > 0 || p.currentBet > 0);
-    for (final p in needAct) {
-      if (p.stack > 0 && !p.hasActedThisRound) return false;
-      if (p.stack > 0 && p.currentBet != state.highestBet) return false;
+    for (final p in active) {
+      if (!_canStillAct(p)) continue;
+      if (!p.hasActedThisRound) return false;
+      // Cent-tolerant compare: exact `!=` on doubles could spin the villain
+      // loop forever on floating point dust.
+      if (!Money.same(p.currentBet, state.highestBet)) return false;
     }
     return true;
   }
+
+  /// Whether [player] still has chips behind to act with.
+  static bool _canStillAct(PlayerModel player) =>
+      !player.folded && player.stack > Money.epsilon;
 
   GameState _advanceToNextPlayer(GameState state) {
     if (_isRoundComplete(state)) {
@@ -642,7 +672,7 @@ class PokerEngine {
     var guard = 0;
     while (guard < n) {
       final p = state.players[next];
-      if (!p.folded && p.stack > 0) {
+      if (_canStillAct(p)) {
         return state.copyWith(
           activePlayerIndex: next,
           waitingForHero: p.isHero,
@@ -657,9 +687,10 @@ class PokerEngine {
 
   GameState _advanceStreet(GameState state) {
     // Collect bets into pot.
-    final collected =
-        state.players.fold<double>(0, (s, p) => s + p.currentBet);
-    var players = [
+    final collected = Money.round(
+      state.players.fold<double>(0, (s, p) => s + p.currentBet),
+    );
+    final players = [
       for (final p in state.players)
         p.copyWith(
           currentBet: 0,
@@ -667,8 +698,8 @@ class PokerEngine {
           clearLastAction: true,
         ),
     ];
-    var mainPot = state.mainPot + collected;
-    var community = List<CardModel>.from(state.community);
+    final mainPot = Money.round(state.mainPot + collected);
+    final community = List<CardModel>.from(state.community);
     final nextStreet = state.street.next;
 
     if (nextStreet == null || nextStreet == Street.showdown) {
@@ -706,11 +737,8 @@ class PokerEngine {
     final n = state.players.length;
     var idx = (state.dealerIndex + 1) % n;
     for (var i = 0; i < n; i++) {
-      final p = state.players[idx];
-      if (!p.folded && (p.stack > 0 || p.allIn)) {
-        // Prefer players who can still act; all-in seats are skipped later.
-        if (p.stack > 0) return idx;
-      }
+      // Prefer players who can still act; all-in seats are skipped later.
+      if (_canStillAct(state.players[idx])) return idx;
       idx = (idx + 1) % n;
     }
     // Fallback: first non-folded player.
@@ -741,13 +769,23 @@ class PokerEngine {
       }
     }
 
-    final pot = state.mainPot;
-    final share = winners.isEmpty ? 0.0 : pot / winners.length;
+    final pot = Money.round(state.mainPot);
+    // Split to the cent, then award the odd cents to the first winner so no
+    // chips are created or destroyed.
+    final share = winners.isEmpty ? 0.0 : Money.round(pot / winners.length);
+    final oddCents =
+        winners.isEmpty ? 0.0 : Money.round(pot - share * winners.length);
+    final firstWinnerId = winners.isEmpty ? null : winners.first.id;
     final winnerIds = winners.map((w) => w.id).toSet();
     final players = [
       for (final p in state.players)
         if (winnerIds.contains(p.id))
-          p.copyWith(stack: p.stack + share, currentBet: 0)
+          p.copyWith(
+            stack: Money.round(
+              p.stack + share + (p.id == firstWinnerId ? oddCents : 0),
+            ),
+            currentBet: 0,
+          )
         else
           p.copyWith(currentBet: 0),
     ];
@@ -759,7 +797,7 @@ class PokerEngine {
       street: Street.showdown,
       isHandOver: true,
       waitingForHero: false,
-      resultMessage: '$names win ${pot.toStringAsFixed(0)}',
+      resultMessage: '$names win ${ChipFormat.dollars(pot)}',
     );
   }
 
