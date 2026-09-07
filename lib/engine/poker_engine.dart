@@ -72,6 +72,7 @@ class PokerEngine {
   }) {
     final rng = random ?? Random();
     final stack = settings.startingStack;
+    final usedNames = <String>{'Hero'};
     final players = <PlayerModel>[
       PlayerModel(
         id: 0,
@@ -83,6 +84,8 @@ class PokerEngine {
     ];
 
     final pool = List<PlayerArchetype>.from(ArchetypeRoster.villainPool);
+    // Shuffle pool so random lineups vary and reduce early duplicates.
+    pool.shuffle(rng);
     for (var i = 1; i < settings.seatCount; i++) {
       PlayerArchetype arch;
       if (settings.lineupMode == LineupMode.custom &&
@@ -93,12 +96,18 @@ class PokerEngine {
             : settings.customArchetypes[
                 idx % settings.customArchetypes.length];
       } else {
-        arch = pool[(i - 1 + rng.nextInt(pool.length)) % pool.length];
+        arch = pool[(i - 1) % pool.length];
+        // Occasionally remix so large tables still feel varied.
+        if (i > pool.length && rng.nextBool()) {
+          arch = pool[rng.nextInt(pool.length)];
+        }
       }
+      final name = ArchetypeRoster.uniqueName(arch, usedNames);
+      usedNames.add(name);
       players.add(
         PlayerModel(
           id: i,
-          name: ArchetypeRoster.defaultNames[arch] ?? arch.label,
+          name: name,
           archetype: arch,
           stack: stack,
         ),
@@ -107,8 +116,8 @@ class PokerEngine {
     return players;
   }
 
-  /// Starts a cash-sim hand (or empty practice shell).
-  GameState startCashHand({
+  /// Starts a full cash-style training hand from preflop.
+  GameState startHand({
     List<PlayerModel>? existingPlayers,
     int? dealerIndex,
   }) {
@@ -143,10 +152,12 @@ class PokerEngine {
 
     final highest = _settings.bigBlind;
     final firstToAct = (bb + 1) % n;
+    final handCount = _tryHandCount() + 1;
+    final heroBet = players.firstWhere((p) => p.isHero).currentBet;
 
     _state = GameState(
       players: players,
-      mode: GameMode.cashSim,
+      mode: GameMode.training,
       community: const [],
       mainPot: 0,
       street: Street.preflop,
@@ -160,10 +171,8 @@ class PokerEngine {
       bigBlind: _settings.bigBlind,
       lastAggressor: bb,
       heroLine: const [],
-      handCount: (_tryHandCount()) + 1,
-      heroInvestedThisHand: players[0].isHero
-          ? players[0].currentBet
-          : players.firstWhere((p) => p.isHero).currentBet,
+      handCount: handCount,
+      heroInvestedThisHand: heroBet,
       waitingForHero: players[firstToAct].isHero,
     );
 
@@ -172,6 +181,13 @@ class PokerEngine {
     }
     return _state;
   }
+
+  /// Alias for [startHand] (legacy cash-sim entry point).
+  GameState startCashHand({
+    List<PlayerModel>? existingPlayers,
+    int? dealerIndex,
+  }) =>
+      startHand(existingPlayers: existingPlayers, dealerIndex: dealerIndex);
 
   int _stateOrDefaultDealer(int n) {
     try {
@@ -260,24 +276,15 @@ class PokerEngine {
     return _state;
   }
 
-  /// Applies a hero action and continues the hand.
+  /// Applies a hero action and continues the hand through remaining streets.
   GameState applyHeroAction(PokerAction action) {
     var state = _state;
     if (!state.waitingForHero || state.isHandOver) return state;
+    final hero = state.hero;
+    if (hero.folded) return state;
 
     final heroIdx = state.players.indexWhere((p) => p.isHero);
     state = _applyAction(state, heroIdx, action, isHero: true);
-
-    // Practice spots are single decision nodes — end after hero acts.
-    if (state.mode == GameMode.practice && !state.isHandOver) {
-      state = state.copyWith(
-        isHandOver: true,
-        waitingForHero: false,
-        resultMessage: state.resultMessage ?? 'Spot complete',
-      );
-      _state = state;
-      return state;
-    }
 
     if (state.isHandOver) {
       _state = state;
@@ -353,11 +360,16 @@ class PokerEngine {
       }
       final idx = s.activePlayerIndex;
       final player = s.players[idx];
-      if (player.folded || player.stack <= 0 && player.currentBet == 0) {
+      if (player.folded || (player.stack <= 0 && player.currentBet == 0)) {
         s = _advanceToNextPlayer(s);
         continue;
       }
       if (player.isHero) {
+        // Never wait on a folded / finished hero.
+        if (player.folded || s.isHandOver) {
+          s = _advanceToNextPlayer(s.copyWith(waitingForHero: false));
+          continue;
+        }
         return s.copyWith(waitingForHero: true);
       }
       final decision = _villainDecision(s, idx);
@@ -636,12 +648,7 @@ class PokerEngine {
           waitingForHero: p.isHero,
         );
       }
-      // All-in players skip.
-      if (!p.folded && p.stack <= 0) {
-        next = (next + 1) % n;
-        guard++;
-        continue;
-      }
+      // All-in or folded players skip.
       next = (next + 1) % n;
       guard++;
     }
@@ -670,29 +677,18 @@ class PokerEngine {
       );
     }
 
-    // Deal board cards for cash sim; practice scenarios already have board.
-    if (state.mode == GameMode.cashSim) {
-      final need = switch (nextStreet) {
-        Street.flop => 3,
-        Street.turn || Street.river => 1,
-        _ => 0,
-      };
-      for (var i = 0; i < need; i++) {
-        if (_deck.isNotEmpty) community.add(_deck.removeLast());
-      }
-    } else if (state.mode == GameMode.practice) {
-      // Practice spots are decision nodes — end after hero acted once.
-      return state.copyWith(
-        players: players,
-        mainPot: mainPot,
-        isHandOver: true,
-        waitingForHero: false,
-        resultMessage: 'Spot complete',
-        street: nextStreet,
-      );
+    // Deal board cards for the next street.
+    final need = switch (nextStreet) {
+      Street.flop => 3,
+      Street.turn || Street.river => 1,
+      _ => 0,
+    };
+    for (var i = 0; i < need; i++) {
+      if (_deck.isNotEmpty) community.add(_deck.removeLast());
     }
 
     final first = _firstToActPostflop(state.copyWith(players: players));
+    final firstPlayer = players[first];
     return state.copyWith(
       players: players,
       mainPot: mainPot,
@@ -702,7 +698,7 @@ class PokerEngine {
       minRaise: state.bigBlind,
       clearLastAggressor: true,
       activePlayerIndex: first,
-      waitingForHero: players[first].isHero,
+      waitingForHero: firstPlayer.isHero && !firstPlayer.folded,
     );
   }
 
@@ -711,7 +707,16 @@ class PokerEngine {
     var idx = (state.dealerIndex + 1) % n;
     for (var i = 0; i < n; i++) {
       final p = state.players[idx];
-      if (!p.folded && p.stack > 0) return idx;
+      if (!p.folded && (p.stack > 0 || p.allIn)) {
+        // Prefer players who can still act; all-in seats are skipped later.
+        if (p.stack > 0) return idx;
+      }
+      idx = (idx + 1) % n;
+    }
+    // Fallback: first non-folded player.
+    idx = (state.dealerIndex + 1) % n;
+    for (var i = 0; i < n; i++) {
+      if (!state.players[idx].folded) return idx;
       idx = (idx + 1) % n;
     }
     return state.dealerIndex;

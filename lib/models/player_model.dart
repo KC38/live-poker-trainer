@@ -71,6 +71,15 @@ class ArchetypeRoster {
     PlayerArchetype.hero: 'Hero',
   };
 
+  /// Extra names when the same archetype appears more than once.
+  static const Map<PlayerArchetype, List<String>> altNames = {
+    PlayerArchetype.maniac: ['Rico', 'Blitz', 'Chaos'],
+    PlayerArchetype.nit: ['Ned', 'Otto', 'Carl'],
+    PlayerArchetype.callingStation: ['Paul', 'Gus', 'Dale'],
+    PlayerArchetype.tag: ['Nina', 'Ivy', 'Cole'],
+    PlayerArchetype.lag: ['Rex', 'Maya', 'Jade'],
+  };
+
   static const List<PlayerArchetype> villainPool = [
     PlayerArchetype.maniac,
     PlayerArchetype.nit,
@@ -78,6 +87,23 @@ class ArchetypeRoster {
     PlayerArchetype.tag,
     PlayerArchetype.lag,
   ];
+
+  /// Picks a display name for [archetype] that is not already in [usedNames].
+  static String uniqueName(
+    PlayerArchetype archetype,
+    Set<String> usedNames,
+  ) {
+    final primary = defaultNames[archetype] ?? archetype.label;
+    if (!usedNames.contains(primary)) return primary;
+    for (final alt in altNames[archetype] ?? const <String>[]) {
+      if (!usedNames.contains(alt)) return alt;
+    }
+    var n = 2;
+    while (usedNames.contains('$primary $n')) {
+      n++;
+    }
+    return '$primary $n';
+  }
 }
 
 /// Mutable-ish seat snapshot for a hand.

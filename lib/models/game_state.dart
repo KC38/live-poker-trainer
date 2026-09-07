@@ -28,7 +28,10 @@ enum Street {
 }
 
 /// Play mode for the table session.
-enum GameMode { practice, cashSim }
+///
+/// Training is the unified full-hand cash-style path with live coaching.
+/// Legacy [practice] / [cashSim] values remain for persisted snapshots only.
+enum GameMode { training, practice, cashSim }
 
 /// Snapshot of the current hand / table.
 @immutable

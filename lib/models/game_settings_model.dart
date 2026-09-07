@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/foundation.dart';
+import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/poker_constants.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
 
@@ -21,6 +22,7 @@ class GameSettingsModel {
     this.rebuyThresholdBb = PokerConstants.defaultRebuyThresholdBb,
     this.sfxEnabled = PokerConstants.defaultSfxEnabled,
     this.ttsEnabled = PokerConstants.defaultTtsEnabled,
+    this.chipDisplayMode = ChipDisplayMode.both,
     this.lineupMode = LineupMode.randomPool,
     this.customArchetypes = const [],
     this.geminiKeyOverride = '',
@@ -34,6 +36,7 @@ class GameSettingsModel {
   final int rebuyThresholdBb;
   final bool sfxEnabled;
   final bool ttsEnabled;
+  final ChipDisplayMode chipDisplayMode;
   final LineupMode lineupMode;
   final List<PlayerArchetype> customArchetypes;
   final String geminiKeyOverride;
@@ -66,6 +69,7 @@ class GameSettingsModel {
     int? rebuyThresholdBb,
     bool? sfxEnabled,
     bool? ttsEnabled,
+    ChipDisplayMode? chipDisplayMode,
     LineupMode? lineupMode,
     List<PlayerArchetype>? customArchetypes,
     String? geminiKeyOverride,
@@ -92,6 +96,7 @@ class GameSettingsModel {
       rebuyThresholdBb: rebuyThresholdBb ?? this.rebuyThresholdBb,
       sfxEnabled: sfxEnabled ?? this.sfxEnabled,
       ttsEnabled: ttsEnabled ?? this.ttsEnabled,
+      chipDisplayMode: chipDisplayMode ?? this.chipDisplayMode,
       lineupMode: lineupMode ?? this.lineupMode,
       customArchetypes: nextCustom,
       geminiKeyOverride: geminiKeyOverride ?? this.geminiKeyOverride,
@@ -107,6 +112,7 @@ class GameSettingsModel {
         'rebuyThresholdBb': rebuyThresholdBb,
         'sfxEnabled': sfxEnabled,
         'ttsEnabled': ttsEnabled,
+        'chipDisplayMode': chipDisplayMode.name,
         'lineupMode': lineupMode.name,
         'customArchetypes':
             customArchetypes.map((a) => a.id).join(','),
@@ -115,6 +121,7 @@ class GameSettingsModel {
 
   static GameSettingsModel fromPrefs(Map<String, Object?> prefs) {
     final lineup = prefs['lineupMode'] as String?;
+    final chipMode = prefs['chipDisplayMode'] as String?;
     final archetypesRaw = prefs['customArchetypes'] as String? ?? '';
     final archetypes = archetypesRaw.isEmpty
         ? <PlayerArchetype>[]
@@ -140,6 +147,10 @@ class GameSettingsModel {
           prefs['sfxEnabled'] as bool? ?? PokerConstants.defaultSfxEnabled,
       ttsEnabled:
           prefs['ttsEnabled'] as bool? ?? PokerConstants.defaultTtsEnabled,
+      chipDisplayMode: ChipDisplayMode.values.firstWhere(
+        (m) => m.name == chipMode,
+        orElse: () => ChipDisplayMode.both,
+      ),
       lineupMode: lineup == LineupMode.custom.name
           ? LineupMode.custom
           : LineupMode.randomPool,

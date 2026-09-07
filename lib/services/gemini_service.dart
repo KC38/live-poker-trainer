@@ -67,62 +67,89 @@ You are an elite exploitative No-Limit Texas Hold'em poker coach analyzing an ex
     return scenarios;
   }
 
-  /// Live coach feedback; requests AUDIO when [wantAudio] is true.
+  /// Live coach feedback; requests TEXT + AUDIO when [wantAudio] is true.
   Future<CoachAudioResult> coach({
     required String prompt,
     bool wantAudio = false,
   }) async {
     if (!hasApiKey) {
-      return CoachAudioResult(text: prompt.isEmpty ? 'No API key configured.' : 'Trust the exploit — punish their leak.');
+      return CoachAudioResult(
+        text: prompt.isEmpty
+            ? 'No API key configured.'
+            : 'Trust the exploit — punish their leak.',
+      );
     }
 
-    final body = <String, dynamic>{
-      'system_instruction': {
-        'parts': [
-          {'text': _coachSystem},
-        ],
-      },
-      'contents': [
-        {
-          'role': 'user',
+    Future<Map<String, dynamic>> postWithModalities(
+      List<String> modalities,
+    ) {
+      final body = <String, dynamic>{
+        'system_instruction': {
           'parts': [
-            {'text': prompt},
+            {'text': _coachSystem},
           ],
         },
-      ],
-      'generationConfig': wantAudio
-          ? {
-              'responseModalities': ['AUDIO'],
-              'speechConfig': {
-                'voiceConfig': {
-                  'prebuiltVoiceConfig': {'voiceName': 'Puck'},
+        'contents': [
+          {
+            'role': 'user',
+            'parts': [
+              {'text': prompt},
+            ],
+          },
+        ],
+        'generationConfig': wantAudio
+            ? {
+                'responseModalities': modalities,
+                'speechConfig': {
+                  'voiceConfig': {
+                    'prebuiltVoiceConfig': {'voiceName': 'Puck'},
+                  },
                 },
+              }
+            : {
+                'temperature': 0.7,
+                'maxOutputTokens': 120,
               },
-            }
-          : {
-              'temperature': 0.7,
-              'maxOutputTokens': 120,
-            },
-    };
+      };
+      return _post(body);
+    }
 
-    final response = await _post(body);
-    final text = _extractText(response) ?? 'Attack their tendency hard.';
-    if (!wantAudio) {
-      return CoachAudioResult(text: text);
+    try {
+      Map<String, dynamic> response;
+      if (wantAudio) {
+        try {
+          response = await postWithModalities(['TEXT', 'AUDIO']);
+        } catch (_) {
+          // Some models reject dual modalities — retry AUDIO-only.
+          response = await postWithModalities(['AUDIO']);
+        }
+      } else {
+        response = await postWithModalities(['TEXT']);
+      }
+
+      final text = _extractText(response) ?? 'Attack their tendency hard.';
+      if (!wantAudio) {
+        return CoachAudioResult(text: text);
+      }
+      final extracted = _extractInlineAudio(response);
+      if (extracted == null) {
+        return CoachAudioResult(text: text);
+      }
+      final playable = WavCodec.ensurePlayable(
+        extracted.bytes,
+        mimeType: extracted.mimeType,
+      );
+      return CoachAudioResult(
+        text: text,
+        audioBytes: playable.bytes,
+        audioMimeType: playable.mimeType,
+      );
+    } catch (_) {
+      // Fall through to offline punchy line; caller may still use device TTS.
+      return const CoachAudioResult(
+        text: 'Trust the exploit — punish their leak.',
+      );
     }
-    final extracted = _extractInlineAudio(response);
-    if (extracted == null) {
-      return CoachAudioResult(text: text);
-    }
-    final playable = WavCodec.ensurePlayable(
-      extracted.bytes,
-      mimeType: extracted.mimeType,
-    );
-    return CoachAudioResult(
-      text: text,
-      audioBytes: playable.bytes,
-      audioMimeType: playable.mimeType,
-    );
   }
 
   Future<Map<String, dynamic>?> _generateJson({

@@ -1,7 +1,9 @@
-/// Table session state: practice / cash sim, coach verdict, prefetch.
+/// Table session state: unified full-hand training with live coach.
 library;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_poker_trainer/core/constants/config.dart';
+import 'package:live_poker_trainer/engine/live_coach.dart';
 import 'package:live_poker_trainer/engine/poker_engine.dart';
 import 'package:live_poker_trainer/models/coach_feedback.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
@@ -20,6 +22,7 @@ class TableSession {
     this.error,
     this.showEvAudit = false,
     this.lastAction,
+    this.voiceHintShown = false,
   });
 
   final GameState? game;
@@ -28,6 +31,7 @@ class TableSession {
   final String? error;
   final bool showEvAudit;
   final PokerAction? lastAction;
+  final bool voiceHintShown;
 
   TableSession copyWith({
     GameState? game,
@@ -38,6 +42,7 @@ class TableSession {
     bool? showEvAudit,
     PokerAction? lastAction,
     bool clearLastAction = false,
+    bool? voiceHintShown,
   }) {
     return TableSession(
       game: game ?? this.game,
@@ -46,6 +51,7 @@ class TableSession {
       error: clearError ? null : (error ?? this.error),
       showEvAudit: showEvAudit ?? this.showEvAudit,
       lastAction: clearLastAction ? null : (lastAction ?? this.lastAction),
+      voiceHintShown: voiceHintShown ?? this.voiceHintShown,
     );
   }
 }
@@ -56,38 +62,12 @@ class GameController extends StateNotifier<TableSession> {
 
   final Ref _ref;
   PokerEngine? _engine;
+  bool _voiceHintShown = false;
 
   GameSettingsModel get _settings => _ref.read(settingsProvider);
 
-  /// Starts Practice mode with a cached / generated scenario.
-  Future<void> startPractice() async {
-    state = state.copyWith(
-      loading: true,
-      clearError: true,
-      coach: const CoachFeedback(),
-      showEvAudit: false,
-    );
-    try {
-      final manager = _ref.read(scenarioManagerProvider);
-      final sound = _ref.read(soundServiceProvider);
-      await sound.unlock();
-
-      final scenario = await manager.nextScenario();
-      _engine = PokerEngine(settings: _settings)
-        ..startPracticeScenario(scenario);
-      await sound.card();
-      state = TableSession(game: _engine!.state, loading: false);
-
-      // Fire-and-forget prefetch.
-      // ignore: unawaited_futures
-      manager.maybePrefetch();
-    } catch (e) {
-      state = state.copyWith(loading: false, error: '$e');
-    }
-  }
-
-  /// Starts a cash game simulation hand.
-  Future<void> startCashSim({bool continueTable = false}) async {
+  /// Starts (or restarts) unified full-hand training.
+  Future<void> startTraining({bool continueTable = false}) async {
     state = state.copyWith(
       loading: true,
       clearError: true,
@@ -98,20 +78,42 @@ class GameController extends StateNotifier<TableSession> {
       final sound = _ref.read(soundServiceProvider);
       await sound.unlock();
       final existing = continueTable ? state.game?.players : null;
-      _engine = PokerEngine(settings: _settings)
-        ..startCashHand(existingPlayers: existing);
+      final engine = _engine;
+      if (continueTable && engine != null) {
+        engine.updateSettings(_settings);
+        engine.startHand(existingPlayers: existing);
+        _engine = engine;
+      } else {
+        _engine = PokerEngine(settings: _settings)
+          ..startHand(existingPlayers: existing);
+      }
       await sound.card();
-      state = TableSession(game: _engine!.state, loading: false);
+      state = TableSession(
+        game: _engine!.state,
+        loading: false,
+        voiceHintShown: _voiceHintShown,
+      );
     } catch (e) {
       state = state.copyWith(loading: false, error: '$e');
     }
   }
 
-  /// Applies a hero action; grades in Practice mode.
+  /// Legacy alias — same as [startTraining].
+  Future<void> startPractice() => startTraining();
+
+  /// Legacy alias — same as [startTraining].
+  Future<void> startCashSim({bool continueTable = false}) =>
+      startTraining(continueTable: continueTable);
+
+  /// Deals the next hand at the same table.
+  Future<void> nextHand() => startTraining(continueTable: true);
+
+  /// Applies a hero action and grades / coaches live.
   Future<void> heroAct(PokerAction action) async {
     final engine = _engine;
     final game = state.game;
     if (engine == null || game == null || !game.waitingForHero) return;
+    if (game.hero.folded || game.isHandOver) return;
 
     final sound = _ref.read(soundServiceProvider);
     switch (action.type) {
@@ -126,59 +128,108 @@ class GameController extends StateNotifier<TableSession> {
         await sound.chip();
     }
 
-    var coach = state.coach;
-    if (game.mode == GameMode.practice && game.activeScenario != null) {
-      coach = coach.copyWith(verdict: CoachVerdict.pending);
-      state = state.copyWith(coach: coach);
+    // Grade against the pre-action snapshot.
+    final grade = LiveCoach.grade(state: game, action: action);
+    var coach = CoachFeedback(
+      verdict: grade.verdict == CoachVerdict.none
+          ? CoachVerdict.pending
+          : grade.verdict,
+      message: grade.message,
+      optimalAction: grade.optimalAction,
+      optimalSizingBb: grade.optimalSizingBb,
+      heroAction: action.label,
+      evDeltaBb: grade.evDeltaBb,
+    );
+    state = state.copyWith(coach: coach);
 
-      final manager = _ref.read(scenarioManagerProvider);
-      final gemini = _ref.read(geminiServiceProvider);
-      final settings = _settings;
+    final settings = _settings;
+    final gemini = _ref.read(geminiServiceProvider);
+    final villain = game.players
+        .where((p) => !p.isHero && !p.folded)
+        .map((p) => p.archetype.label)
+        .take(2)
+        .join(', ');
 
-      final gradeFeedback = await manager.gradeAndRecord(
-        scenario: game.activeScenario!,
-        action: action,
-        engine: engine,
+    String message = grade.message;
+    try {
+      final prompt =
+          'Street: ${game.street.label}. Pot: ${game.totalPot.toStringAsFixed(0)}. '
+          'Hero acted ${action.label}. Villains: ${villain.isEmpty ? 'none' : villain}. '
+          'Board: ${game.community.map((c) => c.code).join(' ')}. '
+          'Hole: ${game.hero.holeCards.map((c) => c.code).join(' ')}. '
+          'Heuristic verdict: ${grade.verdict.name}. '
+          '${grade.optimalAction != null ? 'Suggested: ${grade.optimalAction!.label}.' : ''} '
+          'Give a punchy coaching line for this decision.';
+      final result = await gemini.coach(
+        prompt: prompt,
+        wantAudio: settings.ttsEnabled,
       );
-
-      String message = gradeFeedback.message;
-      try {
-        final prompt =
-            'Hero acted ${action.label} vs ${game.activeScenario!.villainArchetype.label}. '
-            'Verdict: ${gradeFeedback.verdict.name}. '
-            'Spot: ${game.activeScenario!.previousActionNarrative}. '
-            'Optimal: ${game.activeScenario!.optimalExploitAction.label}. '
-            'Give a punchy coaching line.';
-        final result = await gemini.coach(
-          prompt: prompt,
-          wantAudio: settings.ttsEnabled,
-        );
-        if (result.text.trim().isNotEmpty) {
-          message = result.text.trim();
-        }
-        if (result.audioBytes != null) {
-          await sound.playCoachAudio(
-            result.audioBytes!,
-            mimeType: result.audioMimeType,
-          );
-        }
-      } catch (_) {
-        // Keep offline exploit reasoning.
+      if (result.text.trim().isNotEmpty) {
+        message = result.text.trim();
       }
+      final playback = await sound.playCoachVoice(
+        text: message,
+        audioBytes: result.audioBytes,
+        audioMimeType: result.audioMimeType,
+        hasApiKey: Config.hasGeminiKey,
+      );
+      String? voiceNote = playback.note;
+      if (voiceNote != null && _voiceHintShown) {
+        // Only surface the missing-key / mute hint once per session.
+        if (voiceNote.contains('API key') || voiceNote.contains('muted')) {
+          voiceNote = null;
+        }
+      }
+      if (playback.note != null &&
+          (playback.note!.contains('API key') ||
+              playback.note!.contains('muted'))) {
+        _voiceHintShown = true;
+      }
+      coach = coach.copyWith(
+        message: message,
+        verdict: grade.verdict,
+        voiceNote: voiceNote,
+        isSpeaking: playback.spoke,
+      );
+    } catch (_) {
+      final playback = await sound.playCoachVoice(
+        text: message,
+        hasApiKey: Config.hasGeminiKey,
+      );
+      coach = coach.copyWith(
+        message: message,
+        verdict: grade.verdict,
+        voiceNote: _voiceHintShown ? null : playback.note,
+        isSpeaking: playback.spoke,
+      );
+      if (playback.note != null) _voiceHintShown = true;
+    }
 
-      coach = gradeFeedback.copyWith(message: message);
+    if (grade.verdict == CoachVerdict.correct ||
+        grade.verdict == CoachVerdict.incorrect) {
+      final stats = _ref.read(userStatsDaoProvider);
+      await stats.recordPracticeResult(
+        wasCorrect: grade.verdict == CoachVerdict.correct,
+        evDeltaBb: grade.evDeltaBb,
+        street: game.street.label,
+        archetype: villain.isEmpty ? 'Mixed' : villain.split(',').first.trim(),
+      );
+      _ref.invalidate(userStatsProvider);
     }
 
     final next = engine.applyHeroAction(action);
+    final showAudit = next.isHandOver && coach.hasVerdict;
     state = state.copyWith(
       game: next,
-      coach: coach,
+      coach: coach.copyWith(
+        verdict: grade.verdict == CoachVerdict.pending
+            ? CoachVerdict.none
+            : grade.verdict,
+      ),
       lastAction: action,
-      showEvAudit: next.isHandOver && next.mode == GameMode.practice,
+      showEvAudit: showAudit,
+      voiceHintShown: _voiceHintShown,
     );
-
-    // Refresh stats cache.
-    _ref.invalidate(userStatsProvider);
   }
 
   void dismissEvAudit() {

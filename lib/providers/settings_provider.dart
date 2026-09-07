@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/config.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
@@ -50,6 +51,9 @@ class SettingsNotifier extends StateNotifier<GameSettingsModel> {
   Future<void> setSfx(bool value) => update(state.copyWith(sfxEnabled: value));
 
   Future<void> setTts(bool value) => update(state.copyWith(ttsEnabled: value));
+
+  Future<void> setChipDisplayMode(ChipDisplayMode mode) =>
+      update(state.copyWith(chipDisplayMode: mode));
 
   Future<void> setAutoRebuy(bool value) =>
       update(state.copyWith(autoRebuy: value));
