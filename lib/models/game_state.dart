@@ -92,6 +92,25 @@ class GameState {
 
   PlayerModel get hero => players.firstWhere((p) => p.isHero);
 
+  /// Poker position label for [seatIndex] (BTN / SB / BB / UTG / …).
+  ///
+  /// Seats are counted clockwise from the button. Returns `SEAT` when the
+  /// index is out of range.
+  String positionLabel(int seatIndex) {
+    final n = players.length;
+    if (n == 0 || seatIndex < 0 || seatIndex >= n) return 'SEAT';
+    if (seatIndex == dealerIndex) return 'BTN';
+    if (seatIndex == sbIndex) return 'SB';
+    if (seatIndex == bbIndex) return 'BB';
+    // Offset from the seat after BB (UTG).
+    final utg = (bbIndex + 1) % n;
+    var offset = (seatIndex - utg) % n;
+    if (offset < 0) offset += n;
+    const early = ['UTG', 'UTG+1', 'MP', 'MP+1', 'HJ', 'CO'];
+    if (offset < early.length) return early[offset];
+    return 'MP';
+  }
+
   double get totalPot {
     final bets = players.fold<double>(0, (sum, p) => sum + p.currentBet);
     return Money.round(mainPot + bets);

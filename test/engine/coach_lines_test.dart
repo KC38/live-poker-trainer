@@ -222,7 +222,7 @@ void main() {
     });
   });
 
-  group('Gemini prompt', () {
+  group('Claude coach prompt', () {
     test('carries the full decision context so it cannot answer generically',
         () {
       final state = _spot(
@@ -237,12 +237,13 @@ void main() {
       );
       final prompt = grade.toPrompt(state);
 
-      expect(prompt, contains('FLOP'));
+      expect(prompt, contains('Street being graded: FLOP'));
       expect(prompt, contains('LAG'));
       expect(prompt, contains('Villain'));
       expect(prompt, contains('CALL'));
       expect(prompt, contains('Qs'));
       expect(prompt, contains('Do not give generic advice'));
+      expect(prompt, contains('voluntary aggressor'));
     });
   });
 

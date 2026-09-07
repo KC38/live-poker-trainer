@@ -1,6 +1,4 @@
-/// GeminiService request logging: every HTTP attempt is recorded with model,
-/// status, token usage, and a redacted error; retries are numbered; the API
-/// key never reaches the log.
+/// GeminiService request logging for scenario generation (not coaching).
 library;
 
 import 'dart:convert';
@@ -24,12 +22,12 @@ class _MemoryLogger implements AiRequestLogger {
   }
 }
 
-String _coachBody(String text) => jsonEncode({
+String _jsonBody(Map<String, dynamic> payload) => jsonEncode({
       'candidates': [
         {
           'content': {
             'parts': [
-              {'text': text},
+              {'text': jsonEncode(payload)},
             ],
           },
         },
@@ -41,37 +39,51 @@ String _coachBody(String text) => jsonEncode({
       },
     });
 
+Map<String, dynamic> get _scenarioPayload => {
+      'table_size': 6,
+      'hero_position': 'BTN',
+      'hero_hand': ['As', 'Kd'],
+      'board_cards': ['Ah', '7c', '2d'],
+      'pot_size': 40,
+      'villain_seat': 1,
+      'villain_archetype': 'Nit',
+      'previous_action_narrative': 'opens',
+      'villain_action': 'RAISE',
+      'call_amount': 20,
+      'min_raise': 40,
+      'max_raise': 400,
+      'optimal_exploit_action': 'FOLD',
+      'optimal_sizing_bb': 0,
+      'theoretical_ev_explanation': 'fold',
+      'exploit_reasoning': 'nits mean it',
+    };
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  setUp(() => dotenv.loadFromString(envString: 'GEMINI_API_KEY=$_key'));
+  setUp(() => dotenv.loadFromString(
+        envString: 'GEMINI_API_KEY=$_key\nANTHROPIC_API_KEY=',
+      ));
   tearDown(dotenv.clean);
 
-  test('successful coach call logs one entry with tokens and text', () async {
+  test('successful scenario call logs one entry with tokens', () async {
     final logger = _MemoryLogger();
     final client = MockClient((req) async {
       expect(req.url.queryParameters['key'], _key);
-      return http.Response(_coachBody('Fold the river vs a Nit.'), 200);
+      return http.Response(_jsonBody(_scenarioPayload), 200);
     });
     final service = GeminiService(client: client, logger: logger);
 
-    final result = await service.coach(prompt: 'hero raised river', handId: 5);
-    expect(result.text, 'Fold the river vs a Nit.');
-    expect(result.aiRequestId, 1);
+    final scenarios = await service.generateScenarios(count: 1);
+    expect(scenarios, hasLength(1));
 
     final e = logger.entries.single;
-    expect(e.kind, AiRequestKind.coach);
+    expect(e.kind, AiRequestKind.scenario);
     expect(e.modelId, Config.geminiModel);
     expect(e.success, isTrue);
     expect(e.httpStatus, 200);
-    expect(e.attempt, 1);
-    expect(e.handId, 5);
     expect(e.usage?.prompt, 33);
-    expect(e.usage?.response, 9);
-    expect(e.usage?.total, 42);
-    expect(e.responseText, contains('Nit'));
     expect(e.promptHash, hasLength(64));
-    expect(e.latencyMs, greaterThanOrEqualTo(0));
   });
 
   test('retryable failure then success logs two attempts', () async {
@@ -82,7 +94,7 @@ void main() {
       if (calls == 1) {
         return http.Response('{"error":"overloaded key=$_key"}', 503);
       }
-      return http.Response(_coachBody('ok'), 200);
+      return http.Response(_jsonBody(_scenarioPayload), 200);
     });
     final service = GeminiService(
       client: client,
@@ -90,42 +102,13 @@ void main() {
       retryDelay: Duration.zero,
     );
 
-    final result = await service.coach(prompt: 'p');
-    expect(result.text, 'ok');
+    final scenarios = await service.generateScenarios(count: 1);
+    expect(scenarios, hasLength(1));
     expect(calls, 2);
     expect(logger.entries, hasLength(2));
-
-    final failed = logger.entries.first;
-    expect(failed.success, isFalse);
-    expect(failed.httpStatus, 503);
-    expect(failed.attempt, 1);
-    expect(failed.errorMessage, isNotNull);
-    expect(failed.errorMessage, isNot(contains(_key)));
-    expect(failed.usage, isNull);
-
-    expect(logger.entries.last.attempt, 2);
+    expect(logger.entries.first.success, isFalse);
+    expect(logger.entries.first.errorMessage, isNot(contains(_key)));
     expect(logger.entries.last.success, isTrue);
-  });
-
-  test('non-retryable failure logs once and coach falls back to empty text',
-      () async {
-    final logger = _MemoryLogger();
-    var calls = 0;
-    final client = MockClient((req) async {
-      calls++;
-      return http.Response('{"error":"bad request"}', 400);
-    });
-    final service = GeminiService(
-      client: client,
-      logger: logger,
-      retryDelay: Duration.zero,
-    );
-
-    final result = await service.coach(prompt: 'p');
-    expect(result.text, isEmpty);
-    expect(calls, 1);
-    expect(logger.entries.single.httpStatus, 400);
-    expect(logger.entries.single.success, isFalse);
   });
 
   test('redact strips the key from URLs and free text', () {
@@ -134,17 +117,4 @@ void main() {
     expect(redacted, isNot(contains(_key)));
     expect(redacted, contains('key='));
   });
-
-  test('logger failures never break the request', () async {
-    final client = MockClient((_) async => http.Response(_coachBody('ok'), 200));
-    final service = GeminiService(client: client, logger: _ThrowingLogger());
-    final result = await service.coach(prompt: 'p');
-    expect(result.text, 'ok');
-    expect(result.aiRequestId, isNull);
-  });
-}
-
-class _ThrowingLogger implements AiRequestLogger {
-  @override
-  Future<int?> logRequest(AiRequestLogEntry entry) async => throw StateError('db');
 }

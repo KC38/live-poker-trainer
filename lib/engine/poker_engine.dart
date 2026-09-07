@@ -243,7 +243,9 @@ class PokerEngine {
       minRaise: _settings.bigBlind,
       smallBlind: _settings.smallBlind,
       bigBlind: _settings.bigBlind,
-      lastAggressor: bb,
+      // Blind posts are not voluntary aggression — leave null until a
+      // real bet/raise so the coach never calls the BB the "aggressor".
+      lastAggressor: null,
       heroLine: const [],
       handCount: handCount,
       heroInvestedThisHand: heroBet,

@@ -406,6 +406,61 @@ class DiagnosticsDao implements AiRequestLogger, DiagnosticsSink {
     return deleted;
   }
 
+  /// One-time-ish purge of Gemini-sourced coach artifacts so they cannot be
+  /// replayed as live shelf copy.
+  ///
+  /// Deletes Gemini coach/TTS `ai_requests`, all `voice_clips`, blanks Gemini
+  /// `coach_decisions.advice_text`, and clears cached `mistakes.advice_text`.
+  /// Safe to call on every launch (idempotent once emptied).
+  Future<Map<String, int>> purgeGeminiCoachArtifacts() async {
+    final out = <String, int>{};
+
+    out['ai_requests_coach_tts'] = await (db.delete(db.aiRequests)
+          ..where(
+            (t) =>
+                t.requestKind.isIn(['coach', 'tts']) &
+                t.modelId.like('%gemini%'),
+          ))
+        .go();
+
+    // Also drop legacy Gemini coach rows (empty model or spoken-aloud prompt).
+    out['ai_requests_coach_legacy'] = await (db.delete(db.aiRequests)
+          ..where(
+            (t) =>
+                t.requestKind.equals('coach') &
+                (t.modelId.equals('') |
+                    t.promptText.like('%spoken aloud%') |
+                    t.modelId.like('%flash%')),
+          ))
+        .go();
+
+    out['voice_clips'] = await db.delete(db.voiceClips).go();
+
+    final geminiDecisions = await (db.select(db.coachDecisions)
+          ..where((t) => t.adviceSource.equals('gemini')))
+        .get();
+    if (geminiDecisions.isNotEmpty) {
+      await (db.update(db.coachDecisions)
+            ..where((t) => t.adviceSource.equals('gemini')))
+          .write(
+        const CoachDecisionsCompanion(
+          adviceText: Value(''),
+          adviceSource: Value('purged'),
+        ),
+      );
+    }
+    out['coach_decisions_gemini'] = geminiDecisions.length;
+
+    // Mistake advice may still hold old Gemini lines shown in Leak Finder.
+    final mistakesCleared = await db.customUpdate(
+      'UPDATE mistakes SET advice_text = \'\' WHERE length(advice_text) > 0',
+      updates: {db.mistakes},
+    );
+    out['mistakes_advice'] = mistakesCleared;
+
+    return out;
+  }
+
   Future<int> _keepNewest<T extends Table, R>(
     TableInfo<T, R> table,
     GeneratedColumn<int> id,

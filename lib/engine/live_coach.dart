@@ -30,6 +30,10 @@ class LiveCoachGrade {
     this.evDeltaBb = 0,
     this.heroAction = ExploitAction.check,
     this.heroSizingBb = 0,
+    this.villainPosition = '',
+    this.heroPosition = '',
+    this.villainIsAggressor = false,
+    this.callAmount = 0,
   });
 
   final CoachVerdict verdict;
@@ -56,6 +60,18 @@ class LiveCoachGrade {
   /// Hero bet / raise size in big blinds (0 for passive actions).
   final double heroSizingBb;
 
+  /// Villain seat position label (BB / SB / BTN / …).
+  final String villainPosition;
+
+  /// Hero seat position label.
+  final String heroPosition;
+
+  /// True only when the villain voluntarily bet or raised this street.
+  final bool villainIsAggressor;
+
+  /// Chips hero must add to call (snapshot at grade time).
+  final double callAmount;
+
   /// Stable leak classification of this decision (null when ungraded).
   MistakePattern? get pattern {
     final best = optimalAction;
@@ -71,11 +87,10 @@ class LiveCoachGrade {
     );
   }
 
-  /// Prompt for the Gemini coach, carrying the full decision context so the
-  /// model can never fall back to generic advice.
+  /// Structured prompt for the Claude coach.
   ///
-  /// [repeat] / [improvement] add leak-history context so the model calls out
-  /// a repeated mistake, or acknowledges a fixed one, by name.
+  /// Position and aggressor status are explicit so the model cannot invent
+  /// "BB is the aggressor" when they only posted blinds.
   String toPrompt(
     GameState game, {
     RepeatInfo? repeat,
@@ -111,14 +126,24 @@ class LiveCoachGrade {
         'Endorse raising/betting only. Never tell the player to fold.',
       null => 'No graded exploit — stay neutral; do not invent a verdict.',
     };
-    return 'Street: ${street.label}. '
+    final aggressorLine = villainIsAggressor
+        ? 'Villain role: voluntary aggressor (they bet or raised this street).'
+        : 'Villain role: NOT the aggressor '
+            '(posted blinds and/or called only — do NOT say they fired, bet, '
+            'raised, or led).';
+    return 'Street being graded: ${street.label}. '
+        'Hero position: ${heroPosition.isEmpty ? 'unknown' : heroPosition}. '
         'Hero hole cards: ${hole.isEmpty ? 'unknown' : hole}. '
         'Board: ${board.isEmpty ? 'none' : board}. '
         'Pot: ${ChipFormat.dollars(game.totalPot)} '
         '(${(game.totalPot / max(game.bigBlind, 1)).toStringAsFixed(0)} BB). '
-        'Primary villain: $villainName, archetype ${villainArchetype.label} '
+        'Call amount facing hero: ${ChipFormat.dollars(callAmount)}. '
+        'Primary villain: $villainName at '
+        '${villainPosition.isEmpty ? 'unknown' : villainPosition}, '
+        'archetype ${villainArchetype.label} '
         '(VPIP ${villainArchetype.vpip.toStringAsFixed(0)}, '
         'PFR ${villainArchetype.pfr.toStringAsFixed(0)}). '
+        '$aggressorLine '
         'Hero action: $heroActionLabel. '
         'Recommended: $bestLabel'
         '${optimalSizingBb > 0 ? ' ~${optimalSizingBb.toStringAsFixed(0)} BB' : ''}. '
@@ -151,9 +176,14 @@ class LiveCoach {
   }) {
     final hero = state.hero;
     final callAmt = state.callAmountFor(hero);
-    final villain = _primaryVillain(state);
+    final villainInfo = _primaryVillain(state);
+    final villain = villainInfo.player;
     final arch = villain?.archetype ?? PlayerArchetype.tag;
     final villainName = villain?.name ?? 'the field';
+    final villainPos = villainInfo.position;
+    final heroPos = state.positionLabel(
+      state.players.indexWhere((p) => p.isHero),
+    );
     final pot = state.totalPot;
     final bb = state.bigBlind < 1 ? 1.0 : state.bigBlind;
     final cards = [...hero.holeCards, ...state.community];
@@ -181,12 +211,17 @@ class LiveCoach {
           street: state.street,
           villainName: villainName,
           callAmount: callAmt,
+          villainIsAggressor: villainInfo.isAggressor,
         ),
         villainArchetype: arch,
         villainName: villainName,
         street: state.street,
         heroActionLabel: action.label,
         mismatch: CoachMismatch.none,
+        villainPosition: villainPos,
+        heroPosition: heroPos,
+        villainIsAggressor: villainInfo.isAggressor,
+        callAmount: callAmt,
       );
     }
 
@@ -233,6 +268,8 @@ class LiveCoach {
         heroSizing: heroSizingBb,
         potSize: pot,
         callAmount: callAmt,
+        villainIsAggressor: villainInfo.isAggressor,
+        villainPosition: villainPos,
       ),
       villainArchetype: arch,
       villainName: villainName,
@@ -244,22 +281,51 @@ class LiveCoach {
       evDeltaBb: evDeltaBb,
       heroAction: mapped,
       heroSizingBb: heroSizingBb,
+      villainPosition: villainPos,
+      heroPosition: heroPos,
+      villainIsAggressor: villainInfo.isAggressor,
+      callAmount: callAmt,
     );
   }
 
-  static PlayerModel? _primaryVillain(GameState state) {
+  /// Picks the primary villain and whether they voluntarily aggressed.
+  ///
+  /// Blind posts never count as aggression ([GameState.lastAggressor] is only
+  /// set on bet/raise). When nobody has raised, the biggest committed live
+  /// seat is the reference villain but [isAggressor] stays false.
+  static ({PlayerModel? player, String position, bool isAggressor})
+      _primaryVillain(GameState state) {
     final aggressor = state.lastAggressor;
-    if (aggressor != null && aggressor >= 0 && aggressor < state.players.length) {
+    if (aggressor != null &&
+        aggressor >= 0 &&
+        aggressor < state.players.length) {
       final p = state.players[aggressor];
-      if (!p.isHero && !p.folded) return p;
+      if (!p.isHero && !p.folded) {
+        return (
+          player: p,
+          position: state.positionLabel(aggressor),
+          isAggressor: true,
+        );
+      }
     }
-    // Otherwise the biggest live threat: whoever has the most chips committed.
     PlayerModel? best;
-    for (final p in state.players) {
+    var bestIdx = -1;
+    for (var i = 0; i < state.players.length; i++) {
+      final p = state.players[i];
       if (p.isHero || p.folded) continue;
-      if (best == null || p.currentBet > best.currentBet) best = p;
+      if (best == null || p.currentBet > best.currentBet) {
+        best = p;
+        bestIdx = i;
+      }
     }
-    return best;
+    if (best == null) {
+      return (player: null, position: '', isAggressor: false);
+    }
+    return (
+      player: best,
+      position: state.positionLabel(bestIdx),
+      isAggressor: false,
+    );
   }
 
   static ExploitAction _mapAction(PokerAction action) {

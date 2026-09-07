@@ -92,6 +92,7 @@ class CoachLines {
     required Street street,
     required String villainName,
     required double callAmount,
+    bool villainIsAggressor = true,
   }) {
     final free = callAmount <= 0;
     final where = _streetPhrase(street);
@@ -105,8 +106,9 @@ class CoachLines {
           ]
         : <String>[
             'Close spot $where for ${ChipFormat.dollars(callAmount)}. '
-                '${_facingBetPlan(archetype, villainName)}',
-            'No clear exploit $where — ${_facingBetPlan(archetype, villainName)}',
+                '${_facingBetPlan(archetype, villainName, villainIsAggressor)}',
+            'No clear exploit $where — '
+                '${_facingBetPlan(archetype, villainName, villainIsAggressor)}',
           ];
     return _pick(options, seed: street.index + archetype.index * 7);
   }
@@ -124,6 +126,8 @@ class CoachLines {
     required double heroSizing,
     required double potSize,
     required double callAmount,
+    bool villainIsAggressor = true,
+    String villainPosition = '',
   }) {
     final where = _streetPhrase(street);
     final why = _why(
@@ -131,6 +135,8 @@ class CoachLines {
       archetype: archetype,
       villainName: villainName,
       street: street,
+      villainIsAggressor: villainIsAggressor,
+      villainPosition: villainPosition,
     );
     final seed = street.index * 31 +
         archetype.index * 7 +
@@ -237,18 +243,25 @@ class CoachLines {
         PlayerArchetype.hero => 'take the free card.',
       };
 
-  static String _facingBetPlan(PlayerArchetype archetype, String name) =>
+  static String _facingBetPlan(
+    PlayerArchetype archetype,
+    String name,
+    bool isAggressor,
+  ) =>
       switch (archetype) {
-        PlayerArchetype.nit =>
-          '$name is a nit, so their bet is close to the nuts — need real equity.',
-        PlayerArchetype.callingStation =>
-          '$name calls too much but rarely bluffs, so their bet means a hand.',
+        PlayerArchetype.nit => isAggressor
+            ? '$name is a nit, so their bet is close to the nuts — need real equity.'
+            : '$name is a nit — do not pay them off light just to see a flop.',
+        PlayerArchetype.callingStation => isAggressor
+            ? '$name calls too much but rarely bluffs, so their bet means a hand.'
+            : '$name is a station — value when you connect, avoid bloating light.',
         PlayerArchetype.maniac =>
           '$name is a maniac, so discount their range and lean toward calling.',
         PlayerArchetype.lag =>
           '$name is a LAG, so widen your continues but keep raises honest.',
-        PlayerArchetype.tag =>
-          '$name is a TAG, so respect the bet and look for a cheaper street.',
+        PlayerArchetype.tag => isAggressor
+            ? '$name is a TAG, so respect the bet and look for a cheaper street.'
+            : '$name is a TAG — hunt thin edges without forcing the pot.',
         PlayerArchetype.hero => 'take the price that matches your equity.',
       };
 
@@ -258,28 +271,34 @@ class CoachLines {
     required PlayerArchetype archetype,
     required String villainName,
     required Street street,
+    required bool villainIsAggressor,
+    String villainPosition = '',
   }) {
     final late = street == Street.turn || street == Street.river;
+    final seat = villainPosition.isEmpty ? '' : ' ($villainPosition)';
     return switch (archetype) {
       PlayerArchetype.nit => switch (mismatch) {
-          CoachMismatch.tooLoose =>
-            '$villainName is a nit — when they fire, they have it. '
-                'Paying them off is the single most expensive leak.',
+          CoachMismatch.tooLoose => villainIsAggressor
+              ? '$villainName$seat is a nit — when they fire, they have it. '
+                  'Paying them off is the single most expensive leak.'
+              : '$villainName$seat is a nit — posting or calling is not '
+                  'aggression. Paying them off light is still a leak.',
           CoachMismatch.tooTight =>
-            'Nits also over-fold. $villainName gives up too often to keep '
+            'Nits also over-fold. $villainName$seat gives up too often to keep '
                 'folding your equity.',
           CoachMismatch.tooPassive => late
-              ? 'Nits check-fold turns and rivers constantly — $villainName '
+              ? 'Nits check-fold turns and rivers constantly — $villainName$seat '
                   'hands you the pot if you bet.'
               : 'Nits fold too much preflop; take the initiative from '
-                  '$villainName.',
+                  '$villainName$seat.',
           CoachMismatch.tooAggressive =>
-            'Raising a nit only gets called by better. $villainName is not '
+            'Raising a nit only gets called by better. $villainName$seat is not '
                 'folding a hand strong enough to bet.',
           CoachMismatch.sizing =>
             'Nits are price-sensitive: size for the fold, not for the pot.',
-          CoachMismatch.none =>
-            '$villainName is a nit — believe their bets, attack their checks.',
+          CoachMismatch.none => villainIsAggressor
+              ? '$villainName$seat is a nit — believe their bets, attack their checks.'
+              : '$villainName$seat is a nit — believe real bets, attack their checks.',
         },
       PlayerArchetype.callingStation => switch (mismatch) {
           CoachMismatch.tooLoose =>

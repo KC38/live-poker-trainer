@@ -13,7 +13,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _loadEnv();
   assert(() {
-    // Source only — the key itself is never logged.
+    // Source only — keys themselves are never logged.
+    debugPrint('[config] anthropic key source: ${Config.anthropicKeySource}');
     debugPrint('[config] gemini key source: ${Config.geminiKeySource}');
     return true;
   }());

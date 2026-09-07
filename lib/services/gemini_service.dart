@@ -1,9 +1,8 @@
-/// Gemini scenario generation, coach text, and image generation.
+/// Gemini scenario generation and image generation (not live coaching).
 ///
-/// Every HTTP attempt is reported to an optional [AiRequestLogger] with model,
-/// prompt hashes, latency, status, token usage and a redacted error, so the
-/// `ai_requests` table is a complete record of what the app asked and got.
-/// The API key is scrubbed from anything that leaves this file.
+/// Live coach narration is Claude-only via [AnthropicService]. Every HTTP
+/// attempt is reported to an optional [AiRequestLogger] with model, prompt
+/// hashes, latency, status, token usage and a redacted error.
 library;
 
 import 'dart:async';
@@ -82,25 +81,22 @@ You are a game theory and exploitative poker scenario architect for \$1/\$2 to \
 Output valid JSON containing an intense decision spot. Include: table_size (2-9), hero_position, hero_hand, board_cards (flop, turn, river up to spot), pot_size, villain_seat, villain_archetype ('Maniac', 'Nit', 'Calling Station', 'TAG', 'LAG'), previous_action_narrative, villain_action, call_amount, min_raise, max_raise, optimal_exploit_action ('FOLD', 'CALL', 'RAISE'), optimal_sizing_bb, theoretical_ev_explanation, exploit_reasoning.
 ''';
 
-  static const _coachSystem = '''
-You are an elite exploitative No-Limit Texas Hold'em coach at a live table. You are given one concrete decision: the street, the board, the hero's hand, the villain's archetype and stats, what the hero did, the recommended line, and the CORRECT/INCORRECT verdict.
-Respond with 1-2 sentences, under 32 words, spoken aloud to the player. You MUST reference the specific street and the villain's archetype tendency by name, and say why the recommended line beats what the hero did. Never give generic advice, never repeat a stock phrase, never use markdown, bullets, asterisks, or greetings.
-CRITICAL consistency rules:
-- Ground every sentence in the street, villain archetype, hero action, recommended action, and verdict you were given.
-- Your advice MUST endorse the recommended action. If recommended is FOLD, never urge calling, defending, or continuing. If recommended is CALL, never urge folding. If recommended is RAISE/BET, never urge folding.
-- Never contradict yourself inside one reply (do not say both "call most of the time" and "fold all the time").
-When the prompt includes "Leak history" for a repeated mistake, open by saying it is a repeat, quote the occurrence count, and name the pattern (for example "That's the third time you've raised a Nit's river bet when calling was better"). When it describes a fixed leak, open by acknowledging the improvement and what the player used to do. In those cases you may use up to 40 words.
-''';
-
-  /// Removes the API key (and any `key=` query value) from [text].
+  /// Removes API keys (and any `key=` query value) from [text].
   static String redact(String text) {
     var out = text;
     final key = Config.geminiApiKey;
     if (key.isNotEmpty) out = out.replaceAll(key, '[REDACTED]');
-    return out.replaceAllMapped(
+    final anthropic = Config.anthropicApiKey;
+    if (anthropic.isNotEmpty) out = out.replaceAll(anthropic, '[REDACTED]');
+    out = out.replaceAllMapped(
       RegExp(r'([?&]key=)[^&\s"]+'),
       (m) => '${m[1]}[REDACTED]',
     );
+    out = out.replaceAllMapped(
+      RegExp(r'sk-ant-api03-[A-Za-z0-9_-]+'),
+      (_) => 'sk-ant-api03-[REDACTED]',
+    );
+    return out;
   }
 
   /// Generates up to [count] unique scenarios.
@@ -127,50 +123,6 @@ When the prompt includes "Leak history" for a repeated mistake, open by saying i
       }
     }
     return scenarios;
-  }
-
-  /// Coach text for one decision.
-  ///
-  /// Returns an empty string when no key is configured or the call fails, so
-  /// the caller keeps its own spot-specific line instead of a stock phrase.
-  Future<CoachAudioResult> coach({required String prompt, int? handId}) async {
-    if (!hasApiKey || prompt.trim().isEmpty) {
-      return const CoachAudioResult(text: '');
-    }
-    try {
-      final result = await _post(
-        kind: AiRequestKind.coach,
-        prompt: prompt,
-        system: _coachSystem,
-        handId: handId,
-        body: {
-          'system_instruction': {
-            'parts': [
-              {'text': _coachSystem},
-            ],
-          },
-          'contents': [
-            {
-              'role': 'user',
-              'parts': [
-                {'text': prompt},
-              ],
-            },
-          ],
-          'generationConfig': {
-            'temperature': 1.0,
-            'maxOutputTokens': 2048,
-          },
-        },
-      );
-      return CoachAudioResult(
-        text: _extractText(result.json) ?? '',
-        aiRequestId: result.requestId,
-      );
-    } catch (e, s) {
-      DiagnosticsLog.error('GeminiService.coach', e, s, null, handId);
-      return const CoachAudioResult(text: '');
-    }
   }
 
   /// Generates a PNG/JPEG image from [prompt], or null on failure.

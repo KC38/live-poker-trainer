@@ -62,6 +62,19 @@ class AppSessionService with WidgetsBindingObserver {
       debugPrint('[session] failed to open session row: $e');
       DiagnosticsLog.error('AppSessionService.start', e, st);
     }
+    try {
+      final purged = await dao.purgeGeminiCoachArtifacts();
+      final total = purged.values.fold<int>(0, (a, b) => a + b);
+      if (total > 0) {
+        DiagnosticsLog.info(
+          'AppSessionService.purgeGeminiCoach',
+          'purged $total gemini coach artifacts',
+          extra: purged,
+        );
+      }
+    } catch (e, st) {
+      DiagnosticsLog.error('AppSessionService.purgeGeminiCoach', e, st);
+    }
     final binding = WidgetsBinding.instance;
     binding.addObserver(this);
     if (installErrorHandlers) _hookErrors();

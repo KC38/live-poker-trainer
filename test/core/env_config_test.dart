@@ -12,6 +12,9 @@ void main() {
     expect(Config.geminiApiKey, isEmpty);
     expect(Config.hasGeminiKey, isFalse);
     expect(Config.geminiKeySource, 'unloaded');
+    expect(Config.anthropicApiKey, isEmpty);
+    expect(Config.hasAnthropicKey, isFalse);
+    expect(Config.anthropicKeySource, 'unloaded');
   });
 
   test('env files resolve through the asset bundle', () async {
@@ -28,8 +31,19 @@ void main() {
       isTrue,
       reason: '.env / .env.example must be bundled assets (see pubspec.yaml)',
     );
+    expect(
+      dotenv.env.containsKey('ANTHROPIC_API_KEY'),
+      isTrue,
+      reason: 'ANTHROPIC_API_KEY placeholder must be present',
+    );
     expect(Config.geminiKeySource, isNot('unloaded'));
+    expect(Config.anthropicKeySource, isNot('unloaded'));
     expect(Config.geminiApiKey, Config.geminiApiKey.trim());
+    expect(Config.anthropicApiKey, Config.anthropicApiKey.trim());
+    // Never assert the secret value — only that presence matches source.
+    if (Config.hasAnthropicKey) {
+      expect(Config.anthropicKeySource, anyOf('env-asset', 'dart-define'));
+    }
   });
 
   test('a missing env file degrades quietly instead of throwing', () async {
@@ -39,9 +53,12 @@ void main() {
     );
     expect(Config.hasGeminiKey, isFalse);
     expect(Config.geminiKeySource, 'missing');
+    expect(Config.hasAnthropicKey, isFalse);
+    expect(Config.anthropicKeySource, 'missing');
   });
 
-  test('text and image models are distinct', () {
+  test('coach model is Claude Sonnet; Gemini remains for scenarios only', () {
+    expect(Config.claudeCoachModel, startsWith('claude-'));
     expect(Config.geminiModel, isNot(Config.geminiImageModel));
     expect(
       Config.geminiGenerateContentUri().toString(),

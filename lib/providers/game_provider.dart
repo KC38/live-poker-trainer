@@ -275,6 +275,8 @@ class GameController extends StateNotifier<TableSession> {
         optimalSizingBb: grade.optimalSizingBb,
         heroAction: action.label,
         evDeltaBb: grade.evDeltaBb,
+        decisionStreet: grade.street,
+        isHistorical: false,
       ),
     );
 
@@ -422,7 +424,16 @@ class GameController extends StateNotifier<TableSession> {
           state = state.copyWith(collectingChips: false);
         case TableEventKind.dealStreet:
           _safeRecord(() => _recorder.recordStreet(event.state));
-          state = state.copyWith(game: event.state, collectingChips: false);
+          // Prior street grades must not read as live flop/turn advice.
+          final prior = state.coach;
+          final scoped = prior.hasVerdict && !prior.isHistorical
+              ? prior.asHistorical()
+              : prior;
+          state = state.copyWith(
+            game: event.state,
+            collectingChips: false,
+            coach: scoped,
+          );
           await sound.deal();
           await _wait(ReplayPace.dealStreet);
         case TableEventKind.handOver:
@@ -477,11 +488,11 @@ class GameController extends StateNotifier<TableSession> {
     }
   }
 
-  /// Fetches a spot-specific coach line (Gemini when available) for the shelf.
+  /// Fetches a spot-specific coach line (Claude when available) for the shelf.
   ///
   /// [localMessage] is the offline line (already carrying repeat / improvement
-  /// copy) used when Gemini is unavailable. Gemini is only asked on graded
-  /// spots so it cannot invent a CORRECT/INCORRECT story for ambiguous ones.
+  /// copy) used when Anthropic is unavailable. Claude is only asked on graded
+  /// spots. Gemini is never used for coach narration.
   Future<void> _narrate(
     LiveCoachGrade grade,
     GameState game,
@@ -490,14 +501,14 @@ class GameController extends StateNotifier<TableSession> {
     String localMessage,
     Future<int?> decisionId,
   ) async {
-    final gemini = _ref.read(geminiServiceProvider);
+    final anthropic = _ref.read(anthropicServiceProvider);
     var message = localMessage;
     var adviceSource = 'offline';
     int? aiRequestId;
 
     if (grade.verdict.isGraded) {
       try {
-        final result = await gemini.coach(
+        final result = await anthropic.coach(
           prompt: grade.toPrompt(
             game,
             repeat: leak.repeat,
@@ -515,16 +526,12 @@ class GameController extends StateNotifier<TableSession> {
             verdict: grade.verdict,
           );
           message = reconciled;
-          adviceSource =
-              reconciled == text ? 'gemini' : 'offline';
+          adviceSource = reconciled == text ? 'claude' : 'offline';
         }
       } catch (e, st) {
-        // Keep the local, spot-specific line.
         DiagnosticsLog.error('GameController.narrate', e, st);
       }
     } else {
-      // Ambiguous spots stay on the local line — never let Gemini invent a
-      // verdict badge the shelf cannot show.
       message = CoachAdviceGuard.reconcile(
         advice: localMessage,
         fallback: localMessage,
@@ -534,9 +541,22 @@ class GameController extends StateNotifier<TableSession> {
     }
 
     if (_disposed || token != _replayToken) return;
-    state = state.copyWith(coach: state.coach.copyWith(message: message));
+    // Ignore Claude replies that arrive after the street already advanced.
+    final currentStreet = state.game?.street;
+    final stillCurrentDecision = !state.coach.isHistorical &&
+        (state.coach.decisionStreet == null ||
+            state.coach.decisionStreet == grade.street) &&
+        (currentStreet == null || currentStreet == grade.street);
+    if (stillCurrentDecision) {
+      state = state.copyWith(
+        coach: state.coach.copyWith(
+          message: message,
+          decisionStreet: grade.street,
+          isHistorical: false,
+        ),
+      );
+    }
     if (leak.mistakeId != null && message != grade.message) {
-      // Store the advice the player actually saw.
       unawaited(
         _ref.read(mistakeTrackerProvider).saveAdvice(leak.mistakeId, message),
       );

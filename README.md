@@ -1,6 +1,6 @@
 # Exploitative Poker Lab
 
-Multi-platform Flutter trainer for exploitative No-Limit Hold'em (**iOS**, **Android**, **iPadOS/tablets**, **web**) with Gemini coaching, Drift local cache, and a luxury felt table UI.
+Multi-platform Flutter trainer for exploitative No-Limit Hold'em (**iOS**, **Android**, **iPadOS/tablets**, **web**) with **Claude** live coaching, Gemini scenarios, Drift local cache, and a luxury felt table UI.
 
 ## Quick start
 
@@ -9,7 +9,8 @@ Requires **Flutter 3.47+** / **Dart 3.13+** (tested on Flutter 3.47.2 · Dart 3.
 ```bash
 git checkout feat/flutter-poker-lab
 cp .env.example .env        # required: `.env` is a declared asset
-# Set GEMINI_API_KEY in .env — the build ships this key; players never enter one
+# Set ANTHROPIC_API_KEY in .env for live coach text (required for AI coaching)
+# Optionally set GEMINI_API_KEY for scenario generation / art
 
 flutter pub get
 flutter run                 # default device
@@ -20,10 +21,12 @@ flutter run -d <iphone-simulator-id>
 flutter run -d android
 ```
 
-With a compile-time key instead (CI):
+With compile-time keys instead (CI):
 
 ```bash
-flutter run --dart-define=GEMINI_API_KEY=your_key
+flutter run \
+  --dart-define=ANTHROPIC_API_KEY=your_anthropic_key \
+  --dart-define=GEMINI_API_KEY=your_gemini_key
 ```
 
 ## Platforms
@@ -36,12 +39,12 @@ flutter run --dart-define=GEMINI_API_KEY=your_key
 
 ## Secrets
 
-The key is **developer configuration**, baked into the build. There is no
+Keys are **developer configuration**, baked into the build. There is no
 Settings override, and no screen ever asks the player for a key or mentions one.
 
 - **Never commit `.env`** or real API keys (gitignored).
-- Commit only `.env.example` (empty `GEMINI_API_KEY=` placeholder).
-- Key order: `--dart-define=GEMINI_API_KEY` → `.env` → `.env.example`.
+- Commit only `.env.example` (empty `ANTHROPIC_API_KEY=` / `GEMINI_API_KEY=` placeholders).
+- Key order: `--dart-define=…` → `.env` → `.env.example`.
 - `.env` and `.env.example` are both declared under `flutter: assets:` in
   `pubspec.yaml`. `flutter_dotenv` reads env files through the **asset bundle**,
   so an undeclared `.env` is invisible to `flutter run` and release builds —
@@ -53,12 +56,13 @@ Settings override, and no screen ever asks the player for a key or mentions one.
 - Startup logs only the key *source* (`dart-define` / `env-asset` / `missing`),
   never the key.
 
-Without a key the app still runs with heuristic (offline) coach text.
+Without `ANTHROPIC_API_KEY` the app still runs with heuristic (offline) coach text.
 - Models (single source: `lib/core/constants/config.dart`):
-  - coach / scenario text — **`gemini-3.8-flash`** (`Config.geminiModel`)
+  - **live coach text** — **`claude-sonnet-5`** (`Config.claudeCoachModel`) via Anthropic Messages API
+  - scenario generation — **`gemini-3.8-flash`** (`Config.geminiModel`) — not used for coaching
   - art generation — **`gemini-3-pro-image`** (`Config.geminiImageModel`)
 
-Coaching is **text-only** on the shelf (no TTS / spoken coach lines).
+Coaching is **text-only** on the shelf (no TTS / spoken coach lines). Gemini is never used for coach advice.
 
 ## Defaults
 
@@ -96,7 +100,7 @@ The review is Gemini JSON (summary / leaks / adjustments, markdown scrubbed), ca
 
 Screen layout is a strict stack of bands — header, felt, hero rail, coach shelf, action dock — so the coach can never cover the hero's hole cards, down to a 320pt phone at 9 seats. When the hero cannot act (folded, hand over, table replaying), the action dock is removed entirely rather than greyed out.
 
-Graded coach lines always show a **CORRECT** / **INCORRECT** badge (plus Best / You / EV when expanded). Ambiguous spots stay on the offline line — Gemini is not asked to invent a verdict. Every shown line is post-validated against `bestAction` so advice cannot urge calling when the grade says fold (or the reverse). Coaching is text-only on the shelf — there is no spoken coach voice.
+Graded coach lines always show a **CORRECT** / **INCORRECT** badge (plus Best / You / EV when expanded). Ambiguous spots stay on the offline line — Claude is not asked to invent a verdict. Every shown line is post-validated against `bestAction` so advice cannot urge calling when the grade says fold (or the reverse). When the street advances, the prior grade is marked **Previous · STREET** so it never looks like live flop/turn advice. Coaching is text-only on the shelf — there is no spoken coach voice.
 
 Settings → **Chip display** chooses Dollars only, BB only, or Both (default) for hand review, EV, and stats. The live felt is always currency-only so the table stays readable.
 
@@ -111,7 +115,7 @@ lib/
 ├── models/
 ├── engine/        # DeckEvaluator, PokerEngine, LiveCoach, ScenarioManager,
 │                 # HeroProfiler
-├── services/      # GeminiService, AvatarStore, ProfileCoach
+├── services/      # AnthropicService (coach), GeminiService (scenarios), AvatarStore, ProfileCoach
 ├── providers/     # Riverpod 2.x
 └── ui/screens/ + ui/widgets/
 ```

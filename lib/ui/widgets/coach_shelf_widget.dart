@@ -7,6 +7,7 @@ import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/engine/leak_lines.dart';
 import 'package:live_poker_trainer/models/coach_feedback.dart';
+import 'package:live_poker_trainer/models/game_state.dart';
 
 /// Non-overlapping AI coach panel between the hero rail and the action dock.
 ///
@@ -70,6 +71,11 @@ class _CoachShelfWidgetState extends State<CoachShelfWidget> {
     return _feedback.message;
   }
 
+  String _previousStreetLabel(Street? street) {
+    final label = street?.label ?? 'STREET';
+    return 'Prev · $label';
+  }
+
   String? get _optimalLine {
     if (_feedback.optimalAction == null) {
       return null;
@@ -101,11 +107,13 @@ class _CoachShelfWidgetState extends State<CoachShelfWidget> {
   @override
   Widget build(BuildContext context) {
     final hasVerdict = _feedback.hasVerdict;
-    final borderColor = _feedback.verdict == CoachVerdict.correct
-        ? AppColors.success
-        : _feedback.verdict == CoachVerdict.incorrect
-            ? AppColors.danger
-            : AppColors.slateDark;
+    final borderColor = _feedback.isHistorical
+        ? AppColors.slateDark
+        : _feedback.verdict == CoachVerdict.correct
+            ? AppColors.success
+            : _feedback.verdict == CoachVerdict.incorrect
+                ? AppColors.danger
+                : AppColors.slateDark;
     final showExpanded = _expanded || !_canCollapse;
     final optimal = _optimalLine;
     final maxHeight = widget.maxHeight;
@@ -114,7 +122,11 @@ class _CoachShelfWidgetState extends State<CoachShelfWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _CoachHeader(replaying: widget.replaying),
+        _CoachHeader(
+          replaying: widget.replaying,
+          isHistorical: _feedback.isHistorical,
+          decisionStreet: _feedback.decisionStreet,
+        ),
         const SizedBox(height: 4),
         Text(
           _message,
@@ -200,7 +212,14 @@ class _CoachShelfWidgetState extends State<CoachShelfWidget> {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _VerdictBadge(verdict: _feedback.verdict),
+                  if (_feedback.isHistorical)
+                    _LeakChip(
+                      label: _previousStreetLabel(_feedback.decisionStreet),
+                      color: AppColors.slate,
+                      icon: Icons.history_rounded,
+                    )
+                  else
+                    _VerdictBadge(verdict: _feedback.verdict),
                   if (_feedback.isRepeat)
                     _LeakChip(
                       label: LeakLines.repeatBadge(_feedback.repeatCount),
@@ -253,16 +272,25 @@ class _HeightCappedScroll extends StatelessWidget {
 }
 
 class _CoachHeader extends StatelessWidget {
-  const _CoachHeader({required this.replaying});
+  const _CoachHeader({
+    required this.replaying,
+    this.isHistorical = false,
+    this.decisionStreet,
+  });
 
   final bool replaying;
+  final bool isHistorical;
+  final Street? decisionStreet;
 
   @override
   Widget build(BuildContext context) {
+    final title = isHistorical
+        ? 'Previous · ${decisionStreet?.label ?? 'STREET'}'
+        : 'Coach';
     return Row(
       children: [
         Text(
-          'Coach',
+          title,
           style: GoogleFonts.cinzel(
             fontSize: 11,
             fontWeight: FontWeight.w600,

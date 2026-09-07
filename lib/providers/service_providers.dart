@@ -1,4 +1,4 @@
-/// Shared service providers (DB, Gemini, audio).
+/// Shared service providers (DB, Anthropic coach, Gemini scenarios, audio).
 library;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +11,7 @@ import 'package:live_poker_trainer/core/database/scenario_dao.dart';
 import 'package:live_poker_trainer/core/database/user_stats_dao.dart';
 import 'package:live_poker_trainer/core/diagnostics/diagnostics_log.dart';
 import 'package:live_poker_trainer/engine/scenario_manager.dart';
+import 'package:live_poker_trainer/services/anthropic_service.dart';
 import 'package:live_poker_trainer/services/app_session_service.dart';
 import 'package:live_poker_trainer/services/gemini_service.dart';
 import 'package:live_poker_trainer/services/hand_recorder.dart';
@@ -41,13 +42,10 @@ final mistakeTrackerProvider = Provider<MistakeTracker>(
 );
 
 /// Diagnostics: sessions, AI request log, settings audit, caught errors.
-///
-/// Also installed as the process-wide [DiagnosticsLog] sink so services
-/// without a database handle can report errors.
 final diagnosticsDaoProvider = Provider<DiagnosticsDao>((ref) {
   final dao = DiagnosticsDao(ref.watch(appDatabaseProvider));
   DiagnosticsLog.install(dao);
-  DiagnosticsLog.redactor = GeminiService.redact;
+  DiagnosticsLog.redactor = AnthropicService.redact;
   ref.onDispose(() => DiagnosticsLog.install(null));
   return dao;
 });
@@ -73,9 +71,17 @@ final handRecorderProvider = Provider<HandRecorder>((ref) {
   );
 });
 
+/// Claude coach narration (primary live coaching path).
+final anthropicServiceProvider = Provider<AnthropicService>((ref) {
+  final service = AnthropicService(
+    logger: _LazyRequestLogger(() => ref.read(diagnosticsDaoProvider)),
+  );
+  ref.onDispose(service.dispose);
+  return service;
+});
+
+/// Gemini for scenario / image generation only — never coach text.
 final geminiServiceProvider = Provider<GeminiService>((ref) {
-  // The logger resolves the DAO on first use so building the Gemini graph
-  // (e.g. from a Settings read) never opens the database eagerly.
   final service = GeminiService(
     logger: _LazyRequestLogger(() => ref.read(diagnosticsDaoProvider)),
   );
