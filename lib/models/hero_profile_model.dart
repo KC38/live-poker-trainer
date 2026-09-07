@@ -283,6 +283,10 @@ class ProfileCoachSummary {
   /// when the cached copy is stale or was written offline.
   bool needsRefresh(HeroMetrics metrics, DateTime now) {
     if (styleId != metrics.style.style.name) return true;
+    // A summary written before there was any data is provisional — it can only
+    // say "no hands yet". Replace it the moment there are hands, or the card
+    // sits at "0 hands" while the stat tiles next to it show real numbers.
+    if (handsPlayedAt == 0 && metrics.handsPlayed > 0) return true;
     if (metrics.handsPlayed - handsPlayedAt >= refreshEveryHands) return true;
     if (now.toUtc().difference(generatedAt) > maxAge) return true;
     return !isFromAi;

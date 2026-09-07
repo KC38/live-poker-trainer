@@ -249,6 +249,21 @@ void main() {
       expect(cached().needsRefresh(metrics, now), isTrue);
     });
 
+    test('a summary written on an empty profile is replaced as soon as there '
+        'are hands', () {
+      // Seen on device: the first review is generated before the hand log has
+      // been read, so it says "zero hands logged" and then sticks around next
+      // to stat tiles that already show real numbers.
+      final provisional = cached(hands: 0, styleId: 'forming');
+
+      expect(provisional.needsRefresh(_loosePassive(hands: 8), now), isTrue);
+      expect(
+        provisional.needsRefresh(HeroMetrics.empty(), now),
+        isFalse,
+        reason: 'still nothing to say, so do not spend a call',
+      );
+    });
+
     test('a changed style label triggers a refresh immediately', () {
       expect(
         cached(styleId: 'tag').needsRefresh(_loosePassive(), now),
