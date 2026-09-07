@@ -1,4 +1,4 @@
-/// Main gameplay table screen with felt, coach shelf, and action dock.
+/// Main gameplay table — felt, coach shelf, thumb-zone action dock.
 library;
 
 import 'package:flutter/material.dart';
@@ -13,7 +13,7 @@ import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/ev_audit_modal.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 
-/// Smartphone / tablet optimized poker table.
+/// Smartphone-first poker table with teaching-forward chrome.
 class PokerTableScreen extends ConsumerStatefulWidget {
   /// Creates the poker table screen.
   const PokerTableScreen({super.key});
@@ -59,6 +59,8 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: RadialGradient(
+            center: Alignment(0, -0.2),
+            radius: 1.1,
             colors: [AppColors.bgMid, AppColors.bgDark],
           ),
         ),
@@ -67,22 +69,27 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.fromLTRB(4, 0, 8, 0),
                 child: Row(
                   children: [
                     IconButton(
                       onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.arrow_back, color: AppColors.slate),
+                      icon: const Icon(
+                        Icons.arrow_back_ios_new,
+                        size: 18,
+                        color: AppColors.slate,
+                      ),
                     ),
                     Expanded(
                       child: Text(
                         game?.mode == GameMode.practice
                             ? 'Practice'
-                            : 'Cash Sim',
+                            : 'Cash game',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.cinzel(
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.gold,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.goldBright,
+                          fontSize: 17,
                         ),
                       ),
                     ),
@@ -103,7 +110,10 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                         },
                         child: Text(
                           'Next',
-                          style: GoogleFonts.inter(color: AppColors.gold),
+                          style: GoogleFonts.manrope(
+                            color: AppColors.gold,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       )
                     else
@@ -112,15 +122,57 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                 ),
               ),
               if (session.loading)
-                const Expanded(
-                  child: Center(child: CircularProgressIndicator()),
+                Expanded(
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(
+                          width: 28,
+                          height: 28,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.5,
+                            color: AppColors.gold,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'Dealing your spot…',
+                          style: GoogleFonts.manrope(color: AppColors.slate),
+                        ),
+                      ],
+                    ),
+                  ),
                 )
               else if (game == null)
                 Expanded(
                   child: Center(
-                    child: Text(
-                      session.error ?? 'No hand loaded',
-                      style: GoogleFonts.inter(color: AppColors.slate),
+                    child: Padding(
+                      padding: const EdgeInsets.all(32),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.style_outlined,
+                            size: 40,
+                            color: AppColors.slate.withValues(alpha: 0.6),
+                          ),
+                          const SizedBox(height: 14),
+                          Text(
+                            session.error ?? 'No hand loaded',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.manrope(
+                              color: AppColors.slate,
+                              fontSize: 15,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          OutlinedButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('Back to home'),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 )
@@ -132,7 +184,7 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                       game.resultMessage!,
                       style: GoogleFonts.jetBrainsMono(
                         color: AppColors.warning,
-                        fontSize: 12,
+                        fontSize: 11,
                       ),
                     ),
                   ),

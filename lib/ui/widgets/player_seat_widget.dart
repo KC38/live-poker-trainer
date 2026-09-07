@@ -29,11 +29,11 @@ class PlayerSeatWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final opacity = player.folded ? 0.3 : 1.0;
+    final opacity = player.folded ? 0.32 : 1.0;
     final stackBb = bigBlind <= 0 ? 0 : player.stack / bigBlind;
     final stackLabel = micro
         ? '${stackBb.toStringAsFixed(0)} BB'
-        : '\$${player.stack.toStringAsFixed(0)} · ${stackBb.toStringAsFixed(0)} BB';
+        : '\$${player.stack.toStringAsFixed(0)}';
 
     return Opacity(
       opacity: opacity,
@@ -45,25 +45,17 @@ class PlayerSeatWidget extends StatelessWidget {
             alignment: Alignment.center,
             children: [
               AnimatedContainer(
-                duration: const Duration(milliseconds: 250),
-                width: micro ? 44 : 56,
-                height: micro ? 44 : 56,
+                duration: const Duration(milliseconds: 220),
+                curve: Curves.easeOutCubic,
+                width: micro ? 42 : 52,
+                height: micro ? 42 : 52,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.bgMid,
+                  color: AppColors.bgElevated,
                   border: Border.all(
-                    color: isActive ? AppColors.gold : player.archetype.color,
-                    width: isActive ? 3 : 2,
+                    color: isActive ? AppColors.goldBright : player.archetype.color,
+                    width: isActive ? 2.5 : 1.5,
                   ),
-                  boxShadow: isActive
-                      ? [
-                          BoxShadow(
-                            color: AppColors.gold.withValues(alpha: 0.45),
-                            blurRadius: 12,
-                            spreadRadius: 1,
-                          ),
-                        ]
-                      : null,
                 ),
                 child: Center(
                   child: Text(
@@ -71,18 +63,18 @@ class PlayerSeatWidget extends StatelessWidget {
                     style: GoogleFonts.cinzel(
                       fontWeight: FontWeight.w700,
                       color: AppColors.cream,
-                      fontSize: micro ? 12 : 14,
+                      fontSize: micro ? 11 : 13,
                     ),
                   ),
                 ),
               ),
               if (isDealer)
                 Positioned(
-                  right: -4,
-                  top: -4,
+                  right: -2,
+                  top: -2,
                   child: Container(
-                    width: 18,
-                    height: 18,
+                    width: 16,
+                    height: 16,
                     alignment: Alignment.center,
                     decoration: const BoxDecoration(
                       color: AppColors.cream,
@@ -91,7 +83,7 @@ class PlayerSeatWidget extends StatelessWidget {
                     child: Text(
                       'D',
                       style: GoogleFonts.jetBrainsMono(
-                        fontSize: 10,
+                        fontSize: 9,
                         fontWeight: FontWeight.w800,
                         color: AppColors.bgDark,
                       ),
@@ -104,34 +96,25 @@ class PlayerSeatWidget extends StatelessWidget {
           if (!micro)
             Text(
               player.name,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.manrope(
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
                 color: AppColors.slate,
               ),
             ),
-          Container(
-            margin: const EdgeInsets.only(top: 2),
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-            decoration: BoxDecoration(
-              color: AppColors.bgDark.withValues(alpha: 0.75),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.slateDark),
-            ),
-            child: Text(
-              stackLabel,
-              style: GoogleFonts.jetBrainsMono(
-                fontSize: micro ? 9 : 10,
-                fontWeight: FontWeight.w700,
-                color: AppColors.gold,
-              ),
+          Text(
+            stackLabel,
+            style: GoogleFonts.jetBrainsMono(
+              fontSize: micro ? 9 : 10,
+              fontWeight: FontWeight.w700,
+              color: AppColors.goldMuted,
             ),
           ),
           if (player.currentBet > 0)
             Padding(
               padding: const EdgeInsets.only(top: 2),
               child: Text(
-                'Bet \$${player.currentBet.toStringAsFixed(0)}',
+                '\$${player.currentBet.toStringAsFixed(0)}',
                 style: GoogleFonts.jetBrainsMono(
                   fontSize: 9,
                   color: AppColors.cream,
@@ -155,7 +138,7 @@ class PlayerSeatWidget extends StatelessWidget {
           if (player.lastActionLabel != null)
             Text(
               player.lastActionLabel!,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.manrope(
                 fontSize: 9,
                 fontWeight: FontWeight.w700,
                 color: AppColors.warning,
@@ -175,8 +158,8 @@ class _MiniCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final w = large ? 34.0 : 22.0;
-    final h = large ? 48.0 : 32.0;
+    final w = large ? 32.0 : 20.0;
+    final h = large ? 44.0 : 30.0;
     return Container(
       width: w,
       height: h,
@@ -184,12 +167,12 @@ class _MiniCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.cream,
         borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: AppColors.slateDark),
+        border: Border.all(color: AppColors.slateDark.withValues(alpha: 0.35)),
       ),
       child: Text(
         card.display,
         style: GoogleFonts.jetBrainsMono(
-          fontSize: large ? 12 : 9,
+          fontSize: large ? 11 : 8,
           fontWeight: FontWeight.w800,
           color: card.suit == Suit.spades ? AppColors.spades : card.suit.color,
         ),

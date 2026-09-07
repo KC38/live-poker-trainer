@@ -1,4 +1,4 @@
-/// Dedicated coach shelf with unmistakable CORRECT / INCORRECT verdict.
+/// Dedicated coach shelf — clear CORRECT / INCORRECT, never over cards.
 library;
 
 import 'package:flutter/material.dart';
@@ -22,63 +22,69 @@ class CoachShelfWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final hasVerdict = feedback.hasVerdict;
+    final borderColor = feedback.verdict == CoachVerdict.correct
+        ? AppColors.success
+        : feedback.verdict == CoachVerdict.incorrect
+            ? AppColors.danger
+            : AppColors.slateDark;
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 280),
+      curve: Curves.easeOutCubic,
       width: double.infinity,
-      margin: const EdgeInsets.fromLTRB(12, 0, 12, 8),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.fromLTRB(14, 0, 14, 8),
+      padding: const EdgeInsets.fromLTRB(14, 12, 8, 12),
       decoration: BoxDecoration(
-        color: AppColors.bgMid.withValues(alpha: 0.92),
-        borderRadius: BorderRadius.circular(14),
+        color: AppColors.bgElevated.withValues(alpha: 0.94),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: feedback.verdict == CoachVerdict.correct
-              ? AppColors.success
-              : feedback.verdict == CoachVerdict.incorrect
-                  ? AppColors.danger
-                  : AppColors.slateDark,
-          width: feedback.hasVerdict ? 2 : 1,
+          color: borderColor,
+          width: hasVerdict ? 1.5 : 0.8,
         ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (feedback.hasVerdict) ...[
+          if (hasVerdict) ...[
             _VerdictBadge(verdict: feedback.verdict),
-            const SizedBox(width: 10),
+            const SizedBox(width: 12),
           ],
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'COACH',
+                  'Coach',
                   style: GoogleFonts.cinzel(
                     fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.gold,
-                    letterSpacing: 1.2,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.goldMuted,
+                    letterSpacing: 1.1,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   feedback.message.isEmpty
-                      ? 'Waiting for your decision…'
+                      ? 'Your move — pick Fold, Check/Call, or Bet/Raise.'
                       : feedback.message,
-                  style: GoogleFonts.inter(
-                    fontSize: 13,
-                    height: 1.35,
+                  style: GoogleFonts.manrope(
+                    fontSize: 14,
+                    height: 1.4,
                     color: AppColors.cream,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                if (feedback.hasVerdict && feedback.optimalAction != null)
+                if (hasVerdict && feedback.optimalAction != null)
                   Padding(
-                    padding: const EdgeInsets.only(top: 6),
+                    padding: const EdgeInsets.only(top: 8),
                     child: Text(
-                      'Optimal: ${feedback.optimalAction!.label}'
-                      '${feedback.heroAction != null ? ' · You: ${feedback.heroAction}' : ''}'
-                      ' · EV ${feedback.evDeltaBb >= 0 ? '+' : ''}${feedback.evDeltaBb.toStringAsFixed(2)} BB',
+                      'Best: ${feedback.optimalAction!.label}'
+                      '${feedback.heroAction != null ? '  ·  You: ${feedback.heroAction}' : ''}'
+                      '  ·  EV ${feedback.evDeltaBb >= 0 ? '+' : ''}${feedback.evDeltaBb.toStringAsFixed(2)} BB',
                       style: GoogleFonts.jetBrainsMono(
                         fontSize: 10,
+                        height: 1.35,
                         color: AppColors.slate,
                       ),
                     ),
@@ -87,10 +93,11 @@ class CoachShelfWidget extends StatelessWidget {
             ),
           ),
           IconButton(
-            tooltip: ttsEnabled ? 'Mute coach voice' : 'Unmute coach voice',
+            tooltip: ttsEnabled ? 'Mute coach' : 'Unmute coach',
             onPressed: onMuteToggle,
+            visualDensity: VisualDensity.compact,
             icon: Icon(
-              ttsEnabled ? Icons.volume_up : Icons.volume_off,
+              ttsEnabled ? Icons.volume_up_outlined : Icons.volume_off_outlined,
               color: AppColors.slate,
               size: 20,
             ),
@@ -110,7 +117,7 @@ class _VerdictBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final correct = verdict == CoachVerdict.correct;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
         color: correct ? AppColors.success : AppColors.danger,
         borderRadius: BorderRadius.circular(10),
@@ -121,7 +128,7 @@ class _VerdictBadge extends StatelessWidget {
           fontWeight: FontWeight.w800,
           fontSize: 11,
           color: AppColors.bgDark,
-          letterSpacing: 0.5,
+          letterSpacing: 0.4,
         ),
       ),
     );

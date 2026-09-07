@@ -41,76 +41,105 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          SwitchListTile(
-            title: const Text('Sound effects'),
-            subtitle: const Text('Cards, chips, knock, fold'),
-            value: settings.sfxEnabled,
-            onChanged: notifier.setSfx,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: RadialGradient(
+            center: Alignment(0, -0.6),
+            radius: 1.2,
+            colors: [AppColors.bgMid, AppColors.bgDark],
           ),
-          SwitchListTile(
-            title: const Text('Coach TTS'),
-            subtitle: const Text('Gemini AUDIO voice (Puck)'),
-            value: settings.ttsEnabled,
-            onChanged: notifier.setTts,
-          ),
-          const Divider(height: 32),
-          Text(
-            'Gemini API',
-            style: GoogleFonts.cinzel(
-              color: AppColors.gold,
-              fontWeight: FontWeight.w700,
+        ),
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+          children: [
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(
+                'Sound effects',
+                style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
+              ),
+              subtitle: Text(
+                'Cards, chips, knock, fold',
+                style: GoogleFonts.manrope(color: AppColors.slate, fontSize: 13),
+              ),
+              value: settings.sfxEnabled,
+              onChanged: notifier.setSfx,
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Model: ${Config.geminiModel}\n'
-            'Key resolution: Settings override → --dart-define → .env\n'
-            'Never commit real keys. Device override is local only.',
-            style: GoogleFonts.inter(color: AppColors.slate, fontSize: 13),
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _keyController,
-            obscureText: true,
-            decoration: InputDecoration(
-              labelText: 'Device API key override',
-              hintText: 'Optional local override',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(
+                'Coach voice',
+                style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
+              ),
+              subtitle: Text(
+                'Spoken feedback after each decision',
+                style: GoogleFonts.manrope(color: AppColors.slate, fontSize: 13),
+              ),
+              value: settings.ttsEnabled,
+              onChanged: notifier.setTts,
+            ),
+            const SizedBox(height: 20),
+            Divider(color: AppColors.slateDark.withValues(alpha: 0.8)),
+            const SizedBox(height: 16),
+            Text(
+              'Gemini API',
+              style: GoogleFonts.cinzel(
+                color: AppColors.goldMuted,
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
               ),
             ),
-          ),
-          const SizedBox(height: 12),
-          ElevatedButton(
-            onPressed: () async {
-              await notifier.setGeminiKeyOverride(_keyController.text.trim());
-              if (!context.mounted) return;
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    Config.hasGeminiKey
-                        ? 'API key saved on device'
-                        : 'Key cleared — using .env / dart-define',
-                  ),
-                ),
-              );
-            },
-            child: const Text('Save key override'),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            Config.hasGeminiKey
-                ? 'API key detected'
-                : 'No API key — Practice uses offline fallback spots',
-            style: GoogleFonts.jetBrainsMono(
-              fontSize: 11,
-              color: Config.hasGeminiKey ? AppColors.success : AppColors.warning,
+            const SizedBox(height: 8),
+            Text(
+              'Model: ${Config.geminiModel}\n'
+              'Key: Settings override → --dart-define → .env\n'
+              'Never commit real keys. Device override stays local.',
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 13,
+                height: 1.45,
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 14),
+            TextField(
+              controller: _keyController,
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: 'Device API key override',
+                hintText: 'Optional local override',
+              ),
+            ),
+            const SizedBox(height: 14),
+            ElevatedButton(
+              onPressed: () async {
+                await notifier.setGeminiKeyOverride(_keyController.text.trim());
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      Config.hasGeminiKey
+                          ? 'API key saved on device'
+                          : 'Key cleared — using .env / dart-define',
+                    ),
+                  ),
+                );
+              },
+              child: const Text('Save key override'),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              Config.hasGeminiKey
+                  ? 'API key detected'
+                  : 'No API key — Practice uses offline fallback spots',
+              style: GoogleFonts.jetBrainsMono(
+                fontSize: 11,
+                color: Config.hasGeminiKey
+                    ? AppColors.success
+                    : AppColors.warning,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

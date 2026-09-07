@@ -1,4 +1,4 @@
-/// Center board cards, pot badge, and street indicator.
+/// Center board cards, pot label, and street indicator.
 library;
 
 import 'package:flutter/material.dart';
@@ -28,32 +28,22 @@ class CommunityCardsView extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: 10 * scale,
-            vertical: 4 * scale,
-          ),
-          decoration: BoxDecoration(
-            color: AppColors.bgDark.withValues(alpha: 0.7),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppColors.goldMuted),
-          ),
-          child: Text(
-            '${street.label} · Pot \$${pot.toStringAsFixed(0)}',
-            style: GoogleFonts.jetBrainsMono(
-              fontWeight: FontWeight.w700,
-              color: AppColors.gold,
-              fontSize: 11 * scale,
-            ),
+        Text(
+          '${street.label}  ·  \$${pot.toStringAsFixed(0)}',
+          style: GoogleFonts.jetBrainsMono(
+            fontWeight: FontWeight.w700,
+            color: AppColors.goldBright.withValues(alpha: 0.9),
+            fontSize: 12 * scale,
+            letterSpacing: 0.3,
           ),
         ),
-        SizedBox(height: 8 * scale),
+        SizedBox(height: 10 * scale),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             for (var i = 0; i < 5; i++)
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 2 * scale),
+                padding: EdgeInsets.symmetric(horizontal: 2.5 * scale),
                 child: i < community.length
                     ? _BoardCard(card: community[i], scale: scale)
                     : _EmptySlot(scale: scale),
@@ -74,17 +64,17 @@ class _BoardCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 40 * scale,
-      height: 56 * scale,
+      width: 38 * scale,
+      height: 54 * scale,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: AppColors.cream,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.35),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
+            color: Colors.black.withValues(alpha: 0.28),
+            blurRadius: 3,
+            offset: const Offset(0, 1.5),
           ),
         ],
       ),
@@ -92,7 +82,7 @@ class _BoardCard extends StatelessWidget {
         card.display,
         style: GoogleFonts.jetBrainsMono(
           fontWeight: FontWeight.w800,
-          fontSize: 13 * scale,
+          fontSize: 12 * scale,
           color: card.suit == Suit.spades ? AppColors.spades : card.suit.color,
         ),
       ),
@@ -108,12 +98,14 @@ class _EmptySlot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 40 * scale,
-      height: 56 * scale,
+      width: 38 * scale,
+      height: 54 * scale,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.5)),
-        color: Colors.black.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(
+          color: AppColors.feltBorder.withValues(alpha: 0.35),
+        ),
+        color: Colors.black.withValues(alpha: 0.12),
       ),
     );
   }

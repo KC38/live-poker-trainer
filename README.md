@@ -14,7 +14,9 @@ cp .env.example .env
 flutter pub get
 flutter run                 # default device
 flutter run -d chrome       # web
-flutter run -d ios          # simulator
+# Prefer an iPhone simulator whose runtime matches your Xcode SDK
+# (Xcode 26.6 → install iOS 26.5 Simulator via: xcodebuild -downloadPlatform iOS)
+flutter run -d <iphone-simulator-id>
 flutter run -d android
 ```
 
@@ -50,10 +52,12 @@ flutter run --dart-define=GEMINI_API_KEY=your_key
 | Lineup | Random pool, or **Custom** with per-seat archetype pickers |
 | SFX / Coach TTS | On |
 
-## Modes
+## Modes & UX flow
 
-- **Practice:** Gemini (or cached / offline) tough spots; after you act, coach shows **CORRECT** or **INCORRECT**, then a punchy line + EV audit.
-- **Cash Sim:** archetype villains (Maniac / Nit / Calling Station / TAG / LAG) with free-check rule (never fold when check is free). Custom lineup assigns each villain seat on Home.
+Home is teach-first: one primary **Start practice** CTA, secondary **Cash game**, and advanced options in a collapsed **Table setup** section (seats, blinds, stack, rebuy, lineup).
+
+- **Practice:** Gemini (or cached / offline) tough spots; after you act, the coach shelf shows **CORRECT** or **INCORRECT** (never over hole/board cards), then a punchy line + EV audit.
+- **Cash game:** archetype villains (Maniac / Nit / Calling Station / TAG / LAG) with free-check rule (never fold when check is free). Custom lineup assigns each villain seat under Table setup.
 
 ## Architecture
 

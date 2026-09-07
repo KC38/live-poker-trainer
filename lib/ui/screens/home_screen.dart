@@ -1,4 +1,4 @@
-/// Home setup: seats, blinds, stack/rebuy, Practice / Cash Sim launch.
+/// Home: one primary CTA, progressive disclosure for table setup.
 library;
 
 import 'package:flutter/material.dart';
@@ -13,11 +13,37 @@ import 'package:live_poker_trainer/providers/settings_provider.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
 import 'package:live_poker_trainer/ui/screens/settings_screen.dart';
 import 'package:live_poker_trainer/ui/screens/stats_screen.dart';
+import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 
-/// Landing / table configuration screen.
-class HomeScreen extends ConsumerWidget {
+/// Landing screen — teach-first, minimal choices above the fold.
+class HomeScreen extends ConsumerStatefulWidget {
   /// Creates the home screen.
   const HomeScreen({super.key});
+
+  @override
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  bool _setupExpanded = false;
+
+  Future<void> _launchPractice() async {
+    await ref.read(gameControllerProvider.notifier).startPractice();
+    if (!mounted) return;
+    await Navigator.push(
+      context,
+      softFadeRoute(const PokerTableScreen()),
+    );
+  }
+
+  Future<void> _launchCash() async {
+    await ref.read(gameControllerProvider.notifier).startCashSim();
+    if (!mounted) return;
+    await Navigator.push(
+      context,
+      softFadeRoute(const PokerTableScreen()),
+    );
+  }
 
   List<Widget> _customSeatPickers(
     GameSettingsModel settings,
@@ -27,11 +53,11 @@ class HomeScreen extends ConsumerWidget {
     return [
       for (var i = 0; i < normalized.customArchetypes.length; i++)
         Padding(
-          padding: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.only(bottom: 10),
           child: Row(
             children: [
               SizedBox(
-                width: 72,
+                width: 64,
                 child: Text(
                   'Seat ${i + 2}',
                   style: GoogleFonts.jetBrainsMono(
@@ -44,24 +70,15 @@ class HomeScreen extends ConsumerWidget {
               Expanded(
                 child: DropdownButtonFormField<PlayerArchetype>(
                   initialValue: normalized.customArchetypes[i],
-                  decoration: InputDecoration(
-                    isDense: true,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 10,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  dropdownColor: AppColors.bgMid,
+                  decoration: const InputDecoration(isDense: true),
+                  dropdownColor: AppColors.bgElevated,
                   items: [
                     for (final arch in ArchetypeRoster.villainPool)
                       DropdownMenuItem(
                         value: arch,
                         child: Text(
                           '${arch.badge}  ${arch.label}',
-                          style: GoogleFonts.inter(fontSize: 13),
+                          style: GoogleFonts.manrope(fontSize: 14),
                         ),
                       ),
                   ],
@@ -78,8 +95,17 @@ class HomeScreen extends ConsumerWidget {
     ];
   }
 
+  String _setupSummary(GameSettingsModel s) {
+    final blinds =
+        '\$${s.smallBlind % 1 == 0 ? s.smallBlind.toInt() : s.smallBlind}/'
+        '\$${s.bigBlind % 1 == 0 ? s.bigBlind.toInt() : s.bigBlind}';
+    final lineup =
+        s.lineupMode == LineupMode.custom ? 'Custom lineup' : 'Random lineup';
+    return '${s.seatCount} seats · $blinds · ${s.stackDepthBb} BB · $lineup';
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final settings = ref.watch(settingsProvider);
     final notifier = ref.read(settingsProvider.notifier);
     final unplayed = ref.watch(unplayedCountProvider);
@@ -88,200 +114,220 @@ class HomeScreen extends ConsumerWidget {
       body: Container(
         decoration: const BoxDecoration(
           gradient: RadialGradient(
-            center: Alignment(0, -0.4),
-            radius: 1.2,
-            colors: [AppColors.bgMid, AppColors.bgDark],
+            center: Alignment(0, -0.55),
+            radius: 1.15,
+            colors: [
+              Color(0xFF1A2E28),
+              AppColors.bgMid,
+              AppColors.bgDark,
+            ],
+            stops: [0.0, 0.45, 1.0],
           ),
         ),
         child: SafeArea(
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+            padding: const EdgeInsets.fromLTRB(22, 12, 22, 36),
             children: [
               Row(
                 children: [
-                  Expanded(
-                    child: Text(
-                      'Exploitative\nPoker Lab',
-                      style: GoogleFonts.cinzel(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.gold,
-                        height: 1.15,
-                      ),
-                    ),
-                  ),
+                  const Spacer(),
                   IconButton(
+                    tooltip: 'Progress',
                     onPressed: () => Navigator.push(
                       context,
-                      MaterialPageRoute<void>(
-                        builder: (_) => const StatsScreen(),
-                      ),
+                      softFadeRoute(const StatsScreen()),
                     ),
-                    icon: const Icon(Icons.insights, color: AppColors.slate),
+                    icon: const Icon(Icons.insights_outlined, color: AppColors.slate),
                   ),
                   IconButton(
+                    tooltip: 'Settings',
                     onPressed: () => Navigator.push(
                       context,
-                      MaterialPageRoute<void>(
-                        builder: (_) => const SettingsScreen(),
-                      ),
+                      softFadeRoute(const SettingsScreen()),
                     ),
-                    icon: const Icon(Icons.settings, color: AppColors.slate),
+                    icon: const Icon(Icons.settings_outlined, color: AppColors.slate),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
               Text(
-                'Train exploitative lines vs live archetypes.',
-                style: GoogleFonts.inter(color: AppColors.slate),
+                'Exploitative\nPoker Lab',
+                style: Theme.of(context).textTheme.displayLarge,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
+              Text(
+                'Learn when to deviate — calm spots, clear coaching.',
+                style: GoogleFonts.manrope(
+                  color: AppColors.slate,
+                  fontSize: 16,
+                  height: 1.4,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 10),
               unplayed.when(
                 data: (c) => Text(
-                  'Cached unplayed spots: $c',
+                  c > 0
+                      ? '$c spots ready offline'
+                      : 'Spots load as you play',
                   style: GoogleFonts.jetBrainsMono(
                     fontSize: 11,
-                    color: AppColors.slate,
+                    color: AppColors.slate.withValues(alpha: 0.85),
                   ),
                 ),
                 loading: () => const SizedBox.shrink(),
                 error: (_, _) => const SizedBox.shrink(),
               ),
-              const SizedBox(height: 24),
-              _SectionTitle('Table'),
-              _StepperTile(
-                label: 'Seats',
-                value: '${settings.seatCount}',
-                onDec: () => notifier.setSeatCount(settings.seatCount - 1),
-                onInc: () => notifier.setSeatCount(settings.seatCount + 1),
+              const SizedBox(height: 36),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _launchPractice,
+                  child: const Text('Start practice'),
+                ),
               ),
               const SizedBox(height: 12),
-              _SectionTitle('Blinds'),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  for (final stake in PokerConstants.stakePresets)
-                    ChoiceChip(
-                      label: Text(
-                        '\$${stake.$1 % 1 == 0 ? stake.$1.toInt() : stake.$1}/\$${stake.$2 % 1 == 0 ? stake.$2.toInt() : stake.$2}',
-                      ),
-                      selected: settings.smallBlind == stake.$1 &&
-                          settings.bigBlind == stake.$2,
-                      onSelected: (_) => notifier.setBlinds(stake.$1, stake.$2),
-                      selectedColor: AppColors.gold.withValues(alpha: 0.25),
-                      labelStyle: GoogleFonts.jetBrainsMono(
-                        color: AppColors.cream,
-                        fontSize: 12,
-                      ),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              _SectionTitle('Stack depth'),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  for (final depth in PokerConstants.stackDepthPresets)
-                    ChoiceChip(
-                      label: Text('$depth BB'),
-                      selected: settings.stackDepthBb == depth,
-                      onSelected: (_) => notifier.setStackDepthBb(depth),
-                      selectedColor: AppColors.gold.withValues(alpha: 0.25),
-                      labelStyle: GoogleFonts.jetBrainsMono(
-                        color: AppColors.cream,
-                        fontSize: 12,
-                      ),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              SwitchListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(
-                  'Auto-rebuy',
-                  style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  onPressed: _launchCash,
+                  child: const Text('Cash game'),
                 ),
-                subtitle: Text(
-                  'Top up when below ${settings.rebuyThresholdBb} BB',
-                  style: GoogleFonts.inter(color: AppColors.slate, fontSize: 13),
-                ),
-                value: settings.autoRebuy,
-                onChanged: notifier.setAutoRebuy,
               ),
-              if (settings.autoRebuy)
-                Row(
+              const SizedBox(height: 28),
+              _TableSetupSection(
+                expanded: _setupExpanded,
+                summary: _setupSummary(settings),
+                onToggle: () => setState(() => _setupExpanded = !_setupExpanded),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      'Threshold BB',
-                      style: GoogleFonts.inter(color: AppColors.slate),
+                    _Label('Seats'),
+                    _StepperTile(
+                      value: '${settings.seatCount}',
+                      onDec: () => notifier.setSeatCount(settings.seatCount - 1),
+                      onInc: () => notifier.setSeatCount(settings.seatCount + 1),
                     ),
-                    Expanded(
-                      child: Slider(
-                        value: settings.rebuyThresholdBb.toDouble(),
-                        min: 20,
-                        max: 100,
-                        divisions: 16,
-                        label: '${settings.rebuyThresholdBb}',
-                        onChanged: (v) =>
-                            notifier.setRebuyThresholdBb(v.round()),
+                    const SizedBox(height: 18),
+                    _Label('Blinds'),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        for (final stake in PokerConstants.stakePresets)
+                          ChoiceChip(
+                            label: Text(
+                              '\$${stake.$1 % 1 == 0 ? stake.$1.toInt() : stake.$1}/'
+                              '\$${stake.$2 % 1 == 0 ? stake.$2.toInt() : stake.$2}',
+                            ),
+                            selected: settings.smallBlind == stake.$1 &&
+                                settings.bigBlind == stake.$2,
+                            onSelected: (_) =>
+                                notifier.setBlinds(stake.$1, stake.$2),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 18),
+                    _Label('Stack depth'),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        for (final depth in PokerConstants.stackDepthPresets)
+                          ChoiceChip(
+                            label: Text('$depth BB'),
+                            selected: settings.stackDepthBb == depth,
+                            onSelected: (_) => notifier.setStackDepthBb(depth),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    SwitchListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(
+                        'Auto-rebuy',
+                        style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
+                      ),
+                      subtitle: Text(
+                        'Top up below ${settings.rebuyThresholdBb} BB',
+                        style: GoogleFonts.manrope(
+                          color: AppColors.slate,
+                          fontSize: 13,
+                        ),
+                      ),
+                      value: settings.autoRebuy,
+                      onChanged: notifier.setAutoRebuy,
+                    ),
+                    if (settings.autoRebuy)
+                      Row(
+                        children: [
+                          Text(
+                            'Threshold',
+                            style: GoogleFonts.manrope(color: AppColors.slate),
+                          ),
+                          Expanded(
+                            child: Slider(
+                              value: settings.rebuyThresholdBb.toDouble(),
+                              min: 20,
+                              max: 100,
+                              divisions: 16,
+                              label: '${settings.rebuyThresholdBb}',
+                              onChanged: (v) =>
+                                  notifier.setRebuyThresholdBb(v.round()),
+                            ),
+                          ),
+                          Text(
+                            '${settings.rebuyThresholdBb}',
+                            style: GoogleFonts.jetBrainsMono(
+                              color: AppColors.gold,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    const SizedBox(height: 12),
+                    _Label('Lineup'),
+                    SegmentedButton<LineupMode>(
+                      segments: const [
+                        ButtonSegment(
+                          value: LineupMode.randomPool,
+                          label: Text('Random'),
+                        ),
+                        ButtonSegment(
+                          value: LineupMode.custom,
+                          label: Text('Custom'),
+                        ),
+                      ],
+                      selected: {settings.lineupMode},
+                      onSelectionChanged: (s) =>
+                          notifier.setLineupMode(s.first),
+                      style: ButtonStyle(
+                        foregroundColor: WidgetStateProperty.resolveWith(
+                          (states) => states.contains(WidgetState.selected)
+                              ? AppColors.bgDark
+                              : AppColors.slate,
+                        ),
+                        backgroundColor: WidgetStateProperty.resolveWith(
+                          (states) => states.contains(WidgetState.selected)
+                              ? AppColors.gold
+                              : AppColors.bgElevated,
+                        ),
                       ),
                     ),
+                    if (settings.lineupMode == LineupMode.custom) ...[
+                      const SizedBox(height: 12),
+                      Text(
+                        'Assign each villain seat. Hero stays at the bottom.',
+                        style: GoogleFonts.manrope(
+                          color: AppColors.slate,
+                          fontSize: 13,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      ..._customSeatPickers(settings, notifier),
+                    ],
                   ],
                 ),
-              const SizedBox(height: 12),
-              _SectionTitle('Lineup'),
-              SegmentedButton<LineupMode>(
-                segments: const [
-                  ButtonSegment(
-                    value: LineupMode.randomPool,
-                    label: Text('Random Pool'),
-                  ),
-                  ButtonSegment(
-                    value: LineupMode.custom,
-                    label: Text('Custom'),
-                  ),
-                ],
-                selected: {settings.lineupMode},
-                onSelectionChanged: (s) => notifier.setLineupMode(s.first),
-              ),
-              if (settings.lineupMode == LineupMode.custom) ...[
-                const SizedBox(height: 12),
-                Text(
-                  'Assign an archetype to each villain seat (Hero is always seat 1 / bottom).',
-                  style: GoogleFonts.inter(color: AppColors.slate, fontSize: 13),
-                ),
-                const SizedBox(height: 8),
-                ..._customSeatPickers(settings, notifier),
-              ],
-              const SizedBox(height: 28),
-              ElevatedButton(
-                onPressed: () async {
-                  await ref.read(gameControllerProvider.notifier).startPractice();
-                  if (!context.mounted) return;
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute<void>(
-                      builder: (_) => const PokerTableScreen(),
-                    ),
-                  );
-                },
-                child: const Text('Practice Mode'),
-              ),
-              const SizedBox(height: 12),
-              OutlinedButton(
-                onPressed: () async {
-                  await ref.read(gameControllerProvider.notifier).startCashSim();
-                  if (!context.mounted) return;
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute<void>(
-                      builder: (_) => const PokerTableScreen(),
-                    ),
-                  );
-                },
-                child: const Text('Cash Game Sim'),
               ),
             ],
           ),
@@ -291,8 +337,94 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
-class _SectionTitle extends StatelessWidget {
-  const _SectionTitle(this.text);
+class _TableSetupSection extends StatelessWidget {
+  const _TableSetupSection({
+    required this.expanded,
+    required this.summary,
+    required this.onToggle,
+    required this.child,
+  });
+
+  final bool expanded;
+  final String summary;
+  final VoidCallback onToggle;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 280),
+      curve: Curves.easeOutCubic,
+      decoration: BoxDecoration(
+        color: AppColors.bgElevated.withValues(alpha: 0.55),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.slateDark.withValues(alpha: 0.8)),
+      ),
+      child: Column(
+        children: [
+          InkWell(
+            onTap: onToggle,
+            borderRadius: BorderRadius.circular(16),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 14, 12, 14),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Table setup',
+                          style: GoogleFonts.cinzel(
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.goldMuted,
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          summary,
+                          style: GoogleFonts.manrope(
+                            color: AppColors.slate,
+                            fontSize: 13,
+                            height: 1.3,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  AnimatedRotation(
+                    turns: expanded ? 0.5 : 0,
+                    duration: const Duration(milliseconds: 240),
+                    child: const Icon(
+                      Icons.expand_more,
+                      color: AppColors.slate,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          AnimatedCrossFade(
+            firstChild: const SizedBox(width: double.infinity),
+            secondChild: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 18),
+              child: child,
+            ),
+            crossFadeState: expanded
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
+            duration: const Duration(milliseconds: 280),
+            sizeCurve: Curves.easeOutCubic,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Label extends StatelessWidget {
+  const _Label(this.text);
   final String text;
 
   @override
@@ -301,9 +433,11 @@ class _SectionTitle extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: Text(
         text,
-        style: GoogleFonts.cinzel(
+        style: GoogleFonts.manrope(
           fontWeight: FontWeight.w700,
-          color: AppColors.goldMuted,
+          color: AppColors.cream.withValues(alpha: 0.85),
+          fontSize: 13,
+          letterSpacing: 0.2,
         ),
       ),
     );
@@ -312,13 +446,11 @@ class _SectionTitle extends StatelessWidget {
 
 class _StepperTile extends StatelessWidget {
   const _StepperTile({
-    required this.label,
     required this.value,
     required this.onDec,
     required this.onInc,
   });
 
-  final String label;
   final String value;
   final VoidCallback onDec;
   final VoidCallback onInc;
@@ -327,17 +459,31 @@ class _StepperTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(label, style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
-        const Spacer(),
-        IconButton(onPressed: onDec, icon: const Icon(Icons.remove_circle_outline)),
-        Text(
-          value,
-          style: GoogleFonts.jetBrainsMono(
-            fontWeight: FontWeight.w800,
-            color: AppColors.gold,
+        IconButton(
+          onPressed: onDec,
+          style: IconButton.styleFrom(
+            backgroundColor: AppColors.bgDark.withValues(alpha: 0.4),
+          ),
+          icon: const Icon(Icons.remove, color: AppColors.slate),
+        ),
+        Expanded(
+          child: Text(
+            value,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.jetBrainsMono(
+              fontWeight: FontWeight.w800,
+              color: AppColors.goldBright,
+              fontSize: 22,
+            ),
           ),
         ),
-        IconButton(onPressed: onInc, icon: const Icon(Icons.add_circle_outline)),
+        IconButton(
+          onPressed: onInc,
+          style: IconButton.styleFrom(
+            backgroundColor: AppColors.bgDark.withValues(alpha: 0.4),
+          ),
+          icon: const Icon(Icons.add, color: AppColors.slate),
+        ),
       ],
     );
   }

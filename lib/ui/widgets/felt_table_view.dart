@@ -31,12 +31,10 @@ class FeltTableView extends StatelessWidget {
         final rx = w * 0.38;
         final ry = h * 0.34;
 
-        // Hero fixed at bottom center; others distributed around ellipse.
         final seats = <Widget>[];
         final n = game.players.length;
         for (var i = 0; i < n; i++) {
           final player = game.players[i];
-          // Angle: hero at π/2 (bottom), others spaced clockwise.
           final angle = (math.pi / 2) + (2 * math.pi * i / n);
           final x = cx + rx * math.cos(angle);
           final y = cy + ry * math.sin(angle);
@@ -89,14 +87,18 @@ class _FeltPainter extends CustomPainter {
 
     final rim = Paint()
       ..shader = const LinearGradient(
-        colors: [AppColors.feltRim, AppColors.feltBorder],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [AppColors.feltRim, AppColors.feltBorder, AppColors.feltRim],
       ).createShader(rect);
-    canvas.drawOval(rect.inflate(14), rim);
+    canvas.drawOval(rect.inflate(12), rim);
 
     final felt = Paint()
       ..shader = RadialGradient(
+        center: const Alignment(0, -0.15),
+        radius: 0.95,
         colors: [
-          AppColors.feltLight,
+          AppColors.feltLight.withValues(alpha: 0.95),
           AppColors.feltDark,
         ],
       ).createShader(rect);
@@ -104,9 +106,9 @@ class _FeltPainter extends CustomPainter {
 
     final rail = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 3
-      ..color = AppColors.gold.withValues(alpha: 0.35);
-    canvas.drawOval(rect.deflate(6), rail);
+      ..strokeWidth = 1.5
+      ..color = AppColors.gold.withValues(alpha: 0.22);
+    canvas.drawOval(rect.deflate(8), rail);
   }
 
   @override

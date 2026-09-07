@@ -33,9 +33,9 @@ class EvAuditModal extends StatelessWidget {
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.bgMid,
+      backgroundColor: AppColors.bgElevated,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
       ),
       builder: (ctx) => EvAuditModal(
         game: game,
@@ -52,14 +52,14 @@ class EvAuditModal extends StatelessWidget {
     final correct = feedback.verdict == CoachVerdict.correct;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
+      padding: const EdgeInsets.fromLTRB(22, 14, 22, 28),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Center(
             child: Container(
-              width: 40,
+              width: 36,
               height: 4,
               decoration: BoxDecoration(
                 color: AppColors.slateDark,
@@ -67,16 +67,16 @@ class EvAuditModal extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 18),
           Text(
             'EV Audit',
             style: GoogleFonts.cinzel(
               fontSize: 22,
               fontWeight: FontWeight.w700,
-              color: AppColors.gold,
+              color: AppColors.goldBright,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
@@ -91,26 +91,35 @@ class EvAuditModal extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
           Text(
             feedback.message,
-            style: GoogleFonts.inter(color: AppColors.cream, height: 1.4),
+            style: GoogleFonts.manrope(
+              color: AppColors.cream,
+              height: 1.45,
+              fontSize: 15,
+            ),
           ),
           if (scenario != null) ...[
-            const SizedBox(height: 14),
+            const SizedBox(height: 16),
             Text(
               scenario.name ?? 'Scenario',
               style: GoogleFonts.cinzel(
                 color: AppColors.goldMuted,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
               ),
             ),
             const SizedBox(height: 6),
             Text(
               scenario.theoreticalEvExplanation,
-              style: GoogleFonts.inter(color: AppColors.slate, fontSize: 13),
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 13,
+                height: 1.4,
+              ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
             Text(
               'Optimal: ${scenario.optimalExploitAction.label}'
               '${scenario.optimalSizingBb > 0 ? ' · ${scenario.optimalSizingBb.toStringAsFixed(1)} BB' : ''}',
@@ -120,7 +129,7 @@ class EvAuditModal extends StatelessWidget {
               ),
             ),
           ],
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           Text(
             'EV Δ ${feedback.evDeltaBb >= 0 ? '+' : ''}${feedback.evDeltaBb.toStringAsFixed(2)} BB',
             style: GoogleFonts.jetBrainsMono(
@@ -128,9 +137,10 @@ class EvAuditModal extends StatelessWidget {
                   ? AppColors.success
                   : AppColors.danger,
               fontWeight: FontWeight.w800,
+              fontSize: 15,
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 22),
           Row(
             children: [
               Expanded(
@@ -147,7 +157,7 @@ class EvAuditModal extends StatelessWidget {
                       onClose();
                       onNext!();
                     },
-                    child: const Text('Next Spot'),
+                    child: const Text('Next spot'),
                   ),
                 ),
               ],

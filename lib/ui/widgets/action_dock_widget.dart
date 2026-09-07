@@ -1,4 +1,4 @@
-/// Bottom thumb-zone action dock with sizing chips and free-check rule.
+/// Bottom thumb-zone action dock — simple labels, sizing presets.
 library;
 
 import 'dart:math' as math;
@@ -72,65 +72,65 @@ class _ActionDockWidgetState extends State<ActionDockWidget> {
     }
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 10),
       decoration: BoxDecoration(
-        color: AppColors.bgMid.withValues(alpha: 0.95),
-        border: const Border(top: BorderSide(color: AppColors.slateDark)),
+        color: AppColors.bgMid.withValues(alpha: 0.98),
+        border: Border(
+          top: BorderSide(color: AppColors.slateDark.withValues(alpha: 0.9)),
+        ),
       ),
       child: SafeArea(
         top: false,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Wrap(
-              spacing: 6,
-              runSpacing: 6,
+            Row(
               children: [
                 for (final entry in [
-                  ('1/3', 1 / 3),
-                  ('1/2', 0.5),
-                  ('3/4', 0.75),
+                  ('⅓', 1 / 3),
+                  ('½', 0.5),
+                  ('¾', 0.75),
                   ('Pot', 1.0),
                 ])
-                  _SizeChip(
-                    label: entry.$1,
-                    onTap: widget.enabled ? () => setFraction(entry.$2) : null,
+                  Padding(
+                    padding: const EdgeInsets.only(right: 6),
+                    child: _SizeChip(
+                      label: entry.$1,
+                      onTap:
+                          widget.enabled ? () => setFraction(entry.$2) : null,
+                    ),
                   ),
                 _SizeChip(
-                  label: 'All-In',
+                  label: 'All-in',
                   onTap: widget.enabled
                       ? () => setState(() => _raiseAmount = maxRaiseTo)
                       : null,
                 ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
+                const Spacer(),
                 Text(
-                  'Raise to \$${_raiseAmount.toStringAsFixed(0)}',
+                  '\$${_raiseAmount.toStringAsFixed(0)}',
                   style: GoogleFonts.jetBrainsMono(
-                    fontSize: 12,
-                    color: AppColors.slate,
-                  ),
-                ),
-                Expanded(
-                  child: Slider(
-                    value: _raiseAmount.clamp(minRaiseTo, maxRaiseTo),
-                    min: minRaiseTo.clamp(0, maxRaiseTo),
-                    max: maxRaiseTo <= minRaiseTo ? minRaiseTo + 1 : maxRaiseTo,
-                    onChanged: widget.enabled
-                        ? (v) => setState(() => _raiseAmount = v)
-                        : null,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.gold,
                   ),
                 ),
               ],
             ),
+            Slider(
+              value: _raiseAmount.clamp(minRaiseTo, maxRaiseTo),
+              min: minRaiseTo.clamp(0, maxRaiseTo),
+              max: maxRaiseTo <= minRaiseTo ? minRaiseTo + 1 : maxRaiseTo,
+              onChanged: widget.enabled
+                  ? (v) => setState(() => _raiseAmount = v)
+                  : null,
+            ),
+            const SizedBox(height: 4),
             Row(
               children: [
                 Expanded(
                   child: _DockButton(
-                    label: freeCheck ? 'Free to Check' : 'Fold',
+                    label: freeCheck ? '—' : 'Fold',
                     color: freeCheck ? AppColors.slateDark : AppColors.danger,
                     enabled: widget.enabled && !freeCheck,
                     onTap: () => widget.onAction(
@@ -138,13 +138,13 @@ class _ActionDockWidgetState extends State<ActionDockWidget> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 10),
                 Expanded(
                   child: _DockButton(
                     label: freeCheck
                         ? 'Check'
                         : 'Call \$${callAmt.toStringAsFixed(0)}',
-                    color: AppColors.slate,
+                    color: AppColors.surfaceMuted,
                     enabled: widget.enabled,
                     onTap: () => widget.onAction(
                       freeCheck
@@ -156,7 +156,7 @@ class _ActionDockWidgetState extends State<ActionDockWidget> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 10),
                 Expanded(
                   child: _DockButton(
                     label: callAmt <= 0 ? 'Bet' : 'Raise',
@@ -190,22 +190,25 @@ class _SizeChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: AppColors.slateDark),
-          color: AppColors.bgDark,
-        ),
-        child: Text(
-          label,
-          style: GoogleFonts.jetBrainsMono(
-            fontSize: 11,
-            fontWeight: FontWeight.w700,
-            color: AppColors.gold,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.slateDark),
+            color: AppColors.bgDark.withValues(alpha: 0.55),
+          ),
+          child: Text(
+            label,
+            style: GoogleFonts.jetBrainsMono(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: AppColors.goldMuted,
+            ),
           ),
         ),
       ),
@@ -230,19 +233,31 @@ class _DockButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: enabled ? onTap : null,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color,
-        foregroundColor: foreground ?? AppColors.cream,
-        disabledBackgroundColor: AppColors.slateDark,
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
-      child: Text(
-        label,
-        textAlign: TextAlign.center,
-        style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 13),
+    return SizedBox(
+      height: 52,
+      child: ElevatedButton(
+        onPressed: enabled ? onTap : null,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color,
+          foregroundColor: foreground ?? AppColors.cream,
+          disabledBackgroundColor: AppColors.slateDark,
+          disabledForegroundColor: AppColors.slate,
+          elevation: 0,
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+        ),
+        child: Text(
+          label,
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: GoogleFonts.manrope(
+            fontWeight: FontWeight.w800,
+            fontSize: 15,
+          ),
+        ),
       ),
     );
   }
