@@ -20,8 +20,6 @@ class CoachShelfWidget extends StatefulWidget {
     required this.feedback,
     required this.bigBlind,
     required this.chipDisplayMode,
-    this.onMuteToggle,
-    this.ttsEnabled = true,
     this.replaying = false,
     this.maxHeight,
     this.autoExpand = false,
@@ -30,9 +28,6 @@ class CoachShelfWidget extends StatefulWidget {
   final CoachFeedback feedback;
   final double bigBlind;
   final ChipDisplayMode chipDisplayMode;
-  final VoidCallback? onMuteToggle;
-  final bool ttsEnabled;
-
   /// True while villains are acting, shown as a subtle live indicator.
   final bool replaying;
 
@@ -189,7 +184,7 @@ class _CoachShelfWidgetState extends State<CoachShelfWidget> {
         curve: Curves.easeOutCubic,
         width: double.infinity,
         margin: const EdgeInsets.fromLTRB(14, 0, 14, 8),
-        padding: const EdgeInsets.fromLTRB(14, 10, 6, 10),
+        padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
         decoration: BoxDecoration(
           color: AppColors.bgElevated.withValues(alpha: 0.94),
           borderRadius: BorderRadius.circular(16),
@@ -225,18 +220,6 @@ class _CoachShelfWidgetState extends State<CoachShelfWidget> {
               const SizedBox(width: 12),
             ],
             Expanded(child: body),
-            IconButton(
-              tooltip: widget.ttsEnabled ? 'Mute coach' : 'Unmute coach',
-              onPressed: widget.onMuteToggle,
-              visualDensity: VisualDensity.compact,
-              icon: Icon(
-                widget.ttsEnabled
-                    ? Icons.volume_up_outlined
-                    : Icons.volume_off_outlined,
-                color: AppColors.slate,
-                size: 20,
-              ),
-            ),
           ],
         ),
       ),

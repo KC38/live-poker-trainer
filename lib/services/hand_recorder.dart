@@ -188,15 +188,12 @@ class HandRecorder {
     return _guard(() => dao.recordDecision(record), 'recordDecision');
   }
 
-  /// Stores what the coach finally said and how the voice resolved.
+  /// Stores what the coach finally said (text only).
   void completeDecision(
     int? decisionId, {
     required String adviceText,
     required String adviceSource,
     int? aiRequestId,
-    required bool voicePlayed,
-    required bool voiceFromCache,
-    required bool voiceUsedDevice,
   }) {
     if (decisionId == null) return;
     unawaited(_guard(
@@ -205,9 +202,9 @@ class HandRecorder {
         adviceText: adviceText,
         adviceSource: adviceSource,
         aiRequestId: aiRequestId,
-        voicePlayed: voicePlayed,
-        voiceFromCache: voiceFromCache,
-        voiceUsedDevice: voiceUsedDevice,
+        voicePlayed: false,
+        voiceFromCache: false,
+        voiceUsedDevice: false,
       ),
       'completeDecision',
     ));

@@ -107,7 +107,7 @@ class AiRequests extends Table {
 class VoiceClips extends Table {
   IntColumn get id => integer().autoIncrement()();
 
-  /// `VoiceCache.keyFor(text, voice, model)`.
+  /// Legacy cache key (coach TTS removed; table retained for history).
   TextColumn get cacheKey => text().unique()();
   TextColumn get spokenText => text()();
   TextColumn get voice => text()();

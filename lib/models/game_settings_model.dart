@@ -9,7 +9,7 @@ import 'package:live_poker_trainer/models/player_model.dart';
 /// Lineup selection mode on the Home screen.
 enum LineupMode { randomPool, custom }
 
-/// Persistent settings for blinds, stack, rebuy, SFX, music, and TTS.
+/// Persistent settings for blinds, stack, rebuy, SFX, and music.
 @immutable
 class GameSettingsModel {
   /// Creates game settings with plan defaults.
@@ -21,7 +21,6 @@ class GameSettingsModel {
     this.autoRebuy = PokerConstants.defaultAutoRebuy,
     this.rebuyThresholdBb = PokerConstants.defaultRebuyThresholdBb,
     this.sfxEnabled = PokerConstants.defaultSfxEnabled,
-    this.ttsEnabled = PokerConstants.defaultTtsEnabled,
     this.musicEnabled = PokerConstants.defaultMusicEnabled,
     this.chipDisplayMode = ChipDisplayMode.both,
     this.lineupMode = LineupMode.randomPool,
@@ -35,7 +34,6 @@ class GameSettingsModel {
   final bool autoRebuy;
   final int rebuyThresholdBb;
   final bool sfxEnabled;
-  final bool ttsEnabled;
 
   /// Home / lounge ambient loop; independent of table SFX.
   final bool musicEnabled;
@@ -70,7 +68,6 @@ class GameSettingsModel {
     bool? autoRebuy,
     int? rebuyThresholdBb,
     bool? sfxEnabled,
-    bool? ttsEnabled,
     bool? musicEnabled,
     ChipDisplayMode? chipDisplayMode,
     LineupMode? lineupMode,
@@ -97,7 +94,6 @@ class GameSettingsModel {
       autoRebuy: autoRebuy ?? this.autoRebuy,
       rebuyThresholdBb: rebuyThresholdBb ?? this.rebuyThresholdBb,
       sfxEnabled: sfxEnabled ?? this.sfxEnabled,
-      ttsEnabled: ttsEnabled ?? this.ttsEnabled,
       musicEnabled: musicEnabled ?? this.musicEnabled,
       chipDisplayMode: chipDisplayMode ?? this.chipDisplayMode,
       lineupMode: lineupMode ?? this.lineupMode,
@@ -113,7 +109,6 @@ class GameSettingsModel {
         'autoRebuy': autoRebuy,
         'rebuyThresholdBb': rebuyThresholdBb,
         'sfxEnabled': sfxEnabled,
-        'ttsEnabled': ttsEnabled,
         'musicEnabled': musicEnabled,
         'chipDisplayMode': chipDisplayMode.name,
         'lineupMode': lineupMode.name,
@@ -147,8 +142,6 @@ class GameSettingsModel {
           PokerConstants.defaultRebuyThresholdBb,
       sfxEnabled:
           prefs['sfxEnabled'] as bool? ?? PokerConstants.defaultSfxEnabled,
-      ttsEnabled:
-          prefs['ttsEnabled'] as bool? ?? PokerConstants.defaultTtsEnabled,
       musicEnabled:
           prefs['musicEnabled'] as bool? ?? PokerConstants.defaultMusicEnabled,
       chipDisplayMode: ChipDisplayMode.values.firstWhere(

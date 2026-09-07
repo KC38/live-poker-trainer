@@ -1,4 +1,4 @@
-/// Settings: SFX, TTS, chip display, and help text.
+/// Settings: SFX, Music, chip display, and help text.
 library;
 
 import 'package:flutter/material.dart';
@@ -69,22 +69,6 @@ class SettingsScreen extends ConsumerWidget {
                     ),
                     value: settings.musicEnabled,
                     onChanged: notifier.setMusic,
-                  ),
-                  SwitchListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(
-                      'Coach voice',
-                      style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
-                    ),
-                    subtitle: Text(
-                      'Spoken feedback after each decision',
-                      style: GoogleFonts.manrope(
-                        color: AppColors.slate,
-                        fontSize: 13,
-                      ),
-                    ),
-                    value: settings.ttsEnabled,
-                    onChanged: notifier.setTts,
                   ),
                 ],
               ),

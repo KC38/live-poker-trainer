@@ -27,7 +27,6 @@ class CoachFeedback {
     this.optimalSizingBb = 0,
     this.heroAction,
     this.evDeltaBb = 0,
-    this.isSpeaking = false,
     this.repeatCount = 0,
     this.improvementStreak = 0,
     this.patternLabel,
@@ -39,7 +38,6 @@ class CoachFeedback {
   final double optimalSizingBb;
   final String? heroAction;
   final double evDeltaBb;
-  final bool isSpeaking;
 
   /// How many times this INCORRECT pattern has now occurred (0 / 1 = not a
   /// repeat, so no indicator is shown).
@@ -68,7 +66,6 @@ class CoachFeedback {
     double? optimalSizingBb,
     String? heroAction,
     double? evDeltaBb,
-    bool? isSpeaking,
     int? repeatCount,
     int? improvementStreak,
     String? patternLabel,
@@ -80,7 +77,6 @@ class CoachFeedback {
       optimalSizingBb: optimalSizingBb ?? this.optimalSizingBb,
       heroAction: heroAction ?? this.heroAction,
       evDeltaBb: evDeltaBb ?? this.evDeltaBb,
-      isSpeaking: isSpeaking ?? this.isSpeaking,
       repeatCount: repeatCount ?? this.repeatCount,
       improvementStreak: improvementStreak ?? this.improvementStreak,
       patternLabel: patternLabel ?? this.patternLabel,

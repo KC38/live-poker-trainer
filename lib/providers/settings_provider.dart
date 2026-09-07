@@ -20,8 +20,9 @@ const _legacyGeminiKeyOverridePref = 'geminiKeyOverride';
 /// Settings controller with disk persistence.
 class SettingsNotifier extends StateNotifier<GameSettingsModel> {
   /// Creates a notifier from [prefs].
-  SettingsNotifier(this._prefs, {this._soundSync, this.onChanged})
-      : super(_load(_prefs)) {
+  SettingsNotifier(this._prefs, {SoundServiceSync? soundSync, this.onChanged})
+      : _soundSync = soundSync,
+        super(_load(_prefs)) {
     // Drop any previously saved device key override; keys come from
     // `.env` / `--dart-define` only now.
     if (_prefs.containsKey(_legacyGeminiKeyOverridePref)) {
@@ -65,8 +66,6 @@ class SettingsNotifier extends StateNotifier<GameSettingsModel> {
 
   Future<void> setSfx(bool value) => update(state.copyWith(sfxEnabled: value));
 
-  Future<void> setTts(bool value) => update(state.copyWith(ttsEnabled: value));
-
   Future<void> setMusic(bool value) =>
       update(state.copyWith(musicEnabled: value));
 
@@ -108,12 +107,12 @@ class SettingsNotifier extends StateNotifier<GameSettingsModel> {
   }
 
   void _applySideEffects() {
-    _soundSync?.call(state.sfxEnabled, state.ttsEnabled, state.musicEnabled);
+    _soundSync?.call(state.sfxEnabled, state.musicEnabled);
   }
 }
 
-/// Callback to push SFX/TTS/music flags into [SoundService].
-typedef SoundServiceSync = void Function(bool sfx, bool tts, bool music);
+/// Callback to push SFX/music flags into [SoundService].
+typedef SoundServiceSync = void Function(bool sfx, bool music);
 
 /// Callback receiving the settings maps before and after an update.
 typedef SettingsChanged = void Function(
@@ -124,10 +123,9 @@ typedef SettingsChanged = void Function(
 final settingsProvider =
     StateNotifierProvider<SettingsNotifier, GameSettingsModel>((ref) {
   final asyncPrefs = ref.watch(sharedPreferencesProvider);
-  void soundSync(bool sfx, bool tts, bool music) {
+  void soundSync(bool sfx, bool music) {
     final sound = ref.read(soundServiceProvider);
     sound.sfxEnabled = sfx;
-    sound.ttsEnabled = tts;
     sound.setMusicEnabled(music);
   }
 

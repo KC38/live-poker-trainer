@@ -44,8 +44,8 @@ Settings override, and no screen ever asks the player for a key or mentions one.
 - Key order: `--dart-define=GEMINI_API_KEY` → `.env` → `.env.example`.
 - `.env` and `.env.example` are both declared under `flutter: assets:` in
   `pubspec.yaml`. `flutter_dotenv` reads env files through the **asset bundle**,
-  so an undeclared `.env` is invisible to `flutter run` and release builds — that
-  is what silently demoted the coach to the flat device voice. Because `.env` is
+  so an undeclared `.env` is invisible to `flutter run` and release builds —
+  coach text then falls back to offline lines. Because `.env` is
   a declared asset it must exist locally: run `cp .env.example .env` after
   cloning, or the build fails with a missing-asset error.
 - `main()` loads `.env.example` as the base with `.env` as an override file, both
@@ -53,15 +53,12 @@ Settings override, and no screen ever asks the player for a key or mentions one.
 - Startup logs only the key *source* (`dart-define` / `env-asset` / `missing`),
   never the key.
 
-Without a key the app still runs: heuristic coach lines plus the device voice,
-degraded silently. Voice fallbacks are logged, never surfaced in the UI.
+Without a key the app still runs with heuristic (offline) coach text.
 - Models (single source: `lib/core/constants/config.dart`):
-  - coach text — **`gemini-3.8-flash`** (`Config.geminiModel`)
-  - coach voice — **`gemini-3.1-flash-tts-preview`**, voice `Puck` (`Config.geminiTtsModel`)
+  - coach / scenario text — **`gemini-3.8-flash`** (`Config.geminiModel`)
   - art generation — **`gemini-3-pro-image`** (`Config.geminiImageModel`)
 
-The general text model silently ignores an `AUDIO` modality request, which is
-why speech uses the dedicated TTS model.
+Coaching is **text-only** on the shelf (no TTS / spoken coach lines).
 
 ## Defaults
 
@@ -73,7 +70,7 @@ why speech uses the dedicated TTS model.
 | Auto-rebuy | On, top-up when &lt; 50 BB to configured stack |
 | Lineup | Random pool, or **Custom** with per-seat archetype pickers |
 | Chip display | Both ($ and BB) — the live table always shows currency only |
-| SFX / Coach TTS | On |
+| SFX / Music | On |
 
 ## Play flow
 
@@ -99,22 +96,18 @@ The review is Gemini JSON (summary / leaks / adjustments, markdown scrubbed), ca
 
 Screen layout is a strict stack of bands — header, felt, hero rail, coach shelf, action dock — so the coach can never cover the hero's hole cards, down to a 320pt phone at 9 seats. When the hero cannot act (folded, hand over, table replaying), the action dock is removed entirely rather than greyed out.
 
-Graded coach lines always show a **CORRECT** / **INCORRECT** badge (plus Best / You / EV when expanded). Ambiguous spots stay on the offline line — Gemini is not asked to invent a verdict. Every spoken/shown line is post-validated against `bestAction` so advice cannot urge calling when the grade says fold (or the reverse). Tapping **Next** or leaving Training fades coach voice out in ~150ms so the old line cannot talk over the new hand.
+Graded coach lines always show a **CORRECT** / **INCORRECT** badge (plus Best / You / EV when expanded). Ambiguous spots stay on the offline line — Gemini is not asked to invent a verdict. Every shown line is post-validated against `bestAction` so advice cannot urge calling when the grade says fold (or the reverse). Coaching is text-only on the shelf — there is no spoken coach voice.
 
 Settings → **Chip display** chooses Dollars only, BB only, or Both (default) for hand review, EV, and stats. The live felt is always currency-only so the table stays readable.
 
-Coach voice: Gemini TTS audio (voice `Puck`) via the dedicated `Config.geminiTtsModel`, cached on disk so a repeated line replays instantly and never re-hits the API; device TTS (`flutter_tts`) is the last-resort fallback. Fallbacks are **silent** — the shelf shows the coaching line only, and the reason goes to `DiagnosticsLog` (context `SoundService.speakCoachLine`, with the key *source* but never the key). Mute via Settings or the coach shelf speaker icon.
-
-Settings → **Music** (default On) plays a quiet lounge ambient loop on Home, independent of table SFX. It fades in on appear, fades out when entering Training, and resumes on return. Coach speech ducks both SFX and BGM.
-
-Table SFX **duck to 18%** of their level while the coach is speaking and ramp back afterwards, on both the Gemini and device-voice paths (`SfxDucker`). Each line takes a hold that only it can release, so a line interrupted mid-sentence by the next one cannot un-duck audio that is still playing, and a stop, error, or missing completion callback (30s watchdog) always restores volume. Muted SFX skip ducking entirely; muted coach voice never triggers it.
+Settings → **Music** (default On) plays a quiet lounge ambient loop on Home, independent of table SFX. It fades in on appear, fades out when entering Training, and resumes on return.
 
 ## Architecture
 
 ```
 lib/
 ├── main.dart
-├── core/          # config, colors, chip format, audio (WAV + TTS), Drift DB
+├── core/          # config, colors, chip format, audio (SFX + BGM), Drift DB
 ├── models/
 ├── engine/        # DeckEvaluator, PokerEngine, LiveCoach, ScenarioManager,
 │                 # HeroProfiler

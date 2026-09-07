@@ -7,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
-import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/action_dock_widget.dart';
@@ -152,13 +151,9 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                   feedback: session.coach,
                   bigBlind: game?.bigBlind ?? 2,
                   chipDisplayMode: settings.chipDisplayMode,
-                  ttsEnabled: settings.ttsEnabled,
                   replaying: session.replaying,
                   maxHeight: maxHeight,
                   autoExpand: handOver,
-                  onMuteToggle: () => ref
-                      .read(settingsProvider.notifier)
-                      .setTts(!settings.ttsEnabled),
                 );
               }
 
@@ -178,7 +173,6 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                   _TableHeader(
                     game: game,
                     onBack: () async {
-                      await ref.read(soundServiceProvider).fadeStopVoice();
                       if (context.mounted) Navigator.pop(context);
                     },
                     onLegend: game == null ? null : () => _openLegend(game),

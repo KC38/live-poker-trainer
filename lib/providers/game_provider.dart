@@ -162,9 +162,7 @@ class GameController extends StateNotifier<TableSession> {
         ? null
         : PokerEngine.dealFingerprint(_engine!.state);
 
-    // Kill any in-flight coach line before the new deal speaks.
-    unawaited(_ref.read(soundServiceProvider).fadeStopVoice());
-
+    // Clear prior coach text before the new deal.
     state = state.copyWith(
       loading: true,
       clearError: true,
@@ -479,7 +477,7 @@ class GameController extends StateNotifier<TableSession> {
     }
   }
 
-  /// Fetches a spot-specific coach line (Gemini when available) and speaks it.
+  /// Fetches a spot-specific coach line (Gemini when available) for the shelf.
   ///
   /// [localMessage] is the offline line (already carrying repeat / improvement
   /// copy) used when Gemini is unavailable. Gemini is only asked on graded
@@ -492,9 +490,7 @@ class GameController extends StateNotifier<TableSession> {
     String localMessage,
     Future<int?> decisionId,
   ) async {
-    final settings = _settings;
     final gemini = _ref.read(geminiServiceProvider);
-    final sound = _ref.read(soundServiceProvider);
     var message = localMessage;
     var adviceSource = 'offline';
     int? aiRequestId;
@@ -546,27 +542,13 @@ class GameController extends StateNotifier<TableSession> {
       );
     }
 
-    final playback = await sound.speakCoachLine(
-      text: message,
-      enabled: settings.ttsEnabled,
-    );
     final resolvedDecision = await decisionId;
     _safeRecord(() => _recorder.completeDecision(
           resolvedDecision,
           adviceText: message,
           adviceSource: adviceSource,
           aiRequestId: aiRequestId,
-          voicePlayed: playback.spoke,
-          voiceFromCache: playback.fromCache,
-          voiceUsedDevice: playback.usedDeviceVoice,
         ));
-    if (_disposed || token != _replayToken) return;
-
-    // Voice diagnostics stay in logs only — never surface config hints on the
-    // coach shelf (see SoundService / CoachVoicePlayback.diagnostic).
-    state = state.copyWith(
-      coach: state.coach.copyWith(isSpeaking: playback.spoke),
-    );
   }
 
   /// Persists the graded decision; resolves to the `coach_decisions` id.

@@ -41,14 +41,12 @@ void main() {
     expect(Config.geminiKeySource, 'missing');
   });
 
-  test('coach speech uses the dedicated TTS model and Puck voice', () {
-    expect(Config.geminiTtsModel, isNot(Config.geminiModel));
-    expect(Config.geminiTtsModel, contains('tts'));
-    expect(Config.coachVoice, 'Puck');
+  test('text and image models are distinct', () {
+    expect(Config.geminiModel, isNot(Config.geminiImageModel));
     expect(
-      Config.geminiGenerateContentUri(model: Config.geminiTtsModel).toString(),
+      Config.geminiGenerateContentUri().toString(),
       'https://generativelanguage.googleapis.com/v1beta/models/'
-      '${Config.geminiTtsModel}:generateContent',
+      '${Config.geminiModel}:generateContent',
     );
   });
 }

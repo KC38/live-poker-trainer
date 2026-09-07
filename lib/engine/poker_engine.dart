@@ -94,9 +94,10 @@ class PokerEngine {
   /// Pass [random] only for deterministic tests. Production deals must use the
   /// default generator so consecutive hands never share a frozen seed.
   PokerEngine({
-    required this._settings,
+    required GameSettingsModel settings,
     Random? random,
-  })  : _random = random ?? Random(),
+  })  : _settings = settings,
+        _random = random ?? Random(),
         _deterministic = random != null;
 
   GameSettingsModel _settings;

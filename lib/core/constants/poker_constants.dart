@@ -14,7 +14,6 @@ class PokerConstants {
   static const int defaultRebuyThresholdBb = 50;
   static const bool defaultAutoRebuy = true;
   static const bool defaultSfxEnabled = true;
-  static const bool defaultTtsEnabled = true;
   static const bool defaultMusicEnabled = true;
 
   /// Preset stake options as (SB, BB).

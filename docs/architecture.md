@@ -5,7 +5,7 @@
 1. **UI** (`lib/ui`) — responsive felt table, action dock, coach shelf, Home / Stats / Settings.
 2. **Providers** (`lib/providers`) — Riverpod for settings, table session, coach verdict, stats.
 3. **Engine** (`lib/engine`) — `DeckEvaluator`, `PokerEngine` (full-hand streets, pots, archetype AI, auto-rebuy, replay events), `BetSizing`/`RaiseRange` (legal hero raise range), `LiveCoach` + `CoachLines` (exploit grading and copy), `ScenarioManager` (optional cache / prefetch).
-4. **Services** (`lib/services`) — `GeminiService`: coach text, TTS speech, and image generation, each on its own model.
+4. **Services** (`lib/services`) — `GeminiService`: coach text, scenario JSON, and image generation.
 5. **Persistence** (`lib/core/database`) — Drift (`scenarios`, `played_scenarios`, `user_stats_rows`) with native SQLite and web WASM.
 
 ## Unified training
@@ -14,7 +14,7 @@ Home launches a single **Start training** path. Every hand:
 
 1. Deal from preflop with blinds posted, without resolving villain action (`startHand(resolve: false)`); D / SB / BB pucks on seats.
 2. `GameController` pulls `PokerEngine.nextEvent()` on a timer and applies one step per tick, so villain decisions, pot collection, and board cards animate in order.
-3. On each Hero action, `LiveCoach` grades when a clear exploit line exists; Gemini (or `CoachLines`) supplies a spot-specific line; `SoundService` plays cached Gemini speech or device TTS.
+3. On each Hero action, `LiveCoach` grades when a clear exploit line exists; Gemini (or `CoachLines`) supplies a spot-specific text line for the coach shelf.
 4. Continue streets until fold-out or showdown; deal a **fresh shuffled hand** on **Next** (hole-card layouts are fingerprinted so consecutive deals cannot clone the prior hand). Mid-hand hero actions never re-deal — the same hole cards continue until the hand ends.
 
 ### Replay events
@@ -103,18 +103,10 @@ carries `repeatCount` / `improvementStreak` for the shelf chips, and
 
 `SoundService` plays `assets/sounds/{deal,chip,knock,fold,win}.wav`, generated
 by `tool/gen_sfx.py`, plus `lounge_ambient.mp3` from `tool/gen_ambient.py` for
-the Home screen. SFX, Music, and TTS toggles are independent. On web (and iOS),
+the Home screen. SFX and Music toggles are independent. On web (and iOS),
 call `unlock()` after a user gesture (done when starting a session / Home appear).
-Audio session is configured for playback.
-
-Coach voice priority: cached clip → fresh Gemini TTS → `flutter_tts`. Gemini
-speech is raw 16-bit PCM / L16 (often `audio/pcm;rate=24000`), which
-`WavCodec.ensurePlayable` wraps as WAV. `VoiceCache` stores clips under the app
-support directory keyed by a SHA-256 of text + voice + model, bounded by bytes
-and a TTL with LRU eviction, so repeated lines are instant and free. When no
-key, network, or cached clip is available, `flutter_tts` speaks the text and the
-reason travels as `CoachVoicePlayback.diagnostic` into `DiagnosticsLog`. Nothing
-about the fallback — least of all API-key configuration — reaches the UI.
+Audio session is configured for playback. Coaching is text-only — there is no
+coach TTS path, voice cache, or SFX/BGM ducking for speech.
 
 ## Diagnostics logging
 
@@ -128,12 +120,12 @@ and hot lookups are indexed on `session_id`, `hand_id`, `created_at_ms`, and
 | Table | What it holds | Written by |
 | --- | --- | --- |
 | `app_sessions` | one row per launch: uuid, app version/build, platform + OS, debug flag, schema version, started / last-seen / ended | `AppSessionService` (bootstrapped from `PokerLabApp`; heartbeats on lifecycle changes) |
-| `ai_requests` | every Gemini HTTP attempt: kind (`scenario`/`coach`/`tts`/`image`), model, SHA-256 of prompt + system instruction, prompt text (full prompt as blob when truncated), request/response timestamps, latency, HTTP status, success, redacted error, prompt/response/total tokens, response text or binary size, attempt number, cache flag | `GeminiService` → `AiRequestLogger` (`DiagnosticsDao`) |
-| `voice_clips` | TTS cache metadata per clip: cache key, spoken text, voice, model, mime, byte size, file path **or** WAV blob (web), created / last-accessed, hit count, expiry, eviction time + reason (`ttl`/`lru`/`clear`) | `VoiceCache` → `VoiceClipStore` (`VoiceClipDao`) |
+| `ai_requests` | every Gemini HTTP attempt: kind (`scenario`/`coach`/`image`; legacy `tts` rows may still exist), model, SHA-256 of prompt + system instruction, prompt text (full prompt as blob when truncated), request/response timestamps, latency, HTTP status, success, redacted error, prompt/response/total tokens, response text or binary size, attempt number, cache flag | `GeminiService` → `AiRequestLogger` (`DiagnosticsDao`) |
+| `voice_clips` | legacy TTS cache metadata (no longer written); retained for diagnostics retention / export | historical only |
 | `scenarios` (+v3 columns) | `source` (`gemini`/`offline`), `model_id`, generated / last-updated / last-served, `times_served`, `payload_version` | `ScenarioDao` via `ScenarioManager` |
 | `hands` | settings snapshot JSON, seat count, blinds, stack depth, dealer/SB/BB/hero seats, lineup JSON, hero cards, board per street, final street, showdown flag, result message, winner seats, final pot, hero net ($ and bb), hero EV delta, rebuy events JSON | `HandRecorder` from `GameController` |
 | `hand_actions` | ordered action sequence: seat, name, archetype, hero flag, street, action type, amount, pot before/after, stack after | `HandRecorder` (batched per street) |
-| `coach_decisions` | per graded hero decision: street, hero action + amount, best action + sizing, verdict, mismatch, EV delta (bb and $), villain, advice text + source (`gemini`/`offline`), linked `ai_requests.id`, voice played / cache hit / device voice, graded / narrated timestamps | `HandRecorder` (`recordHeroDecision`, then `completeDecision` after narration) |
+| `coach_decisions` | per graded hero decision: street, hero action + amount, best action + sizing, verdict, mismatch, EV delta (bb and $), villain, advice text + source (`gemini`/`offline`), linked `ai_requests.id`, legacy voice columns (always false for new rows), graded / narrated timestamps | `HandRecorder` (`recordHeroDecision`, then `completeDecision` after narration) |
 | `settings_changes` | key, old value, new value per changed setting | `SettingsNotifier.onChanged` → `DiagnosticsDao.logSettingsDiff` |
 | `diagnostic_events` | level, context, message, stack trace, extra JSON, optional hand link | `DiagnosticsLog` facade (sink = `DiagnosticsDao`), `FlutterError.onError`, `PlatformDispatcher.onError` |
 

@@ -47,7 +47,6 @@ dependencies:
   fl_chart: ^1.2.0
   flutter_dotenv: ^6.0.1
   crypto: ^3.0.7
-  flutter_tts: ^4.2.5
   image_picker: ^1.2.3
 
 dev_dependencies:
@@ -79,7 +78,7 @@ flutter:
   assets:
     # `.env` carries the shipped Gemini key. flutter_dotenv reads env files
     # through the asset bundle, so it must be declared here or `flutter run`
-    # cannot see it and the coach silently drops to the device voice.
+    # cannot see it and coach text falls back to offline lines.
     # It is gitignored — run `cp .env.example .env` once after cloning.
     - .env
     - .env.example

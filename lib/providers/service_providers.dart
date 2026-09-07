@@ -1,19 +1,14 @@
 /// Shared service providers (DB, Gemini, audio).
 library;
 
-import 'dart:typed_data';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/core/audio/sound_service.dart';
-import 'package:live_poker_trainer/core/audio/voice_cache.dart';
-import 'package:live_poker_trainer/core/constants/config.dart';
 import 'package:live_poker_trainer/core/database/app_database.dart';
 import 'package:live_poker_trainer/core/database/diagnostics_dao.dart';
 import 'package:live_poker_trainer/core/database/hand_history_dao.dart';
 import 'package:live_poker_trainer/core/database/mistake_dao.dart';
 import 'package:live_poker_trainer/core/database/scenario_dao.dart';
 import 'package:live_poker_trainer/core/database/user_stats_dao.dart';
-import 'package:live_poker_trainer/core/database/voice_clip_dao.dart';
 import 'package:live_poker_trainer/core/diagnostics/diagnostics_log.dart';
 import 'package:live_poker_trainer/engine/scenario_manager.dart';
 import 'package:live_poker_trainer/services/app_session_service.dart';
@@ -69,11 +64,6 @@ final handHistoryDaoProvider = Provider<HandHistoryDao>(
   (ref) => HandHistoryDao(ref.watch(appDatabaseProvider)),
 );
 
-/// Voice clip cache metadata (and blob fallback on web).
-final voiceClipDaoProvider = Provider<VoiceClipDao>(
-  (ref) => VoiceClipDao(ref.watch(appDatabaseProvider)),
-);
-
 /// Buffers one hand at a time and writes it through [HandHistoryDao].
 final handRecorderProvider = Provider<HandRecorder>((ref) {
   final diagnostics = ref.watch(diagnosticsDaoProvider);
@@ -84,8 +74,8 @@ final handRecorderProvider = Provider<HandRecorder>((ref) {
 });
 
 final geminiServiceProvider = Provider<GeminiService>((ref) {
-  // The logger resolves the DAO on first use so building the audio / Gemini
-  // graph (e.g. from a Settings read) never opens the database eagerly.
+  // The logger resolves the DAO on first use so building the Gemini graph
+  // (e.g. from a Settings read) never opens the database eagerly.
   final service = GeminiService(
     logger: _LazyRequestLogger(() => ref.read(diagnosticsDaoProvider)),
   );
@@ -94,14 +84,7 @@ final geminiServiceProvider = Provider<GeminiService>((ref) {
 });
 
 final soundServiceProvider = Provider<SoundService>((ref) {
-  final service = SoundService(
-    gemini: ref.watch(geminiServiceProvider),
-    voiceCache: VoiceCache(
-      maxBytes: Config.voiceCacheMaxBytes,
-      ttl: Config.voiceCacheTtl,
-      store: _LazyVoiceClipStore(() => ref.read(voiceClipDaoProvider)),
-    ),
-  );
+  final service = SoundService();
   ref.onDispose(service.dispose);
   return service;
 });
@@ -113,47 +96,6 @@ class _LazyRequestLogger implements AiRequestLogger {
   @override
   Future<int?> logRequest(AiRequestLogEntry entry) =>
       _resolve().logRequest(entry);
-}
-
-class _LazyVoiceClipStore implements VoiceClipStore {
-  _LazyVoiceClipStore(this._resolve);
-  final VoiceClipStore Function() _resolve;
-
-  @override
-  Future<void> recordPut({
-    required String cacheKey,
-    required String text,
-    required String voice,
-    required String modelId,
-    required int byteSize,
-    required DateTime expiresAt,
-    String? filePath,
-    Uint8List? audioBlob,
-  }) =>
-      _resolve().recordPut(
-        cacheKey: cacheKey,
-        text: text,
-        voice: voice,
-        modelId: modelId,
-        byteSize: byteSize,
-        expiresAt: expiresAt,
-        filePath: filePath,
-        audioBlob: audioBlob,
-      );
-
-  @override
-  Future<void> recordHit(String cacheKey) => _resolve().recordHit(cacheKey);
-
-  @override
-  Future<void> recordEviction(String cacheKey, VoiceEvictionReason reason) =>
-      _resolve().recordEviction(cacheKey, reason);
-
-  @override
-  Future<void> recordClear(VoiceEvictionReason reason) =>
-      _resolve().recordClear(reason);
-
-  @override
-  Future<Uint8List?> readBlob(String cacheKey) => _resolve().readBlob(cacheKey);
 }
 
 final scenarioManagerProvider = Provider<ScenarioManager>(

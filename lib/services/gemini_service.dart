@@ -1,4 +1,4 @@
-/// Gemini scenario generation, coach text, and coach speech synthesis.
+/// Gemini scenario generation, coach text, and image generation.
 ///
 /// Every HTTP attempt is reported to an optional [AiRequestLogger] with model,
 /// prompt hashes, latency, status, token usage and a redacted error, so the
@@ -11,7 +11,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
-import 'package:live_poker_trainer/core/audio/wav_codec.dart';
 import 'package:live_poker_trainer/core/constants/config.dart';
 import 'package:live_poker_trainer/core/diagnostics/diagnostics_log.dart';
 import 'package:live_poker_trainer/models/scenario_model.dart';
@@ -20,23 +19,15 @@ import 'package:live_poker_trainer/services/ai_request_log.dart';
 export 'package:live_poker_trainer/services/ai_request_log.dart'
     show AiRequestKind, AiRequestLogEntry, AiRequestLogger, AiTokenUsage;
 
-/// Result of a coach turn.
+/// Result of a coach text turn.
 class CoachAudioResult {
   /// Creates a coach result.
   const CoachAudioResult({
     required this.text,
-    this.audioBytes,
-    this.audioMimeType,
     this.aiRequestId,
   });
 
   final String text;
-
-  /// WAV-wrapped speech, when synthesized.
-  final Uint8List? audioBytes;
-
-  /// MIME for [audioBytes] (`audio/wav` after normalization).
-  final String? audioMimeType;
 
   /// `ai_requests.id` of the coach text call, when it was logged.
   final int? aiRequestId;
@@ -60,7 +51,7 @@ class GeminiHttpException implements Exception {
   String toString() => 'Gemini HTTP $statusCode: $body';
 }
 
-/// REST client for Gemini generateContent (JSON scenarios, coach, speech).
+/// REST client for Gemini generateContent (JSON scenarios, coach, images).
 class GeminiService {
   /// Creates a Gemini service.
   ///
@@ -179,64 +170,6 @@ When the prompt includes "Leak history" for a repeated mistake, open by saying i
     } catch (e, s) {
       DiagnosticsLog.error('GeminiService.coach', e, s, null, handId);
       return const CoachAudioResult(text: '');
-    }
-  }
-
-  /// Synthesizes [text] with the Gemini speech model, returning WAV bytes.
-  ///
-  /// Returns null when no key is configured or synthesis fails, letting the
-  /// caller fall back to the device voice.
-  Future<Uint8List?> synthesizeSpeech(
-    String text, {
-    String voice = Config.coachVoice,
-    int? handId,
-  }) async {
-    final cleaned = text.trim();
-    if (!hasApiKey || cleaned.isEmpty) return null;
-    final prompt = 'Say this as a sharp, encouraging live poker coach '
-        'sitting next to the player: $cleaned';
-    try {
-      final result = await _post(
-        kind: AiRequestKind.tts,
-        prompt: prompt,
-        model: Config.geminiTtsModel,
-        handId: handId,
-        body: {
-          'contents': [
-            {
-              'role': 'user',
-              'parts': [
-                {'text': prompt},
-              ],
-            },
-          ],
-          'generationConfig': {
-            'responseModalities': ['AUDIO'],
-            'speechConfig': {
-              'voiceConfig': {
-                'prebuiltVoiceConfig': {'voiceName': voice},
-              },
-            },
-          },
-        },
-      );
-      final audio = _extractInlineData(result.json, wantAudio: true);
-      if (audio == null) {
-        DiagnosticsLog.warning(
-          'GeminiService.synthesizeSpeech',
-          'No inline audio in response',
-          extra: {'aiRequestId': result.requestId},
-          handId: handId,
-        );
-        return null;
-      }
-      return WavCodec.ensurePlayable(
-        audio.bytes,
-        mimeType: audio.mimeType,
-      ).bytes;
-    } catch (e, s) {
-      DiagnosticsLog.error('GeminiService.synthesizeSpeech', e, s, null, handId);
-      return null;
     }
   }
 
