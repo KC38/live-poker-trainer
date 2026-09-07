@@ -1,0 +1,114 @@
+/// Elliptical felt table with auto-scaling 2–9 seat layout.
+library;
+
+import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
+import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/models/game_state.dart';
+import 'package:live_poker_trainer/ui/widgets/community_cards_view.dart';
+import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
+
+/// Responsive elliptical table view.
+class FeltTableView extends StatelessWidget {
+  /// Creates the felt table.
+  const FeltTableView({super.key, required this.game});
+
+  final GameState game;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final w = constraints.maxWidth;
+        final h = constraints.maxHeight;
+        final shortest = math.min(w, h);
+        final micro = game.players.length >= 7 || shortest < 360;
+        final scale = (shortest / 420).clamp(0.75, 1.35);
+
+        final cx = w / 2;
+        final cy = h / 2;
+        final rx = w * 0.38;
+        final ry = h * 0.34;
+
+        // Hero fixed at bottom center; others distributed around ellipse.
+        final seats = <Widget>[];
+        final n = game.players.length;
+        for (var i = 0; i < n; i++) {
+          final player = game.players[i];
+          // Angle: hero at π/2 (bottom), others spaced clockwise.
+          final angle = (math.pi / 2) + (2 * math.pi * i / n);
+          final x = cx + rx * math.cos(angle);
+          final y = cy + ry * math.sin(angle);
+
+          seats.add(
+            Positioned(
+              left: x - (micro ? 36 : 48),
+              top: y - (micro ? 40 : 52),
+              child: PlayerSeatWidget(
+                player: player,
+                bigBlind: game.bigBlind,
+                isActive: game.activePlayerIndex == i && !game.isHandOver,
+                isDealer: game.dealerIndex == i,
+                micro: micro,
+                showCards: player.isHero || game.isHandOver,
+              ),
+            ),
+          );
+        }
+
+        return Stack(
+          children: [
+            Positioned.fill(
+              child: CustomPaint(painter: _FeltPainter()),
+            ),
+            Center(
+              child: CommunityCardsView(
+                community: game.community,
+                pot: game.totalPot,
+                street: game.street,
+                scale: scale,
+              ),
+            ),
+            ...seats,
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _FeltPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = Rect.fromCenter(
+      center: Offset(size.width / 2, size.height / 2),
+      width: size.width * 0.92,
+      height: size.height * 0.82,
+    );
+
+    final rim = Paint()
+      ..shader = const LinearGradient(
+        colors: [AppColors.feltRim, AppColors.feltBorder],
+      ).createShader(rect);
+    canvas.drawOval(rect.inflate(14), rim);
+
+    final felt = Paint()
+      ..shader = RadialGradient(
+        colors: [
+          AppColors.feltLight,
+          AppColors.feltDark,
+        ],
+      ).createShader(rect);
+    canvas.drawOval(rect, felt);
+
+    final rail = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3
+      ..color = AppColors.gold.withValues(alpha: 0.35);
+    canvas.drawOval(rect.deflate(6), rail);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
