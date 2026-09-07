@@ -76,3 +76,4 @@ flutter:
   assets:
     - .env.example
     - assets/sounds/
+    - assets/brand/

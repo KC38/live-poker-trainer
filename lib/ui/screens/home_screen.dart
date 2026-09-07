@@ -139,7 +139,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
+              // Generated brand mark (see tool/gen_app_art.py).
+              Image.asset(
+                'assets/brand/logo_mark.png',
+                width: 76,
+                height: 76,
+                filterQuality: FilterQuality.medium,
+                errorBuilder: (_, _, _) => const Icon(
+                  Icons.style,
+                  size: 56,
+                  color: AppColors.gold,
+                ),
+              ),
+              const SizedBox(height: 12),
               Text(
                 'Exploitative\nPoker Lab',
                 style: Theme.of(context).textTheme.displayLarge,
