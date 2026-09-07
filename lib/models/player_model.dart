@@ -40,6 +40,31 @@ enum PlayerArchetype {
   final double threeBet;
   final Color color;
 
+  /// Uppercase word that fits on a seat badge at nine seats.
+  String get shortLabel => switch (this) {
+        PlayerArchetype.hero => 'YOU',
+        PlayerArchetype.maniac => 'MANIAC',
+        PlayerArchetype.nit => 'NIT',
+        PlayerArchetype.callingStation => 'STATION',
+        PlayerArchetype.tag => 'TAG',
+        PlayerArchetype.lag => 'LAG',
+      };
+
+  /// One-line read on how this archetype leaks, shown in the table legend.
+  String get tell => switch (this) {
+        PlayerArchetype.hero => 'That is you — stay process-oriented.',
+        PlayerArchetype.maniac =>
+          'Bets and raises constantly. Call wider, value-bet huge, bluff never.',
+        PlayerArchetype.nit =>
+          'Only plays premiums. Their bets mean strength; steal their checks.',
+        PlayerArchetype.callingStation =>
+          'Calls far too much, folds almost never. Value-bet thin, never bluff.',
+        PlayerArchetype.tag =>
+          'Solid and balanced. Take thin edges on later streets; avoid big wars.',
+        PlayerArchetype.lag =>
+          'Wide and aggressive. Defend more flops, tighten your value raises.',
+      };
+
   static PlayerArchetype fromLabel(String raw) {
     final key = raw.trim().toLowerCase().replaceAll(' ', '_');
     return switch (key) {

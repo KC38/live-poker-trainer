@@ -25,6 +25,8 @@ class CommunityCardsView extends StatelessWidget {
   final double pot;
   final Street street;
   final double bigBlind;
+
+  /// Table amounts are currency-only; see [ChipDisplayMode.tableMode].
   final ChipDisplayMode chipDisplayMode;
   final double scale;
 
@@ -51,12 +53,55 @@ class CommunityCardsView extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 2.5 * scale),
                 child: i < community.length
-                    ? _BoardCard(card: community[i], scale: scale)
+                    ? _RevealedCard(
+                        // Keying on the card makes each newly dealt street
+                        // card animate in on its own, in order.
+                        key: ValueKey(community[i].code),
+                        card: community[i],
+                        scale: scale,
+                      )
                     : _EmptySlot(scale: scale),
               ),
           ],
         ),
       ],
+    );
+  }
+}
+
+/// A board card that flips/scales in when it is first dealt.
+class _RevealedCard extends StatefulWidget {
+  const _RevealedCard({super.key, required this.card, required this.scale});
+
+  final CardModel card;
+  final double scale;
+
+  @override
+  State<_RevealedCard> createState() => _RevealedCardState();
+}
+
+class _RevealedCardState extends State<_RevealedCard> {
+  double _progress = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) setState(() => _progress = 1);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 220),
+      opacity: _progress,
+      child: AnimatedScale(
+        scale: 0.82 + 0.18 * _progress,
+        duration: const Duration(milliseconds: 260),
+        curve: Curves.easeOutBack,
+        child: _BoardCard(card: widget.card, scale: widget.scale),
+      ),
     );
   }
 }

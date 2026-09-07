@@ -104,28 +104,40 @@ class _ActionDockWidgetState extends ConsumerState<ActionDockWidget> {
               children: [
                 Row(
                   children: [
-                    for (final entry in [
-                      ('⅓', 1 / 3),
-                      ('½', 0.5),
-                      ('¾', 0.75),
-                      ('Pot', 1.0),
-                    ])
-                      Padding(
-                        padding: const EdgeInsets.only(right: 6),
-                        child: _SizeChip(
-                          label: entry.$1,
-                          onTap: canAct && range.hasSpread
-                              ? () => setFraction(entry.$2)
-                              : null,
+                    // Presets scroll horizontally so a narrow phone (320pt)
+                    // never overflows the dock.
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            for (final entry in [
+                              ('⅓', 1 / 3),
+                              ('½', 0.5),
+                              ('¾', 0.75),
+                              ('Pot', 1.0),
+                            ])
+                              Padding(
+                                padding: const EdgeInsets.only(right: 6),
+                                child: _SizeChip(
+                                  label: entry.$1,
+                                  onTap: canAct && range.hasSpread
+                                      ? () => setFraction(entry.$2)
+                                      : null,
+                                ),
+                              ),
+                            _SizeChip(
+                              label: 'All-in',
+                              onTap: canAct && range.allowed
+                                  ? () =>
+                                      setState(() => _raiseAmount = range.max)
+                                  : null,
+                            ),
+                          ],
                         ),
                       ),
-                    _SizeChip(
-                      label: 'All-in',
-                      onTap: canAct && range.allowed
-                          ? () => setState(() => _raiseAmount = range.max)
-                          : null,
                     ),
-                    const Spacer(),
+                    const SizedBox(width: 8),
                     Text(
                       range.allowed
                           ? ChipFormat.chips(
