@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
+import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/action_dock_widget.dart';
@@ -176,7 +177,10 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                 children: [
                   _TableHeader(
                     game: game,
-                    onBack: () => Navigator.pop(context),
+                    onBack: () async {
+                      await ref.read(soundServiceProvider).fadeStopVoice();
+                      if (context.mounted) Navigator.pop(context);
+                    },
                     onLegend: game == null ? null : () => _openLegend(game),
                     onReview: handOver && session.coach.hasVerdict
                         ? () => _openOptionalReview(session)
@@ -366,7 +370,7 @@ class _TableHeader extends StatelessWidget {
   });
 
   final GameState? game;
-  final VoidCallback onBack;
+  final Future<void> Function() onBack;
   final VoidCallback? onLegend;
   final VoidCallback? onReview;
   final VoidCallback? onNext;

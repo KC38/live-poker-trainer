@@ -73,6 +73,9 @@ class SoundService {
   int _bgmFadeGen = 0;
   double _bgmAudibleVolume = 0;
 
+  /// Last volume applied to [_voice]; audioplayers 6.x has no `getVolume()`.
+  double _voiceVolume = 1.0;
+
   /// Comfortable lounge level; kept low so it never fights the brand UI.
   static const double _bgmBaseVolume = 0.28;
 
@@ -523,6 +526,37 @@ class SoundService {
     _duckWatchdog?.cancel();
     _duckWatchdog = null;
     await _stopAllVoice();
+    _speechBgmHolds.clear();
+    await _ducker.releaseAll();
+    await _bgmDucker.releaseAll();
+  }
+
+  /// Fades coach voice out quickly (≈150ms) then stops — used when the player
+  /// taps Next or leaves Training so the old line cannot talk over the new hand.
+  Future<void> fadeStopVoice({
+    Duration duration = const Duration(milliseconds: 150),
+  }) async {
+    _duckWatchdog?.cancel();
+    _duckWatchdog = null;
+    try {
+      final start = _voice.volume;
+      if (start > 0.02 && duration.inMilliseconds > 0) {
+        const steps = 4;
+        final stepMs = (duration.inMilliseconds / steps).ceil();
+        for (var i = 1; i <= steps; i++) {
+          final t = i / steps;
+          await _voice.setVolume(start * (1 - t));
+          await Future<void>.delayed(Duration(milliseconds: stepMs));
+        }
+      }
+    } catch (_) {}
+    try {
+      await _tts.stop();
+    } catch (_) {}
+    await _stopAllVoice();
+    try {
+      await _voice.setVolume(1.0);
+    } catch (_) {}
     _speechBgmHolds.clear();
     await _ducker.releaseAll();
     await _bgmDucker.releaseAll();
