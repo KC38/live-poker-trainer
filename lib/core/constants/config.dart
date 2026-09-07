@@ -3,7 +3,6 @@
 /// API key resolution order:
 /// 1. `--dart-define=GEMINI_API_KEY=...`
 /// 2. `.env` via flutter_dotenv
-/// 3. Optional SharedPreferences device override (Settings)
 library;
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -32,14 +31,8 @@ class Config {
     defaultValue: '',
   );
 
-  /// Optional runtime override set from Settings (device-local only).
-  static String? deviceKeyOverride;
-
   /// Resolved Gemini API key (never log or commit this value).
   static String get geminiApiKey {
-    if (deviceKeyOverride != null && deviceKeyOverride!.trim().isNotEmpty) {
-      return deviceKeyOverride!.trim();
-    }
     if (_dartDefineKey.trim().isNotEmpty) {
       return _dartDefineKey.trim();
     }

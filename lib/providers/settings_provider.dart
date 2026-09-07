@@ -3,7 +3,6 @@ library;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
-import 'package:live_poker_trainer/core/constants/config.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
@@ -13,11 +12,19 @@ final sharedPreferencesProvider = FutureProvider<SharedPreferences>(
   (ref) => SharedPreferences.getInstance(),
 );
 
+/// Legacy SharedPreferences key for a removed Settings API-key override.
+const _legacyGeminiKeyOverridePref = 'geminiKeyOverride';
+
 /// Settings controller with disk persistence.
 class SettingsNotifier extends StateNotifier<GameSettingsModel> {
   /// Creates a notifier from [prefs].
   SettingsNotifier(this._prefs, {this._soundSync})
       : super(_load(_prefs)) {
+    // Drop any previously saved device key override; keys come from
+    // `.env` / `--dart-define` only now.
+    if (_prefs.containsKey(_legacyGeminiKeyOverridePref)) {
+      _prefs.remove(_legacyGeminiKeyOverridePref);
+    }
     _applySideEffects();
   }
 
@@ -70,9 +77,6 @@ class SettingsNotifier extends StateNotifier<GameSettingsModel> {
   Future<void> setBlinds(double sb, double bb) =>
       update(state.copyWith(smallBlind: sb, bigBlind: bb));
 
-  Future<void> setGeminiKeyOverride(String key) =>
-      update(state.copyWith(geminiKeyOverride: key));
-
   Future<void> setLineupMode(LineupMode mode) async {
     var next = state.copyWith(lineupMode: mode);
     if (mode == LineupMode.custom) {
@@ -93,8 +97,6 @@ class SettingsNotifier extends StateNotifier<GameSettingsModel> {
   }
 
   void _applySideEffects() {
-    Config.deviceKeyOverride =
-        state.geminiKeyOverride.isEmpty ? null : state.geminiKeyOverride;
     _soundSync?.call(state.sfxEnabled, state.ttsEnabled);
   }
 }

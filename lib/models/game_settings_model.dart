@@ -25,7 +25,6 @@ class GameSettingsModel {
     this.chipDisplayMode = ChipDisplayMode.both,
     this.lineupMode = LineupMode.randomPool,
     this.customArchetypes = const [],
-    this.geminiKeyOverride = '',
   });
 
   final double smallBlind;
@@ -39,7 +38,6 @@ class GameSettingsModel {
   final ChipDisplayMode chipDisplayMode;
   final LineupMode lineupMode;
   final List<PlayerArchetype> customArchetypes;
-  final String geminiKeyOverride;
 
   double get startingStack => stackDepthBb * bigBlind;
 
@@ -72,7 +70,6 @@ class GameSettingsModel {
     ChipDisplayMode? chipDisplayMode,
     LineupMode? lineupMode,
     List<PlayerArchetype>? customArchetypes,
-    String? geminiKeyOverride,
   }) {
     final nextSeats = seatCount ?? this.seatCount;
     var nextCustom = customArchetypes ?? this.customArchetypes;
@@ -99,7 +96,6 @@ class GameSettingsModel {
       chipDisplayMode: chipDisplayMode ?? this.chipDisplayMode,
       lineupMode: lineupMode ?? this.lineupMode,
       customArchetypes: nextCustom,
-      geminiKeyOverride: geminiKeyOverride ?? this.geminiKeyOverride,
     );
   }
 
@@ -116,7 +112,6 @@ class GameSettingsModel {
         'lineupMode': lineupMode.name,
         'customArchetypes':
             customArchetypes.map((a) => a.id).join(','),
-        'geminiKeyOverride': geminiKeyOverride,
       };
 
   static GameSettingsModel fromPrefs(Map<String, Object?> prefs) {
@@ -155,7 +150,6 @@ class GameSettingsModel {
           ? LineupMode.custom
           : LineupMode.randomPool,
       customArchetypes: archetypes,
-      geminiKeyOverride: prefs['geminiKeyOverride'] as String? ?? '',
     );
   }
 }

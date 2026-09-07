@@ -37,8 +37,9 @@ flutter run --dart-define=GEMINI_API_KEY=your_key
 ## Secrets
 
 - **Never commit `.env`** or real API keys (gitignored).
-- Commit only `.env.example`.
-- Key order: Settings device override → `--dart-define=GEMINI_API_KEY` → dotenv `.env` / `.env.example`.
+- Commit only `.env.example` (empty `GEMINI_API_KEY=` placeholder).
+- Key order: `--dart-define=GEMINI_API_KEY` → dotenv `.env` / `.env.example`.
+  The app ships/provides its own key at build time; there is no Settings override.
 - Models (single source: `lib/core/constants/config.dart`):
   - coach text — **`gemini-3.8-flash`** (`Config.geminiModel`)
   - coach voice — **`gemini-3.1-flash-tts-preview`**, voice `Puck` (`Config.geminiTtsModel`)
