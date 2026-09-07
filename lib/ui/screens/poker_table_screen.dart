@@ -12,7 +12,6 @@ import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/action_dock_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/archetype_legend_sheet.dart';
 import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
-import 'package:live_poker_trainer/ui/widgets/ev_audit_modal.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
 
@@ -93,22 +92,6 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
     );
   }
 
-  void _openOptionalReview(TableSession session) {
-    final game = session.game;
-    if (game == null || !session.coach.hasVerdict) return;
-    EvAuditModal.show(
-      context,
-      game: game,
-      feedback: session.coach,
-      chipDisplayMode: ref.read(settingsProvider).chipDisplayMode,
-      onNext: () {
-        ref.read(gameControllerProvider.notifier).nextHand();
-      },
-    ).whenComplete(() {
-      ref.read(gameControllerProvider.notifier).dismissEvAudit();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final session = ref.watch(gameControllerProvider);
@@ -176,9 +159,6 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                       if (context.mounted) Navigator.pop(context);
                     },
                     onLegend: game == null ? null : () => _openLegend(game),
-                    onReview: handOver && session.coach.hasVerdict
-                        ? () => _openOptionalReview(session)
-                        : null,
                     onNext: handOver
                         ? () =>
                             ref.read(gameControllerProvider.notifier).nextHand()
@@ -359,14 +339,12 @@ class _TableHeader extends StatelessWidget {
     required this.game,
     required this.onBack,
     required this.onLegend,
-    required this.onReview,
     required this.onNext,
   });
 
   final GameState? game;
   final Future<void> Function() onBack;
   final VoidCallback? onLegend;
-  final VoidCallback? onReview;
   final VoidCallback? onNext;
 
   @override
@@ -409,26 +387,9 @@ class _TableHeader extends StatelessWidget {
               ],
             ),
           ),
-          if (onNext != null) ...[
-            if (onReview != null)
-              TextButton(
-                onPressed: onReview,
-                style: TextButton.styleFrom(
-                  foregroundColor: AppColors.slate,
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  minimumSize: const Size(0, 36),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                child: Text(
-                  'Review',
-                  style: GoogleFonts.manrope(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-            _NextHandCta(onPressed: onNext!),
-          ] else
+          if (onNext != null)
+            _NextHandCta(onPressed: onNext!)
+          else
             IconButton(
               tooltip: 'Player types',
               onPressed: onLegend,

@@ -328,7 +328,7 @@ void main() {
         );
 
         expect(find.text('Next'), findsOneWidget);
-        expect(find.text('Review'), findsOneWidget);
+        expect(find.text('Review'), findsNothing);
         expect(find.text('Hand review'), findsNothing);
         expect(find.text('Next hand'), findsNothing);
       });

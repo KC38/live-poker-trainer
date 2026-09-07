@@ -52,7 +52,6 @@ class TableSession {
     this.coach = const CoachFeedback(),
     this.loading = false,
     this.error,
-    this.showEvAudit = false,
     this.lastAction,
     this.replaying = false,
     this.collectingChips = false,
@@ -62,7 +61,6 @@ class TableSession {
   final CoachFeedback coach;
   final bool loading;
   final String? error;
-  final bool showEvAudit;
   final PokerAction? lastAction;
 
   /// True while villain actions are being replayed and the hero must wait.
@@ -88,7 +86,6 @@ class TableSession {
     bool? loading,
     String? error,
     bool clearError = false,
-    bool? showEvAudit,
     PokerAction? lastAction,
     bool clearLastAction = false,
     bool? replaying,
@@ -99,7 +96,6 @@ class TableSession {
       coach: coach ?? this.coach,
       loading: loading ?? this.loading,
       error: clearError ? null : (error ?? this.error),
-      showEvAudit: showEvAudit ?? this.showEvAudit,
       lastAction: clearLastAction ? null : (lastAction ?? this.lastAction),
       replaying: replaying ?? this.replaying,
       collectingChips: collectingChips ?? this.collectingChips,
@@ -167,7 +163,6 @@ class GameController extends StateNotifier<TableSession> {
       loading: true,
       clearError: true,
       coach: const CoachFeedback(),
-      showEvAudit: false,
       replaying: false,
       collectingChips: false,
     );
@@ -468,7 +463,7 @@ class GameController extends StateNotifier<TableSession> {
     final heroWon = game.resultMessage?.startsWith('Hero') ?? false;
     if (heroWon) await sound.win();
     // Hand review stays in the coach shelf; the header Next CTA is the cue.
-    state = state.copyWith(showEvAudit: false, replaying: false);
+    state = state.copyWith(replaying: false);
   }
 
   Future<void> _recordStats(LiveCoachGrade grade, GameState game) async {
@@ -615,10 +610,6 @@ class GameController extends StateNotifier<TableSession> {
   }
 
   Future<void> _wait(Duration duration) => Future<void>.delayed(duration);
-
-  void dismissEvAudit() {
-    state = state.copyWith(showEvAudit: false);
-  }
 
   void clearCoach() {
     state = state.copyWith(coach: const CoachFeedback());
