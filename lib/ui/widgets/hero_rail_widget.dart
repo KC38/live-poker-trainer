@@ -64,7 +64,10 @@ class HeroRailWidget extends ConsumerWidget {
   Widget _buildRail(HeroIdentity identity, double t) {
     final hero = game.hero;
     final heroIndex = game.players.indexWhere((p) => p.isHero);
-    final isTurn = game.waitingForHero && !game.isHandOver && !hero.folded;
+    // Matches the action dock's visibility: promising "YOUR TURN" while the
+    // replay still runs would point at controls that are not on screen.
+    final isTurn =
+        game.waitingForHero && !game.isHandOver && !hero.folded && !isThinking;
     final position = _positionLabel(heroIndex);
 
     return SizedBox(
