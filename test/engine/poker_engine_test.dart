@@ -142,5 +142,153 @@ void main() {
         state = engine.startHand(existingPlayers: state.players);
       }
     });
+
+    test('hero raise preflop advances or ends without reopening forever', () {
+      // Regression: villains used highest+BB as the raise floor, so after an
+      // open to ~10bb they could "3-bet" by +1bb forever and preflop never
+      // resolved.
+      final engine = PokerEngine(settings: _settings, random: Random(42));
+      engine.startHand(resolve: false);
+
+      var guard = 0;
+      while (guard++ < 64 && engine.nextEvent() != null) {}
+
+      var state = engine.state;
+      expect(state.waitingForHero, isTrue);
+      expect(state.street, Street.preflop);
+
+      final holes = state.hero.holeCards.map((c) => c.code).join(',');
+      final handId = state.handCount;
+      final range = RaiseRange.forHero(state);
+      expect(range.allowed, isTrue);
+      final raiseTo = range.min;
+      final call = state.callAmountFor(state.hero);
+
+      engine.submitHeroAction(
+        PokerAction(
+          type: call <= Money.epsilon
+              ? PokerActionType.bet
+              : PokerActionType.raise,
+          amount: raiseTo,
+        ),
+      );
+
+      expect(engine.state.highestBet, closeTo(raiseTo, 0.01));
+      expect(engine.state.minRaise, greaterThanOrEqualTo(_settings.bigBlind));
+
+      var heroPreflopReturns = 0;
+      var villainRaises = 0;
+      Street? terminalStreet;
+      guard = 0;
+      while (guard++ < 256) {
+        final event = engine.nextEvent();
+        final s = engine.state;
+        expect(s.handCount, handId, reason: 'must not redeal mid-hand');
+        expect(
+          s.hero.holeCards.map((c) => c.code).join(','),
+          holes,
+          reason: 'hole cards must stay fixed mid-hand',
+        );
+
+        if (event == null) {
+          if (s.isHandOver) {
+            terminalStreet = s.street;
+            break;
+          }
+          if (s.waitingForHero && s.street == Street.preflop) {
+            heroPreflopReturns++;
+            expect(
+              heroPreflopReturns,
+              lessThan(6),
+              reason: 'preflop reopened too many times after hero raise',
+            );
+            final faced = s.callAmountFor(s.hero);
+            final nextRange = RaiseRange.forHero(s);
+            // Call (or fold if somehow broke) — do not keep 4-betting the war.
+            if (faced > Money.epsilon) {
+              engine.submitHeroAction(
+                PokerAction(type: PokerActionType.call, amount: faced),
+              );
+            } else if (nextRange.allowed) {
+              engine.submitHeroAction(
+                PokerAction(type: PokerActionType.bet, amount: nextRange.min),
+              );
+            } else {
+              engine.submitHeroAction(
+                const PokerAction(type: PokerActionType.check),
+              );
+            }
+            continue;
+          }
+          if (s.waitingForHero) {
+            // Reached a later street — success.
+            terminalStreet = s.street;
+            break;
+          }
+          break;
+        }
+
+        if (event.kind == TableEventKind.villainAction &&
+            (event.action?.type == PokerActionType.raise ||
+                event.action?.type == PokerActionType.bet)) {
+          villainRaises++;
+          // Every aggressive response must jump by at least a full min-raise
+          // (or be an all-in), never a +1bb reopen over a large open.
+          final beforeHighest = raiseTo;
+          expect(
+            event.state.highestBet + Money.epsilon,
+            greaterThanOrEqualTo(beforeHighest),
+          );
+        }
+        if (event.kind == TableEventKind.dealStreet) {
+          expect(event.state.street, isNot(Street.preflop));
+          terminalStreet = event.state.street;
+          break;
+        }
+        if (event.kind == TableEventKind.handOver) {
+          terminalStreet = event.state.street;
+          break;
+        }
+      }
+
+      expect(terminalStreet, isNotNull);
+      expect(
+        engine.state.isHandOver || engine.state.street != Street.preflop,
+        isTrue,
+        reason: 'hand must leave preflop or end after the raise cycle',
+      );
+      expect(villainRaises, lessThan(8));
+    });
+
+    test('legal raise floor uses minRaise not just the big blind', () {
+      final engine = PokerEngine(settings: _settings, random: Random(7));
+      engine.startHand(resolve: false);
+      var guard = 0;
+      while (guard++ < 64 && engine.nextEvent() != null) {}
+      final state = engine.state;
+      if (!state.waitingForHero) return;
+
+      final range = RaiseRange.forHero(state);
+      // Size well above a min-raise so the raise increment dwarfs the blind.
+      final openTo = range.forFraction(
+        1.0,
+        pot: state.totalPot,
+        heroBet: state.hero.currentBet,
+      );
+      final call = state.callAmountFor(state.hero);
+      engine.submitHeroAction(
+        PokerAction(
+          type: call <= Money.epsilon
+              ? PokerActionType.bet
+              : PokerActionType.raise,
+          amount: openTo,
+        ),
+      );
+      final after = engine.state;
+      expect(after.highestBet, closeTo(openTo, 0.01));
+      final raiseSize = Money.round(openTo - state.highestBet);
+      expect(after.minRaise, closeTo(raiseSize, 0.01));
+      expect(after.minRaise, greaterThan(after.bigBlind + Money.epsilon));
+    });
   });
 }

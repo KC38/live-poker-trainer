@@ -538,15 +538,37 @@ class PokerEngine {
     return (correct: actionMatch, sizingErrorBb: sizingError);
   }
 
-  /// Rounds a desired "raise to" amount and caps it at the villain's all-in.
+  /// Rounds a desired "raise to" amount to a legal full min-raise (or all-in).
+  ///
+  /// The increment must be [GameState.minRaise], not just the big blind.
+  /// Using only the blind let villains micro-raise after a real open (e.g. open
+  /// to 20, "3-bet" to 22), which reopened action forever and made preflop
+  /// look like it was stuck replaying.
   static double _legalRaiseTarget(
     GameState state,
     PlayerModel villain,
     double desired,
   ) {
     final allIn = Money.round(villain.stack + villain.currentBet);
-    final floor = Money.round(state.highestBet + state.bigBlind);
-    return Money.clamp(Money.round(desired), min(floor, allIn), allIn);
+    final increment = max(state.minRaise, state.bigBlind);
+    final floor = Money.round(state.highestBet + increment);
+    // Short stacks that cannot cover a full min-raise may only shove.
+    if (allIn <= state.highestBet + Money.epsilon) {
+      return allIn;
+    }
+    if (floor >= allIn - Money.epsilon) {
+      return allIn;
+    }
+    return Money.clamp(Money.round(desired), floor, allIn);
+  }
+
+  /// Lowest legal "raise to" for [player], or their all-in when short.
+  static double _minRaiseTo(GameState state, PlayerModel player) {
+    final allIn = Money.round(player.stack + player.currentBet);
+    final increment = max(state.minRaise, state.bigBlind);
+    final floor = Money.round(state.highestBet + increment);
+    if (floor >= allIn - Money.epsilon) return allIn;
+    return floor;
   }
 
   PokerAction _villainDecision(GameState state, int playerIdx) {
@@ -595,12 +617,17 @@ class PokerEngine {
         case PlayerArchetype.maniac:
         case PlayerArchetype.lag:
           if (_random.nextDouble() < 0.4 && callAmount < v.stack) {
-            final target = _legalRaiseTarget(
-              state,
-              v,
-              state.highestBet + state.bigBlind * 3,
-            );
-            return PokerAction(type: PokerActionType.raise, amount: target);
+            final minTo = _minRaiseTo(state, v);
+            // Only fire a raise when a full (or shove) size is available;
+            // otherwise calling keeps the street from micro-reopening.
+            if (minTo > state.highestBet + Money.epsilon) {
+              final target = _legalRaiseTarget(
+                state,
+                v,
+                state.highestBet + max(state.minRaise, state.bigBlind) * 3,
+              );
+              return PokerAction(type: PokerActionType.raise, amount: target);
+            }
           }
           return PokerAction(type: PokerActionType.call, amount: callAmount);
         case PlayerArchetype.nit:
@@ -638,12 +665,15 @@ class PokerEngine {
       case PlayerArchetype.maniac:
       case PlayerArchetype.lag:
         if (_random.nextDouble() < 0.35 && v.stack > callAmount * 2) {
-          final target = _legalRaiseTarget(
-            state,
-            v,
-            state.highestBet + pot * 0.8,
-          );
-          return PokerAction(type: PokerActionType.raise, amount: target);
+          final minTo = _minRaiseTo(state, v);
+          if (minTo > state.highestBet + Money.epsilon) {
+            final target = _legalRaiseTarget(
+              state,
+              v,
+              state.highestBet + pot * 0.8,
+            );
+            return PokerAction(type: PokerActionType.raise, amount: target);
+          }
         }
         return PokerAction(type: PokerActionType.call, amount: callAmount);
       default:
@@ -707,31 +737,67 @@ class PokerEngine {
       case PokerActionType.bet:
       case PokerActionType.raise:
       case PokerActionType.allIn:
-        final target = action.type == PokerActionType.allIn
-            ? Money.round(player.stack + player.currentBet)
+        final allInTo = Money.round(player.stack + player.currentBet);
+        var target = action.type == PokerActionType.allIn
+            ? allInTo
             : Money.round(action.amount);
+        // Non-shove aggression must meet a full min-raise; undersized "raises"
+        // from a stale slider or buggy AI would otherwise reopen the street.
+        if (action.type != PokerActionType.allIn &&
+            target > highest + Money.epsilon &&
+            target < _minRaiseTo(state, player) - Money.epsilon) {
+          target = _minRaiseTo(state, player);
+        }
+        target = Money.clamp(target, 0, allInTo);
         final toAdd = Money.roundNonNegative(
           min(target - player.currentBet, player.stack),
         );
+        final priorHighest = highest;
         setPlayer(_postChips(
           player,
           toAdd,
-          label: action.type == PokerActionType.allIn ? 'ALL-IN' : 'RAISE',
+          label: action.type == PokerActionType.allIn
+              ? 'ALL-IN'
+              : (priorHighest <= Money.epsilon ? 'BET' : 'RAISE'),
         ));
         if (player.currentBet > highest + Money.epsilon) {
-          minRaise = Money.round(player.currentBet - highest);
+          final raiseSize = Money.round(player.currentBet - highest);
+          final fullMin = max(state.minRaise, state.bigBlind);
+          // Incomplete (short all-in) raises still pull chips in and update
+          // the price, but only a full min-raise reopens action for players
+          // who already matched the prior bet — otherwise preflop wars of
+          // +1bb "raises" never end.
+          final reopens =
+              !player.allIn || raiseSize + Money.epsilon >= fullMin;
+          if (reopens) {
+            minRaise = Money.round(raiseSize);
+          }
           highest = player.currentBet;
           lastAggressor = playerIdx;
-          // Reset acted flags for others still in.
-          players = [
-            for (var i = 0; i < players.length; i++)
-              if (i == playerIdx)
-                players[i]
-              else if (!players[i].folded)
-                players[i].copyWith(hasActedThisRound: false)
-              else
-                players[i],
-          ];
+          if (reopens) {
+            players = [
+              for (var i = 0; i < players.length; i++)
+                if (i == playerIdx)
+                  players[i]
+                else if (!players[i].folded)
+                  players[i].copyWith(hasActedThisRound: false)
+                else
+                  players[i],
+            ];
+          } else {
+            // Short all-in: anyone who has not matched the new price must
+            // still respond, even if they had already acted at the old price.
+            players = [
+              for (var i = 0; i < players.length; i++)
+                if (i == playerIdx)
+                  players[i]
+                else if (!players[i].folded &&
+                    !Money.same(players[i].currentBet, highest))
+                  players[i].copyWith(hasActedThisRound: false)
+                else
+                  players[i],
+            ];
+          }
         }
         if (isHero) heroInvested = Money.round(heroInvested + toAdd);
         break;
