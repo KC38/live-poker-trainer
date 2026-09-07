@@ -116,6 +116,53 @@ key, network, or cached clip is available, `flutter_tts` speaks the text and the
 reason travels as `CoachVoicePlayback.diagnostic` into `DiagnosticsLog`. Nothing
 about the fallback — least of all API-key configuration — reaches the UI.
 
+## Diagnostics logging
+
+Everything useful for debugging and later analysis is persisted in
+`AppDatabase` (Drift, schema **v3**; tables in
+`lib/core/database/logging_tables.dart`). All timestamps are UTC epoch ms;
+every table carries `created_at_ms` (and `updated_at_ms` where rows mutate),
+and hot lookups are indexed on `session_id`, `hand_id`, `created_at_ms`, and
+`model_id`.
+
+| Table | What it holds | Written by |
+| --- | --- | --- |
+| `app_sessions` | one row per launch: uuid, app version/build, platform + OS, debug flag, schema version, started / last-seen / ended | `AppSessionService` (bootstrapped from `PokerLabApp`; heartbeats on lifecycle changes) |
+| `ai_requests` | every Gemini HTTP attempt: kind (`scenario`/`coach`/`tts`/`image`), model, SHA-256 of prompt + system instruction, prompt text (full prompt as blob when truncated), request/response timestamps, latency, HTTP status, success, redacted error, prompt/response/total tokens, response text or binary size, attempt number, cache flag | `GeminiService` → `AiRequestLogger` (`DiagnosticsDao`) |
+| `voice_clips` | TTS cache metadata per clip: cache key, spoken text, voice, model, mime, byte size, file path **or** WAV blob (web), created / last-accessed, hit count, expiry, eviction time + reason (`ttl`/`lru`/`clear`) | `VoiceCache` → `VoiceClipStore` (`VoiceClipDao`) |
+| `scenarios` (+v3 columns) | `source` (`gemini`/`offline`), `model_id`, generated / last-updated / last-served, `times_served`, `payload_version` | `ScenarioDao` via `ScenarioManager` |
+| `hands` | settings snapshot JSON, seat count, blinds, stack depth, dealer/SB/BB/hero seats, lineup JSON, hero cards, board per street, final street, showdown flag, result message, winner seats, final pot, hero net ($ and bb), hero EV delta, rebuy events JSON | `HandRecorder` from `GameController` |
+| `hand_actions` | ordered action sequence: seat, name, archetype, hero flag, street, action type, amount, pot before/after, stack after | `HandRecorder` (batched per street) |
+| `coach_decisions` | per graded hero decision: street, hero action + amount, best action + sizing, verdict, mismatch, EV delta (bb and $), villain, advice text + source (`gemini`/`offline`), linked `ai_requests.id`, voice played / cache hit / device voice, graded / narrated timestamps | `HandRecorder` (`recordHeroDecision`, then `completeDecision` after narration) |
+| `settings_changes` | key, old value, new value per changed setting | `SettingsNotifier.onChanged` → `DiagnosticsDao.logSettingsDiff` |
+| `diagnostic_events` | level, context, message, stack trace, extra JSON, optional hand link | `DiagnosticsLog` facade (sink = `DiagnosticsDao`), `FlutterError.onError`, `PlatformDispatcher.onError` |
+
+Design rules:
+
+- **Off the hot path.** Recorder and log calls are fire-and-forget
+  (`unawaited`), actions are inserted in one batch per street, and the Gemini
+  logger / voice store resolve their DAO lazily so building the Settings →
+  Sound → Gemini provider graph never opens the database.
+- **Never secrets.** `GeminiService.redact` strips the API key (and any `key=`
+  query value) from every error before it is logged, and is installed as the
+  `DiagnosticsLog.redactor`.
+- **Bounded.** `RetentionPolicy` caps each high-volume table (newest N rows
+  plus a max age for AI requests / events; hands take their actions with
+  them; evicted voice clips age out). `AppSessionService` runs
+  `DiagnosticsDao.prune()` shortly after launch.
+- **Migration.** v1 → v2 added the leak tables; v2 → v3 creates the logging
+  tables and indexes (`IF NOT EXISTS`) and adds the `scenarios` columns only
+  when missing (`PRAGMA table_info`), so it is idempotent and keeps rows.
+  `test/core/logging_migration_test.dart` exercises both legacy versions.
+- **Reading.** `DiagnosticsDao` exposes `recentSessions`, `recentAiRequests`
+  (filter by kind / model / session), `tokenUsageByModel`,
+  `recentSettingsChanges`, `recentEvents`, `summary()` (row counts), and
+  `exportDebugLog()` (JSON-safe snapshot, blobs elided). `HandHistoryDao`
+  exposes `recentHands`, `actionsFor`, `decisionsFor`; the profile engine's
+  `HandHistorySource` reads the same `hands` / `hand_actions` columns.
+- A Drift column getter cannot be named `text` (it shadows `Table.text`); the
+  voice clip column is `spoken_text`.
+
 ## Lineup
 
 Home supports **Random Pool** and **Custom**. Custom shows a dropdown per villain seat (Seat 2…N); Hero remains seat 1 / bottom. Duplicate archetypes get unique display names. Choices persist via SharedPreferences and feed `PokerEngine.buildLineup`.

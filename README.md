@@ -121,8 +121,11 @@ lib/
 └── ui/screens/ + ui/widgets/
 ```
 
-Local storage is two Drift databases. `AppDatabase` holds gameplay: scenarios,
-user stats, and the `mistakes` / `improvement_events` leak history.
+Local storage is two Drift databases. `AppDatabase` (schema v3) holds gameplay:
+scenarios, user stats, the `mistakes` / `improvement_events` leak history, and
+the diagnostics log — `app_sessions`, `ai_requests`, `voice_clips`, `hands`,
+`hand_actions`, `coach_decisions`, `settings_changes`, `diagnostic_events` (see
+[Diagnostics logging](docs/architecture.md#diagnostics-logging)).
 `ProfileDatabase` holds the player profile — identity, the metric snapshot, and
 the cached coach review — deliberately kept separate so the profile schema does
 not have to migrate in lockstep with gameplay. It reads the shared hand log
