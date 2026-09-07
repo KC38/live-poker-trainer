@@ -66,24 +66,27 @@ class ChipFormat {
     };
   }
 
-  /// Formats an optimal action line, e.g. `RAISE · $70 · 35.0 BB`.
+  /// Whether [actionLabel] is a sized aggression line (bet / raise / all-in).
+  static bool isSizedAction(String actionLabel) {
+    final upper = actionLabel.trim().toUpperCase();
+    return upper == 'RAISE' || upper == 'BET' || upper == 'ALL-IN';
+  }
+
+  /// Formats an action + size line, e.g. `RAISE · $70`.
+  ///
+  /// Sizing is appended only for bet/raise/all-in when [sizingBb] is positive.
+  /// Passive actions (fold / check / call) stay label-only.
   static String optimalLine({
     required String actionLabel,
     required double sizingBb,
     required double bigBlind,
     required ChipDisplayMode mode,
   }) {
-    if (sizingBb <= 0) return actionLabel;
-    final dollarsAmt = sizingBb * bigBlind;
-    return switch (mode) {
-      ChipDisplayMode.dollars =>
-        '$actionLabel · ${dollars(dollarsAmt)}',
-      ChipDisplayMode.bb =>
-        '$actionLabel · ${sizingBb.toStringAsFixed(1)} BB',
-      ChipDisplayMode.both =>
-        '$actionLabel · ${dollars(dollarsAmt)} · '
-            '${sizingBb.toStringAsFixed(1)} BB',
-    };
+    if (sizingBb <= 0 || !isSizedAction(actionLabel)) {
+      return actionLabel;
+    }
+    final amount = chips(sizingBb * bigBlind, bigBlind, mode);
+    return '$actionLabel · $amount';
   }
 
   /// Signed EV amount only (no "EV Δ" prefix) for coach stats cells.

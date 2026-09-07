@@ -27,6 +27,7 @@ class CoachFeedback {
     this.optimalAction,
     this.optimalSizingBb = 0,
     this.heroAction,
+    this.heroSizingBb = 0,
     this.evDeltaBb = 0,
     this.repeatCount = 0,
     this.improvementStreak = 0,
@@ -40,6 +41,9 @@ class CoachFeedback {
   final ExploitAction? optimalAction;
   final double optimalSizingBb;
   final String? heroAction;
+
+  /// Hero bet / raise size in big blinds (0 for passive actions).
+  final double heroSizingBb;
   final double evDeltaBb;
 
   /// How many times this INCORRECT pattern has now occurred (0 / 1 = not a
@@ -79,6 +83,7 @@ class CoachFeedback {
     ExploitAction? optimalAction,
     double? optimalSizingBb,
     String? heroAction,
+    double? heroSizingBb,
     double? evDeltaBb,
     int? repeatCount,
     int? improvementStreak,
@@ -93,6 +98,7 @@ class CoachFeedback {
       optimalAction: optimalAction ?? this.optimalAction,
       optimalSizingBb: optimalSizingBb ?? this.optimalSizingBb,
       heroAction: heroAction ?? this.heroAction,
+      heroSizingBb: heroSizingBb ?? this.heroSizingBb,
       evDeltaBb: evDeltaBb ?? this.evDeltaBb,
       repeatCount: repeatCount ?? this.repeatCount,
       improvementStreak: improvementStreak ?? this.improvementStreak,

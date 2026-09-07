@@ -64,6 +64,9 @@ class _CoachShelfWidgetState extends State<CoachShelfWidget> {
 
   CoachFeedback get _feedback => widget.feedback;
 
+  /// Felt-style chip mode so strip amounts stay compact like table stacks.
+  ChipDisplayMode get _stripMode => widget.chipDisplayMode.tableMode;
+
   String get _message {
     if (_feedback.message.isEmpty) {
       return 'Your move — pick Fold, Check/Call, or Bet/Raise.';
@@ -84,7 +87,21 @@ class _CoachShelfWidgetState extends State<CoachShelfWidget> {
       actionLabel: _feedback.optimalAction!.label,
       sizingBb: _feedback.optimalSizingBb,
       bigBlind: widget.bigBlind,
-      mode: widget.chipDisplayMode,
+      mode: _stripMode,
+    );
+  }
+
+  /// Hero action with raise/bet size when available for fair BEST comparison.
+  String get _youLine {
+    final label = _feedback.heroAction;
+    if (label == null || label.isEmpty) {
+      return '—';
+    }
+    return ChipFormat.optimalLine(
+      actionLabel: label,
+      sizingBb: _feedback.heroSizingBb,
+      bigBlind: widget.bigBlind,
+      mode: _stripMode,
     );
   }
 
@@ -144,11 +161,11 @@ class _CoachShelfWidgetState extends State<CoachShelfWidget> {
             padding: EdgeInsets.only(top: showExpanded ? 10 : 8),
             child: _DecisionStatsStrip(
               best: optimal ?? '—',
-              you: _feedback.heroAction ?? '—',
+              you: _youLine,
               evAmount: ChipFormat.evDeltaAmount(
                 _feedback.evDeltaBb,
                 widget.bigBlind,
-                widget.chipDisplayMode,
+                _stripMode,
               ),
               evDeltaBb: _feedback.evDeltaBb,
               compact: !showExpanded,
@@ -393,6 +410,9 @@ class _DecisionStatsStrip extends StatelessWidget {
 }
 
 /// One labeled mono value in the decision stats strip.
+///
+/// Never ellipsizes away raise sizing — scales the mono value down so the
+/// full `RAISE · $42` string stays readable in the three-cell strip.
 class _StatsCell extends StatelessWidget {
   const _StatsCell({
     required this.label,
@@ -423,16 +443,21 @@ class _StatsCell extends StatelessWidget {
           ),
         ),
         SizedBox(height: compact ? 2 : 3),
-        Text(
-          value,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: GoogleFonts.jetBrainsMono(
-            fontSize: compact ? 11 : 12.5,
-            fontWeight: FontWeight.w700,
-            color: valueColor ?? AppColors.cream,
-            height: 1.15,
-            letterSpacing: -0.2,
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Text(
+            value,
+            maxLines: 2,
+            softWrap: true,
+            textAlign: TextAlign.left,
+            style: GoogleFonts.jetBrainsMono(
+              fontSize: compact ? 11 : 12.5,
+              fontWeight: FontWeight.w700,
+              color: valueColor ?? AppColors.cream,
+              height: 1.15,
+              letterSpacing: -0.2,
+            ),
           ),
         ),
       ],

@@ -124,7 +124,9 @@ class ScenarioManager {
       verdict: correct ? CoachVerdict.correct : CoachVerdict.incorrect,
       message: message,
       optimalAction: scenario.optimalExploitAction,
+      optimalSizingBb: scenario.optimalSizingBb,
       heroAction: action.label,
+      heroSizingBb: bb > 0 ? action.amount / bb : 0,
       evDeltaBb: evDeltaBb,
     );
   }

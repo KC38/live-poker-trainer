@@ -17,7 +17,19 @@ const _longIncorrect = CoachFeedback(
   optimalAction: ExploitAction.call,
   optimalSizingBb: 4,
   heroAction: 'RAISE',
+  heroSizingBb: 8,
   evDeltaBb: -3.84,
+);
+
+const _sizedRaiseIncorrect = CoachFeedback(
+  verdict: CoachVerdict.incorrect,
+  message: 'Right idea, wrong size preflop — you made it 16 BB, target 10 BB. '
+      'Versus a LAG, pick a size that is awkward for their float range.',
+  optimalAction: ExploitAction.raise,
+  optimalSizingBb: 10,
+  heroAction: 'RAISE',
+  heroSizingBb: 16,
+  evDeltaBb: -0.48,
 );
 
 const _longCorrect = CoachFeedback(
@@ -96,8 +108,24 @@ void main() {
     expect(find.text('BEST'), findsOneWidget);
     expect(find.text('YOU'), findsOneWidget);
     expect(find.text('EV'), findsOneWidget);
-    expect(find.text('RAISE'), findsOneWidget);
+    expect(find.text('RAISE · \$16'), findsOneWidget);
     expect(find.textContaining('-\$'), findsOneWidget);
+  });
+
+  testWidgets('BEST and YOU show raise amounts without ellipsis', (tester) async {
+    await tester.pumpWidget(_wrap(_sizedRaiseIncorrect, maxHeight: 190));
+
+    // Collapsed peek must still show sizing (bb=2 → $20 best / $32 you).
+    expect(find.text('RAISE · \$20'), findsOneWidget);
+    expect(find.text('RAISE · \$32'), findsOneWidget);
+    expect(find.text('RAISE …'), findsNothing);
+    expect(find.textContaining('…'), findsNothing);
+
+    await tester.tap(find.text('Show more'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('RAISE · \$20'), findsOneWidget);
+    expect(find.text('RAISE · \$32'), findsOneWidget);
   });
 
   testWidgets('expands to full advice and decision context', (tester) async {
@@ -107,7 +135,7 @@ void main() {
 
     expect(find.text('Show less'), findsOneWidget);
     expect(find.text('BEST'), findsOneWidget);
-    expect(find.text('RAISE'), findsOneWidget);
+    expect(find.text('RAISE · \$16'), findsOneWidget);
     final message = find.textContaining('Raising here bloats');
     final text = tester.widget<Text>(message);
     expect(text.maxLines, isNull);
@@ -184,7 +212,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('INCORRECT'), findsWidgets);
     expect(find.text('BEST'), findsOneWidget);
-    expect(find.text('RAISE'), findsOneWidget);
+    expect(find.text('RAISE · \$16'), findsOneWidget);
   });
 
   testWidgets('autoExpand review keeps the verdict badge visible', (tester) async {
