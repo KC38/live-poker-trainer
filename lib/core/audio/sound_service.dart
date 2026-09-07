@@ -311,15 +311,21 @@ class SoundService {
       );
 
       final cached = await _cache.get(key);
-      if (cached != null && await _playFile(cached.path)) {
+      if (cached != null && await _playClip(cached)) {
         return const CoachVoicePlayback(spoke: true, fromCache: true);
       }
 
       final synthesized = await gemini.synthesizeSpeech(cleaned);
       if (synthesized != null && synthesized.isNotEmpty) {
-        final stored = await _cache.put(key, synthesized);
+        final stored = await _cache.putDescribed(
+          key,
+          synthesized,
+          text: cleaned,
+          voice: Config.coachVoice,
+          modelId: Config.geminiTtsModel,
+        );
         _warmKeys.add(key);
-        if (stored != null && await _playFile(stored.path)) {
+        if (stored != null && await _playClip(stored)) {
           return const CoachVoicePlayback(spoke: true);
         }
         if (await _playBytes(synthesized)) {
@@ -331,6 +337,13 @@ class SoundService {
     // Last resort: the flat device voice, used quietly. The player is never
     // told the Gemini voice was skipped, and never asked for a key.
     final spoke = await _speakWithDevice(cleaned);
+    if (!spoke) {
+      DiagnosticsLog.warning(
+        'SoundService.speakCoachLine',
+        'Coach voice failed on every backend',
+        extra: {'hasKey': gemini?.hasApiKey ?? false},
+      );
+    }
     if (spoke) {
       return _report(CoachVoicePlayback(
         spoke: true,
@@ -375,9 +388,22 @@ class SoundService {
     }
     final bytes = await gemini.synthesizeSpeech(cleaned);
     if (bytes == null || bytes.isEmpty) return false;
-    await _cache.put(key, bytes);
+    await _cache.putDescribed(
+      key,
+      bytes,
+      text: cleaned,
+      voice: Config.coachVoice,
+      modelId: Config.geminiTtsModel,
+    );
     _warmKeys.add(key);
     return true;
+  }
+
+  /// Plays a cached clip from its file, or from bytes when database-backed.
+  Future<bool> _playClip(CachedVoiceClip clip) {
+    if (clip.hasFile) return _playFile(clip.path);
+    final data = clip.data;
+    return data == null ? Future.value(false) : _playBytes(data);
   }
 
   Future<bool> _playFile(String path) async {

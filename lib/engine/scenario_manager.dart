@@ -1,8 +1,11 @@
 /// Fetches, caches, and grades practice scenarios.
 library;
 
+import 'dart:async';
+
 import 'package:live_poker_trainer/core/constants/config.dart';
 import 'package:live_poker_trainer/core/database/scenario_dao.dart';
+import 'package:live_poker_trainer/core/diagnostics/diagnostics_log.dart';
 import 'package:live_poker_trainer/core/database/user_stats_dao.dart';
 import 'package:live_poker_trainer/engine/poker_engine.dart';
 import 'package:live_poker_trainer/models/coach_feedback.dart';
@@ -26,21 +29,38 @@ class ScenarioManager {
   Future<ScenarioModel> nextScenario() async {
     final cached = await scenarioDao.unplayed(limit: 1);
     if (cached.isNotEmpty) {
+      final id = cached.first.id;
+      if (id != null) unawaited(_markServed(id));
       await maybePrefetch();
       return cached.first;
     }
 
     final generated = await gemini.generateScenarios(count: 3);
     if (generated.isEmpty) {
-      return _fallbackScenario();
+      final fallback = _fallbackScenario();
+      // Persist the offline scenario too so its play history is queryable.
+      final id = await scenarioDao.upsert(fallback, source: 'offline');
+      unawaited(_markServed(id));
+      return fallback.copyWith(id: id);
     }
     ScenarioModel? first;
     for (final s in generated) {
-      final id = await scenarioDao.upsert(s);
-      first ??= s.copyWith(id: id);
+      final id = await scenarioDao.upsert(s, modelId: Config.geminiModel);
+      if (first == null) {
+        first = s.copyWith(id: id);
+        unawaited(_markServed(id));
+      }
     }
     await maybePrefetch();
     return first!;
+  }
+
+  Future<void> _markServed(int id) async {
+    try {
+      await scenarioDao.markServed(id);
+    } catch (e, st) {
+      DiagnosticsLog.error('ScenarioManager.markServed', e, st);
+    }
   }
 
   /// Prefetches when unplayed count is below threshold.
@@ -53,10 +73,11 @@ class ScenarioManager {
     try {
       final batch = await gemini.generateScenarios(count: needed);
       for (final s in batch) {
-        await scenarioDao.upsert(s);
+        await scenarioDao.upsert(s, modelId: Config.geminiModel);
       }
-    } catch (_) {
+    } catch (e, st) {
       // Prefetch is best-effort; gameplay can continue offline.
+      DiagnosticsLog.error('ScenarioManager.prefetch', e, st);
     }
   }
 

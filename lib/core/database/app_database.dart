@@ -6,17 +6,32 @@ import 'dart:convert';
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:live_poker_trainer/core/constants/config.dart';
+import 'package:live_poker_trainer/core/database/logging_tables.dart';
 import 'package:live_poker_trainer/models/scenario_model.dart';
 import 'package:live_poker_trainer/models/user_stats_model.dart';
 
 part 'app_database.g.dart';
 
 /// Cached Gemini scenarios (deduped by content hash).
+///
+/// Schema v3 added cache metadata (source, model, served counters, payload
+/// version); see [AppDatabase.migration].
 class Scenarios extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get contentHash => text().unique()();
   TextColumn get payloadJson => text()();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
+  /// `gemini` or `offline`.
+  TextColumn get source => text().withDefault(const Constant('gemini'))();
+  TextColumn get modelId => text().withDefault(const Constant(''))();
+
+  /// UTC epoch ms; null for rows written before schema v3.
+  IntColumn get generatedAtMs => integer().nullable()();
+  IntColumn get lastUpdatedAtMs => integer().nullable()();
+  IntColumn get timesServed => integer().withDefault(const Constant(0))();
+  IntColumn get lastServedAtMs => integer().nullable()();
+  IntColumn get payloadVersion => integer().withDefault(const Constant(1))();
 }
 
 /// Marks scenarios as played for a user.
@@ -108,6 +123,14 @@ class ImprovementEvents extends Table {
 }
 
 /// Application Drift database (native SQLite + web WASM).
+///
+/// Schema history:
+/// * v1 — `scenarios`, `played_scenarios`, `user_stats_rows`.
+/// * v2 — `mistakes`, `improvement_events`.
+/// * v3 — diagnostics / logging tables from `logging_tables.dart`
+///   (`app_sessions`, `ai_requests`, `voice_clips`, `hands`, `hand_actions`,
+///   `coach_decisions`, `settings_changes`, `diagnostic_events`) plus cache
+///   metadata columns on `scenarios`. Existing rows are preserved.
 @DriftDatabase(
   tables: [
     Scenarios,
@@ -115,6 +138,14 @@ class ImprovementEvents extends Table {
     UserStatsRows,
     Mistakes,
     ImprovementEvents,
+    AppSessions,
+    AiRequests,
+    VoiceClips,
+    Hands,
+    HandActions,
+    CoachDecisions,
+    SettingsChanges,
+    DiagnosticEvents,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -122,8 +153,11 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor])
       : super(executor ?? _openConnection());
 
+  /// Current schema version. Bump together with [migration].
+  static const int currentSchemaVersion = 3;
+
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => currentSchemaVersion;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -133,8 +167,51 @@ class AppDatabase extends _$AppDatabase {
             await m.createTable(mistakes);
             await m.createTable(improvementEvents);
           }
+          if (from < 3) {
+            await _upgradeLoggingToV3(m);
+          }
         },
       );
+
+  /// v2 → v3: logging tables, their indexes, and scenario cache metadata.
+  ///
+  /// `createTable` / `createIndex` emit `IF NOT EXISTS`, so re-running after a
+  /// partially applied upgrade is safe. Column adds are guarded by reading the
+  /// live table info because SQLite has no `ADD COLUMN IF NOT EXISTS`.
+  Future<void> _upgradeLoggingToV3(Migrator m) async {
+    for (final table in <TableInfo>[
+      appSessions,
+      aiRequests,
+      voiceClips,
+      hands,
+      handActions,
+      coachDecisions,
+      settingsChanges,
+      diagnosticEvents,
+    ]) {
+      await m.createTable(table);
+    }
+    for (final index in allSchemaEntities.whereType<Index>()) {
+      await m.createIndex(index);
+    }
+    final rows =
+        await customSelect('PRAGMA table_info("${scenarios.actualTableName}")')
+            .get();
+    final existing = rows.map((r) => r.read<String>('name')).toSet();
+    for (final column in <GeneratedColumn>[
+      scenarios.source,
+      scenarios.modelId,
+      scenarios.generatedAtMs,
+      scenarios.lastUpdatedAtMs,
+      scenarios.timesServed,
+      scenarios.lastServedAtMs,
+      scenarios.payloadVersion,
+    ]) {
+      if (!existing.contains(column.$name)) {
+        await m.addColumn(scenarios, column);
+      }
+    }
+  }
 
   static QueryExecutor _openConnection() {
     return driftDatabase(

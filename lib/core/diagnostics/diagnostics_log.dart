@@ -13,9 +13,9 @@ enum DiagnosticLevel { error, warning, info }
 
 /// One diagnostic record before persistence.
 @immutable
-class DiagnosticEvent {
+class DiagnosticRecord {
   /// Creates a diagnostic event.
-  const DiagnosticEvent({
+  const DiagnosticRecord({
     required this.level,
     required this.context,
     required this.message,
@@ -36,10 +36,10 @@ class DiagnosticEvent {
   final int? handId;
 }
 
-/// Destination for [DiagnosticEvent]s.
+/// Destination for [DiagnosticRecord]s.
 abstract class DiagnosticsSink {
   /// Persists [event]. Must not throw.
-  Future<void> record(DiagnosticEvent event);
+  Future<void> record(DiagnosticRecord event);
 }
 
 /// Static facade used by services that have no database handle.
@@ -49,7 +49,7 @@ class DiagnosticsLog {
   static DiagnosticsSink? _sink;
 
   /// Optional hook for tests / debug overlays; receives every event.
-  static void Function(DiagnosticEvent event)? listener;
+  static void Function(DiagnosticRecord event)? listener;
 
   /// Redaction step applied to every message (removes API keys).
   static String Function(String text) redactor = (text) => text;
@@ -69,7 +69,7 @@ class DiagnosticsLog {
     int? handId,
   ]) {
     _emit(
-      DiagnosticEvent(
+      DiagnosticRecord(
         level: DiagnosticLevel.error,
         context: context,
         message: redactor('$error'),
@@ -88,7 +88,7 @@ class DiagnosticsLog {
     int? handId,
   }) {
     _emit(
-      DiagnosticEvent(
+      DiagnosticRecord(
         level: DiagnosticLevel.warning,
         context: context,
         message: redactor(message),
@@ -106,7 +106,7 @@ class DiagnosticsLog {
     int? handId,
   }) {
     _emit(
-      DiagnosticEvent(
+      DiagnosticRecord(
         level: DiagnosticLevel.info,
         context: context,
         message: redactor(message),
@@ -116,7 +116,7 @@ class DiagnosticsLog {
     );
   }
 
-  static void _emit(DiagnosticEvent event) {
+  static void _emit(DiagnosticRecord event) {
     try {
       listener?.call(event);
     } catch (_) {

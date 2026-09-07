@@ -1,6 +1,8 @@
 /// Persisted gameplay and audio settings via SharedPreferences.
 library;
 
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
@@ -18,7 +20,7 @@ const _legacyGeminiKeyOverridePref = 'geminiKeyOverride';
 /// Settings controller with disk persistence.
 class SettingsNotifier extends StateNotifier<GameSettingsModel> {
   /// Creates a notifier from [prefs].
-  SettingsNotifier(this._prefs, {this._soundSync})
+  SettingsNotifier(this._prefs, {this._soundSync, this.onChanged})
       : super(_load(_prefs)) {
     // Drop any previously saved device key override; keys come from
     // `.env` / `--dart-define` only now.
@@ -31,6 +33,10 @@ class SettingsNotifier extends StateNotifier<GameSettingsModel> {
   final SharedPreferences _prefs;
   final SoundServiceSync? _soundSync;
 
+  /// Invoked with the previous and next prefs maps after every [update]
+  /// (used to persist a settings-change audit trail). Must not throw.
+  final SettingsChanged? onChanged;
+
   static GameSettingsModel _load(SharedPreferences prefs) {
     return GameSettingsModel.fromPrefs({
       for (final key in prefs.getKeys()) key: prefs.get(key),
@@ -38,8 +44,10 @@ class SettingsNotifier extends StateNotifier<GameSettingsModel> {
   }
 
   Future<void> update(GameSettingsModel next) async {
+    final before = state.toPrefsMap();
     state = next;
     final map = next.toPrefsMap();
+    onChanged?.call(before, map);
     for (final entry in map.entries) {
       final v = entry.value;
       if (v is bool) {
@@ -107,27 +115,38 @@ class SettingsNotifier extends StateNotifier<GameSettingsModel> {
 /// Callback to push SFX/TTS/music flags into [SoundService].
 typedef SoundServiceSync = void Function(bool sfx, bool tts, bool music);
 
+/// Callback receiving the settings maps before and after an update.
+typedef SettingsChanged = void Function(
+  Map<String, Object?> before,
+  Map<String, Object?> after,
+);
+
 final settingsProvider =
     StateNotifierProvider<SettingsNotifier, GameSettingsModel>((ref) {
   final asyncPrefs = ref.watch(sharedPreferencesProvider);
+  void soundSync(bool sfx, bool tts, bool music) {
+    final sound = ref.read(soundServiceProvider);
+    sound.sfxEnabled = sfx;
+    sound.ttsEnabled = tts;
+    sound.setMusicEnabled(music);
+  }
+
+  void audit(Map<String, Object?> before, Map<String, Object?> after) {
+    unawaited(
+      ref
+          .read(diagnosticsDaoProvider)
+          .logSettingsDiff(before, after)
+          .catchError((Object _) => 0),
+    );
+  }
+
   return asyncPrefs.maybeWhen(
-    data: (prefs) => SettingsNotifier(
-      prefs,
-      soundSync: (sfx, tts, music) {
-        final sound = ref.read(soundServiceProvider);
-        sound.sfxEnabled = sfx;
-        sound.ttsEnabled = tts;
-        sound.setMusicEnabled(music);
-      },
-    ),
+    data: (prefs) =>
+        SettingsNotifier(prefs, soundSync: soundSync, onChanged: audit),
     orElse: () => SettingsNotifier(
       _MemoryPrefs(),
-      soundSync: (sfx, tts, music) {
-        final sound = ref.read(soundServiceProvider);
-        sound.sfxEnabled = sfx;
-        sound.ttsEnabled = tts;
-        sound.setMusicEnabled(music);
-      },
+      soundSync: soundSync,
+      onChanged: audit,
     ),
   );
 });
