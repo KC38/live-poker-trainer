@@ -381,7 +381,7 @@ void main() {
         expect(reviewCards.height, greaterThan(playingCards.height));
         // Review copy opens itself now that the shelf owns the space.
         expect(find.text('Show less'), findsOneWidget);
-        expect(find.textContaining('Best:'), findsOneWidget);
+        expect(find.text('BEST'), findsOneWidget);
       });
 
       testWidgets('bands stay separated while the dock is hidden',

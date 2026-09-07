@@ -83,13 +83,21 @@ void main() {
     await tester.pumpWidget(_wrap(_longIncorrect, maxHeight: 190));
     expect(find.text('Show more'), findsOneWidget);
     expect(find.text('Show less'), findsNothing);
-    expect(find.textContaining('Best:'), findsNothing);
-    expect(find.textContaining('You:'), findsNothing);
 
     final message = find.textContaining('Raising here bloats');
     final text = tester.widget<Text>(message);
     expect(text.maxLines, 2);
     expect(text.overflow, TextOverflow.ellipsis);
+  });
+
+  testWidgets('collapsed preview still peeks BEST / YOU / EV', (tester) async {
+    await tester.pumpWidget(_wrap(_longIncorrect, maxHeight: 190));
+
+    expect(find.text('BEST'), findsOneWidget);
+    expect(find.text('YOU'), findsOneWidget);
+    expect(find.text('EV'), findsOneWidget);
+    expect(find.text('RAISE'), findsOneWidget);
+    expect(find.textContaining('-\$'), findsOneWidget);
   });
 
   testWidgets('expands to full advice and decision context', (tester) async {
@@ -98,8 +106,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Show less'), findsOneWidget);
-    expect(find.textContaining('Best:'), findsOneWidget);
-    expect(find.textContaining('You: RAISE'), findsOneWidget);
+    expect(find.text('BEST'), findsOneWidget);
+    expect(find.text('RAISE'), findsOneWidget);
     final message = find.textContaining('Raising here bloats');
     final text = tester.widget<Text>(message);
     expect(text.maxLines, isNull);
@@ -113,7 +121,9 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Show more'), findsOneWidget);
-    expect(find.textContaining('Best:'), findsNothing);
+    // Mini peek remains while graded.
+    expect(find.text('BEST'), findsOneWidget);
+    expect(find.text('CHECK'), findsNWidgets(2)); // BEST + YOU
   });
 
   testWidgets('stays expanded across a new coach line when already open',
@@ -130,7 +140,8 @@ void main() {
 
     expect(find.text('Show less'), findsOneWidget);
     expect(find.textContaining('Nice check'), findsOneWidget);
-    expect(find.textContaining('Best:'), findsOneWidget);
+    expect(find.text('BEST'), findsOneWidget);
+    expect(find.text('CHECK'), findsNWidgets(2)); // BEST + YOU
   });
 
   testWidgets('returns to collapsed preview for a new line when closed',
@@ -145,7 +156,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Show more'), findsOneWidget);
-    expect(find.textContaining('Best:'), findsNothing);
+    expect(find.text('BEST'), findsOneWidget);
   });
 
   testWidgets('respects height cap while expanded', (tester) async {
@@ -161,6 +172,7 @@ void main() {
     await tester.pumpWidget(_wrap(_neutralPrompt));
     expect(find.text('Show more'), findsNothing);
     expect(find.textContaining('Your move.'), findsOneWidget);
+    expect(find.text('BEST'), findsNothing);
   });
 
   testWidgets('graded incorrect always shows an INCORRECT badge', (tester) async {
@@ -171,8 +183,8 @@ void main() {
     await tester.tap(find.text('Show more'));
     await tester.pumpAndSettle();
     expect(find.text('INCORRECT'), findsWidgets);
-    expect(find.textContaining('Best:'), findsOneWidget);
-    expect(find.textContaining('You: RAISE'), findsOneWidget);
+    expect(find.text('BEST'), findsOneWidget);
+    expect(find.text('RAISE'), findsOneWidget);
   });
 
   testWidgets('autoExpand review keeps the verdict badge visible', (tester) async {
@@ -193,6 +205,28 @@ void main() {
 
     expect(find.text('INCORRECT'), findsWidgets);
     expect(find.text('Show less'), findsOneWidget);
-    expect(find.textContaining('Best:'), findsOneWidget);
+    expect(find.text('BEST'), findsOneWidget);
+    expect(find.text('YOU'), findsOneWidget);
+    expect(find.text('EV'), findsOneWidget);
+  });
+
+  testWidgets('EV cell uses signed amount without EV Δ prefix', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: CoachShelfWidget(
+            feedback: _longCorrect,
+            bigBlind: 2,
+            chipDisplayMode: ChipDisplayMode.dollars,
+            autoExpand: true,
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('EV'), findsOneWidget);
+    expect(find.text('+\$0.80'), findsOneWidget);
+    expect(find.textContaining('EV Δ'), findsNothing);
   });
 }

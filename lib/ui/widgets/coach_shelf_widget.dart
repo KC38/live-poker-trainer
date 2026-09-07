@@ -115,7 +115,7 @@ class _CoachShelfWidgetState extends State<CoachShelfWidget> {
     final optimal = _optimalLine;
     final maxHeight = widget.maxHeight;
 
-    final body = Column(
+    final advice = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -132,33 +132,54 @@ class _CoachShelfWidgetState extends State<CoachShelfWidget> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        if (showExpanded && hasVerdict)
+        if (hasVerdict)
           Padding(
-            padding: const EdgeInsets.only(top: 6),
-            child: Text(
-              [
-                if (optimal != null) 'Best: $optimal',
-                if (_feedback.heroAction != null)
-                  'You: ${_feedback.heroAction}',
-                ChipFormat.evDelta(
-                  _feedback.evDeltaBb,
-                  widget.bigBlind,
-                  widget.chipDisplayMode,
-                ),
-              ].join('  ·  '),
-              style: GoogleFonts.jetBrainsMono(
-                fontSize: 9.5,
-                height: 1.35,
-                color: AppColors.slate,
+            padding: EdgeInsets.only(top: showExpanded ? 10 : 8),
+            child: _DecisionStatsStrip(
+              best: optimal ?? '—',
+              you: _feedback.heroAction ?? '—',
+              evAmount: ChipFormat.evDeltaAmount(
+                _feedback.evDeltaBb,
+                widget.bigBlind,
+                widget.chipDisplayMode,
               ),
+              evDeltaBb: _feedback.evDeltaBb,
+              compact: !showExpanded,
             ),
           ),
-        if (_canCollapse)
-          _CollapseToggle(
-            expanded: showExpanded,
-            onPressed: _toggleExpanded,
-          ),
       ],
+    );
+
+    // Pin Show more/less below a height-capped scroll so it stays tappable
+    // when advice + stats exceed the band. Budget uses the real inner
+    // constraint (not the outer maxHeight), so padding/margin never overflow.
+    final body = LayoutBuilder(
+      builder: (context, constraints) {
+        const toggleReserve = 40.0;
+        final hasCap = maxHeight != null && constraints.hasBoundedHeight;
+        final scrollChild = hasCap
+            ? _HeightCappedScroll(
+                maxHeight: _canCollapse
+                    ? (constraints.maxHeight - toggleReserve)
+                        .clamp(48.0, constraints.maxHeight)
+                    : constraints.maxHeight,
+                child: advice,
+              )
+            : advice;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            scrollChild,
+            if (_canCollapse)
+              _CollapseToggle(
+                expanded: showExpanded,
+                onPressed: _toggleExpanded,
+              ),
+          ],
+        );
+      },
     );
 
     return ConstrainedBox(
@@ -203,16 +224,7 @@ class _CoachShelfWidgetState extends State<CoachShelfWidget> {
               ),
               const SizedBox(width: 12),
             ],
-            Expanded(
-              child: maxHeight == null
-                  ? body
-                  : _HeightCappedScroll(
-                      maxHeight: maxHeight,
-                      // Leave room for vertical padding inside the panel.
-                      paddingReserve: 20,
-                      child: body,
-                    ),
-            ),
+            Expanded(child: body),
             IconButton(
               tooltip: widget.ttsEnabled ? 'Mute coach' : 'Unmute coach',
               onPressed: widget.onMuteToggle,
@@ -236,19 +248,16 @@ class _CoachShelfWidgetState extends State<CoachShelfWidget> {
 class _HeightCappedScroll extends StatelessWidget {
   const _HeightCappedScroll({
     required this.maxHeight,
-    required this.paddingReserve,
     required this.child,
   });
 
   final double maxHeight;
-  final double paddingReserve;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    final cap = (maxHeight - paddingReserve).clamp(48.0, maxHeight);
     return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: cap),
+      constraints: BoxConstraints(maxHeight: maxHeight),
       child: ListView(
         // Size to the preview when collapsed; scroll only when over the cap.
         shrinkWrap: true,
@@ -293,6 +302,128 @@ class _CoachHeader extends StatelessWidget {
             ),
           ),
         ],
+      ],
+    );
+  }
+}
+
+/// Aligned BEST / YOU / EV decision strip for graded coach feedback.
+///
+/// Expanded: labeled cells with mono values. Collapsed: compact peek so the
+/// verdict stays scannable without opening the full shelf.
+class _DecisionStatsStrip extends StatelessWidget {
+  const _DecisionStatsStrip({
+    required this.best,
+    required this.you,
+    required this.evAmount,
+    required this.evDeltaBb,
+    required this.compact,
+  });
+
+  final String best;
+  final String you;
+  final String evAmount;
+  final double evDeltaBb;
+  final bool compact;
+
+  Color get _evColor {
+    if (evDeltaBb > 0.001) return AppColors.success;
+    if (evDeltaBb < -0.001) return AppColors.danger;
+    return AppColors.cream;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final padV = compact ? 6.0 : 8.0;
+    final padH = compact ? 8.0 : 10.0;
+    final gap = compact ? 6.0 : 8.0;
+
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(horizontal: padH, vertical: padV),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceMuted.withValues(alpha: 0.72),
+        borderRadius: BorderRadius.circular(compact ? 10 : 12),
+        border: Border.all(
+          color: AppColors.slateDark.withValues(alpha: 0.9),
+          width: 0.8,
+        ),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: _StatsCell(
+              label: 'BEST',
+              value: best,
+              compact: compact,
+            ),
+          ),
+          SizedBox(width: gap),
+          Expanded(
+            child: _StatsCell(
+              label: 'YOU',
+              value: you,
+              compact: compact,
+            ),
+          ),
+          SizedBox(width: gap),
+          Expanded(
+            child: _StatsCell(
+              label: 'EV',
+              value: evAmount,
+              valueColor: _evColor,
+              compact: compact,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// One labeled mono value in the decision stats strip.
+class _StatsCell extends StatelessWidget {
+  const _StatsCell({
+    required this.label,
+    required this.value,
+    required this.compact,
+    this.valueColor,
+  });
+
+  final String label;
+  final String value;
+  final bool compact;
+  final Color? valueColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.manrope(
+            fontSize: compact ? 8.5 : 9.5,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.9,
+            color: AppColors.goldMuted,
+            height: 1.1,
+          ),
+        ),
+        SizedBox(height: compact ? 2 : 3),
+        Text(
+          value,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: GoogleFonts.jetBrainsMono(
+            fontSize: compact ? 11 : 12.5,
+            fontWeight: FontWeight.w700,
+            color: valueColor ?? AppColors.cream,
+            height: 1.15,
+            letterSpacing: -0.2,
+          ),
+        ),
       ],
     );
   }

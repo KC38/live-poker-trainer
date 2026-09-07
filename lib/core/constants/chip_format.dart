@@ -86,8 +86,8 @@ class ChipFormat {
     };
   }
 
-  /// Formats EV delta with dollars and/or BB.
-  static String evDelta(
+  /// Signed EV amount only (no "EV Δ" prefix) for coach stats cells.
+  static String evDeltaAmount(
     double evDeltaBb,
     double bigBlind,
     ChipDisplayMode mode,
@@ -97,9 +97,18 @@ class ChipFormat {
     final bbPart = '$sign${absBb.toStringAsFixed(2)} BB';
     final signedDollars = '$sign${dollars(absBb * bigBlind)}';
     return switch (mode) {
-      ChipDisplayMode.dollars => 'EV Δ $signedDollars',
-      ChipDisplayMode.bb => 'EV Δ $bbPart',
-      ChipDisplayMode.both => 'EV Δ $signedDollars · $bbPart',
+      ChipDisplayMode.dollars => signedDollars,
+      ChipDisplayMode.bb => bbPart,
+      ChipDisplayMode.both => '$signedDollars · $bbPart',
     };
+  }
+
+  /// Formats EV delta with dollars and/or BB.
+  static String evDelta(
+    double evDeltaBb,
+    double bigBlind,
+    ChipDisplayMode mode,
+  ) {
+    return 'EV Δ ${evDeltaAmount(evDeltaBb, bigBlind, mode)}';
   }
 }
