@@ -8,6 +8,7 @@ import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/core/constants/money.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
+import 'package:live_poker_trainer/models/hero_profile_model.dart';
 import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_avatar.dart';
@@ -24,6 +25,7 @@ class HeroRailWidget extends ConsumerWidget {
     required this.game,
     required this.chipDisplayMode,
     this.isThinking = false,
+    this.review = false,
   });
 
   final GameState game;
@@ -34,19 +36,39 @@ class HeroRailWidget extends ConsumerWidget {
   /// True while villains are still acting and it is not the hero's turn.
   final bool isThinking;
 
+  /// True once the hand is over and the action dock has given up its band:
+  /// the rail takes a slice of that space and shows larger hole cards.
+  final bool review;
+
   /// Height reserved for this band, including padding.
   static const double height = 84;
+
+  /// Taller band used while reviewing a finished hand.
+  static const double reviewHeight = 102;
+
+  /// Hole-card growth applied at full [review].
+  static const double _reviewCardScale = 1.18;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final identity = ref.watch(heroIdentityProvider);
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(end: review ? 1 : 0),
+      duration: const Duration(milliseconds: 280),
+      curve: Curves.easeOutCubic,
+      builder: (context, t, _) => _buildRail(identity, t),
+    );
+  }
+
+  /// Builds the rail at review progress [t] (0 = playing, 1 = reviewing).
+  Widget _buildRail(HeroIdentity identity, double t) {
     final hero = game.hero;
     final heroIndex = game.players.indexWhere((p) => p.isHero);
     final isTurn = game.waitingForHero && !game.isHandOver && !hero.folded;
     final position = _positionLabel(heroIndex);
 
     return SizedBox(
-      height: height,
+      height: height + (reviewHeight - height) * t,
       child: Container(
         margin: const EdgeInsets.fromLTRB(12, 2, 12, 4),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -139,6 +161,7 @@ class HeroRailWidget extends ConsumerWidget {
                       key: ValueKey('hero-${game.handCount}-${card.code}'),
                       card: card,
                       size: MiniCardSize.hero,
+                      scale: 1 + (_reviewCardScale - 1) * t,
                     ),
                   ),
               ],

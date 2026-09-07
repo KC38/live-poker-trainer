@@ -1,9 +1,14 @@
-/// Layout guards: the coach shelf must never cover the hero's hole cards.
+/// Layout guards: strict band separation, plus the reclaimed action-dock band.
 library;
 
+import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/core/database/app_database.dart';
+import 'package:live_poker_trainer/core/database/profile_database.dart';
+import 'package:live_poker_trainer/providers/profile_provider.dart';
+import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/coach_feedback.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
@@ -11,6 +16,7 @@ import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/models/scenario_model.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
+import 'package:live_poker_trainer/ui/widgets/action_dock_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
@@ -25,6 +31,9 @@ class _FixedController extends GameController {
   _FixedController(super.ref, TableSession session) {
     state = session;
   }
+
+  /// Pushes a new session so tests can move between hero-to-act and review.
+  void emit(TableSession session) => state = session;
 
   @override
   Future<void> startTraining({bool continueTable = false}) async {}
@@ -86,7 +95,11 @@ GameState _nineHandedGame({
   );
 }
 
-Future<void> _pumpTable(
+/// Pumps the table and returns the controller so tests can change the session.
+///
+/// The header **Next** CTA pulses forever, so tests must never call
+/// [WidgetTester.pumpAndSettle] here — advance with an explicit duration.
+Future<_FixedController> _pumpTable(
   WidgetTester tester, {
   required Size size,
   required TableSession session,
@@ -96,17 +109,40 @@ Future<void> _pumpTable(
   addTearDown(tester.view.resetPhysicalSize);
   addTearDown(tester.view.resetDevicePixelRatio);
 
+  late _FixedController controller;
   await tester.pumpWidget(
     ProviderScope(
+      // A fresh scope per pump so repeated pumps really do rebuild the table
+      // with the session they were given.
+      key: UniqueKey(),
       overrides: [
+        // Settings side effects reach the sound service and the hero rail
+        // reads the profile, both of which would open on-disk databases.
+        appDatabaseProvider.overrideWith((ref) {
+          final db = AppDatabase(NativeDatabase.memory());
+          ref.onDispose(db.close);
+          return db;
+        }),
+        profileDatabaseProvider.overrideWith((ref) {
+          final db = ProfileDatabase(NativeDatabase.memory());
+          ref.onDispose(db.close);
+          return db;
+        }),
         gameControllerProvider.overrideWith(
-          (ref) => _FixedController(ref, session),
+          (ref) => controller = _FixedController(ref, session),
         ),
       ],
       child: const MaterialApp(home: PokerTableScreen()),
     ),
   );
   await tester.pump();
+  return controller;
+}
+
+/// Runs past every band transition without settling the pulsing Next CTA.
+Future<void> _settleBands(WidgetTester tester) async {
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 400));
 }
 
 /// The union of every hero hole-card rect on screen.
@@ -154,6 +190,15 @@ void main() {
     heroAction: 'RAISE',
     evDeltaBb: -3.84,
   );
+
+  /// Hero is on the clock: the action dock owns the bottom band.
+  TableSession liveSession() =>
+      const TableSession(coach: longCoach).copyWith(game: _nineHandedGame());
+
+  /// Hand is over: the dock is gone and the other bands take its space.
+  TableSession reviewSession() => const TableSession(coach: longCoach).copyWith(
+        game: _nineHandedGame(street: Street.showdown, handOver: true),
+      );
 
   final sizes = <String, Size>{
     'small phone': _smallPhone,
@@ -284,6 +329,90 @@ void main() {
         expect(find.text('Review'), findsOneWidget);
         expect(find.text('Hand review'), findsNothing);
         expect(find.text('Next hand'), findsNothing);
+      });
+
+      testWidgets('action dock is on screen while the hero is to act',
+          (tester) async {
+        await _pumpTable(tester, size: size, session: liveSession());
+        expect(find.byType(ActionDockWidget), findsOneWidget);
+      });
+
+      testWidgets('action dock leaves the tree once the hero cannot act',
+          (tester) async {
+        await _pumpTable(tester, size: size, session: reviewSession());
+        await _settleBands(tester);
+
+        expect(find.byType(ActionDockWidget), findsNothing);
+        expect(find.byType(Slider), findsNothing);
+        expect(find.text('All-in'), findsNothing);
+        expect(find.text('Next'), findsOneWidget);
+      });
+
+      testWidgets('coach and hero cards grow into the freed dock band',
+          (tester) async {
+        final controller = await _pumpTable(
+          tester,
+          size: size,
+          session: liveSession(),
+        );
+        final playingCoach = _rectOf(tester, find.byType(CoachShelfWidget));
+        final playingCards = _heroCardsRect(tester);
+
+        controller.emit(reviewSession());
+        await _settleBands(tester);
+
+        final reviewCoach = _rectOf(tester, find.byType(CoachShelfWidget));
+        final reviewCards = _heroCardsRect(tester);
+
+        expect(reviewCoach.height, greaterThan(playingCoach.height));
+        expect(reviewCards.height, greaterThan(playingCards.height));
+        // Review copy opens itself now that the shelf owns the space.
+        expect(find.text('Show less'), findsOneWidget);
+        expect(find.textContaining('Best:'), findsOneWidget);
+      });
+
+      testWidgets('bands stay separated while the dock is hidden',
+          (tester) async {
+        await _pumpTable(tester, size: size, session: reviewSession());
+        await _settleBands(tester);
+
+        final rail = _rectOf(tester, find.byType(HeroRailWidget));
+        final heroCards = _heroCardsRect(tester);
+        final coach = _rectOf(tester, find.byType(CoachShelfWidget));
+
+        expect(
+          heroCards.overlaps(coach),
+          isFalse,
+          reason: 'coach $coach covers hero cards $heroCards in review',
+        );
+        expect(coach.top, greaterThanOrEqualTo(rail.bottom - 0.5));
+        expect(coach.bottom, lessThanOrEqualTo(size.height + 0.5));
+        expect(heroCards.bottom, lessThanOrEqualTo(size.height));
+        expect(tester.takeException(), isNull);
+      });
+
+      testWidgets('dock comes back when the hero is on the clock again',
+          (tester) async {
+        final controller = await _pumpTable(
+          tester,
+          size: size,
+          session: reviewSession(),
+        );
+        await _settleBands(tester);
+        expect(find.byType(ActionDockWidget), findsNothing);
+
+        controller.emit(liveSession());
+        await _settleBands(tester);
+
+        expect(find.byType(ActionDockWidget), findsOneWidget);
+        expect(tester.takeException(), isNull);
+
+        final heroCards = _heroCardsRect(tester);
+        final coach = _rectOf(tester, find.byType(CoachShelfWidget));
+        final dock = _rectOf(tester, find.byType(ActionDockWidget));
+        expect(heroCards.overlaps(coach), isFalse);
+        expect(coach.bottom, lessThanOrEqualTo(dock.top + 0.5));
+        expect(dock.bottom, lessThanOrEqualTo(size.height + 0.5));
       });
     });
   });

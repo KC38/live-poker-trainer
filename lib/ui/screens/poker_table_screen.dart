@@ -23,6 +23,11 @@ import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
 /// gets whatever is left over, so a tall coach shelf can shrink the felt but
 /// can never draw on top of the hero's hole cards.
 ///
+/// When the hero has no decision to make — villains acting, hero folded, hand
+/// over — the dock band is not dimmed, it is removed. The freed height is
+/// handed to the coach shelf (taller cap, auto-opened review copy) and to the
+/// felt and hero rail, which animate into it rather than jumping.
+///
 /// After a hand ends, coaching stays in the shelf — no auto Hand Review sheet.
 /// The header **Next** control becomes the clear CTA to deal again.
 ///
@@ -36,9 +41,18 @@ class PokerTableScreen extends ConsumerStatefulWidget {
   ConsumerState<PokerTableScreen> createState() => _PokerTableScreenState();
 }
 
+/// Shared timing for every band that resizes when the dock hides or returns.
+const Duration _bandTransition = Duration(milliseconds: 280);
+
 class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
   /// Breakpoint above which the coach moves into its own side column.
   static const double _wideBreakpoint = 900;
+
+  /// Coach band cap while the dock is on screen, as a share of the viewport.
+  static const double _coachShareWithDock = 0.26;
+
+  /// Coach band cap once the dock's space has been reclaimed.
+  static const double _coachShareWithoutDock = 0.38;
 
   bool _kickoffStarted = false;
   bool _kickoffCancelled = false;
@@ -120,21 +134,43 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
           child: LayoutBuilder(
             builder: (context, constraints) {
               final wide = constraints.maxWidth >= _wideBreakpoint;
-              // Cap the coach band so it can never starve the felt.
-              final coachMaxHeight =
-                  (constraints.maxHeight * 0.26).clamp(96.0, 190.0);
+              // Greyed-out controls are dead weight: drop the dock whenever
+              // the hero cannot act and give its band to the other rows.
+              final dockVisible = session.heroCanAct;
 
-              final coach = CoachShelfWidget(
-                feedback: session.coach,
-                bigBlind: game?.bigBlind ?? 2,
-                chipDisplayMode: settings.chipDisplayMode,
-                ttsEnabled: settings.ttsEnabled,
-                replaying: session.replaying,
-                maxHeight: wide ? null : coachMaxHeight,
-                onMuteToggle: () => ref
-                    .read(settingsProvider.notifier)
-                    .setTts(!settings.ttsEnabled),
-              );
+              // Cap the coach band so it can never starve the felt, and let
+              // that cap grow into the space the dock gave up.
+              final coachMaxHeight = dockVisible
+                  ? (constraints.maxHeight * _coachShareWithDock)
+                      .clamp(96.0, 190.0)
+                  : (constraints.maxHeight * _coachShareWithoutDock)
+                      .clamp(120.0, 280.0);
+
+              CoachShelfWidget buildCoach(double? maxHeight) {
+                return CoachShelfWidget(
+                  feedback: session.coach,
+                  bigBlind: game?.bigBlind ?? 2,
+                  chipDisplayMode: settings.chipDisplayMode,
+                  ttsEnabled: settings.ttsEnabled,
+                  replaying: session.replaying,
+                  maxHeight: maxHeight,
+                  autoExpand: handOver,
+                  onMuteToggle: () => ref
+                      .read(settingsProvider.notifier)
+                      .setTts(!settings.ttsEnabled),
+                );
+              }
+
+              // Grow the cap over the same beat as the dock collapse so the
+              // shelf expands instead of snapping to its new size.
+              final coach = wide
+                  ? buildCoach(null)
+                  : TweenAnimationBuilder<double>(
+                      tween: Tween<double>(end: coachMaxHeight),
+                      duration: _bandTransition,
+                      curve: Curves.easeOutCubic,
+                      builder: (context, cap, _) => buildCoach(cap),
+                    );
 
               return Column(
                 children: [
@@ -172,19 +208,24 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                                     game: game,
                                     chipDisplayMode: tableChipMode,
                                     collectingChips: session.collectingChips,
+                                    review: handOver,
                                   ),
                                 ),
                                 HeroRailWidget(
                                   game: game,
                                   chipDisplayMode: tableChipMode,
                                   isThinking: session.replaying,
+                                  review: handOver,
                                 ),
-                                ActionDockWidget(
-                                  game: game,
-                                  enabled: session.heroCanAct,
-                                  onAction: (action) => ref
-                                      .read(gameControllerProvider.notifier)
-                                      .heroAct(action),
+                                _ActionDockSlot(
+                                  visible: dockVisible,
+                                  child: ActionDockWidget(
+                                    game: game,
+                                    enabled: dockVisible,
+                                    onAction: (action) => ref
+                                        .read(gameControllerProvider.notifier)
+                                        .heroAct(action),
+                                  ),
                                 ),
                               ],
                             ),
@@ -205,20 +246,25 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                         game: game,
                         chipDisplayMode: tableChipMode,
                         collectingChips: session.collectingChips,
+                        review: handOver,
                       ),
                     ),
                     HeroRailWidget(
                       game: game,
                       chipDisplayMode: tableChipMode,
                       isThinking: session.replaying,
+                      review: handOver,
                     ),
                     coach,
-                    ActionDockWidget(
-                      game: game,
-                      enabled: session.heroCanAct,
-                      onAction: (action) => ref
-                          .read(gameControllerProvider.notifier)
-                          .heroAct(action),
+                    _ActionDockSlot(
+                      visible: dockVisible,
+                      child: ActionDockWidget(
+                        game: game,
+                        enabled: dockVisible,
+                        onAction: (action) => ref
+                            .read(gameControllerProvider.notifier)
+                            .heroAct(action),
+                      ),
                     ),
                   ],
                 ],
@@ -227,6 +273,85 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Bottom band that carries the action dock only while the hero can act.
+///
+/// Collapsing the band — rather than dimming the controls — is what frees
+/// height for the coach shelf and the felt. The dock slides down behind a
+/// clip and fades as the band shrinks, then leaves the tree entirely so no
+/// dead buttons remain visible or hit-testable.
+class _ActionDockSlot extends StatefulWidget {
+  const _ActionDockSlot({required this.visible, required this.child});
+
+  final bool visible;
+  final Widget child;
+
+  @override
+  State<_ActionDockSlot> createState() => _ActionDockSlotState();
+}
+
+class _ActionDockSlotState extends State<_ActionDockSlot>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: _bandTransition,
+    value: widget.visible ? 1 : 0,
+  );
+
+  late final CurvedAnimation _reveal = CurvedAnimation(
+    parent: _controller,
+    curve: Curves.easeOutCubic,
+    reverseCurve: Curves.easeInCubic,
+  );
+
+  @override
+  void didUpdateWidget(covariant _ActionDockSlot oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.visible == oldWidget.visible) return;
+    if (widget.visible) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
+    }
+  }
+
+  @override
+  void dispose() {
+    _reveal.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // The dock owns the home-indicator gutter via its own SafeArea; keep that
+    // gutter behind once it is gone so the coach never sits under the inset.
+    final gutter = MediaQuery.paddingOf(context).bottom;
+    return AnimatedBuilder(
+      animation: _reveal,
+      builder: (context, child) {
+        final t = _reveal.value;
+        if (t == 0) {
+          return SizedBox(width: double.infinity, height: gutter);
+        }
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ClipRect(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                heightFactor: t,
+                child: Opacity(opacity: t, child: child),
+              ),
+            ),
+            SizedBox(height: gutter * (1 - t)),
+          ],
+        );
+      },
+      child: widget.child,
     );
   }
 }

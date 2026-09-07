@@ -24,6 +24,7 @@ class CoachShelfWidget extends StatefulWidget {
     this.ttsEnabled = true,
     this.replaying = false,
     this.maxHeight,
+    this.autoExpand = false,
   });
 
   final CoachFeedback feedback;
@@ -38,16 +39,32 @@ class CoachShelfWidget extends StatefulWidget {
   /// Hard cap for this band; content scrolls beyond it.
   final double? maxHeight;
 
+  /// Opens the full review copy without a tap.
+  ///
+  /// Set once the hand is over: the action dock is gone, so the shelf owns
+  /// that space and should show the whole verdict rather than a teaser. The
+  /// user can still collapse it, and the next hand returns to a preview.
+  final bool autoExpand;
+
   @override
   State<CoachShelfWidget> createState() => _CoachShelfWidgetState();
 }
 
 class _CoachShelfWidgetState extends State<CoachShelfWidget> {
-  /// Whether the user has opened the full coach copy.
+  /// Whether the full coach copy is open.
   ///
   /// New coach lines keep this preference: stay collapsed by default, but if
-  /// the panel is already open it stays open for the next line.
-  bool _expanded = false;
+  /// the panel is already open it stays open for the next line. Entering or
+  /// leaving review ([CoachShelfWidget.autoExpand]) overrides it.
+  late bool _expanded = widget.autoExpand;
+
+  @override
+  void didUpdateWidget(covariant CoachShelfWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.autoExpand != oldWidget.autoExpand) {
+      _expanded = widget.autoExpand;
+    }
+  }
 
   CoachFeedback get _feedback => widget.feedback;
 

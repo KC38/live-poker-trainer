@@ -35,19 +35,27 @@ enum MiniCardSize {
 /// A single face-up card.
 class MiniCard extends StatelessWidget {
   /// Creates a card face.
-  const MiniCard({super.key, required this.card, this.size = MiniCardSize.small});
+  const MiniCard({
+    super.key,
+    required this.card,
+    this.size = MiniCardSize.small,
+    this.scale = 1,
+  });
 
   final CardModel card;
 
   /// Footprint to render at.
   final MiniCardSize size;
 
+  /// Multiplier on [size], used to enlarge cards while reviewing a hand.
+  final double scale;
+
   @override
   Widget build(BuildContext context) {
     final dims = size.dimensions;
     return Container(
-      width: dims.width,
-      height: dims.height,
+      width: dims.width * scale,
+      height: dims.height * scale,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: AppColors.cream,
@@ -67,7 +75,7 @@ class MiniCard extends StatelessWidget {
         card.display,
         maxLines: 1,
         style: GoogleFonts.jetBrainsMono(
-          fontSize: size.fontSize,
+          fontSize: size.fontSize * scale,
           fontWeight: FontWeight.w800,
           color: card.suit == Suit.spades ? AppColors.spades : card.suit.color,
         ),

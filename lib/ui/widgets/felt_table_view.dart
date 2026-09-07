@@ -26,6 +26,7 @@ class FeltTableView extends StatelessWidget {
     required this.game,
     required this.chipDisplayMode,
     this.collectingChips = false,
+    this.review = false,
   });
 
   final GameState game;
@@ -35,6 +36,10 @@ class FeltTableView extends StatelessWidget {
 
   /// True while the street's bets animate into the pot.
   final bool collectingChips;
+
+  /// True once the hand is over: the felt inherits the action dock's band and
+  /// the board is allowed to grow into it (still bounded by the seat ring).
+  final bool review;
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +126,7 @@ class FeltTableView extends StatelessWidget {
           }
         }
 
-        final boardScale = _boardScale(w, seatBox.width);
+        final boardScale = _boardScale(w, seatBox.width, review: review);
 
         return Stack(
           clipBehavior: Clip.hardEdge,
@@ -130,13 +135,18 @@ class FeltTableView extends StatelessWidget {
               child: CustomPaint(painter: _FeltPainter(seatBox: seatBox)),
             ),
             Center(
-              child: CommunityCardsView(
-                community: game.community,
-                pot: game.totalPot,
-                street: game.street,
-                bigBlind: game.bigBlind,
-                chipDisplayMode: chipDisplayMode,
-                scale: boardScale,
+              child: TweenAnimationBuilder<double>(
+                tween: Tween<double>(end: boardScale),
+                duration: const Duration(milliseconds: 280),
+                curve: Curves.easeOutCubic,
+                builder: (context, scale, _) => CommunityCardsView(
+                  community: game.community,
+                  pot: game.totalPot,
+                  street: game.street,
+                  bigBlind: game.bigBlind,
+                  chipDisplayMode: chipDisplayMode,
+                  scale: scale,
+                ),
               ),
             ),
             ...bets,
@@ -147,11 +157,20 @@ class FeltTableView extends StatelessWidget {
     );
   }
 
-  static double _boardScale(double width, double seatWidth) {
+  /// Board scale that always leaves a seat's width of clearance on each side.
+  ///
+  /// Review only lifts the ceiling — the seat-ring guard still binds, so a
+  /// nine-handed phone keeps the same board and gains readability from the
+  /// taller felt instead.
+  static double _boardScale(
+    double width,
+    double seatWidth, {
+    required bool review,
+  }) {
     const naturalWidth = 5 * 43.0;
     final available = width - seatWidth * 2 - 12;
     if (available <= 0) return 0.62;
-    return _clamp(available / naturalWidth, 0.62, 1.2);
+    return _clamp(available / naturalWidth, 0.62, review ? 1.34 : 1.2);
   }
 
   static double _clamp(double v, double lo, double hi) =>
