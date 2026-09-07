@@ -34,7 +34,7 @@ class ReplayPace {
   /// Pause after new board cards land.
   static const Duration dealStreet = Duration(milliseconds: 620);
 
-  /// Beat before the hand-over review appears.
+  /// Beat after the hand resolves before the Next CTA is actionable.
   static const Duration handOver = Duration(milliseconds: 560);
 }
 
@@ -279,7 +279,8 @@ class GameController extends StateNotifier<TableSession> {
     final sound = _ref.read(soundServiceProvider);
     final heroWon = game.resultMessage?.startsWith('Hero') ?? false;
     if (heroWon) await sound.win();
-    state = state.copyWith(showEvAudit: true, replaying: false);
+    // Hand review stays in the coach shelf; the header Next CTA is the cue.
+    state = state.copyWith(showEvAudit: false, replaying: false);
   }
 
   Future<void> _recordStats(LiveCoachGrade grade, GameState game) async {

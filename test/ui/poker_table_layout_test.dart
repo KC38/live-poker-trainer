@@ -264,6 +264,27 @@ void main() {
           );
         }
       });
+
+      testWidgets('hand over highlights Next without opening Hand review',
+          (tester) async {
+        await _pumpTable(
+          tester,
+          size: size,
+          session: TableSession(
+            coach: longCoach,
+          ).copyWith(
+            game: _nineHandedGame(
+              street: Street.showdown,
+              handOver: true,
+            ),
+          ),
+        );
+
+        expect(find.text('Next'), findsOneWidget);
+        expect(find.text('Review'), findsOneWidget);
+        expect(find.text('Hand review'), findsNothing);
+        expect(find.text('Next hand'), findsNothing);
+      });
     });
   });
 }

@@ -71,7 +71,7 @@ void main() {
 
     for (var hand = 0; hand < _handCount; hand++) {
       var guard = 0;
-      // Act until the hand-review sheet offers the next hand.
+      // Act until the header Next CTA appears (hand over — no auto modal).
       while (guard++ < 90) {
         expect(
           tester.takeException(),
@@ -79,7 +79,7 @@ void main() {
           reason: 'exception during hand $hand',
         );
 
-        if (find.text('Next hand').evaluate().isNotEmpty) break;
+        if (find.text('Next').evaluate().isNotEmpty) break;
 
         // The dock ignores pointers while villains act, so wait for the hero
         // rail to hand us the turn instead of tapping into the void.
@@ -107,7 +107,7 @@ void main() {
 
       expect(guard, lessThan(90), reason: 'hand $hand never resolved');
       debugPrint('[soak] hand ${hand + 1}/$_handCount resolved');
-      await _tapText(tester, 'Next hand');
+      await _tapText(tester, 'Next');
       expect(
         tester.takeException(),
         isNull,

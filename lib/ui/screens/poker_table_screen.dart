@@ -21,6 +21,9 @@ import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
 /// header → felt (flexible) → hero rail → coach shelf → action dock. The felt
 /// gets whatever is left over, so a tall coach shelf can shrink the felt but
 /// can never draw on top of the hero's hole cards.
+///
+/// After a hand ends, coaching stays in the shelf — no auto Hand Review sheet.
+/// The header **Next** control becomes the clear CTA to deal again.
 class PokerTableScreen extends ConsumerStatefulWidget {
   /// Creates the poker table screen.
   const PokerTableScreen({super.key});
@@ -33,8 +36,6 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
   /// Breakpoint above which the coach moves into its own side column.
   static const double _wideBreakpoint = 900;
 
-  bool _auditShown = false;
-
   void _openLegend(GameState game) {
     ArchetypeLegendSheet.show(
       context,
@@ -45,36 +46,28 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
     );
   }
 
+  void _openOptionalReview(TableSession session) {
+    final game = session.game;
+    if (game == null || !session.coach.hasVerdict) return;
+    EvAuditModal.show(
+      context,
+      game: game,
+      feedback: session.coach,
+      chipDisplayMode: ref.read(settingsProvider).chipDisplayMode,
+      onNext: () {
+        ref.read(gameControllerProvider.notifier).nextHand();
+      },
+    ).whenComplete(() {
+      ref.read(gameControllerProvider.notifier).dismissEvAudit();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final session = ref.watch(gameControllerProvider);
     final settings = ref.watch(settingsProvider);
     final game = session.game;
-
-    ref.listen<TableSession>(gameControllerProvider, (prev, next) {
-      if (next.showEvAudit &&
-          next.game != null &&
-          next.coach.hasVerdict &&
-          !_auditShown) {
-        _auditShown = true;
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!mounted) return;
-          EvAuditModal.show(
-            context,
-            game: next.game!,
-            feedback: next.coach,
-            chipDisplayMode: ref.read(settingsProvider).chipDisplayMode,
-            onNext: () {
-              _auditShown = false;
-              ref.read(gameControllerProvider.notifier).nextHand();
-            },
-          ).whenComplete(() {
-            _auditShown = false;
-            ref.read(gameControllerProvider.notifier).dismissEvAudit();
-          });
-        });
-      }
-    });
+    final handOver = game != null && game.isHandOver;
 
     // The felt shows currency only; hand review and stats keep the user's
     // full chip-display choice.
@@ -116,13 +109,12 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                     game: game,
                     onBack: () => Navigator.pop(context),
                     onLegend: game == null ? null : () => _openLegend(game),
-                    onNext: game != null && game.isHandOver
-                        ? () {
-                            _auditShown = false;
-                            ref
-                                .read(gameControllerProvider.notifier)
-                                .nextHand();
-                          }
+                    onReview: handOver && session.coach.hasVerdict
+                        ? () => _openOptionalReview(session)
+                        : null,
+                    onNext: handOver
+                        ? () =>
+                            ref.read(gameControllerProvider.notifier).nextHand()
                         : null,
                   ),
                   if (session.loading)
@@ -211,12 +203,14 @@ class _TableHeader extends StatelessWidget {
     required this.game,
     required this.onBack,
     required this.onLegend,
+    required this.onReview,
     required this.onNext,
   });
 
   final GameState? game;
   final VoidCallback onBack;
   final VoidCallback? onLegend;
+  final VoidCallback? onReview;
   final VoidCallback? onNext;
 
   @override
@@ -259,18 +253,26 @@ class _TableHeader extends StatelessWidget {
               ],
             ),
           ),
-          if (onNext != null)
-            TextButton(
-              onPressed: onNext,
-              child: Text(
-                'Next',
-                style: GoogleFonts.manrope(
-                  color: AppColors.gold,
-                  fontWeight: FontWeight.w700,
+          if (onNext != null) ...[
+            if (onReview != null)
+              TextButton(
+                onPressed: onReview,
+                style: TextButton.styleFrom(
+                  foregroundColor: AppColors.slate,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  minimumSize: const Size(0, 36),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: Text(
+                  'Review',
+                  style: GoogleFonts.manrope(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13,
+                  ),
                 ),
               ),
-            )
-          else
+            _NextHandCta(onPressed: onNext!),
+          ] else
             IconButton(
               tooltip: 'Player types',
               onPressed: onLegend,
@@ -281,6 +283,95 @@ class _TableHeader extends StatelessWidget {
               ),
             ),
         ],
+      ),
+    );
+  }
+}
+
+/// Gold filled **Next** control with a soft pulse so hand-over is unmistakable.
+class _NextHandCta extends StatefulWidget {
+  const _NextHandCta({required this.onPressed});
+
+  final VoidCallback onPressed;
+
+  @override
+  State<_NextHandCta> createState() => _NextHandCtaState();
+}
+
+class _NextHandCtaState extends State<_NextHandCta>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1100),
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final t = Curves.easeInOut.transform(_pulse.value);
+        final glow = 0.28 + (0.42 * t);
+        final scale = 1.0 + (0.035 * t);
+        return Transform.scale(
+          scale: scale,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(22),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.gold.withValues(alpha: glow),
+                  blurRadius: 14 + (8 * t),
+                  spreadRadius: 0.5 + t,
+                ),
+              ],
+            ),
+            child: child,
+          ),
+        );
+      },
+      child: Material(
+        color: AppColors.gold,
+        borderRadius: BorderRadius.circular(22),
+        child: InkWell(
+          onTap: widget.onPressed,
+          borderRadius: BorderRadius.circular(22),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Next',
+                  style: GoogleFonts.manrope(
+                    color: AppColors.bgDark,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 14,
+                    letterSpacing: 0.2,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                const Icon(
+                  Icons.arrow_forward_rounded,
+                  size: 16,
+                  color: AppColors.bgDark,
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
