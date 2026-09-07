@@ -1,9 +1,12 @@
 /// Table SFX plus coach voice: cached Gemini speech, device TTS as last resort.
 library;
 
+import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:live_poker_trainer/core/audio/sfx_ducker.dart';
 import 'package:live_poker_trainer/core/audio/voice_cache.dart';
 import 'package:live_poker_trainer/core/constants/config.dart';
 import 'package:live_poker_trainer/services/gemini_service.dart';
@@ -57,6 +60,17 @@ class SoundService {
   bool _ttsReady = false;
   bool _audioContextConfigured = false;
 
+  /// Drops SFX under the coach voice; see [setSfxVolume] for the base level.
+  late final SfxDucker _ducker = SfxDucker(
+    applyVolume: (volume) => _sfx.setVolume(volume),
+  );
+
+  StreamSubscription<void>? _voiceDoneSub;
+  Timer? _duckWatchdog;
+
+  /// Backstop so a missing completion callback cannot leave SFX quiet forever.
+  static const Duration _maxDuckHold = Duration(seconds: 30);
+
   /// In-memory memo of cache keys already on disk, to skip a stat per line.
   final Set<String> _warmKeys = <String>{};
 
@@ -107,13 +121,25 @@ class SoundService {
     }
   }
 
-  /// Plays a short table SFX if enabled.
+  /// The configured SFX level, before any coach-voice ducking.
+  double get sfxVolume => _ducker.baseVolume;
+
+  /// Whether SFX are currently ducked under the coach voice.
+  bool get sfxDucked => _ducker.isDucked;
+
+  /// Sets the configured SFX level (0..1), keeping any active duck in place.
+  Future<void> setSfxVolume(double volume) => _ducker.setBaseVolume(volume);
+
+  /// Plays a short table SFX if enabled, at the current (possibly ducked) level.
   Future<void> playSfx(SfxKind kind) async {
     if (!sfxEnabled || !_unlocked) return;
     try {
       await _ensureAudioContext();
       await _sfx.stop();
-      await _sfx.play(AssetSource('sounds/${kind.fileName}'));
+      await _sfx.play(
+        AssetSource('sounds/${kind.fileName}'),
+        volume: _ducker.currentVolume,
+      );
     } catch (_) {
       // Ignore missing assets / autoplay blocks.
     }
@@ -219,38 +245,96 @@ class SoundService {
   }
 
   Future<bool> _playFile(String path) async {
+    final hold = await _duckForSpeech();
+    await _stopAllVoice();
     try {
-      await _stopAllVoice();
       await _voice.setReleaseMode(ReleaseMode.stop);
-      await _voice.play(DeviceFileSource(path));
+      await _voice.play(DeviceFileSource(path), volume: 1.0);
+      _restoreWhenVoiceEnds(hold);
       return true;
     } catch (_) {
+      await _releaseDuck(hold);
       return false;
     }
   }
 
   Future<bool> _playBytes(Uint8List bytes) async {
+    final hold = await _duckForSpeech();
+    await _stopAllVoice();
     try {
-      await _stopAllVoice();
-      await _voice.play(BytesSource(bytes, mimeType: 'audio/wav'));
+      await _voice.play(BytesSource(bytes, mimeType: 'audio/wav'), volume: 1.0);
+      _restoreWhenVoiceEnds(hold);
       return true;
     } catch (_) {
+      await _releaseDuck(hold);
       return false;
     }
   }
 
   Future<bool> _speakWithDevice(String text) async {
     await _ensureTts();
+    final hold = await _duckForSpeech();
+    await _stopAllVoice();
+    _bindTtsHandlers(hold);
     try {
-      await _stopAllVoice();
       final result = await _tts.speak(text);
-      return result == 1 || result == true;
+      final spoke = result == 1 || result == true;
+      if (!spoke) await _releaseDuck(hold);
+      return spoke;
     } catch (_) {
+      await _releaseDuck(hold);
       return false;
     }
   }
 
+  /// Ducks SFX for one coach line; returns the token used to restore them.
+  ///
+  /// Returns [SfxDucker.noHold] when SFX are muted, since there is nothing to
+  /// duck; releasing that token is a no-op.
+  Future<int> _duckForSpeech() async {
+    if (!sfxEnabled) return SfxDucker.noHold;
+    final hold = await _ducker.hold();
+    _duckWatchdog?.cancel();
+    _duckWatchdog = Timer(_maxDuckHold, () => _releaseDuck(hold));
+    return hold;
+  }
+
+  Future<void> _releaseDuck(int hold) async {
+    if (hold == SfxDucker.noHold) return;
+    await _ducker.release(hold);
+  }
+
+  /// Points the device-voice callbacks at [hold] so a late event from an
+  /// interrupted line releases its own hold rather than the current one.
+  void _bindTtsHandlers(int hold) {
+    void done() => _releaseDuck(hold);
+    try {
+      _tts.setCompletionHandler(done);
+      _tts.setCancelHandler(done);
+      _tts.setErrorHandler((_) => done());
+    } catch (_) {
+      // Handlers unsupported here — the watchdog still restores volume.
+    }
+  }
+
+  /// Restores SFX volume as soon as the Gemini clip finishes playing.
+  void _restoreWhenVoiceEnds(int hold) {
+    if (hold == SfxDucker.noHold) return;
+    try {
+      _voiceDoneSub = _voice.onPlayerComplete.listen((_) {
+        _releaseDuck(hold);
+      });
+    } catch (_) {
+      // No completion stream on this platform — the watchdog covers us.
+    }
+  }
+
+  /// Stops both voice backends without touching the duck state, so a new line
+  /// can take over the hold instead of flapping the SFX volume back up.
   Future<void> _stopAllVoice() async {
+    final sub = _voiceDoneSub;
+    _voiceDoneSub = null;
+    await sub?.cancel();
     try {
       await _voice.stop();
     } catch (_) {}
@@ -259,8 +343,13 @@ class SoundService {
     } catch (_) {}
   }
 
-  /// Stops any in-flight coach voice.
-  Future<void> stopVoice() => _stopAllVoice();
+  /// Stops any in-flight coach voice and restores SFX volume.
+  Future<void> stopVoice() async {
+    _duckWatchdog?.cancel();
+    _duckWatchdog = null;
+    await _stopAllVoice();
+    await _ducker.releaseAll();
+  }
 
   /// Total bytes of cached coach audio.
   Future<int> voiceCacheBytes() => _cache.sizeInBytes();
@@ -273,6 +362,10 @@ class SoundService {
 
   /// Releases players.
   Future<void> dispose() async {
+    _duckWatchdog?.cancel();
+    _duckWatchdog = null;
+    await _voiceDoneSub?.cancel();
+    _voiceDoneSub = null;
     await _sfx.dispose();
     await _voice.dispose();
     try {

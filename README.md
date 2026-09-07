@@ -75,6 +75,8 @@ Settings → **Chip display** chooses Dollars only, BB only, or Both (default) f
 
 Coach voice: Gemini TTS audio (voice `Puck`) when an API key is present, cached on disk so a repeated line replays instantly and never re-hits the API; device TTS (`flutter_tts`) is the last-resort fallback. Mute via Settings or the coach shelf speaker icon.
 
+Table SFX **duck to 18%** of their level while the coach is speaking and ramp back afterwards, on both the Gemini and device-voice paths (`SfxDucker`). Each line takes a hold that only it can release, so a line interrupted mid-sentence by the next one cannot un-duck audio that is still playing, and a stop, error, or missing completion callback (30s watchdog) always restores volume. Muted SFX skip ducking entirely; muted coach voice never triggers it.
+
 ## Architecture
 
 ```
