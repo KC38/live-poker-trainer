@@ -1,11 +1,14 @@
 /// Widget tests guarding the action dock against illegal range math.
 library;
 
+import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/core/database/app_database.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
+import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/ui/widgets/action_dock_widget.dart';
 
 GameState _state({
@@ -44,6 +47,15 @@ GameState _state({
 Future<void> _pump(WidgetTester tester, GameState state) async {
   await tester.pumpWidget(
     ProviderScope(
+      overrides: [
+        // The dock reads settings, whose side effects reach the sound service
+        // and the diagnostics DAO; keep that off the on-disk database.
+        appDatabaseProvider.overrideWith((ref) {
+          final db = AppDatabase(NativeDatabase.memory());
+          ref.onDispose(db.close);
+          return db;
+        }),
+      ],
       child: MaterialApp(
         home: Scaffold(
           body: Column(
