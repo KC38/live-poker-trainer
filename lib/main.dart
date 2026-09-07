@@ -4,6 +4,8 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_poker_trainer/ui/screens/home_screen.dart';
+import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,8 +21,9 @@ Future<void> _loadEnv() async {
   }
 }
 
-/// Root application widget (scaffold placeholder until screens land).
+/// Root application widget.
 class PokerLabApp extends StatelessWidget {
+  /// Creates the app.
   const PokerLabApp({super.key});
 
   @override
@@ -28,20 +31,8 @@ class PokerLabApp extends StatelessWidget {
     return MaterialApp(
       title: 'Exploitative Poker Lab',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF070A0F),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFFEAB308),
-          brightness: Brightness.dark,
-        ),
-        useMaterial3: true,
-      ),
-      home: const Scaffold(
-        body: Center(
-          child: Text('Exploitative Poker Lab'),
-        ),
-      ),
+      theme: buildPokerTheme(),
+      home: const HomeScreen(),
     );
   }
 }

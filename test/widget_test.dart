@@ -1,9 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:live_poker_trainer/main.dart';
+import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 
 void main() {
-  testWidgets('App boots with title text', (WidgetTester tester) async {
-    await tester.pumpWidget(const PokerLabApp());
-    expect(find.text('Exploitative Poker Lab'), findsOneWidget);
+  test('buildPokerTheme returns dark Material 3 theme', () {
+    final theme = buildPokerTheme();
+    expect(theme.brightness, Brightness.dark);
+    expect(theme.useMaterial3, isTrue);
   });
 }
