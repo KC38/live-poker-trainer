@@ -5,16 +5,26 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
+import 'package:live_poker_trainer/core/audio/wav_codec.dart';
 import 'package:live_poker_trainer/core/constants/config.dart';
 import 'package:live_poker_trainer/models/scenario_model.dart';
 
-/// Result of a coach turn (text and optional PCM/WAV bytes).
+/// Result of a coach turn (text and optional playable audio bytes).
 class CoachAudioResult {
   /// Creates a coach result.
-  const CoachAudioResult({required this.text, this.audioBytes});
+  const CoachAudioResult({
+    required this.text,
+    this.audioBytes,
+    this.audioMimeType,
+  });
 
   final String text;
+
+  /// Prefer WAV-wrapped PCM so [audioplayers] can play on all platforms.
   final Uint8List? audioBytes;
+
+  /// MIME for [audioBytes] (usually `audio/wav` after normalization).
+  final String? audioMimeType;
 }
 
 /// REST client for Gemini generateContent (JSON scenarios + coach).
@@ -97,8 +107,22 @@ You are an elite exploitative No-Limit Texas Hold'em poker coach analyzing an ex
 
     final response = await _post(body);
     final text = _extractText(response) ?? 'Attack their tendency hard.';
-    final audio = wantAudio ? _extractInlineAudio(response) : null;
-    return CoachAudioResult(text: text, audioBytes: audio);
+    if (!wantAudio) {
+      return CoachAudioResult(text: text);
+    }
+    final extracted = _extractInlineAudio(response);
+    if (extracted == null) {
+      return CoachAudioResult(text: text);
+    }
+    final playable = WavCodec.ensurePlayable(
+      extracted.bytes,
+      mimeType: extracted.mimeType,
+    );
+    return CoachAudioResult(
+      text: text,
+      audioBytes: playable.bytes,
+      audioMimeType: playable.mimeType,
+    );
   }
 
   Future<Map<String, dynamic>?> _generateJson({
@@ -165,7 +189,9 @@ You are an elite exploitative No-Limit Texas Hold'em poker coach analyzing an ex
     return text.isEmpty ? null : text;
   }
 
-  Uint8List? _extractInlineAudio(Map<String, dynamic> response) {
+  ({Uint8List bytes, String? mimeType})? _extractInlineAudio(
+    Map<String, dynamic> response,
+  ) {
     final candidates = response['candidates'];
     if (candidates is! List || candidates.isEmpty) return null;
     final content = candidates.first['content'];
@@ -176,7 +202,11 @@ You are an elite exploitative No-Limit Texas Hold'em poker coach analyzing an ex
       if (part is! Map) continue;
       final inline = part['inlineData'] ?? part['inline_data'];
       if (inline is Map && inline['data'] is String) {
-        return base64Decode(inline['data'] as String);
+        final mime = (inline['mimeType'] ?? inline['mime_type']) as String?;
+        return (
+          bytes: base64Decode(inline['data'] as String),
+          mimeType: mime,
+        );
       }
     }
     return null;

@@ -157,7 +157,10 @@ class GameController extends StateNotifier<TableSession> {
           message = result.text.trim();
         }
         if (result.audioBytes != null) {
-          await sound.playCoachAudio(result.audioBytes!);
+          await sound.playCoachAudio(
+            result.audioBytes!,
+            mimeType: result.audioMimeType,
+          );
         }
       } catch (_) {
         // Keep offline exploit reasoning.

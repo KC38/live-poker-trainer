@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/core/constants/poker_constants.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
+import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
@@ -17,6 +18,65 @@ import 'package:live_poker_trainer/ui/screens/stats_screen.dart';
 class HomeScreen extends ConsumerWidget {
   /// Creates the home screen.
   const HomeScreen({super.key});
+
+  List<Widget> _customSeatPickers(
+    GameSettingsModel settings,
+    SettingsNotifier notifier,
+  ) {
+    final normalized = settings.withNormalizedCustomLineup();
+    return [
+      for (var i = 0; i < normalized.customArchetypes.length; i++)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 72,
+                child: Text(
+                  'Seat ${i + 2}',
+                  style: GoogleFonts.jetBrainsMono(
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.gold,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: DropdownButtonFormField<PlayerArchetype>(
+                  initialValue: normalized.customArchetypes[i],
+                  decoration: InputDecoration(
+                    isDense: true,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  dropdownColor: AppColors.bgMid,
+                  items: [
+                    for (final arch in ArchetypeRoster.villainPool)
+                      DropdownMenuItem(
+                        value: arch,
+                        child: Text(
+                          '${arch.badge}  ${arch.label}',
+                          style: GoogleFonts.inter(fontSize: 13),
+                        ),
+                      ),
+                  ],
+                  onChanged: (arch) {
+                    if (arch != null) {
+                      notifier.setCustomArchetypeAt(i, arch);
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -186,6 +246,15 @@ class HomeScreen extends ConsumerWidget {
                 selected: {settings.lineupMode},
                 onSelectionChanged: (s) => notifier.setLineupMode(s.first),
               ),
+              if (settings.lineupMode == LineupMode.custom) ...[
+                const SizedBox(height: 12),
+                Text(
+                  'Assign an archetype to each villain seat (Hero is always seat 1 / bottom).',
+                  style: GoogleFonts.inter(color: AppColors.slate, fontSize: 13),
+                ),
+                const SizedBox(height: 8),
+                ..._customSeatPickers(settings, notifier),
+              ],
               const SizedBox(height: 28),
               ElevatedButton(
                 onPressed: () async {

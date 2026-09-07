@@ -4,6 +4,7 @@ library;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/core/constants/config.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
+import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -69,8 +70,24 @@ class SettingsNotifier extends StateNotifier<GameSettingsModel> {
   Future<void> setGeminiKeyOverride(String key) =>
       update(state.copyWith(geminiKeyOverride: key));
 
-  Future<void> setLineupMode(LineupMode mode) =>
-      update(state.copyWith(lineupMode: mode));
+  Future<void> setLineupMode(LineupMode mode) async {
+    var next = state.copyWith(lineupMode: mode);
+    if (mode == LineupMode.custom) {
+      next = next.withNormalizedCustomLineup();
+    }
+    await update(next);
+  }
+
+  /// Sets archetype for villain seat index `0..villainSeatCount-1` (table seats 1+).
+  Future<void> setCustomArchetypeAt(int villainIndex, PlayerArchetype archetype) async {
+    final normalized = state.withNormalizedCustomLineup();
+    if (villainIndex < 0 || villainIndex >= normalized.customArchetypes.length) {
+      return;
+    }
+    final next = List<PlayerArchetype>.from(normalized.customArchetypes);
+    next[villainIndex] = archetype;
+    await update(normalized.copyWith(customArchetypes: next));
+  }
 
   void _applySideEffects() {
     Config.deviceKeyOverride =

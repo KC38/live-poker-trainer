@@ -88,8 +88,11 @@ class PokerEngine {
       PlayerArchetype arch;
       if (settings.lineupMode == LineupMode.custom &&
           settings.customArchetypes.isNotEmpty) {
-        arch = settings.customArchetypes[
-            (i - 1) % settings.customArchetypes.length];
+        final idx = i - 1;
+        arch = idx < settings.customArchetypes.length
+            ? settings.customArchetypes[idx]
+            : settings.customArchetypes[
+                idx % settings.customArchetypes.length];
       } else {
         arch = pool[(i - 1 + rng.nextInt(pool.length)) % pool.length];
       }

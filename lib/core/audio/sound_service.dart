@@ -3,6 +3,7 @@ library;
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
+import 'package:live_poker_trainer/core/audio/wav_codec.dart';
 
 /// Bundled table sound effects and optional Gemini audio playback.
 class SoundService {
@@ -37,15 +38,26 @@ class SoundService {
   Future<void> knock() => playSfx(SfxKind.knock);
   Future<void> fold() => playSfx(SfxKind.fold);
 
-  /// Plays Gemini inline audio bytes when TTS is enabled.
-  Future<void> playCoachAudio(Uint8List bytes) async {
+  /// Plays Gemini coach audio, wrapping raw PCM/L16 as WAV when needed.
+  Future<void> playCoachAudio(
+    Uint8List bytes, {
+    String? mimeType,
+  }) async {
     if (!ttsEnabled || !_unlocked || bytes.isEmpty) return;
+    final playable = WavCodec.ensurePlayable(bytes, mimeType: mimeType);
     try {
       await _voice.stop();
-      // Gemini AUDIO is typically raw PCM or WAV in inline data.
-      await _voice.play(BytesSource(bytes));
+      await _voice.setReleaseMode(ReleaseMode.stop);
+      await _voice.play(
+        BytesSource(playable.bytes, mimeType: playable.mimeType),
+      );
     } catch (_) {
-      // Fallback: ignore decode failures.
+      // Last-resort: try without mime hint (some web backends are picky).
+      try {
+        await _voice.play(BytesSource(playable.bytes));
+      } catch (_) {
+        // Ignore decode / autoplay failures.
+      }
     }
   }
 

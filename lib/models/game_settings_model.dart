@@ -40,6 +40,23 @@ class GameSettingsModel {
 
   double get startingStack => stackDepthBb * bigBlind;
 
+  /// Villain seat count (excludes Hero at seat 0).
+  int get villainSeatCount => (seatCount - 1).clamp(1, 8);
+
+  /// Ensures [customArchetypes] has one entry per villain seat.
+  GameSettingsModel withNormalizedCustomLineup() {
+    final needed = villainSeatCount;
+    if (customArchetypes.length == needed) return this;
+    final pool = ArchetypeRoster.villainPool;
+    final next = <PlayerArchetype>[
+      for (var i = 0; i < needed; i++)
+        i < customArchetypes.length
+            ? customArchetypes[i]
+            : pool[i % pool.length],
+    ];
+    return copyWith(customArchetypes: next);
+  }
+
   GameSettingsModel copyWith({
     double? smallBlind,
     double? bigBlind,
@@ -53,17 +70,30 @@ class GameSettingsModel {
     List<PlayerArchetype>? customArchetypes,
     String? geminiKeyOverride,
   }) {
+    final nextSeats = seatCount ?? this.seatCount;
+    var nextCustom = customArchetypes ?? this.customArchetypes;
+    // Keep custom lineup length in sync when seat count changes.
+    if (seatCount != null && customArchetypes == null) {
+      final needed = (nextSeats - 1).clamp(1, 8);
+      final pool = ArchetypeRoster.villainPool;
+      nextCustom = [
+        for (var i = 0; i < needed; i++)
+          i < this.customArchetypes.length
+              ? this.customArchetypes[i]
+              : pool[i % pool.length],
+      ];
+    }
     return GameSettingsModel(
       smallBlind: smallBlind ?? this.smallBlind,
       bigBlind: bigBlind ?? this.bigBlind,
-      seatCount: seatCount ?? this.seatCount,
+      seatCount: nextSeats,
       stackDepthBb: stackDepthBb ?? this.stackDepthBb,
       autoRebuy: autoRebuy ?? this.autoRebuy,
       rebuyThresholdBb: rebuyThresholdBb ?? this.rebuyThresholdBb,
       sfxEnabled: sfxEnabled ?? this.sfxEnabled,
       ttsEnabled: ttsEnabled ?? this.ttsEnabled,
       lineupMode: lineupMode ?? this.lineupMode,
-      customArchetypes: customArchetypes ?? this.customArchetypes,
+      customArchetypes: nextCustom,
       geminiKeyOverride: geminiKeyOverride ?? this.geminiKeyOverride,
     );
   }
