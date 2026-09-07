@@ -31,7 +31,7 @@ final geminiServiceProvider = Provider<GeminiService>((ref) {
 });
 
 final soundServiceProvider = Provider<SoundService>((ref) {
-  final service = SoundService();
+  final service = SoundService(gemini: ref.watch(geminiServiceProvider));
   ref.onDispose(service.dispose);
   return service;
 });

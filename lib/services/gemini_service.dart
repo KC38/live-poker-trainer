@@ -1,4 +1,4 @@
-/// Gemini 3.8 Flash scenario generation and live coach (text / AUDIO).
+/// Gemini scenario generation, coach text, and coach speech synthesis.
 library;
 
 import 'dart:convert';
@@ -9,7 +9,7 @@ import 'package:live_poker_trainer/core/audio/wav_codec.dart';
 import 'package:live_poker_trainer/core/constants/config.dart';
 import 'package:live_poker_trainer/models/scenario_model.dart';
 
-/// Result of a coach turn (text and optional playable audio bytes).
+/// Result of a coach turn.
 class CoachAudioResult {
   /// Creates a coach result.
   const CoachAudioResult({
@@ -20,14 +20,14 @@ class CoachAudioResult {
 
   final String text;
 
-  /// Prefer WAV-wrapped PCM so [audioplayers] can play on all platforms.
+  /// WAV-wrapped speech, when synthesized.
   final Uint8List? audioBytes;
 
-  /// MIME for [audioBytes] (usually `audio/wav` after normalization).
+  /// MIME for [audioBytes] (`audio/wav` after normalization).
   final String? audioMimeType;
 }
 
-/// REST client for Gemini generateContent (JSON scenarios + coach).
+/// REST client for Gemini generateContent (JSON scenarios, coach, speech).
 class GeminiService {
   /// Creates a Gemini service with optional [client] for tests.
   GeminiService({http.Client? client}) : _client = client ?? http.Client();
@@ -42,7 +42,8 @@ Output valid JSON containing an intense decision spot. Include: table_size (2-9)
 ''';
 
   static const _coachSystem = '''
-You are an elite exploitative No-Limit Texas Hold'em poker coach analyzing an exploitative spot. Give ultra-concise, punchy verbal strategic advice (1-2 sentences, under 28 words). Focus on opponent archetype vulnerabilities, fold equity, and bet sizing. Never use markdown, bullets, asterisks, or greetings.
+You are an elite exploitative No-Limit Texas Hold'em coach at a live table. You are given one concrete decision: the street, the board, the hero's hand, the villain's archetype and stats, what the hero did, and the recommended line.
+Respond with 1-2 sentences, under 32 words, spoken aloud to the player. You MUST reference the specific street and the villain's archetype tendency by name, and say why the recommended line beats what the hero did. Never give generic advice, never repeat a stock phrase, never use markdown, bullets, asterisks, or greetings.
 ''';
 
   /// Generates up to [count] unique scenarios.
@@ -67,23 +68,16 @@ You are an elite exploitative No-Limit Texas Hold'em poker coach analyzing an ex
     return scenarios;
   }
 
-  /// Live coach feedback; requests TEXT + AUDIO when [wantAudio] is true.
-  Future<CoachAudioResult> coach({
-    required String prompt,
-    bool wantAudio = false,
-  }) async {
-    if (!hasApiKey) {
-      return CoachAudioResult(
-        text: prompt.isEmpty
-            ? 'No API key configured.'
-            : 'Trust the exploit — punish their leak.',
-      );
+  /// Coach text for one decision.
+  ///
+  /// Returns an empty string when no key is configured or the call fails, so
+  /// the caller keeps its own spot-specific line instead of a stock phrase.
+  Future<CoachAudioResult> coach({required String prompt}) async {
+    if (!hasApiKey || prompt.trim().isEmpty) {
+      return const CoachAudioResult(text: '');
     }
-
-    Future<Map<String, dynamic>> postWithModalities(
-      List<String> modalities,
-    ) {
-      final body = <String, dynamic>{
+    try {
+      final response = await _post({
         'system_instruction': {
           'parts': [
             {'text': _coachSystem},
@@ -97,58 +91,91 @@ You are an elite exploitative No-Limit Texas Hold'em poker coach analyzing an ex
             ],
           },
         ],
-        'generationConfig': wantAudio
-            ? {
-                'responseModalities': modalities,
-                'speechConfig': {
-                  'voiceConfig': {
-                    'prebuiltVoiceConfig': {'voiceName': 'Puck'},
-                  },
-                },
-              }
-            : {
-                'temperature': 0.7,
-                'maxOutputTokens': 120,
-              },
-      };
-      return _post(body);
-    }
-
-    try {
-      Map<String, dynamic> response;
-      if (wantAudio) {
-        try {
-          response = await postWithModalities(['TEXT', 'AUDIO']);
-        } catch (_) {
-          // Some models reject dual modalities — retry AUDIO-only.
-          response = await postWithModalities(['AUDIO']);
-        }
-      } else {
-        response = await postWithModalities(['TEXT']);
-      }
-
-      final text = _extractText(response) ?? 'Attack their tendency hard.';
-      if (!wantAudio) {
-        return CoachAudioResult(text: text);
-      }
-      final extracted = _extractInlineAudio(response);
-      if (extracted == null) {
-        return CoachAudioResult(text: text);
-      }
-      final playable = WavCodec.ensurePlayable(
-        extracted.bytes,
-        mimeType: extracted.mimeType,
-      );
-      return CoachAudioResult(
-        text: text,
-        audioBytes: playable.bytes,
-        audioMimeType: playable.mimeType,
-      );
+        'generationConfig': {
+          'temperature': 1.0,
+          'maxOutputTokens': 2048,
+        },
+      });
+      return CoachAudioResult(text: _extractText(response) ?? '');
     } catch (_) {
-      // Fall through to offline punchy line; caller may still use device TTS.
-      return const CoachAudioResult(
-        text: 'Trust the exploit — punish their leak.',
+      return const CoachAudioResult(text: '');
+    }
+  }
+
+  /// Synthesizes [text] with the Gemini speech model, returning WAV bytes.
+  ///
+  /// Returns null when no key is configured or synthesis fails, letting the
+  /// caller fall back to the device voice.
+  Future<Uint8List?> synthesizeSpeech(
+    String text, {
+    String voice = Config.coachVoice,
+  }) async {
+    final cleaned = text.trim();
+    if (!hasApiKey || cleaned.isEmpty) return null;
+    try {
+      final response = await _post(
+        {
+          'contents': [
+            {
+              'role': 'user',
+              'parts': [
+                {
+                  'text': 'Say this as a sharp, encouraging live poker coach '
+                      'sitting next to the player: $cleaned',
+                },
+              ],
+            },
+          ],
+          'generationConfig': {
+            'responseModalities': ['AUDIO'],
+            'speechConfig': {
+              'voiceConfig': {
+                'prebuiltVoiceConfig': {'voiceName': voice},
+              },
+            },
+          },
+        },
+        model: Config.geminiTtsModel,
       );
+      final audio = _extractInlineData(response, wantAudio: true);
+      if (audio == null) return null;
+      return WavCodec.ensurePlayable(
+        audio.bytes,
+        mimeType: audio.mimeType,
+      ).bytes;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Generates a PNG/JPEG image from [prompt], or null on failure.
+  Future<({Uint8List bytes, String mimeType})?> generateImage(
+    String prompt, {
+    String? model,
+  }) async {
+    if (!hasApiKey) return null;
+    try {
+      final response = await _post(
+        {
+          'contents': [
+            {
+              'role': 'user',
+              'parts': [
+                {'text': prompt},
+              ],
+            },
+          ],
+          'generationConfig': {
+            'responseModalities': ['IMAGE'],
+          },
+        },
+        model: model ?? Config.geminiImageModel,
+      );
+      final image = _extractInlineData(response, wantAudio: false);
+      if (image == null) return null;
+      return (bytes: image.bytes, mimeType: image.mimeType ?? 'image/png');
+    } catch (_) {
+      return null;
     }
   }
 
@@ -184,8 +211,11 @@ You are an elite exploitative No-Limit Texas Hold'em poker coach analyzing an ex
     return null;
   }
 
-  Future<Map<String, dynamic>> _post(Map<String, dynamic> body) async {
-    final uri = Config.geminiGenerateContentUri().replace(
+  Future<Map<String, dynamic>> _post(
+    Map<String, dynamic> body, {
+    String? model,
+  }) async {
+    final uri = Config.geminiGenerateContentUri(model: model).replace(
       queryParameters: {'key': Config.geminiApiKey},
     );
     final res = await _client.post(
@@ -200,12 +230,8 @@ You are an elite exploitative No-Limit Texas Hold'em poker coach analyzing an ex
   }
 
   String? _extractText(Map<String, dynamic> response) {
-    final candidates = response['candidates'];
-    if (candidates is! List || candidates.isEmpty) return null;
-    final content = candidates.first['content'];
-    if (content is! Map) return null;
-    final parts = content['parts'];
-    if (parts is! List) return null;
+    final parts = _partsOf(response);
+    if (parts == null) return null;
     final buffer = StringBuffer();
     for (final part in parts) {
       if (part is Map && part['text'] is String) {
@@ -216,27 +242,34 @@ You are an elite exploitative No-Limit Texas Hold'em poker coach analyzing an ex
     return text.isEmpty ? null : text;
   }
 
-  ({Uint8List bytes, String? mimeType})? _extractInlineAudio(
-    Map<String, dynamic> response,
-  ) {
+  ({Uint8List bytes, String? mimeType})? _extractInlineData(
+    Map<String, dynamic> response, {
+    required bool wantAudio,
+  }) {
+    final parts = _partsOf(response);
+    if (parts == null) return null;
+    for (final part in parts) {
+      if (part is! Map) continue;
+      final inline = part['inlineData'] ?? part['inline_data'];
+      if (inline is! Map || inline['data'] is! String) continue;
+      final mime = (inline['mimeType'] ?? inline['mime_type']) as String?;
+      final isAudio = mime == null || mime.startsWith('audio');
+      if (wantAudio != isAudio) continue;
+      return (
+        bytes: base64Decode(inline['data'] as String),
+        mimeType: mime,
+      );
+    }
+    return null;
+  }
+
+  List<dynamic>? _partsOf(Map<String, dynamic> response) {
     final candidates = response['candidates'];
     if (candidates is! List || candidates.isEmpty) return null;
     final content = candidates.first['content'];
     if (content is! Map) return null;
     final parts = content['parts'];
-    if (parts is! List) return null;
-    for (final part in parts) {
-      if (part is! Map) continue;
-      final inline = part['inlineData'] ?? part['inline_data'];
-      if (inline is Map && inline['data'] is String) {
-        final mime = (inline['mimeType'] ?? inline['mime_type']) as String?;
-        return (
-          bytes: base64Decode(inline['data'] as String),
-          mimeType: mime,
-        );
-      }
-    }
-    return null;
+    return parts is List ? parts : null;
   }
 
   String _stripFences(String text) {

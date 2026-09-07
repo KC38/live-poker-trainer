@@ -1,10 +1,12 @@
-/// SFX and coach TTS playback via audioplayers + flutter_tts fallback.
+/// Table SFX plus coach voice: cached Gemini speech, device TTS as last resort.
 library;
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:live_poker_trainer/core/audio/wav_codec.dart';
+import 'package:live_poker_trainer/core/audio/voice_cache.dart';
+import 'package:live_poker_trainer/core/constants/config.dart';
+import 'package:live_poker_trainer/services/gemini_service.dart';
 
 /// Result of attempting coach voice playback.
 class CoachVoicePlayback {
@@ -12,16 +14,38 @@ class CoachVoicePlayback {
   const CoachVoicePlayback({
     required this.spoke,
     this.note,
+    this.fromCache = false,
+    this.usedDeviceVoice = false,
   });
 
   final bool spoke;
   final String? note;
+
+  /// Whether the clip came from the on-disk cache (instant playback).
+  final bool fromCache;
+
+  /// Whether the flat device voice was used instead of Gemini speech.
+  final bool usedDeviceVoice;
 }
 
-/// Bundled table sound effects and coach voice (Gemini audio or device TTS).
+/// Bundled table sound effects and coach voice.
 class SoundService {
   /// Creates a sound service.
-  SoundService();
+  ///
+  /// [gemini] supplies real speech synthesis; [voiceCache] persists clips.
+  SoundService({
+    this.gemini,
+    VoiceCache? voiceCache,
+  }) : _cache = voiceCache ??
+            VoiceCache(
+              maxBytes: Config.voiceCacheMaxBytes,
+              ttl: Config.voiceCacheTtl,
+            );
+
+  /// Speech synthesis backend; null disables the Gemini voice path.
+  final GeminiService? gemini;
+
+  final VoiceCache _cache;
 
   final AudioPlayer _sfx = AudioPlayer();
   final AudioPlayer _voice = AudioPlayer();
@@ -33,11 +57,13 @@ class SoundService {
   bool _ttsReady = false;
   bool _audioContextConfigured = false;
 
+  /// In-memory memo of cache keys already on disk, to skip a stat per line.
+  final Set<String> _warmKeys = <String>{};
+
   /// Call after a user gesture to unlock audio (required on web; helpful on iOS).
   Future<void> unlock() async {
     _unlocked = true;
     await _ensureAudioContext();
-    await _ensureTts();
   }
 
   Future<void> _ensureAudioContext() async {
@@ -93,92 +119,75 @@ class SoundService {
     }
   }
 
-  Future<void> card() => playSfx(SfxKind.card);
+  Future<void> deal() => playSfx(SfxKind.deal);
   Future<void> chip() => playSfx(SfxKind.chip);
   Future<void> knock() => playSfx(SfxKind.knock);
   Future<void> fold() => playSfx(SfxKind.fold);
+  Future<void> win() => playSfx(SfxKind.win);
 
-  /// Plays Gemini coach audio, wrapping raw PCM/L16 as WAV when needed.
-  Future<bool> playCoachAudio(
-    Uint8List bytes, {
-    String? mimeType,
-  }) async {
-    if (!ttsEnabled || !_unlocked || bytes.isEmpty) return false;
-    await _ensureAudioContext();
-    final playable = WavCodec.ensurePlayable(bytes, mimeType: mimeType);
-    try {
-      await _tts.stop();
-      await _voice.stop();
-      await _voice.setReleaseMode(ReleaseMode.stop);
-      await _voice.play(
-        BytesSource(playable.bytes, mimeType: playable.mimeType),
-      );
-      return true;
-    } catch (_) {
-      try {
-        await _voice.play(BytesSource(playable.bytes));
-        return true;
-      } catch (_) {
-        return false;
-      }
-    }
-  }
+  /// Backwards-compatible alias for the card-deal SFX.
+  Future<void> card() => deal();
 
-  /// Speaks [text] via device TTS (offline fallback).
-  Future<bool> speakText(String text) async {
-    if (!ttsEnabled || !_unlocked) return false;
-    final cleaned = text.trim();
-    if (cleaned.isEmpty) return false;
-    await _ensureTts();
-    try {
-      await _voice.stop();
-      await _tts.stop();
-      final result = await _tts.speak(cleaned);
-      return result == 1 || result == true;
-    } catch (_) {
-      return false;
-    }
-  }
-
-  /// Plays Gemini audio when present; otherwise falls back to device TTS.
-  Future<CoachVoicePlayback> playCoachVoice({
+  /// Speaks a coach line, preferring cached Gemini speech.
+  ///
+  /// Order of preference:
+  /// 1. On-disk cached WAV for this exact line (instant, no network).
+  /// 2. Fresh Gemini speech synthesis, then cached for next time.
+  /// 3. `flutter_tts` device voice (flat, last resort only).
+  Future<CoachVoicePlayback> speakCoachLine({
     required String text,
-    Uint8List? audioBytes,
-    String? audioMimeType,
-    bool hasApiKey = true,
+    bool enabled = true,
   }) async {
-    if (!ttsEnabled) {
+    if (!enabled || !ttsEnabled) {
       return const CoachVoicePlayback(
         spoke: false,
         note: 'Coach voice is muted in Settings.',
       );
     }
+    final cleaned = text.trim();
+    if (cleaned.isEmpty) return const CoachVoicePlayback(spoke: false);
     if (!_unlocked) {
       return const CoachVoicePlayback(
         spoke: false,
-        note: 'Tap Play once to unlock coach voice.',
+        note: 'Tap Start training once to unlock coach voice.',
       );
     }
 
-    if (audioBytes != null && audioBytes.isNotEmpty) {
-      final ok = await playCoachAudio(audioBytes, mimeType: audioMimeType);
-      if (ok) return const CoachVoicePlayback(spoke: true);
+    final gemini = this.gemini;
+    if (gemini != null && gemini.hasApiKey) {
+      final key = VoiceCache.keyFor(
+        text: cleaned,
+        voice: Config.coachVoice,
+        model: Config.geminiTtsModel,
+      );
+
+      final cached = await _cache.get(key);
+      if (cached != null && await _playFile(cached.path)) {
+        return const CoachVoicePlayback(spoke: true, fromCache: true);
+      }
+
+      final synthesized = await gemini.synthesizeSpeech(cleaned);
+      if (synthesized != null && synthesized.isNotEmpty) {
+        final stored = await _cache.put(key, synthesized);
+        _warmKeys.add(key);
+        if (stored != null && await _playFile(stored.path)) {
+          return const CoachVoicePlayback(spoke: true);
+        }
+        if (await _playBytes(synthesized)) {
+          return const CoachVoicePlayback(spoke: true);
+        }
+      }
     }
 
-    final spoke = await speakText(text);
+    // Last resort: flat device voice.
+    final spoke = await _speakWithDevice(cleaned);
     if (spoke) {
       return CoachVoicePlayback(
         spoke: true,
-        note: hasApiKey
+        usedDeviceVoice: true,
+        note: gemini != null && gemini.hasApiKey
             ? null
-            : 'Using device voice — add a Gemini API key for coach AUDIO.',
-      );
-    }
-
-    if (!hasApiKey) {
-      return const CoachVoicePlayback(
-        spoke: false,
-        note: 'Enable Coach voice + add a Gemini API key for spoken feedback.',
+            : 'Device voice — add a Gemini API key for the real coach voice.',
       );
     }
     return const CoachVoicePlayback(
@@ -187,11 +196,79 @@ class SoundService {
     );
   }
 
-  Future<void> stopVoice() async {
-    await _voice.stop();
+  /// Pre-synthesizes and caches [text] without playing it.
+  Future<bool> warmCoachLine(String text) async {
+    final gemini = this.gemini;
+    final cleaned = text.trim();
+    if (gemini == null || !gemini.hasApiKey || cleaned.isEmpty) return false;
+    final key = VoiceCache.keyFor(
+      text: cleaned,
+      voice: Config.coachVoice,
+      model: Config.geminiTtsModel,
+    );
+    if (_warmKeys.contains(key)) return true;
+    if (await _cache.get(key) != null) {
+      _warmKeys.add(key);
+      return true;
+    }
+    final bytes = await gemini.synthesizeSpeech(cleaned);
+    if (bytes == null || bytes.isEmpty) return false;
+    await _cache.put(key, bytes);
+    _warmKeys.add(key);
+    return true;
+  }
+
+  Future<bool> _playFile(String path) async {
+    try {
+      await _stopAllVoice();
+      await _voice.setReleaseMode(ReleaseMode.stop);
+      await _voice.play(DeviceFileSource(path));
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<bool> _playBytes(Uint8List bytes) async {
+    try {
+      await _stopAllVoice();
+      await _voice.play(BytesSource(bytes, mimeType: 'audio/wav'));
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<bool> _speakWithDevice(String text) async {
+    await _ensureTts();
+    try {
+      await _stopAllVoice();
+      final result = await _tts.speak(text);
+      return result == 1 || result == true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> _stopAllVoice() async {
+    try {
+      await _voice.stop();
+    } catch (_) {}
     try {
       await _tts.stop();
     } catch (_) {}
+  }
+
+  /// Stops any in-flight coach voice.
+  Future<void> stopVoice() => _stopAllVoice();
+
+  /// Total bytes of cached coach audio.
+  Future<int> voiceCacheBytes() => _cache.sizeInBytes();
+
+  /// Clears cached coach audio.
+  Future<void> clearVoiceCache() async {
+    _warmKeys.clear();
+    await _cache.clear();
   }
 
   /// Releases players.
@@ -206,10 +283,11 @@ class SoundService {
 
 /// Bundled SFX asset kinds.
 enum SfxKind {
-  card('card.wav'),
+  deal('deal.wav'),
   chip('chip.wav'),
   knock('knock.wav'),
-  fold('fold.wav');
+  fold('fold.wav'),
+  win('win.wav');
 
   const SfxKind(this.fileName);
   final String fileName;
