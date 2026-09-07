@@ -6,11 +6,18 @@ import 'package:flutter/foundation.dart';
 
 /// Bundled table sound effects and home ambient music.
 class SoundService {
-  /// Creates a sound service.
-  SoundService();
+  /// Creates a sound service backed by platform audio players.
+  SoundService() : this._(bindPlatform: true);
 
-  final AudioPlayer _sfx = AudioPlayer();
-  final AudioPlayer _bgm = AudioPlayer();
+  /// No-op service for unit tests (never touches audioplayers plugins).
+  SoundService.silent() : this._(bindPlatform: false);
+
+  SoundService._({required bool bindPlatform})
+      : _sfx = bindPlatform ? AudioPlayer() : null,
+        _bgm = bindPlatform ? AudioPlayer() : null;
+
+  final AudioPlayer? _sfx;
+  final AudioPlayer? _bgm;
 
   bool sfxEnabled = true;
   bool musicEnabled = true;
@@ -35,7 +42,9 @@ class SoundService {
   }
 
   Future<void> _ensureAudioContext() async {
-    if (_audioContextConfigured) return;
+    final sfx = _sfx;
+    final bgm = _bgm;
+    if (sfx == null || bgm == null || _audioContextConfigured) return;
     try {
       final ctx = AudioContext(
         iOS: AudioContextIOS(
@@ -53,8 +62,8 @@ class SoundService {
         ),
       );
       await AudioPlayer.global.setAudioContext(ctx);
-      await _sfx.setAudioContext(ctx);
-      await _bgm.setAudioContext(ctx);
+      await sfx.setAudioContext(ctx);
+      await bgm.setAudioContext(ctx);
       _audioContextConfigured = true;
     } catch (_) {
       // Platform may not support AudioContext configuration.
@@ -68,7 +77,7 @@ class SoundService {
   Future<void> setSfxVolume(double volume) async {
     _sfxVolume = volume.clamp(0.0, 1.0);
     try {
-      await _sfx.setVolume(_sfxVolume);
+      await _sfx?.setVolume(_sfxVolume);
     } catch (_) {}
   }
 
@@ -85,16 +94,17 @@ class SoundService {
   /// Fades in the Home lounge loop when music is enabled.
   Future<void> startHomeBgm() async {
     _bgmWanted = true;
-    if (!musicEnabled || !_unlocked) return;
+    final bgm = _bgm;
+    if (bgm == null || !musicEnabled || !_unlocked) return;
     try {
       await _ensureAudioContext();
       if (!_bgmPlaying) {
-        await _bgm.setReleaseMode(ReleaseMode.loop);
-        await _bgm.setVolume(0);
-        await _bgm.play(AssetSource(_bgmAsset), volume: 0);
+        await bgm.setReleaseMode(ReleaseMode.loop);
+        await bgm.setVolume(0);
+        await bgm.play(AssetSource(_bgmAsset), volume: 0);
         _bgmPlaying = true;
       } else {
-        await _bgm.resume();
+        await bgm.resume();
       }
       await _fadeBgmTo(_bgmBaseVolume);
     } catch (_) {
@@ -105,20 +115,20 @@ class SoundService {
   /// Fades out and pauses the Home loop (e.g. entering Training).
   Future<void> pauseHomeBgm() async {
     _bgmWanted = false;
-    if (!_bgmPlaying) return;
+    if (_bgm == null || !_bgmPlaying) return;
     try {
       await _fadeBgmTo(0);
-      await _bgm.pause();
+      await _bgm?.pause();
     } catch (_) {}
   }
 
   /// Resumes the Home loop after returning from Training, if still wanted.
   Future<void> resumeHomeBgm() async {
     _bgmWanted = true;
-    if (!musicEnabled || !_unlocked) return;
+    if (_bgm == null || !musicEnabled || !_unlocked) return;
     if (_bgmPlaying) {
       try {
-        await _bgm.resume();
+        await _bgm?.resume();
         await _fadeBgmTo(_bgmBaseVolume);
       } catch (_) {}
       return;
@@ -133,12 +143,17 @@ class SoundService {
     _bgmPlaying = false;
     _bgmAudibleVolume = 0;
     try {
-      await _bgm.stop();
-      await _bgm.setVolume(0);
+      await _bgm?.stop();
+      await _bgm?.setVolume(0);
     } catch (_) {}
   }
 
   Future<void> _fadeBgmTo(double target) async {
+    final bgm = _bgm;
+    if (bgm == null) {
+      _bgmAudibleVolume = target.clamp(0.0, 1.0);
+      return;
+    }
     final gen = ++_bgmFadeGen;
     final from = _bgmAudibleVolume;
     const steps = 10;
@@ -148,7 +163,7 @@ class SoundService {
       final next = from + (target - from) * (step / steps);
       _bgmAudibleVolume = next.clamp(0.0, 1.0);
       try {
-        await _bgm.setVolume(_bgmAudibleVolume);
+        await bgm.setVolume(_bgmAudibleVolume);
       } catch (_) {
         return;
       }
@@ -160,11 +175,12 @@ class SoundService {
 
   /// Plays a short table SFX if enabled.
   Future<void> playSfx(SfxKind kind) async {
-    if (!sfxEnabled || !_unlocked) return;
+    final sfx = _sfx;
+    if (sfx == null || !sfxEnabled || !_unlocked) return;
     try {
       await _ensureAudioContext();
-      await _sfx.stop();
-      await _sfx.play(
+      await sfx.stop();
+      await sfx.play(
         AssetSource('sounds/${kind.fileName}'),
         volume: _sfxVolume,
       );
@@ -185,8 +201,8 @@ class SoundService {
   /// Releases players.
   Future<void> dispose() async {
     await stopHomeBgm();
-    await _sfx.dispose();
-    await _bgm.dispose();
+    await _sfx?.dispose();
+    await _bgm?.dispose();
   }
 }
 

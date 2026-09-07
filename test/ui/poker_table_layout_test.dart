@@ -35,13 +35,21 @@ class _FixedController extends GameController {
   /// Pushes a new session so tests can move between hero-to-act and review.
   void emit(TableSession session) => state = session;
 
+  int nextHandCalls = 0;
+
   @override
   Future<void> startTraining({bool continueTable = false}) async {}
+
+  @override
+  Future<void> nextHand() async {
+    nextHandCalls++;
+  }
 }
 
 GameState _nineHandedGame({
   Street street = Street.turn,
   bool handOver = false,
+  bool heroFolded = false,
 }) {
   final archetypes = [
     PlayerArchetype.nit,
@@ -60,8 +68,9 @@ GameState _nineHandedGame({
         name: 'Hero',
         archetype: PlayerArchetype.hero,
         stack: 173,
-        currentBet: 8,
+        currentBet: heroFolded ? 0 : 8,
         isHero: true,
+        folded: heroFolded,
         holeCards: [CardModel.fromCode('Ks'), CardModel.fromCode('Jh')],
       ),
       for (var i = 0; i < archetypes.length; i++)
@@ -90,7 +99,7 @@ GameState _nineHandedGame({
     dealerIndex: 3,
     sbIndex: 4,
     bbIndex: 5,
-    waitingForHero: !handOver,
+    waitingForHero: !handOver && !heroFolded,
     isHandOver: handOver,
     awardedPot: handOver ? 937 : 0,
     resultMessage: handOver ? 'Seat 1 wins \$937' : null,
@@ -328,9 +337,58 @@ void main() {
         );
 
         expect(find.text('Next'), findsOneWidget);
+        expect(find.byKey(const ValueKey('next_cta_emphasized')), findsOneWidget);
+        expect(find.byKey(const ValueKey('next_cta_quiet')), findsNothing);
         expect(find.text('Review'), findsNothing);
         expect(find.text('Hand review'), findsNothing);
         expect(find.text('Next hand'), findsNothing);
+      });
+
+      testWidgets('after fold Next is available without highlight',
+          (tester) async {
+        await _pumpTable(
+          tester,
+          size: size,
+          session: TableSession(
+            coach: longCoach,
+            replaying: true,
+          ).copyWith(
+            game: _nineHandedGame(heroFolded: true),
+          ),
+        );
+
+        expect(find.text('Next'), findsOneWidget);
+        expect(find.byKey(const ValueKey('next_cta_quiet')), findsOneWidget);
+        expect(
+          find.byKey(const ValueKey('next_cta_emphasized')),
+          findsNothing,
+        );
+        expect(find.text('Review'), findsNothing);
+        expect(find.byType(ActionDockWidget), findsNothing);
+      });
+
+      testWidgets('early quiet Next requests the next hand', (tester) async {
+        final controller = await _pumpTable(
+          tester,
+          size: size,
+          session: TableSession(
+            coach: longCoach,
+            replaying: true,
+          ).copyWith(
+            game: _nineHandedGame(heroFolded: true),
+          ),
+        );
+
+        await tester.tap(find.text('Next'));
+        await tester.pump();
+        expect(controller.nextHandCalls, 1);
+      });
+
+      testWidgets('YOUR TURN hides Next so mid-decision cannot skip',
+          (tester) async {
+        await _pumpTable(tester, size: size, session: liveSession());
+        expect(find.text('YOUR TURN'), findsOneWidget);
+        expect(find.text('Next'), findsNothing);
       });
 
       testWidgets('action dock is on screen while the hero is to act',

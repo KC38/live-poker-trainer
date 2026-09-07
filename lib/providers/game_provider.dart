@@ -25,23 +25,30 @@ import 'package:live_poker_trainer/services/mistake_tracker.dart';
 class ReplayPace {
   ReplayPace._();
 
+  /// Multiplier for paced delays. Tests set this to `0` to skip sleeps.
+  static double testScale = 1;
+
+  static Duration _scaled(int milliseconds) => Duration(
+        microseconds: (milliseconds * 1000 * testScale).round(),
+      );
+
   /// Pause before the first villain acts after the deal.
-  static const Duration deal = Duration(milliseconds: 420);
+  static Duration get deal => _scaled(420);
 
   /// Pause after a villain checks or folds.
-  static const Duration passiveAction = Duration(milliseconds: 520);
+  static Duration get passiveAction => _scaled(520);
 
   /// Pause after a villain puts chips in (bet / call / raise).
-  static const Duration chipAction = Duration(milliseconds: 680);
+  static Duration get chipAction => _scaled(680);
 
   /// Time the chips take to slide into the pot.
-  static const Duration collectPot = Duration(milliseconds: 420);
+  static Duration get collectPot => _scaled(420);
 
   /// Pause after new board cards land.
-  static const Duration dealStreet = Duration(milliseconds: 620);
+  static Duration get dealStreet => _scaled(620);
 
   /// Beat after the hand resolves before the Next CTA is actionable.
-  static const Duration handOver = Duration(milliseconds: 560);
+  static Duration get handOver => _scaled(560);
 }
 
 /// UI-facing table session snapshot.
@@ -79,6 +86,20 @@ class TableSession {
         !replaying &&
         !loading;
   }
+
+  /// Hero has no further decisions this hand (folded or the hand resolved).
+  ///
+  /// Used to offer an early **Next** that skips the rest of the replay while
+  /// villains finish streets / showdown in the background.
+  bool get heroDoneForHand {
+    final g = game;
+    return g != null && !loading && (g.isHandOver || g.hero.folded);
+  }
+
+  /// Gold pulsing Next — only after the hand finishes naturally (or via skip
+  /// resolve). Quiet Next is still available while [heroDoneForHand] and the
+  /// replay is catching up.
+  bool get highlightNext => game != null && game!.isHandOver && !loading;
 
   TableSession copyWith({
     GameState? game,
@@ -235,7 +256,37 @@ class GameController extends StateNotifier<TableSession> {
       startTraining(continueTable: continueTable);
 
   /// Deals the next hand at the same table.
-  Future<void> nextHand() => startTraining(continueTable: true);
+  ///
+  /// When the hero has already folded (or the hand is over), this cancels any
+  /// in-flight villain replay, silently finishes stack settlement, then deals.
+  /// Refuses to skip while the hero still has decisions left.
+  Future<void> nextHand() async {
+    final game = state.game;
+    if (game != null && !game.isHandOver && !game.hero.folded) {
+      return;
+    }
+    await _forceCompleteSkippedHand();
+    await startTraining(continueTable: true);
+  }
+
+  /// Cancels paced replay and resolves the current hand so stacks stay honest.
+  Future<void> _forceCompleteSkippedHand() async {
+    final engine = _engine;
+    final game = state.game;
+    if (engine == null || game == null || game.isHandOver) return;
+
+    final token = ++_replayToken;
+    if (!engine.state.isHandOver) {
+      engine.runToHeroOrEnd();
+    }
+    if (_disposed || token != _replayToken) return;
+    state = state.copyWith(
+      game: engine.state,
+      replaying: false,
+      collectingChips: false,
+    );
+    await _finishHandIfOver(token);
+  }
 
   /// Applies a hero action, coaches it, then replays the villains' responses.
   Future<void> heroAct(PokerAction action) async {
@@ -269,6 +320,7 @@ class GameController extends StateNotifier<TableSession> {
         optimalAction: grade.optimalAction,
         optimalSizingBb: grade.optimalSizingBb,
         heroAction: action.label,
+        heroSizingBb: grade.heroSizingBb,
         evDeltaBb: grade.evDeltaBb,
         decisionStreet: grade.street,
         isHistorical: false,

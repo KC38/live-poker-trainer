@@ -28,7 +28,9 @@ import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
 /// felt and hero rail, which animate into it rather than jumping.
 ///
 /// After a hand ends, coaching stays in the shelf — no auto Hand Review sheet.
-/// The header **Next** control becomes the clear CTA to deal again.
+/// The header **Next** control deals again: quiet while the hero is done early
+/// (e.g. folded) so they can skip the rest of the replay; gold + pulse only
+/// once [GameState.isHandOver] after the hand finishes naturally.
 ///
 /// Hand kickoff (deal + SFX + replay) waits until this route has finished
 /// presenting so audio never plays over the Home landing page.
@@ -98,6 +100,8 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
     final settings = ref.watch(settingsProvider);
     final game = session.game;
     final handOver = game != null && game.isHandOver;
+    final showNext = session.heroDoneForHand;
+    final highlightNext = session.highlightNext;
 
     // The felt shows currency only; hand review and stats keep the user's
     // full chip-display choice.
@@ -159,10 +163,11 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                       if (context.mounted) Navigator.pop(context);
                     },
                     onLegend: game == null ? null : () => _openLegend(game),
-                    onNext: handOver
+                    onNext: showNext
                         ? () =>
                             ref.read(gameControllerProvider.notifier).nextHand()
                         : null,
+                    highlightNext: highlightNext,
                   ),
                   if (session.loading)
                     const Expanded(child: _DealingIndicator())
@@ -340,12 +345,14 @@ class _TableHeader extends StatelessWidget {
     required this.onBack,
     required this.onLegend,
     required this.onNext,
+    this.highlightNext = false,
   });
 
   final GameState? game;
   final Future<void> Function() onBack;
   final VoidCallback? onLegend;
   final VoidCallback? onNext;
+  final bool highlightNext;
 
   @override
   Widget build(BuildContext context) {
@@ -388,7 +395,10 @@ class _TableHeader extends StatelessWidget {
             ),
           ),
           if (onNext != null)
-            _NextHandCta(onPressed: onNext!)
+            _NextHandCta(
+              onPressed: onNext!,
+              emphasized: highlightNext,
+            )
           else
             IconButton(
               tooltip: 'Player types',
@@ -405,11 +415,16 @@ class _TableHeader extends StatelessWidget {
   }
 }
 
-/// Gold filled **Next** control with a soft pulse so hand-over is unmistakable.
+/// Header **Next** — quiet skip while hero is done early; gold pulse when the
+/// hand has fully finished.
 class _NextHandCta extends StatefulWidget {
-  const _NextHandCta({required this.onPressed});
+  const _NextHandCta({
+    required this.onPressed,
+    this.emphasized = false,
+  });
 
   final VoidCallback onPressed;
+  final bool emphasized;
 
   @override
   State<_NextHandCta> createState() => _NextHandCtaState();
@@ -425,7 +440,28 @@ class _NextHandCtaState extends State<_NextHandCta>
     _pulse = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1100),
-    )..repeat(reverse: true);
+    );
+    _syncPulse();
+  }
+
+  @override
+  void didUpdateWidget(covariant _NextHandCta oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.emphasized != widget.emphasized) {
+      _syncPulse();
+    }
+  }
+
+  void _syncPulse() {
+    if (widget.emphasized) {
+      if (!_pulse.isAnimating) {
+        _pulse.repeat(reverse: true);
+      }
+    } else {
+      _pulse
+        ..stop()
+        ..value = 0;
+    }
   }
 
   @override
@@ -436,57 +472,87 @@ class _NextHandCtaState extends State<_NextHandCta>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _pulse,
-      builder: (context, child) {
-        final t = Curves.easeInOut.transform(_pulse.value);
-        final glow = 0.28 + (0.42 * t);
-        final scale = 1.0 + (0.035 * t);
-        return Transform.scale(
-          scale: scale,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(22),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.gold.withValues(alpha: glow),
-                  blurRadius: 14 + (8 * t),
-                  spreadRadius: 0.5 + t,
-                ),
-              ],
-            ),
-            child: child,
-          ),
-        );
-      },
-      child: Material(
-        color: AppColors.gold,
-        borderRadius: BorderRadius.circular(22),
-        child: InkWell(
-          onTap: widget.onPressed,
+    final label = Text(
+      'Next',
+      style: GoogleFonts.manrope(
+        color: widget.emphasized ? AppColors.bgDark : AppColors.slate,
+        fontWeight: FontWeight.w800,
+        fontSize: 14,
+        letterSpacing: 0.2,
+      ),
+    );
+    final arrow = Icon(
+      Icons.arrow_forward_rounded,
+      size: 16,
+      color: widget.emphasized ? AppColors.bgDark : AppColors.slate,
+    );
+    final body = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          label,
+          const SizedBox(width: 4),
+          arrow,
+        ],
+      ),
+    );
+
+    if (!widget.emphasized) {
+      return KeyedSubtree(
+        key: const ValueKey<String>('next_cta_quiet'),
+        child: Material(
+          color: Colors.transparent,
           borderRadius: BorderRadius.circular(22),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Next',
-                  style: GoogleFonts.manrope(
-                    color: AppColors.bgDark,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 14,
-                    letterSpacing: 0.2,
-                  ),
+          child: InkWell(
+            onTap: widget.onPressed,
+            borderRadius: BorderRadius.circular(22),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(22),
+                border: Border.all(
+                  color: AppColors.slate.withValues(alpha: 0.45),
                 ),
-                const SizedBox(width: 4),
-                const Icon(
-                  Icons.arrow_forward_rounded,
-                  size: 16,
-                  color: AppColors.bgDark,
-                ),
-              ],
+              ),
+              child: body,
             ),
+          ),
+        ),
+      );
+    }
+
+    return KeyedSubtree(
+      key: const ValueKey<String>('next_cta_emphasized'),
+      child: AnimatedBuilder(
+        animation: _pulse,
+        builder: (context, child) {
+          final t = Curves.easeInOut.transform(_pulse.value);
+          final glow = 0.28 + (0.42 * t);
+          final scale = 1.0 + (0.035 * t);
+          return Transform.scale(
+            scale: scale,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(22),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.gold.withValues(alpha: glow),
+                    blurRadius: 14 + (8 * t),
+                    spreadRadius: 0.5 + t,
+                  ),
+                ],
+              ),
+              child: child,
+            ),
+          );
+        },
+        child: Material(
+          color: AppColors.gold,
+          borderRadius: BorderRadius.circular(22),
+          child: InkWell(
+            onTap: widget.onPressed,
+            borderRadius: BorderRadius.circular(22),
+            child: body,
           ),
         ),
       ),
