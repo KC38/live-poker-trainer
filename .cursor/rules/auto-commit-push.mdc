@@ -1,0 +1,33 @@
+---
+description: Regularly commit and push completed work to the live GitHub repo
+alwaysApply: true
+---
+
+# Auto commit & push to live GitHub
+
+Live remote: `origin` → https://github.com/KC38/live-poker-trainer (`main`).
+
+## When to sync
+
+After finishing a coherent unit of work (feature, fix, refactor, tests, docs)—or before ending a session with uncommitted changes—**commit and push** without waiting for the user to ask.
+
+Do **not** sync for trivial WIP mid-edit, broken/unrunnable states, or exploratory experiments the user has not accepted.
+
+## How
+
+1. `git status` / `git diff` / recent `git log` for message style.
+2. Stage only intentional project files. **Never** stage secrets:
+   - `.env*`, `*.pem`
+   - `android/app/google-services.json`
+   - `ios/Runner/GoogleService-Info.plist`
+   - `lib/firebase_options.dart`
+3. Commit with a concise why-focused message (HEREDOC). Follow the repo's existing commit style.
+4. `git push origin HEAD:main` (or push the tracking branch to `origin/main`).
+5. Confirm with `git status -sb`.
+
+## Hard limits
+
+- Never `git push --force` / `--force-with-lease` to `main` unless the user explicitly requests it.
+- Never amend pushed commits unless the user explicitly requests it and amend safety checks pass.
+- Never update git config, skip hooks, or rewrite history.
+- If push fails (auth, conflicts), report the error and stop—do not force through.
