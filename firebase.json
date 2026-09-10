@@ -1,0 +1,62 @@
+{
+  "firestore": {
+    "database": "(default)",
+    "location": "nam5",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run build"
+      ]
+    }
+  ],
+  "auth": {
+    "providers": {
+      "emailPassword": true,
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "Live Poker Trainer",
+        "supportEmail": "chachankushal38@gmail.com"
+      }
+    }
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "live-poker-trainer",
+          "appId": "1:584262608034:android:66dd75d06f90534b2a23fb",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "live-poker-trainer",
+          "appId": "1:584262608034:ios:c7c61ae4b74ea7ce2a23fb",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "live-poker-trainer",
+          "configurations": {
+            "android": "1:584262608034:android:66dd75d06f90534b2a23fb",
+            "ios": "1:584262608034:ios:c7c61ae4b74ea7ce2a23fb",
+            "web": "1:584262608034:web:a70f70ff1309110b2a23fb"
+          }
+        }
+      }
+    }
+  }
+}

@@ -77,8 +77,24 @@ class GeminiService {
   bool get hasApiKey => Config.hasGeminiKey;
 
   static const _scenarioSystem = '''
-You are a game theory and exploitative poker scenario architect for \$1/\$2 to \$5/\$10 No-Limit Hold'em.
-Output valid JSON containing an intense decision spot. Include: table_size (2-9), hero_position, hero_hand, board_cards (flop, turn, river up to spot), pot_size, villain_seat, villain_archetype ('Maniac', 'Nit', 'Calling Station', 'TAG', 'LAG'), previous_action_narrative, villain_action, call_amount, min_raise, max_raise, optimal_exploit_action ('FOLD', 'CALL', 'RAISE'), optimal_sizing_bb, theoretical_ev_explanation, exploit_reasoning.
+You are a poker scenario architect for \$1/\$2 to \$5/\$10 No-Limit Hold'em.
+Invent tough *exploitative decision spots* — never decide the optimal play. A separate EV engine grades the spot.
+
+Diversity rules (critical for training engagement):
+- Mix streets: roughly half preflop, half postflop (flop / turn / river).
+- Hero must have a real decision — NOT an automatic fold. Prefer playable hands (opens, 3-bet pots, BB defense with decent holdings, value bets, thin value, bluffs with equity, river calls/folds that are close).
+- Avoid junk hole cards facing a large raise preflop (those are just fold).
+- Vary villain archetypes: Maniac, Nit, Calling Station, TAG, LAG.
+- Vary action shapes: open, face raise, c-bet, check-raise, river bet, multiway-ish pots at 6-max.
+
+Board / pot rules:
+- Preflop: board_cards = [], pot_size is blinds (+ any preflop raises already in).
+- Flop: exactly 3 board cards; turn: 4; river: 5. pot_size must match the action narrative.
+- call_amount is chips hero must add to continue (0 when checked to).
+
+Output valid JSON with exactly these keys:
+table_size (preferably 6), hero_position, hero_hand (two codes like As,Kd), board_cards, pot_size, villain_seat, villain_archetype ('Maniac', 'Nit', 'Calling Station', 'TAG', 'LAG'), previous_action_narrative, villain_action, call_amount, min_raise, max_raise, name (short title).
+Do NOT invent optimal_exploit_action, optimal_sizing_bb, theoretical_ev_explanation, or exploit_reasoning — leave those out.
 ''';
 
   /// Removes API keys (and any `key=` query value) from [text].
@@ -109,8 +125,7 @@ Output valid JSON containing an intense decision spot. Include: table_size (2-9)
         final json = await _generateJson(
           kind: AiRequestKind.scenario,
           system: _scenarioSystem,
-          user:
-              'Generate one unique tough exploitative spot. Variation seed: $i.',
+          user: _scenarioUserPrompt(i),
         );
         if (json != null) {
           scenarios.add(ScenarioModel.fromGeminiJson(json));
@@ -123,6 +138,23 @@ Output valid JSON containing an intense decision spot. Include: table_size (2-9)
       }
     }
     return scenarios;
+  }
+
+  /// Street / action mix so successive seeds are not all fold-preflop.
+  static String _scenarioUserPrompt(int seed) {
+    final focus = switch (seed % 8) {
+      0 => 'preflop open from late position with a playable hand',
+      1 => 'preflop facing a raise with a defendable / 3-bettable hand',
+      2 => 'flop value vs a Calling Station or Nit',
+      3 => 'flop decision vs a Maniac or LAG bet',
+      4 => 'turn barrel or probe with equity',
+      5 => 'river thin value or bluff-catch vs archetype',
+      6 => '3-bet pot preflop with a premium or suited broadway',
+      _ => 'multiway-aware flop or turn spot at 6-max',
+    };
+    return 'Generate one unique tough exploitative spot focused on: $focus. '
+        'Variation seed: $seed. Hero should usually continue (raise/call/bet), '
+        'not auto-fold.';
   }
 
   /// Generates a PNG/JPEG image from [prompt], or null on failure.

@@ -3,11 +3,13 @@
 library;
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/engine/coach_lines.dart';
 import 'package:live_poker_trainer/engine/hero_profiler.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/hand_history_sample.dart';
 import 'package:live_poker_trainer/models/hero_metrics.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
+import 'package:live_poker_trainer/models/mistake_model.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/services/profile_coach.dart';
 
@@ -96,6 +98,62 @@ void main() {
       expect(
         summary.adjustments.length,
         lessThanOrEqualTo(ProfileCoach.maxLines),
+      );
+    });
+
+    test('grounds leaks and fixes in live mistake keys + reason phrases', () {
+      final mistakes = MistakeStats(
+        totalMistakes: 4,
+        topMistakes: [
+          MistakeSummary(
+            key: 'river:nit:call->fold',
+            tag: MistakeTag.payingOffNits,
+            street: 'river',
+            archetype: 'Nit',
+            taken: 'call',
+            best: 'fold',
+            count: 4,
+            lastSeen: now,
+            improvements: 0,
+            currentStreak: 0,
+            lastEventWasImprovement: false,
+            evLostBb: 6,
+          ),
+          MistakeSummary(
+            key: 'turn:station:raise->call',
+            tag: MistakeTag.overbluffingStations,
+            street: 'turn',
+            archetype: 'Calling Station',
+            taken: 'raise',
+            best: 'call',
+            count: 2,
+            lastSeen: now,
+            improvements: 0,
+            currentStreak: 0,
+            lastEventWasImprovement: false,
+            evLostBb: 3,
+          ),
+        ],
+      );
+
+      final summary = ProfileCoach.offlineSummary(
+        _loosePassive(),
+        mistakes: mistakes,
+        now: now,
+      );
+
+      expect(summary.leaks.first, contains('river:nit:call->fold'));
+      expect(
+        summary.leaks.first,
+        contains(CoachReasonCode.dontPayOffNits.phrase),
+      );
+      expect(
+        summary.adjustments,
+        contains(CoachReasonCode.dontPayOffNits.phrase),
+      );
+      expect(
+        summary.adjustments,
+        contains(CoachReasonCode.neverBluffStations.phrase),
       );
     });
   });
@@ -208,6 +266,35 @@ void main() {
         isNot(contains('${HeroMetricId.wtsd.shortLabel} ')),
         reason: 'the model must not quote noise back at the player',
       );
+    });
+
+    test('includes live mistake keys and curriculum phrases when provided', () {
+      final prompt = ProfileCoach.buildPrompt(
+        _loosePassive(),
+        mistakes: MistakeStats(
+          totalMistakes: 2,
+          topMistakes: [
+            MistakeSummary(
+              key: 'river:nit:call->fold',
+              tag: MistakeTag.payingOffNits,
+              street: 'river',
+              archetype: 'Nit',
+              taken: 'call',
+              best: 'fold',
+              count: 2,
+              lastSeen: now,
+              improvements: 0,
+              currentStreak: 0,
+              lastEventWasImprovement: false,
+              evLostBb: 4,
+            ),
+          ],
+        ),
+      );
+
+      expect(prompt, contains('river:nit:call->fold'));
+      expect(prompt, contains(CoachReasonCode.dontPayOffNits.phrase));
+      expect(prompt, contains('Live-play mistakes'));
     });
   });
 

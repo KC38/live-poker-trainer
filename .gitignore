@@ -3,6 +3,18 @@
 .env.local
 *.pem
 
+# Firebase
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+ui-debug.log
+functions/node_modules/
+functions/lib/
+# Local Firebase app configs (API keys) — keep out of public repos
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+lib/firebase_options.dart
+
 # Miscellaneous
 *.class
 *.log

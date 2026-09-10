@@ -6,8 +6,12 @@
 ///   model answers with JSON (`summary`, `leaks`, `adjustments`). No markdown
 ///   is allowed through: the copy is read on a phone card, not in a terminal.
 /// * **Offline** — the same fields are written locally from the metrics and
-///   the ranked [ProfileLeak] list, so the card is never empty and the app
-///   works with no key and no network.
+///   the ranked [ProfileLeak] / live-play [MistakeStats] list, so the card is
+///   never empty and the app works with no key and no network.
+///
+/// Live-play mistake keys and [MistakeTag.reasonCode] curriculum phrases are
+/// the preferred leak source when present — Progress review must not invent a
+/// second strategy spine.
 ///
 /// The caller decides *when* to run this (see
 /// [ProfileCoachSummary.needsRefresh]); this service only decides *what* to
@@ -20,6 +24,7 @@ import 'package:http/http.dart' as http;
 import 'package:live_poker_trainer/core/constants/config.dart';
 import 'package:live_poker_trainer/models/hero_metrics.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
+import 'package:live_poker_trainer/models/mistake_model.dart';
 
 /// A JSON-mode model call, injected so the coach is testable without HTTP.
 typedef StructuredModelCall = Future<Map<String, dynamic>?> Function({
@@ -142,16 +147,17 @@ class ProfileCoach {
 
   static const String _system = '''
 You are a blunt, encouraging live No-Limit Hold'em coach reviewing one player's own statistics.
-You are given their sample size, their tracked rates, their street tendencies, and how they play against each opponent type.
+You are given their sample size, their tracked rates, their street tendencies, how they play against each opponent type, and — when available — live-play mistake keys with curriculum reason phrases.
 Reply with JSON only, using exactly these keys:
 {"summary": string, "leaks": [string], "adjustments": [string]}
-Rules: "summary" is 2-3 sentences describing how this player plays and what it costs them, speaking directly to them as "you". "leaks" is 1-3 short lines, each naming one concrete leak and the number behind it. "adjustments" is 1-3 short imperative fixes they can apply next session. Never use markdown, asterisks, bullet characters, headings, or emoji. Never invent a statistic that was not given to you. If the sample is small, say so plainly instead of overclaiming.
+Rules: "summary" is 2-3 sentences describing how this player plays and what it costs them, speaking directly to them as "you". "leaks" is 1-3 short lines; when live-play mistakes are listed, each leak MUST name the mistake key (or its tag) and stay faithful to the given curriculum phrase — do not invent a different principle. "adjustments" is 1-3 short imperative fixes grounded in those same reason phrases. Never use markdown, asterisks, bullet characters, headings, or emoji. Never invent a statistic or mistake that was not given to you. If the sample is small, say so plainly instead of overclaiming.
 ''';
 
   /// Produces a summary for [metrics], preferring the model and falling back
   /// to locally derived copy on any failure.
   Future<ProfileCoachSummary> summarize(
     HeroMetrics metrics, {
+    MistakeStats? mistakes,
     DateTime? now,
   }) async {
     final stamp = (now ?? DateTime.now()).toUtc();
@@ -159,17 +165,20 @@ Rules: "summary" is 2-3 sentences describing how this player plays and what it c
     if (call != null) {
       final response = await call(
         system: _system,
-        user: buildPrompt(metrics),
+        user: buildPrompt(metrics, mistakes: mistakes),
       );
       final parsed = _parse(response, metrics, stamp);
       if (parsed != null) return parsed;
     }
-    return offlineSummary(metrics, now: stamp);
+    return offlineSummary(metrics, mistakes: mistakes, now: stamp);
   }
 
   /// The metrics digest sent to the model. Only numbers with a real sample
   /// behind them are included, so the model cannot quote noise back.
-  static String buildPrompt(HeroMetrics metrics) {
+  static String buildPrompt(
+    HeroMetrics metrics, {
+    MistakeStats? mistakes,
+  }) {
     final lines = <String>[
       'Hands logged: ${metrics.handsPlayed}.',
       'Sample confidence: ${metrics.style.confidence.label}.',
@@ -213,7 +222,13 @@ Rules: "summary" is 2-3 sentences describing how this player plays and what it c
       lines.add('Versus opponent types — ${villainNotes.join('; ')}.');
     }
 
-    if (metrics.leaks.isNotEmpty) {
+    final liveLeaks = _liveMistakeLines(mistakes);
+    if (liveLeaks.isNotEmpty) {
+      lines.add(
+        'Live-play mistakes (strongest first; key + curriculum phrase): '
+        '${liveLeaks.join('; ')}.',
+      );
+    } else if (metrics.leaks.isNotEmpty) {
       lines.add(
         'Locally detected leaks, strongest first: '
         '${metrics.leaks.map((l) => l.title).join('; ')}.',
@@ -230,6 +245,7 @@ Rules: "summary" is 2-3 sentences describing how this player plays and what it c
   /// Locally derived copy used with no key, no network, or a bad response.
   static ProfileCoachSummary offlineSummary(
     HeroMetrics metrics, {
+    MistakeStats? mistakes,
     DateTime? now,
   }) {
     final stamp = (now ?? DateTime.now()).toUtc();
@@ -251,15 +267,21 @@ Rules: "summary" is 2-3 sentences describing how this player plays and what it c
       }
     }
 
-    final leaks = [
-      for (final leak in metrics.leaks.take(maxLines))
-        '${leak.title}. ${leak.detail}',
-    ];
+    final live = mistakes?.topMistakes ?? const <MistakeSummary>[];
+    final leaks = live.isNotEmpty
+        ? [
+            for (final leak in live.take(maxLines))
+              '${leak.tag.label} [${leak.key}]. ${leak.tag.reasonCode.phrase}',
+          ]
+        : [
+            for (final leak in metrics.leaks.take(maxLines))
+              '${leak.title}. ${leak.detail}',
+          ];
 
     return ProfileCoachSummary(
       styleSummary: summary.toString(),
       leaks: leaks,
-      adjustments: _offlineAdjustments(metrics),
+      adjustments: _offlineAdjustments(metrics, mistakes: mistakes),
       source: ProfileCoachSummary.offlineSource,
       modelId: '',
       handsPlayedAt: metrics.handsPlayed,
@@ -268,10 +290,31 @@ Rules: "summary" is 2-3 sentences describing how this player plays and what it c
     );
   }
 
-  static List<String> _offlineAdjustments(HeroMetrics metrics) {
+  static List<String> _liveMistakeLines(MistakeStats? mistakes) {
+    if (mistakes == null || mistakes.topMistakes.isEmpty) return const [];
+    return [
+      for (final leak in mistakes.topMistakes.take(maxLines))
+        '${leak.key} (${leak.tag.label}): ${leak.tag.reasonCode.phrase} '
+            '×${leak.count}',
+    ];
+  }
+
+  static List<String> _offlineAdjustments(
+    HeroMetrics metrics, {
+    MistakeStats? mistakes,
+  }) {
     final fixes = <String>[];
     void add(String text) {
       if (fixes.length < maxLines) fixes.add(text);
+    }
+
+    final live = mistakes?.topMistakes ?? const <MistakeSummary>[];
+    if (live.isNotEmpty) {
+      for (final leak in live) {
+        if (fixes.length >= maxLines) break;
+        add(leak.tag.reasonCode.phrase);
+      }
+      return List.unmodifiable(fixes);
     }
 
     switch (metrics.style.style) {

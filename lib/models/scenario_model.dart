@@ -78,11 +78,33 @@ class ScenarioModel {
   final String street;
   final Map<String, dynamic> rawJson;
 
+  /// Keys that describe setup only — never the EV answer.
+  ///
+  /// Optimal / reasoning fields are stamped by [ScenarioGrader] after parse,
+  /// so they must not affect [contentHash] or identical spots would fork.
+  static const _setupHashKeys = <String>{
+    'table_size',
+    'hero_position',
+    'hero_hand',
+    'board_cards',
+    'pot_size',
+    'villain_seat',
+    'villain_archetype',
+    'previous_action_narrative',
+    'villain_action',
+    'call_amount',
+    'min_raise',
+    'max_raise',
+    'name',
+  };
+
   factory ScenarioModel.fromGeminiJson(Map<String, dynamic> json) {
     final heroHand = _parseCards(json['hero_hand']);
     final board = _parseCards(json['board_cards']);
     final normalized = Map<String, dynamic>.from(json);
-    final hash = hashContent(normalized);
+    final hash = hashSetup(normalized);
+    // Gemini may still emit optimal_* for older prompts; those values are
+    // placeholders until ScenarioGrader / LiveCoach overwrites them.
     return ScenarioModel(
       contentHash: hash,
       tableSize: _asInt(json['table_size'], 6),
@@ -109,6 +131,15 @@ class ScenarioModel {
       street: _inferStreet(board),
       rawJson: normalized,
     );
+  }
+
+  /// Content hash over setup fields only (excludes optimal / reasoning).
+  static String hashSetup(Map<String, dynamic> json) {
+    final setup = <String, dynamic>{
+      for (final key in _setupHashKeys)
+        if (json.containsKey(key)) key: json[key],
+    };
+    return hashContent(setup);
   }
 
   static String hashContent(Map<String, dynamic> json) {
@@ -171,7 +202,14 @@ class ScenarioModel {
   }
 
   Map<String, dynamic> toJson() => rawJson.isNotEmpty
-      ? rawJson
+      ? {
+          ...rawJson,
+          'optimal_exploit_action': optimalExploitAction.label,
+          'optimal_sizing_bb': optimalSizingBb,
+          'theoretical_ev_explanation': theoreticalEvExplanation,
+          'exploit_reasoning': exploitReasoning,
+          'street': street,
+        }
       : {
           'table_size': tableSize,
           'hero_position': heroPosition,
@@ -193,7 +231,14 @@ class ScenarioModel {
           'street': street,
         };
 
-  ScenarioModel copyWith({int? id}) => ScenarioModel(
+  ScenarioModel copyWith({
+    int? id,
+    ExploitAction? optimalExploitAction,
+    double? optimalSizingBb,
+    String? theoreticalEvExplanation,
+    String? exploitReasoning,
+  }) =>
+      ScenarioModel(
         id: id ?? this.id,
         contentHash: contentHash,
         tableSize: tableSize,
@@ -208,10 +253,12 @@ class ScenarioModel {
         callAmount: callAmount,
         minRaise: minRaise,
         maxRaise: maxRaise,
-        optimalExploitAction: optimalExploitAction,
-        optimalSizingBb: optimalSizingBb,
-        theoreticalEvExplanation: theoreticalEvExplanation,
-        exploitReasoning: exploitReasoning,
+        optimalExploitAction:
+            optimalExploitAction ?? this.optimalExploitAction,
+        optimalSizingBb: optimalSizingBb ?? this.optimalSizingBb,
+        theoreticalEvExplanation:
+            theoreticalEvExplanation ?? this.theoreticalEvExplanation,
+        exploitReasoning: exploitReasoning ?? this.exploitReasoning,
         name: name,
         street: street,
         rawJson: rawJson,

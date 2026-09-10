@@ -1,4 +1,4 @@
-/// Shared service providers (DB, Anthropic coach, Gemini scenarios, audio).
+/// Shared service providers (DB, Anthropic coach, Gemini assets, audio).
 library;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,6 +13,8 @@ import 'package:live_poker_trainer/core/diagnostics/diagnostics_log.dart';
 import 'package:live_poker_trainer/engine/scenario_manager.dart';
 import 'package:live_poker_trainer/services/anthropic_service.dart';
 import 'package:live_poker_trainer/services/app_session_service.dart';
+import 'package:live_poker_trainer/services/firestore/firestore_repos.dart';
+import 'package:live_poker_trainer/services/firestore/user_repository.dart';
 import 'package:live_poker_trainer/services/gemini_service.dart';
 import 'package:live_poker_trainer/services/hand_recorder.dart';
 import 'package:live_poker_trainer/services/mistake_tracker.dart';
@@ -30,6 +32,11 @@ final scenarioDaoProvider = Provider<ScenarioDao>(
 
 final userStatsDaoProvider = Provider<UserStatsDao>(
   (ref) => UserStatsDao(ref.watch(appDatabaseProvider)),
+);
+
+/// Firestore `users/{uid}` repository (prefs / stats / profile sync).
+final userRepositoryProvider = Provider<UserRepository>(
+  (ref) => UserRepository(),
 );
 
 final mistakeDaoProvider = Provider<MistakeDao>(
@@ -80,7 +87,7 @@ final anthropicServiceProvider = Provider<AnthropicService>((ref) {
   return service;
 });
 
-/// Gemini for scenario / image generation only — never coach text.
+/// Gemini for non-coach assets (e.g. images). Scenario generation is Functions-only.
 final geminiServiceProvider = Provider<GeminiService>((ref) {
   final service = GeminiService(
     logger: _LazyRequestLogger(() => ref.read(diagnosticsDaoProvider)),
@@ -104,10 +111,25 @@ class _LazyRequestLogger implements AiRequestLogger {
       _resolve().logRequest(entry);
 }
 
+/// Shared Firestore scenario pool.
+final scenarioPoolRepoProvider = Provider<ScenarioPoolRepo>(
+  (ref) => ScenarioPoolRepo(),
+);
+
+/// Per-user played scenario receipts.
+final playedScenariosRepoProvider = Provider<PlayedScenariosRepo>(
+  (ref) => PlayedScenariosRepo(),
+);
+
+/// Serves / grades scenarios from Firestore; refill via Cloud Functions.
+///
+/// Auth uid and Functions are resolved lazily inside [ScenarioManager] so this
+/// provider does not create a circular import with [authUidProvider] and unit
+/// tests that never refill can run without Firebase initialized.
 final scenarioManagerProvider = Provider<ScenarioManager>(
   (ref) => ScenarioManager(
-    scenarioDao: ref.watch(scenarioDaoProvider),
-    statsDao: ref.watch(userStatsDaoProvider),
-    gemini: ref.watch(geminiServiceProvider),
+    pool: ref.watch(scenarioPoolRepoProvider),
+    played: ref.watch(playedScenariosRepoProvider),
+    users: ref.watch(userRepositoryProvider),
   ),
 );

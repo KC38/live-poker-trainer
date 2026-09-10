@@ -26,6 +26,7 @@ class HeroRailWidget extends ConsumerWidget {
     required this.chipDisplayMode,
     this.isThinking = false,
     this.review = false,
+    this.isWinner = false,
   });
 
   final GameState game;
@@ -39,6 +40,9 @@ class HeroRailWidget extends ConsumerWidget {
   /// True once the hand is over and the action dock has given up its band:
   /// the rail takes a slice of that space and shows larger hole cards.
   final bool review;
+
+  /// True when the hero took (or split) the pot.
+  final bool isWinner;
 
   /// Height reserved for this band, including padding.
   static const double height = 84;
@@ -69,6 +73,11 @@ class HeroRailWidget extends ConsumerWidget {
     final isTurn =
         game.waitingForHero && !game.isHandOver && !hero.folded && !isThinking;
     final position = _positionLabel(heroIndex);
+    final borderColor = isWinner
+        ? AppColors.goldBright.withValues(alpha: 0.95)
+        : isTurn
+            ? AppColors.goldBright.withValues(alpha: 0.9)
+            : AppColors.slateDark.withValues(alpha: 0.9);
 
     return SizedBox(
       height: height + (reviewHeight - height) * t,
@@ -79,11 +88,17 @@ class HeroRailWidget extends ConsumerWidget {
           color: AppColors.bgElevated.withValues(alpha: 0.82),
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: isTurn
-                ? AppColors.goldBright.withValues(alpha: 0.9)
-                : AppColors.slateDark.withValues(alpha: 0.9),
-            width: isTurn ? 1.6 : 1,
+            color: borderColor,
+            width: isWinner || isTurn ? 1.6 : 1,
           ),
+          boxShadow: isWinner
+              ? [
+                  BoxShadow(
+                    color: AppColors.goldBright.withValues(alpha: 0.28),
+                    blurRadius: 12,
+                  ),
+                ]
+              : null,
         ),
         child: Row(
           children: [
@@ -175,11 +190,13 @@ class HeroRailWidget extends ConsumerWidget {
                 child: Text(
                   hero.folded
                       ? 'FOLDED'
-                      : isTurn
-                          ? 'YOUR TURN'
-                          : isThinking
-                              ? 'ACTION…'
-                              : (hero.lastActionLabel ?? ''),
+                      : isWinner
+                          ? (game.isSplitPot ? 'SPLIT' : 'WINS')
+                          : isTurn
+                              ? 'YOUR TURN'
+                              : isThinking
+                                  ? 'ACTION…'
+                                  : (hero.lastActionLabel ?? ''),
                   textAlign: TextAlign.right,
                   maxLines: 2,
                   style: GoogleFonts.jetBrainsMono(
@@ -188,7 +205,7 @@ class HeroRailWidget extends ConsumerWidget {
                     letterSpacing: 0.4,
                     color: hero.folded
                         ? AppColors.slate
-                        : isTurn
+                        : isWinner || isTurn
                             ? AppColors.goldBright
                             : AppColors.slate,
                   ),

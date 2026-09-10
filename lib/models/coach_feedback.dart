@@ -69,8 +69,8 @@ class CoachFeedback {
   /// Live CORRECT/INCORRECT for the action just taken (not shelved).
   bool get isLiveGrade => hasVerdict && !isHistorical;
 
-  /// Pre-action tip is primary body text (no live grade competing).
-  bool get isPreActionTip => !isLiveGrade && message.isNotEmpty;
+  /// Whether the shelf has post-action coaching to show.
+  bool get hasAdvice => message.isNotEmpty || hasVerdict;
 
   /// Whether the shelf should show a "Repeat ×N" indicator.
   bool get isRepeat =>

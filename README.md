@@ -82,9 +82,13 @@ Home has one primary CTA — **Start training** — plus a collapsed **Table set
 
 Training always deals a **full cash-style hand** from preflop (blinds → streets → fold or showdown). Each **Next** hand gets a fresh shuffle — consecutive deals are checked so they cannot clone the previous hole-card layout, and mid-hand actions continue the same deal rather than resetting it. Archetype villains (Maniac / Nit / Calling Station / TAG / LAG) play with the free-check rule (never fold when check is free). D / SB / BB pucks mark the button and blinds.
 
-The action **replays one seat at a time** instead of arriving resolved: each villain decision, the chips sliding into the pot, and every board card lands as its own step with table-realistic pacing, and the hero simply waits its turn. Seats show the archetype as a word plus VPIP/PFR, and the header's people icon opens a legend of every player type at the table with its exploit.
+The action **replays one seat at a time** instead of arriving resolved: each villain decision, the chips sliding into the pot, and every board card lands as its own step with table-realistic pacing, and the hero simply waits its turn. Seats show the archetype as a word plus VPIP/PFR along with the stack and whatever the villain has committed on the street, and the header's people icon opens a legend of every player type at the table with its exploit. All of it stays simultaneously legible: the felt shrinks its seat ring and its board until nothing on the table covers anything else.
 
-The coach grades each hero decision when a clear exploit line exists (**CORRECT** / **INCORRECT**) and explains it in terms of the street, the villain type, and what the better line was.
+**Coaching is expected value, in chips.** For every hero decision the coach builds each live villain's range from their archetype's VPIP/PFR and the action they have actually shown, measures hero's equity against those ranges, prices folding, checking, calling and raising at several sizes, and recommends whichever is worth the most. So the same hand is a call heads-up and a fold three-handed, a call at 30% of the pot and a fold at 80% — the price and the board decide, not a minimum hand to call with.
+
+Equity is enumerated exactly on the turn and river heads-up and sampled with a spot-derived seed elsewhere, so grading the same decision twice always gives the same answer. Each line quotes the numbers behind it ("Calling $21.50 into $39 needs 36%; 3♦2♥ has a weak pair and 57% against Sammy's range here"), and the reported EV is the real cost of the decision against the best line available — a good decision costs nothing.
+
+A decision is only marked **INCORRECT** when it costs more than the model's own margin of error; inside that band the verdict is CORRECT and the coach says the spot was close. A value bet at a slightly-off size is graded as the right decision with a sizing note, not as a mistake. `test/engine/coach_golden_test.dart` pins the spots this must never get wrong.
 
 **Leak tracking.** Every INCORRECT decision is persisted (Drift `mistakes` table) under a stable mistake key — `street:archetype:heroAction->bestAction`, e.g. `river:nit:raise->call`, with `:small` / `:large` appended for sizing misses — plus coarse leak tags (bluffing into stations, folding too much vs maniacs, paying off nits, …). When the same key or leak recurs the coach says so by count ("That's the third time you've raised against a nit on the river…") in both the Gemini line and the offline copy, and the shelf shows a **Repeat ×N** chip. When you later get a previously-repeated spot right, the coach acknowledges the fix ("Nice — last time you raised here; calling was the right adjustment"), an `improvement` event is recorded, and the shelf shows **Improved** (with the streak).
 
@@ -100,7 +104,7 @@ The review is Gemini JSON (summary / leaks / adjustments, markdown scrubbed), ca
 
 Screen layout is a strict stack of bands — header, felt, hero rail, coach shelf, action dock — so the coach can never cover the hero's hole cards, down to a 320pt phone at 9 seats. When the hero cannot act (folded, hand over, table replaying), the action dock is removed entirely rather than greyed out.
 
-Graded coach lines always show a **CORRECT** / **INCORRECT** badge (plus Best / You / EV when expanded). Ambiguous spots stay on the offline line — Claude is not asked to invent a verdict. Every shown line is post-validated against `bestAction` so advice cannot urge calling when the grade says fold (or the reverse). When the street advances, the prior grade is marked **Previous · STREET** so it never looks like live flop/turn advice. Coaching is text-only on the shelf — there is no spoken coach voice.
+Graded coach lines always show a **CORRECT** / **INCORRECT** badge (plus Best / You / EV when expanded). Ambiguous spots stay on the offline line — Claude is not asked to invent a verdict. Every shown line is post-validated against `bestAction` so advice cannot urge calling when the grade says fold (or the reverse). When the street advances, the prior grade is shelved as **Correct · preflop** / **Incorrect · turn** so it never looks like live advice for the current tip. Coaching is text-only on the shelf — there is no spoken coach voice.
 
 Settings → **Chip display** chooses Dollars only, BB only, or Both (default) for hand review, EV, and stats. The live felt is always currency-only so the table stays readable.
 
@@ -113,8 +117,9 @@ lib/
 ├── main.dart
 ├── core/          # config, colors, chip format, audio (SFX + BGM), Drift DB
 ├── models/
-├── engine/        # DeckEvaluator, PokerEngine, LiveCoach, ScenarioManager,
-│                 # HeroProfiler
+├── engine/        # DeckEvaluator, PokerEngine, ScenarioManager, HeroProfiler,
+│                 # coach: FastEvaluator, PreflopChart, HandRange, HandClass,
+│                 # VillainModel, EquitySimulator, DecisionModel, LiveCoach
 ├── services/      # AnthropicService (coach), GeminiService (scenarios), AvatarStore, ProfileCoach
 ├── providers/     # Riverpod 2.x
 └── ui/screens/ + ui/widgets/
@@ -152,6 +157,39 @@ launchers. Output is palette-quantized to keep each bundled PNG near 100 KB.
 `gen_sfx.py` needs no key or network: table sounds are modal impacts, so they
 are synthesized deterministically into sub-40 KB WAVs. `gen_ambient.py`
 builds an 8s seamless pad and encodes MP3 via ffmpeg when available (~28 KB).
+
+## Firebase (Auth, Firestore, Functions)
+
+Project id: **`live-poker-trainer`**. FlutterFire config is already wired
+(`lib/firebase_options.dart`, platform plist / `google-services.json`).
+
+Shared scenario pool lives in Firestore (`scenarios/{contentHash}`); clients
+read via `lib/services/firestore/`. Generation is the callable Cloud Function
+`ensureScenarioPool` (Gemini key stays server-side).
+
+### Blaze requirement
+
+**Cloud Functions (and Functions secrets) need the Blaze (pay-as-you-go) plan.**
+Firestore/Auth/rules can run on the free Spark plan. If deploy fails with a billing
+error, upgrade the project in the Firebase console first, then re-run the
+commands below.
+
+### Deploy commands
+
+```bash
+# From repo root (requires `firebase login` + project `live-poker-trainer`)
+firebase deploy --only firestore:rules
+firebase deploy --only firestore:indexes
+
+# After Blaze is enabled:
+firebase functions:secrets:set GEMINI_API_KEY   # paste the Gemini API key
+cd functions && npm ci && npm run build && cd ..
+firebase deploy --only functions:ensureScenarioPool
+# (predeploy runs `npm --prefix "$RESOURCE_DIR" run build` automatically)
+```
+
+Local Functions emulator (optional): set `GEMINI_API_KEY` in the shell, then
+`cd functions && npm run serve`.
 
 ## Development
 

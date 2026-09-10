@@ -1,7 +1,9 @@
 /// Main gameplay table — strict vertical bands so nothing ever overlaps.
 library;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
@@ -107,7 +109,15 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
     // full chip-display choice.
     final tableChipMode = settings.chipDisplayMode.tableMode;
 
-    return Scaffold(
+    return Focus(
+      autofocus: kDebugMode,
+      child: CallbackShortcuts(
+        bindings: {
+          if (kDebugMode && showNext)
+            const SingleActivator(LogicalKeyboardKey.keyN): () =>
+                ref.read(gameControllerProvider.notifier).nextHand(),
+        },
+        child: Scaffold(
       body: Container(
         decoration: const BoxDecoration(
           gradient: RadialGradient(
@@ -125,6 +135,8 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
               // the hero cannot act and give its band to the other rows.
               final dockVisible = session.heroCanAct;
 
+              final showCoach = session.coach.hasAdvice;
+
               // Cap the coach band so it can never starve the felt, and let
               // that cap grow into the space the dock gave up.
               final coachMaxHeight = dockVisible
@@ -140,20 +152,21 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                   chipDisplayMode: settings.chipDisplayMode,
                   replaying: session.replaying,
                   maxHeight: maxHeight,
-                  autoExpand: handOver,
                 );
               }
 
               // Grow the cap over the same beat as the dock collapse so the
               // shelf expands instead of snapping to its new size.
-              final coach = wide
-                  ? buildCoach(null)
-                  : TweenAnimationBuilder<double>(
-                      tween: Tween<double>(end: coachMaxHeight),
-                      duration: _bandTransition,
-                      curve: Curves.easeOutCubic,
-                      builder: (context, cap, _) => buildCoach(cap),
-                    );
+              final Widget? coach = !showCoach
+                  ? null
+                  : wide
+                      ? buildCoach(null)
+                      : TweenAnimationBuilder<double>(
+                          tween: Tween<double>(end: coachMaxHeight),
+                          duration: _bandTransition,
+                          curve: Curves.easeOutCubic,
+                          builder: (context, cap, _) => buildCoach(cap),
+                        );
 
               return Column(
                 children: [
@@ -191,6 +204,7 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                                     game: game,
                                     chipDisplayMode: tableChipMode,
                                     collectingChips: session.collectingChips,
+                                    awardingChips: session.awardingChips,
                                     review: handOver,
                                   ),
                                 ),
@@ -199,6 +213,8 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                                   chipDisplayMode: tableChipMode,
                                   isThinking: session.replaying,
                                   review: handOver,
+                                  isWinner: handOver &&
+                                      game.winnerIds.contains(game.hero.id),
                                 ),
                                 _ActionDockSlot(
                                   visible: dockVisible,
@@ -213,13 +229,14 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                               ],
                             ),
                           ),
-                          SizedBox(
-                            width: 320,
-                            child: Align(
-                              alignment: Alignment.bottomCenter,
-                              child: coach,
+                          if (coach != null)
+                            SizedBox(
+                              width: 320,
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: coach,
+                              ),
                             ),
-                          ),
                         ],
                       ),
                     )
@@ -229,6 +246,7 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                         game: game,
                         chipDisplayMode: tableChipMode,
                         collectingChips: session.collectingChips,
+                        awardingChips: session.awardingChips,
                         review: handOver,
                       ),
                     ),
@@ -237,8 +255,10 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                       chipDisplayMode: tableChipMode,
                       isThinking: session.replaying,
                       review: handOver,
+                      isWinner: handOver &&
+                          game.winnerIds.contains(game.hero.id),
                     ),
-                    coach,
+                    if (coach != null) coach,
                     _ActionDockSlot(
                       visible: dockVisible,
                       child: ActionDockWidget(
@@ -255,6 +275,8 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
             },
           ),
         ),
+      ),
+    ),
       ),
     );
   }

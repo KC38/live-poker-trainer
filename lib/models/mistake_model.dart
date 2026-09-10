@@ -31,11 +31,15 @@ enum MistakeTag {
     'not_value_betting_vs_stations',
     'Missing value vs calling stations',
   ),
+  // These two read inside an archetype group, which already names the
+  // opponent, so they describe the direction of the miss rather than
+  // restating "vs maniacs and LAGs" — two such rows side by side read as a
+  // contradiction.
   foldingTooMuchVsAggro(
     'folding_too_much_vs_maniacs',
-    'Folding too much vs maniacs and LAGs',
+    'Folding inside the defend range',
   ),
-  chasingVsAggro('chasing_vs_maniacs', 'Chasing thin vs maniacs and LAGs'),
+  chasingVsAggro('chasing_vs_maniacs', 'Continuing outside the defend range'),
   payingOffNits('paying_off_nits', 'Paying off nits'),
   raisingIntoNits('raising_into_nits', "Raising into a nit's strength"),
   notAttackingNits('not_attacking_nits', "Not attacking nits' weakness"),
@@ -67,6 +71,33 @@ enum MistakeTag {
 
   /// Whether this tag names an archetype-specific exploit leak.
   bool get isArchetypeSpecific => index <= underSizingVsStations.index;
+
+  /// Closest [CoachReasonCode] for ProfileCoach / curriculum grounding.
+  ///
+  /// Mistake rows persist tag ids, not reason codes; this map keeps Progress
+  /// review on the same spine as live grades without a schema migration.
+  CoachReasonCode get reasonCode => switch (this) {
+        MistakeTag.overbluffingStations => CoachReasonCode.neverBluffStations,
+        MistakeTag.notValueBettingStations =>
+          CoachReasonCode.valueThinVsStations,
+        MistakeTag.foldingTooMuchVsAggro => CoachReasonCode.defendVsLooseAggro,
+        MistakeTag.chasingVsAggro => CoachReasonCode.dontChaseLooseAggro,
+        MistakeTag.payingOffNits => CoachReasonCode.dontPayOffNits,
+        MistakeTag.raisingIntoNits => CoachReasonCode.dontRaiseNitStrength,
+        MistakeTag.notAttackingNits => CoachReasonCode.attackNitFolds,
+        MistakeTag.underSizingVsStations => CoachReasonCode.sizeUpVsStations,
+        MistakeTag.sizingTooSmall || MistakeTag.sizingTooLarge =>
+          CoachReasonCode.sizeMatters,
+        MistakeTag.callWhenFoldBest || MistakeTag.raiseWhenFoldBest =>
+          CoachReasonCode.foldWhenPriceWrong,
+        MistakeTag.foldWhenCallBest || MistakeTag.foldWhenRaiseBest =>
+          CoachReasonCode.continueWhenPriced,
+        MistakeTag.raiseWhenCallBest || MistakeTag.betWhenCheckBest =>
+          CoachReasonCode.letAggroHang,
+        MistakeTag.callWhenRaiseBest || MistakeTag.checkWhenBetBest =>
+          CoachReasonCode.takeThinEdges,
+        MistakeTag.other => CoachReasonCode.playTheSpot,
+      };
 
   /// Resolves a persisted id; unknown ids map to [other].
   static MistakeTag fromId(String id) {
@@ -343,12 +374,39 @@ class MistakeSummary {
     return MistakeTrend.isolated;
   }
 
+  /// The villain type this leak was recorded against.
+  PlayerArchetype get villainArchetype => PlayerArchetype.fromLabel(archetype);
+
+  /// Which way the decision missed, recovered from the persisted actions so
+  /// no extra column is needed.
+  ///
+  /// Direction is what makes a group of leaks legible: [CoachMismatch.tooTight]
+  /// and [CoachMismatch.tooLoose] against the same archetype are one threshold
+  /// set wrong, not two conflicting instructions.
+  CoachMismatch get mismatch => CoachLines.classify(
+        best: _action(best),
+        taken: _action(taken),
+        sizingOff: key.endsWith(':small') || key.endsWith(':large'),
+      );
+
   /// Sentence-case description, e.g. "River vs Nit: raised, call was best".
   String get title {
     final streetLabel = street[0].toUpperCase() + street.substring(1);
     return '$streetLabel vs $archetype: ${_past(taken)}, '
         '${best.toLowerCase()} was best';
   }
+
+  /// [title] without the archetype, for rows sitting under a group that
+  /// already names the opponent.
+  String get shortTitle {
+    final streetLabel = street[0].toUpperCase() + street.substring(1);
+    return '$streetLabel: ${_past(taken)}, ${best.toLowerCase()} was best';
+  }
+
+  static ExploitAction _action(String name) => ExploitAction.values.firstWhere(
+        (a) => a.name == name.toLowerCase(),
+        orElse: () => ExploitAction.check,
+      );
 
   static String _past(String action) => switch (action.toLowerCase()) {
         'fold' => 'folded',
@@ -361,6 +419,41 @@ class MistakeSummary {
 
 /// Direction of a recurring leak.
 enum MistakeTrend { improving, recurring, isolated }
+
+/// Every recorded leak against one opponent archetype.
+///
+/// Grouping is what stops the Leak Finder from looking self-contradictory: the
+/// fold / call boundary can be stated once for the whole group instead of the
+/// player having to infer it from rows that name opposite actions.
+@immutable
+class LeakGroup {
+  /// Creates a group.
+  const LeakGroup({
+    required this.label,
+    required this.archetype,
+    required this.leaks,
+  });
+
+  /// Archetype label as persisted, e.g. `Calling Station`.
+  final String label;
+
+  final PlayerArchetype archetype;
+
+  /// Patterns in this group, in the order [MistakeStats.topMistakes] had them.
+  final List<MistakeSummary> leaks;
+
+  /// Total mistakes across the group's patterns.
+  int get mistakeCount => leaks.fold(0, (sum, l) => sum + l.count);
+
+  /// Total EV given up across the group, in big blinds.
+  double get evLostBb => leaks.fold(0, (sum, l) => sum + l.evLostBb);
+
+  /// True when the group holds both over-folds and over-calls — the case that
+  /// reads as contradictory advice until the threshold is spelled out.
+  bool get isTwoSided =>
+      leaks.any((l) => l.mismatch == CoachMismatch.tooTight) &&
+      leaks.any((l) => l.mismatch == CoachMismatch.tooLoose);
+}
 
 /// Whole leak-finder dataset for the Stats screen.
 @immutable
@@ -385,4 +478,27 @@ class MistakeStats {
   final Map<MistakeTag, int> byTag;
 
   bool get isEmpty => totalMistakes == 0;
+
+  /// [topMistakes] grouped by opponent archetype, biggest group first.
+  List<LeakGroup> get archetypeGroups {
+    final order = <String>[];
+    final byLabel = <String, List<MistakeSummary>>{};
+    for (final leak in topMistakes) {
+      if (!byLabel.containsKey(leak.archetype)) order.add(leak.archetype);
+      byLabel.putIfAbsent(leak.archetype, () => []).add(leak);
+    }
+    final groups = [
+      for (final label in order)
+        LeakGroup(
+          label: label,
+          archetype: PlayerArchetype.fromLabel(label),
+          leaks: List.unmodifiable(byLabel[label]!),
+        ),
+    ];
+    groups.sort((a, b) {
+      final byCount = b.mistakeCount.compareTo(a.mistakeCount);
+      return byCount != 0 ? byCount : b.evLostBb.compareTo(a.evLostBb);
+    });
+    return List.unmodifiable(groups);
+  }
 }

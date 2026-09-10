@@ -59,6 +59,41 @@ GameState _spot({
 void main() {
   setUp(CoachLines.resetRotation);
 
+  group('CoachPersona voice', () {
+    test('names an original coach and forbids real-author endorsement', () {
+      expect(CoachPersona.name, 'Mack Hayes');
+      expect(CoachPersona.blurb, contains('blunt live-cash'));
+      expect(CoachPersona.styleGuide, contains('Lexical style only'));
+      expect(CoachPersona.styleGuide.toLowerCase(), isNot(contains('ed miller')));
+      expect(CoachPersona.styleGuide, contains('never claim'));
+    });
+
+    test('offline openers use short Mack-style cadence', () {
+      final state = _spot(
+        archetype: PlayerArchetype.callingStation,
+        street: Street.turn,
+        hole: ['Ks', 'Jh'],
+        board: ['Ac', '7c', '5d', '3h'],
+        villainBet: 20,
+        mainPot: 300,
+      );
+      final grade = LiveCoach.grade(
+        state: state,
+        action: const PokerAction(type: PokerActionType.raise, amount: 200),
+      );
+      expect(grade.verdict, CoachVerdict.incorrect);
+      // Blunt openers: short clause + hard stop before the better line.
+      expect(
+        grade.message,
+        anyOf(
+          contains('Too hot on the turn.'),
+          contains('Overplaying it on the turn.'),
+        ),
+      );
+      expect(grade.message, contains(CoachReasonCode.neverBluffStations.phrase));
+    });
+  });
+
   group('CoachLines.classify', () {
     test('names the direction of the error', () {
       expect(
@@ -238,25 +273,140 @@ void main() {
       final prompt = grade.toPrompt(state);
 
       expect(prompt, contains('Street being graded: FLOP'));
+      expect(prompt, contains('Narration contract: slot-fill only'));
       expect(prompt, contains('LAG'));
       expect(prompt, contains('Villain'));
       expect(prompt, contains('CALL'));
       expect(prompt, contains('Qs'));
       expect(prompt, contains('Do not give generic advice'));
       expect(prompt, contains('voluntary aggressor'));
+      expect(prompt, contains('Curriculum reason codes:'));
+      expect(prompt, contains('Required phrases'));
+      expect(prompt, contains('prefer those phrases verbatim'));
+      expect(grade.reasonCodes, isNotEmpty);
+      for (final code in grade.reasonCodes) {
+        expect(prompt, contains(code.id));
+        expect(prompt, contains(code.phrase));
+        expect(grade.message, contains(code.phrase));
+      }
     });
   });
 
-  group('deal intro', () {
-    test('names the hero hand and the dominant table type', () {
+  group('CoachReasonCode curriculum spine', () {
+    test('fromId round-trips and falls back', () {
+      for (final code in CoachReasonCode.values) {
+        expect(CoachReasonCode.fromId(code.id), code);
+      }
+      expect(CoachReasonCode.fromId('nope'), CoachReasonCode.playTheSpot);
+    });
+
+    test('paying off a nit tags dont_pay_off_nits and fold_when_price_wrong',
+        () {
+      final codes = CoachReasonCode.derive(
+        archetype: PlayerArchetype.nit,
+        mismatch: CoachMismatch.tooLoose,
+        best: ExploitAction.fold,
+        equityPercent: 20,
+        requiredEquityPercent: 40,
+        callAmount: 40,
+        villainIsAggressor: true,
+      );
+      expect(codes.first, CoachReasonCode.foldWhenPriceWrong);
+      expect(codes, contains(CoachReasonCode.dontPayOffNits));
+    });
+
+    test('bluffing a station tags never_bluff_stations', () {
+      final codes = CoachReasonCode.derive(
+        archetype: PlayerArchetype.callingStation,
+        mismatch: CoachMismatch.tooAggressive,
+        best: ExploitAction.call,
+        equityPercent: 35,
+        requiredEquityPercent: 30,
+        callAmount: 20,
+        villainIsAggressor: true,
+      );
+      expect(codes, [CoachReasonCode.neverBluffStations]);
+    });
+
+    test('missing value vs station tags value_thin_vs_stations', () {
+      final codes = CoachReasonCode.derive(
+        archetype: PlayerArchetype.callingStation,
+        mismatch: CoachMismatch.tooPassive,
+        best: ExploitAction.raise,
+        equityPercent: 70,
+        requiredEquityPercent: 0,
+        callAmount: 0,
+        villainIsAggressor: false,
+      );
+      expect(codes, [CoachReasonCode.valueThinVsStations]);
+    });
+
+    test('folding too much vs LAG tags defend_vs_loose_aggro', () {
+      final codes = CoachReasonCode.derive(
+        archetype: PlayerArchetype.lag,
+        mismatch: CoachMismatch.tooTight,
+        best: ExploitAction.call,
+        equityPercent: 45,
+        requiredEquityPercent: 30,
+        callAmount: 20,
+        villainIsAggressor: true,
+      );
+      expect(codes.first, CoachReasonCode.continueWhenPriced);
+      expect(codes, contains(CoachReasonCode.defendVsLooseAggro));
+    });
+
+    test('graded offline copy embeds the same phrases as toPrompt', () {
       final state = _spot(
         archetype: PlayerArchetype.callingStation,
-        street: Street.preflop,
-        hole: ['As', 'Kd'],
+        street: Street.turn,
+        hole: ['Ks', 'Jh'],
+        board: ['Ac', '7c', '5d', '3h'],
+        villainBet: 20,
+        mainPot: 300,
       );
-      final intro = CoachLines.dealIntro(state);
-      expect(intro, contains('A♠'));
-      expect(intro.toLowerCase(), contains('station'));
+      final grade = LiveCoach.grade(
+        state: state,
+        action: const PokerAction(type: PokerActionType.raise, amount: 200),
+      );
+      expect(grade.verdict, CoachVerdict.incorrect);
+      expect(grade.reasonCodes, contains(CoachReasonCode.neverBluffStations));
+      expect(
+        grade.message,
+        contains(CoachReasonCode.neverBluffStations.phrase),
+      );
+      expect(
+        grade.toPrompt(state),
+        contains(CoachReasonCode.neverBluffStations.phrase),
+      );
+    });
+
+    test('correct fold vs nit aggressor keeps EV judge and explains with codes',
+        () {
+      final state = _spot(
+        archetype: PlayerArchetype.nit,
+        street: Street.river,
+        hole: ['7s', '2h'],
+        board: ['Ac', 'Kc', 'Qd', '3h', '9s'],
+        villainBet: 80,
+        mainPot: 120,
+      );
+      final grade = LiveCoach.grade(
+        state: state,
+        action: const PokerAction(type: PokerActionType.fold),
+      );
+      expect(grade.verdict, CoachVerdict.correct);
+      expect(grade.optimalAction, ExploitAction.fold);
+      expect(grade.reasonCodes, isNotEmpty);
+      expect(
+        grade.reasonCodes,
+        anyOf(
+          contains(CoachReasonCode.dontPayOffNits),
+          contains(CoachReasonCode.foldWhenPriceWrong),
+        ),
+      );
+      for (final code in grade.reasonCodes) {
+        expect(grade.message, contains(code.phrase));
+      }
     });
   });
 }

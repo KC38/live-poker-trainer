@@ -19,6 +19,9 @@ class CommunityCardsView extends StatelessWidget {
     required this.bigBlind,
     required this.chipDisplayMode,
     this.scale = 1,
+    this.awarding = false,
+    this.isSplit = false,
+    this.resultMessage,
   });
 
   final List<CardModel> community;
@@ -30,21 +33,94 @@ class CommunityCardsView extends StatelessWidget {
   final ChipDisplayMode chipDisplayMode;
   final double scale;
 
+  /// True while pot chips fly to the winner(s).
+  final bool awarding;
+
+  /// True when more than one seat shares the pot.
+  final bool isSplit;
+
+  /// Hand-end result line shown briefly above the board during the award beat.
+  final String? resultMessage;
+
+  /// Width of the board column at [scale] 1: five slots of 38 plus 5 of gap.
+  ///
+  /// The pot pill and result line are pinned to this width so the felt can
+  /// reason about the board's footprint without measuring text — a long
+  /// headline shrinks to fit instead of widening the column into the seats.
+  static const double naturalWidth = 5 * 43.0;
+
+  /// Height of the board column at [scale] 1, excluding [resultMessage].
+  static const double naturalHeight = 18 + 10 + 54;
+
+  /// Extra height the [resultMessage] line adds during the award beat.
+  static const double resultMessageHeight = 4 + 11;
+
   @override
   Widget build(BuildContext context) {
     final potLabel = ChipFormat.chips(pot, bigBlind, chipDisplayMode);
+    final headline = awarding
+        ? (isSplit ? 'SPLIT  ·  $potLabel' : 'TAKES  ·  $potLabel')
+        : '${street.label}  ·  $potLabel';
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          '${street.label}  ·  $potLabel',
-          style: GoogleFonts.jetBrainsMono(
-            fontWeight: FontWeight.w700,
-            color: AppColors.goldBright.withValues(alpha: 0.9),
-            fontSize: 12 * scale,
-            letterSpacing: 0.3,
+        // Dark pill so street · pot stays readable even when a bet chip
+        // paints nearby — thin gold text alone disappears over dark chips.
+        _PinnedToBoardWidth(
+          scale: scale,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 220),
+            curve: Curves.easeOutCubic,
+            padding: EdgeInsets.symmetric(
+              horizontal: 8 * scale,
+              vertical: 3 * scale,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.bgDark.withValues(alpha: 0.82),
+              borderRadius: BorderRadius.circular(8 * scale),
+              border: Border.all(
+                color: AppColors.gold.withValues(alpha: awarding ? 0.75 : 0.35),
+                width: awarding ? 1.2 : 0.8,
+              ),
+              boxShadow: awarding
+                  ? [
+                      BoxShadow(
+                        color: AppColors.goldBright.withValues(alpha: 0.28),
+                        blurRadius: 10,
+                      ),
+                    ]
+                  : null,
+            ),
+            child: Text(
+              headline,
+              maxLines: 1,
+              softWrap: false,
+              style: GoogleFonts.jetBrainsMono(
+                fontWeight: FontWeight.w700,
+                color: AppColors.goldBright.withValues(alpha: 0.95),
+                fontSize: (awarding ? 13 : 12) * scale,
+                letterSpacing: 0.3,
+              ),
+            ),
           ),
         ),
+        if (resultMessage != null && awarding) ...[
+          SizedBox(height: 4 * scale),
+          _PinnedToBoardWidth(
+            scale: scale,
+            child: Text(
+              resultMessage!,
+              maxLines: 1,
+              softWrap: false,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.manrope(
+                fontWeight: FontWeight.w700,
+                color: AppColors.cream.withValues(alpha: 0.92),
+                fontSize: 11 * scale,
+              ),
+            ),
+          ),
+        ],
         SizedBox(height: 10 * scale),
         Row(
           mainAxisSize: MainAxisSize.min,
@@ -65,6 +141,24 @@ class CommunityCardsView extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+/// Centers [child] in exactly one board-width, scaling it down if it is wider.
+class _PinnedToBoardWidth extends StatelessWidget {
+  const _PinnedToBoardWidth({required this.scale, required this.child});
+
+  final double scale;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: CommunityCardsView.naturalWidth * scale,
+      child: Center(
+        child: FittedBox(fit: BoxFit.scaleDown, child: child),
+      ),
     );
   }
 }

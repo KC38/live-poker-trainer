@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:live_poker_trainer/core/constants/config.dart';
+import 'package:live_poker_trainer/engine/coach_lines.dart';
 import 'package:live_poker_trainer/services/ai_request_log.dart';
 import 'package:live_poker_trainer/services/anthropic_service.dart';
 
@@ -67,12 +68,26 @@ void main() {
     expect(seen!.headers['anthropic-version'], Config.anthropicVersion);
     final body = jsonDecode(seen!.body) as Map<String, dynamic>;
     expect(body['model'], Config.claudeCoachModel);
+    expect(body['temperature'], AnthropicService.coachTemperature);
+    expect(AnthropicService.coachTemperature, inInclusiveRange(0.2, 0.3));
+
+    // Persona is voice only — layered around the narration contract.
+    final system = body['system'] as String;
+    expect(system, contains(CoachPersona.name));
+    expect(system, contains(CoachPersona.blurb));
+    expect(system, contains('Lexical style only'));
+    expect(system, contains('REQUIRED slots'));
+    expect(system, contains('No free-form strategy invention'));
+    expect(system, contains('Endorse the recommended action only'));
+    expect(system, contains('never claim'));
+    expect(system.toLowerCase(), isNot(contains('ed miller')));
 
     expect(result.text, contains('Fold preflop'));
     expect(result.aiRequestId, 1);
     expect(result.fromClaude, isTrue);
 
     final e = logger.entries.single;
+    expect(e.systemInstruction, contains(CoachPersona.name));
     expect(e.kind, AiRequestKind.coach);
     expect(e.modelId, Config.claudeCoachModel);
     expect(e.success, isTrue);

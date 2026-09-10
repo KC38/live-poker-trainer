@@ -95,6 +95,9 @@ class Config {
   /// Prefetch when unplayed cached scenarios fall below this count.
   static const int scenarioPrefetchThreshold = 5;
 
-  /// Default user id for local single-player progress.
+  /// Fallback user id for local / test Drift rows when signed out.
+  ///
+  /// Production paths that sync to Firestore must use [authUidProvider]
+  /// (Firebase Auth uid) instead of this constant.
   static const String defaultUserId = 'local';
 }

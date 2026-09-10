@@ -223,6 +223,27 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
+  /// Wipes every local training / history table (hands, mistakes, scenarios…).
+  ///
+  /// Used for a full local reset. Does not touch [ProfileDatabase].
+  Future<void> clearAllTrainingData() async {
+    await transaction(() async {
+      await delete(handActions).go();
+      await delete(coachDecisions).go();
+      await delete(hands).go();
+      await delete(mistakes).go();
+      await delete(improvementEvents).go();
+      await delete(playedScenarios).go();
+      await delete(scenarios).go();
+      await delete(userStatsRows).go();
+      await delete(aiRequests).go();
+      await delete(voiceClips).go();
+      await delete(settingsChanges).go();
+      await delete(diagnosticEvents).go();
+      await delete(appSessions).go();
+    });
+  }
+
   // --- Scenario DAO ---
 
   /// Inserts a scenario if its content hash is new. Returns the row id.

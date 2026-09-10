@@ -11,6 +11,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:live_poker_trainer/core/constants/config.dart';
 import 'package:live_poker_trainer/core/diagnostics/diagnostics_log.dart';
+import 'package:live_poker_trainer/engine/coach_lines.dart';
 import 'package:live_poker_trainer/services/ai_request_log.dart';
 
 /// Result of a coach text turn from Claude.
@@ -70,27 +71,46 @@ class AnthropicService {
 
   bool get hasApiKey => Config.hasAnthropicKey;
 
-  static const _coachSystem = '''
-You are an elite exploitative No-Limit Texas Hold'em coach at a live table.
-You receive structured context for ONE graded decision: street, hero cards,
-board, pot, call amount, hero position, villain name + position + archetype,
-whether that villain is the voluntary aggressor (bet/raise) or only posted
-blinds / called, hero action, recommended action, and CORRECT/INCORRECT.
+  /// Coach sampling temperature — low so narration stays on the slot-fill
+  /// contract instead of inventing strategy.
+  static const double coachTemperature = 0.25;
+
+  /// System prompt for coach narration. Persona is voice only; facts stay
+  /// locked by the slot-fill contract and [CoachAdviceGuard].
+  static const coachSystemPrompt = '''
+You are ${CoachPersona.name}, ${CoachPersona.blurb}.
+You are a slot-fill narrator for an exploitative live No-Limit Hold'em coach.
+You do NOT invent strategy. The grade already decided the line; you only voice
+locked facts in a tight template.
+
+${CoachPersona.styleGuide}
+
+You receive ONE graded decision with: street, hero cards, board, pot, call
+amount, positions, villain name + archetype, aggressor flag, hero action,
+recommended action, CORRECT/INCORRECT, equity%, price (required equity%),
+and curriculum reason codes with required phrases.
 
 Respond with 1-2 sentences, under 36 words, as text on the coach shelf.
-You MUST reference the specific street and the villain's archetype by name,
-and say why the recommended line beats what the hero did.
+
+REQUIRED slots — every reply MUST include all of:
+1. The graded street (by name).
+2. The villain archetype (by name).
+3. The equity% and, when a call is priced, the required equity% — quote the
+   numbers exactly; never change them.
+4. An endorsement of the recommended action only.
+5. The curriculum reason phrase(s) from the prompt — prefer verbatim wording;
+   do not substitute a different principle.
 
 CRITICAL accuracy rules:
-- Never invent aggressors. If the context says the villain is NOT the
-  aggressor (e.g. they only posted the big blind), do not say they "fired",
-  "bet", "raised", or "led". Describe facing a price / completing / calling
-  instead.
-- Ground every sentence in the given street. Never talk about a different
-  street than the graded decision.
+- No free-form strategy invention. No multi-street lines the grade did not
+  price. No reasons outside the curriculum phrases.
+- Never invent aggressors. If the villain is NOT the aggressor (e.g. only
+  posted the big blind), do not say they "fired", "bet", "raised", or "led".
+  Describe facing a price / completing / calling instead.
+- Ground every sentence in the given street. Never name a different street.
 - Position labels (SB/BB/BTN/UTG/…) are facts — do not reassign them.
-- Your advice MUST endorse the recommended action. If recommended is FOLD,
-  never urge calling. If CALL, never urge folding. If RAISE/BET, never fold.
+- Endorse the recommended action only. If FOLD, never urge calling. If CALL,
+  never urge folding. If RAISE/BET, never fold.
 - Never contradict yourself inside one reply.
 - Never use markdown, bullets, asterisks, or greetings.
 
@@ -99,6 +119,8 @@ saying it is a repeat, quote the occurrence count, and name the pattern.
 When it describes a fixed leak, open by acknowledging the improvement.
 In those cases you may use up to 42 words.
 ''';
+
+  static const _coachSystem = coachSystemPrompt;
 
   /// Removes Anthropic and Gemini keys (and `key=` / `sk-ant-` values) from
   /// [text] before anything is logged.
@@ -139,7 +161,7 @@ In those cases you may use up to 42 words.
         body: {
           'model': Config.claudeCoachModel,
           'max_tokens': 180,
-          'temperature': 0.6,
+          'temperature': coachTemperature,
           'system': _coachSystem,
           'messages': [
             {'role': 'user', 'content': prompt},

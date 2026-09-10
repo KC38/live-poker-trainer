@@ -1,4 +1,4 @@
-/// Unit tests for the collapsible AI coach shelf.
+/// Unit tests for the AI coach shelf.
 library;
 
 import 'package:flutter/material.dart';
@@ -60,7 +60,7 @@ Widget _wrap(CoachFeedback feedback, {double? maxHeight}) {
   );
 }
 
-/// Host that can swap [CoachFeedback] without recreating shelf [State].
+/// Host that can swap [CoachFeedback] without recreating the shelf.
 class _FeedbackHost extends StatefulWidget {
   const _FeedbackHost({required this.initial, this.maxHeight});
 
@@ -92,112 +92,57 @@ class _FeedbackHostState extends State<_FeedbackHost> {
 }
 
 void main() {
-  testWidgets('defaults to collapsed preview with Show more', (tester) async {
+  testWidgets('shows full advice and decision context by default',
+      (tester) async {
     await tester.pumpWidget(_wrap(_longIncorrect, maxHeight: 190));
-    expect(find.text('Show more'), findsOneWidget);
+
+    expect(find.text('Show more'), findsNothing);
     expect(find.text('Show less'), findsNothing);
-
-    final message = find.textContaining('Raising here bloats');
-    final text = tester.widget<Text>(message);
-    expect(text.maxLines, 2);
-    expect(text.overflow, TextOverflow.ellipsis);
-  });
-
-  testWidgets('collapsed preview still peeks BEST / YOU / EV', (tester) async {
-    await tester.pumpWidget(_wrap(_longIncorrect, maxHeight: 190));
-
     expect(find.text('BEST'), findsOneWidget);
     expect(find.text('YOU'), findsOneWidget);
     expect(find.text('EV'), findsOneWidget);
     expect(find.text('RAISE · \$16'), findsOneWidget);
     expect(find.textContaining('-\$'), findsOneWidget);
-  });
 
-  testWidgets('BEST and YOU show raise amounts without ellipsis', (tester) async {
-    await tester.pumpWidget(_wrap(_sizedRaiseIncorrect, maxHeight: 190));
-
-    // Collapsed peek must still show sizing (bb=2 → $20 best / $32 you).
-    expect(find.text('RAISE · \$20'), findsOneWidget);
-    expect(find.text('RAISE · \$32'), findsOneWidget);
-    expect(find.text('RAISE …'), findsNothing);
-    expect(find.textContaining('…'), findsNothing);
-
-    await tester.tap(find.text('Show more'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('RAISE · \$20'), findsOneWidget);
-    expect(find.text('RAISE · \$32'), findsOneWidget);
-  });
-
-  testWidgets('expands to full advice and decision context', (tester) async {
-    await tester.pumpWidget(_wrap(_longIncorrect, maxHeight: 190));
-    await tester.tap(find.text('Show more'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Show less'), findsOneWidget);
-    expect(find.text('BEST'), findsOneWidget);
-    expect(find.text('RAISE · \$16'), findsOneWidget);
     final message = find.textContaining('Raising here bloats');
     final text = tester.widget<Text>(message);
     expect(text.maxLines, isNull);
   });
 
-  testWidgets('collapses again with Show less', (tester) async {
-    await tester.pumpWidget(_wrap(_longCorrect, maxHeight: 190));
-    await tester.tap(find.text('Show more'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Show less'));
-    await tester.pumpAndSettle();
+  testWidgets('BEST and YOU show raise amounts without ellipsis', (tester) async {
+    await tester.pumpWidget(_wrap(_sizedRaiseIncorrect, maxHeight: 190));
 
-    expect(find.text('Show more'), findsOneWidget);
-    // Mini peek remains while graded.
-    expect(find.text('BEST'), findsOneWidget);
-    expect(find.text('CHECK'), findsNWidgets(2)); // BEST + YOU
+    expect(find.text('RAISE · \$20'), findsOneWidget);
+    expect(find.text('RAISE · \$32'), findsOneWidget);
+    expect(find.text('RAISE …'), findsNothing);
+    expect(find.textContaining('…'), findsNothing);
   });
 
-  testWidgets('stays expanded across a new coach line when already open',
-      (tester) async {
+  testWidgets('updates advice when a new coach line arrives', (tester) async {
     await tester.pumpWidget(
       const _FeedbackHost(initial: _longIncorrect, maxHeight: 190),
     );
-    await tester.tap(find.text('Show more'));
-    await tester.pumpAndSettle();
+    expect(find.textContaining('Raising here bloats'), findsOneWidget);
 
     final host = tester.state(find.byType(_FeedbackHost)) as _FeedbackHostState;
     host.update(_longCorrect);
     await tester.pumpAndSettle();
 
-    expect(find.text('Show less'), findsOneWidget);
     expect(find.textContaining('Nice check'), findsOneWidget);
     expect(find.text('BEST'), findsOneWidget);
     expect(find.text('CHECK'), findsNWidgets(2)); // BEST + YOU
+    expect(find.text('Show more'), findsNothing);
   });
 
-  testWidgets('returns to collapsed preview for a new line when closed',
-      (tester) async {
-    await tester.pumpWidget(
-      const _FeedbackHost(initial: _longIncorrect, maxHeight: 190),
-    );
-    expect(find.text('Show more'), findsOneWidget);
-
-    final host = tester.state(find.byType(_FeedbackHost)) as _FeedbackHostState;
-    host.update(_longCorrect);
-    await tester.pumpAndSettle();
-
-    expect(find.text('Show more'), findsOneWidget);
-    expect(find.text('BEST'), findsOneWidget);
-  });
-
-  testWidgets('respects height cap while expanded', (tester) async {
+  testWidgets('respects height cap with scrolling', (tester) async {
     await tester.pumpWidget(_wrap(_longIncorrect, maxHeight: 120));
-    await tester.tap(find.text('Show more'));
     await tester.pumpAndSettle();
 
     final coach = tester.getSize(find.byType(CoachShelfWidget));
     expect(coach.height, lessThanOrEqualTo(120.5));
   });
 
-  testWidgets('short neutral prompts do not force a collapser', (tester) async {
+  testWidgets('short neutral prompts omit decision stats', (tester) async {
     await tester.pumpWidget(_wrap(_neutralPrompt));
     expect(find.text('Show more'), findsNothing);
     expect(find.textContaining('Your move.'), findsOneWidget);
@@ -208,50 +153,12 @@ void main() {
     await tester.pumpWidget(_wrap(_longIncorrect, maxHeight: 190));
     expect(find.text('INCORRECT'), findsWidgets);
     expect(find.text('CORRECT'), findsNothing);
-
-    await tester.tap(find.text('Show more'));
-    await tester.pumpAndSettle();
-    expect(find.text('INCORRECT'), findsWidgets);
     expect(find.text('BEST'), findsOneWidget);
     expect(find.text('RAISE · \$16'), findsOneWidget);
   });
 
-  testWidgets('autoExpand review keeps the verdict badge visible', (tester) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: CoachShelfWidget(
-            feedback: _longIncorrect,
-            bigBlind: 2,
-            chipDisplayMode: ChipDisplayMode.dollars,
-            maxHeight: 220,
-            autoExpand: true,
-          ),
-        ),
-      ),
-    );
-    await tester.pumpAndSettle();
-
-    expect(find.text('INCORRECT'), findsWidgets);
-    expect(find.text('Show less'), findsOneWidget);
-    expect(find.text('BEST'), findsOneWidget);
-    expect(find.text('YOU'), findsOneWidget);
-    expect(find.text('EV'), findsOneWidget);
-  });
-
   testWidgets('EV cell uses signed amount without EV Δ prefix', (tester) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: CoachShelfWidget(
-            feedback: _longCorrect,
-            bigBlind: 2,
-            chipDisplayMode: ChipDisplayMode.dollars,
-            autoExpand: true,
-          ),
-        ),
-      ),
-    );
+    await tester.pumpWidget(_wrap(_longCorrect));
     await tester.pumpAndSettle();
 
     expect(find.text('EV'), findsOneWidget);
@@ -259,11 +166,11 @@ void main() {
     expect(find.textContaining('EV Δ'), findsNothing);
   });
 
-  testWidgets('historical tip shows one Previous badge and tip body',
+  testWidgets('historical grade keeps prior-street advice readable',
       (tester) async {
-    const historicalTip = CoachFeedback(
+    const historical = CoachFeedback(
       verdict: CoachVerdict.correct,
-      message: 'Sammy (LAG) bets preflop — \$12.00 to call, pot \$24.00.',
+      message: 'Raise is right preflop. Ned over-folds to aggression.',
       optimalAction: ExploitAction.raise,
       optimalSizingBb: 6,
       heroAction: 'RAISE',
@@ -272,26 +179,24 @@ void main() {
       decisionStreet: Street.preflop,
       isHistorical: true,
     );
-    await tester.pumpWidget(_wrap(historicalTip, maxHeight: 190));
+    await tester.pumpWidget(_wrap(historical, maxHeight: 190));
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('Previous · PREFLOP'), findsOneWidget);
+    expect(find.textContaining('Correct · preflop'), findsOneWidget);
+    expect(find.textContaining('Previous ·'), findsNothing);
     expect(find.text('CORRECT'), findsNothing);
-    expect(find.textContaining('Sammy (LAG) bets'), findsOneWidget);
-    expect(find.textContaining('Raise is right'), findsNothing);
+    expect(find.textContaining('Raise is right'), findsOneWidget);
     expect(find.text('BEST'), findsOneWidget);
   });
 
-  testWidgets('live grade replaces tip without stacking tip text', (tester) async {
+  testWidgets('live grade replaces empty shelf without stacking bodies',
+      (tester) async {
     await tester.pumpWidget(
       const _FeedbackHost(
-        initial: CoachFeedback(
-          message: 'Your turn preflop — \$2.00 vs Ned (Nit), pot \$3.00.',
-        ),
+        initial: CoachFeedback(),
         maxHeight: 190,
       ),
     );
-    expect(find.textContaining('Your turn preflop'), findsOneWidget);
     expect(find.text('CORRECT'), findsNothing);
 
     final host = tester.state(find.byType(_FeedbackHost)) as _FeedbackHostState;
@@ -309,9 +214,9 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('Your turn preflop'), findsNothing);
     expect(find.textContaining('Raise is right'), findsOneWidget);
     expect(find.text('CORRECT'), findsOneWidget);
+    expect(find.textContaining('Correct ·'), findsNothing);
     expect(find.textContaining('Previous ·'), findsNothing);
   });
 }

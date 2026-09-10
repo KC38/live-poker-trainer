@@ -8,6 +8,8 @@ import 'package:live_poker_trainer/core/database/profile_database.dart';
 import 'package:live_poker_trainer/engine/hero_profiler.dart';
 import 'package:live_poker_trainer/models/hero_metrics.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
+import 'package:live_poker_trainer/models/mistake_model.dart';
+import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/services/avatar_store.dart';
 import 'package:live_poker_trainer/services/profile_coach.dart';
@@ -50,12 +52,16 @@ class HeroProfileController extends StateNotifier<AsyncValue<HeroProfileView>> {
 
   ProfileDatabase get _db => _ref.read(profileDatabaseProvider);
 
+  /// Firebase uid when signed in; falls back to local Drift key in tests.
+  String get _userId =>
+      _ref.read(authUidProvider) ?? Config.defaultUserId;
+
   HeroProfileView? get _view => state.valueOrNull;
 
   Future<void> _bootstrap() async {
     final identity = await _readIdentity();
-    final snapshot = await _guard(() => _db.readSnapshot());
-    final cached = await _guard(() => _db.readSummary());
+    final snapshot = await _guard(() => _db.readSnapshot(userId: _userId));
+    final cached = await _guard(() => _db.readSummary(userId: _userId));
 
     if (!mounted) return;
     state = AsyncValue.data(
@@ -82,7 +88,7 @@ class HeroProfileController extends StateNotifier<AsyncValue<HeroProfileView>> {
     if (!mounted) return;
 
     state = AsyncValue.data(current.copyWith(metrics: metrics));
-    await _guard(() => _db.saveSnapshot(metrics));
+    await _guard(() => _db.saveSnapshot(metrics, userId: _userId));
     await refreshSummary();
   }
 
@@ -103,8 +109,17 @@ class HeroProfileController extends StateNotifier<AsyncValue<HeroProfileView>> {
     }
 
     // Never show an empty card: derive local copy first, then try the model.
+    final mistakes = await _guard(
+          () => _ref.read(mistakeDaoProvider).loadStats(),
+        ) ??
+        const MistakeStats();
+
     if (cached == null) {
-      final offline = ProfileCoach.offlineSummary(metrics, now: now);
+      final offline = ProfileCoach.offlineSummary(
+        metrics,
+        mistakes: mistakes,
+        now: now,
+      );
       state = AsyncValue.data(
         current.copyWith(summary: offline, summaryRefreshing: true),
       );
@@ -115,9 +130,13 @@ class HeroProfileController extends StateNotifier<AsyncValue<HeroProfileView>> {
     _busySummary = true;
     try {
       final coach = _ref.read(profileCoachProvider);
-      final summary = await coach.summarize(metrics, now: now);
+      final summary = await coach.summarize(
+        metrics,
+        mistakes: mistakes,
+        now: now,
+      );
       if (!mounted) return;
-      await _guard(() => _db.saveSummary(summary));
+      await _guard(() => _db.saveSummary(summary, userId: _userId));
       final latest = _view;
       if (latest == null || !mounted) return;
       state = AsyncValue.data(
@@ -136,7 +155,18 @@ class HeroProfileController extends StateNotifier<AsyncValue<HeroProfileView>> {
   Future<void> setDisplayName(String rawName) async {
     final current = _view;
     if (current == null) return;
-    final saved = await _guard(() => _db.saveDisplayName(rawName));
+    final saved = await _guard(
+      () => _db.saveDisplayName(rawName, userId: _userId),
+    );
+    final uid = _ref.read(authUidProvider);
+    if (uid != null) {
+      await _guard(
+        () => _ref.read(userRepositoryProvider).updateProfile(
+              uid: uid,
+              displayName: HeroIdentity.sanitizeName(rawName),
+            ),
+      );
+    }
     if (!mounted) return;
     state = AsyncValue.data(
       current.copyWith(
@@ -184,7 +214,16 @@ class HeroProfileController extends StateNotifier<AsyncValue<HeroProfileView>> {
     final current = _view;
     if (current == null) return;
     final previous = current.identity.avatar;
-    final saved = await _guard(() => _db.saveAvatar(avatar));
+    final saved = await _guard(() => _db.saveAvatar(avatar, userId: _userId));
+    final uid = _ref.read(authUidProvider);
+    if (uid != null) {
+      await _guard(
+        () => _ref.read(userRepositoryProvider).updateProfile(
+              uid: uid,
+              avatarRef: avatar.storageValue,
+            ),
+      );
+    }
     if (deletePrevious && previous.filePath != null) {
       await _guard(
         () => _ref.read(avatarStoreProvider).deleteStoredFile(previous),
@@ -199,7 +238,12 @@ class HeroProfileController extends StateNotifier<AsyncValue<HeroProfileView>> {
   }
 
   Future<HeroIdentity> _readIdentity() async {
-    final identity = await _guard(() => _db.readIdentity());
+    final uid = _ref.read(authUidProvider);
+    if (uid != null) {
+      final cloud = await _guard(() => _ref.read(userDocProvider.future));
+      if (cloud != null) return cloud.identity;
+    }
+    final identity = await _guard(() => _db.readIdentity(userId: _userId));
     return identity ?? const HeroIdentity();
   }
 

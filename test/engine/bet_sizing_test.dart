@@ -104,4 +104,34 @@ void main() {
       expect(amount, 33.33);
     });
   });
+
+  group('RaiseRange.snapToBb', () {
+    test('slider movement snaps to whole-BB steps from the min raise', () {
+      final range = RaiseRange.forHero(
+        _state(heroStack: 400, heroBet: 0, highestBet: 20, bigBlind: 2),
+      );
+      // Min raise-to is 22; each step adds 1 BB ($2).
+      expect(range.snapToBb(22.4, 2), 22);
+      expect(range.snapToBb(23.1, 2), 24);
+      expect(range.snapToBb(25.9, 2), 26);
+      expect(range.snapToBb(30, 2), 30);
+    });
+
+    test('all-in remains reachable when max is off the BB grid', () {
+      final range = RaiseRange.forHero(
+        _state(heroStack: 397, heroBet: 0, highestBet: 20, bigBlind: 2),
+      );
+      expect(range.max, 397);
+      expect(range.snapToBb(396.5, 2), 397);
+      expect(range.snapToBb(range.max, 2), 397);
+    });
+
+    test('min raise stays selectable', () {
+      final range = RaiseRange.forHero(
+        _state(heroStack: 400, heroBet: 0, highestBet: 20, bigBlind: 2),
+      );
+      expect(range.snapToBb(range.min, 2), range.min);
+      expect(range.snapToBb(range.min + 0.4, 2), range.min);
+    });
+  });
 }

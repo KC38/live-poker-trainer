@@ -132,13 +132,13 @@ class GameSettingsModel {
           PokerConstants.defaultSmallBlind,
       bigBlind: (prefs['bigBlind'] as num?)?.toDouble() ??
           PokerConstants.defaultBigBlind,
-      seatCount:
-          prefs['seatCount'] as int? ?? PokerConstants.defaultSeatCount,
-      stackDepthBb:
-          prefs['stackDepthBb'] as int? ?? PokerConstants.defaultStackBb,
+      seatCount: (prefs['seatCount'] as num?)?.toInt() ??
+          PokerConstants.defaultSeatCount,
+      stackDepthBb: (prefs['stackDepthBb'] as num?)?.toInt() ??
+          PokerConstants.defaultStackBb,
       autoRebuy:
           prefs['autoRebuy'] as bool? ?? PokerConstants.defaultAutoRebuy,
-      rebuyThresholdBb: prefs['rebuyThresholdBb'] as int? ??
+      rebuyThresholdBb: (prefs['rebuyThresholdBb'] as num?)?.toInt() ??
           PokerConstants.defaultRebuyThresholdBb,
       sfxEnabled:
           prefs['sfxEnabled'] as bool? ?? PokerConstants.defaultSfxEnabled,
@@ -152,6 +152,45 @@ class GameSettingsModel {
           ? LineupMode.custom
           : LineupMode.randomPool,
       customArchetypes: archetypes,
+    );
+  }
+
+  /// Prefs keys that stay device-local (SharedPreferences only).
+  static const Set<String> audioPrefKeys = {'sfxEnabled', 'musicEnabled'};
+
+  /// Firestore `preferences` map — gameplay only; audio stays on-device.
+  Map<String, Object?> toFirestorePreferences() {
+    final map = Map<String, Object?>.from(toPrefsMap());
+    for (final key in audioPrefKeys) {
+      map.remove(key);
+    }
+    return map;
+  }
+
+  /// Hydrates gameplay prefs from Firestore, keeping [localAudio] SFX/music.
+  static GameSettingsModel fromFirestorePreferences(
+    Map<String, dynamic> data, {
+    GameSettingsModel localAudio = const GameSettingsModel(),
+  }) {
+    final merged = <String, Object?>{
+      ...data,
+      'sfxEnabled': localAudio.sfxEnabled,
+      'musicEnabled': localAudio.musicEnabled,
+    };
+    // Firestore may store customArchetypes as a List.
+    final rawArch = data['customArchetypes'];
+    if (rawArch is List) {
+      merged['customArchetypes'] =
+          rawArch.map((e) => e.toString()).join(',');
+    }
+    return GameSettingsModel.fromPrefs(merged);
+  }
+
+  /// Merges remote gameplay prefs onto this instance (audio unchanged).
+  GameSettingsModel mergeRemotePreferences(GameSettingsModel remote) {
+    return remote.copyWith(
+      sfxEnabled: sfxEnabled,
+      musicEnabled: musicEnabled,
     );
   }
 }

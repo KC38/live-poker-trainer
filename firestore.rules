@@ -1,0 +1,51 @@
+rules_version = '2';
+
+// Live Poker Trainer — user-owned data + shared scenario pool.
+// Clients cannot create/overwrite scenario payloads (Admin SDK / Functions only).
+// Authenticated clients may bump serve counters on existing scenario docs.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    // Profile, prefs, stats, mistakes, played history — owner only.
+    match /users/{uid} {
+      allow read, write: if isOwner(uid);
+
+      match /playedScenarios/{scenarioId} {
+        allow read, write: if isOwner(uid);
+      }
+
+      match /mistakes/{mistakeId} {
+        allow read, write: if isOwner(uid);
+      }
+
+      match /{subcollection}/{docId} {
+        allow read, write: if isOwner(uid);
+      }
+    }
+
+    // Shared pool: authenticated read; create/delete only via Admin SDK.
+    // Clients may update only timesServed + lastServedAt on existing docs.
+    match /scenarios/{contentHash} {
+      allow read: if signedIn();
+
+      allow create, delete: if false;
+
+      allow update: if signedIn()
+        && resource != null
+        && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['timesServed', 'lastServedAt']);
+    }
+
+    // Deny everything else (including unauthenticated).
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

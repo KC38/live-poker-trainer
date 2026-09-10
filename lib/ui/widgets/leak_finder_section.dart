@@ -1,14 +1,21 @@
 /// Stats-screen "Leak Finder": repeated mistakes, trends, and fixes.
 ///
-/// Teach-first layout: a short summary line, the top repeated leaks as plain
-/// rows (count, last seen, trend), then one compact bar chart each for the
+/// Teach-first layout: a short summary line, then the top repeated leaks
+/// grouped by opponent archetype, each group headed by the fold / call / raise
+/// boundary the coach graded against, then one compact bar chart each for the
 /// archetype and street breakdown.
+///
+/// Grouping carries the teaching. Ungrouped, "folded, call was best" and
+/// "called, fold was best" against the same opponent look like the app
+/// contradicting itself; under one header with the threshold spelled out they
+/// read as the same line missed from either side.
 library;
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/engine/coach_policy.dart';
 import 'package:live_poker_trainer/models/mistake_model.dart';
 
 /// Leak Finder block for the Stats screen.
@@ -50,8 +57,8 @@ class LeakFinderSection extends StatelessWidget {
         if (stats.isEmpty)
           const _EmptyHint('No leaks recorded yet — keep playing.')
         else ...[
-          for (final leak in stats.topMistakes)
-            _LeakRow(leak: leak, now: now),
+          for (final group in stats.archetypeGroups)
+            _LeakGroupCard(group: group, now: now),
           const SizedBox(height: 22),
           _SubTitle('Mistakes by archetype'),
           const SizedBox(height: 10),
@@ -93,6 +100,141 @@ class LeakFinderSection extends StatelessWidget {
       };
 }
 
+/// One archetype's leaks under the boundary the coach graded them against.
+class _LeakGroupCard extends StatelessWidget {
+  const _LeakGroupCard({required this.group, required this.now});
+
+  final LeakGroup group;
+  final DateTime now;
+
+  @override
+  Widget build(BuildContext context) {
+    final rule = CoachPolicy.ruleFor(group.archetype);
+    final accent = group.archetype.color;
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.fromLTRB(14, 12, 12, 4),
+      decoration: BoxDecoration(
+        color: AppColors.bgElevated.withValues(alpha: 0.7),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.slateDark.withValues(alpha: 0.8)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(color: accent, shape: BoxShape.circle),
+              ),
+              const SizedBox(width: 7),
+              Text(
+                'vs ${group.label}',
+                style: GoogleFonts.manrope(
+                  color: AppColors.cream,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13.5,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                '×${group.mistakeCount}  ',
+                style: GoogleFonts.jetBrainsMono(
+                  color: AppColors.goldBright,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 13,
+                ),
+              ),
+              Text(
+                '-${group.evLostBb.toStringAsFixed(1)} BB',
+                style: GoogleFonts.jetBrainsMono(
+                  color: AppColors.danger,
+                  fontSize: 10.5,
+                ),
+              ),
+            ],
+          ),
+          if (group.isTwoSided) ...[
+            const SizedBox(height: 8),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(
+                  Icons.swap_vert_rounded,
+                  size: 14,
+                  color: AppColors.warning,
+                ),
+                const SizedBox(width: 5),
+                Expanded(
+                  child: Text(
+                    CoachPolicy.twoSidedNote,
+                    style: GoogleFonts.manrope(
+                      color: AppColors.warning,
+                      fontSize: 11.5,
+                      height: 1.4,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+          const SizedBox(height: 8),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.fromLTRB(10, 8, 10, 9),
+            decoration: BoxDecoration(
+              color: AppColors.bgDark.withValues(alpha: 0.55),
+              borderRadius: BorderRadius.circular(10),
+              border: Border(
+                left: BorderSide(
+                  color: accent.withValues(alpha: 0.7),
+                  width: 2,
+                ),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Where the line is',
+                  style: GoogleFonts.jetBrainsMono(
+                    color: AppColors.slate,
+                    fontSize: 9.5,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.6,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  rule,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.cream.withValues(alpha: 0.92),
+                    fontSize: 11.5,
+                    height: 1.45,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  CoachPolicy.closeSpotNote,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.slate,
+                    fontSize: 10.5,
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          for (final leak in group.leaks) _LeakRow(leak: leak, now: now),
+        ],
+      ),
+    );
+  }
+}
+
 /// One repeated-leak row: title, tag, count, last seen, trend.
 class _LeakRow extends StatelessWidget {
   const _LeakRow({required this.leak, required this.now});
@@ -124,12 +266,11 @@ class _LeakRow extends StatelessWidget {
     };
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
+      padding: const EdgeInsets.symmetric(vertical: 11),
       decoration: BoxDecoration(
-        color: AppColors.bgElevated.withValues(alpha: 0.7),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.slateDark.withValues(alpha: 0.8)),
+        border: Border(
+          top: BorderSide(color: AppColors.slateDark.withValues(alpha: 0.6)),
+        ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,7 +280,7 @@ class _LeakRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  leak.title,
+                  leak.shortTitle,
                   style: GoogleFonts.manrope(
                     fontWeight: FontWeight.w600,
                     color: AppColors.cream,
@@ -184,7 +325,7 @@ class _LeakRow extends StatelessWidget {
                 style: GoogleFonts.jetBrainsMono(
                   color: AppColors.goldBright,
                   fontWeight: FontWeight.w800,
-                  fontSize: 20,
+                  fontSize: 16,
                 ),
               ),
               Text(

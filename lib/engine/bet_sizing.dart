@@ -77,6 +77,31 @@ class RaiseRange {
   /// Clamps [amount] into this range, safe against inverted / NaN input.
   double clamp(double amount) => Money.clamp(Money.round(amount), min, max);
 
+  /// Snaps [amount] onto a 1-BB grid measured from [min].
+  ///
+  /// Used by the bet/raise slider so each thumb movement changes the size by
+  /// one big blind. [min] and [max] stay reachable so the legal min-raise and
+  /// all-in are never lost when they are not exact BB multiples past [min].
+  double snapToBb(double amount, double bigBlind) {
+    if (!allowed) return clamp(amount);
+    final bb = bigBlind > Money.epsilon ? bigBlind : 1.0;
+    final clamped = clamp(amount);
+    if (!hasSpread) return clamped;
+    if (Money.same(clamped, min)) return min;
+    if (Money.same(clamped, max)) return max;
+
+    final maxSteps = ((max - min) / bb).floor();
+    final rawSteps = ((clamped - min) / bb).round().clamp(0, maxSteps);
+    final gridAmount = clamp(Money.round(min + rawSteps * bb));
+
+    // When all-in sits between BB ticks, treat it as an extra stop and pick
+    // whichever of {grid, max} is closer to the thumb.
+    if ((clamped - max).abs() <= (clamped - gridAmount).abs() + Money.epsilon) {
+      return max;
+    }
+    return gridAmount;
+  }
+
   /// A pot-fraction sizing clamped into the legal range.
   ///
   /// [pot] is the total pot including bets already on the street, so

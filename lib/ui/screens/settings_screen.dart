@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart' hide Config;
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
 
 /// Audio and display settings screen.
@@ -113,6 +114,18 @@ class SettingsScreen extends ConsumerWidget {
                       : AppColors.bgElevated,
                 ),
               ),
+            ),
+            const SizedBox(height: 28),
+            Text(
+              'Account',
+              style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 8),
+            OutlinedButton(
+              onPressed: () async {
+                await ref.read(authControllerProvider.notifier).signOut();
+              },
+              child: const Text('Sign out'),
             ),
           ],
         ),

@@ -9,6 +9,8 @@ import 'package:live_poker_trainer/engine/bet_sizing.dart';
 import 'package:live_poker_trainer/engine/poker_engine.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
+import 'package:live_poker_trainer/models/player_model.dart';
+import 'package:live_poker_trainer/models/scenario_model.dart';
 
 const _settings = GameSettingsModel();
 
@@ -139,6 +141,12 @@ void main() {
         for (final p in state.players) {
           expect(Money.round(p.stack), p.stack);
         }
+        expect(state.winnerIds, isNotEmpty);
+        expect(state.awardedPot, greaterThan(0));
+        final credited = state.winnerIds
+            .map(state.awardShareFor)
+            .fold<double>(0, (s, v) => s + v);
+        expect(Money.round(credited), state.awardedPot);
         state = engine.startHand(existingPlayers: state.players);
       }
     });
@@ -289,6 +297,250 @@ void main() {
       final raiseSize = Money.round(openTo - state.highestBet);
       expect(after.minRaise, closeTo(raiseSize, 0.01));
       expect(after.minRaise, greaterThan(after.bigBlind + Money.epsilon));
+    });
+
+    test('posting blinds does not count as acting this round', () {
+      final engine = PokerEngine(settings: _settings, random: Random(0));
+      final state = engine.startHand(resolve: false);
+
+      expect(state.players[state.sbIndex].lastActionLabel, 'BLIND');
+      expect(state.players[state.bbIndex].lastActionLabel, 'BLIND');
+      expect(state.players[state.sbIndex].hasActedThisRound, isFalse);
+      expect(state.players[state.bbIndex].hasActedThisRound, isFalse);
+    });
+
+    test('hero in BB gets the option after the SB completes', () {
+      // Regression: blind posts used to set hasActedThisRound, so a completed
+      // preflop pot closed without ever offering the BB check/raise option.
+      var sawComplete = false;
+      for (var seed = 0; seed < 80; seed++) {
+        final engine = PokerEngine(
+          settings: const GameSettingsModel(seatCount: 2),
+          random: Random(seed),
+        );
+        // dealer 0 => SB is seat 1, BB (hero) is seat 0.
+        engine.startHand(dealerIndex: 0, resolve: false);
+        expect(engine.state.bbIndex, 0);
+
+        var guard = 0;
+        while (guard++ < 64 && engine.nextEvent() != null) {}
+
+        final state = engine.state;
+        if (state.isHandOver) continue;
+        expect(
+          state.street,
+          Street.preflop,
+          reason: 'seed $seed: preflop must not close before the BB acts',
+        );
+        expect(state.waitingForHero, isTrue);
+        expect(state.activePlayerIndex, state.bbIndex);
+
+        if (state.callAmountFor(state.hero) <= Money.epsilon) {
+          sawComplete = true;
+          final range = RaiseRange.forHero(state);
+          expect(range.allowed, isTrue, reason: 'BB must be able to raise');
+          break;
+        }
+      }
+      expect(sawComplete, isTrue, reason: 'expected at least one SB complete');
+    });
+
+    test('all-in pot runs out remaining streets without hero decisions', () {
+      // Regression: after the last opponent was all-in and matched, later
+      // streets still opened a check/bet round for the hero even though no
+      // side-pot action was possible.
+      const settings = GameSettingsModel(
+        seatCount: 2,
+        autoRebuy: false,
+        smallBlind: 1,
+        bigBlind: 2,
+        stackDepthBb: 100,
+      );
+      final lineup = PokerEngine.buildLineup(
+        settings: settings,
+        random: Random(0),
+      );
+      // Villain starts with exactly one BB: completing the SB puts them
+      // all-in, hero can check, and the board must run with no further
+      // hero decisions.
+      final players = [
+        lineup[0].copyWith(stack: 200),
+        lineup[1].copyWith(
+          stack: 2,
+          archetype: PlayerArchetype.callingStation,
+        ),
+      ];
+      final engine = PokerEngine(settings: settings, random: Random(3));
+      // dealer 0 => villain SB, hero BB.
+      engine.startHand(
+        existingPlayers: players,
+        dealerIndex: 0,
+        resolve: false,
+      );
+
+      var enteredAllInPot = false;
+      var guard = 0;
+      while (guard++ < 256 && !engine.state.isHandOver) {
+        final event = engine.nextEvent();
+        final state = engine.state;
+
+        final live = state.players.where((p) => !p.folded).toList();
+        final withChips =
+            live.where((p) => p.stack > Money.epsilon).toList();
+        final allInPot = live.length >= 2 && withChips.length < 2;
+        if (allInPot) {
+          enteredAllInPot = true;
+          expect(
+            state.waitingForHero,
+            isFalse,
+            reason: 'all-in pot must not offer hero actions '
+                '(street=${state.street.label}, event=${event?.kind})',
+          );
+          continue;
+        }
+
+        if (event != null) continue;
+        if (state.isHandOver) break;
+        expect(state.waitingForHero, isTrue);
+
+        final call = state.callAmountFor(state.hero);
+        // Prefer checking/calling so we keep both players live for the runout.
+        if (call <= Money.epsilon) {
+          engine.submitHeroAction(
+            const PokerAction(type: PokerActionType.check),
+          );
+        } else {
+          engine.submitHeroAction(
+            PokerAction(type: PokerActionType.call, amount: call),
+          );
+        }
+      }
+
+      expect(engine.state.isHandOver, isTrue);
+      expect(
+        enteredAllInPot,
+        isTrue,
+        reason: 'expected a covered all-in that ran board cards out',
+      );
+      expect(engine.state.community.length, 5);
+      expect(engine.state.street, Street.showdown);
+    });
+  });
+
+  group('practice scenarios', () {
+    test('deals villain holes and can run out later streets', () {
+      final engine = PokerEngine(
+        settings: const GameSettingsModel(seatCount: 6),
+        random: Random(7),
+      );
+      final scenario = ScenarioModel.fromGeminiJson(const {
+        'name': 'Flop check to hero',
+        'table_size': 6,
+        'hero_position': 'BTN',
+        'hero_hand': ['As', 'Kh'],
+        'board_cards': ['Qd', '7c', '2h'],
+        'pot_size': 20,
+        'villain_seat': 2,
+        'villain_archetype': 'Calling Station',
+        'previous_action_narrative': 'Station checks flop.',
+        'villain_action': 'CHECK',
+        'call_amount': 0,
+        'min_raise': 2,
+        'max_raise': 200,
+      });
+      engine.startPracticeScenario(scenario);
+
+      expect(engine.state.waitingForHero, isTrue);
+      expect(engine.state.activeScenario, isNotNull);
+      expect(engine.state.community.length, 3);
+      for (final p in engine.state.players) {
+        expect(p.holeCards.length, 2);
+      }
+
+      engine.submitHeroAction(
+        const PokerAction(type: PokerActionType.check),
+      );
+      engine.runToHeroOrEnd();
+
+      // After the flop round, turn should be dealt from the practice deck.
+      expect(engine.state.community.length, greaterThanOrEqualTo(3));
+      expect(
+        engine.state.isHandOver || engine.state.waitingForHero,
+        isTrue,
+      );
+    });
+
+    test('dealScenarioHand replays folds before BTN acts', () {
+      final engine = PokerEngine(
+        settings: const GameSettingsModel(seatCount: 6),
+        random: Random(11),
+      );
+      final scenario = ScenarioModel.fromGeminiJson(const {
+        'name': 'BTN open',
+        'table_size': 6,
+        'hero_position': 'BTN',
+        'hero_hand': ['As', '5s'],
+        'board_cards': <String>[],
+        'pot_size': 3,
+        'villain_seat': 2,
+        'villain_archetype': 'Nit',
+        'previous_action_narrative': 'Folds to button.',
+        'villain_action': 'CHECK',
+        'call_amount': 0,
+        'min_raise': 2,
+        'max_raise': 200,
+      });
+      engine.dealScenarioHand(scenario);
+
+      expect(engine.state.street, Street.preflop);
+      expect(engine.state.community, isEmpty);
+      expect(engine.state.waitingForHero, isFalse);
+      expect(engine.state.positionLabel(0), 'BTN');
+
+      engine.runToHeroOrEnd();
+
+      expect(engine.state.waitingForHero, isTrue);
+      final foldedBefore = engine.state.players
+          .where((p) => !p.isHero && p.folded)
+          .length;
+      expect(foldedBefore, greaterThanOrEqualTo(3));
+      for (final p in engine.state.players.where((p) => p.folded)) {
+        expect(p.lastActionLabel, 'FOLD');
+      }
+    });
+
+    test('dealScenarioHand replays a raise before BB acts', () {
+      final engine = PokerEngine(
+        settings: const GameSettingsModel(seatCount: 6),
+        random: Random(13),
+      );
+      final scenario = ScenarioModel.fromGeminiJson(const {
+        'name': 'BB vs raise',
+        'table_size': 6,
+        'hero_position': 'BB',
+        'hero_hand': ['Ah', 'Td'],
+        'board_cards': <String>[],
+        'pot_size': 7,
+        'villain_seat': 1,
+        'villain_archetype': 'Maniac',
+        'previous_action_narrative': 'Maniac opens; folds to BB.',
+        'villain_action': 'RAISE',
+        'call_amount': 3,
+        'min_raise': 8,
+        'max_raise': 200,
+      });
+      engine.dealScenarioHand(scenario);
+      engine.runToHeroOrEnd();
+
+      expect(engine.state.waitingForHero, isTrue);
+      expect(engine.state.positionLabel(0), 'BB');
+      expect(engine.state.callAmountFor(engine.state.hero), greaterThan(0));
+      expect(
+        engine.state.players.any(
+          (p) => !p.isHero && (p.lastActionLabel == 'RAISE'),
+        ),
+        isTrue,
+      );
     });
   });
 }

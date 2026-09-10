@@ -61,6 +61,7 @@ class GameState {
     this.isHandOver = false,
     this.waitingForHero = false,
     this.resultMessage,
+    this.winnerIds = const [],
     this.sidePots = const [],
   });
 
@@ -88,6 +89,11 @@ class GameState {
   final bool isHandOver;
   final bool waitingForHero;
   final String? resultMessage;
+
+  /// Seat ids that took the pot (one winner, or multiple for a split).
+  ///
+  /// Ordered: the first entry receives any leftover odd cents from the split.
+  final List<int> winnerIds;
   final List<double> sidePots;
 
   PlayerModel get hero => players.firstWhere((p) => p.isHero);
@@ -122,6 +128,23 @@ class GameState {
     return totalPot;
   }
 
+  /// Whether the pot was split between two or more winners.
+  bool get isSplitPot => winnerIds.length > 1;
+
+  /// Chips credited to [winnerId] from [awardedPot] (includes odd-cent residue
+  /// on the first winner when the pot does not divide evenly).
+  double awardShareFor(int winnerId) {
+    if (winnerIds.isEmpty || awardedPot <= Money.epsilon) return 0;
+    final share = Money.round(awardedPot / winnerIds.length);
+    final oddCents =
+        Money.round(awardedPot - share * winnerIds.length);
+    if (winnerId == winnerIds.first) {
+      return Money.round(share + oddCents);
+    }
+    if (winnerIds.contains(winnerId)) return share;
+    return 0;
+  }
+
   /// Chips [player] must add to match [highestBet], capped at their stack.
   double callAmountFor(PlayerModel player) {
     final owed = Money.roundNonNegative(highestBet - player.currentBet);
@@ -154,6 +177,7 @@ class GameState {
     bool? waitingForHero,
     String? resultMessage,
     bool clearResult = false,
+    List<int>? winnerIds,
     List<double>? sidePots,
   }) {
     return GameState(
@@ -183,6 +207,7 @@ class GameState {
       waitingForHero: waitingForHero ?? this.waitingForHero,
       resultMessage:
           clearResult ? null : (resultMessage ?? this.resultMessage),
+      winnerIds: winnerIds ?? this.winnerIds,
       sidePots: sidePots ?? this.sidePots,
     );
   }

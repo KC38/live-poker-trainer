@@ -18,8 +18,11 @@ import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
 import 'package:live_poker_trainer/ui/widgets/action_dock_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
+import 'package:live_poker_trainer/ui/widgets/community_cards_view.dart';
+import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
+import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 
 /// The smallest screen we support (iPhone SE logical size).
 const _smallPhone = Size(320, 568);
@@ -50,6 +53,7 @@ GameState _nineHandedGame({
   Street street = Street.turn,
   bool handOver = false,
   bool heroFolded = false,
+  bool multiwayRiverBets = false,
 }) {
   final archetypes = [
     PlayerArchetype.nit,
@@ -61,6 +65,27 @@ GameState _nineHandedGame({
     PlayerArchetype.tag,
     PlayerArchetype.callingStation,
   ];
+  final community = switch (street) {
+    Street.preflop => <CardModel>[],
+    Street.flop => [
+        CardModel.fromCode('Ac'),
+        CardModel.fromCode('Jc'),
+        CardModel.fromCode('Kd'),
+      ],
+    Street.turn => [
+        CardModel.fromCode('Ac'),
+        CardModel.fromCode('Jc'),
+        CardModel.fromCode('Kd'),
+        CardModel.fromCode('3h'),
+      ],
+    Street.river || Street.showdown => [
+        CardModel.fromCode('Ac'),
+        CardModel.fromCode('Jc'),
+        CardModel.fromCode('Kd'),
+        CardModel.fromCode('3h'),
+        CardModel.fromCode('9s'),
+      ],
+  };
   return GameState(
     players: [
       PlayerModel(
@@ -68,7 +93,7 @@ GameState _nineHandedGame({
         name: 'Hero',
         archetype: PlayerArchetype.hero,
         stack: 173,
-        currentBet: heroFolded ? 0 : 8,
+        currentBet: heroFolded ? 0 : (multiwayRiverBets ? 349.54 : 8),
         isHero: true,
         folded: heroFolded,
         holeCards: [CardModel.fromCode('Ks'), CardModel.fromCode('Jh')],
@@ -79,20 +104,23 @@ GameState _nineHandedGame({
           name: 'Seat ${i + 1}',
           archetype: archetypes[i],
           stack: 300 + i * 17,
-          currentBet: i.isEven ? 8 : 0,
+          // Multi-way river: several large live bets like the crowded
+          // production screenshot (Sammy / Paul / Rex stacked on the board).
+          currentBet: multiwayRiverBets
+              ? (i == 1 || i == 3 || i == 4 || i == 6 ? 117.42 + i * 40 : 0)
+              : (i.isEven ? 8 : 0),
+          lastActionLabel: multiwayRiverBets &&
+                  (i == 1 || i == 3 || i == 4 || i == 6)
+              ? (i.isOdd ? 'RAISE' : 'CALL')
+              : null,
           holeCards: [CardModel.fromCode('2c'), CardModel.fromCode('7d')],
         ),
     ],
     mode: GameMode.training,
-    community: [
-      CardModel.fromCode('Ac'),
-      CardModel.fromCode('Jc'),
-      CardModel.fromCode('Kd'),
-      CardModel.fromCode('3h'),
-    ],
-    mainPot: 937,
+    community: community,
+    mainPot: multiwayRiverBets ? 1009.83 : 937,
     street: street,
-    highestBet: 8,
+    highestBet: multiwayRiverBets ? 355.88 : 8,
     minRaise: 2,
     smallBlind: 1,
     bigBlind: 2,
@@ -103,6 +131,7 @@ GameState _nineHandedGame({
     isHandOver: handOver,
     awardedPot: handOver ? 937 : 0,
     resultMessage: handOver ? 'Seat 1 wins \$937' : null,
+    winnerIds: handOver ? const [1] : const [],
   );
 }
 
@@ -187,6 +216,138 @@ Rect _rectOf(WidgetTester tester, Finder finder) {
     box.size.width,
     box.size.height,
   );
+}
+
+/// Painted bounds of a felt bet chip.
+///
+/// [_BetChip] lays out with its top-left at the anchor, then paints with a
+/// horizontal FractionalTranslation(-0.5) and a -10px vertical nudge.
+Rect _betChipVisualRect(WidgetTester tester, Key key) {
+  final box = tester.getRect(find.byKey(key));
+  return Rect.fromLTWH(
+    box.left - box.width / 2,
+    box.top - 10,
+    box.width,
+    box.height,
+  );
+}
+
+/// Asserts nothing the player reads on the felt is hidden behind anything else.
+///
+/// Every seat HUD (archetype word, name, VPIP/PFR, stack), its action badge,
+/// each live bet amount, and the board (pot headline + community cards) has to
+/// be simultaneously legible — they are all inputs to the hero's decision.
+void _expectNoFeltCollisions(
+  WidgetTester tester,
+  GameState game, {
+  required Street street,
+}) {
+  final felt = _rectOf(tester, find.byType(FeltTableView));
+
+  final seats = <int, Rect>{};
+  for (final element in find.byType(PlayerSeatWidget).evaluate()) {
+    final seat = element.widget as PlayerSeatWidget;
+    final box = element.renderObject! as RenderBox;
+    seats[seat.player.id] = box.localToGlobal(Offset.zero) & box.size;
+  }
+
+  final chips = <int, Rect>{};
+  final badges = <int, Rect>{};
+  for (final player in game.players) {
+    if (player.isHero) continue;
+
+    final chipKey = ValueKey('bet-${player.id}');
+    if (find.byKey(chipKey).evaluate().isNotEmpty) {
+      chips[player.id] = _betChipVisualRect(tester, chipKey);
+    }
+
+    final label = player.lastActionLabel;
+    if (label == null) continue;
+    final badgeKey = ValueKey('act-${player.id}-$label');
+    if (find.byKey(badgeKey).evaluate().isNotEmpty) {
+      badges[player.id] = _rectOf(tester, find.byKey(badgeKey));
+    }
+  }
+
+  final board = _rectOf(tester, find.byType(CommunityCardsView));
+  final where = '${street.label} @ ${felt.size}';
+
+  chips.forEach((id, chip) {
+    expect(
+      felt.contains(chip.topLeft) && felt.contains(chip.bottomRight),
+      isTrue,
+      reason: 'bet $id at $chip spills off the felt $felt ($where)',
+    );
+    expect(
+      chip.overlaps(board),
+      isFalse,
+      reason: 'bet $id at $chip covers the board $board ($where)',
+    );
+
+    seats.forEach((seatId, seat) {
+      expect(
+        chip.overlaps(seat),
+        isFalse,
+        reason: 'bet $id at $chip covers seat $seatId $seat ($where)',
+      );
+    });
+
+    badges.forEach((badgeId, badge) {
+      expect(
+        chip.overlaps(badge),
+        isFalse,
+        reason: 'bet $id at $chip covers badge $badgeId $badge ($where)',
+      );
+    });
+
+    chips.forEach((otherId, other) {
+      if (otherId <= id) return;
+      expect(
+        chip.overlaps(other),
+        isFalse,
+        reason: 'bet $id at $chip covers bet $otherId at $other ($where)',
+      );
+    });
+  });
+
+  // Eight villain seats plus the board need roughly this much felt. Below it
+  // the ring is over-subscribed no matter how far the seats shrink — an
+  // iPhone SE running nine-handed with the coach shelf open has ~130px of
+  // felt, which cannot hold eight legible seats. Every other guarantee above
+  // still holds there; only seat-to-seat spacing gives way.
+  final ringFits = felt.height >= 240;
+
+  if (ringFits) {
+    seats.forEach((id, seat) {
+      seats.forEach((otherId, other) {
+        if (otherId <= id) return;
+        expect(
+          seat.overlaps(other),
+          isFalse,
+          reason: 'seat $id $seat covers seat $otherId $other ($where)',
+        );
+      });
+      expect(
+        seat.overlaps(board),
+        isFalse,
+        reason: 'seat $id $seat covers the board $board ($where)',
+      );
+    });
+  }
+
+  // A badge tucks under its own seat by design; it must clear every other one.
+  if (ringFits) {
+    badges.forEach((id, badge) {
+      seats.forEach((seatId, seat) {
+        if (seatId == id) return;
+        expect(
+          badge.overlaps(seat),
+          isFalse,
+          reason: 'badge $id $badge covers seat $seatId $seat ($where)',
+        );
+      });
+    });
+  }
 }
 
 void main() {
@@ -301,6 +462,25 @@ void main() {
         );
       });
 
+      testWidgets('no felt element covers another, on every street',
+          (tester) async {
+        for (final street in Street.values) {
+          final game = _nineHandedGame(
+            street: street,
+            multiwayRiverBets: true,
+            handOver: street == Street.showdown,
+          );
+          await _pumpTable(
+            tester,
+            size: size,
+            session: const TableSession(coach: longCoach).copyWith(game: game),
+          );
+          await tester.pump(const Duration(milliseconds: 400));
+
+          _expectNoFeltCollisions(tester, game, street: street);
+        }
+      });
+
       testWidgets('villain archetypes are legible words, not single letters',
           (tester) async {
         await _pumpTable(
@@ -405,7 +585,47 @@ void main() {
         expect(find.textContaining('SHOWDOWN'), findsOneWidget);
         expect(find.textContaining(r'$0'), findsNothing);
         expect(find.textContaining(r'$937'), findsWidgets);
+        expect(find.text('WINS'), findsOneWidget);
         expect(find.text('INCORRECT'), findsWidgets);
+      });
+
+      testWidgets('award animation shows TAKES and flying pot share',
+          (tester) async {
+        await _pumpTable(
+          tester,
+          size: size,
+          session: reviewSession().copyWith(awardingChips: true),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 100));
+
+        expect(find.textContaining('TAKES'), findsOneWidget);
+        expect(find.textContaining(r'$937'), findsWidgets);
+        expect(find.text('WINS'), findsOneWidget);
+      });
+
+      testWidgets('split award shows SPLIT on the board and seats',
+          (tester) async {
+        final split = _nineHandedGame(
+          street: Street.showdown,
+          handOver: true,
+        ).copyWith(
+          winnerIds: const [1, 2],
+          resultMessage: r'Seat 1 & Seat 2 split $937',
+        );
+        await _pumpTable(
+          tester,
+          size: size,
+          session: TableSession(coach: longCoach).copyWith(
+            game: split,
+            awardingChips: true,
+          ),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 100));
+
+        expect(find.textContaining('SPLIT'), findsWidgets);
+        expect(find.text('WINS'), findsNothing);
       });
 
       testWidgets('action dock leaves the tree once the hero cannot act',
@@ -437,8 +657,8 @@ void main() {
 
         expect(reviewCoach.height, greaterThan(playingCoach.height));
         expect(reviewCards.height, greaterThan(playingCards.height));
-        // Review copy opens itself now that the shelf owns the space.
-        expect(find.text('Show less'), findsOneWidget);
+        expect(find.text('Show more'), findsNothing);
+        expect(find.text('Show less'), findsNothing);
         expect(find.text('BEST'), findsOneWidget);
       });
 

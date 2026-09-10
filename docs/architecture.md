@@ -4,7 +4,7 @@
 
 1. **UI** (`lib/ui`) — responsive felt table, action dock, coach shelf, Home / Stats / Settings.
 2. **Providers** (`lib/providers`) — Riverpod for settings, table session, coach verdict, stats.
-3. **Engine** (`lib/engine`) — `DeckEvaluator`, `PokerEngine` (full-hand streets, pots, archetype AI, auto-rebuy, replay events), `BetSizing`/`RaiseRange` (legal hero raise range), `LiveCoach` + `CoachLines` (exploit grading and copy), `ScenarioManager` (optional cache / prefetch).
+3. **Engine** (`lib/engine`) — `DeckEvaluator`, `PokerEngine` (full-hand streets, pots, archetype AI, auto-rebuy, replay events), `BetSizing`/`RaiseRange` (legal hero raise range), the coach stack below, `ScenarioManager` (optional cache / prefetch).
 4. **Services** (`lib/services`) — `GeminiService`: coach text, scenario JSON, and image generation.
 5. **Persistence** (`lib/core/database`) — Drift (`scenarios`, `played_scenarios`, `user_stats_rows`) with native SQLite and web WASM.
 
@@ -12,10 +12,21 @@
 
 Home launches a single **Start training** path. Every hand:
 
-1. Deal from preflop with blinds posted, without resolving villain action (`startHand(resolve: false)`); D / SB / BB pucks on seats.
-2. `GameController` pulls `PokerEngine.nextEvent()` on a timer and applies one step per tick, so villain decisions, pot collection, and board cards animate in order.
-3. On each Hero action, `LiveCoach` grades when a clear exploit line exists; Gemini (or `CoachLines`) supplies a spot-specific text line for the coach shelf.
-4. Continue streets until fold-out or showdown; deal a **fresh shuffled hand** on **Next** (hole-card layouts are fingerprinted so consecutive deals cannot clone the prior hand). Mid-hand hero actions never re-deal — the same hole cards continue until the hand ends.
+1. `ScenarioManager.nextScenario()` pulls an engineered spot from the Firestore
+   Gemini pool (or a diverse offline template). Prefer playable / postflop
+   setups over automatic fold-preflop junk.
+2. `PokerEngine.dealScenarioHand` deals that spot **from preflop** (scenario
+   hole cards + featured villain). Mid-street boards in the JSON are ignored
+   for the live deal so every hand starts with blinds and an empty board.
+3. A preflop lead-in script folds seats before hero (and raises with the
+   featured villain when `call_amount > 0`). `GameController` replays those
+   steps via `PokerEngine.nextEvent()` so the user sees the action.
+4. Hero acts; remaining streets use normal villain AI with the same paced
+   replay. `LiveCoach` grades each hero decision.
+5. **Next** fetches another scenario (stacks preserved via continue-table).
+
+`PokerEngine.startPracticeScenario` still exists for EV stamping
+(`[ScenarioGrader]`) — it jumps to the decision spot without animation.
 
 ### Replay events
 
@@ -26,7 +37,7 @@ Home launches a single **Start training** path. Every hand:
 | `villainAction` | one seat acted | ~520ms passive, ~680ms with chips |
 | `collectPot` | street bets slide into the pot | ~420ms |
 | `dealStreet` | board cards revealed | ~620ms |
-| `handOver` | hand resolved | ~560ms before review |
+| `handOver` | pot flies to winner(s) | ~720ms award animation |
 
 `null` means the hand is over or the hero owes an action. `runToHeroOrEnd()`
 drains the same stream instantly for tests and non-animated callers, so both
@@ -50,6 +61,16 @@ coach shelf → action dock. The felt takes what is left, so a long coach line
 shrinks the felt and can never draw over the hero's hole cards. `HeroRailWidget`
 owns the hole cards; the coach shelf is height-capped and scrolls internally.
 
+Inside the felt the same rule applies between elements, since archetype, stack,
+committed chips, pucks, last action, and the board are all decision inputs.
+`FeltTableView` resolves them in order: seats claim the ring and shrink together
+until no two footprints touch, the board then takes the largest scale no seat
+reaches, and committed chips ride inside the seat HUD rather than floating
+toward the pot — on a phone there is no lane between a side seat and the board
+wide enough for a chip pill. Chips only cross the felt during the collect beat,
+fading as they go. `test/ui/poker_table_layout_test.dart` asserts this pairwise
+on every street.
+
 Live-table amounts go through `ChipDisplayMode.tableMode`, which collapses
 **Both** to currency-only. Hand review, EV, stats, and table setup keep the
 user's full choice via `ChipFormat`.
@@ -58,11 +79,50 @@ user's full choice via `ChipFormat`.
 
 Archetype decision trees inspired by the domain demo (not a line-by-line port). Universal rule: if `callAmount == 0`, never fold — free check.
 
+## How the coach decides
+
+Grading is expected value in chips. There is no table of hand-class thresholds;
+every recommendation is the highest-EV line among the ones actually available.
+
+| File | Job |
+| --- | --- |
+| `fast_evaluator.dart` | Allocation-light 7-card scoring, ~0.1µs per hand. Ordering is proven equal to `DeckEvaluator` by test, so the coach and the pot never disagree about who won. |
+| `preflop_chart.dart` | The 169 starting hands ranked, and top-N% selection over them. The one hand-authored table. |
+| `hand_range.dart` | Weighted combo ranges. Built from an archetype's VPIP / PFR read as a top-N% slice, adjusted for seat, then narrowed street by street. |
+| `hand_class.dart` | What a holding *is* on a board — top pair, weak pair, strong draw, air — plus draw outs. |
+| `villain_model.dart` | Per-archetype bet / call / raise frequencies for each hand class, with size response. The behavioural half of the opponent model. |
+| `equity.dart` | Hero equity against those ranges. Exact enumeration on turn and river heads-up; seeded Monte Carlo elsewhere. |
+| `decision_ev.dart` | Prices fold / check / call / raise-at-several-sizes in chips, with pot odds, fold equity, and an equity-realization discount. |
+| `live_coach.dart` | Builds the spot, picks the best line, grades hero against it. |
+| `coach_policy.dart` | Plain-language description of the above, derived from the same numbers, for the Leak Finder. |
+
+Determinism is a requirement, not a nicety: the Monte Carlo seed is derived
+from the spot (hole cards, board, street, pot), so grading the same decision
+twice always returns the same equity and the same verdict.
+
+A decision is marked **incorrect** only when it costs more than the model's own
+margin — the larger of 0.75 BB, 4% of the pot, and the sampling error. Inside
+that band the verdict is correct and the copy says the spot was close. Bet
+sizing gets a wider band still, because a one-street model is far more reliable
+about *which* action than about *how much*. `DecisionModel` also refuses to
+propose a bet beyond 1.5× pot when stacks are deep; without that structural cap
+a one-street model will talk itself into shoving twenty pots for a little fold
+equity.
+
+The model is one street deep. It prices the current decision against the range
+in front of it and the cards to come, but does not solve the betting that
+follows. That is why the close band and the sizing caps exist, and why
+`test/engine/coach_golden_test.dart` pins the spots that must not regress.
+
 ## Coaching copy
 
 `LiveCoach.grade` produces a `LiveCoachGrade` carrying the street, the primary
-villain (last aggressor, else whoever committed the most), the hero action, and
-the `CoachMismatch` between the taken and better line. `CoachLines` composes
+villain (last aggressor, else whoever committed the most), the hero action, the
+equity and price behind the verdict, and the `CoachMismatch` between the taken
+and better line. Every graded line leads with numbers the player can check —
+what the call costs, what it needs, what the hand has — because an
+unfalsifiable assertion about a tendency reads as bluster the moment the
+verdict looks wrong. `CoachLines` composes
 copy from those facts with rotating phrasings, so no two spots read the same
 and an INCORRECT verdict explains itself. The same grade builds the Gemini
 prompt (`toPrompt`), keeping the online line grounded in the same facts as the

@@ -122,6 +122,25 @@ void main() {
       }
       expect(MistakeTag.fromId('nope'), MistakeTag.other);
     });
+
+    test('maps coarse tags onto curriculum reason codes', () {
+      expect(
+        MistakeTag.payingOffNits.reasonCode,
+        CoachReasonCode.dontPayOffNits,
+      );
+      expect(
+        MistakeTag.overbluffingStations.reasonCode,
+        CoachReasonCode.neverBluffStations,
+      );
+      expect(
+        MistakeTag.foldingTooMuchVsAggro.reasonCode,
+        CoachReasonCode.defendVsLooseAggro,
+      );
+      expect(
+        MistakeTag.underSizingVsStations.reasonCode,
+        CoachReasonCode.sizeUpVsStations,
+      );
+    });
   });
 
   group('LiveCoachGrade.pattern', () {

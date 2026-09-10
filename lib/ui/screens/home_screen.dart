@@ -3,11 +3,14 @@ library;
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/core/constants/poker_constants.dart';
+import 'package:live_poker_trainer/core/debug/agent_commands.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
@@ -33,11 +36,23 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool _setupExpanded = false;
   bool _launching = false;
+  StreamSubscription<String>? _agentSub;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => _syncHomeBgm());
+    if (kDebugMode) {
+      _agentSub = AgentCommands.stream.listen((cmd) {
+        if (cmd == 'start') unawaited(_launchTraining());
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    unawaited(_agentSub?.cancel());
+    super.dispose();
   }
 
   Future<void> _syncHomeBgm() async {
@@ -147,7 +162,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       _syncHomeBgm();
     });
 
-    return Scaffold(
+    return Focus(
+      autofocus: kDebugMode,
+      child: CallbackShortcuts(
+        bindings: {
+          if (kDebugMode) ...{
+            const SingleActivator(LogicalKeyboardKey.enter): _launchTraining,
+            const SingleActivator(LogicalKeyboardKey.keyS): _launchTraining,
+          },
+        },
+        child: Scaffold(
       body: Container(
         decoration: const BoxDecoration(
           gradient: RadialGradient(
@@ -425,6 +449,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ],
           ),
         ),
+      ),
+    ),
       ),
     );
   }

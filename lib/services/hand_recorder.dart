@@ -217,10 +217,12 @@ class HandRecorder {
     final hero = state.hero;
     final net = hero.stack - _heroStartStack;
     final message = state.resultMessage;
-    final winners = <int>[
-      for (final p in state.players)
-        if (message != null && message.contains(p.name)) p.id,
-    ];
+    final winners = state.winnerIds.isNotEmpty
+        ? List<int>.from(state.winnerIds)
+        : <int>[
+            for (final p in state.players)
+              if (message != null && message.contains(p.name)) p.id,
+          ];
     final record = HandEndRecord(
       endedAtMs: _now(),
       boardFlop: _flop,

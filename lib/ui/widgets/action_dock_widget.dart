@@ -1,7 +1,9 @@
 /// Bottom thumb-zone action dock — simple labels, sizing presets.
 library;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
@@ -49,10 +51,20 @@ class _ActionDockWidgetState extends ConsumerState<ActionDockWidget> {
     _raiseAmount = _defaultRaise();
   }
 
+  /// Sensible default "raise to" for the slider / Raise button.
+  ///
+  /// Pot-fraction sizing collapses to the legal min on an unopened preflop
+  /// (blinds-only pot), which teaches a 2× open. Prefer ~2.5× BB there; use
+  /// two-thirds pot once there is a real pot to size against.
   double _defaultRaise() {
     final game = widget.game;
     final range = RaiseRange.forHero(game);
     if (!range.allowed) return range.max;
+    final unopenedPreflop = game.street == Street.preflop &&
+        game.highestBet <= game.bigBlind + Money.epsilon;
+    if (unopenedPreflop) {
+      return range.clamp(game.bigBlind * 2.5);
+    }
     return range.forFraction(
       0.66,
       pot: game.totalPot,
@@ -85,11 +97,35 @@ class _ActionDockWidgetState extends ConsumerState<ActionDockWidget> {
       });
     }
 
-    return Opacity(
-      opacity: canAct ? 1 : 0.45,
-      child: IgnorePointer(
-        ignoring: !canAct,
-        child: Container(
+    void foldOrNoop() {
+      if (!canAct || freeCheck) return;
+      widget.onAction(const PokerAction(type: PokerActionType.fold));
+    }
+
+    void checkOrCall() {
+      if (!canAct) return;
+      widget.onAction(
+        freeCheck
+            ? const PokerAction(type: PokerActionType.check)
+            : PokerAction(type: PokerActionType.call, amount: callAmt),
+      );
+    }
+
+    void betOrRaise() {
+      if (!canAct || !range.allowed) return;
+      widget.onAction(
+        PokerAction(
+          type: range.isAllInOnly
+              ? PokerActionType.allIn
+              : (freeCheck ? PokerActionType.bet : PokerActionType.raise),
+          amount: raiseAmount,
+        ),
+      );
+    }
+
+    // Debug-only keybinds so Simulator / web can be driven without
+    // Accessibility-permission mouse taps (F fold, C call/check, R raise/bet).
+    final dock = Container(
           padding: const EdgeInsets.fromLTRB(14, 12, 14, 10),
           decoration: BoxDecoration(
             color: AppColors.bgMid.withValues(alpha: 0.98),
@@ -160,7 +196,10 @@ class _ActionDockWidgetState extends ConsumerState<ActionDockWidget> {
                     min: range.min,
                     max: range.max,
                     onChanged: canAct
-                        ? (v) => setState(() => _raiseAmount = Money.round(v))
+                        ? (v) => setState(
+                              () => _raiseAmount =
+                                  range.snapToBb(v, game.bigBlind),
+                            )
                         : null,
                   )
                 else
@@ -185,9 +224,7 @@ class _ActionDockWidgetState extends ConsumerState<ActionDockWidget> {
                         color:
                             freeCheck ? AppColors.slateDark : AppColors.danger,
                         enabled: canAct && !freeCheck,
-                        onTap: () => widget.onAction(
-                          const PokerAction(type: PokerActionType.fold),
-                        ),
+                        onTap: foldOrNoop,
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -198,14 +235,7 @@ class _ActionDockWidgetState extends ConsumerState<ActionDockWidget> {
                             : 'Call ${ChipFormat.chips(callAmt, game.bigBlind, chipMode)}',
                         color: AppColors.surfaceMuted,
                         enabled: canAct,
-                        onTap: () => widget.onAction(
-                          freeCheck
-                              ? const PokerAction(type: PokerActionType.check)
-                              : PokerAction(
-                                  type: PokerActionType.call,
-                                  amount: callAmt,
-                                ),
-                        ),
+                        onTap: checkOrCall,
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -217,16 +247,7 @@ class _ActionDockWidgetState extends ConsumerState<ActionDockWidget> {
                         color: AppColors.gold,
                         foreground: AppColors.bgDark,
                         enabled: canAct && range.allowed,
-                        onTap: () => widget.onAction(
-                          PokerAction(
-                            type: range.isAllInOnly
-                                ? PokerActionType.allIn
-                                : (freeCheck
-                                    ? PokerActionType.bet
-                                    : PokerActionType.raise),
-                            amount: raiseAmount,
-                          ),
-                        ),
+                        onTap: betOrRaise,
                       ),
                     ),
                   ],
@@ -234,7 +255,27 @@ class _ActionDockWidgetState extends ConsumerState<ActionDockWidget> {
               ],
             ),
           ),
-        ),
+    );
+
+    final focusedDock = !kDebugMode
+        ? dock
+        : Focus(
+            autofocus: true,
+            child: CallbackShortcuts(
+              bindings: {
+                const SingleActivator(LogicalKeyboardKey.keyF): foldOrNoop,
+                const SingleActivator(LogicalKeyboardKey.keyC): checkOrCall,
+                const SingleActivator(LogicalKeyboardKey.keyR): betOrRaise,
+              },
+              child: dock,
+            ),
+          );
+
+    return Opacity(
+      opacity: canAct ? 1 : 0.45,
+      child: IgnorePointer(
+        ignoring: !canAct,
+        child: focusedDock,
       ),
     );
   }

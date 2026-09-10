@@ -10,14 +10,18 @@ import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 
 /// Fixed seat footprints so the felt can guarantee seats never overflow their
 /// band and cover the hero rail or coach shelf.
+///
+/// The box reserves room for the committed-chips pill whether or not the
+/// villain has bet, so seat geometry — and therefore every collision check on
+/// the felt — is identical on all streets.
 class SeatMetrics {
   const SeatMetrics._();
 
   /// Seat box at 7–9 seats or on a narrow phone.
-  static const Size compact = Size(78, 84);
+  static const Size compact = Size(78, 100);
 
   /// Seat box at 2–6 seats.
-  static const Size regular = Size(96, 96);
+  static const Size regular = Size(96, 114);
 
   /// Box for [compactLayout].
   static Size of({required bool compactLayout}) =>
@@ -39,8 +43,11 @@ class PlayerSeatWidget extends StatelessWidget {
     required this.isDealer,
     this.isSmallBlind = false,
     this.isBigBlind = false,
+    this.isWinner = false,
     this.compact = false,
     this.showCards = false,
+    this.betLabel,
+    this.size,
   });
 
   final PlayerModel player;
@@ -50,12 +57,26 @@ class PlayerSeatWidget extends StatelessWidget {
   final bool isDealer;
   final bool isSmallBlind;
   final bool isBigBlind;
+  final bool isWinner;
   final bool compact;
   final bool showCards;
 
+  /// Chips this villain has committed on the current street, if any.
+  ///
+  /// Docked to the seat rather than floated toward the pot: on a phone there
+  /// is no lane between a side seat and the board wide enough for a pill, so a
+  /// floating chip inevitably lands on somebody's archetype tag or the board.
+  final String? betLabel;
+
+  /// Footprint to render into, defaulting to [SeatMetrics.of].
+  ///
+  /// The felt shrinks this below the natural box on crowded tables; the HUD
+  /// scales its contents down to match rather than spilling onto a neighbour.
+  final Size? size;
+
   @override
   Widget build(BuildContext context) {
-    final size = SeatMetrics.of(compactLayout: compact);
+    final size = this.size ?? SeatMetrics.of(compactLayout: compact);
     final archetype = player.archetype;
     final accent = archetype.color;
     final dim = player.folded;
@@ -84,6 +105,7 @@ class PlayerSeatWidget extends StatelessWidget {
                       player: player,
                       accent: accent,
                       isActive: isActive,
+                      isWinner: isWinner,
                       compact: compact,
                     ),
                     if (isDealer)
@@ -117,6 +139,15 @@ class PlayerSeatWidget extends StatelessWidget {
                     color: AppColors.goldMuted,
                   ),
                 ),
+                SizedBox(height: betLabel == null ? 0 : 3),
+                if (betLabel != null)
+                  // A four-figure bet is wider than a nine-handed seat; shrink
+                  // the pill rather than truncate the amount or overflow onto
+                  // the neighbour.
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: _BetPill(label: betLabel!, compact: compact),
+                  ),
                 if (showCards && player.holeCards.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 2),
@@ -143,23 +174,78 @@ class PlayerSeatWidget extends StatelessWidget {
   }
 }
 
+/// Committed chips for the current street, docked under the seat's stack.
+class _BetPill extends StatelessWidget {
+  const _BetPill({required this.label, required this.compact});
+
+  final String label;
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: compact ? 5 : 6, vertical: 1),
+      decoration: BoxDecoration(
+        color: AppColors.bgDark.withValues(alpha: 0.94),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: AppColors.gold.withValues(alpha: 0.85),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 6,
+            height: 6,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.gold,
+            ),
+          ),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            maxLines: 1,
+            softWrap: false,
+            style: GoogleFonts.jetBrainsMono(
+              fontSize: compact ? 9 : 10,
+              fontWeight: FontWeight.w800,
+              color: AppColors.cream,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// Archetype pill: colored ring, archetype word, name, and VPIP/PFR.
 class _ArchetypeCard extends StatelessWidget {
   const _ArchetypeCard({
     required this.player,
     required this.accent,
     required this.isActive,
+    required this.isWinner,
     required this.compact,
   });
 
   final PlayerModel player;
   final Color accent;
   final bool isActive;
+  final bool isWinner;
   final bool compact;
 
   @override
   Widget build(BuildContext context) {
     final archetype = player.archetype;
+    final highlight = isWinner || isActive;
+    final ring = isWinner
+        ? AppColors.goldBright
+        : isActive
+            ? AppColors.goldBright
+            : accent.withValues(alpha: 0.9);
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeOutCubic,
@@ -171,19 +257,19 @@ class _ArchetypeCard extends StatelessWidget {
         color: AppColors.bgDark.withValues(alpha: 0.88),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color:
-              isActive ? AppColors.goldBright : accent.withValues(alpha: 0.9),
-          width: isActive ? 2 : 1.2,
+          color: ring,
+          width: highlight ? 2 : 1.2,
         ),
-        boxShadow:
-            isActive
-                ? [
-                  BoxShadow(
-                    color: AppColors.goldBright.withValues(alpha: 0.28),
-                    blurRadius: 10,
+        boxShadow: highlight
+            ? [
+                BoxShadow(
+                  color: AppColors.goldBright.withValues(
+                    alpha: isWinner ? 0.42 : 0.28,
                   ),
-                ]
-                : null,
+                  blurRadius: isWinner ? 14 : 10,
+                ),
+              ]
+            : null,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
