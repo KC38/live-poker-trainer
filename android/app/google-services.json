@@ -1,23 +1,53 @@
 {
   "project_info": {
-    "project_number": "000000000000",
-    "project_id": "live-poker-trainer-placeholder",
-    "storage_bucket": "live-poker-trainer-placeholder.firebasestorage.app"
+    "project_number": "584262608034",
+    "project_id": "live-poker-trainer",
+    "storage_bucket": "live-poker-trainer.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:000000000000:android:0000000000000000000000",
+        "mobilesdk_app_id": "1:584262608034:android:66dd75d06f90534b2a23fb",
         "android_client_info": {
           "package_name": "com.pokerlab.live_poker_trainer"
         }
       },
-      "api_key": [
+      "oauth_client": [
         {
-          "current_key": "placeholder-api-key"
+          "client_id": "584262608034-oec1n24ijsog7s1usefmfpadm1oiaqn4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pokerlab.live_poker_trainer",
+            "certificate_hash": "805356adbb1cf7a48bbcd28ad86589f4073047ef"
+          }
+        },
+        {
+          "client_id": "584262608034-0ev32dvo4qtm4h7hg31tsih29pmq7rmq.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
-      "services": {}
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpb9UiqCq7nH5yr2_JBrotLkwQyBuDkS8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "584262608034-0ev32dvo4qtm4h7hg31tsih29pmq7rmq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "584262608034-jvn5mn90618rlf14dknnu84h3u2i8ukh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.pokerlab.livePokerTrainer"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
