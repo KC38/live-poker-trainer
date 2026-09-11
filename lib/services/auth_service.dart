@@ -45,6 +45,7 @@ class AuthService {
     required String password,
     String? displayName,
   }) async {
+    debugPrint('[auth_service] registerWithEmail: ${email.trim()}');
     final cred = await _auth.createUserWithEmailAndPassword(
       email: email.trim(),
       password: password,
@@ -56,6 +57,7 @@ class AuthService {
         message: 'Registration succeeded but no user was returned.',
       );
     }
+    debugPrint('[auth_service] registered uid=${user.uid}');
     final name = displayName?.trim();
     if (name != null && name.isNotEmpty) {
       await user.updateDisplayName(name);
@@ -69,6 +71,7 @@ class AuthService {
     required String email,
     required String password,
   }) async {
+    debugPrint('[auth_service] signInWithEmail: ${email.trim()}');
     final cred = await _auth.signInWithEmailAndPassword(
       email: email.trim(),
       password: password,
@@ -80,6 +83,7 @@ class AuthService {
         message: 'Sign-in succeeded but no user was returned.',
       );
     }
+    debugPrint('[auth_service] signIn uid=${user.uid}');
     return user;
   }
 
@@ -88,13 +92,18 @@ class AuthService {
   /// Android requires the app SHA-1 in the Firebase console; without it this
   /// fails at runtime (documented blocker).
   Future<User> signInWithGoogle() async {
+    debugPrint('[auth_service] signInWithGoogle — initialising…');
     await _ensureGoogleInitialized();
+    debugPrint('[auth_service] calling authenticate()');
     final account = await _google.authenticate();
+    debugPrint('[auth_service] got account ${account.email}');
     final idToken = account.authentication.idToken;
     if (idToken == null || idToken.isEmpty) {
       throw FirebaseAuthException(
         code: 'missing-id-token',
-        message: 'Google Sign-In did not return an ID token.',
+        message: 'Google Sign-In did not return an ID token. '
+            'Ensure the debug/release SHA-1 fingerprint is registered '
+            'in Firebase Console → Project settings → Android app.',
       );
     }
     final credential = GoogleAuthProvider.credential(idToken: idToken);
@@ -106,17 +115,30 @@ class AuthService {
         message: 'Google sign-in succeeded but no user was returned.',
       );
     }
+    debugPrint('[auth_service] Google signIn uid=${user.uid}');
     return user;
   }
 
-  /// Signs out of Firebase and Google (best-effort).
+  /// Signs out of Firebase and Google, clearing all silent credentials.
+  ///
+  /// [disconnect] revokes the app's access so the next Google sign-in starts
+  /// fresh (no snap-back to the previous account).
   Future<void> signOut() async {
+    debugPrint('[auth_service] signOut — clearing Google + Firebase');
     try {
       await _ensureGoogleInitialized();
       await _google.signOut();
+      // Revoke authorization so the next sign-in doesn't silently restore
+      // the previous Google account.
+      try {
+        await _google.disconnect();
+      } catch (_) {
+        // disconnect() may throw if there was no active session.
+      }
     } catch (_) {
       // Google may not have been used this session.
     }
     await _auth.signOut();
+    debugPrint('[auth_service] signOut complete');
   }
 }

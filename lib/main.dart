@@ -34,8 +34,10 @@ Future<void> main() async {
       persistenceEnabled: true,
     );
     firebaseAvailable = true;
-  } catch (e) {
-    debugPrint('[firebase] init failed — running in guest-only mode: $e');
+    debugPrint('[firebase] init OK — project: '
+        '${DefaultFirebaseOptions.currentPlatform.projectId}');
+  } catch (e, st) {
+    debugPrint('[firebase] init failed — running in guest-only mode: $e\n$st');
     firebaseAvailable = false;
   }
   await _loadEnv();

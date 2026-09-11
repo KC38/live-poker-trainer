@@ -76,6 +76,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   }
 
   String _friendlyError(Object error) {
+    debugPrint('[auth_screen] error: $error');
     if (error is FirebaseAuthException) {
       return switch (error.code) {
         'email-already-in-use' => 'That email already has an account.',
@@ -85,7 +86,14 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
           'Email or password is incorrect.',
         'network-request-failed' => 'Network error — check your connection.',
         'missing-id-token' =>
-          'Google Sign-In could not get an ID token. On Android, add the app SHA-1 in the Firebase console.',
+          'Google Sign-In could not get an ID token. '
+              'On Android, add the app SHA-1 in the Firebase console.',
+        'operation-not-allowed' =>
+          'This sign-in method is not enabled. '
+              'Ask the project owner to enable Email/Password in Firebase Console → Authentication → Sign-in method.',
+        'too-many-requests' =>
+          'Too many attempts — wait a moment and try again.',
+        'user-disabled' => 'This account has been disabled.',
         _ => error.message ?? 'Sign-in failed (${error.code}).',
       };
     }
@@ -93,9 +101,10 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
       if (error.code == GoogleSignInExceptionCode.canceled) {
         return 'Google Sign-In was cancelled.';
       }
-      return 'Google Sign-In failed. On Android, confirm the SHA-1 is registered in Firebase.';
+      return 'Google Sign-In failed (${error.code}). '
+          'On Android, confirm the SHA-1 is registered in Firebase.';
     }
-    return 'Something went wrong. Try again.';
+    return 'Something went wrong ($error). Try again.';
   }
 
   @override
