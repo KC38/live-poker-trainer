@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/main.dart' show firebaseAvailable;
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 
 /// Signed-out landing: create account or sign in.
@@ -140,6 +141,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                         'Exploitative\nPoker Lab',
                         style: Theme.of(context).textTheme.displayMedium,
                       ),
+
                       const SizedBox(height: 10),
                       Text(
                         _registerMode
@@ -151,110 +153,154 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                           height: 1.4,
                         ),
                       ),
-                      const SizedBox(height: 28),
-                      if (_registerMode) ...[
-                        TextFormField(
-                          controller: _displayName,
-                          textInputAction: TextInputAction.next,
-                          textCapitalization: TextCapitalization.words,
-                          decoration: const InputDecoration(
-                            labelText: 'Display name (optional)',
+                      if (!firebaseAvailable) ...[
+                        const SizedBox(height: 16),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 10,
                           ),
-                        ),
-                        const SizedBox(height: 12),
-                      ],
-                      TextFormField(
-                        controller: _email,
-                        keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.next,
-                        autofillHints: const [AutofillHints.email],
-                        decoration: const InputDecoration(
-                          labelText: 'Email',
-                        ),
-                        validator: (v) {
-                          final value = v?.trim() ?? '';
-                          if (value.isEmpty || !value.contains('@')) {
-                            return 'Enter a valid email';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 12),
-                      TextFormField(
-                        controller: _password,
-                        obscureText: _obscure,
-                        textInputAction: TextInputAction.done,
-                        autofillHints: _registerMode
-                            ? const [AutofillHints.newPassword]
-                            : const [AutofillHints.password],
-                        onFieldSubmitted: (_) => _busy ? null : _submitEmail(),
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          suffixIcon: IconButton(
-                            tooltip: _obscure ? 'Show' : 'Hide',
-                            onPressed: () =>
-                                setState(() => _obscure = !_obscure),
-                            icon: Icon(
-                              _obscure
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined,
-                              color: AppColors.slate,
+                          decoration: BoxDecoration(
+                            color: AppColors.gold.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: AppColors.gold.withValues(alpha: 0.3),
+                            ),
+                          ),
+                          child: Text(
+                            'Firebase is not configured — sign-in is unavailable. '
+                            'Continue as guest to train offline.',
+                            style: GoogleFonts.manrope(
+                              color: AppColors.gold,
+                              fontSize: 13,
+                              height: 1.35,
                             ),
                           ),
                         ),
-                        validator: (v) {
-                          final value = v ?? '';
-                          if (value.length < 6) {
-                            return 'At least 6 characters';
-                          }
-                          return null;
-                        },
+                      ],
+                      const SizedBox(height: 28),
+                      if (firebaseAvailable) ...[
+                        if (_registerMode) ...[
+                          TextFormField(
+                            controller: _displayName,
+                            textInputAction: TextInputAction.next,
+                            textCapitalization: TextCapitalization.words,
+                            decoration: const InputDecoration(
+                              labelText: 'Display name (optional)',
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                        ],
+                        TextFormField(
+                          controller: _email,
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          autofillHints: const [AutofillHints.email],
+                          decoration: const InputDecoration(
+                            labelText: 'Email',
+                          ),
+                          validator: (v) {
+                            final value = v?.trim() ?? '';
+                            if (value.isEmpty || !value.contains('@')) {
+                              return 'Enter a valid email';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 12),
+                        TextFormField(
+                          controller: _password,
+                          obscureText: _obscure,
+                          textInputAction: TextInputAction.done,
+                          autofillHints: _registerMode
+                              ? const [AutofillHints.newPassword]
+                              : const [AutofillHints.password],
+                          onFieldSubmitted: (_) =>
+                              _busy ? null : _submitEmail(),
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            suffixIcon: IconButton(
+                              tooltip: _obscure ? 'Show' : 'Hide',
+                              onPressed: () =>
+                                  setState(() => _obscure = !_obscure),
+                              icon: Icon(
+                                _obscure
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
+                                color: AppColors.slate,
+                              ),
+                            ),
+                          ),
+                          validator: (v) {
+                            final value = v ?? '';
+                            if (value.length < 6) {
+                              return 'At least 6 characters';
+                            }
+                            return null;
+                          },
+                        ),
+                        if (_error != null) ...[
+                          const SizedBox(height: 14),
+                          Text(
+                            _error!,
+                            style: GoogleFonts.manrope(
+                              color: AppColors.danger,
+                              fontSize: 13,
+                              height: 1.35,
+                            ),
+                          ),
+                        ],
+                        const SizedBox(height: 22),
+                        ElevatedButton(
+                          onPressed: _busy ? null : _submitEmail,
+                          child: _busy
+                              ? const SizedBox(
+                                  width: 22,
+                                  height: 22,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.4,
+                                    color: AppColors.bgDark,
+                                  ),
+                                )
+                              : Text(
+                                  _registerMode
+                                      ? 'Create account'
+                                      : 'Sign in',
+                                ),
+                        ),
+                        const SizedBox(height: 12),
+                        OutlinedButton.icon(
+                          onPressed: _busy ? null : _submitGoogle,
+                          icon: const Icon(Icons.g_mobiledata, size: 28),
+                          label: const Text('Continue with Google'),
+                        ),
+                        const SizedBox(height: 12),
+                      ],
+                      OutlinedButton.icon(
+                        onPressed: _busy
+                            ? null
+                            : () => ref
+                                .read(authControllerProvider.notifier)
+                                .enterGuestMode(),
+                        icon: const Icon(Icons.person_outline, size: 24),
+                        label: const Text('Continue as guest'),
                       ),
-                      if (_error != null) ...[
-                        const SizedBox(height: 14),
-                        Text(
-                          _error!,
-                          style: GoogleFonts.manrope(
-                            color: AppColors.danger,
-                            fontSize: 13,
-                            height: 1.35,
+                      if (firebaseAvailable) ...[
+                        const SizedBox(height: 18),
+                        TextButton(
+                          onPressed: _busy
+                              ? null
+                              : () => setState(() {
+                                    _registerMode = !_registerMode;
+                                    _error = null;
+                                  }),
+                          child: Text(
+                            _registerMode
+                                ? 'Already have an account? Sign in'
+                                : 'Need an account? Register',
                           ),
                         ),
                       ],
-                      const SizedBox(height: 22),
-                      ElevatedButton(
-                        onPressed: _busy ? null : _submitEmail,
-                        child: _busy
-                            ? const SizedBox(
-                                width: 22,
-                                height: 22,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.4,
-                                  color: AppColors.bgDark,
-                                ),
-                              )
-                            : Text(_registerMode ? 'Create account' : 'Sign in'),
-                      ),
-                      const SizedBox(height: 12),
-                      OutlinedButton.icon(
-                        onPressed: _busy ? null : _submitGoogle,
-                        icon: const Icon(Icons.g_mobiledata, size: 28),
-                        label: const Text('Continue with Google'),
-                      ),
-                      const SizedBox(height: 18),
-                      TextButton(
-                        onPressed: _busy
-                            ? null
-                            : () => setState(() {
-                                  _registerMode = !_registerMode;
-                                  _error = null;
-                                }),
-                        child: Text(
-                          _registerMode
-                              ? 'Already have an account? Sign in'
-                              : 'Need an account? Register',
-                        ),
-                      ),
                     ],
                   ),
                 ),
