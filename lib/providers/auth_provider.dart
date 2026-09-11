@@ -5,16 +5,28 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_poker_trainer/main.dart' show firebaseAvailable;
 import 'package:live_poker_trainer/models/user_document.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
 import 'package:live_poker_trainer/services/auth_service.dart';
 
+/// Whether the session is running in guest (offline) mode.
+///
+/// Flipped to `true` by the auth screen's "Continue as guest" CTA and reset
+/// on explicit sign-out. When `true`, [authStateProvider] / [authUidProvider]
+/// are ignored and the app navigates straight to HomeScreen.
+final guestModeProvider = StateProvider<bool>((ref) => false);
+
 /// Shared [AuthService] singleton.
 final authServiceProvider = Provider<AuthService>((ref) => AuthService());
 
 /// Firebase auth state stream (`null` when signed out).
+///
+/// Emits a single `null` immediately when Firebase failed to initialise,
+/// so downstream listeners never stall.
 final authStateProvider = StreamProvider<User?>((ref) {
+  if (!firebaseAvailable) return Stream.value(null);
   return ref.watch(authServiceProvider).authStateChanges;
 });
 
@@ -27,7 +39,12 @@ final authUidProvider = Provider<String?>((ref) {
 });
 
 /// Ensures `users/{uid}` exists and hydrates synced settings after sign-in.
+///
+/// Returns `null` immediately when Firebase is unavailable or guest mode is
+/// active — all Firestore-dependent syncing is skipped.
 final userDocProvider = FutureProvider<UserDocument?>((ref) async {
+  if (!firebaseAvailable || ref.watch(guestModeProvider)) return null;
+
   final user = await ref.watch(authStateProvider.future);
   if (user == null) return null;
 
@@ -103,17 +120,23 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
     return _run(_auth.signInWithGoogle);
   }
 
-  /// Signs out; clears the user doc cache.
+  /// Signs out; clears the user doc cache and exits guest mode.
   Future<void> signOut() async {
     state = const AsyncValue.loading();
     try {
-      await _auth.signOut();
+      _ref.read(guestModeProvider.notifier).state = false;
+      if (firebaseAvailable) await _auth.signOut();
       _ref.invalidate(userDocProvider);
       state = const AsyncValue.data(null);
     } catch (e, st) {
       state = AsyncValue.error(e, st);
       rethrow;
     }
+  }
+
+  /// Enters guest / offline mode (no Firebase required).
+  void enterGuestMode() {
+    _ref.read(guestModeProvider.notifier).state = true;
   }
 }
 

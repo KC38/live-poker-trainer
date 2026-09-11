@@ -18,19 +18,30 @@ import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/screens/home_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 
+/// Whether Firebase initialised successfully on this launch.
+///
+/// When false, auth and Firestore are unavailable — the app falls back to
+/// guest / offline mode and all Firestore writes become no-ops.
+bool firebaseAvailable = false;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  // Offline cache for user prefs/stats and (later) scenario pool reads.
-  FirebaseFirestore.instance.settings = const Settings(
-    persistenceEnabled: true,
-  );
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    FirebaseFirestore.instance.settings = const Settings(
+      persistenceEnabled: true,
+    );
+    firebaseAvailable = true;
+  } catch (e) {
+    debugPrint('[firebase] init failed — running in guest-only mode: $e');
+    firebaseAvailable = false;
+  }
   await _loadEnv();
   AgentCommands.install();
   assert(() {
-    // Source only — keys themselves are never logged.
+    debugPrint('[config] firebase available: $firebaseAvailable');
     debugPrint('[config] anthropic key source: ${Config.anthropicKeySource}');
     debugPrint('[config] gemini key source: ${Config.geminiKeySource}');
     return true;
@@ -80,6 +91,7 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
 
   @override
   Widget build(BuildContext context) {
+    final guest = ref.watch(guestModeProvider);
     final auth = ref.watch(authStateProvider);
     // Ensure users/{uid} exists and prefs hydrate after sign-in / cold start.
     ref.watch(userDocProvider);
@@ -97,12 +109,14 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
       title: 'Exploitative Poker Lab',
       debugShowCheckedModeBanner: false,
       theme: buildPokerTheme(),
-      home: auth.when(
-        data: (user) =>
-            user == null ? const AuthScreen() : const HomeScreen(),
-        loading: () => const _AuthLoadingScreen(),
-        error: (_, _) => const AuthScreen(),
-      ),
+      home: guest
+          ? const HomeScreen()
+          : auth.when(
+              data: (user) =>
+                  user == null ? const AuthScreen() : const HomeScreen(),
+              loading: () => const _AuthLoadingScreen(),
+              error: (_, _) => const AuthScreen(),
+            ),
     );
   }
 }
