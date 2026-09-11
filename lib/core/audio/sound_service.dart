@@ -115,20 +115,22 @@ class SoundService {
   /// Fades out and pauses the Home loop (e.g. entering Training).
   Future<void> pauseHomeBgm() async {
     _bgmWanted = false;
-    if (_bgm == null || !_bgmPlaying) return;
+    final bgm = _bgm;
+    if (bgm == null || !_bgmPlaying) return;
     try {
       await _fadeBgmTo(0);
-      await _bgm?.pause();
+      await bgm.pause();
     } catch (_) {}
   }
 
   /// Resumes the Home loop after returning from Training, if still wanted.
   Future<void> resumeHomeBgm() async {
     _bgmWanted = true;
-    if (_bgm == null || !musicEnabled || !_unlocked) return;
+    final bgm = _bgm;
+    if (bgm == null || !musicEnabled || !_unlocked) return;
     if (_bgmPlaying) {
       try {
-        await _bgm?.resume();
+        await bgm.resume();
         await _fadeBgmTo(_bgmBaseVolume);
       } catch (_) {}
       return;
@@ -197,6 +199,29 @@ class SoundService {
 
   /// Backwards-compatible alias for the card-deal SFX.
   Future<void> card() => deal();
+
+  /// Pauses BGM when the app is backgrounded, without changing [_bgmWanted].
+  ///
+  /// Call from [AppLifecycleState.paused] / [AppLifecycleState.inactive].
+  Future<void> handleAppLifecyclePause() async {
+    final bgm = _bgm;
+    if (bgm == null || !_bgmPlaying) return;
+    try {
+      await bgm.pause();
+    } catch (_) {}
+  }
+
+  /// Resumes BGM when the app returns to the foreground, only if the loop was
+  /// wanted and music is still enabled.
+  ///
+  /// Call from [AppLifecycleState.resumed].
+  Future<void> handleAppLifecycleResume() async {
+    final bgm = _bgm;
+    if (bgm == null || !_bgmWanted || !musicEnabled || !_bgmPlaying) return;
+    try {
+      await bgm.resume();
+    } catch (_) {}
+  }
 
   /// Releases players.
   Future<void> dispose() async {

@@ -4,9 +4,11 @@ library;
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/main.dart' show firebaseAvailable;
 import 'package:live_poker_trainer/models/user_document.dart';
+import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
 import 'package:live_poker_trainer/services/auth_service.dart';
@@ -72,19 +74,27 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
 
   AuthService get _auth => _ref.read(authServiceProvider);
 
+  /// Runs [action] (an auth call) and then best-effort creates the Firestore
+  /// user doc.  Firestore failures are logged but never surface to the caller
+  /// — the auth state change is what matters.
   Future<void> _run(Future<User> Function() action) async {
     state = const AsyncValue.loading();
     try {
       final user = await action();
-      await _ref.read(userRepositoryProvider).ensureUserDoc(
-            uid: user.uid,
-            displayName: user.displayName,
-            preferences: _ref.read(settingsProvider),
-          );
-      // Refresh providers that key off the signed-in user.
+      // Best-effort Firestore profile write — never let it break login.
+      try {
+        await _ref.read(userRepositoryProvider).ensureUserDoc(
+              uid: user.uid,
+              displayName: user.displayName,
+              preferences: _ref.read(settingsProvider),
+            );
+      } catch (e) {
+        debugPrint('[auth] ensureUserDoc failed (non-fatal): $e');
+      }
       _ref.invalidate(userDocProvider);
       state = const AsyncValue.data(null);
     } catch (e, st) {
+      debugPrint('[auth] sign-in/register failed: $e');
       state = AsyncValue.error(e, st);
       rethrow;
     }
@@ -120,18 +130,26 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
     return _run(_auth.signInWithGoogle);
   }
 
-  /// Signs out; clears the user doc cache and exits guest mode.
+  /// Signs out of Firebase + Google, clears all user-scoped caches, and
+  /// resets guest mode so the next login is a completely fresh session.
   Future<void> signOut() async {
     state = const AsyncValue.loading();
     try {
       _ref.read(guestModeProvider.notifier).state = false;
       if (firebaseAvailable) await _auth.signOut();
-      _ref.invalidate(userDocProvider);
+      _invalidateUserState();
       state = const AsyncValue.data(null);
     } catch (e, st) {
+      debugPrint('[auth] signOut failed: $e');
       state = AsyncValue.error(e, st);
       rethrow;
     }
+  }
+
+  /// Invalidates every Riverpod provider that caches user-specific data.
+  void _invalidateUserState() {
+    _ref.invalidate(userDocProvider);
+    _ref.invalidate(heroProfileControllerProvider);
   }
 
   /// Enters guest / offline mode (no Firebase required).

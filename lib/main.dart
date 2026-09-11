@@ -34,8 +34,10 @@ Future<void> main() async {
       persistenceEnabled: true,
     );
     firebaseAvailable = true;
-  } catch (e) {
-    debugPrint('[firebase] init failed — running in guest-only mode: $e');
+    debugPrint('[firebase] init OK — project: '
+        '${DefaultFirebaseOptions.currentPlatform.projectId}');
+  } catch (e, st) {
+    debugPrint('[firebase] init failed — running in guest-only mode: $e\n$st');
     firebaseAvailable = false;
   }
   await _loadEnv();
@@ -81,12 +83,35 @@ class PokerLabApp extends ConsumerStatefulWidget {
   ConsumerState<PokerLabApp> createState() => _PokerLabAppState();
 }
 
-class _PokerLabAppState extends ConsumerState<PokerLabApp> {
+class _PokerLabAppState extends ConsumerState<PokerLabApp>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     // Fire-and-forget: startup never waits on SQLite.
     Future<void>.microtask(() => ref.read(appSessionServiceProvider).start());
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final sound = ref.read(soundServiceProvider);
+    switch (state) {
+      case AppLifecycleState.paused:
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.detached:
+        sound.handleAppLifecyclePause();
+      case AppLifecycleState.resumed:
+        sound.handleAppLifecycleResume();
+      case AppLifecycleState.hidden:
+        break;
+    }
   }
 
   @override
