@@ -1,0 +1,27 @@
+---
+description: Ship bug fixes/features via branch, PR review/merge, cleanup, and simulator refresh (not direct pushes to main)
+alwaysApply: true
+---
+
+# Ship changes on a branch
+
+For **bug fixes** and **new features**, follow `.cursor/skills/ship-change/SKILL.md` (or `/ship-change`).
+
+## Required flow
+
+1. Create/use a feature branch from up-to-date `main` (`fix/…`, `feat/…`, etc.).
+2. Implement, then commit on that branch (never commit the ship directly on `main`).
+3. Review the diff; fix critical issues.
+4. Push, open a GitHub PR, squash-merge into `main`, delete the feature branch.
+5. Checkout/pull `main`, prune local branch.
+6. Refresh the Flutter simulator if one is running/available (skill script).
+
+## Do not
+
+- Push feature work straight to `main` with `git push origin HEAD:main`.
+- Force-push `main`, skip hooks, or stage secrets (see skill).
+
+## Exceptions
+
+- Docs-only / chore the user explicitly wants on `main`: still prefer the skill unless they say otherwise.
+- User says “commit only” / “don’t PR”: stop after the commit on the feature branch.
