@@ -1,0 +1,62 @@
+// File generated for the Cloud Agent development environment.
+//
+// This mirrors the output of `flutterfire configure` for the
+// `live-poker-trainer` Firebase project. The non-secret client identifiers
+// come from `firebase.json`; the browser/API keys are injected at bootstrap
+// time from the environment (see `.cursor/bootstrap.sh`). When a real key is
+// not provided the placeholder still lets the app compile, boot, and render —
+// only live Firebase Auth/Firestore network calls degrade.
+//
+// ignore_for_file: type=lint
+import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, kIsWeb, TargetPlatform;
+
+/// Default [FirebaseOptions] for use with your Firebase apps.
+class DefaultFirebaseOptions {
+  /// Returns the [FirebaseOptions] for the current platform.
+  static FirebaseOptions get currentPlatform {
+    if (kIsWeb) {
+      return web;
+    }
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return android;
+      case TargetPlatform.iOS:
+        return ios;
+      case TargetPlatform.macOS:
+        return ios;
+      default:
+        return web;
+    }
+  }
+
+  /// Web platform options.
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: '__WEB_API_KEY__',
+    appId: '1:584262608034:web:a70f70ff1309110b2a23fb',
+    messagingSenderId: '584262608034',
+    projectId: 'live-poker-trainer',
+    authDomain: 'live-poker-trainer.firebaseapp.com',
+    storageBucket: 'live-poker-trainer.firebasestorage.app',
+  );
+
+  /// Android platform options.
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: '__ANDROID_API_KEY__',
+    appId: '1:584262608034:android:66dd75d06f90534b2a23fb',
+    messagingSenderId: '584262608034',
+    projectId: 'live-poker-trainer',
+    storageBucket: 'live-poker-trainer.firebasestorage.app',
+  );
+
+  /// iOS platform options.
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: '__IOS_API_KEY__',
+    appId: '1:584262608034:ios:c7c61ae4b74ea7ce2a23fb',
+    messagingSenderId: '584262608034',
+    projectId: 'live-poker-trainer',
+    storageBucket: 'live-poker-trainer.firebasestorage.app',
+    iosBundleId: 'com.livepokertrainer.app',
+  );
+}
