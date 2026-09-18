@@ -93,7 +93,11 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
       ref.invalidate(heroProfileControllerProvider);
     });
 
+    // Key on uid so sign-out/in rebuilds MaterialApp and clears pushed routes
+    // (e.g. Settings) that would otherwise stay on top of the new home.
+    final uid = auth.asData?.value?.uid;
     return MaterialApp(
+      key: ValueKey(uid ?? 'signed-out'),
       title: 'Exploitative Poker Lab',
       debugShowCheckedModeBanner: false,
       theme: buildPokerTheme(),
