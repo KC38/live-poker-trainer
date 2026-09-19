@@ -110,6 +110,7 @@ describe("fetchSituationForUser async refill", () => {
         setupKey: payload.setupKey,
         payload,
         neverServedRemaining: 1,
+        reusedPrepared: false,
       }),
       queueRefill,
     });
@@ -118,6 +119,37 @@ describe("fetchSituationForUser async refill", () => {
     expect(result.refillTriggered).toBe(true);
     expect(queueRefill).toHaveBeenCalledWith(
       expect.objectContaining({reason: "low-water"}),
+    );
+  });
+
+  it("serves a reused prepared hand and queues exhausted refill", async () => {
+    const queueRefill = vi.fn().mockResolvedValue(true);
+    const payload = minimalFoldSituation();
+    const result = await fetchSituationForUser({
+      uid: "user-1",
+      rawSetup: setup,
+      db: fakeDb,
+      readSetupState: vi.fn().mockResolvedValue({
+        exists: true,
+        situationCount: 5,
+        generationStatus: "idle",
+      }),
+      enforceLimits: vi.fn().mockResolvedValue(undefined),
+      ensureSetup: vi.fn().mockResolvedValue(undefined),
+      allocate: vi.fn().mockResolvedValue({
+        situationId: "replay-1",
+        setupKey: payload.setupKey,
+        payload,
+        neverServedRemaining: 4,
+        reusedPrepared: true,
+      }),
+      queueRefill,
+    });
+
+    expect(result.situationId).toBe("replay-1");
+    expect(result.refillTriggered).toBe(true);
+    expect(queueRefill).toHaveBeenCalledWith(
+      expect.objectContaining({reason: "exhausted"}),
     );
   });
 

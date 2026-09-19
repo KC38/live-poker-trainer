@@ -35,8 +35,12 @@ flowchart LR
   seat, and button seat.
 
 Allocation and the per-user receipt are written atomically. The receipt is
-created when content is delivered, not when a hand finishes, so the server
-never intentionally serves that situation to that user again.
+created when content is first delivered. Each fetch prefers situations the
+caller has never received. When every prepared situation already has a
+receipt, the least-served prepared hand is re-served immediately so the
+client does not wait on generation; completed receipts stay completed so
+replay does not double-count progress. A refill is still queued so new
+hands keep arriving.
 
 New or exhausted pools are marked `queued`; `fetchSituation` returns an
 `unavailable` preparation response instead of waiting on Gemini. The Flutter

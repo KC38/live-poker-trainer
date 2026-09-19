@@ -44,10 +44,11 @@ function requireApiKey(): string {
 }
 
 /**
- * Returns exactly one unseen branching situation for the caller's table setup.
+ * Returns one branching situation for the caller's table setup.
  *
- * Creates a receipt atomically so abandoned hands are never re-served.
- * Queues an asynchronous pool refill when inventory is empty or low.
+ * Prefers situations the caller has never received. When the pool is prepared
+ * but unseen inventory is exhausted, re-serves a prepared hand so training
+ * does not wait on generation, and queues a refill for new content.
  */
 export const fetchSituation = onCall(
   {
