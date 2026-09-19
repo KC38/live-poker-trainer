@@ -132,6 +132,49 @@ describe("live poker engine", () => {
       .toBe(299);
   });
 
+  test("all-in label is the chips left, not the raise-to total", () => {
+    const definition = hand([280, 400]);
+    const state: LiveHandState = {
+      street: "preflop",
+      board: [],
+      players: [
+        {
+          seat: 0,
+          stack: 279,
+          streetBet: 1,
+          contribution: 1,
+          folded: false,
+          allIn: false,
+          acted: false,
+          lastFacedBet: 0,
+        },
+        {
+          seat: 1,
+          stack: 392,
+          streetBet: 8,
+          contribution: 8,
+          folded: false,
+          allIn: false,
+          acted: true,
+          lastFacedBet: 2,
+        },
+      ],
+      actorSeat: 0,
+      highestBet: 8,
+      minRaiseIncrement: 6,
+      actionNumber: 3,
+      status: "playing",
+      winnerSeats: [],
+      pots: [],
+      payouts: {},
+    };
+
+    const allIn = legalLiveActions(definition, state)
+      .find((candidate) => candidate.kind === "ALL_IN");
+    expect(allIn?.label).toBe("All-in $279");
+    expect(allIn?.amountTo).toBe(280);
+  });
+
   test("an incomplete all-in does not reopen raising", () => {
     const definition = hand([400, 7, 400]);
     let state = createInitialLiveState(definition);

@@ -162,7 +162,12 @@ export function legalLiveActions(
     ));
   }
   if (maxTo > state.highestBet) {
-    actions.push(action("ALL_IN", "ALL_IN", maxTo, `All-in ${format(maxTo)}`));
+    actions.push(action(
+      "ALL_IN",
+      "ALL_IN",
+      maxTo,
+      `All-in ${format(player.stack)}`,
+    ));
   }
   return dedupeActions(actions);
 }
