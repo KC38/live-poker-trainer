@@ -156,6 +156,49 @@ GameState _nineHandedGame({
   );
 }
 
+/// Six-max lineup with hero at [heroSeat] (for authored-situation rotation).
+GameState _sixMaxGame({required int heroSeat}) {
+  const names = ['Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank'];
+  const arches = [
+    PlayerArchetype.tag,
+    PlayerArchetype.lag,
+    PlayerArchetype.nit,
+    PlayerArchetype.callingStation,
+    PlayerArchetype.maniac,
+    PlayerArchetype.tag,
+  ];
+  final n = names.length;
+  final dealer = (heroSeat - 1 + n) % n;
+  return GameState(
+    players: [
+      for (var i = 0; i < n; i++)
+        PlayerModel(
+          id: i,
+          name: i == heroSeat ? 'Hero' : names[i],
+          archetype: i == heroSeat ? PlayerArchetype.hero : arches[i],
+          stack: 400,
+          currentBet: i == heroSeat ? 1 : (i == (heroSeat + 1) % n ? 2 : 0),
+          isHero: i == heroSeat,
+          holeCards:
+              i == heroSeat
+                  ? [CardModel.fromCode('Ah'), CardModel.fromCode('Kh')]
+                  : const [],
+        ),
+    ],
+    mode: GameMode.training,
+    street: Street.preflop,
+    mainPot: 3,
+    highestBet: 2,
+    minRaise: 2,
+    smallBlind: 1,
+    bigBlind: 2,
+    dealerIndex: dealer,
+    sbIndex: heroSeat,
+    bbIndex: (heroSeat + 1) % n,
+    waitingForHero: true,
+  );
+}
+
 /// Pumps the table and returns the controller so tests can change the session.
 ///
 /// The header **Next** CTA pulses forever, so tests must never call
@@ -493,6 +536,50 @@ void main() {
           _expectNoFeltCollisions(tester, game, street: street);
         }
       });
+
+      testWidgets(
+        'authored non-zero hero seat keeps the bottom ring slot empty',
+        (tester) async {
+          // Mirrors the production screenshot: hero is SB at seat 5, button
+          // at seat 4 — without rotation a villain sat in the hero rail slot.
+          const heroSeat = 5;
+          final game = _sixMaxGame(heroSeat: heroSeat);
+          await _pumpTable(
+            tester,
+            size: size,
+            session: const TableSession(
+              coach: longCoach,
+            ).copyWith(game: game, authoredHeroEdges: _authoredEdges),
+          );
+
+          final felt = _rectOf(tester, find.byType(FeltTableView));
+          final heroSlot = Offset(felt.center.dx, felt.bottom - 8);
+          for (final element in find.byType(PlayerSeatWidget).evaluate()) {
+            final box = element.renderObject! as RenderBox;
+            final seat = box.localToGlobal(Offset.zero) & box.size;
+            expect(
+              seat.contains(heroSlot),
+              isFalse,
+              reason:
+                  'villain seat $seat covers hero bottom slot $heroSlot '
+                  '(heroSeat=$heroSeat)',
+            );
+            // Villain centers must stay clear of the bottom-center anchor so
+            // the empty ring slot reads as "you" above the hero rail.
+            final dx = (seat.center.dx - felt.center.dx).abs();
+            final nearBottom = seat.bottom > felt.bottom - seat.height * 0.35;
+            expect(
+              nearBottom && dx < seat.width * 0.35,
+              isFalse,
+              reason:
+                  'villain at $seat sits in the hero bottom-center slot '
+                  'on felt $felt',
+            );
+          }
+          expect(find.byType(PlayerSeatWidget), findsNWidgets(5));
+          expect(find.text('YOUR TURN'), findsOneWidget);
+        },
+      );
 
       testWidgets('villain archetypes are legible words, not single letters', (
         tester,

@@ -100,7 +100,10 @@ class FeltTableView extends StatelessWidget {
           final player = game.players[i];
           if (player.isHero) continue;
 
-          final angle = (math.pi / 2) + (2 * math.pi * i / n);
+          // Rotate so the hero's empty ring slot is always at the bottom of
+          // the felt (π/2), matching the hero rail below — even when the
+          // authored situation puts hero at a non-zero seat index.
+          final angle = _seatAngle(i, heroIndex: heroIndex, seatCount: n);
           final left = _clamp(
             cx + rx * math.cos(angle) - seatBox.width / 2,
             0,
@@ -244,7 +247,7 @@ class FeltTableView extends StatelessWidget {
             final share = game.awardShareFor(player.id);
             if (share <= Money.epsilon) continue;
 
-            final angle = (math.pi / 2) + (2 * math.pi * i / n);
+            final angle = _seatAngle(i, heroIndex: heroIndex, seatCount: n);
             awards.add(
               _AwardFlight(
                 key: ValueKey('award-${player.id}-${game.handCount}'),
@@ -320,6 +323,16 @@ class FeltTableView extends StatelessWidget {
   static double _ringRy(double height, Size seatBox) =>
       math.max(0.0, (height - seatBox.height) / 2) * 0.94;
 
+  /// Polar angle for seat [index], rotated so [heroIndex] sits at π/2 (bottom).
+  static double _seatAngle(
+    int index, {
+    required int heroIndex,
+    required int seatCount,
+  }) {
+    final anchor = heroIndex < 0 ? 0 : heroIndex;
+    return (math.pi / 2) + (2 * math.pi * (index - anchor) / seatCount);
+  }
+
   /// Seat footprints on the ring, hero's slot left empty for the rail.
   ///
   /// Each box is grown by [_badgeBand] at the bottom so the fit search accounts
@@ -339,7 +352,11 @@ class FeltTableView extends StatelessWidget {
       for (var i = 0; i < seatCount; i++)
         if (i != heroIndex)
           () {
-            final angle = (math.pi / 2) + (2 * math.pi * i / seatCount);
+            final angle = _seatAngle(
+              i,
+              heroIndex: heroIndex,
+              seatCount: seatCount,
+            );
             return Rect.fromLTWH(
               _clamp(
                 cx + rx * math.cos(angle) - seatBox.width / 2,
