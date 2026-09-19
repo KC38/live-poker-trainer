@@ -311,30 +311,6 @@ void main() {
     expect(find.textContaining('EV Δ'), findsNothing);
   });
 
-  testWidgets('historical grade keeps prior-street advice readable', (
-    tester,
-  ) async {
-    const historical = CoachFeedback(
-      verdict: CoachVerdict.correct,
-      message: 'Raise is right preflop. Ned over-folds to aggression.',
-      optimalAction: ExploitAction.raise,
-      optimalSizingBb: 6,
-      heroAction: 'RAISE',
-      heroSizingBb: 6,
-      evDeltaBb: 0.4,
-      decisionStreet: Street.preflop,
-      isHistorical: true,
-    );
-    await tester.pumpWidget(_wrap(historical, maxHeight: 190));
-    await tester.pumpAndSettle();
-
-    expect(find.textContaining('Correct · preflop'), findsOneWidget);
-    expect(find.textContaining('Previous ·'), findsNothing);
-    expect(find.text('CORRECT'), findsNothing);
-    expect(find.textContaining('Raise is right'), findsOneWidget);
-    expect(find.text('BEST'), findsOneWidget);
-  });
-
   testWidgets('live grade replaces empty shelf without stacking bodies', (
     tester,
   ) async {

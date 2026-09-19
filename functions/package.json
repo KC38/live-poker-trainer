@@ -12,7 +12,8 @@
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
-    "reset:dry": "npx ts-node --transpile-only scripts/reset_obsolete_data.ts"
+    "reset:dry": "npx ts-node --transpile-only scripts/reset_obsolete_data.ts",
+    "cleanup:invalid:dry": "npx ts-node --transpile-only scripts/remove_invalid_situations.ts"
   },
   "engines": {
     "node": "22"

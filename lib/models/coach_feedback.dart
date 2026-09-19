@@ -34,7 +34,6 @@ class CoachFeedback {
     this.heroSizingBb = 0,
     this.evDeltaBb = 0,
     this.decisionStreet,
-    this.isHistorical = false,
   });
 
   final CoachVerdict verdict;
@@ -46,18 +45,13 @@ class CoachFeedback {
   final double heroSizingBb;
   final double evDeltaBb;
   final Street? decisionStreet;
-  final bool isHistorical;
 
   bool get hasVerdict =>
       verdict == CoachVerdict.correct ||
       verdict == CoachVerdict.incorrect ||
       verdict == CoachVerdict.close;
 
-  bool get isLiveGrade => hasVerdict && !isHistorical;
-
   bool get hasAdvice => message.isNotEmpty || hasVerdict;
-
-  CoachFeedback asHistorical() => copyWith(isHistorical: true);
 
   /// Builds shelf feedback from a server [HeroActionEdge].
   ///
@@ -103,7 +97,6 @@ class CoachFeedback {
       heroSizingBb: heroSizingBb,
       evDeltaBb: edge.evDeltaBb,
       decisionStreet: street,
-      isHistorical: false,
     );
   }
 
@@ -123,7 +116,6 @@ class CoachFeedback {
     double? evDeltaBb,
     Street? decisionStreet,
     bool clearDecisionStreet = false,
-    bool? isHistorical,
   }) {
     return CoachFeedback(
       verdict: verdict ?? this.verdict,
@@ -136,7 +128,6 @@ class CoachFeedback {
       evDeltaBb: evDeltaBb ?? this.evDeltaBb,
       decisionStreet:
           clearDecisionStreet ? null : (decisionStreet ?? this.decisionStreet),
-      isHistorical: isHistorical ?? this.isHistorical,
     );
   }
 }
