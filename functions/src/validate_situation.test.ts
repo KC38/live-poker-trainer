@@ -758,8 +758,9 @@ describe("allocation helpers", () => {
   });
 
   it("refills at low water", () => {
+    expect(shouldRefillPool(3)).toBe(true);
     expect(shouldRefillPool(1)).toBe(true);
     expect(shouldRefillPool(0)).toBe(true);
-    expect(shouldRefillPool(2)).toBe(false);
+    expect(shouldRefillPool(4)).toBe(false);
   });
 });

@@ -10,6 +10,7 @@ import { normalizeCard, isValidCard } from "./setup_key";
 import { compareHandScores, evaluateSevenCards } from "./holdem_evaluator";
 import { splitPotBySeat } from "./payout";
 import {
+  NEVER_SERVED_LOW_WATER,
   PAYLOAD_VERSION,
   SIZING_BUCKETS,
   type HeroActionEdge,
@@ -1872,7 +1873,7 @@ export function filterUnseenSituationIds(
  */
 export function shouldRefillPool(
   neverServedRemaining: number,
-  lowWater: number = 1,
+  lowWater: number = NEVER_SERVED_LOW_WATER,
 ): boolean {
   return neverServedRemaining <= lowWater;
 }

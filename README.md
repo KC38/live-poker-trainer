@@ -41,10 +41,13 @@ Pools are stored under `tableSetups/{setupKey}/situations`. Custom tables use
 their exact ordered lineup and positions. Random tables use a normalized setup
 key and receive a server-generated lineup inside each situation.
 
-The server queues five concurrent generation attempts for a new setup and five
-more when the globally never-served count reaches one. A Firestore-triggered
-worker performs that work outside the latency-sensitive callable, while a
-Firestore-backed lease prevents duplicate batches.
+The server queues an ASAP wave of two concurrent generation attempts for a new
+setup (publishing each as soon as it validates), then fills the rest of the
+five-situation batch. The same refill is queued when the globally never-served
+count reaches three. A Firestore-triggered worker performs that work outside
+the latency-sensitive callable, while a Firestore-backed lease prevents
+duplicate batches. A scheduled job pre-warms popular Random Pool setups
+(6-max / 9-max at 100BB and 200BB, 1/2 blinds).
 
 All AI work uses `gemini-3.8-flash` in Firebase Functions. Generation is
 followed by a separate critique/correction pass, then deterministic validators
@@ -69,7 +72,8 @@ Project: `live-poker-trainer`
 Runtime services:
 
 - Firebase Authentication
-- Cloud Functions (`fetchSituation`, `recordSituationProgress`)
+- Cloud Functions (`fetchSituation`, `recordSituationProgress`,
+  `refillSituationPool`, `prewarmCommonSituationPoolsJob`)
 - Firestore (private pools, receipts, history, progress, preferences)
 - Firebase Storage (user-owned avatars)
 - Secret Manager (`GEMINI_API_KEY`, Functions only)

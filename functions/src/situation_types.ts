@@ -18,8 +18,13 @@ export const SITUATION_SCHEMA_VERSION = "situation-v2.2";
 /** Pool generation batch sizes (configurable constants). */
 export const INITIAL_POOL_SIZE = 5;
 export const REFILL_BATCH_SIZE = 5;
+/**
+ * Empty-pool first wave: generate this many ASAP so the client can allocate
+ * before the rest of [INITIAL_POOL_SIZE] finishes.
+ */
+export const ASAP_INITIAL_COUNT = 2;
 /** Trigger refill when globally never-served remaining reaches this count. */
-export const NEVER_SERVED_LOW_WATER = 1;
+export const NEVER_SERVED_LOW_WATER = 3;
 
 /** Generation lease TTL in milliseconds (covers a full two-pass batch). */
 export const GENERATION_LEASE_MS = 600_000;

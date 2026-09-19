@@ -4,10 +4,15 @@
  * Callables (auth required):
  * - fetchSituation
  * - recordSituationProgress
+ *
+ * Background:
+ * - refillSituationPool (Firestore trigger)
+ * - prewarmCommonSituationPoolsJob (scheduler)
  */
 
 import {onCall, HttpsError} from "firebase-functions/v2/https";
 import {onDocumentWritten} from "firebase-functions/v2/firestore";
+import {onSchedule} from "firebase-functions/v2/scheduler";
 import {defineSecret} from "firebase-functions/params";
 import {initializeApp} from "firebase-admin/app";
 import {logger} from "firebase-functions";
@@ -17,6 +22,7 @@ import {
   isQueuedGeneration,
   refillQueuedSetup,
 } from "./refill_situation_pool";
+import {prewarmCommonSituationPools} from "./prewarm_common_setups";
 
 initializeApp();
 
@@ -125,6 +131,26 @@ export const refillSituationPool = onDocumentWritten(
         leaseHeldByOther: result.leaseHeldByOther,
       });
     }
+  },
+);
+
+/**
+ * Keeps popular Random Pool setups warm by queueing refills when low.
+ */
+export const prewarmCommonSituationPoolsJob = onSchedule(
+  {
+    schedule: "every 30 minutes",
+    region: "us-central1",
+    timeoutSeconds: 120,
+    memory: "256MiB",
+  },
+  async (_event) => {
+    const results = await prewarmCommonSituationPools();
+    const queued = results.filter((r) => r.queued).length;
+    logger.info("prewarmCommonSituationPools completed", {
+      checked: results.length,
+      queued,
+    });
   },
 );
 
