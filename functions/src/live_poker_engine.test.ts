@@ -175,6 +175,56 @@ describe("live poker engine", () => {
     expect(allIn?.amountTo).toBe(280);
   });
 
+  test("still applies a pre-snap action id at the size that was offered", () => {
+    const definition = hand([400, 400]);
+    const state: LiveHandState = {
+      street: "flop",
+      board: ["Kc", "Td", "5s"],
+      players: [
+        {
+          seat: 0,
+          stack: 299,
+          streetBet: 0,
+          contribution: 101,
+          folded: false,
+          allIn: false,
+          acted: false,
+          lastFacedBet: 0,
+        },
+        {
+          seat: 1,
+          stack: 400,
+          streetBet: 0,
+          contribution: 0,
+          folded: false,
+          allIn: false,
+          acted: true,
+          lastFacedBet: 0,
+        },
+      ],
+      actorSeat: 0,
+      highestBet: 0,
+      minRaiseIncrement: 2,
+      actionNumber: 4,
+      status: "playing",
+      winnerSeats: [],
+      pots: [],
+      payouts: {},
+    };
+
+    const applied = applyLiveAction({
+      hand: definition,
+      state,
+      actionId: "BET_33:3333",
+    });
+    expect(applied.state.players[0].streetBet).toBe(33.33);
+    expect(() => applyLiveAction({
+      hand: definition,
+      state,
+      actionId: "BET_33:100",
+    })).toThrow(/illegal or stale/);
+  });
+
   test("an incomplete all-in does not reopen raising", () => {
     const definition = hand([400, 7, 400]);
     let state = createInitialLiveState(definition);
