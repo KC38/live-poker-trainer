@@ -452,10 +452,14 @@ class GameController extends StateNotifier<TableSession> {
       'reasonable' => CoachVerdict.close,
       _ => CoachVerdict.incorrect,
     };
-    final betterLabel = viewActionLabel(
-      state.liveView?.legalActions ?? const [],
-      assessment.betterActionId,
-    );
+    final playedLabel = action.label.toUpperCase();
+    final betterLabel =
+        viewActionLabel(
+          state.liveView?.legalActions ?? const [],
+          assessment.betterActionId,
+        ) ??
+        // The recommended line omits betterActionId; it is the action played.
+        (assessment.rating == 'recommended' ? playedLabel : null);
     return CoachFeedback(
       verdict: verdict,
       message: assessment.message,

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/engine/hero_profiler.dart';
 import 'package:live_poker_trainer/models/hero_metrics.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
+import 'package:live_poker_trainer/models/user_document.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/services/avatar_store.dart';
@@ -16,12 +17,25 @@ final avatarStoreProvider = Provider<AvatarStore>((ref) => AvatarStore());
 class HeroProfileController extends StateNotifier<AsyncValue<HeroProfileView>> {
   /// Creates the controller and kicks off the initial load.
   HeroProfileController(this._ref) : super(const AsyncValue.loading()) {
+    _ref.listen<AsyncValue<UserDocument?>>(userDocProvider, (_, next) {
+      _applyRemoteIdentity(next.valueOrNull);
+    });
     _bootstrap();
   }
 
   final Ref _ref;
 
   HeroProfileView? get _view => state.valueOrNull;
+
+  void _applyRemoteIdentity(UserDocument? doc) {
+    final current = _view;
+    if (doc == null || current == null) return;
+    if (current.identity.displayName == doc.identity.displayName &&
+        current.identity.avatar == doc.identity.avatar) {
+      return;
+    }
+    state = AsyncValue.data(current.copyWith(identity: doc.identity));
+  }
 
   Future<void> _bootstrap() async {
     final uid = _ref.read(authUidProvider);
@@ -46,6 +60,7 @@ class HeroProfileController extends StateNotifier<AsyncValue<HeroProfileView>> {
           metrics: HeroProfiler.compute(hands, computedAt: DateTime.now()),
         ),
       );
+      _applyRemoteIdentity(_ref.read(userDocProvider).valueOrNull);
     } catch (error, stackTrace) {
       if (!mounted) return;
       state = AsyncValue.error(error, stackTrace);

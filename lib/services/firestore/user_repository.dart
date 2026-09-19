@@ -31,28 +31,50 @@ class UserRepository {
 
   /// Creates the user doc on first login; returns the existing doc otherwise.
   ///
-  /// Defaults: [displayName] / empty avatar and non-audio [preferences].
+  /// A later create that only has the default name does not replace a name
+  /// the player already chose. The reverse does upgrade `Hero` when registration
+  /// supplies a real name after auth state has already created the doc.
   Future<UserDocument> ensureUserDoc({
     required String uid,
     String? displayName,
     String? avatarRef,
     GameSettingsModel preferences = const GameSettingsModel(),
   }) async {
-    final existing = await getUser(uid);
-    if (existing != null) return existing;
-
-    final now = DateTime.now().toUtc();
-    final doc = UserDocument(
-      displayName: HeroIdentity.sanitizeName(
-        displayName ?? HeroIdentity.defaultDisplayName,
-      ),
-      avatarRef: avatarRef ?? '',
-      createdAt: now,
-      updatedAt: now,
-      preferences: preferences,
+    final requested = HeroIdentity.sanitizeName(
+      displayName ?? HeroIdentity.defaultDisplayName,
     );
-    await _doc(uid).set(doc.toFirestoreMap());
-    return doc;
+    final now = DateTime.now().toUtc();
+    return _db.runTransaction((tx) async {
+      final snap = await tx.get(_doc(uid));
+      if (snap.exists && snap.data() != null) {
+        final existing = UserDocument.fromFirestore(snap.data()!);
+        final upgrade =
+            existing.displayName == HeroIdentity.defaultDisplayName &&
+            requested != HeroIdentity.defaultDisplayName;
+        if (!upgrade) return existing;
+        tx.update(_doc(uid), {
+          'displayName': requested,
+          'updatedAt': FieldValue.serverTimestamp(),
+        });
+        return UserDocument(
+          displayName: requested,
+          avatarRef: existing.avatarRef,
+          createdAt: existing.createdAt,
+          updatedAt: now,
+          preferences: existing.preferences,
+        );
+      }
+
+      final doc = UserDocument(
+        displayName: requested,
+        avatarRef: avatarRef ?? '',
+        createdAt: now,
+        updatedAt: now,
+        preferences: preferences,
+      );
+      tx.set(_doc(uid), doc.toFirestoreMap());
+      return doc;
+    });
   }
 
   /// Updates profile identity fields and stamps [updatedAt].

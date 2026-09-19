@@ -202,6 +202,8 @@ void main() {
         'Kh',
       ]);
       expect(session.coach.message, contains('Calling keeps weaker hands in.'));
+      expect(session.coach.optimalActionLabel, r'CALL $1');
+      expect(session.coach.confidence, 'high');
     },
   );
 

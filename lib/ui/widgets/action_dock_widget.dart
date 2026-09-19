@@ -525,12 +525,18 @@ class _DockButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(14),
           ),
         ),
-        child: Text(
-          label,
-          textAlign: TextAlign.center,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: GoogleFonts.manrope(fontWeight: FontWeight.w800, fontSize: 14),
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            label,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            softWrap: false,
+            style: GoogleFonts.manrope(
+              fontWeight: FontWeight.w800,
+              fontSize: 14,
+            ),
+          ),
         ),
       ),
     );
