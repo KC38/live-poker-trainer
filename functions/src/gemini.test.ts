@@ -43,7 +43,7 @@ describe("Gemini generation config", () => {
     expect(heroNode.properties.actions.minItems).toBe(2);
     expect(heroNode.properties.actions.maxItems).toBe(4);
     expect(SITUATION_RESPONSE_JSON_SCHEMA.properties.nodes.maxProperties).toBe(
-      12,
+      20,
     );
   });
 
