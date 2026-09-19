@@ -406,10 +406,10 @@ function validateGraph(p: SituationPayload, issues: ValidationIssue[]): void {
   validateCanonicalRoot(p, root, issues);
 
   const ids = Object.keys(p.nodes);
-  if (ids.length > 20) {
+  if (ids.length > 16) {
     issues.push({
       code: "graph_size",
-      message: `situation graph must contain at most 20 nodes (got ${ids.length})`,
+      message: `situation graph must contain at most 16 nodes (got ${ids.length})`,
     });
   }
   for (const id of ids) {

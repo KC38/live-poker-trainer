@@ -116,7 +116,7 @@ const HERO_NODE_SCHEMA = {
     actions: {
       type: "array",
       minItems: 2,
-      maxItems: 4,
+      maxItems: 2,
       items: HERO_ACTION_EDGE_SCHEMA,
     },
   },
@@ -285,7 +285,7 @@ export const SITUATION_RESPONSE_JSON_SCHEMA = {
     nodes: {
       type: "object",
       minProperties: 1,
-      maxProperties: 20,
+      maxProperties: 16,
       additionalProperties: {
         anyOf: [HERO_NODE_SCHEMA, SCRIPTED_NODE_SCHEMA, TERMINAL_NODE_SCHEMA],
       },
@@ -355,10 +355,10 @@ Rules:
 - Root must be scripted, preflop, pot=0, stacks all equal startingStack, streetBets all 0, board=[], and foldedSeats=[].
 - Root actions must begin with the complete forced-post ledger. If ante>0, POST_ANTE every seat exactly once in seat order 0..N-1 with amountTo=ante. Heads-up: the button posts SB and the other seat posts BB. With 3+ seats: POST_SB at (buttonSeat+1)%seatCount and POST_BB at (buttonSeat+2)%seatCount. Blind amountTo is ante+smallBlind or ante+bigBlind. No forced posts may be missing, duplicated, reordered, or added after this prefix. Voluntary actions may follow it.
 - Include at least one meaningful hero decision.
-- Keep the entire graph to at most 20 nodes.
+- Keep the entire graph to at most 16 nodes.
 - Every root-to-terminal path has 1-4 hero decisions.
-- Every hero node has 2-4 curated action choices.
-- Prefer exactly 2 choices per hero node. To stay within 20 nodes, allow only one nonterminal continuation from each hero node; other choices should end the hand legally by fold or all-in whenever strategically plausible.
+- Every hero node has exactly 2 curated action choices.
+- To stay within 16 nodes, allow only one nonterminal continuation from each hero node; the other choice should end the hand legally by fold or all-in whenever strategically plausible.
 - Play every street: while two or more players still have chips, do NOT jump to a showdown or all_in_runout terminal. Advance one street at a time with a hero decision on each street (preflop/flop/turn/river) until a fold ends the hand or an all-in leaves fewer than two stacks behind.
 - Showdown terminals are only legal from a river node after the river betting round. all_in_runout is only legal when fewer than two players have chips behind.
 - Do not personalize coaching to any player history.
@@ -385,7 +385,7 @@ Given a SituationPayload JSON, find and FIX:
 - missing/invalid verdict, evDeltaBb, or optimalActionKey on any hero edge
 - grading inconsistency: each node needs a correct action; correct/best is 0 EV, alternatives are non-positive strategic estimates; every edge must share an optimalActionKey that exists and points to a correct edge
 - cycles, unreachable nodes, non-terminal leaves
-- graphs over 20 nodes (prune low-value branches while preserving legal terminal paths)
+- graphs over 16 nodes (prune low-value branches while preserving legal terminal paths)
 Return ONLY the corrected full SituationPayload JSON. If already valid, return it unchanged.
 Keep payloadVersion ${PAYLOAD_VERSION} and schemaVersion "${SITUATION_SCHEMA_VERSION}".
 `;
