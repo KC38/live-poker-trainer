@@ -1,16 +1,42 @@
 /**
  * Gemini token usage and estimated-cost accounting.
  *
- * Prices are the Gemini 3.8 Flash standard-tier introductory rates published
- * for requests made through December 31, 2026. Values are stored in USD
- * micros so Firestore aggregation remains integer and deterministic.
+ * Prices are the published Gemini 3.8 Flash standard-tier rates. Values are
+ * stored in USD micros so Firestore aggregation remains integer and
+ * deterministic across pricing periods.
  */
 
-export const GEMINI_PRICING_VERSION =
+export const GEMINI_INTRO_PRICING_VERSION =
   "gemini-3.8-flash-standard-through-2026-12-31";
-export const GEMINI_INPUT_USD_PER_MILLION = 0.75;
-export const GEMINI_CACHED_INPUT_USD_PER_MILLION = 0.075;
-export const GEMINI_OUTPUT_USD_PER_MILLION = 3.75;
+export const GEMINI_2027_PRICING_VERSION =
+  "gemini-3.8-flash-standard-from-2027-01-01";
+export const GEMINI_PRICING_ROLLOVER_MS = Date.UTC(2027, 0, 1);
+
+export type GeminiPricingVersion =
+  | typeof GEMINI_INTRO_PRICING_VERSION
+  | typeof GEMINI_2027_PRICING_VERSION
+  | "mixed";
+
+interface GeminiPricing {
+  version: Exclude<GeminiPricingVersion, "mixed">;
+  inputUsdPerMillion: number;
+  cachedInputUsdPerMillion: number;
+  outputUsdPerMillion: number;
+}
+
+const GEMINI_INTRO_PRICING: GeminiPricing = {
+  version: GEMINI_INTRO_PRICING_VERSION,
+  inputUsdPerMillion: 0.75,
+  cachedInputUsdPerMillion: 0.075,
+  outputUsdPerMillion: 3.75,
+};
+
+const GEMINI_2027_PRICING: GeminiPricing = {
+  version: GEMINI_2027_PRICING_VERSION,
+  inputUsdPerMillion: 1.5,
+  cachedInputUsdPerMillion: 0.15,
+  outputUsdPerMillion: 7.5,
+};
 
 /** Token counts returned by one or more Gemini requests. */
 export interface GenerationUsage {
@@ -21,7 +47,7 @@ export interface GenerationUsage {
   thoughtsTokenCount: number;
   totalTokenCount: number;
   estimatedCostUsdMicros: number;
-  pricingVersion: typeof GEMINI_PRICING_VERSION;
+  pricingVersion: GeminiPricingVersion;
 }
 
 /** Raw usageMetadata fields returned by generateContent. */
@@ -34,7 +60,7 @@ export interface GeminiUsageMetadata {
 }
 
 /** Returns a zero-valued usage accumulator. */
-export function emptyGenerationUsage(): GenerationUsage {
+export function emptyGenerationUsage(atMs: number = Date.now()): GenerationUsage {
   return {
     modelRequestCount: 0,
     promptTokenCount: 0,
@@ -43,7 +69,7 @@ export function emptyGenerationUsage(): GenerationUsage {
     thoughtsTokenCount: 0,
     totalTokenCount: 0,
     estimatedCostUsdMicros: 0,
-    pricingVersion: GEMINI_PRICING_VERSION,
+    pricingVersion: resolveGeminiPricing(atMs).version,
   };
 }
 
@@ -56,7 +82,9 @@ export function emptyGenerationUsage(): GenerationUsage {
  */
 export function generationUsageFromMetadata(
   metadata: GeminiUsageMetadata | undefined,
+  atMs: number = Date.now(),
 ): GenerationUsage {
+  const pricing = resolveGeminiPricing(atMs);
   const promptTokenCount = tokenCount(metadata?.promptTokenCount);
   const cachedContentTokenCount = Math.min(
     promptTokenCount,
@@ -81,8 +109,8 @@ export function generationUsageFromMetadata(
       cachedContentTokenCount,
       candidatesTokenCount,
       thoughtsTokenCount,
-    }),
-    pricingVersion: GEMINI_PRICING_VERSION,
+    }, pricing),
+    pricingVersion: pricing.version,
   };
 }
 
@@ -102,7 +130,7 @@ export function addGenerationUsage(
     totalTokenCount: left.totalTokenCount + right.totalTokenCount,
     estimatedCostUsdMicros:
       left.estimatedCostUsdMicros + right.estimatedCostUsdMicros,
-    pricingVersion: GEMINI_PRICING_VERSION,
+    pricingVersion: aggregatePricingVersion(left, right),
   };
 }
 
@@ -112,7 +140,7 @@ export function estimateCostUsdMicros(options: {
   cachedContentTokenCount: number;
   candidatesTokenCount: number;
   thoughtsTokenCount: number;
-}): number {
+}, pricing: GeminiPricing = resolveGeminiPricing(Date.now())): number {
   const cachedInput = Math.min(
     options.promptTokenCount,
     options.cachedContentTokenCount,
@@ -123,10 +151,28 @@ export function estimateCostUsdMicros(options: {
   // At a per-million-token USD rate, each token costs the same numeric
   // amount in USD micros.
   return Math.round(
-    uncachedInput * GEMINI_INPUT_USD_PER_MILLION +
-      cachedInput * GEMINI_CACHED_INPUT_USD_PER_MILLION +
-      output * GEMINI_OUTPUT_USD_PER_MILLION,
+    uncachedInput * pricing.inputUsdPerMillion +
+      cachedInput * pricing.cachedInputUsdPerMillion +
+      output * pricing.outputUsdPerMillion,
   );
+}
+
+/** Resolves the published rate card in effect when a request completes. */
+export function resolveGeminiPricing(atMs: number): GeminiPricing {
+  return atMs >= GEMINI_PRICING_ROLLOVER_MS ?
+    GEMINI_2027_PRICING :
+    GEMINI_INTRO_PRICING;
+}
+
+function aggregatePricingVersion(
+  left: GenerationUsage,
+  right: GenerationUsage,
+): GeminiPricingVersion {
+  if (left.modelRequestCount === 0) return right.pricingVersion;
+  if (right.modelRequestCount === 0) return left.pricingVersion;
+  return left.pricingVersion === right.pricingVersion ?
+    left.pricingVersion :
+    "mixed";
 }
 
 function tokenCount(value: unknown): number {
