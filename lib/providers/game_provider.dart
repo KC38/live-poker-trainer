@@ -18,6 +18,7 @@ import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/situation_model.dart';
 import 'package:live_poker_trainer/models/table_setup.dart';
 import 'package:live_poker_trainer/models/user_stats_model.dart';
+import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
@@ -63,8 +64,8 @@ class TableSession {
     this.replaying = false,
     this.collectingChips = false,
     this.awardingChips = false,
-    this._authoredHeroEdges = const [],
-  });
+    List<HeroActionEdge> authoredHeroEdges = const [],
+  }) : _authoredHeroEdges = authoredHeroEdges;
 
   final GameState? game;
   final CoachFeedback coach;
@@ -273,6 +274,14 @@ class GameController extends StateNotifier<TableSession> {
         setupKey: fetched.setupKey,
       );
 
+      unawaited(
+        _ref.read(analyticsServiceProvider).logSituationFetched(
+          seatCount: setup.seatCount,
+          stackDepthBb: _settings.stackDepthBb,
+          continueTable: continueTable,
+        ),
+      );
+
       final existing = continueTable ? state.game?.players : null;
       final engine = _engine;
       if (continueTable && engine != null) {
@@ -297,6 +306,9 @@ class GameController extends StateNotifier<TableSession> {
       await _replayUntilHero(pace: ReplayPace.deal, token: token);
     } catch (e) {
       if (_disposed || token != _replayToken) return;
+      unawaited(
+        _ref.read(analyticsServiceProvider).logTrainingError(stage: 'fetch'),
+      );
       final engineState = _engine?.state;
       state = state.copyWith(
         game: engineState,
@@ -413,6 +425,13 @@ class GameController extends StateNotifier<TableSession> {
       state = state.copyWith(
         game: after,
         coach: CoachFeedback.fromHeroEdge(edge: chosen, street: game.street),
+      );
+      unawaited(
+        _ref.read(analyticsServiceProvider).logHeroDecision(
+          street: game.street.name,
+          actionType: action.type.name,
+          verdict: chosen.verdict.name,
+        ),
       );
     } else {
       state = state.copyWith(
@@ -614,9 +633,15 @@ class GameController extends StateNotifier<TableSession> {
       _progressRecorded = true;
       _ref.invalidate(userStatsProvider);
       state = state.copyWith(clearError: true);
+      unawaited(
+        _ref
+            .read(analyticsServiceProvider)
+            .logHandCompleted(heroNetChips: heroNet),
+      );
       return true;
     } catch (e, st) {
       DiagnosticsLog.error('GameController.recordSituationProgress', e, st);
+      unawaited(_ref.read(analyticsServiceProvider).logHandRecordFailed());
       state = state.copyWith(
         error: 'Could not save this hand. Check your connection and retry.',
       );

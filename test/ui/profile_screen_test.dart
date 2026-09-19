@@ -10,7 +10,9 @@ import 'package:live_poker_trainer/models/hero_profile_model.dart';
 import 'package:live_poker_trainer/models/user_document.dart';
 import 'package:live_poker_trainer/models/user_stats_model.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
+import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
+import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/services/firestore/progress_repository.dart';
 import 'package:live_poker_trainer/services/firestore/user_repository.dart';
 import 'package:live_poker_trainer/ui/screens/profile_screen.dart';
@@ -87,6 +89,9 @@ void main() {
           userDocProvider.overrideWith((ref) async => users.document),
           userRepositoryProvider.overrideWithValue(users),
           progressRepositoryProvider.overrideWithValue(progress),
+          analyticsServiceProvider.overrideWithValue(
+            AnalyticsService(enabled: false),
+          ),
         ],
         child: MaterialApp(
           theme: buildPokerTheme(),

@@ -1,4 +1,4 @@
-/// Settings: SFX, Music, chip display, and help text.
+/// Settings: SFX, Music, chip display, analytics, and help text.
 library;
 
 import 'package:flutter/material.dart';
@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart' hide Config;
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
 
@@ -18,6 +19,7 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
     final notifier = ref.read(settingsProvider.notifier);
+    final analyticsEnabled = ref.watch(analyticsConsentProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
@@ -70,6 +72,26 @@ class SettingsScreen extends ConsumerWidget {
                     ),
                     value: settings.musicEnabled,
                     onChanged: notifier.setMusic,
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(
+                      'Usage analytics',
+                      style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
+                    ),
+                    subtitle: Text(
+                      'Anonymous screens, training events, and crash reports '
+                      'to improve the app',
+                      style: GoogleFonts.manrope(
+                        color: AppColors.slate,
+                        fontSize: 13,
+                      ),
+                    ),
+                    value: analyticsEnabled,
+                    onChanged:
+                        (value) => ref
+                            .read(analyticsConsentProvider.notifier)
+                            .setEnabled(value),
                   ),
                 ],
               ),

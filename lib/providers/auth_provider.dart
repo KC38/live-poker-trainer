@@ -1,10 +1,13 @@
 /// Riverpod auth state, uid, and sign-in / sign-out actions.
 library;
 
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
 import 'package:live_poker_trainer/models/user_document.dart';
+import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
 import 'package:live_poker_trainer/services/auth_service.dart';
@@ -69,6 +72,8 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
   Future<void> _run(
     Future<User> Function() action, {
     bool seedLocalPreferences = false,
+    required String method,
+    required bool isSignUp,
   }) async {
     state = const AsyncValue.loading();
     try {
@@ -86,6 +91,13 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
           );
       // Refresh providers that key off the signed-in user (re-hydrates prefs).
       _ref.invalidate(userDocProvider);
+      final analytics = _ref.read(analyticsServiceProvider);
+      unawaited(analytics.setUserId(user.uid));
+      if (isSignUp) {
+        unawaited(analytics.logSignUp(method: method));
+      } else {
+        unawaited(analytics.logLogin(method: method));
+      }
       state = const AsyncValue.data(null);
     } catch (e, st) {
       state = AsyncValue.error(e, st);
@@ -106,6 +118,8 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
         displayName: displayName,
       ),
       seedLocalPreferences: true,
+      method: 'email',
+      isSignUp: true,
     );
   }
 
@@ -114,18 +128,29 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
     required String email,
     required String password,
   }) {
-    return _run(() => _auth.signInWithEmail(email: email, password: password));
+    return _run(
+      () => _auth.signInWithEmail(email: email, password: password),
+      method: 'email',
+      isSignUp: false,
+    );
   }
 
   /// Google Sign-In.
   Future<void> signInWithGoogle() {
-    return _run(_auth.signInWithGoogle);
+    return _run(
+      _auth.signInWithGoogle,
+      method: 'google',
+      isSignUp: false,
+    );
   }
 
   /// Signs out; clears synced gameplay prefs from the device (keeps audio).
   Future<void> signOut() async {
     state = const AsyncValue.loading();
     try {
+      final analytics = _ref.read(analyticsServiceProvider);
+      unawaited(analytics.logLogout());
+      unawaited(analytics.setUserId(null));
       await _auth.signOut();
       // After uid is cleared so we do not push defaults back to Firestore.
       await _ref.read(settingsProvider.notifier).resetSyncedToDefaults();

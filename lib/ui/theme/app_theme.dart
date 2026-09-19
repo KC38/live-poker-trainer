@@ -214,8 +214,11 @@ ThemeData buildPokerTheme() {
 }
 
 /// Soft fade route used for primary mode launches.
-Route<T> softFadeRoute<T>(Widget page) {
+///
+/// Pass [name] so [AnalyticsNavigatorObserver] can log screen views.
+Route<T> softFadeRoute<T>(Widget page, {String? name}) {
   return PageRouteBuilder<T>(
+    settings: name == null ? null : RouteSettings(name: name),
     pageBuilder: (_, _, _) => page,
     transitionDuration: const Duration(milliseconds: 320),
     reverseTransitionDuration: const Duration(milliseconds: 240),
