@@ -9,6 +9,7 @@ import {
   enforceSituationFetchLimits,
   FETCHES_PER_HOUR,
   isPreparingPollState,
+  isServableSituationPayload,
   PREPARING_POLLS_PER_HOUR,
   prioritizeCandidates,
 } from "./fetch_situation";
@@ -40,6 +41,35 @@ describe("prioritizeCandidates", () => {
       receiptIds: new Set(["n1", "o1"]),
     });
     expect(ids).toEqual(["o2"]);
+  });
+});
+
+describe("isServableSituationPayload", () => {
+  it("accepts a currently valid authored situation", () => {
+    expect(isServableSituationPayload(minimalFoldSituation())).toBe(true);
+  });
+
+  it("rejects a legacy shortcut to showdown before authored streets", () => {
+    const payload = minimalFoldSituation();
+    const open = payload.nodes.open;
+    const terminal = payload.nodes.term_call_open;
+    if (open.type !== "hero" || terminal.type !== "terminal") {
+      throw new Error("unexpected fixture nodes");
+    }
+    const call = open.actions.find((action) => action.kind === "CALL");
+    if (!call) throw new Error("expected CALL edge");
+
+    call.nextNodeId = terminal.id;
+    terminal.reason = "showdown";
+    terminal.street = "river";
+    terminal.board = ["2c", "7d", "Jh", "9s", "3h"];
+    terminal.foldedSeats = [];
+    terminal.stacks = [198, 198];
+    terminal.pot = 4;
+    terminal.winnerSeats = [0];
+    terminal.heroNetChips = 2;
+
+    expect(isServableSituationPayload(payload)).toBe(false);
   });
 });
 

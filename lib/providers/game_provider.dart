@@ -97,7 +97,10 @@ class TableSession {
         !g.isHandOver &&
         !g.hero.folded &&
         !replaying &&
-        !loading;
+        !loading &&
+        // Authored training never falls back to the generic sizing dock.
+        // A missing edge list is an invalid graph state, not a free-play turn.
+        (g.activeSituation == null || _authoredHeroEdges.isNotEmpty);
   }
 
   /// Hero has no further decisions this hand (folded or the hand resolved).
@@ -469,8 +472,7 @@ class GameController extends StateNotifier<TableSession> {
               state: game,
               action: action,
             );
-    final authoredSpot =
-        engine.situation != null && !engine.isLiveRemainderPlay;
+    final authoredSpot = engine.situation != null;
     if (authoredSpot && edge == null) {
       state = state.copyWith(
         error: 'That action is not one of the authored choices for this spot.',
@@ -535,18 +537,15 @@ class GameController extends StateNotifier<TableSession> {
     } else {
       state = state.copyWith(
         game: after,
-        coach:
-            engine.isLiveRemainderPlay
-                ? state.coach.asHistorical()
-                : CoachFeedback(
-                  message:
-                      edge == null
-                          ? 'No legal coaching edge for that action.'
-                          : 'Could not apply that action.',
-                  heroAction: action.label,
-                  heroSizingBb: heroSizingBb,
-                  decisionStreet: game.street,
-                ),
+        coach: CoachFeedback(
+          message:
+              edge == null
+                  ? 'No legal coaching edge for that action.'
+                  : 'Could not apply that action.',
+          heroAction: action.label,
+          heroSizingBb: heroSizingBb,
+          decisionStreet: game.street,
+        ),
       );
     }
 
@@ -595,10 +594,20 @@ class GameController extends StateNotifier<TableSession> {
 
       switch (event.kind) {
         case TableEventKind.villainAction:
+          final previousStreet = state.game?.street;
+          final streetAdvanced =
+              previousStreet != null && event.state.street != previousStreet;
+          final priorCoach = state.coach;
           state = state.copyWith(
             game: event.state,
             collectingChips: false,
             awardingChips: false,
+            coach:
+                streetAdvanced &&
+                        priorCoach.hasVerdict &&
+                        !priorCoach.isHistorical
+                    ? priorCoach.asHistorical()
+                    : priorCoach,
           );
           final type = event.action?.type;
           if (type != null) await _playActionSfx(sound, type);
@@ -607,6 +616,10 @@ class GameController extends StateNotifier<TableSession> {
                 ? ReplayPace.chipAction
                 : ReplayPace.passiveAction,
           );
+          if (streetAdvanced) {
+            await sound.deal();
+            await _wait(ReplayPace.dealStreet);
+          }
         case TableEventKind.collectPot:
           state = state.copyWith(
             game: event.state,

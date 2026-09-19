@@ -16,7 +16,10 @@ import {
 } from "./pool";
 import {buildSetupKey, parseTableSetupInput} from "./setup_key";
 import type {SituationPayload, TableSetupInput} from "./situation_types";
-import {filterUnseenSituationIds} from "./validate_situation";
+import {
+  filterUnseenSituationIds,
+  validateSituation,
+} from "./validate_situation";
 import {NEVER_SERVED_LOW_WATER} from "./situation_types";
 
 export const FETCHES_PER_HOUR = 120;
@@ -384,8 +387,8 @@ export async function allocateUnseenSituation(options: {
         ]);
         if (!sitSnap.exists || receiptSnapTx.exists) return null;
 
-        const payload = sitSnap.data()?.payload as SituationPayload | undefined;
-        if (!payload) return null;
+        const payload = sitSnap.data()?.payload;
+        if (!isServableSituationPayload(payload)) return null;
         const timesServed = Number(sitSnap.data()?.timesServed ?? 0);
         tx.set(receiptRef, {
           situationId: candidateId,
@@ -421,6 +424,16 @@ export async function allocateUnseenSituation(options: {
     if (page.size < ALLOCATION_PAGE_SIZE) return null;
     cursor = page.docs[page.docs.length - 1];
   }
+}
+
+/**
+ * Stored situations are revalidated at allocation time so legacy documents
+ * cannot bypass newer graph invariants and reach current clients.
+ */
+export function isServableSituationPayload(
+  payload: unknown,
+): payload is SituationPayload {
+  return validateSituation(payload).ok;
 }
 
 /**
