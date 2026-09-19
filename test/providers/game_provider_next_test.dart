@@ -46,7 +46,9 @@ Map<String, dynamic> _viewJson({
   String status = 'playing',
   int stateVersion = 0,
   List<Map<String, dynamic>>? actions,
+  String? street,
 }) {
+  final playing = status == 'playing';
   return {
     'sessionId': 'session-1',
     'handId': 'hand-1',
@@ -55,8 +57,11 @@ Map<String, dynamic> _viewJson({
     'stateVersion': stateVersion,
     'smallBlind': 1,
     'bigBlind': 2,
-    'street': status == 'playing' ? 'preflop' : 'river',
-    'board': status == 'playing' ? <String>[] : ['2c', '3d', '4h', '8s', 'Kd'],
+    'street': street ?? (playing ? 'preflop' : 'river'),
+    'board':
+        (street ?? (playing ? 'preflop' : 'river')) == 'preflop'
+            ? <String>[]
+            : ['2c', '3d', '4h', '8s', 'Kd'],
     'pot': status == 'playing' ? 3 : 24,
     'buttonSeat': 0,
     'heroSeat': 0,
@@ -206,6 +211,69 @@ void main() {
       expect(session.coach.confidence, 'high');
     },
   );
+
+  test('clears coaching when the next hero decision is dealt', () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    const check = {
+      'actionId': 'CHECK:0',
+      'kind': 'CHECK',
+      'bucket': 'CHECK',
+      'label': 'Check',
+    };
+    final initial = LiveHandStartResult.fromJson({
+      'view': _viewJson(actions: [check]),
+      'events': <Map<String, dynamic>>[],
+    });
+    final after = LiveActionResult.fromJson({
+      'view': _viewJson(stateVersion: 1, street: 'river', actions: [_call]),
+      'events': [
+        {'sequence': 0, 'seat': 0, 'street': 'preflop', ...check},
+        {
+          'sequence': 1,
+          'seat': 1,
+          'street': 'river',
+          'actionId': 'BET:400',
+          'kind': 'BET',
+          'bucket': 'BET_67',
+          'amountTo': 4,
+          'label': r'Bet $4',
+        },
+      ],
+      'coaching': {
+        'actionId': 'CHECK:0',
+        'rating': 'mistake',
+        'confidence': 'high',
+        'summary': 'Checking the turn gives a free river card.',
+        'playerTypeReason': 'Paul calls too wide.',
+        'sizingNote': '',
+        'tendencyKeys': ['foldToTurnBet'],
+      },
+      'replayed': false,
+    });
+    final service = _FakeLiveHandService(initial, after);
+    final container = ProviderContainer(
+      overrides: [
+        authUidProvider.overrideWithValue('uid-1'),
+        liveHandServiceProvider.overrideWithValue(service),
+        soundServiceProvider.overrideWithValue(SoundService.silent()),
+        settingsProvider.overrideWith((ref) => SettingsNotifier(preferences)),
+      ],
+    );
+    addTearDown(container.dispose);
+    final controller = container.read(gameControllerProvider.notifier);
+    await controller.startTraining();
+
+    await controller.heroActLive(
+      container.read(gameControllerProvider).liveActions.single,
+    );
+
+    final session = container.read(gameControllerProvider);
+    expect(session.heroCanAct, isTrue);
+    expect(session.game!.street.name, 'river');
+    expect(session.liveActions.single.actionId, 'CALL:200');
+    expect(session.coach.hasAdvice, isFalse);
+  });
 
   test('rejects an action that is not in the current fixed set', () async {
     final (container, service) = await _container();
