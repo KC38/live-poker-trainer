@@ -1,5 +1,10 @@
 /**
- * Authenticated fetch of exactly one unseen situation for a table setup.
+ * Authenticated fetch of one situation for a table setup.
+ *
+ * Prefers situations the caller has never received. When every prepared
+ * situation already has a receipt, re-serves the least-served prepared hand
+ * so training never blocks on generation — and still queues a refill so new
+ * hands keep arriving.
  */
 
 import {
@@ -41,10 +46,13 @@ interface SetupGenerationState {
 }
 
 /**
- * Serves one unseen situation, creating a receipt atomically.
+ * Serves one situation, creating a receipt atomically when first delivered.
  *
- * May trigger a pool refill when never-served remaining is at/below low water
- * or when the pool is empty.
+ * Prefers unseen situations. If the pool is prepared but the caller has
+ * already received every situation, re-serves a prepared hand instead of
+ * making the client wait. May trigger a pool refill when never-served
+ * remaining is at/below low water, when falling back to a re-serve, or when
+ * the pool is empty.
  */
 export async function fetchSituationForUser(options: {
   uid: string;
@@ -153,14 +161,17 @@ export async function fetchSituationForUser(options: {
   }
 
   let refillTriggered = false;
-  if (allocated.neverServedRemaining <= NEVER_SERVED_LOW_WATER) {
+  if (
+    allocated.reusedPrepared ||
+    allocated.neverServedRemaining <= NEVER_SERVED_LOW_WATER
+  ) {
     await queueRefill({
       db,
       setupKey,
-      reason: "low-water",
+      reason: allocated.reusedPrepared ? "exhausted" : "low-water",
     });
-    // True means the low-water path requested/confirmed asynchronous refill;
-    // the queue transaction may already have found an equivalent active job.
+    // True means refill was requested/confirmed asynchronously; the queue
+    // transaction may already have found an equivalent active job.
     refillTriggered = true;
   }
 
@@ -348,8 +359,42 @@ export async function allocateUnseenSituation(options: {
   setupKey: string;
   payload: SituationPayload;
   neverServedRemaining: number;
+  reusedPrepared: boolean;
 } | null> {
-  const {db, uid, setupKey} = options;
+  const unseen = await allocateFromPool({...options, allowReceipt: false});
+  if (unseen) {
+    return {...unseen, reusedPrepared: false};
+  }
+  // Pool has prepared hands the caller already saw — serve one immediately
+  // rather than waiting on generation. Unseen candidates are still preferred
+  // inside the fallback pass in case a new hand landed between scans.
+  const reused = await allocateFromPool({...options, allowReceipt: true});
+  if (reused) {
+    return {...reused, reusedPrepared: true};
+  }
+  return null;
+}
+
+/**
+ * Pages the pool by ascending timesServed and allocates one candidate.
+ *
+ * When [allowReceipt] is false, only situations without a per-user receipt
+ * are considered. When true, unseen ids are still tried first on each page,
+ * then already-received prepared ids.
+ */
+async function allocateFromPool(options: {
+  db: Firestore;
+  uid: string;
+  setupKey: string;
+  setup: TableSetupInput;
+  allowReceipt: boolean;
+}): Promise<{
+  situationId: string;
+  setupKey: string;
+  payload: SituationPayload;
+  neverServedRemaining: number;
+} | null> {
+  const {db, uid, setupKey, allowReceipt} = options;
   const {situations} = poolRefs(db, setupKey);
   const receiptsCol = db
     .collection("users")
@@ -371,10 +416,12 @@ export async function allocateUnseenSituation(options: {
     const page = await query.get();
     if (page.empty) return null;
 
-    const candidates = filterUnseenSituationIds(
-      page.docs.map((doc) => doc.id),
+    const pageIds = page.docs.map((doc) => doc.id);
+    const candidates = prioritizePageCandidates({
+      pageIds,
       receiptIds,
-    );
+      allowReceipt,
+    });
     for (const candidateId of candidates) {
       const allocated = await db.runTransaction(async (tx) => {
         const situationRef = situations.doc(candidateId);
@@ -385,17 +432,30 @@ export async function allocateUnseenSituation(options: {
           tx.get(receiptRef),
           tx.get(setupRef),
         ]);
-        if (!sitSnap.exists || receiptSnapTx.exists) return null;
+        if (!sitSnap.exists) return null;
+        if (receiptSnapTx.exists && !allowReceipt) return null;
 
         const payload = sitSnap.data()?.payload;
         if (!isServableSituationPayload(payload)) return null;
         const timesServed = Number(sitSnap.data()?.timesServed ?? 0);
-        tx.set(receiptRef, {
-          situationId: candidateId,
-          setupKey,
-          status: "allocated",
-          allocatedAt: FieldValue.serverTimestamp(),
-        });
+        if (!receiptSnapTx.exists) {
+          tx.set(receiptRef, {
+            situationId: candidateId,
+            setupKey,
+            status: "allocated",
+            allocatedAt: FieldValue.serverTimestamp(),
+          });
+        } else if (receiptSnapTx.data()?.status !== "completed") {
+          // Abandoned allocation: refresh so progress can still be recorded.
+          tx.set(receiptRef, {
+            situationId: candidateId,
+            setupKey,
+            status: "allocated",
+            allocatedAt: FieldValue.serverTimestamp(),
+          }, {merge: true});
+        }
+        // Completed receipts are left intact so replay does not double-count
+        // aggregate progress (recordSituationProgress returns alreadyCompleted).
         tx.update(situationRef, {
           timesServed: timesServed + 1,
           lastServedAt: FieldValue.serverTimestamp(),
@@ -427,6 +487,21 @@ export async function allocateUnseenSituation(options: {
 }
 
 /**
+ * Orders one Firestore page: unseen first, then seen when allowed.
+ * Exported for unit tests.
+ */
+export function prioritizePageCandidates(options: {
+  pageIds: string[];
+  receiptIds: Set<string>;
+  allowReceipt: boolean;
+}): string[] {
+  const unseen = filterUnseenSituationIds(options.pageIds, options.receiptIds);
+  if (!options.allowReceipt) return unseen;
+  const seen = options.pageIds.filter((id) => options.receiptIds.has(id));
+  return [...unseen, ...seen];
+}
+
+/**
  * Stored situations are revalidated at allocation time so legacy documents
  * cannot bypass newer graph invariants and reach current clients.
  */
@@ -437,15 +512,25 @@ export function isServableSituationPayload(
 }
 
 /**
- * Pure helper: choose allocation order (never-served first).
+ * Pure helper: choose allocation order (never-served first, then other unseen).
+ * When [allowSeen] is true and nothing unseen remains, falls back to prepared
+ * (already-received) ids so callers can avoid waiting on generation.
  * Exported for unit tests.
  */
 export function prioritizeCandidates(options: {
   neverServedIds: string[];
   otherIds: string[];
   receiptIds: Set<string>;
+  allowSeen?: boolean;
 }): string[] {
   const first = filterUnseenSituationIds(options.neverServedIds, options.receiptIds);
   if (first.length > 0) return first;
-  return filterUnseenSituationIds(options.otherIds, options.receiptIds);
+  const second = filterUnseenSituationIds(options.otherIds, options.receiptIds);
+  if (second.length > 0) return second;
+  if (!options.allowSeen) return [];
+  return prioritizePageCandidates({
+    pageIds: [...options.neverServedIds, ...options.otherIds],
+    receiptIds: options.receiptIds,
+    allowReceipt: true,
+  });
 }

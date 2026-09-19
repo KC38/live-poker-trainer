@@ -5,6 +5,7 @@
 import {describe, expect, it, vi} from "vitest";
 import {
   DISTINCT_SETUPS_PER_DAY,
+  allocateUnseenSituation,
   convertDealReservationToPreparingPoll,
   enforceSituationFetchLimits,
   FETCHES_PER_HOUR,
@@ -12,6 +13,7 @@ import {
   isServableSituationPayload,
   PREPARING_POLLS_PER_HOUR,
   prioritizeCandidates,
+  prioritizePageCandidates,
 } from "./fetch_situation";
 import {canAcquireLease, ensureTableSetupDoc, MAX_GLOBAL_SETUPS} from "./pool";
 import {mergeProgressDelta, emptyProgress} from "./progress_stats";
@@ -41,6 +43,202 @@ describe("prioritizeCandidates", () => {
       receiptIds: new Set(["n1", "o1"]),
     });
     expect(ids).toEqual(["o2"]);
+  });
+
+  it("returns empty when all candidates are seen and allowSeen is off", () => {
+    const ids = prioritizeCandidates({
+      neverServedIds: ["n1"],
+      otherIds: ["o1"],
+      receiptIds: new Set(["n1", "o1"]),
+    });
+    expect(ids).toEqual([]);
+  });
+
+  it("falls back to prepared seen hands when allowSeen is on", () => {
+    const ids = prioritizeCandidates({
+      neverServedIds: ["n1"],
+      otherIds: ["o1", "o2"],
+      receiptIds: new Set(["n1", "o1", "o2"]),
+      allowSeen: true,
+    });
+    expect(ids).toEqual(["n1", "o1", "o2"]);
+  });
+});
+
+describe("prioritizePageCandidates", () => {
+  it("keeps unseen ahead of seen when receipts are allowed", () => {
+    const ids = prioritizePageCandidates({
+      pageIds: ["seen-a", "fresh", "seen-b"],
+      receiptIds: new Set(["seen-a", "seen-b"]),
+      allowReceipt: true,
+    });
+    expect(ids).toEqual(["fresh", "seen-a", "seen-b"]);
+  });
+
+  it("omits seen ids when receipts are not allowed", () => {
+    const ids = prioritizePageCandidates({
+      pageIds: ["seen-a", "fresh"],
+      receiptIds: new Set(["seen-a"]),
+      allowReceipt: false,
+    });
+    expect(ids).toEqual(["fresh"]);
+  });
+});
+
+describe("allocateUnseenSituation prepared fallback", () => {
+  const setup: TableSetupInput = {
+    mode: "random",
+    seatCount: 2,
+    smallBlind: 1,
+    bigBlind: 2,
+    ante: 0,
+    startingStack: 200,
+  };
+
+  function allocationDb(options: {
+    situationIds: string[];
+    receiptIds: Set<string>;
+    payloads?: Record<string, ReturnType<typeof minimalFoldSituation>>;
+  }): Firestore {
+    const payloadById = options.payloads ?? Object.fromEntries(
+      options.situationIds.map((id) => [id, minimalFoldSituation()]),
+    );
+    const receiptDocs = [...options.receiptIds].map((id) => ({id}));
+    const situationDocs = options.situationIds.map((id) => ({
+      id,
+      data: () => ({
+        payload: payloadById[id],
+        timesServed: options.receiptIds.has(id) ? 1 : 0,
+      }),
+      exists: true,
+    }));
+
+    const receiptsQuery = {
+      where: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      get: vi.fn().mockResolvedValue({docs: receiptDocs}),
+      doc: vi.fn((id: string) => ({path: `receipt:${id}`, id})),
+    };
+    const situationsQuery = {
+      orderBy: vi.fn().mockReturnThis(),
+      limit: vi.fn().mockReturnThis(),
+      startAfter: vi.fn().mockReturnThis(),
+      get: vi.fn().mockResolvedValue({
+        empty: situationDocs.length === 0,
+        size: situationDocs.length,
+        docs: situationDocs,
+      }),
+      doc: vi.fn((id: string) => ({path: `sit:${id}`, id})),
+    };
+    const setupRef = {path: "setup", id: "key"};
+
+    return {
+      collection: vi.fn((name: string) => {
+        if (name === "users") {
+          return {
+            doc: vi.fn(() => ({
+              collection: vi.fn((sub: string) => {
+                if (sub === "situationReceipts") return receiptsQuery;
+                return {};
+              }),
+            })),
+          };
+        }
+        if (name === "tableSetups") {
+          return {
+            doc: vi.fn(() => ({
+              ...setupRef,
+              collection: vi.fn((sub: string) => {
+                if (sub === "situations") return situationsQuery;
+                return {};
+              }),
+            })),
+          };
+        }
+        return {doc: vi.fn()};
+      }),
+      runTransaction: vi.fn(async (callback) => {
+        const tx = {
+          get: vi.fn(async (ref: {path?: string; id?: string}) => {
+            const path = String(ref.path ?? "");
+            if (path.startsWith("sit:")) {
+              const id = path.slice(4);
+              const doc = situationDocs.find((entry) => entry.id === id);
+              return {
+                exists: Boolean(doc),
+                data: () => doc?.data() ?? undefined,
+              };
+            }
+            if (path.startsWith("receipt:")) {
+              const id = path.slice(8);
+              return {
+                exists: options.receiptIds.has(id),
+                data: () => options.receiptIds.has(id) ?
+                  {status: "completed", setupKey: "key"} :
+                  undefined,
+              };
+            }
+            if (path === "setup") {
+              return {
+                exists: true,
+                data: () => ({neverServedCount: 0}),
+              };
+            }
+            return {exists: false, data: () => undefined};
+          }),
+          set: vi.fn(),
+          update: vi.fn(),
+        };
+        return callback(tx);
+      }),
+    } as unknown as Firestore;
+  }
+
+  it("reuses a prepared hand when every situation already has a receipt", async () => {
+    const db = allocationDb({
+      situationIds: ["seen-low", "seen-high"],
+      receiptIds: new Set(["seen-low", "seen-high"]),
+    });
+    const allocated = await allocateUnseenSituation({
+      db,
+      uid: "user-1",
+      setupKey: "key",
+      setup,
+    });
+    expect(allocated).toMatchObject({
+      situationId: "seen-low",
+      reusedPrepared: true,
+    });
+  });
+
+  it("still prefers a fresh hand when one appears without a receipt", async () => {
+    const db = allocationDb({
+      situationIds: ["seen-a", "fresh"],
+      receiptIds: new Set(["seen-a"]),
+    });
+    const allocated = await allocateUnseenSituation({
+      db,
+      uid: "user-1",
+      setupKey: "key",
+      setup,
+    });
+    expect(allocated).toMatchObject({
+      situationId: "fresh",
+      reusedPrepared: false,
+    });
+  });
+
+  it("returns null when the pool has no prepared situations", async () => {
+    const db = allocationDb({
+      situationIds: [],
+      receiptIds: new Set(),
+    });
+    await expect(allocateUnseenSituation({
+      db,
+      uid: "user-1",
+      setupKey: "key",
+      setup,
+    })).resolves.toBeNull();
   });
 });
 
