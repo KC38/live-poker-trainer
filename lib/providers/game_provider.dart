@@ -469,7 +469,9 @@ class GameController extends StateNotifier<TableSession> {
               state: game,
               action: action,
             );
-    if (engine.situation != null && edge == null) {
+    final authoredSpot =
+        engine.situation != null && !engine.isLiveRemainderPlay;
+    if (authoredSpot && edge == null) {
       state = state.copyWith(
         error: 'That action is not one of the authored choices for this spot.',
       );
@@ -503,7 +505,7 @@ class GameController extends StateNotifier<TableSession> {
         game.bigBlind > Money.epsilon ? action.amount / game.bigBlind : 0.0;
 
     HeroActionEdge? chosen;
-    if (engine.situation != null) {
+    if (authoredSpot) {
       // Authored situations were rejected above unless [edge] is exact.
       chosen = engine.applySituationHeroChoice(edge: edge!, action: action);
     } else if (edge != null) {
@@ -533,15 +535,18 @@ class GameController extends StateNotifier<TableSession> {
     } else {
       state = state.copyWith(
         game: after,
-        coach: CoachFeedback(
-          message:
-              edge == null
-                  ? 'No legal coaching edge for that action.'
-                  : 'Could not apply that action.',
-          heroAction: action.label,
-          heroSizingBb: heroSizingBb,
-          decisionStreet: game.street,
-        ),
+        coach:
+            engine.isLiveRemainderPlay
+                ? state.coach.asHistorical()
+                : CoachFeedback(
+                  message:
+                      edge == null
+                          ? 'No legal coaching edge for that action.'
+                          : 'Could not apply that action.',
+                  heroAction: action.label,
+                  heroSizingBb: heroSizingBb,
+                  decisionStreet: game.street,
+                ),
       );
     }
 

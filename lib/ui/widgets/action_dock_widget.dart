@@ -90,7 +90,7 @@ class _ActionDockWidgetState extends ConsumerState<ActionDockWidget> {
         !game.isHandOver &&
         !hero.folded;
     final authoredEdges = widget.authoredEdges;
-    if (authoredEdges != null) {
+    if (authoredEdges != null && authoredEdges.isNotEmpty) {
       return _AuthoredActionDock(
         game: game,
         edges: authoredEdges,

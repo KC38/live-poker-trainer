@@ -275,7 +275,7 @@ export const SITUATION_RESPONSE_JSON_SCHEMA = {
     nodes: {
       type: "object",
       minProperties: 1,
-      maxProperties: 12,
+      maxProperties: 20,
       additionalProperties: {
         anyOf: [HERO_NODE_SCHEMA, SCRIPTED_NODE_SCHEMA, TERMINAL_NODE_SCHEMA],
       },
@@ -343,9 +343,11 @@ Rules:
 - Root must be scripted, preflop, pot=0, stacks all equal startingStack, streetBets all 0, board=[], and foldedSeats=[].
 - Root actions must begin with the complete forced-post ledger. If ante>0, POST_ANTE every seat exactly once in seat order 0..N-1 with amountTo=ante. Heads-up: the button posts SB and the other seat posts BB. With 3+ seats: POST_SB at (buttonSeat+1)%seatCount and POST_BB at (buttonSeat+2)%seatCount. Blind amountTo is ante+smallBlind or ante+bigBlind. No forced posts may be missing, duplicated, reordered, or added after this prefix. Voluntary actions may follow it.
 - Include at least one meaningful hero decision.
-- Keep the entire graph to at most 12 nodes.
-- Every root-to-terminal path has 1-3 hero decisions.
+- Keep the entire graph to at most 20 nodes.
+- Every root-to-terminal path has 1-4 hero decisions.
 - Every hero node has 2-4 curated action choices.
+- Play every street: while two or more players still have chips, do NOT jump to a showdown or all_in_runout terminal. Advance one street at a time with a hero decision on each street (preflop/flop/turn/river) until a fold ends the hand or an all-in leaves fewer than two stacks behind.
+- Showdown terminals are only legal from a river node after the river betting round. all_in_runout is only legal when fewer than two players have chips behind.
 - Do not personalize coaching to any player history.
 - amountTo is total chips committed on the current street ("raise to").
 `;
@@ -363,11 +365,12 @@ Given a SituationPayload JSON, find and FIX:
 - incorrect heroNetChips: side pots are unsupported; split integer pot cents by ascending winner seat, with one extra cent to each of the first remainder winners, then subtract Hero's lineup startingStack from Hero's final chips
 - non-canonical root state or forced-post ledger (ordered all-seat antes when ante>0, then exact SB and BB seats/amountTo totals)
 - street/board/runout mismatches
+- shortcut showdowns: showdown terminals must come from the river; all_in_runout only when fewer than two players have chips; live pots need a hero decision on each street
 - coaching that contradicts the action (e.g. "never fold" on a FOLD edge)
 - missing/invalid verdict, evDeltaBb, or optimalActionKey on any hero edge
 - grading inconsistency: each node needs a correct action; correct/best is 0 EV, alternatives are non-positive strategic estimates; every edge must share an optimalActionKey that exists and points to a correct edge
 - cycles, unreachable nodes, non-terminal leaves
-- graphs over 12 nodes (prune low-value branches while preserving legal terminal paths)
+- graphs over 20 nodes (prune low-value branches while preserving legal terminal paths)
 Return ONLY the corrected full SituationPayload JSON. If already valid, return it unchanged.
 Keep payloadVersion ${PAYLOAD_VERSION} and schemaVersion "${SITUATION_SCHEMA_VERSION}".
 `;

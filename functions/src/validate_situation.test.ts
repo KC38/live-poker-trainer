@@ -12,6 +12,87 @@ import { minimalFoldSituation } from "./test_fixtures";
 import { hashSituationStructure } from "./content_hash";
 import type { SituationPayload } from "./situation_types";
 
+/**
+ * Rewires the preflop CALL edge through flop/turn/river scripted nodes into a
+ * river showdown terminal (for tests that need a legal multi-street path).
+ */
+function wirePreflopCallToRiverShowdown(
+  payload: SituationPayload,
+  options: {
+    terminalId: string;
+    board: string[];
+    pot: number;
+    stacks: number[];
+    winnerSeats: number[];
+    heroNetChips: number;
+  },
+): SituationPayload {
+  const {terminalId, board, pot, stacks, winnerSeats, heroNetChips} = options;
+  payload.runouts = [
+    {street: "flop", cards: board.slice(0, 3)},
+    {street: "turn", cards: board.slice(3, 4)},
+    {street: "river", cards: board.slice(4, 5)},
+  ];
+  const open = payload.nodes.open;
+  if (open.type !== "hero") throw new Error("expected hero open");
+  const call = open.actions.find((action) => action.kind === "CALL");
+  if (!call) throw new Error("expected CALL");
+  call.nextNodeId = "sd_flop";
+
+  payload.nodes.sd_flop = {
+    type: "scripted",
+    id: "sd_flop",
+    street: "flop",
+    pot,
+    stacks: [...stacks],
+    streetBets: [0, 0],
+    board: board.slice(0, 3),
+    foldedSeats: [],
+    actions: [{seat: 1, kind: "CHECK"}],
+    nextNodeId: "sd_turn",
+  };
+  payload.nodes.sd_turn = {
+    type: "scripted",
+    id: "sd_turn",
+    street: "turn",
+    pot,
+    stacks: [...stacks],
+    streetBets: [0, 0],
+    board: board.slice(0, 4),
+    foldedSeats: [],
+    actions: [{seat: 1, kind: "CHECK"}],
+    nextNodeId: "sd_river",
+  };
+  payload.nodes.sd_river = {
+    type: "scripted",
+    id: "sd_river",
+    street: "river",
+    pot,
+    stacks: [...stacks],
+    streetBets: [0, 0],
+    board: [...board],
+    foldedSeats: [],
+    actions: [{seat: 1, kind: "CHECK"}],
+    nextNodeId: terminalId,
+  };
+
+  const terminal = payload.nodes[terminalId];
+  if (!terminal || terminal.type !== "terminal") {
+    throw new Error(`expected terminal ${terminalId}`);
+  }
+  terminal.reason = "showdown";
+  terminal.street = "river";
+  terminal.board = [...board];
+  terminal.foldedSeats = [];
+  terminal.stacks = [...stacks];
+  terminal.pot = pot;
+  terminal.winnerSeats = [...winnerSeats];
+  terminal.heroNetChips = heroNetChips;
+
+  delete payload.nodes.villain_folds_limp;
+  return payload;
+}
+
 describe("validateSituation", () => {
   it("accepts a minimal valid tree", () => {
     const result = validateSituation(minimalFoldSituation());
@@ -291,7 +372,7 @@ describe("validateSituation", () => {
   it("rejects graphs larger than the generation budget", () => {
     const payload = minimalFoldSituation();
     const template = payload.nodes.term_fold;
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 20; i++) {
       const id = `extra_${i}`;
       payload.nodes[id] = { ...structuredClone(template), id };
     }
@@ -300,6 +381,25 @@ describe("validateSituation", () => {
     expect(result.issues.some((issue) => issue.code === "graph_size")).toBe(
       true,
     );
+  });
+
+  it("rejects a showdown terminal reached before the river", () => {
+    const payload = minimalFoldSituation();
+    const terminal = payload.nodes.term_call_open;
+    if (terminal.type !== "terminal") throw new Error("expected terminal");
+    terminal.reason = "showdown";
+    terminal.street = "river";
+    terminal.board = ["2c", "7d", "Jh", "9s", "3h"];
+    terminal.foldedSeats = [];
+    const result = validateSituation(payload);
+    expect(result.ok).toBe(false);
+    expect(
+      result.issues.some(
+        (issue) =>
+          issue.code === "transition" &&
+          issue.message.includes("reached from the river"),
+      ),
+    ).toBe(true);
   });
 
   it.each([
@@ -433,22 +533,14 @@ describe("validateSituation", () => {
   });
 
   it("accepts a valid equal split pot", () => {
-    const payload = minimalFoldSituation();
-    const terminal = payload.nodes.term_call_open;
-    if (terminal.type !== "terminal") throw new Error("expected terminal");
-    payload.runouts = [
-      { street: "flop", cards: ["2s", "3s", "4s"] },
-      { street: "turn", cards: ["5s"] },
-      { street: "river", cards: ["6s"] },
-    ];
-    const callTerminal = payload.nodes.term_call;
-    if (callTerminal.type !== "terminal") throw new Error("expected terminal");
-    callTerminal.board = ["2s", "3s", "4s", "5s", "6s"];
-    callTerminal.winnerSeats = [0, 1];
-    callTerminal.heroNetChips = 0;
-    terminal.board = ["2s", "3s", "4s", "5s", "6s"];
-    terminal.winnerSeats = [0, 1];
-    terminal.heroNetChips = 0;
+    const payload = wirePreflopCallToRiverShowdown(minimalFoldSituation(), {
+      terminalId: "term_call_open",
+      board: ["2s", "3s", "4s", "5s", "6s"],
+      pot: 4,
+      stacks: [198, 198],
+      winnerSeats: [0, 1],
+      heroNetChips: 0,
+    });
 
     const result = validateSituation(payload);
     if (!result.ok) console.error(result.issues);
@@ -456,27 +548,21 @@ describe("validateSituation", () => {
   });
 
   it("validates heroNetChips against the hero's split-pot share", () => {
-    const payload = minimalFoldSituation();
-    const terminal = payload.nodes.term_call_open;
-    if (terminal.type !== "terminal") throw new Error("expected terminal");
-    payload.runouts = [
-      {street: "flop", cards: ["2s", "3s", "4s"]},
-      {street: "turn", cards: ["5s"]},
-      {street: "river", cards: ["6s"]},
-    ];
-    terminal.board = ["2s", "3s", "4s", "5s", "6s"];
-    const callTerminal = payload.nodes.term_call;
-    if (callTerminal.type !== "terminal") throw new Error("expected terminal");
-    callTerminal.board = ["2s", "3s", "4s", "5s", "6s"];
-    callTerminal.winnerSeats = [0, 1];
-    callTerminal.heroNetChips = 0;
-    terminal.winnerSeats = [1, 0];
-    terminal.heroNetChips = 0;
+    const payload = wirePreflopCallToRiverShowdown(minimalFoldSituation(), {
+      terminalId: "term_call_open",
+      board: ["2s", "3s", "4s", "5s", "6s"],
+      pot: 4,
+      stacks: [198, 198],
+      winnerSeats: [1, 0],
+      heroNetChips: 0,
+    });
 
     const result = validateSituation(payload);
     if (!result.ok) console.error(result.issues);
     expect(result.ok).toBe(true);
 
+    const terminal = payload.nodes.term_call_open;
+    if (terminal.type !== "terminal") throw new Error("expected terminal");
     terminal.heroNetChips = -0.01;
     expect(
       validateSituation(payload).issues.some(
@@ -521,7 +607,7 @@ describe("validateSituation", () => {
         verdict: "correct",
         evDeltaBb: 0,
         optimalActionKey: "CHECK",
-        nextNodeId: "term_fold",
+        nextNodeId: "villain_folds_flop_check",
       },
       {
         actionKey: "BET_33",
@@ -532,21 +618,45 @@ describe("validateSituation", () => {
         verdict: "close",
         evDeltaBb: -0.1,
         optimalActionKey: "CHECK",
-        nextNodeId: "term_4bet",
+        nextNodeId: "villain_folds_flop_bet",
       },
     ];
-    checkTerminal.reason = "showdown";
-    checkTerminal.street = "river";
-    checkTerminal.board = ["2c", "7d", "Jh", "9s", "3h"];
-    checkTerminal.foldedSeats = [];
+    payload.nodes.villain_folds_flop_check = {
+      type: "scripted",
+      id: "villain_folds_flop_check",
+      street: "flop",
+      pot: 10,
+      stacks: [195, 195],
+      streetBets: [0, 0],
+      board: ["2c", "7d", "Jh"],
+      foldedSeats: [],
+      actions: [{ seat: 1, kind: "FOLD" }],
+      nextNodeId: "term_fold",
+    };
+    payload.nodes.villain_folds_flop_bet = {
+      type: "scripted",
+      id: "villain_folds_flop_bet",
+      street: "flop",
+      pot: 12,
+      stacks: [193, 195],
+      streetBets: [2, 0],
+      board: ["2c", "7d", "Jh"],
+      foldedSeats: [],
+      actions: [{ seat: 1, kind: "FOLD" }],
+      nextNodeId: "term_4bet",
+    };
+    checkTerminal.reason = "fold";
+    checkTerminal.street = "flop";
+    checkTerminal.board = ["2c", "7d", "Jh"];
+    checkTerminal.foldedSeats = [1];
     checkTerminal.stacks = [195, 195];
     checkTerminal.pot = 10;
     checkTerminal.winnerSeats = [0];
     checkTerminal.heroNetChips = 5;
-    betTerminal.reason = "showdown";
-    betTerminal.street = "river";
-    betTerminal.board = ["2c", "7d", "Jh", "9s", "3h"];
-    betTerminal.foldedSeats = [];
+    betTerminal.reason = "fold";
+    betTerminal.street = "flop";
+    betTerminal.board = ["2c", "7d", "Jh"];
+    betTerminal.foldedSeats = [1];
     betTerminal.stacks = [193, 195];
     betTerminal.pot = 12;
     betTerminal.winnerSeats = [0];
@@ -555,6 +665,7 @@ describe("validateSituation", () => {
     delete payload.nodes.term_shove;
     delete payload.nodes.villain_folds_shove;
     delete payload.nodes.villain_folds_4bet;
+    delete payload.nodes.villain_folds_call;
 
     const result = validateSituation(payload);
     if (!result.ok) console.error(result.issues);
@@ -676,11 +787,14 @@ describe("validateSituation", () => {
   });
 
   it("rejects the wrong deterministic showdown winner", () => {
-    const payload = minimalFoldSituation();
-    const terminal = payload.nodes.term_call;
-    if (terminal.type !== "terminal") throw new Error("expected terminal");
-    terminal.winnerSeats = [1];
-    terminal.heroNetChips = -16;
+    const payload = wirePreflopCallToRiverShowdown(minimalFoldSituation(), {
+      terminalId: "term_call_open",
+      board: ["2s", "3s", "4s", "5s", "6s"],
+      pot: 4,
+      stacks: [198, 198],
+      winnerSeats: [1],
+      heroNetChips: -2,
+    });
     const result = validateSituation(payload);
     expect(
       result.issues.some(
