@@ -596,11 +596,10 @@ class PokerEngine {
     _collectEmitted = false;
     _seedDeckWithRemainingRunouts(sit);
 
-    // Hero already acted on the edge that reached this terminal; continue
-    // the betting round (or advance the street) via [nextEvent].
-    _state = _advanceToNextPlayer(
-      _state.copyWith(waitingForHero: false, isHandOver: false, clearResult: true),
-    );
+    // The action that reached this terminal already advanced to the correct
+    // next seat (or closed the round) in [_applyAction]. Advancing again here
+    // would skip that seat and can immediately reopen the hero on this street.
+    _state = _state.copyWith(isHandOver: false, clearResult: true);
   }
 
   /// Puts unpublished runout cards at the end of [_deck] so [_advanceStreet]
