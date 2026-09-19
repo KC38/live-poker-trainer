@@ -248,4 +248,51 @@ void main() {
     expect(pathNodeIds, ['hero_flop']);
     expect(chosenActionKeys, ['RAISE_70']);
   });
+
+  testWidgets('phone-width raise labels keep the full amount', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    const actions = [
+      LiveLegalActionModel(
+        actionId: 'FOLD',
+        kind: 'FOLD',
+        bucket: 'FOLD',
+        label: 'Fold',
+      ),
+      LiveLegalActionModel(
+        actionId: 'CALL:8800',
+        kind: 'CALL',
+        bucket: 'CALL',
+        label: r'Call $88',
+        amountTo: 88,
+      ),
+      LiveLegalActionModel(
+        actionId: 'RAISE:16000',
+        kind: 'RAISE',
+        bucket: 'RERAISE_MIN',
+        label: r'Raise to $160',
+        amountTo: 160,
+      ),
+      LiveLegalActionModel(
+        actionId: 'ALL_IN:40000',
+        kind: 'ALL_IN',
+        bucket: 'ALL_IN',
+        label: r'All-in $400',
+        amountTo: 400,
+      ),
+    ];
+    await _pump(
+      tester,
+      _state(heroStack: 392, highestBet: 96, mainPot: 148),
+      liveActions: actions,
+    );
+
+    expect(find.text('RAISE TO \$160'), findsOneWidget);
+    expect(find.text('ALL-IN \$400'), findsOneWidget);
+    final label = tester.renderObject<RenderBox>(find.text('RAISE TO \$160'));
+    final button = tester.renderObject<RenderBox>(
+      find.widgetWithText(ElevatedButton, 'RAISE TO \$160'),
+    );
+    expect(label.size.width, lessThanOrEqualTo(button.size.width - 8));
+  });
 }

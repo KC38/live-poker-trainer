@@ -74,21 +74,30 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
     bool seedLocalPreferences = false,
     required String method,
     required bool isSignUp,
+    String? displayName,
   }) async {
     state = const AsyncValue.loading();
     try {
       final user = await action();
+      final requested = displayName?.trim();
+      final resolvedName =
+          (requested != null && requested.isNotEmpty)
+              ? requested
+              : user.displayName;
       final preferences =
           seedLocalPreferences
               ? _ref.read(settingsProvider)
               : const GameSettingsModel();
-      await _ref
-          .read(userRepositoryProvider)
-          .ensureUserDoc(
-            uid: user.uid,
-            displayName: user.displayName,
-            preferences: preferences,
-          );
+      final repo = _ref.read(userRepositoryProvider);
+      await repo.ensureUserDoc(
+        uid: user.uid,
+        displayName: resolvedName,
+        preferences: preferences,
+      );
+      // Auth state can create the doc before updateDisplayName lands on web.
+      if (requested != null && requested.isNotEmpty) {
+        await repo.updateProfile(uid: user.uid, displayName: requested);
+      }
       // Refresh providers that key off the signed-in user (re-hydrates prefs).
       _ref.invalidate(userDocProvider);
       final analytics = _ref.read(analyticsServiceProvider);
@@ -120,6 +129,7 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
       seedLocalPreferences: true,
       method: 'email',
       isSignUp: true,
+      displayName: displayName,
     );
   }
 
@@ -137,11 +147,7 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
 
   /// Google Sign-In.
   Future<void> signInWithGoogle() {
-    return _run(
-      _auth.signInWithGoogle,
-      method: 'google',
-      isSignUp: false,
-    );
+    return _run(_auth.signInWithGoogle, method: 'google', isSignUp: false);
   }
 
   /// Signs out; clears synced gameplay prefs from the device (keeps audio).
