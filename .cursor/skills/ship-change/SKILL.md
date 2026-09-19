@@ -2,9 +2,9 @@
 name: ship-change
 description: >-
   Ship bug fixes and features via a feature branch, review, PR merge to main,
-  branch cleanup, and Flutter simulator refresh. Use when implementing a bug
-  fix or new feature, or when the user asks to ship, open a PR, merge, or
-  /ship-change.
+  Cloud Functions deploy, branch cleanup, and Flutter simulator refresh. Use
+  when implementing a bug fix or new feature, or when the user asks to ship,
+  open a PR, merge, or /ship-change.
 ---
 
 # Ship change (branch → review → merge → refresh)
@@ -24,7 +24,8 @@ Ship progress:
 - [ ] 4. Review the diff
 - [ ] 5. Push, open PR, merge to main
 - [ ] 6. Delete remote/local feature branch; sync main
-- [ ] 7. Refresh Flutter simulator (if running / available)
+- [ ] 7. Deploy Cloud Functions from merged main (always)
+- [ ] 8. Refresh Flutter simulator (if running / available)
 ```
 
 ## 1. Branch
@@ -99,7 +100,26 @@ git fetch --prune
 
 Confirm with `git status -sb` (should be `main` clean, in sync with `origin/main`).
 
-## 7. Flutter simulator refresh
+## 7. Deploy Cloud Functions (always)
+
+After merge, **always** deploy Functions so production matches `origin/main`.
+Do not wait for the user to ask. Skip only if they explicitly say not to deploy,
+or if the ship stopped before merge (commit-only / no PR).
+
+Run:
+
+```bash
+.cursor/skills/ship-change/scripts/deploy-functions.sh
+```
+
+Notes:
+
+- Deploys from a disposable worktree on `origin/main` (never from unrelated WIP).
+- Requires Node 22 (`brew` `node@22` on PATH).
+- Uses `firebase-tools@15+` (older CLI fails analyzing `jose` ESM).
+- If deploy fails, report the error and stop — do not claim the ship is live.
+
+## 8. Flutter simulator refresh
 
 Run the helper (preferred):
 
@@ -123,4 +143,5 @@ Or follow [simulator-refresh.md](simulator-refresh.md).
 
 ## Report back
 
-One short block: branch name, PR URL, merge status, whether the simulator was restarted/started/skipped.
+One short block: branch name, PR URL, merge status, functions deploy result,
+whether the simulator was restarted/started/skipped.

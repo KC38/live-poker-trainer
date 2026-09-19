@@ -1,5 +1,5 @@
 ---
-description: Ship bug fixes/features via branch, PR review/merge, cleanup, and simulator refresh (not direct pushes to main)
+description: Ship bug fixes/features via branch, PR review/merge, deploy functions, cleanup, and simulator refresh (not direct pushes to main)
 alwaysApply: true
 ---
 
@@ -14,14 +14,17 @@ For **bug fixes** and **new features**, follow `.cursor/skills/ship-change/SKILL
 3. Review the diff; fix critical issues.
 4. Push, open a GitHub PR, squash-merge into `main`, delete the feature branch.
 5. Checkout/pull `main`, prune local branch.
-6. Refresh the Flutter simulator if one is running/available (skill script).
+6. **Always deploy Cloud Functions** from merged `main` (skill script) — do not wait to be asked.
+7. Refresh the Flutter simulator if one is running/available (skill script).
 
 ## Do not
 
 - Push feature work straight to `main` with `git push origin HEAD:main`.
 - Force-push `main`, skip hooks, or stage secrets (see skill).
+- Skip functions deploy after a successful merge (unless the user explicitly says not to deploy).
 
 ## Exceptions
 
 - Docs-only / chore the user explicitly wants on `main`: still prefer the skill unless they say otherwise.
-- User says “commit only” / “don’t PR”: stop after the commit on the feature branch.
+- User says “commit only” / “don’t PR”: stop after the commit on the feature branch (no deploy).
+- User says “don’t deploy”: skip step 6 only.
