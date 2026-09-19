@@ -13,8 +13,8 @@ import { hashSituationStructure } from "./content_hash";
 import type { SituationPayload } from "./situation_types";
 
 /**
- * Rewires the preflop CALL edge through flop/turn/river scripted nodes into a
- * river showdown terminal (for tests that need a legal multi-street path).
+ * Rewires the preflop CALL edge through authored flop/turn/river Hero nodes
+ * into a river showdown terminal.
  */
 function wirePreflopCallToRiverShowdown(
   payload: SituationPayload,
@@ -40,7 +40,7 @@ function wirePreflopCallToRiverShowdown(
   call.nextNodeId = "sd_flop";
 
   payload.nodes.sd_flop = {
-    type: "scripted",
+    type: "hero",
     id: "sd_flop",
     street: "flop",
     pot,
@@ -48,11 +48,21 @@ function wirePreflopCallToRiverShowdown(
     streetBets: [0, 0],
     board: board.slice(0, 3),
     foldedSeats: [],
-    actions: [{seat: 1, kind: "CHECK"}],
-    nextNodeId: "sd_turn",
+    toAct: payload.heroSeat,
+    callAmount: 0,
+    minRaiseTo: payload.bigBlind,
+    actions: [{
+      actionKey: "CHECK_FLOP",
+      kind: "CHECK",
+      coaching: "Checking keeps the showdown path controlled.",
+      verdict: "correct",
+      evDeltaBb: 0,
+      optimalActionKey: "CHECK_FLOP",
+      nextNodeId: "sd_turn",
+    }],
   };
   payload.nodes.sd_turn = {
-    type: "scripted",
+    type: "hero",
     id: "sd_turn",
     street: "turn",
     pot,
@@ -60,11 +70,21 @@ function wirePreflopCallToRiverShowdown(
     streetBets: [0, 0],
     board: board.slice(0, 4),
     foldedSeats: [],
-    actions: [{seat: 1, kind: "CHECK"}],
-    nextNodeId: "sd_river",
+    toAct: payload.heroSeat,
+    callAmount: 0,
+    minRaiseTo: payload.bigBlind,
+    actions: [{
+      actionKey: "CHECK_TURN",
+      kind: "CHECK",
+      coaching: "Checking preserves showdown value on the turn.",
+      verdict: "correct",
+      evDeltaBb: 0,
+      optimalActionKey: "CHECK_TURN",
+      nextNodeId: "sd_river",
+    }],
   };
   payload.nodes.sd_river = {
-    type: "scripted",
+    type: "hero",
     id: "sd_river",
     street: "river",
     pot,
@@ -72,8 +92,18 @@ function wirePreflopCallToRiverShowdown(
     streetBets: [0, 0],
     board: [...board],
     foldedSeats: [],
-    actions: [{seat: 1, kind: "CHECK"}],
-    nextNodeId: terminalId,
+    toAct: payload.heroSeat,
+    callAmount: 0,
+    minRaiseTo: payload.bigBlind,
+    actions: [{
+      actionKey: "CHECK_RIVER",
+      kind: "CHECK",
+      coaching: "Checking realizes showdown value on the river.",
+      verdict: "correct",
+      evDeltaBb: 0,
+      optimalActionKey: "CHECK_RIVER",
+      nextNodeId: terminalId,
+    }],
   };
 
   const terminal = payload.nodes[terminalId];
@@ -545,6 +575,39 @@ describe("validateSituation", () => {
     const result = validateSituation(payload);
     if (!result.ok) console.error(result.issues);
     expect(result.ok).toBe(true);
+  });
+
+  it("rejects a live path without a Hero decision on every street", () => {
+    const payload = wirePreflopCallToRiverShowdown(minimalFoldSituation(), {
+      terminalId: "term_call_open",
+      board: ["2s", "3s", "4s", "5s", "6s"],
+      pot: 4,
+      stacks: [198, 198],
+      winnerSeats: [0, 1],
+      heroNetChips: 0,
+    });
+    payload.nodes.sd_turn = {
+      type: "scripted",
+      id: "sd_turn",
+      street: "turn",
+      pot: 4,
+      stacks: [198, 198],
+      streetBets: [0, 0],
+      board: ["2s", "3s", "4s", "5s"],
+      foldedSeats: [],
+      actions: [{seat: 1, kind: "CHECK"}],
+      nextNodeId: "sd_river",
+    };
+
+    const result = validateSituation(payload);
+    expect(result.ok).toBe(false);
+    expect(
+      result.issues.some(
+        (issue) =>
+          issue.code === "hero_street_coverage" &&
+          issue.message.includes("turn"),
+      ),
+    ).toBe(true);
   });
 
   it("validates heroNetChips against the hero's split-pot share", () => {
