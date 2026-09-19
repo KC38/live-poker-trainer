@@ -51,6 +51,7 @@ export async function fetchSituationForUser(options: {
   allocate?: typeof allocateUnseenSituation;
   queueRefill?: typeof requestPoolRefill;
   enforceLimits?: typeof enforceSituationFetchLimits;
+  convertReservation?: typeof convertDealReservationToPreparingPoll;
   readSetupState?: (
     db: Firestore,
     setupKey: string,
@@ -64,6 +65,8 @@ export async function fetchSituationForUser(options: {
   const allocate = options.allocate ?? allocateUnseenSituation;
   const queueRefill = options.queueRefill ?? requestPoolRefill;
   const enforceLimits = options.enforceLimits ?? enforceSituationFetchLimits;
+  const convertReservation =
+    options.convertReservation ?? convertDealReservationToPreparingPoll;
   const readSetupState =
     options.readSetupState ??
     (async (firestore, key) => {
@@ -86,14 +89,28 @@ export async function fetchSituationForUser(options: {
     });
 
   const setupState = await readSetupState(db, setupKey);
-  const preparingPoll =
-    setupState.exists &&
-    setupState.situationCount === 0 &&
-    (setupState.generationStatus === "queued" ||
-      setupState.generationStatus === "generating");
+  // Derive from Firestore only; never trust a client-supplied flag.
+  const preparingBeforeAllocate = isPreparingPollState(setupState);
 
-  // Derive poll exemption from Firestore; no client-supplied flag is trusted.
-  await enforceLimits({db, uid: options.uid, setupKey, preparingPoll});
+  // Prep waits charge the poll bucket. Deal quota is reserved up front for
+  // ready pools so a successful allocate cannot outrun the hourly cap, and
+  // empty-pool retries never burn deal slots (see convert below).
+  if (preparingBeforeAllocate) {
+    await enforceLimits({
+      db,
+      uid: options.uid,
+      setupKey,
+      preparingPoll: true,
+    });
+  } else {
+    await enforceLimits({
+      db,
+      uid: options.uid,
+      setupKey,
+      preparingPoll: false,
+    });
+  }
+
   await ensureSetup(db, setup, setupKey);
   const allocated = await allocate({
     db,
@@ -103,6 +120,13 @@ export async function fetchSituationForUser(options: {
   });
 
   if (!allocated) {
+    if (!preparingBeforeAllocate) {
+      // Ready-looking pool had nothing unseen — this is a prep wait, not a deal.
+      await convertReservation({
+        db,
+        uid: options.uid,
+      });
+    }
     const situationCount = await readSituationCount(db, setupKey);
     await queueRefill({
       db,
@@ -113,6 +137,16 @@ export async function fetchSituationForUser(options: {
       "unavailable",
       "Situation pool is generating. Retry in a moment.",
     );
+  }
+
+  if (preparingBeforeAllocate) {
+    // Hand finally delivered after a prep wait — charge the deal quota now.
+    await enforceLimits({
+      db,
+      uid: options.uid,
+      setupKey,
+      preparingPoll: false,
+    });
   }
 
   let refillTriggered = false;
@@ -133,6 +167,82 @@ export async function fetchSituationForUser(options: {
     payload: allocated.payload,
     refillTriggered,
   };
+}
+
+/**
+ * True when the setup is empty / not ready, so client retries are prep polls.
+ *
+ * Includes first-touch (missing doc) and idle empty pools: those previously
+ * burned the hourly deal quota before Gemini published anything.
+ */
+export function isPreparingPollState(state: SetupGenerationState): boolean {
+  if (!state.exists) return true;
+  if (state.situationCount > 0) return false;
+  const status = state.generationStatus;
+  return (
+    status === undefined ||
+    status === "idle" ||
+    status === "queued" ||
+    status === "generating"
+  );
+}
+
+/**
+ * Moves a reserved deal slot into the preparing-poll bucket.
+ *
+ * Used when a non-empty pool still cannot allocate (exhausted / refill), so
+ * the caller is waiting on generation rather than consuming a training hand.
+ */
+export async function convertDealReservationToPreparingPoll(options: {
+  db: Firestore;
+  uid: string;
+  nowMs?: number;
+}): Promise<void> {
+  const nowMs = options.nowMs ?? Date.now();
+  const hourMs = 60 * 60 * 1000;
+  const hourStartMs = Math.floor(nowMs / hourMs) * hourMs;
+  const limitRef = options.db
+    .collection("users")
+    .doc(options.uid)
+    .collection("serverLimits")
+    .doc("situationFetch");
+
+  await options.db.runTransaction(async (tx) => {
+    const snap = await tx.get(limitRef);
+    const data = snap.data() ?? {};
+
+    const sameRequestHour = data.requestWindowStartMs === hourStartMs;
+    const requestCount = sameRequestHour ? Number(data.requestCount ?? 0) : 0;
+    if (!Number.isSafeInteger(requestCount) || requestCount < 0) {
+      throw new Error("Invalid fetch quota state");
+    }
+
+    const samePollHour = data.pollWindowStartMs === hourStartMs;
+    const pollCount = samePollHour ? Number(data.pollCount ?? 0) : 0;
+    if (!Number.isSafeInteger(pollCount) || pollCount < 0) {
+      throw new Error("Invalid preparing poll quota state");
+    }
+    if (pollCount >= PREPARING_POLLS_PER_HOUR) {
+      const retryMinutes = Math.max(
+        1,
+        Math.ceil((hourStartMs + hourMs - nowMs) / 60_000),
+      );
+      throw new HttpsError(
+        "resource-exhausted",
+        `Preparing poll limit reached. Retry in about ${
+          retryMinutes
+        } minute(s).`,
+      );
+    }
+
+    tx.set(limitRef, {
+      requestWindowStartMs: hourStartMs,
+      requestCount: Math.max(0, requestCount - (sameRequestHour ? 1 : 0)),
+      pollWindowStartMs: hourStartMs,
+      pollCount: pollCount + 1,
+      updatedAt: FieldValue.serverTimestamp(),
+    }, {merge: true});
+  });
 }
 
 /**

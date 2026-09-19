@@ -41,7 +41,9 @@ never intentionally serves that situation to that user again.
 New or exhausted pools are marked `queued`; `fetchSituation` returns an
 `unavailable` preparation response instead of waiting on Gemini. The Flutter
 client polls that exact preparation response for up to nine minutes with
-one-, two-, four-, then five-second capped backoff. Other network-unavailable
+one-, two-, four-, then five-second capped backoff. Those preparation polls
+charge a separate per-user hourly poll quota; only a successful situation
+allocation increments the hourly deal (fetch) quota. Other network-unavailable
 responses fail promptly. Generation publishes each validated situation as soon
 as it succeeds (empty pools start with a two-situation ASAP wave, then fill to
 five). The same refill is queued when the globally never-served count reaches
