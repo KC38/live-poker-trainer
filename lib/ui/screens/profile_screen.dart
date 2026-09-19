@@ -4,6 +4,8 @@
 /// sample it came from. Style is withheld below [StyleThresholds.minHands].
 library;
 
+import 'dart:async';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,18 +15,49 @@ import 'package:live_poker_trainer/engine/hero_profiler.dart';
 import 'package:live_poker_trainer/models/hero_metrics.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
 import 'package:live_poker_trainer/models/user_stats_model.dart';
+import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/providers/profile_provider.dart';
+import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_avatar.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_identity_sheet.dart';
 
 /// Consolidated Progress / You screen (profile + coaching stats).
-class ProfileScreen extends ConsumerWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   /// Creates the progress screen.
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  late final DateTime _enteredAt;
+  AnalyticsService? _analytics;
+
+  @override
+  void initState() {
+    super.initState();
+    _enteredAt = DateTime.now();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _analytics = ref.read(analyticsServiceProvider);
+      unawaited(_analytics!.logProgressViewOpen());
+    });
+  }
+
+  @override
+  void dispose() {
+    final durationMs = DateTime.now().difference(_enteredAt).inMilliseconds;
+    final analytics = _analytics;
+    if (analytics != null) {
+      unawaited(analytics.logProgressDwell(durationMs: durationMs));
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final profileAsync = ref.watch(heroProfileControllerProvider);
     final statsAsync = ref.watch(userStatsProvider);
     final canPop = Navigator.of(context).canPop();

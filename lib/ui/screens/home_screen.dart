@@ -14,10 +14,12 @@ import 'package:live_poker_trainer/core/debug/agent_commands.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
+import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
+import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
 import 'package:live_poker_trainer/ui/screens/profile_screen.dart';
 import 'package:live_poker_trainer/ui/screens/settings_screen.dart';
@@ -82,9 +84,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     ref.read(gameControllerProvider.notifier).prepareTraining();
 
     if (!mounted) return;
+    final settings = ref.read(settingsProvider);
+    unawaited(
+      ref.read(analyticsServiceProvider).logTrainingLaunch(
+        seatCount: settings.seatCount,
+        stackDepthBb: settings.stackDepthBb,
+        lineupMode: settings.lineupMode.name,
+      ),
+    );
+
     await Navigator.push(
       context,
-      softFadeRoute(const PokerTableScreen()),
+      softFadeRoute(
+        const PokerTableScreen(),
+        name: AnalyticsScreens.pokerTable,
+      ),
     );
 
     unawaited(_syncHomeBgm());
@@ -197,7 +211,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       identity: ref.watch(heroIdentityProvider),
                       onTap: () => Navigator.push(
                         context,
-                        softFadeRoute(const ProfileScreen()),
+                        softFadeRoute(
+                          const ProfileScreen(),
+                          name: AnalyticsScreens.progress,
+                        ),
                       ),
                     ),
                     const Spacer(),
@@ -205,7 +222,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       tooltip: 'Settings',
                       onPressed: () => Navigator.push(
                         context,
-                        softFadeRoute(const SettingsScreen()),
+                        softFadeRoute(
+                          const SettingsScreen(),
+                          name: AnalyticsScreens.settings,
+                        ),
                       ),
                       icon: const Icon(
                         Icons.settings_outlined,
