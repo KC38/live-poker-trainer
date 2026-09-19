@@ -300,6 +300,7 @@ describe("concurrent generation batch", () => {
         modelId: "gemini-3.8-flash",
       };
     });
+    const recordedRuns: Array<{runId: string; status: string}> = [];
     const result = await runConcurrentGenerationBatch({
       apiKey: "secret",
       setup,
@@ -310,6 +311,9 @@ describe("concurrent generation batch", () => {
       publishFn: vi.fn(async (generated) =>
         generated.payload.setupKey !== "variation-2"
       ),
+      recordRunFn: vi.fn(async (run) => {
+        recordedRuns.push({runId: run.runId, status: run.status});
+      }),
     });
 
     expect(maxActive).toBe(5);
@@ -317,6 +321,14 @@ describe("concurrent generation batch", () => {
     expect(result.added).toBe(2);
     expect(result.skipped).toBe(1);
     expect(result.errors.sort()).toEqual(["failure-1", "failure-3"]);
+    expect(recordedRuns).toHaveLength(5);
+    expect(recordedRuns).toEqual(expect.arrayContaining([
+      {runId: "lease-0", status: "published"},
+      {runId: "lease-1", status: "failed"},
+      {runId: "lease-2", status: "duplicate"},
+      {runId: "lease-3", status: "failed"},
+      {runId: "lease-4", status: "published"},
+    ]));
   });
 
   it("publishes each success before slower siblings finish", async () => {

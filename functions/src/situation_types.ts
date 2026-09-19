@@ -6,6 +6,8 @@
  * nodes advance villain actions between hero decisions.
  */
 
+import type {GenerationUsage} from "./generation_usage";
+
 /** Current published payload version. */
 export const PAYLOAD_VERSION = 2 as const;
 
@@ -237,8 +239,17 @@ export interface TableSetupDoc {
   situationCount: number;
   neverServedCount: number;
   generation?: GenerationLeaseState;
+  generationMetrics?: GenerationMetrics;
   createdAt?: unknown;
   updatedAt?: unknown;
+}
+
+/** Aggregate model usage for one table setup. */
+export interface GenerationMetrics extends GenerationUsage {
+  completedRunCount: number;
+  successfulRunCount: number;
+  failedRunCount: number;
+  publishedSituationCount: number;
 }
 
 export interface GenerationLeaseState {
@@ -262,6 +273,9 @@ export interface SituationDoc {
   schemaVersion: string;
   source: "gemini";
   modelId: string;
+  generationRunId: string;
+  generationUsage: GenerationUsage;
+  validationFailureCount: number;
   contentHash: string;
   timesServed: number;
   generatedAt: unknown;
@@ -269,6 +283,18 @@ export interface SituationDoc {
     ok: true;
     checkedAt: unknown;
   };
+}
+
+/** One auditable generation job under a table setup. */
+export interface GenerationRunDoc {
+  runId: string;
+  setupKey: string;
+  modelId: string;
+  status: "published" | "duplicate" | "failed";
+  usage: GenerationUsage;
+  validationFailureCount: number;
+  error?: string;
+  createdAt: unknown;
 }
 
 /** Receipt allocated atomically when a situation is served. */
