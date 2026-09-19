@@ -183,7 +183,9 @@ export function applyLiveAction(options: {
 }): {state: LiveHandState; event: LiveActionEvent} {
   const state = cloneState(options.state);
   const legal = legalLiveActions(options.hand, state);
-  const selected = legal.find((candidate) => candidate.actionId === options.actionId);
+  const selected = state.actorSeat === null ?
+    null :
+    resolveOfferedAction(legal, options.actionId, state.players[state.actorSeat]);
   if (!selected || state.actorSeat === null) {
     throw new Error(`illegal or stale action id: ${options.actionId}`);
   }
@@ -590,6 +592,47 @@ function commitTo(player: LivePlayerState, amountTo: number): void {
 
 function canAct(player: LivePlayerState): boolean {
   return !player.folded && !player.allIn && player.stack > 0;
+}
+
+/**
+ * Honors an action id stored on an older node.
+ *
+ * Sizing snaps change fresh ids (`BET_33:1584` becomes `BET_33:1600`). The
+ * button the player already saw must still apply, at that exact size, as long
+ * as the same bucket is still legal and the amount fits the stack.
+ */
+function resolveOfferedAction(
+  legal: LiveLegalAction[],
+  actionId: string,
+  player: LivePlayerState,
+): LiveLegalAction | null {
+  const exact = legal.find((candidate) => candidate.actionId === actionId);
+  if (exact) return exact;
+  const separator = actionId.lastIndexOf(":");
+  if (separator <= 0) return null;
+  const bucket = actionId.slice(0, separator);
+  const amountTo = money(Number(actionId.slice(separator + 1)) / 100);
+  if (!Number.isFinite(amountTo)) return null;
+  const template = legal.find((candidate) => candidate.bucket === bucket);
+  if (!template || template.amountTo === undefined) return null;
+  const maxTo = money(player.streetBet + player.stack);
+  if (amountTo > maxTo + 0.001) return null;
+  if (template.kind === "CALL" || template.kind === "ALL_IN") {
+    return Math.abs(template.amountTo - amountTo) <= 0.001 ? template : null;
+  }
+  const sized = legal.filter((candidate) =>
+    candidate.kind === "BET" || candidate.kind === "RAISE",
+  );
+  const minimum = Math.min(
+    ...sized.map((candidate) => candidate.amountTo ?? Number.POSITIVE_INFINITY),
+  );
+  if (amountTo + 0.001 < minimum) return null;
+  return {
+    ...template,
+    actionId,
+    amountTo,
+    label: `${template.kind === "BET" ? "Bet" : "Raise to"} ${format(amountTo)}`,
+  };
 }
 
 function action(
