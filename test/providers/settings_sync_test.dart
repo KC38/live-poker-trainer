@@ -1,4 +1,4 @@
-/// SettingsNotifier remote hydrate and post-sign-out reset.
+/// SettingsNotifier remote hydrate, cloud-sync gate, and post-sign-out reset.
 library;
 
 import 'package:flutter_test/flutter_test.dart';
@@ -84,5 +84,49 @@ void main() {
     expect(notifier.state.lineupMode, defaults.lineupMode);
     expect(notifier.state.sfxEnabled, isFalse);
     expect(notifier.state.musicEnabled, isTrue);
+  });
+
+  test('table-setup edits do not sync until cloud prefs have hydrated', () async {
+    final synced = <GameSettingsModel>[];
+    final gated = SettingsNotifier(
+      prefs,
+      syncRemote: (settings) async {
+        synced.add(settings);
+      },
+    );
+    addTearDown(gated.dispose);
+
+    await gated.setSeatCount(6);
+    expect(synced, isEmpty, reason: 'pre-hydrate edit must not clobber cloud');
+
+    await gated.applyRemotePreferences(
+      const GameSettingsModel(seatCount: 9, stackDepthBb: 200),
+    );
+    gated.setCloudSyncEnabled(true);
+    expect(gated.state.seatCount, 9);
+
+    await gated.setSeatCount(8);
+    expect(synced, hasLength(1));
+    expect(synced.single.seatCount, 8);
+    expect(synced.single.stackDepthBb, 200);
+  });
+
+  test('resetSyncedToDefaults disables further cloud sync', () async {
+    final synced = <GameSettingsModel>[];
+    final gated = SettingsNotifier(
+      prefs,
+      syncRemote: (settings) async {
+        synced.add(settings);
+      },
+    );
+    addTearDown(gated.dispose);
+    gated.setCloudSyncEnabled(true);
+
+    await gated.setSeatCount(6);
+    expect(synced, hasLength(1));
+
+    await gated.resetSyncedToDefaults();
+    await gated.setSeatCount(9);
+    expect(synced, hasLength(1), reason: 'post-sign-out edits must stay local');
   });
 }

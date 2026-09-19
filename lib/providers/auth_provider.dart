@@ -48,9 +48,9 @@ final userDocProvider = FutureProvider<UserDocument?>((ref) async {
   );
 
   // Apply remote gameplay prefs (table setup, blinds, lineup, …); keep audio local.
-  await ref
-      .read(settingsProvider.notifier)
-      .applyRemotePreferences(doc.preferences);
+  final settingsNotifier = ref.read(settingsProvider.notifier);
+  await settingsNotifier.applyRemotePreferences(doc.preferences);
+  settingsNotifier.setCloudSyncEnabled(true);
   return doc;
 });
 
@@ -153,7 +153,9 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
       unawaited(analytics.setUserId(null));
       await _auth.signOut();
       // After uid is cleared so we do not push defaults back to Firestore.
-      await _ref.read(settingsProvider.notifier).resetSyncedToDefaults();
+      final settingsNotifier = _ref.read(settingsProvider.notifier);
+      settingsNotifier.setCloudSyncEnabled(false);
+      await settingsNotifier.resetSyncedToDefaults();
       _ref.invalidate(userDocProvider);
       state = const AsyncValue.data(null);
     } catch (e, st) {
