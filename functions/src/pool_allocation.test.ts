@@ -5,8 +5,10 @@
 import {describe, expect, it, vi} from "vitest";
 import {
   DISTINCT_SETUPS_PER_DAY,
+  convertDealReservationToPreparingPoll,
   enforceSituationFetchLimits,
   FETCHES_PER_HOUR,
+  isPreparingPollState,
   PREPARING_POLLS_PER_HOUR,
   prioritizeCandidates,
 } from "./fetch_situation";
@@ -242,6 +244,53 @@ describe("server fetch limits", () => {
     expect(quota.state.requestCount).toBe(2);
     expect(quota.state.setupKeys).toEqual(["new"]);
     expect(quota.state.pollCount).toBe(19);
+  });
+
+  it("converts a reserved deal slot into a preparing poll", async () => {
+    const nowMs = Date.UTC(2026, 8, 18, 12, 30);
+    const hourStart = Date.UTC(2026, 8, 18, 12);
+    const quota = quotaDb({
+      requestWindowStartMs: hourStart,
+      requestCount: 40,
+      pollWindowStartMs: hourStart,
+      pollCount: 3,
+      setupDay: "2026-09-18",
+      setupKeys: ["known"],
+    });
+
+    await convertDealReservationToPreparingPoll({
+      db: quota.db,
+      uid: "u",
+      nowMs,
+    });
+
+    expect(quota.state.requestCount).toBe(39);
+    expect(quota.state.pollCount).toBe(4);
+    expect(quota.state.setupKeys).toEqual(["known"]);
+  });
+});
+
+describe("isPreparingPollState", () => {
+  it("treats missing, idle, and generating empty pools as prep", () => {
+    expect(isPreparingPollState({
+      exists: false,
+      situationCount: 0,
+    })).toBe(true);
+    expect(isPreparingPollState({
+      exists: true,
+      situationCount: 0,
+      generationStatus: "idle",
+    })).toBe(true);
+    expect(isPreparingPollState({
+      exists: true,
+      situationCount: 0,
+      generationStatus: "queued",
+    })).toBe(true);
+    expect(isPreparingPollState({
+      exists: true,
+      situationCount: 2,
+      generationStatus: "generating",
+    })).toBe(false);
   });
 });
 

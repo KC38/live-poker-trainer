@@ -124,12 +124,12 @@ describe("fetchSituationForUser async refill", () => {
   it.each([
     ["queued empty setup", true, 0, "queued", true],
     ["generating empty setup", true, 0, "generating", true],
-    ["first request", false, 0, undefined, false],
-    ["idle empty setup", true, 0, "idle", false],
+    ["first request", false, 0, undefined, true],
+    ["idle empty setup", true, 0, "idle", true],
     ["available setup", true, 1, "generating", false],
   ] as const)(
-    "derives preparingPoll for %s",
-    async (_, exists, situationCount, generationStatus, expected) => {
+    "charges prep then deal for %s when allocation succeeds",
+    async (_, exists, situationCount, generationStatus, preparingFirst) => {
       const enforceLimits = vi.fn().mockResolvedValue(undefined);
       const payload = minimalFoldSituation();
 
@@ -153,11 +153,54 @@ describe("fetchSituationForUser async refill", () => {
         queueRefill: vi.fn(),
       });
 
-      expect(enforceLimits).toHaveBeenCalledWith(expect.objectContaining({
-        preparingPoll: expected,
+      expect(enforceLimits.mock.calls[0][0]).toEqual(expect.objectContaining({
+        preparingPoll: preparingFirst,
       }));
+      if (preparingFirst) {
+        expect(enforceLimits).toHaveBeenCalledTimes(2);
+        expect(enforceLimits.mock.calls[1][0]).toEqual(expect.objectContaining({
+          preparingPoll: false,
+        }));
+      } else {
+        expect(enforceLimits).toHaveBeenCalledTimes(1);
+      }
     },
   );
+
+  it("converts a deal reservation into a prep poll when a ready pool is empty", async () => {
+    const enforceLimits = vi.fn().mockResolvedValue(undefined);
+    const convertReservation = vi.fn().mockResolvedValue(undefined);
+    const queueRefill = vi.fn().mockResolvedValue(true);
+
+    await expect(
+      fetchSituationForUser({
+        uid: "user-1",
+        rawSetup: setup,
+        db: fakeDb,
+        readSetupState: vi.fn().mockResolvedValue({
+          exists: true,
+          situationCount: 3,
+          generationStatus: "idle",
+        }),
+        enforceLimits,
+        convertReservation,
+        ensureSetup: vi.fn().mockResolvedValue(undefined),
+        allocate: vi.fn().mockResolvedValue(null),
+        readSituationCount: vi.fn().mockResolvedValue(3),
+        queueRefill,
+      }),
+    ).rejects.toMatchObject({code: "unavailable"});
+
+    expect(enforceLimits).toHaveBeenCalledWith(expect.objectContaining({
+      preparingPoll: false,
+    }));
+    expect(convertReservation).toHaveBeenCalledWith(expect.objectContaining({
+      uid: "user-1",
+    }));
+    expect(queueRefill).toHaveBeenCalledWith(expect.objectContaining({
+      reason: "exhausted",
+    }));
+  });
 });
 
 describe("refill trigger", () => {
