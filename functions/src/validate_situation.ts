@@ -406,10 +406,10 @@ function validateGraph(p: SituationPayload, issues: ValidationIssue[]): void {
   validateCanonicalRoot(p, root, issues);
 
   const ids = Object.keys(p.nodes);
-  if (ids.length > 12) {
+  if (ids.length > 20) {
     issues.push({
       code: "graph_size",
-      message: `situation graph must contain at most 12 nodes (got ${ids.length})`,
+      message: `situation graph must contain at most 20 nodes (got ${ids.length})`,
     });
   }
   for (const id of ids) {
@@ -1338,6 +1338,29 @@ function validateTransition(
         "terminal street cannot move backwards",
         issues,
       );
+    }
+    // Live pots must be played street-by-street. Showdown is only legal from
+    // the river; all-in runouts may jump ahead when fewer than two players can
+    // still put chips in.
+    if (target.reason === "showdown" && source.street !== "river") {
+      transitionIssue(
+        source.id,
+        "showdown terminal must be reached from the river (play each street)",
+        issues,
+      );
+    }
+    if (target.reason === "all_in_runout") {
+      const canAct = state.stacks.filter(
+        (stack, seat) =>
+          !state.foldedSeats.has(seat) && Math.abs(stack) > EPS,
+      ).length;
+      if (canAct >= 2) {
+        transitionIssue(
+          source.id,
+          "all_in_runout requires fewer than two players with chips behind",
+          issues,
+        );
+      }
     }
     compareNumber(source.id, "terminal pot", target.pot, state.pot, issues);
     compareArray(

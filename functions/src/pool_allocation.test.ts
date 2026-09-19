@@ -422,6 +422,7 @@ describe("validatePathAgainstSituation", () => {
       ];
       const terminal = payload.nodes.term_call_open;
       if (terminal.type !== "terminal") throw new Error("expected terminal");
+      terminal.reason = "showdown";
       terminal.street = "river";
       terminal.board = ["2s", "3s", "4s", "5s", "6s"];
       terminal.foldedSeats = [];
@@ -429,6 +430,7 @@ describe("validatePathAgainstSituation", () => {
       terminal.stacks[heroSeat] = heroStack;
       terminal.pot = 10.01;
       terminal.winnerSeats = [1, 0];
+      terminal.heroNetChips = expectedNet;
 
       expect(deriveTerminalHeroNetChips(payload, terminal)).toBe(expectedNet);
     },

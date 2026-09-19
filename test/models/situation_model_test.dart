@@ -4,6 +4,7 @@ library;
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/core/constants/money.dart';
 import 'package:live_poker_trainer/engine/poker_engine.dart';
 import 'package:live_poker_trainer/engine/situation_action_keys.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
@@ -168,6 +169,43 @@ Map<String, dynamic> _minimalFoldJson() {
         'winnerSeats': [0],
         'heroNetChips': bb,
         'summary': 'Limped pot reaches showdown.',
+      },
+      'term_river_split': {
+        'type': 'terminal',
+        'id': 'term_river_split',
+        'reason': 'showdown',
+        'street': 'river',
+        'board': ['2c', '7d', 'Jh', '9s', '3h'],
+        'foldedSeats': <int>[],
+        'stacks': [startingStack - bb, startingStack - bb],
+        'pot': bb * 2,
+        'winnerSeats': [0, 1],
+        'heroNetChips': 0,
+        'summary': 'Split pot.',
+      },
+      'hero_river': {
+        'type': 'hero',
+        'id': 'hero_river',
+        'street': 'river',
+        'pot': bb * 2,
+        'stacks': [startingStack - bb, startingStack - bb],
+        'streetBets': [0.0, 0.0],
+        'board': ['2c', '7d', 'Jh', '9s', '3h'],
+        'foldedSeats': <int>[],
+        'toAct': 0,
+        'callAmount': 0,
+        'minRaiseTo': bb,
+        'actions': [
+          {
+            'actionKey': 'CHECK',
+            'kind': 'CHECK',
+            'coaching': 'Checking it down.',
+            'verdict': 'correct',
+            'evDeltaBb': 0,
+            'optimalActionKey': 'CHECK',
+            'nextNodeId': 'term_river_split',
+          },
+        ],
       },
     },
   };
@@ -519,13 +557,8 @@ void main() {
       expect(engine.state.players.map((p) => p.stack), [202, 198]);
     });
 
-    test('terminal split uses authored winners and pre-award stacks', () {
-      final json = _minimalFoldJson();
-      final nodes = json['nodes']! as Map<String, dynamic>;
-      final terminal = nodes['term_call']! as Map<String, dynamic>;
-      terminal['winnerSeats'] = [0, 1];
-      terminal['heroNetChips'] = 0;
-      final situation = SituationModel.fromJson(json);
+    test('preflop CALL to showdown plays out remaining streets live', () {
+      final situation = SituationModel.fromJson(_minimalFoldJson());
       final engine = PokerEngine(
         settings: const GameSettingsModel(seatCount: 2, stackDepthBb: 100),
         random: Random(4),
@@ -539,6 +572,70 @@ void main() {
         action: SituationActionKeys.pokerActionForEdge(engine.state, edge),
       );
 
+      expect(engine.isLiveRemainderPlay, isTrue);
+      expect(engine.state.isHandOver, isFalse);
+      expect(engine.terminalNodeId, 'term_call');
+
+      // Play out with passive lines so the authored runout can deal.
+      var guard = 0;
+      while (guard++ < 256 && !engine.state.isHandOver) {
+        final event = engine.nextEvent();
+        if (event != null) continue;
+        if (!engine.state.waitingForHero) break;
+        final call = engine.state.callAmountFor(engine.state.hero);
+        engine.submitHeroAction(
+          call <= Money.epsilon
+              ? const PokerAction(type: PokerActionType.check)
+              : PokerAction(type: PokerActionType.call, amount: call),
+        );
+      }
+
+      expect(engine.state.isHandOver, isTrue);
+      expect(engine.state.community.length, 5);
+      expect(engine.terminalNodeId, 'term_call');
+      expect(engine.isLiveRemainderPlay, isFalse);
+    });
+
+    test('terminal split uses authored winners and pre-award stacks', () {
+      final json = _minimalFoldJson();
+      final nodes = json['nodes']! as Map<String, dynamic>;
+      final river = Map<String, dynamic>.from(
+        nodes['hero_river']! as Map<String, dynamic>,
+      );
+      final terminal = Map<String, dynamic>.from(
+        nodes['term_river_split']! as Map<String, dynamic>,
+      );
+      terminal['winnerSeats'] = [0, 1];
+      terminal['heroNetChips'] = 0;
+      final riverActions = List<dynamic>.from(river['actions']! as List);
+      final check = Map<String, dynamic>.from(
+        riverActions.first as Map<String, dynamic>,
+      );
+      check['nextNodeId'] = 'term_river_split';
+      river['actions'] = [check];
+
+      final engine = PokerEngine(
+        settings: const GameSettingsModel(seatCount: 2, stackDepthBb: 100),
+        random: Random(4),
+      );
+      engine.dealSituationHand(
+        SituationModel.fromJson({
+          ...json,
+          'rootNodeId': 'hero_river',
+          'nodes': {
+            'hero_river': river,
+            'term_river_split': terminal,
+          },
+        }),
+      );
+
+      final edge = engine.currentHeroNode!.edgeForKey('CHECK')!;
+      engine.applySituationHeroChoice(
+        edge: edge,
+        action: SituationActionKeys.pokerActionForEdge(engine.state, edge),
+      );
+
+      expect(engine.state.isHandOver, isTrue);
       expect(engine.state.winnerIds, [0, 1]);
       expect(engine.state.players.map((p) => p.stack), [200, 200]);
       expect(engine.terminalHeroNetChips, 0);
@@ -547,19 +644,39 @@ void main() {
     test('terminal split assigns an odd cent by ascending seat id', () {
       final json = _minimalFoldJson();
       final nodes = json['nodes']! as Map<String, dynamic>;
-      final terminal = nodes['term_call']! as Map<String, dynamic>;
+      final river = Map<String, dynamic>.from(
+        nodes['hero_river']! as Map<String, dynamic>,
+      );
+      final terminal = Map<String, dynamic>.from(
+        nodes['term_river_split']! as Map<String, dynamic>,
+      );
       terminal['pot'] = 10.01;
       terminal['stacks'] = [194.99, 195.0];
       terminal['winnerSeats'] = [1, 0];
       terminal['heroNetChips'] = 0;
+      final riverActions = List<dynamic>.from(river['actions']! as List);
+      final check = Map<String, dynamic>.from(
+        riverActions.first as Map<String, dynamic>,
+      );
+      check['nextNodeId'] = 'term_river_split';
+      river['actions'] = [check];
+
       final engine = PokerEngine(
         settings: const GameSettingsModel(seatCount: 2, stackDepthBb: 100),
         random: Random(6),
       );
-      engine.dealSituationHand(SituationModel.fromJson(json));
-      engine.runToHeroOrEnd();
+      engine.dealSituationHand(
+        SituationModel.fromJson({
+          ...json,
+          'rootNodeId': 'hero_river',
+          'nodes': {
+            'hero_river': river,
+            'term_river_split': terminal,
+          },
+        }),
+      );
 
-      final edge = engine.currentHeroNode!.edgeForKey('CALL')!;
+      final edge = engine.currentHeroNode!.edgeForKey('CHECK')!;
       engine.applySituationHeroChoice(
         edge: edge,
         action: SituationActionKeys.pokerActionForEdge(engine.state, edge),

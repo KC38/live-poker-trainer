@@ -143,8 +143,18 @@ class PokerEngine {
   /// Pending next node after a scripted node's actions finish.
   String? _pendingAfterScript;
 
+  /// When an authored edge jumps to showdown while betting is still open,
+  /// continue as a live cash hand through the remaining streets.
+  bool _liveRemainderPlay = false;
+
+  /// Authored terminal deferred until live remainder play finishes (progress).
+  TerminalNode? _deferredTerminal;
+
   SituationModel? get situation => _situation;
   String? get situationNodeId => _situationNodeId;
+
+  /// True while playing out streets after a premature showdown edge.
+  bool get isLiveRemainderPlay => _liveRemainderPlay;
 
   SituationNode? get currentSituationNode {
     final sit = _situation;
@@ -520,6 +530,14 @@ class PokerEngine {
       ):
         _pendingAfterScript = null;
         _scriptQueue.clear();
+        // Authored graphs sometimes jump straight to a river showdown while
+        // two or more players still have chips. Play those streets live so
+        // the hero can act through to showdown (unless the pot is already
+        // all-in or only one player remains).
+        if (_shouldPlayOutRemainingStreets(node)) {
+          _startLiveRemainderPlay(node);
+          return;
+        }
         terminalNodeId = node.id;
         final heroSeat = sit.heroSeat.clamp(0, _state.players.length - 1);
         final payouts = Money.splitPot(pot, winnerSeats);
@@ -554,6 +572,78 @@ class PokerEngine {
                   : 'Hand over (${reason.wire})',
         );
     }
+  }
+
+  /// Whether [node] shortcuts past streets the hero should still play.
+  bool _shouldPlayOutRemainingStreets(TerminalNode node) {
+    if (node.reason == TerminalReason.fold) return false;
+    final canAct = _state.players.where(_canStillAct).length;
+    if (canAct < 2) return false;
+    return _state.street != Street.river && _state.street != Street.showdown;
+  }
+
+  /// Continues the hand with free-cash betting and authored runout cards.
+  void _startLiveRemainderPlay(TerminalNode node) {
+    final sit = _situation;
+    if (sit == null) return;
+
+    _liveRemainderPlay = true;
+    _deferredTerminal = node;
+    terminalNodeId = node.id;
+    _situationNodeId = node.id;
+    _scriptQueue.clear();
+    _pendingAfterScript = null;
+    _collectEmitted = false;
+    _seedDeckWithRemainingRunouts(sit);
+
+    // Hero already acted on the edge that reached this terminal; continue
+    // the betting round (or advance the street) via [nextEvent].
+    _state = _advanceToNextPlayer(
+      _state.copyWith(waitingForHero: false, isHandOver: false, clearResult: true),
+    );
+  }
+
+  /// Puts unpublished runout cards at the end of [_deck] so [_advanceStreet]
+  /// deals them in flop → turn → river order via [List.removeLast].
+  void _seedDeckWithRemainingRunouts(SituationModel situation) {
+    final ordered = <CardModel>[];
+    for (final street in const [Street.flop, Street.turn, Street.river]) {
+      for (final runout in situation.runouts) {
+        if (runout.street == street) ordered.addAll(runout.cards);
+      }
+    }
+    final dealt = _state.community.length.clamp(0, ordered.length);
+    final remaining = ordered.skip(dealt).toList(growable: false);
+    final reserved = <String>{
+      for (final p in _state.players)
+        for (final c in p.holeCards) c.code,
+      for (final c in _state.community) c.code,
+      for (final c in remaining) c.code,
+    };
+    final filler = [
+      for (final c in DeckEvaluator.buildShuffledDeck(_random))
+        if (!reserved.contains(c.code)) c,
+    ];
+    // removeLast deals the last element first — reverse so flop comes first.
+    _deck = [...filler, ...remaining.reversed];
+  }
+
+  /// Records deferred terminal metadata after a live remainder hand ends.
+  void _attachDeferredTerminalProgress(GameState ended) {
+    final deferred = _deferredTerminal;
+    if (!_liveRemainderPlay || deferred == null) return;
+    final sit = _situation;
+    terminalNodeId = deferred.id;
+    if (sit != null) {
+      final heroSeat = sit.heroSeat.clamp(0, ended.players.length - 1);
+      final start =
+          sit.lineup
+              .firstWhere((seat) => seat.seat == heroSeat)
+              .startingStack;
+      terminalHeroNetChips = ended.players[heroSeat].stack - start;
+    }
+    _liveRemainderPlay = false;
+    _deferredTerminal = null;
   }
 
   void _snapTableFromNode({
@@ -620,6 +710,8 @@ class PokerEngine {
     terminalNodeId = null;
     terminalHeroNetChips = null;
     _pendingAfterScript = null;
+    _liveRemainderPlay = false;
+    _deferredTerminal = null;
   }
 
   List<PlayerModel> _buildSituationLineup(
@@ -805,7 +897,9 @@ class PokerEngine {
 
       // Situation hands follow the authored script queue; do not auto-advance
       // streets via AI until the queue / pending node is consumed.
+      // Live remainder play is an exception: betting continues like free cash.
       if (_situation != null &&
+          !_liveRemainderPlay &&
           _scriptQueue.isEmpty &&
           _pendingAfterScript != null) {
         syncSituationNodeAfterScript();
@@ -817,7 +911,7 @@ class PokerEngine {
         continue;
       }
 
-      if (_situation == null && _isRoundComplete(s)) {
+      if ((_situation == null || _liveRemainderPlay) && _isRoundComplete(s)) {
         final hasBets = s.players.any((p) => p.currentBet > Money.epsilon);
         if (hasBets && !_collectEmitted) {
           _collectEmitted = true;
@@ -842,7 +936,9 @@ class PokerEngine {
       }
 
       final idx =
-          _situation != null && _scriptQueue.isNotEmpty
+          _situation != null &&
+                  !_liveRemainderPlay &&
+                  _scriptQueue.isNotEmpty
               ? _scriptQueue.first.seat.clamp(0, s.players.length - 1)
               : s.activePlayerIndex;
       final player = s.players[idx];
@@ -863,7 +959,9 @@ class PokerEngine {
           _isForcedPost(_scriptQueue.first.action.kind);
       final decision = _villainDecision(s, idx);
       s = _applyAction(s, idx, decision, isForcedPost: isForcedPost);
-      if (_situation != null && _scriptQueue.isNotEmpty) {
+      if (_situation != null &&
+          !_liveRemainderPlay &&
+          _scriptQueue.isNotEmpty) {
         s = s.copyWith(
           activePlayerIndex: _scriptQueue.first.seat.clamp(
             0,
@@ -873,7 +971,7 @@ class PokerEngine {
         );
       }
       _state = s;
-      if (_scriptQueue.isEmpty && _situation != null) {
+      if (_scriptQueue.isEmpty && _situation != null && !_liveRemainderPlay) {
         syncSituationNodeAfterScript();
         s = _state;
       }
@@ -919,7 +1017,7 @@ class PokerEngine {
     if (scripted != null) return scripted;
 
     // While a situation script is active, never fall through to AI.
-    if (_situation != null && _scriptQueue.isNotEmpty) {
+    if (_situation != null && !_liveRemainderPlay && _scriptQueue.isNotEmpty) {
       final call = state.callAmountFor(state.players[playerIdx]);
       if (call > Money.epsilon) {
         return const PokerAction(type: PokerActionType.fold);
@@ -927,8 +1025,9 @@ class PokerEngine {
       return const PokerAction(type: PokerActionType.check);
     }
 
-    // Branching situations stay on the authored tree — no free AI after hero.
-    if (_situation != null) {
+    // Branching situations stay on the authored tree — no free AI after hero
+    // unless we are playing out remaining streets after a premature terminal.
+    if (_situation != null && !_liveRemainderPlay) {
       final call = state.callAmountFor(state.players[playerIdx]);
       if (call > Money.epsilon) {
         return const PokerAction(type: PokerActionType.fold);
@@ -1097,7 +1196,7 @@ class PokerEngine {
           else
             p.copyWith(currentBet: 0),
       ];
-      return state.copyWith(
+      final ended = state.copyWith(
         players: players,
         mainPot: 0,
         awardedPot: pot,
@@ -1109,6 +1208,8 @@ class PokerEngine {
         heroInvestedThisHand: heroInvested,
         highestBet: 0,
       );
+      _attachDeferredTerminalProgress(ended);
+      return ended;
     }
 
     var next = state.copyWith(
@@ -1313,7 +1414,7 @@ class PokerEngine {
 
     final names = winners.map((w) => w.name).join(' & ');
     final split = winners.length > 1;
-    return state.copyWith(
+    final ended = state.copyWith(
       players: players,
       mainPot: 0,
       awardedPot: pot,
@@ -1326,6 +1427,8 @@ class PokerEngine {
               : '$names wins ${ChipFormat.dollars(pot)}',
       winnerIds: winners.map((w) => w.id).toList(growable: false),
     );
+    _attachDeferredTerminalProgress(ended);
+    return ended;
   }
 
   List<PlayerModel> _applyAutoRebuy(List<PlayerModel> players) {
