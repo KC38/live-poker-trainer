@@ -42,6 +42,9 @@ class SettingsNotifier extends StateNotifier<GameSettingsModel> {
   /// Pushes non-audio preferences to Firestore when signed in.
   final Future<void> Function(GameSettingsModel settings)? syncRemote;
 
+  /// When false, [update] must not push gameplay prefs (hydrate still pending).
+  bool _cloudSyncEnabled = false;
+
   static GameSettingsModel _load(SharedPreferences prefs) {
     return GameSettingsModel.fromPrefs({
       for (final key in GameSettingsModel.audioPrefKeys) key: prefs.get(key),
@@ -60,12 +63,20 @@ class SettingsNotifier extends StateNotifier<GameSettingsModel> {
       }
     }
     _applySideEffects();
-    if (_nonAudioChanged(before, map)) {
+    if (_cloudSyncEnabled && _nonAudioChanged(before, map)) {
       final sync = syncRemote;
       if (sync != null) {
         unawaited(sync(next).catchError((Object _) {}));
       }
     }
+  }
+
+  /// Allows [syncRemote] after cloud prefs for the current user are applied.
+  ///
+  /// Cold start / sign-in must keep this false until [applyRemotePreferences]
+  /// so a table-setup edit cannot replace Firestore with in-memory defaults.
+  void setCloudSyncEnabled(bool enabled) {
+    _cloudSyncEnabled = enabled;
   }
 
   /// Applies gameplay prefs from Firestore; audio stays local.
@@ -84,6 +95,7 @@ class SettingsNotifier extends StateNotifier<GameSettingsModel> {
   /// Keeps device-local audio. Does not push to Firestore (caller must sign
   /// out first so [syncRemote] sees no uid).
   Future<void> resetSyncedToDefaults() async {
+    setCloudSyncEnabled(false);
     final defaults = GameSettingsModel(
       sfxEnabled: state.sfxEnabled,
       musicEnabled: state.musicEnabled,

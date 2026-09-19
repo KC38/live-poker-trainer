@@ -107,7 +107,17 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
       theme: buildPokerTheme(),
       navigatorObservers: [navObserver],
       home: auth.when(
-        data: (user) => user == null ? const AuthScreen() : const HomeScreen(),
+        data: (user) {
+          if (user == null) return const AuthScreen();
+          // Hold Home until cloud gameplay prefs hydrate so table-setup
+          // edits cannot clobber Firestore with in-memory defaults.
+          final userDoc = ref.watch(userDocProvider);
+          return userDoc.when(
+            data: (_) => const HomeScreen(),
+            loading: () => const _AuthLoadingScreen(),
+            error: (_, _) => const HomeScreen(),
+          );
+        },
         loading: () => const _AuthLoadingScreen(),
         error: (_, _) => const AuthScreen(),
       ),
