@@ -185,7 +185,7 @@ export function applyLiveAction(options: {
   const legal = legalLiveActions(options.hand, state);
   const selected = state.actorSeat === null ?
     null :
-    resolveOfferedAction(legal, options.actionId, state.players[state.actorSeat]);
+    resolveOfferedAction(legal, options.actionId, state);
   if (!selected || state.actorSeat === null) {
     throw new Error(`illegal or stale action id: ${options.actionId}`);
   }
@@ -604,8 +604,10 @@ function canAct(player: LivePlayerState): boolean {
 function resolveOfferedAction(
   legal: LiveLegalAction[],
   actionId: string,
-  player: LivePlayerState,
+  state: LiveHandState,
 ): LiveLegalAction | null {
+  if (state.actorSeat === null) return null;
+  const player = state.players[state.actorSeat];
   const exact = legal.find((candidate) => candidate.actionId === actionId);
   if (exact) return exact;
   const separator = actionId.lastIndexOf(":");
@@ -620,13 +622,14 @@ function resolveOfferedAction(
   if (template.kind === "CALL" || template.kind === "ALL_IN") {
     return Math.abs(template.amountTo - amountTo) <= 0.001 ? template : null;
   }
-  const sized = legal.filter((candidate) =>
-    candidate.kind === "BET" || candidate.kind === "RAISE",
+  // Preset buttons snap to the chip, so the size on an older button can sit
+  // a few cents under the new preset. The real floor is still the min bet.
+  const legalMinimumTo = money(
+    state.highestBet < state.minRaiseIncrement ?
+      state.minRaiseIncrement :
+      state.highestBet + state.minRaiseIncrement,
   );
-  const minimum = Math.min(
-    ...sized.map((candidate) => candidate.amountTo ?? Number.POSITIVE_INFINITY),
-  );
-  if (amountTo + 0.001 < minimum) return null;
+  if (amountTo + 0.001 < Math.min(legalMinimumTo, maxTo)) return null;
   return {
     ...template,
     actionId,

@@ -223,6 +223,20 @@ describe("live poker engine", () => {
       state,
       actionId: "BET_33:100",
     })).toThrow(/illegal or stale/);
+
+    const centPot: LiveHandState = {
+      ...state,
+      players: [
+        {...state.players[0], contribution: 48, stack: 272},
+        state.players[1],
+      ],
+    };
+    const retried = applyLiveAction({
+      hand: definition,
+      state: centPot,
+      actionId: "BET_33:1584",
+    });
+    expect(retried.state.players[0].streetBet).toBe(15.84);
   });
 
   test("an incomplete all-in does not reopen raising", () => {
