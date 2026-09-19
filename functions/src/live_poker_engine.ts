@@ -142,8 +142,9 @@ export function legalLiveActions(
       state.minRaiseIncrement :
       minimumTo,
   );
+  const chip = chipUnit(hand);
   for (const candidate of candidates) {
-    const target = money(candidate.amountTo);
+    const target = snapAtLeast(candidate.amountTo, legalMinimumTo, chip);
     if (
       target <= state.highestBet ||
       target < legalMinimumTo ||
@@ -639,6 +640,25 @@ function cents(value: number): number {
 
 function money(value: number): number {
   return cents(value) / 100;
+}
+
+/** Live cash bets use the small blind as the chip. All-ins stay exact. */
+function chipUnit(hand: LiveHandDefinition): number {
+  return hand.setup.smallBlind > 0 ? hand.setup.smallBlind : 1;
+}
+
+function snapToChip(amount: number, unit: number): number {
+  const rounded = money(amount);
+  if (!(unit > 0)) return rounded;
+  return money(Math.round(rounded / unit) * unit);
+}
+
+/** Nearest chip, bumped up only when that would be an illegal under-min size. */
+function snapAtLeast(amount: number, minimum: number, unit: number): number {
+  const nearest = snapToChip(amount, unit);
+  if (nearest + 0.001 >= minimum) return nearest;
+  if (!(unit > 0)) return money(minimum);
+  return money(Math.ceil((minimum - 0.001) / unit) * unit);
 }
 
 function format(value: number): string {
