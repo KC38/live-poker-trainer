@@ -3,6 +3,7 @@ library;
 
 import 'dart:async';
 import 'dart:collection';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -165,6 +166,14 @@ class GameController extends StateNotifier<TableSession> {
   /// Tracks whether progress was already recorded for the current hand.
   bool _progressRecorded = false;
 
+  /// In-flight fetch started by prepare/prefetch (overlaps UI waits).
+  Future<FetchedSituation>? _inflightFetch;
+  String? _inflightSetupFingerprint;
+
+  /// Completed prefetch ready to deal without another network round-trip.
+  FetchedSituation? _readyPrefetch;
+  String? _readyPrefetchFingerprint;
+
   GameSettingsModel get _settings => _ref.read(settingsProvider);
 
   GameState? _lastResolved;
@@ -174,8 +183,83 @@ class GameController extends StateNotifier<TableSession> {
   void dispose() {
     _disposed = true;
     _replayToken++;
+    _clearPendingFetch();
     unawaited(_agentSub?.cancel());
     super.dispose();
+  }
+
+  /// Stable fingerprint for matching prefetch to the current table setup.
+  static String setupFingerprint(TableSetup setup) =>
+      jsonEncode(setup.toCallableMap());
+
+  void _clearPendingFetch() {
+    _inflightFetch = null;
+    _inflightSetupFingerprint = null;
+    _readyPrefetch = null;
+    _readyPrefetchFingerprint = null;
+  }
+
+  /// Starts a background fetch for the current settings when signed in.
+  ///
+  /// Reuses an in-flight or ready result for the same setup fingerprint.
+  void _ensureFetchInFlight({bool restart = false}) {
+    final uid = _ref.read(authUidProvider);
+    if (uid == null || uid.isEmpty) return;
+
+    final setup = TableSetup.fromGameSettings(_settings);
+    final fingerprint = setupFingerprint(setup);
+    if (!restart) {
+      if (_readyPrefetch != null &&
+          _readyPrefetchFingerprint == fingerprint) {
+        return;
+      }
+      if (_inflightFetch != null &&
+          _inflightSetupFingerprint == fingerprint) {
+        return;
+      }
+    }
+
+    if (restart) {
+      _readyPrefetch = null;
+      _readyPrefetchFingerprint = null;
+    }
+
+    final future = _ref.read(situationServiceProvider).fetchSituation(setup);
+    _inflightFetch = future;
+    _inflightSetupFingerprint = fingerprint;
+    unawaited(
+      future.then((fetched) {
+        if (_disposed || !identical(_inflightFetch, future)) return;
+        _readyPrefetch = fetched;
+        _readyPrefetchFingerprint = fingerprint;
+        _inflightFetch = null;
+        _inflightSetupFingerprint = null;
+      }).catchError((Object error, StackTrace stackTrace) {
+        if (_disposed || !identical(_inflightFetch, future)) return;
+        _inflightFetch = null;
+        _inflightSetupFingerprint = null;
+      }),
+    );
+  }
+
+  /// Takes a ready/in-flight fetch for [setup], or starts a fresh one.
+  Future<FetchedSituation> _takeFetchedSituation(TableSetup setup) {
+    final fingerprint = setupFingerprint(setup);
+    final ready = _readyPrefetch;
+    if (ready != null && _readyPrefetchFingerprint == fingerprint) {
+      _readyPrefetch = null;
+      _readyPrefetchFingerprint = null;
+      return Future<FetchedSituation>.value(ready);
+    }
+
+    final inflight = _inflightFetch;
+    if (inflight != null && _inflightSetupFingerprint == fingerprint) {
+      _inflightFetch = null;
+      _inflightSetupFingerprint = null;
+      return inflight;
+    }
+
+    return _ref.read(situationServiceProvider).fetchSituation(setup);
   }
 
   void _onAgentCommand(String cmd) {
@@ -227,9 +311,12 @@ class GameController extends StateNotifier<TableSession> {
   }
 
   /// Marks the table as preparing so Home can navigate before any deal SFX.
+  ///
+  /// Also starts the network fetch immediately so it overlaps the route fade.
   void prepareTraining() {
     _replayToken++;
     state = const TableSession(loading: true);
+    _ensureFetchInFlight(restart: true);
   }
 
   /// Starts training by fetching a server-authored situation.
@@ -251,6 +338,7 @@ class GameController extends StateNotifier<TableSession> {
 
     final uid = _ref.read(authUidProvider);
     if (uid == null || uid.isEmpty) {
+      _clearPendingFetch();
       state = state.copyWith(
         loading: false,
         error: 'Sign in required to train.',
@@ -264,9 +352,9 @@ class GameController extends StateNotifier<TableSession> {
       if (_disposed || token != _replayToken) return;
 
       final setup = TableSetup.fromGameSettings(_settings);
-      final fetched = await _ref
-          .read(situationServiceProvider)
-          .fetchSituation(setup);
+      // Prefer the fetch started in [prepareTraining] / end-of-hand prefetch.
+      _ensureFetchInFlight();
+      final fetched = await _takeFetchedSituation(setup);
       if (_disposed || token != _replayToken) return;
 
       final situation = fetched.situation.copyWith(
@@ -306,6 +394,7 @@ class GameController extends StateNotifier<TableSession> {
       await _replayUntilHero(pace: ReplayPace.deal, token: token);
     } catch (e) {
       if (_disposed || token != _replayToken) return;
+      _clearPendingFetch();
       unawaited(
         _ref.read(analyticsServiceProvider).logTrainingError(stage: 'fetch'),
       );
@@ -333,11 +422,14 @@ class GameController extends StateNotifier<TableSession> {
     if (game != null && !game.isHandOver && !game.hero.folded) {
       return;
     }
-    if (game?.isHandOver ?? false) {
-      final recorded = await _recordSituationProgress();
-      if (!recorded) return;
-    }
+    // Overlap progress recording with the next-hand network fetch.
+    _ensureFetchInFlight();
+    final recordFuture = (game?.isHandOver ?? false)
+        ? _recordSituationProgress()
+        : Future<bool>.value(true);
     await _forceCompleteSkippedHand();
+    final recorded = await recordFuture;
+    if (!recorded) return;
     await startTraining(continueTable: true);
   }
 
@@ -454,6 +546,11 @@ class GameController extends StateNotifier<TableSession> {
         holesAfter.join(',') == holesBefore.join(','),
         'hero hole cards changed mid-hand',
       );
+    }
+
+    // Prefetch while coaching is shown (fold / terminal decisions).
+    if (after.hero.folded || after.isHandOver) {
+      _ensureFetchInFlight();
     }
 
     await _replayUntilHero(pace: ReplayPace.passiveAction, token: token);
@@ -585,6 +682,8 @@ class GameController extends StateNotifier<TableSession> {
     final heroWon = game.resultMessage?.startsWith('Hero') ?? false;
     if (heroWon) await sound.win();
     state = state.copyWith(replaying: false, clearAuthoredHeroEdges: true);
+    // Prefetch the next situation while coaching / Next is visible.
+    _ensureFetchInFlight();
   }
 
   List<HeroActionEdge> _authoredEdgesForCurrentHero(GameState game) {

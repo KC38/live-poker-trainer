@@ -18,6 +18,7 @@ import {
   type GenerateSituationResult,
 } from "./gemini";
 import {
+  ASAP_INITIAL_COUNT,
   GENERATION_LEASE_MS,
   INITIAL_POOL_SIZE,
   NEVER_SERVED_LOW_WATER,
@@ -236,54 +237,83 @@ export async function maybeRefillPool(options: {
   let skipped = 0;
   const errors: string[] = [];
 
+  const publishFn = async (generatedResult: GenerateSituationResult) => {
+    const contentHash = hashSituationStructure(generatedResult.payload);
+    const situationId = contentHash.slice(0, 32);
+    const ref = situations.doc(situationId);
+    return db.runTransaction(async (tx) => {
+      const existing = await tx.get(ref);
+      if (existing.exists) return false;
+      tx.set(ref, {
+        situationId,
+        setupKey,
+        payload: generatedResult.payload,
+        payloadVersion: generatedResult.payload.payloadVersion,
+        schemaVersion:
+          generatedResult.payload.schemaVersion ?? SITUATION_SCHEMA_VERSION,
+        source: "gemini",
+        modelId: generatedResult.modelId,
+        contentHash,
+        timesServed: 0,
+        generatedAt: FieldValue.serverTimestamp(),
+        validation: {
+          ok: true,
+          checkedAt: FieldValue.serverTimestamp(),
+        },
+      });
+      tx.set(
+        setupRef,
+        {
+          situationCount: FieldValue.increment(1),
+          neverServedCount: FieldValue.increment(1),
+          updatedAt: FieldValue.serverTimestamp(),
+        },
+        {merge: true},
+      );
+      return true;
+    });
+  };
+
+  // Empty pools: publish a small ASAP wave first so fetches can allocate,
+  // then fill the remainder under the same lease.
+  const isEmptyPool = situationCount === 0;
+  const firstWaveSize = isEmptyPool ?
+    Math.min(ASAP_INITIAL_COUNT, batchSize) :
+    batchSize;
+  const secondWaveSize = isEmptyPool ?
+    Math.max(0, batchSize - firstWaveSize) :
+    0;
+
   try {
-    const batch = await runConcurrentGenerationBatch({
+    const firstWave = await runConcurrentGenerationBatch({
       apiKey: options.apiKey,
       setup: options.setup,
       setupKey,
       leaseId,
-      batchSize,
+      batchSize: firstWaveSize,
+      variationOffset: 0,
       generateFn,
-      publishFn: async (generatedResult) => {
-        const contentHash = hashSituationStructure(generatedResult.payload);
-        const situationId = contentHash.slice(0, 32);
-        const ref = situations.doc(situationId);
-        return db.runTransaction(async (tx) => {
-          const existing = await tx.get(ref);
-          if (existing.exists) return false;
-          tx.set(ref, {
-            situationId,
-            setupKey,
-            payload: generatedResult.payload,
-            payloadVersion: generatedResult.payload.payloadVersion,
-            schemaVersion:
-              generatedResult.payload.schemaVersion ?? SITUATION_SCHEMA_VERSION,
-            source: "gemini",
-            modelId: generatedResult.modelId,
-            contentHash,
-            timesServed: 0,
-            generatedAt: FieldValue.serverTimestamp(),
-            validation: {
-              ok: true,
-              checkedAt: FieldValue.serverTimestamp(),
-            },
-          });
-          tx.set(
-            setupRef,
-            {
-              situationCount: FieldValue.increment(1),
-              neverServedCount: FieldValue.increment(1),
-              updatedAt: FieldValue.serverTimestamp(),
-            },
-            {merge: true},
-          );
-          return true;
-        });
-      },
+      publishFn,
     });
-    added = batch.added;
-    skipped = batch.skipped;
-    errors.push(...batch.errors);
+    added += firstWave.added;
+    skipped += firstWave.skipped;
+    errors.push(...firstWave.errors);
+
+    if (secondWaveSize > 0) {
+      const secondWave = await runConcurrentGenerationBatch({
+        apiKey: options.apiKey,
+        setup: options.setup,
+        setupKey,
+        leaseId,
+        batchSize: secondWaveSize,
+        variationOffset: firstWaveSize,
+        generateFn,
+        publishFn,
+      });
+      added += secondWave.added;
+      skipped += secondWave.skipped;
+      errors.push(...secondWave.errors);
+    }
 
     await finishGenerationLease({
       db,
@@ -443,7 +473,8 @@ function errorMessage(err: unknown): string {
 }
 
 /**
- * Generates a bounded batch in parallel and publishes each valid result.
+ * Generates a bounded batch in parallel and publishes each valid result as
+ * soon as it succeeds (does not wait for sibling Gemini jobs).
  */
 export async function runConcurrentGenerationBatch(options: {
   apiKey: string;
@@ -451,43 +482,45 @@ export async function runConcurrentGenerationBatch(options: {
   setupKey: string;
   leaseId: string;
   batchSize: number;
+  /** Offset applied to variation seeds when running multi-wave refills. */
+  variationOffset?: number;
   generateFn: typeof generateValidatedSituation;
   publishFn: (result: GenerateSituationResult) => Promise<boolean>;
 }): Promise<{added: number; skipped: number; errors: string[]}> {
-  const generated = await Promise.allSettled(
-    Array.from({length: options.batchSize}, (_, index) =>
-      options.generateFn({
-        apiKey: options.apiKey,
-        setup: options.setup,
-        setupKey: options.setupKey,
-        variationSeed: `${options.leaseId}:${index}`,
-        maxAttempts: 3,
-      }),
-    ),
+  const variationOffset = options.variationOffset ?? 0;
+  const outcomes = await Promise.all(
+    Array.from({length: options.batchSize}, async (_, index) => {
+      const variationIndex = variationOffset + index;
+      try {
+        const generated = await options.generateFn({
+          apiKey: options.apiKey,
+          setup: options.setup,
+          setupKey: options.setupKey,
+          variationSeed: `${options.leaseId}:${variationIndex}`,
+          maxAttempts: 3,
+        });
+        const published = await options.publishFn(generated);
+        return published ?
+          {kind: "added" as const} :
+          {kind: "skipped" as const};
+      } catch (err) {
+        const message = errorMessage(err);
+        logger.warn("refill item failed", {
+          setupKey: options.setupKey,
+          error: message,
+        });
+        return {kind: "error" as const, message};
+      }
+    }),
   );
 
+  let added = 0;
+  let skipped = 0;
   const errors: string[] = [];
-  const publishable: GenerateSituationResult[] = [];
-  for (const result of generated) {
-    if (result.status === "fulfilled") {
-      publishable.push(result.value);
-    } else {
-      const message = errorMessage(result.reason);
-      errors.push(message);
-      logger.warn("refill item failed", {
-        setupKey: options.setupKey,
-        error: message,
-      });
-    }
+  for (const outcome of outcomes) {
+    if (outcome.kind === "added") added += 1;
+    else if (outcome.kind === "skipped") skipped += 1;
+    else errors.push(outcome.message);
   }
-
-  const published = await Promise.all(
-    publishable.map((result) => options.publishFn(result)),
-  );
-  const added = published.filter(Boolean).length;
-  return {
-    added,
-    skipped: published.length - added,
-    errors,
-  };
+  return {added, skipped, errors};
 }

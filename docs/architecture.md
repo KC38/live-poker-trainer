@@ -42,12 +42,17 @@ New or exhausted pools are marked `queued`; `fetchSituation` returns an
 `unavailable` preparation response instead of waiting on Gemini. The Flutter
 client polls that exact preparation response for up to nine minutes with
 one-, two-, four-, then five-second capped backoff. Other network-unavailable
-responses fail promptly. A Firestore write trigger concurrently attempts five
-situations, and the same refill is queued when the globally never-served count
-reaches one. A setup-level lease makes this idempotent across concurrent
-Functions instances.
+responses fail promptly. Generation publishes each validated situation as soon
+as it succeeds (empty pools start with a two-situation ASAP wave, then fill to
+five). The same refill is queued when the globally never-served count reaches
+three. A setup-level lease makes this idempotent across concurrent Functions
+instances. A scheduled job keeps popular Random Pool setups warm.
 
 Clients cannot read `tableSetups` or situation documents directly.
+
+The Flutter client starts `fetchSituation` as soon as training is prepared
+(overlapping the route fade) and prefetches the next situation when a hand
+ends or the hero folds, so Next rarely waits on a cold network round-trip.
 
 ## Branching situation schema
 

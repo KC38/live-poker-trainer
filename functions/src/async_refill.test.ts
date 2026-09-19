@@ -250,11 +250,13 @@ describe("concurrent generation batch", () => {
       expect(options.maxAttempts).toBe(3);
       if (index === 1 || index === 3) throw new Error(`failure-${index}`);
       return {
-        payload: minimalFoldSituation({title: `variation-${index}`}),
+        payload: {
+          ...minimalFoldSituation(),
+          setupKey: `variation-${index}`,
+        },
         modelId: "gemini-3.8-flash",
       };
     });
-    let publishIndex = 0;
     const result = await runConcurrentGenerationBatch({
       apiKey: "secret",
       setup,
@@ -262,15 +264,63 @@ describe("concurrent generation batch", () => {
       leaseId: "lease",
       batchSize: 5,
       generateFn: generateFn as never,
-      publishFn: vi.fn(async () => publishIndex++ !== 2),
+      publishFn: vi.fn(async (generated) =>
+        generated.payload.setupKey !== "variation-2"
+      ),
     });
 
     expect(maxActive).toBe(5);
     expect(new Set(seeds).size).toBe(5);
-    expect(result).toEqual({
-      added: 2,
-      skipped: 1,
-      errors: ["failure-1", "failure-3"],
+    expect(result.added).toBe(2);
+    expect(result.skipped).toBe(1);
+    expect(result.errors.sort()).toEqual(["failure-1", "failure-3"]);
+  });
+
+  it("publishes each success before slower siblings finish", async () => {
+    const publishOrder: string[] = [];
+    let publishedBeforeSlowFinished = false;
+    let slowFinished = false;
+
+    const generateFn = vi.fn(async (options: {
+      variationSeed?: string;
+    }) => {
+      const index = Number(options.variationSeed?.split(":").at(-1));
+      if (index === 0) {
+        await new Promise((resolve) => setTimeout(resolve, 5));
+        return {
+          payload: {
+            ...minimalFoldSituation(),
+            setupKey: "fast",
+          },
+          modelId: "gemini-3.8-flash",
+        };
+      }
+      await new Promise((resolve) => setTimeout(resolve, 40));
+      slowFinished = true;
+      return {
+        payload: {
+          ...minimalFoldSituation(),
+          setupKey: "slow",
+        },
+        modelId: "gemini-3.8-flash",
+      };
     });
+
+    await runConcurrentGenerationBatch({
+      apiKey: "secret",
+      setup,
+      setupKey: "key",
+      leaseId: "lease",
+      batchSize: 2,
+      generateFn: generateFn as never,
+      publishFn: vi.fn(async (generated) => {
+        publishOrder.push(generated.payload.setupKey);
+        if (!slowFinished) publishedBeforeSlowFinished = true;
+        return true;
+      }),
+    });
+
+    expect(publishOrder[0]).toBe("fast");
+    expect(publishedBeforeSlowFinished).toBe(true);
   });
 });

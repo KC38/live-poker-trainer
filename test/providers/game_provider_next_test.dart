@@ -21,11 +21,13 @@ class _FakeSituationService extends SituationService {
   final SituationModel situation;
   final List<List<String>> recordedPaths = [];
   final List<List<String>> recordedActionKeys = [];
+  int fetchCount = 0;
 
   @override
   Future<FetchedSituation> fetchSituation(TableSetup setup) async {
+    fetchCount += 1;
     return FetchedSituation(
-      situationId: 'situation-1',
+      situationId: 'situation-$fetchCount',
       setupKey: situation.setupKey,
       situation: situation,
     );
@@ -258,5 +260,47 @@ void main() {
       ['BET_55'],
     ]);
     expect(container.read(gameControllerProvider).authoredHeroEdges, isEmpty);
+  });
+
+  test('prepareTraining starts fetch before startTraining consumes it', () async {
+    final service = _FakeSituationService(_authoredSituation());
+    final container = _authoredContainer(service);
+    addTearDown(container.dispose);
+    final controller = container.read(gameControllerProvider.notifier);
+
+    controller.prepareTraining();
+    await _flushMicrotasks();
+    expect(service.fetchCount, 1);
+
+    await controller.startTraining();
+    expect(service.fetchCount, 1);
+    expect(container.read(gameControllerProvider).game, isNotNull);
+    expect(container.read(gameControllerProvider).loading, isFalse);
+  });
+
+  test('end-of-hand prefetch is reused by nextHand', () async {
+    final service = _FakeSituationService(_authoredSituation());
+    final container = _authoredContainer(service);
+    addTearDown(container.dispose);
+    final controller = container.read(gameControllerProvider.notifier);
+
+    await controller.startTraining();
+    expect(service.fetchCount, 1);
+
+    await controller.heroAct(
+      const PokerAction(type: PokerActionType.bet, amount: 55),
+    );
+    await _flushMicrotasks();
+    // Hand resolves and schedules prefetch of the next situation.
+    expect(service.fetchCount, greaterThanOrEqualTo(2));
+    final fetchesAfterHand = service.fetchCount;
+
+    await controller.nextHand();
+    expect(
+      service.fetchCount,
+      fetchesAfterHand,
+      reason: 'nextHand should reuse the end-of-hand prefetch',
+    );
+    expect(container.read(gameControllerProvider).loading, isFalse);
   });
 }
