@@ -1,4 +1,4 @@
-/// Hero identity (display name, avatar) and the cached AI style summary.
+/// Server-backed hero identity and computed playing metrics.
 library;
 
 import 'dart:convert';
@@ -15,8 +15,8 @@ enum AvatarKind {
   /// One of the [BuiltInAvatar] designs, painted at render time.
   builtIn,
 
-  /// A user photo copied into the app documents directory.
-  file,
+  /// A Firebase Storage download URL (or other https URL).
+  network,
 }
 
 /// Procedurally drawn avatars offered as one-tap defaults.
@@ -62,9 +62,7 @@ enum BuiltInAvatar {
 
 /// A reference to the hero's avatar, persisted as a single string.
 ///
-/// Encoded as `builtin:<id>`, `file:<absolute path>`, or the empty string. The
-/// file variant stores a path rather than bytes so the database stays small
-/// and the image can be replaced without a schema change.
+/// Encoded as `builtin:<id>`, an HTTPS URL, or the empty string.
 @immutable
 class AvatarRef {
   const AvatarRef._(this.kind, this.value);
@@ -77,20 +75,21 @@ class AvatarRef {
   /// Not `const`: reading `avatar.id` off an enum is not a constant
   /// expression, and the id is what gets persisted.
   AvatarRef.builtIn(BuiltInAvatar avatar)
-      : this._(AvatarKind.builtIn, avatar.id);
+    : this._(AvatarKind.builtIn, avatar.id);
 
-  /// A photo stored at [path] inside the app documents directory.
-  const AvatarRef.file(String path) : this._(AvatarKind.file, path);
+  /// A remote image at [url] (Firebase Storage download URL).
+  const AvatarRef.network(String url) : this._(AvatarKind.network, url);
 
   final AvatarKind kind;
 
-  /// Built-in id or absolute file path; empty for [AvatarKind.none].
+  /// Built-in id or HTTPS URL; empty for [AvatarKind.none].
   final String value;
 
   static const String _builtInPrefix = 'builtin:';
-  static const String _filePrefix = 'file:';
+  static const String _networkPrefix = 'network:';
+  static const String _storagePathPrefix = 'storage:';
 
-  /// Parses a persisted value, tolerating null, empty, and bare paths.
+  /// Parses a persisted value, tolerating null, empty, bare paths, and URLs.
   static AvatarRef parse(String? raw) {
     final text = raw?.trim() ?? '';
     if (text.isEmpty) return const AvatarRef.none();
@@ -98,29 +97,36 @@ class AvatarRef {
       final id = text.substring(_builtInPrefix.length);
       return AvatarRef.builtIn(BuiltInAvatar.fromId(id));
     }
-    if (text.startsWith(_filePrefix)) {
-      final path = text.substring(_filePrefix.length);
-      return path.isEmpty ? const AvatarRef.none() : AvatarRef.file(path);
+    if (text.startsWith('file:') || text.startsWith('/')) {
+      return const AvatarRef.none();
     }
-    // Bare absolute path (older writes).
-    return text.startsWith('/')
-        ? AvatarRef.file(text)
-        : const AvatarRef.none();
+    if (text.startsWith(_networkPrefix)) {
+      final url = text.substring(_networkPrefix.length);
+      return url.isEmpty ? const AvatarRef.none() : AvatarRef.network(url);
+    }
+    if (text.startsWith(_storagePathPrefix)) {
+      // Storage path only — UI falls back to initials until URL is resolved.
+      return const AvatarRef.none();
+    }
+    if (text.startsWith('http://') || text.startsWith('https://')) {
+      return AvatarRef.network(text);
+    }
+    return const AvatarRef.none();
   }
 
-  /// The string written to the database.
+  /// The string written to the database / Firestore `avatarRef`.
   String get storageValue => switch (kind) {
-        AvatarKind.none => '',
-        AvatarKind.builtIn => '$_builtInPrefix$value',
-        AvatarKind.file => '$_filePrefix$value',
-      };
+    AvatarKind.none => '',
+    AvatarKind.builtIn => '$_builtInPrefix$value',
+    AvatarKind.network => value, // bare https URL for Firestore consumers
+  };
 
   /// The built-in design, when this is a built-in avatar.
   BuiltInAvatar? get builtIn =>
       kind == AvatarKind.builtIn ? BuiltInAvatar.fromId(value) : null;
 
-  /// The absolute file path, when this is a photo.
-  String? get filePath => kind == AvatarKind.file ? value : null;
+  /// Network URL when [kind] is [AvatarKind.network].
+  String? get networkUrl => kind == AvatarKind.network ? value : null;
 
   bool get isEmpty => kind == AvatarKind.none;
 
@@ -132,7 +138,8 @@ class AvatarRef {
   int get hashCode => Object.hash(kind, value);
 
   @override
-  String toString() => 'AvatarRef(${storageValue.isEmpty ? 'none' : storageValue})';
+  String toString() =>
+      'AvatarRef(${storageValue.isEmpty ? 'none' : storageValue})';
 }
 
 /// The hero's editable identity.
@@ -165,15 +172,12 @@ class HeroIdentity {
   /// The default name is replaced with `YOU`: at the table the player needs
   /// to spot their own seat instantly, and "HERO" reads as jargon until they
   /// have deliberately named themselves something.
-  String get railLabel =>
-      hasCustomName ? seatName.toUpperCase() : 'YOU';
+  String get railLabel => hasCustomName ? seatName.toUpperCase() : 'YOU';
 
   /// One or two letters for the avatar fallback.
   String get initials {
-    final parts = seatName
-        .split(RegExp(r'\s+'))
-        .where((p) => p.isNotEmpty)
-        .toList();
+    final parts =
+        seatName.split(RegExp(r'\s+')).where((p) => p.isNotEmpty).toList();
     if (parts.isEmpty) return 'H';
     if (parts.length == 1) {
       return parts.first.substring(0, 1).toUpperCase();

@@ -1,7 +1,6 @@
-/// Barrel for Firestore client repositories (scenario pool + played).
+/// Barrel for Firestore client repositories.
 library;
 
-export 'package:live_poker_trainer/services/firestore/played_scenario_doc.dart';
-export 'package:live_poker_trainer/services/firestore/played_scenarios_repo.dart';
-export 'package:live_poker_trainer/services/firestore/scenario_pool_doc.dart';
-export 'package:live_poker_trainer/services/firestore/scenario_pool_repo.dart';
+export 'package:live_poker_trainer/services/firestore/progress_repository.dart';
+export 'package:live_poker_trainer/services/firestore/situation_service.dart';
+export 'package:live_poker_trainer/services/firestore/user_repository.dart';

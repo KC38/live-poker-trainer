@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:live_poker_trainer/core/constants/money.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
-import 'package:live_poker_trainer/models/scenario_model.dart';
+import 'package:live_poker_trainer/models/situation_model.dart';
 
 /// Betting street.
 enum Street {
@@ -56,7 +56,7 @@ class GameState {
     this.lastAggressor,
     this.heroLine = const [],
     this.handCount = 0,
-    this.activeScenario,
+    this.activeSituation,
     this.heroInvestedThisHand = 0,
     this.isHandOver = false,
     this.waitingForHero = false,
@@ -84,7 +84,7 @@ class GameState {
   final int? lastAggressor;
   final List<String> heroLine;
   final int handCount;
-  final ScenarioModel? activeScenario;
+  final SituationModel? activeSituation;
   final double heroInvestedThisHand;
   final bool isHandOver;
   final bool waitingForHero;
@@ -92,7 +92,7 @@ class GameState {
 
   /// Seat ids that took the pot (one winner, or multiple for a split).
   ///
-  /// Ordered: the first entry receives any leftover odd cents from the split.
+  /// Odd cents are assigned by ascending seat id, independent of list order.
   final List<int> winnerIds;
   final List<double> sidePots;
 
@@ -131,18 +131,10 @@ class GameState {
   /// Whether the pot was split between two or more winners.
   bool get isSplitPot => winnerIds.length > 1;
 
-  /// Chips credited to [winnerId] from [awardedPot] (includes odd-cent residue
-  /// on the first winner when the pot does not divide evenly).
+  /// Chips credited to [winnerId] from [awardedPot].
   double awardShareFor(int winnerId) {
     if (winnerIds.isEmpty || awardedPot <= Money.epsilon) return 0;
-    final share = Money.round(awardedPot / winnerIds.length);
-    final oddCents =
-        Money.round(awardedPot - share * winnerIds.length);
-    if (winnerId == winnerIds.first) {
-      return Money.round(share + oddCents);
-    }
-    if (winnerIds.contains(winnerId)) return share;
-    return 0;
+    return Money.splitPot(awardedPot, winnerIds)[winnerId] ?? 0;
   }
 
   /// Chips [player] must add to match [highestBet], capped at their stack.
@@ -170,8 +162,8 @@ class GameState {
     bool clearLastAggressor = false,
     List<String>? heroLine,
     int? handCount,
-    ScenarioModel? activeScenario,
-    bool clearScenario = false,
+    SituationModel? activeSituation,
+    bool clearSituation = false,
     double? heroInvestedThisHand,
     bool? isHandOver,
     bool? waitingForHero,
@@ -195,18 +187,16 @@ class GameState {
       minRaise: minRaise ?? this.minRaise,
       smallBlind: smallBlind ?? this.smallBlind,
       bigBlind: bigBlind ?? this.bigBlind,
-      lastAggressor: clearLastAggressor
-          ? null
-          : (lastAggressor ?? this.lastAggressor),
+      lastAggressor:
+          clearLastAggressor ? null : (lastAggressor ?? this.lastAggressor),
       heroLine: heroLine ?? this.heroLine,
       handCount: handCount ?? this.handCount,
-      activeScenario:
-          clearScenario ? null : (activeScenario ?? this.activeScenario),
+      activeSituation:
+          clearSituation ? null : (activeSituation ?? this.activeSituation),
       heroInvestedThisHand: heroInvestedThisHand ?? this.heroInvestedThisHand,
       isHandOver: isHandOver ?? this.isHandOver,
       waitingForHero: waitingForHero ?? this.waitingForHero,
-      resultMessage:
-          clearResult ? null : (resultMessage ?? this.resultMessage),
+      resultMessage: clearResult ? null : (resultMessage ?? this.resultMessage),
       winnerIds: winnerIds ?? this.winnerIds,
       sidePots: sidePots ?? this.sidePots,
     );

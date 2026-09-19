@@ -1,20 +1,18 @@
 /// Layout guards: strict band separation, plus the reclaimed action-dock band.
 library;
 
-import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:live_poker_trainer/core/database/app_database.dart';
-import 'package:live_poker_trainer/core/database/profile_database.dart';
-import 'package:live_poker_trainer/providers/profile_provider.dart';
-import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/coach_feedback.dart';
+import 'package:live_poker_trainer/models/exploit_action.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
+import 'package:live_poker_trainer/models/hero_profile_model.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
-import 'package:live_poker_trainer/models/scenario_model.dart';
+import 'package:live_poker_trainer/models/situation_model.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
+import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
 import 'package:live_poker_trainer/ui/widgets/action_dock_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
@@ -29,6 +27,28 @@ const _smallPhone = Size(320, 568);
 
 /// A typical modern phone (iPhone 15 / 17 Pro logical size).
 const _modernPhone = Size(393, 852);
+
+const _authoredEdges = [
+  HeroActionEdge(
+    actionKey: 'FOLD',
+    kind: SituationActionKind.fold,
+    coaching: 'Fold.',
+    verdict: HeroActionVerdict.incorrect,
+    evDeltaBb: -1,
+    optimalActionKey: 'CALL',
+    nextNodeId: 'terminal',
+  ),
+  HeroActionEdge(
+    actionKey: 'CALL',
+    kind: SituationActionKind.call,
+    amountTo: 8,
+    coaching: 'Call.',
+    verdict: HeroActionVerdict.correct,
+    evDeltaBb: 0,
+    optimalActionKey: 'CALL',
+    nextNodeId: 'terminal',
+  ),
+];
 
 class _FixedController extends GameController {
   _FixedController(super.ref, TableSession session) {
@@ -68,23 +88,23 @@ GameState _nineHandedGame({
   final community = switch (street) {
     Street.preflop => <CardModel>[],
     Street.flop => [
-        CardModel.fromCode('Ac'),
-        CardModel.fromCode('Jc'),
-        CardModel.fromCode('Kd'),
-      ],
+      CardModel.fromCode('Ac'),
+      CardModel.fromCode('Jc'),
+      CardModel.fromCode('Kd'),
+    ],
     Street.turn => [
-        CardModel.fromCode('Ac'),
-        CardModel.fromCode('Jc'),
-        CardModel.fromCode('Kd'),
-        CardModel.fromCode('3h'),
-      ],
+      CardModel.fromCode('Ac'),
+      CardModel.fromCode('Jc'),
+      CardModel.fromCode('Kd'),
+      CardModel.fromCode('3h'),
+    ],
     Street.river || Street.showdown => [
-        CardModel.fromCode('Ac'),
-        CardModel.fromCode('Jc'),
-        CardModel.fromCode('Kd'),
-        CardModel.fromCode('3h'),
-        CardModel.fromCode('9s'),
-      ],
+      CardModel.fromCode('Ac'),
+      CardModel.fromCode('Jc'),
+      CardModel.fromCode('Kd'),
+      CardModel.fromCode('3h'),
+      CardModel.fromCode('9s'),
+    ],
   };
   return GameState(
     players: [
@@ -106,13 +126,14 @@ GameState _nineHandedGame({
           stack: 300 + i * 17,
           // Multi-way river: several large live bets like the crowded
           // production screenshot (Sammy / Paul / Rex stacked on the board).
-          currentBet: multiwayRiverBets
-              ? (i == 1 || i == 3 || i == 4 || i == 6 ? 117.42 + i * 40 : 0)
-              : (i.isEven ? 8 : 0),
-          lastActionLabel: multiwayRiverBets &&
-                  (i == 1 || i == 3 || i == 4 || i == 6)
-              ? (i.isOdd ? 'RAISE' : 'CALL')
-              : null,
+          currentBet:
+              multiwayRiverBets
+                  ? (i == 1 || i == 3 || i == 4 || i == 6 ? 117.42 + i * 40 : 0)
+                  : (i.isEven ? 8 : 0),
+          lastActionLabel:
+              multiwayRiverBets && (i == 1 || i == 3 || i == 4 || i == 6)
+                  ? (i.isOdd ? 'RAISE' : 'CALL')
+                  : null,
           holeCards: [CardModel.fromCode('2c'), CardModel.fromCode('7d')],
         ),
     ],
@@ -156,18 +177,7 @@ Future<_FixedController> _pumpTable(
       // with the session they were given.
       key: UniqueKey(),
       overrides: [
-        // Settings side effects reach the sound service and the hero rail
-        // reads the profile, both of which would open on-disk databases.
-        appDatabaseProvider.overrideWith((ref) {
-          final db = AppDatabase(NativeDatabase.memory());
-          ref.onDispose(db.close);
-          return db;
-        }),
-        profileDatabaseProvider.overrideWith((ref) {
-          final db = ProfileDatabase(NativeDatabase.memory());
-          ref.onDispose(db.close);
-          return db;
-        }),
+        heroIdentityProvider.overrideWithValue(const HeroIdentity()),
         gameControllerProvider.overrideWith(
           (ref) => controller = _FixedController(ref, session),
         ),
@@ -210,12 +220,7 @@ Rect _heroCardsRect(WidgetTester tester) {
 Rect _rectOf(WidgetTester tester, Finder finder) {
   final box = tester.renderObject<RenderBox>(finder);
   final topLeft = box.localToGlobal(Offset.zero);
-  return Rect.fromLTWH(
-    topLeft.dx,
-    topLeft.dy,
-    box.size.width,
-    box.size.height,
-  );
+  return Rect.fromLTWH(topLeft.dx, topLeft.dy, box.size.width, box.size.height);
 }
 
 /// Painted bounds of a felt bet chip.
@@ -353,7 +358,8 @@ void _expectNoFeltCollisions(
 void main() {
   const longCoach = CoachFeedback(
     verdict: CoachVerdict.incorrect,
-    message: 'Raising here bloats the pot against a station who calls with '
+    message:
+        'Raising here bloats the pot against a station who calls with '
         'any pair and never folds to pressure. On the turn with king-high you '
         'have showdown value but no fold equity, so take the cheap price, '
         'keep the pot small, and let them pay you off when you improve.',
@@ -368,9 +374,9 @@ void main() {
       const TableSession(coach: longCoach).copyWith(game: _nineHandedGame());
 
   /// Hand is over: the dock is gone and the other bands take its space.
-  TableSession reviewSession() => const TableSession(coach: longCoach).copyWith(
-        game: _nineHandedGame(street: Street.showdown, handOver: true),
-      );
+  TableSession reviewSession() => const TableSession(
+    coach: longCoach,
+  ).copyWith(game: _nineHandedGame(street: Street.showdown, handOver: true));
 
   final sizes = <String, Size>{
     'small phone': _smallPhone,
@@ -379,14 +385,15 @@ void main() {
 
   sizes.forEach((label, size) {
     group(label, () {
-      testWidgets('coach shelf never overlaps the hero hole cards',
-          (tester) async {
+      testWidgets('coach shelf never overlaps the hero hole cards', (
+        tester,
+      ) async {
         await _pumpTable(
           tester,
           size: size,
-          session: const TableSession(coach: longCoach).copyWith(
-            game: _nineHandedGame(),
-          ),
+          session: const TableSession(
+            coach: longCoach,
+          ).copyWith(game: _nineHandedGame()),
         );
         expect(tester.takeException(), isNull);
 
@@ -405,14 +412,15 @@ void main() {
         );
       });
 
-      testWidgets('hero hole cards stay fully inside the viewport',
-          (tester) async {
+      testWidgets('hero hole cards stay fully inside the viewport', (
+        tester,
+      ) async {
         await _pumpTable(
           tester,
           size: size,
-          session: const TableSession(coach: longCoach).copyWith(
-            game: _nineHandedGame(),
-          ),
+          session: const TableSession(
+            coach: longCoach,
+          ).copyWith(game: _nineHandedGame()),
         );
         final heroCards = _heroCardsRect(tester);
         expect(heroCards.top, greaterThanOrEqualTo(0));
@@ -442,18 +450,20 @@ void main() {
         }
       });
 
-      testWidgets('felt shows currency only — no BB on the live table',
-          (tester) async {
+      testWidgets('felt shows currency only — no BB on the live table', (
+        tester,
+      ) async {
         await _pumpTable(
           tester,
           size: size,
           session: const TableSession().copyWith(game: _nineHandedGame()),
         );
-        final amounts = tester
-            .widgetList<Text>(find.byType(Text))
-            .map((t) => t.data ?? '')
-            .where((t) => t.contains(r'$'))
-            .toList();
+        final amounts =
+            tester
+                .widgetList<Text>(find.byType(Text))
+                .map((t) => t.data ?? '')
+                .where((t) => t.contains(r'$'))
+                .toList();
         expect(amounts, isNotEmpty);
         expect(
           amounts.where((t) => t.contains('BB')),
@@ -462,8 +472,9 @@ void main() {
         );
       });
 
-      testWidgets('no felt element covers another, on every street',
-          (tester) async {
+      testWidgets('no felt element covers another, on every street', (
+        tester,
+      ) async {
         for (final street in Street.values) {
           final game = _nineHandedGame(
             street: street,
@@ -473,7 +484,9 @@ void main() {
           await _pumpTable(
             tester,
             size: size,
-            session: const TableSession(coach: longCoach).copyWith(game: game),
+            session: const TableSession(
+              coach: longCoach,
+            ).copyWith(game: game, authoredHeroEdges: _authoredEdges),
           );
           await tester.pump(const Duration(milliseconds: 400));
 
@@ -481,17 +494,19 @@ void main() {
         }
       });
 
-      testWidgets('villain archetypes are legible words, not single letters',
-          (tester) async {
+      testWidgets('villain archetypes are legible words, not single letters', (
+        tester,
+      ) async {
         await _pumpTable(
           tester,
           size: size,
           session: const TableSession().copyWith(game: _nineHandedGame()),
         );
-        final labels = tester
-            .widgetList<Text>(find.byType(Text))
-            .map((t) => (t.data ?? '').toUpperCase())
-            .toSet();
+        final labels =
+            tester
+                .widgetList<Text>(find.byType(Text))
+                .map((t) => (t.data ?? '').toUpperCase())
+                .toSet();
         for (final word in ['NIT', 'STATION', 'MANIAC', 'TAG', 'LAG']) {
           expect(
             labels.contains(word),
@@ -501,48 +516,43 @@ void main() {
         }
       });
 
-      testWidgets('hand over highlights Next without opening Hand review',
-          (tester) async {
+      testWidgets('hand over highlights Next without opening Hand review', (
+        tester,
+      ) async {
         await _pumpTable(
           tester,
           size: size,
-          session: TableSession(
-            coach: longCoach,
-          ).copyWith(
-            game: _nineHandedGame(
-              street: Street.showdown,
-              handOver: true,
-            ),
+          session: TableSession(coach: longCoach).copyWith(
+            game: _nineHandedGame(street: Street.showdown, handOver: true),
           ),
         );
 
         expect(find.text('Next'), findsOneWidget);
-        expect(find.byKey(const ValueKey('next_cta_emphasized')), findsOneWidget);
+        expect(
+          find.byKey(const ValueKey('next_cta_emphasized')),
+          findsOneWidget,
+        );
         expect(find.byKey(const ValueKey('next_cta_quiet')), findsNothing);
         expect(find.text('Review'), findsNothing);
         expect(find.text('Hand review'), findsNothing);
         expect(find.text('Next hand'), findsNothing);
       });
 
-      testWidgets('after fold Next is available without highlight',
-          (tester) async {
+      testWidgets('after fold Next is available without highlight', (
+        tester,
+      ) async {
         await _pumpTable(
           tester,
           size: size,
           session: TableSession(
             coach: longCoach,
             replaying: true,
-          ).copyWith(
-            game: _nineHandedGame(heroFolded: true),
-          ),
+          ).copyWith(game: _nineHandedGame(heroFolded: true)),
         );
 
         expect(find.text('Next'), findsOneWidget);
         expect(find.byKey(const ValueKey('next_cta_quiet')), findsOneWidget);
-        expect(
-          find.byKey(const ValueKey('next_cta_emphasized')),
-          findsNothing,
-        );
+        expect(find.byKey(const ValueKey('next_cta_emphasized')), findsNothing);
         expect(find.text('Review'), findsNothing);
         expect(find.byType(ActionDockWidget), findsNothing);
       });
@@ -554,9 +564,7 @@ void main() {
           session: TableSession(
             coach: longCoach,
             replaying: true,
-          ).copyWith(
-            game: _nineHandedGame(heroFolded: true),
-          ),
+          ).copyWith(game: _nineHandedGame(heroFolded: true)),
         );
 
         await tester.tap(find.text('Next'));
@@ -564,21 +572,24 @@ void main() {
         expect(controller.nextHandCalls, 1);
       });
 
-      testWidgets('YOUR TURN hides Next so mid-decision cannot skip',
-          (tester) async {
+      testWidgets('YOUR TURN hides Next so mid-decision cannot skip', (
+        tester,
+      ) async {
         await _pumpTable(tester, size: size, session: liveSession());
         expect(find.text('YOUR TURN'), findsOneWidget);
         expect(find.text('Next'), findsNothing);
       });
 
-      testWidgets('action dock is on screen while the hero is to act',
-          (tester) async {
+      testWidgets('action dock is on screen while the hero is to act', (
+        tester,
+      ) async {
         await _pumpTable(tester, size: size, session: liveSession());
         expect(find.byType(ActionDockWidget), findsOneWidget);
       });
 
-      testWidgets('showdown keeps the awarded pot on the felt, not \$0',
-          (tester) async {
+      testWidgets('showdown keeps the awarded pot on the felt, not \$0', (
+        tester,
+      ) async {
         await _pumpTable(tester, size: size, session: reviewSession());
         await _settleBands(tester);
 
@@ -589,8 +600,9 @@ void main() {
         expect(find.text('INCORRECT'), findsWidgets);
       });
 
-      testWidgets('award animation shows TAKES and flying pot share',
-          (tester) async {
+      testWidgets('award animation shows TAKES and flying pot share', (
+        tester,
+      ) async {
         await _pumpTable(
           tester,
           size: size,
@@ -604,8 +616,9 @@ void main() {
         expect(find.text('WINS'), findsOneWidget);
       });
 
-      testWidgets('split award shows SPLIT on the board and seats',
-          (tester) async {
+      testWidgets('split award shows SPLIT on the board and seats', (
+        tester,
+      ) async {
         final split = _nineHandedGame(
           street: Street.showdown,
           handOver: true,
@@ -616,10 +629,9 @@ void main() {
         await _pumpTable(
           tester,
           size: size,
-          session: TableSession(coach: longCoach).copyWith(
-            game: split,
-            awardingChips: true,
-          ),
+          session: TableSession(
+            coach: longCoach,
+          ).copyWith(game: split, awardingChips: true),
         );
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 100));
@@ -628,8 +640,9 @@ void main() {
         expect(find.text('WINS'), findsNothing);
       });
 
-      testWidgets('action dock leaves the tree once the hero cannot act',
-          (tester) async {
+      testWidgets('action dock leaves the tree once the hero cannot act', (
+        tester,
+      ) async {
         await _pumpTable(tester, size: size, session: reviewSession());
         await _settleBands(tester);
 
@@ -639,8 +652,9 @@ void main() {
         expect(find.text('Next'), findsOneWidget);
       });
 
-      testWidgets('coach and hero cards grow into the freed dock band',
-          (tester) async {
+      testWidgets('coach and hero cards grow into the freed dock band', (
+        tester,
+      ) async {
         final controller = await _pumpTable(
           tester,
           size: size,
@@ -662,8 +676,9 @@ void main() {
         expect(find.text('BEST'), findsOneWidget);
       });
 
-      testWidgets('bands stay separated while the dock is hidden',
-          (tester) async {
+      testWidgets('bands stay separated while the dock is hidden', (
+        tester,
+      ) async {
         await _pumpTable(tester, size: size, session: reviewSession());
         await _settleBands(tester);
 
@@ -682,8 +697,9 @@ void main() {
         expect(tester.takeException(), isNull);
       });
 
-      testWidgets('dock comes back when the hero is on the clock again',
-          (tester) async {
+      testWidgets('dock comes back when the hero is on the clock again', (
+        tester,
+      ) async {
         final controller = await _pumpTable(
           tester,
           size: size,

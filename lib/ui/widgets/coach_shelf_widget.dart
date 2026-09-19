@@ -1,23 +1,13 @@
-/// Dedicated coach shelf — clear CORRECT / INCORRECT, never over cards.
+/// Dedicated coach shelf — CORRECT / INCORRECT / CLOSE from server coaching.
 library;
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
-import 'package:live_poker_trainer/engine/leak_lines.dart';
 import 'package:live_poker_trainer/models/coach_feedback.dart';
 
-/// Non-overlapping AI coach panel between the hero rail and the action dock.
-///
-/// Shown only after a hero action produces coaching. Always shows the full
-/// advice plus decision context inside this band (height-capped by the parent;
-/// content scrolls internally and never covers hero hole cards).
-///
-/// Layout is a single full-width column (no side badge rail) so advice copy and
-/// BEST/YOU/EV use the whole shelf. A shelved prior-street grade is labeled
-/// inline as `Correct · preflop` / `Incorrect · turn` so it cannot be read as
-/// live advice for the current street.
+/// Non-overlapping coach panel between the hero rail and the action dock.
 class CoachShelfWidget extends StatelessWidget {
   /// Creates the coach shelf.
   const CoachShelfWidget({
@@ -32,41 +22,30 @@ class CoachShelfWidget extends StatelessWidget {
   final CoachFeedback feedback;
   final double bigBlind;
   final ChipDisplayMode chipDisplayMode;
-
-  /// True while villains are acting, shown as a subtle live indicator.
   final bool replaying;
-
-  /// Hard cap for this band; content scrolls beyond it.
   final double? maxHeight;
 
-  /// Felt-style chip mode so strip amounts stay compact like table stacks.
   ChipDisplayMode get _stripMode => chipDisplayMode.tableMode;
 
   String get _message {
-    if (feedback.message.isEmpty) {
-      return 'Reviewing that line…';
-    }
+    if (feedback.message.isEmpty) return 'Reviewing that line…';
     return feedback.message;
   }
 
   String? get _optimalLine {
-    if (feedback.optimalAction == null) {
-      return null;
-    }
+    final label = feedback.optimalActionLabel ?? feedback.optimalAction?.label;
+    if (label == null || label.isEmpty) return null;
     return ChipFormat.optimalLine(
-      actionLabel: feedback.optimalAction!.label,
+      actionLabel: label,
       sizingBb: feedback.optimalSizingBb,
       bigBlind: bigBlind,
       mode: _stripMode,
     );
   }
 
-  /// Hero action with raise/bet size when available for fair BEST comparison.
   String get _youLine {
     final label = feedback.heroAction;
-    if (label == null || label.isEmpty) {
-      return '—';
-    }
+    if (label == null || label.isEmpty) return '—';
     return ChipFormat.optimalLine(
       actionLabel: label,
       sizingBb: feedback.heroSizingBb,
@@ -75,49 +54,26 @@ class CoachShelfWidget extends StatelessWidget {
     );
   }
 
+  Color get _borderColor {
+    if (feedback.isHistorical) return AppColors.slateDark;
+    return switch (feedback.verdict) {
+      CoachVerdict.correct => AppColors.success,
+      CoachVerdict.close => AppColors.warning,
+      CoachVerdict.incorrect => AppColors.danger,
+      _ => AppColors.slateDark,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final hasVerdict = feedback.hasVerdict;
-    final borderColor = feedback.isHistorical
-        ? AppColors.slateDark
-        : feedback.verdict == CoachVerdict.correct
-            ? AppColors.success
-            : feedback.verdict == CoachVerdict.incorrect
-                ? AppColors.danger
-                : AppColors.slateDark;
     final optimal = _optimalLine;
 
     final advice = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _CoachHeader(
-          replaying: replaying,
-          feedback: feedback,
-        ),
-        if (feedback.isRepeat || feedback.isImprovement) ...[
-          const SizedBox(height: 6),
-          Wrap(
-            spacing: 6,
-            runSpacing: 4,
-            children: [
-              if (feedback.isRepeat)
-                _LeakChip(
-                  label: LeakLines.repeatBadge(feedback.repeatCount),
-                  color: AppColors.warning,
-                  icon: Icons.replay_rounded,
-                ),
-              if (feedback.isImprovement)
-                _LeakChip(
-                  label: LeakLines.improvementBadge(
-                    feedback.improvementStreak,
-                  ),
-                  color: AppColors.success,
-                  icon: Icons.trending_up_rounded,
-                ),
-            ],
-          ),
-        ],
+        _CoachHeader(replaying: replaying, feedback: feedback),
         const SizedBox(height: 6),
         Text(
           _message,
@@ -149,9 +105,7 @@ class CoachShelfWidget extends StatelessWidget {
     final body = LayoutBuilder(
       builder: (context, constraints) {
         final hasCap = maxHeight != null && constraints.hasBoundedHeight;
-        if (!hasCap) {
-          return advice;
-        }
+        if (!hasCap) return advice;
         return _HeightCappedScroll(
           maxHeight: constraints.maxHeight,
           child: advice,
@@ -171,7 +125,7 @@ class CoachShelfWidget extends StatelessWidget {
           color: AppColors.bgElevated.withValues(alpha: 0.94),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: borderColor,
+            color: _borderColor,
             width: hasVerdict ? 1.5 : 0.8,
           ),
         ),
@@ -181,12 +135,8 @@ class CoachShelfWidget extends StatelessWidget {
   }
 }
 
-/// Sizes to [child] until [maxHeight], then scrolls instead of overflowing.
 class _HeightCappedScroll extends StatelessWidget {
-  const _HeightCappedScroll({
-    required this.maxHeight,
-    required this.child,
-  });
+  const _HeightCappedScroll({required this.maxHeight, required this.child});
 
   final double maxHeight;
   final Widget child;
@@ -205,12 +155,8 @@ class _HeightCappedScroll extends StatelessWidget {
   }
 }
 
-/// Coach title plus live verdict or shelved prior-street grade.
 class _CoachHeader extends StatelessWidget {
-  const _CoachHeader({
-    required this.replaying,
-    required this.feedback,
-  });
+  const _CoachHeader({required this.replaying, required this.feedback});
 
   final bool replaying;
   final CoachFeedback feedback;
@@ -253,10 +199,6 @@ class _CoachHeader extends StatelessWidget {
   }
 }
 
-/// Shelved grade from an earlier street — not live advice for the tip below.
-///
-/// Copy is `Correct · preflop` / `Incorrect · turn` so the street scopes the
-/// verdict and cannot be mistaken for the current-street tip.
 class _HistoricalGradeChip extends StatelessWidget {
   const _HistoricalGradeChip({required this.feedback});
 
@@ -264,9 +206,12 @@ class _HistoricalGradeChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final correct = feedback.verdict == CoachVerdict.correct;
     final street = feedback.decisionStreet?.label.toLowerCase() ?? 'earlier';
-    final color = correct ? AppColors.success : AppColors.danger;
+    final (label, color) = switch (feedback.verdict) {
+      CoachVerdict.correct => ('Correct', AppColors.success),
+      CoachVerdict.close => ('Close', AppColors.warning),
+      _ => ('Incorrect', AppColors.danger),
+    };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
@@ -278,13 +223,15 @@ class _HistoricalGradeChip extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            correct ? Icons.check_rounded : Icons.close_rounded,
+            feedback.verdict == CoachVerdict.incorrect
+                ? Icons.close_rounded
+                : Icons.check_rounded,
             size: 12,
             color: color,
           ),
           const SizedBox(width: 4),
           Text(
-            '${correct ? 'Correct' : 'Incorrect'} · $street',
+            '$label · $street',
             style: GoogleFonts.jetBrainsMono(
               fontWeight: FontWeight.w800,
               fontSize: 9.5,
@@ -298,7 +245,6 @@ class _HistoricalGradeChip extends StatelessWidget {
   }
 }
 
-/// Aligned BEST / YOU / EV decision strip for graded coach feedback.
 class _DecisionStatsStrip extends StatelessWidget {
   const _DecisionStatsStrip({
     required this.best,
@@ -340,19 +286,11 @@ class _DecisionStatsStrip extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: _StatsCell(
-              label: 'BEST',
-              value: best,
-              compact: compact,
-            ),
+            child: _StatsCell(label: 'BEST', value: best, compact: compact),
           ),
           SizedBox(width: gap),
           Expanded(
-            child: _StatsCell(
-              label: 'YOU',
-              value: you,
-              compact: compact,
-            ),
+            child: _StatsCell(label: 'YOU', value: you, compact: compact),
           ),
           SizedBox(width: gap),
           Expanded(
@@ -369,10 +307,6 @@ class _DecisionStatsStrip extends StatelessWidget {
   }
 }
 
-/// One labeled mono value in the decision stats strip.
-///
-/// Never ellipsizes away raise sizing — scales the mono value down so the
-/// full `RAISE · $42` string stays readable in the three-cell strip.
 class _StatsCell extends StatelessWidget {
   const _StatsCell({
     required this.label,
@@ -425,70 +359,30 @@ class _StatsCell extends StatelessWidget {
   }
 }
 
-/// Small "Repeat ×N" / "Improved" indicator under the header.
-class _LeakChip extends StatelessWidget {
-  const _LeakChip({
-    required this.label,
-    required this.color,
-    required this.icon,
-  });
-
-  final String label;
-  final Color color;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.16),
-        borderRadius: BorderRadius.circular(7),
-        border: Border.all(color: color.withValues(alpha: 0.7), width: 0.8),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 10, color: color),
-          const SizedBox(width: 3),
-          Text(
-            label,
-            style: GoogleFonts.jetBrainsMono(
-              fontWeight: FontWeight.w800,
-              fontSize: 8.5,
-              color: color,
-              letterSpacing: 0.3,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _VerdictBadge extends StatelessWidget {
-  const _VerdictBadge({
-    required this.verdict,
-    this.compact = false,
-  });
+  const _VerdictBadge({required this.verdict, this.compact = false});
 
   final CoachVerdict verdict;
   final bool compact;
 
   @override
   Widget build(BuildContext context) {
-    final correct = verdict == CoachVerdict.correct;
+    final (label, color) = switch (verdict) {
+      CoachVerdict.correct => ('CORRECT', AppColors.success),
+      CoachVerdict.close => ('CLOSE', AppColors.warning),
+      _ => ('INCORRECT', AppColors.danger),
+    };
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: compact ? 8 : 9,
         vertical: compact ? 5 : 8,
       ),
       decoration: BoxDecoration(
-        color: correct ? AppColors.success : AppColors.danger,
+        color: color,
         borderRadius: BorderRadius.circular(compact ? 8 : 10),
       ),
       child: Text(
-        correct ? 'CORRECT' : 'INCORRECT',
+        label,
         style: GoogleFonts.jetBrainsMono(
           fontWeight: FontWeight.w800,
           fontSize: compact ? 9.5 : 10.5,

@@ -5,13 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/models/coach_feedback.dart';
+import 'package:live_poker_trainer/models/exploit_action.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
-import 'package:live_poker_trainer/models/scenario_model.dart';
+import 'package:live_poker_trainer/models/situation_model.dart';
 import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
 
 const _longIncorrect = CoachFeedback(
   verdict: CoachVerdict.incorrect,
-  message: 'Raising here bloats the pot against a station who calls with '
+  message:
+      'Raising here bloats the pot against a station who calls with '
       'any pair and never folds to pressure. On the turn with king-high you '
       'have showdown value but no fold equity, so take the cheap price, '
       'keep the pot small, and let them pay you off when you improve.',
@@ -24,7 +26,8 @@ const _longIncorrect = CoachFeedback(
 
 const _sizedRaiseIncorrect = CoachFeedback(
   verdict: CoachVerdict.incorrect,
-  message: 'Right idea, wrong size preflop — you made it 16 BB, target 10 BB. '
+  message:
+      'Right idea, wrong size preflop — you made it 16 BB, target 10 BB. '
       'Versus a LAG, pick a size that is awkward for their float range.',
   optimalAction: ExploitAction.raise,
   optimalSizingBb: 10,
@@ -35,7 +38,8 @@ const _sizedRaiseIncorrect = CoachFeedback(
 
 const _longCorrect = CoachFeedback(
   verdict: CoachVerdict.correct,
-  message: 'Nice check — the maniac is still in and will barrel light on '
+  message:
+      'Nice check — the maniac is still in and will barrel light on '
       'this wet board. You keep the pot small with medium strength and '
       'invite them to bluff into you on later streets.',
   optimalAction: ExploitAction.check,
@@ -43,9 +47,25 @@ const _longCorrect = CoachFeedback(
   evDeltaBb: 0.4,
 );
 
-const _neutralPrompt = CoachFeedback(
-  message: 'Your move.',
-);
+const _neutralPrompt = CoachFeedback(message: 'Your move.');
+
+HeroActionEdge _serverEdge({
+  required String actionKey,
+  required String kind,
+  required String verdict,
+  required double evDeltaBb,
+  required String optimalActionKey,
+}) {
+  return HeroActionEdge.fromJson({
+    'actionKey': actionKey,
+    'kind': kind,
+    'coaching': 'Server-authored coaching.',
+    'verdict': verdict,
+    'evDeltaBb': evDeltaBb,
+    'optimalActionKey': optimalActionKey,
+    'nextNodeId': 'next',
+  });
+}
 
 Widget _wrap(CoachFeedback feedback, {double? maxHeight}) {
   return MaterialApp(
@@ -92,8 +112,65 @@ class _FeedbackHostState extends State<_FeedbackHost> {
 }
 
 void main() {
-  testWidgets('shows full advice and decision context by default',
-      (tester) async {
+  group('CoachFeedback.fromHeroEdge', () {
+    test('maps correct server grading', () {
+      final feedback = CoachFeedback.fromHeroEdge(
+        edge: _serverEdge(
+          actionKey: 'CHECK',
+          kind: 'CHECK',
+          verdict: 'correct',
+          evDeltaBb: 0,
+          optimalActionKey: 'CHECK',
+        ),
+      );
+
+      expect(feedback.verdict, CoachVerdict.correct);
+      expect(feedback.evDeltaBb, 0);
+      expect(feedback.optimalAction, ExploitAction.check);
+      expect(feedback.optimalActionLabel, 'CHECK');
+      expect(feedback.heroAction, 'CHECK');
+    });
+
+    test('maps incorrect server grading', () {
+      final feedback = CoachFeedback.fromHeroEdge(
+        edge: _serverEdge(
+          actionKey: 'FOLD',
+          kind: 'FOLD',
+          verdict: 'incorrect',
+          evDeltaBb: -2.4,
+          optimalActionKey: 'CALL',
+        ),
+      );
+
+      expect(feedback.verdict, CoachVerdict.incorrect);
+      expect(feedback.evDeltaBb, -2.4);
+      expect(feedback.optimalAction, ExploitAction.call);
+      expect(feedback.optimalActionLabel, 'CALL');
+      expect(feedback.heroAction, 'FOLD');
+    });
+
+    test('maps close server grading', () {
+      final feedback = CoachFeedback.fromHeroEdge(
+        edge: _serverEdge(
+          actionKey: 'CALL',
+          kind: 'CALL',
+          verdict: 'close',
+          evDeltaBb: -0.5,
+          optimalActionKey: 'RAISE_100',
+        ),
+      );
+
+      expect(feedback.verdict, CoachVerdict.close);
+      expect(feedback.evDeltaBb, -0.5);
+      expect(feedback.optimalAction, ExploitAction.raise);
+      expect(feedback.optimalActionLabel, 'RAISE_100');
+      expect(feedback.heroAction, 'CALL');
+    });
+  });
+
+  testWidgets('shows full advice and decision context by default', (
+    tester,
+  ) async {
     await tester.pumpWidget(_wrap(_longIncorrect, maxHeight: 190));
 
     expect(find.text('Show more'), findsNothing);
@@ -109,7 +186,9 @@ void main() {
     expect(text.maxLines, isNull);
   });
 
-  testWidgets('BEST and YOU show raise amounts without ellipsis', (tester) async {
+  testWidgets('BEST and YOU show raise amounts without ellipsis', (
+    tester,
+  ) async {
     await tester.pumpWidget(_wrap(_sizedRaiseIncorrect, maxHeight: 190));
 
     expect(find.text('RAISE · \$20'), findsOneWidget);
@@ -149,12 +228,35 @@ void main() {
     expect(find.text('BEST'), findsNothing);
   });
 
-  testWidgets('graded incorrect always shows an INCORRECT badge', (tester) async {
+  testWidgets('graded incorrect always shows an INCORRECT badge', (
+    tester,
+  ) async {
     await tester.pumpWidget(_wrap(_longIncorrect, maxHeight: 190));
     expect(find.text('INCORRECT'), findsWidgets);
     expect(find.text('CORRECT'), findsNothing);
     expect(find.text('BEST'), findsOneWidget);
     expect(find.text('RAISE · \$16'), findsOneWidget);
+  });
+
+  testWidgets('server close edge shows CLOSE and server decision details', (
+    tester,
+  ) async {
+    final feedback = CoachFeedback.fromHeroEdge(
+      edge: _serverEdge(
+        actionKey: 'CALL',
+        kind: 'CALL',
+        verdict: 'close',
+        evDeltaBb: -0.5,
+        optimalActionKey: 'RAISE_100',
+      ),
+    );
+
+    await tester.pumpWidget(_wrap(feedback));
+
+    expect(find.text('CLOSE'), findsOneWidget);
+    expect(find.text('RAISE_100'), findsOneWidget);
+    expect(find.text('CALL'), findsOneWidget);
+    expect(find.text('-\$1'), findsOneWidget);
   });
 
   testWidgets('EV cell uses signed amount without EV Δ prefix', (tester) async {
@@ -166,8 +268,9 @@ void main() {
     expect(find.textContaining('EV Δ'), findsNothing);
   });
 
-  testWidgets('historical grade keeps prior-street advice readable',
-      (tester) async {
+  testWidgets('historical grade keeps prior-street advice readable', (
+    tester,
+  ) async {
     const historical = CoachFeedback(
       verdict: CoachVerdict.correct,
       message: 'Raise is right preflop. Ned over-folds to aggression.',
@@ -189,13 +292,11 @@ void main() {
     expect(find.text('BEST'), findsOneWidget);
   });
 
-  testWidgets('live grade replaces empty shelf without stacking bodies',
-      (tester) async {
+  testWidgets('live grade replaces empty shelf without stacking bodies', (
+    tester,
+  ) async {
     await tester.pumpWidget(
-      const _FeedbackHost(
-        initial: CoachFeedback(),
-        maxHeight: 190,
-      ),
+      const _FeedbackHost(initial: CoachFeedback(), maxHeight: 190),
     );
     expect(find.text('CORRECT'), findsNothing);
 

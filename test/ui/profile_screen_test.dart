@@ -1,39 +1,77 @@
 /// Player Profile screen: the low-sample contract and identity editing.
 library;
 
-import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:live_poker_trainer/core/database/app_database.dart';
-import 'package:live_poker_trainer/core/database/profile_database.dart';
-import 'package:live_poker_trainer/providers/service_providers.dart';
+import 'package:live_poker_trainer/models/game_settings_model.dart';
+import 'package:live_poker_trainer/models/hand_history_sample.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
-import 'package:live_poker_trainer/providers/profile_provider.dart';
+import 'package:live_poker_trainer/models/user_document.dart';
+import 'package:live_poker_trainer/models/user_stats_model.dart';
+import 'package:live_poker_trainer/providers/auth_provider.dart';
+import 'package:live_poker_trainer/providers/service_providers.dart';
+import 'package:live_poker_trainer/services/firestore/progress_repository.dart';
+import 'package:live_poker_trainer/services/firestore/user_repository.dart';
 import 'package:live_poker_trainer/ui/screens/profile_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_avatar.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_identity_sheet.dart';
 
+class _FakeUserRepository extends UserRepository {
+  _FakeUserRepository()
+    : document = UserDocument(
+        displayName: HeroIdentity.defaultDisplayName,
+        avatarRef: '',
+        createdAt: DateTime.utc(2026),
+        updatedAt: DateTime.utc(2026),
+        preferences: const GameSettingsModel(),
+      );
+
+  UserDocument document;
+
+  @override
+  Future<void> updateProfile({
+    required String uid,
+    String? displayName,
+    String? avatarRef,
+  }) async {
+    document = UserDocument(
+      displayName: displayName ?? document.displayName,
+      avatarRef: avatarRef ?? document.avatarRef,
+      createdAt: document.createdAt,
+      updatedAt: DateTime.utc(2026, 1, 2),
+      preferences: document.preferences,
+    );
+  }
+}
+
+class _FakeProgressRepository extends ProgressRepository {
+  Object? failure;
+
+  @override
+  Future<List<HeroHandSample>> loadHandSamples(
+    String uid, {
+    int limit = 100,
+  }) async {
+    if (failure case final error?) throw error;
+    return const [];
+  }
+
+  @override
+  Future<UserStatsModel> loadStats(String uid) async => const UserStatsModel();
+}
+
 void main() {
-  late ProfileDatabase db;
-  late AppDatabase appDb;
+  late _FakeUserRepository users;
+  late _FakeProgressRepository progress;
 
   setUp(() {
-    db = ProfileDatabase(NativeDatabase.memory());
-    appDb = AppDatabase(NativeDatabase.memory());
+    users = _FakeUserRepository();
+    progress = _FakeProgressRepository();
   });
 
-  tearDown(() async {
-    await db.close();
-    await appDb.close();
-  });
-
-  /// Pumps the profile screen against in-memory databases.
-  ///
-  /// The app database is real but empty and has no hand-log tables, which is
-  /// exactly the state a fresh install is in: the screen has to render the
-  /// low-sample story rather than fall over.
+  /// Pumps the profile screen against server-repository fakes.
   ///
   /// The viewport is made tall so the whole page is laid out; a ListView only
   /// builds what is on screen, and this test is auditing the full contents.
@@ -45,8 +83,10 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          profileDatabaseProvider.overrideWithValue(db),
-          appDatabaseProvider.overrideWithValue(appDb),
+          authUidProvider.overrideWithValue('test-user'),
+          userDocProvider.overrideWith((ref) async => users.document),
+          userRepositoryProvider.overrideWithValue(users),
+          progressRepositoryProvider.overrideWithValue(progress),
         ],
         child: MaterialApp(
           theme: buildPokerTheme(),
@@ -57,21 +97,32 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('with no hands the screen withholds every rate and the style',
-      (tester) async {
+  testWidgets('with no hands the screen withholds every rate and the style', (
+    tester,
+  ) async {
     await pumpProfile(tester);
 
     expect(find.text('Progress'), findsOneWidget);
     // No style is claimed, and the reason is spelled out.
     expect(find.text('Style forming'), findsOneWidget);
     expect(find.textContaining('0 hands logged'), findsOneWidget);
-    // Both the banner and the offline review explain the missing sample.
     expect(find.textContaining('style shows up here'), findsWidgets);
     // Every rate tile renders an em dash rather than a fabricated 0%.
     expect(find.text('—'), findsWidgets);
     expect(find.textContaining('needs '), findsWidgets);
     // The default identity falls back to initials.
     expect(find.byType(ProfileAvatar), findsWidgets);
+  });
+
+  testWidgets('server hand-history errors replace cached-looking profile UI', (
+    tester,
+  ) async {
+    progress.failure = Exception('network unavailable');
+
+    await pumpProfile(tester);
+
+    expect(find.textContaining('network unavailable'), findsOneWidget);
+    expect(find.text('Style forming'), findsNothing);
   });
 
   testWidgets('a stat tile explains itself in plain English', (tester) async {
@@ -88,17 +139,9 @@ void main() {
     expect(find.textContaining('Not shown yet'), findsOneWidget);
   });
 
-  testWidgets('the coach review shows offline copy without a model',
-      (tester) async {
-    await pumpProfile(tester);
-
-    expect(find.text('Coach review'), findsOneWidget);
-    expect(find.text('Offline read from your stats'), findsOneWidget);
-    expect(find.textContaining('Not enough hands yet'), findsOneWidget);
-  });
-
-  testWidgets('editing the display name updates the header and persists',
-      (tester) async {
+  testWidgets('editing the display name updates the header and persists', (
+    tester,
+  ) async {
     await pumpProfile(tester);
 
     await tester.tap(find.byIcon(Icons.edit_outlined));
@@ -111,12 +154,13 @@ void main() {
 
     expect(find.byType(ProfileIdentitySheet), findsNothing);
     expect(find.text('Kushal'), findsOneWidget);
-    expect((await db.readIdentity()).displayName, 'Kushal');
+    expect(users.document.displayName, 'Kushal');
   });
 
-  testWidgets('a blank name reverts to the default rather than an empty seat',
-      (tester) async {
-    await db.saveDisplayName('Kushal');
+  testWidgets('a blank name reverts to the default rather than an empty seat', (
+    tester,
+  ) async {
+    await users.updateProfile(uid: 'test-user', displayName: 'Kushal');
     await pumpProfile(tester);
 
     await tester.tap(find.byIcon(Icons.edit_outlined));
@@ -126,14 +170,12 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text(HeroIdentity.defaultDisplayName), findsOneWidget);
-    expect(
-      (await db.readIdentity()).displayName,
-      HeroIdentity.defaultDisplayName,
-    );
+    expect(users.document.displayName, HeroIdentity.defaultDisplayName);
   });
 
-  testWidgets('picking a built-in avatar applies and persists immediately',
-      (tester) async {
+  testWidgets('picking a built-in avatar applies and persists immediately', (
+    tester,
+  ) async {
     await pumpProfile(tester);
 
     await tester.tap(find.byIcon(Icons.edit_outlined));
@@ -151,20 +193,23 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect((await db.readIdentity()).avatar.builtIn, choice);
+    expect(AvatarRef.parse(users.document.avatarRef).builtIn, choice);
     // Applying immediately means a remove affordance now exists.
     expect(find.text('Remove picture'), findsOneWidget);
 
     await tester.tap(find.text('Remove picture'));
     await tester.pumpAndSettle();
 
-    expect((await db.readIdentity()).avatar.kind, AvatarKind.none);
+    expect(AvatarRef.parse(users.document.avatarRef).kind, AvatarKind.none);
     expect(find.text('Remove picture'), findsNothing);
   });
 
   testWidgets('a saved identity is loaded on open', (tester) async {
-    await db.saveDisplayName('Kushal C');
-    await db.saveAvatar(AvatarRef.builtIn(BuiltInAvatar.values.last));
+    await users.updateProfile(
+      uid: 'test-user',
+      displayName: 'Kushal C',
+      avatarRef: AvatarRef.builtIn(BuiltInAvatar.values.last).storageValue,
+    );
 
     await pumpProfile(tester);
 

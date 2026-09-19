@@ -13,8 +13,8 @@ class SoundService {
   SoundService.silent() : this._(bindPlatform: false);
 
   SoundService._({required bool bindPlatform})
-      : _sfx = bindPlatform ? AudioPlayer() : null,
-        _bgm = bindPlatform ? AudioPlayer() : null;
+    : _sfx = bindPlatform ? AudioPlayer() : null,
+      _bgm = bindPlatform ? AudioPlayer() : null;
 
   final AudioPlayer? _sfx;
   final AudioPlayer? _bgm;
@@ -49,9 +49,7 @@ class SoundService {
       final ctx = AudioContext(
         iOS: AudioContextIOS(
           category: AVAudioSessionCategory.playback,
-          options: const {
-            AVAudioSessionOptions.mixWithOthers,
-          },
+          options: const {AVAudioSessionOptions.mixWithOthers},
         ),
         android: const AudioContextAndroid(
           isSpeakerphoneOn: true,
@@ -115,20 +113,22 @@ class SoundService {
   /// Fades out and pauses the Home loop (e.g. entering Training).
   Future<void> pauseHomeBgm() async {
     _bgmWanted = false;
-    if (_bgm == null || !_bgmPlaying) return;
+    final bgm = _bgm;
+    if (bgm == null || !_bgmPlaying) return;
     try {
       await _fadeBgmTo(0);
-      await _bgm?.pause();
+      await bgm.pause();
     } catch (_) {}
   }
 
   /// Resumes the Home loop after returning from Training, if still wanted.
   Future<void> resumeHomeBgm() async {
     _bgmWanted = true;
-    if (_bgm == null || !musicEnabled || !_unlocked) return;
+    final bgm = _bgm;
+    if (bgm == null || !musicEnabled || !_unlocked) return;
     if (_bgmPlaying) {
       try {
-        await _bgm?.resume();
+        await bgm.resume();
         await _fadeBgmTo(_bgmBaseVolume);
       } catch (_) {}
       return;

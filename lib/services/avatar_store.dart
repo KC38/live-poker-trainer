@@ -1,21 +1,13 @@
-/// Picks, normalizes, and stores the hero's profile picture on device.
-///
-/// Nothing is uploaded anywhere. A chosen photo is downscaled and
-/// centre-cropped to a square [AvatarStore.thumbnailSize] PNG and written into
-/// `<app documents>/avatars/`, and only that path is persisted. Files are
-/// named with a timestamp for two reasons: it makes replacing an avatar
-/// atomic, and it sidesteps Flutter's image cache, which keys `Image.file` by
-/// path and would otherwise keep showing the previous picture.
+/// Picks, normalizes, and uploads the hero's profile picture.
 library;
 
-import 'dart:io';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
-import 'package:path_provider/path_provider.dart';
 
 /// Why an avatar pick ended the way it did.
 enum AvatarPickStatus {
@@ -50,39 +42,30 @@ class AvatarPickResult {
 
 /// Reads photos from the device and stores normalized avatar thumbnails.
 class AvatarStore {
-  /// Creates a store. The seams exist for tests: [picker] can be faked and
-  /// [documentsDirectory] can point at a temporary folder.
-  AvatarStore({
-    ImagePicker? picker,
-    Future<Directory> Function()? documentsDirectory,
-  })  : _picker = picker ?? ImagePicker(),
-        _documentsDirectory =
-            documentsDirectory ?? getApplicationDocumentsDirectory;
+  /// Creates a store.
+  AvatarStore({ImagePicker? picker, this.storage, this.uploader})
+    : _picker = picker ?? ImagePicker();
 
   final ImagePicker _picker;
-  final Future<Directory> Function() _documentsDirectory;
+  final FirebaseStorage? storage;
+  final Future<String> Function(String uid, Uint8List bytes)? uploader;
+
+  FirebaseStorage get _firebaseStorage => storage ?? FirebaseStorage.instance;
 
   /// Edge length of the stored square thumbnail, in pixels.
   static const int thumbnailSize = 256;
 
-  /// Longest edge requested from the platform picker. Decoding a 12 MP photo
-  /// only to shrink it wastes memory on older phones.
   static const double pickMaxEdge = 1024;
-
-  /// JPEG quality requested from the platform picker.
   static const int pickQuality = 88;
 
-  /// Subdirectory of the app documents directory holding avatar files.
-  static const String folderName = 'avatars';
-
-  /// Prefix shared by every stored avatar file.
-  static const String filePrefix = 'avatar_';
-
-  /// Opens the photo library and stores the chosen image.
-  ///
-  /// [replacing] is deleted once the new file is written, so switching avatars
-  /// never leaves orphans behind.
-  Future<AvatarPickResult> pickFromGallery({AvatarRef? replacing}) async {
+  /// Opens the photo library and uploads the chosen image for [uploadUid].
+  Future<AvatarPickResult> pickFromGallery({String? uploadUid}) async {
+    if (uploadUid == null || uploadUid.trim().isEmpty) {
+      return const AvatarPickResult(
+        AvatarPickStatus.failed,
+        message: 'Sign in before choosing a profile photo.',
+      );
+    }
     XFile? picked;
     try {
       picked = await _picker.pickImage(
@@ -109,34 +92,35 @@ class AvatarStore {
 
     try {
       final bytes = await picked.readAsBytes();
-      final avatar = await storeImageBytes(bytes);
-      if (replacing != null) await deleteStoredFile(replacing);
+      final avatar = await storeImageBytes(bytes, uploadUid: uploadUid);
       return AvatarPickResult(AvatarPickStatus.saved, avatar: avatar);
     } catch (_) {
       return const AvatarPickResult(
         AvatarPickStatus.failed,
-        message: 'That image could not be read. Try a different photo.',
+        message: 'That photo could not be uploaded. Check your connection.',
       );
     }
   }
 
-  /// Normalizes [bytes] to a square thumbnail and writes it to disk.
-  ///
-  /// Falls back to storing the original bytes when the platform cannot
-  /// rasterize them, so a valid photo is never rejected outright.
-  Future<AvatarRef> storeImageBytes(Uint8List bytes) async {
-    final directory = await ensureDirectory();
-    final file = File(
-      '${directory.path}${Platform.pathSeparator}$filePrefix'
-      '${DateTime.now().toUtc().millisecondsSinceEpoch}.png',
-    );
+  /// Normalizes [bytes] and uploads to Firebase Storage.
+  Future<AvatarRef> storeImageBytes(
+    Uint8List bytes, {
+    required String uploadUid,
+  }) async {
+    if (uploadUid.trim().isEmpty) {
+      throw ArgumentError.value(uploadUid, 'uploadUid', 'must not be empty');
+    }
     final square = await squareThumbnail(bytes) ?? bytes;
-    await file.writeAsBytes(square, flush: true);
-    return AvatarRef.file(file.path);
+    final upload = uploader;
+    if (upload != null) {
+      return AvatarRef.network(await upload(uploadUid, square));
+    }
+    final ref = _firebaseStorage.ref('avatars/$uploadUid/avatar.png');
+    await ref.putData(square, SettableMetadata(contentType: 'image/png'));
+    return AvatarRef.network(await ref.getDownloadURL());
   }
 
-  /// Centre-crops [bytes] to a square and scales it to [thumbnailSize],
-  /// returning PNG bytes, or null when the image could not be decoded.
+  /// Centre-crops [bytes] to a square and scales it to [thumbnailSize].
   static Future<Uint8List?> squareThumbnail(Uint8List bytes) async {
     ui.Image? source;
     ui.Image? output;
@@ -181,80 +165,10 @@ class AvatarStore {
     }
   }
 
-  /// Creates (if needed) and returns the avatar directory.
-  Future<Directory> ensureDirectory() async {
-    final documents = await _documentsDirectory();
-    final directory = Directory(
-      '${documents.path}${Platform.pathSeparator}$folderName',
-    );
-    if (!directory.existsSync()) {
-      await directory.create(recursive: true);
-    }
-    return directory;
-  }
-
-  /// Deletes the file behind [avatar], if it is a stored photo.
-  ///
-  /// Only paths inside the managed avatar directory are touched, so a stale or
-  /// hostile database value can never delete something else.
-  Future<bool> deleteStoredFile(AvatarRef avatar) async {
-    final path = avatar.filePath;
-    if (path == null || path.isEmpty) return false;
-    try {
-      final directory = await ensureDirectory();
-      if (!_isInside(directory.path, path)) return false;
-      final file = File(path);
-      if (!file.existsSync()) return false;
-      await file.delete();
-      return true;
-    } catch (_) {
-      return false;
-    }
-  }
-
-  /// Deletes every stored avatar except the one referenced by [keep].
-  Future<int> pruneExcept(AvatarRef keep) async {
-    try {
-      final directory = await ensureDirectory();
-      final kept = keep.filePath;
-      var removed = 0;
-      for (final entity in directory.listSync()) {
-        if (entity is! File) continue;
-        if (entity.path == kept) continue;
-        if (!_fileName(entity.path).startsWith(filePrefix)) continue;
-        await entity.delete();
-        removed++;
-      }
-      return removed;
-    } catch (_) {
-      return 0;
-    }
-  }
-
-  /// Whether the file behind [avatar] is still on disk.
-  ///
-  /// A photo can vanish (app data cleared, restored backup), and a missing
-  /// file must degrade to initials rather than a broken image box.
-  static bool fileExists(AvatarRef avatar) {
-    final path = avatar.filePath;
-    if (path == null || path.isEmpty) return false;
-    return File(path).existsSync();
-  }
-
-  static bool _isInside(String directory, String path) {
-    final normalized = directory.endsWith(Platform.pathSeparator)
-        ? directory
-        : '$directory${Platform.pathSeparator}';
-    return path.startsWith(normalized);
-  }
-
-  static String _fileName(String path) =>
-      path.split(Platform.pathSeparator).last;
-
   static AvatarPickStatus _statusForPlatformError(String code) {
     return switch (code) {
-      'photo_access_denied' || 'camera_access_denied' =>
-        AvatarPickStatus.permissionDenied,
+      'photo_access_denied' ||
+      'camera_access_denied' => AvatarPickStatus.permissionDenied,
       _ => AvatarPickStatus.failed,
     };
   }

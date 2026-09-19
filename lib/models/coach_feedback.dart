@@ -1,23 +1,26 @@
-/// Coach CORRECT / INCORRECT verdict for training decisions.
+/// Coach feedback shown in the coach shelf (server edge coaching).
 library;
 
 import 'package:flutter/foundation.dart';
+import 'package:live_poker_trainer/models/exploit_action.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
-import 'package:live_poker_trainer/models/scenario_model.dart';
+import 'package:live_poker_trainer/models/situation_model.dart';
 
-/// Whether the hero matched the optimal exploit line.
+/// Whether the hero matched an optimal line (optional; edges carry text only).
 enum CoachVerdict {
   correct,
   incorrect,
+  close,
   pending,
   none;
 
-  /// Whether this verdict represents a real graded decision.
   bool get isGraded =>
-      this == CoachVerdict.correct || this == CoachVerdict.incorrect;
+      this == CoachVerdict.correct ||
+      this == CoachVerdict.incorrect ||
+      this == CoachVerdict.close;
 }
 
-/// Coach feedback shown in the coach shelf and EV audit.
+/// Coach feedback shown in the coach shelf.
 @immutable
 class CoachFeedback {
   /// Creates coach feedback.
@@ -25,13 +28,11 @@ class CoachFeedback {
     this.verdict = CoachVerdict.none,
     this.message = '',
     this.optimalAction,
+    this.optimalActionLabel,
     this.optimalSizingBb = 0,
     this.heroAction,
     this.heroSizingBb = 0,
     this.evDeltaBb = 0,
-    this.repeatCount = 0,
-    this.improvementStreak = 0,
-    this.patternLabel,
     this.decisionStreet,
     this.isHistorical = false,
   });
@@ -39,61 +40,55 @@ class CoachFeedback {
   final CoachVerdict verdict;
   final String message;
   final ExploitAction? optimalAction;
+  final String? optimalActionLabel;
   final double optimalSizingBb;
   final String? heroAction;
-
-  /// Hero bet / raise size in big blinds (0 for passive actions).
   final double heroSizingBb;
   final double evDeltaBb;
-
-  /// How many times this INCORRECT pattern has now occurred (0 / 1 = not a
-  /// repeat, so no indicator is shown).
-  final int repeatCount;
-
-  /// Consecutive fixes of a previously-repeated leak (0 = not an improvement).
-  final int improvementStreak;
-
-  /// Coarse leak name for the repeat / improvement indicator.
-  final String? patternLabel;
-
-  /// Street the graded decision belonged to (null for deal intros).
   final Street? decisionStreet;
-
-  /// True when this grade is from an earlier street and must not look like
-  /// live advice for the current act.
   final bool isHistorical;
 
   bool get hasVerdict =>
-      verdict == CoachVerdict.correct || verdict == CoachVerdict.incorrect;
+      verdict == CoachVerdict.correct ||
+      verdict == CoachVerdict.incorrect ||
+      verdict == CoachVerdict.close;
 
-  /// Live CORRECT/INCORRECT for the action just taken (not shelved).
   bool get isLiveGrade => hasVerdict && !isHistorical;
 
-  /// Whether the shelf has post-action coaching to show.
   bool get hasAdvice => message.isNotEmpty || hasVerdict;
 
-  /// Whether the shelf should show a "Repeat ×N" indicator.
-  bool get isRepeat =>
-      !isHistorical && verdict == CoachVerdict.incorrect && repeatCount >= 2;
-
-  /// Whether the shelf should show an "Improved" indicator.
-  bool get isImprovement =>
-      !isHistorical && verdict == CoachVerdict.correct && improvementStreak >= 1;
-
-  /// Marks this feedback as a previous decision (keeps stats, softens UI).
   CoachFeedback asHistorical() => copyWith(isHistorical: true);
+
+  /// Builds shelf feedback from a server [HeroActionEdge].
+  factory CoachFeedback.fromHeroEdge({
+    required HeroActionEdge edge,
+    Street? street,
+  }) {
+    return CoachFeedback(
+      verdict: switch (edge.verdict) {
+        HeroActionVerdict.correct => CoachVerdict.correct,
+        HeroActionVerdict.incorrect => CoachVerdict.incorrect,
+        HeroActionVerdict.close => CoachVerdict.close,
+      },
+      message: edge.coaching,
+      optimalAction: ExploitAction.fromString(edge.optimalActionKey),
+      optimalActionLabel: edge.optimalActionKey,
+      heroAction: edge.actionKey,
+      evDeltaBb: edge.evDeltaBb,
+      decisionStreet: street,
+      isHistorical: false,
+    );
+  }
 
   CoachFeedback copyWith({
     CoachVerdict? verdict,
     String? message,
     ExploitAction? optimalAction,
+    String? optimalActionLabel,
     double? optimalSizingBb,
     String? heroAction,
     double? heroSizingBb,
     double? evDeltaBb,
-    int? repeatCount,
-    int? improvementStreak,
-    String? patternLabel,
     Street? decisionStreet,
     bool clearDecisionStreet = false,
     bool? isHistorical,
@@ -102,16 +97,13 @@ class CoachFeedback {
       verdict: verdict ?? this.verdict,
       message: message ?? this.message,
       optimalAction: optimalAction ?? this.optimalAction,
+      optimalActionLabel: optimalActionLabel ?? this.optimalActionLabel,
       optimalSizingBb: optimalSizingBb ?? this.optimalSizingBb,
       heroAction: heroAction ?? this.heroAction,
       heroSizingBb: heroSizingBb ?? this.heroSizingBb,
       evDeltaBb: evDeltaBb ?? this.evDeltaBb,
-      repeatCount: repeatCount ?? this.repeatCount,
-      improvementStreak: improvementStreak ?? this.improvementStreak,
-      patternLabel: patternLabel ?? this.patternLabel,
-      decisionStreet: clearDecisionStreet
-          ? null
-          : (decisionStreet ?? this.decisionStreet),
+      decisionStreet:
+          clearDecisionStreet ? null : (decisionStreet ?? this.decisionStreet),
       isHistorical: isHistorical ?? this.isHistorical,
     );
   }

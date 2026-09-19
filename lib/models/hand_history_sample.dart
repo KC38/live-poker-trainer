@@ -32,8 +32,7 @@ enum HandActionKind {
       this == HandActionKind.allIn;
 
   /// Chips went in by choice (blinds excluded).
-  bool get isVoluntaryMoney =>
-      this == HandActionKind.call || isAggressive;
+  bool get isVoluntaryMoney => this == HandActionKind.call || isAggressive;
 
   /// A decision the player actually made (blind posts are not decisions).
   bool get isDecision => this != HandActionKind.blind;
@@ -42,7 +41,14 @@ enum HandActionKind {
   static HandActionKind? tryParse(String raw) {
     final key = raw.trim().toUpperCase().replaceAll(RegExp('[^A-Z]'), '');
     return switch (key) {
-      'BLIND' || 'POST' || 'SB' || 'BB' || 'ANTE' => HandActionKind.blind,
+      'BLIND' ||
+      'POST' ||
+      'SB' ||
+      'BB' ||
+      'ANTE' ||
+      'POSTSB' ||
+      'POSTBB' ||
+      'POSTANTE' => HandActionKind.blind,
       'FOLD' => HandActionKind.fold,
       'CHECK' => HandActionKind.check,
       'CALL' => HandActionKind.call,
@@ -129,23 +135,22 @@ class HeroHandSample {
 
   /// Whether the hero folded at any point up to and including [street].
   bool heroFoldedBy(Street street) => actions.any(
-        (a) =>
-            a.isHero &&
-            a.kind == HandActionKind.fold &&
-            a.street.index <= street.index,
-      );
+    (a) =>
+        a.isHero &&
+        a.kind == HandActionKind.fold &&
+        a.street.index <= street.index,
+  );
 
   /// Hero put chips in preflop by choice.
-  bool get heroVpip => heroActionsOn(Street.preflop)
-      .any((a) => a.kind.isVoluntaryMoney);
+  bool get heroVpip =>
+      heroActionsOn(Street.preflop).any((a) => a.kind.isVoluntaryMoney);
 
   /// Hero raised (or shoved) preflop.
   bool get heroRaisedPreflop =>
       heroActionsOn(Street.preflop).any((a) => a.kind.isAggressive);
 
   /// Hero was still live when the flop came out.
-  bool get heroSawFlop =>
-      reached(Street.flop) && !heroFoldedBy(Street.preflop);
+  bool get heroSawFlop => reached(Street.flop) && !heroFoldedBy(Street.preflop);
 
   /// Seat that made the last aggressive preflop action before the hero's first
   /// voluntary decision, or null when the hero was first in.

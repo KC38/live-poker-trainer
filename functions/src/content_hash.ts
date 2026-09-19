@@ -1,29 +1,15 @@
 /**
- * Content-hash helpers matching Dart `ScenarioModel.hashSetup`.
+ * Content-hash helpers for situation identity.
  *
- * Setup keys only — optimal / reasoning fields must not affect the id.
+ * Situation ids are SHA-256 of a canonical subset of the payload so coaching
+ * text churn alone does not fork pool entries when the tree is identical.
  */
-import {createHash} from "crypto";
 
-/** Keys that describe setup only (mirrors ScenarioModel._setupHashKeys). */
-export const SETUP_HASH_KEYS = [
-  "table_size",
-  "hero_position",
-  "hero_hand",
-  "board_cards",
-  "pot_size",
-  "villain_seat",
-  "villain_archetype",
-  "previous_action_narrative",
-  "villain_action",
-  "call_amount",
-  "min_raise",
-  "max_raise",
-  "name",
-] as const;
+import { createHash } from "crypto";
+import type { SituationPayload } from "./situation_types";
 
 /**
- * Recursively sorts object keys the same way Dart `_sorted` does.
+ * Recursively sorts object keys for stable JSON encoding.
  */
 export function sortedJsonValue(value: unknown): unknown {
   if (value === null || typeof value !== "object") {
@@ -42,22 +28,89 @@ export function sortedJsonValue(value: unknown): unknown {
 }
 
 /**
- * SHA-256 hex of canonical JSON for [json] (full map).
+ * SHA-256 hex of canonical JSON for [value].
  */
-export function hashContent(json: Record<string, unknown>): string {
-  const encoded = JSON.stringify(sortedJsonValue(json));
+export function hashContent(value: unknown): string {
+  const encoded = JSON.stringify(sortedJsonValue(value));
   return createHash("sha256").update(encoded, "utf8").digest("hex");
 }
 
 /**
- * Hash over setup fields only (excludes optimal / reasoning).
+ * Hash identifying a situation's structural tree (excludes title / coaching).
  */
-export function hashSetup(json: Record<string, unknown>): string {
-  const setup: Record<string, unknown> = {};
-  for (const key of SETUP_HASH_KEYS) {
-    if (Object.prototype.hasOwnProperty.call(json, key)) {
-      setup[key] = json[key];
+export function hashSituationStructure(payload: SituationPayload): string {
+  const nodes: Record<string, unknown> = {};
+  for (const [id, node] of Object.entries(payload.nodes)) {
+    if (node.type === "hero") {
+      nodes[id] = {
+        type: node.type,
+        id: node.id,
+        street: node.street,
+        pot: node.pot,
+        stacks: node.stacks,
+        streetBets: node.streetBets,
+        board: node.board,
+        foldedSeats: node.foldedSeats,
+        toAct: node.toAct,
+        callAmount: node.callAmount,
+        minRaiseTo: node.minRaiseTo,
+        actions: node.actions.map((a) => ({
+          actionKey: a.actionKey,
+          kind: a.kind,
+          amountTo: a.amountTo ?? null,
+          sizingBucket: a.sizingBucket ?? null,
+          nextNodeId: a.nextNodeId,
+        })),
+      };
+    } else if (node.type === "scripted") {
+      nodes[id] = {
+        type: node.type,
+        id: node.id,
+        street: node.street,
+        pot: node.pot,
+        stacks: node.stacks,
+        streetBets: node.streetBets,
+        board: node.board,
+        foldedSeats: node.foldedSeats,
+        actions: node.actions,
+        nextNodeId: node.nextNodeId,
+      };
+    } else {
+      nodes[id] = {
+        type: node.type,
+        id: node.id,
+        reason: node.reason,
+        street: node.street,
+        board: node.board,
+        foldedSeats: node.foldedSeats,
+        stacks: node.stacks,
+        pot: node.pot,
+        winnerSeats: node.winnerSeats,
+        heroNetChips: node.heroNetChips,
+      };
     }
   }
-  return hashContent(setup);
+
+  return hashContent({
+    payloadVersion: payload.payloadVersion,
+    setupKey: payload.setupKey,
+    setupMode: payload.setupMode,
+    seatCount: payload.seatCount,
+    smallBlind: payload.smallBlind,
+    bigBlind: payload.bigBlind,
+    ante: payload.ante,
+    startingStack: payload.startingStack,
+    buttonSeat: payload.buttonSeat,
+    heroSeat: payload.heroSeat,
+    lineup: payload.lineup.map((s) => ({
+      seat: s.seat,
+      archetype: s.archetype,
+      startingStack: s.startingStack,
+    })),
+    heroHand: payload.heroHand,
+    holeCards: payload.holeCards,
+    runouts: payload.runouts,
+    rootNodeId: payload.rootNodeId,
+    nodes,
+  });
 }

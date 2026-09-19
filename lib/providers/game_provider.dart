@@ -1,7 +1,8 @@
-/// Table session state: unified full-hand training with live coach.
+/// Table session state: server-authored situations with server coaching.
 library;
 
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,21 +10,17 @@ import 'package:live_poker_trainer/core/audio/sound_service.dart';
 import 'package:live_poker_trainer/core/constants/money.dart';
 import 'package:live_poker_trainer/core/debug/agent_commands.dart';
 import 'package:live_poker_trainer/core/diagnostics/diagnostics_log.dart';
-import 'package:live_poker_trainer/engine/bet_sizing.dart';
-import 'package:live_poker_trainer/engine/coach_advice_guard.dart';
-import 'package:live_poker_trainer/engine/leak_lines.dart';
-import 'package:live_poker_trainer/engine/live_coach.dart';
 import 'package:live_poker_trainer/engine/poker_engine.dart';
+import 'package:live_poker_trainer/engine/situation_action_keys.dart';
 import 'package:live_poker_trainer/models/coach_feedback.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
-import 'package:live_poker_trainer/models/mistake_model.dart';
+import 'package:live_poker_trainer/models/situation_model.dart';
+import 'package:live_poker_trainer/models/table_setup.dart';
 import 'package:live_poker_trainer/models/user_stats_model.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
-import 'package:live_poker_trainer/services/hand_recorder.dart';
-import 'package:live_poker_trainer/services/mistake_tracker.dart';
 
 /// Pacing for the live-table replay. Slow enough to read, fast enough to play.
 class ReplayPace {
@@ -32,9 +29,8 @@ class ReplayPace {
   /// Multiplier for paced delays. Tests set this to `0` to skip sleeps.
   static double testScale = 1;
 
-  static Duration _scaled(int milliseconds) => Duration(
-        microseconds: (milliseconds * 1000 * testScale).round(),
-      );
+  static Duration _scaled(int milliseconds) =>
+      Duration(microseconds: (milliseconds * 1000 * testScale).round());
 
   /// Pause before the first villain acts after the deal.
   static Duration get deal => _scaled(420);
@@ -67,6 +63,7 @@ class TableSession {
     this.replaying = false,
     this.collectingChips = false,
     this.awardingChips = false,
+    this._authoredHeroEdges = const [],
   });
 
   final GameState? game;
@@ -84,6 +81,12 @@ class TableSession {
   /// True while the pot animates out to the winner seat(s).
   final bool awardingChips;
 
+  final List<HeroActionEdge> _authoredHeroEdges;
+
+  /// Exact server-authored actions available at the current hero node.
+  UnmodifiableListView<HeroActionEdge> get authoredHeroEdges =>
+      UnmodifiableListView(_authoredHeroEdges);
+
   /// Whether the hero may act right now.
   bool get heroCanAct {
     final g = game;
@@ -96,17 +99,12 @@ class TableSession {
   }
 
   /// Hero has no further decisions this hand (folded or the hand resolved).
-  ///
-  /// Used to offer an early **Next** that skips the rest of the replay while
-  /// villains finish streets / showdown in the background.
   bool get heroDoneForHand {
     final g = game;
     return g != null && !loading && (g.isHandOver || g.hero.folded);
   }
 
-  /// Gold pulsing Next — only after the hand finishes naturally (or via skip
-  /// resolve). Quiet Next is still available while [heroDoneForHand] and the
-  /// replay is catching up.
+  /// Gold pulsing Next — only after the hand finishes naturally.
   bool get highlightNext => game != null && game!.isHandOver && !loading;
 
   TableSession copyWith({
@@ -120,6 +118,8 @@ class TableSession {
     bool? replaying,
     bool? collectingChips,
     bool? awardingChips,
+    List<HeroActionEdge>? authoredHeroEdges,
+    bool clearAuthoredHeroEdges = false,
   }) {
     return TableSession(
       game: game ?? this.game,
@@ -130,11 +130,15 @@ class TableSession {
       replaying: replaying ?? this.replaying,
       collectingChips: collectingChips ?? this.collectingChips,
       awardingChips: awardingChips ?? this.awardingChips,
+      authoredHeroEdges:
+          clearAuthoredHeroEdges
+              ? const []
+              : (authoredHeroEdges ?? _authoredHeroEdges),
     );
   }
 }
 
-/// Controls poker table flow, action replay pacing, and coach grading.
+/// Controls poker table flow, action replay pacing, and server coaching.
 class GameController extends StateNotifier<TableSession> {
   GameController(this._ref) : super(const TableSession()) {
     if (kDebugMode) {
@@ -146,30 +150,22 @@ class GameController extends StateNotifier<TableSession> {
   PokerEngine? _engine;
   StreamSubscription<String>? _agentSub;
 
-  /// Identifies one sitting at a table; mistakes are grouped by it for
-  /// "N times this session" copy. Refreshed when a fresh table is started.
   String _sessionId = _newSessionId();
 
   static String _newSessionId() =>
       's${DateTime.now().toUtc().millisecondsSinceEpoch}';
 
-  /// Current table session id (exposed for tests and future hand logging).
+  /// Current table session id (exposed for tests).
   String get sessionId => _sessionId;
 
-  /// Incremented per deal / hero action so a stale replay loop can bail out.
   int _replayToken = 0;
   bool _disposed = false;
 
-  /// Bumped whenever the shelf switches tip ↔ grade so late Claude replies
-  /// cannot overwrite a newer decision's primary message.
-  int _coachEpoch = 0;
+  /// Tracks whether progress was already recorded for the current hand.
+  bool _progressRecorded = false;
 
   GameSettingsModel get _settings => _ref.read(settingsProvider);
 
-  /// Hand-history recorder; every call is best-effort and non-blocking.
-  HandRecorder get _recorder => _ref.read(handRecorderProvider);
-
-  /// Resolved state of the previous hand at this table (for rebuy logging).
   GameState? _lastResolved;
   GameState? _lastAwarded;
 
@@ -200,71 +196,48 @@ class GameController extends StateNotifier<TableSession> {
   Future<void> debugHeroShortcut(String cmd) async {
     final game = state.game;
     if (game == null || !state.heroCanAct) return;
-    final hero = game.hero;
-    final callAmt = game.callAmountFor(hero);
-    final freeCheck = callAmt <= 1e-9;
-    final range = RaiseRange.forHero(game);
+    final wantedKind = switch (cmd) {
+      'fold' => SituationActionKind.fold,
+      'check' => SituationActionKind.check,
+      'call' => SituationActionKind.call,
+      'bet' => SituationActionKind.bet,
+      'raise' => SituationActionKind.raise,
+      _ => null,
+    };
+    if (wantedKind == null) return;
 
-    switch (cmd) {
-      case 'fold':
-        if (freeCheck) return;
-        await heroAct(const PokerAction(type: PokerActionType.fold));
-      case 'call':
-      case 'check':
-        await heroAct(
-          freeCheck
-              ? const PokerAction(type: PokerActionType.check)
-              : PokerAction(type: PokerActionType.call, amount: callAmt),
-        );
-      case 'raise':
-      case 'bet':
-        if (!range.allowed) return;
-        final unopenedPreflop = game.street == Street.preflop &&
-            game.highestBet <= game.bigBlind + Money.epsilon;
-        final amount = unopenedPreflop
-            ? range.clamp(game.bigBlind * 2.5)
-            : range.forFraction(
-                0.66,
-                pot: game.totalPot,
-                heroBet: hero.currentBet,
-              );
-        await heroAct(
-          PokerAction(
-            type: range.isAllInOnly
-                ? PokerActionType.allIn
-                : (freeCheck ? PokerActionType.bet : PokerActionType.raise),
-            amount: amount,
-          ),
-        );
-      default:
-        break;
+    final matches =
+        state.authoredHeroEdges
+            .where((edge) => edge.kind == wantedKind)
+            .toList();
+    if (matches.length != 1) return;
+    final action = SituationActionKeys.pokerActionForEdge(game, matches.single);
+    final node = _engine?.currentHeroNode;
+    if (node == null ||
+        SituationActionKeys.resolveEdge(
+              node: node,
+              state: game,
+              action: action,
+            ) !=
+            matches.single) {
+      return;
     }
+    await heroAct(action);
   }
 
   /// Marks the table as preparing so Home can navigate before any deal SFX.
-  ///
-  /// Cancels an in-flight replay and clears the prior hand so the Training
-  /// screen shows an in-table loading state instead of stale cards / audio.
   void prepareTraining() {
     _replayToken++;
     state = const TableSession(loading: true);
   }
 
-  /// Starts (or restarts) training from the Gemini / offline scenario pool.
+  /// Starts training by fetching a server-authored situation.
   ///
-  /// Each hand pulls an engineered spot ([ScenarioManager.nextScenario]) and
-  /// deals it from preflop via [PokerEngine.dealScenarioHand]. Villain folds /
-  /// raises before hero are replayed with [PokerEngine.nextEvent] so the user
-  /// sees what happened; after the first hero decision the hand continues
-  /// street by street with normal AI.
-  ///
-  /// Call only after [PokerTableScreen] is mounted and the route transition
-  /// has finished — Home must not invoke this before navigation.
+  /// Requires a signed-in user. On failure the table shows an error with the
+  /// prior engine state (if any) so the user can retry via Next / restart.
   Future<void> startTraining({bool continueTable = false}) async {
     final token = ++_replayToken;
-
-    // Clear prior coach text before the new deal.
-    _coachEpoch++;
+    _progressRecorded = false;
     state = state.copyWith(
       loading: true,
       clearError: true,
@@ -272,61 +245,64 @@ class GameController extends StateNotifier<TableSession> {
       replaying: false,
       collectingChips: false,
       awardingChips: false,
+      clearAuthoredHeroEdges: true,
     );
+
+    final uid = _ref.read(authUidProvider);
+    if (uid == null || uid.isEmpty) {
+      state = state.copyWith(
+        loading: false,
+        error: 'Sign in required to train.',
+      );
+      return;
+    }
+
     try {
       final sound = _ref.read(soundServiceProvider);
       await sound.unlock();
       if (_disposed || token != _replayToken) return;
 
-      final scenario =
-          await _ref.read(scenarioManagerProvider).nextScenario();
+      final setup = TableSetup.fromGameSettings(_settings);
+      final fetched = await _ref
+          .read(situationServiceProvider)
+          .fetchSituation(setup);
       if (_disposed || token != _replayToken) return;
+
+      final situation = fetched.situation.copyWith(
+        situationId: fetched.situationId,
+        setupKey: fetched.setupKey,
+      );
 
       final existing = continueTable ? state.game?.players : null;
       final engine = _engine;
       if (continueTable && engine != null) {
         engine.updateSettings(_settings);
-        engine.dealScenarioHand(
-          scenario,
-          existingPlayers: existing,
-        );
+        engine.dealSituationHand(situation, existingPlayers: existing);
       } else {
         _sessionId = _newSessionId();
         _engine = PokerEngine(settings: _settings)
-          ..dealScenarioHand(
-            scenario,
-            existingPlayers: existing,
-          );
+          ..dealSituationHand(situation, existingPlayers: existing);
       }
 
       final dealt = _engine!.state;
-      state = state.copyWith(game: dealt, loading: true);
-      _safeRecord(() {
-        _recorder.startHand(
-          dealt,
-          _settings,
-          previous: continueTable ? _lastResolved : null,
-        );
-      });
+      state = state.copyWith(
+        game: dealt,
+        loading: true,
+        clearAuthoredHeroEdges: true,
+      );
       await sound.deal();
       if (_disposed || token != _replayToken) return;
 
-      // Coach stays empty until the first post-action grade — no deal intro
-      // or pre-action tip that would steal the shelf before advice lands.
-      state = TableSession(
-        game: _engine!.state,
-        loading: false,
-      );
-      // Replay folds / raises into the hero's first decision.
+      state = TableSession(game: _engine!.state, loading: false);
       await _replayUntilHero(pace: ReplayPace.deal, token: token);
     } catch (e) {
       if (_disposed || token != _replayToken) return;
-      // Prefer the engine's deal over the prior UI snapshot when one exists.
       final engineState = _engine?.state;
       state = state.copyWith(
         game: engineState,
         loading: false,
         replaying: false,
+        clearAuthoredHeroEdges: true,
         error: '$e',
       );
     }
@@ -340,14 +316,14 @@ class GameController extends StateNotifier<TableSession> {
       startTraining(continueTable: continueTable);
 
   /// Deals the next hand at the same table.
-  ///
-  /// When the hero has already folded (or the hand is over), this cancels any
-  /// in-flight villain replay, silently finishes stack settlement, then deals.
-  /// Refuses to skip while the hero still has decisions left.
   Future<void> nextHand() async {
     final game = state.game;
     if (game != null && !game.isHandOver && !game.hero.folded) {
       return;
+    }
+    if (game?.isHandOver ?? false) {
+      final recorded = await _recordSituationProgress();
+      if (!recorded) return;
     }
     await _forceCompleteSkippedHand();
     await startTraining(continueTable: true);
@@ -369,59 +345,90 @@ class GameController extends StateNotifier<TableSession> {
       replaying: false,
       collectingChips: false,
       awardingChips: false,
+      clearAuthoredHeroEdges: true,
     );
     await _finishHandIfOver(token);
   }
 
-  /// Applies a hero action, coaches it, then replays the villains' responses.
+  /// Applies a hero action, shows server coaching, then replays scripted seats.
   Future<void> heroAct(PokerAction action) async {
     final engine = _engine;
     final game = state.game;
     if (engine == null || game == null || !state.heroCanAct) return;
 
-    // Lock out double-taps before any await so a second press cannot grade
-    // and re-apply against the same spot.
+    final heroNode = engine.currentHeroNode;
+    final edge =
+        heroNode == null
+            ? null
+            : SituationActionKeys.resolveEdge(
+              node: heroNode,
+              state: game,
+              action: action,
+            );
+    if (engine.situation != null && edge == null) {
+      state = state.copyWith(
+        error: 'That action is not one of the authored choices for this spot.',
+      );
+      return;
+    }
+
     final token = ++_replayToken;
     final handId = game.handCount;
-    final holesBefore =
-        game.hero.holeCards.map((c) => c.code).toList(growable: false);
-    state = state.copyWith(replaying: true);
+    final holesBefore = game.hero.holeCards
+        .map((c) => c.code)
+        .toList(growable: false);
+    state = state.copyWith(
+      replaying: true,
+      clearError: true,
+      clearAuthoredHeroEdges: true,
+    );
 
     final sound = _ref.read(soundServiceProvider);
     await _playActionSfx(sound, action.type);
     if (_disposed || token != _replayToken) return;
-    // Bail if a new hand was dealt while SFX played.
     if (engine.state.handCount != handId || !engine.state.waitingForHero) {
-      state = state.copyWith(game: engine.state, replaying: false);
+      state = state.copyWith(
+        game: engine.state,
+        replaying: false,
+        authoredHeroEdges: _authoredEdgesForCurrentHero(engine.state),
+      );
       return;
     }
 
-    // Grade against the pre-action snapshot — replaces any tip as the single
-    // primary shelf message (never stacks tip + grade).
-    final grade = LiveCoach.grade(state: game, action: action);
-    final coachEpoch = ++_coachEpoch;
-    state = state.copyWith(
-      coach: CoachFeedback(
-        verdict: grade.verdict,
-        message: grade.message,
-        optimalAction: grade.optimalAction,
-        optimalSizingBb: grade.optimalSizingBb,
-        heroAction: action.label,
-        heroSizingBb: grade.heroSizingBb,
-        evDeltaBb: grade.evDeltaBb,
-        decisionStreet: grade.street,
-        isHistorical: false,
-      ),
-    );
+    final heroSizingBb =
+        game.bigBlind > Money.epsilon ? action.amount / game.bigBlind : 0.0;
 
-    // Apply the hero action right away so the felt reflects the decision.
-    final after = engine.submitHeroAction(action);
-    state = state.copyWith(game: after);
-    _safeRecord(() => _recorder.recordAction(game, after, game.hero.id, action));
-    final decisionId = _recordDecision(grade, game, action);
+    HeroActionEdge? chosen;
+    if (engine.situation != null) {
+      // Authored situations were rejected above unless [edge] is exact.
+      chosen = engine.applySituationHeroChoice(edge: edge!, action: action);
+    } else if (edge != null) {
+      chosen = engine.applySituationHeroChoice(edge: edge, action: action);
+    } else {
+      engine.submitHeroAction(action);
+    }
 
-    // Mid-hand continuations must keep the same hole cards; a new deal here
-    // would be the "same spot looping" bug.
+    final after = engine.state;
+    if (chosen != null) {
+      state = state.copyWith(
+        game: after,
+        coach: CoachFeedback.fromHeroEdge(edge: chosen, street: game.street),
+      );
+    } else {
+      state = state.copyWith(
+        game: after,
+        coach: CoachFeedback(
+          message:
+              edge == null
+                  ? 'No legal coaching edge for that action.'
+                  : 'Could not apply that action.',
+          heroAction: action.label,
+          heroSizingBb: heroSizingBb,
+          decisionStreet: game.street,
+        ),
+      );
+    }
+
     if (!after.isHandOver) {
       final holesAfter = after.hero.holeCards.map((c) => c.code).toList();
       assert(
@@ -430,93 +437,11 @@ class GameController extends StateNotifier<TableSession> {
       );
     }
 
-    // Leak history (local DB, fast) decides whether this is a repeat or a fix
-    // before the coach speaks, so both the offline line and the AI prompt can
-    // name it.
-    final leak = await _trackLeak(grade, game, action);
-    if (_disposed || token != _replayToken) return;
-    final localMessage = _applyLeakContext(grade, leak);
-
-    await _recordStats(grade, game, action);
-    // Coach narration runs in parallel with the replay so play never stalls
-    // waiting on the network.
-    final narration = _narrate(
-      grade,
-      game,
-      token,
-      leak,
-      localMessage,
-      decisionId,
-      coachEpoch,
-    );
-
     await _replayUntilHero(pace: ReplayPace.passiveAction, token: token);
-    await narration;
-  }
-
-  /// Persists the graded decision into leak history; never throws.
-  Future<LeakCheck> _trackLeak(
-    LiveCoachGrade grade,
-    GameState game,
-    PokerAction action,
-  ) async {
-    if (!grade.verdict.isGraded) return LeakCheck.none;
-    try {
-      final tracker = _ref.read(mistakeTrackerProvider);
-      return await tracker.track(
-        grade: grade,
-        sessionId: _sessionId,
-        handId: '$_sessionId-h${game.handCount}',
-        bigBlind: game.bigBlind,
-        heroAmount: action.amount,
-      );
-    } catch (_) {
-      return LeakCheck.none;
-    }
-  }
-
-  /// Prefixes the local coach line with repeat / improvement copy and sets the
-  /// shelf indicators. Returns the message to fall back to offline.
-  String _applyLeakContext(LiveCoachGrade grade, LeakCheck leak) {
-    var message = grade.message;
-    var coach = state.coach;
-    final repeat = leak.repeat;
-    final improvement = leak.improvement;
-
-    if (repeat != null && repeat.isRepeat) {
-      final prefix = LeakLines.repeatPrefix(
-        repeat,
-        villainName: grade.villainName,
-      );
-      message = '$prefix. $message';
-      coach = coach.copyWith(
-        repeatCount: repeat.displayCount,
-        patternLabel: repeat.pattern.primaryTag.label,
-      );
-    } else if (improvement != null) {
-      final prefix = LeakLines.improvementPrefix(
-        improvement,
-        taken: grade.heroAction,
-      );
-      message = '$prefix. $message';
-      coach = coach.copyWith(
-        improvementStreak: improvement.streak,
-        patternLabel: improvement.tag.label,
-      );
-    }
-
-    state = state.copyWith(coach: coach.copyWith(message: message));
-    if (repeat != null || improvement != null) {
-      _ref.invalidate(mistakeStatsProvider);
-    }
-    return message;
   }
 
   /// Steps the engine forward with realistic pacing until the hero must act.
-  Future<void> _replayUntilHero({
-    required Duration pace,
-    int? token,
-  }) async {
+  Future<void> _replayUntilHero({required Duration pace, int? token}) async {
     final engine = _engine;
     if (engine == null) return;
     final myToken = token ?? _replayToken;
@@ -531,7 +456,7 @@ class GameController extends StateNotifier<TableSession> {
       return;
     }
 
-    state = state.copyWith(replaying: true);
+    state = state.copyWith(replaying: true, clearAuthoredHeroEdges: true);
     await _wait(pace);
 
     var guard = 0;
@@ -544,17 +469,6 @@ class GameController extends StateNotifier<TableSession> {
 
       switch (event.kind) {
         case TableEventKind.villainAction:
-          final before = current;
-          final seat = event.seatIndex;
-          final villainAction = event.action;
-          if (before != null && seat != null && villainAction != null) {
-            _safeRecord(() => _recorder.recordAction(
-                  before,
-                  event.state,
-                  seat,
-                  villainAction,
-                ));
-          }
           state = state.copyWith(
             game: event.state,
             collectingChips: false,
@@ -562,9 +476,11 @@ class GameController extends StateNotifier<TableSession> {
           );
           final type = event.action?.type;
           if (type != null) await _playActionSfx(sound, type);
-          await _wait(_isChipAction(type)
-              ? ReplayPace.chipAction
-              : ReplayPace.passiveAction);
+          await _wait(
+            _isChipAction(type)
+                ? ReplayPace.chipAction
+                : ReplayPace.passiveAction,
+          );
         case TableEventKind.collectPot:
           state = state.copyWith(
             game: event.state,
@@ -575,12 +491,11 @@ class GameController extends StateNotifier<TableSession> {
           await _wait(ReplayPace.collectPot);
           state = state.copyWith(collectingChips: false);
         case TableEventKind.dealStreet:
-          _safeRecord(() => _recorder.recordStreet(event.state));
-          // Prior street grades must not read as live flop/turn advice.
           final prior = state.coach;
-          final scoped = prior.hasVerdict && !prior.isHistorical
-              ? prior.asHistorical()
-              : prior;
+          final scoped =
+              prior.hasVerdict && !prior.isHistorical
+                  ? prior.asHistorical()
+                  : prior;
           state = state.copyWith(
             game: event.state,
             collectingChips: false,
@@ -605,14 +520,12 @@ class GameController extends StateNotifier<TableSession> {
       replaying: false,
       collectingChips: false,
       awardingChips: false,
+      authoredHeroEdges: _authoredEdgesForCurrentHero(resolved),
     );
 
-    // Keep the last post-action grade on the shelf while hero decides again —
-    // no pre-action tip that would replace advice mid-read.
     await _finishHandIfOver(myToken);
   }
 
-  /// Flies the pot to the winner seat(s), then clears the award overlay flag.
   Future<void> _playAwardAnimation(
     GameState game,
     SoundService sound,
@@ -648,171 +561,66 @@ class GameController extends StateNotifier<TableSession> {
     final sound = _ref.read(soundServiceProvider);
     if (!identical(_lastResolved, game)) {
       _lastResolved = game;
-      _safeRecord(() => _recorder.endHand(game));
+      await _recordSituationProgress();
     }
     final heroWon = game.resultMessage?.startsWith('Hero') ?? false;
     if (heroWon) await sound.win();
-    // Hand review stays in the coach shelf; the header Next CTA is the cue.
-    state = state.copyWith(replaying: false);
+    state = state.copyWith(replaying: false, clearAuthoredHeroEdges: true);
   }
 
-  Future<void> _recordStats(
-    LiveCoachGrade grade,
-    GameState game,
-    PokerAction action,
-  ) async {
-    if (!grade.verdict.isGraded) return;
-    final archetype = grade.villainArchetype.label;
-    try {
-      final scenario = game.activeScenario;
-      final engine = _engine;
-      if (scenario != null && engine != null) {
-        // Records playedScenarios + user stats via Firestore (or no-ops when
-        // signed out / offline). UI already shows [grade]; ignore returned
-        // CoachFeedback to avoid overwriting leak-aware shelf copy.
-        await _ref.read(scenarioManagerProvider).gradeAndRecord(
-              scenario: scenario,
-              action: action,
-              engine: engine,
-              gradeState: game,
-            );
-      } else {
-        final uid = _ref.read(authUidProvider);
-        if (uid != null) {
-          await _ref.read(userRepositoryProvider).recordPracticeResult(
-                uid: uid,
-                wasCorrect: grade.verdict == CoachVerdict.correct,
-                evDeltaBb: grade.evDeltaBb,
-                street: game.street.label,
-                archetype: archetype,
-              );
-        } else {
-          final stats = _ref.read(userStatsDaoProvider);
-          await stats.recordPracticeResult(
-            wasCorrect: grade.verdict == CoachVerdict.correct,
-            evDeltaBb: grade.evDeltaBb,
-            street: game.street.label,
-            archetype: archetype,
-          );
-        }
-      }
-      _ref.invalidate(userStatsProvider);
-    } catch (_) {
-      // Stats are best-effort; never block or crash play on a DB hiccup.
+  List<HeroActionEdge> _authoredEdgesForCurrentHero(GameState game) {
+    final node = _engine?.currentHeroNode;
+    if (!game.waitingForHero || game.isHandOver || node == null) {
+      return const [];
     }
+    return List<HeroActionEdge>.unmodifiable(node.actions);
   }
 
-  /// Fetches a spot-specific coach line (Claude when available) for the shelf.
-  ///
-  /// [localMessage] is the offline line (already carrying repeat / improvement
-  /// copy) used when Anthropic is unavailable. Claude is only asked on graded
-  /// spots. Gemini is never used for coach narration.
-  Future<void> _narrate(
-    LiveCoachGrade grade,
-    GameState game,
-    int token,
-    LeakCheck leak,
-    String localMessage,
-    Future<int?> decisionId,
-    int coachEpoch,
-  ) async {
-    final anthropic = _ref.read(anthropicServiceProvider);
-    var message = localMessage;
-    var adviceSource = 'offline';
-    int? aiRequestId;
+  Future<bool> _recordSituationProgress() async {
+    if (_progressRecorded) return true;
+    final engine = _engine;
+    final situation = engine?.situation;
+    if (engine == null || situation == null) return false;
 
-    if (grade.verdict.isGraded) {
-      try {
-        final result = await anthropic.coach(
-          prompt: grade.toPrompt(
-            game,
-            repeat: leak.repeat,
-            improvement: leak.improvement,
-          ),
-          handId: await _recorder.currentHandId,
-        );
-        aiRequestId = result.aiRequestId;
-        final text = result.text.trim();
-        if (text.isNotEmpty) {
-          final reconciled = CoachAdviceGuard.reconcile(
-            advice: text,
-            fallback: localMessage,
-            bestAction: grade.optimalAction,
-            verdict: grade.verdict,
-            street: grade.street,
-            equityPercent: grade.equityPercent,
-            requiredEquityPercent: grade.requiredEquityPercent,
-            villainIsAggressor: grade.villainIsAggressor,
-            reasonCodes: grade.reasonCodes,
-            villainArchetype: grade.villainArchetype,
-            villainAirPercent: (grade.villainAirShare * 100).round(),
-          );
-          message = reconciled;
-          adviceSource = reconciled == text ? 'claude' : 'offline';
-        }
-      } catch (e, st) {
-        DiagnosticsLog.error('GameController.narrate', e, st);
-      }
-    } else {
-      message = CoachAdviceGuard.reconcile(
-        advice: localMessage,
-        fallback: localMessage,
-        bestAction: grade.optimalAction,
-        verdict: grade.verdict,
-      );
-    }
-
-    if (_disposed || token != _replayToken) return;
-    // Ignore replies after a newer tip/grade, street advance, or re-decision.
-    final stillCurrentDecision = coachEpoch == _coachEpoch &&
-        state.coach.isLiveGrade &&
-        (state.coach.decisionStreet == null ||
-            state.coach.decisionStreet == grade.street);
-    if (stillCurrentDecision) {
+    final path = List<String>.from(engine.pathNodeIds);
+    final keys = List<String>.from(engine.chosenActionKeys);
+    final terminalId = engine.terminalNodeId;
+    if (path.isEmpty || terminalId == null || terminalId.isEmpty) {
       state = state.copyWith(
-        coach: state.coach.copyWith(
-          message: message,
-          decisionStreet: grade.street,
-          isHistorical: false,
-        ),
+        error: 'This hand could not be validated. Retry before continuing.',
       );
+      return false;
     }
-    if (leak.mistakeId != null && message != grade.message) {
-      unawaited(
-        _ref.read(mistakeTrackerProvider).saveAdvice(leak.mistakeId, message),
+    if (path.length != keys.length) {
+      state = state.copyWith(
+        error: 'This hand path is incomplete. Retry before continuing.',
       );
+      return false;
     }
 
-    final resolvedDecision = await decisionId;
-    _safeRecord(() => _recorder.completeDecision(
-          resolvedDecision,
-          adviceText: message,
-          adviceSource: adviceSource,
-          aiRequestId: aiRequestId,
-        ));
-  }
+    final heroNet = engine.terminalHeroNetChips ?? 0;
 
-  /// Persists the graded decision; resolves to the `coach_decisions` id.
-  Future<int?> _recordDecision(
-    LiveCoachGrade grade,
-    GameState game,
-    PokerAction action,
-  ) async {
-    if (!grade.verdict.isGraded) return null;
     try {
-      return await _recorder.recordHeroDecision(grade, game, action);
+      await _ref
+          .read(situationServiceProvider)
+          .recordSituationProgress(
+            situationId: situation.situationId ?? '',
+            setupKey: situation.setupKey,
+            pathNodeIds: path,
+            chosenActionKeys: keys,
+            terminalNodeId: terminalId,
+            heroNetChips: heroNet,
+          );
+      _progressRecorded = true;
+      _ref.invalidate(userStatsProvider);
+      state = state.copyWith(clearError: true);
+      return true;
     } catch (e, st) {
-      DiagnosticsLog.error('GameController.recordDecision', e, st);
-      return null;
-    }
-  }
-
-  /// Runs a recorder call; hand logging must never affect play.
-  void _safeRecord(void Function() body) {
-    try {
-      body();
-    } catch (e, st) {
-      DiagnosticsLog.error('GameController.record', e, st);
+      DiagnosticsLog.error('GameController.recordSituationProgress', e, st);
+      state = state.copyWith(
+        error: 'Could not save this hand. Check your connection and retry.',
+      );
+      return false;
     }
   }
 
@@ -823,8 +631,7 @@ class GameController extends StateNotifier<TableSession> {
       PokerActionType.call ||
       PokerActionType.bet ||
       PokerActionType.raise ||
-      PokerActionType.allIn =>
-        sound.chip(),
+      PokerActionType.allIn => sound.chip(),
     };
   }
 
@@ -843,26 +650,12 @@ class GameController extends StateNotifier<TableSession> {
 }
 
 final gameControllerProvider =
-    StateNotifierProvider<GameController, TableSession>(
-  GameController.new,
-);
+    StateNotifierProvider<GameController, TableSession>(GameController.new);
 
 final userStatsProvider = FutureProvider<UserStatsModel>((ref) async {
   final uid = ref.watch(authUidProvider);
-  if (uid != null) {
-    // Fresh Firestore read — do not reuse the bootstrap userDoc cache.
-    return ref.read(userRepositoryProvider).getStats(uid);
+  if (uid == null) {
+    return const UserStatsModel();
   }
-  final dao = ref.watch(userStatsDaoProvider);
-  return dao.getStats();
-});
-
-/// Leak-finder aggregates for the Stats screen.
-final mistakeStatsProvider = FutureProvider<MistakeStats>((ref) async {
-  final dao = ref.watch(mistakeDaoProvider);
-  return dao.loadStats();
-});
-
-final unplayedCountProvider = FutureProvider<int>((ref) async {
-  return ref.watch(scenarioManagerProvider).unplayedCount();
+  return ref.read(progressRepositoryProvider).loadStats(uid);
 });
