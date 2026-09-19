@@ -60,10 +60,32 @@ class CoachFeedback {
   CoachFeedback asHistorical() => copyWith(isHistorical: true);
 
   /// Builds shelf feedback from a server [HeroActionEdge].
+  ///
+  /// When [node] is provided, BEST uses the optimal edge's kind / sizing so
+  /// opaque authored keys (e.g. `act_hero_pf_3bet`) never appear in the UI.
   factory CoachFeedback.fromHeroEdge({
     required HeroActionEdge edge,
     Street? street,
+    HeroDecisionNode? node,
+    double bigBlind = 0,
   }) {
+    final optimalEdge =
+        node?.edgeForKey(edge.optimalActionKey) ??
+        (edge.optimalActionKey.toUpperCase() == edge.actionKey.toUpperCase()
+            ? edge
+            : null);
+    final optimalKind = optimalEdge?.kind;
+    final heroLabel = ActionDisplayLabel.resolve(
+      actionKey: edge.actionKey,
+      kind: edge.kind,
+    );
+    final optimalLabel = ActionDisplayLabel.resolve(
+      actionKey: edge.optimalActionKey,
+      kind: optimalKind,
+    );
+    final heroSizingBb = _sizingBb(edge.amountTo, bigBlind);
+    final optimalSizingBb = _sizingBb(optimalEdge?.amountTo, bigBlind);
+
     return CoachFeedback(
       verdict: switch (edge.verdict) {
         HeroActionVerdict.correct => CoachVerdict.correct,
@@ -71,13 +93,23 @@ class CoachFeedback {
         HeroActionVerdict.close => CoachVerdict.close,
       },
       message: edge.coaching,
-      optimalAction: ExploitAction.fromString(edge.optimalActionKey),
-      optimalActionLabel: edge.optimalActionKey,
-      heroAction: edge.actionKey,
+      optimalAction:
+          optimalKind != null
+              ? ExploitAction.fromKind(optimalKind)
+              : ExploitAction.fromString(edge.optimalActionKey),
+      optimalActionLabel: optimalLabel,
+      optimalSizingBb: optimalSizingBb,
+      heroAction: heroLabel,
+      heroSizingBb: heroSizingBb,
       evDeltaBb: edge.evDeltaBb,
       decisionStreet: street,
       isHistorical: false,
     );
+  }
+
+  static double _sizingBb(double? amountTo, double bigBlind) {
+    if (amountTo == null || amountTo <= 0 || bigBlind <= 0) return 0;
+    return amountTo / bigBlind;
   }
 
   CoachFeedback copyWith({

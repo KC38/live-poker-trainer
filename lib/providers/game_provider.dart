@@ -516,7 +516,12 @@ class GameController extends StateNotifier<TableSession> {
     if (chosen != null) {
       state = state.copyWith(
         game: after,
-        coach: CoachFeedback.fromHeroEdge(edge: chosen, street: game.street),
+        coach: CoachFeedback.fromHeroEdge(
+          edge: chosen,
+          street: game.street,
+          node: heroNode,
+          bigBlind: game.bigBlind,
+        ),
       );
       unawaited(
         _ref.read(analyticsServiceProvider).logHeroDecision(

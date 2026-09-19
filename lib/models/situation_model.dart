@@ -76,6 +76,12 @@ enum SituationActionKind {
     SituationActionKind.postBb => 'POST_BB',
     SituationActionKind.postAnte => 'POST_ANTE',
   };
+
+  /// Human-readable label for coach / dock UI (e.g. `ALL-IN`).
+  String get displayLabel => switch (this) {
+    SituationActionKind.allIn => 'ALL-IN',
+    _ => wire,
+  };
 }
 
 /// Server-authored assessment for a hero action.

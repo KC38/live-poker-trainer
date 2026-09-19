@@ -68,7 +68,7 @@ class ChipFormat {
 
   /// Whether [actionLabel] is a sized aggression line (bet / raise / all-in).
   static bool isSizedAction(String actionLabel) {
-    final upper = actionLabel.trim().toUpperCase();
+    final upper = actionLabel.trim().toUpperCase().replaceAll('_', '-');
     return upper == 'RAISE' || upper == 'BET' || upper == 'ALL-IN';
   }
 

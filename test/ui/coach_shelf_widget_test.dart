@@ -55,6 +55,7 @@ HeroActionEdge _serverEdge({
   required String verdict,
   required double evDeltaBb,
   required String optimalActionKey,
+  double? amountTo,
 }) {
   return HeroActionEdge.fromJson({
     'actionKey': actionKey,
@@ -64,6 +65,7 @@ HeroActionEdge _serverEdge({
     'evDeltaBb': evDeltaBb,
     'optimalActionKey': optimalActionKey,
     'nextNodeId': 'next',
+    if (amountTo != null) 'amountTo': amountTo,
   });
 }
 
@@ -163,8 +165,27 @@ void main() {
       expect(feedback.verdict, CoachVerdict.close);
       expect(feedback.evDeltaBb, -0.5);
       expect(feedback.optimalAction, ExploitAction.raise);
-      expect(feedback.optimalActionLabel, 'RAISE_100');
+      expect(feedback.optimalActionLabel, 'RAISE');
       expect(feedback.heroAction, 'CALL');
+    });
+
+    test('humanizes opaque authored action keys', () {
+      final feedback = CoachFeedback.fromHeroEdge(
+        edge: _serverEdge(
+          actionKey: 'act_hero_pf_3bet',
+          kind: 'RAISE',
+          verdict: 'correct',
+          evDeltaBb: 0,
+          optimalActionKey: 'act_hero_pf_3bet',
+          amountTo: 14,
+        ),
+        bigBlind: 2,
+      );
+
+      expect(feedback.optimalActionLabel, 'RAISE');
+      expect(feedback.heroAction, 'RAISE');
+      expect(feedback.optimalSizingBb, 7);
+      expect(feedback.heroSizingBb, 7);
     });
   });
 
@@ -254,9 +275,31 @@ void main() {
     await tester.pumpWidget(_wrap(feedback));
 
     expect(find.text('CLOSE'), findsOneWidget);
-    expect(find.text('RAISE_100'), findsOneWidget);
+    expect(find.text('RAISE'), findsOneWidget);
     expect(find.text('CALL'), findsOneWidget);
     expect(find.text('-\$1'), findsOneWidget);
+    expect(find.text('RAISE_100'), findsNothing);
+    expect(find.textContaining('act_'), findsNothing);
+  });
+
+  testWidgets('opaque authored keys render as RAISE with size', (tester) async {
+    final feedback = CoachFeedback.fromHeroEdge(
+      edge: _serverEdge(
+        actionKey: 'act_hero_pf_3bet',
+        kind: 'RAISE',
+        verdict: 'correct',
+        evDeltaBb: 0,
+        optimalActionKey: 'act_hero_pf_3bet',
+        amountTo: 14,
+      ),
+      bigBlind: 2,
+    );
+
+    await tester.pumpWidget(_wrap(feedback));
+
+    expect(find.text('RAISE · \$14'), findsNWidgets(2)); // BEST + YOU
+    expect(find.text('act_hero_pf_3bet'), findsNothing);
+    expect(find.text('+\$0'), findsOneWidget);
   });
 
   testWidgets('EV cell uses signed amount without EV Δ prefix', (tester) async {
