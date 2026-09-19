@@ -34,24 +34,19 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  http: ^1.6.0
   audioplayers: ^6.8.1
   google_fonts: ^8.2.1
   # Stay on Riverpod 2.x — 3.x is a breaking Notifier API migration.
   flutter_riverpod: ^2.6.1
-  drift: ^2.34.4
-  drift_flutter: ^0.3.1
-  sqlite3_flutter_libs: ^0.6.0+eol
   path_provider: ^2.1.6
   shared_preferences: ^2.5.5
   fl_chart: ^1.2.0
-  flutter_dotenv: ^6.0.1
-  crypto: ^3.0.7
   image_picker: ^1.2.3
   firebase_core: ^4.14.0
   firebase_auth: ^6.6.1
   cloud_firestore: ^6.9.0
   cloud_functions: ^6.4.0
+  firebase_storage: ^13.0.0
   google_sign_in: ^7.2.0
 
 dev_dependencies:
@@ -64,8 +59,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
-  drift_dev: ^2.34.6
-  build_runner: ^2.16.1
   integration_test:
     sdk: flutter
 
@@ -81,11 +74,5 @@ flutter:
   uses-material-design: true
 
   assets:
-    # `.env` carries the shipped Gemini key. flutter_dotenv reads env files
-    # through the asset bundle, so it must be declared here or `flutter run`
-    # cannot see it and coach text falls back to offline lines.
-    # It is gitignored — run `cp .env.example .env` once after cloning.
-    - .env
-    - .env.example
     - assets/sounds/
     - assets/brand/

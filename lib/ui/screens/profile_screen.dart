@@ -1,10 +1,7 @@
-/// Progress ("You"): identity, style metrics, Leak Finder, charts, AI review.
+/// Progress ("You"): identity, style metrics, coaching record, charts.
 ///
-/// One Home destination replaces the old split Profile + Stats screens. Every
-/// rate carries the sample it came from, taps through to a plain-English
-/// explanation of what it measures and what a healthy number looks like, and
-/// shows an em dash with a "needs N more" hint rather than a misleading figure.
-/// The style label is withheld entirely below [StyleThresholds.minHands] hands.
+/// One Home destination for profile + coaching stats. Every rate carries the
+/// sample it came from. Style is withheld below [StyleThresholds.minHands].
 library;
 
 import 'package:fl_chart/fl_chart.dart';
@@ -15,15 +12,13 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/engine/hero_profiler.dart';
 import 'package:live_poker_trainer/models/hero_metrics.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
-import 'package:live_poker_trainer/models/mistake_model.dart';
 import 'package:live_poker_trainer/models/user_stats_model.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/providers/profile_provider.dart';
-import 'package:live_poker_trainer/ui/widgets/leak_finder_section.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_avatar.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_identity_sheet.dart';
 
-/// Consolidated Progress / You screen (profile + stats + leak finder).
+/// Consolidated Progress / You screen (profile + coaching stats).
 class ProfileScreen extends ConsumerWidget {
   /// Creates the progress screen.
   const ProfileScreen({super.key});
@@ -32,23 +27,23 @@ class ProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profileAsync = ref.watch(heroProfileControllerProvider);
     final statsAsync = ref.watch(userStatsProvider);
-    final leaksAsync = ref.watch(mistakeStatsProvider);
     final canPop = Navigator.of(context).canPop();
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Progress'),
-        leading: canPop
-            ? IconButton(
-                tooltip: 'Back',
-                onPressed: () => Navigator.of(context).maybePop(),
-                icon: const Icon(
-                  Icons.arrow_back_ios_new,
-                  size: 18,
-                  color: AppColors.slate,
-                ),
-              )
-            : null,
+        leading:
+            canPop
+                ? IconButton(
+                  tooltip: 'Back',
+                  onPressed: () => Navigator.of(context).maybePop(),
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new,
+                    size: 18,
+                    color: AppColors.slate,
+                  ),
+                )
+                : null,
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -59,15 +54,16 @@ class ProfileScreen extends ConsumerWidget {
           ),
         ),
         child: profileAsync.when(
-          loading: () => const Center(
-            child: CircularProgressIndicator(color: AppColors.gold),
-          ),
+          loading:
+              () => const Center(
+                child: CircularProgressIndicator(color: AppColors.gold),
+              ),
           error: (e, _) => _ErrorState(message: '$e'),
-          data: (profile) => _ProfileBody(
-            profile: profile,
-            coachingStats: statsAsync.valueOrNull,
-            leaksAsync: leaksAsync,
-          ),
+          data:
+              (profile) => _ProfileBody(
+                profile: profile,
+                coachingStats: statsAsync.valueOrNull,
+              ),
         ),
       ),
     );
@@ -75,15 +71,10 @@ class ProfileScreen extends ConsumerWidget {
 }
 
 class _ProfileBody extends ConsumerWidget {
-  const _ProfileBody({
-    required this.profile,
-    required this.coachingStats,
-    required this.leaksAsync,
-  });
+  const _ProfileBody({required this.profile, required this.coachingStats});
 
   final HeroProfileView profile;
   final UserStatsModel? coachingStats;
-  final AsyncValue<MistakeStats> leaksAsync;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -95,7 +86,6 @@ class _ProfileBody extends ConsumerWidget {
       backgroundColor: AppColors.bgElevated,
       onRefresh: () async {
         await controller.refreshMetrics();
-        ref.invalidate(mistakeStatsProvider);
         ref.invalidate(userStatsProvider);
       },
       child: ListView(
@@ -106,31 +96,12 @@ class _ProfileBody extends ConsumerWidget {
             const SizedBox(height: 14),
             _NeedsMoreHands(style: metrics.style),
           ],
-          const SizedBox(height: 22),
-          _CoachReviewCard(profile: profile),
           if (coachingStats != null && coachingStats!.totalSpots > 0) ...[
             const SizedBox(height: 26),
             const _SectionTitle('Coaching record'),
             const SizedBox(height: 10),
             _CoachingRecord(stats: coachingStats!),
           ],
-          const SizedBox(height: 26),
-          leaksAsync.when(
-            loading: () => const SizedBox(
-              height: 48,
-              child: Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.gold,
-                  strokeWidth: 2,
-                ),
-              ),
-            ),
-            error: (e, _) => Text(
-              'Leak Finder unavailable: $e',
-              style: GoogleFonts.manrope(color: AppColors.slate),
-            ),
-            data: (leaks) => LeakFinderSection(stats: leaks),
-          ),
           const SizedBox(height: 26),
           _TrendCard(metrics: metrics, coachingStats: coachingStats),
           if (coachingStats != null) ...[
@@ -158,8 +129,7 @@ class _ProfileBody extends ConsumerWidget {
             const _SectionTitle('Against each player type'),
             const SizedBox(height: 10),
             for (final tendency in metrics.archetypeTendencies)
-              if (tendency.hasEnoughData)
-                _ArchetypeRow(tendency: tendency),
+              if (tendency.hasEnoughData) _ArchetypeRow(tendency: tendency),
           ],
         ],
       ),
@@ -208,9 +178,8 @@ class _ProfileHeader extends ConsumerWidget {
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     _Pill(
-                      label: style.isKnown
-                          ? style.style.label
-                          : 'Style forming',
+                      label:
+                          style.isKnown ? style.style.label : 'Style forming',
                       color: accent,
                     ),
                     Text(
@@ -292,175 +261,6 @@ class _NeedsMoreHands extends StatelessWidget {
 }
 
 // -----------------------------------------------------------------------------
-// AI review
-// -----------------------------------------------------------------------------
-
-class _CoachReviewCard extends ConsumerWidget {
-  const _CoachReviewCard({required this.profile});
-
-  final HeroProfileView profile;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final summary = profile.summary;
-    final controller = ref.read(heroProfileControllerProvider.notifier);
-
-    return _Panel(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(
-                Icons.auto_awesome,
-                size: 16,
-                color: AppColors.goldBright,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  'Coach review',
-                  style: GoogleFonts.cinzel(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.goldMuted,
-                  ),
-                ),
-              ),
-              if (profile.summaryRefreshing)
-                const SizedBox(
-                  width: 14,
-                  height: 14,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: AppColors.goldBright,
-                  ),
-                )
-              else
-                IconButton(
-                  tooltip: 'Get a fresh review',
-                  visualDensity: VisualDensity.compact,
-                  onPressed: () => controller.refreshSummary(force: true),
-                  icon: const Icon(
-                    Icons.refresh,
-                    size: 18,
-                    color: AppColors.slate,
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          if (summary == null)
-            Text(
-              'Your review appears once a few hands are logged.',
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 13.5,
-                height: 1.45,
-              ),
-            )
-          else ...[
-            Text(
-              summary.styleSummary,
-              style: GoogleFonts.manrope(
-                color: AppColors.cream,
-                fontSize: 14,
-                height: 1.5,
-              ),
-            ),
-            if (summary.leaks.isNotEmpty) ...[
-              const SizedBox(height: 16),
-              _ReviewList(
-                title: 'Biggest leaks',
-                lines: summary.leaks,
-                color: AppColors.warning,
-              ),
-            ],
-            if (summary.adjustments.isNotEmpty) ...[
-              const SizedBox(height: 14),
-              _ReviewList(
-                title: 'Do this next session',
-                lines: summary.adjustments,
-                color: AppColors.success,
-              ),
-            ],
-            const SizedBox(height: 14),
-            Text(
-              summary.isFromAi
-                  ? 'AI review · ${summary.handsPlayedAt} hands'
-                  : 'Offline read from your stats',
-              style: GoogleFonts.jetBrainsMono(
-                fontSize: 9.5,
-                color: AppColors.slate.withValues(alpha: 0.8),
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-class _ReviewList extends StatelessWidget {
-  const _ReviewList({
-    required this.title,
-    required this.lines,
-    required this.color,
-  });
-
-  final String title;
-  final List<String> lines;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title.toUpperCase(),
-          style: GoogleFonts.jetBrainsMono(
-            fontSize: 10,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 0.6,
-            color: color,
-          ),
-        ),
-        const SizedBox(height: 8),
-        for (final line in lines)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 7),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 6, right: 9),
-                  width: 5,
-                  height: 5,
-                  decoration: BoxDecoration(
-                    color: color,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    line,
-                    style: GoogleFonts.manrope(
-                      color: AppColors.cream.withValues(alpha: 0.92),
-                      fontSize: 13.5,
-                      height: 1.45,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-// -----------------------------------------------------------------------------
 // Trend
 // -----------------------------------------------------------------------------
 
@@ -476,21 +276,23 @@ class _TrendCard extends StatelessWidget {
     final evTrend = coachingStats?.recentEvDeltas ?? const <double>[];
 
     final useVpip = vpipTrend.length >= 2;
-    final points = useVpip
-        ? [
-            for (var i = 0; i < vpipTrend.length; i++)
-              FlSpot(i.toDouble(), vpipTrend[i].vpipPct),
-          ]
-        : [
-            for (var i = 0; i < evTrend.length; i++)
-              FlSpot(i.toDouble(), evTrend[i]),
-          ];
+    final points =
+        useVpip
+            ? [
+              for (var i = 0; i < vpipTrend.length; i++)
+                FlSpot(i.toDouble(), vpipTrend[i].vpipPct),
+            ]
+            : [
+              for (var i = 0; i < evTrend.length; i++)
+                FlSpot(i.toDouble(), evTrend[i]),
+            ];
 
     final title = useVpip ? 'Hands played over time' : 'Recent EV Δ';
-    final caption = useVpip
-        ? 'Rolling VPIP over your last ${HeroProfiler.trendWindow} hands. A '
-            'flattening line means your preflop discipline is settling.'
-        : 'Coached decisions, in big blinds won or lost versus the best line.';
+    final caption =
+        useVpip
+            ? 'Rolling VPIP over your last ${HeroProfiler.trendWindow} hands. A '
+                'flattening line means your preflop discipline is settling.'
+            : 'Coached decisions, in big blinds won or lost versus the best line.';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -508,34 +310,35 @@ class _TrendCard extends StatelessWidget {
         const SizedBox(height: 14),
         SizedBox(
           height: 150,
-          child: points.length < 2
-              ? _EmptyHint(
-                  useVpip
-                      ? 'Keep playing — your trend line starts here.'
-                      : 'Play a few coached hands and your trend shows up '
-                          'here.',
-                )
-              : LineChart(
-                  LineChartData(
-                    gridData: const FlGridData(show: false),
-                    titlesData: const FlTitlesData(show: false),
-                    borderData: FlBorderData(show: false),
-                    lineTouchData: const LineTouchData(enabled: false),
-                    lineBarsData: [
-                      LineChartBarData(
-                        spots: points,
-                        isCurved: true,
-                        color: AppColors.gold,
-                        barWidth: 2.5,
-                        dotData: const FlDotData(show: false),
-                        belowBarData: BarAreaData(
-                          show: true,
-                          color: AppColors.gold.withValues(alpha: 0.08),
+          child:
+              points.length < 2
+                  ? _EmptyHint(
+                    useVpip
+                        ? 'Keep playing — your trend line starts here.'
+                        : 'Play a few coached hands and your trend shows up '
+                            'here.',
+                  )
+                  : LineChart(
+                    LineChartData(
+                      gridData: const FlGridData(show: false),
+                      titlesData: const FlTitlesData(show: false),
+                      borderData: FlBorderData(show: false),
+                      lineTouchData: const LineTouchData(enabled: false),
+                      lineBarsData: [
+                        LineChartBarData(
+                          spots: points,
+                          isCurved: true,
+                          color: AppColors.gold,
+                          barWidth: 2.5,
+                          dotData: const FlDotData(show: false),
+                          belowBarData: BarAreaData(
+                            show: true,
+                            color: AppColors.gold.withValues(alpha: 0.08),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
         ),
       ],
     );
@@ -630,9 +433,10 @@ class _MetricTile extends StatelessWidget {
               style: GoogleFonts.jetBrainsMono(
                 fontSize: 24,
                 fontWeight: FontWeight.w800,
-                color: sample.reliableValue == null
-                    ? AppColors.slate
-                    : AppColors.cream,
+                color:
+                    sample.reliableValue == null
+                        ? AppColors.slate
+                        : AppColors.cream,
               ),
             ),
             const SizedBox(height: 2),
@@ -721,11 +525,12 @@ class _MetricExplainer extends StatelessWidget {
           _KeyValue(label: 'Healthy range', value: band),
           _KeyValue(
             label: 'Yours',
-            value: sample.hasEnoughData
-                ? '${sample.display} (${sample.sampleLabel})'
-                : 'Not shown yet — needs '
-                    '${sample.opportunitiesNeeded} more '
-                    '${id.format == MetricFormat.ratio ? 'decisions' : 'spots'}',
+            value:
+                sample.hasEnoughData
+                    ? '${sample.display} (${sample.sampleLabel})'
+                    : 'Not shown yet — needs '
+                        '${sample.opportunitiesNeeded} more '
+                        '${id.format == MetricFormat.ratio ? 'decisions' : 'spots'}',
           ),
         ],
       ),
@@ -750,10 +555,7 @@ class _KeyValue extends StatelessWidget {
             width: 116,
             child: Text(
               label,
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 13,
-              ),
+              style: GoogleFonts.manrope(color: AppColors.slate, fontSize: 13),
             ),
           ),
           Expanded(
@@ -863,9 +665,10 @@ class _ArchetypeRow extends StatelessWidget {
                 style: GoogleFonts.jetBrainsMono(
                   fontSize: 11,
                   fontWeight: FontWeight.w800,
-                  color: tendency.netBb >= 0
-                      ? AppColors.success
-                      : AppColors.danger,
+                  color:
+                      tendency.netBb >= 0
+                          ? AppColors.success
+                          : AppColors.danger,
                 ),
               ),
             ],
@@ -918,18 +721,19 @@ class _MixBar extends StatelessWidget {
       borderRadius: BorderRadius.circular(4),
       child: SizedBox(
         height: 7,
-        child: total <= 0
-            ? const ColoredBox(color: AppColors.slateDark)
-            : Row(
-                children: [
-                  for (final segment in segments)
-                    if (segment.$1 > 0)
-                      Expanded(
-                        flex: (segment.$1 * 100).round(),
-                        child: ColoredBox(color: segment.$2),
-                      ),
-                ],
-              ),
+        child:
+            total <= 0
+                ? const ColoredBox(color: AppColors.slateDark)
+                : Row(
+                  children: [
+                    for (final segment in segments)
+                      if (segment.$1 > 0)
+                        Expanded(
+                          flex: (segment.$1 * 100).round(),
+                          child: ColoredBox(color: segment.$2),
+                        ),
+                  ],
+                ),
       ),
     );
   }
@@ -955,7 +759,8 @@ class _CoachingRecord extends StatelessWidget {
           Container(width: 1, height: 46, color: AppColors.slateDark),
           Expanded(
             child: _Figure(
-              value: '${stats.netEvBb >= 0 ? '+' : ''}'
+              value:
+                  '${stats.netEvBb >= 0 ? '+' : ''}'
                   '${stats.netEvBb.toStringAsFixed(1)}',
               label: 'Net EV (BB)',
               detail: 'versus the best line',

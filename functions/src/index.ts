@@ -1,105 +1,161 @@
 /**
- * Cloud Functions for Live Poker Trainer.
+ * Cloud Functions for Live Poker Trainer — server-authored situations.
  *
- * `ensureScenarioPool` generates Gemini scenarios into the shared Firestore
- * pool (`scenarios/{contentHash}`). Optimal EV stamping stays client-side.
+ * Callables (auth required):
+ * - fetchSituation
+ * - recordSituationProgress
  */
+
 import {onCall, HttpsError} from "firebase-functions/v2/https";
+import {onDocumentWritten} from "firebase-functions/v2/firestore";
 import {defineSecret} from "firebase-functions/params";
 import {initializeApp} from "firebase-admin/app";
-import {FieldValue, getFirestore} from "firebase-admin/firestore";
 import {logger} from "firebase-functions";
-import {hashSetup} from "./content_hash";
-import {generateScenarios} from "./gemini";
+import {fetchSituationForUser} from "./fetch_situation";
+import {recordSituationProgressForUser} from "./record_progress";
+import {
+  isQueuedGeneration,
+  refillQueuedSetup,
+} from "./refill_situation_pool";
 
 initializeApp();
 
 /** Gemini API key — set via `firebase functions:secrets:set GEMINI_API_KEY`. */
 const geminiApiKey = defineSecret("GEMINI_API_KEY");
 
-/** Matches Flutter `ScenarioDao.payloadVersion` / `ScenarioPoolDoc`. */
-const PAYLOAD_VERSION = 1;
+function requireApiKey(): string {
+  const apiKey =
+    geminiApiKey.value()?.trim() ||
+    process.env.GEMINI_API_KEY?.trim() ||
+    "";
+  if (!apiKey) {
+    throw new HttpsError(
+      "failed-precondition",
+      "GEMINI_API_KEY secret is not configured on Functions.",
+    );
+  }
+  return apiKey;
+}
 
 /**
- * Ensures the shared scenario pool has fresh Gemini content.
+ * Returns exactly one unseen branching situation for the caller's table setup.
  *
- * Auth required. Upserts `scenarios/{contentHash}` and skips duplicates.
- * Returns how many new docs were added (existing hashes are ignored).
+ * Creates a receipt atomically so abandoned hands are never re-served.
+ * Queues an asynchronous pool refill when inventory is empty or low.
  */
-export const ensureScenarioPool = onCall(
+export const fetchSituation = onCall(
   {
     region: "us-central1",
-    secrets: [geminiApiKey],
+    timeoutSeconds: 60,
+    memory: "512MiB",
   },
   async (request) => {
     if (!request.auth) {
       throw new HttpsError(
         "unauthenticated",
-        "Sign in required to refill the scenario pool.",
+        "Sign in required to fetch a situation.",
       );
     }
 
-    const countRaw = request.data?.count;
-    const count =
-      typeof countRaw === "number" && Number.isFinite(countRaw)
-        ? Math.min(Math.max(Math.trunc(countRaw), 1), 20)
-        : 5;
-
-    const apiKey =
-      geminiApiKey.value()?.trim() ||
-      process.env.GEMINI_API_KEY?.trim() ||
-      "";
-    if (!apiKey) {
+    const tableSetup = request.data?.tableSetup ?? request.data?.setup;
+    if (!tableSetup) {
       throw new HttpsError(
-        "failed-precondition",
-        "GEMINI_API_KEY secret is not configured on Functions.",
+        "invalid-argument",
+        "tableSetup is required.",
       );
     }
 
-    const generated = await generateScenarios({apiKey, count});
-    const db = getFirestore();
-    let added = 0;
-    let skipped = 0;
-    const hashes: string[] = [];
-
-    for (const payload of generated.scenarios) {
-      const contentHash = hashSetup(payload);
-      hashes.push(contentHash);
-      const ref = db.collection("scenarios").doc(contentHash);
-      const existing = await ref.get();
-      if (existing.exists) {
-        skipped += 1;
-        continue;
-      }
-      await ref.set({
-        payload,
-        source: "gemini",
-        modelId: generated.modelId,
-        generatedAt: FieldValue.serverTimestamp(),
-        timesServed: 0,
-        payloadVersion: PAYLOAD_VERSION,
+    try {
+      const result = await fetchSituationForUser({
+        uid: request.auth.uid,
+        rawSetup: tableSetup,
       });
-      added += 1;
+
+      logger.info("fetchSituation ok", {
+        uid: request.auth.uid,
+        setupKey: result.setupKey,
+        situationId: result.situationId,
+        refillTriggered: result.refillTriggered,
+      });
+
+      return {
+        ok: true,
+        situationId: result.situationId,
+        setupKey: result.setupKey,
+        payload: result.payload,
+        refillTriggered: result.refillTriggered,
+      };
+    } catch (err) {
+      if (err instanceof HttpsError) throw err;
+      const message = err instanceof Error ? err.message : String(err);
+      logger.error("fetchSituation failed", {error: message});
+      throw new HttpsError("internal", message);
+    }
+  },
+);
+
+/**
+ * Generates queued situation batches outside the latency-sensitive callable.
+ */
+export const refillSituationPool = onDocumentWritten(
+  {
+    document: "tableSetups/{setupKey}",
+    region: "us-central1",
+    secrets: [geminiApiKey],
+    timeoutSeconds: 540,
+    memory: "1GiB",
+    maxInstances: 2,
+  },
+  async (event) => {
+    const afterData = event.data?.after.exists
+      ? event.data.after.data()
+      : undefined;
+    if (!isQueuedGeneration(afterData)) return;
+    const result = await refillQueuedSetup({
+      setupKey: event.params.setupKey,
+      afterData,
+      apiKey: requireApiKey(),
+    });
+    if (result) {
+      logger.info("refillSituationPool completed", {
+        setupKey: event.params.setupKey,
+        added: result.added,
+        skipped: result.skipped,
+        errorCount: result.errors.length,
+        leaseHeldByOther: result.leaseHeldByOther,
+      });
+    }
+  },
+);
+
+/**
+ * Records a completed (or abandoned-with-path) situation for progress stats.
+ *
+ * Validates the path against the allocated situation before updating aggregates.
+ */
+export const recordSituationProgress = onCall(
+  {
+    region: "us-central1",
+  },
+  async (request) => {
+    if (!request.auth) {
+      throw new HttpsError(
+        "unauthenticated",
+        "Sign in required to record progress.",
+      );
     }
 
-    logger.info("ensureScenarioPool completed", {
-      uid: request.auth.uid,
-      requestedCount: count,
-      generated: generated.scenarios.length,
-      added,
-      skipped,
-      errors: generated.errors.length,
-    });
-
-    return {
-      ok: true,
-      requestedCount: count,
-      generated: generated.scenarios.length,
-      added,
-      skipped,
-      modelId: generated.modelId,
-      contentHashes: hashes,
-      errors: generated.errors,
-    };
+    try {
+      const result = await recordSituationProgressForUser({
+        uid: request.auth.uid,
+        raw: request.data,
+      });
+      return result;
+    } catch (err) {
+      if (err instanceof HttpsError) throw err;
+      const message = err instanceof Error ? err.message : String(err);
+      logger.error("recordSituationProgress failed", {error: message});
+      throw new HttpsError("internal", message);
+    }
   },
 );

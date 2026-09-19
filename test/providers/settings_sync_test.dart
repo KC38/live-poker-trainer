@@ -32,7 +32,7 @@ void main() {
   });
 
   test('applyRemotePreferences restores table setup and keeps audio', () async {
-    expect(notifier.state.seatCount, 9);
+    expect(notifier.state.seatCount, const GameSettingsModel().seatCount);
     expect(notifier.state.sfxEnabled, isFalse);
 
     await notifier.applyRemotePreferences(
@@ -67,8 +67,10 @@ void main() {
     // Audio stays device-local.
     expect(notifier.state.sfxEnabled, isFalse);
     expect(notifier.state.musicEnabled, isTrue);
-    expect(prefs.getInt('seatCount'), 6);
-    expect(prefs.getDouble('smallBlind'), 0.5);
+    expect(prefs.getInt('seatCount'), isNull);
+    expect(prefs.getDouble('smallBlind'), isNull);
+    expect(prefs.getBool('sfxEnabled'), isFalse);
+    expect(prefs.getBool('musicEnabled'), isTrue);
   });
 
   test('resetSyncedToDefaults clears table setup but keeps audio', () async {

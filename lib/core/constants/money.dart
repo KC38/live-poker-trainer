@@ -27,6 +27,22 @@ class Money {
     return value < 0 ? 0 : value;
   }
 
+  /// Splits [pot] in integer cents by ascending winner seat id.
+  ///
+  /// The first `potCents % winnerCount` seats receive one extra cent.
+  static Map<int, double> splitPot(double pot, Iterable<int> winnerSeats) {
+    final seats = winnerSeats.toList()..sort();
+    if (!pot.isFinite || pot < 0 || seats.isEmpty) return const {};
+
+    final cents = (pot * 100).round();
+    final baseCents = cents ~/ seats.length;
+    final remainder = cents % seats.length;
+    return {
+      for (var i = 0; i < seats.length; i++)
+        seats[i]: (baseCents + (i < remainder ? 1 : 0)) / 100,
+    };
+  }
+
   /// Clamps [value] into `[lower, upper]` without throwing when the range is
   /// inverted or non-finite.
   ///

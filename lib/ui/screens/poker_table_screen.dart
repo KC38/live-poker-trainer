@@ -89,10 +89,8 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
   void _openLegend(GameState game) {
     ArchetypeLegendSheet.show(
       context,
-      seated: game.players
-          .where((p) => !p.isHero)
-          .map((p) => p.archetype)
-          .toList(),
+      seated:
+          game.players.where((p) => !p.isHero).map((p) => p.archetype).toList(),
     );
   }
 
@@ -114,169 +112,247 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
       child: CallbackShortcuts(
         bindings: {
           if (kDebugMode && showNext)
-            const SingleActivator(LogicalKeyboardKey.keyN): () =>
-                ref.read(gameControllerProvider.notifier).nextHand(),
+            const SingleActivator(LogicalKeyboardKey.keyN):
+                () => ref.read(gameControllerProvider.notifier).nextHand(),
         },
         child: Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: RadialGradient(
-            center: Alignment(0, -0.2),
-            radius: 1.1,
-            colors: [AppColors.bgMid, AppColors.bgDark],
-          ),
-        ),
-        child: SafeArea(
-          bottom: false,
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final wide = constraints.maxWidth >= _wideBreakpoint;
-              // Greyed-out controls are dead weight: drop the dock whenever
-              // the hero cannot act and give its band to the other rows.
-              final dockVisible = session.heroCanAct;
+          body: Container(
+            decoration: const BoxDecoration(
+              gradient: RadialGradient(
+                center: Alignment(0, -0.2),
+                radius: 1.1,
+                colors: [AppColors.bgMid, AppColors.bgDark],
+              ),
+            ),
+            child: SafeArea(
+              bottom: false,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final wide = constraints.maxWidth >= _wideBreakpoint;
+                  // Greyed-out controls are dead weight: drop the dock whenever
+                  // the hero cannot act and give its band to the other rows.
+                  final dockVisible = session.heroCanAct;
 
-              final showCoach = session.coach.hasAdvice;
+                  final showCoach = session.coach.hasAdvice;
 
-              // Cap the coach band so it can never starve the felt, and let
-              // that cap grow into the space the dock gave up.
-              final coachMaxHeight = dockVisible
-                  ? (constraints.maxHeight * _coachShareWithDock)
-                      .clamp(96.0, 190.0)
-                  : (constraints.maxHeight * _coachShareWithoutDock)
-                      .clamp(120.0, 280.0);
+                  // Cap the coach band so it can never starve the felt, and let
+                  // that cap grow into the space the dock gave up.
+                  final coachMaxHeight =
+                      dockVisible
+                          ? (constraints.maxHeight * _coachShareWithDock).clamp(
+                            96.0,
+                            190.0,
+                          )
+                          : (constraints.maxHeight * _coachShareWithoutDock)
+                              .clamp(120.0, 280.0);
 
-              CoachShelfWidget buildCoach(double? maxHeight) {
-                return CoachShelfWidget(
-                  feedback: session.coach,
-                  bigBlind: game?.bigBlind ?? 2,
-                  chipDisplayMode: settings.chipDisplayMode,
-                  replaying: session.replaying,
-                  maxHeight: maxHeight,
-                );
-              }
+                  CoachShelfWidget buildCoach(double? maxHeight) {
+                    return CoachShelfWidget(
+                      feedback: session.coach,
+                      bigBlind: game?.bigBlind ?? 2,
+                      chipDisplayMode: settings.chipDisplayMode,
+                      replaying: session.replaying,
+                      maxHeight: maxHeight,
+                    );
+                  }
 
-              // Grow the cap over the same beat as the dock collapse so the
-              // shelf expands instead of snapping to its new size.
-              final Widget? coach = !showCoach
-                  ? null
-                  : wide
-                      ? buildCoach(null)
-                      : TweenAnimationBuilder<double>(
-                          tween: Tween<double>(end: coachMaxHeight),
-                          duration: _bandTransition,
-                          curve: Curves.easeOutCubic,
-                          builder: (context, cap, _) => buildCoach(cap),
-                        );
+                  // Grow the cap over the same beat as the dock collapse so the
+                  // shelf expands instead of snapping to its new size.
+                  final Widget? coach =
+                      !showCoach
+                          ? null
+                          : wide
+                          ? buildCoach(null)
+                          : TweenAnimationBuilder<double>(
+                            tween: Tween<double>(end: coachMaxHeight),
+                            duration: _bandTransition,
+                            curve: Curves.easeOutCubic,
+                            builder: (context, cap, _) => buildCoach(cap),
+                          );
 
-              return Column(
-                children: [
-                  _TableHeader(
-                    game: game,
-                    onBack: () async {
-                      if (context.mounted) Navigator.pop(context);
-                    },
-                    onLegend: game == null ? null : () => _openLegend(game),
-                    onNext: showNext
-                        ? () =>
-                            ref.read(gameControllerProvider.notifier).nextHand()
-                        : null,
-                    highlightNext: highlightNext,
-                  ),
-                  if (session.loading)
-                    const Expanded(child: _DealingIndicator())
-                  else if (game == null)
-                    Expanded(
-                      child: _EmptyTable(
-                        message: session.error ?? 'No hand loaded',
-                        onBack: () => Navigator.pop(context),
-                      ),
-                    )
-                  else if (wide)
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  child: FeltTableView(
-                                    game: game,
-                                    chipDisplayMode: tableChipMode,
-                                    collectingChips: session.collectingChips,
-                                    awardingChips: session.awardingChips,
-                                    review: handOver,
-                                  ),
-                                ),
-                                HeroRailWidget(
-                                  game: game,
-                                  chipDisplayMode: tableChipMode,
-                                  isThinking: session.replaying,
-                                  review: handOver,
-                                  isWinner: handOver &&
-                                      game.winnerIds.contains(game.hero.id),
-                                ),
-                                _ActionDockSlot(
-                                  visible: dockVisible,
-                                  child: ActionDockWidget(
-                                    game: game,
-                                    enabled: dockVisible,
-                                    onAction: (action) => ref
+                  return Column(
+                    children: [
+                      _TableHeader(
+                        game: game,
+                        onBack: () async {
+                          if (context.mounted) Navigator.pop(context);
+                        },
+                        onLegend: game == null ? null : () => _openLegend(game),
+                        onNext:
+                            showNext
+                                ? () =>
+                                    ref
                                         .read(gameControllerProvider.notifier)
-                                        .heroAct(action),
+                                        .nextHand()
+                                : null,
+                        highlightNext: highlightNext,
+                      ),
+                      if (session.error != null && game != null)
+                        _ServerErrorBanner(
+                          message: session.error!,
+                          onRetry: () {
+                            final controller = ref.read(
+                              gameControllerProvider.notifier,
+                            );
+                            if (game.isHandOver) {
+                              controller.nextHand();
+                            } else {
+                              controller.startTraining(continueTable: true);
+                            }
+                          },
+                        ),
+                      if (session.loading)
+                        const Expanded(child: _DealingIndicator())
+                      else if (game == null)
+                        Expanded(
+                          child: _EmptyTable(
+                            message: session.error ?? 'No hand loaded',
+                            onBack: () => Navigator.pop(context),
+                            onRetry:
+                                () =>
+                                    ref
+                                        .read(gameControllerProvider.notifier)
+                                        .startTraining(),
+                          ),
+                        )
+                      else if (wide)
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: FeltTableView(
+                                        game: game,
+                                        chipDisplayMode: tableChipMode,
+                                        collectingChips:
+                                            session.collectingChips,
+                                        awardingChips: session.awardingChips,
+                                        review: handOver,
+                                      ),
+                                    ),
+                                    HeroRailWidget(
+                                      game: game,
+                                      chipDisplayMode: tableChipMode,
+                                      isThinking: session.replaying,
+                                      review: handOver,
+                                      isWinner:
+                                          handOver &&
+                                          game.winnerIds.contains(game.hero.id),
+                                    ),
+                                    _ActionDockSlot(
+                                      visible: dockVisible,
+                                      child: ActionDockWidget(
+                                        game: game,
+                                        enabled: dockVisible,
+                                        authoredEdges:
+                                            session.authoredHeroEdges,
+                                        onAction:
+                                            (action) => ref
+                                                .read(
+                                                  gameControllerProvider
+                                                      .notifier,
+                                                )
+                                                .heroAct(action),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              if (coach != null)
+                                SizedBox(
+                                  width: 320,
+                                  child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: coach,
                                   ),
                                 ),
-                              ],
-                            ),
+                            ],
                           ),
-                          if (coach != null)
-                            SizedBox(
-                              width: 320,
-                              child: Align(
-                                alignment: Alignment.bottomCenter,
-                                child: coach,
-                              ),
-                            ),
-                        ],
-                      ),
-                    )
-                  else ...[
-                    Expanded(
-                      child: FeltTableView(
-                        game: game,
-                        chipDisplayMode: tableChipMode,
-                        collectingChips: session.collectingChips,
-                        awardingChips: session.awardingChips,
-                        review: handOver,
-                      ),
-                    ),
-                    HeroRailWidget(
-                      game: game,
-                      chipDisplayMode: tableChipMode,
-                      isThinking: session.replaying,
-                      review: handOver,
-                      isWinner: handOver &&
-                          game.winnerIds.contains(game.hero.id),
-                    ),
-                    if (coach != null) coach,
-                    _ActionDockSlot(
-                      visible: dockVisible,
-                      child: ActionDockWidget(
-                        game: game,
-                        enabled: dockVisible,
-                        onAction: (action) => ref
-                            .read(gameControllerProvider.notifier)
-                            .heroAct(action),
-                      ),
-                    ),
-                  ],
-                ],
-              );
-            },
+                        )
+                      else ...[
+                        Expanded(
+                          child: FeltTableView(
+                            game: game,
+                            chipDisplayMode: tableChipMode,
+                            collectingChips: session.collectingChips,
+                            awardingChips: session.awardingChips,
+                            review: handOver,
+                          ),
+                        ),
+                        HeroRailWidget(
+                          game: game,
+                          chipDisplayMode: tableChipMode,
+                          isThinking: session.replaying,
+                          review: handOver,
+                          isWinner:
+                              handOver && game.winnerIds.contains(game.hero.id),
+                        ),
+                        // Null-aware collection elements are not enabled by
+                        // the current Flutter language version.
+                        // ignore: use_null_aware_elements
+                        if (coach != null) coach,
+                        _ActionDockSlot(
+                          visible: dockVisible,
+                          child: ActionDockWidget(
+                            game: game,
+                            enabled: dockVisible,
+                            authoredEdges: session.authoredHeroEdges,
+                            onAction:
+                                (action) => ref
+                                    .read(gameControllerProvider.notifier)
+                                    .heroAct(action),
+                          ),
+                        ),
+                      ],
+                    ],
+                  );
+                },
+              ),
+            ),
           ),
         ),
       ),
-    ),
+    );
+  }
+}
+
+class _ServerErrorBanner extends StatelessWidget {
+  const _ServerErrorBanner({required this.message, required this.onRetry});
+
+  final String message;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(14, 8, 8, 8),
+      color: AppColors.danger.withValues(alpha: 0.16),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.cloud_off_outlined,
+            color: AppColors.danger,
+            size: 18,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              message,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.manrope(
+                color: AppColors.cream,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          TextButton(onPressed: onRetry, child: const Text('Retry')),
+        ],
       ),
     );
   }
@@ -417,10 +493,7 @@ class _TableHeader extends StatelessWidget {
             ),
           ),
           if (onNext != null)
-            _NextHandCta(
-              onPressed: onNext!,
-              emphasized: highlightNext,
-            )
+            _NextHandCta(onPressed: onNext!, emphasized: highlightNext)
           else
             IconButton(
               tooltip: 'Player types',
@@ -440,10 +513,7 @@ class _TableHeader extends StatelessWidget {
 /// Header **Next** — quiet skip while hero is done early; gold pulse when the
 /// hand has fully finished.
 class _NextHandCta extends StatefulWidget {
-  const _NextHandCta({
-    required this.onPressed,
-    this.emphasized = false,
-  });
+  const _NextHandCta({required this.onPressed, this.emphasized = false});
 
   final VoidCallback onPressed;
   final bool emphasized;
@@ -512,11 +582,7 @@ class _NextHandCtaState extends State<_NextHandCta>
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          label,
-          const SizedBox(width: 4),
-          arrow,
-        ],
+        children: [label, const SizedBox(width: 4), arrow],
       ),
     );
 
@@ -601,7 +667,7 @@ class _DealingIndicator extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'Dealing…',
+            'Preparing hand…',
             style: GoogleFonts.manrope(color: AppColors.slate),
           ),
         ],
@@ -611,10 +677,15 @@ class _DealingIndicator extends StatelessWidget {
 }
 
 class _EmptyTable extends StatelessWidget {
-  const _EmptyTable({required this.message, required this.onBack});
+  const _EmptyTable({
+    required this.message,
+    required this.onBack,
+    this.onRetry,
+  });
 
   final String message;
   final VoidCallback onBack;
+  final VoidCallback? onRetry;
 
   @override
   Widget build(BuildContext context) {
@@ -633,12 +704,13 @@ class _EmptyTable extends StatelessWidget {
             Text(
               message,
               textAlign: TextAlign.center,
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 15,
-              ),
+              style: GoogleFonts.manrope(color: AppColors.slate, fontSize: 15),
             ),
             const SizedBox(height: 20),
+            if (onRetry != null) ...[
+              FilledButton(onPressed: onRetry, child: const Text('Retry')),
+              const SizedBox(height: 10),
+            ],
             OutlinedButton(
               onPressed: onBack,
               child: const Text('Back to home'),

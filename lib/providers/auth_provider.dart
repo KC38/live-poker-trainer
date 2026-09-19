@@ -19,8 +19,7 @@ final authStateProvider = StreamProvider<User?>((ref) {
 
 /// Current Firebase uid, or `null` when signed out.
 ///
-/// Prefer this over [Config.defaultUserId] for any user-scoped Firestore path
-/// (prefs, stats, profile) once the auth gate has admitted the session.
+/// All user-scoped data requires this authenticated server identity.
 final authUidProvider = Provider<String?>((ref) {
   return ref.watch(authStateProvider).asData?.value?.uid;
 });
@@ -74,10 +73,13 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
     state = const AsyncValue.loading();
     try {
       final user = await action();
-      final preferences = seedLocalPreferences
-          ? _ref.read(settingsProvider)
-          : const GameSettingsModel();
-      await _ref.read(userRepositoryProvider).ensureUserDoc(
+      final preferences =
+          seedLocalPreferences
+              ? _ref.read(settingsProvider)
+              : const GameSettingsModel();
+      await _ref
+          .read(userRepositoryProvider)
+          .ensureUserDoc(
             uid: user.uid,
             displayName: user.displayName,
             preferences: preferences,
@@ -112,9 +114,7 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
     required String email,
     required String password,
   }) {
-    return _run(
-      () => _auth.signInWithEmail(email: email, password: password),
-    );
+    return _run(() => _auth.signInWithEmail(email: email, password: password));
   }
 
   /// Google Sign-In.
@@ -140,6 +140,4 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
 
 /// Auth action controller.
 final authControllerProvider =
-    StateNotifierProvider<AuthController, AsyncValue<void>>(
-  AuthController.new,
-);
+    StateNotifierProvider<AuthController, AsyncValue<void>>(AuthController.new);

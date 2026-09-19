@@ -1,4 +1,4 @@
-/// Persisted gameplay and audio settings via SharedPreferences + Firestore.
+/// Server-synced gameplay settings plus device-local audio preferences.
 library;
 
 import 'dart:async';
@@ -18,37 +18,33 @@ final sharedPreferencesProvider = FutureProvider<SharedPreferences>(
 /// Legacy SharedPreferences key for a removed Settings API-key override.
 const _legacyGeminiKeyOverridePref = 'geminiKeyOverride';
 
-/// Settings controller with disk persistence.
+/// Settings controller with device persistence for audio only.
 class SettingsNotifier extends StateNotifier<GameSettingsModel> {
   /// Creates a notifier from [prefs].
-  SettingsNotifier(
-    this._prefs, {
-    SoundServiceSync? soundSync,
-    this.onChanged,
-    this.syncRemote,
-  })  : _soundSync = soundSync,
-        super(_load(_prefs)) {
-    // Drop any previously saved device key override; keys come from
-    // `.env` / `--dart-define` only now.
+  SettingsNotifier(this._prefs, {this.soundSync, this.syncRemote})
+    : super(_load(_prefs)) {
+    // Drop obsolete client-key and gameplay preference rows from older builds.
     if (_prefs.containsKey(_legacyGeminiKeyOverridePref)) {
       _prefs.remove(_legacyGeminiKeyOverridePref);
+    }
+    for (final key in const GameSettingsModel().toPrefsMap().keys) {
+      if (!GameSettingsModel.audioPrefKeys.contains(key) &&
+          _prefs.containsKey(key)) {
+        _prefs.remove(key);
+      }
     }
     _applySideEffects();
   }
 
   final SharedPreferences _prefs;
-  final SoundServiceSync? _soundSync;
-
-  /// Invoked with the previous and next prefs maps after every [update]
-  /// (used to persist a settings-change audit trail). Must not throw.
-  final SettingsChanged? onChanged;
+  final SoundServiceSync? soundSync;
 
   /// Pushes non-audio preferences to Firestore when signed in.
   final Future<void> Function(GameSettingsModel settings)? syncRemote;
 
   static GameSettingsModel _load(SharedPreferences prefs) {
     return GameSettingsModel.fromPrefs({
-      for (final key in prefs.getKeys()) key: prefs.get(key),
+      for (final key in GameSettingsModel.audioPrefKeys) key: prefs.get(key),
     });
   }
 
@@ -56,17 +52,11 @@ class SettingsNotifier extends StateNotifier<GameSettingsModel> {
     final before = state.toPrefsMap();
     state = next;
     final map = next.toPrefsMap();
-    onChanged?.call(before, map);
-    for (final entry in map.entries) {
+    for (final key in GameSettingsModel.audioPrefKeys) {
+      final entry = MapEntry(key, map[key]);
       final v = entry.value;
       if (v is bool) {
         await _prefs.setBool(entry.key, v);
-      } else if (v is int) {
-        await _prefs.setInt(entry.key, v);
-      } else if (v is double) {
-        await _prefs.setDouble(entry.key, v);
-      } else if (v is String) {
-        await _prefs.setString(entry.key, v);
       }
     }
     _applySideEffects();
@@ -84,24 +74,8 @@ class SettingsNotifier extends StateNotifier<GameSettingsModel> {
     if (merged.toPrefsMap().toString() == state.toPrefsMap().toString()) {
       return;
     }
-    // Write SharedPreferences without re-pushing to Firestore.
-    final before = state.toPrefsMap();
+    // Gameplay settings stay in memory; only audio is device-persisted.
     state = merged;
-    final map = merged.toPrefsMap();
-    onChanged?.call(before, map);
-    for (final entry in map.entries) {
-      if (GameSettingsModel.audioPrefKeys.contains(entry.key)) continue;
-      final v = entry.value;
-      if (v is bool) {
-        await _prefs.setBool(entry.key, v);
-      } else if (v is int) {
-        await _prefs.setInt(entry.key, v);
-      } else if (v is double) {
-        await _prefs.setDouble(entry.key, v);
-      } else if (v is String) {
-        await _prefs.setString(entry.key, v);
-      }
-    }
     _applySideEffects();
   }
 
@@ -160,9 +134,13 @@ class SettingsNotifier extends StateNotifier<GameSettingsModel> {
   }
 
   /// Sets archetype for villain seat index `0..villainSeatCount-1` (table seats 1+).
-  Future<void> setCustomArchetypeAt(int villainIndex, PlayerArchetype archetype) async {
+  Future<void> setCustomArchetypeAt(
+    int villainIndex,
+    PlayerArchetype archetype,
+  ) async {
     final normalized = state.withNormalizedCustomLineup();
-    if (villainIndex < 0 || villainIndex >= normalized.customArchetypes.length) {
+    if (villainIndex < 0 ||
+        villainIndex >= normalized.customArchetypes.length) {
       return;
     }
     final next = List<PlayerArchetype>.from(normalized.customArchetypes);
@@ -171,61 +149,45 @@ class SettingsNotifier extends StateNotifier<GameSettingsModel> {
   }
 
   void _applySideEffects() {
-    _soundSync?.call(state.sfxEnabled, state.musicEnabled);
+    soundSync?.call(state.sfxEnabled, state.musicEnabled);
   }
 }
 
 /// Callback to push SFX/music flags into [SoundService].
 typedef SoundServiceSync = void Function(bool sfx, bool music);
 
-/// Callback receiving the settings maps before and after an update.
-typedef SettingsChanged = void Function(
-  Map<String, Object?> before,
-  Map<String, Object?> after,
-);
-
 final settingsProvider =
     StateNotifierProvider<SettingsNotifier, GameSettingsModel>((ref) {
-  final asyncPrefs = ref.watch(sharedPreferencesProvider);
-  void soundSync(bool sfx, bool music) {
-    final sound = ref.read(soundServiceProvider);
-    sound.sfxEnabled = sfx;
-    sound.setMusicEnabled(music);
-  }
+      final asyncPrefs = ref.watch(sharedPreferencesProvider);
+      void soundSync(bool sfx, bool music) {
+        final sound = ref.read(soundServiceProvider);
+        sound.sfxEnabled = sfx;
+        sound.setMusicEnabled(music);
+      }
 
-  void audit(Map<String, Object?> before, Map<String, Object?> after) {
-    unawaited(
-      ref
-          .read(diagnosticsDaoProvider)
-          .logSettingsDiff(before, after)
-          .catchError((Object _) => 0),
-    );
-  }
+      Future<void> syncRemote(GameSettingsModel settings) async {
+        final uid = FirebaseAuth.instance.currentUser?.uid;
+        if (uid == null) return;
+        await ref
+            .read(userRepositoryProvider)
+            .syncPreferences(uid: uid, settings: settings);
+      }
 
-  Future<void> syncRemote(GameSettingsModel settings) async {
-    final uid = FirebaseAuth.instance.currentUser?.uid;
-    if (uid == null) return;
-    await ref.read(userRepositoryProvider).syncPreferences(
-          uid: uid,
-          settings: settings,
-        );
-  }
-
-  return asyncPrefs.maybeWhen(
-    data: (prefs) => SettingsNotifier(
-      prefs,
-      soundSync: soundSync,
-      onChanged: audit,
-      syncRemote: syncRemote,
-    ),
-    orElse: () => SettingsNotifier(
-      _MemoryPrefs(),
-      soundSync: soundSync,
-      onChanged: audit,
-      syncRemote: syncRemote,
-    ),
-  );
-});
+      return asyncPrefs.maybeWhen(
+        data:
+            (prefs) => SettingsNotifier(
+              prefs,
+              soundSync: soundSync,
+              syncRemote: syncRemote,
+            ),
+        orElse:
+            () => SettingsNotifier(
+              _MemoryPrefs(),
+              soundSync: soundSync,
+              syncRemote: syncRemote,
+            ),
+      );
+    });
 
 /// Minimal in-memory prefs used until real SharedPreferences resolves.
 class _MemoryPrefs implements SharedPreferences {

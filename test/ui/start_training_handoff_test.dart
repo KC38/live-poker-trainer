@@ -89,7 +89,7 @@ void main() {
         () => find.byType(PokerTableScreen).evaluate().isNotEmpty,
         maxPumps: 10,
       );
-      expect(find.text('Dealing…'), findsOneWidget);
+      expect(find.text('Preparing hand…'), findsOneWidget);
       expect(controller.log, isNot(contains('start')));
 
       await tester.pump(const Duration(milliseconds: 320));

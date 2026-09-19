@@ -3,22 +3,34 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
+    "test": "vitest run",
+    "test:rules": "cd .. && npx -y firebase-tools@latest emulators:exec --project live-poker-trainer-rules-test --only firestore,storage \"npm --prefix functions run test:rules:unit\"",
+    "test:rules:unit": "vitest run --config vitest.rules.config.mts",
+    "test:watch": "vitest",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "reset:dry": "npx ts-node --transpile-only scripts/reset_obsolete_data.ts"
   },
   "engines": {
-    "node": "20"
+    "node": "22"
   },
   "main": "lib/index.js",
   "dependencies": {
-    "firebase-admin": "^13.0.0",
-    "firebase-functions": "^6.0.0"
+    "firebase-admin": "^14.4.0",
+    "firebase-functions": "^7.4.0"
   },
   "devDependencies": {
-    "typescript": "^5.7.0"
+    "@firebase/rules-unit-testing": "^5.0.2",
+    "firebase": "^12.19.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.0",
+    "vitest": "^5.0.1"
+  },
+  "overrides": {
+    "uuid": "^11.1.1"
   },
   "private": true
 }

@@ -1,8 +1,28 @@
 rules_version = '2';
 
-// Live Poker Trainer — user-owned data + shared scenario pool.
-// Clients cannot create/overwrite scenario payloads (Admin SDK / Functions only).
-// Authenticated clients may bump serve counters on existing scenario docs.
+// ===============================================================
+// Assumed data model
+// ===============================================================
+// users/{uid}
+//   displayName: string, 1..18 characters
+//   avatarRef: string, empty/builtin id/Firebase Storage HTTPS URL
+//   createdAt: timestamp, immutable
+//   updatedAt: timestamp
+//   preferences: validated gameplay settings map
+//
+// users/{uid}/situationReceipts/{situationId}
+//   Functions-only allocation and completion receipt
+//
+// users/{uid}/handHistory/{handId}
+//   Functions-authored hand summary; owner-readable
+//
+// users/{uid}/progress/main
+//   Functions-authored aggregates; owner-readable
+//
+// tableSetups/{setupKey}/situations/{situationId}
+//   Private server-generated pool; Admin SDK only
+// ===============================================================
+
 service cloud.firestore {
   match /databases/{database}/documents {
     function signedIn() {
@@ -13,37 +33,154 @@ service cloud.firestore {
       return signedIn() && request.auth.uid == uid;
     }
 
-    // Profile, prefs, stats, mistakes, played history — owner only.
+    function isRecent(value) {
+      return value is timestamp
+        && value >= request.time - duration.value(5, 'm')
+        && value <= request.time + duration.value(1, 'm');
+    }
+
+    function validDisplayName(value) {
+      return value is string && value.size() >= 1 && value.size() <= 18;
+    }
+
+    function validAvatarRef(value) {
+      return value is string
+        && value.size() <= 2048
+        && (
+          value == ''
+          || value.matches('^builtin:(spade|heart|diamond|club|chip|crown|button|star)$')
+          || value.matches('^https://firebasestorage.googleapis.com/.*$')
+        );
+    }
+
+    function validPreferences(value) {
+      return value is map
+        && value.keys().hasAll([
+          'smallBlind',
+          'bigBlind',
+          'seatCount',
+          'stackDepthBb',
+          'autoRebuy',
+          'rebuyThresholdBb',
+          'chipDisplayMode',
+          'lineupMode',
+          'customArchetypes'
+        ])
+        && value.keys().hasOnly([
+          'smallBlind',
+          'bigBlind',
+          'seatCount',
+          'stackDepthBb',
+          'autoRebuy',
+          'rebuyThresholdBb',
+          'chipDisplayMode',
+          'lineupMode',
+          'customArchetypes'
+        ])
+        && value.smallBlind is number
+        && value.smallBlind > 0
+        && value.smallBlind <= 100000
+        && value.bigBlind is number
+        && value.bigBlind >= value.smallBlind
+        && value.bigBlind <= 200000
+        && value.seatCount is int
+        && value.seatCount >= 2
+        && value.seatCount <= 9
+        && value.stackDepthBb is int
+        && value.stackDepthBb >= 20
+        && value.stackDepthBb <= 500
+        && value.autoRebuy is bool
+        && value.rebuyThresholdBb is int
+        && value.rebuyThresholdBb >= 0
+        && value.rebuyThresholdBb <= 500
+        && value.chipDisplayMode is string
+        && value.chipDisplayMode in ['dollars', 'bb', 'both']
+        && value.lineupMode is string
+        && value.lineupMode in ['randomPool', 'custom']
+        && value.customArchetypes is string
+        && value.customArchetypes.size() <= 160;
+    }
+
+    function validUser(data) {
+      return data.keys().hasAll([
+          'displayName',
+          'avatarRef',
+          'createdAt',
+          'updatedAt',
+          'preferences'
+        ])
+        && data.keys().hasOnly([
+          'displayName',
+          'avatarRef',
+          'createdAt',
+          'updatedAt',
+          'preferences'
+        ])
+        && validDisplayName(data.displayName)
+        && validAvatarRef(data.avatarRef)
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp
+        && validPreferences(data.preferences);
+    }
+
     match /users/{uid} {
-      allow read, write: if isOwner(uid);
+      allow read: if isOwner(uid);
 
-      match /playedScenarios/{scenarioId} {
-        allow read, write: if isOwner(uid);
+      allow create: if isOwner(uid)
+        && validUser(request.resource.data)
+        && isRecent(request.resource.data.createdAt)
+        && isRecent(request.resource.data.updatedAt);
+
+      allow update: if isOwner(uid)
+        && validUser(request.resource.data)
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.updatedAt == request.time;
+
+      allow delete: if false;
+
+      match /situationReceipts/{situationId} {
+        allow read, write: if false;
       }
 
-      match /mistakes/{mistakeId} {
-        allow read, write: if isOwner(uid);
+      match /handHistory/{handId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
       }
 
-      match /{subcollection}/{docId} {
-        allow read, write: if isOwner(uid);
+      match /progress/{docId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      match /playedScenarios/{id} {
+        allow read, write: if false;
+      }
+
+      match /mistakes/{id} {
+        allow read, write: if false;
+      }
+
+      match /{document=**} {
+        allow read, write: if false;
       }
     }
 
-    // Shared pool: authenticated read; create/delete only via Admin SDK.
-    // Clients may update only timesServed + lastServedAt on existing docs.
+    match /tableSetups/{setupKey} {
+      allow read, write: if false;
+
+      match /situations/{situationId} {
+        allow read, write: if false;
+      }
+
+      match /{document=**} {
+        allow read, write: if false;
+      }
+    }
+
     match /scenarios/{contentHash} {
-      allow read: if signedIn();
-
-      allow create, delete: if false;
-
-      allow update: if signedIn()
-        && resource != null
-        && request.resource.data.diff(resource.data).affectedKeys()
-            .hasOnly(['timesServed', 'lastServedAt']);
+      allow read, write: if false;
     }
 
-    // Deny everything else (including unauthenticated).
     match /{document=**} {
       allow read, write: if false;
     }

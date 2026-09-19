@@ -11,7 +11,7 @@ import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
-import 'package:live_poker_trainer/models/scenario_model.dart';
+import 'package:live_poker_trainer/models/situation_model.dart';
 
 /// Hero / villain action kinds.
 enum PokerActionType { fold, check, call, bet, raise, allIn }
@@ -19,10 +19,7 @@ enum PokerActionType { fold, check, call, bet, raise, allIn }
 /// A resolved player action.
 class PokerAction {
   /// Creates an action.
-  const PokerAction({
-    required this.type,
-    this.amount = 0,
-  });
+  const PokerAction({required this.type, this.amount = 0});
 
   final PokerActionType type;
 
@@ -94,12 +91,13 @@ class PokerEngine {
   ///
   /// Pass [random] only for deterministic tests. Production deals must use the
   /// default generator so consecutive hands never share a frozen seed.
-  PokerEngine({
-    required GameSettingsModel settings,
-    Random? random,
-  })  : _settings = settings,
-        _random = random ?? Random(),
-        _deterministic = random != null;
+  PokerEngine({required GameSettingsModel settings, Random? random})
+    // The public argument remains `settings`; an initializing formal would
+    // make the named parameter private and unusable outside this library.
+    // ignore: prefer_initializing_formals
+    : _settings = settings,
+      _random = random ?? Random(),
+      _deterministic = random != null;
 
   GameSettingsModel _settings;
   final Random _random;
@@ -118,9 +116,47 @@ class PokerEngine {
   /// current betting round but the street has not advanced yet.
   bool _collectEmitted = false;
 
-  /// Forced preflop lead-in for Gemini / offline scenario hands so folds and
-  /// raises animate before the hero's first decision.
-  _ScenarioLeadIn? _leadIn;
+  /// Scripted villain actions from the situation graph (path / interstitial).
+  final List<_QueuedSituationAction> _scriptQueue = [];
+
+  /// Active branching situation for the current hand (null for free cash deals).
+  SituationModel? _situation;
+
+  /// Current graph node id while playing a situation.
+  String? _situationNodeId;
+
+  /// Last hero action key chosen at the current node (for progress logging).
+  String? lastHeroActionKey;
+
+  /// Hero node ids visited this hand (for [recordSituationProgress]).
+  final List<String> pathNodeIds = [];
+
+  /// Action keys chosen at each hero node (parallel to [pathNodeIds]).
+  final List<String> chosenActionKeys = [];
+
+  /// Terminal node reached, if any.
+  String? terminalNodeId;
+
+  /// Hero net chips from the terminal node.
+  double? terminalHeroNetChips;
+
+  /// Pending next node after a scripted node's actions finish.
+  String? _pendingAfterScript;
+
+  SituationModel? get situation => _situation;
+  String? get situationNodeId => _situationNodeId;
+
+  SituationNode? get currentSituationNode {
+    final sit = _situation;
+    final id = _situationNodeId;
+    if (sit == null || id == null) return null;
+    return sit.node(id);
+  }
+
+  HeroDecisionNode? get currentHeroNode {
+    final n = currentSituationNode;
+    return n is HeroDecisionNode ? n : null;
+  }
 
   GameState get state => _state;
   GameSettingsModel get settings => _settings;
@@ -128,8 +164,7 @@ class PokerEngine {
   /// Stable id for the hole-card layout of [state]'s current deal.
   static String dealFingerprint(GameState state) {
     final parts = <String>[
-      for (final p in state.players)
-        p.holeCards.map((c) => c.code).join(','),
+      for (final p in state.players) p.holeCards.map((c) => c.code).join(','),
     ];
     return parts.join('|');
   }
@@ -165,10 +200,11 @@ class PokerEngine {
       if (settings.lineupMode == LineupMode.custom &&
           settings.customArchetypes.isNotEmpty) {
         final idx = i - 1;
-        arch = idx < settings.customArchetypes.length
-            ? settings.customArchetypes[idx]
-            : settings.customArchetypes[
-                idx % settings.customArchetypes.length];
+        arch =
+            idx < settings.customArchetypes.length
+                ? settings.customArchetypes[idx]
+                : settings.customArchetypes[idx %
+                    settings.customArchetypes.length];
       } else {
         arch = pool[(i - 1) % pool.length];
         // Occasionally remix so large tables still feel varied.
@@ -179,12 +215,7 @@ class PokerEngine {
       final name = ArchetypeRoster.uniqueName(arch, usedNames);
       usedNames.add(name);
       players.add(
-        PlayerModel(
-          id: i,
-          name: name,
-          archetype: arch,
-          stack: stack,
-        ),
+        PlayerModel(id: i, name: name, archetype: arch, stack: stack),
       );
     }
     return players;
@@ -208,8 +239,8 @@ class PokerEngine {
 
     final n = players.length;
     final dealer = dealerIndex ?? (_stateOrDefaultDealer(n));
-    final sb = (dealer + 1) % n;
-    final bb = (dealer + 2) % n;
+    final sb = _smallBlindSeat(dealer, n);
+    final bb = _bigBlindSeat(dealer, n);
 
     players = [
       for (final p in players)
@@ -224,9 +255,12 @@ class PokerEngine {
     ];
 
     _collectEmitted = false;
-    _leadIn = null;
+    _clearSituationPlay();
     final handCount = _tryHandCount() + 1;
-    players = _dealUniqueHoles(players, previousFingerprint: _lastDealFingerprint);
+    players = _dealUniqueHoles(
+      players,
+      previousFingerprint: _lastDealFingerprint,
+    );
 
     players = _postBlind(players, sb, _settings.smallBlind);
     players = _postBlind(players, bb, _settings.bigBlind);
@@ -257,9 +291,11 @@ class PokerEngine {
       heroInvestedThisHand: heroBet,
       waitingForHero: players[firstToAct].isHero,
       isHandOver: false,
-      // Never carry a prior hand's result / scenario into the new deal.
+      // Never carry a prior hand's result / situation into the new deal.
       resultMessage: null,
-      activeScenario: null,
+      activeSituation: null,
+      winnerIds: const [],
+      awardedPot: 0,
     );
     _lastDealFingerprint = dealFingerprint(_state);
 
@@ -304,8 +340,7 @@ class PokerEngine {
   GameState startCashHand({
     List<PlayerModel>? existingPlayers,
     int? dealerIndex,
-  }) =>
-      startHand(existingPlayers: existingPlayers, dealerIndex: dealerIndex);
+  }) => startHand(existingPlayers: existingPlayers, dealerIndex: dealerIndex);
 
   int _stateOrDefaultDealer(int n) {
     try {
@@ -315,6 +350,14 @@ class PokerEngine {
     }
   }
 
+  static int _smallBlindSeat(int dealer, int seatCount) =>
+      seatCount == 2 ? dealer : (dealer + 1) % seatCount;
+
+  static int _bigBlindSeat(int dealer, int seatCount) =>
+      seatCount == 2
+          ? (dealer + 1) % seatCount
+          : (dealer + 2) % seatCount;
+
   int _tryHandCount() {
     try {
       return _state.handCount;
@@ -323,179 +366,35 @@ class PokerEngine {
     }
   }
 
-  /// Injects a practice scenario at the decision spot (hero to act now).
+  /// Deals a server-authored branching situation from its root node.
   ///
-  /// Used by [ScenarioGrader] / EV stamping. Live training should call
-  /// [dealScenarioHand] instead so prior action replays from preflop.
-  ///
-  /// When [existingPlayers] is provided (continue-table), stacks are copied by
-  /// seat index before auto-rebuy so bankrolls persist across spots.
-  GameState startPracticeScenario(
-    ScenarioModel scenario, {
+  /// Enters the root (often a scripted blind-post node). [nextEvent] plays
+  /// scripted seats, then waits at the first hero decision.
+  GameState dealSituationHand(
+    SituationModel situation, {
     List<PlayerModel>? existingPlayers,
   }) {
-    _leadIn = null;
-    final prepared = _prepareScenarioLineup(
-      scenario,
+    _clearSituationPlay();
+    _situation = situation;
+
+    final stackBb =
+        situation.bigBlind > 0
+            ? (situation.startingStack / situation.bigBlind).round()
+            : 100;
+    _settings = _settings.copyWith(
+      seatCount: situation.seatCount.clamp(2, 9),
+      smallBlind: situation.smallBlind,
+      bigBlind: situation.bigBlind,
+      stackDepthBb: stackBb.clamp(20, 500),
+    );
+
+    final players = _buildSituationLineup(
+      situation,
       existingPlayers: existingPlayers,
-      includeBoardInDeckDead: true,
     );
-    var players = prepared.players;
     final n = players.length;
-    final villainSeat = prepared.villainSeat;
-    final street = prepared.street;
-    final dealer = prepared.dealer;
-    final sb = prepared.sb;
-    final bb = prepared.bb;
-    final callAmt = scenario.callAmount;
-    var highest = 0.0;
-    int? lastAggressor;
-    var mainPot = scenario.potSize;
+    final dealer = situation.buttonSeat.clamp(0, n - 1);
 
-    if (street == Street.preflop) {
-      players = _postBlind(players, sb, _settings.smallBlind);
-      players = _postBlind(players, bb, _settings.bigBlind);
-      highest = _settings.bigBlind;
-
-      final order = preflopActionOrder(dealerIndex: dealer, seatCount: n);
-      final heroOrd = order.indexOf(0);
-      for (var i = 0; i < heroOrd; i++) {
-        final seat = order[i];
-        if (callAmt > Money.epsilon && seat == villainSeat) continue;
-        players = _markFolded(players, seat);
-      }
-
-      if (callAmt > Money.epsilon) {
-        final raiseTo = Money.round(players[0].currentBet + callAmt);
-        players = _setStreetBet(
-          players,
-          villainSeat,
-          raiseTo,
-          label: 'RAISE',
-        );
-        highest = raiseTo;
-        lastAggressor = villainSeat;
-      }
-    } else {
-      for (var i = 1; i < n; i++) {
-        if (i == villainSeat) continue;
-        players = _markFolded(players, i);
-      }
-      if (callAmt > Money.epsilon) {
-        players = _setStreetBet(
-          players,
-          villainSeat,
-          callAmt,
-          label: 'BET',
-        );
-        highest = callAmt;
-        lastAggressor = villainSeat;
-      }
-    }
-
-    final betSum = players.fold<double>(0, (s, p) => s + p.currentBet);
-    mainPot = Money.roundNonNegative(scenario.potSize - betSum);
-
-    _collectEmitted = false;
-    _state = GameState(
-      players: players,
-      mode: GameMode.training,
-      community: scenario.boardCards,
-      mainPot: mainPot,
-      street: street,
-      dealerIndex: dealer,
-      sbIndex: sb,
-      bbIndex: bb,
-      activePlayerIndex: 0,
-      highestBet: highest,
-      minRaise: scenario.minRaise > 0 ? scenario.minRaise : _settings.bigBlind,
-      smallBlind: _settings.smallBlind,
-      bigBlind: _settings.bigBlind,
-      lastAggressor: lastAggressor,
-      heroLine: const [],
-      handCount: _tryHandCount() + 1,
-      activeScenario: scenario,
-      heroInvestedThisHand: players[0].currentBet,
-      waitingForHero: true,
-      isHandOver: false,
-      resultMessage: null,
-      winnerIds: const [],
-      awardedPot: 0,
-    );
-    _lastDealFingerprint = dealFingerprint(_state);
-    return _state;
-  }
-
-  /// Deals a Gemini / offline scenario as a live hand from preflop.
-  ///
-  /// Hero receives the scenario hole cards and the featured villain archetype.
-  /// Mid-street board cards are ignored so every training hand begins preflop.
-  /// Seats before hero fold on a script (featured villain raises when
-  /// [ScenarioModel.callAmount] is positive); [nextEvent] replays those
-  /// actions before the hero's first decision. After hero acts, normal AI
-  /// continues for the rest of the hand.
-  GameState dealScenarioHand(
-    ScenarioModel scenario, {
-    List<PlayerModel>? existingPlayers,
-  }) {
-    final prepared = _prepareScenarioLineup(
-      scenario,
-      existingPlayers: existingPlayers,
-      includeBoardInDeckDead: false,
-    );
-    var players = prepared.players;
-    final n = players.length;
-    final dealer = prepared.dealer;
-    final sb = prepared.sb;
-    final bb = prepared.bb;
-
-    players = _postBlind(players, sb, _settings.smallBlind);
-    players = _postBlind(players, bb, _settings.bigBlind);
-
-    final order = preflopActionOrder(dealerIndex: dealer, seatCount: n);
-    final heroOrd = order.indexOf(0);
-    final callAmt = scenario.callAmount;
-    var raiseSeat = prepared.villainSeat;
-    if (callAmt > Money.epsilon) {
-      raiseSeat = _raiserSeatBeforeHero(
-        preferred: prepared.villainSeat,
-        order: order,
-        heroOrd: heroOrd,
-        dealer: dealer,
-      );
-      if (raiseSeat != prepared.villainSeat) {
-        final raiser = players[raiseSeat];
-        final old = players[prepared.villainSeat];
-        players = [
-          for (var i = 0; i < n; i++)
-            if (i == raiseSeat)
-              raiser.copyWith(
-                archetype: scenario.villainArchetype,
-                name: old.name,
-              )
-            else if (i == prepared.villainSeat)
-              old.copyWith(
-                archetype: raiser.archetype,
-                name: raiser.name,
-              )
-            else
-              players[i],
-        ];
-      }
-    }
-
-    final foldSeats = <int>{
-      for (var i = 0; i < heroOrd; i++)
-        if (!(callAmt > Money.epsilon && order[i] == raiseSeat)) order[i],
-    };
-
-    _leadIn = _ScenarioLeadIn(
-      foldSeats: foldSeats,
-      raiseSeat: callAmt > Money.epsilon ? raiseSeat : null,
-      heroCallAmount: callAmt > Money.epsilon ? callAmt : null,
-    );
-
-    final firstToAct = order.first;
     _collectEmitted = false;
     _state = GameState(
       players: players,
@@ -504,35 +403,232 @@ class PokerEngine {
       mainPot: 0,
       street: Street.preflop,
       dealerIndex: dealer,
-      sbIndex: sb,
-      bbIndex: bb,
-      activePlayerIndex: firstToAct,
-      highestBet: _settings.bigBlind,
-      minRaise: _settings.bigBlind,
-      smallBlind: _settings.smallBlind,
-      bigBlind: _settings.bigBlind,
+      sbIndex: _smallBlindSeat(dealer, n),
+      bbIndex: _bigBlindSeat(dealer, n),
+      activePlayerIndex: situation.heroSeat.clamp(0, n - 1),
+      highestBet: 0,
+      minRaise: situation.bigBlind,
+      smallBlind: situation.smallBlind,
+      bigBlind: situation.bigBlind,
       lastAggressor: null,
       heroLine: const [],
       handCount: _tryHandCount() + 1,
-      activeScenario: scenario,
-      heroInvestedThisHand: players[0].currentBet,
-      waitingForHero: firstToAct == 0,
+      activeSituation: situation,
+      heroInvestedThisHand: 0,
+      waitingForHero: false,
       isHandOver: false,
       resultMessage: null,
       winnerIds: const [],
       awardedPot: 0,
     );
+
+    _enterSituationNode(situation.rootNodeId);
     _lastDealFingerprint = dealFingerprint(_state);
     return _state;
   }
 
-  /// Shared lineup / holes / positions for scenario deals.
-  _PreparedScenario _prepareScenarioLineup(
-    ScenarioModel scenario, {
-    List<PlayerModel>? existingPlayers,
-    required bool includeBoardInDeckDead,
+  /// Applies a hero edge choice: records progress keys, animates the action,
+  /// then enters [HeroActionEdge.nextNodeId].
+  HeroActionEdge? applySituationHeroChoice({
+    required HeroActionEdge edge,
+    required PokerAction action,
   }) {
-    final seatCount = scenario.tableSize.clamp(2, 9);
+    final node = currentHeroNode;
+    if (node == null) return null;
+
+    lastHeroActionKey = edge.actionKey;
+    pathNodeIds.add(node.id);
+    chosenActionKeys.add(edge.actionKey);
+
+    _scriptQueue.clear();
+    final heroIdx = _state.players.indexWhere((p) => p.isHero);
+    _state = _applyAction(_state, heroIdx, action, isHero: true);
+
+    _enterSituationNode(edge.nextNodeId);
+    return edge;
+  }
+
+  /// After a scripted queue drains, advance to the pending next node.
+  void syncSituationNodeAfterScript() {
+    if (_scriptQueue.isNotEmpty) return;
+    final next = _pendingAfterScript;
+    if (next == null || next.isEmpty) return;
+    _pendingAfterScript = null;
+    _enterSituationNode(next);
+  }
+
+  void _enterSituationNode(String nodeId) {
+    final sit = _situation;
+    if (sit == null) return;
+    final node = sit.node(nodeId);
+    if (node == null) {
+      throw StateError('Unknown situation node $nodeId');
+    }
+    _situationNodeId = nodeId;
+
+    switch (node) {
+      case ScriptedNode(:final actions, :final nextNodeId):
+        _snapTableFromNode(
+          street: node.street,
+          pot: node.pot,
+          stacks: node.stacks,
+          streetBets: node.streetBets,
+          board: node.board,
+          foldedSeats: node.foldedSeats,
+          toAct: actions.isNotEmpty ? actions.first.seat : sit.heroSeat,
+          minRaiseTo: _state.bigBlind,
+          waitingForHero: false,
+        );
+        _scriptQueue
+          ..clear()
+          ..addAll([
+            for (final a in actions)
+              _QueuedSituationAction(seat: a.seat, action: a),
+          ]);
+        _pendingAfterScript = nextNodeId;
+        if (_scriptQueue.isEmpty) {
+          syncSituationNodeAfterScript();
+        }
+      case HeroDecisionNode(
+        :final pot,
+        :final stacks,
+        :final streetBets,
+        :final board,
+        :final foldedSeats,
+        :final toAct,
+        :final minRaiseTo,
+      ):
+        _pendingAfterScript = null;
+        _scriptQueue.clear();
+        _snapTableFromNode(
+          street: node.street,
+          pot: pot,
+          stacks: stacks,
+          streetBets: streetBets,
+          board: board,
+          foldedSeats: foldedSeats,
+          toAct: toAct,
+          minRaiseTo: minRaiseTo > 0 ? minRaiseTo : _state.bigBlind,
+          waitingForHero: true,
+        );
+      case TerminalNode(
+        :final pot,
+        :final board,
+        :final stacks,
+        :final winnerSeats,
+        :final summary,
+        :final reason,
+        :final foldedSeats,
+      ):
+        _pendingAfterScript = null;
+        _scriptQueue.clear();
+        terminalNodeId = node.id;
+        final heroSeat = sit.heroSeat.clamp(0, _state.players.length - 1);
+        final payouts = Money.splitPot(pot, winnerSeats);
+        final players = [
+          for (var i = 0; i < _state.players.length; i++)
+            _state.players[i].copyWith(
+              stack: Money.round(stacks[i] + (payouts[i] ?? 0)),
+              currentBet: 0,
+              folded: foldedSeats.contains(i),
+              allIn: false,
+              hasActedThisRound: false,
+              clearLastAction: true,
+            ),
+        ];
+        final heroStartingStack =
+            sit.lineup
+                .firstWhere((seat) => seat.seat == heroSeat)
+                .startingStack;
+        terminalHeroNetChips = players[heroSeat].stack - heroStartingStack;
+        _state = _state.copyWith(
+          players: players,
+          community: List<CardModel>.from(board),
+          mainPot: 0,
+          street: node.street == Street.showdown ? Street.river : node.street,
+          isHandOver: true,
+          waitingForHero: false,
+          awardedPot: pot,
+          winnerIds: List<int>.from(winnerSeats),
+          resultMessage:
+              summary?.isNotEmpty == true
+                  ? summary
+                  : 'Hand over (${reason.wire})',
+        );
+    }
+  }
+
+  void _snapTableFromNode({
+    required Street street,
+    required double pot,
+    required List<double> stacks,
+    required List<double> streetBets,
+    required List<CardModel> board,
+    required List<int> foldedSeats,
+    required int toAct,
+    required double minRaiseTo,
+    required bool waitingForHero,
+  }) {
+    final n = _state.players.length;
+    final players = [
+      for (var i = 0; i < n; i++)
+        _state.players[i].copyWith(
+          stack: i < stacks.length ? stacks[i] : _state.players[i].stack,
+          currentBet: i < streetBets.length ? streetBets[i] : 0,
+          folded: foldedSeats.contains(i),
+          allIn:
+              (i < stacks.length ? stacks[i] : 0) <= Money.epsilon &&
+              (i < streetBets.length ? streetBets[i] : 0) <= Money.epsilon,
+          hasActedThisRound: false,
+          holeCards: _state.players[i].holeCards,
+          clearLastAction: true,
+        ),
+    ];
+    final highest = players.fold<double>(
+      0,
+      (m, p) => p.currentBet > m ? p.currentBet : m,
+    );
+    final dealer = _situation!.buttonSeat.clamp(0, n - 1);
+    final heroSeat = _situation!.heroSeat.clamp(0, n - 1);
+    _state = _state.copyWith(
+      players: players,
+      community: List<CardModel>.from(board),
+      mainPot: Money.roundNonNegative(
+        pot - players.fold<double>(0, (s, p) => s + p.currentBet),
+      ).clamp(0, double.infinity),
+      street: street == Street.showdown ? Street.river : street,
+      dealerIndex: dealer,
+      sbIndex: _smallBlindSeat(dealer, n),
+      bbIndex: _bigBlindSeat(dealer, n),
+      highestBet: highest,
+      minRaise: Money.roundNonNegative(
+        minRaiseTo - highest,
+      ).clamp(_state.bigBlind, double.infinity),
+      activePlayerIndex: toAct.clamp(0, n - 1),
+      waitingForHero: waitingForHero,
+      isHandOver: false,
+      clearResult: true,
+      heroInvestedThisHand: players[heroSeat].currentBet,
+    );
+  }
+
+  void _clearSituationPlay() {
+    _scriptQueue.clear();
+    _situation = null;
+    _situationNodeId = null;
+    lastHeroActionKey = null;
+    pathNodeIds.clear();
+    chosenActionKeys.clear();
+    terminalNodeId = null;
+    terminalHeroNetChips = null;
+    _pendingAfterScript = null;
+  }
+
+  List<PlayerModel> _buildSituationLineup(
+    SituationModel situation, {
+    List<PlayerModel>? existingPlayers,
+  }) {
+    final seatCount = situation.seatCount.clamp(2, 9);
     final settings = _settings.copyWith(seatCount: seatCount);
     var players = buildLineup(settings: settings, random: _random);
 
@@ -540,193 +636,147 @@ class PokerEngine {
       players = [
         for (var i = 0; i < players.length; i++)
           players[i].copyWith(
-            stack: i < existingPlayers.length
-                ? existingPlayers[i].stack
-                : players[i].stack,
+            stack:
+                i < existingPlayers.length
+                    ? existingPlayers[i].stack
+                    : players[i].stack,
           ),
       ];
     }
-    players = _applyAutoRebuy(players);
 
-    final usedNames = <String>{};
-    final heroName = players[0].name;
-    if (heroName.isNotEmpty) usedNames.add(heroName);
-    final n = players.length;
-    final villainSeat = scenario.villainSeat.clamp(1, n - 1);
+    final bySeat = {for (final s in situation.lineup) s.seat: s};
+    final holesBySeat = {
+      for (final entry in situation.holeCards) entry.seat: entry.cards,
+    };
+    final usedNames = <String>{'Hero'};
+    final heroSeat = situation.heroSeat.clamp(0, players.length - 1);
     final renamed = <PlayerModel>[];
-    for (var i = 0; i < n; i++) {
-      if (i == 0) {
-        renamed.add(players[i].copyWith(holeCards: scenario.heroHand));
+    for (var i = 0; i < players.length; i++) {
+      final seatInfo = bySeat[i];
+      final start = seatInfo?.startingStack ?? situation.startingStack;
+      if (i == heroSeat) {
+        renamed.add(
+          players[i].copyWith(
+            stack: start,
+            holeCards: holesBySeat[i] ?? situation.heroHand,
+            name:
+                (seatInfo?.name.isNotEmpty ?? false)
+                    ? seatInfo!.name
+                    : players[i].name,
+            archetype: PlayerArchetype.hero,
+          ),
+        );
         continue;
       }
-      final arch =
-          i == villainSeat ? scenario.villainArchetype : players[i].archetype;
-      final name = ArchetypeRoster.uniqueName(arch, usedNames);
+      final arch = seatInfo?.playerArchetype ?? players[i].archetype;
+      final name =
+          (seatInfo?.name.isNotEmpty ?? false)
+              ? seatInfo!.name
+              : ArchetypeRoster.uniqueName(arch, usedNames);
       usedNames.add(name);
       renamed.add(
         players[i].copyWith(
+          stack: start,
           archetype: arch,
           name: name,
+          holeCards: holesBySeat[i] ?? const [],
         ),
       );
     }
     players = renamed;
 
-    final dead = <String>{
-      for (final c in scenario.heroHand) c.code,
-      if (includeBoardInDeckDead)
-        for (final c in scenario.boardCards) c.code,
+    final dead = {
+      for (final entry in situation.holeCards)
+        for (final card in entry.cards) card.code,
     };
+    for (final r in situation.runouts) {
+      for (final c in r.cards) {
+        dead.add(c.code);
+      }
+    }
     _deck = [
       for (final c in DeckEvaluator.buildShuffledDeck(_random))
         if (!dead.contains(c.code)) c,
     ];
-    players = [
-      for (final p in players)
-        if (p.isHero)
-          p
-        else
-          p.copyWith(holeCards: [_deck.removeLast(), _deck.removeLast()]),
-    ];
-
-    final street = switch (scenario.boardCards.length) {
-      0 => Street.preflop,
-      3 => Street.flop,
-      4 => Street.turn,
-      _ => Street.river,
-    };
-    final dealer = dealerIndexForHeroPosition(scenario.heroPosition, n);
-    return _PreparedScenario(
-      players: players,
-      villainSeat: villainSeat,
-      street: street,
-      dealer: dealer,
-      sb: (dealer + 1) % n,
-      bb: (dealer + 2) % n,
-    );
+    return players;
   }
 
-  /// Seat that raises into hero when the scenario faces a bet.
-  static int _raiserSeatBeforeHero({
-    required int preferred,
-    required List<int> order,
-    required int heroOrd,
-    required int dealer,
-  }) {
-    if (heroOrd > 0 && order.indexOf(preferred) < heroOrd) return preferred;
-    final btnOrd = order.indexOf(dealer);
-    if (btnOrd >= 0 && btnOrd < heroOrd) return dealer;
-    if (heroOrd > 0) return order[heroOrd - 1];
-    return preferred;
-  }
-
-  /// Dealer seat so hero (seat 0) matches [heroPosition] (BTN / SB / BB / …).
-  static int dealerIndexForHeroPosition(String heroPosition, int seatCount) {
-    final n = seatCount.clamp(2, 9);
-    final want = _normalizePosition(heroPosition);
-    for (var dealer = 0; dealer < n; dealer++) {
-      final sb = (dealer + 1) % n;
-      final bb = (dealer + 2) % n;
-      if (_positionLabelAt(0, n, dealer, sb, bb) == want) return dealer;
+  PokerAction? _scriptedActionFor(GameState state, int seat) {
+    if (_scriptQueue.isEmpty) return null;
+    final next = _scriptQueue.first;
+    if (next.seat != seat) {
+      if (!_canStillAct(state.players[seat])) return null;
+      final call = state.callAmountFor(state.players[seat]);
+      if (call > Money.epsilon) {
+        return const PokerAction(type: PokerActionType.fold);
+      }
+      return const PokerAction(type: PokerActionType.check);
     }
-    return 0;
+    _scriptQueue.removeAt(0);
+    return _pokerActionFromScripted(state, next.action);
   }
 
-  /// Preflop act order from UTG through BB (dealer is last among blinds).
-  static List<int> preflopActionOrder({
-    required int dealerIndex,
-    required int seatCount,
-  }) {
-    final n = seatCount;
-    final bb = (dealerIndex + 2) % n;
-    final utg = (bb + 1) % n;
-    return [for (var i = 0; i < n; i++) (utg + i) % n];
+  PokerAction _pokerActionFromScripted(GameState state, ScriptedAction action) {
+    final seat = action.seat.clamp(0, state.players.length - 1);
+    final player = state.players[seat];
+    final callAmt = state.callAmountFor(player);
+    final allInTo = Money.round(player.stack + player.currentBet);
+    final amountTo = action.amountTo;
+
+    switch (action.kind) {
+      case SituationActionKind.fold:
+        return const PokerAction(type: PokerActionType.fold);
+      case SituationActionKind.check:
+        return const PokerAction(type: PokerActionType.check);
+      case SituationActionKind.call:
+        return PokerAction(type: PokerActionType.call, amount: callAmt);
+      case SituationActionKind.postSb:
+      case SituationActionKind.postBb:
+      case SituationActionKind.postAnte:
+      case SituationActionKind.bet:
+      case SituationActionKind.raise:
+      case SituationActionKind.allIn:
+        final raiseTo = amountTo ?? allInTo;
+        if (raiseTo >= allInTo - Money.epsilon) {
+          return PokerAction(type: PokerActionType.allIn, amount: allInTo);
+        }
+        if (action.kind == SituationActionKind.postSb ||
+            action.kind == SituationActionKind.postBb ||
+            action.kind == SituationActionKind.postAnte) {
+          // Treat blind posts as raising the street commitment.
+          return PokerAction(type: PokerActionType.bet, amount: raiseTo);
+        }
+        if (raiseTo <= state.highestBet + Money.epsilon) {
+          if (callAmt <= Money.epsilon) {
+            return const PokerAction(type: PokerActionType.check);
+          }
+          return PokerAction(type: PokerActionType.call, amount: callAmt);
+        }
+        final isBet = state.highestBet <= Money.epsilon;
+        return PokerAction(
+          type: isBet ? PokerActionType.bet : PokerActionType.raise,
+          amount: raiseTo,
+        );
+    }
   }
 
-  static String _normalizePosition(String raw) {
-    final p = raw.trim().toUpperCase();
-    return switch (p) {
-      'BU' || 'BUTTON' || 'DEALER' => 'BTN',
-      'SMALL BLIND' || 'SMALL' => 'SB',
-      'BIG BLIND' || 'BIG' => 'BB',
-      'CUTOFF' => 'CO',
-      'HIJACK' => 'HJ',
-      'UTG1' || 'UTG +1' => 'UTG+1',
-      'MP1' => 'MP',
-      'MP2' || 'MP+1' => 'MP+1',
-      _ => p,
-    };
-  }
-
-  static String _positionLabelAt(
-    int seatIndex,
-    int n,
-    int dealerIndex,
-    int sbIndex,
-    int bbIndex,
-  ) {
-    if (seatIndex == dealerIndex) return 'BTN';
-    if (seatIndex == sbIndex) return 'SB';
-    if (seatIndex == bbIndex) return 'BB';
-    final utg = (bbIndex + 1) % n;
-    var offset = (seatIndex - utg) % n;
-    if (offset < 0) offset += n;
-    const early = ['UTG', 'UTG+1', 'MP', 'MP+1', 'HJ', 'CO'];
-    if (offset < early.length) return early[offset];
-    return 'MP';
-  }
-
-  List<PlayerModel> _markFolded(List<PlayerModel> players, int idx) {
-    final updated = List<PlayerModel>.from(players);
-    updated[idx] = updated[idx].copyWith(
-      folded: true,
-      hasActedThisRound: true,
-      lastActionLabel: 'FOLD',
-      currentBet: 0,
-    );
-    return updated;
-  }
-
-  /// Sets [idx]'s street commitment to [to], adjusting stack by the delta.
-  List<PlayerModel> _setStreetBet(
-    List<PlayerModel> players,
-    int idx,
-    double to, {
-    required String label,
-  }) {
-    final updated = List<PlayerModel>.from(players);
-    final p = updated[idx];
-    final target = Money.round(to);
-    final already = p.currentBet;
-    final add = Money.roundNonNegative(target - already);
-    final pay = add > p.stack ? p.stack : add;
-    final newBet = Money.round(already + pay);
-    final newStack = Money.roundNonNegative(p.stack - pay);
-    updated[idx] = p.copyWith(
-      stack: newStack,
-      currentBet: newBet,
-      folded: false,
-      allIn: newStack <= Money.epsilon,
-      hasActedThisRound: true,
-      lastActionLabel: label,
-    );
-    return updated;
+  /// Soft grade — situations use edge coaching strings, not local EV.
+  ({bool correct, double sizingErrorBb}) gradeHeroAction(PokerAction action) {
+    return (correct: true, sizingErrorBb: 0);
   }
 
   /// Applies a hero action without playing out the villains.
   ///
   /// Pair with [nextEvent] to replay the rest of the street step by step.
+  /// Situation hands should prefer [applySituationHeroChoice].
   GameState submitHeroAction(PokerAction action) {
     var state = _state;
     if (!state.waitingForHero || state.isHandOver) return state;
     if (state.hero.folded) return state;
 
-    // Lead-in only scripts action before the hero's first decision.
-    _leadIn = null;
+    _scriptQueue.clear();
 
     final heroIdx = state.players.indexWhere((p) => p.isHero);
-    // [_applyAction] already sets waitingForHero / isHandOver for the next
-    // seat — do not force waitingForHero false or mid-hand can desync.
     _state = _applyAction(state, heroIdx, action, isHero: true);
     return _state;
   }
@@ -753,11 +803,23 @@ class PokerEngine {
         return null;
       }
 
-      if (_isRoundComplete(s)) {
-        final hasBets =
-            s.players.any((p) => p.currentBet > Money.epsilon);
+      // Situation hands follow the authored script queue; do not auto-advance
+      // streets via AI until the queue / pending node is consumed.
+      if (_situation != null &&
+          _scriptQueue.isEmpty &&
+          _pendingAfterScript != null) {
+        syncSituationNodeAfterScript();
+        s = _state;
+        if (s.isHandOver) {
+          return TableEvent(kind: TableEventKind.handOver, state: s);
+        }
+        if (s.waitingForHero) return null;
+        continue;
+      }
+
+      if (_situation == null && _isRoundComplete(s)) {
+        final hasBets = s.players.any((p) => p.currentBet > Money.epsilon);
         if (hasBets && !_collectEmitted) {
-          // Let the UI slide the street's chips into the pot first.
           _collectEmitted = true;
           _state = s;
           return TableEvent(kind: TableEventKind.collectPot, state: s);
@@ -779,25 +841,47 @@ class PokerEngine {
         continue;
       }
 
-      final idx = s.activePlayerIndex;
+      final idx =
+          _situation != null && _scriptQueue.isNotEmpty
+              ? _scriptQueue.first.seat.clamp(0, s.players.length - 1)
+              : s.activePlayerIndex;
       final player = s.players[idx];
       if (!_canStillAct(player)) {
         s = _advanceToNextPlayer(s);
+        _state = s;
         continue;
       }
-      if (player.isHero) {
+      if (player.isHero && _scriptQueue.isEmpty) {
         s = s.copyWith(waitingForHero: true);
         _state = s;
         return null;
       }
 
+      final isForcedPost =
+          _scriptQueue.isNotEmpty &&
+          _scriptQueue.first.seat == idx &&
+          _isForcedPost(_scriptQueue.first.action.kind);
       final decision = _villainDecision(s, idx);
-      s = _applyAction(s, idx, decision);
+      s = _applyAction(s, idx, decision, isForcedPost: isForcedPost);
+      if (_situation != null && _scriptQueue.isNotEmpty) {
+        s = s.copyWith(
+          activePlayerIndex: _scriptQueue.first.seat.clamp(
+            0,
+            s.players.length - 1,
+          ),
+          waitingForHero: false,
+        );
+      }
       _state = s;
+      if (_scriptQueue.isEmpty && _situation != null) {
+        syncSituationNodeAfterScript();
+        s = _state;
+      }
       return TableEvent(
-        kind: s.isHandOver
-            ? TableEventKind.handOver
-            : TableEventKind.villainAction,
+        kind:
+            s.isHandOver
+                ? TableEventKind.handOver
+                : TableEventKind.villainAction,
         state: s,
         seatIndex: idx,
         action: decision,
@@ -817,62 +901,6 @@ class PokerEngine {
     return _state;
   }
 
-  /// Grades hero action against the scenario's EV-stamped optimal line.
-  ///
-  /// Prefer [ScenarioManager.gradeAndRecord] / [LiveCoach.grade] for full-band
-  /// EV grading. This helper compares to [ScenarioModel.optimalExploitAction]
-  /// after [ScenarioGrader.resolveOptimal] has stamped it from DecisionModel.
-  ({bool correct, double sizingErrorBb}) gradeHeroAction(PokerAction action) {
-    final scenario = _state.activeScenario;
-    if (scenario == null) {
-      return (correct: true, sizingErrorBb: 0);
-    }
-
-    final optimal = scenario.optimalExploitAction;
-    final mapped = switch (action.type) {
-      PokerActionType.fold => ExploitAction.fold,
-      PokerActionType.check => ExploitAction.check,
-      PokerActionType.call => ExploitAction.call,
-      PokerActionType.bet ||
-      PokerActionType.raise ||
-      PokerActionType.allIn =>
-        ExploitAction.raise,
-    };
-
-    // Treat CHECK as matching CALL when call is free / optimal is check-ish.
-    var actionMatch = mapped == optimal;
-    if (!actionMatch &&
-        optimal == ExploitAction.call &&
-        mapped == ExploitAction.check &&
-        scenario.callAmount <= 0) {
-      actionMatch = true;
-    }
-    if (!actionMatch &&
-        optimal == ExploitAction.check &&
-        mapped == ExploitAction.call &&
-        scenario.callAmount <= 0) {
-      actionMatch = true;
-    }
-
-    var sizingError = 0.0;
-    if (optimal == ExploitAction.raise &&
-        (mapped == ExploitAction.raise) &&
-        scenario.optimalSizingBb > 0) {
-      final bb = _state.bigBlind;
-      final sizingBb = action.amount / bb;
-      sizingError = (sizingBb - scenario.optimalSizingBb).abs();
-      // Allow ±40% band around optimal sizing.
-      final band = scenario.optimalSizingBb * 0.4;
-      if (sizingError > max(band, 1.0)) {
-        actionMatch = false;
-      } else {
-        actionMatch = true;
-      }
-    }
-
-    return (correct: actionMatch, sizingErrorBb: sizingError);
-  }
-
   /// Lowest legal "raise to" for [player], or their all-in when short.
   static double _minRaiseTo(GameState state, PlayerModel player) {
     final allIn = Money.round(player.stack + player.currentBet);
@@ -887,21 +915,39 @@ class PokerEngine {
   /// Postflop lines come from [VillainModel] frequencies (same tables the coach
   /// uses when narrowing ranges). See [VillainAi] for the RNG contract.
   PokerAction _villainDecision(GameState state, int playerIdx) {
-    final scripted = _leadIn?.actionFor(state, playerIdx, _settings.bigBlind);
+    final scripted = _scriptedActionFor(state, playerIdx);
     if (scripted != null) return scripted;
+
+    // While a situation script is active, never fall through to AI.
+    if (_situation != null && _scriptQueue.isNotEmpty) {
+      final call = state.callAmountFor(state.players[playerIdx]);
+      if (call > Money.epsilon) {
+        return const PokerAction(type: PokerActionType.fold);
+      }
+      return const PokerAction(type: PokerActionType.check);
+    }
+
+    // Branching situations stay on the authored tree — no free AI after hero.
+    if (_situation != null) {
+      final call = state.callAmountFor(state.players[playerIdx]);
+      if (call > Money.epsilon) {
+        return const PokerAction(type: PokerActionType.fold);
+      }
+      return const PokerAction(type: PokerActionType.check);
+    }
 
     final choice = VillainAi.decide(state, playerIdx, _random);
     return switch (choice.line) {
       VillainLine.fold => const PokerAction(type: PokerActionType.fold),
       VillainLine.check => const PokerAction(type: PokerActionType.check),
       VillainLine.call => PokerAction(
-          type: PokerActionType.call,
-          amount: choice.callAmount,
-        ),
+        type: PokerActionType.call,
+        amount: choice.callAmount,
+      ),
       VillainLine.raise => PokerAction(
-          type: PokerActionType.raise,
-          amount: choice.raiseTo,
-        ),
+        type: PokerActionType.raise,
+        amount: choice.raiseTo,
+      ),
     };
   }
 
@@ -910,6 +956,7 @@ class PokerEngine {
     int playerIdx,
     PokerAction action, {
     bool isHero = false,
+    bool isForcedPost = false,
   }) {
     var players = List<PlayerModel>.from(state.players);
     var player = players[playerIdx];
@@ -931,23 +978,23 @@ class PokerEngine {
       case PokerActionType.fold:
         // Free-check rule for non-hero: never fold when check is free.
         if (!isHero && state.callAmountFor(player) <= 0) {
-          setPlayer(player.copyWith(
-            hasActedThisRound: true,
-            lastActionLabel: 'CHECK',
-          ));
+          setPlayer(
+            player.copyWith(hasActedThisRound: true, lastActionLabel: 'CHECK'),
+          );
           break;
         }
-        setPlayer(player.copyWith(
-          folded: true,
-          hasActedThisRound: true,
-          lastActionLabel: 'FOLD',
-        ));
+        setPlayer(
+          player.copyWith(
+            folded: true,
+            hasActedThisRound: true,
+            lastActionLabel: 'FOLD',
+          ),
+        );
         break;
       case PokerActionType.check:
-        setPlayer(player.copyWith(
-          hasActedThisRound: true,
-          lastActionLabel: 'CHECK',
-        ));
+        setPlayer(
+          player.copyWith(hasActedThisRound: true, lastActionLabel: 'CHECK'),
+        );
         break;
       case PokerActionType.call:
         final callAmt = Money.roundNonNegative(
@@ -960,12 +1007,14 @@ class PokerEngine {
       case PokerActionType.raise:
       case PokerActionType.allIn:
         final allInTo = Money.round(player.stack + player.currentBet);
-        var target = action.type == PokerActionType.allIn
-            ? allInTo
-            : Money.round(action.amount);
+        var target =
+            action.type == PokerActionType.allIn
+                ? allInTo
+                : Money.round(action.amount);
         // Non-shove aggression must meet a full min-raise; undersized "raises"
         // from a stale slider or buggy AI would otherwise reopen the street.
-        if (action.type != PokerActionType.allIn &&
+        if (!isForcedPost &&
+            action.type != PokerActionType.allIn &&
             target > highest + Money.epsilon &&
             target < _minRaiseTo(state, player) - Money.epsilon) {
           target = _minRaiseTo(state, player);
@@ -975,22 +1024,27 @@ class PokerEngine {
           min(target - player.currentBet, player.stack),
         );
         final priorHighest = highest;
-        setPlayer(_postChips(
-          player,
-          toAdd,
-          label: action.type == PokerActionType.allIn
-              ? 'ALL-IN'
-              : (priorHighest <= Money.epsilon ? 'BET' : 'RAISE'),
-        ));
-        if (player.currentBet > highest + Money.epsilon) {
+        setPlayer(
+          _postChips(
+            player,
+            toAdd,
+            label:
+                action.type == PokerActionType.allIn
+                    ? 'ALL-IN'
+                    : (priorHighest <= Money.epsilon ? 'BET' : 'RAISE'),
+          ),
+        );
+        if (isForcedPost) {
+          highest = max(highest, player.currentBet);
+          setPlayer(player.copyWith(hasActedThisRound: false));
+        } else if (player.currentBet > highest + Money.epsilon) {
           final raiseSize = Money.round(player.currentBet - highest);
           final fullMin = max(state.minRaise, state.bigBlind);
           // Incomplete (short all-in) raises still pull chips in and update
           // the price, but only a full min-raise reopens action for players
           // who already matched the prior bet — otherwise preflop wars of
           // +1bb "raises" never end.
-          final reopens =
-              !player.allIn || raiseSize + Money.epsilon >= fullMin;
+          final reopens = !player.allIn || raiseSize + Money.epsilon >= fullMin;
           if (reopens) {
             minRaise = Money.round(raiseSize);
           }
@@ -1070,6 +1124,12 @@ class PokerEngine {
     );
     next = _advanceToNextPlayer(next);
     return next;
+  }
+
+  static bool _isForcedPost(SituationActionKind kind) {
+    return kind == SituationActionKind.postAnte ||
+        kind == SituationActionKind.postSb ||
+        kind == SituationActionKind.postBb;
   }
 
   PlayerModel _postChips(PlayerModel player, double amount, {String? label}) {
@@ -1165,7 +1225,11 @@ class PokerEngine {
 
     if (nextStreet == null || nextStreet == Street.showdown) {
       return _showdown(
-        state.copyWith(players: players, mainPot: mainPot, community: community),
+        state.copyWith(
+          players: players,
+          mainPot: mainPot,
+          community: community,
+        ),
       );
     }
 
@@ -1194,8 +1258,7 @@ class PokerEngine {
       minRaise: state.bigBlind,
       clearLastAggressor: true,
       activePlayerIndex: first,
-      waitingForHero:
-          bettingOpen && firstPlayer.isHero && !firstPlayer.folded,
+      waitingForHero: bettingOpen && firstPlayer.isHero && !firstPlayer.folded,
     );
   }
 
@@ -1222,9 +1285,8 @@ class PokerEngine {
     final winners = <PlayerModel>[];
     for (final p in contenders) {
       final cards = [...p.holeCards, ...state.community];
-      final score = cards.length >= 5
-          ? DeckEvaluator.evaluate7Cards(cards).score
-          : 0;
+      final score =
+          cards.length >= 5 ? DeckEvaluator.evaluate7Cards(cards).score : 0;
       if (score > bestScore) {
         bestScore = score;
         winners
@@ -1236,20 +1298,13 @@ class PokerEngine {
     }
 
     final pot = Money.round(state.mainPot);
-    // Split to the cent, then award the odd cents to the first winner so no
-    // chips are created or destroyed.
-    final share = winners.isEmpty ? 0.0 : Money.round(pot / winners.length);
-    final oddCents =
-        winners.isEmpty ? 0.0 : Money.round(pot - share * winners.length);
-    final firstWinnerId = winners.isEmpty ? null : winners.first.id;
     final winnerIds = winners.map((w) => w.id).toSet();
+    final payouts = Money.splitPot(pot, winnerIds);
     final players = [
       for (final p in state.players)
         if (winnerIds.contains(p.id))
           p.copyWith(
-            stack: Money.round(
-              p.stack + share + (p.id == firstWinnerId ? oddCents : 0),
-            ),
+            stack: Money.round(p.stack + (payouts[p.id] ?? 0)),
             currentBet: 0,
           )
         else
@@ -1265,9 +1320,10 @@ class PokerEngine {
       street: Street.showdown,
       isHandOver: true,
       waitingForHero: false,
-      resultMessage: split
-          ? '$names split ${ChipFormat.dollars(pot)}'
-          : '$names wins ${ChipFormat.dollars(pot)}',
+      resultMessage:
+          split
+              ? '$names split ${ChipFormat.dollars(pot)}'
+              : '$names wins ${ChipFormat.dollars(pot)}',
       winnerIds: winners.map((w) => w.id).toList(growable: false),
     );
   }
@@ -1283,64 +1339,10 @@ class PokerEngine {
   }
 }
 
-/// Lineup snapshot shared by [PokerEngine.startPracticeScenario] and
-/// [PokerEngine.dealScenarioHand].
-class _PreparedScenario {
-  const _PreparedScenario({
-    required this.players,
-    required this.villainSeat,
-    required this.street,
-    required this.dealer,
-    required this.sb,
-    required this.bb,
-  });
+/// One pending scripted action from a situation scripted node.
+class _QueuedSituationAction {
+  const _QueuedSituationAction({required this.seat, required this.action});
 
-  final List<PlayerModel> players;
-  final int villainSeat;
-  final Street street;
-  final int dealer;
-  final int sb;
-  final int bb;
-}
-
-/// Forced preflop actions so the felt shows folds / a raise before hero acts.
-class _ScenarioLeadIn {
-  const _ScenarioLeadIn({
-    required this.foldSeats,
-    this.raiseSeat,
-    this.heroCallAmount,
-  });
-
-  final Set<int> foldSeats;
-  final int? raiseSeat;
-  final double? heroCallAmount;
-
-  PokerAction? actionFor(GameState state, int seat, double bigBlind) {
-    if (state.street != Street.preflop) return null;
-
-    if (raiseSeat != null &&
-        seat == raiseSeat &&
-        heroCallAmount != null &&
-        heroCallAmount! > Money.epsilon) {
-      final heroBet = state.players.firstWhere((p) => p.isHero).currentBet;
-      var raiseTo = Money.round(heroBet + heroCallAmount!);
-      final floor = Money.round(state.highestBet + max(state.minRaise, bigBlind));
-      if (raiseTo < floor) raiseTo = floor;
-      final villain = state.players[seat];
-      final allIn = Money.round(villain.stack + villain.currentBet);
-      if (raiseTo > allIn) raiseTo = allIn;
-      if (raiseTo <= state.highestBet + Money.epsilon) {
-        return PokerAction(
-          type: PokerActionType.call,
-          amount: state.callAmountFor(villain),
-        );
-      }
-      return PokerAction(type: PokerActionType.raise, amount: raiseTo);
-    }
-
-    if (foldSeats.contains(seat)) {
-      return const PokerAction(type: PokerActionType.fold);
-    }
-    return null;
-  }
+  final int seat;
+  final ScriptedAction action;
 }

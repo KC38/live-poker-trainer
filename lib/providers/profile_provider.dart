@@ -1,46 +1,18 @@
-/// Riverpod wiring for the hero profile: identity, metrics, cached AI review.
+/// Riverpod wiring for the hero profile: identity and metrics.
 library;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_poker_trainer/core/constants/config.dart';
-import 'package:live_poker_trainer/core/database/hand_history_source.dart';
-import 'package:live_poker_trainer/core/database/profile_database.dart';
 import 'package:live_poker_trainer/engine/hero_profiler.dart';
 import 'package:live_poker_trainer/models/hero_metrics.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
-import 'package:live_poker_trainer/models/mistake_model.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/services/avatar_store.dart';
-import 'package:live_poker_trainer/services/profile_coach.dart';
 
-/// Profile Drift database singleton.
-final profileDatabaseProvider = Provider<ProfileDatabase>((ref) {
-  final db = ProfileDatabase();
-  ref.onDispose(db.close);
-  return db;
-});
-
-/// Avatar file store.
+/// Avatar picker and Firebase Storage uploader.
 final avatarStoreProvider = Provider<AvatarStore>((ref) => AvatarStore());
 
-/// Reader over the shared hand log.
-final handHistorySourceProvider = Provider<HandHistorySource>(
-  (ref) => HandHistorySource(ref.watch(appDatabaseProvider)),
-);
-
-/// Profile review generator. Falls back to offline copy without an API key.
-final profileCoachProvider = Provider<ProfileCoach>((ref) {
-  return Config.hasGeminiKey ? ProfileCoach.gemini() : ProfileCoach();
-});
-
 /// Loads, computes, and mutates the hero profile.
-///
-/// Load order matters for perceived speed: the persisted identity and the last
-/// metric snapshot paint first, then the metrics are recomputed from the hand
-/// log, and only then is a new AI review considered. Every step is wrapped so
-/// a missing plugin, a missing hand log, or an offline device degrades to a
-/// usable screen instead of an error state.
 class HeroProfileController extends StateNotifier<AsyncValue<HeroProfileView>> {
   /// Creates the controller and kicks off the initial load.
   HeroProfileController(this._ref) : super(const AsyncValue.loading()) {
@@ -48,215 +20,131 @@ class HeroProfileController extends StateNotifier<AsyncValue<HeroProfileView>> {
   }
 
   final Ref _ref;
-  bool _busySummary = false;
-
-  ProfileDatabase get _db => _ref.read(profileDatabaseProvider);
-
-  /// Firebase uid when signed in; falls back to local Drift key in tests.
-  String get _userId =>
-      _ref.read(authUidProvider) ?? Config.defaultUserId;
 
   HeroProfileView? get _view => state.valueOrNull;
 
   Future<void> _bootstrap() async {
-    final identity = await _readIdentity();
-    final snapshot = await _guard(() => _db.readSnapshot(userId: _userId));
-    final cached = await _guard(() => _db.readSummary(userId: _userId));
-
-    if (!mounted) return;
-    state = AsyncValue.data(
-      HeroProfileView(
-        identity: identity,
-        metrics: snapshot ?? HeroMetrics.empty(),
-        summary: cached,
-      ),
-    );
-
-    await refreshMetrics();
+    final uid = _ref.read(authUidProvider);
+    if (uid == null) {
+      state = AsyncValue.data(
+        HeroProfileView(
+          identity: const HeroIdentity(),
+          metrics: HeroMetrics.empty(),
+        ),
+      );
+      return;
+    }
+    try {
+      final user = await _ref.read(userDocProvider.future);
+      final hands = await _ref
+          .read(progressRepositoryProvider)
+          .loadHandSamples(uid);
+      if (!mounted) return;
+      state = AsyncValue.data(
+        HeroProfileView(
+          identity: user?.identity ?? const HeroIdentity(),
+          metrics: HeroProfiler.compute(hands, computedAt: DateTime.now()),
+        ),
+      );
+    } catch (error, stackTrace) {
+      if (!mounted) return;
+      state = AsyncValue.error(error, stackTrace);
+    }
   }
 
-  /// Recomputes metrics from the hand log and persists the snapshot.
+  /// Reloads server-authored hand history and recomputes hero metrics.
   Future<void> refreshMetrics() async {
     final current = _view;
     if (current == null) return;
-
-    final hands = await _guard(
-          () => _ref.read(handHistorySourceProvider).recentHands(),
-        ) ??
-        const [];
-    final metrics = HeroProfiler.compute(hands, computedAt: DateTime.now());
-    if (!mounted) return;
-
-    state = AsyncValue.data(current.copyWith(metrics: metrics));
-    await _guard(() => _db.saveSnapshot(metrics, userId: _userId));
-    await refreshSummary();
-  }
-
-  /// Regenerates the coach review when the cache is stale.
-  ///
-  /// Without [force] this is a no-op unless
-  /// [ProfileCoachSummary.needsRefresh] says the cached copy no longer
-  /// describes the player — the screen must not spend an API call per open.
-  Future<void> refreshSummary({bool force = false}) async {
-    final current = _view;
-    if (current == null || _busySummary) return;
-
-    final metrics = current.metrics;
-    final cached = current.summary;
-    final now = DateTime.now();
-    if (!force && cached != null && !cached.needsRefresh(metrics, now)) {
-      return;
-    }
-
-    // Never show an empty card: derive local copy first, then try the model.
-    final mistakes = await _guard(
-          () => _ref.read(mistakeDaoProvider).loadStats(),
-        ) ??
-        const MistakeStats();
-
-    if (cached == null) {
-      final offline = ProfileCoach.offlineSummary(
-        metrics,
-        mistakes: mistakes,
-        now: now,
-      );
-      state = AsyncValue.data(
-        current.copyWith(summary: offline, summaryRefreshing: true),
-      );
-    } else {
-      state = AsyncValue.data(current.copyWith(summaryRefreshing: true));
-    }
-
-    _busySummary = true;
+    final uid = _ref.read(authUidProvider);
+    if (uid == null) return;
     try {
-      final coach = _ref.read(profileCoachProvider);
-      final summary = await coach.summarize(
-        metrics,
-        mistakes: mistakes,
-        now: now,
-      );
+      final hands = await _ref
+          .read(progressRepositoryProvider)
+          .loadHandSamples(uid);
       if (!mounted) return;
-      await _guard(() => _db.saveSummary(summary, userId: _userId));
-      final latest = _view;
-      if (latest == null || !mounted) return;
       state = AsyncValue.data(
-        latest.copyWith(summary: summary, summaryRefreshing: false),
+        current.copyWith(
+          metrics: HeroProfiler.compute(hands, computedAt: DateTime.now()),
+          summary: null,
+        ),
       );
-    } finally {
-      _busySummary = false;
-      final latest = _view;
-      if (mounted && latest != null && latest.summaryRefreshing) {
-        state = AsyncValue.data(latest.copyWith(summaryRefreshing: false));
-      }
+    } catch (error, stackTrace) {
+      if (!mounted) return;
+      state = AsyncValue.error(error, stackTrace);
+      rethrow;
     }
   }
 
-  /// Saves a new display name (sanitized) and updates the hero seat.
+  /// Writes a new display name to Firestore before updating the hero seat.
   Future<void> setDisplayName(String rawName) async {
     final current = _view;
     if (current == null) return;
-    final saved = await _guard(
-      () => _db.saveDisplayName(rawName, userId: _userId),
-    );
     final uid = _ref.read(authUidProvider);
-    if (uid != null) {
-      await _guard(
-        () => _ref.read(userRepositoryProvider).updateProfile(
-              uid: uid,
-              displayName: HeroIdentity.sanitizeName(rawName),
-            ),
+    if (uid == null) return;
+    final name = HeroIdentity.sanitizeName(rawName);
+    try {
+      await _ref
+          .read(userRepositoryProvider)
+          .updateProfile(uid: uid, displayName: name);
+      if (!mounted) return;
+      state = AsyncValue.data(
+        current.copyWith(
+          identity: current.identity.copyWith(displayName: name),
+        ),
       );
+    } catch (error, stackTrace) {
+      if (!mounted) return;
+      state = AsyncValue.error(error, stackTrace);
+      rethrow;
     }
-    if (!mounted) return;
-    state = AsyncValue.data(
-      current.copyWith(
-        identity: saved ??
-            current.identity.copyWith(
-              displayName: HeroIdentity.sanitizeName(rawName),
-            ),
-      ),
-    );
   }
 
-  /// Selects one of the built-in avatars, removing any stored photo.
+  /// Selects one of the built-in avatars.
   Future<void> selectBuiltInAvatar(BuiltInAvatar avatar) async {
-    await _setAvatar(AvatarRef.builtIn(avatar), deletePrevious: true);
+    await _setAvatar(AvatarRef.builtIn(avatar));
   }
 
-  /// Clears the avatar back to initials, removing any stored photo.
+  /// Clears the avatar back to initials.
   Future<void> clearAvatar() async {
-    await _setAvatar(const AvatarRef.none(), deletePrevious: true);
+    await _setAvatar(const AvatarRef.none());
   }
 
-  /// Opens the photo library and stores the chosen picture.
-  ///
-  /// Returns the raw result so the screen can explain a permission denial
-  /// instead of silently doing nothing.
+  /// Opens the photo library, uploads to Storage when signed in, and saves.
   Future<AvatarPickResult> pickAvatarFromLibrary() async {
     final current = _view;
     if (current == null) {
-      return const AvatarPickResult(AvatarPickStatus.failed);
+      return const AvatarPickResult(
+        AvatarPickStatus.failed,
+        message: 'Your profile is still loading.',
+      );
     }
     final store = _ref.read(avatarStoreProvider);
-    final result = await store.pickFromGallery(
-      replacing: current.identity.avatar,
-    );
+    final uid = _ref.read(authUidProvider);
+    final result = await store.pickFromGallery(uploadUid: uid);
     if (result.isSaved) {
-      await _setAvatar(result.avatar!, deletePrevious: false);
+      await _setAvatar(result.avatar!);
     }
     return result;
   }
 
-  Future<void> _setAvatar(
-    AvatarRef avatar, {
-    required bool deletePrevious,
-  }) async {
+  Future<void> _setAvatar(AvatarRef avatar) async {
     final current = _view;
     if (current == null) return;
-    final previous = current.identity.avatar;
-    final saved = await _guard(() => _db.saveAvatar(avatar, userId: _userId));
     final uid = _ref.read(authUidProvider);
-    if (uid != null) {
-      await _guard(
-        () => _ref.read(userRepositoryProvider).updateProfile(
-              uid: uid,
-              avatarRef: avatar.storageValue,
-            ),
-      );
-    }
-    if (deletePrevious && previous.filePath != null) {
-      await _guard(
-        () => _ref.read(avatarStoreProvider).deleteStoredFile(previous),
-      );
-    }
-    if (!mounted) return;
-    state = AsyncValue.data(
-      current.copyWith(
-        identity: saved ?? current.identity.copyWith(avatar: avatar),
-      ),
-    );
-  }
-
-  Future<HeroIdentity> _readIdentity() async {
-    final uid = _ref.read(authUidProvider);
-    if (uid != null) {
-      final cloud = await _guard(() => _ref.read(userDocProvider.future));
-      if (cloud != null) return cloud.identity;
-    }
-    final identity = await _guard(() => _db.readIdentity(userId: _userId));
-    return identity ?? const HeroIdentity();
-  }
-
-  /// Runs [action], swallowing storage and platform failures.
-  ///
-  /// The profile is a read-mostly convenience surface; a database that cannot
-  /// open (web without WASM assets, a widget test with no plugins) must not
-  /// take the screen down with it.
-  Future<T?> _guard<T>(Future<T> Function() action) async {
+    if (uid == null) return;
     try {
-      return await action();
-    } catch (_) {
-      return null;
+      await _ref
+          .read(userRepositoryProvider)
+          .updateProfile(uid: uid, avatarRef: avatar.storageValue);
+      if (!mounted) return;
+      state = AsyncValue.data(
+        current.copyWith(identity: current.identity.copyWith(avatar: avatar)),
+      );
+    } catch (error, stackTrace) {
+      if (!mounted) return;
+      state = AsyncValue.error(error, stackTrace);
+      rethrow;
     }
   }
 }
@@ -264,12 +152,10 @@ class HeroProfileController extends StateNotifier<AsyncValue<HeroProfileView>> {
 /// The hero profile controller.
 final heroProfileControllerProvider =
     StateNotifierProvider<HeroProfileController, AsyncValue<HeroProfileView>>(
-  HeroProfileController.new,
-);
+      HeroProfileController.new,
+    );
 
 /// Hero identity for the table: always resolves, defaulting to `Hero`.
-///
-/// The felt reads this synchronously, so it can never be a loading state.
 final heroIdentityProvider = Provider<HeroIdentity>((ref) {
   return ref.watch(heroProfileControllerProvider).valueOrNull?.identity ??
       const HeroIdentity();
