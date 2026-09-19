@@ -354,9 +354,7 @@ class PokerEngine {
       seatCount == 2 ? dealer : (dealer + 1) % seatCount;
 
   static int _bigBlindSeat(int dealer, int seatCount) =>
-      seatCount == 2
-          ? (dealer + 1) % seatCount
-          : (dealer + 2) % seatCount;
+      seatCount == 2 ? (dealer + 1) % seatCount : (dealer + 2) % seatCount;
 
   int _tryHandCount() {
     try {
@@ -659,6 +657,7 @@ class PokerEngine {
           players[i].copyWith(
             stack: start,
             holeCards: holesBySeat[i] ?? situation.heroHand,
+            isHero: true,
             name:
                 (seatInfo?.name.isNotEmpty ?? false)
                     ? seatInfo!.name
@@ -678,6 +677,7 @@ class PokerEngine {
         players[i].copyWith(
           stack: start,
           archetype: arch,
+          isHero: false,
           name: name,
           holeCards: holesBySeat[i] ?? const [],
         ),

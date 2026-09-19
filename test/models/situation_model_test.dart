@@ -370,6 +370,64 @@ void main() {
       expect(engine.pathNodeIds, isEmpty);
     });
 
+    test('uses the authored hero seat as the only hero', () {
+      final json = _minimalFoldJson();
+      json['setupKey'] = 'random|s3|stack200|sb1|bb2|ante0';
+      json['seatCount'] = 3;
+      json['heroSeat'] = 2;
+      json['lineup'] = [
+        {
+          'seat': 0,
+          'archetype': 'TAG',
+          'name': 'Charlie',
+          'startingStack': 200,
+        },
+        {'seat': 1, 'archetype': 'LAG', 'name': 'Diana', 'startingStack': 200},
+        {'seat': 2, 'archetype': 'HERO', 'name': 'Hero', 'startingStack': 200},
+      ];
+      json['holeCards'] = [
+        {
+          'seat': 0,
+          'cards': ['As', 'Kd'],
+        },
+        {
+          'seat': 1,
+          'cards': ['Qc', 'Tc'],
+        },
+        {
+          'seat': 2,
+          'cards': ['Qh', 'Qd'],
+        },
+      ];
+      json['heroHand'] = ['Qh', 'Qd'];
+      final nodes = json['nodes']! as Map<String, dynamic>;
+      final root = nodes['root']! as Map<String, dynamic>;
+      root['stacks'] = [200, 200, 200];
+      root['streetBets'] = [0, 0, 0];
+      root['actions'] = [
+        {'seat': 1, 'kind': 'POST_SB', 'amountTo': 1},
+        {'seat': 2, 'kind': 'POST_BB', 'amountTo': 2},
+      ];
+
+      final engine = PokerEngine(
+        settings: const GameSettingsModel(seatCount: 3, stackDepthBb: 100),
+        random: Random(9),
+      );
+      engine.dealSituationHand(SituationModel.fromJson(json));
+
+      expect(
+        engine.state.players.where((player) => player.isHero).map((p) => p.id),
+        [2],
+      );
+      expect(engine.state.hero.id, 2);
+      expect(engine.state.hero.holeCards.map((card) => card.code), [
+        'Qh',
+        'Qd',
+      ]);
+      expect(engine.state.dealerIndex, 0);
+      expect(engine.state.bbIndex, 2);
+    });
+
     test(
       'replays canonical ante and blind ledger without inserted actions',
       () {
