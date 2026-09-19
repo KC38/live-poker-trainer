@@ -127,6 +127,123 @@ SituationModel _authoredSituation() {
   );
 }
 
+SituationModel _legacyFlopTerminalSituation() {
+  const bet = HeroActionEdge(
+    actionKey: 'BET_40',
+    kind: SituationActionKind.bet,
+    amountTo: 8,
+    coaching: 'A small continuation bet performs well on this dry flop.',
+    verdict: HeroActionVerdict.correct,
+    evDeltaBb: 0,
+    optimalActionKey: 'BET_40',
+    nextNodeId: 'villain_calls',
+  );
+  return SituationModel(
+    payloadVersion: 2,
+    schemaVersion: 'situation-v2.0',
+    setupKey: 'legacy-flop-terminal',
+    setupMode: SetupMode.random,
+    seatCount: 2,
+    smallBlind: 1,
+    bigBlind: 2,
+    ante: 0,
+    startingStack: 200,
+    buttonSeat: 0,
+    heroSeat: 0,
+    lineup: const [
+      SituationSeatLineup(
+        seat: 0,
+        archetype: 'HERO',
+        name: 'Hero',
+        startingStack: 200,
+      ),
+      SituationSeatLineup(
+        seat: 1,
+        archetype: 'CALLING_STATION',
+        name: 'Villain',
+        startingStack: 200,
+      ),
+    ],
+    holeCards: [
+      SituationHoleCards(
+        seat: 0,
+        cards: [CardModel.fromCode('As'), CardModel.fromCode('Kd')],
+      ),
+      SituationHoleCards(
+        seat: 1,
+        cards: [CardModel.fromCode('Qc'), CardModel.fromCode('Tc')],
+      ),
+    ],
+    heroHand: [CardModel.fromCode('As'), CardModel.fromCode('Kd')],
+    runouts: [
+      StreetRunout(
+        street: Street.flop,
+        cards: [
+          CardModel.fromCode('2c'),
+          CardModel.fromCode('7d'),
+          CardModel.fromCode('Jh'),
+        ],
+      ),
+      StreetRunout(street: Street.turn, cards: [CardModel.fromCode('9s')]),
+      StreetRunout(street: Street.river, cards: [CardModel.fromCode('3h')]),
+    ],
+    rootNodeId: 'flop_decision',
+    nodes: {
+      'flop_decision': HeroDecisionNode(
+        id: 'flop_decision',
+        street: Street.flop,
+        pot: 20,
+        stacks: const [190, 190],
+        streetBets: const [0, 0],
+        board: [
+          CardModel.fromCode('2c'),
+          CardModel.fromCode('7d'),
+          CardModel.fromCode('Jh'),
+        ],
+        foldedSeats: const [],
+        toAct: 0,
+        callAmount: 0,
+        minRaiseTo: 2,
+        actions: const [bet],
+      ),
+      'villain_calls': ScriptedNode(
+        id: 'villain_calls',
+        street: Street.flop,
+        pot: 28,
+        stacks: const [182, 190],
+        streetBets: const [8, 0],
+        board: [
+          CardModel.fromCode('2c'),
+          CardModel.fromCode('7d'),
+          CardModel.fromCode('Jh'),
+        ],
+        foldedSeats: const [],
+        actions: const [
+          ScriptedAction(seat: 1, kind: SituationActionKind.call, amountTo: 8),
+        ],
+        nextNodeId: 'legacy_showdown',
+      ),
+      'legacy_showdown': TerminalNode(
+        id: 'legacy_showdown',
+        street: Street.river,
+        reason: TerminalReason.showdown,
+        board: [
+          CardModel.fromCode('2c'),
+          CardModel.fromCode('7d'),
+          CardModel.fromCode('Jh'),
+          CardModel.fromCode('9s'),
+          CardModel.fromCode('3h'),
+        ],
+        foldedSeats: const [],
+        stacks: const [182, 182],
+        pot: 36,
+        winnerSeats: const [0],
+        heroNetChips: 18,
+      ),
+    },
+  );
+}
+
 GameState _headsUp({required bool heroFolded, required bool handOver}) {
   return GameState(
     players: [
@@ -261,6 +378,29 @@ void main() {
     ]);
     expect(container.read(gameControllerProvider).authoredHeroEdges, isEmpty);
   });
+
+  test(
+    'completed flop replay advances to turn before generic action',
+    () async {
+      final service = _FakeSituationService(_legacyFlopTerminalSituation());
+      final container = _authoredContainer(service);
+      addTearDown(container.dispose);
+      final controller = container.read(gameControllerProvider.notifier);
+
+      await controller.startTraining();
+      expect(container.read(gameControllerProvider).game?.street, Street.flop);
+
+      await controller.heroAct(
+        const PokerAction(type: PokerActionType.bet, amount: 8),
+      );
+
+      final session = container.read(gameControllerProvider);
+      expect(session.game?.street, Street.turn);
+      expect(session.game?.community.length, 4);
+      expect(session.heroCanAct, isTrue);
+      expect(session.authoredHeroEdges, isEmpty);
+    },
+  );
 
   test('prepareTraining starts fetch before startTraining consumes it', () async {
     final service = _FakeSituationService(_authoredSituation());
