@@ -597,17 +597,12 @@ class GameController extends StateNotifier<TableSession> {
           final previousStreet = state.game?.street;
           final streetAdvanced =
               previousStreet != null && event.state.street != previousStreet;
-          final priorCoach = state.coach;
           state = state.copyWith(
             game: event.state,
             collectingChips: false,
             awardingChips: false,
             coach:
-                streetAdvanced &&
-                        priorCoach.hasVerdict &&
-                        !priorCoach.isHistorical
-                    ? priorCoach.asHistorical()
-                    : priorCoach,
+                streetAdvanced ? const CoachFeedback() : state.coach,
           );
           final type = event.action?.type;
           if (type != null) await _playActionSfx(sound, type);
@@ -630,16 +625,11 @@ class GameController extends StateNotifier<TableSession> {
           await _wait(ReplayPace.collectPot);
           state = state.copyWith(collectingChips: false);
         case TableEventKind.dealStreet:
-          final prior = state.coach;
-          final scoped =
-              prior.hasVerdict && !prior.isHistorical
-                  ? prior.asHistorical()
-                  : prior;
           state = state.copyWith(
             game: event.state,
             collectingChips: false,
             awardingChips: false,
-            coach: scoped,
+            coach: const CoachFeedback(),
           );
           await sound.deal();
           await _wait(ReplayPace.dealStreet);

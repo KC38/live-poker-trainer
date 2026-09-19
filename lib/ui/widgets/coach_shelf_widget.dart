@@ -55,7 +55,6 @@ class CoachShelfWidget extends StatelessWidget {
   }
 
   Color get _borderColor {
-    if (feedback.isHistorical) return AppColors.slateDark;
     return switch (feedback.verdict) {
       CoachVerdict.correct => AppColors.success,
       CoachVerdict.close => AppColors.warning,
@@ -96,7 +95,7 @@ class CoachShelfWidget extends StatelessWidget {
                 _stripMode,
               ),
               evDeltaBb: feedback.evDeltaBb,
-              compact: feedback.isHistorical,
+              compact: false,
             ),
           ),
       ],
@@ -191,56 +190,8 @@ class _CoachHeader extends StatelessWidget {
         ],
         const Spacer(),
         if (feedback.hasVerdict)
-          feedback.isHistorical
-              ? _HistoricalGradeChip(feedback: feedback)
-              : _VerdictBadge(verdict: feedback.verdict, compact: true),
+          _VerdictBadge(verdict: feedback.verdict, compact: true),
       ],
-    );
-  }
-}
-
-class _HistoricalGradeChip extends StatelessWidget {
-  const _HistoricalGradeChip({required this.feedback});
-
-  final CoachFeedback feedback;
-
-  @override
-  Widget build(BuildContext context) {
-    final street = feedback.decisionStreet?.label.toLowerCase() ?? 'earlier';
-    final (label, color) = switch (feedback.verdict) {
-      CoachVerdict.correct => ('Correct', AppColors.success),
-      CoachVerdict.close => ('Close', AppColors.warning),
-      _ => ('Incorrect', AppColors.danger),
-    };
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.14),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withValues(alpha: 0.65), width: 0.8),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            feedback.verdict == CoachVerdict.incorrect
-                ? Icons.close_rounded
-                : Icons.check_rounded,
-            size: 12,
-            color: color,
-          ),
-          const SizedBox(width: 4),
-          Text(
-            '$label · $street',
-            style: GoogleFonts.jetBrainsMono(
-              fontWeight: FontWeight.w800,
-              fontSize: 9.5,
-              color: color,
-              letterSpacing: 0.2,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

@@ -602,7 +602,7 @@ void main() {
   });
 
   test(
-    'multi-street situation keeps authored options and current coaching',
+    'multi-street situation keeps authored options and clears stale coaching',
     () async {
       final service = _FakeSituationService(_fullyAuthoredPostflopSituation());
       final container = _authoredContainer(service);
@@ -628,8 +628,7 @@ void main() {
         'CHECK_TURN',
         'BET_TURN_50',
       ]);
-      expect(session.coach.decisionStreet, Street.flop);
-      expect(session.coach.isHistorical, isTrue);
+      expect(session.coach.hasAdvice, isFalse);
 
       await controller.heroAct(const PokerAction(type: PokerActionType.check));
       session = container.read(gameControllerProvider);
@@ -639,8 +638,7 @@ void main() {
         'CHECK_RIVER',
         'BET_RIVER_50',
       ]);
-      expect(session.coach.decisionStreet, Street.turn);
-      expect(session.coach.isHistorical, isTrue);
+      expect(session.coach.hasAdvice, isFalse);
 
       await controller.heroAct(const PokerAction(type: PokerActionType.check));
       session = container.read(gameControllerProvider);
