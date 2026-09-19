@@ -63,6 +63,8 @@ class GameState {
     this.resultMessage,
     this.winnerIds = const [],
     this.sidePots = const [],
+    this.winnerPayouts = const {},
+    this.splitPotAward = false,
   });
 
   final List<PlayerModel> players;
@@ -95,6 +97,8 @@ class GameState {
   /// Odd cents are assigned by ascending seat id, independent of list order.
   final List<int> winnerIds;
   final List<double> sidePots;
+  final Map<int, double> winnerPayouts;
+  final bool splitPotAward;
 
   PlayerModel get hero => players.firstWhere((p) => p.isHero);
 
@@ -129,10 +133,12 @@ class GameState {
   }
 
   /// Whether the pot was split between two or more winners.
-  bool get isSplitPot => winnerIds.length > 1;
+  bool get isSplitPot =>
+      splitPotAward || (winnerPayouts.isEmpty && winnerIds.length > 1);
 
   /// Chips credited to [winnerId] from [awardedPot].
   double awardShareFor(int winnerId) {
+    if (winnerPayouts.isNotEmpty) return winnerPayouts[winnerId] ?? 0;
     if (winnerIds.isEmpty || awardedPot <= Money.epsilon) return 0;
     return Money.splitPot(awardedPot, winnerIds)[winnerId] ?? 0;
   }
@@ -171,6 +177,8 @@ class GameState {
     bool clearResult = false,
     List<int>? winnerIds,
     List<double>? sidePots,
+    Map<int, double>? winnerPayouts,
+    bool? splitPotAward,
   }) {
     return GameState(
       players: players ?? this.players,
@@ -199,6 +207,8 @@ class GameState {
       resultMessage: clearResult ? null : (resultMessage ?? this.resultMessage),
       winnerIds: winnerIds ?? this.winnerIds,
       sidePots: sidePots ?? this.sidePots,
+      winnerPayouts: winnerPayouts ?? this.winnerPayouts,
+      splitPotAward: splitPotAward ?? this.splitPotAward,
     );
   }
 }

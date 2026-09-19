@@ -1,8 +1,8 @@
 # Exploitative Poker Lab
 
-Multi-platform Flutter trainer for live No-Limit Hold'em. Training situations,
-coaching, hand history, and progress are server-authored and require an
-authenticated network connection.
+Online Flutter trainer for exploitative live No-Limit Hold'em. The server owns
+cards, legal fixed actions, opponent decisions, coaching, side pots, history,
+and progress. The app contains no LLM credential or offline gameplay fallback.
 
 ## Quick start
 
@@ -13,57 +13,52 @@ flutter pub get
 flutter run
 ```
 
-There are no LLM keys or training-data fallbacks in the app bundle. The Flutter
-client authenticates with Firebase, requests one situation from Cloud
-Functions, and keeps only that active hand in memory.
+The launch default is random six-max $1/$2 with a 200 BB maximum. Every hand
+gets a new ordered lineup of bounded player tendencies, visible by tapping a
+villain. Gemini chooses the button, varied 20–200 BB stacks, private cards, and
+the fixed runout.
 
-## Training flow
+## Live training flow
 
-1. The client sends the current table setup to `fetchSituation`.
-2. The server canonicalizes the setup and atomically allocates a situation that
-   has never been served to that user.
-   If a new pool is still being generated, the callable returns immediately
-   and the client polls with a short backoff while showing “Preparing hand…”.
-3. Every situation starts preflop and contains a validated action graph:
-   scripted opponent actions, fixed runouts, curated hero decisions, and
-   general coaching for every available hero action.
-4. The Flutter engine replays that graph. It does not generate cards, opponent
-   lines, or coaching.
-5. `recordSituationProgress` validates the reported path against the stored
-   graph before writing the hand and updating Progress.
+1. `startLiveHand` allocates an unseen, fully warmed hand and returns only
+   Hero's cards plus public state.
+2. Hero chooses from fixed server-provided actions. Fold is never offered when
+   Check is free.
+3. `submitLiveAction` validates an idempotent state/version/action command.
+4. The shared branch is loaded or generated. Each villain is called
+   sequentially with only its own cards and public information.
+5. A pre-generated all-actions exploit rubric is revealed for Hero's choice.
+6. The server returns replay events and the next projected decision/terminal.
+7. `resumeLiveHand` restores authoritative state after interruptions.
 
-An allocation receipt is created when a situation is delivered, so abandoning
-a hand cannot cause that same situation to be served to the user again.
+Hero folding ends training immediately. Villain cards are revealed only for
+non-folded players at a real showdown.
 
-## Situation generation
+## Shared pools and trees
 
-Pools are stored under `tableSetups/{setupKey}/situations`. Custom tables use
-their exact ordered lineup and positions. Random tables use a normalized setup
-key and receive a server-generated lineup inside each situation.
+Pools live under `liveTableSetups/{setupKey}/hands`. A new setup becomes
+available after ten hands have complete first-node coaching and three warmed
+non-fold branches. When a user has five or fewer unseen hands, ten more shared
+hands are queued. Only zero unseen hands blocks that user.
 
-The server queues an ASAP wave of two concurrent generation attempts for a new
-setup (publishing each as soon as it validates), then fills the rest of the
-five-situation batch. The same refill is queued when the globally never-served
-count reaches three. A Firestore-triggered worker performs that work outside
-the latency-sensitive callable, while a Firestore-backed lease prevents
-duplicate batches. A scheduled job pre-warms popular Random Pool setups
-(6-max / 9-max at 100BB and 200BB, 1/2 blinds).
+Each hand owns a lazy tree of canonical state/history nodes and fixed-action
+edges. Generation leases make first expansion deterministic under concurrent
+users; later users receive the stored response.
 
-All AI work uses `gemini-3.8-flash` in Firebase Functions. Generation is
-followed by a separate critique/correction pass, then deterministic validators
-check graph structure, cards, streets, action legality, bet sizing, stack/pot
-consistency, and coaching metadata before publication.
+The authoritative engine supports unequal stacks, incomplete raises, unmatched
+refunds, main/side pots, ties, odd cents, fixed all-in runouts, and deterministic
+showdown evaluation. Gemini selects legal action IDs but never computes state
+or payouts.
 
-## Progress
+## Coaching quality
 
-Progress preserves identity, style and sample-gated poker metrics, trends,
-coaching accuracy/EV, and street/archetype breakdowns. Hand history and
-aggregates live under the authenticated user's Firestore document. Leak Finder
-and Coach Review have been removed.
+Coaching is qualitative and profile-driven, not presented as solver EV.
+Deterministic facts, bounded visible tendencies, a high-thinking draft, an
+adversarial correction pass, strict output validation, hidden-information
+metamorphic tests, a 720-case corpus, and a dimension-stratified 60-case online
+run form the release gate.
 
-User photos are normalized in memory, uploaded to
-`avatars/{uid}/avatar.png`, and referenced from the Firestore user profile.
-Only audio preferences remain device-local.
+See [docs/coaching-quality.md](docs/coaching-quality.md).
 
 ## Firebase
 
@@ -72,13 +67,14 @@ Project: `live-poker-trainer`
 Runtime services:
 
 - Firebase Authentication
-- Cloud Functions (`fetchSituation`, `recordSituationProgress`,
-  `refillSituationPool`, `prewarmCommonSituationPoolsJob`)
-- Firestore (private pools, receipts, history, progress, preferences)
+- Cloud Functions (`startLiveHand`, `submitLiveAction`, `resumeLiveHand`,
+  `refillLiveHandPool`, `processLiveHandGenerationJob`)
+- Firestore (private deals/trees/sessions/receipts; owner-readable history and
+  progress)
 - Firebase Storage (user-owned avatars)
 - Secret Manager (`GEMINI_API_KEY`, Functions only)
 
-Deploy with the current Firebase CLI:
+Deploy:
 
 ```bash
 npx -y firebase-tools@latest deploy \
@@ -86,32 +82,22 @@ npx -y firebase-tools@latest deploy \
   --only firestore:rules,firestore:indexes,storage,functions
 ```
 
-Set or rotate the server secret separately:
+Set or rotate the secret separately:
 
 ```bash
 npx -y firebase-tools@latest functions:secrets:set GEMINI_API_KEY \
   --project live-poker-trainer
 ```
 
-The obsolete-data reset requires an explicit target and is dry-run by default:
+## Reset and seed
+
+The reset is dry-run by default and requires an exact target. Production
+execution also requires the explicit production guard.
 
 ```bash
 cd functions
-npm run reset:dry -- --project=my-staging-project
-```
+npm run reset:dry -- --project=live-poker-trainer
 
-Execution has no short package command. The target must be repeated exactly:
-
-```bash
-npx ts-node --transpile-only scripts/reset_obsolete_data.ts \
-  --project=my-staging-project \
-  --execute \
-  --confirm-project=my-staging-project
-```
-
-Production additionally requires the explicit production-reset guard:
-
-```bash
 npx ts-node --transpile-only scripts/reset_obsolete_data.ts \
   --project=live-poker-trainer \
   --execute \
@@ -119,9 +105,20 @@ npx ts-node --transpile-only scripts/reset_obsolete_data.ts \
   --allow-production-reset
 ```
 
-The reset preserves Authentication accounts and retained identity/preferences.
-It deletes obsolete training collections, user training stats, and the private
-`system/situationPoolLimits` quota document when present.
+The reset preserves Auth accounts, names, avatars, and device-local audio. It
+deletes all old/new training data and resets gameplay preferences to the launch
+default.
+
+After v3 Functions and rules are deployed:
+
+```bash
+npm run seed:live -- \
+  --project=live-poker-trainer \
+  --confirm-project=live-poker-trainer
+```
+
+The seed command enables client version 2.0.0 and waits for ten warmed default
+hands.
 
 ## Development
 
@@ -137,5 +134,13 @@ flutter analyze
 flutter test
 ```
 
-See [docs/architecture.md](docs/architecture.md) for data flow and security
-boundaries.
+Run the sampled or full coaching gate with `GEMINI_API_KEY` in the environment:
+
+```bash
+cd functions
+npm run benchmark:coach
+npm run benchmark:coach:full
+```
+
+See [docs/architecture.md](docs/architecture.md) for complete boundaries and
+data flow.

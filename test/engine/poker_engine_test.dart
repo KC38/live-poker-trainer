@@ -391,7 +391,6 @@ void main() {
       // side-pot action was possible.
       const settings = GameSettingsModel(
         seatCount: 2,
-        autoRebuy: false,
         smallBlind: 1,
         bigBlind: 2,
         stackDepthBb: 100,

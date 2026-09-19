@@ -41,6 +41,7 @@ class FeltTableView extends StatelessWidget {
     this.collectingChips = false,
     this.awardingChips = false,
     this.review = false,
+    this.onPlayerTap,
   });
 
   final GameState game;
@@ -57,6 +58,9 @@ class FeltTableView extends StatelessWidget {
   /// True once the hand is over: the felt inherits the action dock's band and
   /// the board is allowed to grow into it (still bounded by the seat ring).
   final bool review;
+
+  /// Opens a villain's visible modeled tendency profile.
+  final ValueChanged<PlayerModel>? onPlayerTap;
 
   @override
   Widget build(BuildContext context) {
@@ -114,13 +118,9 @@ class FeltTableView extends StatelessWidget {
             0,
             math.max(0.0, h - seatBox.height),
           );
-          final box = Rect.fromLTWH(
-            left,
-            top,
-            seatBox.width,
-            seatBox.height,
-          );
-          final hasBadge = (player.lastActionLabel != null && !game.isHandOver) ||
+          final box = Rect.fromLTWH(left, top, seatBox.width, seatBox.height);
+          final hasBadge =
+              (player.lastActionLabel != null && !game.isHandOver) ||
               (game.isHandOver && winnerIdSet.contains(player.id));
           slots.add(
             _SeatSlot(
@@ -162,27 +162,33 @@ class FeltTableView extends StatelessWidget {
             Positioned(
               left: slot.box.left,
               top: slot.box.top,
-              child: PlayerSeatWidget(
-                player: player,
-                bigBlind: game.bigBlind,
-                chipDisplayMode: chipDisplayMode,
-                isActive: game.activePlayerIndex == i && !game.isHandOver,
-                isWinner: game.isHandOver && isWinner,
-                isDealer: game.dealerIndex == i,
-                isSmallBlind: game.sbIndex == i,
-                isBigBlind: game.bbIndex == i,
-                compact: compact,
-                size: seatBox,
-                showCards: game.isHandOver && !player.folded,
-                // While chips fly to the pot the flying pill carries the
-                // amount, so the docked one would read as a double count.
-                betLabel: hasBet && !collectingChips
-                    ? ChipFormat.chips(
-                        player.currentBet,
-                        game.bigBlind,
-                        chipDisplayMode,
-                      )
-                    : null,
+              child: GestureDetector(
+                onTap:
+                    player.tendency == null
+                        ? null
+                        : () => onPlayerTap?.call(player),
+                child: PlayerSeatWidget(
+                  player: player,
+                  bigBlind: game.bigBlind,
+                  chipDisplayMode: chipDisplayMode,
+                  isActive: game.activePlayerIndex == i && !game.isHandOver,
+                  isWinner: game.isHandOver && isWinner,
+                  isDealer: game.dealerIndex == i,
+                  isSmallBlind: game.sbIndex == i,
+                  isBigBlind: game.bbIndex == i,
+                  compact: compact,
+                  size: seatBox,
+                  showCards: game.isHandOver && !player.folded,
+                  // During collection the flying pill carries the amount.
+                  betLabel:
+                      hasBet && !collectingChips
+                          ? ChipFormat.chips(
+                            player.currentBet,
+                            game.bigBlind,
+                            chipDisplayMode,
+                          )
+                          : null,
+                ),
               ),
             ),
           );
@@ -252,17 +258,14 @@ class FeltTableView extends StatelessWidget {
               _AwardFlight(
                 key: ValueKey('award-${player.id}-${game.handCount}'),
                 from: potTarget,
-                to: player.isHero
-                    ? heroTarget
-                    : Offset(
-                        cx + rx * math.cos(angle),
-                        cy + ry * math.sin(angle),
-                      ),
-                label: ChipFormat.chips(
-                  share,
-                  game.bigBlind,
-                  chipDisplayMode,
-                ),
+                to:
+                    player.isHero
+                        ? heroTarget
+                        : Offset(
+                          cx + rx * math.cos(angle),
+                          cy + ry * math.sin(angle),
+                        ),
+                label: ChipFormat.chips(share, game.bigBlind, chipDisplayMode),
               ),
             );
           }
@@ -285,17 +288,19 @@ class FeltTableView extends StatelessWidget {
                 tween: Tween<double>(end: boardScale),
                 duration: const Duration(milliseconds: 280),
                 curve: Curves.easeOutCubic,
-                builder: (context, scale, _) => CommunityCardsView(
-                  community: game.community,
-                  pot: game.displayPot,
-                  street: game.street,
-                  bigBlind: game.bigBlind,
-                  chipDisplayMode: chipDisplayMode,
-                  scale: scale,
-                  awarding: awardingChips,
-                  isSplit: game.isSplitPot,
-                  resultMessage: game.isHandOver ? game.resultMessage : null,
-                ),
+                builder:
+                    (context, scale, _) => CommunityCardsView(
+                      community: game.community,
+                      pot: game.displayPot,
+                      street: game.street,
+                      bigBlind: game.bigBlind,
+                      chipDisplayMode: chipDisplayMode,
+                      scale: scale,
+                      awarding: awardingChips,
+                      isSplit: game.isSplitPot,
+                      resultMessage:
+                          game.isHandOver ? game.resultMessage : null,
+                    ),
               ),
             ),
             ...awards,
@@ -389,9 +394,17 @@ class FeltTableView extends StatelessWidget {
   ) {
     var box = natural;
     for (var attempt = 0; attempt < _seatFitSteps; attempt++) {
-      final boxes = _ringBoxes(width, height, seatCount, heroIndex, box)
-          .map((r) => Rect.fromLTRB(r.left, r.top, r.right, r.bottom + _badgeBand))
-          .toList();
+      final boxes =
+          _ringBoxes(width, height, seatCount, heroIndex, box)
+              .map(
+                (r) => Rect.fromLTRB(
+                  r.left,
+                  r.top,
+                  r.right,
+                  r.bottom + _badgeBand,
+                ),
+              )
+              .toList();
       if (!_anyOverlap(boxes)) return box;
       box = Size(box.width * _seatFitStep, box.height * _seatFitStep);
     }
@@ -449,10 +462,10 @@ class FeltTableView extends StatelessWidget {
 
   /// Board column size at scale 1. The result line only exists while awarding.
   static Size _boardNatural({required bool awarding}) => Size(
-        CommunityCardsView.naturalWidth,
-        CommunityCardsView.naturalHeight +
-            (awarding ? CommunityCardsView.resultMessageHeight : 0),
-      );
+    CommunityCardsView.naturalWidth,
+    CommunityCardsView.naturalHeight +
+        (awarding ? CommunityCardsView.resultMessageHeight : 0),
+  );
 
   /// Footprint of [CommunityCardsView] content (pot pill + card row) at [scale].
   ///
@@ -571,17 +584,15 @@ class _AwardFlightState extends State<_AwardFlight>
         final travel = Curves.easeInOutCubic.transform(
           (_controller.value / 0.72).clamp(0.0, 1.0),
         );
-        final fade = _controller.value < 0.62
-            ? 1.0
-            : (1 - (_controller.value - 0.62) / 0.38).clamp(0.0, 1.0);
+        final fade =
+            _controller.value < 0.62
+                ? 1.0
+                : (1 - (_controller.value - 0.62) / 0.38).clamp(0.0, 1.0);
         final pos = Offset.lerp(widget.from, widget.to, travel)!;
         return Positioned(
           left: pos.dx,
           top: pos.dy,
-          child: Opacity(
-            opacity: fade,
-            child: child,
-          ),
+          child: Opacity(opacity: fade, child: child),
         );
       },
       child: Transform.translate(
@@ -712,11 +723,7 @@ class _WinnerBadgeState extends State<_WinnerBadge> {
 
 /// Pops the villain's most recent action so the replay reads as live play.
 class _ActionBadge extends StatefulWidget {
-  const _ActionBadge({
-    super.key,
-    required this.label,
-    required this.archetype,
-  });
+  const _ActionBadge({super.key, required this.label, required this.archetype});
 
   final String label;
   final PlayerArchetype archetype;
@@ -788,29 +795,36 @@ class _FeltPainter extends CustomPainter {
       height: height,
     );
 
-    final rim = Paint()
-      ..shader = const LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [AppColors.feltRim, AppColors.feltBorder, AppColors.feltRim],
-      ).createShader(rect);
+    final rim =
+        Paint()
+          ..shader = const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              AppColors.feltRim,
+              AppColors.feltBorder,
+              AppColors.feltRim,
+            ],
+          ).createShader(rect);
     canvas.drawOval(rect.inflate(11), rim);
 
-    final felt = Paint()
-      ..shader = RadialGradient(
-        center: const Alignment(0, -0.15),
-        radius: 0.95,
-        colors: [
-          AppColors.feltLight.withValues(alpha: 0.95),
-          AppColors.feltDark,
-        ],
-      ).createShader(rect);
+    final felt =
+        Paint()
+          ..shader = RadialGradient(
+            center: const Alignment(0, -0.15),
+            radius: 0.95,
+            colors: [
+              AppColors.feltLight.withValues(alpha: 0.95),
+              AppColors.feltDark,
+            ],
+          ).createShader(rect);
     canvas.drawOval(rect, felt);
 
-    final rail = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5
-      ..color = AppColors.gold.withValues(alpha: 0.22);
+    final rail =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5
+          ..color = AppColors.gold.withValues(alpha: 0.22);
     canvas.drawOval(rect.deflate(8), rail);
   }
 

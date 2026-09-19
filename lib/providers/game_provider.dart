@@ -1,8 +1,7 @@
-/// Table session state: server-authored situations with server coaching.
+/// Online server-authoritative live training session state.
 library;
 
 import 'dart:async';
-import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -10,131 +9,111 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/core/audio/sound_service.dart';
 import 'package:live_poker_trainer/core/constants/money.dart';
 import 'package:live_poker_trainer/core/debug/agent_commands.dart';
-import 'package:live_poker_trainer/core/diagnostics/diagnostics_log.dart';
 import 'package:live_poker_trainer/engine/poker_engine.dart';
-import 'package:live_poker_trainer/engine/situation_action_keys.dart';
 import 'package:live_poker_trainer/models/coach_feedback.dart';
-import 'package:live_poker_trainer/models/game_settings_model.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
+import 'package:live_poker_trainer/models/live_hand_model.dart';
 import 'package:live_poker_trainer/models/situation_model.dart';
 import 'package:live_poker_trainer/models/table_setup.dart';
 import 'package:live_poker_trainer/models/user_stats_model.dart';
-import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
 
-/// Pacing for the live-table replay. Slow enough to read, fast enough to play.
+/// Pacing for replayed server actions.
 class ReplayPace {
   ReplayPace._();
 
-  /// Multiplier for paced delays. Tests set this to `0` to skip sleeps.
   static double testScale = 1;
 
   static Duration _scaled(int milliseconds) =>
       Duration(microseconds: (milliseconds * 1000 * testScale).round());
 
-  /// Pause before the first villain acts after the deal.
   static Duration get deal => _scaled(420);
-
-  /// Pause after a villain checks or folds.
-  static Duration get passiveAction => _scaled(520);
-
-  /// Pause after a villain puts chips in (bet / call / raise).
-  static Duration get chipAction => _scaled(680);
-
-  /// Time the chips take to slide into the pot.
-  static Duration get collectPot => _scaled(420);
-
-  /// Pause after new board cards land.
-  static Duration get dealStreet => _scaled(620);
-
-  /// Beat while pot chips fly to the winner(s) at hand end.
-  static Duration get handOver => _scaled(720);
+  static Duration get passiveAction => _scaled(420);
+  static Duration get chipAction => _scaled(620);
+  static Duration get collectPot => _scaled(360);
+  static Duration get dealStreet => _scaled(560);
+  static Duration get handOver => _scaled(700);
 }
 
-/// UI-facing table session snapshot.
+/// UI-facing online table snapshot.
+@immutable
 class TableSession {
-  /// Creates a table session.
   const TableSession({
     this.game,
+    this.liveView,
     this.coach = const CoachFeedback(),
     this.loading = false,
     this.error,
-    this.lastAction,
     this.replaying = false,
     this.collectingChips = false,
     this.awardingChips = false,
+    this.liveActions = const [],
     List<HeroActionEdge> authoredHeroEdges = const [],
+    // The public compatibility argument cannot initialize a private named
+    // field directly without changing its call-site name.
+    // ignore: prefer_initializing_formals
   }) : _authoredHeroEdges = authoredHeroEdges;
 
   final GameState? game;
+  final LiveHandViewModel? liveView;
   final CoachFeedback coach;
   final bool loading;
   final String? error;
-  final PokerAction? lastAction;
-
-  /// True while villain actions are being replayed and the hero must wait.
   final bool replaying;
-
-  /// True during the brief window where street bets animate into the pot.
   final bool collectingChips;
-
-  /// True while the pot animates out to the winner seat(s).
   final bool awardingChips;
-
+  final List<LiveLegalActionModel> liveActions;
   final List<HeroActionEdge> _authoredHeroEdges;
 
-  /// Exact server-authored actions available at the current hero node.
-  UnmodifiableListView<HeroActionEdge> get authoredHeroEdges =>
-      UnmodifiableListView(_authoredHeroEdges);
+  /// Compatibility surface retained while legacy graph tests are retired.
+  List<HeroActionEdge> get authoredHeroEdges => _authoredHeroEdges;
 
-  /// Whether the hero may act right now.
   bool get heroCanAct {
-    final g = game;
-    return g != null &&
-        g.waitingForHero &&
-        !g.isHandOver &&
-        !g.hero.folded &&
-        !replaying &&
-        !loading &&
-        // Authored training never falls back to the generic sizing dock.
-        // A missing edge list is an invalid graph state, not a free-play turn.
-        (g.activeSituation == null || _authoredHeroEdges.isNotEmpty);
+    final current = game;
+    if (current == null ||
+        !current.waitingForHero ||
+        current.isHandOver ||
+        replaying ||
+        loading) {
+      return false;
+    }
+    if (liveView != null) return liveActions.isNotEmpty;
+    return (liveActions.isNotEmpty ||
+        _authoredHeroEdges.isNotEmpty ||
+        current.activeSituation == null);
   }
 
-  /// Hero has no further decisions this hand (folded or the hand resolved).
-  bool get heroDoneForHand {
-    final g = game;
-    return g != null && !loading && (g.isHandOver || g.hero.folded);
-  }
+  bool get heroDoneForHand =>
+      game != null && !loading && (game!.isHandOver || game!.hero.folded);
 
-  /// Gold pulsing Next — only after the hand finishes naturally.
   bool get highlightNext => game != null && game!.isHandOver && !loading;
 
   TableSession copyWith({
     GameState? game,
+    LiveHandViewModel? liveView,
     CoachFeedback? coach,
     bool? loading,
     String? error,
     bool clearError = false,
-    PokerAction? lastAction,
-    bool clearLastAction = false,
     bool? replaying,
     bool? collectingChips,
     bool? awardingChips,
+    List<LiveLegalActionModel>? liveActions,
     List<HeroActionEdge>? authoredHeroEdges,
     bool clearAuthoredHeroEdges = false,
   }) {
     return TableSession(
       game: game ?? this.game,
+      liveView: liveView ?? this.liveView,
       coach: coach ?? this.coach,
       loading: loading ?? this.loading,
       error: clearError ? null : (error ?? this.error),
-      lastAction: clearLastAction ? null : (lastAction ?? this.lastAction),
       replaying: replaying ?? this.replaying,
       collectingChips: collectingChips ?? this.collectingChips,
       awardingChips: awardingChips ?? this.awardingChips,
+      liveActions: liveActions ?? this.liveActions,
       authoredHeroEdges:
           clearAuthoredHeroEdges
               ? const []
@@ -143,646 +122,376 @@ class TableSession {
   }
 }
 
-/// Controls poker table flow, action replay pacing, and server coaching.
+/// Coordinates online hand creation, idempotent Hero actions, and replay.
 class GameController extends StateNotifier<TableSession> {
   GameController(this._ref) : super(const TableSession()) {
     if (kDebugMode) {
-      _agentSub = AgentCommands.stream.listen(_onAgentCommand);
+      _agentSubscription = AgentCommands.stream.listen(_onAgentCommand);
     }
   }
 
   final Ref _ref;
-  PokerEngine? _engine;
-  StreamSubscription<String>? _agentSub;
-
-  String _sessionId = _newSessionId();
-
-  static String _newSessionId() =>
-      's${DateTime.now().toUtc().millisecondsSinceEpoch}';
-
-  /// Current table session id (exposed for tests).
-  String get sessionId => _sessionId;
-
+  StreamSubscription<String>? _agentSubscription;
   int _replayToken = 0;
+  int _handCount = 0;
+  int _idempotencyCounter = 0;
   bool _disposed = false;
 
-  /// Tracks whether progress was already recorded for the current hand.
-  bool _progressRecorded = false;
+  String get sessionId => state.liveView?.sessionId ?? '';
 
-  /// In-flight fetch started by prepare/prefetch (overlaps UI waits).
-  Future<FetchedSituation>? _inflightFetch;
-  String? _inflightSetupFingerprint;
-
-  /// Completed prefetch ready to deal without another network round-trip.
-  FetchedSituation? _readyPrefetch;
-  String? _readyPrefetchFingerprint;
-
-  GameSettingsModel get _settings => _ref.read(settingsProvider);
-
-  GameState? _lastResolved;
-  GameState? _lastAwarded;
+  /// Compatibility fingerprint used by setup tests.
+  static String setupFingerprint(TableSetup setup) =>
+      jsonEncode(setup.toCallableMap());
 
   @override
   void dispose() {
     _disposed = true;
     _replayToken++;
-    _clearPendingFetch();
-    unawaited(_agentSub?.cancel());
+    unawaited(_agentSubscription?.cancel());
     super.dispose();
   }
 
-  /// Stable fingerprint for matching prefetch to the current table setup.
-  static String setupFingerprint(TableSetup setup) =>
-      jsonEncode(setup.toCallableMap());
-
-  void _clearPendingFetch() {
-    _inflightFetch = null;
-    _inflightSetupFingerprint = null;
-    _readyPrefetch = null;
-    _readyPrefetchFingerprint = null;
-  }
-
-  /// Starts a background fetch for the current settings when signed in.
-  ///
-  /// Reuses an in-flight or ready result for the same setup fingerprint.
-  void _ensureFetchInFlight({bool restart = false}) {
-    final uid = _ref.read(authUidProvider);
-    if (uid == null || uid.isEmpty) return;
-
-    final setup = TableSetup.fromGameSettings(_settings);
-    final fingerprint = setupFingerprint(setup);
-    if (!restart) {
-      if (_readyPrefetch != null &&
-          _readyPrefetchFingerprint == fingerprint) {
-        return;
-      }
-      if (_inflightFetch != null &&
-          _inflightSetupFingerprint == fingerprint) {
-        return;
-      }
-    }
-
-    if (restart) {
-      _readyPrefetch = null;
-      _readyPrefetchFingerprint = null;
-    }
-
-    final future = _ref.read(situationServiceProvider).fetchSituation(setup);
-    _inflightFetch = future;
-    _inflightSetupFingerprint = fingerprint;
-    unawaited(
-      future.then((fetched) {
-        if (_disposed || !identical(_inflightFetch, future)) return;
-        _readyPrefetch = fetched;
-        _readyPrefetchFingerprint = fingerprint;
-        _inflightFetch = null;
-        _inflightSetupFingerprint = null;
-      }).catchError((Object error, StackTrace stackTrace) {
-        if (_disposed || !identical(_inflightFetch, future)) return;
-        _inflightFetch = null;
-        _inflightSetupFingerprint = null;
-      }),
-    );
-  }
-
-  /// Takes a ready/in-flight fetch for [setup], or starts a fresh one.
-  Future<FetchedSituation> _takeFetchedSituation(TableSetup setup) {
-    final fingerprint = setupFingerprint(setup);
-    final ready = _readyPrefetch;
-    if (ready != null && _readyPrefetchFingerprint == fingerprint) {
-      _readyPrefetch = null;
-      _readyPrefetchFingerprint = null;
-      return Future<FetchedSituation>.value(ready);
-    }
-
-    final inflight = _inflightFetch;
-    if (inflight != null && _inflightSetupFingerprint == fingerprint) {
-      _inflightFetch = null;
-      _inflightSetupFingerprint = null;
-      return inflight;
-    }
-
-    return _ref.read(situationServiceProvider).fetchSituation(setup);
-  }
-
-  void _onAgentCommand(String cmd) {
-    switch (cmd) {
-      case 'fold':
-      case 'call':
-      case 'check':
-      case 'raise':
-      case 'bet':
-        unawaited(debugHeroShortcut(cmd));
-      case 'next':
-        unawaited(nextHand());
-      default:
-        break;
-    }
-  }
-
-  /// Maps a debug shortcut to the same action the dock would emit.
-  Future<void> debugHeroShortcut(String cmd) async {
-    final game = state.game;
-    if (game == null || !state.heroCanAct) return;
-    final wantedKind = switch (cmd) {
-      'fold' => SituationActionKind.fold,
-      'check' => SituationActionKind.check,
-      'call' => SituationActionKind.call,
-      'bet' => SituationActionKind.bet,
-      'raise' => SituationActionKind.raise,
-      _ => null,
-    };
-    if (wantedKind == null) return;
-
-    final matches =
-        state.authoredHeroEdges
-            .where((edge) => edge.kind == wantedKind)
-            .toList();
-    if (matches.length != 1) return;
-    final action = SituationActionKeys.pokerActionForEdge(game, matches.single);
-    final node = _engine?.currentHeroNode;
-    if (node == null ||
-        SituationActionKeys.resolveEdge(
-              node: node,
-              state: game,
-              action: action,
-            ) !=
-            matches.single) {
-      return;
-    }
-    await heroAct(action);
-  }
-
-  /// Marks the table as preparing so Home can navigate before any deal SFX.
-  ///
-  /// Also starts the network fetch immediately so it overlaps the route fade.
   void prepareTraining() {
     _replayToken++;
     state = const TableSession(loading: true);
-    _ensureFetchInFlight(restart: true);
   }
 
-  /// Starts training by fetching a server-authored situation.
-  ///
-  /// Requires a signed-in user. On failure the table shows an error with the
-  /// prior engine state (if any) so the user can retry via Next / restart.
   Future<void> startTraining({bool continueTable = false}) async {
     final token = ++_replayToken;
-    _progressRecorded = false;
-    state = state.copyWith(
-      loading: true,
-      clearError: true,
-      coach: const CoachFeedback(),
-      replaying: false,
-      collectingChips: false,
-      awardingChips: false,
-      clearAuthoredHeroEdges: true,
-    );
-
+    state = TableSession(game: state.game, loading: true, replaying: false);
     final uid = _ref.read(authUidProvider);
     if (uid == null || uid.isEmpty) {
-      _clearPendingFetch();
       state = state.copyWith(
         loading: false,
         error: 'Sign in required to train.',
       );
       return;
     }
-
     try {
       final sound = _ref.read(soundServiceProvider);
       await sound.unlock();
+      final result = await _ref
+          .read(liveHandServiceProvider)
+          .startHand(_ref.read(settingsProvider));
       if (_disposed || token != _replayToken) return;
-
-      final setup = TableSetup.fromGameSettings(_settings);
-      // Prefer the fetch started in [prepareTraining] / end-of-hand prefetch.
-      _ensureFetchInFlight();
-      final fetched = await _takeFetchedSituation(setup);
-      if (_disposed || token != _replayToken) return;
-
-      final situation = fetched.situation.copyWith(
-        situationId: fetched.situationId,
-        setupKey: fetched.setupKey,
-      );
-
-      unawaited(
-        _ref.read(analyticsServiceProvider).logSituationFetched(
-          seatCount: setup.seatCount,
-          stackDepthBb: _settings.stackDepthBb,
-          continueTable: continueTable,
-        ),
-      );
-
-      final existing = continueTable ? state.game?.players : null;
-      final engine = _engine;
-      if (continueTable && engine != null) {
-        engine.updateSettings(_settings);
-        engine.dealSituationHand(situation, existingPlayers: existing);
-      } else {
-        _sessionId = _newSessionId();
-        _engine = PokerEngine(settings: _settings)
-          ..dealSituationHand(situation, existingPlayers: existing);
-      }
-
-      final dealt = _engine!.state;
-      state = state.copyWith(
-        game: dealt,
-        loading: true,
-        clearAuthoredHeroEdges: true,
-      );
+      _handCount++;
       await sound.deal();
       if (_disposed || token != _replayToken) return;
-
-      state = TableSession(game: _engine!.state, loading: false);
-      await _replayUntilHero(pace: ReplayPace.deal, token: token);
-    } catch (e) {
+      state = TableSession(
+        game: result.view.toGameState(handCount: _handCount),
+        liveView: result.view,
+        liveActions: result.view.legalActions,
+      );
+    } catch (error) {
       if (_disposed || token != _replayToken) return;
-      _clearPendingFetch();
-      unawaited(
-        _ref.read(analyticsServiceProvider).logTrainingError(stage: 'fetch'),
-      );
-      final engineState = _engine?.state;
-      state = state.copyWith(
-        game: engineState,
-        loading: false,
-        replaying: false,
-        clearAuthoredHeroEdges: true,
-        error: '$e',
-      );
+      state = state.copyWith(loading: false, replaying: false, error: '$error');
     }
   }
 
-  /// Legacy alias — same as [startTraining].
   Future<void> startPractice() => startTraining();
 
-  /// Legacy alias — same as [startTraining].
   Future<void> startCashSim({bool continueTable = false}) =>
       startTraining(continueTable: continueTable);
 
-  /// Deals the next hand at the same table.
   Future<void> nextHand() async {
-    final game = state.game;
-    if (game != null && !game.isHandOver && !game.hero.folded) {
-      return;
-    }
-    // Overlap progress recording with the next-hand network fetch.
-    _ensureFetchInFlight();
-    final recordFuture = (game?.isHandOver ?? false)
-        ? _recordSituationProgress()
-        : Future<bool>.value(true);
-    await _forceCompleteSkippedHand();
-    final recorded = await recordFuture;
-    if (!recorded) return;
-    await startTraining(continueTable: true);
+    if (!state.heroDoneForHand) return;
+    await startTraining(continueTable: false);
   }
 
-  /// Cancels paced replay and resolves the current hand so stacks stay honest.
-  Future<void> _forceCompleteSkippedHand() async {
-    final engine = _engine;
-    final game = state.game;
-    if (engine == null || game == null || game.isHandOver) return;
-
-    final token = ++_replayToken;
-    if (!engine.state.isHandOver) {
-      engine.runToHeroOrEnd();
-    }
-    if (_disposed || token != _replayToken) return;
-    state = state.copyWith(
-      game: engine.state,
-      replaying: false,
-      collectingChips: false,
-      awardingChips: false,
-      clearAuthoredHeroEdges: true,
-    );
-    await _finishHandIfOver(token);
-  }
-
-  /// Applies a hero action, shows server coaching, then replays scripted seats.
-  Future<void> heroAct(PokerAction action) async {
-    final engine = _engine;
-    final game = state.game;
-    if (engine == null || game == null || !state.heroCanAct) return;
-
-    final heroNode = engine.currentHeroNode;
-    final edge =
-        heroNode == null
-            ? null
-            : SituationActionKeys.resolveEdge(
-              node: heroNode,
-              state: game,
-              action: action,
-            );
-    final authoredSpot = engine.situation != null;
-    if (authoredSpot && edge == null) {
-      state = state.copyWith(
-        error: 'That action is not one of the authored choices for this spot.',
-      );
+  /// Sends one exact legal action id to the authoritative server.
+  Future<void> heroActLive(LiveLegalActionModel action) async {
+    final view = state.liveView;
+    if (view == null || !state.heroCanAct) return;
+    if (!state.liveActions.any(
+      (candidate) => candidate.actionId == action.actionId,
+    )) {
       return;
     }
-
     final token = ++_replayToken;
-    final handId = game.handCount;
-    final holesBefore = game.hero.holeCards
-        .map((c) => c.code)
-        .toList(growable: false);
     state = state.copyWith(
       replaying: true,
+      liveActions: const [],
       clearError: true,
-      clearAuthoredHeroEdges: true,
     );
-
-    final sound = _ref.read(soundServiceProvider);
-    await _playActionSfx(sound, action.type);
-    if (_disposed || token != _replayToken) return;
-    if (engine.state.handCount != handId || !engine.state.waitingForHero) {
+    try {
+      final result = await _ref
+          .read(liveHandServiceProvider)
+          .submitAction(
+            view: view,
+            action: action,
+            idempotencyKey: _newIdempotencyKey(),
+          );
+      if (_disposed || token != _replayToken) return;
+      final coaching = _feedback(result.coaching, action, view.street);
+      state = state.copyWith(coach: coaching, replaying: true);
+      await _replayEvents(result.events, result.view, token);
+      if (_disposed || token != _replayToken) return;
+      final game = result.view.toGameState(handCount: _handCount);
+      state = TableSession(
+        game: game,
+        liveView: result.view,
+        coach: coaching,
+        liveActions: result.view.legalActions,
+        awardingChips: game.isHandOver && game.winnerIds.isNotEmpty,
+      );
+      if (state.awardingChips) {
+        await _ref.read(soundServiceProvider).chip();
+        await Future<void>.delayed(ReplayPace.handOver);
+        if (!_disposed && token == _replayToken) {
+          state = state.copyWith(awardingChips: false);
+        }
+      }
+    } catch (error) {
+      if (_disposed || token != _replayToken) return;
       state = state.copyWith(
-        game: engine.state,
         replaying: false,
-        authoredHeroEdges: _authoredEdgesForCurrentHero(engine.state),
-      );
-      return;
-    }
-
-    final heroSizingBb =
-        game.bigBlind > Money.epsilon ? action.amount / game.bigBlind : 0.0;
-
-    HeroActionEdge? chosen;
-    if (authoredSpot) {
-      // Authored situations were rejected above unless [edge] is exact.
-      chosen = engine.applySituationHeroChoice(edge: edge!, action: action);
-    } else if (edge != null) {
-      chosen = engine.applySituationHeroChoice(edge: edge, action: action);
-    } else {
-      engine.submitHeroAction(action);
-    }
-
-    final after = engine.state;
-    if (chosen != null) {
-      state = state.copyWith(
-        game: after,
-        coach: CoachFeedback.fromHeroEdge(
-          edge: chosen,
-          street: game.street,
-          node: heroNode,
-          bigBlind: game.bigBlind,
-        ),
-      );
-      unawaited(
-        _ref.read(analyticsServiceProvider).logHeroDecision(
-          street: game.street.name,
-          actionType: action.type.name,
-          verdict: chosen.verdict.name,
-        ),
-      );
-    } else {
-      state = state.copyWith(
-        game: after,
-        coach: CoachFeedback(
-          message:
-              edge == null
-                  ? 'No legal coaching edge for that action.'
-                  : 'Could not apply that action.',
-          heroAction: action.label,
-          heroSizingBb: heroSizingBb,
-          decisionStreet: game.street,
-        ),
+        liveActions: view.legalActions,
+        error: '$error',
       );
     }
-
-    if (!after.isHandOver) {
-      final holesAfter = after.hero.holeCards.map((c) => c.code).toList();
-      assert(
-        holesAfter.join(',') == holesBefore.join(','),
-        'hero hole cards changed mid-hand',
-      );
-    }
-
-    // Prefetch while coaching is shown (fold / terminal decisions).
-    if (after.hero.folded || after.isHandOver) {
-      _ensureFetchInFlight();
-    }
-
-    await _replayUntilHero(pace: ReplayPace.passiveAction, token: token);
   }
 
-  /// Steps the engine forward with realistic pacing until the hero must act.
-  Future<void> _replayUntilHero({required Duration pace, int? token}) async {
-    final engine = _engine;
-    if (engine == null) return;
-    final myToken = token ?? _replayToken;
-    final sound = _ref.read(soundServiceProvider);
-
-    var current = state.game;
-    if (current == null || current.isHandOver) {
-      if (current != null && current.isHandOver) {
-        await _playAwardAnimation(current, sound, myToken);
-      }
-      await _finishHandIfOver(myToken);
-      return;
-    }
-
-    state = state.copyWith(replaying: true, clearAuthoredHeroEdges: true);
-    await _wait(pace);
-
-    var guard = 0;
-    while (guard < 256) {
-      guard++;
-      if (_disposed || myToken != _replayToken) return;
-
-      final event = engine.nextEvent();
-      if (event == null) break;
-
-      switch (event.kind) {
-        case TableEventKind.villainAction:
-          final previousStreet = state.game?.street;
-          final streetAdvanced =
-              previousStreet != null && event.state.street != previousStreet;
-          state = state.copyWith(
-            game: event.state,
-            collectingChips: false,
-            awardingChips: false,
-            coach:
-                streetAdvanced ? const CoachFeedback() : state.coach,
-          );
-          final type = event.action?.type;
-          if (type != null) await _playActionSfx(sound, type);
-          await _wait(
-            _isChipAction(type)
-                ? ReplayPace.chipAction
-                : ReplayPace.passiveAction,
-          );
-          if (streetAdvanced) {
-            await sound.deal();
-            await _wait(ReplayPace.dealStreet);
-          }
-        case TableEventKind.collectPot:
-          state = state.copyWith(
-            game: event.state,
-            collectingChips: true,
-            awardingChips: false,
-          );
-          await sound.chip();
-          await _wait(ReplayPace.collectPot);
-          state = state.copyWith(collectingChips: false);
-        case TableEventKind.dealStreet:
-          state = state.copyWith(
-            game: event.state,
-            collectingChips: false,
-            awardingChips: false,
-            coach: const CoachFeedback(),
-          );
-          await sound.deal();
-          await _wait(ReplayPace.dealStreet);
-        case TableEventKind.handOver:
-          await _playAwardAnimation(event.state, sound, myToken);
-      }
-
-      current = event.state;
-      if (current.isHandOver) break;
-    }
-
-    if (_disposed || myToken != _replayToken) return;
-
-    final resolved = engine.state;
-    state = state.copyWith(
-      game: resolved,
-      replaying: false,
-      collectingChips: false,
-      awardingChips: false,
-      authoredHeroEdges: _authoredEdgesForCurrentHero(resolved),
-    );
-
-    await _finishHandIfOver(myToken);
+  /// Compatibility adapter used by keyboard shortcuts and older widget tests.
+  Future<void> heroAct(PokerAction action) async {
+    final candidates =
+        state.liveActions.where((candidate) {
+          final expected = switch (action.type) {
+            PokerActionType.fold => 'FOLD',
+            PokerActionType.check => 'CHECK',
+            PokerActionType.call => 'CALL',
+            PokerActionType.bet => 'BET',
+            PokerActionType.raise => 'RAISE',
+            PokerActionType.allIn => 'ALL_IN',
+          };
+          if (candidate.kind != expected) return false;
+          if (candidate.amountTo == null || action.amount <= 0) return true;
+          return Money.same(candidate.amountTo!, action.amount);
+        }).toList();
+    if (candidates.length == 1) await heroActLive(candidates.single);
   }
 
-  Future<void> _playAwardAnimation(
-    GameState game,
-    SoundService sound,
+  Future<void> debugHeroShortcut(String command) async {
+    if (!state.heroCanAct) return;
+    final kind = switch (command) {
+      'fold' => 'FOLD',
+      'check' => 'CHECK',
+      'call' => 'CALL',
+      'bet' => 'BET',
+      'raise' => 'RAISE',
+      _ => '',
+    };
+    final matching =
+        state.liveActions.where((action) => action.kind == kind).toList();
+    if (matching.length == 1) await heroActLive(matching.single);
+  }
+
+  Future<void> resumeCurrentHand() async {
+    final sessionId = state.liveView?.sessionId;
+    if (sessionId == null || sessionId.isEmpty) return;
+    final token = ++_replayToken;
+    state = state.copyWith(loading: true, clearError: true);
+    try {
+      final result = await _ref
+          .read(liveHandServiceProvider)
+          .resumeHand(sessionId);
+      if (_disposed || token != _replayToken) return;
+      state = TableSession(
+        game: result.view.toGameState(handCount: _handCount),
+        liveView: result.view,
+        liveActions: result.view.legalActions,
+      );
+    } catch (error) {
+      if (_disposed || token != _replayToken) return;
+      state = state.copyWith(loading: false, error: '$error');
+    }
+  }
+
+  Future<void> _replayEvents(
+    List<LiveActionEventModel> events,
+    LiveHandViewModel finalView,
     int token,
   ) async {
-    if (_disposed || token != _replayToken) return;
-    if (identical(_lastAwarded, game)) {
-      state = state.copyWith(
-        game: game,
-        collectingChips: false,
-        awardingChips: false,
-      );
-      return;
-    }
-    _lastAwarded = game;
-    state = state.copyWith(
-      game: game,
-      collectingChips: false,
-      awardingChips: game.winnerIds.isNotEmpty,
-    );
-    if (game.winnerIds.isNotEmpty) {
-      await sound.chip();
-    }
-    await _wait(ReplayPace.handOver);
-    if (_disposed || token != _replayToken) return;
-    state = state.copyWith(awardingChips: false);
-  }
-
-  Future<void> _finishHandIfOver(int token) async {
-    final game = state.game;
-    if (game == null || !game.isHandOver) return;
-    if (_disposed || token != _replayToken) return;
     final sound = _ref.read(soundServiceProvider);
-    if (!identical(_lastResolved, game)) {
-      _lastResolved = game;
-      await _recordSituationProgress();
+    for (final event in events) {
+      if (_disposed || token != _replayToken) return;
+      var game = state.game;
+      if (game == null) return;
+      final eventStreet = Street.values.firstWhere(
+        (street) => street.name == event.street,
+        orElse: () => game!.street,
+      );
+      if (eventStreet != game.street) {
+        state = state.copyWith(collectingChips: true);
+        await sound.chip();
+        await Future<void>.delayed(ReplayPace.collectPot);
+        if (_disposed || token != _replayToken) return;
+        final collected = game.players.fold<double>(
+          0,
+          (total, player) => total + player.currentBet,
+        );
+        final boardCount = switch (eventStreet) {
+          Street.preflop => 0,
+          Street.flop => 3,
+          Street.turn => 4,
+          Street.river || Street.showdown => 5,
+        };
+        game = game.copyWith(
+          players: [
+            for (final player in game.players)
+              player.copyWith(
+                currentBet: 0,
+                hasActedThisRound: false,
+                clearLastAction: true,
+              ),
+          ],
+          mainPot: game.mainPot + collected,
+          street: eventStreet,
+          community: finalView.board.take(boardCount).toList(growable: false),
+          highestBet: 0,
+          waitingForHero: false,
+        );
+        state = state.copyWith(game: game, collectingChips: false);
+        await sound.deal();
+        await Future<void>.delayed(ReplayPace.dealStreet);
+      }
+      game = _applyReplayEvent(game, event);
+      state = state.copyWith(game: game);
+      await _playActionSound(sound, event.kind);
+      await Future<void>.delayed(
+        event.kind == 'CHECK' || event.kind == 'FOLD'
+            ? ReplayPace.passiveAction
+            : ReplayPace.chipAction,
+      );
     }
-    final heroWon = game.resultMessage?.startsWith('Hero') ?? false;
-    if (heroWon) await sound.win();
-    state = state.copyWith(replaying: false, clearAuthoredHeroEdges: true);
-    // Prefetch the next situation while coaching / Next is visible.
-    _ensureFetchInFlight();
+    var game = state.game;
+    while (game != null &&
+        game.street.index < finalView.street.index &&
+        game.street != Street.showdown) {
+      final nextStreet = game.street.next;
+      if (nextStreet == null || nextStreet == Street.showdown) break;
+      final collected = game.players.fold<double>(
+        0,
+        (total, player) => total + player.currentBet,
+      );
+      final boardCount = switch (nextStreet) {
+        Street.preflop => 0,
+        Street.flop => 3,
+        Street.turn => 4,
+        Street.river || Street.showdown => 5,
+      };
+      game = game.copyWith(
+        players: [
+          for (final player in game.players)
+            player.copyWith(currentBet: 0, clearLastAction: true),
+        ],
+        mainPot: game.mainPot + collected,
+        street: nextStreet,
+        community: finalView.board.take(boardCount).toList(growable: false),
+        highestBet: 0,
+        waitingForHero: false,
+      );
+      state = state.copyWith(game: game, collectingChips: false);
+      await sound.deal();
+      await Future<void>.delayed(ReplayPace.dealStreet);
+      if (_disposed || token != _replayToken) return;
+    }
   }
 
-  List<HeroActionEdge> _authoredEdgesForCurrentHero(GameState game) {
-    final node = _engine?.currentHeroNode;
-    if (!game.waitingForHero || game.isHandOver || node == null) {
-      return const [];
-    }
-    return List<HeroActionEdge>.unmodifiable(node.actions);
+  static GameState _applyReplayEvent(
+    GameState game,
+    LiveActionEventModel event,
+  ) {
+    if (event.seat < 0 || event.seat >= game.players.length) return game;
+    final players = [...game.players];
+    final player = players[event.seat];
+    final target = event.amountTo ?? player.currentBet;
+    final added = Money.roundNonNegative(
+      target - player.currentBet,
+    ).clamp(0, player.stack);
+    players[event.seat] = player.copyWith(
+      stack: Money.roundNonNegative(player.stack - added),
+      currentBet: Money.round(player.currentBet + added),
+      folded: event.kind == 'FOLD' || player.folded,
+      allIn: event.kind == 'ALL_IN' || player.stack - added <= Money.epsilon,
+      hasActedThisRound: true,
+      lastActionLabel: event.kind.replaceAll('_', '-'),
+    );
+    final highest = players.fold<double>(
+      0,
+      (value, seat) => seat.currentBet > value ? seat.currentBet : value,
+    );
+    return game.copyWith(
+      players: players,
+      activePlayerIndex: event.seat,
+      highestBet: highest,
+      waitingForHero: false,
+    );
   }
 
-  Future<bool> _recordSituationProgress() async {
-    if (_progressRecorded) return true;
-    final engine = _engine;
-    final situation = engine?.situation;
-    if (engine == null || situation == null) return false;
-
-    final path = List<String>.from(engine.pathNodeIds);
-    final keys = List<String>.from(engine.chosenActionKeys);
-    final terminalId = engine.terminalNodeId;
-    if (path.isEmpty || terminalId == null || terminalId.isEmpty) {
-      state = state.copyWith(
-        error: 'This hand could not be validated. Retry before continuing.',
-      );
-      return false;
-    }
-    if (path.length != keys.length) {
-      state = state.copyWith(
-        error: 'This hand path is incomplete. Retry before continuing.',
-      );
-      return false;
-    }
-
-    final heroNet = engine.terminalHeroNetChips ?? 0;
-
-    try {
-      await _ref
-          .read(situationServiceProvider)
-          .recordSituationProgress(
-            situationId: situation.situationId ?? '',
-            setupKey: situation.setupKey,
-            pathNodeIds: path,
-            chosenActionKeys: keys,
-            terminalNodeId: terminalId,
-            heroNetChips: heroNet,
-          );
-      _progressRecorded = true;
-      _ref.invalidate(userStatsProvider);
-      state = state.copyWith(clearError: true);
-      unawaited(
-        _ref
-            .read(analyticsServiceProvider)
-            .logHandCompleted(heroNetChips: heroNet),
-      );
-      return true;
-    } catch (e, st) {
-      DiagnosticsLog.error('GameController.recordSituationProgress', e, st);
-      unawaited(_ref.read(analyticsServiceProvider).logHandRecordFailed());
-      state = state.copyWith(
-        error: 'Could not save this hand. Check your connection and retry.',
-      );
-      return false;
+  static Future<void> _playActionSound(SoundService sound, String kind) async {
+    switch (kind) {
+      case 'BET':
+      case 'RAISE':
+      case 'CALL':
+      case 'ALL_IN':
+        return sound.chip();
+      case 'FOLD':
+        return sound.fold();
+      case 'CHECK':
+        return;
     }
   }
 
-  Future<void> _playActionSfx(SoundService sound, PokerActionType type) {
-    return switch (type) {
-      PokerActionType.fold => sound.fold(),
-      PokerActionType.check => sound.knock(),
-      PokerActionType.call ||
-      PokerActionType.bet ||
-      PokerActionType.raise ||
-      PokerActionType.allIn => sound.chip(),
+  CoachFeedback _feedback(
+    LiveCoachingAssessment assessment,
+    LiveLegalActionModel action,
+    Street street,
+  ) {
+    final verdict = switch (assessment.rating) {
+      'recommended' || 'strong' => CoachVerdict.correct,
+      'reasonable' => CoachVerdict.close,
+      _ => CoachVerdict.incorrect,
     };
+    final betterLabel = viewActionLabel(
+      state.liveView?.legalActions ?? const [],
+      assessment.betterActionId,
+    );
+    return CoachFeedback(
+      verdict: verdict,
+      message: assessment.message,
+      optimalActionLabel: betterLabel,
+      heroAction: action.label,
+      heroSizingBb:
+          action.amountTo == null
+              ? 0
+              : action.amountTo! / (state.game?.bigBlind ?? 1),
+      decisionStreet: street,
+      confidence: assessment.confidence,
+    );
   }
 
-  static bool _isChipAction(PokerActionType? type) {
-    return type == PokerActionType.call ||
-        type == PokerActionType.bet ||
-        type == PokerActionType.raise ||
-        type == PokerActionType.allIn;
+  static String? viewActionLabel(
+    List<LiveLegalActionModel> actions,
+    String? actionId,
+  ) {
+    if (actionId == null) return null;
+    for (final action in actions) {
+      if (action.actionId == actionId) return action.label.toUpperCase();
+    }
+    return null;
   }
 
-  Future<void> _wait(Duration duration) => Future<void>.delayed(duration);
+  String _newIdempotencyKey() {
+    _idempotencyCounter++;
+    return 'd${DateTime.now().microsecondsSinceEpoch}_$_idempotencyCounter';
+  }
 
-  void clearCoach() {
-    state = state.copyWith(coach: const CoachFeedback());
+  void _onAgentCommand(String command) {
+    if (command == 'next') {
+      unawaited(nextHand());
+    } else {
+      unawaited(debugHeroShortcut(command));
+    }
   }
 }
 
@@ -791,8 +500,6 @@ final gameControllerProvider =
 
 final userStatsProvider = FutureProvider<UserStatsModel>((ref) async {
   final uid = ref.watch(authUidProvider);
-  if (uid == null) {
-    return const UserStatsModel();
-  }
+  if (uid == null) return const UserStatsModel();
   return ref.read(progressRepositoryProvider).loadStats(uid);
 });

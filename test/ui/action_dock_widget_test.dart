@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/engine/poker_engine.dart';
 import 'package:live_poker_trainer/engine/situation_action_keys.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
+import 'package:live_poker_trainer/models/live_hand_model.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/models/situation_model.dart';
 import 'package:live_poker_trainer/ui/widgets/action_dock_widget.dart';
@@ -62,6 +63,8 @@ Future<void> _pump(
   GameState state, {
   List<HeroActionEdge>? authoredEdges,
   ValueChanged<PokerAction>? onAction,
+  List<LiveLegalActionModel>? liveActions,
+  ValueChanged<LiveLegalActionModel>? onLiveAction,
 }) async {
   await tester.pumpWidget(
     ProviderScope(
@@ -72,6 +75,8 @@ Future<void> _pump(
               ActionDockWidget(
                 game: state,
                 authoredEdges: authoredEdges,
+                liveActions: liveActions,
+                onLiveAction: onLiveAction,
                 onAction: onAction ?? (_) {},
               ),
             ],
@@ -84,6 +89,41 @@ Future<void> _pump(
 }
 
 void main() {
+  testWidgets('live mode renders only exact server actions and no free fold', (
+    tester,
+  ) async {
+    LiveLegalActionModel? chosen;
+    const actions = [
+      LiveLegalActionModel(
+        actionId: 'CHECK',
+        kind: 'CHECK',
+        bucket: 'CHECK',
+        label: 'Check',
+      ),
+      LiveLegalActionModel(
+        actionId: 'BET_67:1200',
+        kind: 'BET',
+        bucket: 'BET_67',
+        label: r'Bet $12',
+        amountTo: 12,
+      ),
+    ];
+    await _pump(
+      tester,
+      _state(heroStack: 400, highestBet: 0, mainPot: 18),
+      liveActions: actions,
+      onLiveAction: (action) => chosen = action,
+    );
+
+    expect(find.text('CHECK'), findsOneWidget);
+    expect(find.text(r'BET $12'), findsOneWidget);
+    expect(find.text('FOLD'), findsNothing);
+    expect(find.byType(Slider), findsNothing);
+
+    await tester.tap(find.text(r'BET $12'));
+    expect(chosen?.actionId, 'BET_67:1200');
+  });
+
   testWidgets('renders a sizing slider for a deep hero', (tester) async {
     await _pump(tester, _state(heroStack: 400, highestBet: 20, mainPot: 40));
     expect(tester.takeException(), isNull);

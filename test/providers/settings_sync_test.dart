@@ -40,9 +40,7 @@ void main() {
         seatCount: 6,
         smallBlind: 0.5,
         bigBlind: 1,
-        stackDepthBb: 100,
-        autoRebuy: true,
-        rebuyThresholdBb: 40,
+        maxStackDepthBb: 100,
         lineupMode: LineupMode.custom,
         customArchetypes: [
           PlayerArchetype.maniac,
@@ -59,9 +57,7 @@ void main() {
     expect(notifier.state.seatCount, 6);
     expect(notifier.state.smallBlind, 0.5);
     expect(notifier.state.bigBlind, 1);
-    expect(notifier.state.stackDepthBb, 100);
-    expect(notifier.state.autoRebuy, isTrue);
-    expect(notifier.state.rebuyThresholdBb, 40);
+    expect(notifier.state.maxStackDepthBb, 100);
     expect(notifier.state.lineupMode, LineupMode.custom);
     expect(notifier.state.customArchetypes.length, 5);
     // Audio stays device-local.
@@ -86,30 +82,37 @@ void main() {
     expect(notifier.state.musicEnabled, isTrue);
   });
 
-  test('table-setup edits do not sync until cloud prefs have hydrated', () async {
-    final synced = <GameSettingsModel>[];
-    final gated = SettingsNotifier(
-      prefs,
-      syncRemote: (settings) async {
-        synced.add(settings);
-      },
-    );
-    addTearDown(gated.dispose);
+  test(
+    'table-setup edits do not sync until cloud prefs have hydrated',
+    () async {
+      final synced = <GameSettingsModel>[];
+      final gated = SettingsNotifier(
+        prefs,
+        syncRemote: (settings) async {
+          synced.add(settings);
+        },
+      );
+      addTearDown(gated.dispose);
 
-    await gated.setSeatCount(6);
-    expect(synced, isEmpty, reason: 'pre-hydrate edit must not clobber cloud');
+      await gated.setSeatCount(6);
+      expect(
+        synced,
+        isEmpty,
+        reason: 'pre-hydrate edit must not clobber cloud',
+      );
 
-    await gated.applyRemotePreferences(
-      const GameSettingsModel(seatCount: 9, stackDepthBb: 200),
-    );
-    gated.setCloudSyncEnabled(true);
-    expect(gated.state.seatCount, 9);
+      await gated.applyRemotePreferences(
+        const GameSettingsModel(seatCount: 9, stackDepthBb: 200),
+      );
+      gated.setCloudSyncEnabled(true);
+      expect(gated.state.seatCount, 9);
 
-    await gated.setSeatCount(8);
-    expect(synced, hasLength(1));
-    expect(synced.single.seatCount, 8);
-    expect(synced.single.stackDepthBb, 200);
-  });
+      await gated.setSeatCount(8);
+      expect(synced, hasLength(1));
+      expect(synced.single.seatCount, 8);
+      expect(synced.single.stackDepthBb, 200);
+    },
+  );
 
   test('resetSyncedToDefaults disables further cloud sync', () async {
     final synced = <GameSettingsModel>[];

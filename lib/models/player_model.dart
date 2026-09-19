@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
+import 'package:live_poker_trainer/models/tendency_profile_model.dart';
 
 /// Villain / hero archetypes with default VPIP/PFR/3-bet frequencies.
 enum PlayerArchetype {
@@ -42,28 +43,28 @@ enum PlayerArchetype {
 
   /// Uppercase word that fits on a seat badge at nine seats.
   String get shortLabel => switch (this) {
-        PlayerArchetype.hero => 'YOU',
-        PlayerArchetype.maniac => 'MANIAC',
-        PlayerArchetype.nit => 'NIT',
-        PlayerArchetype.callingStation => 'STATION',
-        PlayerArchetype.tag => 'TAG',
-        PlayerArchetype.lag => 'LAG',
-      };
+    PlayerArchetype.hero => 'YOU',
+    PlayerArchetype.maniac => 'MANIAC',
+    PlayerArchetype.nit => 'NIT',
+    PlayerArchetype.callingStation => 'STATION',
+    PlayerArchetype.tag => 'TAG',
+    PlayerArchetype.lag => 'LAG',
+  };
 
   /// One-line read on how this archetype leaks, shown in the table legend.
   String get tell => switch (this) {
-        PlayerArchetype.hero => 'That is you — stay process-oriented.',
-        PlayerArchetype.maniac =>
-          'Bets and raises constantly. Call wider, value-bet huge, bluff never.',
-        PlayerArchetype.nit =>
-          'Only plays premiums. Their bets mean strength; steal their checks.',
-        PlayerArchetype.callingStation =>
-          'Calls far too much, folds almost never. Value-bet thin, never bluff.',
-        PlayerArchetype.tag =>
-          'Solid and balanced. Take thin edges on later streets; avoid big wars.',
-        PlayerArchetype.lag =>
-          'Wide and aggressive. Defend more flops, tighten your value raises.',
-      };
+    PlayerArchetype.hero => 'That is you — stay process-oriented.',
+    PlayerArchetype.maniac =>
+      'Bets and raises constantly. Call wider, value-bet huge, bluff never.',
+    PlayerArchetype.nit =>
+      'Only plays premiums. Their bets mean strength; steal their checks.',
+    PlayerArchetype.callingStation =>
+      'Calls far too much, folds almost never. Value-bet thin, never bluff.',
+    PlayerArchetype.tag =>
+      'Solid and balanced. Take thin edges on later streets; avoid big wars.',
+    PlayerArchetype.lag =>
+      'Wide and aggressive. Defend more flops, tighten your value raises.',
+  };
 
   static PlayerArchetype fromLabel(String raw) {
     final key = raw.trim().toLowerCase().replaceAll(' ', '_');
@@ -74,8 +75,7 @@ enum PlayerArchetype {
       'calling_station' ||
       'station' ||
       'fred' ||
-      'callingstation' =>
-        PlayerArchetype.callingStation,
+      'callingstation' => PlayerArchetype.callingStation,
       'tag' || 'alex' => PlayerArchetype.tag,
       'lag' || 'loose' || 'sammy' => PlayerArchetype.lag,
       _ => PlayerArchetype.tag,
@@ -114,10 +114,7 @@ class ArchetypeRoster {
   ];
 
   /// Picks a display name for [archetype] that is not already in [usedNames].
-  static String uniqueName(
-    PlayerArchetype archetype,
-    Set<String> usedNames,
-  ) {
+  static String uniqueName(PlayerArchetype archetype, Set<String> usedNames) {
     final primary = defaultNames[archetype] ?? archetype.label;
     if (!usedNames.contains(primary)) return primary;
     for (final alt in altNames[archetype] ?? const <String>[]) {
@@ -147,6 +144,7 @@ class PlayerModel {
     this.holeCards = const [],
     this.hasActedThisRound = false,
     this.lastActionLabel,
+    this.tendency,
   });
 
   final int id;
@@ -160,6 +158,7 @@ class PlayerModel {
   final List<CardModel> holeCards;
   final bool hasActedThisRound;
   final String? lastActionLabel;
+  final TendencyProfileModel? tendency;
 
   double get vpip => archetype.vpip;
   double get pfr => archetype.pfr;
@@ -178,6 +177,7 @@ class PlayerModel {
     bool? hasActedThisRound,
     String? lastActionLabel,
     bool clearLastAction = false,
+    TendencyProfileModel? tendency,
   }) {
     return PlayerModel(
       id: id ?? this.id,
@@ -190,21 +190,21 @@ class PlayerModel {
       allIn: allIn ?? this.allIn,
       holeCards: holeCards ?? this.holeCards,
       hasActedThisRound: hasActedThisRound ?? this.hasActedThisRound,
-      lastActionLabel: clearLastAction
-          ? null
-          : (lastActionLabel ?? this.lastActionLabel),
+      lastActionLabel:
+          clearLastAction ? null : (lastActionLabel ?? this.lastActionLabel),
+      tendency: tendency ?? this.tendency,
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'archetype': archetype.id,
-        'stack': stack,
-        'isHero': isHero,
-        'currentBet': currentBet,
-        'folded': folded,
-        'allIn': allIn,
-        'holeCards': holeCards.map((c) => c.toJson()).toList(),
-      };
+    'id': id,
+    'name': name,
+    'archetype': archetype.id,
+    'stack': stack,
+    'isHero': isHero,
+    'currentBet': currentBet,
+    'folded': folded,
+    'allIn': allIn,
+    'holeCards': holeCards.map((c) => c.toJson()).toList(),
+  };
 }

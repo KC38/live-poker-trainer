@@ -1,4 +1,5 @@
 /// [DiagnosticsSink] that forwards errors to Firebase Crashlytics.
+// ignore_for_file: prefer_initializing_formals
 library;
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';

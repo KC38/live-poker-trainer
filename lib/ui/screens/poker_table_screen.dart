@@ -16,6 +16,7 @@ import 'package:live_poker_trainer/ui/widgets/archetype_legend_sheet.dart';
 import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
+import 'package:live_poker_trainer/ui/widgets/tendency_profile_sheet.dart';
 
 /// Smartphone-first poker table with teaching-forward chrome.
 ///
@@ -197,7 +198,7 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                             if (game.isHandOver) {
                               controller.nextHand();
                             } else {
-                              controller.startTraining(continueTable: true);
+                              controller.resumeCurrentHand();
                             }
                           },
                         ),
@@ -231,6 +232,12 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                                             session.collectingChips,
                                         awardingChips: session.awardingChips,
                                         review: handOver,
+                                        onPlayerTap:
+                                            (player) =>
+                                                TendencyProfileSheet.show(
+                                                  context,
+                                                  player,
+                                                ),
                                       ),
                                     ),
                                     HeroRailWidget(
@@ -247,8 +254,16 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                                       child: ActionDockWidget(
                                         game: game,
                                         enabled: dockVisible,
+                                        liveActions: session.liveActions,
                                         authoredEdges:
                                             session.authoredHeroEdges,
+                                        onLiveAction:
+                                            (action) => ref
+                                                .read(
+                                                  gameControllerProvider
+                                                      .notifier,
+                                                )
+                                                .heroActLive(action),
                                         onAction:
                                             (action) => ref
                                                 .read(
@@ -280,6 +295,9 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                             collectingChips: session.collectingChips,
                             awardingChips: session.awardingChips,
                             review: handOver,
+                            onPlayerTap:
+                                (player) =>
+                                    TendencyProfileSheet.show(context, player),
                           ),
                         ),
                         HeroRailWidget(
@@ -299,7 +317,12 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                           child: ActionDockWidget(
                             game: game,
                             enabled: dockVisible,
+                            liveActions: session.liveActions,
                             authoredEdges: session.authoredHeroEdges,
+                            onLiveAction:
+                                (action) => ref
+                                    .read(gameControllerProvider.notifier)
+                                    .heroActLive(action),
                             onAction:
                                 (action) => ref
                                     .read(gameControllerProvider.notifier)

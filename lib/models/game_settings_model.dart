@@ -9,7 +9,7 @@ import 'package:live_poker_trainer/models/player_model.dart';
 /// Lineup selection mode on the Home screen.
 enum LineupMode { randomPool, custom }
 
-/// Persistent settings for blinds, stack, rebuy, SFX, and music.
+/// Persistent settings for live table setup, display, SFX, and music.
 @immutable
 class GameSettingsModel {
   /// Creates game settings with plan defaults.
@@ -17,22 +17,20 @@ class GameSettingsModel {
     this.smallBlind = PokerConstants.defaultSmallBlind,
     this.bigBlind = PokerConstants.defaultBigBlind,
     this.seatCount = PokerConstants.defaultSeatCount,
-    this.stackDepthBb = PokerConstants.defaultStackBb,
-    this.autoRebuy = PokerConstants.defaultAutoRebuy,
-    this.rebuyThresholdBb = PokerConstants.defaultRebuyThresholdBb,
+    int? maxStackDepthBb,
+    @Deprecated('Use maxStackDepthBb') int? stackDepthBb,
     this.sfxEnabled = PokerConstants.defaultSfxEnabled,
     this.musicEnabled = PokerConstants.defaultMusicEnabled,
     this.chipDisplayMode = ChipDisplayMode.both,
     this.lineupMode = LineupMode.randomPool,
     this.customArchetypes = const [],
-  });
+  }) : maxStackDepthBb =
+           maxStackDepthBb ?? stackDepthBb ?? PokerConstants.defaultStackBb;
 
   final double smallBlind;
   final double bigBlind;
   final int seatCount;
-  final int stackDepthBb;
-  final bool autoRebuy;
-  final int rebuyThresholdBb;
+  final int maxStackDepthBb;
   final bool sfxEnabled;
 
   /// Home / lounge ambient loop; independent of table SFX.
@@ -41,7 +39,11 @@ class GameSettingsModel {
   final LineupMode lineupMode;
   final List<PlayerArchetype> customArchetypes;
 
-  double get startingStack => stackDepthBb * bigBlind;
+  double get startingStack => maxStackDepthBb * bigBlind;
+
+  /// Legacy compatibility for the dormant local poker engine.
+  @Deprecated('Use maxStackDepthBb')
+  int get stackDepthBb => maxStackDepthBb;
 
   /// Villain seat count (excludes Hero at seat 0).
   int get villainSeatCount => (seatCount - 1).clamp(1, 8);
@@ -64,9 +66,8 @@ class GameSettingsModel {
     double? smallBlind,
     double? bigBlind,
     int? seatCount,
-    int? stackDepthBb,
-    bool? autoRebuy,
-    int? rebuyThresholdBb,
+    int? maxStackDepthBb,
+    @Deprecated('Use maxStackDepthBb') int? stackDepthBb,
     bool? sfxEnabled,
     bool? musicEnabled,
     ChipDisplayMode? chipDisplayMode,
@@ -90,9 +91,7 @@ class GameSettingsModel {
       smallBlind: smallBlind ?? this.smallBlind,
       bigBlind: bigBlind ?? this.bigBlind,
       seatCount: nextSeats,
-      stackDepthBb: stackDepthBb ?? this.stackDepthBb,
-      autoRebuy: autoRebuy ?? this.autoRebuy,
-      rebuyThresholdBb: rebuyThresholdBb ?? this.rebuyThresholdBb,
+      maxStackDepthBb: maxStackDepthBb ?? stackDepthBb ?? this.maxStackDepthBb,
       sfxEnabled: sfxEnabled ?? this.sfxEnabled,
       musicEnabled: musicEnabled ?? this.musicEnabled,
       chipDisplayMode: chipDisplayMode ?? this.chipDisplayMode,
@@ -102,44 +101,43 @@ class GameSettingsModel {
   }
 
   Map<String, Object?> toPrefsMap() => {
-        'smallBlind': smallBlind,
-        'bigBlind': bigBlind,
-        'seatCount': seatCount,
-        'stackDepthBb': stackDepthBb,
-        'autoRebuy': autoRebuy,
-        'rebuyThresholdBb': rebuyThresholdBb,
-        'sfxEnabled': sfxEnabled,
-        'musicEnabled': musicEnabled,
-        'chipDisplayMode': chipDisplayMode.name,
-        'lineupMode': lineupMode.name,
-        'customArchetypes':
-            customArchetypes.map((a) => a.id).join(','),
-      };
+    'smallBlind': smallBlind,
+    'bigBlind': bigBlind,
+    'seatCount': seatCount,
+    'maxStackDepthBb': maxStackDepthBb,
+    'sfxEnabled': sfxEnabled,
+    'musicEnabled': musicEnabled,
+    'chipDisplayMode': chipDisplayMode.name,
+    'lineupMode': lineupMode.name,
+    'customArchetypes': customArchetypes.map((a) => a.id).join(','),
+  };
 
   static GameSettingsModel fromPrefs(Map<String, Object?> prefs) {
     final lineup = prefs['lineupMode'] as String?;
     final chipMode = prefs['chipDisplayMode'] as String?;
     final archetypesRaw = prefs['customArchetypes'] as String? ?? '';
-    final archetypes = archetypesRaw.isEmpty
-        ? <PlayerArchetype>[]
-        : archetypesRaw
-            .split(',')
-            .where((s) => s.isNotEmpty)
-            .map(PlayerArchetype.fromLabel)
-            .toList();
+    final archetypes =
+        archetypesRaw.isEmpty
+            ? <PlayerArchetype>[]
+            : archetypesRaw
+                .split(',')
+                .where((s) => s.isNotEmpty)
+                .map(PlayerArchetype.fromLabel)
+                .toList();
     return GameSettingsModel(
-      smallBlind: (prefs['smallBlind'] as num?)?.toDouble() ??
+      smallBlind:
+          (prefs['smallBlind'] as num?)?.toDouble() ??
           PokerConstants.defaultSmallBlind,
-      bigBlind: (prefs['bigBlind'] as num?)?.toDouble() ??
+      bigBlind:
+          (prefs['bigBlind'] as num?)?.toDouble() ??
           PokerConstants.defaultBigBlind,
-      seatCount: (prefs['seatCount'] as num?)?.toInt() ??
+      seatCount:
+          (prefs['seatCount'] as num?)?.toInt() ??
           PokerConstants.defaultSeatCount,
-      stackDepthBb: (prefs['stackDepthBb'] as num?)?.toInt() ??
+      maxStackDepthBb:
+          (prefs['maxStackDepthBb'] as num?)?.toInt() ??
+          (prefs['stackDepthBb'] as num?)?.toInt() ??
           PokerConstants.defaultStackBb,
-      autoRebuy:
-          prefs['autoRebuy'] as bool? ?? PokerConstants.defaultAutoRebuy,
-      rebuyThresholdBb: (prefs['rebuyThresholdBb'] as num?)?.toInt() ??
-          PokerConstants.defaultRebuyThresholdBb,
       sfxEnabled:
           prefs['sfxEnabled'] as bool? ?? PokerConstants.defaultSfxEnabled,
       musicEnabled:
@@ -148,9 +146,10 @@ class GameSettingsModel {
         (m) => m.name == chipMode,
         orElse: () => ChipDisplayMode.both,
       ),
-      lineupMode: lineup == LineupMode.custom.name
-          ? LineupMode.custom
-          : LineupMode.randomPool,
+      lineupMode:
+          lineup == LineupMode.custom.name
+              ? LineupMode.custom
+              : LineupMode.randomPool,
       customArchetypes: archetypes,
     );
   }
@@ -180,17 +179,13 @@ class GameSettingsModel {
     // Firestore may store customArchetypes as a List.
     final rawArch = data['customArchetypes'];
     if (rawArch is List) {
-      merged['customArchetypes'] =
-          rawArch.map((e) => e.toString()).join(',');
+      merged['customArchetypes'] = rawArch.map((e) => e.toString()).join(',');
     }
     return GameSettingsModel.fromPrefs(merged);
   }
 
   /// Merges remote gameplay prefs onto this instance (audio unchanged).
   GameSettingsModel mergeRemotePreferences(GameSettingsModel remote) {
-    return remote.copyWith(
-      sfxEnabled: sfxEnabled,
-      musicEnabled: musicEnabled,
-    );
+    return remote.copyWith(sfxEnabled: sfxEnabled, musicEnabled: musicEnabled);
   }
 }

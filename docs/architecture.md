@@ -1,151 +1,156 @@
 # Architecture
 
-## Trust boundary
+## Trust and information boundaries
 
-The Flutter app is an authenticated rendering and input client. It never holds
-an LLM credential, generates training content, grades coaching, lists the
-shared situation pool, or persists training/progress data locally.
+The Flutter app is an authenticated online renderer and input client. The
+server owns legal actions, chip movement, turn order, streets, side pots,
+showdowns, shared branches, and progress. The client never receives unrevealed
+runout cards or folded/opponent private cards.
 
-The active situation graph and current poker state exist in memory for one
-hand. Starting another hand requires a successful call to the server.
+Gemini is not a poker engine:
 
-## Data flow
+- Deal generation chooses button, varied 20–maximum-BB stacks, private cards,
+  and a fixed runout for an app-defined random lineup.
+- A villain call receives only that actor's cards, visible state/history, and
+  bounded tendency profile.
+- A coaching call receives Hero's cards, public state/history, and the same
+  tendency profiles visible in the UI.
+- Deterministic code validates and applies every selected action id.
 
-```mermaid
-flowchart LR
-  Client["Authenticated Flutter client"] -->|"tableSetup"| Fetch["fetchSituation"]
-  Fetch --> Setup["tableSetups/{setupKey}"]
-  Setup --> Situation["situations/{situationId}"]
-  Fetch --> Receipt["users/{uid}/situationReceipts"]
-  Setup --> Refill["Gemini generation + critique"]
-  Refill --> Validate["Deterministic validator"]
-  Validate --> Situation
-  Client -->|"validated path"| Record["recordSituationProgress"]
-  Record --> History["users/{uid}/handHistory"]
-  Record --> Progress["users/{uid}/progress/main"]
+Training requires a live connection. There is no offline continuation.
+
+## Setup and inventory
+
+The default setup is six-handed $1/$2 with a 200 BB maximum and Hero at logical
+seat zero. The setup pool key excludes the per-hand lineup:
+
+`live-v3|random|s6|max200bb|sb1|bb2`
+
+For each generated hand the server creates a new ordered archetype lineup from
+bounded templates; Gemini chooses the button, so Hero's position varies.
+
+Inventory is unseen per user:
+
+- a new setup queues ten fully ready hands;
+- allocating a hand creates `users/{uid}/liveHandReceipts/{handId}`;
+- five or fewer unseen ready hands queues ten more shared hands;
+- only zero unseen hands blocks allocation while generation catches up.
+
+A hand is `ready` only after its first Hero node has a complete coaching rubric
+and three useful non-fold continuations have been expanded through the next
+Hero decision or terminal.
+
+Generation is split into per-hand `liveGenerationJobs` so sequential
+perspective-isolated model calls stay inside event-function deadlines.
+
+## Immutable hand and shared lazy tree
+
+`liveTableSetups/{setupKey}/hands/{handId}` stores the server-only immutable
+deal and root state hash. A hand's subcollections contain:
+
+```text
+nodes/{stateHash}
+  state
+  public action history
+  fixed legal actions
+  hidden all-actions coaching rubric
+
+nodes/{stateHash}/actions/{actionId}
+  selected action
+  coaching for that action
+  replay events
+  child state hash
 ```
 
-## Server-owned situation pools
+Node hashes include canonical state and public history. Action documents use
+generation leases, making branches shared, deterministic, and idempotent under
+concurrent users.
 
-`fetchSituation` canonicalizes each requested table:
+## Online sessions
 
-- Random Pool keys include seat count, blinds/ante, and starting stack.
-  Ordered archetypes and positions are authored inside each situation.
-- Custom keys additionally include the exact ordered archetype lineup, hero
-  seat, and button seat.
+Callables:
 
-Allocation and the per-user receipt are written atomically. The receipt is
-created when content is first delivered. Each fetch prefers situations the
-caller has never received. When every prepared situation already has a
-receipt, the least-served prepared hand is re-served immediately so the
-client does not wait on generation; completed receipts stay completed so
-replay does not double-count progress. A refill is still queued so new
-hands keep arriving.
+- `startLiveHand(tableSetup, clientVersion)`
+- `submitLiveAction(sessionId, handId, stateVersion, decisionId,
+  idempotencyKey, actionId)`
+- `resumeLiveHand(sessionId, clientVersion)`
 
-New or exhausted pools are marked `queued`; `fetchSituation` returns an
-`unavailable` preparation response instead of waiting on Gemini. The Flutter
-client polls that exact preparation response for up to nine minutes with
-one-, two-, four-, then five-second capped backoff. Those preparation polls
-charge a separate per-user hourly poll quota; only a successful situation
-allocation increments the hourly deal (fetch) quota. Other network-unavailable
-responses fail promptly. Generation publishes each validated situation as soon
-as it succeeds (empty pools start with a two-situation ASAP wave, then fill to
-five). The same refill is queued when the globally never-served count reaches
-three. A setup-level lease makes this idempotent across concurrent Functions
-instances. A scheduled job keeps popular Random Pool setups warm.
+The per-user cursor lives at `users/{uid}/liveSessions/{sessionId}`. Decision
+results are stored beneath the session by idempotency key. Duplicate requests
+return the original result; stale state versions are rejected.
 
-Clients cannot read `tableSetups` or situation documents directly.
+The client receives a projected `LiveHandView`: Hero cards, currently visible
+board, public seat state, visible tendencies, fixed legal actions, and terminal
+pots/winners. Villain cards are included only for non-folded players at an
+actual showdown. Hero folding terminates training immediately.
 
-The Flutter client starts `fetchSituation` as soon as training is prepared
-(overlapping the route fade) and prefetches the next situation when a hand
-ends or the hero folds, so Next rarely waits on a cold network round-trip.
+## Fixed actions
 
-## Branching situation schema
+No free fold is offered. When checked to, Hero receives Check plus fixed legal
+bet buckets. When facing a price, Hero receives Fold, Call, fixed legal raises,
+and All-in where available.
 
-Every payload has `payloadVersion: 2`, starts preflop, and contains:
+- Preflop open: 2.5 BB, 3 BB, 4 BB, all-in
+- Preflop re-raise: minimum, 3×, 4×, all-in
+- Postflop bet: 33%, 67%, 100% pot, all-in
+- Postflop raise: minimum, 50% and 100% pot-after-call, all-in
 
-- table setup, hero cards, lineup, button, blinds/ante, and starting stacks;
-- fixed flop/turn/river runouts;
-- a directed acyclic node graph;
-- hero nodes with curated legal actions and coaching metadata;
-- scripted nodes for deterministic opponent actions;
-- terminal fold/showdown/all-in outcomes.
+Targets that are illegal, unaffordable, or duplicates after stack clamping are
+removed. Incomplete all-ins do not reopen betting.
 
-Hero actions are selected by stable `actionKey`. Bet and raise amounts use
-total chips committed on the street ("raise to"), matching `PokerAction`.
+## Authoritative poker engine
 
-The Flutter `PokerEngine` materializes each node into `GameState`, replays
-scripted actions, waits at hero nodes, and follows only the selected edge. It
-does not call stochastic villain logic while traversing an authored situation.
+`live_poker_engine.ts` uses cent-exact commitments and supports:
 
-## Generation and validation
+- heads-up and multiway blind/turn order;
+- full and incomplete raises;
+- fixed runout street progression;
+- unequal stacks and all-in runouts;
+- unmatched-chip refunds;
+- main and side pots with folded contributors and eligibility;
+- tied pots and deterministic odd-cent assignment;
+- deterministic seven-card showdown evaluation.
 
-Firebase Functions calls `gemini-3.8-flash` with the API key provided through
-Secret Manager. A first call authors the graph. The next call receives both the
-candidate and exact deterministic-validator findings, then critiques and
-corrects it. If correction is still needed, later calls repair that same
-candidate instead of restarting the full generation pipeline.
+Gemini returns only one supplied legal action id. It never returns snapshots,
+payouts, winners, or arbitrary amounts.
 
-Before publication, deterministic validation rejects:
+## Exploit coaching
 
-- malformed, cyclic, unreachable, or unterminated graphs;
-- non-preflop roots;
-- duplicate/invalid cards or incorrect street boards;
-- missing hero action coverage or invalid coaching fields;
-- illegal call, bet, raise, or all-in sizing;
-- inconsistent stacks, street commitments, pots, or chip totals;
-- coaching verdict/optimal-action contradictions.
+Every Hero node is evaluated before the action is revealed. The strongest
+stable Gemini model available (`gemini-3.8-flash`, high thinking) drafts and
+critiques a rubric covering every action. Villain decisions use the same model
+at low thinking for latency.
 
-Invalid model output is repaired or retried and never becomes servable.
-Successful, duplicate, and failed generation runs are recorded under
-`tableSetups/{setupKey}/generationRuns`. Each run stores Gemini prompt,
-candidate, thinking, cached, and total token counts plus an estimated cost in
-USD micros. `tableSetups/{setupKey}.generationMetrics` aggregates those values,
-and each published situation stores the usage attributable to that situation.
-The pricing-version field identifies the rates used for each estimate. The
-calculator automatically switches from the introductory rate to the published
-standard Gemini 3.8 Flash rate on January 1, 2027.
+Server-computed facts include position, effective stack, SPR, pot odds, board
+texture, Hero features, fixed actions, public history, and visible bounded
+tendencies. Coaching is qualitative:
 
-## Progress
+`recommended | strong | reasonable | questionable | clear_mistake`
 
-`recordSituationProgress` accepts only a situation previously allocated to the
-caller. It walks the server's stored graph and verifies every reported hero
-node/action and terminal result. The server derives grading and hand summaries
-from the authored edges rather than accepting client-supplied verdicts.
+It carries confidence, profile-grounded reasoning, sizing guidance, a better
+alternative where appropriate, and the read that would reverse the advice.
+There are no fabricated EV numbers.
 
-Server history feeds `HeroProfiler`, preserving sample-gated VPIP/PFR, 3-bet,
-aggression, showdown, street, archetype, style, and trend calculations.
-Progress aggregates provide coaching accuracy and EV deltas.
+See `docs/coaching-quality.md` for the 720-case release benchmark, hidden-data
+metamorphic tests, and deployment gates.
 
-Leak Finder and Coach Review do not exist in the new pipeline.
+## Progress and privacy
 
-## Client persistence
+Each action is persisted incrementally. Terminal sessions write:
 
-Firestore offline persistence is disabled. Training, receipts, hand history,
-profile metrics, and coaching are not written to SQLite or SharedPreferences.
-Legacy local databases/avatar files are removed once during upgrade. A
-`legacyCleanupVersion` SharedPreferences marker gates that idempotent migration;
-the marker is operational metadata, not training data.
+- `users/{uid}/liveHandHistory/{sessionId}`
+- `users/{uid}/liveProgress/main`
+- completed `liveHandReceipts`
 
-SharedPreferences remains only for SFX/music preferences. Gameplay preferences
-and identity are stored in Firestore. User-uploaded avatars are stored under
-`avatars/{uid}/` in Firebase Storage.
+Owners can read history and progress. Sessions, receipts, pool definitions,
+private tree nodes, jobs, and all private cards remain Admin-only.
 
-## Firebase access
+## Migration
 
-- User root documents: owner read; validated identity/preferences writes.
-- `situationReceipts`: Functions/Admin only.
-- `handHistory` and `progress`: owner read, Functions/Admin write.
-- `tableSetups` and nested `situations`: Functions/Admin only.
-- Avatar objects: authenticated reads; owner-only image writes with size limits.
-- Everything else: denied.
+Version 2 callable exports are removed, enforcing a mandatory client upgrade.
+The guarded production reset preserves Firebase Auth, display name, avatar, and
+device-local audio while deleting old/new training data and resetting gameplay
+preferences to the v3 default.
 
-The project uses the Standard edition, native-mode `(default)` Firestore
-database in `nam5`; Functions run in `us-central1`.
-
-## Tests
-
-Functions tests cover setup canonicalization, leases/allocation, graph
-validation, coaching metadata, and server-derived progress. Flutter tests cover
-payload parsing, graph traversal, server coaching display, network-required
-error states, and Progress without removed features.
+After deployment/reset, `seed_live_default.ts` creates the launch setup, enables
+client version 2.0.0, and waits until ten warmed hands are ready.

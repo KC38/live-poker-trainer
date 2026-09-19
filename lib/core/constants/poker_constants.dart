@@ -7,12 +7,10 @@ class PokerConstants {
 
   static const double defaultSmallBlind = 1;
   static const double defaultBigBlind = 2;
-  static const int defaultSeatCount = 9;
+  static const int defaultSeatCount = 6;
   static const int minSeats = 2;
   static const int maxSeats = 9;
   static const int defaultStackBb = 200;
-  static const int defaultRebuyThresholdBb = 50;
-  static const bool defaultAutoRebuy = true;
   static const bool defaultSfxEnabled = true;
   static const bool defaultMusicEnabled = true;
 

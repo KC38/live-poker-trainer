@@ -1,6 +1,6 @@
 /// Reads user progress aggregates from Firestore.
 ///
-/// Primary source: `users/{uid}/progress/main` (server-authored).
+/// Primary source: `users/{uid}/liveProgress/main` (server-authored).
 /// Falls back to empty stats when the doc is missing.
 library;
 
@@ -10,7 +10,7 @@ import 'package:live_poker_trainer/models/hand_history_sample.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/models/user_stats_model.dart';
 
-/// Progress surface backed by `users/{uid}/progress/main`.
+/// Progress surface backed by `users/{uid}/liveProgress/main`.
 class ProgressRepository {
   /// Creates a progress repository.
   ProgressRepository({FirebaseFirestore? firestore}) : _override = firestore;
@@ -20,7 +20,7 @@ class ProgressRepository {
   FirebaseFirestore get _db => _override ?? FirebaseFirestore.instance;
 
   DocumentReference<Map<String, dynamic>> _progressDoc(String uid) =>
-      _db.collection('users').doc(uid).collection('progress').doc('main');
+      _db.collection('users').doc(uid).collection('liveProgress').doc('main');
 
   /// Coaching / EV aggregates from the progress doc.
   Future<UserStatsModel> loadStats(String uid) async {
@@ -41,7 +41,7 @@ class ProgressRepository {
     final snap = await _db
         .collection('users')
         .doc(uid)
-        .collection('handHistory')
+        .collection('liveHandHistory')
         .orderBy('createdAt', descending: true)
         .limit(limit)
         .get(const GetOptions(source: Source.server));

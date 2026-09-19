@@ -1,4 +1,5 @@
 /// Unit tests for the AI coach shelf.
+// ignore_for_file: use_null_aware_elements
 library;
 
 import 'package:flutter/material.dart';

@@ -59,9 +59,7 @@ service cloud.firestore {
           'smallBlind',
           'bigBlind',
           'seatCount',
-          'stackDepthBb',
-          'autoRebuy',
-          'rebuyThresholdBb',
+          'maxStackDepthBb',
           'chipDisplayMode',
           'lineupMode',
           'customArchetypes'
@@ -70,9 +68,7 @@ service cloud.firestore {
           'smallBlind',
           'bigBlind',
           'seatCount',
-          'stackDepthBb',
-          'autoRebuy',
-          'rebuyThresholdBb',
+          'maxStackDepthBb',
           'chipDisplayMode',
           'lineupMode',
           'customArchetypes'
@@ -86,13 +82,9 @@ service cloud.firestore {
         && value.seatCount is int
         && value.seatCount >= 2
         && value.seatCount <= 9
-        && value.stackDepthBb is int
-        && value.stackDepthBb >= 20
-        && value.stackDepthBb <= 500
-        && value.autoRebuy is bool
-        && value.rebuyThresholdBb is int
-        && value.rebuyThresholdBb >= 0
-        && value.rebuyThresholdBb <= 500
+        && value.maxStackDepthBb is int
+        && value.maxStackDepthBb >= 20
+        && value.maxStackDepthBb <= 500
         && value.chipDisplayMode is string
         && value.chipDisplayMode in ['dollars', 'bb', 'both']
         && value.lineupMode is string
@@ -152,6 +144,32 @@ service cloud.firestore {
         allow write: if false;
       }
 
+      match /liveProgress/{docId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      match /liveHandHistory/{handId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      match /liveHandReceipts/{handId} {
+        allow read, write: if false;
+      }
+
+      match /liveSessions/{sessionId}/{document=**} {
+        allow read, write: if false;
+      }
+
+      match /liveStartRequests/{requestId} {
+        allow read, write: if false;
+      }
+
+      match /liveOpenSession/{docId} {
+        allow read, write: if false;
+      }
+
       match /playedScenarios/{id} {
         allow read, write: if false;
       }
@@ -175,6 +193,14 @@ service cloud.firestore {
       match /{document=**} {
         allow read, write: if false;
       }
+    }
+
+    match /liveTableSetups/{setupKey}/{document=**} {
+      allow read, write: if false;
+    }
+
+    match /liveGenerationJobs/{jobId} {
+      allow read, write: if false;
     }
 
     match /scenarios/{contentHash} {

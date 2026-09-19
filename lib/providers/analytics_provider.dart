@@ -1,4 +1,5 @@
 /// Analytics service, consent preference, and navigator observer providers.
+// ignore_for_file: prefer_initializing_formals
 library;
 
 import 'dart:async';
@@ -20,10 +21,11 @@ final analyticsServiceProvider = Provider<AnalyticsService>((ref) {
 });
 
 /// Navigator observer that logs named routes.
-final analyticsNavigatorObserverProvider =
-    Provider<AnalyticsNavigatorObserver>((ref) {
-  return AnalyticsNavigatorObserver(ref.watch(analyticsServiceProvider));
-});
+final analyticsNavigatorObserverProvider = Provider<AnalyticsNavigatorObserver>(
+  (ref) {
+    return AnalyticsNavigatorObserver(ref.watch(analyticsServiceProvider));
+  },
+);
 
 /// Device-local Analytics + Crashlytics collection preference (default on).
 class AnalyticsConsentNotifier extends StateNotifier<bool> {
@@ -73,7 +75,7 @@ Future<void> applyCollectionEnabled(
 /// Whether Analytics / Crashlytics collection is enabled (default true).
 final analyticsConsentProvider =
     StateNotifierProvider<AnalyticsConsentNotifier, bool>((ref) {
-  final analytics = ref.watch(analyticsServiceProvider);
-  final prefs = ref.watch(sharedPreferencesProvider).asData?.value;
-  return AnalyticsConsentNotifier(analytics: analytics, prefs: prefs);
-});
+      final analytics = ref.watch(analyticsServiceProvider);
+      final prefs = ref.watch(sharedPreferencesProvider).asData?.value;
+      return AnalyticsConsentNotifier(analytics: analytics, prefs: prefs);
+    });

@@ -34,6 +34,7 @@ class CoachFeedback {
     this.heroSizingBb = 0,
     this.evDeltaBb = 0,
     this.decisionStreet,
+    this.confidence,
   });
 
   final CoachVerdict verdict;
@@ -45,6 +46,7 @@ class CoachFeedback {
   final double heroSizingBb;
   final double evDeltaBb;
   final Street? decisionStreet;
+  final String? confidence;
 
   bool get hasVerdict =>
       verdict == CoachVerdict.correct ||
@@ -116,6 +118,7 @@ class CoachFeedback {
     double? evDeltaBb,
     Street? decisionStreet,
     bool clearDecisionStreet = false,
+    String? confidence,
   }) {
     return CoachFeedback(
       verdict: verdict ?? this.verdict,
@@ -128,6 +131,7 @@ class CoachFeedback {
       evDeltaBb: evDeltaBb ?? this.evDeltaBb,
       decisionStreet:
           clearDecisionStreet ? null : (decisionStreet ?? this.decisionStreet),
+      confidence: confidence ?? this.confidence,
     );
   }
 }

@@ -235,7 +235,6 @@ class PokerEngine {
     // lineup as well as a reproducible deck.
     var players =
         existingPlayers ?? buildLineup(settings: _settings, random: _random);
-    players = _applyAutoRebuy(players);
 
     final n = players.length;
     final dealer = dealerIndex ?? (_stateOrDefaultDealer(n));
@@ -1335,16 +1334,6 @@ class PokerEngine {
       winnerIds: winners.map((w) => w.id).toList(growable: false),
     );
     return ended;
-  }
-
-  List<PlayerModel> _applyAutoRebuy(List<PlayerModel> players) {
-    if (!_settings.autoRebuy) return players;
-    final threshold = _settings.rebuyThresholdBb * _settings.bigBlind;
-    final target = _settings.startingStack;
-    return [
-      for (final p in players)
-        if (p.stack < threshold) p.copyWith(stack: target) else p,
-    ];
   }
 }
 

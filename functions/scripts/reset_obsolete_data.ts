@@ -3,8 +3,9 @@
  *
  * Dry-run by default. An explicit target project is always required.
  *
- * Preserves Firebase Auth and users/{uid} identity/preferences fields.
- * Purges scenarios, tableSetups, and obsolete per-user training subcollections.
+ * Preserves Firebase Auth plus users/{uid} identity/avatar fields.
+ * Purges every v2/v3 training artifact and resets gameplay preferences to the
+ * v3 launch default ($1/$2, six seats, 200 BB maximum, random lineup).
  *
  * Usage (from functions/):
  *   npm run reset:dry -- --project=my-staging-project
@@ -15,6 +16,7 @@
 
 import {initializeApp, applicationDefault} from "firebase-admin/app";
 import {
+  FieldPath,
   FieldValue,
   getFirestore,
   type CollectionReference,
@@ -122,9 +124,30 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
   summary.situations = await purgeQuery(
     db.collectionGroup("situations"),
     options.execute,
+    (doc) => doc.ref.path.startsWith("tableSetups/"),
   );
+  summary.generationRuns = await purgeQuery(
+    db.collectionGroup("generationRuns"),
+    options.execute,
+    (doc) => doc.ref.path.startsWith("tableSetups/"),
+  );
+  for (const name of ["actions", "nodes", "hands"]) {
+    summary[name] = await purgeQuery(
+      db.collectionGroup(name),
+      options.execute,
+      (doc) => doc.ref.path.startsWith("liveTableSetups/"),
+    );
+  }
   summary.tableSetups = await purgeCollection(
     db.collection("tableSetups"),
+    options.execute,
+  );
+  summary.liveTableSetups = await purgeCollection(
+    db.collection("liveTableSetups"),
+    options.execute,
+  );
+  summary.liveGenerationJobs = await purgeCollection(
+    db.collection("liveGenerationJobs"),
     options.execute,
   );
 
@@ -137,14 +160,24 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
     "handHistory",
     "progress",
     "serverLimits",
+    "decisions",
+    "liveSessions",
+    "liveStartRequests",
+    "liveOpenSession",
+    "liveHandReceipts",
+    "liveHandHistory",
+    "liveProgress",
   ]) {
     summary[name] = await purgeQuery(
       db.collectionGroup(name),
       options.execute,
+      (doc) =>
+        doc.ref.path.startsWith("users/") &&
+        (name !== "decisions" || doc.ref.path.includes("/liveSessions/")),
     );
   }
 
-  summary.userStatsCleared = await clearUserStats(db, options.execute);
+  summary.usersReset = await resetUsers(db, options.execute);
   summary.situationPoolLimits = await clearPoolLimits(
     db,
     options.execute,
@@ -175,33 +208,38 @@ async function purgeCollection(
 async function purgeQuery(
   query: Query,
   execute: boolean,
+  include: (doc: DocumentSnapshot) => boolean = () => true,
 ): Promise<Counter> {
   const counter: Counter = {scanned: 0, deleted: 0};
   let cursor: DocumentSnapshot | undefined;
   let previewed = 0;
+  const ordered = query.orderBy(FieldPath.documentId());
 
   for (;;) {
-    const pageQuery = execute || cursor === undefined
-      ? query.limit(PAGE_SIZE)
-      : query.startAfter(cursor).limit(PAGE_SIZE);
+    const pageQuery = cursor === undefined
+      ? ordered.limit(PAGE_SIZE)
+      : ordered.startAfter(cursor).limit(PAGE_SIZE);
     const snap = await pageQuery.get();
     if (snap.empty) break;
 
     counter.scanned += snap.size;
-    counter.deleted += snap.size;
+    const matches = snap.docs.filter(include);
+    counter.deleted += matches.length;
     if (execute) {
-      const batch = snap.docs[0].ref.firestore.batch();
-      for (const doc of snap.docs) batch.delete(doc.ref);
-      await batch.commit();
+      if (matches.length > 0) {
+        const batch = matches[0].ref.firestore.batch();
+        for (const doc of matches) batch.delete(doc.ref);
+        await batch.commit();
+      }
     } else {
-      for (const doc of snap.docs) {
+      for (const doc of matches) {
         if (previewed < PREVIEW_LIMIT) {
           console.log(`  would delete ${doc.ref.path}`);
           previewed += 1;
         }
       }
-      cursor = snap.docs[snap.docs.length - 1];
     }
+    cursor = snap.docs[snap.docs.length - 1];
 
     if (snap.size < PAGE_SIZE) break;
   }
@@ -211,7 +249,7 @@ async function purgeQuery(
   return counter;
 }
 
-async function clearUserStats(
+async function resetUsers(
   db: Firestore,
   execute: boolean,
 ): Promise<Counter> {
@@ -226,22 +264,28 @@ async function clearUserStats(
     if (snap.empty) break;
     counter.scanned += snap.size;
 
-    const matching = snap.docs.filter(
-      (doc) => doc.data().stats !== undefined,
-    );
-    counter.deleted += matching.length;
-    if (execute && matching.length > 0) {
+    counter.deleted += snap.size;
+    if (execute && snap.size > 0) {
       const batch = db.batch();
-      for (const doc of matching) {
+      for (const doc of snap.docs) {
         batch.update(doc.ref, {
           stats: FieldValue.delete(),
+          preferences: {
+            smallBlind: 1,
+            bigBlind: 2,
+            seatCount: 6,
+            maxStackDepthBb: 200,
+            chipDisplayMode: "both",
+            lineupMode: "randomPool",
+            customArchetypes: "",
+          },
           updatedAt: FieldValue.serverTimestamp(),
         });
       }
       await batch.commit();
     } else if (!execute) {
-      for (const doc of matching) {
-        console.log(`  would clear stats on ${doc.ref.path}`);
+      for (const doc of snap.docs) {
+        console.log(`  would reset training data on ${doc.ref.path}`);
       }
     }
 
