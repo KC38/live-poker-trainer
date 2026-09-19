@@ -2,13 +2,15 @@
  * Unit tests for the Gemini REST structured-output contract.
  */
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   GEMINI_GENERATION_CONFIG,
   GEMINI_INITIAL_GENERATION_CONFIG,
   SITUATION_RESPONSE_JSON_SCHEMA,
+  generateValidatedSituation,
   normalizePayload,
 } from "./gemini";
+import {minimalFoldSituation} from "./test_fixtures";
 
 describe("Gemini generation config", () => {
   it("uses REST thinkingConfig and no sampling controls", () => {
@@ -114,4 +116,88 @@ describe("Gemini generation config", () => {
       ]);
     },
   );
+
+  it("normalizes common ten-card and casing variants before validation", () => {
+    const payload = minimalFoldSituation();
+    payload.heroHand = ["10H", "kd"];
+    payload.holeCards[0].cards = ["10H", "kd"];
+
+    const normalized = normalizePayload(
+      payload,
+      {
+        mode: "random",
+        seatCount: 2,
+        smallBlind: 1,
+        bigBlind: 2,
+        ante: 0,
+        startingStack: 200,
+      },
+      payload.setupKey,
+    );
+
+    expect(normalized.heroHand).toEqual(["Th", "Kd"]);
+    expect(normalized.holeCards[0].cards).toEqual(["Th", "Kd"]);
+  });
+
+  it("repairs one candidate with exact feedback instead of regenerating", async () => {
+    const invalid = structuredClone(minimalFoldSituation());
+    const open = invalid.nodes.open;
+    if (open.type !== "hero") throw new Error("expected hero node");
+    open.actions = open.actions.filter(
+      (action) => action.kind !== "CALL" && action.kind !== "ALL_IN",
+    );
+    const corrected = minimalFoldSituation();
+    const responses = [invalid, invalid, corrected];
+    const fetchImpl = vi.fn(async () => {
+      const payload = responses.shift();
+      return new Response(JSON.stringify({
+        candidates: [{content: {parts: [{text: JSON.stringify(payload)}]}}],
+        usageMetadata: {
+          promptTokenCount: 100,
+          candidatesTokenCount: 200,
+          thoughtsTokenCount: 300,
+          totalTokenCount: 600,
+        },
+      }), {status: 200});
+    });
+
+    const result = await generateValidatedSituation({
+      apiKey: "secret",
+      setup: {
+        mode: "random",
+        seatCount: 2,
+        smallBlind: 1,
+        bigBlind: 2,
+        ante: 0,
+        startingStack: 200,
+      },
+      fetchImpl: fetchImpl as typeof fetch,
+      maxAttempts: 2,
+    });
+
+    expect(fetchImpl).toHaveBeenCalledTimes(3);
+    const correctionBody = JSON.parse(
+      String(fetchImpl.mock.calls[1][1]?.body),
+    ) as {contents: Array<{parts: Array<{text: string}>}>};
+    expect(correctionBody.contents[0].parts[0].text).toContain(
+      "[coverage] node=open: facing a bet requires CALL or ALL_IN",
+    );
+    const repairBody = JSON.parse(
+      String(fetchImpl.mock.calls[2][1]?.body),
+    ) as {contents: Array<{parts: Array<{text: string}>}>};
+    expect(repairBody.contents[0].parts[0].text).toContain(
+      "[coverage] node=open: facing a bet requires CALL or ALL_IN",
+    );
+    expect(repairBody.contents[0].parts[0].text).not.toContain(
+      "Batch variation seed:",
+    );
+    expect(result.validationFailureCount).toBeGreaterThanOrEqual(1);
+    expect(result.usage).toMatchObject({
+      modelRequestCount: 3,
+      promptTokenCount: 300,
+      candidatesTokenCount: 600,
+      thoughtsTokenCount: 900,
+      totalTokenCount: 1800,
+    });
+  });
 });

@@ -15,10 +15,16 @@ import {HttpsError} from "firebase-functions/v2/https";
 import {hashSituationStructure} from "./content_hash";
 import {
   generateValidatedSituation,
+  SituationGenerationError,
   type GenerateSituationResult,
 } from "./gemini";
 import {
+  emptyGenerationUsage,
+  type GenerationUsage,
+} from "./generation_usage";
+import {
   ASAP_INITIAL_COUNT,
+  GEMINI_MODEL_ID,
   GENERATION_LEASE_MS,
   INITIAL_POOL_SIZE,
   NEVER_SERVED_LOW_WATER,
@@ -96,6 +102,13 @@ export async function ensureTableSetupDoc(
         })) ?? null,
       situationCount: 0,
       neverServedCount: 0,
+      generationMetrics: {
+        ...emptyGenerationUsage(),
+        completedRunCount: 0,
+        successfulRunCount: 0,
+        failedRunCount: 0,
+        publishedSituationCount: 0,
+      },
       generation: {
         status: "idle",
         leaseId: null,
@@ -237,7 +250,10 @@ export async function maybeRefillPool(options: {
   let skipped = 0;
   const errors: string[] = [];
 
-  const publishFn = async (generatedResult: GenerateSituationResult) => {
+  const publishFn = async (
+    generatedResult: GenerateSituationResult,
+    generationRunId: string,
+  ) => {
     const contentHash = hashSituationStructure(generatedResult.payload);
     const situationId = contentHash.slice(0, 32);
     const ref = situations.doc(situationId);
@@ -253,6 +269,9 @@ export async function maybeRefillPool(options: {
           generatedResult.payload.schemaVersion ?? SITUATION_SCHEMA_VERSION,
         source: "gemini",
         modelId: generatedResult.modelId,
+        generationRunId,
+        generationUsage: generatedResult.usage,
+        validationFailureCount: generatedResult.validationFailureCount,
         contentHash,
         timesServed: 0,
         generatedAt: FieldValue.serverTimestamp(),
@@ -294,6 +313,7 @@ export async function maybeRefillPool(options: {
       variationOffset: 0,
       generateFn,
       publishFn,
+      recordRunFn: (run) => recordGenerationRun(db, run),
     });
     added += firstWave.added;
     skipped += firstWave.skipped;
@@ -309,6 +329,7 @@ export async function maybeRefillPool(options: {
         variationOffset: firstWaveSize,
         generateFn,
         publishFn,
+        recordRunFn: (run) => recordGenerationRun(db, run),
       });
       added += secondWave.added;
       skipped += secondWave.skipped;
@@ -472,6 +493,76 @@ function errorMessage(err: unknown): string {
   return err instanceof Error ? err.message : String(err);
 }
 
+export interface GenerationRunTelemetry {
+  runId: string;
+  setupKey: string;
+  modelId: string;
+  status: "published" | "duplicate" | "failed";
+  usage: GenerationUsage;
+  validationFailureCount: number;
+  error?: string;
+}
+
+/**
+ * Persists one idempotent generation-run record and setup-level token totals.
+ */
+export async function recordGenerationRun(
+  db: Firestore,
+  run: GenerationRunTelemetry,
+): Promise<void> {
+  const {setupRef} = poolRefs(db, run.setupKey);
+  const runRef = setupRef.collection("generationRuns").doc(run.runId);
+  await db.runTransaction(async (tx) => {
+    const existing = await tx.get(runRef);
+    if (existing.exists) return;
+
+    tx.set(runRef, {
+      ...run,
+      error: run.error?.slice(0, 1000) ?? null,
+      createdAt: FieldValue.serverTimestamp(),
+    });
+    tx.set(
+      setupRef,
+      {
+        generationMetrics: {
+          pricingVersion: run.usage.pricingVersion,
+          modelRequestCount: FieldValue.increment(
+            run.usage.modelRequestCount,
+          ),
+          promptTokenCount: FieldValue.increment(
+            run.usage.promptTokenCount,
+          ),
+          cachedContentTokenCount: FieldValue.increment(
+            run.usage.cachedContentTokenCount,
+          ),
+          candidatesTokenCount: FieldValue.increment(
+            run.usage.candidatesTokenCount,
+          ),
+          thoughtsTokenCount: FieldValue.increment(
+            run.usage.thoughtsTokenCount,
+          ),
+          totalTokenCount: FieldValue.increment(run.usage.totalTokenCount),
+          estimatedCostUsdMicros: FieldValue.increment(
+            run.usage.estimatedCostUsdMicros,
+          ),
+          completedRunCount: FieldValue.increment(1),
+          successfulRunCount: FieldValue.increment(
+            run.status === "failed" ? 0 : 1,
+          ),
+          failedRunCount: FieldValue.increment(
+            run.status === "failed" ? 1 : 0,
+          ),
+          publishedSituationCount: FieldValue.increment(
+            run.status === "published" ? 1 : 0,
+          ),
+        },
+        updatedAt: FieldValue.serverTimestamp(),
+      },
+      {merge: true},
+    );
+  });
+}
+
 /**
  * Generates a bounded batch in parallel and publishes each valid result as
  * soon as it succeeds (does not wait for sibling Gemini jobs).
@@ -485,12 +576,17 @@ export async function runConcurrentGenerationBatch(options: {
   /** Offset applied to variation seeds when running multi-wave refills. */
   variationOffset?: number;
   generateFn: typeof generateValidatedSituation;
-  publishFn: (result: GenerateSituationResult) => Promise<boolean>;
+  publishFn: (
+    result: GenerateSituationResult,
+    generationRunId: string,
+  ) => Promise<boolean>;
+  recordRunFn?: (run: GenerationRunTelemetry) => Promise<void>;
 }): Promise<{added: number; skipped: number; errors: string[]}> {
   const variationOffset = options.variationOffset ?? 0;
   const outcomes = await Promise.all(
     Array.from({length: options.batchSize}, async (_, index) => {
       const variationIndex = variationOffset + index;
+      const runId = `${options.leaseId}-${variationIndex}`;
       try {
         const generated = await options.generateFn({
           apiKey: options.apiKey,
@@ -499,12 +595,33 @@ export async function runConcurrentGenerationBatch(options: {
           variationSeed: `${options.leaseId}:${variationIndex}`,
           maxAttempts: 3,
         });
-        const published = await options.publishFn(generated);
+        const published = await options.publishFn(generated, runId);
+        await recordRunSafely(options.recordRunFn, {
+          runId,
+          setupKey: options.setupKey,
+          modelId: generated.modelId,
+          status: published ? "published" : "duplicate",
+          usage: generated.usage ?? emptyGenerationUsage(),
+          validationFailureCount: generated.validationFailureCount ?? 0,
+        });
         return published ?
           {kind: "added" as const} :
           {kind: "skipped" as const};
       } catch (err) {
         const message = errorMessage(err);
+        await recordRunSafely(options.recordRunFn, {
+          runId,
+          setupKey: options.setupKey,
+          modelId: GEMINI_MODEL_ID,
+          status: "failed",
+          usage: err instanceof SituationGenerationError ?
+            err.usage :
+            emptyGenerationUsage(),
+          validationFailureCount: err instanceof SituationGenerationError ?
+            err.validationFailureCount :
+            0,
+          error: message,
+        });
         logger.warn("refill item failed", {
           setupKey: options.setupKey,
           error: message,
@@ -523,4 +640,20 @@ export async function runConcurrentGenerationBatch(options: {
     else errors.push(outcome.message);
   }
   return {added, skipped, errors};
+}
+
+async function recordRunSafely(
+  recordRunFn: ((run: GenerationRunTelemetry) => Promise<void>) | undefined,
+  run: GenerationRunTelemetry,
+): Promise<void> {
+  if (!recordRunFn) return;
+  try {
+    await recordRunFn(run);
+  } catch (err) {
+    logger.error("generation usage recording failed", {
+      runId: run.runId,
+      setupKey: run.setupKey,
+      error: errorMessage(err),
+    });
+  }
 }

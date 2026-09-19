@@ -77,8 +77,10 @@ does not call stochastic villain logic while traversing an authored situation.
 ## Generation and validation
 
 Firebase Functions calls `gemini-3.8-flash` with the API key provided through
-Secret Manager. A first call authors the graph and a second call critiques and
-corrects it.
+Secret Manager. A first call authors the graph. The next call receives both the
+candidate and exact deterministic-validator findings, then critiques and
+corrects it. If correction is still needed, later calls repair that same
+candidate instead of restarting the full generation pipeline.
 
 Before publication, deterministic validation rejects:
 
@@ -90,7 +92,13 @@ Before publication, deterministic validation rejects:
 - inconsistent stacks, street commitments, pots, or chip totals;
 - coaching verdict/optimal-action contradictions.
 
-Invalid model output is retried and never becomes servable.
+Invalid model output is repaired or retried and never becomes servable.
+Successful, duplicate, and failed generation runs are recorded under
+`tableSetups/{setupKey}/generationRuns`. Each run stores Gemini prompt,
+candidate, thinking, cached, and total token counts plus an estimated cost in
+USD micros. `tableSetups/{setupKey}.generationMetrics` aggregates those values,
+and each published situation stores the usage attributable to that situation.
+The pricing-version field identifies the rates used for each estimate.
 
 ## Progress
 
