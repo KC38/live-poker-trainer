@@ -217,7 +217,7 @@ Design rules:
 
 ## Lineup
 
-Home supports **Random Pool** and **Custom**. Custom shows a dropdown per villain seat (Seat 2…N); Hero remains seat 1 / bottom. Duplicate archetypes get unique display names. Choices persist via SharedPreferences and feed `PokerEngine.buildLineup`.
+Home supports **Random Pool** and **Custom**. Custom shows a dropdown per villain seat (Seat 2…N); Hero remains seat 1 / bottom. Duplicate archetypes get unique display names. Table setup (seats, blinds, stack, rebuy, lineup) persists in SharedPreferences and syncs to Firestore `users/{uid}.preferences` when signed in; it is re-hydrated on login. Audio stays device-local. Lineup choices feed `PokerEngine.buildLineup`.
 
 ## Breakpoints
 
