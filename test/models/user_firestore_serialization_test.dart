@@ -13,17 +13,12 @@ void main() {
       smallBlind: 1,
       bigBlind: 2,
       seatCount: 6,
-      stackDepthBb: 100,
-      autoRebuy: false,
-      rebuyThresholdBb: 40,
+      maxStackDepthBb: 100,
       sfxEnabled: false,
       musicEnabled: false,
       chipDisplayMode: ChipDisplayMode.bb,
       lineupMode: LineupMode.custom,
-      customArchetypes: const [
-        PlayerArchetype.maniac,
-        PlayerArchetype.nit,
-      ],
+      customArchetypes: const [PlayerArchetype.maniac, PlayerArchetype.nit],
     );
 
     final remote = settings.toFirestorePreferences();
@@ -32,9 +27,9 @@ void main() {
     expect(remote['seatCount'], 6);
     expect(remote['smallBlind'], 1);
     expect(remote['bigBlind'], 2);
-    expect(remote['stackDepthBb'], 100);
-    expect(remote['autoRebuy'], isFalse);
-    expect(remote['rebuyThresholdBb'], 40);
+    expect(remote['maxStackDepthBb'], 100);
+    expect(remote.containsKey('autoRebuy'), isFalse);
+    expect(remote.containsKey('rebuyThresholdBb'), isFalse);
     expect(remote['chipDisplayMode'], ChipDisplayMode.bb.name);
     expect(remote['lineupMode'], LineupMode.custom.name);
     expect(remote['customArchetypes'], isA<String>());
@@ -52,26 +47,21 @@ void main() {
     expect(hydrated.seatCount, 6);
     expect(hydrated.smallBlind, 1);
     expect(hydrated.bigBlind, 2);
-    expect(hydrated.stackDepthBb, 100);
-    expect(hydrated.autoRebuy, isFalse);
-    expect(hydrated.rebuyThresholdBb, 40);
+    expect(hydrated.maxStackDepthBb, 100);
     expect(hydrated.chipDisplayMode, ChipDisplayMode.bb);
     expect(hydrated.lineupMode, LineupMode.custom);
     expect(hydrated.customArchetypes.length, 2);
   });
 
   test('Firestore prefs accept list-shaped customArchetypes from server', () {
-    final hydrated = GameSettingsModel.fromFirestorePreferences(
-      {
-        'seatCount': 4,
-        'smallBlind': 0.5,
-        'bigBlind': 1,
-        'stackDepthBb': 50,
-        'lineupMode': 'custom',
-        'customArchetypes': ['Maniac', 'Nit', 'TAG'],
-      },
-      localAudio: const GameSettingsModel(sfxEnabled: false),
-    );
+    final hydrated = GameSettingsModel.fromFirestorePreferences({
+      'seatCount': 4,
+      'smallBlind': 0.5,
+      'bigBlind': 1,
+      'stackDepthBb': 50,
+      'lineupMode': 'custom',
+      'customArchetypes': ['Maniac', 'Nit', 'TAG'],
+    }, localAudio: const GameSettingsModel(sfxEnabled: false));
     expect(hydrated.seatCount, 4);
     expect(hydrated.customArchetypes.map((a) => a.id).toList(), [
       'MANIAC',

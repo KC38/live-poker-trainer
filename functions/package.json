@@ -13,6 +13,10 @@
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
     "reset:dry": "npx ts-node --transpile-only scripts/reset_obsolete_data.ts",
+    "seed:live": "npx ts-node --transpile-only scripts/seed_live_default.ts",
+    "benchmark:coach": "npx ts-node --transpile-only scripts/run_exploit_benchmark.ts",
+    "benchmark:coach:full": "npx ts-node --transpile-only scripts/run_exploit_benchmark.ts --full",
+    "smoke:live": "npx ts-node --transpile-only scripts/smoke_live_hand.ts",
     "cleanup:invalid:dry": "npx ts-node --transpile-only scripts/remove_invalid_situations.ts"
   },
   "engines": {

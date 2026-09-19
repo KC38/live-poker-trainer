@@ -122,17 +122,11 @@ class SettingsNotifier extends StateNotifier<GameSettingsModel> {
   Future<void> setChipDisplayMode(ChipDisplayMode mode) =>
       update(state.copyWith(chipDisplayMode: mode));
 
-  Future<void> setAutoRebuy(bool value) =>
-      update(state.copyWith(autoRebuy: value));
-
   Future<void> setSeatCount(int value) =>
       update(state.copyWith(seatCount: value.clamp(2, 9)));
 
-  Future<void> setStackDepthBb(int value) =>
-      update(state.copyWith(stackDepthBb: value));
-
-  Future<void> setRebuyThresholdBb(int value) =>
-      update(state.copyWith(rebuyThresholdBb: value));
+  Future<void> setMaxStackDepthBb(int value) =>
+      update(state.copyWith(maxStackDepthBb: value));
 
   Future<void> setBlinds(double sb, double bb) =>
       update(state.copyWith(smallBlind: sb, bigBlind: bb));

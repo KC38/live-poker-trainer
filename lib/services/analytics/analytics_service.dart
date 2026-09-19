@@ -2,6 +2,7 @@
 ///
 /// All calls are best-effort: failures never throw into gameplay. Collection
 /// can be disabled via [setCollectionEnabled] (Settings opt-out).
+// ignore_for_file: prefer_initializing_formals
 library;
 
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -71,14 +72,18 @@ class AnalyticsService {
   /// Email/password or Google sign-in.
   Future<void> logLogin({required String method}) async {
     await _log(() async {
-      await (_analytics ?? FirebaseAnalytics.instance).logLogin(loginMethod: method);
+      await (_analytics ?? FirebaseAnalytics.instance).logLogin(
+        loginMethod: method,
+      );
     });
   }
 
   /// New account registration.
   Future<void> logSignUp({required String method}) async {
     await _log(() async {
-      await (_analytics ?? FirebaseAnalytics.instance).logSignUp(signUpMethod: method);
+      await (_analytics ?? FirebaseAnalytics.instance).logSignUp(
+        signUpMethod: method,
+      );
     });
   }
 

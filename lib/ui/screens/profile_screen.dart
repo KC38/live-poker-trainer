@@ -320,7 +320,7 @@ class _TrendCard extends StatelessWidget {
                 FlSpot(i.toDouble(), evTrend[i]),
             ];
 
-    final title = useVpip ? 'Hands played over time' : 'Recent EV Δ';
+    final title = useVpip ? 'Hands played over time' : 'Recent results';
     final caption =
         useVpip
             ? 'Rolling VPIP over your last ${HeroProfiler.trendWindow} hands. A '
@@ -785,8 +785,8 @@ class _CoachingRecord extends StatelessWidget {
           Expanded(
             child: _Figure(
               value: '${stats.accuracyPct.toStringAsFixed(0)}%',
-              label: 'Coach agreement',
-              detail: '${stats.correctSpots} of ${stats.totalSpots} spots',
+              label: 'Strong decisions',
+              detail: '${stats.correctSpots} of ${stats.totalSpots} reviewed',
             ),
           ),
           Container(width: 1, height: 46, color: AppColors.slateDark),
@@ -795,8 +795,8 @@ class _CoachingRecord extends StatelessWidget {
               value:
                   '${stats.netEvBb >= 0 ? '+' : ''}'
                   '${stats.netEvBb.toStringAsFixed(1)}',
-              label: 'Net EV (BB)',
-              detail: 'versus the best line',
+              label: 'Net result (BB)',
+              detail: 'across completed hands',
             ),
           ),
         ],

@@ -95,6 +95,7 @@ class CoachShelfWidget extends StatelessWidget {
                 _stripMode,
               ),
               evDeltaBb: feedback.evDeltaBb,
+              confidence: feedback.confidence,
               compact: false,
             ),
           ),
@@ -202,6 +203,7 @@ class _DecisionStatsStrip extends StatelessWidget {
     required this.you,
     required this.evAmount,
     required this.evDeltaBb,
+    required this.confidence,
     required this.compact,
   });
 
@@ -209,6 +211,7 @@ class _DecisionStatsStrip extends StatelessWidget {
   final String you;
   final String evAmount;
   final double evDeltaBb;
+  final String? confidence;
   final bool compact;
 
   Color get _evColor {
@@ -246,9 +249,9 @@ class _DecisionStatsStrip extends StatelessWidget {
           SizedBox(width: gap),
           Expanded(
             child: _StatsCell(
-              label: 'EV',
-              value: evAmount,
-              valueColor: _evColor,
+              label: confidence == null ? 'EV' : 'CONFIDENCE',
+              value: confidence?.toUpperCase() ?? evAmount,
+              valueColor: confidence == null ? _evColor : AppColors.gold,
               compact: compact,
             ),
           ),

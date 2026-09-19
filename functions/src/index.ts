@@ -1,188 +1,186 @@
 /**
- * Cloud Functions for Live Poker Trainer — server-authored situations.
+ * Cloud Functions for server-authoritative v3 live poker training.
  *
- * Callables (auth required):
- * - fetchSituation
- * - recordSituationProgress
- *
- * Background:
- * - refillSituationPool (Firestore trigger)
- * - prewarmCommonSituationPoolsJob (scheduler)
+ * The v2 fetch/progress/pool exports are intentionally removed so old clients
+ * cannot recreate deleted graph situations after the mandatory upgrade reset.
  */
 
-import {onCall, HttpsError} from "firebase-functions/v2/https";
-import {onDocumentWritten} from "firebase-functions/v2/firestore";
-import {onSchedule} from "firebase-functions/v2/scheduler";
-import {defineSecret} from "firebase-functions/params";
 import {initializeApp} from "firebase-admin/app";
 import {logger} from "firebase-functions";
-import {fetchSituationForUser} from "./fetch_situation";
-import {recordSituationProgressForUser} from "./record_progress";
+import {defineSecret} from "firebase-functions/params";
+import {onDocumentWritten} from "firebase-functions/v2/firestore";
+import {HttpsError, onCall} from "firebase-functions/v2/https";
+import {onSchedule} from "firebase-functions/v2/scheduler";
 import {
-  isQueuedGeneration,
-  refillQueuedSetup,
-} from "./refill_situation_pool";
-import {prewarmCommonSituationPools} from "./prewarm_common_setups";
+  isQueuedLiveGeneration,
+  isQueuedLiveGenerationJob,
+  processLiveGenerationJob,
+  recoverExpiredLiveGenerationLeases,
+  refillQueuedLiveSetup,
+} from "./live_pool";
+import {
+  resumeLiveHandForUser,
+  startLiveHandForUser,
+  submitLiveActionForUser,
+} from "./live_session";
 
 initializeApp();
 
-/** Gemini API key — set via `firebase functions:secrets:set GEMINI_API_KEY`. */
 const geminiApiKey = defineSecret("GEMINI_API_KEY");
 
 function requireApiKey(): string {
-  const apiKey =
+  const key =
     geminiApiKey.value()?.trim() ||
     process.env.GEMINI_API_KEY?.trim() ||
     "";
-  if (!apiKey) {
+  if (!key) {
     throw new HttpsError(
       "failed-precondition",
-      "GEMINI_API_KEY secret is not configured on Functions.",
+      "GEMINI_API_KEY secret is not configured.",
     );
   }
-  return apiKey;
+  return key;
 }
 
-/**
- * Returns one branching situation for the caller's table setup.
- *
- * Prefers situations the caller has never received. When the pool is prepared
- * but unseen inventory is exhausted, re-serves a prepared hand so training
- * does not wait on generation, and queues a refill for new content.
- */
-export const fetchSituation = onCall(
+/** Allocates an unseen, pre-warmed hand and creates an online session. */
+export const startLiveHand = onCall(
   {
     region: "us-central1",
     timeoutSeconds: 60,
     memory: "512MiB",
   },
   async (request) => {
-    if (!request.auth) {
-      throw new HttpsError(
-        "unauthenticated",
-        "Sign in required to fetch a situation.",
-      );
-    }
-
-    const tableSetup = request.data?.tableSetup ?? request.data?.setup;
-    if (!tableSetup) {
-      throw new HttpsError(
-        "invalid-argument",
-        "tableSetup is required.",
-      );
-    }
-
+    const uid = requireAuth(request.auth?.uid);
     try {
-      const result = await fetchSituationForUser({
-        uid: request.auth.uid,
-        rawSetup: tableSetup,
-      });
-
-      logger.info("fetchSituation ok", {
-        uid: request.auth.uid,
-        setupKey: result.setupKey,
-        situationId: result.situationId,
-        refillTriggered: result.refillTriggered,
-      });
-
-      return {
-        ok: true,
-        situationId: result.situationId,
-        setupKey: result.setupKey,
-        payload: result.payload,
-        refillTriggered: result.refillTriggered,
-      };
-    } catch (err) {
-      if (err instanceof HttpsError) throw err;
-      const message = err instanceof Error ? err.message : String(err);
-      logger.error("fetchSituation failed", {error: message});
-      throw new HttpsError("internal", message);
+      return await startLiveHandForUser({uid, raw: request.data});
+    } catch (error) {
+      throw callableError("startLiveHand", error);
     }
   },
 );
 
-/**
- * Generates queued situation batches outside the latency-sensitive callable.
- */
-export const refillSituationPool = onDocumentWritten(
+/** Applies one idempotent Hero command and returns its shared continuation. */
+export const submitLiveAction = onCall(
   {
-    document: "tableSetups/{setupKey}",
+    region: "us-central1",
+    secrets: [geminiApiKey],
+    timeoutSeconds: 300,
+    memory: "1GiB",
+  },
+  async (request) => {
+    const uid = requireAuth(request.auth?.uid);
+    try {
+      return await submitLiveActionForUser({
+        uid,
+        raw: request.data,
+        apiKey: requireApiKey(),
+      });
+    } catch (error) {
+      throw callableError("submitLiveAction", error);
+    }
+  },
+);
+
+/** Restores the latest authoritative view after a network interruption. */
+export const resumeLiveHand = onCall(
+  {
+    region: "us-central1",
+    timeoutSeconds: 60,
+    memory: "512MiB",
+  },
+  async (request) => {
+    const uid = requireAuth(request.auth?.uid);
+    try {
+      const sessionId = String(request.data?.sessionId ?? "").trim();
+      const clientVersion = String(request.data?.clientVersion ?? "").trim();
+      if (!sessionId || !clientVersion) {
+        throw new HttpsError(
+          "invalid-argument",
+          "sessionId and clientVersion are required.",
+        );
+      }
+      return await resumeLiveHandForUser({uid, sessionId, clientVersion});
+    } catch (error) {
+      throw callableError("resumeLiveHand", error);
+    }
+  },
+);
+
+/** Fans one setup refill request into independent warmed-hand jobs. */
+export const refillLiveHandPool = onDocumentWritten(
+  {
+    document: "liveTableSetups/{setupKey}",
+    region: "us-central1",
+    timeoutSeconds: 120,
+    memory: "512MiB",
+    maxInstances: 2,
+  },
+  async (event) => {
+    const after = event.data?.after.exists ? event.data.after.data() : undefined;
+    if (!isQueuedLiveGeneration(after)) return;
+    const result = await refillQueuedLiveSetup({
+      setupKey: event.params.setupKey,
+    });
+    logger.info("refillLiveHandPool completed", {
+      setupKey: event.params.setupKey,
+      ...result,
+    });
+  },
+);
+
+/** Generates, validates, coaches, and warms one hand. */
+export const processLiveHandGenerationJob = onDocumentWritten(
+  {
+    document: "liveGenerationJobs/{jobId}",
     region: "us-central1",
     secrets: [geminiApiKey],
     timeoutSeconds: 540,
     memory: "1GiB",
-    maxInstances: 2,
+    maxInstances: 10,
   },
   async (event) => {
-    const afterData = event.data?.after.exists
-      ? event.data.after.data()
-      : undefined;
-    if (!isQueuedGeneration(afterData)) return;
-    const result = await refillQueuedSetup({
-      setupKey: event.params.setupKey,
-      afterData,
+    const after = event.data?.after.exists ? event.data.after.data() : undefined;
+    if (!isQueuedLiveGenerationJob(after)) return;
+    const result = await processLiveGenerationJob({
+      jobId: event.params.jobId,
       apiKey: requireApiKey(),
     });
-    if (result) {
-      logger.info("refillSituationPool completed", {
-        setupKey: event.params.setupKey,
-        added: result.added,
-        skipped: result.skipped,
-        errorCount: result.errors.length,
-        leaseHeldByOther: result.leaseHeldByOther,
-      });
-    }
+    logger.info("processLiveHandGenerationJob completed", {
+      jobId: event.params.jobId,
+      ...result,
+    });
   },
 );
 
-/**
- * Keeps popular Random Pool setups warm by queueing refills when low.
- */
-export const prewarmCommonSituationPoolsJob = onSchedule(
+/** Recovers setup waves after a worker crash or event-delivery failure. */
+export const recoverLiveGenerationLeases = onSchedule(
   {
-    schedule: "every 30 minutes",
+    schedule: "every 5 minutes",
     region: "us-central1",
     timeoutSeconds: 120,
     memory: "256MiB",
   },
-  async (_event) => {
-    const results = await prewarmCommonSituationPools();
-    const queued = results.filter((r) => r.queued).length;
-    logger.info("prewarmCommonSituationPools completed", {
-      checked: results.length,
-      queued,
-    });
-  },
-);
-
-/**
- * Records a completed (or abandoned-with-path) situation for progress stats.
- *
- * Validates the path against the allocated situation before updating aggregates.
- */
-export const recordSituationProgress = onCall(
-  {
-    region: "us-central1",
-  },
-  async (request) => {
-    if (!request.auth) {
-      throw new HttpsError(
-        "unauthenticated",
-        "Sign in required to record progress.",
-      );
-    }
-
-    try {
-      const result = await recordSituationProgressForUser({
-        uid: request.auth.uid,
-        raw: request.data,
-      });
-      return result;
-    } catch (err) {
-      if (err instanceof HttpsError) throw err;
-      const message = err instanceof Error ? err.message : String(err);
-      logger.error("recordSituationProgress failed", {error: message});
-      throw new HttpsError("internal", message);
+  async () => {
+    const recovered = await recoverExpiredLiveGenerationLeases();
+    if (recovered > 0) {
+      logger.warn("Recovered expired live generation leases", {recovered});
     }
   },
 );
+
+function requireAuth(uid: string | undefined): string {
+  if (!uid) {
+    throw new HttpsError(
+      "unauthenticated",
+      "Sign in required for live training.",
+    );
+  }
+  return uid;
+}
+
+function callableError(name: string, error: unknown): HttpsError {
+  if (error instanceof HttpsError) return error;
+  const message = error instanceof Error ? error.message : String(error);
+  logger.error(`${name} failed`, {error: message});
+  return new HttpsError("internal", "Live training failed. Retry shortly.");
+}

@@ -1,0 +1,31 @@
+{
+  "version": "exploit-benchmark-v1",
+  "runDate": "2026-09-19",
+  "model": "gemini-3.8-flash",
+  "thinking": "high-draft-and-high-critic",
+  "sample": {
+    "method": "dimension-stratified",
+    "caseCount": 60,
+    "corpusCaseCount": 720,
+    "coversEveryArchetype": true,
+    "coversEveryStreet": true,
+    "coversEveryStackDepth": true,
+    "coversEverySpotType": true,
+    "coversHeadsUpAndMultiway": true
+  },
+  "metrics": {
+    "structuralRate": 1.0,
+    "acceptableRecommendationRate": 0.9833333333333333,
+    "forbiddenAvoidanceRate": 1.0,
+    "tendencyGroundingRate": 1.0,
+    "calibrationRate": 1.0
+  },
+  "passed": true,
+  "knownMisses": [
+    {
+      "caseId": "CALLING_STATION|preflop|100|v2|bluff_catch_facing_bet",
+      "recommended": "CALL",
+      "acceptableSet": ["FOLD"]
+    }
+  ]
+}

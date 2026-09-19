@@ -36,9 +36,7 @@ function validPreferences(): Record<string, unknown> {
     smallBlind: 1,
     bigBlind: 2,
     seatCount: 6,
-    stackDepthBb: 100,
-    autoRebuy: true,
-    rebuyThresholdBb: 40,
+    maxStackDepthBb: 200,
     chipDisplayMode: "dollars",
     lineupMode: "randomPool",
     customArchetypes: "",
@@ -173,9 +171,8 @@ describe("Firestore security rules", () => {
   it.each([
     ["non-integer seat count", {seatCount: 6.5}],
     ["out-of-range seat count", {seatCount: 10}],
-    ["wrong auto-rebuy type", {autoRebuy: "yes"}],
     ["out-of-range small blind", {smallBlind: 0}],
-    ["out-of-range stack depth", {stackDepthBb: 501}],
+    ["out-of-range stack depth", {maxStackDepthBb: 501}],
     ["unknown preference", {unknown: true}],
   ])("rejects invalid preferences: %s", async (_label, mutation) => {
     const database = testEnv.authenticatedContext(OWNER_UID).firestore();
@@ -211,13 +208,13 @@ describe("Firestore security rules", () => {
   });
 
   it("allows owner reads but denies owner writes to progress and history", async () => {
-    await seedFirestore(`users/${OWNER_UID}/progress/main`, {handsPlayed: 3});
-    await seedFirestore(`users/${OWNER_UID}/handHistory/hand-1`, {result: 10});
+    await seedFirestore(`users/${OWNER_UID}/liveProgress/main`, {handsPlayed: 3});
+    await seedFirestore(`users/${OWNER_UID}/liveHandHistory/hand-1`, {result: 10});
     const database = testEnv.authenticatedContext(OWNER_UID).firestore();
-    const progressRef = doc(database, `users/${OWNER_UID}/progress/main`);
+    const progressRef = doc(database, `users/${OWNER_UID}/liveProgress/main`);
     const historyRef = doc(
       database,
-      `users/${OWNER_UID}/handHistory/hand-1`,
+      `users/${OWNER_UID}/liveHandHistory/hand-1`,
     );
 
     await assertSucceeds(getDoc(progressRef));
@@ -238,6 +235,19 @@ describe("Firestore security rules", () => {
       {prompt: "private"},
     );
     await seedFirestore("scenarios/hash-1", {prompt: "legacy private"});
+    await seedFirestore(
+      `users/${OWNER_UID}/liveHandReceipts/hand-1`,
+      {status: "allocated"},
+    );
+    await seedFirestore(
+      `users/${OWNER_UID}/liveSessions/session-1`,
+      {stateVersion: 0},
+    );
+    await seedFirestore("liveTableSetups/setup-1", {active: true});
+    await seedFirestore(
+      "liveTableSetups/setup-1/hands/hand-1",
+      {definition: "private"},
+    );
     const database = testEnv.authenticatedContext(OWNER_UID).firestore();
 
     for (const path of [
@@ -245,6 +255,10 @@ describe("Firestore security rules", () => {
       "tableSetups/setup-1",
       "tableSetups/setup-1/situations/situation-1",
       "scenarios/hash-1",
+      `users/${OWNER_UID}/liveHandReceipts/hand-1`,
+      `users/${OWNER_UID}/liveSessions/session-1`,
+      "liveTableSetups/setup-1",
+      "liveTableSetups/setup-1/hands/hand-1",
     ]) {
       const document = doc(database, path);
       await assertFails(getDoc(document));

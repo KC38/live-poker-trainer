@@ -13,6 +13,7 @@ import 'package:live_poker_trainer/engine/bet_sizing.dart';
 import 'package:live_poker_trainer/engine/poker_engine.dart';
 import 'package:live_poker_trainer/engine/situation_action_keys.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
+import 'package:live_poker_trainer/models/live_hand_model.dart';
 import 'package:live_poker_trainer/models/situation_model.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
 
@@ -25,6 +26,8 @@ class ActionDockWidget extends ConsumerStatefulWidget {
     required this.onAction,
     this.enabled = true,
     this.authoredEdges,
+    this.liveActions,
+    this.onLiveAction,
   });
 
   final GameState game;
@@ -33,6 +36,12 @@ class ActionDockWidget extends ConsumerStatefulWidget {
 
   /// Exact server-authored controls. `null` retains the generic action dock.
   final List<HeroActionEdge>? authoredEdges;
+
+  /// Exact fixed legal actions from the live server.
+  final List<LiveLegalActionModel>? liveActions;
+
+  /// Handles a selected live action id.
+  final ValueChanged<LiveLegalActionModel>? onLiveAction;
 
   @override
   ConsumerState<ActionDockWidget> createState() => _ActionDockWidgetState();
@@ -90,6 +99,14 @@ class _ActionDockWidgetState extends ConsumerState<ActionDockWidget> {
         !game.isHandOver &&
         !hero.folded;
     final authoredEdges = widget.authoredEdges;
+    final liveActions = widget.liveActions;
+    if (liveActions != null && liveActions.isNotEmpty) {
+      return _LiveActionDock(
+        actions: liveActions,
+        enabled: canAct,
+        onAction: widget.onLiveAction,
+      );
+    }
     if (authoredEdges != null && authoredEdges.isNotEmpty) {
       return _AuthoredActionDock(
         game: game,
@@ -295,6 +312,66 @@ class _ActionDockWidgetState extends ConsumerState<ActionDockWidget> {
       opacity: canAct ? 1 : 0.45,
       child: IgnorePointer(ignoring: !canAct, child: focusedDock),
     );
+  }
+}
+
+class _LiveActionDock extends StatelessWidget {
+  const _LiveActionDock({
+    required this.actions,
+    required this.enabled,
+    required this.onAction,
+  });
+
+  final List<LiveLegalActionModel> actions;
+  final bool enabled;
+  final ValueChanged<LiveLegalActionModel>? onAction;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 10),
+      decoration: BoxDecoration(
+        color: AppColors.bgMid.withValues(alpha: 0.98),
+        border: Border(
+          top: BorderSide(color: AppColors.slateDark.withValues(alpha: 0.9)),
+        ),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (final action in actions)
+              SizedBox(
+                width: _buttonWidth(context, actions.length),
+                child: _DockButton(
+                  label: action.label.toUpperCase(),
+                  color: switch (action.kind) {
+                    'FOLD' => AppColors.danger,
+                    'CHECK' || 'CALL' => AppColors.surfaceMuted,
+                    _ => AppColors.gold,
+                  },
+                  foreground:
+                      action.kind == 'FOLD' ||
+                              action.kind == 'CHECK' ||
+                              action.kind == 'CALL'
+                          ? null
+                          : AppColors.bgDark,
+                  enabled: enabled && onAction != null,
+                  onTap: () => onAction?.call(action),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  static double _buttonWidth(BuildContext context, int count) {
+    final available = MediaQuery.sizeOf(context).width - 28;
+    final columns = count <= 3 ? count : 3;
+    return (available - (columns - 1) * 8) / columns;
   }
 }
 

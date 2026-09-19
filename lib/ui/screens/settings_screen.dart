@@ -103,7 +103,7 @@ class SettingsScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              'Stacks, pot, bets, and EV audit',
+              'Stacks, pots, bets, and hand results',
               style: GoogleFonts.manrope(color: AppColors.slate, fontSize: 13),
             ),
             const SizedBox(height: 10),
@@ -116,8 +116,8 @@ class SettingsScreen extends ConsumerWidget {
                       mode == ChipDisplayMode.dollars
                           ? '\$'
                           : mode == ChipDisplayMode.bb
-                              ? 'BB'
-                              : 'Both',
+                          ? 'BB'
+                          : 'Both',
                       style: const TextStyle(fontSize: 13),
                     ),
                   ),
@@ -126,14 +126,16 @@ class SettingsScreen extends ConsumerWidget {
               onSelectionChanged: (s) => notifier.setChipDisplayMode(s.first),
               style: ButtonStyle(
                 foregroundColor: WidgetStateProperty.resolveWith(
-                  (states) => states.contains(WidgetState.selected)
-                      ? AppColors.bgDark
-                      : AppColors.slate,
+                  (states) =>
+                      states.contains(WidgetState.selected)
+                          ? AppColors.bgDark
+                          : AppColors.slate,
                 ),
                 backgroundColor: WidgetStateProperty.resolveWith(
-                  (states) => states.contains(WidgetState.selected)
-                      ? AppColors.gold
-                      : AppColors.bgElevated,
+                  (states) =>
+                      states.contains(WidgetState.selected)
+                          ? AppColors.gold
+                          : AppColors.bgElevated,
                 ),
               ),
             ),
