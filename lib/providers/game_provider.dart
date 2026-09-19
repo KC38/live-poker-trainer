@@ -227,10 +227,15 @@ class GameController extends StateNotifier<TableSession> {
       await _replayEvents(result.events, result.view, token);
       if (_disposed || token != _replayToken) return;
       final game = result.view.toGameState(handCount: _handCount);
+      // Coaching grades the action just played. Keep it through the replay and
+      // after the hand ends, but drop it once a new decision is on the dock.
+      // Otherwise a turn "INCORRECT" check sits next to river fold/call buttons.
+      final nextDecision =
+          !game.isHandOver && result.view.legalActions.isNotEmpty;
       state = TableSession(
         game: game,
         liveView: result.view,
-        coach: coaching,
+        coach: nextDecision ? const CoachFeedback() : coaching,
         liveActions: result.view.legalActions,
         awardingChips: game.isHandOver && game.winnerIds.isNotEmpty,
       );
