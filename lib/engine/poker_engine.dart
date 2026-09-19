@@ -658,6 +658,8 @@ class PokerEngine {
     required bool waitingForHero,
   }) {
     final n = _state.players.length;
+    final normalizedStreet = street == Street.showdown ? Street.river : street;
+    final staysOnStreet = _state.street == normalizedStreet;
     final players = [
       for (var i = 0; i < n; i++)
         _state.players[i].copyWith(
@@ -667,7 +669,12 @@ class PokerEngine {
           allIn:
               (i < stacks.length ? stacks[i] : 0) <= Money.epsilon &&
               (i < streetBets.length ? streetBets[i] : 0) <= Money.epsilon,
-          hasActedThisRound: false,
+          // Same-street graph nodes are snapshots after the preceding action,
+          // not a fresh betting round. Preserve action completion so a legacy
+          // terminal fallback cannot circle back and offer the hero a second
+          // decision on the street. A genuine street change resets everyone.
+          hasActedThisRound:
+              staysOnStreet && _state.players[i].hasActedThisRound,
           holeCards: _state.players[i].holeCards,
           clearLastAction: true,
         ),
@@ -684,7 +691,7 @@ class PokerEngine {
       mainPot: Money.roundNonNegative(
         pot - players.fold<double>(0, (s, p) => s + p.currentBet),
       ).clamp(0, double.infinity),
-      street: street == Street.showdown ? Street.river : street,
+      street: normalizedStreet,
       dealerIndex: dealer,
       sbIndex: _smallBlindSeat(dealer, n),
       bbIndex: _bigBlindSeat(dealer, n),
