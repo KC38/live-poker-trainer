@@ -182,7 +182,7 @@ function normalizeLiveHand(options: {
   const stacksBySeat = new Map(
     options.deal.stacks.map((entry) => [
       entry.seat,
-      money(entry.startingStack),
+      snapStack(entry.startingStack, options.setup.smallBlind),
     ]),
   );
   const seats: LiveSeatDefinition[] = options.lineup.map((seat) => ({
@@ -231,7 +231,8 @@ async function callGeminiDeal(options: {
     "Output only JSON matching the schema.",
     "Choose the button, every starting stack, every private hand, and one fixed",
     "five-card runout. Do not author actions, coaching, branches, or winners.",
-    `Every stack must be from ${minStack} through ${maxStack} chips,`,
+    `Every stack must be from ${minStack} through ${maxStack},`,
+    "a whole multiple of the small blind, with no cents,",
     "with Hero usually at least 80 BB when the configured maximum permits it,",
     "and a realistic weighted mix of villain stacks. Every card must be unique.",
     "Do not include rake, straddles, bomb",
@@ -375,6 +376,12 @@ function deterministicIndex(seed: string, length: number): number {
 
 function money(value: number): number {
   return Math.round(value * 100) / 100;
+}
+
+/** Generated buy-ins are live chips, so cents from the model do not stick. */
+function snapStack(amount: number, smallBlind: number): number {
+  const unit = smallBlind > 0 ? smallBlind : 1;
+  return money(Math.round(money(amount) / unit) * unit);
 }
 
 function redact(value: string, apiKey: string): string {

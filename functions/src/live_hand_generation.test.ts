@@ -83,4 +83,21 @@ describe("live hand generation", () => {
       fetchImpl: async () => response(duplicate),
     })).rejects.toThrow("globally unique");
   });
+
+  test("rounds generated stacks to the small blind", async () => {
+    const cents = {
+      ...deal,
+      stacks: deal.stacks.map((entry, index) => (
+        index === 1 ? {...entry, startingStack: 183.99} : entry
+      )),
+    };
+    const hand = await generateLiveHandDefinition({
+      apiKey: "test-key",
+      setup: DEFAULT_LIVE_SETUP,
+      setupKey: buildLiveSetupKey(DEFAULT_LIVE_SETUP),
+      variationSeed: "snap-stacks",
+      fetchImpl: async () => response(cents),
+    });
+    expect(hand.seats[1].startingStack).toBe(184);
+  });
 });
