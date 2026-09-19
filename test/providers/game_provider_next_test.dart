@@ -244,6 +244,198 @@ SituationModel _legacyFlopTerminalSituation() {
   );
 }
 
+SituationModel _fullyAuthoredPostflopSituation() {
+  final base = _legacyFlopTerminalSituation();
+  const checkTurn = HeroActionEdge(
+    actionKey: 'CHECK_TURN',
+    kind: SituationActionKind.check,
+    coaching: 'Checking keeps the turn range protected.',
+    verdict: HeroActionVerdict.correct,
+    evDeltaBb: 0,
+    optimalActionKey: 'CHECK_TURN',
+    nextNodeId: 'villain_checks_turn',
+  );
+  const betTurn = HeroActionEdge(
+    actionKey: 'BET_TURN_50',
+    kind: SituationActionKind.bet,
+    amountTo: 18,
+    coaching: 'A half-pot turn bet is a viable alternative.',
+    verdict: HeroActionVerdict.close,
+    evDeltaBb: -0.1,
+    optimalActionKey: 'CHECK_TURN',
+    nextNodeId: 'villain_folds_turn',
+  );
+  const checkRiver = HeroActionEdge(
+    actionKey: 'CHECK_RIVER',
+    kind: SituationActionKind.check,
+    coaching: 'Checking river realizes showdown value.',
+    verdict: HeroActionVerdict.correct,
+    evDeltaBb: 0,
+    optimalActionKey: 'CHECK_RIVER',
+    nextNodeId: 'villain_checks_river',
+  );
+  const betRiver = HeroActionEdge(
+    actionKey: 'BET_RIVER_50',
+    kind: SituationActionKind.bet,
+    amountTo: 18,
+    coaching: 'A thin river value bet is close.',
+    verdict: HeroActionVerdict.close,
+    evDeltaBb: -0.1,
+    optimalActionKey: 'CHECK_RIVER',
+    nextNodeId: 'villain_folds_river',
+  );
+
+  final flop = base.nodes['flop_decision']! as HeroDecisionNode;
+  final board = base.runouts
+      .expand((runout) => runout.cards)
+      .toList(growable: false);
+  return SituationModel(
+    payloadVersion: base.payloadVersion,
+    schemaVersion: base.schemaVersion,
+    setupKey: 'fully-authored-postflop',
+    setupMode: base.setupMode,
+    seatCount: base.seatCount,
+    smallBlind: base.smallBlind,
+    bigBlind: base.bigBlind,
+    ante: base.ante,
+    startingStack: base.startingStack,
+    buttonSeat: base.buttonSeat,
+    heroSeat: base.heroSeat,
+    lineup: base.lineup,
+    holeCards: base.holeCards,
+    heroHand: base.heroHand,
+    runouts: base.runouts,
+    rootNodeId: flop.id,
+    nodes: {
+      flop.id: flop,
+      'villain_calls': ScriptedNode(
+        id: 'villain_calls',
+        street: Street.flop,
+        pot: 28,
+        stacks: const [182, 190],
+        streetBets: const [8, 0],
+        board: board.take(3).toList(growable: false),
+        foldedSeats: const [],
+        actions: const [
+          ScriptedAction(seat: 1, kind: SituationActionKind.call, amountTo: 8),
+        ],
+        nextNodeId: 'turn_decision',
+      ),
+      'turn_decision': HeroDecisionNode(
+        id: 'turn_decision',
+        street: Street.turn,
+        pot: 36,
+        stacks: const [182, 182],
+        streetBets: const [0, 0],
+        board: board.take(4).toList(growable: false),
+        foldedSeats: const [],
+        toAct: 0,
+        callAmount: 0,
+        minRaiseTo: 2,
+        actions: const [checkTurn, betTurn],
+      ),
+      'villain_checks_turn': ScriptedNode(
+        id: 'villain_checks_turn',
+        street: Street.turn,
+        pot: 36,
+        stacks: const [182, 182],
+        streetBets: const [0, 0],
+        board: board.take(4).toList(growable: false),
+        foldedSeats: const [],
+        actions: const [
+          ScriptedAction(seat: 1, kind: SituationActionKind.check),
+        ],
+        nextNodeId: 'river_decision',
+      ),
+      'villain_folds_turn': ScriptedNode(
+        id: 'villain_folds_turn',
+        street: Street.turn,
+        pot: 54,
+        stacks: const [164, 182],
+        streetBets: const [18, 0],
+        board: board.take(4).toList(growable: false),
+        foldedSeats: const [],
+        actions: const [
+          ScriptedAction(seat: 1, kind: SituationActionKind.fold),
+        ],
+        nextNodeId: 'turn_fold_terminal',
+      ),
+      'turn_fold_terminal': TerminalNode(
+        id: 'turn_fold_terminal',
+        street: Street.turn,
+        reason: TerminalReason.fold,
+        board: board.take(4).toList(growable: false),
+        foldedSeats: const [1],
+        stacks: const [164, 182],
+        pot: 54,
+        winnerSeats: const [0],
+        heroNetChips: 18,
+      ),
+      'river_decision': HeroDecisionNode(
+        id: 'river_decision',
+        street: Street.river,
+        pot: 36,
+        stacks: const [182, 182],
+        streetBets: const [0, 0],
+        board: board,
+        foldedSeats: const [],
+        toAct: 0,
+        callAmount: 0,
+        minRaiseTo: 2,
+        actions: const [checkRiver, betRiver],
+      ),
+      'villain_checks_river': ScriptedNode(
+        id: 'villain_checks_river',
+        street: Street.river,
+        pot: 36,
+        stacks: const [182, 182],
+        streetBets: const [0, 0],
+        board: board,
+        foldedSeats: const [],
+        actions: const [
+          ScriptedAction(seat: 1, kind: SituationActionKind.check),
+        ],
+        nextNodeId: 'river_showdown',
+      ),
+      'villain_folds_river': ScriptedNode(
+        id: 'villain_folds_river',
+        street: Street.river,
+        pot: 54,
+        stacks: const [164, 182],
+        streetBets: const [18, 0],
+        board: board,
+        foldedSeats: const [],
+        actions: const [
+          ScriptedAction(seat: 1, kind: SituationActionKind.fold),
+        ],
+        nextNodeId: 'river_fold_terminal',
+      ),
+      'river_fold_terminal': TerminalNode(
+        id: 'river_fold_terminal',
+        street: Street.river,
+        reason: TerminalReason.fold,
+        board: board,
+        foldedSeats: const [1],
+        stacks: const [164, 182],
+        pot: 54,
+        winnerSeats: const [0],
+        heroNetChips: 18,
+      ),
+      'river_showdown': TerminalNode(
+        id: 'river_showdown',
+        street: Street.river,
+        reason: TerminalReason.showdown,
+        board: board,
+        foldedSeats: const [],
+        stacks: const [182, 182],
+        pot: 36,
+        winnerSeats: const [0],
+        heroNetChips: 18,
+      ),
+    },
+  );
+}
+
 GameState _headsUp({required bool heroFolded, required bool handOver}) {
   return GameState(
     players: [
@@ -335,6 +527,15 @@ void main() {
     expect(done.highlightNext, isTrue);
   });
 
+  test('authored situation never enables generic action without edges', () {
+    final game = _headsUp(
+      heroFolded: false,
+      handOver: false,
+    ).copyWith(activeSituation: _authoredSituation());
+
+    expect(TableSession(game: game).heroCanAct, isFalse);
+  });
+
   test(
     'rejects unauthored action without mutating or recording progress',
     () async {
@@ -379,26 +580,73 @@ void main() {
     expect(container.read(gameControllerProvider).authoredHeroEdges, isEmpty);
   });
 
+  test('premature terminal never exposes generic postflop action', () async {
+    final service = _FakeSituationService(_legacyFlopTerminalSituation());
+    final container = _authoredContainer(service);
+    addTearDown(container.dispose);
+    final controller = container.read(gameControllerProvider.notifier);
+
+    await controller.startTraining();
+    expect(container.read(gameControllerProvider).game?.street, Street.flop);
+
+    await controller.heroAct(
+      const PokerAction(type: PokerActionType.bet, amount: 8),
+    );
+
+    final session = container.read(gameControllerProvider);
+    expect(session.game?.street, Street.river);
+    expect(session.game?.community.length, 5);
+    expect(session.game?.isHandOver, isTrue);
+    expect(session.heroCanAct, isFalse);
+    expect(session.authoredHeroEdges, isEmpty);
+  });
+
   test(
-    'completed flop replay advances to turn before generic action',
+    'multi-street situation keeps authored options and current coaching',
     () async {
-      final service = _FakeSituationService(_legacyFlopTerminalSituation());
+      final service = _FakeSituationService(_fullyAuthoredPostflopSituation());
       final container = _authoredContainer(service);
       addTearDown(container.dispose);
       final controller = container.read(gameControllerProvider.notifier);
 
       await controller.startTraining();
-      expect(container.read(gameControllerProvider).game?.street, Street.flop);
+      expect(
+        container
+            .read(gameControllerProvider)
+            .authoredHeroEdges
+            .map((edge) => edge.actionKey),
+        ['BET_40'],
+      );
 
       await controller.heroAct(
         const PokerAction(type: PokerActionType.bet, amount: 8),
       );
-
-      final session = container.read(gameControllerProvider);
+      var session = container.read(gameControllerProvider);
       expect(session.game?.street, Street.turn);
-      expect(session.game?.community.length, 4);
       expect(session.heroCanAct, isTrue);
-      expect(session.authoredHeroEdges, isEmpty);
+      expect(session.authoredHeroEdges.map((edge) => edge.actionKey), [
+        'CHECK_TURN',
+        'BET_TURN_50',
+      ]);
+      expect(session.coach.decisionStreet, Street.flop);
+      expect(session.coach.isHistorical, isTrue);
+
+      await controller.heroAct(const PokerAction(type: PokerActionType.check));
+      session = container.read(gameControllerProvider);
+      expect(session.game?.street, Street.river);
+      expect(session.heroCanAct, isTrue);
+      expect(session.authoredHeroEdges.map((edge) => edge.actionKey), [
+        'CHECK_RIVER',
+        'BET_RIVER_50',
+      ]);
+      expect(session.coach.decisionStreet, Street.turn);
+      expect(session.coach.isHistorical, isTrue);
+
+      await controller.heroAct(const PokerAction(type: PokerActionType.check));
+      session = container.read(gameControllerProvider);
+      expect(session.game?.isHandOver, isTrue);
+      expect(session.heroCanAct, isFalse);
+      expect(session.coach.decisionStreet, Street.river);
     },
   );
 

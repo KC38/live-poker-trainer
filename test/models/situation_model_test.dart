@@ -4,7 +4,6 @@ library;
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:live_poker_trainer/core/constants/money.dart';
 import 'package:live_poker_trainer/engine/poker_engine.dart';
 import 'package:live_poker_trainer/engine/situation_action_keys.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
@@ -557,7 +556,7 @@ void main() {
       expect(engine.state.players.map((p) => p.stack), [202, 198]);
     });
 
-    test('preflop CALL to showdown plays out remaining streets live', () {
+    test('premature showdown never falls back to generic street play', () {
       final situation = SituationModel.fromJson(_minimalFoldJson());
       final engine = PokerEngine(
         settings: const GameSettingsModel(seatCount: 2, stackDepthBb: 100),
@@ -572,28 +571,12 @@ void main() {
         action: SituationActionKeys.pokerActionForEdge(engine.state, edge),
       );
 
-      expect(engine.isLiveRemainderPlay, isTrue);
-      expect(engine.state.isHandOver, isFalse);
       expect(engine.terminalNodeId, 'term_call');
-
-      // Play out with passive lines so the authored runout can deal.
-      var guard = 0;
-      while (guard++ < 256 && !engine.state.isHandOver) {
-        final event = engine.nextEvent();
-        if (event != null) continue;
-        if (!engine.state.waitingForHero) break;
-        final call = engine.state.callAmountFor(engine.state.hero);
-        engine.submitHeroAction(
-          call <= Money.epsilon
-              ? const PokerAction(type: PokerActionType.check)
-              : PokerAction(type: PokerActionType.call, amount: call),
-        );
-      }
-
       expect(engine.state.isHandOver, isTrue);
+      expect(engine.state.waitingForHero, isFalse);
       expect(engine.state.community.length, 5);
-      expect(engine.terminalNodeId, 'term_call');
-      expect(engine.isLiveRemainderPlay, isFalse);
+      expect(engine.currentHeroNode, isNull);
+      expect(engine.nextEvent(), isNull);
     });
 
     test('terminal split uses authored winners and pre-award stacks', () {

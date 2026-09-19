@@ -144,12 +144,12 @@ SituationModel _situationEndingAfterResponse({
 }
 
 void main() {
-  group('authored street completion', () {
+  group('authored situations never fall back to generic play', () {
     for (final street in const [Street.preflop, Street.flop, Street.turn]) {
       for (final heroBets in const [false, true]) {
         final line = heroBets ? 'bet-call' : 'check-check';
 
-        test('$line advances exactly once after ${street.name}', () {
+        test('$line resolves its authored terminal after ${street.name}', () {
           final engine = PokerEngine(
             settings: const GameSettingsModel(seatCount: 2),
             random: Random(7),
@@ -167,34 +167,12 @@ void main() {
             ),
           );
 
-          final villainEvent = engine.nextEvent();
-          expect(villainEvent?.kind, TableEventKind.villainAction);
-          expect(engine.isLiveRemainderPlay, isTrue);
-
-          TableEvent? streetEvent;
-          for (var step = 0; step < 3; step++) {
-            final event = engine.nextEvent();
-            expect(
-              event,
-              isNotNull,
-              reason: 'hero must not receive another ${street.name} action',
-            );
-            if (event!.state.waitingForHero) {
-              expect(event.state.street, isNot(street));
-            }
-            if (event.kind == TableEventKind.dealStreet) {
-              streetEvent = event;
-              break;
-            }
-          }
-
-          expect(streetEvent, isNotNull);
-          expect(streetEvent!.street, street.next);
-          expect(streetEvent.state.street, street.next);
-          expect(
-            streetEvent.state.community.length,
-            _boardFor(street.next!).length,
-          );
+          final terminalEvent = engine.nextEvent();
+          expect(terminalEvent?.kind, TableEventKind.handOver);
+          expect(engine.state.isHandOver, isTrue);
+          expect(engine.state.waitingForHero, isFalse);
+          expect(engine.currentHeroNode, isNull);
+          expect(engine.nextEvent(), isNull);
         });
       }
     }
@@ -203,41 +181,36 @@ void main() {
       for (final heroBets in const [false, true]) {
         final line = heroBets ? 'bet' : 'check';
 
-        test('direct-terminal $line passes action after ${street.name}', () {
-          final engine = PokerEngine(
-            settings: const GameSettingsModel(seatCount: 2),
-            random: Random(7),
-          );
-          engine.dealSituationHand(
-            _situationEndingAfterResponse(
-              street: street,
-              heroBets: heroBets,
-              directTerminal: true,
-            ),
-          );
+        test(
+          'direct-terminal $line ends without generic ${street.name} play',
+          () {
+            final engine = PokerEngine(
+              settings: const GameSettingsModel(seatCount: 2),
+              random: Random(7),
+            );
+            engine.dealSituationHand(
+              _situationEndingAfterResponse(
+                street: street,
+                heroBets: heroBets,
+                directTerminal: true,
+              ),
+            );
 
-          final edge = engine.currentHeroNode!.actions.single;
-          engine.applySituationHeroChoice(
-            edge: edge,
-            action: PokerAction(
-              type: heroBets ? PokerActionType.bet : PokerActionType.check,
-              amount: heroBets ? 8 : 0,
-            ),
-          );
+            final edge = engine.currentHeroNode!.actions.single;
+            engine.applySituationHeroChoice(
+              edge: edge,
+              action: PokerAction(
+                type: heroBets ? PokerActionType.bet : PokerActionType.check,
+                amount: heroBets ? 8 : 0,
+              ),
+            );
 
-          expect(engine.isLiveRemainderPlay, isTrue);
-          expect(engine.state.street, street);
-          expect(
-            engine.state.waitingForHero,
-            isFalse,
-            reason: 'live remainder must not skip the responding villain',
-          );
-          expect(engine.state.activePlayerIndex, 1);
-
-          final response = engine.nextEvent();
-          expect(response, isNotNull);
-          expect(response!.seatIndex, 1);
-        });
+            expect(engine.state.isHandOver, isTrue);
+            expect(engine.state.waitingForHero, isFalse);
+            expect(engine.currentHeroNode, isNull);
+            expect(engine.nextEvent(), isNull);
+          },
+        );
       }
     }
   });
