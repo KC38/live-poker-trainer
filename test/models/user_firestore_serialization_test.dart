@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/models/user_stats_model.dart';
@@ -17,6 +18,7 @@ void main() {
       rebuyThresholdBb: 40,
       sfxEnabled: false,
       musicEnabled: false,
+      chipDisplayMode: ChipDisplayMode.bb,
       lineupMode: LineupMode.custom,
       customArchetypes: const [
         PlayerArchetype.maniac,
@@ -28,6 +30,14 @@ void main() {
     expect(remote.containsKey('sfxEnabled'), isFalse);
     expect(remote.containsKey('musicEnabled'), isFalse);
     expect(remote['seatCount'], 6);
+    expect(remote['smallBlind'], 1);
+    expect(remote['bigBlind'], 2);
+    expect(remote['stackDepthBb'], 100);
+    expect(remote['autoRebuy'], isFalse);
+    expect(remote['rebuyThresholdBb'], 40);
+    expect(remote['chipDisplayMode'], ChipDisplayMode.bb.name);
+    expect(remote['lineupMode'], LineupMode.custom.name);
+    expect(remote['customArchetypes'], isA<String>());
 
     final localAudio = const GameSettingsModel(
       sfxEnabled: true,
@@ -40,8 +50,60 @@ void main() {
     expect(hydrated.sfxEnabled, isTrue);
     expect(hydrated.musicEnabled, isTrue);
     expect(hydrated.seatCount, 6);
+    expect(hydrated.smallBlind, 1);
+    expect(hydrated.bigBlind, 2);
+    expect(hydrated.stackDepthBb, 100);
+    expect(hydrated.autoRebuy, isFalse);
+    expect(hydrated.rebuyThresholdBb, 40);
+    expect(hydrated.chipDisplayMode, ChipDisplayMode.bb);
     expect(hydrated.lineupMode, LineupMode.custom);
     expect(hydrated.customArchetypes.length, 2);
+  });
+
+  test('Firestore prefs accept list-shaped customArchetypes from server', () {
+    final hydrated = GameSettingsModel.fromFirestorePreferences(
+      {
+        'seatCount': 4,
+        'smallBlind': 0.5,
+        'bigBlind': 1,
+        'stackDepthBb': 50,
+        'lineupMode': 'custom',
+        'customArchetypes': ['Maniac', 'Nit', 'TAG'],
+      },
+      localAudio: const GameSettingsModel(sfxEnabled: false),
+    );
+    expect(hydrated.seatCount, 4);
+    expect(hydrated.customArchetypes.map((a) => a.id).toList(), [
+      'MANIAC',
+      'NIT',
+      'TAG',
+    ]);
+    expect(hydrated.sfxEnabled, isFalse);
+  });
+
+  test('mergeRemotePreferences keeps local audio over remote gameplay', () {
+    const local = GameSettingsModel(
+      seatCount: 9,
+      sfxEnabled: false,
+      musicEnabled: true,
+    );
+    const remote = GameSettingsModel(
+      seatCount: 6,
+      smallBlind: 2,
+      bigBlind: 5,
+      stackDepthBb: 200,
+      sfxEnabled: true,
+      musicEnabled: false,
+      lineupMode: LineupMode.custom,
+    );
+    final merged = local.mergeRemotePreferences(remote);
+    expect(merged.seatCount, 6);
+    expect(merged.smallBlind, 2);
+    expect(merged.bigBlind, 5);
+    expect(merged.stackDepthBb, 200);
+    expect(merged.lineupMode, LineupMode.custom);
+    expect(merged.sfxEnabled, isFalse);
+    expect(merged.musicEnabled, isTrue);
   });
 
   test('UserStatsModel Firestore map round-trips', () {

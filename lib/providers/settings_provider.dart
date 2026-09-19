@@ -105,6 +105,18 @@ class SettingsNotifier extends StateNotifier<GameSettingsModel> {
     _applySideEffects();
   }
 
+  /// Resets table-setup / gameplay prefs to defaults after sign-out.
+  ///
+  /// Keeps device-local audio. Does not push to Firestore (caller must sign
+  /// out first so [syncRemote] sees no uid).
+  Future<void> resetSyncedToDefaults() async {
+    final defaults = GameSettingsModel(
+      sfxEnabled: state.sfxEnabled,
+      musicEnabled: state.musicEnabled,
+    );
+    await update(defaults);
+  }
+
   static bool _nonAudioChanged(
     Map<String, Object?> before,
     Map<String, Object?> after,

@@ -1,10 +1,9 @@
 /// Riverpod auth state, uid, and sign-in / sign-out actions.
 library;
 
-import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_poker_trainer/models/game_settings_model.dart';
 import 'package:live_poker_trainer/models/user_document.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
@@ -27,9 +26,16 @@ final authUidProvider = Provider<String?>((ref) {
 });
 
 /// Ensures `users/{uid}` exists and hydrates synced settings after sign-in.
+///
+/// Waits for durable [SharedPreferences] first so remote table-setup / gameplay
+/// prefs are never applied to the temporary in-memory settings notifier (which
+/// is discarded when real prefs resolve).
 final userDocProvider = FutureProvider<UserDocument?>((ref) async {
   final user = await ref.watch(authStateProvider.future);
   if (user == null) return null;
+
+  // Gate on SharedPreferences so [settingsProvider] has the durable notifier.
+  await ref.watch(sharedPreferencesProvider.future);
 
   final settings = ref.read(settingsProvider);
   final repo = ref.read(userRepositoryProvider);
@@ -39,10 +45,10 @@ final userDocProvider = FutureProvider<UserDocument?>((ref) async {
     preferences: settings,
   );
 
-  // Apply remote gameplay prefs; keep device-local audio.
-  unawaited(
-    ref.read(settingsProvider.notifier).applyRemotePreferences(doc.preferences),
-  );
+  // Apply remote gameplay prefs (table setup, blinds, lineup, …); keep audio local.
+  await ref
+      .read(settingsProvider.notifier)
+      .applyRemotePreferences(doc.preferences);
   return doc;
 });
 
@@ -55,16 +61,28 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
 
   AuthService get _auth => _ref.read(authServiceProvider);
 
-  Future<void> _run(Future<User> Function() action) async {
+  /// Ensures the cloud user doc exists, then invalidates [userDocProvider].
+  ///
+  /// When [seedLocalPreferences] is true (registration), a brand-new doc is
+  /// seeded from the current device settings (table setup the user may have
+  /// configured before signing up). Sign-in uses defaults so a previous
+  /// account's local prefs cannot pollute a new user's first cloud doc.
+  Future<void> _run(
+    Future<User> Function() action, {
+    bool seedLocalPreferences = false,
+  }) async {
     state = const AsyncValue.loading();
     try {
       final user = await action();
+      final preferences = seedLocalPreferences
+          ? _ref.read(settingsProvider)
+          : const GameSettingsModel();
       await _ref.read(userRepositoryProvider).ensureUserDoc(
             uid: user.uid,
             displayName: user.displayName,
-            preferences: _ref.read(settingsProvider),
+            preferences: preferences,
           );
-      // Refresh providers that key off the signed-in user.
+      // Refresh providers that key off the signed-in user (re-hydrates prefs).
       _ref.invalidate(userDocProvider);
       state = const AsyncValue.data(null);
     } catch (e, st) {
@@ -85,6 +103,7 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
         password: password,
         displayName: displayName,
       ),
+      seedLocalPreferences: true,
     );
   }
 
@@ -103,11 +122,13 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
     return _run(_auth.signInWithGoogle);
   }
 
-  /// Signs out; clears the user doc cache.
+  /// Signs out; clears synced gameplay prefs from the device (keeps audio).
   Future<void> signOut() async {
     state = const AsyncValue.loading();
     try {
       await _auth.signOut();
+      // After uid is cleared so we do not push defaults back to Firestore.
+      await _ref.read(settingsProvider.notifier).resetSyncedToDefaults();
       _ref.invalidate(userDocProvider);
       state = const AsyncValue.data(null);
     } catch (e, st) {
