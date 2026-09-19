@@ -483,6 +483,8 @@ function validateGraph(p: SituationPayload, issues: ValidationIssue[]): void {
   };
   visit(p.rootNodeId);
 
+  validateHeroStreetCoverage(p, issues);
+
   // Every leaf must be terminal; every non-terminal must have outs
   for (const id of reachable) {
     const node = p.nodes[id];
@@ -598,6 +600,64 @@ function outgoing(node: SituationNode): string[] {
     return [node.nextNodeId];
   }
   return [];
+}
+
+/**
+ * Requires every live root-to-terminal path to offer Hero a decision on each
+ * betting street reached before the hand ends. All-in runouts only require
+ * coverage through the street where the all-in was completed.
+ */
+function validateHeroStreetCoverage(
+  p: SituationPayload,
+  issues: ValidationIssue[],
+): void {
+  const reported = new Set<string>();
+  const streets: Street[] = ["preflop", "flop", "turn", "river"];
+
+  const visit = (
+    nodeId: string,
+    heroStreets: ReadonlySet<Street>,
+    previousStreet: Street | undefined,
+    path: ReadonlySet<string>,
+  ): void => {
+    const node = p.nodes[nodeId];
+    if (!node || path.has(nodeId)) return;
+
+    const nextPath = new Set(path);
+    nextPath.add(nodeId);
+    const nextHeroStreets = new Set(heroStreets);
+    if (node.type === "hero") nextHeroStreets.add(node.street);
+
+    if (node.type === "terminal") {
+      const requiredThrough =
+        node.reason === "all_in_runout" ?
+          previousStreet :
+          node.street;
+      if (requiredThrough === undefined) return;
+      const lastIndex = streets.indexOf(requiredThrough);
+      for (let index = 0; index <= lastIndex; index++) {
+        const street = streets[index];
+        if (nextHeroStreets.has(street)) continue;
+        const key = `${node.id}:${street}`;
+        if (reported.has(key)) continue;
+        reported.add(key);
+        issues.push({
+          code: "hero_street_coverage",
+          message:
+            `root-to-terminal path is missing an authored Hero decision ` +
+            `on ${street}`,
+          nodeId: node.id,
+        });
+      }
+      return;
+    }
+
+    for (const nextId of outgoing(node)) {
+      visit(nextId, nextHeroStreets, node.street, nextPath);
+    }
+  };
+
+  visit(p.rootNodeId, new Set<Street>(), undefined, new Set<string>());
 }
 
 function validateNodesDeep(

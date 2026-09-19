@@ -358,6 +358,7 @@ Rules:
 - Keep the entire graph to at most 20 nodes.
 - Every root-to-terminal path has 1-4 hero decisions.
 - Every hero node has 2-4 curated action choices.
+- Prefer exactly 2 choices per hero node. To stay within 20 nodes, allow only one nonterminal continuation from each hero node; other choices should end the hand legally by fold or all-in whenever strategically plausible.
 - Play every street: while two or more players still have chips, do NOT jump to a showdown or all_in_runout terminal. Advance one street at a time with a hero decision on each street (preflop/flop/turn/river) until a fold ends the hand or an all-in leaves fewer than two stacks behind.
 - Showdown terminals are only legal from a river node after the river betting round. all_in_runout is only legal when fewer than two players have chips behind.
 - Do not personalize coaching to any player history.
