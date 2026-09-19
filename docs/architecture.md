@@ -98,7 +98,9 @@ Successful, duplicate, and failed generation runs are recorded under
 candidate, thinking, cached, and total token counts plus an estimated cost in
 USD micros. `tableSetups/{setupKey}.generationMetrics` aggregates those values,
 and each published situation stores the usage attributable to that situation.
-The pricing-version field identifies the rates used for each estimate.
+The pricing-version field identifies the rates used for each estimate. The
+calculator automatically switches from the introductory rate to the published
+standard Gemini 3.8 Flash rate on January 1, 2027.
 
 ## Progress
 
