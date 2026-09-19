@@ -28,6 +28,7 @@ List<CardModel> _boardFor(Street street) {
 SituationModel _situationEndingAfterResponse({
   required Street street,
   required bool heroBets,
+  bool directTerminal = false,
 }) {
   final heroAmount = heroBets ? 8.0 : 0.0;
   final finalPot = 20 + (heroAmount * 2);
@@ -40,7 +41,7 @@ SituationModel _situationEndingAfterResponse({
     verdict: HeroActionVerdict.correct,
     evDeltaBb: 0,
     optimalActionKey: heroBets ? 'BET_40' : 'CHECK',
-    nextNodeId: 'villain_response',
+    nextNodeId: directTerminal ? 'legacy_showdown' : 'villain_response',
   );
 
   return SituationModel(
@@ -106,24 +107,27 @@ SituationModel _situationEndingAfterResponse({
         minRaiseTo: 2,
         actions: [heroEdge],
       ),
-      'villain_response': ScriptedNode(
-        id: 'villain_response',
-        street: street,
-        pot: 20 + heroAmount,
-        stacks: [190 - heroAmount, 190],
-        streetBets: [heroAmount, 0],
-        board: _boardFor(street),
-        foldedSeats: const [],
-        actions: [
-          ScriptedAction(
-            seat: 1,
-            kind:
-                heroBets ? SituationActionKind.call : SituationActionKind.check,
-            amountTo: heroBets ? heroAmount : null,
-          ),
-        ],
-        nextNodeId: 'legacy_showdown',
-      ),
+      if (!directTerminal)
+        'villain_response': ScriptedNode(
+          id: 'villain_response',
+          street: street,
+          pot: 20 + heroAmount,
+          stacks: [190 - heroAmount, 190],
+          streetBets: [heroAmount, 0],
+          board: _boardFor(street),
+          foldedSeats: const [],
+          actions: [
+            ScriptedAction(
+              seat: 1,
+              kind:
+                  heroBets
+                      ? SituationActionKind.call
+                      : SituationActionKind.check,
+              amountTo: heroBets ? heroAmount : null,
+            ),
+          ],
+          nextNodeId: 'legacy_showdown',
+        ),
       'legacy_showdown': TerminalNode(
         id: 'legacy_showdown',
         street: Street.river,
@@ -191,6 +195,48 @@ void main() {
             streetEvent.state.community.length,
             _boardFor(street.next!).length,
           );
+        });
+      }
+    }
+
+    for (final street in const [Street.preflop, Street.flop, Street.turn]) {
+      for (final heroBets in const [false, true]) {
+        final line = heroBets ? 'bet' : 'check';
+
+        test('direct-terminal $line passes action after ${street.name}', () {
+          final engine = PokerEngine(
+            settings: const GameSettingsModel(seatCount: 2),
+            random: Random(7),
+          );
+          engine.dealSituationHand(
+            _situationEndingAfterResponse(
+              street: street,
+              heroBets: heroBets,
+              directTerminal: true,
+            ),
+          );
+
+          final edge = engine.currentHeroNode!.actions.single;
+          engine.applySituationHeroChoice(
+            edge: edge,
+            action: PokerAction(
+              type: heroBets ? PokerActionType.bet : PokerActionType.check,
+              amount: heroBets ? 8 : 0,
+            ),
+          );
+
+          expect(engine.isLiveRemainderPlay, isTrue);
+          expect(engine.state.street, street);
+          expect(
+            engine.state.waitingForHero,
+            isFalse,
+            reason: 'live remainder must not skip the responding villain',
+          );
+          expect(engine.state.activePlayerIndex, 1);
+
+          final response = engine.nextEvent();
+          expect(response, isNotNull);
+          expect(response!.seatIndex, 1);
         });
       }
     }
