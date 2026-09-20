@@ -249,6 +249,13 @@ void main() {
     );
     expect(
       polishCoachCopy(
+        'stations behind with high showdown call marks '
+        '(Dale 77.4, Fred 71.7) make calling unprofitable.',
+      ),
+      contains('(Dale 77.4%, Fred 71.7%)'),
+    );
+    expect(
+      polishCoachCopy(
         'Folding against opponents with aggression above 77 is timid.',
       ),
       contains('aggression above 77%'),
