@@ -109,6 +109,21 @@ class AuthService {
     return user;
   }
 
+  /// Sends a password-reset email for [email].
+  ///
+  /// Treats `user-not-found` as success so the UI cannot leak whether an
+  /// account exists.
+  Future<void> sendPasswordResetEmail({required String email}) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email.trim());
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        return;
+      }
+      rethrow;
+    }
+  }
+
   /// Signs out of Firebase and Google (best-effort).
   Future<void> signOut() async {
     try {
