@@ -101,7 +101,8 @@ void main() {
       confidence: 'high',
       summary: 'Call the remaining 42.36 all-in.',
       playerTypeReason:
-          'Viktor has 51.7 bluffRiver and 93.7 aggression, plus 57.8 VPIP.',
+          'Viktor has 51.7 bluffRiver and 93.7 aggression, plus 57.8 VPIP. '
+          'Cole has high aggression of 57.8.',
       sizingNote:
           'Hero needs 5.5% equity to call the final 42.36 into a pot of 731.64. '
           'Calling into a massive 748 pot. Facing a 210 all-in.',
@@ -117,7 +118,9 @@ void main() {
     expect(message, isNot(contains('a 210 all-in')));
     expect(message, contains('51.7% river bluff'));
     expect(message, contains('93.7% aggression'));
+    expect(message, contains('aggression of 57.8%'));
     expect(message, contains('57.8% VPIP'));
+    expect(message, isNot(contains(RegExp(r'aggression of 57\.8(?!%)'))));
     expect(message, contains('5.5% equity'));
     expect(message, isNot(contains('bluffRiver')));
     expect(message, isNot(contains(r'$5.5')));

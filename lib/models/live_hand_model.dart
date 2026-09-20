@@ -158,6 +158,16 @@ String polishCoachCopy(String raw) {
       entry.value,
     );
   }
+  for (final label in _tendencyLabels.values) {
+    final escaped = RegExp.escape(label);
+    text = text.replaceAllMapped(
+      RegExp(
+        '($escaped)\\s+of\\s+(\\d+(?:\\.\\d+)?)(?!\\s*%)',
+        caseSensitive: false,
+      ),
+      (match) => '${match[1]} of ${match[2]}%',
+    );
+  }
   text = text.replaceAllMapped(
     RegExp(r'(?<![\d$])(\d+\.\d{2})(?!\d)(?!\s*%)'),
     (match) => '\$${match[1]}',
