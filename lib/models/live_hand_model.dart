@@ -334,14 +334,18 @@ String polishCoachCopy(String raw) {
       (match) => '(${match[1]}${match[2]} ${match[3]}%)',
     );
   }
-  // Mid-list nested tendency rates inside an open paren (batch 0198/0203):
+  // Mid-list nested tendency rates inside an open paren (batch 0198/0203/0205):
   // "Maniac (aggression 78.3%, VPIP (51.3%) who" →
   // "Maniac (aggression 78.3%, VPIP 51.3%) who".
   // "Paul (VPIP 40.7%, showdown call (62.6%) and Alex's" →
   // "Paul (VPIP 40.7%, showdown call 62.6%) and Alex's".
+  // "profile (VPIP 10.8%, 3-bet (3.8%) alongside" →
+  // "profile (VPIP 10.8%, 3-bet 3.8%) alongside".
   // Only when the rate-paren is wrongly ending mid-clause
-  // (`who` / `and Name` / `.`), not list items like "PFR (26%), and …".
-  // Standalone "3-bet (25.3%)" (depth 0) stays intact.
+  // (`who` / `and Name` / lowercase continuer / `.`),
+  // not list items like "PFR (26%), and …".
+  // Standalone "3-bet (25.3%)" / "aggression (77%) and Carl" (depth 0)
+  // stays intact.
   {
     final labelAlt =
         _tendencyLabels.values.map(RegExp.escape).toSet().join('|');
@@ -369,8 +373,10 @@ String polishCoachCopy(String raw) {
             r'^\s+(?:who|that|which|while|when|making)\b',
             caseSensitive: false,
           ).hasMatch(after) ||
-          // "showdown call (62.6%) and Alex's" — not ", and …" list items.
+          // "showdown call (62.6%) and Alex's"
           RegExp(r'^\s+and\s+[A-Z]').hasMatch(after) ||
+          // "3-bet (3.8%) alongside multiway …"
+          RegExp(r'^\s+[a-z]').hasMatch(after) ||
           RegExp(r'^\s*[.!?]').hasMatch(after);
       if (!wronglyCloses) {
         return match[0]!;
