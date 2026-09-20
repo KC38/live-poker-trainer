@@ -470,6 +470,22 @@ void main() {
       polishCoachCopy('high aggression (69.0) keeps pressure on.'),
       contains('aggression (69.0%)'),
     );
+    // Live 0118 H8: "aggression rating of 85.6" missing %.
+    expect(
+      polishCoachCopy(
+        'Blitz has an extreme aggression rating of 85.6 and high '
+        'VPIP (63.1%), meaning their range contains ample bluffs.',
+      ),
+      allOf(
+        contains('aggression rating of 85.6%'),
+        contains('VPIP (63.1%)'),
+        isNot(contains(RegExp(r'aggression rating of 85\.6(?!%)'))),
+      ),
+    );
+    expect(
+      polishCoachCopy('stations show aggression rating 85.6 on the river.'),
+      contains('aggression rating 85.6%'),
+    );
     expect(
       polishCoachCopy('stations show frequency (63.1) on the river.'),
       contains('frequency (63.1%)'),

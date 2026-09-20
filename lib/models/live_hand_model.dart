@@ -228,22 +228,26 @@ String polishCoachCopy(String raw) {
   );
   for (final label in _tendencyLabels.values) {
     final escaped = RegExp.escape(label);
+    // Optional noun after the label: frequency / rate / stat / rating.
+    const noun = r'(?:\s+(?:frequency|rate|stat|rating))?';
     // Complete number tokens only. "of 76.3%" must not become "of 76%.3%",
     // but "of 57.8." at the end of a sentence still needs the percent.
+    // Also "aggression rating of 85.6" (live coach prose).
     text = text.replaceAllMapped(
       RegExp(
-        '($escaped)\\s+of\\s+(\\d+(?:\\.\\d+)?)(?!\\d)(?!\\.\\d)(?!\\s*%)',
+        '($escaped)($noun)\\s+of\\s+(\\d+(?:\\.\\d+)?)(?!\\d)(?!\\.\\d)(?!\\s*%)',
         caseSensitive: false,
       ),
-      (match) => '${match[1]} of ${match[2]}%',
+      (match) => '${match[1]}${match[2]} of ${match[3]}%',
     );
-    // Bare "showdown call 50.7" (no "of") still needs a percent mark.
+    // Bare "showdown call 50.7" / "aggression rating 85.6" (no "of").
+    // Skip OCR-split "frequency 63.1)" — that is repaired by the paren pass.
     text = text.replaceAllMapped(
       RegExp(
-        '($escaped)\\s+(\\d+(?:\\.\\d+)?)(?!\\d)(?!\\.\\d)(?!\\s*%)(?![xX])',
+        '($escaped)($noun)\\s+(\\d+(?:\\.\\d+)?)(?!\\d)(?!\\.\\d)(?!\\s*%)(?![xX)])',
         caseSensitive: false,
       ),
-      (match) => '${match[1]} ${match[2]}%',
+      (match) => '${match[1]}${match[2]} ${match[3]}%',
     );
     // Colon rates: "showdown call: 67.9".
     text = text.replaceAllMapped(
@@ -254,11 +258,11 @@ String polishCoachCopy(String raw) {
       (match) => '${match[1]}: ${match[2]}%',
     );
     // Parenthetical rates: "aggression (86.4)" / "VPIP (70.2)", and the
-    // common "river bluff frequency (63.1)" / "3-bet stat (15.1)" forms
-    // with an extra noun.
+    // common "river bluff frequency (63.1)" / "3-bet stat (15.1)" /
+    // "aggression rating (85.6)" forms with an extra noun.
     text = text.replaceAllMapped(
       RegExp(
-        '($escaped)((?:\\s+(?:frequency|rate|stat))?)\\s*\\((\\d+(?:\\.\\d+)?)\\)'
+        '($escaped)($noun)\\s*\\((\\d+(?:\\.\\d+)?)\\)'
         r'(?!\s*%)',
         caseSensitive: false,
       ),
@@ -267,7 +271,7 @@ String polishCoachCopy(String raw) {
     // OCR-split close paren only: "river bluff frequency 63.1)".
     text = text.replaceAllMapped(
       RegExp(
-        '($escaped)((?:\\s+(?:frequency|rate|stat))?)\\s+(\\d+(?:\\.\\d+)?)\\)'
+        '($escaped)($noun)\\s+(\\d+(?:\\.\\d+)?)\\)'
         r'(?!\s*%)',
         caseSensitive: false,
       ),
