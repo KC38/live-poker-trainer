@@ -464,30 +464,12 @@ class GameController extends StateNotifier<TableSession> {
     LiveLegalActionModel action,
     Street street,
   ) {
-    final verdict = switch (assessment.rating) {
-      'recommended' || 'strong' => CoachVerdict.correct,
-      'reasonable' => CoachVerdict.close,
-      _ => CoachVerdict.incorrect,
-    };
-    final playedLabel = action.label.toUpperCase();
-    final betterLabel =
-        viewActionLabel(
-          state.liveView?.legalActions ?? const [],
-          assessment.betterActionId,
-        ) ??
-        // The recommended line omits betterActionId; it is the action played.
-        (assessment.rating == 'recommended' ? playedLabel : null);
-    return CoachFeedback(
-      verdict: verdict,
-      message: assessment.message,
-      optimalActionLabel: betterLabel,
-      heroAction: action.label,
-      heroSizingBb:
-          action.amountTo == null
-              ? 0
-              : action.amountTo! / (state.game?.bigBlind ?? 1),
-      decisionStreet: street,
-      confidence: assessment.confidence,
+    return buildLiveCoachFeedback(
+      assessment: assessment,
+      action: action,
+      legalActions: state.liveView?.legalActions ?? const [],
+      street: street,
+      bigBlind: state.game?.bigBlind ?? 1,
     );
   }
 
@@ -583,6 +565,52 @@ GameState applyLiveReplayEvent(
     activePlayerIndex: event.seat,
     highestBet: highest,
     waitingForHero: false,
+  );
+}
+
+/// Maps a live coaching assessment onto shelf feedback.
+CoachFeedback buildLiveCoachFeedback({
+  required LiveCoachingAssessment assessment,
+  required LiveLegalActionModel action,
+  required List<LiveLegalActionModel> legalActions,
+  required Street street,
+  required double bigBlind,
+}) {
+  final verdict = switch (assessment.rating) {
+    // Only the single recommended line is CORRECT; strong is a good
+    // non-best alternative and should read as CLOSE like reasonable.
+    'recommended' => CoachVerdict.correct,
+    'strong' || 'reasonable' => CoachVerdict.close,
+    _ => CoachVerdict.incorrect,
+  };
+  final bb = bigBlind <= 0 ? 1.0 : bigBlind;
+  LiveLegalActionModel? betterAction;
+  final betterId = assessment.betterActionId;
+  if (betterId != null) {
+    for (final candidate in legalActions) {
+      if (candidate.actionId == betterId) {
+        betterAction = candidate;
+        break;
+      }
+    }
+  }
+  final playedLabel = action.label.toUpperCase();
+  final betterLabel =
+      betterAction?.label.toUpperCase() ??
+      // The recommended line omits betterActionId; it is the action played.
+      (assessment.rating == 'recommended' ? playedLabel : null);
+  final optimalAction =
+      betterAction ?? (assessment.rating == 'recommended' ? action : null);
+  return CoachFeedback(
+    verdict: verdict,
+    message: assessment.message,
+    optimalActionLabel: betterLabel,
+    heroAction: action.label,
+    heroSizingBb: action.amountTo == null ? 0 : action.amountTo! / bb,
+    optimalSizingBb:
+        optimalAction?.amountTo == null ? 0 : optimalAction!.amountTo! / bb,
+    decisionStreet: street,
+    confidence: assessment.confidence,
   );
 }
 
