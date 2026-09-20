@@ -45,6 +45,14 @@ async function main(): Promise<void> {
         coachDraft: prepared.usage.byPurpose.coach_draft.modelRequestCount,
         coachCritique: prepared.usage.byPurpose.coach_critique.modelRequestCount,
       },
+      latencyMs: {
+        total: generated.usage.latency.totalDurationMs +
+          prepared.usage.latency.totalDurationMs,
+        deal: generated.usage.latencyByPurpose.deal,
+        villain: prepared.usage.latencyByPurpose.villain,
+        coachDraft: prepared.usage.latencyByPurpose.coach_draft,
+        coachCritique: prepared.usage.latencyByPurpose.coach_critique,
+      },
     },
   }, null, 2));
 }

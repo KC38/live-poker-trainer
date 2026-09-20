@@ -547,6 +547,7 @@ async function getOrGenerateSharedEdge(options: {
           runtimeUsage: liveGenerationMetricsIncrements({
             usage: expanded.usage,
             expandCount: 1,
+            expandDurationMs: expanded.usage.latency.totalDurationMs,
           }),
           updatedAt: FieldValue.serverTimestamp(),
         },
@@ -558,6 +559,7 @@ async function getOrGenerateSharedEdge(options: {
           generationMetrics: liveGenerationMetricsIncrements({
             usage: expanded.usage,
             expandCount: 1,
+            expandDurationMs: expanded.usage.latency.totalDurationMs,
           }),
           updatedAt: FieldValue.serverTimestamp(),
         },
@@ -631,6 +633,9 @@ async function readPreparedEdge(
       {
         total: edge.generationUsage,
         byPurpose: edge.usageByPurpose ?? emptyLiveUsageBreakdown().byPurpose,
+        latency: edge.latency ?? emptyLiveUsageBreakdown().latency,
+        latencyByPurpose:
+          edge.latencyByPurpose ?? emptyLiveUsageBreakdown().latencyByPurpose,
       } :
       emptyLiveUsageBreakdown(),
   };
