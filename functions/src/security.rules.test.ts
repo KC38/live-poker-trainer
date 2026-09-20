@@ -210,17 +210,24 @@ describe("Firestore security rules", () => {
   it("allows owner reads but denies owner writes to progress and history", async () => {
     await seedFirestore(`users/${OWNER_UID}/liveProgress/main`, {handsPlayed: 3});
     await seedFirestore(`users/${OWNER_UID}/liveHandHistory/hand-1`, {result: 10});
+    await seedFirestore(`users/${OWNER_UID}/liveActionFeed/current`, {
+      status: "acting",
+      events: [],
+    });
     const database = testEnv.authenticatedContext(OWNER_UID).firestore();
     const progressRef = doc(database, `users/${OWNER_UID}/liveProgress/main`);
     const historyRef = doc(
       database,
       `users/${OWNER_UID}/liveHandHistory/hand-1`,
     );
+    const feedRef = doc(database, `users/${OWNER_UID}/liveActionFeed/current`);
 
     await assertSucceeds(getDoc(progressRef));
     await assertSucceeds(getDoc(historyRef));
+    await assertSucceeds(getDoc(feedRef));
     await assertFails(setDoc(progressRef, {handsPlayed: 4}));
     await assertFails(updateDoc(historyRef, {result: 20}));
+    await assertFails(setDoc(feedRef, {status: "done"}));
     await assertFails(deleteDoc(progressRef));
   });
 

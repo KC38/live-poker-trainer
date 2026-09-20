@@ -17,6 +17,7 @@ class CoachShelfWidget extends StatelessWidget {
     required this.chipDisplayMode,
     this.replaying = false,
     this.maxHeight,
+    this.onDismiss,
   });
 
   final CoachFeedback feedback;
@@ -24,6 +25,9 @@ class CoachShelfWidget extends StatelessWidget {
   final ChipDisplayMode chipDisplayMode;
   final bool replaying;
   final double? maxHeight;
+
+  /// Clears the shelf so the next action dock can appear.
+  final VoidCallback? onDismiss;
 
   ChipDisplayMode get _stripMode => chipDisplayMode.tableMode;
 
@@ -67,6 +71,7 @@ class CoachShelfWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final hasVerdict = feedback.hasVerdict;
     final optimal = _optimalLine;
+    final canDismiss = onDismiss != null && !replaying;
 
     final advice = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,6 +102,31 @@ class CoachShelfWidget extends StatelessWidget {
               evDeltaBb: feedback.evDeltaBb,
               confidence: feedback.confidence,
               compact: false,
+            ),
+          ),
+        if (canDismiss)
+          Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: onDismiss,
+                style: TextButton.styleFrom(
+                  foregroundColor: AppColors.goldBright,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                ),
+                child: Text(
+                  'Continue',
+                  style: GoogleFonts.jetBrainsMono(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.4,
+                  ),
+                ),
+              ),
             ),
           ),
       ],

@@ -10,6 +10,7 @@ import 'package:live_poker_trainer/core/constants/money.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
 import 'package:live_poker_trainer/providers/profile_provider.dart';
+import 'package:live_poker_trainer/ui/widgets/action_badge.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_avatar.dart';
 
@@ -25,6 +26,7 @@ class HeroRailWidget extends ConsumerWidget {
     required this.game,
     required this.chipDisplayMode,
     this.isThinking = false,
+    this.canAct = false,
     this.review = false,
     this.isWinner = false,
   });
@@ -36,6 +38,9 @@ class HeroRailWidget extends ConsumerWidget {
 
   /// True while villains are still acting and it is not the hero's turn.
   final bool isThinking;
+
+  /// True when the action dock is actually available (not blocked by coaching).
+  final bool canAct;
 
   /// True once the hand is over and the action dock has given up its band:
   /// the rail takes a slice of that space and shows larger hole cards.
@@ -68,10 +73,9 @@ class HeroRailWidget extends ConsumerWidget {
   Widget _buildRail(HeroIdentity identity, double t) {
     final hero = game.hero;
     final heroIndex = game.players.indexWhere((p) => p.isHero);
-    // Matches the action dock's visibility: promising "YOUR TURN" while the
-    // replay still runs would point at controls that are not on screen.
-    final isTurn =
-        game.waitingForHero && !game.isHandOver && !hero.folded && !isThinking;
+    // Prefer the dock's real availability so "YOUR TURN" never appears while
+    // coaching still owns the band.
+    final isTurn = canAct && !hero.folded && !game.isHandOver;
     final position = _positionLabel(heroIndex);
     final borderColor = isWinner
         ? AppColors.goldBright.withValues(alpha: 0.95)
@@ -187,28 +191,14 @@ class HeroRailWidget extends ConsumerWidget {
             Expanded(
               child: Align(
                 alignment: Alignment.centerRight,
-                child: Text(
-                  hero.folded
-                      ? 'FOLDED'
-                      : isWinner
-                          ? (game.isSplitPot ? 'SPLIT' : 'WINS')
-                          : isTurn
-                              ? 'YOUR TURN'
-                              : isThinking
-                                  ? 'ACTION…'
-                                  : (hero.lastActionLabel ?? ''),
-                  textAlign: TextAlign.right,
-                  maxLines: 2,
-                  style: GoogleFonts.jetBrainsMono(
-                    fontSize: 9.5,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.4,
-                    color: hero.folded
-                        ? AppColors.slate
-                        : isWinner || isTurn
-                            ? AppColors.goldBright
-                            : AppColors.slate,
-                  ),
+                child: _HeroStatus(
+                  folded: hero.folded,
+                  isWinner: isWinner,
+                  isSplit: game.isSplitPot,
+                  isTurn: isTurn,
+                  isThinking: isThinking,
+                  lastActionLabel: hero.lastActionLabel,
+                  handOver: game.isHandOver,
                 ),
               ),
             ),
@@ -224,5 +214,67 @@ class HeroRailWidget extends ConsumerWidget {
     if (heroIndex == game.sbIndex) return 'SB';
     if (heroIndex == game.bbIndex) return 'BB';
     return null;
+  }
+}
+
+/// Right-rail status: action badge when set, otherwise turn / thinking text.
+class _HeroStatus extends StatelessWidget {
+  const _HeroStatus({
+    required this.folded,
+    required this.isWinner,
+    required this.isSplit,
+    required this.isTurn,
+    required this.isThinking,
+    required this.lastActionLabel,
+    required this.handOver,
+  });
+
+  final bool folded;
+  final bool isWinner;
+  final bool isSplit;
+  final bool isTurn;
+  final bool isThinking;
+  final String? lastActionLabel;
+  final bool handOver;
+
+  @override
+  Widget build(BuildContext context) {
+    if (folded) {
+      return _statusText('FOLDED', AppColors.slate);
+    }
+    if (isWinner) {
+      return _statusText(
+        isSplit ? 'SPLIT' : 'WINS',
+        AppColors.goldBright,
+      );
+    }
+    final label = lastActionLabel;
+    if (label != null && label.isNotEmpty && !handOver) {
+      return ActionBadge(
+        key: ValueKey('hero-act-$label'),
+        label: label,
+      );
+    }
+    if (isTurn) {
+      return _statusText('YOUR TURN', AppColors.goldBright);
+    }
+    if (isThinking) {
+      return _statusText('ACTION…', AppColors.slate);
+    }
+    return const SizedBox.shrink();
+  }
+
+  Widget _statusText(String text, Color color) {
+    return Text(
+      text,
+      textAlign: TextAlign.right,
+      maxLines: 2,
+      style: GoogleFonts.jetBrainsMono(
+        fontSize: 9.5,
+        fontWeight: FontWeight.w800,
+        letterSpacing: 0.4,
+        color: color,
+      ),
+    );
   }
 }

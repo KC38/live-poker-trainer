@@ -121,6 +121,11 @@ export async function expandLiveHeroAction(options: {
   parent: PreparedLiveNode;
   actionId: string;
   fetchImpl?: typeof fetch;
+  /** Fires after each appended edge event so callers can stream seat actions. */
+  onEdgeEvents?: (
+    events: LiveActionEvent[],
+    state: LiveHandState,
+  ) => Promise<void>;
 }): Promise<PreparedLiveEdge> {
   if (!options.parent.rubric) {
     throw new Error("cannot expand a Hero node without coaching");
@@ -129,20 +134,25 @@ export async function expandLiveHeroAction(options: {
     (candidate) => candidate.actionId === options.actionId,
   );
   if (!selected) throw new Error(`action ${options.actionId} is not legal`);
+  const parentLen = options.parent.history.length;
   const applied = applyLiveAction({
     hand: options.hand,
     state: options.parent.state,
     actionId: options.actionId,
   });
   const history = [...options.parent.history, applied.event];
+  await options.onEdgeEvents?.(history.slice(parentLen), applied.state);
   const childResolved = await resolveToHeroOrTerminal({
     apiKey: options.apiKey,
     hand: options.hand,
     state: applied.state,
     history,
     fetchImpl: options.fetchImpl,
+    onHistoryAppend: async (_event, nextHistory, state) => {
+      await options.onEdgeEvents?.(nextHistory.slice(parentLen), state);
+    },
   });
-  const events = childResolved.node.history.slice(options.parent.history.length);
+  const events = childResolved.node.history.slice(parentLen);
   return {
     parentStateHash: options.parent.stateHash,
     actionId: options.actionId,
@@ -195,6 +205,11 @@ async function resolveToHeroOrTerminal(options: {
   state: LiveHandState;
   history: LiveActionEvent[];
   fetchImpl?: typeof fetch;
+  onHistoryAppend?: (
+    event: LiveActionEvent,
+    history: LiveActionEvent[],
+    state: LiveHandState,
+  ) => Promise<void>;
 }): Promise<ResolvedLiveNode> {
   let state = options.state;
   const history = [...options.history];
@@ -254,6 +269,7 @@ async function resolveToHeroOrTerminal(options: {
       });
       state = applied.state;
       history.push(applied.event);
+      await options.onHistoryAppend?.(applied.event, history, state);
     }
     throw new Error("live continuation exceeded 128 actions");
   } catch (error) {

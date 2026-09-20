@@ -1,6 +1,8 @@
 /// Controller coverage for server-authoritative live hand sessions.
 library;
 
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/core/audio/sound_service.dart';
@@ -40,6 +42,13 @@ class _FakeLiveHandService extends LiveHandService {
 
   @override
   Future<LiveHandStartResult> resumeHand(String sessionId) async => initial;
+
+  @override
+  Stream<LiveActionFeedUpdate> watchActionFeed({
+    required String sessionId,
+    required String decisionId,
+  }) =>
+      const Stream.empty();
 }
 
 Map<String, dynamic> _viewJson({
@@ -212,7 +221,7 @@ void main() {
     },
   );
 
-  test('clears coaching when the next hero decision is dealt', () async {
+  test('keeps coaching until dismissed when the next decision is ready', () async {
     SharedPreferences.setMockInitialValues({});
     final preferences = await SharedPreferences.getInstance();
     const check = {
@@ -268,11 +277,17 @@ void main() {
       container.read(gameControllerProvider).liveActions.single,
     );
 
-    final session = container.read(gameControllerProvider);
-    expect(session.heroCanAct, isTrue);
+    var session = container.read(gameControllerProvider);
+    expect(session.heroCanAct, isFalse);
     expect(session.game!.street.name, 'river');
     expect(session.liveActions.single.actionId, 'CALL:200');
+    expect(session.coach.hasAdvice, isTrue);
+    expect(session.coach.message, contains('Checking the turn'));
+
+    controller.dismissCoach();
+    session = container.read(gameControllerProvider);
     expect(session.coach.hasAdvice, isFalse);
+    expect(session.heroCanAct, isTrue);
   });
 
   test('rejects an action that is not in the current fixed set', () async {

@@ -4,13 +4,64 @@ library;
 
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
 import 'package:live_poker_trainer/models/live_hand_model.dart';
 
 /// App contract version required by the v3 live backend.
 const liveClientVersion = '2.0.0';
+
+/// Incremental seat-action feed while the server resolves villains.
+@immutable
+class LiveActionFeedUpdate {
+  /// Creates one feed snapshot.
+  const LiveActionFeedUpdate({
+    required this.sessionId,
+    required this.decisionId,
+    required this.events,
+    required this.board,
+    required this.street,
+    required this.status,
+  });
+
+  final String sessionId;
+  final String decisionId;
+  final List<LiveActionEventModel> events;
+  final List<String> board;
+  final String street;
+  final String status;
+
+  factory LiveActionFeedUpdate.fromJson(Map<String, dynamic> json) {
+    return LiveActionFeedUpdate(
+      sessionId: json['sessionId'] as String? ?? '',
+      decisionId: json['decisionId'] as String? ?? '',
+      events:
+          _maps(
+            json['events'],
+          ).map(LiveActionEventModel.fromJson).toList(growable: false),
+      board:
+          (json['board'] as List<dynamic>? ?? const [])
+              .map((value) => value.toString())
+              .toList(growable: false),
+      street: json['street'] as String? ?? 'preflop',
+      status: json['status'] as String? ?? 'acting',
+    );
+  }
+
+  static List<Map<String, dynamic>> _maps(dynamic value) {
+    if (value is! List) return const [];
+    return [
+      for (final item in value)
+        if (item is Map<String, dynamic>)
+          item
+        else if (item is Map)
+          item.map((key, nested) => MapEntry('$key', nested)),
+    ];
+  }
+}
 
 /// Cloud callable wrapper with bounded retry for pool/branch preparation.
 class LiveHandService {
@@ -18,13 +69,16 @@ class LiveHandService {
   LiveHandService({
     FirebaseFunctions? functions,
     FirebaseAuth? auth,
+    FirebaseFirestore? firestore,
     this.functionsRegion = 'us-central1',
     this.maximumWait = const Duration(minutes: 9),
   }) : _functions = functions,
-       _auth = auth;
+       _auth = auth,
+       _firestore = firestore;
 
   final FirebaseFunctions? _functions;
   final FirebaseAuth? _auth;
+  final FirebaseFirestore? _firestore;
   final String functionsRegion;
   final Duration maximumWait;
 
@@ -32,6 +86,8 @@ class LiveHandService {
       _functions ?? FirebaseFunctions.instanceFor(region: functionsRegion);
 
   FirebaseAuth get _firebaseAuth => _auth ?? FirebaseAuth.instance;
+
+  FirebaseFirestore get _db => _firestore ?? FirebaseFirestore.instance;
 
   /// Starts one unseen warmed hand for the current user.
   Future<LiveHandStartResult> startHand(GameSettingsModel settings) async {
@@ -70,6 +126,34 @@ class LiveHandService {
       'actionId': action.actionId,
     });
     return LiveActionResult.fromJson(data);
+  }
+
+  /// Watches seat actions published while [decisionId] is resolving.
+  Stream<LiveActionFeedUpdate> watchActionFeed({
+    required String sessionId,
+    required String decisionId,
+  }) {
+    final uid = _firebaseAuth.currentUser?.uid;
+    if (uid == null || uid.isEmpty) {
+      return const Stream.empty();
+    }
+    return _db
+        .collection('users')
+        .doc(uid)
+        .collection('liveActionFeed')
+        .doc('current')
+        .snapshots()
+        .map((snapshot) {
+          final data = snapshot.data();
+          if (data == null) return null;
+          return LiveActionFeedUpdate.fromJson(data);
+        })
+        .where((update) => update != null)
+        .cast<LiveActionFeedUpdate>()
+        .where(
+          (update) =>
+              update.sessionId == sessionId && update.decisionId == decisionId,
+        );
   }
 
   /// Restores a session after a dropped request or app interruption.

@@ -340,4 +340,41 @@ void main() {
     expect(find.textContaining('Correct ·'), findsNothing);
     expect(find.textContaining('Previous ·'), findsNothing);
   });
+
+  testWidgets('Continue dismisses when not replaying', (tester) async {
+    var dismissed = false;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: CoachShelfWidget(
+            feedback: _longIncorrect,
+            bigBlind: 2,
+            chipDisplayMode: ChipDisplayMode.dollars,
+            onDismiss: () => dismissed = true,
+          ),
+        ),
+      ),
+    );
+    expect(find.text('Continue'), findsOneWidget);
+    await tester.tap(find.text('Continue'));
+    expect(dismissed, isTrue);
+  });
+
+  testWidgets('hides Continue while table is still acting', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: CoachShelfWidget(
+            feedback: _longIncorrect,
+            bigBlind: 2,
+            chipDisplayMode: ChipDisplayMode.dollars,
+            replaying: true,
+            onDismiss: () {},
+          ),
+        ),
+      ),
+    );
+    expect(find.text('Continue'), findsNothing);
+    expect(find.text('TABLE ACTING…'), findsOneWidget);
+  });
 }
