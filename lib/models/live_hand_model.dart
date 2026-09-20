@@ -468,25 +468,39 @@ String polishCoachCopy(String raw) {
   );
   // Chip amounts before "pot" / "all-in", but not odds ratios like "8-to-1 pot
   // odds", pot fractions like "2/3 pot", and not the cents of an amount that is
-  // already marked.
+  // already marked. Also skip thousands groups: "1,036 pot" must not become
+  // "1,$036 pot" (batch 0297 H6) — comma is excluded from the lookbehind.
   text = text.replaceAllMapped(
     RegExp(
-      r'(?<![\d$.\-/])(\d+(?:\.\d{1,2})?)\s+(all-in)\b',
+      r'(?<![\d$.,\-/])(\d+(?:\.\d{1,2})?)\s+(all-in)\b',
+      caseSensitive: false,
+    ),
+    (match) => '\$${match[1]} ${match[2]}',
+  );
+  // Whole thousands amounts before pot: "1,036 pot" → "$1,036 pot".
+  text = text.replaceAllMapped(
+    RegExp(
+      r'(?<![\d$])(\d{1,3}(?:,\d{3})+)\s+(pot)\b(?!\s+odds)',
       caseSensitive: false,
     ),
     (match) => '\$${match[1]} ${match[2]}',
   );
   text = text.replaceAllMapped(
     RegExp(
-      r'(?<![\d$.\-/])(\d+(?:\.\d{1,2})?)\s+(pot)\b(?!\s+odds)',
+      r'(?<![\d$.,\-/])(\d+(?:\.\d{1,2})?)\s+(pot)\b(?!\s+odds)',
       caseSensitive: false,
     ),
     (match) => '\$${match[1]} ${match[2]}',
+  );
+  // Repair mangled "$1,$036" from older builds / already-broken model text.
+  text = text.replaceAllMapped(
+    RegExp(r'\$(\d{1,3}),\$(\d{3})\b'),
+    (match) => '\$${match[1]},${match[2]}',
   );
   // "698 total pot" / "a 698 total pot".
   text = text.replaceAllMapped(
     RegExp(
-      r'(?<![\d$.\-/])([1-9]\d*)(?!\.\d)(?!\s*%)\s+(total pot)\b',
+      r'(?<![\d$.,\-/])([1-9]\d*)(?!\.\d)(?!\s*%)\s+(total pot)\b',
       caseSensitive: false,
     ),
     (match) => '\$${match[1]} ${match[2]}',
@@ -494,14 +508,14 @@ String polishCoachCopy(String raw) {
   // "262 stack" / "125 bb stack" — amount before the noun, not after.
   text = text.replaceAllMapped(
     RegExp(
-      r'(?<![\d$.\-/])([1-9]\d*)(?!\.\d)(?!\s*%)\s+bb\s+stack\b',
+      r'(?<![\d$.,\-/])([1-9]\d*)(?!\.\d)(?!\s*%)\s+bb\s+stack\b',
       caseSensitive: false,
     ),
     (match) => '\$${match[1]} bb stack',
   );
   text = text.replaceAllMapped(
     RegExp(
-      r'(?<![\d$.\-/])(\d+(?:\.\d{1,2})?)\s+(stack)\b',
+      r'(?<![\d$.,\-/])(\d+(?:\.\d{1,2})?)\s+(stack)\b',
       caseSensitive: false,
     ),
     (match) => '\$${match[1]} ${match[2]}',
@@ -517,7 +531,7 @@ String polishCoachCopy(String raw) {
   // "Facing a 59 call into" — chip count before call, not "call 50.7%" rates.
   text = text.replaceAllMapped(
     RegExp(
-      r'(?<![\d$.\-/])([1-9]\d*)\s+(call)\b(?!\s*\d)(?!\s*%)(?!\s*\.)',
+      r'(?<![\d$.,\-/])([1-9]\d*)\s+(call)\b(?!\s*\d)(?!\s*%)(?!\s*\.)',
       caseSensitive: false,
     ),
     (match) => '\$${match[1]} ${match[2]}',
@@ -578,7 +592,7 @@ String polishCoachCopy(String raw) {
   // "SPR 0.$7 behind" (batch 0289 H7). `\b` matches between "." and "7".
   text = text.replaceAllMapped(
     RegExp(
-      r'\b((?:just|only)\s+)?(?<![\d$.])([1-9]\d*)(?!\.\d)(?!\s*%)\s+(behind)\b',
+      r'\b((?:just|only)\s+)?(?<![\d$.,])([1-9]\d*)(?!\.\d)(?!\s*%)\s+(behind)\b',
       caseSensitive: false,
     ),
     (match) {
@@ -589,7 +603,7 @@ String polishCoachCopy(String raw) {
   // "only 10 chips behind".
   text = text.replaceAllMapped(
     RegExp(
-      r'\b((?:just|only)\s+)?(?<![\d$.])([1-9]\d*)(?!\.\d)(?!\s*%)\s+'
+      r'\b((?:just|only)\s+)?(?<![\d$.,])([1-9]\d*)(?!\.\d)(?!\s*%)\s+'
       r'(chips?)\s+(behind)\b',
       caseSensitive: false,
     ),

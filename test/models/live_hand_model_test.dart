@@ -720,6 +720,35 @@ void main() {
       polishCoachCopy('leaving just 73 behind after the call.'),
       contains(r'leaving just $73 behind'),
     );
+    // Thousands comma before pot must not dollarize the trailing group
+    // (batch 0297 H6 live: "$1,036 pot" → "$1,$036 pot").
+    expect(
+      polishCoachCopy(
+        r'Risking $160 into a $1,036 pot offers great nominal odds.',
+      ),
+      allOf(
+        contains(r'a $1,036 pot'),
+        isNot(contains(r'$1,$036')),
+      ),
+    );
+    expect(
+      polishCoachCopy(
+        r'Risking $160 into a 1,036 pot offers great nominal odds.',
+      ),
+      allOf(
+        contains(r'a $1,036 pot'),
+        isNot(contains(r'1,$036')),
+      ),
+    );
+    expect(
+      polishCoachCopy(
+        r'Risking $160 into a $1,$036 pot offers great nominal odds.',
+      ),
+      allOf(
+        contains(r'a $1,036 pot'),
+        isNot(contains(r'$1,$036')),
+      ),
+    );
     expect(
       polishCoachCopy('stations show frequency (63.1) on the river.'),
       contains('frequency (63.1%)'),
