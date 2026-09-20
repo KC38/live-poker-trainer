@@ -74,6 +74,20 @@ const CLAUDE_HAIKU_45_PRICING: GeminiPricing = {
   outputUsdPerMillion: 5.0,
 };
 
+const GPT_5_MINI_PRICING: GeminiPricing = {
+  version: "gpt-5-mini-standard",
+  inputUsdPerMillion: 0.25,
+  cachedInputUsdPerMillion: 0.025,
+  outputUsdPerMillion: 2.0,
+};
+
+const DEEPSEEK_FLASH_PRICING: GeminiPricing = {
+  version: "deepseek-flash-peak-standard",
+  inputUsdPerMillion: 0.3,
+  cachedInputUsdPerMillion: 0.006,
+  outputUsdPerMillion: 1.2,
+};
+
 const INTRO_FLASH_MODELS = new Set([
   "gemini-3.8-flash",
   "gemini-3.7-flash",
@@ -107,6 +121,14 @@ export interface AnthropicUsageMetadata {
   output_tokens?: unknown;
   cache_read_input_tokens?: unknown;
   cache_creation_input_tokens?: unknown;
+}
+
+/** Token usage fields returned by OpenAI-compatible Responses APIs. */
+export interface OpenAiCompatibleUsageMetadata {
+  input_tokens?: unknown;
+  output_tokens?: unknown;
+  input_tokens_details?: {cached_tokens?: unknown};
+  output_tokens_details?: {reasoning_tokens?: unknown};
 }
 
 /** Returns a zero-valued usage accumulator. */
@@ -229,6 +251,16 @@ export function resolveGeminiPricing(
   ) {
     return CLAUDE_HAIKU_45_PRICING;
   }
+  if (normalized === "gpt-5-mini" || normalized.startsWith("gpt-5-mini-")) {
+    return GPT_5_MINI_PRICING;
+  }
+  if (
+    normalized === "deepseek-flash" ||
+    normalized === "deepseek-v4-flash" ||
+    normalized.startsWith("deepseek-flash")
+  ) {
+    return DEEPSEEK_FLASH_PRICING;
+  }
   if (normalized === "gemini-3.5-flash-lite") return FLASH_LITE_35_PRICING;
   if (normalized === "gemini-3.1-flash-lite") return FLASH_LITE_31_PRICING;
   if (
@@ -285,6 +317,45 @@ export function generationUsageFromAnthropicUsage(
   };
 }
 
+/**
+ * Converts OpenAI/DeepSeek Responses usage into the shared GenerationUsage
+ * shape. Reasoning tokens are billed as output and counted separately when
+ * the provider exposes them.
+ */
+export function generationUsageFromOpenAiCompatibleUsage(
+  metadata: OpenAiCompatibleUsageMetadata | undefined,
+  atMs: number = Date.now(),
+  modelId: string = DEFAULT_GEMINI_MODEL_ID,
+): GenerationUsage {
+  const pricing = resolveGeminiPricing(atMs, modelId);
+  const promptTokenCount = tokenCount(metadata?.input_tokens);
+  const cachedContentTokenCount = Math.min(
+    promptTokenCount,
+    tokenCount(metadata?.input_tokens_details?.cached_tokens),
+  );
+  const thoughtsTokenCount = tokenCount(
+    metadata?.output_tokens_details?.reasoning_tokens,
+  );
+  const outputTotal = tokenCount(metadata?.output_tokens);
+  const candidatesTokenCount = Math.max(0, outputTotal - thoughtsTokenCount);
+  const totalTokenCount = promptTokenCount + outputTotal;
+  return {
+    modelRequestCount: 1,
+    promptTokenCount,
+    cachedContentTokenCount,
+    candidatesTokenCount,
+    thoughtsTokenCount,
+    totalTokenCount,
+    estimatedCostUsdMicros: estimateCostUsdMicros({
+      promptTokenCount,
+      cachedContentTokenCount,
+      candidatesTokenCount,
+      thoughtsTokenCount,
+    }, pricing),
+    pricingVersion: pricing.version,
+  };
+}
+
 /** Lists model ids with first-class coach-benchmark pricing cards. */
 export function pricedGeminiModelIds(): readonly string[] {
   return [
@@ -295,6 +366,8 @@ export function pricedGeminiModelIds(): readonly string[] {
     "gemini-3.1-flash-lite",
     "gemini-3.1-pro-preview",
     "claude-haiku-4-5",
+    "gpt-5-mini",
+    "deepseek-flash",
   ];
 }
 

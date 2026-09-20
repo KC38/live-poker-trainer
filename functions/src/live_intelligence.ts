@@ -16,6 +16,10 @@ import {
   isAnthropicCoachModel,
 } from "./coach_anthropic";
 import {
+  callOpenAiCompatibleCoachJson,
+  openAiCompatibleProviderForModel,
+} from "./coach_openai_compatible";
+import {
   DEFAULT_GEMINI_MODEL_ID,
   generationUsageFromMetadata,
   type GeminiUsageMetadata,
@@ -187,6 +191,8 @@ export async function chooseVillainAction(options: {
 export async function generateCoachingRubric(options: {
   apiKey: string;
   anthropicApiKey?: string;
+  openaiApiKey?: string;
+  deepseekApiKey?: string;
   hand: LiveHandDefinition;
   state: LiveHandState;
   legalActions: LiveLegalAction[];
@@ -199,6 +205,8 @@ export async function generateCoachingRubric(options: {
   return generateCoachingRubricFromFacts({
     apiKey: options.apiKey,
     anthropicApiKey: options.anthropicApiKey,
+    openaiApiKey: options.openaiApiKey,
+    deepseekApiKey: options.deepseekApiKey,
     facts,
     stateHash: hashLiveState(options.state, options.publicHistory),
     intelligence: options.intelligence,
@@ -212,11 +220,14 @@ export async function generateCoachingRubric(options: {
  * Exported so the versioned benchmark exercises the exact production prompt,
  * schema, parser, and critic instead of a simplified test-only imitation.
  * Benchmarks may override model id and thinking levels via `intelligence`.
- * Claude model ids route to Anthropic when `anthropicApiKey` is supplied.
+ * Non-Gemini model ids route to Anthropic/OpenAI/DeepSeek when the matching
+ * API key is supplied.
  */
 export async function generateCoachingRubricFromFacts(options: {
   apiKey: string;
   anthropicApiKey?: string;
+  openaiApiKey?: string;
+  deepseekApiKey?: string;
   facts: CoachingFacts;
   stateHash: string;
   intelligence?: CoachIntelligenceConfig;
@@ -232,6 +243,8 @@ export async function generateCoachingRubricFromFacts(options: {
     const draft = await callCoachProviderJson({
       geminiApiKey: options.apiKey,
       anthropicApiKey: options.anthropicApiKey,
+      openaiApiKey: options.openaiApiKey,
+      deepseekApiKey: options.deepseekApiKey,
       system: coachSystemPrompt(),
       user: JSON.stringify({task: "draft", facts}),
       schema,
@@ -244,6 +257,8 @@ export async function generateCoachingRubricFromFacts(options: {
     const corrected = await callCoachProviderJson({
       geminiApiKey: options.apiKey,
       anthropicApiKey: options.anthropicApiKey,
+      openaiApiKey: options.openaiApiKey,
+      deepseekApiKey: options.deepseekApiKey,
       system: [
         coachSystemPrompt(),
         "You are now the adversarial critic. Correct unsupported certainty,",
@@ -286,6 +301,8 @@ export async function generateCoachingRubricFromFacts(options: {
 async function callCoachProviderJson(options: {
   geminiApiKey: string;
   anthropicApiKey?: string;
+  openaiApiKey?: string;
+  deepseekApiKey?: string;
   system: string;
   user: string;
   schema: Record<string, unknown>;
@@ -303,6 +320,41 @@ async function callCoachProviderJson(options: {
     }
     return callAnthropicCoachJson({
       apiKey: anthropicApiKey,
+      modelId: options.modelId,
+      system: options.system,
+      user: options.user,
+      schema: options.schema,
+      thinkingLevel: options.thinkingLevel,
+      purpose: options.purpose,
+      fetchImpl: options.fetchImpl,
+    });
+  }
+  const openAiCompatible = openAiCompatibleProviderForModel(options.modelId);
+  if (openAiCompatible === "openai") {
+    const openaiApiKey = options.openaiApiKey?.trim();
+    if (!openaiApiKey) {
+      throw new Error("OPENAI_API_KEY is required for OpenAI coach benchmarks");
+    }
+    return callOpenAiCompatibleCoachJson({
+      apiKey: openaiApiKey,
+      modelId: options.modelId,
+      system: options.system,
+      user: options.user,
+      schema: options.schema,
+      thinkingLevel: options.thinkingLevel,
+      purpose: options.purpose,
+      fetchImpl: options.fetchImpl,
+    });
+  }
+  if (openAiCompatible === "deepseek") {
+    const deepseekApiKey = options.deepseekApiKey?.trim();
+    if (!deepseekApiKey) {
+      throw new Error(
+        "DEEPSEEK_API_KEY is required for DeepSeek coach benchmarks",
+      );
+    }
+    return callOpenAiCompatibleCoachJson({
+      apiKey: deepseekApiKey,
       modelId: options.modelId,
       system: options.system,
       user: options.user,
