@@ -208,7 +208,9 @@ void main() {
       ),
     );
     expect(
-      polishCoachCopy('Calling your last $29 at an SPR of 0.04 lets you realize.'),
+      polishCoachCopy(
+        r'Calling your last $29 at an SPR of 0.04 lets you realize.',
+      ),
       allOf(
         contains('SPR of 0.04'),
         isNot(contains(r'SPR of $0.04')),
