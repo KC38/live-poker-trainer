@@ -323,6 +323,20 @@ void main() {
       contains('showdown call: 67.9%'),
     );
     expect(
+      polishCoachCopy(r'Risking only 40 chips to contest an $886 pot is fine.'),
+      contains(r'Risking only $40'),
+    );
+    expect(
+      polishCoachCopy('Folding preserves 302 chips and prevents committing.'),
+      contains(r'preserves $302 chips'),
+    );
+    expect(
+      polishCoachCopy(
+        "Calling fails to charge Dale's remaining \$68 and Fred's 38 chips.",
+      ),
+      contains(r"Fred's $38 chips"),
+    );
+    expect(
       polishCoachCopy(
         'Folding against opponents with aggression above 77 is timid.',
       ),
