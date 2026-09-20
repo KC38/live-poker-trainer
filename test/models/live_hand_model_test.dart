@@ -839,6 +839,24 @@ void main() {
       polishCoachCopy('Facing a cold 3-bet cold out of position.'),
       equals('Facing a cold 3-bet out of position.'),
     );
+    // "for N with" chip sizes (batch 0311 H5).
+    expect(
+      polishCoachCopy(
+        'Calling all-in for 246 with 14.5% modeled equity when the pot demands 24%.',
+      ),
+      contains(r'for $246 with'),
+    );
+    // Named profile rate closed with a comma (batch 0311 H6).
+    expect(
+      polishCoachCopy(
+        'Against a loose 3-bettor (Jade: 3-bet 15.5%) and a '
+        'station (Paul: showdown call 74.9%, flatting keeps the pot multiway.',
+      ),
+      allOf(
+        contains('(Paul: showdown call 74.9%), flatting'),
+        isNot(contains(RegExp(r'showdown call 74\.9%, flatting'))),
+      ),
+    );
     // Comparison operators must gain % (batch 0163).
     expect(
       polishCoachCopy(
