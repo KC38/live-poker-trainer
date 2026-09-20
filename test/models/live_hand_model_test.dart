@@ -475,6 +475,28 @@ void main() {
         isNot(contains('showdown call (62.6%)')),
       ),
     );
+    // Mid-list nest closed by lowercase continuer (batch 0205).
+    expect(
+      polishCoachCopy(
+        "Ned's ultra-tight profile (VPIP 10.8%, 3-bet (3.8%) "
+        'alongside multiway all-ins guarantees strong made hands.',
+      ),
+      allOf(
+        contains('profile (VPIP 10.8%, 3-bet 3.8%) alongside'),
+        isNot(contains('3-bet (3.8%)')),
+      ),
+    );
+    // Standalone rate + "and Name" must stay (batch 0204 FP).
+    expect(
+      polishCoachCopy(
+        'Viktor exhibits high aggression (77%) and Carl '
+        'demonstrates high sizing tell (80%).',
+      ),
+      allOf(
+        contains('aggression (77%) and Carl'),
+        contains('sizing tell (80%)'),
+      ),
+    );
     // List items ", and …" must keep paren rates.
     expect(
       polishCoachCopy(
