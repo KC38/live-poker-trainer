@@ -194,6 +194,12 @@ void main() {
     );
     expect(
       polishCoachCopy(
+        "Folding preserves Hero's 262 stack against Stan's value-heavy shove.",
+      ),
+      contains(r'$262 stack'),
+    );
+    expect(
+      polishCoachCopy(
         "Rico's extreme aggression (86.4) and wide VPIP (70.2) push many "
         'inferior hands into his range.',
       ),
