@@ -119,10 +119,10 @@ payouts, winners, or arbitrary amounts.
 
 ## Exploit coaching
 
-Every Hero node is evaluated before the action is revealed. The strongest
-stable Gemini model available (`gemini-3.8-flash`, medium thinking) drafts and
-critiques a rubric covering every action. Villain decisions use the same model
-at low thinking for latency.
+Every Hero node is evaluated before the action is revealed.
+`gemini-3.7-flash` (medium thinking) drafts and critiques a rubric covering
+every action. Villain decisions use `gemini-3.8-flash` at low thinking for
+latency.
 
 Server-computed facts include position, effective stack, SPR, pot odds, board
 texture, Hero features, fixed actions, public history, and visible bounded
