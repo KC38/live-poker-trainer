@@ -229,7 +229,6 @@ function straightDrawLabel(
   const allRanks = [...holeCards, ...board].map((card) => rankValue(card[0]));
   const unique = new Set(allRanks);
   if (unique.has(14)) unique.add(1);
-  const sorted = [...unique].sort((a, b) => a - b);
   let openEnders = 0;
   let gutshots = 0;
   for (let high = 5; high <= 14; high++) {
