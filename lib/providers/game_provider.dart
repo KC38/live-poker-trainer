@@ -277,17 +277,51 @@ class GameController extends StateNotifier<TableSession> {
 
   Future<void> debugHeroShortcut(String command) async {
     if (!state.heroCanAct) return;
-    final kind = switch (command) {
-      'fold' => 'FOLD',
-      'check' => 'CHECK',
-      'call' => 'CALL',
-      'bet' => 'BET',
-      'raise' => 'RAISE',
-      _ => '',
-    };
+    final parsed = _parseAgentHeroCommand(command);
+    if (parsed == null) return;
     final matching =
-        state.liveActions.where((action) => action.kind == kind).toList();
-    if (matching.length == 1) await heroActLive(matching.single);
+        state.liveActions.where((action) {
+          if (!parsed.kinds.contains(action.kind)) return false;
+          if (parsed.amountTo == null) return true;
+          if (action.amountTo == null) return false;
+          return Money.same(action.amountTo!, parsed.amountTo!);
+        }).toList();
+    if (matching.isEmpty) return;
+    if (matching.length == 1) {
+      await heroActLive(matching.single);
+      return;
+    }
+    // Bare raise/bet with several sizes: pick the middle preset so play-tests
+    // can size without knowing the exact chip amount up front.
+    await heroActLive(matching[matching.length ~/ 2]);
+  }
+
+  /// Parses debug bus tokens like `raise`, `raise:45`, `bet:95`, `allin`.
+  ///
+  /// `raise` and `bet` both match either BET or RAISE legal actions so the
+  /// agent can fire the same verb on an open street or facing a bet.
+  ({Set<String> kinds, double? amountTo})? _parseAgentHeroCommand(
+    String command,
+  ) {
+    final raw = command.trim().toLowerCase();
+    if (raw.isEmpty) return null;
+    final match = RegExp(
+      r'^(fold|check|call|bet|raise|allin|all_in|all-in)'
+      r'(?:[:_=\s]+\$?([\d.]+))?$',
+    ).firstMatch(raw);
+    if (match == null) return null;
+    final verb = match.group(1)!;
+    final amount = double.tryParse(match.group(2) ?? '');
+    final kinds = switch (verb) {
+      'fold' => {'FOLD'},
+      'check' => {'CHECK'},
+      'call' => {'CALL'},
+      'bet' || 'raise' => {'BET', 'RAISE'},
+      'allin' || 'all_in' || 'all-in' => {'ALL_IN'},
+      _ => <String>{},
+    };
+    if (kinds.isEmpty) return null;
+    return (kinds: kinds, amountTo: amount);
   }
 
   Future<void> resumeCurrentHand() async {
