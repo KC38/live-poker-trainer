@@ -539,6 +539,29 @@ void main() {
         isNot(contains('3-bet (3.8%)')),
       ),
     );
+    // Name + label nest before comma continuer (batch 0229 H6).
+    expect(
+      polishCoachCopy(
+        'Cole has a disciplined 3-betting range (3-bet 7.4%) '
+        'and calling stations are active (Dale VPIP (46.6%), '
+        'leaving KdQd heavily dominated multiway despite having position.',
+      ),
+      allOf(
+        contains('active (Dale VPIP 46.6%), leaving'),
+        isNot(contains('VPIP (46.6%)')),
+      ),
+    );
+    // Mid-list nest closed by ", leaving" without a name prefix.
+    expect(
+      polishCoachCopy(
+        'Stations remain (aggression 70.1%, VPIP (46.6%), '
+        'leaving Hero dominated multiway.',
+      ),
+      allOf(
+        contains('(aggression 70.1%, VPIP 46.6%), leaving'),
+        isNot(contains('VPIP (46.6%)')),
+      ),
+    );
     // Mid-list nest closed by semicolon continuer (batch 0224).
     expect(
       polishCoachCopy(

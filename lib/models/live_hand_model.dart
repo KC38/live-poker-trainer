@@ -363,6 +363,16 @@ String polishCoachCopy(String raw) {
       ),
       (match) => '(${match[1]}${match[2]} ${match[3]}%)',
     );
+    // Name + label nest (batch 0229):
+    // "active (Dale VPIP (46.6%), leaving" →
+    // "active (Dale VPIP 46.6%), leaving".
+    text = text.replaceAllMapped(
+      RegExp(
+        '\\(\\s*([A-Z][a-z]{2,})\\s+($escaped)($noun)\\s*'
+        '\\((\\d+(?:\\.\\d+)?)%\\s*\\)',
+      ),
+      (match) => '(${match[1]} ${match[2]}${match[3]} ${match[4]}%)',
+    );
   }
   // Mid-list nested tendency rates inside an open paren (batch 0198/0203/0205):
   // "Maniac (aggression 78.3%, VPIP (51.3%) who" →
@@ -372,7 +382,7 @@ String polishCoachCopy(String raw) {
   // "profile (VPIP 10.8%, 3-bet (3.8%) alongside" →
   // "profile (VPIP 10.8%, 3-bet 3.8%) alongside".
   // Only when the rate-paren is wrongly ending mid-clause
-  // (`who` / `and Name` / lowercase continuer / `.` / `;`),
+  // (`who` / `and Name` / lowercase continuer / `.` / `;` / `, leaving`),
   // not list items like "PFR (26%), and …".
   // Standalone "3-bet (25.3%)" / "aggression (77%) and Carl" (depth 0)
   // stays intact.
@@ -407,6 +417,8 @@ String polishCoachCopy(String raw) {
           RegExp(r'^\s+and\s+[A-Z]').hasMatch(after) ||
           // "3-bet (3.8%) alongside multiway …"
           RegExp(r'^\s+[a-z]').hasMatch(after) ||
+          // "VPIP (46.6%), leaving …" (batch 0229) — not list ", and …"
+          RegExp(r'^\s*,\s+(?!and\b)[a-z]').hasMatch(after) ||
           // "river bluff (62.6%); raising …" (batch 0224)
           RegExp(r'^\s*[.!?;]').hasMatch(after);
       if (!wronglyCloses) {
