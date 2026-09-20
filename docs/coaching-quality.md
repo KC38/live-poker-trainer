@@ -99,3 +99,12 @@ Model, tendency-template, or benchmark-version changes require a new full
 report. Ordinary releases require a new stratified report. Failed cases remain
 auditable in the generated JSON report. Prefer the `--compare` winner only when
 it still passes the quality gates above.
+
+Claude Haiku can be benched with `ANTHROPIC_API_KEY` (Gemini remains the live
+production coach until a non-Google config wins the gate):
+
+```bash
+cd functions
+ANTHROPIC_API_KEY=... npm run benchmark:coach -- \
+  --model=claude-haiku-4-5-20251001 --draft-thinking=low --critic-thinking=medium
+```

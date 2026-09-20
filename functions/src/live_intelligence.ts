@@ -12,6 +12,10 @@ import {
   type CoachingFacts,
 } from "./coaching_facts";
 import {
+  callAnthropicCoachJson,
+  isAnthropicCoachModel,
+} from "./coach_anthropic";
+import {
   DEFAULT_GEMINI_MODEL_ID,
   generationUsageFromMetadata,
   type GeminiUsageMetadata,
@@ -182,6 +186,7 @@ export async function chooseVillainAction(options: {
  */
 export async function generateCoachingRubric(options: {
   apiKey: string;
+  anthropicApiKey?: string;
   hand: LiveHandDefinition;
   state: LiveHandState;
   legalActions: LiveLegalAction[];
@@ -193,6 +198,7 @@ export async function generateCoachingRubric(options: {
   assertFairCoachingFacts(facts);
   return generateCoachingRubricFromFacts({
     apiKey: options.apiKey,
+    anthropicApiKey: options.anthropicApiKey,
     facts,
     stateHash: hashLiveState(options.state, options.publicHistory),
     intelligence: options.intelligence,
@@ -206,9 +212,11 @@ export async function generateCoachingRubric(options: {
  * Exported so the versioned benchmark exercises the exact production prompt,
  * schema, parser, and critic instead of a simplified test-only imitation.
  * Benchmarks may override model id and thinking levels via `intelligence`.
+ * Claude model ids route to Anthropic when `anthropicApiKey` is supplied.
  */
 export async function generateCoachingRubricFromFacts(options: {
   apiKey: string;
+  anthropicApiKey?: string;
   facts: CoachingFacts;
   stateHash: string;
   intelligence?: CoachIntelligenceConfig;
@@ -221,8 +229,9 @@ export async function generateCoachingRubricFromFacts(options: {
   const schema = coachingSchema(facts.legalActions);
   let usage = emptyLiveUsageBreakdown();
   try {
-    const draft = await callGeminiJson({
-      apiKey: options.apiKey,
+    const draft = await callCoachProviderJson({
+      geminiApiKey: options.apiKey,
+      anthropicApiKey: options.anthropicApiKey,
       system: coachSystemPrompt(),
       user: JSON.stringify({task: "draft", facts}),
       schema,
@@ -232,8 +241,9 @@ export async function generateCoachingRubricFromFacts(options: {
       fetchImpl,
     });
     usage = addLiveUsage(usage, draft.usage);
-    const corrected = await callGeminiJson({
-      apiKey: options.apiKey,
+    const corrected = await callCoachProviderJson({
+      geminiApiKey: options.apiKey,
+      anthropicApiKey: options.anthropicApiKey,
       system: [
         coachSystemPrompt(),
         "You are now the adversarial critic. Correct unsupported certainty,",
@@ -271,6 +281,47 @@ export async function generateCoachingRubricFromFacts(options: {
       addLiveUsage(usage, liveUsageFromError(error)),
     );
   }
+}
+
+async function callCoachProviderJson(options: {
+  geminiApiKey: string;
+  anthropicApiKey?: string;
+  system: string;
+  user: string;
+  schema: Record<string, unknown>;
+  thinkingLevel: GeminiThinkingLevel;
+  purpose: "coach_draft" | "coach_critique";
+  modelId: string;
+  fetchImpl: typeof fetch;
+}): Promise<{value: unknown; usage: LiveUsageBreakdown}> {
+  if (isAnthropicCoachModel(options.modelId)) {
+    const anthropicApiKey = options.anthropicApiKey?.trim();
+    if (!anthropicApiKey) {
+      throw new Error(
+        "ANTHROPIC_API_KEY is required for Claude coach benchmarks",
+      );
+    }
+    return callAnthropicCoachJson({
+      apiKey: anthropicApiKey,
+      modelId: options.modelId,
+      system: options.system,
+      user: options.user,
+      schema: options.schema,
+      thinkingLevel: options.thinkingLevel,
+      purpose: options.purpose,
+      fetchImpl: options.fetchImpl,
+    });
+  }
+  return callGeminiJson({
+    apiKey: options.geminiApiKey,
+    system: options.system,
+    user: options.user,
+    schema: options.schema,
+    thinkingLevel: options.thinkingLevel,
+    purpose: options.purpose,
+    modelId: options.modelId,
+    fetchImpl: options.fetchImpl,
+  });
 }
 
 /** Returns only the chosen action's already-generated coaching. */

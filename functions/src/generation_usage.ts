@@ -67,6 +67,13 @@ const PRO_31_PRICING: GeminiPricing = {
   outputUsdPerMillion: 12.0,
 };
 
+const CLAUDE_HAIKU_45_PRICING: GeminiPricing = {
+  version: "claude-haiku-4-5-standard",
+  inputUsdPerMillion: 1.0,
+  cachedInputUsdPerMillion: 0.1,
+  outputUsdPerMillion: 5.0,
+};
+
 const INTRO_FLASH_MODELS = new Set([
   "gemini-3.8-flash",
   "gemini-3.7-flash",
@@ -92,6 +99,14 @@ export interface GeminiUsageMetadata {
   candidatesTokenCount?: unknown;
   thoughtsTokenCount?: unknown;
   totalTokenCount?: unknown;
+}
+
+/** Token usage fields returned by Anthropic Messages. */
+export interface AnthropicUsageMetadata {
+  input_tokens?: unknown;
+  output_tokens?: unknown;
+  cache_read_input_tokens?: unknown;
+  cache_creation_input_tokens?: unknown;
 }
 
 /** Returns a zero-valued usage accumulator. */
@@ -207,6 +222,13 @@ export function resolveGeminiPricing(
   modelId: string = DEFAULT_GEMINI_MODEL_ID,
 ): GeminiPricing {
   const normalized = modelId.trim().toLowerCase();
+  if (
+    normalized === "claude-haiku-4-5" ||
+    normalized === "claude-haiku-4-5-20251001" ||
+    normalized.startsWith("claude-haiku-4-5")
+  ) {
+    return CLAUDE_HAIKU_45_PRICING;
+  }
   if (normalized === "gemini-3.5-flash-lite") return FLASH_LITE_35_PRICING;
   if (normalized === "gemini-3.1-flash-lite") return FLASH_LITE_31_PRICING;
   if (
@@ -226,6 +248,43 @@ export function resolveGeminiPricing(
     FLASH_INTRO_PRICING;
 }
 
+/**
+ * Converts Anthropic Messages usage into the shared GenerationUsage shape.
+ *
+ * Anthropic bills thinking tokens inside output_tokens, so thoughts stay zero
+ * unless a future field exposes them separately.
+ */
+export function generationUsageFromAnthropicUsage(
+  metadata: AnthropicUsageMetadata | undefined,
+  atMs: number = Date.now(),
+  modelId: string = "claude-haiku-4-5",
+): GenerationUsage {
+  const pricing = resolveGeminiPricing(atMs, modelId);
+  const promptTokenCount = tokenCount(metadata?.input_tokens);
+  const cachedContentTokenCount = Math.min(
+    promptTokenCount,
+    tokenCount(metadata?.cache_read_input_tokens),
+  );
+  const candidatesTokenCount = tokenCount(metadata?.output_tokens);
+  const thoughtsTokenCount = 0;
+  const totalTokenCount = promptTokenCount + candidatesTokenCount;
+  return {
+    modelRequestCount: 1,
+    promptTokenCount,
+    cachedContentTokenCount,
+    candidatesTokenCount,
+    thoughtsTokenCount,
+    totalTokenCount,
+    estimatedCostUsdMicros: estimateCostUsdMicros({
+      promptTokenCount,
+      cachedContentTokenCount,
+      candidatesTokenCount,
+      thoughtsTokenCount,
+    }, pricing),
+    pricingVersion: pricing.version,
+  };
+}
+
 /** Lists model ids with first-class coach-benchmark pricing cards. */
 export function pricedGeminiModelIds(): readonly string[] {
   return [
@@ -235,6 +294,7 @@ export function pricedGeminiModelIds(): readonly string[] {
     "gemini-3.5-flash-lite",
     "gemini-3.1-flash-lite",
     "gemini-3.1-pro-preview",
+    "claude-haiku-4-5",
   ];
 }
 
