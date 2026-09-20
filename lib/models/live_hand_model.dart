@@ -665,6 +665,14 @@ String polishCoachCopy(String raw) {
     ),
     (match) => '${match[1]} \$${match[2]} ${match[3]}',
   );
+  // "A flat call of 30" / "a call of 48" / "bet of 60" (batch 0304 H8).
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b((?:flat\s+)?(?:call|bet|raise))\s+of\s+(?!\$)([1-9]\d*)(?!\.\d)(?!\s*%)\b',
+      caseSensitive: false,
+    ),
+    (match) => '${match[1]} of \$${match[2]}',
+  );
   // "for 155 more" / "for 42 chips" / "for 137 into a $732 pot".
   text = text.replaceAllMapped(
     RegExp(
