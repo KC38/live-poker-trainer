@@ -15,7 +15,8 @@ For **bug fixes** and **new features**, follow `.cursor/skills/ship-change/SKILL
 4. Push, open a GitHub PR, squash-merge into `main`, delete the feature branch.
 5. Checkout/pull `main`, prune local branch.
 6. **Always deploy Cloud Functions** from merged `main` (skill script) — do not wait to be asked.
-7. Refresh the Flutter simulator if one is running/available (skill script).
+7. After any new change lands on `main`, hot-restart **all** running Flutter
+   simulators (skill script) — not just one session.
 
 ## Do not
 

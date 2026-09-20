@@ -25,7 +25,7 @@ Ship progress:
 - [ ] 5. Push, open PR, merge to main
 - [ ] 6. Delete remote/local feature branch; sync main
 - [ ] 7. Deploy Cloud Functions from merged main (always)
-- [ ] 8. Refresh Flutter simulator (if running / available)
+- [ ] 8. Refresh **all** Flutter simulators (if running / available)
 ```
 
 ## 1. Branch
@@ -119,9 +119,10 @@ Notes:
 - Uses `firebase-tools@15+` (older CLI fails analyzing `jose` ESM).
 - If deploy fails, report the error and stop — do not claim the ship is live.
 
-## 8. Flutter simulator refresh
+## 8. Flutter simulator refresh (all sims)
 
-Run the helper (preferred):
+After merge to `main`, **always** refresh **every** running iOS simulator
+`flutter run` — not just one:
 
 ```bash
 .cursor/skills/ship-change/scripts/refresh-simulator.sh
@@ -129,8 +130,10 @@ Run the helper (preferred):
 
 Or follow [simulator-refresh.md](simulator-refresh.md).
 
-- If a `flutter run` session is already attached, hot **restart** (`R`) so the app picks up merged code.
-- If a simulator is booted but no session is running, start `flutter run` on that device in the background.
+- Hot **restart** (`USR2` / `R`) each attached sim session so apps pick up
+  merged code.
+- If a simulator is booted but no session is running, start `flutter run` on
+  that device in the background (script starts one fallback device).
 - If no device/simulator is available, skip and say so—do not block the ship.
 
 ## Hard limits
@@ -144,4 +147,4 @@ Or follow [simulator-refresh.md](simulator-refresh.md).
 ## Report back
 
 One short block: branch name, PR URL, merge status, functions deploy result,
-whether the simulator was restarted/started/skipped.
+whether simulators were restarted/started/skipped (list each if multiple).
