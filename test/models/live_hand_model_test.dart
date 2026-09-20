@@ -376,5 +376,25 @@ void main() {
         isNot(contains(RegExp(r'VPIP \(70\.2\)(?!%)'))),
       ),
     );
+    expect(
+      polishCoachCopy(
+        'Maniac profiles with 85% aggression and 60.1% bluffRiver bluff '
+        'far too often to surrender.',
+      ),
+      allOf(
+        contains('60.1% river bluff and bluff'),
+        isNot(contains('river bluff bluff')),
+      ),
+    );
+    expect(
+      polishCoachCopy(
+        'Giving up equity when facing a river bet requiring only 111 chips '
+        r'to win a $502 pot is a mistake.',
+      ),
+      allOf(
+        contains(r'requiring only $111 chips'),
+        isNot(contains(RegExp(r'requiring only 111 chips'))),
+      ),
+    );
   });
 }
