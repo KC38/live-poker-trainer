@@ -808,6 +808,26 @@ void main() {
         expect(coach.bottom, lessThanOrEqualTo(dock.top + 0.5));
         expect(dock.bottom, lessThanOrEqualTo(size.height + 0.5));
       });
+
+      testWidgets(
+        'replay without coaching shows table acting instead of a blank dock',
+        (tester) async {
+          await _pumpTable(
+            tester,
+            size: size,
+            session: const TableSession(replaying: true).copyWith(
+              game: _nineHandedGame(),
+            ),
+          );
+          await _settleBands(tester);
+
+          expect(find.text('TABLE ACTING…'), findsOneWidget);
+          expect(find.text('ACTION…'), findsOneWidget);
+          expect(find.byType(ActionDockWidget), findsNothing);
+          expect(find.byType(CoachShelfWidget), findsNothing);
+          expect(tester.takeException(), isNull);
+        },
+      );
     });
   });
 }

@@ -135,6 +135,9 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                   final dockVisible = session.heroCanAct;
 
                   final showCoach = session.coach.hasAdvice;
+                  // A fresh decision has no coach shelf, so replay otherwise
+                  // looks frozen: the dock is gone and only "ACTION…" remains.
+                  final showResolving = session.replaying && !showCoach;
 
                   // Cap the coach band so it can never starve the felt, and let
                   // that cap grow into the space the dock gave up.
@@ -249,6 +252,8 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                                           handOver &&
                                           game.winnerIds.contains(game.hero.id),
                                     ),
+                                    if (showResolving)
+                                      const _TableActingBanner(),
                                     _ActionDockSlot(
                                       visible: dockVisible,
                                       child: ActionDockWidget(
@@ -308,6 +313,7 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                           isWinner:
                               handOver && game.winnerIds.contains(game.hero.id),
                         ),
+                        if (showResolving) const _TableActingBanner(),
                         // Null-aware collection elements are not enabled by
                         // the current Flutter language version.
                         // ignore: use_null_aware_elements
@@ -666,6 +672,41 @@ class _NextHandCtaState extends State<_NextHandCta>
             child: body,
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Shown while villains and coaching resolve and the shelf is still empty.
+class _TableActingBanner extends StatelessWidget {
+  const _TableActingBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 2, 16, 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(
+            width: 14,
+            height: 14,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: AppColors.warning,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Text(
+            'TABLE ACTING…',
+            style: GoogleFonts.jetBrainsMono(
+              fontSize: 11,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.8,
+              color: AppColors.warning,
+            ),
+          ),
+        ],
       ),
     );
   }
