@@ -524,6 +524,17 @@ void main() {
         isNot(contains('3-bet (3.8%)')),
       ),
     );
+    // Mid-list nest closed by semicolon continuer (batch 0224).
+    expect(
+      polishCoachCopy(
+        'Maniac fires frequently with inferior hands (aggression 74.8%, '
+        'river bluff (62.6%); raising isolates better.',
+      ),
+      allOf(
+        contains('(aggression 74.8%, river bluff 62.6%); raising'),
+        isNot(contains('river bluff (62.6%)')),
+      ),
+    );
     // Standalone rate + "and Name" must stay (batch 0204 FP).
     expect(
       polishCoachCopy(
