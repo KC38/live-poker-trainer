@@ -22,6 +22,8 @@ class _FakeLiveHandService extends LiveHandService {
   int startCalls = 0;
   int actionCalls = 0;
   String? lastActionId;
+  Stream<LiveActionFeedUpdate> feed = const Stream.empty();
+  Completer<void>? holdAction;
 
   @override
   Future<LiveHandStartResult> startHand(settings) async {
@@ -37,6 +39,8 @@ class _FakeLiveHandService extends LiveHandService {
   }) async {
     actionCalls++;
     lastActionId = action.actionId;
+    final hold = holdAction;
+    if (hold != null) await hold.future;
     return afterAction;
   }
 
@@ -48,7 +52,7 @@ class _FakeLiveHandService extends LiveHandService {
     required String sessionId,
     required String decisionId,
   }) =>
-      const Stream.empty();
+      feed;
 }
 
 Map<String, dynamic> _viewJson({
@@ -357,6 +361,128 @@ void main() {
     expect(session.heroCanAct, isTrue);
     // Must not deal a new hand while the current one is still live.
     expect(service.startCalls, startCallsBefore);
+  });
+
+  test('agent start at the table deals a fresh hand', () async {
+    final (container, service) = await _container();
+    addTearDown(container.dispose);
+    final controller = container.read(gameControllerProvider.notifier);
+    await controller.startTraining();
+    final startCallsBefore = service.startCalls;
+
+    controller.debugHandleAgentCommand('start');
+    await Future<void>.delayed(Duration.zero);
+
+    expect(service.startCalls, startCallsBefore + 1);
+  });
+
+  test('agent start is a no-op before a table exists', () async {
+    final (container, service) = await _container();
+    addTearDown(container.dispose);
+    final controller = container.read(gameControllerProvider.notifier);
+
+    controller.debugHandleAgentCommand('start');
+    await Future<void>.delayed(Duration.zero);
+
+    expect(service.startCalls, 0);
+  });
+
+  test('feed errors stay quiet and later waitingOnSeat updates still apply', () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    const check = {
+      'actionId': 'CHECK:0',
+      'kind': 'CHECK',
+      'bucket': 'CHECK',
+      'label': 'Check',
+    };
+    final initial = LiveHandStartResult.fromJson({
+      'view': _viewJson(actions: [check]),
+      'events': <Map<String, dynamic>>[],
+    });
+    final after = LiveActionResult.fromJson({
+      'view': _viewJson(stateVersion: 1, street: 'river', actions: [_call]),
+      'events': [
+        {'sequence': 0, 'seat': 0, 'street': 'preflop', ...check},
+      ],
+      'coaching': {
+        'actionId': 'CHECK:0',
+        'rating': 'mistake',
+        'confidence': 'high',
+        'summary': 'Checking the turn gives a free river card.',
+        'playerTypeReason': 'Paul calls too wide.',
+        'sizingNote': '',
+        'tendencyKeys': ['foldToTurnBet'],
+      },
+      'replayed': false,
+    });
+    final feed = StreamController<LiveActionFeedUpdate>.broadcast();
+    addTearDown(feed.close);
+    final service = _FakeLiveHandService(initial, after)
+      ..feed = feed.stream
+      ..holdAction = Completer<void>();
+    final container = ProviderContainer(
+      overrides: [
+        authUidProvider.overrideWithValue('uid-1'),
+        liveHandServiceProvider.overrideWithValue(service),
+        soundServiceProvider.overrideWithValue(SoundService.silent()),
+        settingsProvider.overrideWith((ref) => SettingsNotifier(preferences)),
+      ],
+    );
+    addTearDown(container.dispose);
+    final controller = container.read(gameControllerProvider.notifier);
+    await controller.startTraining();
+
+    final acting = controller.heroActLive(
+      container.read(gameControllerProvider).liveActions.single,
+    );
+    await Future<void>.delayed(Duration.zero);
+
+    feed.addError(StateError('permission-denied'));
+    await Future<void>.delayed(Duration.zero);
+
+    feed.add(
+      const LiveActionFeedUpdate(
+        sessionId: 'session-1',
+        decisionId: 'node-root',
+        events: [],
+        board: [],
+        street: 'preflop',
+        status: 'acting',
+        waitingOnSeat: 1,
+      ),
+    );
+    await Future<void>.delayed(Duration.zero);
+
+    var session = container.read(gameControllerProvider);
+    expect(session.waitingOnSeat, 1);
+    expect(session.awaitingCoach, isTrue);
+    expect(session.error, isNull);
+
+    feed.add(
+      const LiveActionFeedUpdate(
+        sessionId: 'session-1',
+        decisionId: 'node-root',
+        events: [],
+        board: [],
+        street: 'preflop',
+        status: 'coaching',
+        waitingOnSeat: 1,
+      ),
+    );
+    await Future<void>.delayed(Duration.zero);
+    session = container.read(gameControllerProvider);
+    expect(session.waitingOnSeat, isNull);
+    expect(session.awaitingCoach, isTrue);
+
+    service.holdAction!.complete();
+    await acting;
+
+    session = container.read(gameControllerProvider);
+    expect(session.coach.hasAdvice, isTrue);
+    expect(session.waitingOnSeat, isNull);
+    expect(session.awaitingCoach, isFalse);
+    expect(session.error, isNull);
   });
 
   test('rejects an action that is not in the current fixed set', () async {
