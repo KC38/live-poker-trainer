@@ -4,7 +4,8 @@
 /// `curl 'http://127.0.0.1:<port>/<token>/ext.poker.agent?isolateId=<id>&cmd=start'`
 ///
 /// Commands: `start`, `fold`, `call`, `check`, `raise`, `raise:45`, `allin`,
-/// `next`, `retry`/`resume`, `back`. Optional `amount` query param becomes
+/// `next`/`dismiss` (dismisses mid-hand coach; otherwise next hand),
+/// `retry`/`resume`, `back`. Optional `amount` query param becomes
 /// `raise:<amount>`.
 library;
 

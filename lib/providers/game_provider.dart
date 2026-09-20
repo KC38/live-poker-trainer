@@ -547,7 +547,13 @@ class GameController extends StateNotifier<TableSession> {
 
   void _onAgentCommand(String command) {
     final cmd = command.trim().toLowerCase();
-    if (cmd == 'next') {
+    // Mid-hand coach: Next is hidden in the UI; agent `next`/`dismiss` clears
+    // the shelf so the dock can return. Hand-over still advances via nextHand.
+    if (cmd == 'next' || cmd == 'dismiss') {
+      if (state.coach.hasAdvice && !state.heroDoneForHand) {
+        dismissCoach();
+        return;
+      }
       unawaited(nextHand());
       return;
     }
@@ -565,6 +571,10 @@ class GameController extends StateNotifier<TableSession> {
     }
     unawaited(debugHeroShortcut(command));
   }
+
+  /// Test hook for the debug agent command bus.
+  @visibleForTesting
+  void debugHandleAgentCommand(String command) => _onAgentCommand(command);
 
   /// Debug-bus counterpart to the server-error / empty-table Retry buttons.
   Future<void> _agentRetryOrResume() async {
