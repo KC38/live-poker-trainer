@@ -332,6 +332,11 @@ String polishCoachCopy(String raw) {
     RegExp(r'\$?([1-9]\d*)-chip\s+stack\b', caseSensitive: false),
     (match) => '\$${match[1]}-chip stack',
   );
+  // "570-chip pot".
+  text = text.replaceAllMapped(
+    RegExp(r'\$?([1-9]\d*)-chip\s+pot\b', caseSensitive: false),
+    (match) => '\$${match[1]}-chip pot',
+  );
   // "72 chip stack" / "72 chips stack".
   text = text.replaceAllMapped(
     RegExp(
@@ -339,6 +344,22 @@ String polishCoachCopy(String raw) {
       caseSensitive: false,
     ),
     (match) => '\$${match[1]} chip stack',
+  );
+  // "for 155 more" / "for 42 chips".
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b(for)\s+(?!\$)([1-9]\d*)(?!\.\d)(?!\s*%)\s+(more|chips?)\b',
+      caseSensitive: false,
+    ),
+    (match) => '${match[1]} \$${match[2]} ${match[3]}',
+  );
+  // "exceeds 800" when describing a pot.
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b(exceeds)\s+(?!\$)([1-9]\d{2,})(?!\.\d)(?!\s*%)\b',
+      caseSensitive: false,
+    ),
+    (match) => '${match[1]} \$${match[2]}',
   );
   // "65%-74" percent ranges missing the trailing mark.
   text = text.replaceAllMapped(

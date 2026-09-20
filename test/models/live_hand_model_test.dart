@@ -290,6 +290,18 @@ void main() {
     );
     expect(
       polishCoachCopy(
+        'Surrendering for 155 more into a pot that already exceeds 800.',
+      ),
+      allOf(contains(r'for $155 more'), contains(r'exceeds $800')),
+    );
+    expect(
+      polishCoachCopy(
+        'Surrendering for 42 chips in a 570-chip pot is indefensible.',
+      ),
+      allOf(contains(r'for $42 chips'), contains(r'$570-chip pot')),
+    );
+    expect(
+      polishCoachCopy(
         'Folding against opponents with aggression above 77 is timid.',
       ),
       contains('aggression above 77%'),
