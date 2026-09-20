@@ -200,7 +200,7 @@ void main() {
     );
     expect(
       polishCoachCopy(
-        'Risking 0 preserves your full $219 stack against a cold 4-bet.',
+        r'Risking 0 preserves your full $219 stack against a cold 4-bet.',
       ),
       allOf(
         contains('Risking 0'),
