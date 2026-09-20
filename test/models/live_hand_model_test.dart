@@ -403,6 +403,15 @@ void main() {
     );
     expect(
       polishCoachCopy(
+        'Rex exhibits high aggression at 59.5, so flatting keeps his bluffs in.',
+      ),
+      allOf(
+        contains('aggression at 59.5%'),
+        isNot(contains('aggression at 59.5,')),
+      ),
+    );
+    expect(
+      polishCoachCopy(
         r'Needing 190 to compete for a total pot of $642 is fine.',
       ),
       contains(r'Needing $190'),
