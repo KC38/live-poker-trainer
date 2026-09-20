@@ -189,6 +189,10 @@ void main() {
       allOf(contains(r'risk $178'), contains(r'pot of $795')),
     );
     expect(
+      polishCoachCopy('Hero needs 18.6% equity risking 101 into a pot of 442.'),
+      allOf(contains(r'risking $101'), contains(r'pot of $442')),
+    );
+    expect(
       polishCoachCopy(
         "Rico's extreme aggression (86.4) and wide VPIP (70.2) push many "
         'inferior hands into his range.',
