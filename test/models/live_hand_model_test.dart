@@ -573,6 +573,18 @@ void main() {
         isNot(contains('river bluff (62.6%)')),
       ),
     );
+    // "river bluff tendency (58.3)" missing % (batch 0237 H2).
+    expect(
+      polishCoachCopy(
+        'Opponent has high river bluff tendency (58.3) and '
+        'aggression (77.6%), making slowplaying viable.',
+      ),
+      allOf(
+        contains('river bluff tendency (58.3%)'),
+        contains('aggression (77.6%)'),
+        isNot(contains('tendency (58.3) and')),
+      ),
+    );
     // Standalone rate + "and Name" must stay (batch 0204 FP).
     expect(
       polishCoachCopy(
