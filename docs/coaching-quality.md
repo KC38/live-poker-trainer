@@ -100,11 +100,16 @@ report. Ordinary releases require a new stratified report. Failed cases remain
 auditable in the generated JSON report. Prefer the `--compare` winner only when
 it still passes the quality gates above.
 
-Claude Haiku can be benched with `ANTHROPIC_API_KEY` (Gemini remains the live
-production coach until a non-Google config wins the gate):
+Claude Haiku / GPT-5 mini / DeepSeek Flash can be benched with the matching
+API keys (Gemini remains the live production coach until a non-Google config
+wins the gate):
 
 ```bash
 cd functions
 ANTHROPIC_API_KEY=... npm run benchmark:coach -- \
   --model=claude-haiku-4-5-20251001 --draft-thinking=low --critic-thinking=medium
+OPENAI_API_KEY=... npm run benchmark:coach -- \
+  --model=gpt-5-mini --draft-thinking=low --critic-thinking=medium
+DEEPSEEK_API_KEY=... npm run benchmark:coach -- \
+  --model=deepseek-flash --draft-thinking=low --critic-thinking=medium
 ```
