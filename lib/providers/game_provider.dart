@@ -279,13 +279,22 @@ class GameController extends StateNotifier<TableSession> {
     if (!state.heroCanAct) return;
     final parsed = _parseAgentHeroCommand(command);
     if (parsed == null) return;
-    final matching =
+    var matching =
         state.liveActions.where((action) {
           if (!parsed.kinds.contains(action.kind)) return false;
           if (parsed.amountTo == null) return true;
           if (action.amountTo == null) return false;
           return Money.same(action.amountTo!, parsed.amountTo!);
         }).toList();
+    // Facing a shove, the server often exposes "Call all-in $N" as CALL rather
+    // than ALL_IN. Let bare `allin` still fire that call.
+    if (matching.isEmpty && parsed.kinds.contains('ALL_IN')) {
+      matching =
+          state.liveActions.where((action) {
+            if (action.kind != 'CALL') return false;
+            return action.label.toLowerCase().contains('all-in');
+          }).toList();
+    }
     if (matching.isEmpty) return;
     if (matching.length == 1) {
       await heroActLive(matching.single);

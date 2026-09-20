@@ -184,5 +184,9 @@ void main() {
       polishCoachCopy('call 50 more against the shove.'),
       contains(r'call $50'),
     );
+    expect(
+      polishCoachCopy('Hero must risk 178 to win a final pot of 795.'),
+      allOf(contains(r'risk $178'), contains(r'pot of $795')),
+    );
   });
 }

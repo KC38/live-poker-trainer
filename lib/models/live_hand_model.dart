@@ -204,7 +204,7 @@ String polishCoachCopy(String raw) {
   // "call 50.7%" / "call 50.7".
   text = text.replaceAllMapped(
     RegExp(
-      r'\b(remaining|final|calling|call|bet|raise|stack|pot of)\s+'
+      r'\b(remaining|final|calling|call|bet|raise|stack|pot of|risk)\s+'
       r'(\d+)(?!\.\d)(?!\s*%)\b',
       caseSensitive: false,
     ),
