@@ -308,6 +308,15 @@ String polishCoachCopy(String raw) {
       ),
       (match) => '${match[1]} ${match[2]} ${match[3]}%',
     );
+    // "showdown call up to 77.4" (batch 0226).
+    text = text.replaceAllMapped(
+      RegExp(
+        '($escaped)($noun)\\s+up\\s+to\\s+'
+        r'(\d+(?:\.\d+)?)(?!\d)(?!\.\d)(?!\s*%)',
+        caseSensitive: false,
+      ),
+      (match) => '${match[1]}${match[2]} up to ${match[3]}%',
+    );
     // Comparison rates: "VPIP > 48" / "showdown call › 65" (batch 0163).
     text = text.replaceAllMapped(
       RegExp(
@@ -709,6 +718,35 @@ String polishCoachCopy(String raw) {
     ),
     (match) => '${match[1]} (${match[2]}%) and ${match[3]} (${match[4]}%)',
   );
+  // Unclosed profile rate lists (batch 0226):
+  // "Sammy (LAG, aggression 70.3% generate" →
+  // "Sammy (LAG, aggression 70.3%) generate".
+  {
+    final labelAlt =
+        _tendencyLabels.values.map(RegExp.escape).toSet().join('|');
+    text = text.replaceAllMapped(
+      RegExp(
+        '($labelAlt)\\s+(\\d+(?:\\.\\d+)?)%(?!\\s*[),;])\\s+(?=[a-z])',
+        caseSensitive: false,
+      ),
+      (match) {
+        final before = match.input.substring(0, match.start);
+        var depth = 0;
+        for (var i = 0; i < before.length; i++) {
+          final ch = before[i];
+          if (ch == '(') {
+            depth++;
+          } else if (ch == ')') {
+            depth--;
+          }
+        }
+        if (depth <= 0) {
+          return match[0]!;
+        }
+        return '${match[1]} ${match[2]}%) ';
+      },
+    );
+  }
   return text;
 }
 
