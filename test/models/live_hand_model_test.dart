@@ -857,6 +857,13 @@ void main() {
         isNot(contains(RegExp(r'showdown call 74\.9%, flatting'))),
       ),
     );
+    // "aggression score of 86.2" (batch 0313 H4).
+    expect(
+      polishCoachCopy(
+        'Chaos has an aggression score of 86.2 and will almost certainly bet.',
+      ),
+      contains('aggression score of 86.2%'),
+    );
     // Comparison operators must gain % (batch 0163).
     expect(
       polishCoachCopy(

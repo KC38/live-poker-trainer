@@ -258,7 +258,7 @@ String polishCoachCopy(String raw) {
     // Optional noun after the label: frequency / rate / stat / rating / range.
     // "range" covers live "wide 3-bet range (12.9)" (batch 0299 H3).
     const noun =
-        r'(?:\s+(?:frequency|rate|stat|rating|range|tendenc(?:y|ies)))?';
+        r'(?:\s+(?:frequency|rate|stat|rating|range|score|tendenc(?:y|ies)))?';
     // Complete number tokens only. "of 76.3%" must not become "of 76%.3%",
     // but "of 57.8." at the end of a sentence still needs the percent.
     // Also "aggression rating of 85.6" (live coach prose).
@@ -359,7 +359,7 @@ String polishCoachCopy(String raw) {
   for (final label in _tendencyLabels.values.toSet()) {
     final escaped = RegExp.escape(label);
     const noun =
-        r'(?:\s+(?:frequency|rate|stat|rating|range|tendenc(?:y|ies)))?';
+        r'(?:\s+(?:frequency|rate|stat|rating|range|score|tendenc(?:y|ies)))?';
     text = text.replaceAllMapped(
       RegExp(
         '\\(\\s*($escaped)($noun)\\s*\\((\\d+(?:\\.\\d+)?)%\\s*\\)',
@@ -394,7 +394,7 @@ String polishCoachCopy(String raw) {
     final labelAlt =
         _tendencyLabels.values.map(RegExp.escape).toSet().join('|');
     final nestedMid = RegExp(
-      '($labelAlt)((?:\\s+(?:frequency|rate|stat|rating|range|tendenc(?:y|ies)))?)\\s*'
+      '($labelAlt)((?:\\s+(?:frequency|rate|stat|rating|range|score|tendenc(?:y|ies)))?)\\s*'
       r'\((\d+(?:\.\d+)?)%\s*\)',
       caseSensitive: false,
     );
