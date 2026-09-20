@@ -16,12 +16,34 @@ export function evaluateSevenCards(cards: readonly string[]): HandScore {
   if (cards.length !== 7) {
     throw new Error(`expected 7 cards, got ${cards.length}`);
   }
+  return bestFiveCardScore(cards);
+}
+
+/**
+ * Best five-card hold'em score from 5–7 cards (hole + board).
+ * Returns null when fewer than five cards are available.
+ */
+export function evaluateHoleAndBoard(
+  holeCards: readonly string[],
+  board: readonly string[],
+): HandScore | null {
+  const cards = [...holeCards, ...board];
+  if (cards.length < 5) return null;
+  if (cards.length > 7) {
+    throw new Error(`expected at most 7 cards, got ${cards.length}`);
+  }
+  return bestFiveCardScore(cards);
+}
+
+function bestFiveCardScore(cards: readonly string[]): HandScore {
+  if (cards.length === 5) return evaluateFive(cards);
   let best: HandScore | null = null;
-  for (let a = 0; a < 3; a++) {
-    for (let b = a + 1; b < 4; b++) {
-      for (let c = b + 1; c < 5; c++) {
-        for (let d = c + 1; d < 6; d++) {
-          for (let e = d + 1; e < 7; e++) {
+  const n = cards.length;
+  for (let a = 0; a < n - 4; a++) {
+    for (let b = a + 1; b < n - 3; b++) {
+      for (let c = b + 1; c < n - 2; c++) {
+        for (let d = c + 1; d < n - 1; d++) {
+          for (let e = d + 1; e < n; e++) {
             const score = evaluateFive([
               cards[a],
               cards[b],

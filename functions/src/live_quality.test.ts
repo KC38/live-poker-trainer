@@ -192,4 +192,25 @@ describe("live quality invariants", () => {
     expect(facts.pot).toBe(789);
     expect(facts.spr).toBe(0.03);
   });
+
+  test("flop nut straight is labeled straight with flush draw", () => {
+    const hand = definition();
+    hand.seats[hand.setup.heroSeat].holeCards = ["Js", "Ts"];
+    hand.runout = ["Qs", "9s", "8d", "2c", "3h"];
+    const state = createInitialLiveState(hand);
+    state.street = "flop";
+    state.board = hand.runout.slice(0, 3);
+    state.actorSeat = hand.setup.heroSeat;
+    const facts = buildCoachingFacts({
+      hand,
+      state,
+      legalActions: [],
+      publicHistory: [],
+      equityIterations: 1,
+    });
+    expect(facts.heroFeatures).toEqual(
+      expect.arrayContaining(["straight", "flush-draw"]),
+    );
+    expect(facts.heroFeatures).not.toContain("high-card");
+  });
 });

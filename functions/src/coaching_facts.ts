@@ -16,6 +16,7 @@ import {
   estimateProfileEquity,
   RANGE_EQUITY_VERSION,
 } from "./range_equity";
+import {evaluateHoleAndBoard} from "./holdem_evaluator";
 
 export interface CoachingFacts {
   street: LiveHandState["street"];
@@ -188,31 +189,65 @@ function heroFeatures(
 ): string[] {
   const features: string[] = [];
   const holeRanks = holeCards.map((card) => rankValue(card[0]));
-  const boardRanks = board.map((card) => rankValue(card[0]));
-  const allRanks = [...holeRanks, ...boardRanks];
-  const rankCounts = frequency(allRanks);
-  const holePair = holeRanks[0] === holeRanks[1];
   if (board.length === 0) {
+    const holePair = holeRanks[0] === holeRanks[1];
     if (holePair) features.push("pocket-pair");
     if (holeCards[0][1] === holeCards[1][1]) features.push("suited");
     if (Math.abs(holeRanks[0] - holeRanks[1]) === 1) features.push("connected");
     if (Math.max(...holeRanks) >= 13) features.push("high-card");
     return features.length > 0 ? features : ["unpaired"];
   }
-  const matchingHoleRanks = holeRanks.filter((rank) =>
-    boardRanks.includes(rank),
-  );
-  const tripsOrBetter = [...rankCounts.values()].some((count) => count >= 3);
-  if (tripsOrBetter) features.push("trips-or-better");
-  else if (matchingHoleRanks.length >= 2 || holePair) features.push("pair-or-better");
-  else if (matchingHoleRanks.length === 1) features.push("one-pair");
+  const score = evaluateHoleAndBoard(holeCards, board);
+  const category = score?.[0] ?? 0;
+  if (category >= 8) features.push("straight-flush");
+  else if (category === 7) features.push("quads");
+  else if (category === 6) features.push("full-house");
+  else if (category === 5) features.push("flush");
+  else if (category === 4) features.push("straight");
+  else if (category === 3) features.push("trips-or-better");
+  else if (category === 2) features.push("two-pair");
+  else if (category === 1) features.push("one-pair");
   else features.push("high-card");
   const suitCounts = frequency([...holeCards, ...board].map((card) => card[1]));
   const heroSuits = new Set(holeCards.map((card) => card[1]));
   if ([...heroSuits].some((suit) => (suitCounts.get(suit) ?? 0) === 4)) {
     features.push("flush-draw");
   }
+  if (category < 4) {
+    const draw = straightDrawLabel(holeCards, board);
+    if (draw) features.push(draw);
+  }
   return features;
+}
+
+/** Open-ender or gutshot using at least one hole card on the current board. */
+function straightDrawLabel(
+  holeCards: readonly string[],
+  board: readonly string[],
+): string | null {
+  const holeRanks = new Set(holeCards.map((card) => rankValue(card[0])));
+  const allRanks = [...holeCards, ...board].map((card) => rankValue(card[0]));
+  const unique = new Set(allRanks);
+  if (unique.has(14)) unique.add(1);
+  const sorted = [...unique].sort((a, b) => a - b);
+  let openEnders = 0;
+  let gutshots = 0;
+  for (let high = 5; high <= 14; high++) {
+    const window = [high - 4, high - 3, high - 2, high - 1, high];
+    const missing = window.filter((rank) => !unique.has(rank));
+    if (missing.length !== 1) continue;
+    const usesHole = window.some((rank) => {
+      const normalized = rank === 1 ? 14 : rank;
+      return holeRanks.has(normalized);
+    });
+    if (!usesHole) continue;
+    const miss = missing[0];
+    if (miss === high - 4 || miss === high) openEnders += 1;
+    else gutshots += 1;
+  }
+  if (openEnders > 0) return "oesd";
+  if (gutshots > 0) return "gutshot";
+  return null;
 }
 
 function frequency<T>(values: readonly T[]): Map<T, number> {
