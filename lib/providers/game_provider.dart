@@ -500,6 +500,13 @@ class GameController extends StateNotifier<TableSession> {
       unawaited(_agentRetryOrResume());
       return;
     }
+    // HomeScreen owns cold `start` from the lobby. On-table, start a fresh hand.
+    if (cmd == 'start') {
+      if (state.game != null) {
+        unawaited(startTraining(continueTable: false));
+      }
+      return;
+    }
     unawaited(debugHeroShortcut(command));
   }
 
