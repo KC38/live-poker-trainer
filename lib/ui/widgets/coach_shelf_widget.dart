@@ -20,6 +20,8 @@ class CoachShelfWidget extends StatelessWidget {
     this.maxHeight,
     this.onDismiss,
     this.dismissLabel = 'Continue',
+    this.onUndo,
+    this.undoLabel = 'Undo',
   });
 
   final CoachFeedback feedback;
@@ -36,6 +38,12 @@ class CoachShelfWidget extends StatelessWidget {
 
   /// Button copy for [onDismiss] — Continue mid-hand, Next hand when done.
   final String dismissLabel;
+
+  /// Rewinds the graded action so the player can pick another branch.
+  final VoidCallback? onUndo;
+
+  /// Button copy for [onUndo].
+  final String undoLabel;
 
   ChipDisplayMode get _stripMode => chipDisplayMode.tableMode;
 
@@ -87,6 +95,7 @@ class CoachShelfWidget extends StatelessWidget {
     final hasVerdict = feedback.hasVerdict;
     final optimal = _optimalLine;
     final canDismiss = onDismiss != null && !replaying;
+    final canUndo = onUndo != null && !replaying;
 
     final advice = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,29 +128,51 @@ class CoachShelfWidget extends StatelessWidget {
               compact: false,
             ),
           ),
-        if (canDismiss)
+        if (canDismiss || canUndo)
           Padding(
             padding: const EdgeInsets.only(top: 12),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: onDismiss,
-                style: TextButton.styleFrom(
-                  foregroundColor: AppColors.goldBright,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
+            child: Row(
+              children: [
+                if (canUndo)
+                  TextButton(
+                    onPressed: onUndo,
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppColors.cream.withValues(alpha: 0.85),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                    ),
+                    child: Text(
+                      undoLabel,
+                      style: GoogleFonts.jetBrainsMono(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.4,
+                      ),
+                    ),
                   ),
-                ),
-                child: Text(
-                  dismissLabel,
-                  style: GoogleFonts.jetBrainsMono(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.4,
+                const Spacer(),
+                if (canDismiss)
+                  TextButton(
+                    onPressed: onDismiss,
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppColors.goldBright,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                    ),
+                    child: Text(
+                      dismissLabel,
+                      style: GoogleFonts.jetBrainsMono(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.4,
+                      ),
+                    ),
                   ),
-                ),
-              ),
+              ],
             ),
           ),
       ],

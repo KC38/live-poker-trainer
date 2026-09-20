@@ -252,6 +252,40 @@ class GameController extends StateNotifier<TableSession> {
     }
   }
 
+  /// Rewinds the graded Hero action so the dock offers that decision again.
+  Future<void> undoCoachAction() async {
+    final view = state.liveView;
+    if (view == null || !state.coach.hasAdvice || state.replaying) return;
+    final token = ++_replayToken;
+    final held = _heldStreetReveal;
+    state = state.copyWith(
+      replaying: true,
+      liveActions: const [],
+      clearWaitingOnSeat: true,
+      clearError: true,
+    );
+    try {
+      final result = await _ref
+          .read(liveHandServiceProvider)
+          .undoAction(view: view);
+      if (_disposed || token != _replayToken) return;
+      _heldStreetReveal = null;
+      final restored = result.view;
+      state = TableSession(
+        game: restored.toGameState(handCount: _handCount),
+        liveView: restored,
+        liveActions: restored.legalActions,
+      );
+    } catch (error) {
+      if (_disposed || token != _replayToken) return;
+      _heldStreetReveal = held;
+      state = state.copyWith(
+        replaying: false,
+        error: '$error',
+      );
+    }
+  }
+
   Future<void> _finishAwardAnimation(int token) async {
     await _ref.read(soundServiceProvider).chip();
     await Future<void>.delayed(ReplayPace.handOver);
@@ -745,6 +779,12 @@ class GameController extends StateNotifier<TableSession> {
         return;
       }
       unawaited(nextHand());
+      return;
+    }
+    if (cmd == 'undo') {
+      if (state.coach.hasAdvice) {
+        unawaited(undoCoachAction());
+      }
       return;
     }
     // Mirror the table Retry banner: resume mid-hand, next when over, else deal.

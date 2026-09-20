@@ -50,6 +50,16 @@ const DECISION_LEASE_MS = 5 * 60 * 1000;
 const START_LEASE_MS = 5 * 60 * 1000;
 export const MIN_LIVE_CLIENT_VERSION = "2.0.0";
 
+/** Parent cursor stored so coach review can rewind one Hero decision. */
+interface LiveUndoCheckpoint {
+  stateHash: string;
+  state: LiveHandState;
+  history: LiveActionEvent[];
+  stateVersion: number;
+  status: LiveHandState["status"];
+  coaching: CoachingActionAssessment[];
+}
+
 interface LiveSessionDoc {
   sessionId: string;
   uid: string;
@@ -61,6 +71,14 @@ interface LiveSessionDoc {
   stateVersion: number;
   status: LiveHandState["status"];
   coaching: CoachingActionAssessment[];
+  /** Present after the latest submit until Continue advances or Undo rewinds. */
+  undoCheckpoint?: LiveUndoCheckpoint | null;
+}
+
+interface UndoLiveActionInput {
+  sessionId: string;
+  stateVersion: number;
+  clientVersion: string;
 }
 
 /** Starts one unseen hand and returns its warmed first Hero decision. */
@@ -363,6 +381,14 @@ export async function submitLiveActionForUser(options: {
         });
       },
     });
+    const undoCheckpoint: LiveUndoCheckpoint = {
+      stateHash: session.stateHash,
+      state: session.state,
+      history: session.history,
+      stateVersion: session.stateVersion,
+      status: session.status,
+      coaching: session.coaching,
+    };
     const nextSession: LiveSessionDoc = {
       ...session,
       stateHash: edge.child.stateHash,
@@ -371,6 +397,7 @@ export async function submitLiveActionForUser(options: {
       stateVersion: session.stateVersion + 1,
       status: edge.child.state.status,
       coaching: [...session.coaching, edge.coaching],
+      undoCheckpoint,
     };
     const result: SubmitLiveActionResult = {
       ok: true,
@@ -418,6 +445,7 @@ export async function submitLiveActionForUser(options: {
         coaching: nextSession.coaching,
         stateVersion: nextSession.stateVersion,
         status: nextSession.status,
+        undoCheckpoint,
         updatedAt: FieldValue.serverTimestamp(),
       });
       tx.set(decisionRef, {
@@ -494,6 +522,124 @@ export async function resumeLiveHandForUser(options: {
   return {
     ok: true,
     view: projectLiveView({session, hand, node}),
+    events: [],
+  };
+}
+
+/**
+ * Rewinds the session one Hero decision so coach review can try another branch.
+ *
+ * Restores the parent cursor saved on the last submit. When that submit ended
+ * the hand, progress / history writes are reversed and the open session returns.
+ */
+export async function undoLiveActionForUser(options: {
+  uid: string;
+  raw: unknown;
+  db?: Firestore;
+}): Promise<StartLiveHandResult> {
+  const db = options.db ?? getFirestore();
+  const input = parseUndoInput(options.raw);
+  await assertLiveServiceAvailable(db, input.clientVersion);
+  const sessionRef = sessionReference(db, options.uid, input.sessionId);
+  const openRef = openSessionReference(db, options.uid);
+  const restored = await db.runTransaction(async (tx) => {
+    const [sessionSnapshot, openSnapshot] = await Promise.all([
+      tx.get(sessionRef),
+      tx.get(openRef),
+    ]);
+    if (!sessionSnapshot.exists) {
+      throw new HttpsError("not-found", "Live hand session not found.");
+    }
+    const session = sessionSnapshot.data() as LiveSessionDoc;
+    if (session.stateVersion !== input.stateVersion) {
+      throw new HttpsError("aborted", "Stale state version. Resume the hand.");
+    }
+    const checkpoint = session.undoCheckpoint;
+    if (!checkpoint) {
+      throw new HttpsError(
+        "failed-precondition",
+        "Nothing to undo for this decision.",
+      );
+    }
+    const open = openSnapshot.data();
+    if (
+      open?.status === "playing" &&
+      typeof open.sessionId === "string" &&
+      open.sessionId !== session.sessionId
+    ) {
+      throw new HttpsError(
+        "failed-precondition",
+        "Another hand is already open.",
+      );
+    }
+    const handRef = db
+      .collection("liveTableSetups")
+      .doc(session.setupKey)
+      .collection("hands")
+      .doc(session.handId);
+    const handSnapshot = await tx.get(handRef);
+    const hand = handSnapshot.data()?.definition as
+      LiveHandDefinition | undefined;
+    if (!hand) {
+      throw new HttpsError("internal", "Live hand definition missing.");
+    }
+    const nodeSnapshot = await tx.get(
+      handRef.collection("nodes").doc(checkpoint.stateHash),
+    );
+    if (!nodeSnapshot.exists) {
+      throw new HttpsError("internal", "Parent decision node missing.");
+    }
+    const handWasComplete = session.status !== "playing";
+    if (handWasComplete) {
+      reverseCompleteLiveHandInTransaction({
+        tx,
+        db,
+        uid: options.uid,
+        session,
+        hand,
+      });
+    }
+    const restoredSession: LiveSessionDoc = {
+      sessionId: session.sessionId,
+      uid: session.uid,
+      handId: session.handId,
+      setupKey: session.setupKey,
+      stateHash: checkpoint.stateHash,
+      state: checkpoint.state,
+      history: checkpoint.history,
+      stateVersion: checkpoint.stateVersion,
+      status: checkpoint.status,
+      coaching: checkpoint.coaching,
+    };
+    tx.update(sessionRef, {
+      stateHash: restoredSession.stateHash,
+      state: restoredSession.state,
+      history: restoredSession.history,
+      coaching: restoredSession.coaching,
+      stateVersion: restoredSession.stateVersion,
+      status: restoredSession.status,
+      undoCheckpoint: FieldValue.delete(),
+      updatedAt: FieldValue.serverTimestamp(),
+    });
+    if (handWasComplete || !openSnapshot.exists) {
+      tx.set(openRef, {
+        status: "playing",
+        sessionId: session.sessionId,
+        claimId: null,
+        leaseExpiresAtMs: null,
+        updatedAt: FieldValue.serverTimestamp(),
+      });
+    }
+    const node = preparedNodeFromData(nodeSnapshot.data()!);
+    return {session: restoredSession, hand, node};
+  });
+  return {
+    ok: true,
+    view: projectLiveView({
+      session: restored.session,
+      hand: restored.hand,
+      node: restored.node,
+    }),
     events: [],
   };
 }
@@ -767,6 +913,42 @@ function completeLiveHandInTransaction(options: {
   session: LiveSessionDoc;
   hand: LiveHandDefinition;
 }): void {
+  applyHandCompletionDelta({
+    ...options,
+    sign: 1,
+  });
+  options.tx.delete(openSessionReference(options.db, options.uid));
+}
+
+/** Undoes progress/history written when a completed hand is rewound. */
+function reverseCompleteLiveHandInTransaction(options: {
+  tx: FirebaseFirestore.Transaction;
+  db: Firestore;
+  uid: string;
+  session: LiveSessionDoc;
+  hand: LiveHandDefinition;
+}): void {
+  applyHandCompletionDelta({
+    ...options,
+    sign: -1,
+  });
+  options.tx.delete(
+    options.db
+      .collection("users")
+      .doc(options.uid)
+      .collection("liveHandHistory")
+      .doc(options.session.sessionId),
+  );
+}
+
+function applyHandCompletionDelta(options: {
+  tx: FirebaseFirestore.Transaction;
+  db: Firestore;
+  uid: string;
+  session: LiveSessionDoc;
+  hand: LiveHandDefinition;
+  sign: 1 | -1;
+}): void {
   const receiptRef = options.db
     .collection("users")
     .doc(options.uid)
@@ -782,71 +964,77 @@ function completeLiveHandInTransaction(options: {
     .doc(options.uid)
     .collection("liveProgress")
     .doc("main");
-  const openRef = openSessionReference(options.db, options.uid);
   const hero = options.session.state.players[options.hand.setup.heroSeat];
   const start = options.hand.seats.find(
     (seat) => seat.seat === options.hand.setup.heroSeat,
   )!.startingStack;
   const heroNetChips = hero.stack - start;
   const heroNetBb = heroNetChips / options.hand.setup.bigBlind;
-  const decisionProgress = qualitativeProgress(options.session, options.hand);
-  const historyActions = options.session.history.map((event) => ({
-    seat: event.seat,
-    street: event.street,
-    kind: event.kind,
-    amountBb: (event.amountTo ?? 0) / options.hand.setup.bigBlind,
-    isHero: event.seat === options.hand.setup.heroSeat,
-    archetype: options.hand.seats.find(
-      (seat) => seat.seat === event.seat,
-    )?.archetype ?? "TAG",
-  }));
-  options.tx.set(receiptRef, {
-    status: "completed",
-    completedAt: FieldValue.serverTimestamp(),
-    lastSessionId: options.session.sessionId,
-    heroNetChips,
-    heroNetBb,
-  }, {merge: true});
-  options.tx.set(historyRef, {
-    sessionId: options.session.sessionId,
-    handId: options.hand.handId,
-    setupKey: options.hand.setupKey,
-    actions: historyActions,
-    status: options.session.status,
-    heroNetChips,
-    heroNetBb,
-    heroSeat: options.hand.setup.heroSeat,
-    wentToShowdown: options.session.state.terminalReason === "showdown",
-    heroWon: options.session.state.winnerSeats.includes(
-      options.hand.setup.heroSeat,
-    ),
-    finalPots: options.session.state.pots,
-    winnerSeats: options.session.state.winnerSeats,
-    coaching: options.session.coaching,
-    completedAt: FieldValue.serverTimestamp(),
-    createdAt: FieldValue.serverTimestamp(),
-  });
+  const decisionProgress = qualitativeProgress(
+    options.session,
+    options.hand,
+    options.sign,
+  );
+  const coachingLength = options.session.coaching.length;
+  if (options.sign > 0) {
+    const historyActions = options.session.history.map((event) => ({
+      seat: event.seat,
+      street: event.street,
+      kind: event.kind,
+      amountBb: (event.amountTo ?? 0) / options.hand.setup.bigBlind,
+      isHero: event.seat === options.hand.setup.heroSeat,
+      archetype: options.hand.seats.find(
+        (seat) => seat.seat === event.seat,
+      )?.archetype ?? "TAG",
+    }));
+    options.tx.set(receiptRef, {
+      status: "completed",
+      completedAt: FieldValue.serverTimestamp(),
+      lastSessionId: options.session.sessionId,
+      heroNetChips,
+      heroNetBb,
+    }, {merge: true});
+    options.tx.set(historyRef, {
+      sessionId: options.session.sessionId,
+      handId: options.hand.handId,
+      setupKey: options.hand.setupKey,
+      actions: historyActions,
+      status: options.session.status,
+      heroNetChips,
+      heroNetBb,
+      heroSeat: options.hand.setup.heroSeat,
+      wentToShowdown: options.session.state.terminalReason === "showdown",
+      heroWon: options.session.state.winnerSeats.includes(
+        options.hand.setup.heroSeat,
+      ),
+      finalPots: options.session.state.pots,
+      winnerSeats: options.session.state.winnerSeats,
+      coaching: options.session.coaching,
+      completedAt: FieldValue.serverTimestamp(),
+      createdAt: FieldValue.serverTimestamp(),
+    });
+  }
   options.tx.set(progressRef, {
-    handsPlayed: FieldValue.increment(1),
-    netResultBb: FieldValue.increment(heroNetBb),
-    decisionsReviewed: FieldValue.increment(options.session.coaching.length),
+    handsPlayed: FieldValue.increment(options.sign),
+    netResultBb: FieldValue.increment(options.sign * heroNetBb),
+    decisionsReviewed: FieldValue.increment(options.sign * coachingLength),
     recommendedOrStrong: FieldValue.increment(
-      options.session.coaching.filter(
+      options.sign * options.session.coaching.filter(
         (entry) => entry.rating === "recommended" || entry.rating === "strong",
       ).length,
     ),
     reasonable: FieldValue.increment(
-      options.session.coaching.filter(
+      options.sign * options.session.coaching.filter(
         (entry) => entry.rating === "reasonable",
       ).length,
     ),
     questionable: FieldValue.increment(
-      options.session.coaching.filter(
+      options.sign * options.session.coaching.filter(
         (entry) => entry.rating === "questionable",
       ).length,
     ),
     clearMistakes: FieldValue.increment(
-      options.session.coaching.filter(
+      options.sign * options.session.coaching.filter(
         (entry) => entry.rating === "clear_mistake",
       ).length,
     ),
@@ -854,12 +1042,12 @@ function completeLiveHandInTransaction(options: {
     archetypeAccuracy: decisionProgress.archetypeAccuracy,
     updatedAt: FieldValue.serverTimestamp(),
   }, {merge: true});
-  options.tx.delete(openRef);
 }
 
 function qualitativeProgress(
   session: LiveSessionDoc,
   hand: LiveHandDefinition,
+  sign: 1 | -1 = 1,
 ): {
   streetAccuracy: Record<string, {
     played: FirebaseFirestore.FieldValue;
@@ -905,8 +1093,8 @@ function qualitativeProgress(
       [...streetCounts.entries()].map(([street, counts]) => [
         street,
         {
-          played: FieldValue.increment(counts.played),
-          correct: FieldValue.increment(counts.correct),
+          played: FieldValue.increment(sign * counts.played),
+          correct: FieldValue.increment(sign * counts.correct),
         },
       ]),
     ),
@@ -914,8 +1102,8 @@ function qualitativeProgress(
       [...archetypeCounts.entries()].map(([archetype, counts]) => [
         archetype,
         {
-          played: FieldValue.increment(counts.played),
-          correct: FieldValue.increment(counts.correct),
+          played: FieldValue.increment(sign * counts.played),
+          correct: FieldValue.increment(sign * counts.correct),
           evBb: 0,
         },
       ]),
@@ -988,6 +1176,23 @@ function parseSubmitInput(raw: unknown): SubmitLiveActionInput {
     decisionId: nonEmpty(data.decisionId, "decisionId"),
     idempotencyKey,
     actionId: nonEmpty(data.actionId, "actionId"),
+  };
+}
+
+function parseUndoInput(raw: unknown): UndoLiveActionInput {
+  const data = record(raw, "request");
+  const stateVersion = data.stateVersion;
+  if (
+    typeof stateVersion !== "number" ||
+    !Number.isInteger(stateVersion) ||
+    stateVersion < 0
+  ) {
+    throw new HttpsError("invalid-argument", "stateVersion must be >= 0.");
+  }
+  return {
+    sessionId: nonEmpty(data.sessionId, "sessionId"),
+    stateVersion,
+    clientVersion: nonEmpty(data.clientVersion, "clientVersion"),
   };
 }
 

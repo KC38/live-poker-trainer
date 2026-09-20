@@ -360,6 +360,46 @@ void main() {
     expect(dismissed, isTrue);
   });
 
+  testWidgets('Undo rewinds when provided', (tester) async {
+    var undone = false;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: CoachShelfWidget(
+            feedback: _longIncorrect,
+            bigBlind: 2,
+            chipDisplayMode: ChipDisplayMode.dollars,
+            onDismiss: () {},
+            onUndo: () => undone = true,
+          ),
+        ),
+      ),
+    );
+    expect(find.text('Undo'), findsOneWidget);
+    expect(find.text('Continue'), findsOneWidget);
+    await tester.tap(find.text('Undo'));
+    expect(undone, isTrue);
+  });
+
+  testWidgets('hides Undo while table is still acting', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: CoachShelfWidget(
+            feedback: _longIncorrect,
+            bigBlind: 2,
+            chipDisplayMode: ChipDisplayMode.dollars,
+            replaying: true,
+            onDismiss: () {},
+            onUndo: () {},
+          ),
+        ),
+      ),
+    );
+    expect(find.text('Undo'), findsNothing);
+    expect(find.text('Continue'), findsNothing);
+  });
+
   testWidgets('Next hand label is used when the hand is over', (tester) async {
     var advanced = false;
     await tester.pumpWidget(
