@@ -281,6 +281,14 @@ String polishCoachCopy(String raw) {
       ),
       (match) => '${match[1]} at ${match[2]}% and ${match[3]}%',
     );
+    // Single rate: "aggression at 59.5" / "VPIP at 40".
+    text = text.replaceAllMapped(
+      RegExp(
+        '($escaped)\\s+at\\s+(\\d+(?:\\.\\d+)?)(?!\\d)(?!\\.\\d)(?!\\s*%)',
+        caseSensitive: false,
+      ),
+      (match) => '${match[1]} at ${match[2]}%',
+    );
   }
   // Bare "frequency (63.1)" / "bluff frequency (63.1)" when no tendency
   // label precedes the noun.
