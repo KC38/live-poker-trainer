@@ -1,12 +1,15 @@
 /// Main gameplay table — strict vertical bands so nothing ever overlaps.
 library;
 
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/core/debug/agent_commands.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
@@ -60,6 +63,7 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
 
   bool _kickoffStarted = false;
   bool _kickoffCancelled = false;
+  StreamSubscription<String>? _agentSub;
 
   @override
   void initState() {
@@ -67,11 +71,17 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _kickOffHandWhenVisible();
     });
+    if (kDebugMode) {
+      _agentSub = AgentCommands.stream.listen((cmd) {
+        if (cmd == 'back' && mounted) Navigator.of(context).maybePop();
+      });
+    }
   }
 
   @override
   void dispose() {
     _kickoffCancelled = true;
+    unawaited(_agentSub?.cancel());
     super.dispose();
   }
 
