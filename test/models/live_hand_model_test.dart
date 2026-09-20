@@ -266,6 +266,15 @@ void main() {
     );
     expect(
       polishCoachCopy(
+        'calling stations have high showdown call (65.5-79.1%) and call flop.',
+      ),
+      allOf(
+        contains('(65.5%-79.1%)'),
+        isNot(contains('(65.5-79.1%)')),
+      ),
+    );
+    expect(
+      polishCoachCopy(
         "Checking preserves Hero's 72 chip stack to realize showdown.",
       ),
       contains(r'$72 chip stack'),

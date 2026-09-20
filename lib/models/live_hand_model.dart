@@ -464,6 +464,11 @@ String polishCoachCopy(String raw) {
     RegExp(r'(\d+(?:\.\d+)?%)-(\d+(?:\.\d+)?)(?!\s*%)'),
     (match) => '${match[1]}-${match[2]}%',
   );
+  // "65.5-79.1%" percent ranges missing the leading mark.
+  text = text.replaceAllMapped(
+    RegExp(r'(\d+(?:\.\d+)?)(?!\s*%)-(\d+(?:\.\d+)?%)'),
+    (match) => '${match[1]}%-${match[2]}',
+  );
   // Paired rates in parentheses: "aggression (65.8 and 69.7)".
   text = text.replaceAllMapped(
     RegExp(r'\((\d+(?:\.\d+)?)(?!\s*%)\s+and\s+(\d+(?:\.\d+)?)(?!\s*%)\)'),
