@@ -1,0 +1,14 @@
+---
+description: Continuous Pro-sim play → test → fix loop with dual-sim isolation and main sync
+alwaysApply: false
+---
+
+# Play → test → fix
+
+When the user asks to keep playing, testing, and fixing live (or invokes
+`/play-test-fix` / a durable play goal), follow
+`.cursor/skills/play-test-fix/SKILL.md`.
+
+Ship every product fix via `.cursor/skills/ship-change/SKILL.md`. Stay synced
+with `origin/main`. Drive only the agent iPhone 17 Pro UDID; leave the user’s
+iPhone 17 instance alone (notify them if you relaunch it).
