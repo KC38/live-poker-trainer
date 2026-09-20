@@ -149,8 +149,13 @@ String polishCoachCopy(String raw) {
   var text = raw;
   for (final entry in _tendencyLabels.entries) {
     final key = RegExp.escape(entry.key);
+    // Skip chip sizes: "$30 threeBet" must not become "$30% 3-bet"
+    // (and must not match the trailing "0" of "$30").
     text = text.replaceAllMapped(
-      RegExp('(\\d+(?:\\.\\d+)?)\\s+$key\\b', caseSensitive: false),
+      RegExp(
+        '(?<![\\d\$])(\\d+(?:\\.\\d+)?)\\s+$key\\b',
+        caseSensitive: false,
+      ),
       (match) => '${match[1]}% ${entry.value}',
     );
     text = text.replaceAll(
@@ -161,7 +166,7 @@ String polishCoachCopy(String raw) {
   // Model prose often says "three-bet" instead of the canonical "3-bet" label.
   text = text.replaceAllMapped(
     RegExp(
-      r'(\d+(?:\.\d+)?)(?!\s*%)\s+three[\s-]?bets?\b',
+      r'(?<![\d$])(\d+(?:\.\d+)?)(?!\s*%)\s+three[\s-]?bets?\b',
       caseSensitive: false,
     ),
     (match) => '${match[1]}% 3-bet',
@@ -173,7 +178,7 @@ String polishCoachCopy(String raw) {
   // "42.3 river bluffing" → "42.3% river bluff".
   text = text.replaceAllMapped(
     RegExp(
-      r'(\d+(?:\.\d+)?)(?!\s*%)\s+river\s+bluffing\b',
+      r'(?<![\d$])(\d+(?:\.\d+)?)(?!\s*%)\s+river\s+bluffing\b',
       caseSensitive: false,
     ),
     (match) => '${match[1]}% river bluff',
@@ -184,11 +189,12 @@ String polishCoachCopy(String raw) {
   );
   // Number before display label: "51.5 river bluff frequency" / "81.5 aggression".
   // (The key pass only catches camelCase like "51.5 bluffRiver".)
+  // Skip "$30 3-bet" chip sizes (live: became "$30% 3-bet").
   for (final label in _tendencyLabels.values.toSet()) {
     final escaped = RegExp.escape(label);
     text = text.replaceAllMapped(
       RegExp(
-        '(\\d+(?:\\.\\d+)?)(?!\\s*%)\\s+$escaped\\b',
+        '(?<![\\d\$])(\\d+(?:\\.\\d+)?)(?!\\s*%)\\s+$escaped\\b',
         caseSensitive: false,
       ),
       (match) => '${match[1]}% $label',

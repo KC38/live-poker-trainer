@@ -527,5 +527,26 @@ void main() {
         isNot(contains(RegExp(r'requiring only 111 chips'))),
       ),
     );
+    // Chip size before "3-bet" must not gain a percent (batch 0154).
+    expect(
+      polishCoachCopy(
+        r'Matches the $30 3-bet offering 21.9% pot odds with a '
+        '23.4% estimated multiway equity.',
+      ),
+      allOf(
+        contains(r'$30 3-bet'),
+        isNot(contains(r'$30%')),
+        contains('21.9%'),
+        contains('23.4%'),
+      ),
+    );
+    expect(
+      polishCoachCopy(r'Facing a $30 three-bet from Blitz.'),
+      allOf(contains(r'$30 3-bet'), isNot(contains(r'$30%'))),
+    );
+    expect(
+      polishCoachCopy('Blitz has 16.2 3-bet and shoves wide.'),
+      contains('16.2% 3-bet'),
+    );
   });
 }
