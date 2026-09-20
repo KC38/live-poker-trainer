@@ -201,6 +201,14 @@ String polishCoachCopy(String raw) {
       ),
       (match) => '${match[1]} ${match[2]}%',
     );
+    // Colon rates: "showdown call: 67.9".
+    text = text.replaceAllMapped(
+      RegExp(
+        '($escaped)\\s*:\\s*(\\d+(?:\\.\\d+)?)(?!\\d)(?!\\.\\d)(?!\\s*%)',
+        caseSensitive: false,
+      ),
+      (match) => '${match[1]}: ${match[2]}%',
+    );
     // Parenthetical rates: "aggression (86.4)" / "VPIP (70.2)".
     text = text.replaceAllMapped(
       RegExp(

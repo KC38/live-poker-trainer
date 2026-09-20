@@ -319,6 +319,10 @@ void main() {
       contains(r'$120-chip effective shove'),
     );
     expect(
+      polishCoachCopy('Fred (showdown call: 67.9) stays in with worse.'),
+      contains('showdown call: 67.9%'),
+    );
+    expect(
       polishCoachCopy(
         'Folding against opponents with aggression above 77 is timid.',
       ),
