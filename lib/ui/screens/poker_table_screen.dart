@@ -144,10 +144,14 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                   // the hero cannot act and give its band to the other rows.
                   final dockVisible = session.heroCanAct;
 
-                  final showCoach = session.coach.hasAdvice;
+                  final showCoachAdvice = session.coach.hasAdvice;
+                  final showCoachPrep =
+                      session.awaitingCoach && !showCoachAdvice;
+                  final showCoach = showCoachAdvice || showCoachPrep;
                   // A fresh decision has no coach shelf, so replay otherwise
                   // looks frozen: the dock is gone and only "ACTION…" remains.
-                  final showResolving = session.replaying && !showCoach;
+                  final showResolving =
+                      session.replaying && !showCoach;
 
                   // Cap the coach band so it can never starve the felt, and let
                   // that cap grow into the space the dock gave up.
@@ -166,12 +170,15 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                       bigBlind: game?.bigBlind ?? 2,
                       chipDisplayMode: settings.chipDisplayMode,
                       replaying: session.replaying,
+                      preparing: showCoachPrep,
                       maxHeight: maxHeight,
                       onDismiss:
-                          () =>
-                              ref
-                                  .read(gameControllerProvider.notifier)
-                                  .dismissCoach(),
+                          showCoachAdvice
+                              ? () =>
+                                  ref
+                                      .read(gameControllerProvider.notifier)
+                                      .dismissCoach()
+                              : null,
                     );
                   }
 
@@ -250,6 +257,7 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                                             session.collectingChips,
                                         awardingChips: session.awardingChips,
                                         review: handOver,
+                                        waitingOnSeat: session.waitingOnSeat,
                                         onPlayerTap:
                                             (player) =>
                                                 TendencyProfileSheet.show(
@@ -316,6 +324,7 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                             collectingChips: session.collectingChips,
                             awardingChips: session.awardingChips,
                             review: handOver,
+                            waitingOnSeat: session.waitingOnSeat,
                             onPlayerTap:
                                 (player) =>
                                     TendencyProfileSheet.show(context, player),

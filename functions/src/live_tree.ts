@@ -121,11 +121,16 @@ export async function expandLiveHeroAction(options: {
   parent: PreparedLiveNode;
   actionId: string;
   fetchImpl?: typeof fetch;
-  /** Fires after each appended edge event so callers can stream seat actions. */
-  onEdgeEvents?: (
-    events: LiveActionEvent[],
-    state: LiveHandState,
-  ) => Promise<void>;
+  /**
+   * Live progress for the submitting client: seat actions as they land, plus
+   * a coaching phase once villains are done and the next rubric is generating.
+   */
+  onFeed?: (update: {
+    events: LiveActionEvent[];
+    state: LiveHandState;
+    status: "acting" | "coaching";
+    waitingOnSeat: number | null;
+  }) => Promise<void>;
 }): Promise<PreparedLiveEdge> {
   if (!options.parent.rubric) {
     throw new Error("cannot expand a Hero node without coaching");
@@ -141,7 +146,22 @@ export async function expandLiveHeroAction(options: {
     actionId: options.actionId,
   });
   const history = [...options.parent.history, applied.event];
-  await options.onEdgeEvents?.(history.slice(parentLen), applied.state);
+  const publish = async (
+    nextHistory: LiveActionEvent[],
+    state: LiveHandState,
+    status: "acting" | "coaching",
+  ): Promise<void> => {
+    await options.onFeed?.({
+      events: nextHistory.slice(parentLen),
+      state,
+      status,
+      waitingOnSeat:
+        status === "acting" && typeof state.actorSeat === "number" ?
+          state.actorSeat :
+          null,
+    });
+  };
+  await publish(history, applied.state, "acting");
   const childResolved = await resolveToHeroOrTerminal({
     apiKey: options.apiKey,
     hand: options.hand,
@@ -149,7 +169,13 @@ export async function expandLiveHeroAction(options: {
     history,
     fetchImpl: options.fetchImpl,
     onHistoryAppend: async (_event, nextHistory, state) => {
-      await options.onEdgeEvents?.(nextHistory.slice(parentLen), state);
+      await publish(nextHistory, state, "acting");
+    },
+    onWaiting: async (_seat, nextHistory, state) => {
+      await publish(nextHistory, state, "acting");
+    },
+    onCoachingPhase: async (nextHistory, state) => {
+      await publish(nextHistory, state, "coaching");
     },
   });
   const events = childResolved.node.history.slice(parentLen);
@@ -210,6 +236,17 @@ async function resolveToHeroOrTerminal(options: {
     history: LiveActionEvent[],
     state: LiveHandState,
   ) => Promise<void>;
+  /** Fires before an LLM villain decision so the client can start a seat timer. */
+  onWaiting?: (
+    seat: number,
+    history: LiveActionEvent[],
+    state: LiveHandState,
+  ) => Promise<void>;
+  /** Fires once villains are done and the next-node rubric is about to run. */
+  onCoachingPhase?: (
+    history: LiveActionEvent[],
+    state: LiveHandState,
+  ) => Promise<void>;
 }): Promise<ResolvedLiveNode> {
   let state = options.state;
   const history = [...options.history];
@@ -230,6 +267,7 @@ async function resolveToHeroOrTerminal(options: {
       }
       const legalActions = legalLiveActions(options.hand, state);
       if (liveHeroToAct(options.hand, state)) {
+        await options.onCoachingPhase?.(history, state);
         const coached = await generateCoachingRubric({
           apiKey: options.apiKey,
           hand: options.hand,
@@ -253,6 +291,7 @@ async function resolveToHeroOrTerminal(options: {
       if (state.actorSeat === null || legalActions.length === 0) {
         throw new Error("playing state has no legal opponent action");
       }
+      await options.onWaiting?.(state.actorSeat, history, state);
       const villain = await chooseVillainAction({
         apiKey: options.apiKey,
         hand: options.hand,

@@ -51,6 +51,8 @@ class TableSession {
     this.collectingChips = false,
     this.awardingChips = false,
     this.liveActions = const [],
+    this.waitingOnSeat,
+    this.awaitingCoach = false,
     List<HeroActionEdge> authoredHeroEdges = const [],
     // The public compatibility argument cannot initialize a private named
     // field directly without changing its call-site name.
@@ -66,6 +68,12 @@ class TableSession {
   final bool collectingChips;
   final bool awardingChips;
   final List<LiveLegalActionModel> liveActions;
+
+  /// Villain seat whose LLM decision is in flight, if any.
+  final int? waitingOnSeat;
+
+  /// True while the server is generating the next coaching rubric.
+  final bool awaitingCoach;
   final List<HeroActionEdge> _authoredHeroEdges;
 
   /// Compatibility surface retained while legacy graph tests are retired.
@@ -104,6 +112,9 @@ class TableSession {
     bool? collectingChips,
     bool? awardingChips,
     List<LiveLegalActionModel>? liveActions,
+    int? waitingOnSeat,
+    bool clearWaitingOnSeat = false,
+    bool? awaitingCoach,
     List<HeroActionEdge>? authoredHeroEdges,
     bool clearAuthoredHeroEdges = false,
   }) {
@@ -117,6 +128,9 @@ class TableSession {
       collectingChips: collectingChips ?? this.collectingChips,
       awardingChips: awardingChips ?? this.awardingChips,
       liveActions: liveActions ?? this.liveActions,
+      waitingOnSeat:
+          clearWaitingOnSeat ? null : (waitingOnSeat ?? this.waitingOnSeat),
+      awaitingCoach: awaitingCoach ?? this.awaitingCoach,
       authoredHeroEdges:
           clearAuthoredHeroEdges
               ? const []
@@ -244,9 +258,22 @@ class GameController extends StateNotifier<TableSession> {
           sessionId: view.sessionId,
           decisionId: view.decisionId,
         )
-        .listen(
+.listen(
           (update) {
             if (_disposed || token != _replayToken) return;
+            final heroSeat = state.game?.hero.id;
+            final waiting =
+                update.isCoaching
+                    ? null
+                    : (update.waitingOnSeat != null &&
+                        update.waitingOnSeat != heroSeat)
+                    ? update.waitingOnSeat
+                    : null;
+            state = state.copyWith(
+              awaitingCoach: update.isCoaching,
+              waitingOnSeat: waiting,
+              clearWaitingOnSeat: waiting == null,
+            );
             unawaited(enqueueReplay(update.events, update.board));
           },
           // Rules lag / transient denials must not surface as unhandled
@@ -268,7 +295,12 @@ class GameController extends StateNotifier<TableSession> {
       final coaching = _feedback(result.coaching, action, view.street);
       // Show coaching as soon as the server grades the act; villains may still
       // be animating from the action feed / remaining callable events.
-      state = state.copyWith(coach: coaching, replaying: true);
+      state = state.copyWith(
+        coach: coaching,
+        replaying: true,
+        awaitingCoach: false,
+        clearWaitingOnSeat: true,
+      );
       await enqueueReplay(
         result.events,
         result.view.board.map((card) => card.code).toList(growable: false),
@@ -297,6 +329,8 @@ class GameController extends StateNotifier<TableSession> {
       state = state.copyWith(
         replaying: false,
         liveActions: view.legalActions,
+        awaitingCoach: false,
+        clearWaitingOnSeat: true,
         error: '$error',
       );
     } finally {

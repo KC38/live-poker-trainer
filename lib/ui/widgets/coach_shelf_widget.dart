@@ -16,6 +16,7 @@ class CoachShelfWidget extends StatelessWidget {
     required this.bigBlind,
     required this.chipDisplayMode,
     this.replaying = false,
+    this.preparing = false,
     this.maxHeight,
     this.onDismiss,
   });
@@ -24,6 +25,9 @@ class CoachShelfWidget extends StatelessWidget {
   final double bigBlind;
   final ChipDisplayMode chipDisplayMode;
   final bool replaying;
+
+  /// True while the server is generating the coaching rubric.
+  final bool preparing;
   final double? maxHeight;
 
   /// Clears the shelf so the next action dock can appear.
@@ -69,6 +73,13 @@ class CoachShelfWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (preparing && !feedback.hasAdvice) {
+      return ConstrainedBox(
+        constraints: BoxConstraints(maxHeight: maxHeight ?? double.infinity),
+        child: const _CoachPreparingShelf(),
+      );
+    }
+
     final hasVerdict = feedback.hasVerdict;
     final optimal = _optimalLine;
     final canDismiss = onDismiss != null && !replaying;
@@ -180,6 +191,189 @@ class _HeightCappedScroll extends StatelessWidget {
         padding: EdgeInsets.zero,
         physics: const ClampingScrollPhysics(),
         children: [child],
+      ),
+    );
+  }
+}
+
+/// Pulsing shelf shown while the next coaching rubric is generating.
+class _CoachPreparingShelf extends StatefulWidget {
+  const _CoachPreparingShelf();
+
+  @override
+  State<_CoachPreparingShelf> createState() => _CoachPreparingShelfState();
+}
+
+class _CoachPreparingShelfState extends State<_CoachPreparingShelf>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1100),
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final t = Curves.easeInOut.transform(_pulse.value);
+        return Container(
+          width: double.infinity,
+          margin: const EdgeInsets.fromLTRB(14, 0, 14, 8),
+          padding: const EdgeInsets.fromLTRB(12, 12, 12, 14),
+          decoration: BoxDecoration(
+            color: AppColors.bgElevated.withValues(alpha: 0.94),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: AppColors.gold.withValues(alpha: 0.35 + 0.45 * t),
+              width: 1.2,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.gold.withValues(alpha: 0.12 + 0.18 * t),
+                blurRadius: 14 + 10 * t,
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Text(
+                'Coach',
+                style: GoogleFonts.cinzel(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.goldMuted,
+                  letterSpacing: 1.1,
+                ),
+              ),
+              const SizedBox(width: 8),
+              SizedBox(
+                width: 12,
+                height: 12,
+                child: CircularProgressIndicator(
+                  strokeWidth: 1.6,
+                  color: AppColors.goldBright.withValues(alpha: 0.9),
+                ),
+              ),
+              const Spacer(),
+              Text(
+                'REVIEWING…',
+                style: GoogleFonts.jetBrainsMono(
+                  fontSize: 8,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.6,
+                  color: AppColors.goldBright,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'Grading your line against the table…',
+            style: GoogleFonts.manrope(
+              fontSize: 13.5,
+              height: 1.35,
+              color: AppColors.cream.withValues(alpha: 0.85),
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 12),
+          const _ShimmerBars(),
+        ],
+      ),
+    );
+  }
+}
+
+class _ShimmerBars extends StatefulWidget {
+  const _ShimmerBars();
+
+  @override
+  State<_ShimmerBars> createState() => _ShimmerBarsState();
+}
+
+class _ShimmerBarsState extends State<_ShimmerBars>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _slide;
+
+  @override
+  void initState() {
+    super.initState();
+    _slide = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1400),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _slide.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _slide,
+      builder: (context, _) {
+        return Column(
+          children: [
+            for (final width in const [1.0, 0.82, 0.64])
+              Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: _ShimmerBar(progress: _slide.value, widthFactor: width),
+              ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _ShimmerBar extends StatelessWidget {
+  const _ShimmerBar({required this.progress, required this.widthFactor});
+
+  final double progress;
+  final double widthFactor;
+
+  @override
+  Widget build(BuildContext context) {
+    return FractionallySizedBox(
+      widthFactor: widthFactor,
+      alignment: Alignment.centerLeft,
+      child: Container(
+        height: 8,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4),
+          gradient: LinearGradient(
+            begin: Alignment(-1.2 + 2.4 * progress, 0),
+            end: Alignment(-0.2 + 2.4 * progress, 0),
+            colors: [
+              AppColors.surfaceMuted,
+              AppColors.gold.withValues(alpha: 0.35),
+              AppColors.surfaceMuted,
+            ],
+          ),
+        ),
       ),
     );
   }

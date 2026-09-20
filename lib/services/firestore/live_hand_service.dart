@@ -25,6 +25,7 @@ class LiveActionFeedUpdate {
     required this.board,
     required this.street,
     required this.status,
+    this.waitingOnSeat,
   });
 
   final String sessionId;
@@ -32,9 +33,17 @@ class LiveActionFeedUpdate {
   final List<LiveActionEventModel> events;
   final List<String> board;
   final String street;
+
+  /// `acting` | `coaching` | `done`
   final String status;
 
+  /// Seat currently waiting on an LLM decision, if any.
+  final int? waitingOnSeat;
+
+  bool get isCoaching => status == 'coaching';
+
   factory LiveActionFeedUpdate.fromJson(Map<String, dynamic> json) {
+    final rawSeat = json['waitingOnSeat'];
     return LiveActionFeedUpdate(
       sessionId: json['sessionId'] as String? ?? '',
       decisionId: json['decisionId'] as String? ?? '',
@@ -48,6 +57,7 @@ class LiveActionFeedUpdate {
               .toList(growable: false),
       street: json['street'] as String? ?? 'preflop',
       status: json['status'] as String? ?? 'acting',
+      waitingOnSeat: rawSeat is num ? rawSeat.toInt() : null,
     );
   }
 
