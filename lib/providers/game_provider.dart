@@ -244,9 +244,18 @@ class GameController extends StateNotifier<TableSession> {
           sessionId: view.sessionId,
           decisionId: view.decisionId,
         )
-        .listen((update) {
-          unawaited(enqueueReplay(update.events, update.board));
-        });
+        .listen(
+          (update) {
+            if (_disposed || token != _replayToken) return;
+            unawaited(enqueueReplay(update.events, update.board));
+          },
+          // Rules lag / transient denials must not surface as unhandled
+          // Crashlytics errors; submitAction still returns the full event list.
+          onError: (Object error, StackTrace stack) {
+            debugPrint('liveActionFeed error: $error');
+          },
+          cancelOnError: false,
+        );
     try {
       final result = await _ref
           .read(liveHandServiceProvider)
