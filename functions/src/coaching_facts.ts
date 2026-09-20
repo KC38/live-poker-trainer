@@ -252,7 +252,7 @@ function pairStrengthLabel(
     const pair = holeRanks[0];
     if (pair > boardUnique[0]) return "overpair";
     if (pair < boardUnique[boardUnique.length - 1]) return "underpair";
-    return "pocket-pair";
+    return "middle-pair";
   }
 
   const paired = holeRanks.find((rank) => boardRanks.includes(rank));

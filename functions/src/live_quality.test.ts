@@ -251,4 +251,27 @@ describe("live quality invariants", () => {
     expect(riverFacts.heroFeatures).not.toContain("second-pair");
     expect(riverFacts.heroFeatures).not.toContain("one-pair");
   });
+
+  test("middling pocket pairs tag as middle-pair on board", () => {
+    const hand = definition();
+    hand.seats[hand.setup.heroSeat].holeCards = ["9h", "9c"];
+    hand.runout = ["Kh", "7d", "2c", "5s", "Ad"];
+    const flop = createInitialLiveState(hand);
+    flop.street = "flop";
+    flop.board = hand.runout.slice(0, 3);
+    flop.actorSeat = hand.setup.heroSeat;
+    const facts = buildCoachingFacts({
+      hand,
+      state: flop,
+      legalActions: [],
+      publicHistory: [],
+      equityIterations: 1,
+    });
+    expect(facts.heroFeatures).toEqual(
+      expect.arrayContaining(["one-pair", "middle-pair"]),
+    );
+    expect(facts.heroFeatures).not.toContain("pocket-pair");
+    expect(facts.heroFeatures).not.toContain("overpair");
+    expect(facts.heroFeatures).not.toContain("underpair");
+  });
 });
