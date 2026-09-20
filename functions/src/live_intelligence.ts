@@ -12,6 +12,18 @@ import {
   type CoachingFacts,
 } from "./coaching_facts";
 import {
+  generationUsageFromMetadata,
+  type GeminiUsageMetadata,
+} from "./generation_usage";
+import {
+  addLiveUsage,
+  emptyLiveUsageBreakdown,
+  liveUsageFromError,
+  liveUsageFromPurpose,
+  LiveUsageError,
+  type LiveUsageBreakdown,
+} from "./live_usage";
+import {
   COACHING_SCHEMA_VERSION,
   type CoachingActionAssessment,
   type CoachingRubric,
@@ -37,6 +49,18 @@ const TENDENCY_KEYS = new Set([
   "sizingTellStrength",
 ]);
 
+/** Villain decision result with billable Gemini usage. */
+export interface VillainActionResult {
+  actionId: string;
+  usage: LiveUsageBreakdown;
+}
+
+/** Coaching rubric result with billable Gemini usage. */
+export interface CoachingRubricResult {
+  rubric: CoachingRubric;
+  usage: LiveUsageBreakdown;
+}
+
 /** Chooses one legal action using only the acting villain's fair information. */
 export async function chooseVillainAction(options: {
   apiKey: string;
@@ -45,7 +69,7 @@ export async function chooseVillainAction(options: {
   legalActions: LiveLegalAction[];
   publicHistory: LiveActionEvent[];
   fetchImpl?: typeof fetch;
-}): Promise<string> {
+}): Promise<VillainActionResult> {
   const actor = options.state.actorSeat;
   if (actor === null || actor === options.hand.setup.heroSeat) {
     throw new Error("villain action requested without a villain actor");
@@ -54,7 +78,10 @@ export async function chooseVillainAction(options: {
     throw new Error("villain has no legal actions");
   }
   if (options.legalActions.length === 1) {
-    return options.legalActions[0].actionId;
+    return {
+      actionId: options.legalActions[0].actionId,
+      usage: emptyLiveUsageBreakdown(),
+    };
   }
   const seat = options.hand.seats.find((candidate) => candidate.seat === actor);
   const player = options.state.players[actor];
@@ -109,16 +136,20 @@ export async function chooseVillainAction(options: {
       required: ["actionId"],
     },
     thinkingLevel: "low",
+    purpose: "villain",
     fetchImpl: options.fetchImpl ?? fetch,
   });
-  const actionId = (response as {actionId?: unknown}).actionId;
+  const actionId = (response.value as {actionId?: unknown}).actionId;
   if (
     typeof actionId !== "string" ||
     !options.legalActions.some((candidate) => candidate.actionId === actionId)
   ) {
-    throw new Error("Gemini selected an illegal villain action");
+    throw new LiveUsageError(
+      "Gemini selected an illegal villain action",
+      response.usage,
+    );
   }
-  return actionId;
+  return {actionId, usage: response.usage};
 }
 
 /**
@@ -132,7 +163,7 @@ export async function generateCoachingRubric(options: {
   legalActions: LiveLegalAction[];
   publicHistory: LiveActionEvent[];
   fetchImpl?: typeof fetch;
-}): Promise<CoachingRubric> {
+}): Promise<CoachingRubricResult> {
   const facts = buildCoachingFacts(options);
   assertFairCoachingFacts(facts);
   return generateCoachingRubricFromFacts({
@@ -154,42 +185,61 @@ export async function generateCoachingRubricFromFacts(options: {
   facts: CoachingFacts;
   stateHash: string;
   fetchImpl?: typeof fetch;
-}): Promise<CoachingRubric> {
+}): Promise<CoachingRubricResult> {
   const facts = options.facts;
   assertFairCoachingFacts(facts);
   const fetchImpl = options.fetchImpl ?? fetch;
   const schema = coachingSchema(facts.legalActions);
-  const draft = await callGeminiJson({
-    apiKey: options.apiKey,
-    system: coachSystemPrompt(),
-    user: JSON.stringify({task: "draft", facts}),
-    schema,
-    thinkingLevel: "high",
-    fetchImpl,
-  });
-  const corrected = await callGeminiJson({
-    apiKey: options.apiKey,
-    system: [
-      coachSystemPrompt(),
-      "You are now the adversarial critic. Correct unsupported certainty,",
-      "generic archetype stereotypes, invented statistics, mathematical",
-      "contradictions, inconsistent action rankings, and outcome-oriented",
-      "reasoning. Preserve every legal action exactly once. Return the complete",
-      "corrected assessments array only in the required JSON object.",
-    ].join(" "),
-    user: JSON.stringify({task: "critique", facts, draft}),
-    schema,
-    thinkingLevel: "high",
-    fetchImpl,
-  });
-  const assessments = parseAssessments(corrected, facts.legalActions, facts);
-  return {
-    schemaVersion: COACHING_SCHEMA_VERSION,
-    stateHash: options.stateHash,
-    assessments,
-    generatedBy: LIVE_INTELLIGENCE_MODEL,
-    criticModel: LIVE_INTELLIGENCE_MODEL,
-  };
+  let usage = emptyLiveUsageBreakdown();
+  try {
+    const draft = await callGeminiJson({
+      apiKey: options.apiKey,
+      system: coachSystemPrompt(),
+      user: JSON.stringify({task: "draft", facts}),
+      schema,
+      thinkingLevel: "high",
+      purpose: "coach_draft",
+      fetchImpl,
+    });
+    usage = addLiveUsage(usage, draft.usage);
+    const corrected = await callGeminiJson({
+      apiKey: options.apiKey,
+      system: [
+        coachSystemPrompt(),
+        "You are now the adversarial critic. Correct unsupported certainty,",
+        "generic archetype stereotypes, invented statistics, mathematical",
+        "contradictions, inconsistent action rankings, and outcome-oriented",
+        "reasoning. Preserve every legal action exactly once. Return the complete",
+        "corrected assessments array only in the required JSON object.",
+      ].join(" "),
+      user: JSON.stringify({task: "critique", facts, draft: draft.value}),
+      schema,
+      thinkingLevel: "high",
+      purpose: "coach_critique",
+      fetchImpl,
+    });
+    usage = addLiveUsage(usage, corrected.usage);
+    const assessments = parseAssessments(
+      corrected.value,
+      facts.legalActions,
+      facts,
+    );
+    return {
+      rubric: {
+        schemaVersion: COACHING_SCHEMA_VERSION,
+        stateHash: options.stateHash,
+        assessments,
+        generatedBy: LIVE_INTELLIGENCE_MODEL,
+        criticModel: LIVE_INTELLIGENCE_MODEL,
+      },
+      usage,
+    };
+  } catch (error) {
+    throw new LiveUsageError(
+      error instanceof Error ? error.message : String(error),
+      addLiveUsage(usage, liveUsageFromError(error)),
+    );
+  }
 }
 
 /** Returns only the chosen action's already-generated coaching. */
@@ -356,8 +406,9 @@ async function callGeminiJson(options: {
   user: string;
   schema: Record<string, unknown>;
   thinkingLevel: "low" | "high";
+  purpose: "villain" | "coach_draft" | "coach_critique";
   fetchImpl: typeof fetch;
-}): Promise<unknown> {
+}): Promise<{value: unknown; usage: LiveUsageBreakdown}> {
   const url =
     "https://generativelanguage.googleapis.com/v1beta/models/" +
     `${LIVE_INTELLIGENCE_MODEL}:generateContent?key=` +
@@ -400,14 +451,36 @@ async function callGeminiJson(options: {
   }
   if (!response?.ok) throw new Error("Gemini intelligence request failed");
   const json = await response.json() as Record<string, unknown>;
+  const usage = liveUsageFromPurpose(
+    generationUsageFromMetadata(
+      json.usageMetadata as GeminiUsageMetadata | undefined,
+    ),
+    options.purpose,
+  );
   const text = extractText(json);
-  if (!text) throw new Error("Gemini intelligence returned empty text");
-  return JSON.parse(
-    text
-      .trim()
-      .replace(/^```(?:json)?\s*/i, "")
-      .replace(/\s*```$/i, ""),
-  ) as unknown;
+  if (!text) {
+    throw new LiveUsageError(
+      "Gemini intelligence returned empty text",
+      usage,
+    );
+  }
+  try {
+    return {
+      value: JSON.parse(
+        text
+          .trim()
+          .replace(/^```(?:json)?\s*/i, "")
+          .replace(/\s*```$/i, ""),
+      ) as unknown,
+      usage,
+    };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new LiveUsageError(
+      `Gemini intelligence returned invalid JSON: ${message}`,
+      usage,
+    );
+  }
 }
 
 function delay(milliseconds: number): Promise<void> {

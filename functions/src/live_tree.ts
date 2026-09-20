@@ -3,7 +3,8 @@
  *
  * Every continuation is produced once from an authoritative state. Villain
  * choices are sequential and perspective-isolated; the resulting Hero node
- * receives an all-actions coaching rubric before it is exposed.
+ * receives an all-actions coaching rubric before it is exposed. All Gemini
+ * token usage from those calls is accumulated for Firestore metering.
  */
 
 import {
@@ -18,6 +19,13 @@ import {
   chooseVillainAction,
   generateCoachingRubric,
 } from "./live_intelligence";
+import {
+  addLiveUsage,
+  emptyLiveUsageBreakdown,
+  liveUsageFromError,
+  LiveUsageError,
+  type LiveUsageBreakdown,
+} from "./live_usage";
 import type {
   CoachingActionAssessment,
   CoachingRubric,
@@ -41,11 +49,18 @@ export interface PreparedLiveEdge {
   child: PreparedLiveNode;
   events: LiveActionEvent[];
   coaching: CoachingActionAssessment;
+  usage: LiveUsageBreakdown;
 }
 
 export interface PreparedLiveHand {
   root: PreparedLiveNode;
   warmEdges: PreparedLiveEdge[];
+  usage: LiveUsageBreakdown;
+}
+
+interface ResolvedLiveNode {
+  node: PreparedLiveNode;
+  usage: LiveUsageBreakdown;
 }
 
 /** Resolves forced/opponent action to the first Hero decision and warms it. */
@@ -54,34 +69,49 @@ export async function prepareLiveHand(options: {
   hand: LiveHandDefinition;
   fetchImpl?: typeof fetch;
 }): Promise<PreparedLiveHand> {
-  const initial = createInitialLiveState(options.hand);
-  const root = await resolveToHeroOrTerminal({
-    apiKey: options.apiKey,
-    hand: options.hand,
-    state: initial,
-    history: [],
-    fetchImpl: options.fetchImpl,
-  });
-  if (root.state.status !== "playing" || !liveHeroToAct(options.hand, root.state)) {
-    throw new Error("generated hand ended before Hero received a decision");
-  }
-  const warmIds = selectWarmActionIds(root);
-  if (warmIds.length < 3) {
-    throw new Error(
-      "generated first decision needs at least three non-fold branches",
-    );
-  }
-  const warmEdges: PreparedLiveEdge[] = [];
-  for (const actionId of warmIds) {
-    warmEdges.push(await expandLiveHeroAction({
+  let usage = emptyLiveUsageBreakdown();
+  try {
+    const initial = createInitialLiveState(options.hand);
+    const rootResolved = await resolveToHeroOrTerminal({
       apiKey: options.apiKey,
       hand: options.hand,
-      parent: root,
-      actionId,
+      state: initial,
+      history: [],
       fetchImpl: options.fetchImpl,
-    }));
+    });
+    usage = addLiveUsage(usage, rootResolved.usage);
+    const root = rootResolved.node;
+    if (
+      root.state.status !== "playing" ||
+      !liveHeroToAct(options.hand, root.state)
+    ) {
+      throw new Error("generated hand ended before Hero received a decision");
+    }
+    const warmIds = selectWarmActionIds(root);
+    if (warmIds.length < 3) {
+      throw new Error(
+        "generated first decision needs at least three non-fold branches",
+      );
+    }
+    const warmEdges: PreparedLiveEdge[] = [];
+    for (const actionId of warmIds) {
+      const edge = await expandLiveHeroAction({
+        apiKey: options.apiKey,
+        hand: options.hand,
+        parent: root,
+        actionId,
+        fetchImpl: options.fetchImpl,
+      });
+      usage = addLiveUsage(usage, edge.usage);
+      warmEdges.push(edge);
+    }
+    return {root, warmEdges, usage};
+  } catch (error) {
+    throw new LiveUsageError(
+      error instanceof Error ? error.message : String(error),
+      addLiveUsage(usage, liveUsageFromError(error)),
+    );
   }
-  return {root, warmEdges};
 }
 
 /** Expands one shared Hero edge through all villains to the next Hero node. */
@@ -105,20 +135,21 @@ export async function expandLiveHeroAction(options: {
     actionId: options.actionId,
   });
   const history = [...options.parent.history, applied.event];
-  const child = await resolveToHeroOrTerminal({
+  const childResolved = await resolveToHeroOrTerminal({
     apiKey: options.apiKey,
     hand: options.hand,
     state: applied.state,
     history,
     fetchImpl: options.fetchImpl,
   });
-  const events = child.history.slice(options.parent.history.length);
+  const events = childResolved.node.history.slice(options.parent.history.length);
   return {
     parentStateHash: options.parent.stateHash,
     actionId: options.actionId,
-    child,
+    child: childResolved.node,
     events,
     coaching: assessmentForAction(options.parent.rubric, options.actionId),
+    usage: childResolved.usage,
   };
 }
 
@@ -164,22 +195,50 @@ async function resolveToHeroOrTerminal(options: {
   state: LiveHandState;
   history: LiveActionEvent[];
   fetchImpl?: typeof fetch;
-}): Promise<PreparedLiveNode> {
+}): Promise<ResolvedLiveNode> {
   let state = options.state;
   const history = [...options.history];
-  for (let guard = 0; guard < 128; guard++) {
-    if (state.status !== "playing") {
-      return {
-        stateHash: hashLiveState(state, history),
-        state,
-        history,
-        legalActions: [],
-        rubric: null,
-      };
-    }
-    const legalActions = legalLiveActions(options.hand, state);
-    if (liveHeroToAct(options.hand, state)) {
-      const rubric = await generateCoachingRubric({
+  let usage = emptyLiveUsageBreakdown();
+  try {
+    for (let guard = 0; guard < 128; guard++) {
+      if (state.status !== "playing") {
+        return {
+          node: {
+            stateHash: hashLiveState(state, history),
+            state,
+            history,
+            legalActions: [],
+            rubric: null,
+          },
+          usage,
+        };
+      }
+      const legalActions = legalLiveActions(options.hand, state);
+      if (liveHeroToAct(options.hand, state)) {
+        const coached = await generateCoachingRubric({
+          apiKey: options.apiKey,
+          hand: options.hand,
+          state,
+          legalActions,
+          publicHistory: history,
+          fetchImpl: options.fetchImpl,
+        });
+        usage = addLiveUsage(usage, coached.usage);
+        return {
+          node: {
+            stateHash: hashLiveState(state, history),
+            state,
+            history,
+            legalActions,
+            rubric: coached.rubric,
+          },
+          usage,
+        };
+      }
+      if (state.actorSeat === null || legalActions.length === 0) {
+        throw new Error("playing state has no legal opponent action");
+      }
+      const villain = await chooseVillainAction({
         apiKey: options.apiKey,
         hand: options.hand,
         state,
@@ -187,32 +246,20 @@ async function resolveToHeroOrTerminal(options: {
         publicHistory: history,
         fetchImpl: options.fetchImpl,
       });
-      return {
-        stateHash: hashLiveState(state, history),
+      usage = addLiveUsage(usage, villain.usage);
+      const applied = applyLiveAction({
+        hand: options.hand,
         state,
-        history,
-        legalActions,
-        rubric,
-      };
+        actionId: villain.actionId,
+      });
+      state = applied.state;
+      history.push(applied.event);
     }
-    if (state.actorSeat === null || legalActions.length === 0) {
-      throw new Error("playing state has no legal opponent action");
-    }
-    const actionId = await chooseVillainAction({
-      apiKey: options.apiKey,
-      hand: options.hand,
-      state,
-      legalActions,
-      publicHistory: history,
-      fetchImpl: options.fetchImpl,
-    });
-    const applied = applyLiveAction({
-      hand: options.hand,
-      state,
-      actionId,
-    });
-    state = applied.state;
-    history.push(applied.event);
+    throw new Error("live continuation exceeded 128 actions");
+  } catch (error) {
+    throw new LiveUsageError(
+      error instanceof Error ? error.message : String(error),
+      addLiveUsage(usage, liveUsageFromError(error)),
+    );
   }
-  throw new Error("live continuation exceeded 128 actions");
 }

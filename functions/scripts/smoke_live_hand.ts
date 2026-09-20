@@ -14,12 +14,13 @@ async function main(): Promise<void> {
   const apiKey = process.env.GEMINI_API_KEY?.trim();
   if (!apiKey) throw new Error("GEMINI_API_KEY is required.");
   const setupKey = buildLiveSetupKey(DEFAULT_LIVE_SETUP);
-  const hand = await generateLiveHandDefinition({
+  const generated = await generateLiveHandDefinition({
     apiKey,
     setup: DEFAULT_LIVE_SETUP,
     setupKey,
     variationSeed: `smoke:${randomUUID()}`,
   });
+  const hand = generated.hand;
   const prepared = await prepareLiveHand({apiKey, hand});
   console.log(JSON.stringify({
     ok: true,
@@ -33,6 +34,18 @@ async function main(): Promise<void> {
       (edge) =>
         edge.child.state.status !== "playing" || edge.child.rubric !== null,
     ),
+    usage: {
+      modelRequestCount: prepared.usage.total.modelRequestCount +
+        generated.usage.total.modelRequestCount,
+      estimatedCostUsdMicros: prepared.usage.total.estimatedCostUsdMicros +
+        generated.usage.total.estimatedCostUsdMicros,
+      byPurpose: {
+        deal: generated.usage.byPurpose.deal.modelRequestCount,
+        villain: prepared.usage.byPurpose.villain.modelRequestCount,
+        coachDraft: prepared.usage.byPurpose.coach_draft.modelRequestCount,
+        coachCritique: prepared.usage.byPurpose.coach_critique.modelRequestCount,
+      },
+    },
   }, null, 2));
 }
 

@@ -18,9 +18,17 @@ import {
   type QueryDocumentSnapshot,
 } from "firebase-admin/firestore";
 import {HttpsError} from "firebase-functions/v2/https";
-import {generateLiveHandDefinition} from "./live_hand_generation";
+import {generateLiveHandDefinition, LIVE_GEMINI_MODEL} from "./live_hand_generation";
 import {buildLiveSetupKey} from "./live_setup";
 import {prepareLiveHand, type PreparedLiveNode} from "./live_tree";
+import {
+  addLiveUsage,
+  emptyLiveUsageBreakdown,
+  liveGenerationMetricsIncrements,
+  liveUsageFirestoreFields,
+  liveUsageFromError,
+  type LiveUsageBreakdown,
+} from "./live_usage";
 import {
   LIVE_INITIAL_POOL_SIZE,
   LIVE_REFILL_BATCH_SIZE,
@@ -369,31 +377,36 @@ export async function processLiveGenerationJob(options: {
   const leaseId = String(claimed.leaseId);
   const attempt = Number(claimed.attempt ?? 0);
   const setupRef = db.collection("liveTableSetups").doc(setupKey);
+  let usage = emptyLiveUsageBreakdown();
   try {
     const variationSeed =
       `${leaseId}:${claimed.variationIndex}:${attempt}:${Date.now()}`;
-    const definition = await generateLiveHandDefinition({
+    const generated = await generateLiveHandDefinition({
       apiKey: options.apiKey,
       setup,
       setupKey,
       variationSeed,
     });
+    usage = addLiveUsage(usage, generated.usage);
     const prepared = await prepareLiveHand({
       apiKey: options.apiKey,
-      hand: definition,
+      hand: generated.hand,
     });
+    usage = addLiveUsage(usage, prepared.usage);
     const published = await publishPreparedHandJob({
       db,
       setupRef,
       jobRef,
       leaseId,
       claimId,
-      definition,
+      definition: generated.hand,
       prepared,
+      usage,
     });
     if (!published) throw new Error("generation job lost its lease");
     return {published: true, retried: false};
   } catch (error) {
+    usage = addLiveUsage(usage, liveUsageFromError(error));
     const message = error instanceof Error ? error.message : String(error);
     const retried = await failOrRetryLiveJob({
       db,
@@ -403,6 +416,7 @@ export async function processLiveGenerationJob(options: {
       claimId,
       attempt,
       error: message,
+      usage,
     });
     return {published: false, retried};
   }
@@ -416,7 +430,9 @@ async function failOrRetryLiveJob(options: {
   claimId: string;
   attempt: number;
   error: string;
+  usage: LiveUsageBreakdown;
 }): Promise<boolean> {
+  const usageFields = liveUsageFirestoreFields(options.usage);
   return options.db.runTransaction(async (tx) => {
     const [snapshot, jobSnapshot] = await Promise.all([
       tx.get(options.setupRef),
@@ -438,8 +454,20 @@ async function failOrRetryLiveJob(options: {
         leaseExpiresAtMs: null,
         attempt: options.attempt + 1,
         lastError: options.error,
+        modelId: LIVE_GEMINI_MODEL,
+        ...usageFields,
         updatedAt: FieldValue.serverTimestamp(),
       });
+      tx.set(
+        options.setupRef,
+        {
+          generationMetrics: liveGenerationMetricsIncrements({
+            usage: options.usage,
+          }),
+          updatedAt: FieldValue.serverTimestamp(),
+        },
+        {merge: true},
+      );
       return true;
     }
     const generation = snapshot.data()?.generation ?? {};
@@ -452,19 +480,30 @@ async function failOrRetryLiveJob(options: {
       error: options.error,
       claimId: null,
       leaseExpiresAtMs: null,
+      modelId: LIVE_GEMINI_MODEL,
+      ...usageFields,
       completedAt: FieldValue.serverTimestamp(),
     });
-    tx.update(options.setupRef, {
-      "generation.completedJobs": completed,
-      "generation.successfulJobs": successful,
-      "generation.status": finished ? "idle" : "generating",
-      "generation.leaseId": finished ? null : options.leaseId,
-      "generation.leaseExpiresAtMs": finished ?
-        null :
-        Date.now() + LIVE_GENERATION_LEASE_MS,
-      "generation.lastError": options.error,
-      updatedAt: FieldValue.serverTimestamp(),
-    });
+    tx.set(
+      options.setupRef,
+      {
+        "generation.completedJobs": completed,
+        "generation.successfulJobs": successful,
+        "generation.status": finished ? "idle" : "generating",
+        "generation.leaseId": finished ? null : options.leaseId,
+        "generation.leaseExpiresAtMs": finished ?
+          null :
+          Date.now() + LIVE_GENERATION_LEASE_MS,
+        "generation.lastError": options.error,
+        generationMetrics: liveGenerationMetricsIncrements({
+          usage: options.usage,
+          completedJobCount: 1,
+          failedJobCount: 1,
+        }),
+        updatedAt: FieldValue.serverTimestamp(),
+      },
+      {merge: true},
+    );
     return false;
   });
 }
@@ -477,10 +516,12 @@ async function publishPreparedHandJob(options: {
   claimId: string;
   definition: LiveHandDefinition;
   prepared: Awaited<ReturnType<typeof prepareLiveHand>>;
+  usage: LiveUsageBreakdown;
 }): Promise<boolean> {
   const handRef = options.setupRef.collection("hands").doc(
     options.definition.handId,
   );
+  const usageFields = liveUsageFirestoreFields(options.usage);
   return options.db.runTransaction(async (tx) => {
     const [setupSnapshot, jobSnapshot, handSnapshot] = await Promise.all([
       tx.get(options.setupRef),
@@ -512,6 +553,8 @@ async function publishPreparedHandJob(options: {
       rootStateHash: options.prepared.root.stateHash,
       warmBranchCount: options.prepared.warmEdges.length,
       timesServed: 0,
+      modelId: LIVE_GEMINI_MODEL,
+      ...usageFields,
       generatedAt: FieldValue.serverTimestamp(),
     });
     writeNodeTransaction(tx, handRef, options.prepared.root);
@@ -529,6 +572,7 @@ async function publishPreparedHandJob(options: {
           childStateHash: edge.child.stateHash,
           events: edge.events,
           coaching: edge.coaching,
+          ...liveUsageFirestoreFields(edge.usage),
           generatedAt: FieldValue.serverTimestamp(),
         },
       );
@@ -538,20 +582,32 @@ async function publishPreparedHandJob(options: {
       handId: options.definition.handId,
       claimId: null,
       leaseExpiresAtMs: null,
+      modelId: LIVE_GEMINI_MODEL,
+      ...usageFields,
       completedAt: FieldValue.serverTimestamp(),
     });
-    tx.update(options.setupRef, {
-      handCount: FieldValue.increment(1),
-      "generation.completedJobs": completed,
-      "generation.successfulJobs": successful,
-      "generation.status": finished ? "idle" : "generating",
-      "generation.leaseId": finished ? null : options.leaseId,
-      "generation.leaseExpiresAtMs": finished ?
-        null :
-        Date.now() + LIVE_GENERATION_LEASE_MS,
-      "generation.lastError": null,
-      updatedAt: FieldValue.serverTimestamp(),
-    });
+    tx.set(
+      options.setupRef,
+      {
+        handCount: FieldValue.increment(1),
+        "generation.completedJobs": completed,
+        "generation.successfulJobs": successful,
+        "generation.status": finished ? "idle" : "generating",
+        "generation.leaseId": finished ? null : options.leaseId,
+        "generation.leaseExpiresAtMs": finished ?
+          null :
+          Date.now() + LIVE_GENERATION_LEASE_MS,
+        "generation.lastError": null,
+        generationMetrics: liveGenerationMetricsIncrements({
+          usage: options.usage,
+          completedJobCount: 1,
+          successfulJobCount: 1,
+          publishedHandCount: 1,
+        }),
+        updatedAt: FieldValue.serverTimestamp(),
+      },
+      {merge: true},
+    );
     return true;
   });
 }

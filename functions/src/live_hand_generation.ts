@@ -7,6 +7,15 @@
  */
 
 import {createHash} from "node:crypto";
+import {
+  generationUsageFromMetadata,
+  type GeminiUsageMetadata,
+} from "./generation_usage";
+import {
+  liveUsageFromPurpose,
+  LiveUsageError,
+  type LiveUsageBreakdown,
+} from "./live_usage";
 import {isValidCard, normalizeCard} from "./setup_key";
 import {generateTendencyProfile} from "./tendency_profiles";
 import {
@@ -46,6 +55,12 @@ interface GeminiDeal {
   runout: [string, string, string, string, string];
 }
 
+/** Deal generation result with billable Gemini usage. */
+export interface GeneratedLiveHand {
+  hand: LiveHandDefinition;
+  usage: LiveUsageBreakdown;
+}
+
 /** Generates and validates one complete server-only live hand definition. */
 export async function generateLiveHandDefinition(options: {
   apiKey: string;
@@ -53,7 +68,7 @@ export async function generateLiveHandDefinition(options: {
   setupKey: string;
   variationSeed: string;
   fetchImpl?: typeof fetch;
-}): Promise<LiveHandDefinition> {
+}): Promise<GeneratedLiveHand> {
   const lineup = buildRandomLiveLineup(options.setup, options.variationSeed);
   const response = await callGeminiDeal({
     apiKey: options.apiKey,
@@ -66,13 +81,16 @@ export async function generateLiveHandDefinition(options: {
     setup: options.setup,
     setupKey: options.setupKey,
     lineup,
-    deal: response,
+    deal: response.deal,
   });
   const issues = validateLiveHandDefinition(hand);
   if (issues.length > 0) {
-    throw new Error(`invalid live hand: ${issues.join("; ")}`);
+    throw new LiveUsageError(
+      `invalid live hand: ${issues.join("; ")}`,
+      response.usage,
+    );
   }
-  return hand;
+  return {hand, usage: response.usage};
 }
 
 /** Deterministically creates a fresh ordered lineup for one generated hand. */
@@ -220,7 +238,7 @@ async function callGeminiDeal(options: {
   lineup: Omit<LiveSeatDefinition, "startingStack" | "holeCards">[];
   variationSeed: string;
   fetchImpl: typeof fetch;
-}): Promise<GeminiDeal> {
+}): Promise<{deal: GeminiDeal; usage: LiveUsageBreakdown}> {
   const url =
     "https://generativelanguage.googleapis.com/v1beta/models/" +
     `${LIVE_GEMINI_MODEL}:generateContent?key=${encodeURIComponent(options.apiKey)}`;
@@ -289,9 +307,25 @@ async function callGeminiDeal(options: {
   }
   if (!response?.ok) throw new Error("Gemini deal request failed");
   const json = await response.json() as Record<string, unknown>;
+  const usage = liveUsageFromPurpose(
+    generationUsageFromMetadata(
+      json.usageMetadata as GeminiUsageMetadata | undefined,
+    ),
+    "deal",
+  );
   const text = extractGeminiText(json);
-  if (!text) throw new Error("Gemini returned an empty deal");
-  return JSON.parse(stripFences(text)) as GeminiDeal;
+  if (!text) {
+    throw new LiveUsageError("Gemini returned an empty deal", usage);
+  }
+  try {
+    return {
+      deal: JSON.parse(stripFences(text)) as GeminiDeal,
+      usage,
+    };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new LiveUsageError(`Gemini returned invalid deal JSON: ${message}`, usage);
+  }
 }
 
 function dealSchema(seatCount: number): Record<string, unknown> {
