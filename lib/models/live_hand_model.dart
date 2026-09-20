@@ -432,6 +432,14 @@ String polishCoachCopy(String raw) {
     ),
     (match) => '(${match[1]} ${match[2]}%, ${match[3]} ${match[4]}%)',
   );
+  // "Rex (53.8) and Jade (52.6)" named paren rates.
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b([A-Z][a-z]{2,})\s+\((\d{1,2}(?:\.\d+)?)\)(?!\s*%)\s+and\s+'
+      r'([A-Z][a-z]{2,})\s+\((\d{1,2}(?:\.\d+)?)\)(?!\s*%)',
+    ),
+    (match) => '${match[1]} (${match[2]}%) and ${match[3]} (${match[4]}%)',
+  );
   return text;
 }
 

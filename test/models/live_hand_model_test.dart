@@ -338,6 +338,12 @@ void main() {
     );
     expect(
       polishCoachCopy(
+        'flatting captures value against Rex (53.8) and Jade (52.6).',
+      ),
+      contains('Rex (53.8%) and Jade (52.6%)'),
+    );
+    expect(
+      polishCoachCopy(
         'Folding against opponents with aggression above 77 is timid.',
       ),
       contains('aggression above 77%'),
