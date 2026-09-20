@@ -418,6 +418,10 @@ function advanceRoundOrShowdown(
     player.streetBet = 0;
     player.acted = false;
     player.lastFacedBet = 0;
+    // A new street has no action yet. Keep FOLD so folded seats stay marked;
+    // leave everyone else unlabeled so a flop raise is not still "RAISE"
+    // while the hero can check the turn.
+    if (!player.folded) delete player.lastAction;
   }
   state.actorSeat = firstActiveLeftOfButton(hand, state);
   if (state.actorSeat === null) {
