@@ -871,6 +871,13 @@ void main() {
       ),
       contains(r'Committing $102 chips into'),
     );
+    // "exceeding N chips" (batch 0321 H5).
+    expect(
+      polishCoachCopy(
+        'Calling \$44 puts you all-in into a pot exceeding 1000 chips.',
+      ),
+      contains(r'exceeding $1000 chips'),
+    );
     // Comparison operators must gain % (batch 0163).
     expect(
       polishCoachCopy(
