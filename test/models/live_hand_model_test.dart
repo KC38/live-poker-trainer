@@ -302,6 +302,24 @@ void main() {
     );
     expect(
       polishCoachCopy(
+        'Folding retains 164 chips but ignores the 20% pot odds.',
+      ),
+      contains(r'retains $164 chips'),
+    );
+    expect(
+      polishCoachCopy(
+        r'Surrendering against a 151 bet into a $548 pot forfeits share.',
+      ),
+      contains(r'a $151 bet'),
+    );
+    expect(
+      polishCoachCopy(
+        r'Facing a 120-chip effective shove into $537 requires only 18.3%.',
+      ),
+      contains(r'$120-chip effective shove'),
+    );
+    expect(
+      polishCoachCopy(
         'Folding against opponents with aggression above 77 is timid.',
       ),
       contains('aggression above 77%'),
