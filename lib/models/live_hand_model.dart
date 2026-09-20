@@ -265,10 +265,10 @@ String polishCoachCopy(String raw) {
     ),
     (match) => 'into \$${match[1]}',
   );
-  // "leaving just 73 behind".
+  // "leaving just 73 behind" — skip amounts that already have $.
   text = text.replaceAllMapped(
     RegExp(
-      r'\b((?:just|only)\s+)?([1-9]\d*)(?!\.\d)(?!\s*%)\s+(behind)\b',
+      r'\b((?:just|only)\s+)?(?<!\$)([1-9]\d*)(?!\.\d)(?!\s*%)\s+(behind)\b',
       caseSensitive: false,
     ),
     (match) {
