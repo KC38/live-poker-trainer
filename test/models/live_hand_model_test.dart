@@ -225,6 +225,21 @@ void main() {
       allOf(contains('16.2% 3-bet'), isNot(contains('16.2 three-bet'))),
     );
     expect(
+      polishCoachCopy('Hero needs 24.8% pot odds to call \$118 into 358.'),
+      contains(r'into $358'),
+    );
+    expect(
+      polishCoachCopy(
+        'Sammy and Rex exhibit high aggression (65.8 and 69.7) and '
+        'active 3-bet frequencies (10.8 and 12.6).',
+      ),
+      allOf(contains('(65.8% and 69.7%)'), contains('(10.8% and 12.6%)')),
+    );
+    expect(
+      polishCoachCopy('Calling \$75 leaves just 73 behind into a \$378 pot.'),
+      contains(r'just $73 behind'),
+    );
+    expect(
       polishCoachCopy(
         "Rico's extreme aggression (86.4) and wide VPIP (70.2) push many "
         'inferior hands into his range.',

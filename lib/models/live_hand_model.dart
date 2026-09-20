@@ -248,6 +248,35 @@ String polishCoachCopy(String raw) {
     ),
     (match) => '${match[1]} \$${match[2]}',
   );
+  // "call $118 into 358" — bare pot after into (2+ digit chips, not "into 4").
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\binto\s+(?!\$)(?!a\s)([1-9]\d+)(?!\.\d)(?!\s*%)(?!\s*-)',
+      caseSensitive: false,
+    ),
+    (match) => 'into \$${match[1]}',
+  );
+  // "leaving just 73 behind".
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b((?:just|only)\s+)?([1-9]\d*)(?!\.\d)(?!\s*%)\s+(behind)\b',
+      caseSensitive: false,
+    ),
+    (match) {
+      final lead = match[1] ?? '';
+      return '$lead\$${match[2]} ${match[3]}';
+    },
+  );
+  // "244-chip stack" after "remaining 244" was dollarized mid-token.
+  text = text.replaceAllMapped(
+    RegExp(r'\$?([1-9]\d*)-chip\s+stack\b', caseSensitive: false),
+    (match) => '\$${match[1]}-chip stack',
+  );
+  // Paired rates in parentheses: "aggression (65.8 and 69.7)".
+  text = text.replaceAllMapped(
+    RegExp(r'\((\d+(?:\.\d+)?)(?!\s*%)\s+and\s+(\d+(?:\.\d+)?)(?!\s*%)\)'),
+    (match) => '(${match[1]}% and ${match[2]}%)',
+  );
   return text;
 }
 
