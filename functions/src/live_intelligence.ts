@@ -12,6 +12,7 @@ import {
   type CoachingFacts,
 } from "./coaching_facts";
 import {
+  DEFAULT_GEMINI_MODEL_ID,
   generationUsageFromMetadata,
   type GeminiUsageMetadata,
 } from "./generation_usage";
@@ -34,7 +35,24 @@ import {
 } from "./live_types";
 import {hashLiveState, livePotSize} from "./live_poker_engine";
 
-export const LIVE_INTELLIGENCE_MODEL = "gemini-3.8-flash";
+export const LIVE_INTELLIGENCE_MODEL = DEFAULT_GEMINI_MODEL_ID;
+
+/** Thinking levels accepted by current Gemini 3.x coach models. */
+export type GeminiThinkingLevel = "low" | "medium" | "high";
+
+/** Configurable coach draft/critic pipeline settings for production or benches. */
+export interface CoachIntelligenceConfig {
+  modelId: string;
+  draftThinking: GeminiThinkingLevel;
+  criticThinking: GeminiThinkingLevel;
+}
+
+/** Production coach defaults: strongest Flash thinking on both passes. */
+export const DEFAULT_COACH_INTELLIGENCE: CoachIntelligenceConfig = {
+  modelId: LIVE_INTELLIGENCE_MODEL,
+  draftThinking: "high",
+  criticThinking: "high",
+};
 
 const TENDENCY_KEYS = new Set([
   "vpip",
@@ -137,6 +155,7 @@ export async function chooseVillainAction(options: {
     },
     thinkingLevel: "low",
     purpose: "villain",
+    modelId: LIVE_INTELLIGENCE_MODEL,
     fetchImpl: options.fetchImpl ?? fetch,
   });
   const actionId = (response.value as {actionId?: unknown}).actionId;
@@ -162,6 +181,7 @@ export async function generateCoachingRubric(options: {
   state: LiveHandState;
   legalActions: LiveLegalAction[];
   publicHistory: LiveActionEvent[];
+  intelligence?: CoachIntelligenceConfig;
   fetchImpl?: typeof fetch;
 }): Promise<CoachingRubricResult> {
   const facts = buildCoachingFacts(options);
@@ -170,6 +190,7 @@ export async function generateCoachingRubric(options: {
     apiKey: options.apiKey,
     facts,
     stateHash: hashLiveState(options.state, options.publicHistory),
+    intelligence: options.intelligence,
     fetchImpl: options.fetchImpl,
   });
 }
@@ -179,15 +200,18 @@ export async function generateCoachingRubric(options: {
  *
  * Exported so the versioned benchmark exercises the exact production prompt,
  * schema, parser, and critic instead of a simplified test-only imitation.
+ * Benchmarks may override model id and thinking levels via `intelligence`.
  */
 export async function generateCoachingRubricFromFacts(options: {
   apiKey: string;
   facts: CoachingFacts;
   stateHash: string;
+  intelligence?: CoachIntelligenceConfig;
   fetchImpl?: typeof fetch;
 }): Promise<CoachingRubricResult> {
   const facts = options.facts;
   assertFairCoachingFacts(facts);
+  const intelligence = options.intelligence ?? DEFAULT_COACH_INTELLIGENCE;
   const fetchImpl = options.fetchImpl ?? fetch;
   const schema = coachingSchema(facts.legalActions);
   let usage = emptyLiveUsageBreakdown();
@@ -197,8 +221,9 @@ export async function generateCoachingRubricFromFacts(options: {
       system: coachSystemPrompt(),
       user: JSON.stringify({task: "draft", facts}),
       schema,
-      thinkingLevel: "high",
+      thinkingLevel: intelligence.draftThinking,
       purpose: "coach_draft",
+      modelId: intelligence.modelId,
       fetchImpl,
     });
     usage = addLiveUsage(usage, draft.usage);
@@ -214,8 +239,9 @@ export async function generateCoachingRubricFromFacts(options: {
       ].join(" "),
       user: JSON.stringify({task: "critique", facts, draft: draft.value}),
       schema,
-      thinkingLevel: "high",
+      thinkingLevel: intelligence.criticThinking,
       purpose: "coach_critique",
+      modelId: intelligence.modelId,
       fetchImpl,
     });
     usage = addLiveUsage(usage, corrected.usage);
@@ -229,8 +255,8 @@ export async function generateCoachingRubricFromFacts(options: {
         schemaVersion: COACHING_SCHEMA_VERSION,
         stateHash: options.stateHash,
         assessments,
-        generatedBy: LIVE_INTELLIGENCE_MODEL,
-        criticModel: LIVE_INTELLIGENCE_MODEL,
+        generatedBy: intelligence.modelId,
+        criticModel: intelligence.modelId,
       },
       usage,
     };
@@ -405,13 +431,15 @@ async function callGeminiJson(options: {
   system: string;
   user: string;
   schema: Record<string, unknown>;
-  thinkingLevel: "low" | "high";
+  thinkingLevel: GeminiThinkingLevel;
   purpose: "villain" | "coach_draft" | "coach_critique";
+  modelId: string;
   fetchImpl: typeof fetch;
 }): Promise<{value: unknown; usage: LiveUsageBreakdown}> {
+  const modelId = options.modelId.trim() || LIVE_INTELLIGENCE_MODEL;
   const url =
     "https://generativelanguage.googleapis.com/v1beta/models/" +
-    `${LIVE_INTELLIGENCE_MODEL}:generateContent?key=` +
+    `${modelId}:generateContent?key=` +
     encodeURIComponent(options.apiKey);
   const requestBody = JSON.stringify({
     system_instruction: {parts: [{text: options.system}]},
@@ -456,6 +484,8 @@ async function callGeminiJson(options: {
   const usage = liveUsageFromPurpose(
     generationUsageFromMetadata(
       json.usageMetadata as GeminiUsageMetadata | undefined,
+      Date.now(),
+      modelId,
     ),
     options.purpose,
     durationMs,

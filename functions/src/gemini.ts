@@ -744,6 +744,8 @@ async function callGeminiJson(options: {
   const responseJson = (await res.json()) as Record<string, unknown>;
   const usage = generationUsageFromMetadata(
     responseJson.usageMetadata as GeminiUsageMetadata | undefined,
+    Date.now(),
+    options.modelId,
   );
   const text = extractText(responseJson);
   if (!text) {

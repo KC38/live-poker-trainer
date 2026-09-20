@@ -10,6 +10,7 @@ import {
   addGenerationUsage,
   emptyGenerationUsage,
   generationUsageFromMetadata,
+  resolveGeminiPricing,
 } from "./generation_usage";
 
 describe("generation usage", () => {
@@ -89,5 +90,27 @@ describe("generation usage", () => {
       totalTokenCount: 0,
       estimatedCostUsdMicros: 0,
     });
+  });
+
+  it("prices lite and pro models with their published rate cards", () => {
+    const tokens = {
+      promptTokenCount: 1000,
+      cachedContentTokenCount: 0,
+      candidatesTokenCount: 100,
+      thoughtsTokenCount: 100,
+    };
+    expect(
+      generationUsageFromMetadata(tokens, introTimestamp, "gemini-3.5-flash-lite")
+        .estimatedCostUsdMicros,
+    ).toBe(Math.round(1000 * 0.3 + 200 * 2.5));
+    expect(
+      generationUsageFromMetadata(
+        tokens,
+        introTimestamp,
+        "gemini-3.1-pro-preview",
+      ).estimatedCostUsdMicros,
+    ).toBe(Math.round(1000 * 2.0 + 200 * 12.0));
+    expect(resolveGeminiPricing(introTimestamp, "gemini-3.7-flash").version)
+      .toBe(GEMINI_INTRO_PRICING_VERSION);
   });
 });
