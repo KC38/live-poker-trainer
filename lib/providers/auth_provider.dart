@@ -150,6 +150,11 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
     return _run(_auth.signInWithGoogle, method: 'google', isSignUp: false);
   }
 
+  /// Emails a password-reset link. Does not sign the user in.
+  Future<void> sendPasswordReset({required String email}) {
+    return _auth.sendPasswordResetEmail(email: email);
+  }
+
   /// Signs out; clears synced gameplay prefs from the device (keeps audio).
   Future<void> signOut() async {
     state = const AsyncValue.loading();

@@ -1,4 +1,4 @@
-/// Login / register gate — email+password and Google Sign-In.
+/// Login / register gate — email+password, password reset, and Google Sign-In.
 library;
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,7 +26,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
   bool _registerMode = false;
   bool _obscure = true;
+  bool _resetBusy = false;
   String? _error;
+  String? _info;
 
   @override
   void dispose() {
@@ -36,10 +38,14 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     super.dispose();
   }
 
-  bool get _busy => ref.watch(authControllerProvider).isLoading;
+  bool get _busy =>
+      _resetBusy || ref.watch(authControllerProvider).isLoading;
 
   Future<void> _submitEmail() async {
-    setState(() => _error = null);
+    setState(() {
+      _error = null;
+      _info = null;
+    });
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
     final controller = ref.read(authControllerProvider.notifier);
@@ -64,8 +70,42 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     }
   }
 
+  Future<void> _sendPasswordReset() async {
+    setState(() {
+      _error = null;
+      _info = null;
+    });
+    final email = _email.text.trim();
+    if (email.isEmpty || !email.contains('@')) {
+      setState(() => _error = 'Enter a valid email address.');
+      return;
+    }
+
+    setState(() => _resetBusy = true);
+    try {
+      await ref
+          .read(authControllerProvider.notifier)
+          .sendPasswordReset(email: email);
+      if (!mounted) return;
+      setState(() {
+        _resetBusy = false;
+        _info =
+            'If an account exists for that email, we sent a reset link.';
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _resetBusy = false;
+        _error = _friendlyError(e);
+      });
+    }
+  }
+
   Future<void> _submitGoogle() async {
-    setState(() => _error = null);
+    setState(() {
+      _error = null;
+      _info = null;
+    });
     try {
       await ref.read(authControllerProvider.notifier).signInWithGoogle();
     } catch (e) {
@@ -83,6 +123,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
         'user-not-found' || 'wrong-password' || 'invalid-credential' =>
           'Email or password is incorrect.',
         'network-request-failed' => 'Network error — check your connection.',
+        'too-many-requests' =>
+          'Too many attempts. Wait a minute and try again.',
         'missing-id-token' =>
           'Google Sign-In could not get an ID token. On Android, add the app SHA-1 in the Firebase console.',
         _ => error.message ?? 'Sign-in failed (${error.code}).',
@@ -210,6 +252,27 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                           return null;
                         },
                       ),
+                      if (!_registerMode) ...[
+                        const SizedBox(height: 4),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: _busy ? null : _sendPasswordReset,
+                            child: const Text('Forgot password?'),
+                          ),
+                        ),
+                      ],
+                      if (_info != null) ...[
+                        const SizedBox(height: 14),
+                        Text(
+                          _info!,
+                          style: GoogleFonts.manrope(
+                            color: AppColors.success,
+                            fontSize: 13,
+                            height: 1.35,
+                          ),
+                        ),
+                      ],
                       if (_error != null) ...[
                         const SizedBox(height: 14),
                         Text(
@@ -248,6 +311,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                             : () => setState(() {
                                   _registerMode = !_registerMode;
                                   _error = null;
+                                  _info = null;
                                 }),
                         child: Text(
                           _registerMode
