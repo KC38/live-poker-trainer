@@ -606,6 +606,21 @@ function canAct(player: LivePlayerState): boolean {
 }
 
 /**
+ * Action pill for the felt. A check (or other unmatched label) is hidden while
+ * that seat still owes chips to the current bet — including on older pooled
+ * nodes that still store the pre-raise CHECK.
+ */
+export function visibleLastAction(
+  player: LivePlayerState,
+  highestBet: number,
+): string | undefined {
+  if (player.lastAction === undefined) return undefined;
+  if (player.folded) return player.lastAction;
+  if (!player.allIn && player.streetBet < highestBet) return undefined;
+  return player.lastAction;
+}
+
+/**
  * Honors an action id stored on an older node.
  *
  * Sizing snaps change fresh ids (`BET_33:1584` becomes `BET_33:1600`). The

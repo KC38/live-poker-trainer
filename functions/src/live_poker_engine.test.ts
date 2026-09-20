@@ -9,6 +9,7 @@ import {
   createInitialLiveState,
   legalLiveActions,
   settleLiveShowdown,
+  visibleLastAction,
 } from "./live_poker_engine";
 import {
   LIVE_PAYLOAD_VERSION,
@@ -338,6 +339,34 @@ describe("live poker engine", () => {
     expect(state.players[2].lastAction).toBeUndefined();
     expect(state.players[1].acted).toBe(false);
     expect(state.players[2].acted).toBe(false);
+  });
+
+  test("hides a check pill while the seat still owes the current bet", () => {
+    const player = {
+      seat: 1,
+      stack: 200,
+      streetBet: 0,
+      contribution: 20,
+      folded: false,
+      allIn: false,
+      acted: false,
+      lastFacedBet: 0,
+      lastAction: "CHECK",
+    };
+    expect(visibleLastAction(player, 50)).toBeUndefined();
+    expect(visibleLastAction({...player, streetBet: 50}, 50)).toBe("CHECK");
+    expect(visibleLastAction({
+      ...player,
+      folded: true,
+      lastAction: "FOLD",
+    }, 50)).toBe("FOLD");
+    expect(visibleLastAction({
+      ...player,
+      allIn: true,
+      stack: 0,
+      streetBet: 40,
+      lastAction: "CALL ALL-IN",
+    }, 50)).toBe("CALL ALL-IN");
   });
 
   test("an incomplete all-in does not reopen raising", () => {
