@@ -864,6 +864,13 @@ void main() {
       ),
       contains('aggression score of 86.2%'),
     );
+    // "Committing N chips" (batch 0314 H2).
+    expect(
+      polishCoachCopy(
+        r'Committing 102 chips into a $180 pot with 21.1% equity.',
+      ),
+      contains(r'Committing $102 chips into'),
+    );
     // Comparison operators must gain % (batch 0163).
     expect(
       polishCoachCopy(

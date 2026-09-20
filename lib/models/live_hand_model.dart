@@ -649,10 +649,12 @@ String polishCoachCopy(String raw) {
     ),
     (match) => '\$${match[1]} chip stack',
   );
-  // "retains 164 chips" / "keeps 80 chips".
+  // "retains 164 chips" / "keeps 80 chips" /
+  // "Committing 102 chips into …" (batch 0314 H2).
   text = text.replaceAllMapped(
     RegExp(
-      r'\b(retains?|keeps?)\s+(?!\$)([1-9]\d*)(?!\.\d)(?!\s*%)\s+(chips?)\b',
+      r'\b(retains?|keeps?|commits?|committing|risks?|risking|invests?|investing)\s+'
+      r'(?!\$)([1-9]\d*)(?!\.\d)(?!\s*%)\s+(chips?)\b',
       caseSensitive: false,
     ),
     (match) => '${match[1]} \$${match[2]} ${match[3]}',
