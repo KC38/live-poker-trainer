@@ -69,8 +69,8 @@ class _ActionDockWidgetState extends ConsumerState<ActionDockWidget> {
   /// Sensible default "raise to" for the slider / Raise button.
   ///
   /// Pot-fraction sizing collapses to the legal min on an unopened preflop
-  /// (blinds-only pot), which teaches a 2× open. Prefer ~2.5× BB there; use
-  /// two-thirds pot once there is a real pot to size against.
+  /// (blinds-only pot), which teaches a tiny open. Prefer a live-cash ~4× BB
+  /// there; use two-thirds pot once there is a real pot to size against.
   double _defaultRaise() {
     final game = widget.game;
     final range = RaiseRange.forHero(game);
@@ -79,7 +79,7 @@ class _ActionDockWidgetState extends ConsumerState<ActionDockWidget> {
         game.street == Street.preflop &&
         game.highestBet <= game.bigBlind + Money.epsilon;
     if (unopenedPreflop) {
-      return range.clamp(game.bigBlind * 2.5);
+      return range.clamp(game.bigBlind * 4);
     }
     return range.forFraction(
       0.66,

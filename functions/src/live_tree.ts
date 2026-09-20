@@ -208,8 +208,8 @@ export function selectWarmActionIds(node: PreparedLiveNode): string[] {
   ));
   for (const bucket of [
     "BET_67",
-    "OPEN_3_BB",
-    "RERAISE_3X",
+    "OPEN_4_BB",
+    "RERAISE_4X",
     "RAISE_50",
     "BET_100",
     "RAISE_100",
