@@ -443,6 +443,27 @@ void main() {
         isNot(contains('3-bet (9.9%)')),
       ),
     );
+    // Mid-list nested rate inside an open paren (batch 0198).
+    expect(
+      polishCoachCopy(
+        'The turn bettor is an aggressive Maniac (aggression 78.3%, '
+        'VPIP (51.3%) who bluffs and overvalues hands.',
+      ),
+      allOf(
+        contains('Maniac (aggression 78.3%, VPIP 51.3%) who'),
+        isNot(contains('VPIP (51.3%)')),
+      ),
+    );
+    expect(
+      polishCoachCopy(
+        'The turn bettor is an aggressive Maniac (aggression (78.3%), '
+        'VPIP (51.3%) who bluffs and overvalues hands.',
+      ),
+      allOf(
+        contains('aggression 78.3%'),
+        isNot(contains('aggression (78.3%)')),
+      ),
+    );
     expect(
       polishCoachCopy(
         'Maya has a loose 3-bet stat (15.1), multiway all-in action narrows '
