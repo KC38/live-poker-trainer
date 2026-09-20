@@ -692,6 +692,17 @@ void main() {
       polishCoachCopy('stations show aggression rating 85.6 on the river.'),
       contains('aggression rating 85.6%'),
     );
+    // Double-L typo (batch 0287 H5 live).
+    expect(
+      polishCoachCopy(
+        'Committing \$95 of your remaining \$148 stack with an SPR of 0.3 '
+        'severely reduces any future street maneuverabillity.',
+      ),
+      allOf(
+        contains('maneuverability'),
+        isNot(contains('maneuverabillity')),
+      ),
+    );
     expect(
       polishCoachCopy('stations show frequency (63.1) on the river.'),
       contains('frequency (63.1%)'),
