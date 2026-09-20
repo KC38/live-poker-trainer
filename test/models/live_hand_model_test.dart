@@ -284,6 +284,12 @@ void main() {
     );
     expect(
       polishCoachCopy(
+        "Maya's 42.3 river bluffing frequency includes many air balls.",
+      ),
+      contains('42.3% river bluff'),
+    );
+    expect(
+      polishCoachCopy(
         'Folding against opponents with aggression above 77 is timid.',
       ),
       contains('aggression above 77%'),
