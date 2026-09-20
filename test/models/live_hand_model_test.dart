@@ -147,10 +147,7 @@ void main() {
   test('coach copy keeps pot fractions intact', () {
     expect(
       polishCoachCopy('making 2/3 pot directly exploitative against stations.'),
-      allOf(
-        contains('2/3 pot'),
-        isNot(contains(r'2/$3')),
-      ),
+      allOf(contains('2/3 pot'), isNot(contains(r'2/$3'))),
     );
     expect(
       polishCoachCopy('A 3/4 pot bet charges draws.'),
@@ -175,10 +172,7 @@ void main() {
       polishCoachCopy(
         r'Shoving $134 into a $364 pot represents a 0.37x pot bet.',
       ),
-      allOf(
-        contains('0.37x pot'),
-        isNot(contains(r'$0.37x')),
-      ),
+      allOf(contains('0.37x pot'), isNot(contains(r'$0.37x'))),
     );
     expect(
       polishCoachCopy('call 50 more against the shove.'),
@@ -202,23 +196,33 @@ void main() {
       polishCoachCopy(
         r'Risking 0 preserves your full $219 stack against a cold 4-bet.',
       ),
-      allOf(
-        contains('Risking 0'),
-        isNot(contains(r'Risking $0')),
-      ),
+      allOf(contains('Risking 0'), isNot(contains(r'Risking $0'))),
     );
     expect(
       polishCoachCopy(
         r'Calling your last $29 at an SPR of 0.04 lets you realize.',
       ),
-      allOf(
-        contains('SPR of 0.04'),
-        isNot(contains(r'SPR of $0.04')),
-      ),
+      allOf(contains('SPR of 0.04'), isNot(contains(r'SPR of $0.04'))),
     );
     expect(
       polishCoachCopy(r'Risking $260 to win 462 offers 36% pot odds.'),
       contains(r'win $462'),
+    );
+    expect(
+      polishCoachCopy(
+        'Facing a 59 call into a \$511 pot, we need 10.4% equity.',
+      ),
+      allOf(contains(r'$59 call'), contains(r'$511 pot')),
+    );
+    expect(
+      polishCoachCopy(
+        'Calling requires 125 into a \$508 pot, offering direct pot odds.',
+      ),
+      contains(r'requires $125'),
+    );
+    expect(
+      polishCoachCopy('Blitz has 16.2 three-bet frequency and shoves wide.'),
+      allOf(contains('16.2% 3-bet'), isNot(contains('16.2 three-bet'))),
     );
     expect(
       polishCoachCopy(
