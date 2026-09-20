@@ -93,4 +93,28 @@ void main() {
     expect(game.awardShareFor(1), 250);
     expect(game.isSplitPot, isTrue);
   });
+
+  test('coach copy marks chips and spells tendency keys', () {
+    const assessment = LiveCoachingAssessment(
+      actionId: 'CALL',
+      rating: 'recommended',
+      confidence: 'high',
+      summary: 'Call the remaining 42.36 all-in.',
+      playerTypeReason:
+          'Viktor has 51.7 bluffRiver and 93.7 aggression, plus 57.8 VPIP.',
+      sizingNote:
+          'Hero needs 5.5% equity to call the final 42.36 into a pot of 731.64.',
+      tendencyKeys: const ['bluffRiver', 'aggression', 'vpip'],
+    );
+
+    final message = assessment.message;
+    expect(message, contains(r'$42.36'));
+    expect(message, contains(r'$731.64'));
+    expect(message, contains('51.7% river bluff'));
+    expect(message, contains('93.7% aggression'));
+    expect(message, contains('57.8% VPIP'));
+    expect(message, contains('5.5% equity'));
+    expect(message, isNot(contains('bluffRiver')));
+    expect(message, isNot(contains(r'$5.5')));
+  });
 }
