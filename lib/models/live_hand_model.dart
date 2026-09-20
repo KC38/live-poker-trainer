@@ -337,6 +337,14 @@ String polishCoachCopy(String raw) {
     RegExp(r'\$?([1-9]\d*)-chip\s+pot\b', caseSensitive: false),
     (match) => '\$${match[1]}-chip pot',
   );
+  // "120-chip effective shove" / "120-chip shove".
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\$?([1-9]\d*)-chip\s+(effective\s+)?(shove|bet)\b',
+      caseSensitive: false,
+    ),
+    (match) => '\$${match[1]}-chip ${match[2] ?? ''}${match[3]}',
+  );
   // "72 chip stack" / "72 chips stack".
   text = text.replaceAllMapped(
     RegExp(
@@ -344,6 +352,22 @@ String polishCoachCopy(String raw) {
       caseSensitive: false,
     ),
     (match) => '\$${match[1]} chip stack',
+  );
+  // "retains 164 chips" / "keeps 80 chips".
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b(retains?|keeps?)\s+(?!\$)([1-9]\d*)(?!\.\d)(?!\s*%)\s+(chips?)\b',
+      caseSensitive: false,
+    ),
+    (match) => '${match[1]} \$${match[2]} ${match[3]}',
+  );
+  // "against a 151 bet" — 3+ digit chip bets only (not "a 3 bet").
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b(a|an|the)\s+(?!\$)([1-9]\d{2,})(?!\.\d)(?!\s*%)\s+(bet|shove)\b',
+      caseSensitive: false,
+    ),
+    (match) => '${match[1]} \$${match[2]} ${match[3]}',
   );
   // "for 155 more" / "for 42 chips".
   text = text.replaceAllMapped(
