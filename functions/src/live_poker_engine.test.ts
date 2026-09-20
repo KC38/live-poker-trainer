@@ -312,6 +312,34 @@ describe("live poker engine", () => {
     }
   });
 
+  test("clears a check label when a later bet reopens the seat", () => {
+    const definition = hand([400, 400, 400]);
+    let state = createInitialLiveState(definition);
+    const act = (actionId: string): void => {
+      state = applyLiveAction({hand: definition, state, actionId}).state;
+    };
+    act("OPEN_3_BB:600");
+    act("CALL:600");
+    act("CALL:600");
+    expect(state.street).toBe("flop");
+    // SB checks, BB checks, button bets. The earlier checks must not stay
+    // painted once those seats are facing the bet again.
+    act("CHECK");
+    expect(state.players[1].lastAction).toBe("CHECK");
+    act("CHECK");
+    expect(state.players[2].lastAction).toBe("CHECK");
+    const bet = legalLiveActions(definition, state).find(
+      (candidate) => candidate.bucket === "BET_33",
+    );
+    expect(bet).toBeDefined();
+    act(bet!.actionId);
+    expect(state.players[0].lastAction).toBe("BET");
+    expect(state.players[1].lastAction).toBeUndefined();
+    expect(state.players[2].lastAction).toBeUndefined();
+    expect(state.players[1].acted).toBe(false);
+    expect(state.players[2].acted).toBe(false);
+  });
+
   test("an incomplete all-in does not reopen raising", () => {
     const definition = hand([400, 7, 400]);
     let state = createInitialLiveState(definition);

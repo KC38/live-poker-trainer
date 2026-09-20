@@ -236,7 +236,12 @@ export function applyLiveAction(options: {
     if (fullRaise) {
       state.minRaiseIncrement = raiseIncrement;
       for (const other of state.players) {
-        if (other.seat !== seat && canAct(other)) other.acted = false;
+        if (other.seat !== seat && canAct(other)) {
+          other.acted = false;
+          // A check (or earlier call) is no longer the last thing this seat
+          // did once a bet reopens them. Leave the pill blank until they act.
+          delete other.lastAction;
+        }
       }
     }
     player.acted = true;
