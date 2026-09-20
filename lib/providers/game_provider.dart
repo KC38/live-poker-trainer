@@ -384,10 +384,7 @@ class GameController extends StateNotifier<TableSession> {
         );
         final heldGame = state.game;
         state = TableSession(
-          game:
-              heldGame == null
-                  ? null
-                  : heldGame.copyWith(waitingForHero: false),
+          game: heldGame?.copyWith(waitingForHero: false),
           liveView: result.view,
           coach: coaching,
           liveActions: const [],
