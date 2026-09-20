@@ -765,6 +765,11 @@ String polishCoachCopy(String raw) {
       },
     );
   }
+  // Model typo "maneuverabillity" (batch 0287) → "maneuverability".
+  text = text.replaceAll(
+    RegExp(r'\bmaneuverabillity\b', caseSensitive: false),
+    'maneuverability',
+  );
   return text;
 }
 
