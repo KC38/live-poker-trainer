@@ -224,6 +224,21 @@ void main() {
       polishCoachCopy('Blitz has 16.2 three-bet frequency and shoves wide.'),
       allOf(contains('16.2% 3-bet'), isNot(contains('16.2 three-bet'))),
     );
+    // "3-betting (20.7) tendencies" missing % (batch 0207).
+    expect(
+      polishCoachCopy(
+        "unprofitable despite Blitz's wide 3-betting (20.7) tendencies.",
+      ),
+      allOf(
+        contains('3-bet (20.7%) tendencies'),
+        isNot(contains('(20.7) tendencies')),
+        isNot(contains('3-betting (20.7)')),
+      ),
+    );
+    expect(
+      polishCoachCopy('wide aggression (20.7) tendencies on the river.'),
+      contains('(20.7%) tendencies'),
+    );
     expect(
       polishCoachCopy('Hero needs 24.8% pot odds to call \$118 into 358.'),
       contains(r'into $358'),

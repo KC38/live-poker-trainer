@@ -175,6 +175,22 @@ String polishCoachCopy(String raw) {
     RegExp(r'\bthree[\s-]bets?\b', caseSensitive: false),
     '3-bet',
   );
+  // "wide 3-betting (20.7) tendencies" (batch 0207) → "3-bet (20.7%)".
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b3[\s-]?bettings?\s*\((\d+(?:\.\d+)?)\)(?!\s*%)',
+      caseSensitive: false,
+    ),
+    (match) => '3-bet (${match[1]}%)',
+  );
+  // Bare rate paren before "tendency/tendencies".
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\((\d+(?:\.\d+)?)\)(?!\s*%)\s+(tendenc(?:y|ies)\b)',
+      caseSensitive: false,
+    ),
+    (match) => '(${match[1]}%) ${match[2]}',
+  );
   // "42.3 river bluffing" → "42.3% river bluff".
   text = text.replaceAllMapped(
     RegExp(
