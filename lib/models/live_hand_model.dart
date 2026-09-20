@@ -169,9 +169,18 @@ String polishCoachCopy(String raw) {
       ),
       (match) => '${match[1]} of ${match[2]}%',
     );
+    // Bare "showdown call 50.7" (no "of") still needs a percent mark.
+    text = text.replaceAllMapped(
+      RegExp(
+        '($escaped)\\s+(\\d+(?:\\.\\d+)?)(?!\\d)(?!\\.\\d)(?!\\s*%)(?![xX])',
+        caseSensitive: false,
+      ),
+      (match) => '${match[1]} ${match[2]}%',
+    );
   }
+  // Two-decimal chip amounts, but not pot multipliers like "0.37x pot".
   text = text.replaceAllMapped(
-    RegExp(r'(?<![\d$])(\d+\.\d{2})(?!\d)(?!\s*%)'),
+    RegExp(r'(?<![\d$])(\d+\.\d{2})(?!\d)(?!\s*%)(?![xX])'),
     (match) => '\$${match[1]}',
   );
   // Chip amounts before "pot" / "all-in", but not odds ratios like "8-to-1 pot
@@ -191,9 +200,12 @@ String polishCoachCopy(String raw) {
     ),
     (match) => '\$${match[1]} ${match[2]}',
   );
+  // Whole chip counts after verbs, but not the integer prefix of a rate like
+  // "call 50.7%" / "call 50.7".
   text = text.replaceAllMapped(
     RegExp(
-      r'\b(remaining|final|calling|call|bet|raise|stack|pot of)\s+(\d+)\b(?!\s*%)',
+      r'\b(remaining|final|calling|call|bet|raise|stack|pot of)\s+'
+      r'(\d+)(?!\.\d)(?!\s*%)\b',
       caseSensitive: false,
     ),
     (match) => '${match[1]} \$${match[2]}',

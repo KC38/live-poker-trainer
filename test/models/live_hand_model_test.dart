@@ -161,4 +161,28 @@ void main() {
       contains(r'$40 pot'),
     );
   });
+
+  test('coach copy keeps rates and pot multipliers intact', () {
+    expect(
+      polishCoachCopy('Rex calls down wide with showdown call 50.7.'),
+      allOf(
+        contains('showdown call 50.7%'),
+        isNot(contains(r'call $50')),
+        isNot(contains(r'$50.7')),
+      ),
+    );
+    expect(
+      polishCoachCopy(
+        r'Shoving $134 into a $364 pot represents a 0.37x pot bet.',
+      ),
+      allOf(
+        contains('0.37x pot'),
+        isNot(contains(r'$0.37x')),
+      ),
+    );
+    expect(
+      polishCoachCopy('call 50 more against the shove.'),
+      contains(r'call $50'),
+    );
+  });
 }
