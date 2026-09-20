@@ -5,14 +5,21 @@
 import {describe, expect, test} from "vitest";
 import {generateLiveHandDefinition} from "./live_hand_generation";
 import {DEFAULT_LIVE_SETUP, buildLiveSetupKey} from "./live_setup";
+import {LiveUsageError} from "./live_usage";
 
-function response(deal: unknown): Response {
+function response(deal: unknown, usage?: Record<string, number>): Response {
   return new Response(JSON.stringify({
     candidates: [{
       content: {
         parts: [{text: JSON.stringify(deal)}],
       },
     }],
+    usageMetadata: usage ?? {
+      promptTokenCount: 100,
+      candidatesTokenCount: 40,
+      thoughtsTokenCount: 20,
+      totalTokenCount: 160,
+    },
   }), {
     status: 200,
     headers: {"Content-Type": "application/json"},
@@ -43,7 +50,7 @@ const deal = {
 describe("live hand generation", () => {
   test("Gemini authors only immutable deal fields", async () => {
     let requestBody = "";
-    const hand = await generateLiveHandDefinition({
+    const generated = await generateLiveHandDefinition({
       apiKey: "test-key",
       setup: DEFAULT_LIVE_SETUP,
       setupKey: buildLiveSetupKey(DEFAULT_LIVE_SETUP),
@@ -53,12 +60,15 @@ describe("live hand generation", () => {
         return response(deal);
       },
     });
+    const hand = generated.hand;
 
     expect(hand.buttonSeat).toBe(4);
     expect(hand.seats).toHaveLength(6);
     expect(hand.seats[0].archetype).toBe("HERO");
     expect(hand.seats.slice(1).every((seat) => seat.tendency)).toBe(true);
     expect(hand.runout).toEqual(deal.runout);
+    expect(generated.usage.byPurpose.deal.modelRequestCount).toBe(1);
+    expect(generated.usage.total.promptTokenCount).toBe(100);
     expect(requestBody).toContain("orderedLineup");
     const request = JSON.parse(requestBody) as {
       generationConfig: {
@@ -81,7 +91,11 @@ describe("live hand generation", () => {
       setupKey: buildLiveSetupKey(DEFAULT_LIVE_SETUP),
       variationSeed: "duplicate",
       fetchImpl: async () => response(duplicate),
-    })).rejects.toThrow("globally unique");
+    })).rejects.toSatisfy((error: unknown) =>
+      error instanceof LiveUsageError &&
+      error.message.includes("globally unique") &&
+      error.usage.byPurpose.deal.modelRequestCount === 1
+    );
   });
 
   test("rounds generated stacks to the small blind", async () => {
@@ -91,13 +105,13 @@ describe("live hand generation", () => {
         index === 1 ? {...entry, startingStack: 183.99} : entry
       )),
     };
-    const hand = await generateLiveHandDefinition({
+    const generated = await generateLiveHandDefinition({
       apiKey: "test-key",
       setup: DEFAULT_LIVE_SETUP,
       setupKey: buildLiveSetupKey(DEFAULT_LIVE_SETUP),
       variationSeed: "snap-stacks",
       fetchImpl: async () => response(cents),
     });
-    expect(hand.seats[1].startingStack).toBe(184);
+    expect(generated.hand.seats[1].startingStack).toBe(184);
   });
 });

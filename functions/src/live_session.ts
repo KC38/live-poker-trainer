@@ -24,6 +24,13 @@ import {
   type PreparedLiveEdge,
   type PreparedLiveNode,
 } from "./live_tree";
+import {LIVE_GEMINI_MODEL} from "./live_hand_generation";
+import {
+  emptyLiveUsageBreakdown,
+  liveGenerationMetricsIncrements,
+  liveUsageFirestoreFields,
+  liveUsageFromError,
+} from "./live_usage";
 import {livePotSize, visibleLastAction} from "./live_poker_engine";
 import {buildLiveSetupKey, parseLiveTableSetup} from "./live_setup";
 import type {
@@ -491,6 +498,7 @@ async function getOrGenerateSharedEdge(options: {
   if (claim.ready) {
     return readPreparedEdge(options.handRef, options.parent, claim.ready);
   }
+  let usage = emptyLiveUsageBreakdown();
   try {
     const expanded = await expandLiveHeroAction({
       apiKey: options.apiKey,
@@ -498,9 +506,13 @@ async function getOrGenerateSharedEdge(options: {
       parent: options.parent,
       actionId: options.actionId,
     });
+    usage = expanded.usage;
     const childRef = options.handRef.collection("nodes").doc(
       expanded.child.stateHash,
     );
+    const setupKey = String(options.hand.setupKey);
+    const setupRef = options.db.collection("liveTableSetups").doc(setupKey);
+    const usageFields = liveUsageFirestoreFields(expanded.usage);
     const committed = await options.db.runTransaction(async (tx) => {
       const edge = await tx.get(edgeRef);
       if (
@@ -523,10 +535,34 @@ async function getOrGenerateSharedEdge(options: {
         childStateHash: expanded.child.stateHash,
         events: expanded.events,
         coaching: expanded.coaching,
+        modelId: LIVE_GEMINI_MODEL,
+        ...usageFields,
         leaseId: null,
         leaseExpiresAtMs: null,
         generatedAt: FieldValue.serverTimestamp(),
       });
+      tx.set(
+        options.handRef,
+        {
+          runtimeUsage: liveGenerationMetricsIncrements({
+            usage: expanded.usage,
+            expandCount: 1,
+          }),
+          updatedAt: FieldValue.serverTimestamp(),
+        },
+        {merge: true},
+      );
+      tx.set(
+        setupRef,
+        {
+          generationMetrics: liveGenerationMetricsIncrements({
+            usage: expanded.usage,
+            expandCount: 1,
+          }),
+          updatedAt: FieldValue.serverTimestamp(),
+        },
+        {merge: true},
+      );
       return true;
     });
     if (!committed) {
@@ -537,6 +573,11 @@ async function getOrGenerateSharedEdge(options: {
     }
     return expanded;
   } catch (error) {
+    const failedUsage = liveUsageFromError(error);
+    if (failedUsage.total.modelRequestCount > 0) {
+      usage = failedUsage;
+    }
+    const usageFields = liveUsageFirestoreFields(usage);
     await options.db.runTransaction(async (tx) => {
       const edge = await tx.get(edgeRef);
       if (
@@ -549,9 +590,24 @@ async function getOrGenerateSharedEdge(options: {
         status: "failed",
         leaseId: null,
         leaseExpiresAtMs: null,
+        modelId: LIVE_GEMINI_MODEL,
+        ...usageFields,
         error: error instanceof Error ? error.message : String(error),
         updatedAt: FieldValue.serverTimestamp(),
       }, {merge: true});
+      if (usage.total.modelRequestCount > 0) {
+        const setupKey = String(options.hand.setupKey);
+        tx.set(
+          options.db.collection("liveTableSetups").doc(setupKey),
+          {
+            generationMetrics: liveGenerationMetricsIncrements({
+              usage,
+            }),
+            updatedAt: FieldValue.serverTimestamp(),
+          },
+          {merge: true},
+        );
+      }
     });
     throw error;
   }
@@ -571,6 +627,12 @@ async function readPreparedEdge(
     child: preparedNodeFromData(child.data()!),
     events: edge.events as LiveActionEvent[],
     coaching: edge.coaching,
+    usage: edge.generationUsage ?
+      {
+        total: edge.generationUsage,
+        byPurpose: edge.usageByPurpose ?? emptyLiveUsageBreakdown().byPurpose,
+      } :
+      emptyLiveUsageBreakdown(),
   };
 }
 

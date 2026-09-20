@@ -58,6 +58,12 @@ function hand(): LiveHandDefinition {
 function geminiResponse(value: unknown): Response {
   return new Response(JSON.stringify({
     candidates: [{content: {parts: [{text: JSON.stringify(value)}]}}],
+    usageMetadata: {
+      promptTokenCount: 50,
+      candidatesTokenCount: 10,
+      thoughtsTokenCount: 5,
+      totalTokenCount: 65,
+    },
   }), {status: 200, headers: {"Content-Type": "application/json"}});
 }
 
@@ -79,7 +85,8 @@ describe("live intelligence boundaries", () => {
         return geminiResponse({actionId: legal[0].actionId});
       },
     });
-    expect(actionId).toBe(legal[0].actionId);
+    expect(actionId.actionId).toBe(legal[0].actionId);
+    expect(actionId.usage.byPurpose.villain.modelRequestCount).toBe(1);
     expect(body).toContain("Ks");
     expect(body).toContain("Kh");
     expect(body).not.toContain("Ah");
@@ -112,7 +119,9 @@ describe("live intelligence boundaries", () => {
         return geminiResponse({assessments});
       },
     });
-    expect(rubric.assessments).toHaveLength(legal.length);
+    expect(rubric.rubric.assessments).toHaveLength(legal.length);
+    expect(rubric.usage.byPurpose.coach_draft.modelRequestCount).toBe(1);
+    expect(rubric.usage.byPurpose.coach_critique.modelRequestCount).toBe(1);
     expect(bodies).toHaveLength(2);
     for (const body of bodies) {
       expect(body).toContain("Ah");
