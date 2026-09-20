@@ -47,11 +47,16 @@ export interface CoachIntelligenceConfig {
   criticThinking: GeminiThinkingLevel;
 }
 
-/** Production coach defaults: strongest Flash thinking on both passes. */
+/**
+ * Production coach defaults: gemini-3.8-flash medium/medium.
+ *
+ * Selected from the quality→cost→latency compare: passes the stratified gate
+ * at ~3.5× lower cost and ~3× lower latency than high/high on the same model.
+ */
 export const DEFAULT_COACH_INTELLIGENCE: CoachIntelligenceConfig = {
   modelId: LIVE_INTELLIGENCE_MODEL,
-  draftThinking: "high",
-  criticThinking: "high",
+  draftThinking: "medium",
+  criticThinking: "medium",
 };
 
 const TENDENCY_KEYS = new Set([
