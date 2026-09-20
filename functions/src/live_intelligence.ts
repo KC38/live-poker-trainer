@@ -48,13 +48,13 @@ export interface CoachIntelligenceConfig {
 }
 
 /**
- * Production coach defaults: gemini-3.8-flash medium/medium.
+ * Production coach defaults: gemini-3.7-flash medium/medium.
  *
- * Selected from the quality→cost→latency compare: passes the stratified gate
- * at ~3.5× lower cost and ~3× lower latency than high/high on the same model.
+ * Beats 3.8-flash medium/medium on the stratified gate (100% quality, lower
+ * cost, lower latency) while keeping villain/deal on the shared Flash model.
  */
 export const DEFAULT_COACH_INTELLIGENCE: CoachIntelligenceConfig = {
-  modelId: LIVE_INTELLIGENCE_MODEL,
+  modelId: "gemini-3.7-flash",
   draftThinking: "medium",
   criticThinking: "medium",
 };

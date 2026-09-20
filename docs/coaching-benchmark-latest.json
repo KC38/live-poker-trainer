@@ -1,7 +1,7 @@
 {
   "version": "exploit-benchmark-v1",
   "runDate": "2026-09-20",
-  "model": "gemini-3.8-flash",
+  "model": "gemini-3.7-flash",
   "thinking": "medium-draft-and-medium-critic",
   "sample": {
     "method": "dimension-stratified",
@@ -15,21 +15,15 @@
   },
   "metrics": {
     "structuralRate": 1.0,
-    "acceptableRecommendationRate": 0.9833333333333333,
+    "acceptableRecommendationRate": 1.0,
     "forbiddenAvoidanceRate": 1.0,
     "tendencyGroundingRate": 1.0,
     "calibrationRate": 1.0,
-    "averageEstimatedCostUsdMicros": 16956,
-    "averageDurationMs": 14118,
-    "maxDurationMs": 35614,
-    "totalEstimatedCostUsdMicros": 1017343
+    "averageEstimatedCostUsdMicros": 12530,
+    "averageDurationMs": 9984,
+    "maxDurationMs": 14583,
+    "totalEstimatedCostUsdMicros": 751781
   },
   "passed": true,
-  "knownMisses": [
-    {
-      "caseId": "CALLING_STATION|preflop|100|v2|bluff_catch_facing_bet",
-      "recommended": "CALL",
-      "acceptableSet": ["FOLD"]
-    }
-  ]
+  "knownMisses": []
 }
