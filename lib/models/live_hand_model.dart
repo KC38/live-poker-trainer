@@ -177,6 +177,14 @@ String polishCoachCopy(String raw) {
       ),
       (match) => '${match[1]} ${match[2]}%',
     );
+    // Parenthetical rates: "aggression (86.4)" / "VPIP (70.2)".
+    text = text.replaceAllMapped(
+      RegExp(
+        '($escaped)\\s*\\((\\d+(?:\\.\\d+)?)\\)(?!\\s*%)',
+        caseSensitive: false,
+      ),
+      (match) => '${match[1]} (${match[2]}%)',
+    );
   }
   // Two-decimal chip amounts, but not pot multipliers like "0.37x pot".
   text = text.replaceAllMapped(

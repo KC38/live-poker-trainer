@@ -188,5 +188,17 @@ void main() {
       polishCoachCopy('Hero must risk 178 to win a final pot of 795.'),
       allOf(contains(r'risk $178'), contains(r'pot of $795')),
     );
+    expect(
+      polishCoachCopy(
+        "Rico's extreme aggression (86.4) and wide VPIP (70.2) push many "
+        'inferior hands into his range.',
+      ),
+      allOf(
+        contains('aggression (86.4%)'),
+        contains('VPIP (70.2%)'),
+        isNot(contains(RegExp(r'aggression \(86\.4\)(?!%)'))),
+        isNot(contains(RegExp(r'VPIP \(70\.2\)(?!%)'))),
+      ),
+    );
   });
 }
