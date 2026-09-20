@@ -129,7 +129,9 @@ export function legalLiveActions(
       "CALL",
       "CALL",
       money(player.streetBet + callAmount),
-      callAmount === player.stack ? "Call all-in" : `Call ${format(callAmount)}`,
+      callAmount === player.stack ?
+        `Call all-in ${format(callAmount)}` :
+        `Call ${format(callAmount)}`,
     ));
   }
 
