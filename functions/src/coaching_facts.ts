@@ -109,7 +109,7 @@ export function buildCoachingFacts(options: {
     heroStack: hero.stack,
     effectiveStack,
     effectiveStackBb: roundOne(effectiveStack / hand.setup.bigBlind),
-    spr: pot <= 0 ? 0 : roundOne(effectiveStack / pot),
+    spr: pot <= 0 ? 0 : roundSpr(effectiveStack / pot),
     activePlayerCount: activeOpponents.length + 1,
     position: positionLabel(hand, heroSeat),
     boardTexture: boardTexture(state.board),
@@ -227,4 +227,11 @@ function rankValue(rank: string): number {
 
 function roundOne(value: number): number {
   return Math.round(value * 10) / 10;
+}
+
+/** Keep tiny SPRs visible. 26/789 is 0.03, not a one-decimal 0. */
+function roundSpr(value: number): number {
+  if (value <= 0) return 0;
+  const one = roundOne(value);
+  return one === 0 ? Math.round(value * 100) / 100 : one;
 }
