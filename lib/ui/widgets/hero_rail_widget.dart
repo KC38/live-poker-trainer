@@ -12,6 +12,7 @@ import 'package:live_poker_trainer/models/hero_profile_model.dart';
 import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/ui/widgets/action_badge.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
+import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_avatar.dart';
 
 /// Fixed-height hero band between the felt and the coach shelf.
@@ -107,70 +108,91 @@ class HeroRailWidget extends ConsumerWidget {
         child: Row(
           children: [
             Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      ProfileAvatar(identity: identity, size: 20),
-                      const SizedBox(width: 6),
-                      Flexible(
-                        child: Text(
-                          identity.railLabel,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.jetBrainsMono(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 0.6,
-                            color: AppColors.gold,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: SizedBox(
+                      width: constraints.maxWidth,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              ProfileAvatar(identity: identity, size: 20),
+                              const SizedBox(width: 6),
+                              Flexible(
+                                child: Text(
+                                  identity.railLabel,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.jetBrainsMono(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: 0.6,
+                                    color: AppColors.gold,
+                                  ),
+                                ),
+                              ),
+                              if (position != null) ...[
+                                const SizedBox(width: 6),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 5,
+                                    vertical: 1,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.goldMuted.withValues(
+                                      alpha: 0.85,
+                                    ),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Text(
+                                    position,
+                                    style: GoogleFonts.jetBrainsMono(
+                                      fontSize: 8,
+                                      fontWeight: FontWeight.w800,
+                                      color: AppColors.bgDark,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ],
                           ),
-                        ),
-                      ),
-                      if (position != null) ...[
-                        const SizedBox(width: 6),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 5,
-                            vertical: 1,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.goldMuted.withValues(alpha: 0.85),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Text(
-                            position,
+                          const SizedBox(height: 3),
+                          Text(
+                            ChipFormat.chips(
+                              hero.stack,
+                              game.bigBlind,
+                              chipDisplayMode,
+                            ),
+                            maxLines: 1,
                             style: GoogleFonts.jetBrainsMono(
-                              fontSize: 8,
+                              fontSize: 14,
                               fontWeight: FontWeight.w800,
-                              color: AppColors.bgDark,
+                              color: AppColors.goldBright,
                             ),
                           ),
-                        ),
-                      ],
-                    ],
-                  ),
-                  const SizedBox(height: 3),
-                  Text(
-                    ChipFormat.chips(hero.stack, game.bigBlind, chipDisplayMode),
-                    maxLines: 1,
-                    style: GoogleFonts.jetBrainsMono(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.goldBright,
-                    ),
-                  ),
-                  if (hero.currentBet > Money.epsilon)
-                    Text(
-                      'in ${ChipFormat.chips(hero.currentBet, game.bigBlind, chipDisplayMode)}',
-                      maxLines: 1,
-                      style: GoogleFonts.jetBrainsMono(
-                        fontSize: 9.5,
-                        color: AppColors.slate,
+                          // Always mirror villain street-bet pills: hero is off
+                          // the felt ring, so this is the only place commitment
+                          // shows.
+                          if (hero.currentBet > Money.epsilon) ...[
+                            const SizedBox(height: 3),
+                            StreetBetPill(
+                              label: ChipFormat.chips(
+                                hero.currentBet,
+                                game.bigBlind,
+                                chipDisplayMode,
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
                     ),
-                ],
+                  );
+                },
               ),
             ),
             Row(

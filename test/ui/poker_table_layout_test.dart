@@ -586,6 +586,23 @@ void main() {
         },
       );
 
+      testWidgets('hero street commitment shows as a bet pill', (tester) async {
+        await _pumpTable(
+          tester,
+          size: size,
+          session: const TableSession().copyWith(game: _nineHandedGame()),
+        );
+        // Hero is off the felt ring; commitment must still be readable on the
+        // rail as the same gold pill villains use.
+        expect(find.byType(StreetBetPill), findsWidgets);
+        expect(find.textContaining(r'$8'), findsWidgets);
+        final heroRail = find.byType(HeroRailWidget);
+        expect(
+          find.descendant(of: heroRail, matching: find.byType(StreetBetPill)),
+          findsOneWidget,
+        );
+      });
+
       testWidgets('villain archetypes are legible words, not single letters', (
         tester,
       ) async {

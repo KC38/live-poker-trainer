@@ -153,7 +153,7 @@ class PlayerSeatWidget extends StatelessWidget {
                   // the neighbour.
                   FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: _BetPill(label: betLabel!, compact: compact),
+                    child: StreetBetPill(label: betLabel!, compact: compact),
                   ),
                 if (showCards && player.holeCards.isNotEmpty)
                   Padding(
@@ -181,48 +181,60 @@ class PlayerSeatWidget extends StatelessWidget {
   }
 }
 
-/// Committed chips for the current street, docked under the seat's stack.
-class _BetPill extends StatelessWidget {
-  const _BetPill({required this.label, required this.compact});
+/// Committed chips for the current street (seat HUD or hero rail).
+class StreetBetPill extends StatelessWidget {
+  /// Creates a street-commitment chip pill.
+  const StreetBetPill({super.key, required this.label, this.compact = false});
 
+  /// Formatted chip amount for the current street.
   final String label;
+
+  /// Tighter padding/type for nine-handed seats.
   final bool compact;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: compact ? 5 : 6, vertical: 1),
-      decoration: BoxDecoration(
-        color: AppColors.bgDark.withValues(alpha: 0.94),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: AppColors.gold.withValues(alpha: 0.85),
-          width: 1,
+    // Lay out at natural size, then scale down when a seat or the hero rail
+    // is narrower than a four-figure amount (FittedBox child is unbounded).
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: compact ? 5 : 6,
+          vertical: 1,
         ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 6,
-            height: 6,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.gold,
-            ),
+        decoration: BoxDecoration(
+          color: AppColors.bgDark.withValues(alpha: 0.94),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: AppColors.gold.withValues(alpha: 0.85),
+            width: 1,
           ),
-          const SizedBox(width: 4),
-          Text(
-            label,
-            maxLines: 1,
-            softWrap: false,
-            style: GoogleFonts.jetBrainsMono(
-              fontSize: compact ? 9 : 10,
-              fontWeight: FontWeight.w800,
-              color: AppColors.cream,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 6,
+              height: 6,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.gold,
+              ),
             ),
-          ),
-        ],
+            const SizedBox(width: 4),
+            Text(
+              label,
+              maxLines: 1,
+              softWrap: false,
+              style: GoogleFonts.jetBrainsMono(
+                fontSize: compact ? 9 : 10,
+                fontWeight: FontWeight.w800,
+                color: AppColors.cream,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
