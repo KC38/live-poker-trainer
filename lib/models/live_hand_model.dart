@@ -186,9 +186,10 @@ String polishCoachCopy(String raw) {
       (match) => '${match[1]} (${match[2]}%)',
     );
   }
-  // Two-decimal chip amounts, but not pot multipliers like "0.37x pot".
+  // Two-decimal chip amounts (e.g. 33.33), but not pot multipliers like
+  // "0.37x pot" and not SPR ratios like "SPR of 0.04".
   text = text.replaceAllMapped(
-    RegExp(r'(?<![\d$])(\d+\.\d{2})(?!\d)(?!\s*%)(?![xX])'),
+    RegExp(r'(?<![\d$])([1-9]\d*\.\d{2})(?!\d)(?!\s*%)(?![xX])'),
     (match) => '\$${match[1]}',
   );
   // Chip amounts before "pot" / "all-in", but not odds ratios like "8-to-1 pot
