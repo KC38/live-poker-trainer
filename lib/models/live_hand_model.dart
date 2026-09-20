@@ -217,11 +217,11 @@ String polishCoachCopy(String raw) {
     (match) => '\$${match[1]} ${match[2]}',
   );
   // Whole chip counts after verbs, but not the integer prefix of a rate like
-  // "call 50.7%" / "call 50.7".
+  // "call 50.7%" / "call 50.7", and not a bare zero ("Risking 0").
   text = text.replaceAllMapped(
     RegExp(
       r'\b(remaining|final|calling|call|bet|raise|stack|pot of|risk|risking)\s+'
-      r'(\d+)(?!\.\d)(?!\s*%)\b',
+      r'([1-9]\d*)(?!\.\d)(?!\s*%)\b',
       caseSensitive: false,
     ),
     (match) => '${match[1]} \$${match[2]}',

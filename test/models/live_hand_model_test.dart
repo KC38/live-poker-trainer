@@ -200,6 +200,15 @@ void main() {
     );
     expect(
       polishCoachCopy(
+        'Risking 0 preserves your full $219 stack against a cold 4-bet.',
+      ),
+      allOf(
+        contains('Risking 0'),
+        isNot(contains(r'Risking $0')),
+      ),
+    );
+    expect(
+      polishCoachCopy(
         "Rico's extreme aggression (86.4) and wide VPIP (70.2) push many "
         'inferior hands into his range.',
       ),
