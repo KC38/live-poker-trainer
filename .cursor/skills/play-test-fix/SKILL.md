@@ -77,7 +77,7 @@ PATH:
 |------|--------|
 | Agent `next` no-op mid-hand coach | Fixed #95 |
 | `liveActionFeed` Crashlytics permission-denied spam | Fixed #96 (`onError`, `cancelOnError: false`); rules allow owner read on `users/{uid}/liveActionFeed/*` |
-| Coach polish: paired `%`, `requiring only`, split percents, tendency `(N.N)` → `%` | Fixed through #98 (`polishCoachCopy` in `live_hand_model.dart`) |
+| Coach polish: paired `%`, `requiring only`, split percents, tendency `(N.N)` → `%`, number-before-label (`51.5 river bluff`) | Fixed through #98+ (`polishCoachCopy` in `live_hand_model.dart`) |
 | CLOSE without CORRECT/INCORRECT | **Intentional** (#85 strong/reasonable → CLOSE) |
 | SPR not on felt | **Intentional** (street · pot on felt; SPR in coach copy) |
 | BEST/YOU OCR misreads | Harness noise (product labels fixed historically) |
