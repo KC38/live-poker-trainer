@@ -290,6 +290,75 @@ void main() {
     expect(session.heroCanAct, isTrue);
   });
 
+  test('agent next dismisses mid-hand coach instead of no-op', () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    const check = {
+      'actionId': 'CHECK:0',
+      'kind': 'CHECK',
+      'bucket': 'CHECK',
+      'label': 'Check',
+    };
+    final initial = LiveHandStartResult.fromJson({
+      'view': _viewJson(actions: [check]),
+      'events': <Map<String, dynamic>>[],
+    });
+    final after = LiveActionResult.fromJson({
+      'view': _viewJson(stateVersion: 1, street: 'river', actions: [_call]),
+      'events': [
+        {'sequence': 0, 'seat': 0, 'street': 'preflop', ...check},
+        {
+          'sequence': 1,
+          'seat': 1,
+          'street': 'river',
+          'actionId': 'BET:400',
+          'kind': 'BET',
+          'bucket': 'BET_67',
+          'amountTo': 4,
+          'label': r'Bet $4',
+        },
+      ],
+      'coaching': {
+        'actionId': 'CHECK:0',
+        'rating': 'mistake',
+        'confidence': 'high',
+        'summary': 'Checking the turn gives a free river card.',
+        'playerTypeReason': 'Paul calls too wide.',
+        'sizingNote': '',
+        'tendencyKeys': ['foldToTurnBet'],
+      },
+      'replayed': false,
+    });
+    final service = _FakeLiveHandService(initial, after);
+    final container = ProviderContainer(
+      overrides: [
+        authUidProvider.overrideWithValue('uid-1'),
+        liveHandServiceProvider.overrideWithValue(service),
+        soundServiceProvider.overrideWithValue(SoundService.silent()),
+        settingsProvider.overrideWith((ref) => SettingsNotifier(preferences)),
+      ],
+    );
+    addTearDown(container.dispose);
+    final controller = container.read(gameControllerProvider.notifier);
+    await controller.startTraining();
+
+    await controller.heroActLive(
+      container.read(gameControllerProvider).liveActions.single,
+    );
+
+    var session = container.read(gameControllerProvider);
+    expect(session.coach.hasAdvice, isTrue);
+    expect(session.heroDoneForHand, isFalse);
+    final startCallsBefore = service.startCalls;
+
+    controller.debugHandleAgentCommand('next');
+    session = container.read(gameControllerProvider);
+    expect(session.coach.hasAdvice, isFalse);
+    expect(session.heroCanAct, isTrue);
+    // Must not deal a new hand while the current one is still live.
+    expect(service.startCalls, startCallsBefore);
+  });
+
   test('rejects an action that is not in the current fixed set', () async {
     final (container, service) = await _container();
     addTearDown(container.dispose);
