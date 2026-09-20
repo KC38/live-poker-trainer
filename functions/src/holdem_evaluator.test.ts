@@ -2,8 +2,12 @@
  * Deterministic NLH evaluator tests.
  */
 
-import { describe, expect, it } from "vitest";
-import { compareHandScores, evaluateSevenCards } from "./holdem_evaluator";
+import {describe, expect, it} from "vitest";
+import {
+  compareHandScores,
+  evaluateHoleAndBoard,
+  evaluateSevenCards,
+} from "./holdem_evaluator";
 
 describe("evaluateSevenCards", () => {
   it.each([
@@ -22,5 +26,16 @@ describe("evaluateSevenCards", () => {
     const a = evaluateSevenCards(["As", "Kd", ...board]);
     const b = evaluateSevenCards(["Qc", "Jh", ...board]);
     expect(compareHandScores(a, b)).toBe(0);
+  });
+});
+
+describe("evaluateHoleAndBoard", () => {
+  it("detects the flop nut straight with five cards", () => {
+    const score = evaluateHoleAndBoard(["Js", "Ts"], ["Qs", "9s", "8d"]);
+    expect(score?.[0]).toBe(4);
+  });
+
+  it("returns null preflop", () => {
+    expect(evaluateHoleAndBoard(["As", "Kd"], [])).toBeNull();
   });
 });
