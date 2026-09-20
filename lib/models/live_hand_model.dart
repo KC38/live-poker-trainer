@@ -287,6 +287,18 @@ String polishCoachCopy(String raw) {
       return '$lead\$${match[2]} ${match[3]}';
     },
   );
+  // "only 10 chips behind".
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b((?:just|only)\s+)?(?<!\$)([1-9]\d*)(?!\.\d)(?!\s*%)\s+'
+      r'(chips?)\s+(behind)\b',
+      caseSensitive: false,
+    ),
+    (match) {
+      final lead = match[1] ?? '';
+      return '$lead\$${match[2]} ${match[3]} ${match[4]}';
+    },
+  );
   // "244-chip stack" after "remaining 244" was dollarized mid-token.
   text = text.replaceAllMapped(
     RegExp(r'\$?([1-9]\d*)-chip\s+stack\b', caseSensitive: false),

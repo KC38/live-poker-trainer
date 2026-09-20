@@ -255,6 +255,10 @@ void main() {
       contains('(Dale 77.4%, Fred 71.7%)'),
     );
     expect(
+      polishCoachCopy(r'Calling $210 leaves Hero with only 10 chips behind.'),
+      contains(r'only $10 chips behind'),
+    );
+    expect(
       polishCoachCopy(
         'Folding against opponents with aggression above 77 is timid.',
       ),
