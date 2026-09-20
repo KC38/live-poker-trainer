@@ -241,6 +241,12 @@ void main() {
     );
     expect(
       polishCoachCopy(
+        'Folding against opponents with aggression above 77 is timid.',
+      ),
+      contains('aggression above 77%'),
+    );
+    expect(
+      polishCoachCopy(
         "Rico's extreme aggression (86.4) and wide VPIP (70.2) push many "
         'inferior hands into his range.',
       ),

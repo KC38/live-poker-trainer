@@ -197,6 +197,15 @@ String polishCoachCopy(String raw) {
       ),
       (match) => '${match[1]} (${match[2]}%)',
     );
+    // "aggression above 77" / "VPIP under 20".
+    text = text.replaceAllMapped(
+      RegExp(
+        '($escaped)\\s+(above|below|over|under)\\s+'
+        r'(\d+(?:\.\d+)?)(?!\d)(?!\.\d)(?!\s*%)',
+        caseSensitive: false,
+      ),
+      (match) => '${match[1]} ${match[2]} ${match[3]}%',
+    );
   }
   // Two-decimal chip amounts (e.g. 33.33), but not pot multipliers like
   // "0.37x pot" and not SPR ratios like "SPR of 0.04".
