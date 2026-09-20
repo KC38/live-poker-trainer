@@ -304,6 +304,27 @@ String polishCoachCopy(String raw) {
     ),
     (match) => '${match[1]} \$${match[2]}',
   );
+  // "Risking only 40 chips".
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b(risking)\s+only\s+(?!\$)([1-9]\d*)(?!\.\d)(?!\s*%)\b',
+      caseSensitive: false,
+    ),
+    (match) => '${match[1]} only \$${match[2]}',
+  );
+  // "preserves 302 chips" / "saves 80 chips".
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b(preserves?|saves?)\s+(?!\$)([1-9]\d*)(?!\.\d)(?!\s*%)\s+(chips?)\b',
+      caseSensitive: false,
+    ),
+    (match) => '${match[1]} \$${match[2]} ${match[3]}',
+  );
+  // "Fred's 38 chips".
+  text = text.replaceAllMapped(
+    RegExp(r"\b([A-Za-z]+)'s\s+(?!\$)([1-9]\d*)(?!\.\d)(?!\s*%)\s+(chips?)\b"),
+    (match) => "${match[1]}'s \$${match[2]} ${match[3]}",
+  );
   // "call $118 into 358" — bare pot after into (2+ digit chips, not "into 4").
   text = text.replaceAllMapped(
     RegExp(
