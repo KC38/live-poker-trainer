@@ -402,7 +402,7 @@ class GameController extends StateNotifier<TableSession> {
         await sound.deal();
         await Future<void>.delayed(ReplayPace.dealStreet);
       }
-      game = _applyReplayEvent(game, event);
+      game = applyLiveReplayEvent(game, event);
       state = state.copyWith(game: game);
       await _playActionSound(sound, event.kind);
       await Future<void>.delayed(
@@ -443,37 +443,6 @@ class GameController extends StateNotifier<TableSession> {
       await Future<void>.delayed(ReplayPace.dealStreet);
       if (_disposed || token != _replayToken) return;
     }
-  }
-
-  static GameState _applyReplayEvent(
-    GameState game,
-    LiveActionEventModel event,
-  ) {
-    if (event.seat < 0 || event.seat >= game.players.length) return game;
-    final players = [...game.players];
-    final player = players[event.seat];
-    final target = event.amountTo ?? player.currentBet;
-    final added = Money.roundNonNegative(
-      target - player.currentBet,
-    ).clamp(0, player.stack);
-    players[event.seat] = player.copyWith(
-      stack: Money.roundNonNegative(player.stack - added),
-      currentBet: Money.round(player.currentBet + added),
-      folded: event.kind == 'FOLD' || player.folded,
-      allIn: event.kind == 'ALL_IN' || player.stack - added <= Money.epsilon,
-      hasActedThisRound: true,
-      lastActionLabel: event.kind.replaceAll('_', '-'),
-    );
-    final highest = players.fold<double>(
-      0,
-      (value, seat) => seat.currentBet > value ? seat.currentBet : value,
-    );
-    return game.copyWith(
-      players: players,
-      activePlayerIndex: event.seat,
-      highestBet: highest,
-      waitingForHero: false,
-    );
   }
 
   static Future<void> _playActionSound(SoundService sound, String kind) async {
@@ -565,6 +534,56 @@ class GameController extends StateNotifier<TableSession> {
     }
     await resumeCurrentHand();
   }
+}
+
+/// Applies one live-table action event onto a client [GameState] for replay.
+GameState applyLiveReplayEvent(
+  GameState game,
+  LiveActionEventModel event,
+) {
+  if (event.seat < 0 || event.seat >= game.players.length) return game;
+  final players = [...game.players];
+  final player = players[event.seat];
+  final target = event.amountTo ?? player.currentBet;
+  final added = Money.roundNonNegative(
+    target - player.currentBet,
+  ).clamp(0, player.stack);
+  players[event.seat] = player.copyWith(
+    stack: Money.roundNonNegative(player.stack - added),
+    currentBet: Money.round(player.currentBet + added),
+    folded: event.kind == 'FOLD' || player.folded,
+    allIn: event.kind == 'ALL_IN' || player.stack - added <= Money.epsilon,
+    hasActedThisRound: true,
+    lastActionLabel: event.kind.replaceAll('_', '-'),
+  );
+  final highest = players.fold<double>(
+    0,
+    (value, seat) => seat.currentBet > value ? seat.currentBet : value,
+  );
+  // Match the server: a bet/raise reopens seats that still owe chips, so
+  // their CHECK (or call) pill must clear during client-side replay too.
+  final aggressive =
+      event.kind == 'BET' ||
+      event.kind == 'RAISE' ||
+      event.kind == 'ALL_IN';
+  if (aggressive && highest > game.highestBet + Money.epsilon) {
+    for (var i = 0; i < players.length; i++) {
+      if (i == event.seat) continue;
+      final other = players[i];
+      if (other.folded || other.allIn) continue;
+      if (other.currentBet + Money.epsilon >= highest) continue;
+      players[i] = other.copyWith(
+        hasActedThisRound: false,
+        clearLastAction: true,
+      );
+    }
+  }
+  return game.copyWith(
+    players: players,
+    activePlayerIndex: event.seat,
+    highestBet: highest,
+    waitingForHero: false,
+  );
 }
 
 final gameControllerProvider =
