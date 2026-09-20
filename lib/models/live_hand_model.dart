@@ -182,6 +182,29 @@ String polishCoachCopy(String raw) {
     RegExp(r'\briver\s+bluffing\b', caseSensitive: false),
     'river bluff',
   );
+  // "60.1% bluffRiver bluff far too often" → "river bluff bluff" after the
+  // key rewrite; keep the verb by inserting "and".
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b(river bluff)\s+(bluff(?:s|ing)?)\b',
+      caseSensitive: false,
+    ),
+    (match) => '${match[1]} and ${match[2]}',
+  );
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b(showdown call)\s+(calls?|calling)\b',
+      caseSensitive: false,
+    ),
+    (match) => '${match[1]} and ${match[2]}',
+  );
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b((?:flop|turn|river) fold)\s+(folds?|folding)\b',
+      caseSensitive: false,
+    ),
+    (match) => '${match[1]} and ${match[2]}',
+  );
   for (final label in _tendencyLabels.values) {
     final escaped = RegExp.escape(label);
     // Complete number tokens only. "of 76.3%" must not become "of 76%.3%",
@@ -318,10 +341,10 @@ String polishCoachCopy(String raw) {
     ),
     (match) => '${match[1]} \$${match[2]}',
   );
-  // "Risking only 40 chips".
+  // "Risking only 40 chips" / "requiring only 111 chips".
   text = text.replaceAllMapped(
     RegExp(
-      r'\b(risking)\s+only\s+(?!\$)([1-9]\d*)(?!\.\d)(?!\s*%)\b',
+      r'\b(risking|requiring)\s+only\s+(?!\$)([1-9]\d*)(?!\.\d)(?!\s*%)\b',
       caseSensitive: false,
     ),
     (match) => '${match[1]} only \$${match[2]}',
@@ -369,6 +392,14 @@ String polishCoachCopy(String raw) {
       final lead = match[1] ?? '';
       return '$lead\$${match[2]} ${match[3]} ${match[4]}';
     },
+  );
+  // "requiring only 111 chips to win" (no "behind").
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b((?:just|only)\s+)(?<!\$)([1-9]\d*)(?!\.\d)(?!\s*%)\s+(chips?)\b',
+      caseSensitive: false,
+    ),
+    (match) => '${match[1]}\$${match[2]} ${match[3]}',
   );
   // "244-chip stack" after "remaining 244" was dollarized mid-token.
   text = text.replaceAllMapped(
