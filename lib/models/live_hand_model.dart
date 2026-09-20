@@ -334,6 +334,49 @@ String polishCoachCopy(String raw) {
       (match) => '(${match[1]}${match[2]} ${match[3]}%)',
     );
   }
+  // Mid-list nested tendency rates inside an open paren (batch 0198):
+  // "Maniac (aggression 78.3%, VPIP (51.3%) who" →
+  // "Maniac (aggression 78.3%, VPIP 51.3%) who".
+  // Only when the rate-paren is wrongly ending mid-clause (`who` / `.`),
+  // not list items like "PFR (26%), and …".
+  // Standalone "3-bet (25.3%)" (depth 0) stays intact.
+  {
+    final labelAlt =
+        _tendencyLabels.values.map(RegExp.escape).toSet().join('|');
+    final nestedMid = RegExp(
+      '($labelAlt)((?:\\s+(?:frequency|rate|stat|rating))?)\\s*'
+      r'\((\d+(?:\.\d+)?)%\s*\)',
+      caseSensitive: false,
+    );
+    text = text.replaceAllMapped(nestedMid, (match) {
+      final before = match.input.substring(0, match.start);
+      var depth = 0;
+      for (var i = 0; i < before.length; i++) {
+        final ch = before[i];
+        if (ch == '(') {
+          depth++;
+        } else if (ch == ')') {
+          depth--;
+        }
+      }
+      if (depth <= 0) {
+        return match[0]!;
+      }
+      final after = match.input.substring(match.end);
+      final wronglyCloses = RegExp(
+            r'^\s+(?:who|that|which|while|when|making)\b',
+            caseSensitive: false,
+          ).hasMatch(after) ||
+          RegExp(r'^\s*[.!?]').hasMatch(after);
+      if (!wronglyCloses) {
+        return match[0]!;
+      }
+      if (depth == 1) {
+        return '${match[1]}${match[2]} ${match[3]}%)';
+      }
+      return '${match[1]}${match[2]} ${match[3]}%';
+    });
+  }
   // Bare "frequency (63.1)" / "bluff frequency (63.1)" when no tendency
   // label precedes the noun.
   text = text.replaceAllMapped(
