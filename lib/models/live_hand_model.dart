@@ -292,6 +292,15 @@ String polishCoachCopy(String raw) {
       ),
       (match) => '${match[1]} ${match[2]} ${match[3]}%',
     );
+    // Comparison rates: "VPIP > 48" / "showdown call › 65" (batch 0163).
+    text = text.replaceAllMapped(
+      RegExp(
+        '($escaped)\\s*([<>≤≥‹›])\\s*'
+        r'(\d+(?:\.\d+)?)(?!\d)(?!\.\d)(?!\s*%)',
+        caseSensitive: false,
+      ),
+      (match) => '${match[1]} ${match[2]} ${match[3]}%',
+    );
     // "aggression at 87.7 and 92.9".
     text = text.replaceAllMapped(
       RegExp(

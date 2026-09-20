@@ -548,5 +548,21 @@ void main() {
       polishCoachCopy('Blitz has 16.2 3-bet and shoves wide.'),
       contains('16.2% 3-bet'),
     );
+    // Comparison operators must gain % (batch 0163).
+    expect(
+      polishCoachCopy(
+        'Sammy opens wide (VPIP 44.6%, PFR (26%), and multiple '
+        'passive calling stations (VPIP › 48, showdown call > 65) '
+        'provide strong multiway implied odds.',
+      ),
+      allOf(
+        contains('VPIP › 48%'),
+        contains('showdown call > 65%'),
+        contains('VPIP 44.6%'),
+        contains('PFR (26%)'),
+        isNot(contains(RegExp(r'VPIP › 48[,)]'))),
+        isNot(contains(RegExp(r'showdown call > 65\)'))),
+      ),
+    );
   });
 }
