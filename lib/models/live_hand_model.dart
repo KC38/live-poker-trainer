@@ -298,6 +298,13 @@ String polishCoachCopy(String raw) {
   // "262 stack" / "125 bb stack" — amount before the noun, not after.
   text = text.replaceAllMapped(
     RegExp(
+      r'(?<![\d$.\-/])([1-9]\d*)(?!\.\d)(?!\s*%)\s+bb\s+stack\b',
+      caseSensitive: false,
+    ),
+    (match) => '\$${match[1]} bb stack',
+  );
+  text = text.replaceAllMapped(
+    RegExp(
       r'(?<![\d$.\-/])(\d+(?:\.\d{1,2})?)\s+(stack)\b',
       caseSensitive: false,
     ),
@@ -435,10 +442,10 @@ String polishCoachCopy(String raw) {
     ),
     (match) => '${match[1]} \$${match[2]} ${match[3]}',
   );
-  // "against a 151 bet" — 3+ digit chip bets only (not "a 3 bet").
+  // "against a 45 bet" / "a 151 shove" — 2+ digit chip bets (not "a 3 bet").
   text = text.replaceAllMapped(
     RegExp(
-      r'\b(a|an|the)\s+(?!\$)([1-9]\d{2,})(?!\.\d)(?!\s*%)\s+(bet|shove)\b',
+      r'\b(a|an|the)\s+(?!\$)([1-9]\d+)(?!\.\d)(?!\s*%)\s+(bet|shove)\b',
       caseSensitive: false,
     ),
     (match) => '${match[1]} \$${match[2]} ${match[3]}',
@@ -468,6 +475,24 @@ String polishCoachCopy(String raw) {
   text = text.replaceAllMapped(
     RegExp(r'(\d+(?:\.\d+)?)(?!\s*%)-(\d+(?:\.\d+)?%)'),
     (match) => '${match[1]}%-${match[2]}',
+  );
+  // Bare tendency ranges: "showdown call 65-74" / "(65.5-79.1)".
+  // Avoid odds ("8-to-1") and SPR-style decimals by requiring an integer
+  // pair after a known rate label, or a parenthetical pair.
+  for (final label in _tendencyLabels.values) {
+    final escaped = RegExp.escape(label);
+    text = text.replaceAllMapped(
+      RegExp(
+        '($escaped)\\s+(\\d{1,2}(?:\\.\\d+)?)(?!\\s*%)-'
+        r'(\d{1,2}(?:\.\d+)?)(?!\s*%)',
+        caseSensitive: false,
+      ),
+      (match) => '${match[1]} ${match[2]}%-${match[3]}%',
+    );
+  }
+  text = text.replaceAllMapped(
+    RegExp(r'\((\d{1,2}(?:\.\d+)?)(?!\s*%)-(\d{1,2}(?:\.\d+)?)(?!\s*%)\)'),
+    (match) => '(${match[1]}%-${match[2]}%)',
   );
   // Paired rates in parentheses: "aggression (65.8 and 69.7)".
   text = text.replaceAllMapped(

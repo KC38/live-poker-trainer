@@ -274,6 +274,26 @@ void main() {
       ),
     );
     expect(
+      polishCoachCopy('stations call with showdown call 65-74 often.'),
+      contains('65%-74%'),
+    );
+    expect(
+      polishCoachCopy(r'Surrendering against a 45 bet into a $180 pot.'),
+      allOf(contains(r'a $45 bet'), isNot(contains('a 45 bet'))),
+    );
+    expect(
+      polishCoachCopy('A 3 bet is not a chip size.'),
+      allOf(contains('A 3 bet'), isNot(contains(r'A $3 bet'))),
+    );
+    expect(
+      polishCoachCopy("Folding preserves Hero's 125 bb stack."),
+      contains(r'$125 bb stack'),
+    );
+    expect(
+      polishCoachCopy('Chaos has an aggression of 76.3% and offers 8-to-1 pot odds.'),
+      contains('8-to-1 pot odds'),
+    );
+    expect(
       polishCoachCopy(
         "Checking preserves Hero's 72 chip stack to realize showdown.",
       ),
