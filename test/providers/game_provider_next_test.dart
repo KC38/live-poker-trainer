@@ -15,12 +15,14 @@ import 'package:live_poker_trainer/services/firestore/live_hand_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class _FakeLiveHandService extends LiveHandService {
-  _FakeLiveHandService(this.initial, this.afterAction);
+  _FakeLiveHandService(this.initial, this.afterAction, {this.undoResult});
 
   final LiveHandStartResult initial;
   final LiveActionResult afterAction;
+  final LiveHandStartResult? undoResult;
   int startCalls = 0;
   int actionCalls = 0;
+  int undoCalls = 0;
   String? lastActionId;
 
   @override
@@ -42,6 +44,14 @@ class _FakeLiveHandService extends LiveHandService {
 
   @override
   Future<LiveHandStartResult> resumeHand(String sessionId) async => initial;
+
+  @override
+  Future<LiveHandStartResult> undoAction({
+    required LiveHandViewModel view,
+  }) async {
+    undoCalls++;
+    return undoResult ?? initial;
+  }
 
   @override
   Stream<LiveActionFeedUpdate> watchActionFeed({
@@ -298,6 +308,74 @@ void main() {
     expect(session.game!.street.name, 'river');
     expect(session.liveActions.single.actionId, 'CALL:200');
     expect(session.heroCanAct, isTrue);
+  });
+
+  test('undoCoachAction restores the prior decision and clears coach', () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    const check = {
+      'actionId': 'CHECK:0',
+      'kind': 'CHECK',
+      'bucket': 'CHECK',
+      'label': 'Check',
+    };
+    final initial = LiveHandStartResult.fromJson({
+      'view': _viewJson(actions: [check]),
+      'events': <Map<String, dynamic>>[],
+    });
+    final after = LiveActionResult.fromJson({
+      'view': _viewJson(stateVersion: 1, street: 'river', actions: [_call]),
+      'events': [
+        {'sequence': 0, 'seat': 0, 'street': 'preflop', ...check},
+        {
+          'sequence': 1,
+          'seat': 1,
+          'street': 'river',
+          'actionId': 'BET:400',
+          'kind': 'BET',
+          'bucket': 'BET_67',
+          'amountTo': 4,
+          'label': r'Bet $4',
+        },
+      ],
+      'coaching': {
+        'actionId': 'CHECK:0',
+        'rating': 'mistake',
+        'confidence': 'high',
+        'summary': 'Checking the turn gives a free river card.',
+        'playerTypeReason': 'Paul calls too wide.',
+        'sizingNote': '',
+        'tendencyKeys': ['foldToTurnBet'],
+      },
+      'replayed': false,
+    });
+    final service = _FakeLiveHandService(initial, after, undoResult: initial);
+    final container = ProviderContainer(
+      overrides: [
+        authUidProvider.overrideWithValue('uid-1'),
+        liveHandServiceProvider.overrideWithValue(service),
+        soundServiceProvider.overrideWithValue(SoundService.silent()),
+        settingsProvider.overrideWith((ref) => SettingsNotifier(preferences)),
+      ],
+    );
+    addTearDown(container.dispose);
+    final controller = container.read(gameControllerProvider.notifier);
+    await controller.startTraining();
+    await controller.heroActLive(
+      container.read(gameControllerProvider).liveActions.single,
+    );
+
+    expect(container.read(gameControllerProvider).coach.hasAdvice, isTrue);
+
+    await controller.undoCoachAction();
+
+    final session = container.read(gameControllerProvider);
+    expect(service.undoCalls, 1);
+    expect(session.coach.hasAdvice, isFalse);
+    expect(session.game!.street.name, 'preflop');
+    expect(session.liveActions.single.actionId, 'CHECK:0');
+    expect(session.heroCanAct, isTrue);
+    expect(session.liveView!.stateVersion, 0);
   });
 
   test('agent next dismisses mid-hand coach instead of no-op', () async {

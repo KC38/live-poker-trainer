@@ -176,6 +176,19 @@ class LiveHandService {
     return LiveHandStartResult.fromJson(data);
   }
 
+  /// Rewinds the last Hero decision so coach review can try another branch.
+  Future<LiveHandStartResult> undoAction({
+    required LiveHandViewModel view,
+  }) async {
+    _requireAuth();
+    final data = await _callWithRetry('undoLiveAction', <String, dynamic>{
+      'sessionId': view.sessionId,
+      'stateVersion': view.stateVersion,
+      'clientVersion': liveClientVersion,
+    });
+    return LiveHandStartResult.fromJson(data);
+  }
+
   Future<Map<String, dynamic>> _callWithRetry(
     String callableName,
     Map<String, dynamic> payload,

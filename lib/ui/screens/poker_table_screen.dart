@@ -187,6 +187,16 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                                 }
                               }
                               : null,
+                      onUndo:
+                          showCoachAdvice
+                              ? () {
+                                unawaited(
+                                  ref
+                                      .read(gameControllerProvider.notifier)
+                                      .undoCoachAction(),
+                                );
+                              }
+                              : null,
                     );
                   }
 

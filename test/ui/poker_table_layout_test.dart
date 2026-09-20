@@ -797,6 +797,7 @@ void main() {
 
         expect(find.byType(CoachShelfWidget), findsOneWidget);
         expect(find.text('Continue'), findsOneWidget);
+        expect(find.text('Undo'), findsOneWidget);
         expect(find.text('Next hand'), findsNothing);
         expect(find.byType(ActionDockWidget), findsNothing);
         expect(find.text('YOUR TURN'), findsNothing);
@@ -808,6 +809,7 @@ void main() {
 
         expect(find.byType(CoachShelfWidget), findsOneWidget);
         expect(find.text('Next hand'), findsOneWidget);
+        expect(find.text('Undo'), findsOneWidget);
         expect(find.text('Continue'), findsNothing);
       });
 

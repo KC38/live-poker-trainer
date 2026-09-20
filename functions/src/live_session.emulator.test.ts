@@ -19,6 +19,7 @@ import {
 import {
   startLiveHandForUser,
   submitLiveActionForUser,
+  undoLiveActionForUser,
 } from "./live_session";
 import {buildLiveSetupKey, DEFAULT_LIVE_SETUP} from "./live_setup";
 import {
@@ -288,5 +289,74 @@ describe("live session integration", () => {
       apiKey: "unused",
       db,
     })).rejects.toMatchObject({code: "already-exists"});
+  });
+
+  test("undo restores the parent decision after a completed fold", async () => {
+    const seeded = await seedReadyHand();
+    const started = await startLiveHandForUser({
+      uid: "user-1",
+      db,
+      raw: {
+        clientVersion: "2.0.0",
+        startRequestId: "start_request_undo",
+        tableSetup: {...DEFAULT_LIVE_SETUP, seatCount: 2},
+      },
+    });
+    const submitted = await submitLiveActionForUser({
+      uid: "user-1",
+      raw: {
+        sessionId: started.view.sessionId,
+        handId: seeded.definition.handId,
+        stateVersion: 0,
+        decisionId: seeded.rootHash,
+        idempotencyKey: "decision_key_undo",
+        actionId: seeded.foldActionId,
+      },
+      apiKey: "unused",
+      db,
+    });
+    expect(submitted.view.status).not.toBe("playing");
+    expect(submitted.view.stateVersion).toBe(1);
+
+    const undone = await undoLiveActionForUser({
+      uid: "user-1",
+      db,
+      raw: {
+        sessionId: started.view.sessionId,
+        stateVersion: 1,
+        clientVersion: "2.0.0",
+      },
+    });
+    expect(undone.view.stateVersion).toBe(0);
+    expect(undone.view.decisionId).toBe(seeded.rootHash);
+    expect(undone.view.status).toBe("playing");
+    expect(undone.view.legalActions.some(
+      (action) => action.actionId === seeded.foldActionId,
+    )).toBe(true);
+
+    const sessionDoc = await db
+      .doc(`users/user-1/liveSessions/${started.view.sessionId}`)
+      .get();
+    expect(sessionDoc.data()?.undoCheckpoint).toBeUndefined();
+    expect(sessionDoc.data()?.stateVersion).toBe(0);
+
+    const history = await db
+      .doc(`users/user-1/liveHandHistory/${started.view.sessionId}`)
+      .get();
+    expect(history.exists).toBe(false);
+
+    const open = await db.doc("users/user-1/liveOpenSession/main").get();
+    expect(open.data()?.status).toBe("playing");
+    expect(open.data()?.sessionId).toBe(started.view.sessionId);
+
+    await expect(undoLiveActionForUser({
+      uid: "user-1",
+      db,
+      raw: {
+        sessionId: started.view.sessionId,
+        stateVersion: 0,
+        clientVersion: "2.0.0",
+      },
+    })).rejects.toMatchObject({code: "failed-precondition"});
   });
 });

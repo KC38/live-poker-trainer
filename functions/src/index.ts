@@ -22,6 +22,7 @@ import {
   resumeLiveHandForUser,
   startLiveHandForUser,
   submitLiveActionForUser,
+  undoLiveActionForUser,
 } from "./live_session";
 
 initializeApp();
@@ -102,6 +103,23 @@ export const resumeLiveHand = onCall(
       return await resumeLiveHandForUser({uid, sessionId, clientVersion});
     } catch (error) {
       throw callableError("resumeLiveHand", error);
+    }
+  },
+);
+
+/** Rewinds one Hero decision so coach review can try another branch. */
+export const undoLiveAction = onCall(
+  {
+    region: "us-central1",
+    timeoutSeconds: 60,
+    memory: "512MiB",
+  },
+  async (request) => {
+    const uid = requireAuth(request.auth?.uid);
+    try {
+      return await undoLiveActionForUser({uid, raw: request.data});
+    } catch (error) {
+      throw callableError("undoLiveAction", error);
     }
   },
 );
