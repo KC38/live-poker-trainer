@@ -175,17 +175,18 @@ String polishCoachCopy(String raw) {
     (match) => '\$${match[1]}',
   );
   // Chip amounts before "pot" / "all-in", but not odds ratios like "8-to-1 pot
-  // odds" and not the cents of an amount that is already marked.
+  // odds", pot fractions like "2/3 pot", and not the cents of an amount that is
+  // already marked.
   text = text.replaceAllMapped(
     RegExp(
-      r'(?<![\d$.\-])(\d+(?:\.\d{1,2})?)\s+(all-in)\b',
+      r'(?<![\d$.\-/])(\d+(?:\.\d{1,2})?)\s+(all-in)\b',
       caseSensitive: false,
     ),
     (match) => '\$${match[1]} ${match[2]}',
   );
   text = text.replaceAllMapped(
     RegExp(
-      r'(?<![\d$.\-])(\d+(?:\.\d{1,2})?)\s+(pot)\b(?!\s+odds)',
+      r'(?<![\d$.\-/])(\d+(?:\.\d{1,2})?)\s+(pot)\b(?!\s+odds)',
       caseSensitive: false,
     ),
     (match) => '\$${match[1]} ${match[2]}',

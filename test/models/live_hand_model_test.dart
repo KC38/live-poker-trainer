@@ -143,4 +143,22 @@ void main() {
       contains('aggression of 76.3%'),
     );
   });
+
+  test('coach copy keeps pot fractions intact', () {
+    expect(
+      polishCoachCopy('making 2/3 pot directly exploitative against stations.'),
+      allOf(
+        contains('2/3 pot'),
+        isNot(contains(r'2/$3')),
+      ),
+    );
+    expect(
+      polishCoachCopy('A 3/4 pot bet charges draws.'),
+      allOf(contains('3/4 pot'), isNot(contains(r'3/$4'))),
+    );
+    expect(
+      polishCoachCopy('Betting 40 pot extracts value.'),
+      contains(r'$40 pot'),
+    );
+  });
 }
