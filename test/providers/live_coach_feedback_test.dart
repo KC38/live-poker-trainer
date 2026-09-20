@@ -69,4 +69,49 @@ void main() {
     expect(feedback.optimalActionLabel, 'RAISE TO \$18');
     expect(feedback.optimalSizingBb, 9);
   });
+
+  test('reasonable grades as CLOSE like strong', () {
+    final feedback = buildLiveCoachFeedback(
+      assessment: const LiveCoachingAssessment(
+        actionId: 'CALL:600',
+        rating: 'reasonable',
+        confidence: 'medium',
+        summary: 'Calling is fine.',
+        playerTypeReason: 'Villain is linear.',
+        sizingNote: '',
+        tendencyKeys: ['showdownCall'],
+        betterActionId: 'RAISE_3X:1800',
+      ),
+      action: call,
+      legalActions: const [call, raise],
+      street: Street.preflop,
+      bigBlind: 2,
+    );
+
+    expect(feedback.verdict, CoachVerdict.close);
+    expect(feedback.optimalActionLabel, 'RAISE TO \$18');
+    expect(feedback.optimalSizingBb, 9);
+  });
+
+  test('mistake grades as INCORRECT', () {
+    final feedback = buildLiveCoachFeedback(
+      assessment: const LiveCoachingAssessment(
+        actionId: 'CALL:600',
+        rating: 'mistake',
+        confidence: 'high',
+        summary: 'Folding is better.',
+        playerTypeReason: 'Villain never bluffs.',
+        sizingNote: '',
+        tendencyKeys: ['bluffRiver'],
+      ),
+      action: call,
+      legalActions: const [call, raise],
+      street: Street.preflop,
+      bigBlind: 2,
+    );
+
+    expect(feedback.verdict, CoachVerdict.incorrect);
+    expect(feedback.optimalActionLabel, isNull);
+    expect(feedback.optimalSizingBb, 0);
+  });
 }
