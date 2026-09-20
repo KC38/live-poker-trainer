@@ -620,6 +620,7 @@ void main() {
         );
 
         expect(find.text('Next'), findsOneWidget);
+        expect(find.text('Next hand'), findsOneWidget);
         expect(
           find.byKey(const ValueKey('next_cta_emphasized')),
           findsOneWidget,
@@ -627,7 +628,7 @@ void main() {
         expect(find.byKey(const ValueKey('next_cta_quiet')), findsNothing);
         expect(find.text('Review'), findsNothing);
         expect(find.text('Hand review'), findsNothing);
-        expect(find.text('Next hand'), findsNothing);
+        expect(find.text('Continue'), findsNothing);
       });
 
       testWidgets('after fold Next is available without highlight', (
@@ -779,8 +780,18 @@ void main() {
 
         expect(find.byType(CoachShelfWidget), findsOneWidget);
         expect(find.text('Continue'), findsOneWidget);
+        expect(find.text('Next hand'), findsNothing);
         expect(find.byType(ActionDockWidget), findsNothing);
         expect(find.text('YOUR TURN'), findsNothing);
+      });
+
+      testWidgets('finished-hand coach CTA is Next hand', (tester) async {
+        await _pumpTable(tester, size: size, session: reviewSession());
+        await _settleBands(tester);
+
+        expect(find.byType(CoachShelfWidget), findsOneWidget);
+        expect(find.text('Next hand'), findsOneWidget);
+        expect(find.text('Continue'), findsNothing);
       });
 
       testWidgets('bands stay separated while the dock is hidden', (

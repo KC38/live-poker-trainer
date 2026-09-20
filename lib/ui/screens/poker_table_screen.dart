@@ -165,6 +165,7 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                               .clamp(120.0, 280.0);
 
                   CoachShelfWidget buildCoach(double? maxHeight) {
+                    final handDone = session.heroDoneForHand;
                     return CoachShelfWidget(
                       feedback: session.coach,
                       bigBlind: game?.bigBlind ?? 2,
@@ -172,12 +173,19 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                       replaying: session.replaying,
                       preparing: showCoachPrep,
                       maxHeight: maxHeight,
+                      dismissLabel: handDone ? 'Next hand' : 'Continue',
                       onDismiss:
                           showCoachAdvice
-                              ? () =>
-                                  ref
-                                      .read(gameControllerProvider.notifier)
-                                      .dismissCoach()
+                              ? () {
+                                final controller = ref.read(
+                                  gameControllerProvider.notifier,
+                                );
+                                if (handDone) {
+                                  controller.nextHand();
+                                } else {
+                                  controller.dismissCoach();
+                                }
+                              }
                               : null,
                     );
                   }
