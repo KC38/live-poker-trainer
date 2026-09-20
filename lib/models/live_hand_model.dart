@@ -164,7 +164,7 @@ String polishCoachCopy(String raw) {
   );
   text = text.replaceAllMapped(
     RegExp(
-      r'(?<![\d$])(\d+(?:\.\d{1,2})?)\s+(pot)\b',
+      r'(?<![\d$])(\d+(?:\.\d{1,2})?)\s+(pot|all-in)\b',
       caseSensitive: false,
     ),
     (match) => '\$${match[1]} ${match[2]}',

@@ -104,7 +104,7 @@ void main() {
           'Viktor has 51.7 bluffRiver and 93.7 aggression, plus 57.8 VPIP.',
       sizingNote:
           'Hero needs 5.5% equity to call the final 42.36 into a pot of 731.64. '
-          'Calling into a massive 748 pot.',
+          'Calling into a massive 748 pot. Facing a 210 all-in.',
       tendencyKeys: const ['bluffRiver', 'aggression', 'vpip'],
     );
 
@@ -112,7 +112,9 @@ void main() {
     expect(message, contains(r'$42.36'));
     expect(message, contains(r'$731.64'));
     expect(message, contains(r'massive $748 pot'));
+    expect(message, contains(r'a $210 all-in'));
     expect(message, isNot(contains('massive 748 pot')));
+    expect(message, isNot(contains('a 210 all-in')));
     expect(message, contains('51.7% river bluff'));
     expect(message, contains('93.7% aggression'));
     expect(message, contains('57.8% VPIP'));
