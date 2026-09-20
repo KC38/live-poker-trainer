@@ -577,6 +577,28 @@ void main() {
       ),
       contains('aggression above 77%'),
     );
+    // "showdown call up to 77.4" (batch 0226).
+    expect(
+      polishCoachCopy(
+        'Sticky stations (showdown call up to 77.4) and aggressive '
+        'squeezers will dominate your medium suited connector multiway.',
+      ),
+      allOf(
+        contains('showdown call up to 77.4%'),
+        isNot(contains('up to 77.4)')),
+      ),
+    );
+    // Unclosed profile rate list before a verb (batch 0226).
+    expect(
+      polishCoachCopy(
+        'Rico (MANIAC, aggression 90.7%, VPIP 52.1%) and Sammy (LAG, '
+        'aggression 70.3% generate massive action with wide ranges.',
+      ),
+      allOf(
+        contains('Sammy (LAG, aggression 70.3%) generate'),
+        isNot(contains('aggression 70.3% generate')),
+      ),
+    );
     expect(
       polishCoachCopy(
         "Rico's extreme aggression (86.4) and wide VPIP (70.2) push many "
