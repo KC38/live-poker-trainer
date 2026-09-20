@@ -414,6 +414,33 @@ void main() {
         isNot(contains(RegExp(r'VPIP \(70\.2\)(?!%)'))),
       ),
     );
+    // H3: tendency label + "frequency" noun before the paren rate.
+    expect(
+      polishCoachCopy(
+        'Blitz exhibits extreme aggression (91.6%) and high '
+        'river bluff frequency (63.1), meaning his three-barrel shove.',
+      ),
+      allOf(
+        contains('river bluff frequency (63.1%)'),
+        isNot(contains(RegExp(r'frequency \(63\.1\)(?!%)'))),
+      ),
+    );
+    expect(
+      polishCoachCopy('high aggression (69.0) keeps pressure on.'),
+      contains('aggression (69.0%)'),
+    );
+    expect(
+      polishCoachCopy('stations show frequency (63.1) on the river.'),
+      contains('frequency (63.1%)'),
+    );
+    expect(
+      polishCoachCopy('Maya has bluff frequency (63.1) in this spot.'),
+      contains('bluff frequency (63.1%)'),
+    );
+    expect(
+      polishCoachCopy('river bluff frequency 63.1) from OCR noise.'),
+      contains('river bluff frequency (63.1%)'),
+    );
     expect(
       polishCoachCopy(
         'Maniac profiles with 85% aggression and 60.1% bluffRiver bluff '
