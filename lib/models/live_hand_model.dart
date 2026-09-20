@@ -667,6 +667,13 @@ String polishCoachCopy(String raw) {
     RegExp(r'\((\d+(?:\.\d+)?)(?!\s*%)\s+and\s+(\d+(?:\.\d+)?)(?!\s*%)\)'),
     (match) => '(${match[1]}% and ${match[2]}%)',
   );
+  // Comma-paired rates: "VPIP (50.8, 45.1)" (batch 0210).
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\((\d{1,2}(?:\.\d+)?)(?!\s*%)\s*,\s*(\d{1,2}(?:\.\d+)?)(?!\s*%)\)',
+    ),
+    (match) => '(${match[1]}%, ${match[2]}%)',
+  );
   // Named rate lists: "(Dale 77.4, Fred 71.7)".
   text = text.replaceAllMapped(
     RegExp(
