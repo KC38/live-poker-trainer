@@ -69,10 +69,10 @@ function geminiResponse(value: unknown): Response {
 }
 
 describe("live intelligence boundaries", () => {
-  test("production coach defaults are 3.7-flash medium/medium", () => {
+  test("production coach defaults are 3.7-flash low/medium", () => {
     expect(DEFAULT_COACH_INTELLIGENCE).toEqual({
       modelId: "gemini-3.7-flash",
-      draftThinking: "medium",
+      draftThinking: "low",
       criticThinking: "medium",
     });
   });
@@ -138,7 +138,8 @@ describe("live intelligence boundaries", () => {
       expect(body).not.toContain("Ks");
       expect(body).not.toContain("Kh");
       expect(body).not.toContain("2c");
-      expect(body).toContain('"thinkingLevel":"medium"');
     }
+    expect(bodies[0]).toContain('"thinkingLevel":"low"');
+    expect(bodies[1]).toContain('"thinkingLevel":"medium"');
   });
 });
