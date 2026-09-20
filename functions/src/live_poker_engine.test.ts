@@ -175,6 +175,50 @@ describe("live poker engine", () => {
     expect(allIn?.amountTo).toBe(280);
   });
 
+  test("a short-stack call names the chips it actually costs", () => {
+    const definition = hand([49, 400]);
+    const state: LiveHandState = {
+      street: "river",
+      board: ["Kc", "Td", "5s", "2h", "9c"],
+      players: [
+        {
+          seat: 0,
+          stack: 49,
+          streetBet: 0,
+          contribution: 161,
+          folded: false,
+          allIn: false,
+          acted: false,
+          lastFacedBet: 0,
+        },
+        {
+          seat: 1,
+          stack: 0,
+          streetBet: 149,
+          contribution: 400,
+          folded: false,
+          allIn: true,
+          acted: true,
+          lastFacedBet: 149,
+        },
+      ],
+      actorSeat: 0,
+      highestBet: 149,
+      minRaiseIncrement: 149,
+      actionNumber: 12,
+      status: "playing",
+      winnerSeats: [],
+      pots: [],
+      payouts: {},
+    };
+
+    const actions = legalLiveActions(definition, state);
+    const call = actions.find((candidate) => candidate.kind === "CALL");
+    expect(call?.label).toBe("Call all-in $49");
+    expect(call?.amountTo).toBe(49);
+    expect(actions.some((candidate) => candidate.kind === "RAISE")).toBe(false);
+  });
+
   test("still applies a pre-snap action id at the size that was offered", () => {
     const definition = hand([400, 400]);
     const state: LiveHandState = {
