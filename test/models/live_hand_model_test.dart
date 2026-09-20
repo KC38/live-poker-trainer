@@ -272,6 +272,18 @@ void main() {
     );
     expect(
       polishCoachCopy(
+        r'Calling $144 to contest a 698 total pot requires 20.6% equity.',
+      ),
+      contains(r'$698 total pot'),
+    );
+    expect(
+      polishCoachCopy(
+        'With an effective stack of 157 and SPR of 0.5, Hero cannot extract.',
+      ),
+      contains(r'stack of $157'),
+    );
+    expect(
+      polishCoachCopy(
         'Folding against opponents with aggression above 77 is timid.',
       ),
       contains('aggression above 77%'),

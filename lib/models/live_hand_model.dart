@@ -230,6 +230,14 @@ String polishCoachCopy(String raw) {
     ),
     (match) => '\$${match[1]} ${match[2]}',
   );
+  // "698 total pot" / "a 698 total pot".
+  text = text.replaceAllMapped(
+    RegExp(
+      r'(?<![\d$.\-/])([1-9]\d*)(?!\.\d)(?!\s*%)\s+(total pot)\b',
+      caseSensitive: false,
+    ),
+    (match) => '\$${match[1]} ${match[2]}',
+  );
   // "262 stack" / "125 bb stack" — amount before the noun, not after.
   text = text.replaceAllMapped(
     RegExp(
@@ -237,6 +245,14 @@ String polishCoachCopy(String raw) {
       caseSensitive: false,
     ),
     (match) => '\$${match[1]} ${match[2]}',
+  );
+  // "stack of 157".
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b(stack of)\s+(?!\$)([1-9]\d*)(?!\.\d)(?!\s*%)\b',
+      caseSensitive: false,
+    ),
+    (match) => '${match[1]} \$${match[2]}',
   );
   // "Facing a 59 call into" — chip count before call, not "call 50.7%" rates.
   text = text.replaceAllMapped(
