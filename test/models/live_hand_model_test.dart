@@ -260,6 +260,18 @@ void main() {
     );
     expect(
       polishCoachCopy(
+        'Calling stations (showdown call 65%-74) stay in the hand.',
+      ),
+      contains('65%-74%'),
+    );
+    expect(
+      polishCoachCopy(
+        "Checking preserves Hero's 72 chip stack to realize showdown.",
+      ),
+      contains(r'$72 chip stack'),
+    );
+    expect(
+      polishCoachCopy(
         'Folding against opponents with aggression above 77 is timid.',
       ),
       contains('aggression above 77%'),

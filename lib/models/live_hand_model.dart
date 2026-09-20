@@ -304,6 +304,19 @@ String polishCoachCopy(String raw) {
     RegExp(r'\$?([1-9]\d*)-chip\s+stack\b', caseSensitive: false),
     (match) => '\$${match[1]}-chip stack',
   );
+  // "72 chip stack" / "72 chips stack".
+  text = text.replaceAllMapped(
+    RegExp(
+      r'(?<![\d$])([1-9]\d*)(?!\.\d)(?!\s*%)\s+chips?\s+stack\b',
+      caseSensitive: false,
+    ),
+    (match) => '\$${match[1]} chip stack',
+  );
+  // "65%-74" percent ranges missing the trailing mark.
+  text = text.replaceAllMapped(
+    RegExp(r'(\d+(?:\.\d+)?%)-(\d+(?:\.\d+)?)(?!\s*%)'),
+    (match) => '${match[1]}-${match[2]}%',
+  );
   // Paired rates in parentheses: "aggression (65.8 and 69.7)".
   text = text.replaceAllMapped(
     RegExp(r'\((\d+(?:\.\d+)?)(?!\s*%)\s+and\s+(\d+(?:\.\d+)?)(?!\s*%)\)'),
