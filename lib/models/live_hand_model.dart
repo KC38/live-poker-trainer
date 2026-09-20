@@ -334,11 +334,13 @@ String polishCoachCopy(String raw) {
       (match) => '(${match[1]}${match[2]} ${match[3]}%)',
     );
   }
-  // Mid-list nested tendency rates inside an open paren (batch 0198):
+  // Mid-list nested tendency rates inside an open paren (batch 0198/0203):
   // "Maniac (aggression 78.3%, VPIP (51.3%) who" →
   // "Maniac (aggression 78.3%, VPIP 51.3%) who".
-  // Only when the rate-paren is wrongly ending mid-clause (`who` / `.`),
-  // not list items like "PFR (26%), and …".
+  // "Paul (VPIP 40.7%, showdown call (62.6%) and Alex's" →
+  // "Paul (VPIP 40.7%, showdown call 62.6%) and Alex's".
+  // Only when the rate-paren is wrongly ending mid-clause
+  // (`who` / `and Name` / `.`), not list items like "PFR (26%), and …".
   // Standalone "3-bet (25.3%)" (depth 0) stays intact.
   {
     final labelAlt =
@@ -367,6 +369,8 @@ String polishCoachCopy(String raw) {
             r'^\s+(?:who|that|which|while|when|making)\b',
             caseSensitive: false,
           ).hasMatch(after) ||
+          // "showdown call (62.6%) and Alex's" — not ", and …" list items.
+          RegExp(r'^\s+and\s+[A-Z]').hasMatch(after) ||
           RegExp(r'^\s*[.!?]').hasMatch(after);
       if (!wronglyCloses) {
         return match[0]!;

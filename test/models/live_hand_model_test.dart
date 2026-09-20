@@ -464,6 +464,26 @@ void main() {
         isNot(contains('aggression (78.3%)')),
       ),
     );
+    // Mid-list nest closed by "and Name" (batch 0203).
+    expect(
+      polishCoachCopy(
+        "Paul (VPIP 40.7%, showdown call (62.6%) and Alex's "
+        'strong range make it difficult to realize equity.',
+      ),
+      allOf(
+        contains("Paul (VPIP 40.7%, showdown call 62.6%) and Alex's"),
+        isNot(contains('showdown call (62.6%)')),
+      ),
+    );
+    // List items ", and …" must keep paren rates.
+    expect(
+      polishCoachCopy(
+        'Sammy opens wide (VPIP 44.6%, PFR (26%), and multiple '
+        'passive calling stations (VPIP › 48, showdown call > 65) '
+        'provide strong multiway implied odds.',
+      ),
+      contains('PFR (26%)'),
+    );
     expect(
       polishCoachCopy(
         'Maya has a loose 3-bet stat (15.1), multiway all-in action narrows '
