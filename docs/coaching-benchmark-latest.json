@@ -2,7 +2,7 @@
   "version": "exploit-benchmark-v1",
   "runDate": "2026-09-20",
   "model": "gemini-3.7-flash",
-  "thinking": "medium-draft-and-medium-critic",
+  "thinking": "low-draft-and-medium-critic",
   "sample": {
     "method": "dimension-stratified",
     "caseCount": 60,
@@ -19,10 +19,10 @@
     "forbiddenAvoidanceRate": 1.0,
     "tendencyGroundingRate": 1.0,
     "calibrationRate": 1.0,
-    "averageEstimatedCostUsdMicros": 12530,
-    "averageDurationMs": 9984,
-    "maxDurationMs": 14583,
-    "totalEstimatedCostUsdMicros": 751781
+    "averageEstimatedCostUsdMicros": 9924,
+    "averageDurationMs": 8315,
+    "maxDurationMs": 14282,
+    "totalEstimatedCostUsdMicros": 595424
   },
   "passed": true,
   "knownMisses": []

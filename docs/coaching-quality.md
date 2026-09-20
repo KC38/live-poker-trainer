@@ -24,7 +24,7 @@ facts.
    pot odds.
 2. Versioned bounded tendency templates supply the only permitted player reads.
 3. Gemini evaluates all legal actions together using the fair-information facts
-   (`gemini-3.7-flash`, medium thinking in production).
+   (`gemini-3.7-flash`, low draft thinking in production).
 4. A second medium-thinking critic pass corrects unsupported certainty, invented
    statistics, mathematical contradictions, and inconsistent rankings.
 5. Deterministic parsing requires every action exactly once, at least one
@@ -73,18 +73,18 @@ Override a single run with `--model=`, `--draft-thinking=`, and
 
 The latest checked-in stratified run is
 [`coaching-benchmark-latest.json`](coaching-benchmark-latest.json): 60 cases
-on production defaults (`gemini-3.7-flash`, medium/medium), covering every
+on production defaults (`gemini-3.7-flash`, low/medium), covering every
 archetype, street, stack depth, spot type, and heads-up/multiway variant. It
 achieved 100% on acceptable-set, structural, forbidden-action,
-tendency-grounding, and confidence-calibration gates, at about $0.0125/case and
-10 s average latency.
+tendency-grounding, and confidence-calibration gates, at about $0.0099/case and
+8.3 s average latency.
 
 ```bash
 cd functions
 GEMINI_API_KEY=... npm run benchmark:coach
 GEMINI_API_KEY=... npm run benchmark:coach:full
 GEMINI_API_KEY=... npm run benchmark:coach:compare
-GEMINI_API_KEY=... npm run benchmark:coach -- --model=gemini-3.7-flash --draft-thinking=medium --critic-thinking=medium
+GEMINI_API_KEY=... npm run benchmark:coach -- --model=gemini-3.7-flash --draft-thinking=low --critic-thinking=medium
 ```
 
 Release thresholds:
