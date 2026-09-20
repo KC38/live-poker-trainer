@@ -226,7 +226,21 @@ String polishCoachCopy(String raw) {
       ),
       (match) => '${match[1]} ${match[2]} ${match[3]}%',
     );
+    // "aggression at 87.7 and 92.9".
+    text = text.replaceAllMapped(
+      RegExp(
+        '($escaped)\\s+at\\s+(\\d+(?:\\.\\d+)?)(?!\\s*%)\\s+and\\s+'
+        r'(\d+(?:\.\d+)?)(?!\s*%)',
+        caseSensitive: false,
+      ),
+      (match) => '${match[1]} at ${match[2]}% and ${match[3]}%',
+    );
   }
+  // "81.4 and 67.3%" — first rate missing its percent.
+  text = text.replaceAllMapped(
+    RegExp(r'(\d+(?:\.\d+)?)(?!\s*%)\s+and\s+(\d+(?:\.\d+)?%)'),
+    (match) => '${match[1]}% and ${match[2]}',
+  );
   // Two-decimal chip amounts (e.g. 33.33), but not pot multipliers like
   // "0.37x pot" and not SPR ratios like "SPR of 0.04".
   text = text.replaceAllMapped(
@@ -298,7 +312,7 @@ String polishCoachCopy(String raw) {
   text = text.replaceAllMapped(
     RegExp(
       r'\b(remaining|final|calling|call|bet|raise|stack|pot of|risk|risking|'
-      r'win|requires?|needs?)\s+'
+      r'win|requires?|need(?:s|ing)?)\s+'
       r'([1-9]\d*)(?!\.\d)(?!\s*%)\b',
       caseSensitive: false,
     ),
