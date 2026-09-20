@@ -19,6 +19,7 @@ class CoachShelfWidget extends StatelessWidget {
     this.preparing = false,
     this.maxHeight,
     this.onDismiss,
+    this.dismissLabel = 'Continue',
   });
 
   final CoachFeedback feedback;
@@ -30,8 +31,11 @@ class CoachShelfWidget extends StatelessWidget {
   final bool preparing;
   final double? maxHeight;
 
-  /// Clears the shelf so the next action dock can appear.
+  /// Clears the shelf (or advances the hand when [dismissLabel] is Next hand).
   final VoidCallback? onDismiss;
+
+  /// Button copy for [onDismiss] — Continue mid-hand, Next hand when done.
+  final String dismissLabel;
 
   ChipDisplayMode get _stripMode => chipDisplayMode.tableMode;
 
@@ -130,7 +134,7 @@ class CoachShelfWidget extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  'Continue',
+                  dismissLabel,
                   style: GoogleFonts.jetBrainsMono(
                     fontSize: 11,
                     fontWeight: FontWeight.w800,

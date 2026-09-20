@@ -360,6 +360,27 @@ void main() {
     expect(dismissed, isTrue);
   });
 
+  testWidgets('Next hand label is used when the hand is over', (tester) async {
+    var advanced = false;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: CoachShelfWidget(
+            feedback: _longIncorrect,
+            bigBlind: 2,
+            chipDisplayMode: ChipDisplayMode.dollars,
+            dismissLabel: 'Next hand',
+            onDismiss: () => advanced = true,
+          ),
+        ),
+      ),
+    );
+    expect(find.text('Continue'), findsNothing);
+    expect(find.text('Next hand'), findsOneWidget);
+    await tester.tap(find.text('Next hand'));
+    expect(advanced, isTrue);
+  });
+
   testWidgets('hides Continue while table is still acting', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
