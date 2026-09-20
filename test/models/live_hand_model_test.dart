@@ -125,4 +125,22 @@ void main() {
     expect(message, isNot(contains('bluffRiver')));
     expect(message, isNot(contains(r'$5.5')));
   });
+
+  test('coach copy keeps odds ratios and complete percents intact', () {
+    expect(
+      polishCoachCopy(
+        'Chaos has an aggression of 76.3% and offers 8-to-1 pot odds.',
+      ),
+      allOf(
+        contains('aggression of 76.3%'),
+        isNot(contains('76%.3%')),
+        contains('8-to-1 pot odds'),
+        isNot(contains(r'8-to-$1')),
+      ),
+    );
+    expect(
+      polishCoachCopy('aggression of 76.3 on the river'),
+      contains('aggression of 76.3%'),
+    );
+  });
 }

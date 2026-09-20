@@ -160,9 +160,11 @@ String polishCoachCopy(String raw) {
   }
   for (final label in _tendencyLabels.values) {
     final escaped = RegExp.escape(label);
+    // Complete number tokens only. "of 76.3%" must not become "of 76%.3%",
+    // but "of 57.8." at the end of a sentence still needs the percent.
     text = text.replaceAllMapped(
       RegExp(
-        '($escaped)\\s+of\\s+(\\d+(?:\\.\\d+)?)(?!\\s*%)',
+        '($escaped)\\s+of\\s+(\\d+(?:\\.\\d+)?)(?!\\d)(?!\\.\\d)(?!\\s*%)',
         caseSensitive: false,
       ),
       (match) => '${match[1]} of ${match[2]}%',
@@ -172,16 +174,25 @@ String polishCoachCopy(String raw) {
     RegExp(r'(?<![\d$])(\d+\.\d{2})(?!\d)(?!\s*%)'),
     (match) => '\$${match[1]}',
   );
+  // Chip amounts before "pot" / "all-in", but not odds ratios like "8-to-1 pot
+  // odds" and not the cents of an amount that is already marked.
   text = text.replaceAllMapped(
     RegExp(
-      r'(?<![\d$])(\d+(?:\.\d{1,2})?)\s+(pot|all-in)\b',
+      r'(?<![\d$.\-])(\d+(?:\.\d{1,2})?)\s+(all-in)\b',
       caseSensitive: false,
     ),
     (match) => '\$${match[1]} ${match[2]}',
   );
   text = text.replaceAllMapped(
     RegExp(
-      r'\b(remaining|final|calling|call|bet|raise|stack|pot of|pot)\s+(\d+)\b(?!\s*%)',
+      r'(?<![\d$.\-])(\d+(?:\.\d{1,2})?)\s+(pot)\b(?!\s+odds)',
+      caseSensitive: false,
+    ),
+    (match) => '\$${match[1]} ${match[2]}',
+  );
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b(remaining|final|calling|call|bet|raise|stack|pot of)\s+(\d+)\b(?!\s*%)',
       caseSensitive: false,
     ),
     (match) => '${match[1]} \$${match[2]}',
