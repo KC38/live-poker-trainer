@@ -175,6 +175,11 @@ String polishCoachCopy(String raw) {
     RegExp(r'\bthree[\s-]bets?\b', caseSensitive: false),
     '3-bet',
   );
+  // Bare "3bet"/"3bets" (batch 0228) → canonical "3-bet".
+  text = text.replaceAll(
+    RegExp(r'\b3bets?\b', caseSensitive: false),
+    '3-bet',
+  );
   // "wide 3-betting (20.7) tendencies" (batch 0207) → "3-bet (20.7%)".
   text = text.replaceAllMapped(
     RegExp(

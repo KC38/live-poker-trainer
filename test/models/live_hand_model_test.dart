@@ -224,6 +224,21 @@ void main() {
       polishCoachCopy('Blitz has 16.2 three-bet frequency and shoves wide.'),
       allOf(contains('16.2% 3-bet'), isNot(contains('16.2 three-bet'))),
     );
+    // Bare "3bet" label (batch 0228 H1 live).
+    expect(
+      polishCoachCopy(
+        'Chaos is an aggressive Maniac (aggression 79.8%, 3bet 15.3%) '
+        'who shoves very wide.',
+      ),
+      allOf(
+        contains('3-bet 15.3%'),
+        isNot(contains('3bet')),
+      ),
+    );
+    expect(
+      polishCoachCopy('Blitz has 16.2 3bet frequency and shoves wide.'),
+      allOf(contains('16.2% 3-bet'), isNot(contains('3bet'))),
+    );
     // "3-betting (20.7) tendencies" missing % (batch 0207).
     expect(
       polishCoachCopy(
