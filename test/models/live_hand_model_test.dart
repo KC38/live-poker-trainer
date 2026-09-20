@@ -319,6 +319,17 @@ void main() {
     );
     expect(
       polishCoachCopy(
+        'Blitz is a Maniac with 81.5% aggression and 51.5 river bluff '
+        'frequency.',
+      ),
+      allOf(
+        contains('81.5% aggression'),
+        contains('51.5% river bluff'),
+        isNot(contains('51.5 river bluff')),
+      ),
+    );
+    expect(
+      polishCoachCopy(
         'Surrendering for 155 more into a pot that already exceeds 800.',
       ),
       allOf(contains(r'for $155 more'), contains(r'exceeds $800')),

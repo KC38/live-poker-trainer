@@ -182,6 +182,18 @@ String polishCoachCopy(String raw) {
     RegExp(r'\briver\s+bluffing\b', caseSensitive: false),
     'river bluff',
   );
+  // Number before display label: "51.5 river bluff frequency" / "81.5 aggression".
+  // (The key pass only catches camelCase like "51.5 bluffRiver".)
+  for (final label in _tendencyLabels.values.toSet()) {
+    final escaped = RegExp.escape(label);
+    text = text.replaceAllMapped(
+      RegExp(
+        '(\\d+(?:\\.\\d+)?)(?!\\s*%)\\s+$escaped\\b',
+        caseSensitive: false,
+      ),
+      (match) => '${match[1]}% $label',
+    );
+  }
   // "60.1% bluffRiver bluff far too often" → "river bluff bluff" after the
   // key rewrite; keep the verb by inserting "and".
   text = text.replaceAllMapped(
