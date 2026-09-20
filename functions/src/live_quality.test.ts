@@ -166,4 +166,30 @@ describe("live quality invariants", () => {
     expect(facts.effectiveStack).toBe(136);
     expect(facts.spr).toBe(0.5);
   });
+
+  test("a micro stack still reports a non-zero SPR", () => {
+    const hand = definition();
+    const state = createInitialLiveState(hand);
+    const hero = state.players[hand.setup.heroSeat];
+    hero.stack = 26;
+    hero.contribution = 200;
+    for (const player of state.players) {
+      if (player.seat === hero.seat) continue;
+      player.folded = player.seat > 1;
+      player.stack = 0;
+      player.allIn = !player.folded;
+      player.contribution = player.folded ? 0 : 589;
+    }
+    state.actorSeat = hero.seat;
+    const facts = buildCoachingFacts({
+      hand,
+      state,
+      legalActions: [],
+      publicHistory: [],
+      equityIterations: 1,
+    });
+    expect(facts.effectiveStack).toBe(26);
+    expect(facts.pot).toBe(789);
+    expect(facts.spr).toBe(0.03);
+  });
 });
