@@ -139,6 +139,19 @@ class TableSession {
   }
 }
 
+/// Authoritative next-street snapshot held until coach Continue.
+class _HeldStreetReveal {
+  const _HeldStreetReveal({
+    required this.view,
+    required this.liveActions,
+    required this.finalGame,
+  });
+
+  final LiveHandViewModel view;
+  final List<LiveLegalActionModel> liveActions;
+  final GameState finalGame;
+}
+
 /// Coordinates online hand creation, idempotent Hero actions, and replay.
 class GameController extends StateNotifier<TableSession> {
   GameController(this._ref) : super(const TableSession()) {
@@ -153,6 +166,7 @@ class GameController extends StateNotifier<TableSession> {
   int _handCount = 0;
   int _idempotencyCounter = 0;
   bool _disposed = false;
+  _HeldStreetReveal? _heldStreetReveal;
 
   String get sessionId => state.liveView?.sessionId ?? '';
 
@@ -170,11 +184,13 @@ class GameController extends StateNotifier<TableSession> {
 
   void prepareTraining() {
     _replayToken++;
+    _heldStreetReveal = null;
     state = const TableSession(loading: true);
   }
 
   Future<void> startTraining({bool continueTable = false}) async {
     final token = ++_replayToken;
+    _heldStreetReveal = null;
     state = TableSession(game: state.game, loading: true, replaying: false);
     final uid = _ref.read(authUidProvider);
     if (uid == null || uid.isEmpty) {
@@ -215,10 +231,33 @@ class GameController extends StateNotifier<TableSession> {
     await startTraining(continueTable: false);
   }
 
-  /// Clears coaching so the next decision's action dock can appear.
+  /// Clears coaching and reveals any next-street state held underneath.
   void dismissCoach() {
     if (!state.coach.hasAdvice) return;
-    state = state.copyWith(coach: const CoachFeedback());
+    final held = _heldStreetReveal;
+    _heldStreetReveal = null;
+    if (held == null) {
+      state = state.copyWith(coach: const CoachFeedback());
+      return;
+    }
+    final game = held.finalGame;
+    state = TableSession(
+      game: game,
+      liveView: held.view,
+      liveActions: held.liveActions,
+      awardingChips: game.isHandOver && game.winnerIds.isNotEmpty,
+    );
+    if (state.awardingChips) {
+      unawaited(_finishAwardAnimation(_replayToken));
+    }
+  }
+
+  Future<void> _finishAwardAnimation(int token) async {
+    await _ref.read(soundServiceProvider).chip();
+    await Future<void>.delayed(ReplayPace.handOver);
+    if (!_disposed && token == _replayToken) {
+      state = state.copyWith(awardingChips: false);
+    }
   }
 
   /// Sends one exact legal action id to the authoritative server.
@@ -231,6 +270,8 @@ class GameController extends StateNotifier<TableSession> {
       return;
     }
     final token = ++_replayToken;
+    _heldStreetReveal = null;
+    final decisionStreet = view.street;
     // Coach prep starts immediately so the reviewing shelf can sit beside
     // seat wait timers while villains (and the next rubric) resolve.
     state = state.copyWith(
@@ -241,6 +282,7 @@ class GameController extends StateNotifier<TableSession> {
       clearError: true,
     );
     var appliedCount = 0;
+    final heldLaterEvents = <LiveActionEventModel>[];
     Future<void> drain = Future<void>.value();
     Future<void> enqueueReplay(
       List<LiveActionEventModel> events,
@@ -251,7 +293,21 @@ class GameController extends StateNotifier<TableSession> {
         if (appliedCount >= events.length) return;
         final slice = events.sublist(appliedCount);
         appliedCount = events.length;
-        await _replayEvents(slice, boardCodes, token);
+        final sameStreet = <LiveActionEventModel>[];
+        for (final event in slice) {
+          if (_eventStreetIsAfter(event.street, decisionStreet)) {
+            heldLaterEvents.add(event);
+          } else {
+            sameStreet.add(event);
+          }
+        }
+        // Truncate the board so replay cannot deal the next street while the
+        // prior street's coaching is still outstanding.
+        await _replayEvents(
+          sameStreet,
+          _boardCodesForStreet(decisionStreet, boardCodes),
+          token,
+        );
       });
       return drain;
     }
@@ -307,31 +363,54 @@ class GameController extends StateNotifier<TableSession> {
         awaitingCoach: false,
         clearWaitingOnSeat: true,
       );
-      await enqueueReplay(
-        result.events,
-        result.view.board.map((card) => card.code).toList(growable: false),
-      );
+      final resultBoard =
+          result.view.board.map((card) => card.code).toList(growable: false);
+      await enqueueReplay(result.events, resultBoard);
       if (_disposed || token != _replayToken) return;
-      final game = result.view.toGameState(handCount: _handCount);
-      // Keep coaching up until the player dismisses it. The next dock stays
-      // gated by [TableSession.heroCanAct] while advice is visible; replay and
-      // legal actions are already settled underneath.
+      final finalGame = result.view.toGameState(handCount: _handCount);
+      final streetAdvanced =
+          result.view.street.index > decisionStreet.index ||
+          _streetIndexFromBoard(resultBoard) > decisionStreet.index ||
+          heldLaterEvents.isNotEmpty;
+      // Keep the felt on the decision street until Continue. Replay and legal
+      // actions for the next street settle underneath and apply on dismiss.
+      if (coaching.hasAdvice && streetAdvanced) {
+        await _collectStreetBetsIntoPot(token);
+        if (_disposed || token != _replayToken) return;
+        _heldStreetReveal = _HeldStreetReveal(
+          view: result.view,
+          liveActions: result.view.legalActions,
+          finalGame: finalGame,
+        );
+        final heldGame = state.game;
+        state = TableSession(
+          game:
+              heldGame == null
+                  ? null
+                  : heldGame.copyWith(waitingForHero: false),
+          liveView: result.view,
+          coach: coaching,
+          liveActions: const [],
+        );
+        return;
+      }
+      if (heldLaterEvents.isNotEmpty) {
+        await _replayEvents(heldLaterEvents, resultBoard, token);
+        if (_disposed || token != _replayToken) return;
+      }
       state = TableSession(
-        game: game,
+        game: finalGame,
         liveView: result.view,
         coach: coaching,
         liveActions: result.view.legalActions,
-        awardingChips: game.isHandOver && game.winnerIds.isNotEmpty,
+        awardingChips: finalGame.isHandOver && finalGame.winnerIds.isNotEmpty,
       );
       if (state.awardingChips) {
-        await _ref.read(soundServiceProvider).chip();
-        await Future<void>.delayed(ReplayPace.handOver);
-        if (!_disposed && token == _replayToken) {
-          state = state.copyWith(awardingChips: false);
-        }
+        await _finishAwardAnimation(token);
       }
     } catch (error) {
       if (_disposed || token != _replayToken) return;
+      _heldStreetReveal = null;
       state = state.copyWith(
         replaying: false,
         liveActions: view.legalActions,
@@ -425,6 +504,7 @@ class GameController extends StateNotifier<TableSession> {
     final sessionId = state.liveView?.sessionId;
     if (sessionId == null || sessionId.isEmpty) return;
     final token = ++_replayToken;
+    _heldStreetReveal = null;
     state = state.copyWith(loading: true, clearError: true);
     try {
       final result = await _ref
@@ -539,6 +619,70 @@ class GameController extends StateNotifier<TableSession> {
       await Future<void>.delayed(ReplayPace.dealStreet);
       if (_disposed || token != _replayToken) return;
     }
+  }
+
+  /// Pulls street bets into the main pot without dealing the next street.
+  Future<void> _collectStreetBetsIntoPot(int token) async {
+    var game = state.game;
+    if (game == null) return;
+    final collected = game.players.fold<double>(
+      0,
+      (total, player) => total + player.currentBet,
+    );
+    if (collected <= Money.epsilon) return;
+    final sound = _ref.read(soundServiceProvider);
+    state = state.copyWith(collectingChips: true);
+    await sound.chip();
+    await Future<void>.delayed(ReplayPace.collectPot);
+    if (_disposed || token != _replayToken) return;
+    game = state.game;
+    if (game == null) return;
+    final stillOwed = game.players.fold<double>(
+      0,
+      (total, player) => total + player.currentBet,
+    );
+    if (stillOwed <= Money.epsilon) {
+      state = state.copyWith(collectingChips: false);
+      return;
+    }
+    game = game.copyWith(
+      players: [
+        for (final player in game.players)
+          player.copyWith(
+            currentBet: 0,
+            hasActedThisRound: false,
+            clearLastAction: true,
+          ),
+      ],
+      mainPot: game.mainPot + stillOwed,
+      highestBet: 0,
+      waitingForHero: false,
+    );
+    state = state.copyWith(game: game, collectingChips: false);
+  }
+
+  static bool _eventStreetIsAfter(String streetName, Street decisionStreet) {
+    final eventStreet = Street.values.firstWhere(
+      (street) => street.name == streetName,
+      orElse: () => decisionStreet,
+    );
+    return eventStreet.index > decisionStreet.index;
+  }
+
+  static List<String> _boardCodesForStreet(
+    Street street,
+    List<String> boardCodes,
+  ) {
+    final boardCount = switch (street) {
+      Street.preflop => 0,
+      Street.flop => 3,
+      Street.turn => 4,
+      Street.river || Street.showdown => 5,
+    };
+    if (boardCodes.length <= boardCount) {
+      return List<String>.from(boardCodes, growable: false);
+    }
+    return boardCodes.take(boardCount).toList(growable: false);
   }
 
   static int _streetIndexFromBoard(List<String> boardCodes) {
