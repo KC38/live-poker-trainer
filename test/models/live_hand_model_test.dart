@@ -280,6 +280,18 @@ void main() {
       ),
       contains('(Dale 77.4%, Fred 71.7%)'),
     );
+    // Named rate list continuations after a percented rate (batch 0222).
+    expect(
+      polishCoachCopy(
+        'Multiple aggressive players (Chaos aggression 93.9%, Rex 65.4, '
+        'Jade 69.7) and the preflop 3-bettor Ivy act behind us.',
+      ),
+      allOf(
+        contains('(Chaos aggression 93.9%, Rex 65.4%, Jade 69.7%)'),
+        isNot(contains('Rex 65.4,')),
+        isNot(contains('Jade 69.7)')),
+      ),
+    );
     expect(
       polishCoachCopy(r'Calling $210 leaves Hero with only 10 chips behind.'),
       contains(r'only $10 chips behind'),
