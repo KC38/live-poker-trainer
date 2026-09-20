@@ -207,17 +207,24 @@ void main() {
         container.read(gameControllerProvider).liveActions.single,
       );
 
-      final session = container.read(gameControllerProvider);
+      var session = container.read(gameControllerProvider);
       expect(service.actionCalls, 1);
       expect(service.lastActionId, 'CALL:200');
+      // Hand-ending board/showdown stays hidden until coach Continue.
+      expect(session.game!.isHandOver, isFalse);
+      expect(session.game!.street.name, 'preflop');
+      expect(session.game!.players[1].holeCards, isEmpty);
+      expect(session.coach.message, contains('Calling keeps weaker hands in.'));
+      expect(session.coach.optimalActionLabel, r'CALL $1');
+      expect(session.coach.confidence, 'high');
+
+      controller.dismissCoach();
+      session = container.read(gameControllerProvider);
       expect(session.game!.isHandOver, isTrue);
       expect(session.game!.players[1].holeCards.map((card) => card.code), [
         'Ks',
         'Kh',
       ]);
-      expect(session.coach.message, contains('Calling keeps weaker hands in.'));
-      expect(session.coach.optimalActionLabel, r'CALL $1');
-      expect(session.coach.confidence, 'high');
     },
   );
 
@@ -279,14 +286,17 @@ void main() {
 
     var session = container.read(gameControllerProvider);
     expect(session.heroCanAct, isFalse);
-    expect(session.game!.street.name, 'river');
-    expect(session.liveActions.single.actionId, 'CALL:200');
+    expect(session.game!.street.name, 'preflop');
+    expect(session.game!.community, isEmpty);
+    expect(session.liveActions, isEmpty);
     expect(session.coach.hasAdvice, isTrue);
     expect(session.coach.message, contains('Checking the turn'));
 
     controller.dismissCoach();
     session = container.read(gameControllerProvider);
     expect(session.coach.hasAdvice, isFalse);
+    expect(session.game!.street.name, 'river');
+    expect(session.liveActions.single.actionId, 'CALL:200');
     expect(session.heroCanAct, isTrue);
   });
 
@@ -349,11 +359,13 @@ void main() {
     var session = container.read(gameControllerProvider);
     expect(session.coach.hasAdvice, isTrue);
     expect(session.heroDoneForHand, isFalse);
+    expect(session.game!.street.name, 'preflop');
     final startCallsBefore = service.startCalls;
 
     controller.debugHandleAgentCommand('next');
     session = container.read(gameControllerProvider);
     expect(session.coach.hasAdvice, isFalse);
+    expect(session.game!.street.name, 'river');
     expect(session.heroCanAct, isTrue);
     // Must not deal a new hand while the current one is still live.
     expect(service.startCalls, startCallsBefore);
