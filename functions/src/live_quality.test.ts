@@ -137,4 +137,33 @@ describe("live quality invariants", () => {
       });
     expect(project(first, firstState)).toEqual(project(second, secondState));
   });
+
+  test("all-in opponents do not zero Hero's effective stack", () => {
+    const hand = definition();
+    const state = createInitialLiveState(hand);
+    const hero = state.players[hand.setup.heroSeat];
+    hero.stack = 136;
+    hero.contribution = 100;
+    hero.streetBet = 0;
+    for (const player of state.players) {
+      if (player.seat === hero.seat) continue;
+      player.folded = player.seat > 2;
+      player.stack = 0;
+      player.allIn = !player.folded;
+      player.streetBet = player.folded ? 0 : 80;
+      player.contribution = player.folded ? 0 : 100;
+    }
+    state.street = "turn";
+    state.highestBet = 80;
+    state.actorSeat = hero.seat;
+    const facts = buildCoachingFacts({
+      hand,
+      state,
+      legalActions: [],
+      publicHistory: [],
+    });
+    expect(facts.heroStack).toBe(136);
+    expect(facts.effectiveStack).toBe(136);
+    expect(facts.spr).toBe(0.5);
+  });
 });
