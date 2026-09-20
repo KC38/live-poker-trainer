@@ -5,6 +5,7 @@
 import {describe, expect, test} from "vitest";
 import {
   chooseVillainAction,
+  DEFAULT_COACH_INTELLIGENCE,
   generateCoachingRubric,
 } from "./live_intelligence";
 import {
@@ -68,6 +69,14 @@ function geminiResponse(value: unknown): Response {
 }
 
 describe("live intelligence boundaries", () => {
+  test("production coach defaults are 3.8-flash medium/medium", () => {
+    expect(DEFAULT_COACH_INTELLIGENCE).toEqual({
+      modelId: "gemini-3.8-flash",
+      draftThinking: "medium",
+      criticThinking: "medium",
+    });
+  });
+
   test("villain prompt sees own cards but not Hero cards or runout", async () => {
     const definition = hand();
     const state = createInitialLiveState(definition);
@@ -129,6 +138,7 @@ describe("live intelligence boundaries", () => {
       expect(body).not.toContain("Ks");
       expect(body).not.toContain("Kh");
       expect(body).not.toContain("2c");
+      expect(body).toContain('"thinkingLevel":"medium"');
     }
   });
 });

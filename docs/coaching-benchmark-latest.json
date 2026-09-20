@@ -1,8 +1,8 @@
 {
   "version": "exploit-benchmark-v1",
-  "runDate": "2026-09-19",
+  "runDate": "2026-09-20",
   "model": "gemini-3.8-flash",
-  "thinking": "high-draft-and-high-critic",
+  "thinking": "medium-draft-and-medium-critic",
   "sample": {
     "method": "dimension-stratified",
     "caseCount": 60,
@@ -19,9 +19,10 @@
     "forbiddenAvoidanceRate": 1.0,
     "tendencyGroundingRate": 1.0,
     "calibrationRate": 1.0,
-    "averageEstimatedCostUsdMicros": null,
-    "averageDurationMs": null,
-    "note": "Cost and latency fields require a re-run with the economics-aware runner."
+    "averageEstimatedCostUsdMicros": 16956,
+    "averageDurationMs": 14118,
+    "maxDurationMs": 35614,
+    "totalEstimatedCostUsdMicros": 1017343
   },
   "passed": true,
   "knownMisses": [

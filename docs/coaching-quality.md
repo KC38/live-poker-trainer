@@ -23,8 +23,9 @@ facts.
 1. The server engine supplies legal actions, stacks, pot, position, SPR, and
    pot odds.
 2. Versioned bounded tendency templates supply the only permitted player reads.
-3. Gemini evaluates all legal actions together using the fair-information facts.
-4. A second high-thinking pass corrects unsupported certainty, invented
+3. Gemini evaluates all legal actions together using the fair-information facts
+   (`gemini-3.8-flash`, medium thinking in production).
+4. A second medium-thinking critic pass corrects unsupported certainty, invented
    statistics, mathematical contradictions, and inconsistent rankings.
 5. Deterministic parsing requires every action exactly once, at least one
    recommendation, legal alternatives, and known tendency keys.
@@ -72,12 +73,12 @@ Override a single run with `--model=`, `--draft-thinking=`, and
 
 The latest checked-in stratified run is
 [`coaching-benchmark-latest.json`](coaching-benchmark-latest.json): 60 cases
-covering every archetype, street, stack depth, spot type, and heads-up/multiway
-variant. It achieved 98.33% acceptable-set agreement and 100% on structural,
-forbidden-action, tendency-grounding, and confidence-calibration gates. The
-single known miss remains explicit in that artifact rather than being hidden by
-an aggregate score. Re-run with the current runner to refresh cost and latency
-fields on that artifact.
+on production defaults (`gemini-3.8-flash`, medium/medium), covering every
+archetype, street, stack depth, spot type, and heads-up/multiway variant. It
+achieved 98.33% acceptable-set agreement and 100% on structural,
+forbidden-action, tendency-grounding, and confidence-calibration gates, at
+about $0.017/case and 14 s average latency. The single known miss remains
+explicit in that artifact rather than being hidden by an aggregate score.
 
 ```bash
 cd functions
