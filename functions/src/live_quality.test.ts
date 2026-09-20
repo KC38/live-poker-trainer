@@ -213,4 +213,42 @@ describe("live quality invariants", () => {
     );
     expect(facts.heroFeatures).not.toContain("high-card");
   });
+
+  test("pair and trips strength tags follow the board", () => {
+    const hand = definition();
+    hand.seats[hand.setup.heroSeat].holeCards = ["Ah", "Qc"];
+    hand.runout = ["Kh", "Qh", "9c", "5d", "Qd"];
+    const turn = createInitialLiveState(hand);
+    turn.street = "turn";
+    turn.board = hand.runout.slice(0, 4);
+    turn.actorSeat = hand.setup.heroSeat;
+    const turnFacts = buildCoachingFacts({
+      hand,
+      state: turn,
+      legalActions: [],
+      publicHistory: [],
+      equityIterations: 1,
+    });
+    expect(turnFacts.heroFeatures).toEqual(
+      expect.arrayContaining(["one-pair", "second-pair"]),
+    );
+    expect(turnFacts.heroFeatures).not.toContain("trips");
+
+    const river = createInitialLiveState(hand);
+    river.street = "river";
+    river.board = hand.runout.slice(0, 5);
+    river.actorSeat = hand.setup.heroSeat;
+    const riverFacts = buildCoachingFacts({
+      hand,
+      state: river,
+      legalActions: [],
+      publicHistory: [],
+      equityIterations: 1,
+    });
+    expect(riverFacts.heroFeatures).toEqual(
+      expect.arrayContaining(["trips-or-better", "trips"]),
+    );
+    expect(riverFacts.heroFeatures).not.toContain("second-pair");
+    expect(riverFacts.heroFeatures).not.toContain("one-pair");
+  });
 });

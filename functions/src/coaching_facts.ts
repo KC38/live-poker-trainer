@@ -204,10 +204,15 @@ function heroFeatures(
   else if (category === 6) features.push("full-house");
   else if (category === 5) features.push("flush");
   else if (category === 4) features.push("straight");
-  else if (category === 3) features.push("trips-or-better");
-  else if (category === 2) features.push("two-pair");
-  else if (category === 1) features.push("one-pair");
-  else features.push("high-card");
+  else if (category === 3) {
+    features.push("trips-or-better");
+    features.push(tripsKindLabel(holeCards, board));
+  } else if (category === 2) features.push("two-pair");
+  else if (category === 1) {
+    features.push("one-pair");
+    const pairKind = pairStrengthLabel(holeCards, board);
+    if (pairKind) features.push(pairKind);
+  } else features.push("high-card");
   const suitCounts = frequency([...holeCards, ...board].map((card) => card[1]));
   const heroSuits = new Set(holeCards.map((card) => card[1]));
   if ([...heroSuits].some((suit) => (suitCounts.get(suit) ?? 0) === 4)) {
@@ -218,6 +223,48 @@ function heroFeatures(
     if (draw) features.push(draw);
   }
   return features;
+}
+
+/**
+ * Pocket set vs board trips. Callers only invoke this for category-3 scores.
+ */
+function tripsKindLabel(
+  holeCards: readonly string[],
+  board: readonly string[],
+): string {
+  const holeRanks = holeCards.map((card) => rankValue(card[0]));
+  if (holeRanks[0] === holeRanks[1]) return "set";
+  return "trips";
+}
+
+/**
+ * Labels one-pair relative to the board using hole cards that actually pair.
+ * Board-only pairs (hero plays the pair without a matching hole card) stay as
+ * the coarse "one-pair" feature without a strength tag.
+ */
+function pairStrengthLabel(
+  holeCards: readonly string[],
+  board: readonly string[],
+): string | null {
+  const holeRanks = holeCards.map((card) => rankValue(card[0]));
+  const boardRanks = board.map((card) => rankValue(card[0]));
+  const boardUnique = [...new Set(boardRanks)].sort((a, b) => b - a);
+  if (boardUnique.length === 0) return null;
+
+  if (holeRanks[0] === holeRanks[1]) {
+    const pair = holeRanks[0];
+    if (pair > boardUnique[0]) return "overpair";
+    if (pair < boardUnique[boardUnique.length - 1]) return "underpair";
+    return "pocket-pair";
+  }
+
+  const paired = holeRanks.find((rank) => boardRanks.includes(rank));
+  if (paired == null) return null;
+  const index = boardUnique.indexOf(paired);
+  if (index === 0) return "top-pair";
+  if (index === 1) return "second-pair";
+  if (index === 2) return "third-pair";
+  return "weak-pair";
 }
 
 /** Open-ender or gutshot using at least one hole card on the current board. */
