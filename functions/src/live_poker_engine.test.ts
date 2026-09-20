@@ -239,6 +239,35 @@ describe("live poker engine", () => {
     expect(retried.state.players[0].streetBet).toBe(15.84);
   });
 
+  test("drops previous-street action labels when the next street starts", () => {
+    const definition = hand();
+    let state = createInitialLiveState(definition);
+    const act = (actionId: string): void => {
+      state = applyLiveAction({hand: definition, state, actionId}).state;
+    };
+    act("OPEN_3_BB:600");
+    act("FOLD");
+    act("CALL:600");
+    expect(state.street).toBe("flop");
+    while (state.street === "flop" && state.status === "playing") {
+      const check = legalLiveActions(definition, state).find(
+        (candidate) => candidate.kind === "CHECK",
+      );
+      if (!check) {
+        throw new Error("expected a check to finish the flop");
+      }
+      act(check.actionId);
+    }
+    expect(state.street).toBe("turn");
+    for (const player of state.players) {
+      if (player.folded) {
+        expect(player.lastAction).toBe("FOLD");
+      } else {
+        expect(player.lastAction).toBeUndefined();
+      }
+    }
+  });
+
   test("an incomplete all-in does not reopen raising", () => {
     const definition = hand([400, 7, 400]);
     let state = createInitialLiveState(definition);
