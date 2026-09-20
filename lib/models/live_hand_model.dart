@@ -254,10 +254,11 @@ String polishCoachCopy(String raw) {
       (match) => '${match[1]}: ${match[2]}%',
     );
     // Parenthetical rates: "aggression (86.4)" / "VPIP (70.2)", and the
-    // common "river bluff frequency (63.1)" form with an extra noun.
+    // common "river bluff frequency (63.1)" / "3-bet stat (15.1)" forms
+    // with an extra noun.
     text = text.replaceAllMapped(
       RegExp(
-        '($escaped)((?:\\s+(?:frequency|rate))?)\\s*\\((\\d+(?:\\.\\d+)?)\\)'
+        '($escaped)((?:\\s+(?:frequency|rate|stat))?)\\s*\\((\\d+(?:\\.\\d+)?)\\)'
         r'(?!\s*%)',
         caseSensitive: false,
       ),
@@ -266,7 +267,7 @@ String polishCoachCopy(String raw) {
     // OCR-split close paren only: "river bluff frequency 63.1)".
     text = text.replaceAllMapped(
       RegExp(
-        '($escaped)((?:\\s+(?:frequency|rate))?)\\s+(\\d+(?:\\.\\d+)?)\\)'
+        '($escaped)((?:\\s+(?:frequency|rate|stat))?)\\s+(\\d+(?:\\.\\d+)?)\\)'
         r'(?!\s*%)',
         caseSensitive: false,
       ),

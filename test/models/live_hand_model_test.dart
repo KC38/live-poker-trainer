@@ -423,6 +423,16 @@ void main() {
     );
     expect(
       polishCoachCopy(
+        'Maya has a loose 3-bet stat (15.1), multiway all-in action narrows '
+        'ranges.',
+      ),
+      allOf(
+        contains('3-bet stat (15.1%)'),
+        isNot(contains('3-bet stat (15.1),')),
+      ),
+    );
+    expect(
+      polishCoachCopy(
         r'Needing 190 to compete for a total pot of $642 is fine.',
       ),
       contains(r'Needing $190'),
