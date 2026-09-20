@@ -673,6 +673,14 @@ String polishCoachCopy(String raw) {
     ),
     (match) => '${match[1]} of \$${match[2]}',
   );
+  // "calling a cold 4-bet cold" (batch 0309 H8) — drop the trailing "cold".
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b(cold\s+\d+-bet)\s+cold\b',
+      caseSensitive: false,
+    ),
+    (match) => '${match[1]}',
+  );
   // "for 155 more" / "for 42 chips" / "for 137 into a $732 pot".
   text = text.replaceAllMapped(
     RegExp(
