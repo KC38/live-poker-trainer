@@ -692,10 +692,11 @@ String polishCoachCopy(String raw) {
     ),
     (match) => '${match[1]} \$${match[2]} ${match[3]}',
   );
-  // "exceeds 800" when describing a pot.
+  // "exceeds 800" / "exceeding 1000 chips" when describing a pot
+  // (batch 0321 H5).
   text = text.replaceAllMapped(
     RegExp(
-      r'\b(exceeds)\s+(?!\$)([1-9]\d{2,})(?!\.\d)(?!\s*%)\b',
+      r'\b(exceeds?|exceeding)\s+(?!\$)([1-9]\d{2,})(?!\.\d)(?!\s*%)\b',
       caseSensitive: false,
     ),
     (match) => '${match[1]} \$${match[2]}',
