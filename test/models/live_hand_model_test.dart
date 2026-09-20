@@ -217,6 +217,10 @@ void main() {
       ),
     );
     expect(
+      polishCoachCopy(r'Risking $260 to win 462 offers 36% pot odds.'),
+      contains(r'win $462'),
+    );
+    expect(
       polishCoachCopy(
         "Rico's extreme aggression (86.4) and wide VPIP (70.2) push many "
         'inferior hands into his range.',
