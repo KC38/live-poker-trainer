@@ -77,12 +77,16 @@ export function buildCoachingFacts(options: {
       return tendency ? {seat: player.seat, profile: tendency} : null;
     })
     .filter((value): value is NonNullable<typeof value> => value !== null);
+  const contesting = activeOpponents.filter((player) => player.stack > 0);
+  // An all-in player's remaining stack is 0. That must not collapse SPR to 0
+  // while Hero still has chips to call; use the deepest stack that can still
+  // put money in, or Hero's own stack when nobody else can.
+  const deepestOpponent = contesting.length === 0 ?
+    hero.stack :
+    Math.max(...contesting.map((player) => player.stack));
   const effectiveStack = activeOpponents.length === 0 ?
     hero.stack :
-    Math.min(
-      hero.stack,
-      Math.max(...activeOpponents.map((player) => player.stack)),
-    );
+    Math.min(hero.stack, deepestOpponent);
   return {
     street: state.street,
     heroSeat,
