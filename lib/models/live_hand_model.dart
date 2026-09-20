@@ -208,6 +208,14 @@ String polishCoachCopy(String raw) {
     ),
     (match) => '\$${match[1]} ${match[2]}',
   );
+  // "262 stack" / "125 bb stack" — amount before the noun, not after.
+  text = text.replaceAllMapped(
+    RegExp(
+      r'(?<![\d$.\-/])(\d+(?:\.\d{1,2})?)\s+(stack)\b',
+      caseSensitive: false,
+    ),
+    (match) => '\$${match[1]} ${match[2]}',
+  );
   // Whole chip counts after verbs, but not the integer prefix of a rate like
   // "call 50.7%" / "call 50.7".
   text = text.replaceAllMapped(
