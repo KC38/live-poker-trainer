@@ -682,6 +682,24 @@ String polishCoachCopy(String raw) {
     ),
     (match) => '(${match[1]} ${match[2]}%, ${match[3]} ${match[4]}%)',
   );
+  // Named rate list continuations after a percented rate (batch 0222):
+  // "(Chaos aggression 93.9%, Rex 65.4, Jade 69.7)" →
+  // "(Chaos aggression 93.9%, Rex 65.4%, Jade 69.7%)".
+  // Require a complete number token (`(?!\.\d)`) so "71.7%" is not
+  // rewritten as "71%.7%".
+  {
+    final namedContinuation = RegExp(
+      r'(%),\s*([A-Z][a-z]{2,})\s+(\d{1,2}(?:\.\d+)?)(?!\d)(?!\.\d)(?!\s*%)',
+    );
+    var prev = '';
+    while (prev != text) {
+      prev = text;
+      text = text.replaceAllMapped(
+        namedContinuation,
+        (match) => '${match[1]}, ${match[2]} ${match[3]}%',
+      );
+    }
+  }
   // "Rex (53.8) and Jade (52.6)" named paren rates.
   text = text.replaceAllMapped(
     RegExp(
