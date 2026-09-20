@@ -10,6 +10,7 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/core/constants/money.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
+import 'package:live_poker_trainer/ui/widgets/action_badge.dart';
 import 'package:live_poker_trainer/ui/widgets/community_cards_view.dart';
 import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 
@@ -199,10 +200,9 @@ class FeltTableView extends StatelessWidget {
                 left: slot.box.left,
                 top: _clamp(slot.box.bottom - 6, 0, math.max(0.0, h - 18)),
                 width: seatBox.width,
-                child: _ActionBadge(
+                child: ActionBadge(
                   key: ValueKey('act-${player.id}-${player.lastActionLabel}'),
                   label: player.lastActionLabel!,
-                  archetype: player.archetype,
                 ),
               ),
             );
@@ -712,65 +712,6 @@ class _WinnerBadgeState extends State<_WinnerBadge> {
               fontSize: 8.5,
               fontWeight: FontWeight.w800,
               letterSpacing: 0.4,
-              color: AppColors.bgDark,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Pops the villain's most recent action so the replay reads as live play.
-class _ActionBadge extends StatefulWidget {
-  const _ActionBadge({super.key, required this.label, required this.archetype});
-
-  final String label;
-  final PlayerArchetype archetype;
-
-  @override
-  State<_ActionBadge> createState() => _ActionBadgeState();
-}
-
-class _ActionBadgeState extends State<_ActionBadge> {
-  double _scale = 0.7;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) setState(() => _scale = 1);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final label = widget.label;
-    final color = switch (label) {
-      'FOLD' => AppColors.slate,
-      'CHECK' => AppColors.slate,
-      'BLIND' => AppColors.goldMuted,
-      'CALL' => AppColors.warning,
-      _ => AppColors.danger,
-    };
-    return AnimatedScale(
-      scale: _scale,
-      duration: const Duration(milliseconds: 180),
-      curve: Curves.easeOutBack,
-      child: Center(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.92),
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Text(
-            label,
-            maxLines: 1,
-            style: GoogleFonts.jetBrainsMono(
-              fontSize: 8.5,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 0.3,
               color: AppColors.bgDark,
             ),
           ),

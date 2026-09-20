@@ -167,6 +167,11 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                       chipDisplayMode: settings.chipDisplayMode,
                       replaying: session.replaying,
                       maxHeight: maxHeight,
+                      onDismiss:
+                          () =>
+                              ref
+                                  .read(gameControllerProvider.notifier)
+                                  .dismissCoach(),
                     );
                   }
 
@@ -257,6 +262,7 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                                       game: game,
                                       chipDisplayMode: tableChipMode,
                                       isThinking: session.replaying,
+                                      canAct: session.heroCanAct,
                                       review: handOver,
                                       isWinner:
                                           handOver &&
@@ -319,6 +325,7 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                           game: game,
                           chipDisplayMode: tableChipMode,
                           isThinking: session.replaying,
+                          canAct: session.heroCanAct,
                           review: handOver,
                           isWinner:
                               handOver && game.winnerIds.contains(game.hero.id),

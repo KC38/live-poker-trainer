@@ -149,6 +149,11 @@ service cloud.firestore {
         allow write: if false;
       }
 
+      match /liveActionFeed/{docId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
       match /liveHandHistory/{handId} {
         allow read: if isOwner(uid);
         allow write: if false;

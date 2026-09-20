@@ -319,6 +319,30 @@ export async function submitLiveActionForUser(options: {
       throw new HttpsError("internal", "Live hand definition or node missing.");
     }
     const parent = preparedNodeFromData(nodeSnapshot.data()!);
+    const feedRef = actionFeedReference(db, options.uid);
+    await feedRef.set({
+      sessionId: session.sessionId,
+      decisionId: input.decisionId,
+      events: [],
+      board: [...parent.state.board],
+      street: parent.state.street,
+      status: "acting",
+      updatedAt: FieldValue.serverTimestamp(),
+    });
+    const publishEdgeEvents = async (
+      events: LiveActionEvent[],
+      state: LiveHandState,
+    ): Promise<void> => {
+      await feedRef.set({
+        sessionId: session.sessionId,
+        decisionId: input.decisionId,
+        events,
+        board: [...state.board],
+        street: state.street,
+        status: "acting",
+        updatedAt: FieldValue.serverTimestamp(),
+      }, {merge: true});
+    };
     const edge = await getOrGenerateSharedEdge({
       db,
       handRef,
@@ -326,6 +350,7 @@ export async function submitLiveActionForUser(options: {
       parent,
       actionId: input.actionId,
       apiKey: options.apiKey,
+      onEdgeEvents: publishEdgeEvents,
     });
     const nextSession: LiveSessionDoc = {
       ...session,
@@ -347,6 +372,15 @@ export async function submitLiveActionForUser(options: {
       coaching: edge.coaching,
       replayed: false,
     };
+    await feedRef.set({
+      sessionId: session.sessionId,
+      decisionId: input.decisionId,
+      events: edge.events,
+      board: [...edge.child.state.board],
+      street: edge.child.state.street,
+      status: "done",
+      updatedAt: FieldValue.serverTimestamp(),
+    }, {merge: true});
     await db.runTransaction(async (tx) => {
       const [currentSession, currentDecision] = await Promise.all([
         tx.get(sessionRef),
@@ -463,6 +497,10 @@ async function getOrGenerateSharedEdge(options: {
   parent: PreparedLiveNode;
   actionId: string;
   apiKey: string;
+  onEdgeEvents?: (
+    events: LiveActionEvent[],
+    state: LiveHandState,
+  ) => Promise<void>;
 }): Promise<PreparedLiveEdge> {
   const parentRef = options.handRef.collection("nodes").doc(
     options.parent.stateHash,
@@ -496,7 +534,13 @@ async function getOrGenerateSharedEdge(options: {
     return {ready: null};
   });
   if (claim.ready) {
-    return readPreparedEdge(options.handRef, options.parent, claim.ready);
+    const prepared = await readPreparedEdge(
+      options.handRef,
+      options.parent,
+      claim.ready,
+    );
+    await options.onEdgeEvents?.(prepared.events, prepared.child.state);
+    return prepared;
   }
   let usage = emptyLiveUsageBreakdown();
   try {
@@ -505,6 +549,7 @@ async function getOrGenerateSharedEdge(options: {
       hand: options.hand,
       parent: options.parent,
       actionId: options.actionId,
+      onEdgeEvents: options.onEdgeEvents,
     });
     usage = expanded.usage;
     const childRef = options.handRef.collection("nodes").doc(
@@ -1094,6 +1139,15 @@ function sessionReference(db: Firestore, uid: string, sessionId: string) {
     .doc(uid)
     .collection("liveSessions")
     .doc(sessionId);
+}
+
+/** Per-user feed of in-flight seat actions while an edge is resolving. */
+function actionFeedReference(db: Firestore, uid: string) {
+  return db
+    .collection("users")
+    .doc(uid)
+    .collection("liveActionFeed")
+    .doc("current");
 }
 
 function openSessionReference(db: Firestore, uid: string) {

@@ -11,6 +11,7 @@ import 'package:live_poker_trainer/core/constants/money.dart';
 import 'package:live_poker_trainer/core/debug/agent_commands.dart';
 import 'package:live_poker_trainer/engine/poker_engine.dart';
 import 'package:live_poker_trainer/models/coach_feedback.dart';
+import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/live_hand_model.dart';
 import 'package:live_poker_trainer/models/situation_model.dart';
@@ -76,7 +77,9 @@ class TableSession {
         !current.waitingForHero ||
         current.isHandOver ||
         replaying ||
-        loading) {
+        loading ||
+        // Hold the dock until the player dismisses coaching for the last act.
+        coach.hasAdvice) {
       return false;
     }
     if (liveView != null) return liveActions.isNotEmpty;
@@ -198,6 +201,12 @@ class GameController extends StateNotifier<TableSession> {
     await startTraining(continueTable: false);
   }
 
+  /// Clears coaching so the next decision's action dock can appear.
+  void dismissCoach() {
+    if (!state.coach.hasAdvice) return;
+    state = state.copyWith(coach: const CoachFeedback());
+  }
+
   /// Sends one exact legal action id to the authoritative server.
   Future<void> heroActLive(LiveLegalActionModel action) async {
     final view = state.liveView;
@@ -213,6 +222,31 @@ class GameController extends StateNotifier<TableSession> {
       liveActions: const [],
       clearError: true,
     );
+    var appliedCount = 0;
+    Future<void> drain = Future<void>.value();
+    Future<void> enqueueReplay(
+      List<LiveActionEventModel> events,
+      List<String> boardCodes,
+    ) {
+      drain = drain.then((_) async {
+        if (_disposed || token != _replayToken) return;
+        if (appliedCount >= events.length) return;
+        final slice = events.sublist(appliedCount);
+        appliedCount = events.length;
+        await _replayEvents(slice, boardCodes, token);
+      });
+      return drain;
+    }
+
+    final feedSubscription = _ref
+        .read(liveHandServiceProvider)
+        .watchActionFeed(
+          sessionId: view.sessionId,
+          decisionId: view.decisionId,
+        )
+        .listen((update) {
+          unawaited(enqueueReplay(update.events, update.board));
+        });
     try {
       final result = await _ref
           .read(liveHandServiceProvider)
@@ -223,19 +257,22 @@ class GameController extends StateNotifier<TableSession> {
           );
       if (_disposed || token != _replayToken) return;
       final coaching = _feedback(result.coaching, action, view.street);
+      // Show coaching as soon as the server grades the act; villains may still
+      // be animating from the action feed / remaining callable events.
       state = state.copyWith(coach: coaching, replaying: true);
-      await _replayEvents(result.events, result.view, token);
+      await enqueueReplay(
+        result.events,
+        result.view.board.map((card) => card.code).toList(growable: false),
+      );
       if (_disposed || token != _replayToken) return;
       final game = result.view.toGameState(handCount: _handCount);
-      // Coaching grades the action just played. Keep it through the replay and
-      // after the hand ends, but drop it once a new decision is on the dock.
-      // Otherwise a turn "INCORRECT" check sits next to river fold/call buttons.
-      final nextDecision =
-          !game.isHandOver && result.view.legalActions.isNotEmpty;
+      // Keep coaching up until the player dismisses it. The next dock stays
+      // gated by [TableSession.heroCanAct] while advice is visible; replay and
+      // legal actions are already settled underneath.
       state = TableSession(
         game: game,
         liveView: result.view,
-        coach: nextDecision ? const CoachFeedback() : coaching,
+        coach: coaching,
         liveActions: result.view.legalActions,
         awardingChips: game.isHandOver && game.winnerIds.isNotEmpty,
       );
@@ -253,6 +290,8 @@ class GameController extends StateNotifier<TableSession> {
         liveActions: view.legalActions,
         error: '$error',
       );
+    } finally {
+      await feedSubscription.cancel();
     }
   }
 
@@ -356,7 +395,7 @@ class GameController extends StateNotifier<TableSession> {
 
   Future<void> _replayEvents(
     List<LiveActionEventModel> events,
-    LiveHandViewModel finalView,
+    List<String> boardCodes,
     int token,
   ) async {
     final sound = _ref.read(soundServiceProvider);
@@ -394,7 +433,11 @@ class GameController extends StateNotifier<TableSession> {
           ],
           mainPot: game.mainPot + collected,
           street: eventStreet,
-          community: finalView.board.take(boardCount).toList(growable: false),
+          community:
+              boardCodes
+                  .take(boardCount)
+                  .map(CardModel.fromCode)
+                  .toList(growable: false),
           highestBet: 0,
           waitingForHero: false,
         );
@@ -413,7 +456,7 @@ class GameController extends StateNotifier<TableSession> {
     }
     var game = state.game;
     while (game != null &&
-        game.street.index < finalView.street.index &&
+        game.street.index < _streetIndexFromBoard(boardCodes) &&
         game.street != Street.showdown) {
       final nextStreet = game.street.next;
       if (nextStreet == null || nextStreet == Street.showdown) break;
@@ -434,7 +477,11 @@ class GameController extends StateNotifier<TableSession> {
         ],
         mainPot: game.mainPot + collected,
         street: nextStreet,
-        community: finalView.board.take(boardCount).toList(growable: false),
+        community:
+            boardCodes
+                .take(boardCount)
+                .map(CardModel.fromCode)
+                .toList(growable: false),
         highestBet: 0,
         waitingForHero: false,
       );
@@ -443,6 +490,15 @@ class GameController extends StateNotifier<TableSession> {
       await Future<void>.delayed(ReplayPace.dealStreet);
       if (_disposed || token != _replayToken) return;
     }
+  }
+
+  static int _streetIndexFromBoard(List<String> boardCodes) {
+    return switch (boardCodes.length) {
+      0 => Street.preflop.index,
+      3 => Street.flop.index,
+      4 => Street.turn.index,
+      _ => Street.river.index,
+    };
   }
 
   static Future<void> _playActionSound(SoundService sound, String kind) async {

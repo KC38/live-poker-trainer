@@ -414,6 +414,10 @@ void main() {
 
   /// Hero is on the clock: the action dock owns the bottom band.
   TableSession liveSession() =>
+      const TableSession().copyWith(game: _nineHandedGame());
+
+  /// Coaching is still open after an act: dock stays hidden until Continue.
+  TableSession coachHoldingSession() =>
       const TableSession(coach: longCoach).copyWith(game: _nineHandedGame());
 
   /// Hand is over: the dock is gone and the other bands take its space.
@@ -547,9 +551,10 @@ void main() {
           await _pumpTable(
             tester,
             size: size,
-            session: const TableSession(
-              coach: longCoach,
-            ).copyWith(game: game, authoredHeroEdges: _authoredEdges),
+            session: const TableSession().copyWith(
+              game: game,
+              authoredHeroEdges: _authoredEdges,
+            ),
           );
 
           final felt = _rectOf(tester, find.byType(FeltTableView));
@@ -747,7 +752,7 @@ void main() {
           size: size,
           session: liveSession(),
         );
-        final playingCoach = _rectOf(tester, find.byType(CoachShelfWidget));
+        expect(find.byType(ActionDockWidget), findsOneWidget);
         final playingCards = _heroCardsRect(tester);
 
         controller.emit(reviewSession());
@@ -756,11 +761,26 @@ void main() {
         final reviewCoach = _rectOf(tester, find.byType(CoachShelfWidget));
         final reviewCards = _heroCardsRect(tester);
 
-        expect(reviewCoach.height, greaterThan(playingCoach.height));
+        expect(find.byType(ActionDockWidget), findsNothing);
+        expect(reviewCoach.height, greaterThan(80));
         expect(reviewCards.height, greaterThan(playingCards.height));
         expect(find.text('Show more'), findsNothing);
         expect(find.text('Show less'), findsNothing);
         expect(find.text('BEST'), findsOneWidget);
+      });
+
+      testWidgets('coaching holds the dock until Continue', (tester) async {
+        await _pumpTable(
+          tester,
+          size: size,
+          session: coachHoldingSession(),
+        );
+        await _settleBands(tester);
+
+        expect(find.byType(CoachShelfWidget), findsOneWidget);
+        expect(find.text('Continue'), findsOneWidget);
+        expect(find.byType(ActionDockWidget), findsNothing);
+        expect(find.text('YOUR TURN'), findsNothing);
       });
 
       testWidgets('bands stay separated while the dock is hidden', (
@@ -799,13 +819,12 @@ void main() {
         await _settleBands(tester);
 
         expect(find.byType(ActionDockWidget), findsOneWidget);
+        expect(find.byType(CoachShelfWidget), findsNothing);
         expect(tester.takeException(), isNull);
 
         final heroCards = _heroCardsRect(tester);
-        final coach = _rectOf(tester, find.byType(CoachShelfWidget));
         final dock = _rectOf(tester, find.byType(ActionDockWidget));
-        expect(heroCards.overlaps(coach), isFalse);
-        expect(coach.bottom, lessThanOrEqualTo(dock.top + 0.5));
+        expect(heroCards.bottom, lessThanOrEqualTo(dock.top + 0.5));
         expect(dock.bottom, lessThanOrEqualTo(size.height + 0.5));
       });
 
