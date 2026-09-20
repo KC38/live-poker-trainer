@@ -344,6 +344,22 @@ void main() {
     );
     expect(
       polishCoachCopy(
+        'Against opponents showing 81.4 and 67.3% aggression, folding is tight.',
+      ),
+      contains('81.4% and 67.3%'),
+    );
+    expect(
+      polishCoachCopy('Opponents show extreme aggression at 87.7 and 92.9.'),
+      contains('aggression at 87.7% and 92.9%'),
+    );
+    expect(
+      polishCoachCopy(
+        r'Needing 190 to compete for a total pot of $642 is fine.',
+      ),
+      contains(r'Needing $190'),
+    );
+    expect(
+      polishCoachCopy(
         'Folding against opponents with aggression above 77 is timid.',
       ),
       contains('aggression above 77%'),
