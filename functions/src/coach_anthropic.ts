@@ -59,7 +59,7 @@ export async function callAnthropicCoachJson(options: {
     output_config: {
       format: {
         type: "json_schema",
-        schema: options.schema,
+        schema: anthropicCompatibleSchema(options.schema),
       },
     },
   };
@@ -149,6 +149,36 @@ function extractAnthropicText(response: Record<string, unknown>): string | null 
     .join("")
     .trim();
   return parts || null;
+}
+
+/**
+ * Anthropic structured outputs only allow array minItems/maxItems of 0 or 1.
+ * Exact action coverage is still enforced by parseAssessments after the call.
+ */
+export function anthropicCompatibleSchema(
+  schema: Record<string, unknown>,
+): Record<string, unknown> {
+  return sanitizeSchemaNode(schema) as Record<string, unknown>;
+}
+
+function sanitizeSchemaNode(value: unknown): unknown {
+  if (Array.isArray(value)) {
+    return value.map((entry) => sanitizeSchemaNode(entry));
+  }
+  if (!value || typeof value !== "object") return value;
+  const input = value as Record<string, unknown>;
+  const output: Record<string, unknown> = {};
+  for (const [key, child] of Object.entries(input)) {
+    if (
+      (key === "minItems" || key === "maxItems") &&
+      typeof child === "number" &&
+      child > 1
+    ) {
+      continue;
+    }
+    output[key] = sanitizeSchemaNode(child);
+  }
+  return output;
 }
 
 function delay(milliseconds: number): Promise<void> {

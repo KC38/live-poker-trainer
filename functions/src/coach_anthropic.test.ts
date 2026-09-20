@@ -4,6 +4,7 @@
 
 import {describe, expect, it} from "vitest";
 import {
+  anthropicCompatibleSchema,
   anthropicThinkingBudget,
   isAnthropicCoachModel,
 } from "./coach_anthropic";
@@ -33,5 +34,39 @@ describe("anthropic coach helpers", () => {
     expect(resolveGeminiPricing(Date.now(), "claude-haiku-4-5").version)
       .toBe("claude-haiku-4-5-standard");
     expect(usage.estimatedCostUsdMicros).toBe(Math.round(1000 * 1.0 + 200 * 5.0));
+  });
+
+  it("strips unsupported array bounds from Anthropic JSON schemas", () => {
+    const sanitized = anthropicCompatibleSchema({
+      type: "object",
+      properties: {
+        assessments: {
+          type: "array",
+          minItems: 6,
+          maxItems: 6,
+          items: {
+            type: "object",
+            properties: {
+              tendencyKeys: {
+                type: "array",
+                minItems: 1,
+                items: {type: "string"},
+              },
+            },
+          },
+        },
+      },
+    });
+    const assessments =
+      (sanitized.properties as Record<string, Record<string, unknown>>)
+        .assessments;
+    expect(assessments.minItems).toBeUndefined();
+    expect(assessments.maxItems).toBeUndefined();
+    expect(
+      (
+        (assessments.items as Record<string, Record<string, unknown>>)
+          .properties.tendencyKeys as Record<string, unknown>
+      ).minItems,
+    ).toBe(1);
   });
 });
