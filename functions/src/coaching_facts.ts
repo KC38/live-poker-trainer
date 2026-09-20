@@ -206,7 +206,7 @@ function heroFeatures(
   else if (category === 4) features.push("straight");
   else if (category === 3) {
     features.push("trips-or-better");
-    features.push(tripsKindLabel(holeCards, board));
+    features.push(tripsKindLabel(holeCards));
   } else if (category === 2) features.push("two-pair");
   else if (category === 1) {
     features.push("one-pair");
@@ -228,10 +228,7 @@ function heroFeatures(
 /**
  * Pocket set vs board trips. Callers only invoke this for category-3 scores.
  */
-function tripsKindLabel(
-  holeCards: readonly string[],
-  board: readonly string[],
-): string {
+function tripsKindLabel(holeCards: readonly string[]): string {
   const holeRanks = holeCards.map((card) => rankValue(card[0]));
   if (holeRanks[0] === holeRanks[1]) return "set";
   return "trips";
