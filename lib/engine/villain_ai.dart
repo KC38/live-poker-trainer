@@ -222,7 +222,7 @@ class VillainAi {
           final target = _legalRaiseTarget(
             state,
             villain,
-            state.highestBet + max(state.minRaise, state.bigBlind) * 3,
+            state.highestBet + max(state.minRaise, state.bigBlind) * 4,
           );
           if (target > state.highestBet + Money.epsilon) {
             return VillainChoice(line: VillainLine.raise, raiseTo: target);

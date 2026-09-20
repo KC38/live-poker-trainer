@@ -331,17 +331,20 @@ function aggressiveTargets(
     state.minRaiseIncrement :
     state.highestBet + state.minRaiseIncrement;
   if (state.street === "preflop") {
+    // Live cash opens skew larger than online 2.5×; keep 3/4/5 BB on the
+    // menu. OPEN_2_5_BB remains parseable for already-pooled hands only.
     if (state.highestBet <= bb) {
       return [
-        {bucket: "OPEN_2_5_BB", amountTo: 2.5 * bb},
         {bucket: "OPEN_3_BB", amountTo: 3 * bb},
         {bucket: "OPEN_4_BB", amountTo: 4 * bb},
+        {bucket: "OPEN_5_BB", amountTo: 5 * bb},
       ];
     }
+    // Live 3-bets are rarely a min-click; size off the open instead.
     return [
-      {bucket: "RAISE_MIN", amountTo: minTo},
       {bucket: "RERAISE_3X", amountTo: state.highestBet * 3},
       {bucket: "RERAISE_4X", amountTo: state.highestBet * 4},
+      {bucket: "RERAISE_5X", amountTo: state.highestBet * 5},
     ];
   }
   if (callAmount === 0) {
@@ -625,7 +628,8 @@ export function visibleLastAction(
  *
  * Sizing snaps change fresh ids (`BET_33:1584` becomes `BET_33:1600`). The
  * button the player already saw must still apply, at that exact size, as long
- * as the same bucket is still legal and the amount fits the stack.
+ * as the amount still fits. Retired live-cash buckets (e.g. OPEN_2_5_BB on a
+ * pooled hand dealt before the 3/4/5 menu) are reconstructed from amount.
  */
 function resolveOfferedAction(
   legal: LiveLegalAction[],
@@ -638,30 +642,68 @@ function resolveOfferedAction(
   if (exact) return exact;
   const separator = actionId.lastIndexOf(":");
   if (separator <= 0) return null;
-  const bucket = actionId.slice(0, separator);
+  const bucket = actionId.slice(0, separator) as LiveActionBucket;
   const amountTo = money(Number(actionId.slice(separator + 1)) / 100);
   if (!Number.isFinite(amountTo)) return null;
-  const template = legal.find((candidate) => candidate.bucket === bucket);
-  if (!template || template.amountTo === undefined) return null;
   const maxTo = money(player.streetBet + player.stack);
   if (amountTo > maxTo + 0.001) return null;
-  if (template.kind === "CALL" || template.kind === "ALL_IN") {
-    return Math.abs(template.amountTo - amountTo) <= 0.001 ? template : null;
+  const template = legal.find((candidate) => candidate.bucket === bucket);
+  if (template && template.amountTo !== undefined) {
+    if (template.kind === "CALL" || template.kind === "ALL_IN") {
+      return Math.abs(template.amountTo - amountTo) <= 0.001 ? template : null;
+    }
+    // Preset buttons snap to the chip, so the size on an older button can sit
+    // a few cents under the new preset. The real floor is still the min bet.
+    const legalMinimumTo = money(
+      state.highestBet < state.minRaiseIncrement ?
+        state.minRaiseIncrement :
+        state.highestBet + state.minRaiseIncrement,
+    );
+    if (amountTo + 0.001 < Math.min(legalMinimumTo, maxTo)) return null;
+    return {
+      ...template,
+      actionId,
+      amountTo,
+      label:
+        `${template.kind === "BET" ? "Bet" : "Raise to"} ${format(amountTo)}`,
+    };
   }
-  // Preset buttons snap to the chip, so the size on an older button can sit
-  // a few cents under the new preset. The real floor is still the min bet.
+  // Bucket left the live menu (e.g. OPEN_2_5_BB) but this hand still offers it.
+  if (!isHistoricalAggressiveBucket(bucket)) return null;
   const legalMinimumTo = money(
     state.highestBet < state.minRaiseIncrement ?
       state.minRaiseIncrement :
       state.highestBet + state.minRaiseIncrement,
   );
   if (amountTo + 0.001 < Math.min(legalMinimumTo, maxTo)) return null;
+  if (amountTo <= state.highestBet + 0.001) return null;
+  const kind = state.highestBet === 0 ? "BET" : "RAISE";
   return {
-    ...template,
     actionId,
+    kind,
+    bucket,
     amountTo,
-    label: `${template.kind === "BET" ? "Bet" : "Raise to"} ${format(amountTo)}`,
+    label: `${kind === "BET" ? "Bet" : "Raise to"} ${format(amountTo)}`,
   };
+}
+
+/** Buckets that may appear on older pooled nodes after menu changes. */
+function isHistoricalAggressiveBucket(bucket: string): boolean {
+  return (
+    bucket === "OPEN_2_5_BB" ||
+    bucket === "OPEN_3_BB" ||
+    bucket === "OPEN_4_BB" ||
+    bucket === "OPEN_5_BB" ||
+    bucket === "RAISE_MIN" ||
+    bucket === "RERAISE_3X" ||
+    bucket === "RERAISE_4X" ||
+    bucket === "RERAISE_5X" ||
+    bucket === "BET_33" ||
+    bucket === "BET_67" ||
+    bucket === "BET_100" ||
+    bucket === "RAISE_50" ||
+    bucket === "RAISE_100"
+  );
 }
 
 function action(

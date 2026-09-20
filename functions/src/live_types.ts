@@ -35,9 +35,11 @@ export type LiveActionBucket =
   "CHECK" |
   "FOLD" |
   "CALL" |
+  // OPEN_2_5_BB kept for hands already stored in the pool; new deals use 3/4/5.
   "OPEN_2_5_BB" |
   "OPEN_3_BB" |
   "OPEN_4_BB" |
+  "OPEN_5_BB" |
   "BET_33" |
   "BET_67" |
   "BET_100" |
@@ -46,6 +48,7 @@ export type LiveActionBucket =
   "RAISE_100" |
   "RERAISE_3X" |
   "RERAISE_4X" |
+  "RERAISE_5X" |
   "ALL_IN";
 
 /** Canonical setup shared by a pool of independently generated hands. */

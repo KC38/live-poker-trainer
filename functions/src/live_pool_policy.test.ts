@@ -82,7 +82,7 @@ describe("live pool policy", () => {
     expect(selectWarmActionIds(node)).toEqual([
       "CALL:600",
       "RERAISE_3X:1800",
-      "ALL_IN:40000",
+      "RERAISE_4X:2400",
     ]);
   });
 });

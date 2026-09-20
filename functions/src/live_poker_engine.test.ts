@@ -641,4 +641,56 @@ describe("live poker engine", () => {
     );
     expect(minimum?.amountTo).toBe(2);
   });
+
+  test("unopened preflop offers live-cash 3/4/5 BB opens", () => {
+    const definition = hand();
+    const state = createInitialLiveState(definition);
+    const buckets = legalLiveActions(definition, state).map(
+      (candidate) => candidate.bucket,
+    );
+    expect(buckets).toEqual(
+      expect.arrayContaining(["OPEN_3_BB", "OPEN_4_BB", "OPEN_5_BB", "ALL_IN"]),
+    );
+    expect(buckets).not.toContain("OPEN_2_5_BB");
+    expect(
+      legalLiveActions(definition, state).find(
+        (candidate) => candidate.bucket === "OPEN_4_BB",
+      )?.amountTo,
+    ).toBe(8);
+  });
+
+  test("facing a preflop open offers 3×/4×/5× reraises", () => {
+    const definition = hand();
+    let state = createInitialLiveState(definition);
+    state = applyLiveAction({
+      hand: definition,
+      state,
+      actionId: "OPEN_4_BB:800",
+    }).state;
+    const buckets = legalLiveActions(definition, state).map(
+      (candidate) => candidate.bucket,
+    );
+    expect(buckets).toEqual(
+      expect.arrayContaining([
+        "RERAISE_3X",
+        "RERAISE_4X",
+        "RERAISE_5X",
+        "ALL_IN",
+      ]),
+    );
+    expect(buckets).not.toContain("RAISE_MIN");
+  });
+
+  test("still applies a retired OPEN_2_5_BB id from an older pooled hand", () => {
+    const definition = hand();
+    const state = createInitialLiveState(definition);
+    const applied = applyLiveAction({
+      hand: definition,
+      state,
+      actionId: "OPEN_2_5_BB:500",
+    });
+    expect(applied.event.bucket).toBe("OPEN_2_5_BB");
+    expect(applied.event.amountTo).toBe(5);
+    expect(applied.state.highestBet).toBe(5);
+  });
 });

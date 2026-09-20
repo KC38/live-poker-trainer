@@ -90,10 +90,13 @@ No free fold is offered. When checked to, Hero receives Check plus fixed legal
 bet buckets. When facing a price, Hero receives Fold, Call, fixed legal raises,
 and All-in where available.
 
-- Preflop open: 2.5 BB, 3 BB, 4 BB, all-in
-- Preflop re-raise: minimum, 3×, 4×, all-in
+- Preflop open: 3 BB, 4 BB, 5 BB, all-in (live-cash sized; prefer 4 BB)
+- Preflop re-raise: 3×, 4×, 5× the current bet, all-in (prefer 4×)
 - Postflop bet: 33%, 67%, 100% pot, all-in
 - Postflop raise: minimum, 50% and 100% pot-after-call, all-in
+
+Older pooled hands may still expose retired open/3-bet buckets (e.g. 2.5 BB
+opens); those action ids remain playable so existing deals are unchanged.
 
 Targets that are illegal, unaffordable, or duplicates after stack clamping are
 removed. Incomplete all-ins do not reopen betting.

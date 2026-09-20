@@ -106,6 +106,7 @@ function visibleRangePercent(
     if (
       event.bucket === "RERAISE_3X" ||
       event.bucket === "RERAISE_4X" ||
+      event.bucket === "RERAISE_5X" ||
       event.bucket === "RAISE_MIN"
     ) {
       return true;
