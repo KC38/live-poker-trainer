@@ -319,6 +319,21 @@ String polishCoachCopy(String raw) {
       (match) => '${match[1]} at ${match[2]}%',
     );
   }
+  // Nested tendency parens from model prose (batch 0197):
+  // "Alex (3-bet (9.4%) and Cole (3-bet (9.9%)" →
+  // "Alex (3-bet 9.4%) and Cole (3-bet 9.9%)".
+  // Leave standalone "3-bet (25.3%)" alone.
+  for (final label in _tendencyLabels.values.toSet()) {
+    final escaped = RegExp.escape(label);
+    const noun = r'(?:\s+(?:frequency|rate|stat|rating))?';
+    text = text.replaceAllMapped(
+      RegExp(
+        '\\(\\s*($escaped)($noun)\\s*\\((\\d+(?:\\.\\d+)?)%\\s*\\)',
+        caseSensitive: false,
+      ),
+      (match) => '(${match[1]}${match[2]} ${match[3]}%)',
+    );
+  }
   // Bare "frequency (63.1)" / "bluff frequency (63.1)" when no tendency
   // label precedes the noun.
   text = text.replaceAllMapped(
