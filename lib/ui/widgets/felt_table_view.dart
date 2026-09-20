@@ -42,6 +42,7 @@ class FeltTableView extends StatelessWidget {
     this.collectingChips = false,
     this.awardingChips = false,
     this.review = false,
+    this.waitingOnSeat,
     this.onPlayerTap,
   });
 
@@ -59,6 +60,9 @@ class FeltTableView extends StatelessWidget {
   /// True once the hand is over: the felt inherits the action dock's band and
   /// the board is allowed to grow into it (still bounded by the seat ring).
   final bool review;
+
+  /// Seat currently waiting on an LLM decision, if any.
+  final int? waitingOnSeat;
 
   /// Opens a villain's visible modeled tendency profile.
   final ValueChanged<PlayerModel>? onPlayerTap;
@@ -177,6 +181,7 @@ class FeltTableView extends StatelessWidget {
                   isDealer: game.dealerIndex == i,
                   isSmallBlind: game.sbIndex == i,
                   isBigBlind: game.bbIndex == i,
+                  isWaitingOnLlm: waitingOnSeat == player.id,
                   compact: compact,
                   size: seatBox,
                   showCards: game.isHandOver && !player.folded,

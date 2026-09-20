@@ -327,19 +327,23 @@ export async function submitLiveActionForUser(options: {
       board: [...parent.state.board],
       street: parent.state.street,
       status: "acting",
+      waitingOnSeat: parent.state.actorSeat,
       updatedAt: FieldValue.serverTimestamp(),
     });
-    const publishEdgeEvents = async (
-      events: LiveActionEvent[],
-      state: LiveHandState,
-    ): Promise<void> => {
+    const publishFeed = async (update: {
+      events: LiveActionEvent[];
+      state: LiveHandState;
+      status: "acting" | "coaching" | "done";
+      waitingOnSeat: number | null;
+    }): Promise<void> => {
       await feedRef.set({
         sessionId: session.sessionId,
         decisionId: input.decisionId,
-        events,
-        board: [...state.board],
-        street: state.street,
-        status: "acting",
+        events: update.events,
+        board: [...update.state.board],
+        street: update.state.street,
+        status: update.status,
+        waitingOnSeat: update.waitingOnSeat,
         updatedAt: FieldValue.serverTimestamp(),
       }, {merge: true});
     };
@@ -350,7 +354,14 @@ export async function submitLiveActionForUser(options: {
       parent,
       actionId: input.actionId,
       apiKey: options.apiKey,
-      onEdgeEvents: publishEdgeEvents,
+      onFeed: async (update) => {
+        await publishFeed({
+          events: update.events,
+          state: update.state,
+          status: update.status,
+          waitingOnSeat: update.waitingOnSeat,
+        });
+      },
     });
     const nextSession: LiveSessionDoc = {
       ...session,
@@ -372,15 +383,12 @@ export async function submitLiveActionForUser(options: {
       coaching: edge.coaching,
       replayed: false,
     };
-    await feedRef.set({
-      sessionId: session.sessionId,
-      decisionId: input.decisionId,
+    await publishFeed({
       events: edge.events,
-      board: [...edge.child.state.board],
-      street: edge.child.state.street,
+      state: edge.child.state,
       status: "done",
-      updatedAt: FieldValue.serverTimestamp(),
-    }, {merge: true});
+      waitingOnSeat: null,
+    });
     await db.runTransaction(async (tx) => {
       const [currentSession, currentDecision] = await Promise.all([
         tx.get(sessionRef),
@@ -497,10 +505,12 @@ async function getOrGenerateSharedEdge(options: {
   parent: PreparedLiveNode;
   actionId: string;
   apiKey: string;
-  onEdgeEvents?: (
-    events: LiveActionEvent[],
-    state: LiveHandState,
-  ) => Promise<void>;
+  onFeed?: (update: {
+    events: LiveActionEvent[];
+    state: LiveHandState;
+    status: "acting" | "coaching";
+    waitingOnSeat: number | null;
+  }) => Promise<void>;
 }): Promise<PreparedLiveEdge> {
   const parentRef = options.handRef.collection("nodes").doc(
     options.parent.stateHash,
@@ -539,7 +549,12 @@ async function getOrGenerateSharedEdge(options: {
       options.parent,
       claim.ready,
     );
-    await options.onEdgeEvents?.(prepared.events, prepared.child.state);
+    await options.onFeed?.({
+      events: prepared.events,
+      state: prepared.child.state,
+      status: "coaching",
+      waitingOnSeat: null,
+    });
     return prepared;
   }
   let usage = emptyLiveUsageBreakdown();
@@ -549,7 +564,7 @@ async function getOrGenerateSharedEdge(options: {
       hand: options.hand,
       parent: options.parent,
       actionId: options.actionId,
-      onEdgeEvents: options.onEdgeEvents,
+      onFeed: options.onFeed,
     });
     usage = expanded.usage;
     const childRef = options.handRef.collection("nodes").doc(

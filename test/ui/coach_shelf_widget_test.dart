@@ -377,4 +377,24 @@ void main() {
     expect(find.text('Continue'), findsNothing);
     expect(find.text('TABLE ACTING…'), findsOneWidget);
   });
+
+  testWidgets('preparing shelf shows reviewing animation', (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: CoachShelfWidget(
+            feedback: CoachFeedback(),
+            bigBlind: 2,
+            chipDisplayMode: ChipDisplayMode.dollars,
+            preparing: true,
+          ),
+        ),
+      ),
+    );
+    expect(find.text('REVIEWING…'), findsOneWidget);
+    expect(find.textContaining('Grading your line'), findsOneWidget);
+    expect(find.text('Continue'), findsNothing);
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(tester.takeException(), isNull);
+  });
 }

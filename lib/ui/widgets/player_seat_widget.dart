@@ -1,6 +1,8 @@
 /// Villain seat HUD — archetype-first so exploits are readable at nine seats.
 library;
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
@@ -46,6 +48,7 @@ class PlayerSeatWidget extends StatelessWidget {
     this.isWinner = false,
     this.compact = false,
     this.showCards = false,
+    this.isWaitingOnLlm = false,
     this.betLabel,
     this.size,
   });
@@ -60,6 +63,9 @@ class PlayerSeatWidget extends StatelessWidget {
   final bool isWinner;
   final bool compact;
   final bool showCards;
+
+  /// True while the server is waiting on this seat's LLM decision.
+  final bool isWaitingOnLlm;
 
   /// Chips this villain has committed on the current street, if any.
   ///
@@ -104,9 +110,10 @@ class PlayerSeatWidget extends StatelessWidget {
                     _ArchetypeCard(
                       player: player,
                       accent: accent,
-                      isActive: isActive,
+                      isActive: isActive || isWaitingOnLlm,
                       isWinner: isWinner,
                       compact: compact,
+                      isWaitingOnLlm: isWaitingOnLlm,
                     ),
                     if (isDealer)
                       Positioned(
@@ -229,6 +236,7 @@ class _ArchetypeCard extends StatelessWidget {
     required this.isActive,
     required this.isWinner,
     required this.compact,
+    this.isWaitingOnLlm = false,
   });
 
   final PlayerModel player;
@@ -236,6 +244,7 @@ class _ArchetypeCard extends StatelessWidget {
   final bool isActive;
   final bool isWinner;
   final bool compact;
+  final bool isWaitingOnLlm;
 
   @override
   Widget build(BuildContext context) {
@@ -243,9 +252,11 @@ class _ArchetypeCard extends StatelessWidget {
     final highlight = isWinner || isActive;
     final ring = isWinner
         ? AppColors.goldBright
-        : isActive
-            ? AppColors.goldBright
-            : accent.withValues(alpha: 0.9);
+        : isWaitingOnLlm
+            ? AppColors.warning
+            : isActive
+                ? AppColors.goldBright
+                : accent.withValues(alpha: 0.9);
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeOutCubic,
@@ -263,7 +274,10 @@ class _ArchetypeCard extends StatelessWidget {
         boxShadow: highlight
             ? [
                 BoxShadow(
-                  color: AppColors.goldBright.withValues(
+                  color: (isWaitingOnLlm
+                          ? AppColors.warning
+                          : AppColors.goldBright)
+                      .withValues(
                     alpha: isWinner ? 0.42 : 0.28,
                   ),
                   blurRadius: isWinner ? 14 : 10,
@@ -295,14 +309,27 @@ class _ArchetypeCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 2),
-          Text(
-            player.name,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.manrope(
-              fontSize: compact ? 9.5 : 11,
-              fontWeight: FontWeight.w700,
-              color: AppColors.cream,
+          SizedBox(
+            width: double.infinity,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    player.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.manrope(
+                      fontSize: compact ? 9.5 : 11,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.cream,
+                    ),
+                  ),
+                ),
+                if (isWaitingOnLlm) ...[
+                  const SizedBox(width: 4),
+                  _SeatWaitTimer(compact: compact),
+                ],
+              ],
             ),
           ),
           if (!player.isHero)
@@ -316,6 +343,56 @@ class _ArchetypeCard extends StatelessWidget {
               ),
             ),
         ],
+      ),
+    );
+  }
+}
+
+/// Elapsed wait while an LLM decides for this seat.
+class _SeatWaitTimer extends StatefulWidget {
+  const _SeatWaitTimer({required this.compact});
+
+  final bool compact;
+
+  @override
+  State<_SeatWaitTimer> createState() => _SeatWaitTimerState();
+}
+
+class _SeatWaitTimerState extends State<_SeatWaitTimer> {
+  late final Stopwatch _watch;
+  Timer? _ticker;
+  int _tenths = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _watch = Stopwatch()..start();
+    _ticker = Timer.periodic(const Duration(milliseconds: 100), (_) {
+      if (!mounted) return;
+      setState(() => _tenths = _watch.elapsedMilliseconds ~/ 100);
+    });
+  }
+
+  @override
+  void dispose() {
+    _ticker?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final seconds = _tenths / 10;
+    final label =
+        seconds < 10
+            ? seconds.toStringAsFixed(1)
+            : seconds.toStringAsFixed(0);
+    return Text(
+      '${label}s',
+      maxLines: 1,
+      style: GoogleFonts.jetBrainsMono(
+        fontSize: widget.compact ? 7.5 : 8.5,
+        fontWeight: FontWeight.w800,
+        color: AppColors.warning,
       ),
     );
   }
