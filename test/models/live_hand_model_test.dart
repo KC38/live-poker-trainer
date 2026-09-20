@@ -761,6 +761,17 @@ void main() {
         isNot(contains(RegExp(r'3-bet range \(12\.9\)(?!%)'))),
       ),
     );
+    // "flat call of 30" must dollarize (batch 0304 H8 live).
+    expect(
+      polishCoachCopy(
+        'A flat call of 30 takes advantage of an attractive '
+        'multiway price and preserves position on the turn.',
+      ),
+      allOf(
+        contains(r'A flat call of $30'),
+        isNot(contains(RegExp(r'flat call of 30(?!\d)'))),
+      ),
+    );
     expect(
       polishCoachCopy('stations show frequency (63.1) on the river.'),
       contains('frequency (63.1%)'),
