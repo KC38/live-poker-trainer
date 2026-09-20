@@ -539,11 +539,31 @@ class GameController extends StateNotifier<TableSession> {
   }
 
   void _onAgentCommand(String command) {
-    if (command == 'next') {
+    final cmd = command.trim().toLowerCase();
+    if (cmd == 'next') {
       unawaited(nextHand());
-    } else {
-      unawaited(debugHeroShortcut(command));
+      return;
     }
+    // Mirror the table Retry banner: resume mid-hand, next when over, else deal.
+    if (cmd == 'retry' || cmd == 'resume') {
+      unawaited(_agentRetryOrResume());
+      return;
+    }
+    unawaited(debugHeroShortcut(command));
+  }
+
+  /// Debug-bus counterpart to the server-error / empty-table Retry buttons.
+  Future<void> _agentRetryOrResume() async {
+    final game = state.game;
+    if (game == null) {
+      await startTraining();
+      return;
+    }
+    if (game.isHandOver) {
+      await nextHand();
+      return;
+    }
+    await resumeCurrentHand();
   }
 }
 
