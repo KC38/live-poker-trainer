@@ -217,6 +217,15 @@ String polishCoachCopy(String raw) {
     ),
     (match) => '${match[1]} and ${match[2]}',
   );
+  // Adjective form the model sometimes uses: "aggressive (77.4)" →
+  // "aggression (77.4%)" so the rate gets a percent like other tendencies.
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\baggressive\s*\((\d+(?:\.\d+)?)\)(?!\s*%)',
+      caseSensitive: false,
+    ),
+    (match) => 'aggression (${match[1]}%)',
+  );
   for (final label in _tendencyLabels.values) {
     final escaped = RegExp.escape(label);
     // Complete number tokens only. "of 76.3%" must not become "of 76%.3%",

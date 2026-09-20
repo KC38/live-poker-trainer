@@ -412,6 +412,17 @@ void main() {
     );
     expect(
       polishCoachCopy(
+        "flatting against Rico's aggressive (77.4) and 3-bet (25.3%) "
+        'heavy profile.',
+      ),
+      allOf(
+        contains('aggression (77.4%)'),
+        contains('3-bet (25.3%)'),
+        isNot(contains('aggressive (77.4)')),
+      ),
+    );
+    expect(
+      polishCoachCopy(
         r'Needing 190 to compete for a total pot of $642 is fine.',
       ),
       contains(r'Needing $190'),
