@@ -115,13 +115,61 @@ class LiveCoachingAssessment {
   }
 
   /// User-facing review assembled from the structured rubric.
-  String get message => [
-    summary,
-    playerTypeReason,
-    sizingNote,
-    if (reversalRead != null && reversalRead!.isNotEmpty)
-      'This changes when: $reversalRead',
-  ].where((line) => line.trim().isNotEmpty).join('\n\n');
+  String get message => polishCoachCopy(
+    [
+      summary,
+      playerTypeReason,
+      sizingNote,
+      if (reversalRead != null && reversalRead!.isNotEmpty)
+        'This changes when: $reversalRead',
+    ].where((line) => line.trim().isNotEmpty).join('\n\n'),
+  );
+}
+
+/// Readable labels for tendency keys the model sometimes prints raw.
+const _tendencyLabels = <String, String>{
+  'foldToFlopBet': 'flop fold',
+  'foldToTurnBet': 'turn fold',
+  'foldToRiverBet': 'river fold',
+  'bluffRiver': 'river bluff',
+  'showdownCall': 'showdown call',
+  'sizingTellStrength': 'sizing tell',
+  'threeBet': '3-bet',
+  'aggression': 'aggression',
+  'vpip': 'VPIP',
+  'pfr': 'PFR',
+};
+
+/// Turns stored coach prose into something a player can read.
+///
+/// Rubrics are generated once and reused, so this has to repair copy that is
+/// already saved: chip amounts gain a `$`, and `51.7 bluffRiver` becomes
+/// `51.7% river bluff`. Percentages that are already marked stay as they are.
+String polishCoachCopy(String raw) {
+  var text = raw;
+  for (final entry in _tendencyLabels.entries) {
+    final key = RegExp.escape(entry.key);
+    text = text.replaceAllMapped(
+      RegExp('(\\d+(?:\\.\\d+)?)\\s+$key\\b', caseSensitive: false),
+      (match) => '${match[1]}% ${entry.value}',
+    );
+    text = text.replaceAll(
+      RegExp('\\b$key\\b', caseSensitive: false),
+      entry.value,
+    );
+  }
+  text = text.replaceAllMapped(
+    RegExp(r'(?<![\d$])(\d+\.\d{2})(?!\d)(?!\s*%)'),
+    (match) => '\$${match[1]}',
+  );
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b(remaining|final|calling|call|bet|raise|stack|pot of|pot)\s+(\d+)\b(?!\s*%)',
+      caseSensitive: false,
+    ),
+    (match) => '${match[1]} \$${match[2]}',
+  );
+  return text;
 }
 
 /// Current server-projected hand state.
