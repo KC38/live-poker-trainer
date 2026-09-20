@@ -574,9 +574,11 @@ String polishCoachCopy(String raw) {
     (match) => 'into \$${match[1]}',
   );
   // "leaving just 73 behind" — skip amounts that already have $.
+  // Also skip SPR fractional digits: "SPR 0.7 behind" must not become
+  // "SPR 0.$7 behind" (batch 0289 H7). `\b` matches between "." and "7".
   text = text.replaceAllMapped(
     RegExp(
-      r'\b((?:just|only)\s+)?(?<!\$)([1-9]\d*)(?!\.\d)(?!\s*%)\s+(behind)\b',
+      r'\b((?:just|only)\s+)?(?<![\d$.])([1-9]\d*)(?!\.\d)(?!\s*%)\s+(behind)\b',
       caseSensitive: false,
     ),
     (match) {
@@ -587,7 +589,7 @@ String polishCoachCopy(String raw) {
   // "only 10 chips behind".
   text = text.replaceAllMapped(
     RegExp(
-      r'\b((?:just|only)\s+)?(?<!\$)([1-9]\d*)(?!\.\d)(?!\s*%)\s+'
+      r'\b((?:just|only)\s+)?(?<![\d$.])([1-9]\d*)(?!\.\d)(?!\s*%)\s+'
       r'(chips?)\s+(behind)\b',
       caseSensitive: false,
     ),

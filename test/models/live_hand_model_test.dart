@@ -703,6 +703,23 @@ void main() {
         isNot(contains('maneuverabillity')),
       ),
     );
+    // SPR fractional digit must not be dollarized as chips-behind
+    // (batch 0289 H7 live: "SPR 0.7 behind" → "SPR 0.$7 behind").
+    expect(
+      polishCoachCopy(
+        r'Calling $103 leaves SPR 0.7 behind for the river on a '
+        'highly connected board.',
+      ),
+      allOf(
+        contains('SPR 0.7 behind'),
+        isNot(contains(r'SPR 0.$7')),
+        contains(r'Calling $103'),
+      ),
+    );
+    expect(
+      polishCoachCopy('leaving just 73 behind after the call.'),
+      contains(r'leaving just $73 behind'),
+    );
     expect(
       polishCoachCopy('stations show frequency (63.1) on the river.'),
       contains('frequency (63.1%)'),
