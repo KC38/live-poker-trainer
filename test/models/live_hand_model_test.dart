@@ -305,6 +305,15 @@ void main() {
     );
     expect(
       polishCoachCopy(
+        r'folding for 137 into a $732 pot gives up massive value.',
+      ),
+      allOf(
+        contains(r'for $137 into'),
+        isNot(contains(RegExp(r'for 137 into'))),
+      ),
+    );
+    expect(
+      polishCoachCopy(
         'Surrendering for 42 chips in a 570-chip pot is indefensible.',
       ),
       allOf(contains(r'for $42 chips'), contains(r'$570-chip pot')),

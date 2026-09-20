@@ -443,10 +443,10 @@ String polishCoachCopy(String raw) {
     ),
     (match) => '${match[1]} \$${match[2]} ${match[3]}',
   );
-  // "for 155 more" / "for 42 chips".
+  // "for 155 more" / "for 42 chips" / "for 137 into a $732 pot".
   text = text.replaceAllMapped(
     RegExp(
-      r'\b(for)\s+(?!\$)([1-9]\d*)(?!\.\d)(?!\s*%)\s+(more|chips?)\b',
+      r'\b(for)\s+(?!\$)([1-9]\d*)(?!\.\d)(?!\s*%)\s+(more|chips?|into)\b',
       caseSensitive: false,
     ),
     (match) => '${match[1]} \$${match[2]} ${match[3]}',
