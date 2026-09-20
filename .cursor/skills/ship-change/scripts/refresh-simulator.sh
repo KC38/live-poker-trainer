@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Refresh the Flutter app on a running simulator/device after shipping to main.
-# Prefer hot restart of an existing `flutter run`; otherwise start one.
+# Refresh Flutter apps on every running iOS simulator after shipping to main.
+# Prefer hot restart of existing `flutter run` sessions; otherwise start one.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
@@ -27,18 +27,40 @@ hot_restart_pid() {
   return 1
 }
 
-if [[ -f "$PID_FILE" ]]; then
-  if hot_restart_pid "$(cat "$PID_FILE")"; then
-    exit 0
+# Hot-restart every attached iOS-simulator `flutter run` (UUID device id).
+restarted=0
+while IFS= read -r pid; do
+  [[ -z "$pid" ]] && continue
+  if hot_restart_pid "$pid"; then
+    restarted=$((restarted + 1))
   fi
-  rm -f "$PID_FILE"
+done < <(
+  pgrep -f 'flutter_tools\.snapshot run -d [A-Fa-f0-9-]{36}' 2>/dev/null || true
+)
+
+# Also honor known pid-files (covers sessions whose cmdline shape differs).
+for file in \
+  "$PID_FILE" \
+  /tmp/flutter-live-poker-trainer.pid \
+  /tmp/flutter-live-poker-trainer-user.pid
+do
+  [[ -f "$file" ]] || continue
+  pid="$(cat "$file" 2>/dev/null || true)"
+  [[ -n "${pid:-}" ]] || continue
+  if hot_restart_pid "$pid"; then
+    restarted=$((restarted + 1))
+  else
+    rm -f "$file"
+  fi
+done
+
+if [[ "$restarted" -gt 0 ]]; then
+  echo "hot-restarted $restarted flutter run session(s) across sims"
+  exit 0
 fi
 
 EXISTING_PID="$(pgrep -f "flutter_tools\.snapshot run" 2>/dev/null | head -n 1 || true)"
 if [[ -n "$EXISTING_PID" ]]; then
-  if hot_restart_pid "$EXISTING_PID"; then
-    exit 0
-  fi
   echo "skip-start: flutter run already active (pid $EXISTING_PID); press R in that terminal"
   exit 0
 fi
