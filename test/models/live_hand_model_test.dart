@@ -749,6 +749,18 @@ void main() {
         isNot(contains(r'$1,$036')),
       ),
     );
+    // "3-bet range (12.9)" must gain % (batch 0299 H3 live).
+    expect(
+      polishCoachCopy(
+        "Maya's aggressive LAG profile with high aggression (61.1%) "
+        'and wide 3-bet range (12.9) ensures she pushes.',
+      ),
+      allOf(
+        contains('3-bet range (12.9%)'),
+        contains('aggression (61.1%)'),
+        isNot(contains(RegExp(r'3-bet range \(12\.9\)(?!%)'))),
+      ),
+    );
     expect(
       polishCoachCopy('stations show frequency (63.1) on the river.'),
       contains('frequency (63.1%)'),
