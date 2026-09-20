@@ -430,6 +430,19 @@ void main() {
         isNot(contains('aggressive (77.4)')),
       ),
     );
+    // Nested "(3-bet (N%)" inside a name paren (batch 0197 #119 live).
+    expect(
+      polishCoachCopy(
+        'TAG profiles like Alex (3-bet (9.4%) and Cole (3-bet (9.9%) '
+        'entering multiway 4-bet pots signal tight value ranges.',
+      ),
+      allOf(
+        contains('Alex (3-bet 9.4%)'),
+        contains('Cole (3-bet 9.9%)'),
+        isNot(contains('3-bet (9.4%)')),
+        isNot(contains('3-bet (9.9%)')),
+      ),
+    );
     expect(
       polishCoachCopy(
         'Maya has a loose 3-bet stat (15.1), multiway all-in action narrows '
