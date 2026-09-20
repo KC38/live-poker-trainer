@@ -398,6 +398,15 @@ void main() {
       contains('81.4% and 67.3%'),
     );
     expect(
+      polishCoachCopy(
+        'With an SPR of 0.1 and 13.9% modeled equity, checking retains flexibility.',
+      ),
+      allOf(
+        contains('SPR of 0.1 and 13.9%'),
+        isNot(contains('SPR of 0.1%')),
+      ),
+    );
+    expect(
       polishCoachCopy('Opponents show extreme aggression at 87.7 and 92.9.'),
       contains('aggression at 87.7% and 92.9%'),
     );
