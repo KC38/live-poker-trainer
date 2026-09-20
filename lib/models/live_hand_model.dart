@@ -170,6 +170,18 @@ String polishCoachCopy(String raw) {
     RegExp(r'\bthree[\s-]bets?\b', caseSensitive: false),
     '3-bet',
   );
+  // "42.3 river bluffing" → "42.3% river bluff".
+  text = text.replaceAllMapped(
+    RegExp(
+      r'(\d+(?:\.\d+)?)(?!\s*%)\s+river\s+bluffing\b',
+      caseSensitive: false,
+    ),
+    (match) => '${match[1]}% river bluff',
+  );
+  text = text.replaceAll(
+    RegExp(r'\briver\s+bluffing\b', caseSensitive: false),
+    'river bluff',
+  );
   for (final label in _tendencyLabels.values) {
     final escaped = RegExp.escape(label);
     // Complete number tokens only. "of 76.3%" must not become "of 76%.3%",
