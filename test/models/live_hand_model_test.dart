@@ -250,6 +250,17 @@ void main() {
       ),
       allOf(contains('(65.8% and 69.7%)'), contains('(10.8% and 12.6%)')),
     );
+    // Comma-paired rates missing % (batch 0210).
+    expect(
+      polishCoachCopy(
+        'Against sticky callers with high VPIP (50.8, 45.1), calling '
+        'plays well postflop in position.',
+      ),
+      allOf(
+        contains('VPIP (50.8%, 45.1%)'),
+        isNot(contains('(50.8, 45.1)')),
+      ),
+    );
     expect(
       polishCoachCopy('Calling \$75 leaves just 73 behind into a \$378 pot.'),
       contains(r'just $73 behind'),
