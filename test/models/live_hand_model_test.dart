@@ -244,6 +244,10 @@ void main() {
       allOf(contains(r'just $75 behind'), isNot(contains(r'$$75'))),
     );
     expect(
+      polishCoachCopy(r'Hero has only 163 remaining into an $867 pot.'),
+      contains(r'only $163 remaining'),
+    );
+    expect(
       polishCoachCopy(
         'Folding against opponents with aggression above 77 is timid.',
       ),

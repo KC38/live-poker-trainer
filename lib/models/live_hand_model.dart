@@ -246,6 +246,17 @@ String polishCoachCopy(String raw) {
     ),
     (match) => '\$${match[1]} ${match[2]}',
   );
+  // "only 163 remaining into" — amount before remaining.
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b((?:only|just)\s+)?(?<!\$)([1-9]\d*)(?!\.\d)(?!\s*%)\s+(remaining)\b',
+      caseSensitive: false,
+    ),
+    (match) {
+      final lead = match[1] ?? '';
+      return '$lead\$${match[2]} ${match[3]}';
+    },
+  );
   // Whole chip counts after verbs, but not the integer prefix of a rate like
   // "call 50.7%" / "call 50.7", and not a bare zero ("Risking 0").
   text = text.replaceAllMapped(
