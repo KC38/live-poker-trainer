@@ -847,6 +847,32 @@ void main() {
           expect(tester.takeException(), isNull);
         },
       );
+
+      testWidgets(
+        'coach prep shows alongside a seat wait timer',
+        (tester) async {
+          final game = _nineHandedGame();
+          await _pumpTable(
+            tester,
+            size: size,
+            session: TableSession(
+              replaying: true,
+              awaitingCoach: true,
+              waitingOnSeat: game.players.firstWhere((p) => !p.isHero).id,
+            ).copyWith(game: game),
+          );
+          await _settleBands(tester);
+
+          expect(find.text('REVIEWING…'), findsOneWidget);
+          expect(find.textContaining('Grading your line'), findsOneWidget);
+          expect(find.byType(ActionDockWidget), findsNothing);
+          expect(find.text('TABLE ACTING…'), findsNothing);
+          // Seat timer ticks in tenths; allow a beat for the first label.
+          await tester.pump(const Duration(milliseconds: 150));
+          expect(find.textContaining('s'), findsWidgets);
+          expect(tester.takeException(), isNull);
+        },
+      );
     });
   });
 }

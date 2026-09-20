@@ -231,9 +231,13 @@ class GameController extends StateNotifier<TableSession> {
       return;
     }
     final token = ++_replayToken;
+    // Coach prep starts immediately so the reviewing shelf can sit beside
+    // seat wait timers while villains (and the next rubric) resolve.
     state = state.copyWith(
       replaying: true,
       liveActions: const [],
+      awaitingCoach: true,
+      clearWaitingOnSeat: true,
       clearError: true,
     );
     var appliedCount = 0;
@@ -258,7 +262,7 @@ class GameController extends StateNotifier<TableSession> {
           sessionId: view.sessionId,
           decisionId: view.decisionId,
         )
-.listen(
+        .listen(
           (update) {
             if (_disposed || token != _replayToken) return;
             final heroSeat = state.game?.hero.id;
@@ -269,8 +273,10 @@ class GameController extends StateNotifier<TableSession> {
                         update.waitingOnSeat != heroSeat)
                     ? update.waitingOnSeat
                     : null;
+            // Keep coach prep sticky through "acting" snapshots so seat timers
+            // and the reviewing shelf can show together.
             state = state.copyWith(
-              awaitingCoach: update.isCoaching,
+              awaitingCoach: state.awaitingCoach || update.isCoaching,
               waitingOnSeat: waiting,
               clearWaitingOnSeat: waiting == null,
             );
