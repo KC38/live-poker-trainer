@@ -681,10 +681,11 @@ String polishCoachCopy(String raw) {
     ),
     (match) => '${match[1]}',
   );
-  // "for 155 more" / "for 42 chips" / "for 137 into a $732 pot".
+  // "for 155 more" / "for 42 chips" / "for 137 into a $732 pot" /
+  // "Calling all-in for 246 with …" (batch 0311 H5).
   text = text.replaceAllMapped(
     RegExp(
-      r'\b(for)\s+(?!\$)([1-9]\d*)(?!\.\d)(?!\s*%)\s+(more|chips?|into)\b',
+      r'\b(for)\s+(?!\$)([1-9]\d*)(?!\.\d)(?!\s*%)\s+(more|chips?|into|with)\b',
       caseSensitive: false,
     ),
     (match) => '${match[1]} \$${match[2]} ${match[3]}',
@@ -798,6 +799,21 @@ String polishCoachCopy(String raw) {
         }
         return '${match[1]} ${match[2]}%) ';
       },
+    );
+  }
+  // Named profile rate closed with a comma instead of ")" (batch 0311 H6):
+  // "station (Paul: showdown call 74.9%, flatting keeps" →
+  // "station (Paul: showdown call 74.9%), flatting keeps".
+  {
+    final labelAlt =
+        _tendencyLabels.values.map(RegExp.escape).toSet().join('|');
+    text = text.replaceAllMapped(
+      RegExp(
+        '\\(([A-Z][a-z]{2,}):\\s*($labelAlt)\\s+'
+        r'(\d+(?:\.\d+)?)%\s*,\s+(?=[a-z])',
+        caseSensitive: false,
+      ),
+      (match) => '(${match[1]}: ${match[2]} ${match[3]}%), ',
     );
   }
   // Model typo "maneuverabillity" (batch 0287) → "maneuverability".
