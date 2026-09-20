@@ -240,6 +240,10 @@ void main() {
       contains(r'just $73 behind'),
     );
     expect(
+      polishCoachCopy(r'Calling $120 leaves just $75 behind out of position.'),
+      allOf(contains(r'just $75 behind'), isNot(contains(r'$$75'))),
+    );
+    expect(
       polishCoachCopy(
         'Folding against opponents with aggression above 77 is timid.',
       ),
