@@ -121,4 +121,51 @@ void main() {
     // Seat 1 still shows CHECK until a raise reopens; CALL does not reopen.
     expect(next.players[1].lastActionLabel, 'CHECK');
   });
+
+  test('all-in raise clears CHECK labels on seats that now owe chips', () {
+    final game = GameState(
+      mode: GameMode.training,
+      players: [
+        _seat(
+          id: 0,
+          stack: 200,
+          currentBet: 0,
+          lastActionLabel: 'CHECK',
+          hasActedThisRound: true,
+        ),
+        _seat(
+          id: 1,
+          stack: 194,
+          currentBet: 6,
+          lastActionLabel: 'BET',
+          hasActedThisRound: true,
+        ),
+        _seat(id: 2, stack: 50, currentBet: 0),
+      ],
+      street: Street.flop,
+      highestBet: 6,
+      activePlayerIndex: 2,
+      handCount: 1,
+    );
+
+    final next = applyLiveReplayEvent(
+      game,
+      const LiveActionEventModel(
+        sequence: 3,
+        seat: 2,
+        street: 'flop',
+        actionId: 'ALL_IN:5000',
+        kind: 'ALL_IN',
+        bucket: 'ALL_IN',
+        amountTo: 50,
+      ),
+    );
+
+    expect(next.players[2].lastActionLabel, 'ALL-IN');
+    expect(next.highestBet, 50);
+    expect(next.players[0].lastActionLabel, isNull);
+    expect(next.players[1].lastActionLabel, isNull);
+    expect(next.players[0].hasActedThisRound, isFalse);
+    expect(next.players[1].hasActedThisRound, isFalse);
+  });
 }
