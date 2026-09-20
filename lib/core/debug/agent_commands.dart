@@ -4,7 +4,8 @@
 /// `curl 'http://127.0.0.1:<port>/<token>/ext.poker.agent?isolateId=<id>&cmd=start'`
 ///
 /// Commands: `start`, `fold`, `call`, `check`, `raise`, `raise:45`, `allin`,
-/// `next`, `back`. Optional `amount` query param becomes `raise:<amount>`.
+/// `next`, `retry`/`resume`, `back`. Optional `amount` query param becomes
+/// `raise:<amount>`.
 library;
 
 import 'dart:async';
