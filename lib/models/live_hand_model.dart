@@ -164,6 +164,13 @@ String polishCoachCopy(String raw) {
   );
   text = text.replaceAllMapped(
     RegExp(
+      r'(?<![\d$])(\d+(?:\.\d{1,2})?)\s+(pot)\b',
+      caseSensitive: false,
+    ),
+    (match) => '\$${match[1]} ${match[2]}',
+  );
+  text = text.replaceAllMapped(
+    RegExp(
       r'\b(remaining|final|calling|call|bet|raise|stack|pot of|pot)\s+(\d+)\b(?!\s*%)',
       caseSensitive: false,
     ),
