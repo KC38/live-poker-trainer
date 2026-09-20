@@ -24,7 +24,7 @@ import {
   type PreparedLiveEdge,
   type PreparedLiveNode,
 } from "./live_tree";
-import {livePotSize} from "./live_poker_engine";
+import {livePotSize, visibleLastAction} from "./live_poker_engine";
 import {buildLiveSetupKey, parseLiveTableSetup} from "./live_setup";
 import type {
   CoachingActionAssessment,
@@ -585,6 +585,7 @@ function projectLiveView(options: {
     const player = node.state.players[definition.seat];
     const reveal = definition.seat === hand.setup.heroSeat ||
       (showdown && !player.folded);
+    const lastAction = visibleLastAction(player, node.state.highestBet);
     return {
       seat: definition.seat,
       name: definition.name,
@@ -593,9 +594,7 @@ function projectLiveView(options: {
       streetBet: player.streetBet,
       folded: player.folded,
       allIn: player.allIn,
-      ...(player.lastAction === undefined ?
-        {} :
-        {lastAction: player.lastAction}),
+      ...(lastAction === undefined ? {} : {lastAction}),
       ...(reveal ? {holeCards: definition.holeCards} : {}),
       ...(definition.tendency === undefined ?
         {} :
