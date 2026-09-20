@@ -825,6 +825,20 @@ void main() {
       polishCoachCopy('Blitz has 16.2 3-bet and shoves wide.'),
       contains('16.2% 3-bet'),
     );
+    // Redundant trailing "cold" after "cold N-bet" (batch 0309 H8).
+    expect(
+      polishCoachCopy(
+        'calling a cold 4-bet cold with other players behind is burning chips.',
+      ),
+      allOf(
+        contains('calling a cold 4-bet with other players behind'),
+        isNot(contains('cold 4-bet cold')),
+      ),
+    );
+    expect(
+      polishCoachCopy('Facing a cold 3-bet cold out of position.'),
+      equals('Facing a cold 3-bet out of position.'),
+    );
     // Comparison operators must gain % (batch 0163).
     expect(
       polishCoachCopy(
