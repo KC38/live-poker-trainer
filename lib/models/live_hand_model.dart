@@ -158,6 +158,18 @@ String polishCoachCopy(String raw) {
       entry.value,
     );
   }
+  // Model prose often says "three-bet" instead of the canonical "3-bet" label.
+  text = text.replaceAllMapped(
+    RegExp(
+      r'(\d+(?:\.\d+)?)(?!\s*%)\s+three[\s-]?bets?\b',
+      caseSensitive: false,
+    ),
+    (match) => '${match[1]}% 3-bet',
+  );
+  text = text.replaceAll(
+    RegExp(r'\bthree[\s-]bets?\b', caseSensitive: false),
+    '3-bet',
+  );
   for (final label in _tendencyLabels.values) {
     final escaped = RegExp.escape(label);
     // Complete number tokens only. "of 76.3%" must not become "of 76%.3%",
@@ -217,11 +229,20 @@ String polishCoachCopy(String raw) {
     ),
     (match) => '\$${match[1]} ${match[2]}',
   );
+  // "Facing a 59 call into" — chip count before call, not "call 50.7%" rates.
+  text = text.replaceAllMapped(
+    RegExp(
+      r'(?<![\d$.\-/])([1-9]\d*)\s+(call)\b(?!\s*\d)(?!\s*%)(?!\s*\.)',
+      caseSensitive: false,
+    ),
+    (match) => '\$${match[1]} ${match[2]}',
+  );
   // Whole chip counts after verbs, but not the integer prefix of a rate like
   // "call 50.7%" / "call 50.7", and not a bare zero ("Risking 0").
   text = text.replaceAllMapped(
     RegExp(
-      r'\b(remaining|final|calling|call|bet|raise|stack|pot of|risk|risking|win)\s+'
+      r'\b(remaining|final|calling|call|bet|raise|stack|pot of|risk|risking|'
+      r'win|requires?|needs?)\s+'
       r'([1-9]\d*)(?!\.\d)(?!\s*%)\b',
       caseSensitive: false,
     ),
