@@ -16,6 +16,7 @@
     "seed:live": "npx ts-node --transpile-only scripts/seed_live_default.ts",
     "benchmark:coach": "npx ts-node --transpile-only scripts/run_exploit_benchmark.ts",
     "benchmark:coach:full": "npx ts-node --transpile-only scripts/run_exploit_benchmark.ts --full",
+    "benchmark:coach:compare": "npx ts-node --transpile-only scripts/run_exploit_benchmark.ts --compare",
     "smoke:live": "npx ts-node --transpile-only scripts/smoke_live_hand.ts",
     "cleanup:invalid:dry": "npx ts-node --transpile-only scripts/remove_invalid_situations.ts"
   },

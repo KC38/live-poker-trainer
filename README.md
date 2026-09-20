@@ -134,13 +134,18 @@ flutter analyze
 flutter test
 ```
 
-Run the sampled or full coaching gate with `GEMINI_API_KEY` in the environment:
+Run the sampled, full, or multi-model coaching gate with `GEMINI_API_KEY` in the
+environment:
 
 ```bash
 cd functions
 npm run benchmark:coach
 npm run benchmark:coach:full
+npm run benchmark:coach:compare
 ```
+
+Reports include quality rates plus estimated cost and response-time averages.
+`--compare` ranks configs by quality, then cost, then latency.
 
 See [docs/architecture.md](docs/architecture.md) for complete boundaries and
 data flow.

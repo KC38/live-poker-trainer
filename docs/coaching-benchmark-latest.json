@@ -18,7 +18,10 @@
     "acceptableRecommendationRate": 0.9833333333333333,
     "forbiddenAvoidanceRate": 1.0,
     "tendencyGroundingRate": 1.0,
-    "calibrationRate": 1.0
+    "calibrationRate": 1.0,
+    "averageEstimatedCostUsdMicros": null,
+    "averageDurationMs": null,
+    "note": "Cost and latency fields require a re-run with the economics-aware runner."
   },
   "passed": true,
   "knownMisses": [

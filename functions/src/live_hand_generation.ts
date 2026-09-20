@@ -312,6 +312,8 @@ async function callGeminiDeal(options: {
   const usage = liveUsageFromPurpose(
     generationUsageFromMetadata(
       json.usageMetadata as GeminiUsageMetadata | undefined,
+      Date.now(),
+      LIVE_GEMINI_MODEL,
     ),
     "deal",
     durationMs,
