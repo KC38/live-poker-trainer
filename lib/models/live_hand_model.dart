@@ -232,13 +232,24 @@ String polishCoachCopy(String raw) {
       ),
       (match) => '${match[1]}: ${match[2]}%',
     );
-    // Parenthetical rates: "aggression (86.4)" / "VPIP (70.2)".
+    // Parenthetical rates: "aggression (86.4)" / "VPIP (70.2)", and the
+    // common "river bluff frequency (63.1)" form with an extra noun.
     text = text.replaceAllMapped(
       RegExp(
-        '($escaped)\\s*\\((\\d+(?:\\.\\d+)?)\\)(?!\\s*%)',
+        '($escaped)((?:\\s+(?:frequency|rate))?)\\s*\\((\\d+(?:\\.\\d+)?)\\)'
+        r'(?!\s*%)',
         caseSensitive: false,
       ),
-      (match) => '${match[1]} (${match[2]}%)',
+      (match) => '${match[1]}${match[2]} (${match[3]}%)',
+    );
+    // OCR-split close paren only: "river bluff frequency 63.1)".
+    text = text.replaceAllMapped(
+      RegExp(
+        '($escaped)((?:\\s+(?:frequency|rate))?)\\s+(\\d+(?:\\.\\d+)?)\\)'
+        r'(?!\s*%)',
+        caseSensitive: false,
+      ),
+      (match) => '${match[1]}${match[2]} (${match[3]}%)',
     );
     // "aggression above 77" / "VPIP under 20".
     text = text.replaceAllMapped(
@@ -259,6 +270,22 @@ String polishCoachCopy(String raw) {
       (match) => '${match[1]} at ${match[2]}% and ${match[3]}%',
     );
   }
+  // Bare "frequency (63.1)" / "bluff frequency (63.1)" when no tendency
+  // label precedes the noun.
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b((?:bluff\s+)?frequency)\s*\((\d+(?:\.\d+)?)\)(?!\s*%)',
+      caseSensitive: false,
+    ),
+    (match) => '${match[1]} (${match[2]}%)',
+  );
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b((?:bluff\s+)?frequency)\s+(\d+(?:\.\d+)?)\)(?!\s*%)',
+      caseSensitive: false,
+    ),
+    (match) => '${match[1]} (${match[2]}%)',
+  );
   // "81.4 and 67.3%" — first rate missing its percent.
   text = text.replaceAllMapped(
     RegExp(r'(\d+(?:\.\d+)?)(?!\s*%)\s+and\s+(\d+(?:\.\d+)?%)'),
