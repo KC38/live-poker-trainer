@@ -423,6 +423,7 @@ async function callGeminiJson(options: {
     },
   });
   let response: Response | null = null;
+  const startedMs = Date.now();
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       response = await options.fetchImpl(url, {
@@ -451,11 +452,13 @@ async function callGeminiJson(options: {
   }
   if (!response?.ok) throw new Error("Gemini intelligence request failed");
   const json = await response.json() as Record<string, unknown>;
+  const durationMs = Date.now() - startedMs;
   const usage = liveUsageFromPurpose(
     generationUsageFromMetadata(
       json.usageMetadata as GeminiUsageMetadata | undefined,
     ),
     options.purpose,
+    durationMs,
   );
   const text = extractText(json);
   if (!text) {

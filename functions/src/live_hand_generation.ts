@@ -280,6 +280,7 @@ async function callGeminiDeal(options: {
     },
   };
   let response: Response | null = null;
+  const startedMs = Date.now();
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       response = await options.fetchImpl(url, {
@@ -307,11 +308,13 @@ async function callGeminiDeal(options: {
   }
   if (!response?.ok) throw new Error("Gemini deal request failed");
   const json = await response.json() as Record<string, unknown>;
+  const durationMs = Date.now() - startedMs;
   const usage = liveUsageFromPurpose(
     generationUsageFromMetadata(
       json.usageMetadata as GeminiUsageMetadata | undefined,
     ),
     "deal",
+    durationMs,
   );
   const text = extractGeminiText(json);
   if (!text) {
