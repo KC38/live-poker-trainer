@@ -321,9 +321,17 @@ String polishCoachCopy(String raw) {
     (match) => '${match[1]} (${match[2]}%)',
   );
   // "81.4 and 67.3%" — first rate missing its percent.
+  // Skip SPR ratios: "SPR of 0.1 and 13.9% modeled equity" must not become
+  // "SPR of 0.1% and 13.9%".
   text = text.replaceAllMapped(
     RegExp(r'(\d+(?:\.\d+)?)(?!\s*%)\s+and\s+(\d+(?:\.\d+)?%)'),
-    (match) => '${match[1]}% and ${match[2]}',
+    (match) {
+      final before = match.input.substring(0, match.start).toLowerCase();
+      if (RegExp(r'spr\s+of\s+~?\s*$').hasMatch(before)) {
+        return match[0]!;
+      }
+      return '${match[1]}% and ${match[2]}';
+    },
   );
   // Two-decimal chip amounts (e.g. 33.33), but not pot multipliers like
   // "0.37x pot" and not SPR ratios like "SPR of 0.04".
