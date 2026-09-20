@@ -358,7 +358,7 @@ String polishCoachCopy(String raw) {
   // "profile (VPIP 10.8%, 3-bet (3.8%) alongside" →
   // "profile (VPIP 10.8%, 3-bet 3.8%) alongside".
   // Only when the rate-paren is wrongly ending mid-clause
-  // (`who` / `and Name` / lowercase continuer / `.`),
+  // (`who` / `and Name` / lowercase continuer / `.` / `;`),
   // not list items like "PFR (26%), and …".
   // Standalone "3-bet (25.3%)" / "aggression (77%) and Carl" (depth 0)
   // stays intact.
@@ -393,7 +393,8 @@ String polishCoachCopy(String raw) {
           RegExp(r'^\s+and\s+[A-Z]').hasMatch(after) ||
           // "3-bet (3.8%) alongside multiway …"
           RegExp(r'^\s+[a-z]').hasMatch(after) ||
-          RegExp(r'^\s*[.!?]').hasMatch(after);
+          // "river bluff (62.6%); raising …" (batch 0224)
+          RegExp(r'^\s*[.!?;]').hasMatch(after);
       if (!wronglyCloses) {
         return match[0]!;
       }
