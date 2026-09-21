@@ -878,6 +878,13 @@ void main() {
       ),
       contains(r'exceeding $1000 chips'),
     );
+    // "Paying N chips" (batch 0333 H6).
+    expect(
+      polishCoachCopy(
+        'Paying 2400 chips out of position when badly crushed is a leak.',
+      ),
+      contains(r'Paying $2400 chips out of position'),
+    );
     // Comparison operators must gain % (batch 0163).
     expect(
       polishCoachCopy(
