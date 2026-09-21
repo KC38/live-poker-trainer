@@ -15,6 +15,7 @@ const INTENDED = [
   "startCourseLesson",
   "submitCourseStep",
   "completeCourseLesson",
+  "completeCalibrationWarmUp",
   "getLiveAccess",
   "getCourseState",
   "issueAnonymousProgressTransfer",

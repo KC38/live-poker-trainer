@@ -1,5 +1,16 @@
 # Plan 11 — Profile, Migration, Observability, Cleanup, and Rollout
 
+**Status: Done**
+
+- Merged: https://github.com/KC38/live-poker-trainer/pull/192
+  (`7c3117c`) on `main`
+- Cloud Functions deploy: completed from `origin/main` at `7c3117c`
+  (updated course and live callables; v2 `fetchSituation` / `recordProgress`
+  pool exports stay undeployed)
+- CI: `course-contract` passed on PR #192
+  (https://github.com/KC38/live-poker-trainer/actions/runs/35592682209)
+- Simulator: hot-restarted attached Flutter sessions (pids 19321 and 44612)
+
 ## Objective
 
 Finish the product transition safely: combine course and simulator progress in

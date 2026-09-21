@@ -102,7 +102,7 @@ scaffolding over repeated attempts, and keeps reading short.
 | [08](08-course-wave-two-live-competence.md) | Sections 3–4 and player types | 07 | Done |
 | [09](09-course-wave-three-advanced-play.md) | Sections 5–7 and integrated play | 08 | Done (PR #184; deploy from `43a5873`) |
 | [10](10-live-training-course-bridge.md) | Coached warm-up and hand labs | 03, 04, 07–09 | Done (PR #188; deploy from `2af3de2`) |
-| [11](11-profile-migration-observability-rollout.md) | Profile, cleanup, rollout | 01–10 | |
+| [11](11-profile-migration-observability-rollout.md) | Profile, cleanup, rollout | 01–10 | Done (PR #192; deploy from `7c3117c`) |
 
 Plans 01 and 02 can run in parallel. Then implement 03 → 04 → 05 → 06.
 Content waves begin only after the content validator and interactive runtime are
