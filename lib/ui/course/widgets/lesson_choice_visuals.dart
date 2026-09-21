@@ -68,6 +68,9 @@ enum SelectIdentifyPresentation {
 
   /// Tap who wins a visual showdown (you / them / chop).
   showdownTap,
+
+  /// Tap five of seven cards that play in the made hand.
+  bestFiveCardTap,
 }
 
 /// Detects the best interactive presentation for [activity].
@@ -82,8 +85,14 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
   if (activity.id == 'act-01-02-01-scaffolded-spot') {
     return SelectIdentifyPresentation.handCategoryTap;
   }
-  if (activity.id == 'act-01-02-01-checkpoint-winner') {
+  if (activity.id == 'act-01-02-01-checkpoint-winner' ||
+      activity.id == 'act-01-02-02-scaffolded-kicker' ||
+      activity.id == 'act-01-02-02-unguided-board') {
     return SelectIdentifyPresentation.showdownTap;
+  }
+  if (activity.id == 'act-01-02-02-guided-seven' ||
+      activity.id == 'act-01-02-02-checkpoint-build') {
+    return SelectIdentifyPresentation.bestFiveCardTap;
   }
   if (activity.id == 'act-01-01-02-guided-suits' ||
       activity.choices.any((c) => c.id == 'suits-full')) {

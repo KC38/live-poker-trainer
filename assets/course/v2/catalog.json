@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "9ff2f98c8f22569cdd2b6c775e82e8c2af7a111b3e124e44032f8e02eda0fb3e",
+  "contentChecksum": "144455b59c8a121ea02c82e2e81485e7d74a43102d522b4a8ca3e1a009c5454f",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -860,7 +860,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Choose the best five-card combination.",
+                  "accessibilityText": "Tap the five cards for aces with king kicker.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -870,7 +870,7 @@
                   "objectives": [
                     "Build the best five-card hand from seven"
                   ],
-                  "prompt": "You have Ah Kd. Board As 7c 2d 9h 3s. Best hand?",
+                  "prompt": "You hold Ah Kd. Board As 7c 2d 9h 3s. Tap your best five.",
                   "choices": [
                     {
                       "id": "best-pair-k",
@@ -878,9 +878,9 @@
                       "accessibilityText": "Pair of aces with king kicker"
                     },
                     {
-                      "id": "use-all-seven",
-                      "label": "All seven cards as the hand",
-                      "accessibilityText": "All seven cards as the hand"
+                      "id": "weak-kickers",
+                      "label": "Aces with nine — leave the king out",
+                      "accessibilityText": "Aces with nine — leave the king out"
                     },
                     {
                       "id": "ignore-ace",
@@ -902,7 +902,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Resolve a kicker battle with king pair.",
+                  "accessibilityText": "Tap the winner of the king-pair kicker battle.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -912,7 +912,7 @@
                   "objectives": [
                     "Use kickers when categories tie"
                   ],
-                  "prompt": "Both have pair of kings. You have AQ; they have AJ. Winner?",
+                  "prompt": "Board Kh Kd 7c 3s 2d. You AQ; they AJ. Tap who wins.",
                   "choices": [
                     {
                       "id": "you-kicker",
@@ -926,8 +926,8 @@
                     },
                     {
                       "id": "chop-kicker",
-                      "label": "Always chop with the same pair",
-                      "accessibilityText": "Always chop with the same pair"
+                      "label": "Chop — same pair always ties",
+                      "accessibilityText": "Chop — same pair always ties"
                     }
                   ]
                 },
@@ -937,7 +937,7 @@
                   "stage": "unguided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Recognize a board that plays for everyone.",
+                  "accessibilityText": "Tap chop when the board plays for everyone.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -947,12 +947,12 @@
                   "objectives": [
                     "Spot board-tied pots"
                   ],
-                  "prompt": "Board is Ac Kc Qc Jc Tc. Both players checked down. Result?",
+                  "prompt": "Board Ac Kc Qc Jc Tc. Both checked down. Tap the result.",
                   "choices": [
                     {
                       "id": "chop-broadway",
-                      "label": "Chop — both play the board straight flush",
-                      "accessibilityText": "Chop — both play the board straight flush"
+                      "label": "Chop — both play the board",
+                      "accessibilityText": "Chop — both play the board"
                     },
                     {
                       "id": "button-wins",
@@ -961,8 +961,8 @@
                     },
                     {
                       "id": "high-card-wins",
-                      "label": "Whoever has the higher hole card wins",
-                      "accessibilityText": "Whoever has the higher hole card wins"
+                      "label": "Higher hole card wins",
+                      "accessibilityText": "Higher hole card wins"
                     }
                   ]
                 },
@@ -972,7 +972,7 @@
                   "stage": "checkpoint",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Identify full house eights full of kings.",
+                  "accessibilityText": "Tap three eights and two kings for eights full of kings.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -983,7 +983,7 @@
                     "Build the best five-card hand from seven",
                     "Use kickers when categories tie"
                   ],
-                  "prompt": "You hold 8h 8d. Board 8c Kd Ks 2h 2c. Best hand?",
+                  "prompt": "You hold 8h 8d. Board 8c Kd Ks 2h 2c. Tap your best five.",
                   "choices": [
                     {
                       "id": "fh-eights",
@@ -991,9 +991,9 @@
                       "accessibilityText": "Full house — eights full of kings"
                     },
                     {
-                      "id": "fh-kings",
-                      "label": "Full house — kings full of eights",
-                      "accessibilityText": "Full house — kings full of eights"
+                      "id": "fh-deuces",
+                      "label": "Full house — eights full of deuces",
+                      "accessibilityText": "Full house — eights full of deuces"
                     },
                     {
                       "id": "two-pair-only",
