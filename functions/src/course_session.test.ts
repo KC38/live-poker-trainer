@@ -3,6 +3,8 @@
  */
 
 import {describe, expect, it} from "vitest";
+import {HttpsError} from "firebase-functions/v2/https";
+import type {Firestore} from "firebase-admin/firestore";
 import {
   activityIdsInOrder,
   courseBank,
@@ -13,12 +15,26 @@ import {
 } from "./course_catalog";
 import {
   applyStudyDayStreak,
+  assertCourseAvailable,
   disabledCourseFlags,
   evaluateLifeAndAcceptance,
   gradeCourseResponse,
   localDateString,
   parseCourseFlags,
+  type CourseFlags,
 } from "./course_session";
+
+/** Flags for unit tests that skip Firestore (assertCourseAvailable uses `flags`). */
+const enabledFlags: CourseFlags = {
+  courseEnabled: true,
+  courseStartsEnabled: true,
+  guestCourseEnabled: false,
+  placementTestsEnabled: true,
+  catalogVersion: "2.0.0",
+  minimumClientVersion: "2.0.0",
+};
+
+const unusedDb = {} as Firestore;
 
 describe("course flags", () => {
   it("fails closed on missing or invalid documents", () => {
@@ -88,6 +104,33 @@ describe("soft grading and life loss", () => {
         lifeLossEligible: false,
       }).lifeLost,
     ).toBe(false);
+  });
+
+  it("loses a life on jump_test clear_mistake when eligible", () => {
+    expect(
+      evaluateLifeAndAcceptance({
+        grade: "clear_mistake",
+        stage: "jump_test",
+        lifeLossEligible: true,
+      }),
+    ).toMatchObject({accepted: false, lifeLost: true, masteryWeight: 0});
+  });
+
+  it("treats strong and reasonable as accepted without life loss", () => {
+    expect(
+      evaluateLifeAndAcceptance({
+        grade: "strong",
+        stage: "unguided",
+        lifeLossEligible: true,
+      }),
+    ).toMatchObject({accepted: true, lifeLost: false, masteryWeight: 0.85});
+    expect(
+      evaluateLifeAndAcceptance({
+        grade: "reasonable",
+        stage: "checkpoint",
+        lifeLossEligible: true,
+      }),
+    ).toMatchObject({accepted: true, lifeLost: false, masteryWeight: 0.7});
   });
 
   it("grades every soft-grade × stage combination from the bank", () => {
@@ -163,6 +206,58 @@ describe("soft grading and life loss", () => {
       accepted: false,
       lifeLost: true,
     });
+    expect(gradeCourseResponse({
+      activity: unguided,
+      numericValue: 9,
+    }).accepted).toBe(true);
+  });
+
+  it("auto-passes explain and coach_dialogue without a client answer", () => {
+    const explain = lesson.activities.find(
+      (activity) => activity.id === "act-01-01-01-explain-hole-cards",
+    )!;
+    expect(gradeCourseResponse({activity: explain})).toMatchObject({
+      grade: "recommended",
+      accepted: true,
+      lifeLost: false,
+    });
+  });
+
+  it("accepts the authored sequence and rejects permutations", () => {
+    const scaffolded = coverage.activities.find(
+      (activity) => activity.id === "act-01-01-02-scaffolded-action-order",
+    )!;
+    expect(gradeCourseResponse({
+      activity: scaffolded,
+      orderedIds: ["seat-utg", "seat-hj", "seat-btn"],
+    })).toMatchObject({accepted: true, lifeLost: false});
+  });
+
+  it("rejects unknown choices and empty scored payloads", () => {
+    const guided = lesson.activities.find(
+      (activity) => activity.id === "act-01-01-01-guided-find-holes",
+    )!;
+    expect(() => gradeCourseResponse({
+      activity: guided,
+      choiceId: "not-a-real-choice",
+    })).toThrow(HttpsError);
+    expect(() => gradeCourseResponse({activity: guided})).toThrowError(
+      /choiceId, orderedIds, or numericValue/,
+    );
+  });
+
+  it("rejects mismatched response shapes for sequence and numeric activities", () => {
+    const guided = lesson.activities.find(
+      (activity) => activity.id === "act-01-01-01-guided-find-holes",
+    )!;
+    expect(() => gradeCourseResponse({
+      activity: guided,
+      orderedIds: ["choice-hero-holes"],
+    })).toThrowError(/does not accept ordered responses/);
+    expect(() => gradeCourseResponse({
+      activity: guided,
+      numericValue: 2,
+    })).toThrowError(/does not accept numeric responses/);
   });
 
   it("rejects client-supplied grade fields at the response API boundary", () => {
@@ -232,6 +327,91 @@ describe("streak calendar rules", () => {
       ),
     });
     expect(acrossDst.currentStreak).toBe(2);
+  });
+
+  it("falls back to UTC for an invalid IANA timezone", () => {
+    expect(localDateString(Date.parse("2026-03-09T07:30:00Z"), "Not/A_Zone"))
+      .toBe("2026-03-09");
+  });
+});
+
+describe("assertCourseAvailable gates", () => {
+  it("fails closed when the course is disabled", async () => {
+    await expect(assertCourseAvailable({
+      db: unusedDb,
+      clientVersion: "2.0.0",
+      mode: "read",
+      flags: disabledCourseFlags(),
+    })).rejects.toMatchObject({code: "failed-precondition"});
+  });
+
+  it("rejects stale clients and catalog mismatches", async () => {
+    await expect(assertCourseAvailable({
+      db: unusedDb,
+      clientVersion: "1.9.9",
+      mode: "mutate",
+      flags: enabledFlags,
+    })).rejects.toThrowError(/newer app version/);
+    await expect(assertCourseAvailable({
+      db: unusedDb,
+      clientVersion: "2.0.0",
+      catalogVersion: "1.0.0",
+      mode: "mutate",
+      flags: enabledFlags,
+    })).rejects.toThrowError(/catalog version mismatch/i);
+  });
+
+  it("blocks anonymous starts unless guestCourseEnabled", async () => {
+    await expect(assertCourseAvailable({
+      db: unusedDb,
+      clientVersion: "2.0.0",
+      mode: "start",
+      isAnonymous: true,
+      flags: enabledFlags,
+    })).rejects.toThrowError(/Guest course access is disabled/);
+    await expect(assertCourseAvailable({
+      db: unusedDb,
+      clientVersion: "2.0.0",
+      mode: "mutate",
+      isAnonymous: true,
+      flags: enabledFlags,
+    })).resolves.toEqual(enabledFlags);
+  });
+
+  it("pauses new starts independently of in-progress mutate", async () => {
+    const paused: CourseFlags = {...enabledFlags, courseStartsEnabled: false};
+    await expect(assertCourseAvailable({
+      db: unusedDb,
+      clientVersion: "2.0.0",
+      mode: "start",
+      flags: paused,
+    })).rejects.toThrowError(/New course attempts are paused/);
+    await expect(assertCourseAvailable({
+      db: unusedDb,
+      clientVersion: "2.0.0",
+      mode: "mutate",
+      flags: paused,
+    })).resolves.toEqual(paused);
+  });
+
+  it("blocks placement/jump when the placement flag is off", async () => {
+    const noPlacement: CourseFlags = {
+      ...enabledFlags,
+      placementTestsEnabled: false,
+    };
+    await expect(assertCourseAvailable({
+      db: unusedDb,
+      clientVersion: "2.0.0",
+      mode: "placement",
+      flags: {...enabledFlags, guestCourseEnabled: true, placementTestsEnabled: false},
+    })).rejects.toThrowError(/Placement and jump tests are disabled/);
+    await expect(assertCourseAvailable({
+      db: unusedDb,
+      clientVersion: "2.0.0",
+      mode: "start",
+      requiresPlacement: true,
+      flags: noPlacement,
+    })).rejects.toThrowError(/Placement and jump tests are disabled/);
   });
 });
 
