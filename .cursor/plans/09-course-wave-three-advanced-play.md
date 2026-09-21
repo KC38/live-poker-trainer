@@ -1,5 +1,21 @@
 # Plan 09 — Course Wave Three: Advanced and Integrated Live Play
 
+**Status: Done**
+
+- Merged: https://github.com/KC38/live-poker-trainer/pull/184
+  (`43a5873`) on `main`
+- Cloud Functions deploy: completed from `origin/main` at `43a5873`
+  (course bank regenerated with Sections 5–7 content)
+- CI: `course-contract` passed on PR #184
+  (https://github.com/KC38/live-poker-trainer/actions/runs/35586575158)
+- Simulator: hot-restarted attached Flutter sessions after merge
+- Content: Section 5 (Winning 1/2) — 9 units / 10 lessons;
+  Section 6 (Advanced Live Cash) — 13 units / 18 lessons including
+  TAG/LAG observe→label→adjust; Section 7 (Full-Hand Integration) —
+  12 units / 14 lessons including SRP/3-bet/multiway capstones,
+  Live warm-up prep, and five-type final assessment
+- Authoring source: `tools/course/wave_three_advanced_play.mjs`
+
 ## Objective
 
 Complete a genuinely deep live cash curriculum for winning 1/2 players and
