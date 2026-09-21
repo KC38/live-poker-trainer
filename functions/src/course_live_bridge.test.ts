@@ -5,11 +5,15 @@
 import {describe, expect, it} from "vitest";
 import {
   assertSetupKeyIsolation,
+  calibrationHistoryAllowsComplete,
   courseCompletionWrites,
+  courseReturnNodeId,
   parseCourseTableSetup,
 } from "./course_live_bridge";
 import {
+  CALIBRATION_LAUNCH_LESSON_ID,
   allCuratedCourseHands,
+  calibrationResultNodeId,
   isCourseSetupKey,
   pickWarmUpHand,
 } from "./course_live_hands";
@@ -47,6 +51,29 @@ describe("course live bridge isolation", () => {
     });
     expect(parsed.mode).toBe("course");
     expect(parsed.courseKind).toBe("warm_up");
+  });
+
+  it("calibration return node is the lesson result, not the lesson id", () => {
+    const lessonId = CALIBRATION_LAUNCH_LESSON_ID;
+    expect(courseReturnNodeId({
+      courseKind: "calibration",
+      lessonId,
+      returnNodeId: lessonId,
+    })).toBe(calibrationResultNodeId(lessonId));
+    expect(courseReturnNodeId({
+      courseKind: "calibration",
+      lessonId,
+      returnNodeId: lessonId,
+    })).not.toBe(lessonId);
+    expect(calibrationHistoryAllowsComplete(null, lessonId)).toBe(false);
+    expect(calibrationHistoryAllowsComplete(
+      {kind: "warm_up", lessonId},
+      lessonId,
+    )).toBe(false);
+    expect(calibrationHistoryAllowsComplete(
+      {kind: "calibration", lessonId},
+      lessonId,
+    )).toBe(true);
   });
 
   it("engine accepts curated course hands (parity with live definitions)", () => {

@@ -19,6 +19,20 @@ export const COURSE_SETUP_PREFIX = "course-v1";
 
 export type CourseHandKind = "warm_up" | "hand_lab" | "calibration";
 
+/** Section 7 lesson that launches the calibration warm-up from Home. */
+export const CALIBRATION_LAUNCH_LESSON_ID =
+  "lesson-07-11-01-live-warmup-prep";
+
+/**
+ * Result node resumed after a finished calibration hand.
+ * Distinct from the lesson id so Home does not restart activity 0.
+ */
+export function calibrationResultNodeId(
+  lessonId = CALIBRATION_LAUNCH_LESSON_ID,
+): string {
+  return `result:${lessonId}`;
+}
+
 export interface CuratedCourseHand {
   kind: CourseHandKind;
   handLabSpecId?: string;
@@ -450,7 +464,7 @@ const LAB_BTN_VS_NIT: CuratedCourseHand = {
 /** Section 7 calibration warm-up — reduced scaffolding. */
 const CALIBRATION_SRP: CuratedCourseHand = {
   kind: "calibration",
-  launchLessonId: "lesson-07-11-01-live-warmup-prep",
+  launchLessonId: CALIBRATION_LAUNCH_LESSON_ID,
   maxDecisions: 3,
   scaffolding: "reduced",
   rexPrompt: "Calibration: one clean plan, less scaffolding. Trust your reads.",

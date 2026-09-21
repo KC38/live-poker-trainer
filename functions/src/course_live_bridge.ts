@@ -12,6 +12,8 @@ import {
 import {HttpsError} from "firebase-functions/v2/https";
 import {assertCourseLiveAccess, type LiveAccessDeps} from "./live_access";
 import {
+  CALIBRATION_LAUNCH_LESSON_ID,
+  calibrationResultNodeId,
   curatedCourseHandById,
   curatedCourseHandForLab,
   isCourseSetupKey,
@@ -19,6 +21,12 @@ import {
   pickWarmUpHand,
   type CuratedCourseHand,
 } from "./course_live_hands";
+import {courseBank, findLesson} from "./course_catalog";
+import {
+  completeCourseLessonForUser,
+  startCourseLessonForUser,
+  type CompleteCourseLessonResult,
+} from "./course_session";
 import {
   applyLiveAction,
   createInitialLiveState,
@@ -156,7 +164,11 @@ export async function allocateCourseHandForUser(options: {
     activityId: input.activityId,
     lessonId: input.lessonId ?? curated.launchLessonId,
     handLabSpecId: curated.handLabSpecId ?? input.handLabSpecId,
-    returnNodeId: input.returnNodeId,
+    returnNodeId: courseReturnNodeId({
+      courseKind: curated.kind,
+      lessonId: input.lessonId ?? curated.launchLessonId,
+      returnNodeId: input.returnNodeId,
+    }),
     courseHandId: definition.handId,
     maxDecisions: curated.maxDecisions,
     decisionCount: 0,
@@ -383,6 +395,182 @@ export async function writeCourseLiveHistory(options: {
       isolation: courseCompletionWrites(),
       completedAt: FieldValue.serverTimestamp(),
     }, {merge: true});
+}
+
+/**
+ * Calibration resumes the lesson result node, never the lesson id itself.
+ * Other course kinds keep the caller-supplied return node.
+ */
+export function courseReturnNodeId(input: {
+  courseKind?: string;
+  lessonId?: string;
+  returnNodeId?: string;
+}): string | undefined {
+  if (
+    input.courseKind === "calibration" ||
+    input.lessonId === CALIBRATION_LAUNCH_LESSON_ID
+  ) {
+    return calibrationResultNodeId(
+      input.lessonId ?? CALIBRATION_LAUNCH_LESSON_ID,
+    );
+  }
+  return input.returnNodeId;
+}
+
+/**
+ * A calibration lesson may be marked complete only after that hand was
+ * actually finished (courseLiveHistory). Abandoning the table must not pass.
+ */
+export function calibrationHistoryAllowsComplete(
+  history: {kind?: unknown; lessonId?: unknown} | null | undefined,
+  lessonId: string,
+): boolean {
+  if (!history) return false;
+  return history.kind === "calibration" &&
+    history.lessonId === lessonId &&
+    lessonId === CALIBRATION_LAUNCH_LESSON_ID;
+}
+
+/**
+ * Marks the Section 7 calibration lesson complete after its live hand.
+ * Refuses when the hand was never finished, so header-back abandon cannot
+ * complete the lesson.
+ */
+export async function completeCalibrationWarmUpForUser(options: {
+  uid: string;
+  raw: unknown;
+  isAnonymous?: boolean;
+  db?: Firestore;
+  nowMs?: number;
+}): Promise<CompleteCourseLessonResult> {
+  const db = options.db ?? getFirestore();
+  const input = requestRecord(options.raw);
+  const clientVersion = requiredString(input.clientVersion, "clientVersion");
+  const lessonId = requiredString(input.lessonId, "lessonId");
+  const sessionId = requiredString(input.sessionId, "sessionId");
+  if (lessonId !== CALIBRATION_LAUNCH_LESSON_ID) {
+    throw new HttpsError(
+      "invalid-argument",
+      "Only the Section 7 calibration lesson can be completed from the table.",
+    );
+  }
+  const historyRef = db
+    .collection("users")
+    .doc(options.uid)
+    .collection("courseLiveHistory")
+    .doc(sessionId);
+  const historySnap = await historyRef.get();
+  const history = historySnap.data();
+  if (!calibrationHistoryAllowsComplete(history, lessonId)) {
+    throw new HttpsError(
+      "failed-precondition",
+      "Finish the calibration hand before completing the lesson.",
+    );
+  }
+
+  const catalogVersion = optionalString(input.catalogVersion) ??
+    courseBank.catalogVersion;
+  const startRequestId = calibrationRequestKey(sessionId, "calstart");
+  const idempotencyKey = calibrationRequestKey(sessionId, "caldone");
+  const priorAttemptId = optionalString(history?.completedAttemptId);
+  if (priorAttemptId) {
+    return completeCourseLessonForUser({
+      uid: options.uid,
+      raw: {
+        clientVersion,
+        attemptId: priorAttemptId,
+        idempotencyKey,
+        catalogVersion,
+      },
+      isAnonymous: options.isAnonymous,
+      db,
+      nowMs: options.nowMs,
+    });
+  }
+
+  const started = await startCourseLessonForUser({
+    uid: options.uid,
+    raw: {
+      clientVersion,
+      lessonId,
+      catalogVersion,
+      startRequestId,
+      timezone: optionalString(input.timezone) ?? "UTC",
+    },
+    isAnonymous: options.isAnonymous,
+    db,
+    nowMs: options.nowMs,
+  });
+  const located = findLesson(lessonId);
+  if (!located) {
+    throw new HttpsError("not-found", "Unknown calibration lesson.");
+  }
+  const activities = [...located.lesson.activities].sort(
+    (a, b) => a.order - b.order,
+  );
+  const last = activities[activities.length - 1];
+  if (!last) {
+    throw new HttpsError("failed-precondition", "Lesson has no activities.");
+  }
+  // The live hand is the capstone. Advance the attempt so completion is the
+  // result node, not a restart of activity 0.
+  await db
+    .collection("users")
+    .doc(options.uid)
+    .collection("courseAttempts")
+    .doc(started.attempt.attemptId)
+    .set({
+      activityIndex: activities.length - 1,
+      currentActivityId: last.id,
+      stepCount: activities.length,
+      acceptedCount: activities.length,
+      scoredCount: activities.length,
+      masteryPoints: 1,
+      masteryWeight: 1,
+      status: "in_progress",
+      updatedAt: FieldValue.serverTimestamp(),
+    }, {merge: true});
+
+  await historyRef.set({
+    completedAttemptId: started.attempt.attemptId,
+  }, {merge: true});
+
+  const result = await completeCourseLessonForUser({
+    uid: options.uid,
+    raw: {
+      clientVersion,
+      attemptId: started.attempt.attemptId,
+      idempotencyKey,
+      catalogVersion,
+    },
+    isAnonymous: options.isAnonymous,
+    db,
+    nowMs: options.nowMs,
+  });
+  await historyRef.set({
+    lessonCompleted: true,
+  }, {merge: true});
+  return result;
+}
+
+function requestRecord(raw: unknown): Record<string, unknown> {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+    throw new HttpsError("invalid-argument", "request must be an object.");
+  }
+  return raw as Record<string, unknown>;
+}
+
+function requiredString(value: unknown, field: string): string {
+  if (typeof value !== "string" || !value.trim()) {
+    throw new HttpsError("invalid-argument", `${field} is required.`);
+  }
+  return value.trim();
+}
+
+function calibrationRequestKey(sessionId: string, prefix: string): string {
+  const raw = `${prefix}_${sessionId}`.replace(/[^A-Za-z0-9_-]/g, "_");
+  const padded = raw.length >= 8 ? raw : `${raw}_warmup`;
+  return padded.slice(0, 100);
 }
 
 function resolveCuratedHand(input: CourseTableSetupInput): CuratedCourseHand {

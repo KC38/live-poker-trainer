@@ -8,23 +8,34 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_home_models.dart';
+import 'package:live_poker_trainer/models/course_table_return.dart';
+import 'package:live_poker_trainer/models/live_access.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
+import 'package:live_poker_trainer/providers/course_catalog_provider.dart';
 import 'package:live_poker_trainer/providers/course_home_provider.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
-import 'package:live_poker_trainer/models/live_access.dart';
+import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
+import 'package:live_poker_trainer/services/firestore/course_service.dart';
 import 'package:live_poker_trainer/ui/home/course_path_view.dart';
 import 'package:live_poker_trainer/ui/home/course_resume_card.dart';
 import 'package:live_poker_trainer/ui/home/course_status_bar.dart';
 import 'package:live_poker_trainer/ui/home/rex_coach_card.dart';
+import 'package:live_poker_trainer/ui/screens/lesson_result_screen.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_runner_screen.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
-import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 
 /// Home tab — interactive live-cash course path.
 class HomeScreen extends ConsumerStatefulWidget {
   /// Creates the Home course root.
   const HomeScreen({super.key});
+
+  /// Section 7 capstone. Tapping it opens the calibration table, not activity 0.
+  static const calibrationLessonId = 'lesson-07-11-01-live-warmup-prep';
+
+  /// Result node resumed after the calibration hand. Not the lesson id.
+  static const calibrationResultNodeId =
+      'result:lesson-07-11-01-live-warmup-prep';
 
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
@@ -60,31 +71,36 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         child: SafeArea(
           child: asyncHome.when(
-            loading: () => const _HomeMessage(
-              title: 'Loading course',
-              body: 'Pulling your path from the server…',
-            ),
-            error: (error, _) => _HomeMessage(
-              title: 'Could not load course',
-              body: error.toString(),
-              actionLabel: 'Retry',
-              onAction: () => ref.read(courseHomeProvider.notifier).refresh(),
-            ),
-            data: (snapshot) => _HomeBody(
-              snapshot: snapshot,
-              onRetry: () => ref.read(courseHomeProvider.notifier).refresh(),
-              onNodeTap: (node) => _onNodeTap(snapshot, node),
-              onResume: () {
-                final resume = snapshot.resume;
-                if (resume == null) return;
-                unawaited(
-                  ref.read(analyticsServiceProvider).logHomeResume(
-                        lessonId: resume.lessonId,
-                      ),
-                );
-                _openLesson(resume.lessonId);
-              },
-            ),
+            loading:
+                () => const _HomeMessage(
+                  title: 'Loading course',
+                  body: 'Pulling your path from the server…',
+                ),
+            error:
+                (error, _) => _HomeMessage(
+                  title: 'Could not load course',
+                  body: error.toString(),
+                  actionLabel: 'Retry',
+                  onAction:
+                      () => ref.read(courseHomeProvider.notifier).refresh(),
+                ),
+            data:
+                (snapshot) => _HomeBody(
+                  snapshot: snapshot,
+                  onRetry:
+                      () => ref.read(courseHomeProvider.notifier).refresh(),
+                  onNodeTap: (node) => _onNodeTap(snapshot, node),
+                  onResume: () {
+                    final resume = snapshot.resume;
+                    if (resume == null) return;
+                    unawaited(
+                      ref
+                          .read(analyticsServiceProvider)
+                          .logHomeResume(lessonId: resume.lessonId),
+                    );
+                    _openLesson(resume.lessonId);
+                  },
+                ),
           ),
         ),
       ),
@@ -96,9 +112,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (node.state == CourseNodeState.locked) {
       unawaited(analytics.logHomeNodeLockedTap(lessonId: node.lessonId));
       final message = node.lockReason ?? 'Finish the previous lesson first.';
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
       return;
     }
     unawaited(
@@ -110,50 +126,104 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     _openLesson(node.lessonId);
   }
 
-  /// Section 7 capstone launches a calibration warm-up, then the lesson result.
-  static const calibrationLessonId = 'lesson-07-11-01-live-warmup-prep';
-
   void _openLesson(String lessonId) {
-    if (lessonId == calibrationLessonId) {
+    if (lessonId == HomeScreen.calibrationLessonId) {
       unawaited(_openCalibrationWarmUp(lessonId));
       return;
     }
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => LessonRunnerScreen(lessonId: lessonId),
-      ),
-    ).then((_) {
-      if (!mounted) return;
-      unawaited(ref.read(courseHomeProvider.notifier).refresh());
-    });
+    Navigator.of(context)
+        .push(
+          MaterialPageRoute<void>(
+            builder: (_) => LessonRunnerScreen(lessonId: lessonId),
+          ),
+        )
+        .then((_) {
+          if (!mounted) return;
+          unawaited(ref.read(courseHomeProvider.notifier).refresh());
+        });
   }
 
   Future<void> _openCalibrationWarmUp(String lessonId) async {
-    ref.read(gameControllerProvider.notifier).prepareTraining(
-      courseContext: CourseLiveContext(
-        courseHandId: '',
-        kind: 'calibration',
-        lessonId: lessonId,
-        returnNodeId: lessonId,
-        scaffolding: 'reduced',
-        rexPrompt: 'Calibration: one clean plan, less scaffolding.',
-      ),
-    );
+    ref
+        .read(gameControllerProvider.notifier)
+        .prepareTraining(
+          courseContext: const CourseLiveContext(
+            courseHandId: '',
+            kind: 'calibration',
+            lessonId: HomeScreen.calibrationLessonId,
+            returnNodeId: HomeScreen.calibrationResultNodeId,
+            scaffolding: 'reduced',
+            rexPrompt: 'Calibration: one clean plan, less scaffolding.',
+          ),
+        );
     if (!mounted) return;
-    await Navigator.of(context).push(
+    final pop = await Navigator.of(context).push<Object?>(
       softFadeRoute(
         const PokerTableScreen(),
         name: AnalyticsScreens.pokerTable,
       ),
     );
     if (!mounted) return;
-    await Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => LessonRunnerScreen(lessonId: lessonId),
-      ),
-    );
+    final exit = pop is CourseTableReturn ? pop : null;
+    if (exit != null && exit.completed) {
+      await _presentCalibrationResult(exit, lessonId);
+    }
     if (!mounted) return;
     unawaited(ref.read(courseHomeProvider.notifier).refresh());
+  }
+
+  /// Finished hands land on the lesson result. Unfinished exits never call this.
+  Future<void> _presentCalibrationResult(
+    CourseTableReturn exit,
+    String lessonId,
+  ) async {
+    final sessionId = exit.sessionId;
+    if (sessionId == null || sessionId.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'The calibration hand was not saved, so the lesson stays incomplete.',
+          ),
+        ),
+      );
+      return;
+    }
+    final snapshot = ref.read(courseHomeProvider).asData?.value;
+    final title = _titleForLesson(snapshot, lessonId);
+    try {
+      final result = await ref
+          .read(courseServiceProvider)
+          .completeCalibrationWarmUp(
+            lessonId: lessonId,
+            sessionId: sessionId,
+            catalogVersion: snapshot?.catalogVersion,
+          );
+      if (!mounted) return;
+      await Navigator.of(context).push<void>(
+        MaterialPageRoute<void>(
+          builder:
+              (_) => LessonResultScreen(lessonTitle: title, result: result),
+        ),
+      );
+    } on CourseServiceException catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(error.message)));
+    } on Object catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not save the calibration lesson.')),
+      );
+    }
+  }
+
+  String _titleForLesson(CourseHomeSnapshot? snapshot, String lessonId) {
+    final nodes = snapshot?.nodes ?? const <CourseMapNode>[];
+    for (final node in nodes) {
+      if (node.lessonId == lessonId) return node.title;
+    }
+    return 'Lesson';
   }
 }
 
@@ -175,12 +245,12 @@ class _HomeBody extends StatelessWidget {
     if (snapshot.status != CourseHomeLoadStatus.ready) {
       return _HomeMessage(
         title: _titleFor(snapshot.status),
-        body: snapshot.errorMessage ??
+        body:
+            snapshot.errorMessage ??
             snapshot.rexLine ??
             'Course path unavailable.',
-        actionLabel: snapshot.status == CourseHomeLoadStatus.disabled
-            ? null
-            : 'Retry',
+        actionLabel:
+            snapshot.status == CourseHomeLoadStatus.disabled ? null : 'Retry',
         onAction:
             snapshot.status == CourseHomeLoadStatus.disabled ? null : onRetry,
         rexLine: snapshot.rexLine,
@@ -204,10 +274,7 @@ class _HomeBody extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
           sliver: SliverList(
             delegate: SliverChildListDelegate([
-              Text(
-                'Home',
-                style: Theme.of(context).textTheme.displayLarge,
-              ),
+              Text('Home', style: Theme.of(context).textTheme.displayLarge),
               const SizedBox(height: 6),
               Text(
                 'Your live cash path — one clear next step.',
@@ -228,13 +295,14 @@ class _HomeBody extends StatelessWidget {
                 const SizedBox(height: 14),
                 RexCoachCard(
                   line: snapshot.rexLine!,
-                  onContinue: snapshot.nextLessonId == null
-                      ? null
-                      : () {
-                          final next = snapshot.nextNode;
-                          if (next == null) return;
-                          onNodeTap(next);
-                        },
+                  onContinue:
+                      snapshot.nextLessonId == null
+                          ? null
+                          : () {
+                            final next = snapshot.nextNode;
+                            if (next == null) return;
+                            onNodeTap(next);
+                          },
                   continueLabel: snapshot.resume != null ? 'Resume' : 'Start',
                 ),
               ],
@@ -253,10 +321,7 @@ class _HomeBody extends StatelessWidget {
         SliverPadding(
           padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
           sliver: SliverToBoxAdapter(
-            child: CoursePathView(
-              nodes: snapshot.nodes,
-              onNodeTap: onNodeTap,
-            ),
+            child: CoursePathView(nodes: snapshot.nodes, onNodeTap: onNodeTap),
           ),
         ),
       ],
@@ -302,9 +367,9 @@ class _HomeMessage extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: AppColors.goldBright,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(color: AppColors.goldBright),
             ),
             const SizedBox(height: 12),
             Text(
