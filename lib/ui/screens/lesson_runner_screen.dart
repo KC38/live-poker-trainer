@@ -21,7 +21,6 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart'
 import 'package:live_poker_trainer/ui/course/widgets/lesson_progress_header.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_result_screen.dart';
-import 'package:live_poker_trainer/ui/screens/onboarding_screens.dart';
 
 /// Runs one catalog lesson through Plan 03 course callables.
 class LessonRunnerScreen extends ConsumerStatefulWidget {
@@ -441,11 +440,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
               lessonTitle: _lesson?.title ?? 'Lesson',
               result: complete,
             );
-        if (!mounted) return;
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute<void>(builder: (_) => const SaveProgressScreen()),
-          (route) => false,
-        );
+        // AppRoot switches home to SaveProgressScreen via pendingSaveProgress.
+        // Do not push a second SaveProgress route — it would stick on the
+        // navigator after Continue learning clears the flag.
         return;
       }
       await Navigator.of(context).pushReplacement(

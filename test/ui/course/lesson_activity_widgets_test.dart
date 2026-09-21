@@ -262,6 +262,95 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('Button and blinds guided tap selects dealer button on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-01-03-guided-button',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap the seat that has the dealer button chip.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap the dealer button on the table.',
+      choices: const [
+        CourseChoice(id: 'btn-seat', label: 'The seat with the D chip'),
+        CourseChoice(id: 'bb-seat', label: 'The seat that posted 2 chips'),
+        CourseChoice(id: 'empty-seat', label: 'Any empty seat'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+
+    expect(find.text('Tap the dealer button on the table.'), findsOneWidget);
+    expect(find.byType(LessonTableContext), findsOneWidget);
+    expect(find.text('The seat with the D chip'), findsNothing);
+
+    await tester.tap(
+      find.descendant(
+        of: find.byType(LessonTableContext),
+        matching: find.text('D'),
+      ),
+    );
+    await tester.pump();
+    expect(controller.draft.choiceId, 'btn-seat');
+
+    await tester.tap(
+      find.descendant(
+        of: find.byType(LessonTableContext),
+        matching: find.text('Big blind'),
+      ),
+    );
+    await tester.pump();
+    expect(controller.draft.choiceId, 'bb-seat');
+    controller.dispose();
+  });
+
+  testWidgets('Button and blinds timing tap selects before deal', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-01-03-unguided-when',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap the hand phase when blinds are posted.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap when the blinds go in.',
+      choices: const [
+        CourseChoice(id: 'before-deal', label: 'Before any hole cards are dealt'),
+        CourseChoice(id: 'after-flop', label: 'After the flop'),
+        CourseChoice(id: 'only-showdown', label: 'Only if the hand reaches showdown'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+
+    expect(find.text('Before deal'), findsOneWidget);
+    await tester.tap(find.text('Before deal'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'before-deal');
+    controller.dispose();
+  });
+
   test('resolveLessonTableScene covers first-lesson select activities', () {
     final privacy = CourseActivity(
       id: 'act-01-01-01-scaffolded-private',

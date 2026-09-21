@@ -31,9 +31,12 @@ import 'package:live_poker_trainer/services/legacy_local_data_cleanup.dart';
 import 'package:live_poker_trainer/ui/screens/app_shell.dart';
 import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/screens/first_lesson_launch_screen.dart';
+import 'package:live_poker_trainer/ui/screens/lesson_runner_screen.dart';
 import 'package:live_poker_trainer/ui/screens/onboarding_screens.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -128,12 +131,13 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
 
     return MaterialApp(
       key: ValueKey(
-        rootNavigatorKeyFor(
+        '${rootNavigatorKeyFor(
           uid: session?.uid,
           anonymous: session?.isAnonymous == true,
           resetForAuthGate: destination == AppRootDestination.auth,
-        ),
+        )}-${destination.name}',
       ),
+      navigatorKey: _rootNavigatorKey,
       title: 'Exploitative Poker Lab',
       debugShowCheckedModeBanner: false,
       theme: buildPokerTheme(),
@@ -259,6 +263,21 @@ class _AgentUiBootstrapState extends ConsumerState<_AgentUiBootstrap> {
     super.initState();
     AgentUiDriver.install(
       signOut: () => ref.read(authControllerProvider.notifier).signOut(),
+      openLesson: (lessonId) async {
+        final nav = _rootNavigatorKey.currentState;
+        if (nav == null) {
+          debugPrint('AgentUiDriver: no navigator for openLesson');
+          return;
+        }
+        await nav.push(
+          MaterialPageRoute<void>(
+            builder: (_) => LessonRunnerScreen(
+              lessonId: lessonId,
+              embeddedInShell: true,
+            ),
+          ),
+        );
+      },
     );
   }
 
