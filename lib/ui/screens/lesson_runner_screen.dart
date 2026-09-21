@@ -84,7 +84,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       _error = null;
     });
     try {
-      await ref.read(authControllerProvider.notifier).ensureAnonymousSession();
+      if (widget.courseService == null) {
+        await ref.read(authControllerProvider.notifier).ensureAnonymousSession();
+      }
       final catalog = await ref.read(courseCatalogProvider.future);
       final lesson = catalog.lessonById(widget.lessonId);
       if (lesson == null) {
@@ -515,42 +517,48 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
               ),
               if (controller.lastResult == null) ...[
                 const SizedBox(height: 12),
-                Row(
-                  children: [
-                    if (controller.draft.hasAnswer)
-                      TextButton(
-                        onPressed:
-                            controller.submitting
-                                ? null
-                                : () {
-                                  controller.undoDraft();
-                                  setState(() {});
-                                },
-                        child: const Text('Undo'),
-                      ),
-                    const Spacer(),
-                    ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minWidth: largeText ? 160 : 140,
-                        minHeight: 48,
-                      ),
-                      child: FilledButton(
-                        onPressed: _canSubmit && !_completing ? _submit : null,
-                        style: FilledButton.styleFrom(
-                          backgroundColor: AppColors.gold,
-                          foregroundColor: AppColors.bgDark,
+                AnimatedBuilder(
+                  animation: controller,
+                  builder: (context, _) {
+                    return Row(
+                      children: [
+                        if (controller.draft.hasAnswer)
+                          TextButton(
+                            onPressed:
+                                controller.submitting
+                                    ? null
+                                    : () {
+                                      controller.undoDraft();
+                                      setState(() {});
+                                    },
+                            child: const Text('Undo'),
+                          ),
+                        const Spacer(),
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minWidth: largeText ? 160 : 140,
+                            minHeight: 48,
+                          ),
+                          child: FilledButton(
+                            onPressed:
+                                _canSubmit && !_completing ? _submit : null,
+                            style: FilledButton.styleFrom(
+                              backgroundColor: AppColors.gold,
+                              foregroundColor: AppColors.bgDark,
+                            ),
+                            child: Text(
+                              controller.submitting
+                                  ? 'Checking…'
+                                  : activity.renderer ==
+                                      ActivityRenderer.coachDialogue
+                                  ? 'Continue'
+                                  : 'Check',
+                            ),
+                          ),
                         ),
-                        child: Text(
-                          controller.submitting
-                              ? 'Checking…'
-                              : activity.renderer ==
-                                  ActivityRenderer.coachDialogue
-                              ? 'Continue'
-                              : 'Check',
-                        ),
-                      ),
-                    ),
-                  ],
+                      ],
+                    );
+                  },
                 ),
               ],
             ],
