@@ -128,6 +128,10 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
               .logLesson(lessonId: widget.lessonId, phase: 'started'),
         );
       }
+      if (started.attempt.isReadyToComplete(activities.length)) {
+        await _completeLesson();
+        return;
+      }
     } catch (error) {
       if (!mounted) return;
       setState(() {
