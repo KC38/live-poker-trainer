@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 final _rankOnly = RegExp(r'^[2-9TJQKA]$', caseSensitive: false);
@@ -28,6 +29,8 @@ class OrderSequenceActivity extends StatelessWidget {
       activity.sequenceItems.isNotEmpty &&
       activity.sequenceItems.every((item) => _rankOnly.hasMatch(item.label));
 
+  bool get _handMode => isHandExampleSequenceActivity(activity);
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -43,6 +46,8 @@ class OrderSequenceActivity extends StatelessWidget {
             activity.primaryCoachLine?.text ??
             (_rankMode
                 ? 'Tap ranks from lowest to highest.'
+                : _handMode
+                ? 'Tap each hand into the order asked.'
                 : 'Tap seats in the order they act.');
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -61,37 +66,133 @@ class OrderSequenceActivity extends StatelessWidget {
               ),
             ],
             const SizedBox(height: 14),
-            Semantics(
-              label:
-                  'Current order: ${ordered.isEmpty ? 'empty' : ordered.join(', ')}',
-              child: Wrap(
+            if (_handMode) ...[
+              Text(
+                ordered.isEmpty ? 'Your order (empty)' : 'Your order',
+                style: GoogleFonts.manrope(
+                  color: AppColors.slate,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Semantics(
+                label:
+                    'Current order: ${ordered.isEmpty ? 'empty' : ordered.join(', ')}',
+                child: Container(
+                  width: double.infinity,
+                  constraints: const BoxConstraints(minHeight: 56),
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: AppColors.feltDark.withValues(alpha: 0.55),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: AppColors.feltBorder.withValues(alpha: 0.8),
+                    ),
+                  ),
+                  child: ordered.isEmpty
+                      ? Text(
+                          'Tap hands below in the order asked',
+                          style: GoogleFonts.manrope(
+                            color: AppColors.slate,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )
+                      : Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            for (var i = 0; i < ordered.length; i++)
+                              HandExampleTile(
+                                example:
+                                    resolveHandExample(
+                                      id: ordered[i],
+                                      label: _labelFor(ordered[i]),
+                                    ) ??
+                                    LessonHandExample(
+                                      id: ordered[i],
+                                      title: _labelFor(ordered[i]),
+                                      codes: const [],
+                                    ),
+                                badge: '${i + 1}',
+                                selected: true,
+                                enabled: false,
+                                compact: true,
+                              ),
+                          ],
+                        ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                remaining.isEmpty ? 'All hands placed' : 'Tap next',
+                style: GoogleFonts.manrope(
+                  color: AppColors.slate,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  for (var i = 0; i < ordered.length; i++)
-                    _rankMode
-                        ? _RankTile(
+                  for (final item in remaining)
+                    HandExampleTile(
+                      example:
+                          resolveHandExample(id: item.id, label: item.label) ??
+                          LessonHandExample(
+                            id: item.id,
+                            title: item.label,
+                            codes: const [],
+                          ),
+                      selected: false,
+                      enabled: !locked,
+                      compact: true,
+                      onPressed:
+                          locked
+                              ? null
+                              : () => controller.setOrderedIds([
+                                ...ordered,
+                                item.id,
+                              ]),
+                    ),
+                ],
+              ),
+            ] else ...[
+              Semantics(
+                label:
+                    'Current order: ${ordered.isEmpty ? 'empty' : ordered.join(', ')}',
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (var i = 0; i < ordered.length; i++)
+                      if (_rankMode)
+                        _RankTile(
                           label: _labelFor(ordered[i]),
                           badge: '${i + 1}',
                           selected: true,
                         )
-                        : Chip(
+                      else
+                        Chip(
                           label: Text('${i + 1}. ${_labelFor(ordered[i])}'),
                           backgroundColor: AppColors.gold.withValues(
                             alpha: 0.2,
                           ),
                         ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                for (final item in remaining)
-                  _rankMode
-                      ? _RankTile(
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final item in remaining)
+                    if (_rankMode)
+                      _RankTile(
                         label: item.label,
                         onPressed:
                             locked
@@ -101,7 +202,8 @@ class OrderSequenceActivity extends StatelessWidget {
                                   item.id,
                                 ]),
                       )
-                      : ActionChip(
+                    else
+                      ActionChip(
                         onPressed:
                             locked
                                 ? null
@@ -111,8 +213,9 @@ class OrderSequenceActivity extends StatelessWidget {
                                 ]),
                         label: Text(item.label),
                       ),
-              ],
-            ),
+                ],
+              ),
+            ],
             if (ordered.isNotEmpty && !locked) ...[
               const SizedBox(height: 8),
               Align(

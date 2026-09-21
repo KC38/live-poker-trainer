@@ -8,6 +8,7 @@ import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
@@ -59,6 +60,9 @@ enum CoachDialogueVisualKind {
 
   /// Dealer button chip.
   dealerButton,
+
+  /// Weakest-to-strongest made-hand ladder.
+  handLadder,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -81,6 +85,8 @@ class CoachDialogueVisual {
       'Tap Continue when the four suits and ranks click.',
     CoachDialogueVisualKind.dealerButton =>
       'Tap Continue when you can spot the button and blinds.',
+    CoachDialogueVisualKind.handLadder =>
+      'Tap Continue when the ladder from high card to flush clicks.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -91,7 +97,10 @@ class CoachDialogueVisual {
           : 'Demonstration hole cards ${cardCodes.join(' and ')}',
     CoachDialogueVisualKind.suitsRanks =>
       'Demonstration suits hearts diamonds clubs spades, ranks deuce through ace',
-    CoachDialogueVisualKind.dealerButton => 'Demonstration dealer button',
+    CoachDialogueVisualKind.dealerButton =>
+      'Poker table showing dealer button and blinds',
+    CoachDialogueVisualKind.handLadder =>
+      'Hand rank ladder from high card to flush',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -111,6 +120,8 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.dealerButton,
       );
+    case 'act-01-02-01-explain-ladder':
+      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
   }
 
   final blob =
@@ -119,10 +130,16 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
               '${activity.objectives.join(' ')}'
           .toLowerCase();
 
+  if (blob.contains('flush beats') ||
+      blob.contains('hand rank') ||
+      blob.contains('pair beats') ||
+      blob.contains('remember the ladder')) {
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
+  }
   if (blob.contains('suit') ||
-      blob.contains('rank') ||
       blob.contains('deuce') ||
-      blob.contains('ace is high')) {
+      blob.contains('ace is high') ||
+      (blob.contains('rank') && blob.contains('thirteen'))) {
     return const CoachDialogueVisual(kind: CoachDialogueVisualKind.suitsRanks);
   }
   if (blob.contains('button') ||
@@ -163,6 +180,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
         CoachDialogueVisualKind.holeCards => _HoleCardDemo(visual: visual),
         CoachDialogueVisualKind.suitsRanks => const _SuitsRanksDemo(),
         CoachDialogueVisualKind.dealerButton => const _DealerButtonDemo(),
+        CoachDialogueVisualKind.handLadder => const HandRankLadderDemo(),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
     );

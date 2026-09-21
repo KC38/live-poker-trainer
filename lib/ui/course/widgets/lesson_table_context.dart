@@ -209,6 +209,16 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         buttonSeat: 5,
         numberSeats: true,
       );
+    case 'act-01-02-01-scaffolded-spot':
+      return const LessonTableScene(
+        heroCodes: ['Ac', '3d'],
+        boardCodes: ['Kc', '9c', '4c', '7c', '2s'],
+        villainSeatCount: 0,
+        highlight: LessonTableHighlight.none,
+        caption: 'You',
+      );
+    case 'act-01-02-01-explain-ladder':
+      return null;
   }
 
   final hero = <String>[];
