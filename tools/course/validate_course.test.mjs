@@ -21,7 +21,11 @@ test("seed course validates and shares contentChecksum", () => {
   assert.equal(clientCatalog.catalogVersion, serverBank.catalogVersion);
   assert.equal(clientCatalog.contentChecksum, serverBank.contentChecksum);
   assert.equal(clientCatalog.sections.length, 7);
-  assert.ok(serverBank.handLabsById["lab-01-01-01-bb-defend-seed"]);
+  assert.ok(serverBank.handLabsById["lab-01-01-02-bb-defend-seed"]);
+  assert.ok(
+    clientCatalog.sections[0].units[0].lessons[0].id ===
+      "lesson-01-01-01-your-two-cards",
+  );
 });
 
 test("client catalog omits private grading keys", () => {

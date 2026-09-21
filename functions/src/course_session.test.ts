@@ -44,7 +44,8 @@ describe("course flags", () => {
 });
 
 describe("soft grading and life loss", () => {
-  const lesson = findLesson("lesson-01-01-01-suits-ranks-and-seats")!.lesson;
+  const lesson = findLesson("lesson-01-01-01-your-two-cards")!.lesson;
+  const coverage = findLesson("lesson-01-01-02-renderer-coverage-seed")!.lesson;
 
   it("never loses a life on reasonable or questionable answers", () => {
     for (const grade of ["reasonable", "questionable"] as const) {
@@ -91,31 +92,33 @@ describe("soft grading and life loss", () => {
 
   it("grades every soft-grade × stage combination from the bank", () => {
     const guided = lesson.activities.find(
-      (activity) => activity.id === "act-01-01-01-guided-flush-beats",
+      (activity) => activity.id === "act-01-01-01-guided-find-holes",
     )!;
     expect(gradeCourseResponse({
       activity: guided,
-      choiceId: "choice-flush",
+      choiceId: "choice-hero-holes",
     })).toMatchObject({grade: "recommended", accepted: true, lifeLost: false});
     expect(gradeCourseResponse({
       activity: guided,
-      choiceId: "choice-straight",
+      choiceId: "choice-board",
     })).toMatchObject({
       grade: "clear_mistake",
       accepted: false,
       lifeLost: false,
     });
     expect(gradeCourseResponse({
-      activity: guided,
-      choiceId: "choice-unsure",
+      activity: lesson.activities.find(
+        (activity) => activity.id === "act-01-01-01-scaffolded-private",
+      )!,
+      choiceId: "choice-dealer-only",
     })).toMatchObject({
       grade: "questionable",
       accepted: false,
       lifeLost: false,
     });
 
-    const checkpoint = lesson.activities.find(
-      (activity) => activity.id === "act-01-01-01-checkpoint-open-fold",
+    const checkpoint = coverage.activities.find(
+      (activity) => activity.id === "act-01-01-02-checkpoint-open-fold",
     )!;
     expect(gradeCourseResponse({
       activity: checkpoint,
@@ -134,8 +137,8 @@ describe("soft grading and life loss", () => {
       lifeLost: false,
     });
 
-    const scaffolded = lesson.activities.find(
-      (activity) => activity.id === "act-01-01-01-scaffolded-action-order",
+    const scaffolded = coverage.activities.find(
+      (activity) => activity.id === "act-01-01-02-scaffolded-action-order",
     )!;
     expect(gradeCourseResponse({
       activity: scaffolded,
@@ -145,8 +148,8 @@ describe("soft grading and life loss", () => {
       lifeLost: false,
     });
 
-    const unguided = lesson.activities.find(
-      (activity) => activity.id === "act-01-01-01-unguided-pot-price",
+    const unguided = coverage.activities.find(
+      (activity) => activity.id === "act-01-01-02-unguided-pot-price",
     )!;
     expect(gradeCourseResponse({
       activity: unguided,
@@ -165,7 +168,7 @@ describe("soft grading and life loss", () => {
   it("rejects client-supplied grade fields at the response API boundary", () => {
     // Covered by submitCourseStepForUser; grading helper never accepts a grade.
     expect(activityIdsInOrder().length).toBeGreaterThan(5);
-    expect(courseBank.gradingByActivityId["act-01-01-01-guided-flush-beats"])
+    expect(courseBank.gradingByActivityId["act-01-01-01-guided-find-holes"])
       .toBeTruthy();
   });
 });
@@ -234,14 +237,16 @@ describe("streak calendar rules", () => {
 
 describe("placement and live unlock helpers", () => {
   it("requires placement flag for jump-test lessons only", () => {
-    const first = findLesson("lesson-01-01-01-suits-ranks-and-seats")!;
-    expect(lessonRequiresPlacementFlag(first.lesson)).toBe(true);
+    const first = findLesson("lesson-01-01-01-your-two-cards")!;
+    expect(lessonRequiresPlacementFlag(first.lesson)).toBe(false);
+    const coverage = findLesson("lesson-01-01-02-renderer-coverage-seed")!;
+    expect(lessonRequiresPlacementFlag(coverage.lesson)).toBe(true);
     const stub = findLesson("lesson-02-01-01-position-stub")!;
     expect(lessonRequiresPlacementFlag(stub.lesson)).toBe(false);
   });
 
   it("only section 4 jump lessons grant Live entitlement", () => {
-    const first = findLesson("lesson-01-01-01-suits-ranks-and-seats")!;
+    const first = findLesson("lesson-01-01-01-your-two-cards")!;
     expect(lessonGrantsLiveTrainingEntitlement(first)).toBe(false);
     expect(LIVE_UNLOCK_SECTION_ID).toBe("sec-04-regular-live");
   });

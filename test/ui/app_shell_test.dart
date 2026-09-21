@@ -160,7 +160,7 @@ void main() {
     await tester.tap(_navLabel('Home'));
     await tester.pumpAndSettle();
     expect(
-      find.textContaining('Your live cash course lives here'),
+      find.textContaining('Your live cash course starts with a short'),
       findsOneWidget,
     );
 

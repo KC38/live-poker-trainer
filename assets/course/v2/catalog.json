@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "0ca015424b4e1ab0e68dbcd5550ca339f3b47a35dcb2bcd6528d9ae2de75bb57",
+  "contentChecksum": "d84084be78adeb66af550f96d5bd011f9045ae87fa05880432953bb49fee715e",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -51,53 +51,53 @@
           "summary": "Suits, ranks, hole cards, and the live table layout.",
           "lessons": [
             {
-              "id": "lesson-01-01-01-suits-ranks-and-seats",
+              "id": "lesson-01-01-01-your-two-cards",
               "order": 1,
-              "title": "Suits, ranks, and seats",
-              "summary": "Learn the card deck and where everyone sits at a live cash table.",
+              "title": "Your two cards",
+              "summary": "Learn that hole cards are private to you until showdown.",
               "objectives": [
-                "Identify suits and ranks",
+                "Identify your two hole cards",
                 "Distinguish hole cards from community cards",
-                "Name seats, button, and blinds"
+                "Recognize that other seats hide their hole cards"
               ],
               "prerequisites": [],
               "remediationLessonIds": [
-                "lesson-01-01-01-suits-ranks-and-seats"
+                "lesson-01-01-01-your-two-cards"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 6,
               "difficultyBand": 1,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
               "activities": [
                 {
-                  "id": "act-01-01-01-explain-deck",
+                  "id": "act-01-01-01-explain-hole-cards",
                   "order": 1,
                   "stage": "explain",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Fifty-two cards. Four suits. Same deck every orbit.",
+                  "accessibilityText": "These two are yours alone. Nobody else sees them.",
                   "acceptedGrades": [
                     "recommended"
                   ],
                   "lifeLossEligible": false,
                   "coachMedia": [
                     {
-                      "id": "act-01-01-01-explain-deck-media",
+                      "id": "act-01-01-01-explain-hole-cards-media",
                       "kind": "dialogue",
-                      "text": "Fifty-two cards. Four suits. Same deck every orbit."
+                      "text": "These two are yours alone. Nobody else sees them."
                     }
                   ],
                   "objectives": [
-                    "Identify suits and ranks"
+                    "Identify your two hole cards"
                   ]
                 },
                 {
-                  "id": "act-01-01-01-guided-flush-beats",
+                  "id": "act-01-01-01-guided-find-holes",
                   "order": 2,
                   "stage": "guided",
                   "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Choose which hand wins when a flush faces a straight.",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Choose which pair are your private hole cards.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -105,30 +105,164 @@
                   ],
                   "lifeLossEligible": false,
                   "objectives": [
-                    "Identify suits and ranks"
+                    "Identify your two hole cards"
                   ],
-                  "prompt": "At showdown, which hand wins?",
+                  "prompt": "Which cards are your hole cards?",
+                  "coachMedia": [
+                    {
+                      "id": "act-01-01-01-guided-find-holes-hint",
+                      "kind": "hint",
+                      "text": "Look at the two cards in front of you — not the board."
+                    }
+                  ],
                   "choices": [
                     {
-                      "id": "choice-flush",
-                      "label": "A flush beats a straight.",
-                      "accessibilityText": "Select flush beats straight."
+                      "id": "choice-hero-holes",
+                      "label": "Ah Kd in front of you",
+                      "accessibilityText": "Select ace of hearts and king of diamonds as your hole cards."
                     },
                     {
-                      "id": "choice-straight",
-                      "label": "A straight beats a flush.",
-                      "accessibilityText": "Select straight beats flush."
+                      "id": "choice-board",
+                      "label": "The flop cards in the middle",
+                      "accessibilityText": "Select the community flop cards."
                     },
                     {
-                      "id": "choice-unsure",
-                      "label": "They always chop.",
-                      "accessibilityText": "Select that the hands always chop."
+                      "id": "choice-villain",
+                      "label": "Face-down cards at another seat",
+                      "accessibilityText": "Select another seat's face-down cards."
                     }
                   ]
                 },
                 {
-                  "id": "act-01-01-01-scaffolded-action-order",
+                  "id": "act-01-01-01-scaffolded-private",
                   "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Decide who can see your hole cards during the hand.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Recognize that other seats hide their hole cards"
+                  ],
+                  "prompt": "Who can see your hole cards right now?",
+                  "choices": [
+                    {
+                      "id": "choice-only-you",
+                      "label": "Only you",
+                      "accessibilityText": "Select that only you see your hole cards."
+                    },
+                    {
+                      "id": "choice-whole-table",
+                      "label": "Everyone at the table",
+                      "accessibilityText": "Select that the whole table sees your hole cards."
+                    },
+                    {
+                      "id": "choice-dealer-only",
+                      "label": "Only the dealer",
+                      "accessibilityText": "Select that only the dealer sees your hole cards."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-01-01-unguided-mix",
+                  "order": 4,
+                  "stage": "unguided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 35,
+                  "accessibilityText": "Pick the shared community cards on a simple flop.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Distinguish hole cards from community cards"
+                  ],
+                  "prompt": "Which cards are community cards?",
+                  "choices": [
+                    {
+                      "id": "choice-flop",
+                      "label": "Qs Jh 2c in the middle",
+                      "accessibilityText": "Select the queen, jack, and deuce in the middle."
+                    },
+                    {
+                      "id": "choice-hero-again",
+                      "label": "Your Ah Kd",
+                      "accessibilityText": "Select your ace-king as community cards."
+                    },
+                    {
+                      "id": "choice-muck",
+                      "label": "Folded cards in the muck",
+                      "accessibilityText": "Select folded cards in the muck."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-01-01-checkpoint-table",
+                  "order": 5,
+                  "stage": "checkpoint",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "On a fuller table, identify your private hole cards again.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Identify your two hole cards",
+                    "Distinguish hole cards from community cards"
+                  ],
+                  "prompt": "Six seats, flop out. Which cards are only yours?",
+                  "choices": [
+                    {
+                      "id": "choice-checkpoint-holes",
+                      "label": "The two cards at your seat",
+                      "accessibilityText": "Select the two cards at your seat."
+                    },
+                    {
+                      "id": "choice-checkpoint-board",
+                      "label": "Flop plus your two cards",
+                      "accessibilityText": "Select the flop plus your hole cards."
+                    },
+                    {
+                      "id": "choice-checkpoint-all",
+                      "label": "Every face-up card you can see",
+                      "accessibilityText": "Select every face-up card in view."
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "lesson-01-01-02-renderer-coverage-seed",
+              "order": 2,
+              "title": "Table coverage seed",
+              "summary": "Seed activities that cover remaining renderers until Plan 07 authoring.",
+              "objectives": [
+                "Exercise remaining activity renderers"
+              ],
+              "prerequisites": [
+                "lesson-01-01-01-your-two-cards"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-01-01-your-two-cards"
+              ],
+              "estimatedMinutes": 8,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-01-02-scaffolded-action-order",
+                  "order": 1,
                   "stage": "scaffolded",
                   "renderer": "order_sequence",
                   "estimatedSeconds": 50,
@@ -140,7 +274,7 @@
                   ],
                   "lifeLossEligible": false,
                   "objectives": [
-                    "Name seats, button, and blinds"
+                    "Exercise remaining activity renderers"
                   ],
                   "prompt": "Order the first three seats to act preflop after the blinds post.",
                   "sequenceItems": [
@@ -159,8 +293,8 @@
                   ]
                 },
                 {
-                  "id": "act-01-01-01-unguided-pot-price",
-                  "order": 4,
+                  "id": "act-01-01-02-unguided-pot-price",
+                  "order": 2,
                   "stage": "unguided",
                   "renderer": "numeric_pot_price",
                   "estimatedSeconds": 40,
@@ -172,7 +306,7 @@
                   ],
                   "lifeLossEligible": true,
                   "objectives": [
-                    "Distinguish hole cards from community cards"
+                    "Exercise remaining activity renderers"
                   ],
                   "numericPrompt": {
                     "question": "Blinds are 1/2. Nobody limps. BTN opens to 6. What is the pot before the blinds act?",
@@ -180,8 +314,8 @@
                   }
                 },
                 {
-                  "id": "act-01-01-01-checkpoint-open-fold",
-                  "order": 5,
+                  "id": "act-01-01-02-checkpoint-open-fold",
+                  "order": 3,
                   "stage": "checkpoint",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -193,7 +327,7 @@
                   ],
                   "lifeLossEligible": true,
                   "objectives": [
-                    "Name seats, button, and blinds"
+                    "Exercise remaining activity renderers"
                   ],
                   "prompt": "You are UTG with 72o at 1/2. What do you do?",
                   "choices": [
@@ -216,8 +350,8 @@
                   ]
                 },
                 {
-                  "id": "act-01-01-01-jump-compare",
-                  "order": 6,
+                  "id": "act-01-01-02-jump-compare",
+                  "order": 4,
                   "stage": "jump_test",
                   "renderer": "compare_rank",
                   "estimatedSeconds": 45,
@@ -229,7 +363,7 @@
                   ],
                   "lifeLossEligible": true,
                   "objectives": [
-                    "Identify suits and ranks"
+                    "Exercise remaining activity renderers"
                   ],
                   "prompt": "Rank these UTG open candidates from strongest to weakest.",
                   "sequenceItems": [
@@ -248,8 +382,8 @@
                   ]
                 },
                 {
-                  "id": "act-01-01-01-hand-lab-seed",
-                  "order": 7,
+                  "id": "act-01-01-02-hand-lab-seed",
+                  "order": 5,
                   "stage": "unguided",
                   "renderer": "full_table_hand_lab",
                   "estimatedSeconds": 90,
@@ -261,10 +395,27 @@
                   ],
                   "lifeLossEligible": true,
                   "objectives": [
-                    "Distinguish hole cards from community cards"
+                    "Exercise remaining activity renderers"
                   ],
                   "prompt": "Defend or fold this big-blind hand.",
-                  "handLabSpecId": "lab-01-01-01-bb-defend-seed"
+                  "choices": [
+                    {
+                      "id": "fold-bb",
+                      "label": "Fold",
+                      "action": "FOLD"
+                    },
+                    {
+                      "id": "call-bb",
+                      "label": "Call 4 more",
+                      "action": "CALL"
+                    },
+                    {
+                      "id": "shove-bb",
+                      "label": "Jam 100bb",
+                      "action": "ALL_IN"
+                    }
+                  ],
+                  "handLabSpecId": "lab-01-01-02-bb-defend-seed"
                 }
               ]
             }
@@ -294,10 +445,10 @@
                 "Recognize position labels"
               ],
               "prerequisites": [
-                "lesson-01-01-01-suits-ranks-and-seats"
+                "lesson-01-01-01-your-two-cards"
               ],
               "remediationLessonIds": [
-                "lesson-01-01-01-suits-ranks-and-seats"
+                "lesson-01-01-01-your-two-cards"
               ],
               "estimatedMinutes": 5,
               "difficultyBand": 2,

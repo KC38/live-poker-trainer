@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/ui/screens/first_lesson_launch_screen.dart';
 
 /// Home tab — interactive live-cash course path (placeholder).
 class HomeScreen extends ConsumerWidget {
@@ -52,8 +53,8 @@ class HomeScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        'Your live cash course lives here. Interactive lessons '
-                        'arrive in a later update.',
+                        'Your live cash course starts with a short interactive '
+                        'lesson. The full Home path arrives soon.',
                         style: GoogleFonts.manrope(
                           color: AppColors.slate,
                           fontSize: 16,
@@ -62,6 +63,16 @@ class HomeScreen extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(height: 28),
+                      FilledButton(
+                        onPressed: () => FirstLessonLaunchScreen.open(context),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppColors.gold,
+                          foregroundColor: AppColors.bgDark,
+                          minimumSize: const Size.fromHeight(52),
+                        ),
+                        child: const Text('Start: Your two cards'),
+                      ),
+                      const SizedBox(height: 16),
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),

@@ -31,9 +31,10 @@ void main() {
     final activityIds = catalog.activityIdsInOrder;
     expect(lessonIds.toSet(), hasLength(lessonIds.length));
     expect(activityIds.toSet(), hasLength(activityIds.length));
-    expect(lessonIds.first, 'lesson-01-01-01-suits-ranks-and-seats');
+    expect(lessonIds.first, 'lesson-01-01-01-your-two-cards');
     expect(lessonIds.last, 'lesson-07-01-01-plan-stub');
-    expect(activityIds, contains('act-01-01-01-hand-lab-seed'));
+    expect(activityIds, contains('act-01-01-02-hand-lab-seed'));
+    expect(activityIds, contains('act-01-01-01-explain-hole-cards'));
   });
 
   test('client catalog json contains no private grading keys', () {

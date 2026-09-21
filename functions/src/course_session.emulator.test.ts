@@ -70,7 +70,7 @@ describe("course session integration", () => {
 
     const startRaw = {
       clientVersion: "2.0.0",
-      lessonId: "lesson-01-01-01-suits-ranks-and-seats",
+      lessonId: "lesson-01-01-01-your-two-cards",
       startRequestId: "start_req_01",
       catalogVersion: "2.0.0",
       timezone: "UTC",
@@ -93,7 +93,7 @@ describe("course session integration", () => {
       raw: {
         clientVersion: "2.0.0",
         attemptId: first.attempt.attemptId,
-        activityId: "act-01-01-01-explain-deck",
+        activityId: "act-01-01-01-explain-hole-cards",
         idempotencyKey: "step_explain_01",
       },
       db,
@@ -103,7 +103,7 @@ describe("course session integration", () => {
       raw: {
         clientVersion: "2.0.0",
         attemptId: first.attempt.attemptId,
-        activityId: "act-01-01-01-explain-deck",
+        activityId: "act-01-01-01-explain-hole-cards",
         idempotencyKey: "step_explain_01",
       },
       db,
@@ -128,7 +128,7 @@ describe("course session integration", () => {
       uid: "life-user",
       raw: {
         clientVersion: "2.0.0",
-        lessonId: "lesson-01-01-01-suits-ranks-and-seats",
+        lessonId: "lesson-01-01-01-your-two-cards",
         startRequestId: "start_life_01",
       },
       db,
@@ -139,7 +139,7 @@ describe("course session integration", () => {
       raw: {
         clientVersion: "2.0.0",
         attemptId: started.attempt.attemptId,
-        activityId: "act-01-01-01-explain-deck",
+        activityId: "act-01-01-01-explain-hole-cards",
         idempotencyKey: "life_explain",
       },
       db,
@@ -149,34 +149,47 @@ describe("course session integration", () => {
       raw: {
         clientVersion: "2.0.0",
         attemptId: started.attempt.attemptId,
-        activityId: "act-01-01-01-guided-flush-beats",
-        choiceId: "choice-unsure",
-        idempotencyKey: "life_questionable",
+        activityId: "act-01-01-01-guided-find-holes",
+        choiceId: "choice-board",
+        idempotencyKey: "life_guided_miss",
       },
       db,
     });
     expect(questionable.lifeLost).toBe(false);
     expect(questionable.livesRemaining).toBe(3);
 
-    // Accept guided to advance, then scaffolded, then miss unguided.
+    // Accept guided, then questionable scaffolded (still no life loss).
     await submitCourseStepForUser({
       uid: "life-user",
       raw: {
         clientVersion: "2.0.0",
         attemptId: started.attempt.attemptId,
-        activityId: "act-01-01-01-guided-flush-beats",
-        choiceId: "choice-flush",
+        activityId: "act-01-01-01-guided-find-holes",
+        choiceId: "choice-hero-holes",
         idempotencyKey: "life_guided_ok",
       },
       db,
     });
+    const scaffoldedQuestionable = await submitCourseStepForUser({
+      uid: "life-user",
+      raw: {
+        clientVersion: "2.0.0",
+        attemptId: started.attempt.attemptId,
+        activityId: "act-01-01-01-scaffolded-private",
+        choiceId: "choice-dealer-only",
+        idempotencyKey: "life_questionable",
+      },
+      db,
+    });
+    expect(scaffoldedQuestionable.grade).toBe("questionable");
+    expect(scaffoldedQuestionable.lifeLost).toBe(false);
     await submitCourseStepForUser({
       uid: "life-user",
       raw: {
         clientVersion: "2.0.0",
         attemptId: started.attempt.attemptId,
-        activityId: "act-01-01-01-scaffolded-action-order",
-        orderedIds: ["seat-utg", "seat-hj", "seat-btn"],
+        activityId: "act-01-01-01-scaffolded-private",
+        choiceId: "choice-only-you",
         idempotencyKey: "life_scaffold_ok",
       },
       db,
@@ -186,8 +199,8 @@ describe("course session integration", () => {
       raw: {
         clientVersion: "2.0.0",
         attemptId: started.attempt.attemptId,
-        activityId: "act-01-01-01-unguided-pot-price",
-        numericValue: 1,
+        activityId: "act-01-01-01-unguided-mix",
+        choiceId: "choice-hero-again",
         idempotencyKey: "life_clear_mistake",
       },
       db,
@@ -208,7 +221,7 @@ describe("course session integration", () => {
       uid: "gate-user",
       raw: {
         clientVersion: "2.0.0",
-        lessonId: "lesson-01-01-01-suits-ranks-and-seats",
+        lessonId: "lesson-01-01-01-your-two-cards",
         startRequestId: "start_gate_01",
       },
       db,
@@ -219,7 +232,7 @@ describe("course session integration", () => {
         raw: {
           clientVersion: "2.0.0",
           attemptId: started.attempt.attemptId,
-          activityId: "act-01-01-01-explain-deck",
+          activityId: "act-01-01-01-explain-hole-cards",
           idempotencyKey: "grade_reject_01",
           grade: "recommended",
         },
@@ -246,7 +259,7 @@ describe("course session integration", () => {
         uid: "gate-user",
         raw: {
           clientVersion: "2.0.0",
-          lessonId: "lesson-01-01-01-suits-ranks-and-seats",
+          lessonId: "lesson-01-01-02-renderer-coverage-seed",
           startRequestId: "start_gate_03",
         },
         db,
