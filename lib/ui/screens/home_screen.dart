@@ -117,6 +117,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ).showSnackBar(SnackBar(content: Text(message)));
       return;
     }
+    if (!snapshot.startsEnabled && node.state != CourseNodeState.active) {
+      unawaited(analytics.logHomeNodeLockedTap(lessonId: node.lessonId));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('New course attempts are paused.')),
+      );
+      return;
+    }
     unawaited(
       analytics.logHomeNodeOpen(
         lessonId: node.lessonId,
@@ -296,7 +303,9 @@ class _HomeBody extends StatelessWidget {
                 RexCoachCard(
                   line: snapshot.rexLine!,
                   onContinue:
-                      snapshot.nextLessonId == null
+                      snapshot.nextLessonId == null ||
+                              (!snapshot.startsEnabled &&
+                                  snapshot.resume == null)
                           ? null
                           : () {
                             final next = snapshot.nextNode;

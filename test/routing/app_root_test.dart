@@ -68,6 +68,90 @@ void main() {
       ),
       AppRootDestination.saveProgress,
     );
+    expect(
+      resolveAppRoot(
+        signedIn: true,
+        anonymous: true,
+        flagsReady: true,
+        flags: enabled,
+        onboarding: const OnboardingDraft(),
+      ),
+      AppRootDestination.guestCourse,
+    );
+  });
+
+  test('guestCourseEnabled false sends new guests to auth', () {
+    const guestsOff = CourseFlags(
+      courseEnabled: true,
+      courseStartsEnabled: true,
+      guestCourseEnabled: false,
+      placementTestsEnabled: true,
+      catalogVersion: '2.0.0',
+      minimumClientVersion: '2.0.0',
+    );
+    expect(guestCourseEntryEnabled(guestsOff), isFalse);
+    expect(
+      resolveAppRoot(
+        signedIn: false,
+        anonymous: false,
+        flagsReady: true,
+        flags: guestsOff,
+        onboarding: const OnboardingDraft(),
+      ),
+      AppRootDestination.auth,
+    );
+    expect(
+      resolveAppRoot(
+        signedIn: true,
+        anonymous: true,
+        flagsReady: true,
+        flags: guestsOff,
+        onboarding: const OnboardingDraft(),
+      ),
+      AppRootDestination.auth,
+    );
+    expect(
+      resolveAppRoot(
+        signedIn: true,
+        anonymous: true,
+        flagsReady: true,
+        flags: guestsOff,
+        onboarding: const OnboardingDraft(firstLessonCompleted: true),
+      ),
+      AppRootDestination.saveProgress,
+    );
+    expect(
+      resolveAppRoot(
+        signedIn: true,
+        anonymous: false,
+        flagsReady: true,
+        flags: guestsOff,
+        onboarding: const OnboardingDraft(),
+      ),
+      AppRootDestination.shell,
+    );
+  });
+
+  test('paused starts still allow guest entry when guests are enabled', () {
+    const startsPaused = CourseFlags(
+      courseEnabled: true,
+      courseStartsEnabled: false,
+      guestCourseEnabled: true,
+      placementTestsEnabled: true,
+      catalogVersion: '2.0.0',
+      minimumClientVersion: '2.0.0',
+    );
+    expect(guestCourseEntryEnabled(startsPaused), isTrue);
+    expect(
+      resolveAppRoot(
+        signedIn: false,
+        anonymous: false,
+        flagsReady: true,
+        flags: startsPaused,
+        onboarding: const OnboardingDraft(),
+      ),
+      AppRootDestination.welcome,
+    );
   });
 
   test('flags still loading do not flash guest onboarding', () {

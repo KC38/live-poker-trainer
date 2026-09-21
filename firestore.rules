@@ -44,7 +44,8 @@ rules_version = '2';
 //   Admin-only TTL queue for purged anonymous course trees
 //
 // appConfig/courseFlags
-//   Server-controlled course feature flags; signed-in read-only
+//   Server-controlled course feature flags. Readable without sign-in so
+//   welcome can run before anonymous auth. Writes are Admin SDK only.
 //
 // tableSetups/{setupKey}/situations/{situationId}
 //   Legacy v2 situation pool. Admin SDK only. Live hands use liveTableSetups.
@@ -261,8 +262,9 @@ service cloud.firestore {
     }
 
     match /appConfig/{docId} {
-      // Course feature flags are readable by any signed-in user (incl. anon).
-      allow read: if signedIn() && docId == 'courseFlags';
+      // Signed-out guests read flags before anonymous sign-in. Other
+      // appConfig docs stay closed. Writes remain Admin SDK only.
+      allow read: if docId == 'courseFlags';
       allow write: if false;
     }
 

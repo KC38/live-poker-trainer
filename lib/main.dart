@@ -134,7 +134,7 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
         loading: () => const _AuthLoadingScreen(),
         error:
             (_, _) =>
-                flagsReady && flags?.courseEnabled == true
+                flagsReady && guestCourseEntryEnabled(flags)
                     ? const WelcomeScreen()
                     : flagsReady
                     ? const AuthScreen()
