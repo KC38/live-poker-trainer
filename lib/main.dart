@@ -15,16 +15,21 @@ import 'package:live_poker_trainer/core/debug/agent_commands.dart';
 import 'package:live_poker_trainer/core/diagnostics/diagnostics_log.dart';
 import 'package:live_poker_trainer/firebase_options.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/models/course/course_flags.dart';
 import 'package:live_poker_trainer/models/course/onboarding_models.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
+import 'package:live_poker_trainer/providers/course_flags_provider.dart';
+import 'package:live_poker_trainer/providers/course_progress_provider.dart';
 import 'package:live_poker_trainer/providers/onboarding_provider.dart';
 import 'package:live_poker_trainer/providers/profile_provider.dart';
+import 'package:live_poker_trainer/routing/app_root.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/services/analytics/crashlytics_diagnostics_sink.dart';
 import 'package:live_poker_trainer/services/legacy_local_data_cleanup.dart';
 import 'package:live_poker_trainer/ui/screens/app_shell.dart';
+import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/screens/first_lesson_launch_screen.dart';
 import 'package:live_poker_trainer/ui/screens/onboarding_screens.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
@@ -90,6 +95,9 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
     final analytics = ref.watch(analyticsServiceProvider);
     final navObserver = ref.watch(analyticsNavigatorObserverProvider);
     final onboarding = ref.watch(onboardingControllerProvider);
+    final flagsAsync = ref.watch(courseFlagsProvider);
+    final flags = flagsAsync.asData?.value;
+    final flagsReady = flagsAsync.hasValue;
 
     ref.listen(authStateProvider, (prev, next) {
       final prevUid = prev?.asData?.value?.uid;
@@ -99,8 +107,12 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
       ref.invalidate(userDocProvider);
       ref.invalidate(userStatsProvider);
       ref.invalidate(heroProfileControllerProvider);
+      ref.invalidate(courseProgressProvider);
       unawaited(analytics.setUserId(nextUid));
-      _logRootScreen(analytics, _rootScreenName(nextUser, onboarding));
+      _logRootScreen(
+        analytics,
+        _rootScreenName(nextUser, onboarding, flags, flagsReady),
+      );
     });
 
     // Key on uid so sign-out/in rebuilds MaterialApp and clears pushed routes
@@ -108,7 +120,7 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
     final uid = auth.asData?.value?.uid;
     _logRootScreen(
       analytics,
-      _rootScreenName(auth.asData?.value, onboarding),
+      _rootScreenName(auth.asData?.value, onboarding, flags, flagsReady),
     );
 
     return MaterialApp(
@@ -118,49 +130,82 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
       theme: buildPokerTheme(),
       navigatorObservers: [navObserver],
       home: auth.when(
-        data: (user) => _homeForUser(user, onboarding),
+        data: (user) => _homeForUser(user, onboarding, flags, flagsReady),
         loading: () => const _AuthLoadingScreen(),
-        error: (_, _) => const WelcomeScreen(),
+        error:
+            (_, _) =>
+                flagsReady && flags?.courseEnabled == true
+                    ? const WelcomeScreen()
+                    : flagsReady
+                    ? const AuthScreen()
+                    : const _AuthLoadingScreen(),
       ),
     );
   }
 
-  Widget _homeForUser(User? user, OnboardingDraft onboarding) {
-    if (user == null) {
-      return const WelcomeScreen();
-    }
-
-    if (user.isAnonymous) {
-      if (onboarding.pendingSaveProgress || onboarding.firstLessonCompleted) {
-        return const SaveProgressScreen();
-      }
-      if (onboarding.step == OnboardingStep.firstLesson ||
-          onboarding.step == OnboardingStep.recommendedStart) {
-        return FirstLessonLaunchScreen(
-          lessonId: onboarding.recommendedLessonId ?? kFirstCourseLessonId,
-        );
-      }
-      // Cold start with an orphan anonymous session — resume onboarding.
-      return const ExperienceChoiceScreen();
-    }
-
-    // Hold shell until cloud gameplay prefs hydrate so table-setup
-    // edits cannot clobber Firestore with in-memory defaults.
-    final userDoc = ref.watch(userDocProvider);
-    return userDoc.when(
-      data: (_) => const AppShell(),
-      loading: () => const _AuthLoadingScreen(),
-      error: (_, _) => const AppShell(),
+  Widget _homeForUser(
+    User? user,
+    OnboardingDraft onboarding,
+    CourseFlags? flags,
+    bool flagsReady,
+  ) {
+    final destination = resolveAppRoot(
+      signedIn: user != null,
+      anonymous: user?.isAnonymous == true,
+      flagsReady: flagsReady,
+      flags: flags,
+      onboarding: onboarding,
     );
+    switch (destination) {
+      case AppRootDestination.loading:
+        return const _AuthLoadingScreen();
+      case AppRootDestination.auth:
+        return const AuthScreen();
+      case AppRootDestination.welcome:
+        return const WelcomeScreen();
+      case AppRootDestination.saveProgress:
+        return const SaveProgressScreen();
+      case AppRootDestination.guestCourse:
+        if (onboarding.step == OnboardingStep.firstLesson ||
+            onboarding.step == OnboardingStep.recommendedStart) {
+          return FirstLessonLaunchScreen(
+            lessonId: onboarding.recommendedLessonId ?? kFirstCourseLessonId,
+          );
+        }
+        return const ExperienceChoiceScreen();
+      case AppRootDestination.shell:
+        // Hold shell until cloud gameplay prefs hydrate so table-setup
+        // edits cannot clobber Firestore with in-memory defaults.
+        final userDoc = ref.watch(userDocProvider);
+        return userDoc.when(
+          data: (_) => const AppShell(),
+          loading: () => const _AuthLoadingScreen(),
+          error: (_, _) => const AppShell(),
+        );
+    }
   }
 
-  String _rootScreenName(User? user, OnboardingDraft onboarding) {
-    if (user == null) return AnalyticsScreens.welcome;
-    if (user.isAnonymous) {
-      if (onboarding.pendingSaveProgress) return AnalyticsScreens.saveProgress;
-      return AnalyticsScreens.onboarding;
-    }
-    return AnalyticsScreens.home;
+  String _rootScreenName(
+    User? user,
+    OnboardingDraft onboarding,
+    CourseFlags? flags,
+    bool flagsReady,
+  ) {
+    final destination = resolveAppRoot(
+      signedIn: user != null,
+      anonymous: user?.isAnonymous == true,
+      flagsReady: flagsReady,
+      flags: flags,
+      onboarding: onboarding,
+    );
+    return switch (destination) {
+      AppRootDestination.welcome => AnalyticsScreens.welcome,
+      AppRootDestination.guestCourse => AnalyticsScreens.onboarding,
+      AppRootDestination.saveProgress => AnalyticsScreens.saveProgress,
+      AppRootDestination.shell => AnalyticsScreens.home,
+      AppRootDestination.auth ||
+      AppRootDestination.loading => AnalyticsScreens.auth,
+    };
   }
 
   void _logRootScreen(AnalyticsService analytics, String screen) {

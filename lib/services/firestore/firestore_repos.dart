@@ -2,5 +2,4 @@
 library;
 
 export 'package:live_poker_trainer/services/firestore/progress_repository.dart';
-export 'package:live_poker_trainer/services/firestore/situation_service.dart';
 export 'package:live_poker_trainer/services/firestore/user_repository.dart';

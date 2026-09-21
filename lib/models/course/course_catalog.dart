@@ -12,13 +12,7 @@ const kFirstCourseLessonId = 'lesson-01-01-01-your-two-cards';
 const kCourseCatalogAssetPath = 'assets/course/v2/catalog.json';
 
 /// Soft coaching grades shared with live training.
-enum SoftGrade {
-  recommended,
-  strong,
-  reasonable,
-  questionable,
-  clearMistake,
-}
+enum SoftGrade { recommended, strong, reasonable, questionable, clearMistake }
 
 /// Maps wire-format grade strings.
 SoftGrade softGradeFromWire(String value) {
@@ -108,13 +102,7 @@ ActivityRenderer activityRendererFromWire(String value) {
 }
 
 /// Player type id.
-enum CoursePlayerTypeId {
-  callingStation,
-  nit,
-  maniac,
-  tag,
-  lag,
-}
+enum CoursePlayerTypeId { callingStation, nit, maniac, tag, lag }
 
 /// Maps wire-format player type ids.
 CoursePlayerTypeId coursePlayerTypeIdFromWire(String value) {
@@ -360,12 +348,12 @@ class CourseActivity {
 
   /// Parses JSON.
   factory CourseActivity.fromJson(Map<String, dynamic> json) {
-    final grades = _stringList(json['acceptedGrades'])
-        .map(softGradeFromWire)
-        .toList(growable: false);
-    final playerTypes = _stringList(json['playerTypeRefs'])
-        .map(coursePlayerTypeIdFromWire)
-        .toList(growable: false);
+    final grades = _stringList(
+      json['acceptedGrades'],
+    ).map(softGradeFromWire).toList(growable: false);
+    final playerTypes = _stringList(
+      json['playerTypeRefs'],
+    ).map(coursePlayerTypeIdFromWire).toList(growable: false);
     final media = <CoachMediaRef>[];
     final rawMedia = json['coachMedia'];
     if (rawMedia is List) {
@@ -523,12 +511,12 @@ class CourseLesson {
       remediationLessonIds: _stringList(json['remediationLessonIds']),
       estimatedMinutes: json['estimatedMinutes'] as int,
       difficultyBand: json['difficultyBand'] as int,
-      playerTypeRefs: _stringList(json['playerTypeRefs'])
-          .map(coursePlayerTypeIdFromWire)
-          .toList(growable: false),
-      introducesPlayerTypes: _stringList(json['introducesPlayerTypes'])
-          .map(coursePlayerTypeIdFromWire)
-          .toList(growable: false),
+      playerTypeRefs: _stringList(
+        json['playerTypeRefs'],
+      ).map(coursePlayerTypeIdFromWire).toList(growable: false),
+      introducesPlayerTypes: _stringList(
+        json['introducesPlayerTypes'],
+      ).map(coursePlayerTypeIdFromWire).toList(growable: false),
       activities: List.unmodifiable(activities),
     );
   }
@@ -767,6 +755,18 @@ class CourseCatalog {
       playerTypes: List.unmodifiable(playerTypes),
       sections: List.unmodifiable(sections),
     );
+  }
+
+  /// Section that contains [lessonId], if the catalog publishes it.
+  CourseSection? sectionForLesson(String lessonId) {
+    for (final section in sections) {
+      for (final unit in section.units) {
+        for (final lesson in unit.lessons) {
+          if (lesson.id == lessonId) return section;
+        }
+      }
+    }
+    return null;
   }
 
   /// Finds a lesson by id.

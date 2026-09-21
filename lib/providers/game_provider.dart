@@ -2,7 +2,6 @@
 library;
 
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,7 +15,6 @@ import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/live_hand_model.dart';
 import 'package:live_poker_trainer/models/live_access.dart';
 import 'package:live_poker_trainer/models/situation_model.dart';
-import 'package:live_poker_trainer/models/table_setup.dart';
 import 'package:live_poker_trainer/models/user_stats_model.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
@@ -181,10 +179,6 @@ class GameController extends StateNotifier<TableSession> {
 
   String get sessionId => state.liveView?.sessionId ?? '';
 
-  /// Compatibility fingerprint used by setup tests.
-  static String setupFingerprint(TableSetup setup) =>
-      jsonEncode(setup.toCallableMap());
-
   @override
   void dispose() {
     _disposed = true;
@@ -326,10 +320,7 @@ class GameController extends StateNotifier<TableSession> {
     } catch (error) {
       if (_disposed || token != _replayToken) return;
       _heldStreetReveal = held;
-      state = state.copyWith(
-        replaying: false,
-        error: '$error',
-      );
+      state = state.copyWith(replaying: false, error: '$error');
     }
   }
 
@@ -395,10 +386,7 @@ class GameController extends StateNotifier<TableSession> {
 
     final feedSubscription = _ref
         .read(liveHandServiceProvider)
-        .watchActionFeed(
-          sessionId: view.sessionId,
-          decisionId: view.decisionId,
-        )
+        .watchActionFeed(sessionId: view.sessionId, decisionId: view.decisionId)
         .listen(
           (update) {
             if (_disposed || token != _replayToken) return;
@@ -444,8 +432,9 @@ class GameController extends StateNotifier<TableSession> {
         awaitingCoach: false,
         clearWaitingOnSeat: true,
       );
-      final resultBoard =
-          result.view.board.map((card) => card.code).toList(growable: false);
+      final resultBoard = result.view.board
+          .map((card) => card.code)
+          .toList(growable: false);
       await enqueueReplay(result.events, resultBoard);
       if (_disposed || token != _replayToken) return;
       final finalGame = result.view.toGameState(handCount: _handCount);
@@ -646,11 +635,10 @@ class GameController extends StateNotifier<TableSession> {
           ],
           mainPot: game.mainPot + collected,
           street: eventStreet,
-          community:
-              boardCodes
-                  .take(boardCount)
-                  .map(CardModel.fromCode)
-                  .toList(growable: false),
+          community: boardCodes
+              .take(boardCount)
+              .map(CardModel.fromCode)
+              .toList(growable: false),
           highestBet: 0,
           waitingForHero: false,
         );
@@ -690,11 +678,10 @@ class GameController extends StateNotifier<TableSession> {
         ],
         mainPot: game.mainPot + collected,
         street: nextStreet,
-        community:
-            boardCodes
-                .take(boardCount)
-                .map(CardModel.fromCode)
-                .toList(growable: false),
+        community: boardCodes
+            .take(boardCount)
+            .map(CardModel.fromCode)
+            .toList(growable: false),
         highestBet: 0,
         waitingForHero: false,
       );
@@ -875,10 +862,7 @@ class GameController extends StateNotifier<TableSession> {
 }
 
 /// Applies one live-table action event onto a client [GameState] for replay.
-GameState applyLiveReplayEvent(
-  GameState game,
-  LiveActionEventModel event,
-) {
+GameState applyLiveReplayEvent(GameState game, LiveActionEventModel event) {
   if (event.seat < 0 || event.seat >= game.players.length) return game;
   final players = [...game.players];
   final player = players[event.seat];
@@ -901,9 +885,7 @@ GameState applyLiveReplayEvent(
   // Match the server: a bet/raise reopens seats that still owe chips, so
   // their CHECK (or call) pill must clear during client-side replay too.
   final aggressive =
-      event.kind == 'BET' ||
-      event.kind == 'RAISE' ||
-      event.kind == 'ALL_IN';
+      event.kind == 'BET' || event.kind == 'RAISE' || event.kind == 'ALL_IN';
   if (aggressive && highest > game.highestBet + Money.epsilon) {
     for (var i = 0; i < players.length; i++) {
       if (i == event.seat) continue;

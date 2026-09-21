@@ -5,7 +5,7 @@
     "course:generate": "node ../tools/course/validate_course.mjs --write",
     "course:check": "node ../tools/course/validate_course.mjs --check",
     "prebuild": "npm run course:check && npm run clean",
-    "build": "npm run course:generate && tsc",
+    "build": "npm run clean && npm run course:generate && tsc",
     "build:watch": "tsc --watch",
     "test": "vitest run",
     "test:rules": "cd .. && npx -y firebase-tools@latest emulators:exec --project live-poker-trainer-rules-test --only firestore,storage \"npm --prefix functions run test:rules:unit\"",
@@ -17,12 +17,12 @@
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
     "reset:dry": "npx ts-node --transpile-only scripts/reset_obsolete_data.ts",
+    "migrate:academy:dry": "npx ts-node --transpile-only scripts/migrate_legacy_academy.ts",
     "seed:live": "npx ts-node --transpile-only scripts/seed_live_default.ts",
     "benchmark:coach": "npx ts-node --transpile-only scripts/run_exploit_benchmark.ts",
     "benchmark:coach:full": "npx ts-node --transpile-only scripts/run_exploit_benchmark.ts --full",
     "benchmark:coach:compare": "npx ts-node --transpile-only scripts/run_exploit_benchmark.ts --compare",
-    "smoke:live": "npx ts-node --transpile-only scripts/smoke_live_hand.ts",
-    "cleanup:invalid:dry": "npx ts-node --transpile-only scripts/remove_invalid_situations.ts"
+    "smoke:live": "npx ts-node --transpile-only scripts/smoke_live_hand.ts"
   },
   "engines": {
     "node": "22"

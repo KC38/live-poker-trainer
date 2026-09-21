@@ -57,12 +57,43 @@ class CourseFlags {
   final String minimumClientVersion;
 
   /// Whether the client may start new course attempts.
-  bool get canStartCourse =>
-      courseEnabled && courseStartsEnabled;
+  bool get canStartCourse => courseEnabled && courseStartsEnabled;
 
   /// Whether anonymous users may initialize/start course attempts.
-  bool get canStartAsGuest =>
-      canStartCourse && guestCourseEnabled;
+  bool get canStartAsGuest => canStartCourse && guestCourseEnabled;
+
+  /// Fail closed when this client is older than [minimumClientVersion].
+  ///
+  /// `courseEnabled` is the kill switch: turning it off hides course entry
+  /// and guest onboarding without changing Live Training or Profile.
+  CourseFlags gatedForClient(String clientVersion) {
+    if (clientMeetsMinimum(clientVersion)) return this;
+    return CourseFlags(
+      courseEnabled: false,
+      courseStartsEnabled: false,
+      guestCourseEnabled: false,
+      placementTestsEnabled: false,
+      catalogVersion: catalogVersion,
+      minimumClientVersion: minimumClientVersion,
+    );
+  }
+
+  /// True when [clientVersion] is greater than or equal to the minimum.
+  bool clientMeetsMinimum(String clientVersion) =>
+      _compareVersions(clientVersion, minimumClientVersion) >= 0;
+
+  /// Combines fetch outcome, parse, and minimum-client gating.
+  ///
+  /// Fetch failure, malformed documents, and too-old clients all disable
+  /// the course. Live Training is unaffected.
+  static CourseFlags resolve({
+    required bool fetched,
+    Map<String, dynamic>? data,
+    required String clientVersion,
+  }) {
+    if (!fetched) return CourseFlags.disabled();
+    return CourseFlags.fromMap(data).gatedForClient(clientVersion);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -77,11 +108,28 @@ class CourseFlags {
 
   @override
   int get hashCode => Object.hash(
-        courseEnabled,
-        courseStartsEnabled,
-        guestCourseEnabled,
-        placementTestsEnabled,
-        catalogVersion,
-        minimumClientVersion,
-      );
+    courseEnabled,
+    courseStartsEnabled,
+    guestCourseEnabled,
+    placementTestsEnabled,
+    catalogVersion,
+    minimumClientVersion,
+  );
+}
+
+int _compareVersions(String left, String right) {
+  List<int> parse(String value) {
+    final parts = value.split('.');
+    return List<int>.generate(3, (index) {
+      if (index >= parts.length) return 0;
+      return int.tryParse(parts[index]) ?? 0;
+    });
+  }
+
+  final a = parse(left);
+  final b = parse(right);
+  for (var index = 0; index < 3; index++) {
+    if (a[index] != b[index]) return a[index] - b[index];
+  }
+  return 0;
 }

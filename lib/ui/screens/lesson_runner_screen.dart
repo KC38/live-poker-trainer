@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
+import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/course_catalog_provider.dart';
 import 'package:live_poker_trainer/providers/onboarding_provider.dart';
@@ -118,6 +119,13 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         _attempt = started.attempt;
         _bootstrapping = false;
       });
+      if (!started.duplicate) {
+        unawaited(
+          ref
+              .read(analyticsServiceProvider)
+              .logLesson(lessonId: widget.lessonId, phase: 'started'),
+        );
+      }
     } catch (error) {
       if (!mounted) return;
       setState(() {
@@ -133,7 +141,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       (a) => a.id == _attempt!.currentActivityId,
     );
     if (index < 0) return 0;
-    return (index + (_activityController?.lastResult?.accepted == true ? 1 : 0)) /
+    return (index +
+            (_activityController?.lastResult?.accepted == true ? 1 : 0)) /
         _activities.length;
   }
 
@@ -176,9 +185,10 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         idempotencyKey: key,
         catalogVersion: catalog.catalogVersion,
         choiceId: controller.draft.choiceId,
-        orderedIds: controller.draft.orderedIds.isEmpty
-            ? null
-            : controller.draft.orderedIds,
+        orderedIds:
+            controller.draft.orderedIds.isEmpty
+                ? null
+                : controller.draft.orderedIds,
         numericValue: controller.draft.numericValue,
       );
       if (!mounted) return;
@@ -188,15 +198,14 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
           attemptId: attempt.attemptId,
           lessonId: attempt.lessonId,
           catalogVersion: attempt.catalogVersion,
-          status: result.remediationRequired
-              ? 'remediation'
-              : attempt.status,
+          status: result.remediationRequired ? 'remediation' : attempt.status,
           activityIndex: result.resume.activityIndex,
           currentActivityId: result.resume.activityId,
           livesRemaining: result.livesRemaining,
           livesMax: attempt.livesMax,
           acceptedCount:
-              attempt.acceptedCount + (result.accepted && !result.duplicate ? 1 : 0),
+              attempt.acceptedCount +
+              (result.accepted && !result.duplicate ? 1 : 0),
           scoredCount: attempt.scoredCount,
           stepCount: attempt.stepCount + (result.duplicate ? 0 : 1),
           jumpTestPassed: attempt.jumpTestPassed,
@@ -208,12 +217,51 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         }
       });
       unawaited(_playFeedbackSound(result));
+      if (!result.duplicate) {
+        final analytics = ref.read(analyticsServiceProvider);
+        final stage = _stageWire(controller.activity.stage);
+        final grade = _gradeWire(result.grade);
+        unawaited(
+          analytics.logGradeBand(
+            lessonId: attempt.lessonId,
+            activityId: result.activityId,
+            grade: grade,
+            stage: stage,
+          ),
+        );
+        if (result.lifeLost) {
+          unawaited(
+            analytics.logLifeLost(
+              lessonId: attempt.lessonId,
+              activityId: result.activityId,
+              livesRemaining: result.livesRemaining,
+            ),
+          );
+        }
+        if (result.remediationRequired) {
+          unawaited(
+            analytics.logRemediation(
+              lessonId: attempt.lessonId,
+              activityId: result.activityId,
+              kind: 'life_loop',
+            ),
+          );
+        }
+        if (controller.activity.stage == ActivityStage.jumpTest) {
+          unawaited(
+            analytics.logJumpTest(
+              lessonId: attempt.lessonId,
+              result: result.accepted ? 'passed' : 'failed',
+            ),
+          );
+        }
+      }
     } catch (error) {
       controller.failSubmit();
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('$error')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('$error')));
       setState(() {});
     }
   }
@@ -242,8 +290,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       return;
     }
 
-    final isLast = _activities.isNotEmpty &&
-        controller.activity.id == _activities.last.id;
+    final isLast =
+        _activities.isNotEmpty && controller.activity.id == _activities.last.id;
     if (isLast) {
       await _completeLesson();
       return;
@@ -252,7 +300,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     final next = _activities.firstWhere(
       (a) => a.id == result.resume.activityId,
       orElse: () {
-        final idx = _activities.indexWhere((a) => a.id == controller.activity.id);
+        final idx = _activities.indexWhere(
+          (a) => a.id == controller.activity.id,
+        );
         return _activities[(idx + 1).clamp(0, _activities.length - 1)];
       },
     );
@@ -288,37 +338,43 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       );
       if (!mounted) return;
       unawaited(ref.read(soundServiceProvider).win());
+      unawaited(
+        ref
+            .read(analyticsServiceProvider)
+            .logLesson(lessonId: complete.lessonId, phase: 'completed'),
+      );
       final isAnonymous =
           ref.read(authServiceProvider).currentUser?.isAnonymous == true;
       if (isAnonymous && !widget.embeddedInShell) {
-        await ref.read(onboardingControllerProvider.notifier).markFirstLessonComplete(
+        await ref
+            .read(onboardingControllerProvider.notifier)
+            .markFirstLessonComplete(
               lessonTitle: _lesson?.title ?? 'Lesson',
               result: complete,
             );
         if (!mounted) return;
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute<void>(
-            builder: (_) => const SaveProgressScreen(),
-          ),
+          MaterialPageRoute<void>(builder: (_) => const SaveProgressScreen()),
           (route) => false,
         );
         return;
       }
       await Navigator.of(context).pushReplacement(
         MaterialPageRoute<void>(
-          builder: (_) => LessonResultScreen(
-            lessonTitle: _lesson?.title ?? 'Lesson',
-            result: complete,
-            standalone: !widget.embeddedInShell,
-          ),
+          builder:
+              (_) => LessonResultScreen(
+                lessonTitle: _lesson?.title ?? 'Lesson',
+                result: complete,
+                standalone: !widget.embeddedInShell,
+              ),
         ),
       );
     } catch (error) {
       if (!mounted) return;
       setState(() => _completing = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('$error')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('$error')));
     }
   }
 
@@ -364,10 +420,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
               style: GoogleFonts.manrope(color: AppColors.slate, height: 1.4),
             ),
             const SizedBox(height: 20),
-            FilledButton(
-              onPressed: _bootstrap,
-              child: const Text('Retry'),
-            ),
+            FilledButton(onPressed: _bootstrap, child: const Text('Retry')),
           ],
         ),
       );
@@ -377,7 +430,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     final activity = controller.activity;
     final attempt = _attempt!;
     final showGuidance = controller.showTargetCue;
-    final hint = activity.hintMedia.isNotEmpty ? activity.hintMedia.first : null;
+    final hint =
+        activity.hintMedia.isNotEmpty ? activity.hintMedia.first : null;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -393,12 +447,24 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                 livesMax: attempt.livesMax,
                 acceptedStreak: _acceptedStreak,
                 hintEnabled: hint != null && !controller.hintVisible,
-                onHint: hint == null
-                    ? null
-                    : () {
-                        controller.revealHint();
-                        setState(() {});
-                      },
+                onHint:
+                    hint == null
+                        ? null
+                        : () {
+                          controller.revealHint();
+                          setState(() {});
+                          final attempt = _attempt;
+                          if (attempt == null) return;
+                          unawaited(
+                            ref
+                                .read(analyticsServiceProvider)
+                                .logRemediation(
+                                  lessonId: attempt.lessonId,
+                                  activityId: controller.activity.id,
+                                  kind: 'hint',
+                                ),
+                          );
+                        },
               ),
               const SizedBox(height: 14),
               Expanded(
@@ -431,12 +497,13 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                                   controller.lastResult!.betterChoiceId,
                                 ),
                                 onContinue: _continueAfterFeedback,
-                                onRetry: controller.lastResult!.accepted
-                                    ? null
-                                    : () {
-                                        controller.clearFeedbackForRetry();
-                                        setState(() {});
-                                      },
+                                onRetry:
+                                    controller.lastResult!.accepted
+                                        ? null
+                                        : () {
+                                          controller.clearFeedbackForRetry();
+                                          setState(() {});
+                                        },
                               ),
                             ],
                           ],
@@ -452,12 +519,13 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                   children: [
                     if (controller.draft.hasAnswer)
                       TextButton(
-                        onPressed: controller.submitting
-                            ? null
-                            : () {
-                                controller.undoDraft();
-                                setState(() {});
-                              },
+                        onPressed:
+                            controller.submitting
+                                ? null
+                                : () {
+                                  controller.undoDraft();
+                                  setState(() {});
+                                },
                         child: const Text('Undo'),
                       ),
                     const Spacer(),
@@ -476,9 +544,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                           controller.submitting
                               ? 'Checking…'
                               : activity.renderer ==
-                                      ActivityRenderer.coachDialogue
-                                  ? 'Continue'
-                                  : 'Check',
+                                  ActivityRenderer.coachDialogue
+                              ? 'Continue'
+                              : 'Check',
                         ),
                       ),
                     ),
@@ -504,4 +572,25 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     }
     return choiceId;
   }
+}
+
+String _gradeWire(SoftGrade grade) {
+  return switch (grade) {
+    SoftGrade.recommended => 'recommended',
+    SoftGrade.strong => 'strong',
+    SoftGrade.reasonable => 'reasonable',
+    SoftGrade.questionable => 'questionable',
+    SoftGrade.clearMistake => 'clear_mistake',
+  };
+}
+
+String _stageWire(ActivityStage stage) {
+  return switch (stage) {
+    ActivityStage.explain => 'explain',
+    ActivityStage.guided => 'guided',
+    ActivityStage.scaffolded => 'scaffolded',
+    ActivityStage.unguided => 'unguided',
+    ActivityStage.checkpoint => 'checkpoint',
+    ActivityStage.jumpTest => 'jump_test',
+  };
 }

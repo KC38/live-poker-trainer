@@ -468,6 +468,19 @@ export function mergeCourseProfiles(
         Number(destination.firstLessonCompletedAtMs ?? 0) ||
         Number(source.firstLessonCompletedAtMs ?? 0) ||
         null,
+      legacyLifetimeXp:
+        Number(destination.legacyLifetimeXp ?? 0) ||
+        Number(source.legacyLifetimeXp ?? 0) ||
+        null,
+      legacyXpCatalogVersion:
+        optionalString(destination.legacyXpCatalogVersion) ??
+        optionalString(source.legacyXpCatalogVersion) ??
+        null,
+      legacyXpLabel:
+        destination.legacyXpLabel === "legacy_academy" ||
+        source.legacyXpLabel === "legacy_academy" ?
+          "legacy_academy" :
+          null,
     },
     mergedLessonCount: newLessons.length,
     transferredXp: newLessons.length > 0 ? transferredXp : 0,

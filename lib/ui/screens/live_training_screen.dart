@@ -133,14 +133,17 @@ class _LiveTrainingScreenState extends ConsumerState<LiveTrainingScreen> {
   }
 
   Future<void> _launchWarmUp() async {
-    ref.read(gameControllerProvider.notifier).prepareTraining(
-      courseContext: const CourseLiveContext(
-        courseHandId: '',
-        kind: 'warm_up',
-        scaffolding: 'full',
-        rexPrompt: 'Warm-up: defend or fold with a plan.',
-      ),
-    );
+    ref
+        .read(gameControllerProvider.notifier)
+        .prepareTraining(
+          courseContext: const CourseLiveContext(
+            courseHandId: '',
+            kind: 'warm_up',
+            scaffolding: 'full',
+            rexPrompt: 'Warm-up: defend or fold with a plan.',
+          ),
+        );
+    unawaited(ref.read(analyticsServiceProvider).logWarmUp(kind: 'warm_up'));
     if (!mounted) return;
     await Navigator.push(
       context,
@@ -164,8 +167,7 @@ class _LiveTrainingScreenState extends ConsumerState<LiveTrainingScreen> {
     final settings = ref.watch(settingsProvider);
     final notifier = ref.read(settingsProvider.notifier);
     final access = ref.watch(liveAccessProvider).asData?.value;
-    final gated =
-        access != null && access.tier != LiveAccessTier.unrestricted;
+    final gated = access != null && access.tier != LiveAccessTier.unrestricted;
 
     return Focus(
       autofocus: kDebugMode,
@@ -193,9 +195,10 @@ class _LiveTrainingScreenState extends ConsumerState<LiveTrainingScreen> {
                     return _LiveAccessGate(
                       access: access,
                       onOpenHome: widget.onOpenHome,
-                      onWarmUp: access.warmUpAvailable
-                          ? () => unawaited(_launchWarmUp())
-                          : null,
+                      onWarmUp:
+                          access.warmUpAvailable
+                              ? () => unawaited(_launchWarmUp())
+                              : null,
                     );
                   }
                   return SingleChildScrollView(
@@ -321,10 +324,9 @@ class _LiveTrainingScreenState extends ConsumerState<LiveTrainingScreen> {
                                         selected:
                                             settings.maxStackDepthBb == depth,
                                         onSelected:
-                                            (_) =>
-                                                notifier.setMaxStackDepthBb(
-                                                  depth,
-                                                ),
+                                            (_) => notifier.setMaxStackDepthBb(
+                                              depth,
+                                            ),
                                       ),
                                   ],
                                 ),
@@ -357,11 +359,7 @@ class _LiveTrainingScreenState extends ConsumerState<LiveTrainingScreen> {
 }
 
 class _LiveAccessGate extends StatelessWidget {
-  const _LiveAccessGate({
-    required this.access,
-    this.onOpenHome,
-    this.onWarmUp,
-  });
+  const _LiveAccessGate({required this.access, this.onOpenHome, this.onWarmUp});
 
   final LiveAccessSnapshot access;
   final VoidCallback? onOpenHome;

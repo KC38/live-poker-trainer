@@ -7,9 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/engine/poker_engine.dart';
 import 'package:live_poker_trainer/engine/situation_action_keys.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
-import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/models/situation_model.dart';
-import 'package:live_poker_trainer/models/table_setup.dart';
 
 /// Minimal fold tree matching `functions/src/test_fixtures.ts`.
 Map<String, dynamic> _minimalFoldJson() {
@@ -351,33 +349,6 @@ void main() {
     });
   });
 
-  group('TableSetup', () {
-    test('random mode omits lineup', () {
-      final setup = TableSetup.fromGameSettings(
-        const GameSettingsModel(seatCount: 6, stackDepthBb: 100),
-      );
-      final map = setup.toCallableMap();
-      expect(map['mode'], 'random');
-      expect(map['startingStack'], 200); // 100bb * 2
-      expect(map.containsKey('lineup'), isFalse);
-    });
-
-    test('custom mode includes HERO lineup', () {
-      final setup = TableSetup.fromGameSettings(
-        const GameSettingsModel(
-          seatCount: 3,
-          lineupMode: LineupMode.custom,
-          customArchetypes: [PlayerArchetype.tag, PlayerArchetype.nit],
-        ),
-      );
-      final map = setup.toCallableMap();
-      expect(map['mode'], 'custom');
-      final lineup = map['lineup'] as List;
-      expect(lineup.length, 3);
-      expect(lineup.first['archetype'], 'HERO');
-    });
-  });
-
   group('PokerEngine.dealSituationHand', () {
     test('replays scripted blinds then waits on hero', () {
       final situation = SituationModel.fromJson(_minimalFoldJson());
@@ -605,10 +576,7 @@ void main() {
         SituationModel.fromJson({
           ...json,
           'rootNodeId': 'hero_river',
-          'nodes': {
-            'hero_river': river,
-            'term_river_split': terminal,
-          },
+          'nodes': {'hero_river': river, 'term_river_split': terminal},
         }),
       );
 
@@ -652,10 +620,7 @@ void main() {
         SituationModel.fromJson({
           ...json,
           'rootNodeId': 'hero_river',
-          'nodes': {
-            'hero_river': river,
-            'term_river_split': terminal,
-          },
+          'nodes': {'hero_river': river, 'term_river_split': terminal},
         }),
       );
 

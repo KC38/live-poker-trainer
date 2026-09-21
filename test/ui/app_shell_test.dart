@@ -10,9 +10,11 @@ import 'package:live_poker_trainer/models/hero_profile_model.dart';
 import 'package:live_poker_trainer/models/user_document.dart';
 import 'package:live_poker_trainer/models/user_stats_model.dart';
 import 'package:live_poker_trainer/models/course/course_home_models.dart';
+import 'package:live_poker_trainer/models/course/course_progress.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/course_home_provider.dart';
+import 'package:live_poker_trainer/providers/course_progress_provider.dart';
 import 'package:live_poker_trainer/models/live_access.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/providers/live_access_provider.dart';
@@ -61,8 +63,7 @@ class _FakeProgressRepository extends ProgressRepository {
   Future<List<HeroHandSample>> loadHandSamples(
     String uid, {
     int limit = 100,
-  }) async =>
-      const [];
+  }) async => const [];
 
   @override
   Future<UserStatsModel> loadStats(String uid) async => const UserStatsModel();
@@ -86,10 +87,8 @@ class _TrackingController extends GameController {
   }
 }
 
-Finder _navLabel(String label) => find.descendant(
-  of: find.byType(NavigationBar),
-  matching: find.text(label),
-);
+Finder _navLabel(String label) =>
+    find.descendant(of: find.byType(NavigationBar), matching: find.text(label));
 
 List<Override> _shellOverrides() {
   final users = _FakeUserRepository();
@@ -102,6 +101,9 @@ List<Override> _shellOverrides() {
       AnalyticsService(enabled: false),
     ),
     courseHomeProvider.overrideWith(_FixedHomeController.new),
+    courseProgressProvider.overrideWith(
+      (ref) async => const CourseProgress.unavailable(),
+    ),
     liveAccessProvider.overrideWith(
       (ref) async => const LiveAccessSnapshot(
         tier: LiveAccessTier.unrestricted,
@@ -125,10 +127,7 @@ Future<void> _pumpShell(
   await tester.pumpWidget(
     ProviderScope(
       overrides: [..._shellOverrides(), ...extraOverrides],
-      child: MaterialApp(
-        theme: buildPokerTheme(),
-        home: const AppShell(),
-      ),
+      child: MaterialApp(theme: buildPokerTheme(), home: const AppShell()),
     ),
   );
   await tester.pump();
@@ -148,18 +147,12 @@ void main() {
     expect(_navLabel('Live Training'), findsOneWidget);
     expect(_navLabel('Profile'), findsOneWidget);
     // IndexedStack keeps inactive tabs offstage; include them in the search.
-    expect(
-      find.byType(HomeScreen, skipOffstage: false),
-      findsOneWidget,
-    );
+    expect(find.byType(HomeScreen, skipOffstage: false), findsOneWidget);
     expect(
       find.byType(LiveTrainingScreen, skipOffstage: false),
       findsOneWidget,
     );
-    expect(
-      find.byType(ProfileScreen, skipOffstage: false),
-      findsOneWidget,
-    );
+    expect(find.byType(ProfileScreen, skipOffstage: false), findsOneWidget);
   });
 
   testWidgets('small-phone layout still shows all three tab labels', (
@@ -187,10 +180,7 @@ void main() {
 
     await tester.tap(_navLabel('Home'));
     await tester.pumpAndSettle();
-    expect(
-      find.textContaining('Your live cash path'),
-      findsWidgets,
-    );
+    expect(find.textContaining('Your live cash path'), findsWidgets);
 
     await tester.tap(_navLabel('Live Training'));
     await tester.pumpAndSettle();

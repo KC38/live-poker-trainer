@@ -1,12 +1,15 @@
 /// Guest welcome, experience, goal, Rex intro, and recommended-start screens.
 library;
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/onboarding_models.dart';
+import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/course_catalog_provider.dart';
 import 'package:live_poker_trainer/providers/course_flags_provider.dart';
 import 'package:live_poker_trainer/providers/onboarding_provider.dart';
@@ -14,12 +17,12 @@ import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/screens/first_lesson_launch_screen.dart';
 
 /// Signed-out value proposition with Get started / I already have an account.
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends ConsumerWidget {
   /// Creates the welcome screen.
   const WelcomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return _OnboardingScaffold(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -41,6 +44,11 @@ class WelcomeScreen extends StatelessWidget {
           const Spacer(),
           FilledButton(
             onPressed: () {
+              unawaited(
+                ref
+                    .read(analyticsServiceProvider)
+                    .logOnboardingStep(step: 'get_started'),
+              );
               Navigator.of(context).push(
                 MaterialPageRoute<void>(
                   builder: (_) => const ExperienceChoiceScreen(),
@@ -53,10 +61,13 @@ class WelcomeScreen extends StatelessWidget {
           const SizedBox(height: 12),
           OutlinedButton(
             onPressed: () {
+              unawaited(
+                ref
+                    .read(analyticsServiceProvider)
+                    .logOnboardingStep(step: 'existing_account'),
+              );
               Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => const AuthScreen(),
-                ),
+                MaterialPageRoute<void>(builder: (_) => const AuthScreen()),
               );
             },
             style: _secondaryButton,
@@ -103,6 +114,11 @@ class ExperienceChoiceScreen extends ConsumerWidget {
             _ChoiceTile(
               label: band.label,
               onTap: () async {
+                unawaited(
+                  ref
+                      .read(analyticsServiceProvider)
+                      .logOnboardingStep(step: 'experience'),
+                );
                 await ref
                     .read(onboardingControllerProvider.notifier)
                     .setExperience(band);
@@ -157,6 +173,11 @@ class DailyGoalScreen extends ConsumerWidget {
             _ChoiceTile(
               label: '$minutes minutes',
               onTap: () async {
+                unawaited(
+                  ref
+                      .read(analyticsServiceProvider)
+                      .logOnboardingStep(step: 'daily_goal'),
+                );
                 await ref
                     .read(onboardingControllerProvider.notifier)
                     .setDailyGoal(minutes);
@@ -218,6 +239,11 @@ class RexIntroScreen extends ConsumerWidget {
           const Spacer(),
           FilledButton(
             onPressed: () async {
+              unawaited(
+                ref
+                    .read(analyticsServiceProvider)
+                    .logOnboardingStep(step: 'rex_intro'),
+              );
               final draft = ref.read(onboardingControllerProvider);
               final band = draft.experienceBand ?? ExperienceBand.neverPlayed;
               final catalog = await ref.read(courseCatalogProvider.future);
@@ -227,16 +253,19 @@ class RexIntroScreen extends ConsumerWidget {
                 catalog: catalog,
                 flags: flags,
               );
-              await ref.read(onboardingControllerProvider.notifier).setRecommendation(
+              await ref
+                  .read(onboardingControllerProvider.notifier)
+                  .setRecommendation(
                     lessonId: recommendation.startLessonId,
                     jumpTestOffered: recommendation.jumpTestOffered,
                   );
               if (!context.mounted) return;
               Navigator.of(context).push(
                 MaterialPageRoute<void>(
-                  builder: (_) => RecommendedStartScreen(
-                    recommendation: recommendation,
-                  ),
+                  builder:
+                      (_) => RecommendedStartScreen(
+                        recommendation: recommendation,
+                      ),
                 ),
               );
             },
@@ -252,16 +281,15 @@ class RexIntroScreen extends ConsumerWidget {
 /// Recommended first lesson / optional jump test.
 class RecommendedStartScreen extends ConsumerWidget {
   /// Creates the recommended start screen.
-  const RecommendedStartScreen({
-    super.key,
-    required this.recommendation,
-  });
+  const RecommendedStartScreen({super.key, required this.recommendation});
 
   final OnboardingRecommendation recommendation;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final lesson = ref.watch(courseCatalogProvider).maybeWhen(
+    final lesson = ref
+        .watch(courseCatalogProvider)
+        .maybeWhen(
           data: (catalog) => catalog.lessonById(recommendation.startLessonId),
           orElse: () => null,
         );
@@ -295,8 +323,8 @@ class RecommendedStartScreen extends ConsumerWidget {
             recommendation.jumpTestOffered
                 ? 'You asked for Regular. A published jump test is available — it never unlocks content by itself.'
                 : recommendation.experienceBand == ExperienceBand.regularLive
-                    ? 'Regular players will get a jump test when it publishes. For now, start with the first interactive lesson.'
-                    : 'A short interactive lesson. Progress is temporary until you create an account.',
+                ? 'Regular players will get a jump test when it publishes. For now, start with the first interactive lesson.'
+                : 'A short interactive lesson. Progress is temporary until you create an account.',
             style: GoogleFonts.manrope(
               color: AppColors.slate,
               fontSize: 15,
@@ -306,21 +334,44 @@ class RecommendedStartScreen extends ConsumerWidget {
           const Spacer(),
           FilledButton(
             onPressed: () async {
+              unawaited(
+                ref
+                    .read(analyticsServiceProvider)
+                    .logOnboardingStep(
+                      step:
+                          recommendation.jumpTestOffered
+                              ? 'jump_test_offer'
+                              : 'start_lesson',
+                    ),
+              );
+              if (recommendation.jumpTestOffered) {
+                unawaited(
+                  ref
+                      .read(analyticsServiceProvider)
+                      .logJumpTest(
+                        lessonId: recommendation.startLessonId,
+                        result: 'offered',
+                      ),
+                );
+              }
               await ref
                   .read(onboardingControllerProvider.notifier)
                   .markEnteringFirstLesson();
               if (!context.mounted) return;
               Navigator.of(context).push(
                 MaterialPageRoute<void>(
-                  builder: (_) => FirstLessonLaunchScreen(
-                    lessonId: recommendation.startLessonId,
-                  ),
+                  builder:
+                      (_) => FirstLessonLaunchScreen(
+                        lessonId: recommendation.startLessonId,
+                      ),
                 ),
               );
             },
             style: _primaryButton,
             child: Text(
-              recommendation.jumpTestOffered ? 'Start jump test' : 'Start lesson',
+              recommendation.jumpTestOffered
+                  ? 'Start jump test'
+                  : 'Start lesson',
             ),
           ),
           if (recommendation.jumpTestOffered) ...[
@@ -396,12 +447,21 @@ class SaveProgressScreen extends ConsumerWidget {
           const Spacer(),
           FilledButton(
             onPressed: () {
+              unawaited(
+                ref
+                    .read(analyticsServiceProvider)
+                    .logAccountConversion(
+                      method: 'save_progress',
+                      outcome: 'started',
+                    ),
+              );
               Navigator.of(context).push(
                 MaterialPageRoute<void>(
-                  builder: (_) => const AuthScreen(
-                    saveProgressMode: true,
-                    initialRegisterMode: true,
-                  ),
+                  builder:
+                      (_) => const AuthScreen(
+                        saveProgressMode: true,
+                        initialRegisterMode: true,
+                      ),
                 ),
               );
             },
@@ -413,10 +473,11 @@ class SaveProgressScreen extends ConsumerWidget {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute<void>(
-                  builder: (_) => const AuthScreen(
-                    saveProgressMode: true,
-                    initialRegisterMode: false,
-                  ),
+                  builder:
+                      (_) => const AuthScreen(
+                        saveProgressMode: true,
+                        initialRegisterMode: false,
+                      ),
                 ),
               );
             },
@@ -442,11 +503,7 @@ class _OnboardingScaffold extends StatelessWidget {
           gradient: RadialGradient(
             center: Alignment(0, -0.55),
             radius: 1.15,
-            colors: [
-              Color(0xFF1A2E28),
-              AppColors.bgMid,
-              AppColors.bgDark,
-            ],
+            colors: [Color(0xFF1A2E28), AppColors.bgMid, AppColors.bgDark],
             stops: [0.0, 0.45, 1.0],
           ),
         ),
