@@ -592,21 +592,8 @@ export async function startCourseLessonForUser(options: {
         "This guest progress was transferred and can no longer be used.",
       );
     }
-    // Default policy: account required before lesson two for anonymous guests.
-    if (options.isAnonymous === true) {
-      const completed = Array.isArray(profileSnap.data()?.completedLessonIds) ?
-        profileSnap.data()!.completedLessonIds as string[] :
-        [];
-      const resumeData = profileSnap.data()?.resume as DocumentData | undefined;
-      const resumeLessonId = optionalString(resumeData?.lessonId);
-      const resumingSameLesson = resumeLessonId === lessonId;
-      if (completed.length >= 1 && !resumingSameLesson) {
-        throw new HttpsError(
-          "failed-precondition",
-          "Create an account to save progress before lesson two.",
-        );
-      }
-    }
+    // Soft save-progress CTA lives on the client. Guests may continue the
+    // course anonymously; linking remains optional until they choose it.
     const existing = requestSnap.data();
     const resumeData = profileSnap.data()?.resume as DocumentData | undefined;
     const resumeAttemptId = optionalString(resumeData?.attemptId);
