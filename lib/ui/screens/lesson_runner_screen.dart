@@ -74,8 +74,20 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
 
   @override
   void dispose() {
+    _activityController?.removeListener(_onActivityChanged);
     _activityController?.dispose();
     super.dispose();
+  }
+
+  void _onActivityChanged() {
+    if (mounted) setState(() {});
+  }
+
+  void _bindActivityController(LessonActivityController next) {
+    _activityController?.removeListener(_onActivityChanged);
+    _activityController?.dispose();
+    _activityController = next;
+    _activityController!.addListener(_onActivityChanged);
   }
 
   Future<void> _bootstrap() async {
@@ -85,7 +97,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     });
     try {
       if (widget.courseService == null) {
-        await ref.read(authControllerProvider.notifier).ensureAnonymousSession();
+        await ref
+            .read(authControllerProvider.notifier)
+            .ensureAnonymousSession();
       }
       final catalog = await ref.read(courseCatalogProvider.future);
       final lesson = catalog.lessonById(widget.lessonId);
@@ -112,8 +126,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         (a) => a.id == started.resume.activityId,
         orElse: () => activities.first,
       );
-      _activityController?.dispose();
-      _activityController = LessonActivityController(activity: current);
+      _bindActivityController(LessonActivityController(activity: current));
       if (!mounted) return;
       setState(() {
         _lesson = lesson;
@@ -447,7 +460,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
           child: Column(
             children: [
               LessonProgressHeader(
-                title: activity.prompt ?? activity.accessibilityText,
+                // Prompt lives once in the activity body — avoid duplicating it.
                 progress: _progress,
                 livesRemaining: attempt.livesRemaining,
                 livesMax: attempt.livesMax,
@@ -521,9 +534,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
               ),
               if (controller.lastResult == null) ...[
                 const SizedBox(height: 12),
-                AnimatedBuilder(
-                  animation: controller,
-                  builder: (context, _) {
+                Builder(
+                  builder: (context) {
+                    final canSubmit = _canSubmit && !_completing;
                     return Row(
                       children: [
                         if (controller.draft.hasAnswer)
@@ -544,11 +557,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                             minHeight: 48,
                           ),
                           child: FilledButton(
-                            onPressed:
-                                _canSubmit && !_completing ? _submit : null,
+                            onPressed: canSubmit ? _submit : null,
                             style: FilledButton.styleFrom(
                               backgroundColor: AppColors.gold,
                               foregroundColor: AppColors.bgDark,
+                              disabledBackgroundColor: AppColors.slateDark,
+                              disabledForegroundColor: AppColors.slate,
                             ),
                             child: Text(
                               controller.submitting

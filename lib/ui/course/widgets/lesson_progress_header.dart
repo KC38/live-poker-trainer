@@ -10,7 +10,7 @@ class LessonProgressHeader extends StatelessWidget {
   /// Creates the header.
   const LessonProgressHeader({
     super.key,
-    required this.title,
+    this.title,
     required this.progress,
     required this.livesRemaining,
     required this.livesMax,
@@ -19,7 +19,9 @@ class LessonProgressHeader extends StatelessWidget {
     this.hintEnabled = false,
   });
 
-  final String title;
+  /// Optional secondary title. Prefer showing the activity prompt once in the
+  /// activity body — leave null here to avoid duplicating the question.
+  final String? title;
   final double progress;
   final int livesRemaining;
   final int livesMax;
@@ -29,32 +31,37 @@ class LessonProgressHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasTitle = title != null && title!.trim().isNotEmpty;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.manrope(
-                  color: AppColors.cream,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
+        if (hasTitle || onHint != null)
+          Row(
+            children: [
+              if (hasTitle)
+                Expanded(
+                  child: Text(
+                    title!,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.manrope(
+                      color: AppColors.cream,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                )
+              else
+                const Spacer(),
+              if (onHint != null)
+                TextButton.icon(
+                  onPressed: hintEnabled ? onHint : null,
+                  icon: const Icon(Icons.lightbulb_outline, size: 18),
+                  label: const Text('Hint'),
                 ),
-              ),
-            ),
-            if (onHint != null)
-              TextButton.icon(
-                onPressed: hintEnabled ? onHint : null,
-                icon: const Icon(Icons.lightbulb_outline, size: 18),
-                label: const Text('Hint'),
-              ),
-          ],
-        ),
-        const SizedBox(height: 10),
+            ],
+          ),
+        if (hasTitle || onHint != null) const SizedBox(height: 10),
         Semantics(
           label:
               'Lesson progress ${(progress * 100).round()} percent. '
@@ -86,8 +93,11 @@ class LessonProgressHeader extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 14),
-                  Icon(Icons.local_fire_department,
-                      size: 16, color: AppColors.gold),
+                  Icon(
+                    Icons.local_fire_department,
+                    size: 16,
+                    color: AppColors.gold,
+                  ),
                   const SizedBox(width: 4),
                   Text(
                     'Streak $acceptedStreak',

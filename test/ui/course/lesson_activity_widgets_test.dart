@@ -12,6 +12,7 @@ import 'package:live_poker_trainer/ui/course/activities/poker_action_sizing_acti
 import 'package:live_poker_trainer/ui/course/activities/select_identify_activity.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 
@@ -96,7 +97,11 @@ void main() {
     final activity = _activity(
       renderer: ActivityRenderer.selectIdentify,
       choices: const [
-        CourseChoice(id: 'c1', label: 'Hole cards', accessibilityText: 'Pick hole cards'),
+        CourseChoice(
+          id: 'c1',
+          label: 'Hole cards',
+          accessibilityText: 'Pick hole cards',
+        ),
         CourseChoice(id: 'c2', label: 'Board'),
       ],
     );
@@ -114,6 +119,85 @@ void main() {
     await tester.pump();
     expect(controller.draft.choiceId, 'c1');
     controller.dispose();
+  });
+
+  testWidgets('first-lesson privacy select shows table and selection chrome', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-01-01-scaffolded-private',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Decide who can see your hole cards during the hand.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Who can see your hole cards right now?',
+      choices: const [
+        CourseChoice(id: 'choice-only-you', label: 'Only you'),
+        CourseChoice(id: 'choice-whole-table', label: 'Everyone at the table'),
+        CourseChoice(id: 'choice-dealer-only', label: 'Only the dealer'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+
+    expect(find.text('Who can see your hole cards right now?'), findsOneWidget);
+    expect(
+      find.text('Look at the table, then pick the answer that matches.'),
+      findsOneWidget,
+    );
+    expect(find.byType(LessonTableContext), findsOneWidget);
+    expect(find.byType(MiniCard), findsAtLeastNWidgets(2));
+
+    await tester.tap(find.text('Only you'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'choice-only-you');
+    controller.dispose();
+  });
+
+  test('resolveLessonTableScene covers first-lesson select activities', () {
+    final privacy = CourseActivity(
+      id: 'act-01-01-01-scaffolded-private',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'a11y',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Who can see your hole cards right now?',
+    );
+    final scene = resolveLessonTableScene(privacy);
+    expect(scene, isNotNull);
+    expect(scene!.heroCodes, ['Ah', 'Kd']);
+    expect(scene.boardCodes, ['Qs', 'Jh', '2c']);
+    expect(scene.highlight, LessonTableHighlight.hero);
+
+    final suits = CourseActivity(
+      id: 'act-01-01-02-guided-suits',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Pick suits',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Which set lists every suit?',
+      choices: const [
+        CourseChoice(
+          id: 'suits-full',
+          label: 'Hearts, diamonds, clubs, spades',
+        ),
+      ],
+    );
+    expect(resolveLessonTableScene(suits), isNull);
   });
 
   testWidgets('order sequence supports undo', (tester) async {
