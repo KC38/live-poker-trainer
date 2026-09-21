@@ -227,4 +227,36 @@ void main() {
     expect(controller.draft.handStepIndex, 1);
     controller.dispose();
   });
+
+  test('attempt is ready to complete only after every activity is accepted', () {
+    const attemptOnLast = CourseAttemptSnapshot(
+      attemptId: 'att',
+      lessonId: 'l',
+      catalogVersion: '2.0.0',
+      status: 'in_progress',
+      activityIndex: 4,
+      currentActivityId: 'checkpoint',
+      livesRemaining: 3,
+      livesMax: 3,
+      acceptedCount: 4,
+      scoredCount: 4,
+      stepCount: 6,
+    );
+    expect(attemptOnLast.isReadyToComplete(5), isFalse);
+
+    const ready = CourseAttemptSnapshot(
+      attemptId: 'att',
+      lessonId: 'l',
+      catalogVersion: '2.0.0',
+      status: 'in_progress',
+      activityIndex: 5,
+      currentActivityId: 'checkpoint',
+      livesRemaining: 3,
+      livesMax: 3,
+      acceptedCount: 5,
+      scoredCount: 4,
+      stepCount: 5,
+    );
+    expect(ready.isReadyToComplete(5), isTrue);
+  });
 }
