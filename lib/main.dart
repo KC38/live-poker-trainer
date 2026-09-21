@@ -197,14 +197,13 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
         }
         return const ExperienceChoiceScreen();
       case AppRootDestination.shell:
-        // Hold shell until cloud gameplay prefs hydrate so table-setup
-        // edits cannot clobber Firestore with in-memory defaults.
-        final userDoc = ref.watch(userDocProvider);
-        return userDoc.when(
-          data: (_) => const AppShell(),
-          loading: () => const _AuthLoadingScreen(),
-          error: (_, _) => const AppShell(),
-        );
+        // Kick off users/{uid} hydrate without blocking the shell. Cloud sync
+        // stays disabled until [userDocProvider] finishes, so table-setup
+        // edits cannot clobber Firestore with in-memory defaults. Gating the
+        // whole shell on that Future left linked accounts stuck on the auth
+        // loading spinner when Firestore get/transaction never completed.
+        ref.watch(userDocProvider);
+        return const AppShell();
     }
   }
 
