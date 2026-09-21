@@ -1,5 +1,17 @@
 # Plan 06 — Home Course Map and Rex Coach
 
+**Status: Done**
+
+- Merged: https://github.com/KC38/live-poker-trainer/pull/180
+  (`5fe26c4`) on `main`
+- Cloud Functions deploy: completed from `origin/main` at `5fe26c4`
+  (`startCourseLesson` now enforces catalog prerequisites / deep-link locks)
+- CI: `course-contract` passed on PR #180
+  (https://github.com/KC38/live-poker-trainer/actions/runs/35584915884)
+- Simulator: refresh attempted after merge
+- Home: status bar, winding path, resume card, Rex coach, lock/next/resume
+  derivation from `getCourseState` + catalog
+
 ## Objective
 
 Build Home as a clear section/unit/lesson path with one obvious next action,
