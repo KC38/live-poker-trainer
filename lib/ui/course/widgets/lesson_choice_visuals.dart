@@ -62,6 +62,12 @@ enum SelectIdentifyPresentation {
 
   /// Tap regions on the mini-table (hole cards / board / seats).
   tableRegionTap,
+
+  /// Tap a made-hand category shown as example cards.
+  handCategoryTap,
+
+  /// Tap who wins a visual showdown (you / them / chop).
+  showdownTap,
 }
 
 /// Detects the best interactive presentation for [activity].
@@ -72,6 +78,12 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
       (activity.id.startsWith('act-01-01-01-') ||
           activity.id.startsWith('act-01-01-03-'))) {
     return SelectIdentifyPresentation.tableRegionTap;
+  }
+  if (activity.id == 'act-01-02-01-scaffolded-spot') {
+    return SelectIdentifyPresentation.handCategoryTap;
+  }
+  if (activity.id == 'act-01-02-01-checkpoint-winner') {
+    return SelectIdentifyPresentation.showdownTap;
   }
   if (activity.id == 'act-01-01-02-guided-suits' ||
       activity.choices.any((c) => c.id == 'suits-full')) {

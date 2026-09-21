@@ -7,6 +7,7 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
@@ -29,6 +30,26 @@ class SelectIdentifyActivity extends StatelessWidget {
     final presentation = resolveSelectIdentifyPresentation(activity);
     if (presentation == SelectIdentifyPresentation.tableRegionTap) {
       return _TableRegionTapActivity(
+        key: ValueKey<String>(
+          '${activity.id}-${controller.bindGeneration}',
+        ),
+        activity: activity,
+        controller: controller,
+        showGuidance: showGuidance,
+      );
+    }
+    if (presentation == SelectIdentifyPresentation.handCategoryTap) {
+      return _HandCategoryTapActivity(
+        key: ValueKey<String>(
+          '${activity.id}-${controller.bindGeneration}',
+        ),
+        activity: activity,
+        controller: controller,
+        showGuidance: showGuidance,
+      );
+    }
+    if (presentation == SelectIdentifyPresentation.showdownTap) {
+      return _ShowdownTapActivity(
         key: ValueKey<String>(
           '${activity.id}-${controller.bindGeneration}',
         ),
@@ -106,6 +127,10 @@ class SelectIdentifyActivity extends StatelessWidget {
         'Read the suits, then pick the complete set.',
       SelectIdentifyPresentation.tableRegionTap =>
         'Tap the answer on the table.',
+      SelectIdentifyPresentation.handCategoryTap =>
+        'Read the board and your holes — tap the category you made.',
+      SelectIdentifyPresentation.showdownTap =>
+        'Look at both hands — tap who wins.',
       SelectIdentifyPresentation.text =>
         hasScene
             ? 'Look at the table, then pick the answer that matches.'
@@ -150,6 +175,8 @@ class SelectIdentifyActivity extends StatelessWidget {
         );
       case SelectIdentifyPresentation.suitTapPicker:
       case SelectIdentifyPresentation.tableRegionTap:
+      case SelectIdentifyPresentation.handCategoryTap:
+      case SelectIdentifyPresentation.showdownTap:
       case SelectIdentifyPresentation.text:
         return LessonChoiceButton(
           label: choice.label,
@@ -301,6 +328,187 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             Text(
               selected == null
                   ? 'Tap a region on the table.'
+                  : 'Ready — Check when it looks right.',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _HandCategoryTapActivity extends StatelessWidget {
+  const _HandCategoryTapActivity({
+    super.key,
+    required this.activity,
+    required this.controller,
+    required this.showGuidance,
+  });
+
+  final CourseActivity activity;
+  final LessonActivityController controller;
+  final bool showGuidance;
+
+  String get _coachText {
+    final authored = activity.primaryCoachLine?.text;
+    if (authored != null) return authored;
+    return 'Board and holes are live — tap the category you made.';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final scene = resolveLessonTableScene(activity);
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, _) {
+        final locked = controller.submitting || controller.lastResult != null;
+        final selected = controller.draft.choiceId;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            RexCoachLine(text: _coachText),
+            if (activity.prompt != null) ...[
+              const SizedBox(height: 14),
+              Text(
+                activity.prompt!,
+                style: GoogleFonts.manrope(
+                  color: AppColors.cream,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  height: 1.3,
+                ),
+              ),
+            ],
+            if (scene != null) ...[
+              const SizedBox(height: 14),
+              LessonTableContext(scene: scene),
+            ],
+            const SizedBox(height: 14),
+            for (var i = 0; i < activity.choices.length; i++) ...[
+              if (i > 0) const SizedBox(height: 10),
+              Builder(
+                builder: (context) {
+                  final choice = activity.choices[i];
+                  final example =
+                      resolveHandExample(id: choice.id, label: choice.label) ??
+                      LessonHandExample(
+                        id: choice.id,
+                        title: choice.label,
+                        codes: const [],
+                      );
+                  return HandExampleTile(
+                    example: example,
+                    selected: selected == choice.id,
+                    enabled: !locked,
+                    onPressed:
+                        locked ? null : () => controller.selectChoice(choice.id),
+                  );
+                },
+              ),
+            ],
+            const SizedBox(height: 12),
+            Text(
+              selected == null
+                  ? 'Tap the hand category you made.'
+                  : 'Ready — Check when it looks right.',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _ShowdownTapActivity extends StatelessWidget {
+  const _ShowdownTapActivity({
+    super.key,
+    required this.activity,
+    required this.controller,
+    required this.showGuidance,
+  });
+
+  final CourseActivity activity;
+  final LessonActivityController controller;
+  final bool showGuidance;
+
+  String get _coachText {
+    final authored = activity.primaryCoachLine?.text;
+    if (authored != null) return authored;
+    return 'Flush vs straight — tap the winner.';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final you = resolveHandExample(id: 'you-win', label: 'Your flush');
+    final them = resolveHandExample(id: 'they-win', label: 'Their straight');
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, _) {
+        final locked = controller.submitting || controller.lastResult != null;
+        final selected = controller.draft.choiceId;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            RexCoachLine(text: _coachText),
+            if (activity.prompt != null) ...[
+              const SizedBox(height: 14),
+              Text(
+                activity.prompt!,
+                style: GoogleFonts.manrope(
+                  color: AppColors.cream,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  height: 1.3,
+                ),
+              ),
+            ],
+            const SizedBox(height: 14),
+            if (you != null)
+              HandExampleTile(
+                example: you,
+                selected: selected == 'you-win',
+                enabled: !locked,
+                onPressed:
+                    locked ? null : () => controller.selectChoice('you-win'),
+              ),
+            const SizedBox(height: 10),
+            if (them != null)
+              HandExampleTile(
+                example: them,
+                selected: selected == 'they-win',
+                enabled: !locked,
+                onPressed:
+                    locked ? null : () => controller.selectChoice('they-win'),
+              ),
+            const SizedBox(height: 10),
+            HandExampleTile(
+              example: const LessonHandExample(
+                id: 'split',
+                title: 'Chop the pot',
+                codes: [],
+              ),
+              selected: selected == 'split',
+              enabled: !locked,
+              compact: true,
+              onPressed:
+                  locked ? null : () => controller.selectChoice('split'),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              selected == null
+                  ? 'Tap the hand that wins the pot.'
                   : 'Ready — Check when it looks right.',
               textAlign: TextAlign.center,
               style: GoogleFonts.manrope(

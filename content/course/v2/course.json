@@ -847,7 +847,7 @@
                   "stage": "guided",
                   "renderer": "compare_rank",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Order high card, pair, and flush from weakest to strongest.",
+                  "accessibilityText": "Tap high card, then pair, then flush from weakest to strongest.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -857,7 +857,7 @@
                   "objectives": [
                     "Order common hand ranks"
                   ],
-                  "prompt": "Rank these from weakest to strongest.",
+                  "prompt": "Tap weakest to strongest.",
                   "sequenceItems": [
                     {
                       "id": "hr-high",
@@ -894,7 +894,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Identify the hand category with ace-high clubs.",
+                  "accessibilityText": "Tap the hand category with ace-high clubs.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -904,7 +904,7 @@
                   "objectives": [
                     "Recognize pairs, straights, and flushes"
                   ],
-                  "prompt": "Board Kc 9c 4c. You hold Ac 2d. What is your best category?",
+                  "prompt": "Board Kc 9c 4c 7c 2s. You hold Ac 3d. Tap what you made.",
                   "choices": [
                     {
                       "id": "cat-flush",
@@ -912,7 +912,7 @@
                       "accessibilityText": "Flush",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Ace and three clubs on board make a flush."
+                        "feedback": "Ace plus four clubs on board make a flush."
                       }
                     },
                     {
@@ -921,7 +921,7 @@
                       "accessibilityText": "One pair",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "You have five clubs available — that is a flush.",
+                        "feedback": "You have five clubs — that is a flush, not a pair.",
                         "betterChoiceId": "cat-flush"
                       }
                     },
@@ -943,7 +943,7 @@
                   "stage": "unguided",
                   "renderer": "compare_rank",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Order full house, two pair, and three of a kind.",
+                  "accessibilityText": "Tap full house, then trips, then two pair.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -953,7 +953,7 @@
                   "objectives": [
                     "Compare two finished hands"
                   ],
-                  "prompt": "Strongest to weakest: full house, two pair, trips.",
+                  "prompt": "Tap strongest to weakest.",
                   "sequenceItems": [
                     {
                       "id": "fh",
@@ -990,7 +990,7 @@
                   "stage": "checkpoint",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Decide whether flush beats straight.",
+                  "accessibilityText": "Tap the winning hand: flush versus straight.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1001,7 +1001,7 @@
                     "Compare two finished hands",
                     "Order common hand ranks"
                   ],
-                  "prompt": "Showdown: your flush vs their straight. Who wins?",
+                  "prompt": "Showdown — tap who wins.",
                   "choices": [
                     {
                       "id": "you-win",

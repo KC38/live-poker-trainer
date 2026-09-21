@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 final _rankOnly = RegExp(r'^[2-9TJQKA]$', caseSensitive: false);
@@ -28,6 +29,8 @@ class OrderSequenceActivity extends StatelessWidget {
       activity.sequenceItems.isNotEmpty &&
       activity.sequenceItems.every((item) => _rankOnly.hasMatch(item.label));
 
+  bool get _handMode => isHandExampleSequenceActivity(activity);
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -43,6 +46,8 @@ class OrderSequenceActivity extends StatelessWidget {
             activity.primaryCoachLine?.text ??
             (_rankMode
                 ? 'Tap ranks from lowest to highest.'
+                : _handMode
+                ? 'Tap each hand into the order asked.'
                 : 'Tap seats in the order they act.');
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -69,18 +74,36 @@ class OrderSequenceActivity extends StatelessWidget {
                 runSpacing: 8,
                 children: [
                   for (var i = 0; i < ordered.length; i++)
-                    _rankMode
-                        ? _RankTile(
-                          label: _labelFor(ordered[i]),
-                          badge: '${i + 1}',
-                          selected: true,
-                        )
-                        : Chip(
-                          label: Text('${i + 1}. ${_labelFor(ordered[i])}'),
-                          backgroundColor: AppColors.gold.withValues(
-                            alpha: 0.2,
-                          ),
+                    if (_handMode)
+                      HandExampleTile(
+                        example:
+                            resolveHandExample(
+                              id: ordered[i],
+                              label: _labelFor(ordered[i]),
+                            ) ??
+                            LessonHandExample(
+                              id: ordered[i],
+                              title: _labelFor(ordered[i]),
+                              codes: const [],
+                            ),
+                        badge: '${i + 1}',
+                        selected: true,
+                        enabled: false,
+                        compact: true,
+                      )
+                    else if (_rankMode)
+                      _RankTile(
+                        label: _labelFor(ordered[i]),
+                        badge: '${i + 1}',
+                        selected: true,
+                      )
+                    else
+                      Chip(
+                        label: Text('${i + 1}. ${_labelFor(ordered[i])}'),
+                        backgroundColor: AppColors.gold.withValues(
+                          alpha: 0.2,
                         ),
+                      ),
                 ],
               ),
             ),
@@ -90,27 +113,48 @@ class OrderSequenceActivity extends StatelessWidget {
               runSpacing: 8,
               children: [
                 for (final item in remaining)
-                  _rankMode
-                      ? _RankTile(
-                        label: item.label,
-                        onPressed:
-                            locked
-                                ? null
-                                : () => controller.setOrderedIds([
-                                  ...ordered,
-                                  item.id,
-                                ]),
-                      )
-                      : ActionChip(
-                        onPressed:
-                            locked
-                                ? null
-                                : () => controller.setOrderedIds([
-                                  ...ordered,
-                                  item.id,
-                                ]),
-                        label: Text(item.label),
-                      ),
+                  if (_handMode)
+                    HandExampleTile(
+                      example:
+                          resolveHandExample(id: item.id, label: item.label) ??
+                          LessonHandExample(
+                            id: item.id,
+                            title: item.label,
+                            codes: const [],
+                          ),
+                      selected: false,
+                      enabled: !locked,
+                      compact: true,
+                      onPressed:
+                          locked
+                              ? null
+                              : () => controller.setOrderedIds([
+                                ...ordered,
+                                item.id,
+                              ]),
+                    )
+                  else if (_rankMode)
+                    _RankTile(
+                      label: item.label,
+                      onPressed:
+                          locked
+                              ? null
+                              : () => controller.setOrderedIds([
+                                ...ordered,
+                                item.id,
+                              ]),
+                    )
+                  else
+                    ActionChip(
+                      onPressed:
+                          locked
+                              ? null
+                              : () => controller.setOrderedIds([
+                                ...ordered,
+                                item.id,
+                              ]),
+                      label: Text(item.label),
+                    ),
               ],
             ),
             if (ordered.isNotEmpty && !locked) ...[

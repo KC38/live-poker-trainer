@@ -493,8 +493,8 @@ export function buildSectionOne() {
               sequenceAct({
                 id: "act-01-02-01-guided-ladder", order: 2, stage: "guided",
                 renderer: "compare_rank",
-                prompt: "Rank these from weakest to strongest.",
-                a11y: "Order high card, pair, and flush from weakest to strongest.",
+                prompt: "Tap weakest to strongest.",
+                a11y: "Tap high card, then pair, then flush from weakest to strongest.",
                 objectives: ["Order common hand ranks"],
                 items: [
                   {id: "hr-high", label: "High card"},
@@ -507,14 +507,14 @@ export function buildSectionOne() {
               }),
               selectAct({
                 id: "act-01-02-01-scaffolded-spot", order: 3, stage: "scaffolded",
-                prompt: "Board Kc 9c 4c. You hold Ac 2d. What is your best category?",
-                a11y: "Identify the hand category with ace-high clubs.",
+                prompt: "Board Kc 9c 4c 7c 2s. You hold Ac 3d. Tap what you made.",
+                a11y: "Tap the hand category with ace-high clubs.",
                 objectives: ["Recognize pairs, straights, and flushes"],
                 choices: [
                   choice("cat-flush", "Flush", "recommended",
-                    "Ace and three clubs on board make a flush."),
+                    "Ace plus four clubs on board make a flush."),
                   choice("cat-pair", "One pair", "clear_mistake",
-                    "You have five clubs available — that is a flush.",
+                    "You have five clubs — that is a flush, not a pair.",
                     {betterChoiceId: "cat-flush"}),
                   choice("cat-straight", "Straight", "clear_mistake",
                     "No five consecutive ranks here.",
@@ -524,8 +524,8 @@ export function buildSectionOne() {
               sequenceAct({
                 id: "act-01-02-01-unguided-compare", order: 4, stage: "unguided",
                 renderer: "compare_rank",
-                prompt: "Strongest to weakest: full house, two pair, trips.",
-                a11y: "Order full house, two pair, and three of a kind.",
+                prompt: "Tap strongest to weakest.",
+                a11y: "Tap full house, then trips, then two pair.",
                 objectives: ["Compare two finished hands"],
                 lifeLoss: true,
                 items: [
@@ -539,8 +539,8 @@ export function buildSectionOne() {
               }),
               selectAct({
                 id: "act-01-02-01-checkpoint-winner", order: 5, stage: "checkpoint",
-                prompt: "Showdown: your flush vs their straight. Who wins?",
-                a11y: "Decide whether flush beats straight.",
+                prompt: "Showdown — tap who wins.",
+                a11y: "Tap the winning hand: flush versus straight.",
                 objectives: ["Compare two finished hands", "Order common hand ranks"],
                 lifeLoss: true,
                 choices: [

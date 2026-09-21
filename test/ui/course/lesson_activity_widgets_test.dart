@@ -13,6 +13,7 @@ import 'package:live_poker_trainer/ui/course/activities/select_identify_activity
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
@@ -886,5 +887,205 @@ void main() {
     );
     expect(find.text('Playable'), findsOneWidget);
     expect(find.text('Life −1'), findsNothing);
+  });
+
+  test('hand ranks presentations resolve to visual modes', () {
+    final ladder = CourseActivity(
+      id: 'act-01-02-01-guided-ladder',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.compareRank,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap high card, then pair, then flush',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap weakest to strongest.',
+      sequenceItems: const [
+        CourseChoice(id: 'hr-high', label: 'High card'),
+        CourseChoice(id: 'hr-pair', label: 'One pair'),
+        CourseChoice(id: 'hr-flush', label: 'Flush'),
+      ],
+    );
+    expect(isHandExampleSequenceActivity(ladder), isTrue);
+    expect(resolveHandExample(id: 'hr-high')?.codes.length, 5);
+
+    final spot = CourseActivity(
+      id: 'act-01-02-01-scaffolded-spot',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap flush',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap what you made.',
+      choices: const [
+        CourseChoice(id: 'cat-flush', label: 'Flush'),
+        CourseChoice(id: 'cat-pair', label: 'One pair'),
+        CourseChoice(id: 'cat-straight', label: 'Straight'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(spot),
+      SelectIdentifyPresentation.handCategoryTap,
+    );
+    final scene = resolveLessonTableScene(spot);
+    expect(scene?.heroCodes, ['Ac', '3d']);
+    expect(scene?.boardCodes, ['Kc', '9c', '4c', '7c', '2s']);
+    expect(resolveHandExample(id: 'cat-flush')?.codes, [
+      'Ac',
+      'Kc',
+      '9c',
+      '4c',
+      '7c',
+    ]);
+
+    final showdown = CourseActivity(
+      id: 'act-01-02-01-checkpoint-winner',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap who wins',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Showdown — tap who wins.',
+      choices: const [
+        CourseChoice(id: 'you-win', label: 'You win with the flush'),
+        CourseChoice(id: 'they-win', label: 'They win with the straight'),
+        CourseChoice(id: 'split', label: 'Chop the pot'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(showdown),
+      SelectIdentifyPresentation.showdownTap,
+    );
+
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-01-02-01-explain-ladder',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText: 'Ladder',
+          acceptedGrades: const [SoftGrade.recommended],
+          prompt: 'Pair beats high card.',
+        ),
+      ).kind,
+      CoachDialogueVisualKind.handLadder,
+    );
+  });
+
+  testWidgets('hand ranks order taps hand tiles not text chips', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-02-01-guided-ladder',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.compareRank,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap weakest to strongest',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap weakest to strongest.',
+      sequenceItems: const [
+        CourseChoice(id: 'hr-high', label: 'High card'),
+        CourseChoice(id: 'hr-pair', label: 'One pair'),
+        CourseChoice(id: 'hr-flush', label: 'Flush'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        OrderSequenceActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byType(HandExampleTile), findsNWidgets(3));
+    expect(find.byType(ActionChip), findsNothing);
+
+    await tester.tap(find.text('High card'));
+    await tester.pump();
+    await tester.tap(find.text('One pair'));
+    await tester.pump();
+    await tester.tap(find.text('Flush'));
+    await tester.pump();
+    expect(controller.draft.orderedIds, ['hr-high', 'hr-pair', 'hr-flush']);
+    controller.dispose();
+  });
+
+  testWidgets('hand category tap selects flush tile for scaffolded spot', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-02-01-scaffolded-spot',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap flush',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap what you made.',
+      choices: const [
+        CourseChoice(id: 'cat-flush', label: 'Flush'),
+        CourseChoice(id: 'cat-pair', label: 'One pair'),
+        CourseChoice(id: 'cat-straight', label: 'Straight'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byType(HandExampleTile), findsNWidgets(3));
+    expect(find.byType(LessonTableContext), findsOneWidget);
+
+    await tester.tap(find.text('Flush'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'cat-flush');
+    controller.dispose();
+  });
+
+  testWidgets('showdown tap selects your flush over straight', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-01-02-01-checkpoint-winner',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap who wins',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Showdown — tap who wins.',
+      choices: const [
+        CourseChoice(id: 'you-win', label: 'You win with the flush'),
+        CourseChoice(id: 'they-win', label: 'They win with the straight'),
+        CourseChoice(id: 'split', label: 'Chop the pot'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Your flush'), findsOneWidget);
+    expect(find.text('Their straight'), findsOneWidget);
+    expect(find.text('Chop the pot'), findsOneWidget);
+
+    await tester.tap(find.text('Your flush'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'you-win');
+    controller.dispose();
   });
 }
