@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/core/debug/agent_commands.dart';
+import 'package:live_poker_trainer/core/debug/agent_ui_driver.dart';
 import 'package:live_poker_trainer/core/diagnostics/diagnostics_log.dart';
 import 'package:live_poker_trainer/firebase_options.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
@@ -51,7 +52,11 @@ Future<void> main() async {
   await _installCrashReporting(enabled: analyticsEnabled);
 
   AgentCommands.install();
-  runApp(const ProviderScope(child: PokerLabApp()));
+  runApp(
+    const ProviderScope(
+      child: _AgentUiBootstrap(child: PokerLabApp()),
+    ),
+  );
 }
 
 Future<void> _installCrashReporting({required bool enabled}) async {
@@ -236,4 +241,27 @@ class _AuthLoadingScreen extends StatelessWidget {
       body: Center(child: CircularProgressIndicator(color: AppColors.gold)),
     );
   }
+}
+
+/// Wires debug agent UI taps + sign-out after [ProviderScope] exists.
+final class _AgentUiBootstrap extends ConsumerStatefulWidget {
+  const _AgentUiBootstrap({required this.child});
+
+  final Widget child;
+
+  @override
+  ConsumerState<_AgentUiBootstrap> createState() => _AgentUiBootstrapState();
+}
+
+class _AgentUiBootstrapState extends ConsumerState<_AgentUiBootstrap> {
+  @override
+  void initState() {
+    super.initState();
+    AgentUiDriver.install(
+      signOut: () => ref.read(authControllerProvider.notifier).signOut(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
 }

@@ -5,8 +5,10 @@
 ///
 /// Commands: `start`, `fold`, `call`, `check`, `raise`, `raise:45`, `allin`,
 /// `next`/`dismiss` (dismisses mid-hand coach; otherwise next hand),
-/// `retry`/`resume`, `back`. Optional `amount` query param becomes
-/// `raise:<amount>`.
+/// `retry`/`resume`, `back`,
+/// `tap` / `taptext` / `tap:<label>` (UI text tap; optional `text=` param),
+/// `signout`.
+/// Optional `amount` query param becomes `raise:<amount>`.
 library;
 
 import 'dart:async';
@@ -40,6 +42,16 @@ final class AgentCommands {
       if (amountRaw.isNotEmpty &&
           (cmd == 'raise' || cmd == 'bet' || cmd == 'allin' || cmd == 'all_in')) {
         cmd = '$cmd:$amountRaw';
+      }
+      // Prefer explicit label params for UI taps (text= / label=).
+      final textRaw =
+          (params['text'] ?? params['label'] ?? '').trim();
+      if (textRaw.isNotEmpty &&
+          (cmd == 'tap' ||
+              cmd == 'taptext' ||
+              cmd.startsWith('tap:') ||
+              cmd.startsWith('taptext:'))) {
+        cmd = 'tap:${textRaw.toLowerCase()}';
       }
       _controller.add(cmd);
       return developer.ServiceExtensionResponse.result(
