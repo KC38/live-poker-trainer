@@ -52,7 +52,8 @@ class CourseService {
       'timezone': timezone,
       if (experienceBand != null) 'experienceBand': experienceBand,
       if (dailyGoalMinutes != null) 'dailyGoalMinutes': dailyGoalMinutes,
-      if (recommendedLessonId != null) 'recommendedLessonId': recommendedLessonId,
+      if (recommendedLessonId != null)
+        'recommendedLessonId': recommendedLessonId,
     });
   }
 
@@ -112,6 +113,26 @@ class CourseService {
       'idempotencyKey': idempotencyKey,
       if (catalogVersion != null) 'catalogVersion': catalogVersion,
     });
+    return CompleteCourseLessonResult.fromJson(data);
+  }
+
+  /// Marks the Section 7 calibration lesson complete after its live hand.
+  ///
+  /// The server refuses this unless that calibration hand was finished, so
+  /// leaving the table early cannot complete the lesson.
+  Future<CompleteCourseLessonResult> completeCalibrationWarmUp({
+    required String lessonId,
+    String? sessionId,
+    String? catalogVersion,
+  }) async {
+    _requireAuth();
+    final data =
+        await _callWithRetry('completeCalibrationWarmUp', <String, dynamic>{
+          'clientVersion': clientVersion,
+          'lessonId': lessonId,
+          if (sessionId != null) 'sessionId': sessionId,
+          if (catalogVersion != null) 'catalogVersion': catalogVersion,
+        });
     return CompleteCourseLessonResult.fromJson(data);
   }
 

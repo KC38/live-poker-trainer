@@ -3,10 +3,19 @@
 **Status: Done**
 
 - Merged: https://github.com/KC38/live-poker-trainer/pull/188
-  (`2af3de2`) on `main`
+  (`2af3de2`) on `main` — isolated course warm-ups, hand labs, calibration
+  launch, and Live access gates
+- Return path: a finished calibration hand
+  (`lesson-07-11-01-live-warmup-prep`) resumes the lesson result node
+  (`result:lesson-07-11-01-live-warmup-prep`) on `LessonResultScreen`.
+  Header back after the hand still opens that result and marks the lesson
+  complete via `completeCalibrationWarmUp`. Leaving before the hand finishes
+  returns to Home and does not mark the lesson complete. It does not restart
+  the first activity.
 - Cloud Functions deploy: completed from `origin/main` at `2af3de2`
   (`getLiveAccess` created; `startLiveHand`, `submitLiveAction`,
-  `resumeLiveHand`, `undoLiveAction`, and `getCourseState` updated)
+  `resumeLiveHand`, `undoLiveAction`, and `getCourseState` updated).
+  `completeCalibrationWarmUp` ships with the return-path fix.
 - CI: `course-contract` passed on PR #188
   (https://github.com/KC38/live-poker-trainer/actions/runs/35588907459)
 - Simulator: hot-restarted attached Flutter sessions after merge

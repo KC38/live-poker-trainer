@@ -37,6 +37,7 @@ import {
   undoLiveActionForUser,
 } from "./live_session";
 import {resolveLiveAccessForUser} from "./live_access";
+import {completeCalibrationWarmUpForUser} from "./course_live_bridge";
 
 initializeApp();
 
@@ -225,6 +226,28 @@ export const completeCourseLesson = onCall(
       });
     } catch (error) {
       throw callableError("completeCourseLesson", error);
+    }
+  },
+);
+
+/** Completes the Section 7 calibration lesson after its live hand. */
+export const completeCalibrationWarmUp = onCall(
+  {
+    region: "us-central1",
+    timeoutSeconds: 30,
+    memory: "256MiB",
+  },
+  async (request) => {
+    const uid = requireAuth(request.auth?.uid, "Sign in required for course.");
+    try {
+      return await completeCalibrationWarmUpForUser({
+        uid,
+        raw: request.data,
+        isAnonymous: request.auth?.token?.firebase?.sign_in_provider ===
+          "anonymous",
+      });
+    } catch (error) {
+      throw callableError("completeCalibrationWarmUp", error);
     }
   },
 );
