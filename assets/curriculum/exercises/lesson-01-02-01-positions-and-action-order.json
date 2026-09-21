@@ -1,0 +1,104 @@
+{
+  "id": "lesson-01-02-01-positions-and-action-order",
+  "lessonId": "lesson-01-02-01-positions-and-action-order",
+  "version": "1.0.0",
+  "title": "Positions and action order",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Preflop, first to act in a nine-handed game is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The player left of the big blind (under the gun)."
+        },
+        {
+          "id": "b",
+          "text": "The button."
+        },
+        {
+          "id": "c",
+          "text": "The small blind."
+        },
+        {
+          "id": "d",
+          "text": "The cutoff."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Blinds post first, then action starts under the gun and ends on the button, then blinds."
+    },
+    {
+      "id": "q2",
+      "prompt": "Postflop, first to act is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The button."
+        },
+        {
+          "id": "b",
+          "text": "The first remaining player left of the button."
+        },
+        {
+          "id": "c",
+          "text": "Under the gun, even if folded."
+        },
+        {
+          "id": "d",
+          "text": "The big blind, always, even when folded."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "The button is last postflop. Action begins with the next live player to the left."
+    },
+    {
+      "id": "q3",
+      "prompt": "Heads-up, the small blind/button\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Acts last preflop and first postflop."
+        },
+        {
+          "id": "b",
+          "text": "Acts first preflop and last postflop."
+        },
+        {
+          "id": "c",
+          "text": "Acts first on every street."
+        },
+        {
+          "id": "d",
+          "text": "Posts no blind."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "Heads-up, the button posts the small blind, acts first preflop, and last postflop."
+    },
+    {
+      "id": "q4",
+      "prompt": "Position is an advantage mainly because\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "You are forced to bluff more."
+        },
+        {
+          "id": "b",
+          "text": "You post fewer blinds."
+        },
+        {
+          "id": "c",
+          "text": "Your cards are dealt face-up."
+        },
+        {
+          "id": "d",
+          "text": "You act after others and can react to their bets."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "Information and control come from acting later."
+    }
+  ]
+}

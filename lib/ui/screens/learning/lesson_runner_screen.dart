@@ -69,18 +69,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         // Fall through to bundled asset (flags off / offline / tests).
       }
 
-      if (widget.lessonId == kFirstLessonId) {
-        final raw = await rootBundle.loadString(kFirstLessonExercisesAssetPath);
-        final decoded = jsonDecode(raw);
-        if (decoded is Map<String, dynamic>) {
-          if (!mounted) return;
-          setState(() {
-            _payload = LessonExercisesPayload.fromJson(decoded).publicView;
-          });
-          return;
-        }
-      }
+      final bundled = await _loadBundled(widget.lessonId);
       if (!mounted) return;
+      if (bundled != null) {
+        setState(() => _payload = bundled.publicView);
+        return;
+      }
       setState(() {
         _loadError = 'No exercises available for ${widget.lessonId}';
       });
@@ -171,23 +165,28 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       }
       return correct;
     }
-    try {
-      final raw = await rootBundle.loadString(kFirstLessonExercisesAssetPath);
-      final decoded = jsonDecode(raw);
-      if (decoded is! Map<String, dynamic>) return 0;
-      final full = LessonExercisesPayload.fromJson(decoded);
-      var correct = 0;
-      for (final q in full.questions) {
-        final selected = _answers[q.id];
-        if (selected != null &&
-            q.correctChoiceId != null &&
-            selected == q.correctChoiceId) {
-          correct += 1;
-        }
+    final full = await _loadBundled(payload.lessonId);
+    if (full == null) return 0;
+    var correct = 0;
+    for (final q in full.questions) {
+      final selected = _answers[q.id];
+      if (selected != null &&
+          q.correctChoiceId != null &&
+          selected == q.correctChoiceId) {
+        correct += 1;
       }
-      return correct;
+    }
+    return correct;
+  }
+
+  Future<LessonExercisesPayload?> _loadBundled(String lessonId) async {
+    try {
+      final raw = await rootBundle.loadString(lessonExercisesAssetPath(lessonId));
+      final decoded = jsonDecode(raw);
+      if (decoded is! Map<String, dynamic>) return null;
+      return LessonExercisesPayload.fromJson(decoded);
     } catch (_) {
-      return 0;
+      return null;
     }
   }
 

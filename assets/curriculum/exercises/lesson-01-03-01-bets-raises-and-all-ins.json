@@ -1,0 +1,104 @@
+{
+  "id": "lesson-01-03-01-bets-raises-and-all-ins",
+  "lessonId": "lesson-01-03-01-bets-raises-and-all-ins",
+  "version": "1.0.0",
+  "title": "Bets, raises, and all-ins",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "A legal raise must be at least\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The size of the previous full raise, subject to room and all-in exceptions."
+        },
+        {
+          "id": "b",
+          "text": "One chip, always."
+        },
+        {
+          "id": "c",
+          "text": "The whole pot or nothing."
+        },
+        {
+          "id": "d",
+          "text": "Twice the big blind on every street, even facing a huge bet."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "The minimum raise matches the last full raise. Short all-ins may not reopen action."
+    },
+    {
+      "id": "q2",
+      "prompt": "An all-in that is less than a full raise\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Always reopens betting for the original raiser."
+        },
+        {
+          "id": "b",
+          "text": "Often does not reopen action for players who already acted."
+        },
+        {
+          "id": "c",
+          "text": "Is an illegal bet and is returned."
+        },
+        {
+          "id": "d",
+          "text": "Forces every caller to fold."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "Incomplete raises typically do not reopen players who already acted."
+    },
+    {
+      "id": "q3",
+      "prompt": "A string bet is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "A single verbal 'raise to 50'."
+        },
+        {
+          "id": "b",
+          "text": "Putting out one chip to call."
+        },
+        {
+          "id": "c",
+          "text": "Going back to your stack for more chips after the first motion counted as a call."
+        },
+        {
+          "id": "d",
+          "text": "Checking and then betting after someone else acts."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "Say the amount first, or put the full bet out in one motion."
+    },
+    {
+      "id": "q4",
+      "prompt": "In most cardrooms, a verbal declaration in turn\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Is a joke until chips are out."
+        },
+        {
+          "id": "b",
+          "text": "Can be changed after you see a reaction."
+        },
+        {
+          "id": "c",
+          "text": "Binds only if you repeat it twice."
+        },
+        {
+          "id": "d",
+          "text": "Is binding. Say what you mean once."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "Speak clearly. 'Raise' without a number may be a minimum raise."
+    }
+  ]
+}

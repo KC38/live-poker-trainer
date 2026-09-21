@@ -156,6 +156,10 @@ class LessonExercisesPayload {
 /// Hardcoded first-lesson id for the guest-first vertical slice.
 const String kFirstLessonId = 'lesson-00-01-01-cash-vs-tournaments';
 
-/// Asset path when an authored exercise JSON is bundled.
+/// Bundled exercise JSON for [lessonId], including answer keys for offline grading.
+String lessonExercisesAssetPath(String lessonId) =>
+    'assets/curriculum/exercises/$lessonId.json';
+
+/// Asset path for the first authored lesson.
 const String kFirstLessonExercisesAssetPath =
-    'assets/curriculum/exercises/lesson-00-01-01-cash-vs-tournaments.json';
+    'assets/curriculum/exercises/$kFirstLessonId.json';

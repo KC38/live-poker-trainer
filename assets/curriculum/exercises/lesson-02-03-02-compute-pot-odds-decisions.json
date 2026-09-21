@@ -1,0 +1,104 @@
+{
+  "id": "lesson-02-03-02-compute-pot-odds-decisions",
+  "lessonId": "lesson-02-03-02-compute-pot-odds-decisions",
+  "version": "1.0.0",
+  "title": "Compute pot odds decisions",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "You must call $10 into a $40 pot. Break-even equity is about\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "10%."
+        },
+        {
+          "id": "b",
+          "text": "20%."
+        },
+        {
+          "id": "c",
+          "text": "40%."
+        },
+        {
+          "id": "d",
+          "text": "50%."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "Risk 10 to win 50 total after the call, so 10/50 = 20%. Or 10/(40+10)."
+    },
+    {
+      "id": "q2",
+      "prompt": "You have about 32% equity with a flush draw on the flop and the pot offers you 4 to 1. If you will see both cards\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The price is better than 20% break-even, so a call can be fine before implied odds."
+        },
+        {
+          "id": "b",
+          "text": "You must fold every draw."
+        },
+        {
+          "id": "c",
+          "text": "4 to 1 means you need 50%."
+        },
+        {
+          "id": "d",
+          "text": "Pot odds ignore the number of outs."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "4 to 1 is 20 percent. Thirty-two percent clears that price if the draw is clean and you see both cards."
+    },
+    {
+      "id": "q3",
+      "prompt": "A bluff that risks $50 to win $50 needs to work\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "More than 75% of the time."
+        },
+        {
+          "id": "b",
+          "text": "Never; bluffs are free."
+        },
+        {
+          "id": "c",
+          "text": "More than half the time if you never win when called."
+        },
+        {
+          "id": "d",
+          "text": "Less than 10% of the time."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "Risk 50 to win 50 is even money. With no showdown value you need folds more than half the time."
+    },
+    {
+      "id": "q4",
+      "prompt": "Which statement about EV is right?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "A winning session proves every call was correct."
+        },
+        {
+          "id": "b",
+          "text": "Losing a called bluff means the call was a mistake."
+        },
+        {
+          "id": "c",
+          "text": "You should never call without the nuts."
+        },
+        {
+          "id": "d",
+          "text": "A +EV call can still lose this particular hand."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "One result is not the decision. EV is the average over the chances."
+    }
+  ]
+}

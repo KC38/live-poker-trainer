@@ -16,6 +16,7 @@ CONTENT = ROOT / "content/curriculum/v1"
 EX_DIR = CONTENT / "exercises"
 CATALOG = CONTENT / "catalog.json"
 ASSET_CATALOG = ROOT / "assets/curriculum/catalog.json"
+ASSET_EX = ROOT / "assets/curriculum/exercises"
 FN_CATALOG = ROOT / "functions/src/generated/curriculum_catalog.json"
 FN_EX = ROOT / "functions/src/generated/exercises"
 BANK = ROOT / "functions/src/generated/exercise_bank.json"
@@ -724,9 +725,10 @@ def write_bank() -> None:
     for path in sorted(EX_DIR.glob("*.json")):
         payload = json.loads(path.read_text())
         bank[payload["id"]] = payload
-        target = FN_EX / path.name
-        target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(path, target)
+        for dest in (FN_EX, ASSET_EX):
+            target = dest / path.name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(path, target)
     BANK.write_text(json.dumps(bank, indent=2) + "\n")
 
 
