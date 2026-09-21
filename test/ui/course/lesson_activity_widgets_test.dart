@@ -11,6 +11,7 @@ import 'package:live_poker_trainer/ui/course/activities/order_sequence_activity.
 import 'package:live_poker_trainer/ui/course/activities/poker_action_sizing_activity.dart';
 import 'package:live_poker_trainer/ui/course/activities/select_identify_activity.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
@@ -829,6 +830,172 @@ void main() {
     await tester.tap(find.text('Raise'));
     await tester.pump();
     expect(controller.draft.choiceId, 'raise');
+    controller.dispose();
+  });
+
+  test('fold check call spots resolve mini-table dock mode', () {
+    final fold = CourseActivity(
+      id: 'act-01-03-01-guided-fold',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Tap Fold',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap your action.',
+      choices: const [
+        CourseChoice(id: 'fold-72', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'call-72', label: 'Call 6', action: 'CALL'),
+        CourseChoice(id: 'raise-72', label: 'Raise to 18', action: 'RAISE'),
+      ],
+    );
+    expect(isLessonActionTableActivity(fold), isTrue);
+    final spot = resolveLessonActionSpot(fold)!;
+    expect(spot.facingBet, isTrue);
+    expect(spot.heroCodes, ['7h', '2d']);
+
+    final checkpoint = CourseActivity(
+      id: 'act-01-03-01-checkpoint-legal',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Tap Check',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap the action you cannot take.',
+      choices: const [
+        CourseChoice(id: 'check-illegal', label: 'Check', action: 'CHECK'),
+        CourseChoice(id: 'call-legal', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'fold-legal', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    expect(resolveLessonActionSpot(checkpoint)!.identifyUnavailable, isTrue);
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-01-03-01-explain-passive',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText: 'Fold check call',
+          acceptedGrades: const [SoftGrade.recommended],
+          prompt: 'Fold ends your hand.',
+        ),
+      ).kind,
+      CoachDialogueVisualKind.passiveActions,
+    );
+  });
+
+  testWidgets('fold check call dock taps Fold on mini-table', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-01-03-01-guided-fold',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Tap Fold',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap your action.',
+      choices: const [
+        CourseChoice(id: 'fold-72', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'call-72', label: 'Call 6', action: 'CALL'),
+        CourseChoice(id: 'raise-72', label: 'Raise to 18', action: 'RAISE'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byType(LessonActionTable), findsOneWidget);
+    expect(find.byType(LessonActionDock), findsOneWidget);
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'fold-72');
+    expect(find.text('Ready — Lock in below.'), findsOneWidget);
+    controller.dispose();
+  });
+
+  testWidgets('free-check dock shows CHECK with Check free semantics', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-03-01-scaffolded-check',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Tap Check',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap the free action.',
+      choices: const [
+        CourseChoice(
+          id: 'check-free',
+          label: 'Check free',
+          accessibilityText: 'Check free',
+          action: 'CHECK',
+        ),
+        CourseChoice(id: 'call-free', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'fold-free', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('CHECK'), findsOneWidget);
+    expect(find.text('CHECK FREE'), findsNothing);
+    final handle = tester.ensureSemantics();
+    expect(find.bySemanticsLabel('Check free'), findsOneWidget);
+    await tester.tap(find.bySemanticsLabel('Check free'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'check-free');
+    handle.dispose();
+    controller.dispose();
+  });
+
+  testWidgets('checkpoint marks Check as off and selectable', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-01-03-01-checkpoint-legal',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Tap Check',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap the action you cannot take.',
+      choices: const [
+        CourseChoice(id: 'check-illegal', label: 'Check', action: 'CHECK'),
+        CourseChoice(id: 'call-legal', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'fold-legal', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('CHECK (off)'), findsOneWidget);
+    await tester.tap(find.text('CHECK (off)'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'check-illegal');
     controller.dispose();
   });
 

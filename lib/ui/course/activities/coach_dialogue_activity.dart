@@ -7,6 +7,7 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -67,6 +68,9 @@ enum CoachDialogueVisualKind {
 
   /// Seven cards with five highlighted as the playing hand.
   bestFive,
+
+  /// Fold / Check / Call action meanings.
+  passiveActions,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -93,6 +97,8 @@ class CoachDialogueVisual {
       'Tap Continue when the ladder from high card to flush clicks.',
     CoachDialogueVisualKind.bestFive =>
       'Tap Continue when you see that only five of seven play.',
+    CoachDialogueVisualKind.passiveActions =>
+      'Tap Continue when Fold, Check, and Call click.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -109,6 +115,8 @@ class CoachDialogueVisual {
       'Hand rank ladder from high card to flush',
     CoachDialogueVisualKind.bestFive =>
       'Seven cards with five highlighted as the playing hand',
+    CoachDialogueVisualKind.passiveActions =>
+      'Fold, Check, and Call action buttons',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -132,6 +140,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
     case 'act-01-02-02-explain-five':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.bestFive);
+    case 'act-01-03-01-explain-passive':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.passiveActions,
+      );
   }
 
   final blob =
@@ -140,6 +152,13 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
               '${activity.objectives.join(' ')}'
           .toLowerCase();
 
+  if (blob.contains('fold ends') ||
+      blob.contains('check passes') ||
+      blob.contains('call matches')) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.passiveActions,
+    );
+  }
   if (blob.contains('only five') ||
       blob.contains('strongest five') ||
       blob.contains('five cards count') ||
@@ -198,6 +217,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
         CoachDialogueVisualKind.dealerButton => const _DealerButtonDemo(),
         CoachDialogueVisualKind.handLadder => const HandRankLadderDemo(),
         CoachDialogueVisualKind.bestFive => const BestFiveDemo(),
+        CoachDialogueVisualKind.passiveActions => const PassiveActionsDemo(),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
     );

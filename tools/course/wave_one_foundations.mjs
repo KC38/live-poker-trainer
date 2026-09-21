@@ -656,8 +656,8 @@ export function buildSectionOne() {
                 {objectives: ["Fold to give up the hand"]}),
               actionAct({
                 id: "act-01-03-01-guided-fold", order: 2, stage: "guided",
-                prompt: "UTG opens to 6. You have 72o on the button. Action?",
-                a11y: "Choose fold with seven-two offsuit versus an open.",
+                prompt: "UTG opens to 6. You hold 72o on the button. Tap your action.",
+                a11y: "Tap Fold with seven-two offsuit versus an open.",
                 objectives: ["Fold to give up the hand"],
                 hint: "Trash hands fold to raises.",
                 choices: [
@@ -672,11 +672,11 @@ export function buildSectionOne() {
               }),
               actionAct({
                 id: "act-01-03-01-scaffolded-check", order: 3, stage: "scaffolded",
-                prompt: "Flop checked to you. Nobody bet. You want a free card. Action?",
-                a11y: "Choose check when the action is free.",
+                prompt: "Flop checked to you. Nobody bet. Tap the free action.",
+                a11y: "Tap Check when the action is free.",
                 objectives: ["Check when no bet faces you"],
                 choices: [
-                  choice("check-free", "Check", "recommended",
+                  choice("check-free", "Check free", "recommended",
                     "No bet to match — check is available.", {action: "CHECK"}),
                   choice("call-free", "Call", "clear_mistake",
                     "Call needs a bet to match.", {action: "CALL", betterChoiceId: "check-free"}),
@@ -687,8 +687,8 @@ export function buildSectionOne() {
               }),
               actionAct({
                 id: "act-01-03-01-unguided-call", order: 4, stage: "unguided",
-                prompt: "Villain bets 5 into 10. You want to continue cheaply. Action?",
-                a11y: "Choose call to match a half-pot bet.",
+                prompt: "Villain bets 5 into 10. You want to continue. Tap your action.",
+                a11y: "Tap Call to match a half-pot bet.",
                 objectives: ["Call to match the current bet"],
                 lifeLoss: true,
                 choices: [
@@ -697,15 +697,15 @@ export function buildSectionOne() {
                   choice("check-5", "Check", "clear_mistake",
                     "A bet faces you — check is not legal.",
                     {action: "CHECK", betterChoiceId: "call-5"}),
-                  choice("fold-strong", "Fold always when bet into", "questionable",
-                    "Sometimes call. Here the price is fine if you planned to continue.",
+                  choice("fold-strong", "Fold", "questionable",
+                    "Sometimes fold, but here the price is fine if you planned to continue.",
                     {action: "FOLD"}),
                 ],
               }),
-              selectAct({
+              actionAct({
                 id: "act-01-03-01-checkpoint-legal", order: 5, stage: "checkpoint",
-                prompt: "A bet faces you. Which action is unavailable?",
-                a11y: "Identify that check is illegal facing a bet.",
+                prompt: "A bet faces you. Tap the action you cannot take.",
+                a11y: "Tap Check — it is illegal facing a bet.",
                 objectives: [
                   "Check when no bet faces you",
                   "Call to match the current bet",
@@ -713,11 +713,14 @@ export function buildSectionOne() {
                 lifeLoss: true,
                 choices: [
                   choice("check-illegal", "Check", "recommended",
-                    "You must fold, call, or raise — check is off."),
+                    "You must fold, call, or raise — check is off.",
+                    {action: "CHECK"}),
                   choice("call-legal", "Call", "clear_mistake",
-                    "Call is available facing a bet.", {betterChoiceId: "check-illegal"}),
+                    "Call is available facing a bet.",
+                    {action: "CALL", betterChoiceId: "check-illegal"}),
                   choice("fold-legal", "Fold", "clear_mistake",
-                    "Fold is always available.", {betterChoiceId: "check-illegal"}),
+                    "Fold is always available.",
+                    {action: "FOLD", betterChoiceId: "check-illegal"}),
                 ],
               }),
             ],
@@ -732,6 +735,7 @@ export function buildSectionOne() {
               "Treat all-in as a sized bet or raise",
             ],
             prereq: L010301, remediation: L010301,
+            minutes: 7,
             activities: [
               dialogue("act-01-03-02-explain-aggro", 1,
                 "Bet opens the betting. Raise reopens it. All-in is just size-capped.",

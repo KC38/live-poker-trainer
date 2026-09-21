@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "144455b59c8a121ea02c82e2e81485e7d74a43102d522b4a8ca3e1a009c5454f",
+  "contentChecksum": "54c32e60926935b57fef619db804d3802fdc7329ed0cd9e8b037e0d108f8b318",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -1061,7 +1061,7 @@
                   "stage": "guided",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
-                  "accessibilityText": "Choose fold with seven-two offsuit versus an open.",
+                  "accessibilityText": "Tap Fold with seven-two offsuit versus an open.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1071,7 +1071,7 @@
                   "objectives": [
                     "Fold to give up the hand"
                   ],
-                  "prompt": "UTG opens to 6. You have 72o on the button. Action?",
+                  "prompt": "UTG opens to 6. You hold 72o on the button. Tap your action.",
                   "choices": [
                     {
                       "id": "fold-72",
@@ -1107,7 +1107,7 @@
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
-                  "accessibilityText": "Choose check when the action is free.",
+                  "accessibilityText": "Tap Check when the action is free.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1117,12 +1117,12 @@
                   "objectives": [
                     "Check when no bet faces you"
                   ],
-                  "prompt": "Flop checked to you. Nobody bet. You want a free card. Action?",
+                  "prompt": "Flop checked to you. Nobody bet. Tap the free action.",
                   "choices": [
                     {
                       "id": "check-free",
-                      "label": "Check",
-                      "accessibilityText": "Check",
+                      "label": "Check free",
+                      "accessibilityText": "Check free",
                       "action": "CHECK"
                     },
                     {
@@ -1145,7 +1145,7 @@
                   "stage": "unguided",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
-                  "accessibilityText": "Choose call to match a half-pot bet.",
+                  "accessibilityText": "Tap Call to match a half-pot bet.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1155,7 +1155,7 @@
                   "objectives": [
                     "Call to match the current bet"
                   ],
-                  "prompt": "Villain bets 5 into 10. You want to continue cheaply. Action?",
+                  "prompt": "Villain bets 5 into 10. You want to continue. Tap your action.",
                   "choices": [
                     {
                       "id": "call-5",
@@ -1171,8 +1171,8 @@
                     },
                     {
                       "id": "fold-strong",
-                      "label": "Fold always when bet into",
-                      "accessibilityText": "Fold always when bet into",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
                       "action": "FOLD"
                     }
                   ]
@@ -1181,9 +1181,9 @@
                   "id": "act-01-03-01-checkpoint-legal",
                   "order": 5,
                   "stage": "checkpoint",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Identify that check is illegal facing a bet.",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Tap Check — it is illegal facing a bet.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1194,22 +1194,25 @@
                     "Check when no bet faces you",
                     "Call to match the current bet"
                   ],
-                  "prompt": "A bet faces you. Which action is unavailable?",
+                  "prompt": "A bet faces you. Tap the action you cannot take.",
                   "choices": [
                     {
                       "id": "check-illegal",
                       "label": "Check",
-                      "accessibilityText": "Check"
+                      "accessibilityText": "Check",
+                      "action": "CHECK"
                     },
                     {
                       "id": "call-legal",
                       "label": "Call",
-                      "accessibilityText": "Call"
+                      "accessibilityText": "Call",
+                      "action": "CALL"
                     },
                     {
                       "id": "fold-legal",
                       "label": "Fold",
-                      "accessibilityText": "Fold"
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
                     }
                   ]
                 }
@@ -1231,7 +1234,7 @@
               "remediationLessonIds": [
                 "lesson-01-03-01-fold-check-call"
               ],
-              "estimatedMinutes": 6,
+              "estimatedMinutes": 7,
               "difficultyBand": 1,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],

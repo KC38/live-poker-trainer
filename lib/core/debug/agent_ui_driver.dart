@@ -78,10 +78,12 @@ final class AgentUiDriver {
       if (ro is! RenderBox || !ro.hasSize || !ro.attached) return;
 
       VoidCallback? onPressed;
+      var filledStyle = false;
       element.visitAncestorElements((ancestor) {
         final w = ancestor.widget;
         if (w is ButtonStyleButton) {
           onPressed = w.onPressed;
+          filledStyle = true;
           return false;
         }
         if (w is InkWell) {
@@ -114,6 +116,7 @@ final class AgentUiDriver {
             }
             if (w is ButtonStyleButton) {
               onPressed = w.onPressed;
+              filledStyle = true;
               return;
             }
             e.visitChildren(dig);
@@ -128,6 +131,7 @@ final class AgentUiDriver {
           offset: ro.localToGlobal(ro.size.center(Offset.zero)),
           exact: lower == needleLower,
           buttonish: onPressed != null,
+          filledStyle: filledStyle,
           length: lower.length,
           onPressed: onPressed,
           fromSemantics: fromSemantics,
@@ -165,12 +169,18 @@ final class AgentUiDriver {
 
     candidates.sort((a, b) {
       if (a.exact != b.exact) return a.exact ? -1 : 1;
+      // Prefer a live onPressed target over a disabled FilledButton.
+      final aLive = a.onPressed != null;
+      final bLive = b.onPressed != null;
+      if (aLive != bLive) return aLive ? -1 : 1;
+      if (a.filledStyle != b.filledStyle) return a.filledStyle ? -1 : 1;
       if (a.buttonish != b.buttonish) return a.buttonish ? -1 : 1;
       if (a.fromSemantics != b.fromSemantics) {
         return a.fromSemantics ? -1 : 1;
       }
       if (a.length != b.length) return a.length.compareTo(b.length);
-      return 0;
+      // Prefer lower on-screen controls (lesson Check / Continue docks).
+      return b.offset.dy.compareTo(a.offset.dy);
     });
 
     final chosen = candidates.first;
@@ -213,6 +223,7 @@ class _TapCandidate {
     required this.offset,
     required this.exact,
     required this.buttonish,
+    required this.filledStyle,
     required this.length,
     required this.onPressed,
     this.fromSemantics = false,
@@ -222,6 +233,7 @@ class _TapCandidate {
   final Offset offset;
   final bool exact;
   final bool buttonish;
+  final bool filledStyle;
   final int length;
   final VoidCallback? onPressed;
   final bool fromSemantics;
