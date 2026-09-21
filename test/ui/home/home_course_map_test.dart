@@ -105,12 +105,16 @@ Future<void> _pumpHome(
         courseHomeProvider.overrideWith(() => _FixedHome(snapshot)),
         analyticsServiceProvider.overrideWithValue(analytics),
       ],
-      child: MediaQuery(
-        data: MediaQueryData(textScaler: TextScaler.linear(textScale)),
-        child: MaterialApp(
-          theme: buildPokerTheme(),
-          home: const HomeScreen(),
-        ),
+      child: MaterialApp(
+        theme: buildPokerTheme(),
+        builder: (context, child) {
+          final mq = MediaQuery.of(context);
+          return MediaQuery(
+            data: mq.copyWith(textScaler: TextScaler.linear(textScale)),
+            child: child ?? const SizedBox.shrink(),
+          );
+        },
+        home: const HomeScreen(),
       ),
     ),
   );
@@ -186,7 +190,11 @@ void main() {
       size: const Size(320, 568),
       textScale: 1.6,
     );
+    expect(find.byType(HomeScreen), findsOneWidget);
+    expect(find.text('Home'), findsWidgets);
+    expect(find.byType(RexCoachCard), findsOneWidget);
     expect(find.text('Lesson A'), findsOneWidget);
+    expect(find.text('NEXT'), findsOneWidget);
     await tester.ensureVisible(find.text('Lesson A'));
   });
 

@@ -147,7 +147,6 @@ class _NodeBubble extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(18),
           child: Ink(
-            constraints: const BoxConstraints(minHeight: 56),
             padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
             decoration: BoxDecoration(
               color: colors.background,
@@ -166,8 +165,10 @@ class _NodeBubble extends StatelessWidget {
                     ]
                   : null,
             ),
-            child: Row(
-              children: [
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: 56),
+              child: Row(
+                children: [
                 Container(
                   width: 44,
                   height: 44,
@@ -217,6 +218,7 @@ class _NodeBubble extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
             ),
           ),
         ),
