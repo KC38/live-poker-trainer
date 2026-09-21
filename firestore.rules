@@ -11,13 +11,13 @@ rules_version = '2';
 //   preferences: validated gameplay settings map
 //
 // users/{uid}/situationReceipts/{situationId}
-//   Functions-only allocation and completion receipt
+//   Legacy v2 allocation receipts. Clients cannot read or write them.
 //
 // users/{uid}/handHistory/{handId}
-//   Functions-authored hand summary; owner-readable
+//   Legacy v2 hand summaries. Owner-readable, Functions-write, not Live Training.
 //
 // users/{uid}/progress/main
-//   Functions-authored aggregates; owner-readable
+//   Legacy v2 aggregates. Owner-readable. Live stats live at liveProgress/main.
 //
 // users/{uid}/course/main
 //   Functions-authored course progress; owner-readable
@@ -47,7 +47,11 @@ rules_version = '2';
 //   Server-controlled course feature flags; signed-in read-only
 //
 // tableSetups/{setupKey}/situations/{situationId}
-//   Private server-generated pool; Admin SDK only
+//   Legacy v2 situation pool. Admin SDK only. Live hands use liveTableSetups.
+//
+// users/{uid}/academy and playedScenarios / mistakes
+//   Reverted academy leftovers. Client writes denied. Delete only via the
+//   dry-run migration script after telemetry confirmation.
 // ===============================================================
 
 service cloud.firestore {

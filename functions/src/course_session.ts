@@ -90,6 +90,10 @@ export interface CourseProfile {
   dailyGoalMinutes?: number | null;
   recommendedLessonId?: string | null;
   firstLessonCompletedAtMs?: number | null;
+  /** Labeled academy XP. Never added to lifetimeXp or unlocks. */
+  legacyLifetimeXp?: number | null;
+  legacyXpCatalogVersion?: string | null;
+  legacyXpLabel?: string | null;
   createdAtMs?: number;
   updatedAtMs?: number;
 }
@@ -1517,6 +1521,9 @@ function emptyProfile(options: {
     dailyGoalMinutes: options.dailyGoalMinutes ?? null,
     recommendedLessonId: options.recommendedLessonId ?? null,
     firstLessonCompletedAtMs: null,
+    legacyLifetimeXp: null,
+    legacyXpCatalogVersion: null,
+    legacyXpLabel: null,
     createdAtMs: options.nowMs,
     updatedAtMs: options.nowMs,
   };
@@ -1541,6 +1548,9 @@ function profileToFirestore(profile: CourseProfile): DocumentData {
     dailyGoalMinutes: profile.dailyGoalMinutes ?? null,
     recommendedLessonId: profile.recommendedLessonId ?? null,
     firstLessonCompletedAtMs: profile.firstLessonCompletedAtMs ?? null,
+    legacyLifetimeXp: profile.legacyLifetimeXp ?? null,
+    legacyXpCatalogVersion: profile.legacyXpCatalogVersion ?? null,
+    legacyXpLabel: profile.legacyXpLabel ?? null,
   };
 }
 
@@ -1578,6 +1588,11 @@ function profileFromData(data: DocumentData): CourseProfile {
       null,
     recommendedLessonId: optionalString(data.recommendedLessonId) ?? null,
     firstLessonCompletedAtMs: optionalNumber(data.firstLessonCompletedAtMs) ??
+      null,
+    legacyLifetimeXp: optionalNumber(data.legacyLifetimeXp) ?? null,
+    legacyXpCatalogVersion: optionalString(data.legacyXpCatalogVersion) ?? null,
+    legacyXpLabel: data.legacyXpLabel === "legacy_academy" ?
+      "legacy_academy" :
       null,
   };
 }

@@ -24,6 +24,9 @@ class _ScriptedCourseService extends CourseService {
   Future<void> initializeProfile({
     required String catalogVersion,
     String timezone = 'UTC',
+    String? experienceBand,
+    int? dailyGoalMinutes,
+    String? recommendedLessonId,
   }) async {
     log.add('init');
   }
@@ -132,69 +135,71 @@ class _ScriptedCourseService extends CourseService {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('first lesson show→guided→scaffolded→unguided→checkpoint completes',
-      () async {
-    final container = ProviderContainer();
-    addTearDown(container.dispose);
-    final catalog = await container.read(courseCatalogProvider.future);
-    final lesson = catalog.lessonById(kFirstCourseLessonId)!;
-    expect(lesson.title, 'Your two cards');
-    expect(
-      lesson.activities.map((a) => a.stage).toList(),
-      [
+  test(
+    'first lesson show→guided→scaffolded→unguided→checkpoint completes',
+    () async {
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+      final catalog = await container.read(courseCatalogProvider.future);
+      final lesson = catalog.lessonById(kFirstCourseLessonId)!;
+      expect(lesson.title, 'Your two cards');
+      expect(lesson.activities.map((a) => a.stage).toList(), [
         ActivityStage.explain,
         ActivityStage.guided,
         ActivityStage.scaffolded,
         ActivityStage.unguided,
         ActivityStage.checkpoint,
-      ],
-    );
+      ]);
 
-    final service = _ScriptedCourseService(catalog);
-    await service.initializeProfile(catalogVersion: catalog.catalogVersion);
-    final started = await service.startLesson(
-      lessonId: kFirstCourseLessonId,
-      catalogVersion: catalog.catalogVersion,
-      startRequestId: 'start_e2e',
-    );
-
-    final answers = <String, String?>{
-      'act-01-01-01-explain-hole-cards': null,
-      'act-01-01-01-guided-find-holes': 'choice-hero-holes',
-      'act-01-01-01-scaffolded-private': 'choice-only-you',
-      'act-01-01-01-unguided-mix': 'choice-flop',
-      'act-01-01-01-checkpoint-table': 'choice-checkpoint-holes',
-    };
-
-    var activityId = started.resume.activityId;
-    for (final entry in answers.entries) {
-      expect(activityId, entry.key);
-      final key = 'step_${entry.key}';
-      final first = await service.submitStep(
-        attemptId: started.attempt.attemptId,
-        activityId: entry.key,
-        idempotencyKey: key,
-        choiceId: entry.value,
+      final service = _ScriptedCourseService(catalog);
+      await service.initializeProfile(catalogVersion: catalog.catalogVersion);
+      final started = await service.startLesson(
+        lessonId: kFirstCourseLessonId,
+        catalogVersion: catalog.catalogVersion,
+        startRequestId: 'start_e2e',
       );
-      expect(first.accepted, isTrue);
-      expect(first.lifeLost, isFalse);
-      final retry = await service.submitStep(
-        attemptId: started.attempt.attemptId,
-        activityId: entry.key,
-        idempotencyKey: key,
-        choiceId: entry.value,
-      );
-      expect(retry.duplicate, isTrue);
-      expect(retry.xpAwarded, 0);
-      activityId = first.resume.activityId;
-    }
 
-    final complete = await service.completeLesson(
-      attemptId: started.attempt.attemptId,
-      idempotencyKey: 'complete_e2e',
-    );
-    expect(complete.xpAwarded, 25);
-    expect(service.log.where((e) => e.startsWith('submit:')).toSet(), hasLength(5));
-    expect(service.log, contains('complete'));
-  });
+      final answers = <String, String?>{
+        'act-01-01-01-explain-hole-cards': null,
+        'act-01-01-01-guided-find-holes': 'choice-hero-holes',
+        'act-01-01-01-scaffolded-private': 'choice-only-you',
+        'act-01-01-01-unguided-mix': 'choice-flop',
+        'act-01-01-01-checkpoint-table': 'choice-checkpoint-holes',
+      };
+
+      var activityId = started.resume.activityId;
+      for (final entry in answers.entries) {
+        expect(activityId, entry.key);
+        final key = 'step_${entry.key}';
+        final first = await service.submitStep(
+          attemptId: started.attempt.attemptId,
+          activityId: entry.key,
+          idempotencyKey: key,
+          choiceId: entry.value,
+        );
+        expect(first.accepted, isTrue);
+        expect(first.lifeLost, isFalse);
+        final retry = await service.submitStep(
+          attemptId: started.attempt.attemptId,
+          activityId: entry.key,
+          idempotencyKey: key,
+          choiceId: entry.value,
+        );
+        expect(retry.duplicate, isTrue);
+        expect(retry.xpAwarded, 0);
+        activityId = first.resume.activityId;
+      }
+
+      final complete = await service.completeLesson(
+        attemptId: started.attempt.attemptId,
+        idempotencyKey: 'complete_e2e',
+      );
+      expect(complete.xpAwarded, 25);
+      expect(
+        service.log.where((e) => e.startsWith('submit:')).toSet(),
+        hasLength(5),
+      );
+      expect(service.log, contains('complete'));
+    },
+  );
 }

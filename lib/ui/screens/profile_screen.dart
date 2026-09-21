@@ -15,7 +15,10 @@ import 'package:live_poker_trainer/engine/hero_profiler.dart';
 import 'package:live_poker_trainer/models/hero_metrics.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
 import 'package:live_poker_trainer/models/user_stats_model.dart';
+import 'package:live_poker_trainer/models/course/course_progress.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
+import 'package:live_poker_trainer/providers/auth_provider.dart';
+import 'package:live_poker_trainer/providers/course_progress_provider.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
@@ -92,10 +95,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     name: AnalyticsScreens.settings,
                   ),
                 ),
-            icon: const Icon(
-              Icons.settings_outlined,
-              color: AppColors.slate,
-            ),
+            icon: const Icon(Icons.settings_outlined, color: AppColors.slate),
           ),
         ],
       ),
@@ -141,17 +141,34 @@ class _ProfileBody extends ConsumerWidget {
       onRefresh: () async {
         await controller.refreshMetrics();
         ref.invalidate(userStatsProvider);
+        ref.invalidate(courseProgressProvider);
       },
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 40),
         children: [
           _ProfileHeader(profile: profile),
+          const SizedBox(height: 26),
+          const _SectionTitle('Course'),
+          const SizedBox(height: 4),
+          Text(
+            'Lesson progress. Separate from Live Training coaching.',
+            style: GoogleFonts.manrope(color: AppColors.slate, fontSize: 12.5),
+          ),
+          const SizedBox(height: 10),
+          const _CourseProgressSection(),
+          const SizedBox(height: 26),
+          const _SectionTitle('Live Training'),
+          const SizedBox(height: 4),
+          Text(
+            'Coaching record, results, and style from full-hand play.',
+            style: GoogleFonts.manrope(color: AppColors.slate, fontSize: 12.5),
+          ),
           if (!metrics.style.isKnown) ...[
             const SizedBox(height: 14),
             _NeedsMoreHands(style: metrics.style),
           ],
           if (coachingStats != null && coachingStats!.totalSpots > 0) ...[
-            const SizedBox(height: 26),
+            const SizedBox(height: 16),
             const _SectionTitle('Coaching record'),
             const SizedBox(height: 10),
             _CoachingRecord(stats: coachingStats!),
@@ -185,6 +202,10 @@ class _ProfileBody extends ConsumerWidget {
             for (final tendency in metrics.archetypeTendencies)
               if (tendency.hasEnoughData) _ArchetypeRow(tendency: tendency),
           ],
+          const SizedBox(height: 26),
+          const _SectionTitle('Settings'),
+          const SizedBox(height: 10),
+          const _SettingsAndSignOut(),
         ],
       ),
     );
@@ -1064,6 +1085,172 @@ class _ErrorState extends StatelessWidget {
           textAlign: TextAlign.center,
           style: GoogleFonts.manrope(color: AppColors.slate),
         ),
+      ),
+    );
+  }
+}
+
+class _CourseProgressSection extends ConsumerWidget {
+  const _CourseProgressSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final progress = ref.watch(courseProgressProvider);
+    return progress.when(
+      loading:
+          () => const _Panel(child: _EmptyHint('Loading course progress…')),
+      error:
+          (_, _) => const _Panel(
+            child: _EmptyHint(
+              'Course progress is unavailable. Live Training is unchanged.',
+            ),
+          ),
+      data: (course) => _CourseProgressCard(progress: course),
+    );
+  }
+}
+
+class _CourseProgressCard extends StatelessWidget {
+  const _CourseProgressCard({required this.progress});
+
+  final CourseProgress progress;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!progress.loaded) {
+      return const _Panel(
+        child: _EmptyHint(
+          'Course progress is unavailable. Live Training is unchanged.',
+        ),
+      );
+    }
+    final accuracy = (progress.acceptedAccuracy * 100).clamp(0, 100);
+    final mastery = (progress.mastery * 100).clamp(0, 100);
+    return _Panel(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _CourseMetricRow(
+            leftValue: '${progress.lifetimeXp}',
+            leftLabel: 'Course XP',
+            rightValue: '${progress.currentStreak}',
+            rightLabel: 'Day streak',
+          ),
+          const SizedBox(height: 14),
+          _CourseMetricRow(
+            leftValue: '${accuracy.toStringAsFixed(0)}%',
+            leftLabel: 'Accepted accuracy',
+            rightValue: '${mastery.toStringAsFixed(0)}%',
+            rightLabel: 'Mastery',
+          ),
+          const SizedBox(height: 14),
+          Text(
+            progress.currentSectionTitle ?? 'Section not started',
+            style: GoogleFonts.manrope(
+              color: AppColors.cream,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          Text(
+            progress.reviewsDue == 0
+                ? 'No reviews due'
+                : '${progress.reviewsDue} reviews due',
+            style: GoogleFonts.manrope(color: AppColors.slate, fontSize: 12.5),
+          ),
+          if (!progress.available) ...[
+            const SizedBox(height: 12),
+            Text(
+              'Course entry is off. Saved progress stays here; Live Training is unchanged.',
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 12.5,
+              ),
+            ),
+          ],
+          if (progress.legacyLifetimeXp != null) ...[
+            const SizedBox(height: 12),
+            Text(
+              'Legacy academy XP ${progress.legacyLifetimeXp}',
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 12.5,
+              ),
+            ),
+            Text(
+              'Old catalog XP only. It does not unlock lessons.',
+              style: GoogleFonts.manrope(color: AppColors.slate, fontSize: 12),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _CourseMetricRow extends StatelessWidget {
+  const _CourseMetricRow({
+    required this.leftValue,
+    required this.leftLabel,
+    required this.rightValue,
+    required this.rightLabel,
+  });
+
+  final String leftValue;
+  final String leftLabel;
+  final String rightValue;
+  final String rightLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: _Figure(value: leftValue, label: leftLabel, detail: 'Course'),
+        ),
+        Container(width: 1, height: 46, color: AppColors.slateDark),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 12),
+            child: _Figure(
+              value: rightValue,
+              label: rightLabel,
+              detail: 'Course',
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _SettingsAndSignOut extends ConsumerWidget {
+  const _SettingsAndSignOut();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return _Panel(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          OutlinedButton(
+            onPressed:
+                () => Navigator.push(
+                  context,
+                  softFadeRoute(
+                    const SettingsScreen(),
+                    name: AnalyticsScreens.settings,
+                  ),
+                ),
+            child: const Text('Settings'),
+          ),
+          const SizedBox(height: 8),
+          TextButton(
+            onPressed: () async {
+              await ref.read(authControllerProvider.notifier).signOut();
+            },
+            child: const Text('Sign out'),
+          ),
+        ],
       ),
     );
   }

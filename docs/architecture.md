@@ -148,9 +148,41 @@ Each action is persisted incrementally. Terminal sessions write:
 Owners can read history and progress. Sessions, receipts, pool definitions,
 private tree nodes, jobs, and all private cards remain Admin-only.
 
+## Course and profile
+
+Course progress is `users/{uid}/course/main` plus attempts, reviews, and the
+XP ledger. The client reads it through `getCourseState`. It is not written
+into `liveProgress` or `UserStatsModel`.
+
+Profile shows course metrics and Live Training metrics in separate sections.
+Accepted course accuracy is the share of accepted scored lesson answers.
+Live "strong decisions" is the coaching record. Those numbers are not merged.
+
+`appConfig/courseFlags` is the course kill switch. Clients may read it.
+Writes are Admin SDK only. Fetch, parse, and minimum-client-version failures
+disable course entry and guest onboarding. Authenticated Live Training and
+Profile remain usable.
+
+Analytics events use public lesson and activity ids, timing, grade band, and
+closed-set outcomes. Hole cards, unrevealed cards, private grading keys,
+model prompts, and user-entered free text are not analytics parameters.
+
+## Legacy academy data
+
+A reverted academy document at `users/{uid}/academy/main` is not mapped onto
+new lesson completions. When its catalog version matches the current course
+and every referenced lesson id is still published, lifetime XP is copied only
+as `legacyLifetimeXp` / `legacyXpLabel=legacy_academy`. Otherwise the old
+learning collections stay read-only until
+`functions/scripts/migrate_legacy_academy.ts` is run. That script defaults to
+dry-run and will not execute without an exact project confirmation and
+telemetry confirmation. It never deletes Live Training history or progress.
+
 ## Migration
 
-Version 2 callable exports are removed, enforcing a mandatory client upgrade.
+Version 2 callable exports (`fetchSituation`, `recordProgress`, and the v2
+pool refill) are removed. `npm run build` deletes `functions/lib/` before
+`tsc`, so a clean build contains only the current TypeScript exports.
 The guarded production reset preserves Firebase Auth, display name, avatar, and
 device-local audio while deleting old/new training data and resetting gameplay
 preferences to the v3 default.

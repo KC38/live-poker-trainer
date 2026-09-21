@@ -131,9 +131,9 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
       _ref.invalidate(userDocProvider);
       unawaited(_ref.read(analyticsServiceProvider).setUserId(user.uid));
       unawaited(
-        _ref.read(analyticsServiceProvider).logEventSafe(
-          'guest_session_started',
-        ),
+        _ref
+            .read(analyticsServiceProvider)
+            .logEventSafe('guest_session_started'),
       );
       state = const AsyncValue.data(null);
       return user;
@@ -182,10 +182,20 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
           isSignUp: true,
           displayName: displayName,
         );
+        unawaited(
+          _ref
+              .read(analyticsServiceProvider)
+              .logAccountConversion(method: 'email_link', outcome: 'linked'),
+        );
         return;
       } on FirebaseAuthException catch (error) {
         if (error.code != 'email-already-in-use' &&
             error.code != 'credential-already-in-use') {
+          unawaited(
+            _ref
+                .read(analyticsServiceProvider)
+                .logAccountConversion(method: 'email_link', outcome: 'failed'),
+          );
           rethrow;
         }
         await _transferThenSignIn(
@@ -195,11 +205,7 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
         return;
       }
     }
-    await register(
-      email: email,
-      password: password,
-      displayName: displayName,
-    );
+    await register(email: email, password: password, displayName: displayName);
   }
 
   /// Email / password sign-in (issues transfer first when anonymous).
@@ -227,15 +233,21 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
     final current = _auth.currentUser;
     if (current != null && current.isAnonymous) {
       try {
-        await _run(
-          _auth.linkWithGoogle,
-          method: 'google_link',
-          isSignUp: true,
+        await _run(_auth.linkWithGoogle, method: 'google_link', isSignUp: true);
+        unawaited(
+          _ref
+              .read(analyticsServiceProvider)
+              .logAccountConversion(method: 'google_link', outcome: 'linked'),
         );
         return;
       } on FirebaseAuthException catch (error) {
         if (error.code != 'credential-already-in-use' &&
             error.code != 'email-already-in-use') {
+          unawaited(
+            _ref
+                .read(analyticsServiceProvider)
+                .logAccountConversion(method: 'google_link', outcome: 'failed'),
+          );
           rethrow;
         }
         await _transferThenSignIn(_auth.signInWithGoogle, method: 'google');
@@ -276,9 +288,21 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
       final analytics = _ref.read(analyticsServiceProvider);
       unawaited(analytics.setUserId(user.uid));
       unawaited(analytics.logLogin(method: method));
+      unawaited(
+        analytics.logAccountConversion(method: method, outcome: 'merged'),
+      );
+      unawaited(analytics.logProgressMerge(outcome: 'succeeded'));
       unawaited(analytics.logEventSafe('guest_progress_transferred'));
       state = const AsyncValue.data(null);
     } catch (e, st) {
+      unawaited(
+        _ref.read(analyticsServiceProvider).logProgressMerge(outcome: 'failed'),
+      );
+      unawaited(
+        _ref
+            .read(analyticsServiceProvider)
+            .logAccountConversion(method: method, outcome: 'failed'),
+      );
       state = AsyncValue.error(e, st);
       rethrow;
     }

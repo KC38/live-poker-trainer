@@ -149,3 +149,68 @@ Reports include quality rates plus estimated cost and response-time averages.
 
 See [docs/architecture.md](docs/architecture.md) for complete boundaries and
 data flow.
+
+## Profile
+
+Profile is a tab root with three separate sections:
+
+- Identity and avatar
+- Course progress (XP, streak, accepted accuracy, current section, mastery,
+  reviews due). Legacy academy XP, when present, is labeled and is not course
+  XP or an unlock.
+- Live Training (coaching record, net result, streets, style, player types)
+
+Course accuracy and Live coaching statistics are not combined. Settings and
+sign-out are on Profile.
+
+## Course rollout
+
+`appConfig/courseFlags` is server-owned and client read-only. A missing,
+malformed, failed, or too-old-client read disables the course. That kill
+switch hides course starts and guest onboarding. Signed-in Live Training and
+Profile stay available.
+
+Rollout order:
+
+1. Internal catalog and runtime validation.
+2. Staff accounts with course state enabled.
+3. New guest onboarding cohort (`guestCourseEnabled`).
+4. Authenticated existing-user cohort.
+5. Full rollout after crash, completion, merge, and Live Training checks.
+
+`courseEnabled=false` stops course entry. `courseStartsEnabled=false` pauses
+new attempts while an already started attempt can finish. Neither flag
+disables Live Training.
+
+## Analytics
+
+Events cover tab selection, onboarding steps, lessons, grade band, life loss,
+remediation, jump tests, warm-ups, account conversion, and progress merge.
+They may include public lesson or activity ids, timing, and closed-set
+outcomes. They must not include hole cards, unrevealed cards, grading keys,
+coach prompts, or free text.
+
+## Legacy academy migration
+
+The migration is dry-run by default. Execute mode requires an exact project
+confirmation and `--confirm-telemetry=legacy-academy-observed`. Production
+also requires `--allow-production-migration`.
+
+```bash
+cd functions
+npm run migrate:academy:dry -- --project=live-poker-trainer
+```
+
+Compatible lifetime XP is stored as `legacyLifetimeXp` with label
+`legacy_academy`. Old lesson ids are not copied onto completions or unlocks.
+Authentication, identity, avatar, preferences, audio, and Live Training
+history stay in place.
+
+## Functions build
+
+`npm run build` deletes `functions/lib/` before generating the course bank and
+running `tsc`, so stale academy output cannot survive into the deploy bundle.
+Deployed exports are the live-hand, course, and transfer callables plus the
+live pool workers. The v2 situation fetch, progress, and pool callables are
+not exported.
+

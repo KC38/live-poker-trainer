@@ -23,4 +23,18 @@ void main() {
     await analytics.setCollectionEnabled(false);
     expect(analytics.isEnabled, isFalse);
   });
+
+  test('course analytics parameters drop private keys and keep lesson ids', () {
+    final safe = AnalyticsService.sanitizeParams({
+      'lesson_id': 'lesson-01-01-01-your-two-cards',
+      'grade': 'clear_mistake',
+      'hole_cards': 'AsKh',
+      'prompt': 'What do you do?',
+      'answer_map': 'secret',
+    });
+    expect(safe['lesson_id'], 'lesson-01-01-01-your-two-cards');
+    expect(safe.containsKey('hole_cards'), isFalse);
+    expect(safe.containsKey('prompt'), isFalse);
+    expect(safe.containsKey('answer_map'), isFalse);
+  });
 }

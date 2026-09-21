@@ -1,22 +1,6 @@
 {
   "indexes": [
     {
-      "collectionGroup": "situationReceipts",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "setupKey", "order": "ASCENDING" },
-        { "fieldPath": "allocatedAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "handHistory",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "setupKey", "order": "ASCENDING" },
-        { "fieldPath": "createdAt", "order": "DESCENDING" }
-      ]
-    },
-    {
       "collectionGroup": "hands",
       "queryScope": "COLLECTION",
       "fields": [

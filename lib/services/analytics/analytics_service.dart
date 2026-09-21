@@ -210,19 +210,138 @@ class AnalyticsService {
     await _event('analytics_consent_changed', {'enabled': enabled ? 1 : 0});
   }
 
+  /// Closed-set onboarding step (not free text or experience labels).
+  Future<void> logOnboardingStep({required String step}) async {
+    await _event('onboarding_step', {'step': step});
+  }
+
+  /// Lesson start or completion. [lessonId] is a public catalog id.
+  Future<void> logLesson({
+    required String lessonId,
+    required String phase,
+    int? durationMs,
+  }) async {
+    await _event('lesson', {
+      'lesson_id': lessonId,
+      'phase': phase,
+      if (durationMs != null) 'duration_ms': durationMs.clamp(0, 3_600_000),
+    });
+  }
+
+  /// Soft-grade band for a public activity. Never includes the choice text.
+  Future<void> logGradeBand({
+    required String lessonId,
+    required String activityId,
+    required String grade,
+    required String stage,
+  }) async {
+    await _event('grade_band', {
+      'lesson_id': lessonId,
+      'activity_id': activityId,
+      'grade': grade,
+      'stage': stage,
+    });
+  }
+
+  /// A scored clear mistake cost a life.
+  Future<void> logLifeLost({
+    required String lessonId,
+    required String activityId,
+    required int livesRemaining,
+  }) async {
+    await _event('life_lost', {
+      'lesson_id': lessonId,
+      'activity_id': activityId,
+      'lives_remaining': livesRemaining.clamp(0, 20),
+    });
+  }
+
+  /// Hint opened or a zero-life remediation loop started.
+  Future<void> logRemediation({
+    required String lessonId,
+    required String activityId,
+    required String kind,
+  }) async {
+    await _event('remediation', {
+      'lesson_id': lessonId,
+      'activity_id': activityId,
+      'kind': kind,
+    });
+  }
+
+  /// Jump-test outcome. [result] is `passed` or `failed`.
+  Future<void> logJumpTest({
+    required String lessonId,
+    required String result,
+  }) async {
+    await _event('jump_test', {'lesson_id': lessonId, 'result': result});
+  }
+
+  /// Coached warm-up launched from Live Training.
+  Future<void> logWarmUp({required String kind}) async {
+    await _event('warm_up', {'kind': kind});
+  }
+
+  /// Anonymous session became a permanent account.
+  Future<void> logAccountConversion({
+    required String method,
+    required String outcome,
+  }) async {
+    await _event('account_conversion', {'method': method, 'outcome': outcome});
+  }
+
+  /// Guest progress merge into a permanent account.
+  Future<void> logProgressMerge({required String outcome}) async {
+    await _event('progress_merge', {'outcome': outcome});
+  }
+
   /// Best-effort named event without free-form PII payloads.
   Future<void> logEventSafe(String name, [Map<String, Object>? params]) async {
-    await _event(name, params);
+    await _event(name, params == null ? null : _safeParams(params));
   }
 
   Future<void> _event(String name, [Map<String, Object>? params]) async {
     await _log(() async {
       await (_analytics ?? FirebaseAnalytics.instance).logEvent(
         name: name,
-        parameters: params,
+        parameters: params == null ? null : _safeParams(params),
       );
     });
   }
+
+  /// Drops parameter names that could carry cards, prompts, or free text.
+  static Map<String, Object> _safeParams(Map<String, Object> params) {
+    final safe = <String, Object>{};
+    for (final entry in params.entries) {
+      if (_forbiddenParam(entry.key.toLowerCase())) continue;
+      safe[entry.key] = entry.value;
+    }
+    return safe;
+  }
+
+  static bool _forbiddenParam(String value) {
+    const needles = [
+      'hole',
+      'card',
+      'prompt',
+      'answer',
+      'grading',
+      'free_text',
+      'freetext',
+      'password',
+      'nonce',
+      'credential',
+    ];
+    for (final needle in needles) {
+      if (value.contains(needle)) return true;
+    }
+    return false;
+  }
+
+  /// Test seam for the privacy filter. Public course ids stay in values.
+  @visibleForTesting
+  static Map<String, Object> sanitizeParams(Map<String, Object> params) =>
+      _safeParams(params);
 
   Future<void> _log(Future<void> Function() body) async {
     if (!_enabled) return;

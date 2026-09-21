@@ -9,8 +9,10 @@ import 'package:live_poker_trainer/models/hand_history_sample.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
 import 'package:live_poker_trainer/models/user_document.dart';
 import 'package:live_poker_trainer/models/user_stats_model.dart';
+import 'package:live_poker_trainer/models/course/course_progress.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
+import 'package:live_poker_trainer/providers/course_progress_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/services/firestore/progress_repository.dart';
@@ -91,6 +93,18 @@ void main() {
           progressRepositoryProvider.overrideWithValue(progress),
           analyticsServiceProvider.overrideWithValue(
             AnalyticsService(enabled: false),
+          ),
+          courseProgressProvider.overrideWith(
+            (ref) async => const CourseProgress(
+              loaded: true,
+              available: false,
+              lifetimeXp: 12,
+              currentStreak: 2,
+              acceptedAccuracy: 0.5,
+              mastery: 0.4,
+              reviewsDue: 1,
+              currentSectionTitle: 'Foundations',
+            ),
           ),
         ],
         child: MaterialApp(
