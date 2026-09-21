@@ -12,9 +12,21 @@
 - Content: Section 5 (Winning 1/2) — 9 units / 10 lessons;
   Section 6 (Advanced Live Cash) — 13 units / 18 lessons including
   TAG/LAG observe→label→adjust; Section 7 (Full-Hand Integration) —
-  12 units / 14 lessons including SRP/3-bet/multiway capstones,
-  Live warm-up prep, and five-type final assessment
+  12 units / 16 lessons including SRP, 3-bet, multiway-deep, limped, and
+  4-bet capstones, Live warm-up prep, and five-type final assessment
 - Authoring source: `tools/course/wave_three_advanced_play.mjs`
+
+**Amendment (acceptance fix):** TAG/LAG labels appeared in observe lessons
+before their meet introductions. Fixed in
+https://github.com/KC38/live-poker-trainer/pull/186
+(squash `79e1a0b` on `main`). Observe lessons now record behavior only;
+labels start at `lesson-06-11-02-meet-tag` / `lesson-06-12-02-meet-lag`.
+Also added limped and 4-bet capstones
+(`lesson-07-10-04-capstone-limped`, `lesson-07-10-05-capstone-4bet`) so
+capstones cover every major pot type. CI `course-contract` passed
+(https://github.com/KC38/live-poker-trainer/actions/runs/35587901064).
+Cloud Functions redeployed from `origin/main` at `79e1a0b`
+(course bank checksum `089e844019e3`). Simulators hot-restarted after merge.
 
 ## Objective
 
