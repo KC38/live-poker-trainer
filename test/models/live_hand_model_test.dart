@@ -892,6 +892,13 @@ void main() {
       ),
       contains(r'$69-chip call'),
     );
+    // "pot over N" (batch 0342 H8).
+    expect(
+      polishCoachCopy(
+        'Risking \$200 to win a total pot over 1194 gives immediate odds.',
+      ),
+      contains(r'pot over $1194'),
+    );
     // Comparison operators must gain % (batch 0163).
     expect(
       polishCoachCopy(
