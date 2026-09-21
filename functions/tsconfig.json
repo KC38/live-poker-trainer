@@ -8,7 +8,6 @@
     "strict": true,
     "target": "es2022",
     "esModuleInterop": true,
-    "resolveJsonModule": true,
     "skipLibCheck": true
   },
   "compileOnSave": true,

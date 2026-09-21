@@ -15,13 +15,11 @@ import 'package:live_poker_trainer/core/diagnostics/diagnostics_log.dart';
 import 'package:live_poker_trainer/firebase_options.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
-import 'package:live_poker_trainer/providers/feature_flags_provider.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/services/analytics/crashlytics_diagnostics_sink.dart';
 import 'package:live_poker_trainer/services/legacy_local_data_cleanup.dart';
-import 'package:live_poker_trainer/ui/screens/app_shell.dart';
 import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/screens/home_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
@@ -64,11 +62,7 @@ Future<void> _installCrashReporting({required bool enabled}) async {
 
 /// Root application widget.
 ///
-/// Auth gate:
-/// - Default (`learningPlatformEnabled` false): signed-out → [AuthScreen];
-///   signed-in → [HomeScreen] (production unchanged).
-/// - When learning flags are on: signed-out → [AuthScreen] (with guest CTA);
-///   signed-in → [AppShell].
+/// Auth gate: signed-out → [AuthScreen]; signed-in → [HomeScreen].
 class PokerLabApp extends ConsumerStatefulWidget {
   /// Creates the app.
   const PokerLabApp({super.key});
@@ -87,8 +81,6 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
     ref.watch(userDocProvider);
     final analytics = ref.watch(analyticsServiceProvider);
     final navObserver = ref.watch(analyticsNavigatorObserverProvider);
-    final learningEnabled =
-        ref.watch(learningFeatureFlagsValueProvider).learningPlatformEnabled;
 
     ref.listen(authStateProvider, (prev, next) {
       final prevUid = prev?.asData?.value?.uid;
@@ -117,17 +109,13 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
       home: auth.when(
         data: (user) {
           if (user == null) return const AuthScreen();
-          // Hold Home/shell until cloud gameplay prefs hydrate so table-setup
+          // Hold Home until cloud gameplay prefs hydrate so table-setup
           // edits cannot clobber Firestore with in-memory defaults.
           final userDoc = ref.watch(userDocProvider);
           return userDoc.when(
-            data: (_) => learningEnabled
-                ? const AppShell()
-                : const HomeScreen(),
+            data: (_) => const HomeScreen(),
             loading: () => const _AuthLoadingScreen(),
-            error: (_, _) => learningEnabled
-                ? const AppShell()
-                : const HomeScreen(),
+            error: (_, _) => const HomeScreen(),
           );
         },
         loading: () => const _AuthLoadingScreen(),
