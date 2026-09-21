@@ -29,10 +29,11 @@ Cloud Functions redeployed from `origin/main` at `79e1a0b`
 (course bank checksum `089e844019e3`). Simulators hot-restarted after merge.
 
 **Follow-up (re-review residual):** Plan 08 `lesson-04-08-02-meet-maniac`
-checkpoint no longer uses the “Add TAG/LAG already” distractor. The wrong
-choice is unlabeled behavior (“Add an unlabeled loose seat”) so TAG/LAG stay
-unintroduced until Section 6. Unit titles “Player type: TAG” / “Player type:
-LAG” are unchanged. Course bank checksum `90626cc467cf`.
+checkpoint no longer uses the “Add TAG/LAG already” distractor. Fixed in
+https://github.com/KC38/live-poker-trainer/pull/190.
+The wrong choice is unlabeled behavior (“Add an unlabeled loose seat”) so
+TAG/LAG stay unintroduced until Section 6. Unit titles “Player type: TAG” /
+“Player type: LAG” are unchanged. Course bank checksum `90626cc467cf`.
 
 ## Objective
 
