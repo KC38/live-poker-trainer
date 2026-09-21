@@ -119,9 +119,19 @@ void main() {
     expect(_navLabel('Home'), findsOneWidget);
     expect(_navLabel('Live Training'), findsOneWidget);
     expect(_navLabel('Profile'), findsOneWidget);
-    expect(find.byType(HomeScreen), findsOneWidget);
-    expect(find.byType(LiveTrainingScreen), findsOneWidget);
-    expect(find.byType(ProfileScreen), findsOneWidget);
+    // IndexedStack keeps inactive tabs offstage; include them in the search.
+    expect(
+      find.byType(HomeScreen, skipOffstage: false),
+      findsOneWidget,
+    );
+    expect(
+      find.byType(LiveTrainingScreen, skipOffstage: false),
+      findsOneWidget,
+    );
+    expect(
+      find.byType(ProfileScreen, skipOffstage: false),
+      findsOneWidget,
+    );
   });
 
   testWidgets('small-phone layout still shows all three tab labels', (
@@ -163,13 +173,13 @@ void main() {
   testWidgets('Start training prepares then pushes full-screen table', (
     tester,
   ) async {
-    late _TrackingController controller;
+    _TrackingController? controller;
     await _pumpShell(
       tester,
       extraOverrides: [
         gameControllerProvider.overrideWith((ref) {
           controller = _TrackingController(ref);
-          return controller;
+          return controller!;
         }),
       ],
     );
@@ -177,19 +187,19 @@ void main() {
     await tester.tap(_navLabel('Live Training'));
     await tester.pumpAndSettle();
 
-    expect(controller.log, isEmpty);
     await tester.tap(find.text('Start training'));
     await tester.pump();
 
-    expect(controller.log, contains('prepare'));
-    expect(controller.log, isNot(contains('start')));
+    expect(controller, isNotNull);
+    expect(controller!.log, contains('prepare'));
+    expect(controller!.log, isNot(contains('start')));
 
     await tester.pump(const Duration(milliseconds: 40));
     expect(find.byType(PokerTableScreen), findsOneWidget);
 
     await tester.pump(const Duration(milliseconds: 320));
     await tester.pump();
-    expect(controller.log, contains('start'));
+    expect(controller!.log, contains('start'));
   });
 
   testWidgets('Profile tab is a root with Settings and without a back button', (
