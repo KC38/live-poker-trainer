@@ -20,7 +20,7 @@ export function dialogue(id, order, text, extra = {}) {
   };
 }
 
-function choice(id, label, grade, feedback, extra = {}) {
+export function choice(id, label, grade, feedback, extra = {}) {
   const out = {
     id,
     label,
@@ -37,7 +37,7 @@ function choice(id, label, grade, feedback, extra = {}) {
   return out;
 }
 
-function selectAct({
+export function selectAct({
   id, order, stage, prompt, a11y, objectives, choices,
   lifeLoss = false, hint,
 }) {
@@ -57,7 +57,7 @@ function selectAct({
   return act;
 }
 
-function sequenceAct({
+export function sequenceAct({
   id, order, stage, prompt, a11y, objectives, items, correct,
   okFeedback, missFeedback, lifeLoss = false, renderer = "order_sequence",
 }) {
@@ -78,7 +78,7 @@ function sequenceAct({
   };
 }
 
-function numericAct({
+export function numericAct({
   id, order, stage, question, a11y, objectives,
   unit, min, max, okFeedback, missFeedback, lifeLoss = false,
 }) {
@@ -100,7 +100,7 @@ function numericAct({
   };
 }
 
-function actionAct({
+export function actionAct({
   id, order, stage, prompt, a11y, objectives, choices, lifeLoss = false, hint,
 }) {
   const act = {
@@ -119,7 +119,7 @@ function actionAct({
   return act;
 }
 
-function multiStepAct({
+export function multiStepAct({
   id, order, stage, a11y, objectives, steps, lifeLoss = false,
 }) {
   return {
@@ -133,7 +133,7 @@ function multiStepAct({
   };
 }
 
-function handLabAct({
+export function handLabAct({
   id, order, stage, prompt, a11y, objectives, choices, lab, lifeLoss = true,
 }) {
   return {
@@ -149,9 +149,10 @@ function handLabAct({
   };
 }
 
-function lesson({
+export function lesson({
   id, order, title, summary, objectives, prereq, remediation,
-  minutes = 6, band = 1, activities,
+  minutes = 6, band = 1, activities, playerTypeRefs = [],
+  introducesPlayerTypes = [],
 }) {
   return {
     id, order, title, summary, objectives,
@@ -159,14 +160,36 @@ function lesson({
     remediationLessonIds: [remediation ?? id],
     estimatedMinutes: minutes,
     difficultyBand: band,
-    playerTypeRefs: [],
-    introducesPlayerTypes: [],
+    playerTypeRefs,
+    introducesPlayerTypes,
     activities,
   };
 }
 
-function unit(id, order, title, summary, lessons) {
+export function unit(id, order, title, summary, lessons) {
   return {id, order, title, summary, lessons};
+}
+
+/** Player-read classify activity (Plan 08+). */
+export function classifyAct({
+  id, order, stage, prompt, a11y, objectives, choices,
+  lifeLoss = false, playerTypeRefs = [], hint,
+}) {
+  const act = {
+    id, order, stage, renderer: "player_read_classify",
+    estimatedSeconds: 45,
+    accessibilityText: a11y,
+    acceptedGrades: ACC,
+    lifeLossEligible: lifeLoss,
+    objectives,
+    prompt,
+    choices,
+  };
+  if (playerTypeRefs.length) act.playerTypeRefs = playerTypeRefs;
+  if (hint) {
+    act.coachMedia = [{id: `${id}-hint`, kind: "hint", text: hint}];
+  }
+  return act;
 }
 
 /** @returns {object} Section 1 — Never Played */

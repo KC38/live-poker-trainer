@@ -7,8 +7,15 @@ import {
   buildSectionOne,
   buildSectionTwo,
   dialogue,
-  SECTION_TWO_EXIT_LESSON,
 } from './wave_one_foundations.mjs';
+import {
+  MEET_CALLING_STATION,
+  MEET_MANIAC,
+  MEET_NIT,
+  SECTION_FOUR_EXIT_LESSON,
+  buildSectionFour,
+  buildSectionThree,
+} from './wave_two_live_competence.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const outPath = resolve(__dirname, '../../content/course/v2/course.json');
@@ -51,17 +58,17 @@ const course = {
   playerTypes: [
     {
       id: "calling_station", label: "Calling Station",
-      introducedByLessonId: "lesson-04-01-01-meet-calling-station",
+      introducedByLessonId: MEET_CALLING_STATION,
       summary: "Calls too often and rarely folds to pressure.",
     },
     {
       id: "nit", label: "Nit",
-      introducedByLessonId: "lesson-04-01-02-meet-nit",
+      introducedByLessonId: MEET_NIT,
       summary: "Plays very few hands and overfolds to aggression.",
     },
     {
       id: "maniac", label: "Maniac",
-      introducedByLessonId: "lesson-04-01-03-meet-maniac",
+      introducedByLessonId: MEET_MANIAC,
       summary: "Raises and barrels far too wide.",
     },
     {
@@ -78,108 +85,10 @@ const course = {
   sections: [
     buildSectionOne(),
     buildSectionTwo(),
+    buildSectionThree(),
+    buildSectionFour(),
   ],
 };
-
-course.sections.push(stubSection({
-  id: "sec-03-first-casino", order: 3, title: "First Casino Sessions",
-  summary: "Reach the river with a plan and avoid beginner leaks.",
-  band: "first_casino",
-  unitId: "unit-03-01-table-read-stub",
-  lessonId: "lesson-03-01-01-table-read-stub",
-  prereq: SECTION_TWO_EXIT_LESSON,
-  remediation: SECTION_TWO_EXIT_LESSON,
-  objective: "Track pot and stacks",
-  line: "Pot, stacks, button, action. Read those first.",
-}));
-
-course.sections.push({
-  id: "sec-04-regular-live", order: 4, title: "Regular Live Cash Player",
-  summary: "Build ranges, recognize opponents, and make deliberate exploits.",
-  experienceBand: "regular_live",
-  units: [{
-    id: "unit-04-01-player-types-intro", order: 1, title: "Core player types",
-    summary: "Introduce Calling Station, Nit, and Maniac.",
-    lessons: [
-      {
-        id: "lesson-04-01-01-meet-calling-station", order: 1,
-        title: "Meet the Calling Station",
-        summary: "Introduce the Calling Station label from observed call frequency.",
-        objectives: ["Introduce Calling Station"],
-        prerequisites: ["lesson-03-01-01-table-read-stub"],
-        remediationLessonIds: ["lesson-03-01-01-table-read-stub"],
-        estimatedMinutes: 6, difficultyBand: 3,
-        playerTypeRefs: ["calling_station"],
-        introducesPlayerTypes: ["calling_station"],
-        activities: [
-          dialogue(
-            "act-04-01-01-explain-station", 1,
-            "They call and call. Value thin; bluff less.",
-            {playerTypeRefs: ["calling_station"]},
-          ),
-          {
-            id: "act-04-01-01-classify-station", order: 2, stage: "guided",
-            renderer: "player_read_classify",
-            estimatedSeconds: 40,
-            accessibilityText: "Classify a seat that calls three streets with second pair.",
-            acceptedGrades: ACC, lifeLossEligible: false,
-            playerTypeRefs: ["calling_station"],
-            prompt: "This seat called three streets with second pair. Best label?",
-            choices: [
-              {
-                id: "pt-station", label: "Calling Station",
-                grading: {
-                  grade: "recommended",
-                  feedback: "Sticky calls are the Calling Station tell.",
-                },
-              },
-              {
-                id: "pt-nit", label: "Nit",
-                grading: {
-                  grade: "clear_mistake",
-                  feedback: "Nits fold too much; this seat calls too much.",
-                  betterChoiceId: "pt-station",
-                },
-              },
-            ],
-          },
-        ],
-      },
-      {
-        id: "lesson-04-01-02-meet-nit", order: 2, title: "Meet the Nit",
-        summary: "Introduce the Nit label from tight fold frequency.",
-        objectives: ["Introduce Nit"],
-        prerequisites: ["lesson-04-01-01-meet-calling-station"],
-        remediationLessonIds: ["lesson-04-01-01-meet-calling-station"],
-        estimatedMinutes: 6, difficultyBand: 3,
-        playerTypeRefs: ["nit"], introducesPlayerTypes: ["nit"],
-        activities: [
-          dialogue(
-            "act-04-01-02-explain-nit", 1,
-            "Tiny range. Steal their blinds; respect their raises.",
-            {playerTypeRefs: ["nit"]},
-          ),
-        ],
-      },
-      {
-        id: "lesson-04-01-03-meet-maniac", order: 3, title: "Meet the Maniac",
-        summary: "Introduce the Maniac label from reckless aggression.",
-        objectives: ["Introduce Maniac"],
-        prerequisites: ["lesson-04-01-02-meet-nit"],
-        remediationLessonIds: ["lesson-04-01-02-meet-nit"],
-        estimatedMinutes: 6, difficultyBand: 3,
-        playerTypeRefs: ["maniac"], introducesPlayerTypes: ["maniac"],
-        activities: [
-          dialogue(
-            "act-04-01-03-explain-maniac", 1,
-            "They blast. Tighten up and let them hang themselves.",
-            {playerTypeRefs: ["maniac"]},
-          ),
-        ],
-      },
-    ],
-  }],
-});
 
 course.sections.push(stubSection({
   id: "sec-05-winning-12", order: 5, title: "Winning 1/2",
@@ -187,8 +96,8 @@ course.sections.push(stubSection({
   band: "winning_12",
   unitId: "unit-05-01-value-stub",
   lessonId: "lesson-05-01-01-value-stub",
-  prereq: "lesson-04-01-03-meet-maniac",
-  remediation: "lesson-04-01-01-meet-calling-station",
+  prereq: SECTION_FOUR_EXIT_LESSON,
+  remediation: MEET_CALLING_STATION,
   objective: "Choose thin value spots",
   line: "Against stations, bet thinner for value.",
   playerTypeRefs: ["calling_station"],

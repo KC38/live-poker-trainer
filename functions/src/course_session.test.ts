@@ -263,5 +263,11 @@ describe("placement and live unlock helpers", () => {
     const first = findLesson("lesson-01-01-01-your-two-cards")!;
     expect(lessonGrantsLiveTrainingEntitlement(first)).toBe(false);
     expect(LIVE_UNLOCK_SECTION_ID).toBe("sec-04-regular-live");
+    const sec3Jump = findLesson("lesson-03-08-02-section-three-jump-test")!;
+    expect(lessonRequiresPlacementFlag(sec3Jump.lesson)).toBe(true);
+    expect(lessonGrantsLiveTrainingEntitlement(sec3Jump)).toBe(false);
+    const sec4Jump = findLesson("lesson-04-10-02-section-four-jump-test")!;
+    expect(lessonRequiresPlacementFlag(sec4Jump.lesson)).toBe(true);
+    expect(lessonGrantsLiveTrainingEntitlement(sec4Jump)).toBe(true);
   });
 });
