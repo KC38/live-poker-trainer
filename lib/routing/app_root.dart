@@ -82,8 +82,14 @@ AppRootDestination resolveAppRoot({
   if (anonymous) {
     if (!flagsReady) return AppRootDestination.loading;
     if (!courseOn) return AppRootDestination.auth;
-    if (onboarding.pendingSaveProgress || onboarding.firstLessonCompleted) {
+    // Soft account CTA after the first lesson — dismissible so guests can keep
+    // learning on Home without linking yet.
+    if (onboarding.pendingSaveProgress) {
       return AppRootDestination.saveProgress;
+    }
+    if (onboarding.step == OnboardingStep.done ||
+        onboarding.firstLessonCompleted) {
+      return AppRootDestination.shell;
     }
     if (!guestEntry) return AppRootDestination.auth;
     return AppRootDestination.guestCourse;
