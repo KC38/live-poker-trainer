@@ -1,5 +1,20 @@
 # Plan 10 — Course and Live Training Bridge
 
+**Status: Done**
+
+- Merged: https://github.com/KC38/live-poker-trainer/pull/188
+  (`2af3de2`) on `main`
+- Cloud Functions deploy: completed from `origin/main` at `2af3de2`
+  (`getLiveAccess` created; `startLiveHand`, `submitLiveAction`,
+  `resumeLiveHand`, `undoLiveAction`, and `getCourseState` updated)
+- CI: `course-contract` passed on PR #188
+  (https://github.com/KC38/live-poker-trainer/actions/runs/35588907459)
+- Simulator: hot-restarted attached Flutter sessions after merge
+- Bridge: course-v1 warm-ups, curated hand labs, and Section 7 calibration
+  stay off `live-v3` pools and do not write live receipts, history, or progress
+- Access: anonymous Live callables rejected; pre-cutoff accounts grandfathered;
+  Section 2 jump unlocks warm-ups; Section 4 entitlement unlocks random Live
+
 ## Objective
 
 Connect deterministic course hand labs and coached warm-ups to the mature Live
