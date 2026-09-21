@@ -235,6 +235,46 @@ void main() {
     controller.dispose();
   });
 
+  test('advanceToNextHandStep clears feedback and choice', () {
+    final activity = CourseActivity(
+      id: 'multi',
+      order: 1,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 40,
+      accessibilityText: 'multi',
+      acceptedGrades: const [SoftGrade.recommended],
+    );
+    final controller = LessonActivityController(activity: activity);
+    controller.selectChoice('open-6');
+    controller.finishSubmit(
+      SubmitCourseStepResult(
+        attemptId: 'att',
+        activityId: 'multi',
+        grade: SoftGrade.recommended,
+        feedback: 'ok',
+        accepted: true,
+        lifeLost: false,
+        livesRemaining: 3,
+        xpAwarded: 10,
+        remediationRequired: false,
+        resume: const CourseResumePointer(
+          attemptId: 'att',
+          lessonId: 'l',
+          activityId: 'multi',
+          activityIndex: 0,
+        ),
+        duplicate: false,
+      ),
+    );
+    controller.advanceToNextHandStep();
+    expect(controller.lastResult, isNull);
+    expect(controller.draft.choiceId, isNull);
+    expect(controller.draft.handStepIndex, 1);
+    expect(controller.pendingIdempotencyKey, isNull);
+    controller.dispose();
+  });
+
   test('attempt is ready to complete only after every activity is accepted', () {
     const attemptOnLast = CourseAttemptSnapshot(
       attemptId: 'att',

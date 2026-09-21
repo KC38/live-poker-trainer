@@ -14,6 +14,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_pots.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_streets.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_toy_hand.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 
@@ -82,6 +83,9 @@ enum CoachDialogueVisualKind {
 
   /// Fold-win / showdown / side-pot paths.
   winningPaths,
+
+  /// Blinds → you act → ending toy hand.
+  toyHandRun,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -116,6 +120,8 @@ class CoachDialogueVisual {
       'Tap Continue when the four streets click.',
     CoachDialogueVisualKind.winningPaths =>
       'Tap Continue when fold-win, showdown, and side pots click.',
+    CoachDialogueVisualKind.toyHandRun =>
+      'Tap Continue when blinds, your act, and the ending click.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -140,6 +146,8 @@ class CoachDialogueVisual {
       'Street timeline from preflop to river',
     CoachDialogueVisualKind.winningPaths =>
       'Fold-win, showdown, and side-pot paths',
+    CoachDialogueVisualKind.toyHandRun =>
+      'Toy hand timeline: blinds, you act, ending',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -179,6 +187,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.winningPaths,
       );
+    case 'act-01-06-01-explain-run':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.toyHandRun,
+      );
   }
 
   final blob =
@@ -187,6 +199,13 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
               '${activity.objectives.join(' ')}'
           .toLowerCase();
 
+  if (blob.contains('one short hand') ||
+      blob.contains('blinds post, you act') ||
+      blob.contains('we reach an ending')) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.toyHandRun,
+    );
+  }
   if (blob.contains('folds win pots') ||
       blob.contains('showdown compares') ||
       blob.contains('short stacks make side')) {
@@ -279,6 +298,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           const AggressiveActionsDemo(),
         CoachDialogueVisualKind.streetsTimeline => const StreetsTimelineDemo(),
         CoachDialogueVisualKind.winningPaths => const WinningPathsDemo(),
+        CoachDialogueVisualKind.toyHandRun => const ToyHandRunDemo(),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
     );

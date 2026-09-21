@@ -22,6 +22,7 @@ import {
   isLessonAttemptReadyToComplete,
   localDateString,
   parseCourseFlags,
+  shouldAdvanceActivityAfterSubmit,
   type CourseFlags,
 } from "./course_session";
 
@@ -490,6 +491,41 @@ describe("lesson completion cursor", () => {
         activityIndex: lesson.activities.length,
         acceptedCount: lesson.activities.length,
       }, lesson),
+    ).toBe(false);
+  });
+});
+
+describe("multi-step activity advance", () => {
+  const toy = findLesson("lesson-01-06-01-guided-complete-hand")!.lesson;
+  const guided = toy.activities.find((a) => a.id === "act-01-06-01-guided-steps")!;
+
+  it("stays on activity after an accepted first street", () => {
+    expect(
+      shouldAdvanceActivityAfterSubmit({
+        activity: guided,
+        choiceId: "open-6",
+        accepted: true,
+      }),
+    ).toBe(false);
+  });
+
+  it("advances after an accepted last street", () => {
+    expect(
+      shouldAdvanceActivityAfterSubmit({
+        activity: guided,
+        choiceId: "won-folds",
+        accepted: true,
+      }),
+    ).toBe(true);
+  });
+
+  it("does not advance on a rejected first street", () => {
+    expect(
+      shouldAdvanceActivityAfterSubmit({
+        activity: guided,
+        choiceId: "fold-a9",
+        accepted: false,
+      }),
     ).toBe(false);
   });
 });

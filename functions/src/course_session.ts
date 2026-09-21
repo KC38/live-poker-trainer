@@ -829,16 +829,27 @@ export async function submitCourseStepForUser(options: {
     }
     const remediationRequired = lifeLost && livesRemaining <= 0;
     const scored = activity.stage !== "explain";
-    const acceptedCount = attempt.acceptedCount + (outcome.accepted ? 1 : 0);
-    const scoredCount = attempt.scoredCount + (scored ? 1 : 0);
-    const masteryPoints = attempt.masteryPoints + outcome.masteryWeight;
-    const masteryWeight = attempt.masteryWeight + (scored ? 1 : 0);
-    const jumpTestPassed = attempt.jumpTestPassed ||
-      (activity.stage === "jump_test" && outcome.accepted);
-
     const activities = sortedActivities(located.lesson);
     const currentIndex = activities.findIndex((item) => item.id === activityId);
-    const advance = outcome.accepted || activity.stage === "explain";
+    // Multi-step hands grade each street in place; only the last street
+    // advances the activity cursor (otherwise street 2 never appears).
+    const advanceActivity = shouldAdvanceActivityAfterSubmit({
+      activity,
+      choiceId,
+      accepted: outcome.accepted,
+    });
+    // One accept per activity so multi-step streets don't trip
+    // isLessonAttemptReadyToComplete early via acceptedCount >= length.
+    const acceptedCount = attempt.acceptedCount + (advanceActivity ? 1 : 0);
+    const scoredCount = attempt.scoredCount +
+      (scored && (advanceActivity || !outcome.accepted) ? 1 : 0);
+    const masteryPoints = attempt.masteryPoints + outcome.masteryWeight;
+    const masteryWeight = attempt.masteryWeight +
+      (scored && (advanceActivity || !outcome.accepted) ? 1 : 0);
+    const jumpTestPassed = attempt.jumpTestPassed ||
+      (activity.stage === "jump_test" && advanceActivity);
+
+    const advance = advanceActivity;
     const nextIndex = advance ?
       Math.min(currentIndex + 1, activities.length - 1) :
       currentIndex;
@@ -1397,6 +1408,34 @@ function findChoiceOnActivity(
     if (match) return match;
   }
   return undefined;
+}
+
+/**
+ * Whether an accepted submit should move the lesson cursor to the next
+ * activity. Explain steps always advance. Multi-step hands stay put until the
+ * graded choice belongs to the last authored street.
+ */
+export function shouldAdvanceActivityAfterSubmit(options: {
+  activity: CourseActivity;
+  choiceId?: string | null;
+  accepted: boolean;
+}): boolean {
+  const {activity, choiceId, accepted} = options;
+  if (activity.stage === "explain") return true;
+  if (!accepted) return false;
+  const steps = activity.handSteps;
+  if (!Array.isArray(steps) || steps.length <= 1) return true;
+  if (!choiceId) return true;
+  let stepIndex = -1;
+  for (let i = 0; i < steps.length; i++) {
+    if (steps[i]?.choices?.some((choice) => choice.id === choiceId)) {
+      stepIndex = i;
+      break;
+    }
+  }
+  // Unknown choice: keep prior advance-on-accept behavior.
+  if (stepIndex < 0) return true;
+  return stepIndex >= steps.length - 1;
 }
 
 function choiceGradingFromBank(

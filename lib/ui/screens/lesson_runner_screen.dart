@@ -224,6 +224,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       final gradedIndex = _activities.indexWhere(
         (a) => a.id == controller.activity.id,
       );
+      final advancedActivity = result.accepted &&
+          (result.resume.activityId != controller.activity.id ||
+              result.resume.activityIndex >= _activities.length);
       setState(() {
         _attempt = CourseAttemptSnapshot(
           attemptId: attempt.attemptId,
@@ -239,7 +242,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
           livesMax: attempt.livesMax,
           acceptedCount:
               attempt.acceptedCount +
-              (result.accepted && !result.duplicate ? 1 : 0),
+              (advancedActivity && !result.duplicate ? 1 : 0),
           scoredCount: attempt.scoredCount,
           stepCount: attempt.stepCount + (result.duplicate ? 0 : 1),
           jumpTestPassed: attempt.jumpTestPassed,
@@ -375,6 +378,18 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
 
     if (!result.accepted) {
       controller.clearFeedbackForRetry();
+      setState(() {});
+      return;
+    }
+
+    // Multi-step: server stays on this activity until the last street.
+    final steps = controller.activity.handSteps;
+    final stepIdx = controller.draft.handStepIndex;
+    final stayedOnActivity = result.resume.activityId == controller.activity.id;
+    if (steps.length > 1 &&
+        stepIdx < steps.length - 1 &&
+        stayedOnActivity) {
+      controller.advanceToNextHandStep();
       setState(() {});
       return;
     }
