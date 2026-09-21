@@ -1,0 +1,104 @@
+{
+  "id": "lesson-04-02-03-squeezes-and-cold-calls-check",
+  "lessonId": "lesson-04-02-03-squeezes-and-cold-calls-check",
+  "version": "1.0.0",
+  "title": "Squeezes and cold calls check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Which action is a squeeze?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Open-raising after folds"
+        },
+        {
+          "id": "b",
+          "text": "Reraising after a cutoff open and a button call"
+        },
+        {
+          "id": "c",
+          "text": "Calling one open on the button"
+        },
+        {
+          "id": "d",
+          "text": "Folding the small blind"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "Open plus caller plus your raise is the squeeze."
+    },
+    {
+      "id": "q2",
+      "prompt": "A cold-call wants which ingredient most?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Position, and a hand that makes strong flops rather than one pair"
+        },
+        {
+          "id": "b",
+          "text": "The worst offsuit hand"
+        },
+        {
+          "id": "c",
+          "text": "Being first to act against an under-the-gun range"
+        },
+        {
+          "id": "d",
+          "text": "A plan to stack off ace-high"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Suited connectors and small pairs realize better in position than dominated offsuit hands do."
+    },
+    {
+      "id": "q3",
+      "prompt": "Big blind, UTG open, two calls, you hold KK. Folding is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Standard"
+        },
+        {
+          "id": "b",
+          "text": "Required multiway"
+        },
+        {
+          "id": "c",
+          "text": "A large mistake. Squeeze."
+        },
+        {
+          "id": "d",
+          "text": "The only way to trap"
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "Kings raise for value even multiway. Flatting lets the field see a cheap flop."
+    },
+    {
+      "id": "q4",
+      "prompt": "Why is a squeeze sized larger than a heads-up 3-bet?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The rules require an all-in"
+        },
+        {
+          "id": "b",
+          "text": "Callers remove the dead money"
+        },
+        {
+          "id": "c",
+          "text": "Smaller raises fold more players"
+        },
+        {
+          "id": "d",
+          "text": "The caller\u2019s chips are already in, and you need more folds"
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "Start from your 3-bet size and add size for each caller."
+    }
+  ]
+}

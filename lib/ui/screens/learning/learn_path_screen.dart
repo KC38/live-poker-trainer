@@ -1,4 +1,4 @@
-/// Learn tab — Sections 0–2 path, streak, and Table Ready progress.
+/// Learn tab — Sections 0–4, streak, Table Ready, and preflop progress.
 library;
 
 import 'package:flutter/material.dart';
@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/curriculum/curriculum_models.dart';
 import 'package:live_poker_trainer/models/curriculum/learning_snapshot.dart';
+import 'package:live_poker_trainer/models/curriculum/path_progress.dart';
 import 'package:live_poker_trainer/providers/learning_provider.dart';
 import 'package:live_poker_trainer/ui/screens/learning/lesson_runner_screen.dart';
 import 'package:live_poker_trainer/ui/tokens/learning_tokens.dart';
@@ -62,17 +63,17 @@ class LearnPathScreen extends ConsumerWidget {
                     width: 64,
                     height: 64,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) => const SizedBox(
-                      width: 64,
-                      height: 64,
-                    ),
+                    errorBuilder:
+                        (_, _, _) => const SizedBox(width: 64, height: 64),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    snapshot.tableReadyPassed
-                        ? 'Table Ready. Keep the streak with a review.'
+                    snapshot.preflopPassed
+                        ? 'Preflop foundation is in. Review the spots you still miss.'
+                        : snapshot.tableReadyPassed
+                        ? 'Table Ready. Preflop is unlocked: opens, limpers, blinds, and reraises.'
                         : 'Meridian’s table-ready path: rules, procedure, and the math under live cash.',
                     style: GoogleFonts.manrope(
                       color: AppColors.slate,
@@ -86,7 +87,8 @@ class LearnPathScreen extends ConsumerWidget {
             const SizedBox(height: 8),
             Text(
               'XP ${snapshot.xp} · Streak ${snapshot.streak} · '
-              'Table Ready ${snapshot.tableReadyCompleted}/${snapshot.tableReadyTotal}',
+              'Table Ready ${snapshot.tableReadyCompleted}/${snapshot.tableReadyTotal} · '
+              'Preflop ${snapshot.preflopCompleted}/${snapshot.preflopTotal}',
               style: GoogleFonts.manrope(
                 color: AppColors.gold,
                 fontSize: 13,
@@ -105,49 +107,59 @@ class LearnPathScreen extends ConsumerWidget {
             const SizedBox(height: 12),
             Expanded(
               child: catalogAsync.when(
-                loading: () => const Center(
-                  child: CircularProgressIndicator(color: AppColors.gold),
-                ),
-                error: (error, _) => Text(
-                  'Catalog unavailable.\n$error',
-                  style: GoogleFonts.manrope(color: AppColors.danger),
-                ),
-                data: (catalog) => ListView(
-                  children: [
-                    for (final section in catalog.sections.where(
-                      (section) => section.order <= 2,
-                    )) ...[
-                      Text(
-                        section.title,
-                        style: GoogleFonts.manrope(
-                          color: AppColors.cream,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      for (final unit in section.units) ...[
-                        Text(
-                          unit.title,
-                          style: GoogleFonts.manrope(
-                            color: AppColors.slate,
-                            fontSize: 13,
+                loading:
+                    () => const Center(
+                      child: CircularProgressIndicator(color: AppColors.gold),
+                    ),
+                error:
+                    (error, _) => Text(
+                      'Catalog unavailable.\n$error',
+                      style: GoogleFonts.manrope(color: AppColors.danger),
+                    ),
+                data:
+                    (catalog) => ListView(
+                      children: [
+                        for (final section in catalog.sections.where(
+                          (section) =>
+                              section.order <= kVisiblePathMaxSectionOrder,
+                        )) ...[
+                          Text(
+                            section.title,
+                            style: GoogleFonts.manrope(
+                              color: AppColors.cream,
+                              fontSize: 17,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 6),
-                        for (final lesson in unit.lessons)
-                          _LessonTile(
-                            lesson: lesson,
-                            unlocked: _isUnlocked(catalog, snapshot, lesson.id),
-                            completed: snapshot.completedLessonIds
-                                .contains(lesson.id),
-                            onOpen: () => _openLesson(context, ref, lesson.id),
-                          ),
-                        const SizedBox(height: 8),
+                          const SizedBox(height: 8),
+                          for (final unit in section.units) ...[
+                            Text(
+                              unit.title,
+                              style: GoogleFonts.manrope(
+                                color: AppColors.slate,
+                                fontSize: 13,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            for (final lesson in unit.lessons)
+                              _LessonTile(
+                                lesson: lesson,
+                                unlocked: isPathLessonUnlocked(
+                                  catalog: catalog,
+                                  snapshot: snapshot,
+                                  lessonId: lesson.id,
+                                ),
+                                completed: snapshot.completedLessonIds.contains(
+                                  lesson.id,
+                                ),
+                                onOpen:
+                                    () => _openLesson(context, ref, lesson.id),
+                              ),
+                            const SizedBox(height: 8),
+                          ],
+                        ],
                       ],
-                    ],
-                  ],
-                ),
+                    ),
               ),
             ),
           ],
@@ -155,24 +167,6 @@ class LearnPathScreen extends ConsumerWidget {
       ),
     );
   }
-}
-
-bool _isUnlocked(
-  CurriculumCatalog catalog,
-  LearningSnapshot snapshot,
-  String lessonId,
-) {
-  final ordered = <String>[];
-  for (final section in catalog.sections.where((section) => section.order <= 2)) {
-    for (final unit in section.units) {
-      for (final lesson in unit.lessons) {
-        ordered.add(lesson.id);
-      }
-    }
-  }
-  final index = ordered.indexOf(lessonId);
-  if (index <= 0) return index == 0;
-  return snapshot.completedLessonIds.contains(ordered[index - 1]);
 }
 
 class _LessonTile extends StatelessWidget {
@@ -190,9 +184,10 @@ class _LessonTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final label = completed
-        ? 'Done'
-        : unlocked
+    final label =
+        completed
+            ? 'Done'
+            : unlocked
             ? 'Start'
             : 'Locked';
     return Padding(

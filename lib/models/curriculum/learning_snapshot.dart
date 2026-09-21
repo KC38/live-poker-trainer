@@ -11,6 +11,10 @@ class LearningSnapshot {
     required this.tableReadyCompleted,
     required this.tableReadyTotal,
     required this.tableReadyPassed,
+    required this.preflopCompleted,
+    required this.preflopTotal,
+    required this.preflopPassed,
+    required this.masteryByObjectiveId,
   });
 
   /// Lifetime study XP.
@@ -31,6 +35,18 @@ class LearningSnapshot {
   /// Whether the Table Ready gate is passed.
   final bool tableReadyPassed;
 
+  /// Completed lessons in Sections 3–4.
+  final int preflopCompleted;
+
+  /// Lessons required for the preflop gate.
+  final int preflopTotal;
+
+  /// Whether Table Ready and the preflop gate are both passed.
+  final bool preflopPassed;
+
+  /// Best mastery by objective id, from 0 to 1.
+  final Map<String, double> masteryByObjectiveId;
+
   /// Empty progress when the callable is unavailable.
   static const empty = LearningSnapshot(
     xp: 0,
@@ -39,16 +55,28 @@ class LearningSnapshot {
     tableReadyCompleted: 0,
     tableReadyTotal: 39,
     tableReadyPassed: false,
+    preflopCompleted: 0,
+    preflopTotal: 27,
+    preflopPassed: false,
+    masteryByObjectiveId: {},
   );
 
   /// Parses a `getLearningState` response.
   factory LearningSnapshot.fromJson(Map<String, dynamic> json) {
     final progress = json['progress'];
     final tableReady = json['tableReady'];
+    final preflop = json['preflop'];
     final completed = <String>{};
     if (progress is Map && progress['completedLessonIds'] is List) {
       for (final id in progress['completedLessonIds'] as List) {
         completed.add(id.toString());
+      }
+    }
+    final mastery = <String, double>{};
+    if (progress is Map && progress['masteryByObjectiveId'] is Map) {
+      for (final entry in (progress['masteryByObjectiveId'] as Map).entries) {
+        final value = entry.value;
+        if (value is num) mastery[entry.key.toString()] = value.toDouble();
       }
     }
     int asInt(Object? value) => value is num ? value.toInt() : 0;
@@ -60,6 +88,10 @@ class LearningSnapshot {
           tableReady is Map ? asInt(tableReady['completedCount']) : 0,
       tableReadyTotal: tableReady is Map ? asInt(tableReady['totalCount']) : 39,
       tableReadyPassed: tableReady is Map && tableReady['passed'] == true,
+      preflopCompleted: preflop is Map ? asInt(preflop['completedCount']) : 0,
+      preflopTotal: preflop is Map ? asInt(preflop['totalCount']) : 27,
+      preflopPassed: preflop is Map && preflop['passed'] == true,
+      masteryByObjectiveId: Map.unmodifiable(mastery),
     );
   }
 }

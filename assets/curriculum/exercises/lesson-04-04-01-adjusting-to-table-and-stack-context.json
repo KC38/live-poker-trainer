@@ -1,0 +1,104 @@
+{
+  "id": "lesson-04-04-01-adjusting-to-table-and-stack-context",
+  "lessonId": "lesson-04-04-01-adjusting-to-table-and-stack-context",
+  "version": "1.0.0",
+  "title": "Adjusting to table and stack context",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Stacks are 200bb instead of 100bb. Which hands gain?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Suited connectors and suited aces that can make strong hands"
+        },
+        {
+          "id": "b",
+          "text": "Dominated offsuit broadways that make one pair"
+        },
+        {
+          "id": "c",
+          "text": "72o"
+        },
+        {
+          "id": "d",
+          "text": "Nothing. Depth does not change preflop."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Deeper stacks pay implied odds for suited and connected hands and punish one-pair domination."
+    },
+    {
+      "id": "q2",
+      "prompt": "Stacks are 30bb. Which adjustment fits?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Call more suited connectors because implied odds increased"
+        },
+        {
+          "id": "b",
+          "text": "Prefer hands that are ahead now. Speculative hands lose implied odds."
+        },
+        {
+          "id": "c",
+          "text": "Limp every pair"
+        },
+        {
+          "id": "d",
+          "text": "Ignore position"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "At 30bb you cannot win a huge pot when you flop a set, and you are committed more often with one pair."
+    },
+    {
+      "id": "q3",
+      "prompt": "A tight table open-folds too much. A sound exploit is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Open only AA"
+        },
+        {
+          "id": "b",
+          "text": "Stop stealing"
+        },
+        {
+          "id": "c",
+          "text": "Open wider in late position and fold when they play back"
+        },
+        {
+          "id": "d",
+          "text": "All-in every button"
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "Steal more against folders. Give up when a tight player 3-bets, because their continue is strong."
+    },
+    {
+      "id": "q4",
+      "prompt": "A live straddle is posted by the under-the-gun seat. This trainer does not deal straddles yet. Conceptually, you should\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Ignore it. A straddle is the same as no blind."
+        },
+        {
+          "id": "b",
+          "text": "Treat the straddler as an early-position open."
+        },
+        {
+          "id": "c",
+          "text": "Fold for the rest of the orbit by rule."
+        },
+        {
+          "id": "d",
+          "text": "Treat the straddle as a bigger big blind. The first voluntary actor sits to the left of the straddle."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "A straddle changes who is in the blinds. Do not play a 9-handed UTG chart from the seat that now acts after the straddle."
+    }
+  ]
+}

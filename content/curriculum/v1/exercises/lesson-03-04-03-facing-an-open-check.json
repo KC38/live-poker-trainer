@@ -1,0 +1,104 @@
+{
+  "id": "lesson-03-04-03-facing-an-open-check",
+  "lessonId": "lesson-03-04-03-facing-an-open-check",
+  "version": "1.0.0",
+  "title": "Facing an open check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Against a tighter early open, your continuing range should be\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Wider than against a button open"
+        },
+        {
+          "id": "b",
+          "text": "Tighter than against a button open"
+        },
+        {
+          "id": "c",
+          "text": "Every suited hand"
+        },
+        {
+          "id": "d",
+          "text": "Only the blinds are allowed to continue"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "An early range is stronger, so you continue fewer hands than against a steal."
+    },
+    {
+      "id": "q2",
+      "prompt": "Which spot is the best 3-bet, not a fold?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Button versus a cutoff open, holding AK"
+        },
+        {
+          "id": "b",
+          "text": "UTG+1 versus an UTG open, holding 96o"
+        },
+        {
+          "id": "c",
+          "text": "Big blind versus an UTG open, holding 72o"
+        },
+        {
+          "id": "d",
+          "text": "Any hand, because 3-bets cannot be value"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "AK is a value 3-bet against a late open. The trash hands fold."
+    },
+    {
+      "id": "q3",
+      "prompt": "You called an open in position with 76s and completely missed the flop. Default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Stack off because you called preflop"
+        },
+        {
+          "id": "b",
+          "text": "Check-raise every turn"
+        },
+        {
+          "id": "c",
+          "text": "Give up the pot unless you have a real reason to continue"
+        },
+        {
+          "id": "d",
+          "text": "The preflop call obligates you to see the river"
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "A preflop continue is not a promise to put in 100bb with no pair and no draw."
+    },
+    {
+      "id": "q4",
+      "prompt": "Cutoff opens to 3bb. You are on the button with AKo. Folding is wrong because\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The button must call every open"
+        },
+        {
+          "id": "b",
+          "text": "AKo cannot be 3-bet"
+        },
+        {
+          "id": "c",
+          "text": "Position makes folding illegal"
+        },
+        {
+          "id": "d",
+          "text": "AKo is ahead of a cutoff open and should call or 3-bet"
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "This is a standard value continue, usually a 3-bet."
+    }
+  ]
+}

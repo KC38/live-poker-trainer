@@ -1,0 +1,104 @@
+{
+  "id": "lesson-04-01-03-3-bet-construction-check",
+  "lessonId": "lesson-04-01-03-3-bet-construction-check",
+  "version": "1.0.0",
+  "title": "3-bet construction check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Cutoff opens, button holds AK. The 3-bet is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Value"
+        },
+        {
+          "id": "b",
+          "text": "A fold"
+        },
+        {
+          "id": "c",
+          "text": "A pure bluff with no showdown value"
+        },
+        {
+          "id": "d",
+          "text": "Illegal in position"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "AK is ahead of a cutoff open and of many calls. That is a value 3-bet."
+    },
+    {
+      "id": "q2",
+      "prompt": "You are in the small blind and 3-bet to the same chips you would use on the button. The usual fix is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "3-bet smaller out of position"
+        },
+        {
+          "id": "b",
+          "text": "3-bet larger out of position, about 4\u00d7 the open rather than 3\u00d7"
+        },
+        {
+          "id": "c",
+          "text": "Never 3-bet from the small blind"
+        },
+        {
+          "id": "d",
+          "text": "Only limp"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "Out of position you want more folds and a bigger pot when called, so the 3-bet is larger."
+    },
+    {
+      "id": "q3",
+      "prompt": "A value 3-bet and a bluff 3-bet differ because\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Bluffs always go all-in and value always limps"
+        },
+        {
+          "id": "b",
+          "text": "Value hands fold to an open"
+        },
+        {
+          "id": "c",
+          "text": "Value continues against a 4-bet more often; bluffs with blockers usually fold"
+        },
+        {
+          "id": "d",
+          "text": "There is no difference"
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "QQ continues versus many 4-bets. A5s usually does not."
+    },
+    {
+      "id": "q4",
+      "prompt": "Against a very loose button opener, a sound adjustment is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold AK"
+        },
+        {
+          "id": "b",
+          "text": "3-bet only AA"
+        },
+        {
+          "id": "c",
+          "text": "Stop 3-betting"
+        },
+        {
+          "id": "d",
+          "text": "Widen value 3-bets. Their open contains more dominated hands."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "Looser opens are attacked with a wider value range, not a tighter one."
+    }
+  ]
+}

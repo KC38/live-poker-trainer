@@ -960,7 +960,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-03-01-01-early-and-middle-position-opens"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-02-05-03-ranges-and-combos-check"
@@ -977,7 +979,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-03-01-02-choose-ep-mp-opens"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-03-01-01-early-and-middle-position-opens"
@@ -994,7 +998,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-03-01-03-ep-mp-opens-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-03-01-02-choose-ep-mp-opens"
@@ -1024,7 +1030,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-03-02-01-late-position-and-short-handed-opens"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-03-01-03-ep-mp-opens-check"
@@ -1041,7 +1049,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-03-02-02-open-co-btn-and-short-handed"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-03-02-01-late-position-and-short-handed-opens"
@@ -1058,7 +1068,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-03-02-03-late-position-opens-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-03-02-02-open-co-btn-and-short-handed"
@@ -1088,7 +1100,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-03-03-01-opening-over-limpers-live"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-03-02-03-late-position-opens-check"
@@ -1105,7 +1119,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-03-03-02-attack-and-isolate-limpers"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-03-03-01-opening-over-limpers-live"
@@ -1122,7 +1138,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-03-03-03-limper-opens-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-03-03-02-attack-and-isolate-limpers"
@@ -1152,7 +1170,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-03-04-01-calling-and-3-betting-basics"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-03-03-03-limper-opens-check"
@@ -1169,7 +1189,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-03-04-02-respond-to-an-open"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-03-04-01-calling-and-3-betting-basics"
@@ -1186,7 +1208,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-03-04-03-facing-an-open-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-03-04-02-respond-to-an-open"
@@ -1216,7 +1240,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-03-05-01-defending-and-playing-blinds"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-03-04-03-facing-an-open-check"
@@ -1233,7 +1259,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-03-05-02-play-from-the-blinds"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-03-05-01-defending-and-playing-blinds"
@@ -1250,7 +1278,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-03-05-03-blind-play-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-03-05-02-play-from-the-blinds"
@@ -1289,7 +1319,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-04-01-01-value-and-bluff-3-bet-ranges"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-03-05-03-blind-play-check"
@@ -1306,7 +1338,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-04-01-02-build-3-bet-ranges"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-04-01-01-value-and-bluff-3-bet-ranges"
@@ -1323,7 +1357,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-04-01-03-3-bet-construction-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-04-01-02-build-3-bet-ranges"
@@ -1353,7 +1389,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-04-02-01-squeezes-and-cold-call-criteria"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-04-01-03-3-bet-construction-check"
@@ -1370,7 +1408,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-04-02-02-squeeze-or-cold-call"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-04-02-01-squeezes-and-cold-call-criteria"
@@ -1387,7 +1427,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-04-02-03-squeezes-and-cold-calls-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-04-02-02-squeeze-or-cold-call"
@@ -1417,7 +1459,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-04-03-01-4-bet-and-preflop-all-in-trees"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-04-02-03-squeezes-and-cold-calls-check"
@@ -1434,7 +1478,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-04-03-02-navigate-4-bets-and-all-ins"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-04-03-01-4-bet-and-preflop-all-in-trees"
@@ -1451,7 +1497,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-04-03-03-4-bets-and-all-ins-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-04-03-02-navigate-4-bets-and-all-ins"
@@ -1481,7 +1529,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-04-04-01-adjusting-to-table-and-stack-context"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-04-03-03-4-bets-and-all-ins-check"
@@ -1498,7 +1548,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-04-04-02-adjust-preflop-by-context"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-04-04-01-adjusting-to-table-and-stack-context"
@@ -1515,7 +1567,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-04-04-03-contextual-adjustment-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-04-04-02-adjust-preflop-by-context"
@@ -4247,6 +4301,16 @@
       "tagSelectors": {
         "topic": [
           "preflop"
+        ],
+        "street": [
+          "preflop"
+        ],
+        "position": [
+          "utg",
+          "mp"
+        ],
+        "action": [
+          "open"
         ]
       },
       "difficulty": 2
@@ -4257,6 +4321,19 @@
       "tagSelectors": {
         "topic": [
           "preflop"
+        ],
+        "street": [
+          "preflop"
+        ],
+        "position": [
+          "co",
+          "btn"
+        ],
+        "action": [
+          "open"
+        ],
+        "playerCount": [
+          "short-handed"
         ]
       },
       "difficulty": 2
@@ -4268,6 +4345,13 @@
         "topic": [
           "preflop",
           "live"
+        ],
+        "street": [
+          "preflop"
+        ],
+        "action": [
+          "iso",
+          "open"
         ]
       },
       "difficulty": 2
@@ -4278,6 +4362,13 @@
       "tagSelectors": {
         "topic": [
           "preflop"
+        ],
+        "street": [
+          "preflop"
+        ],
+        "action": [
+          "call",
+          "3bet"
         ]
       },
       "difficulty": 2
@@ -4289,6 +4380,16 @@
         "topic": [
           "preflop",
           "blinds"
+        ],
+        "street": [
+          "preflop"
+        ],
+        "position": [
+          "sb",
+          "bb"
+        ],
+        "action": [
+          "defend"
         ]
       },
       "difficulty": 2
@@ -4300,6 +4401,12 @@
         "topic": [
           "preflop",
           "3bet"
+        ],
+        "street": [
+          "preflop"
+        ],
+        "action": [
+          "3bet"
         ]
       },
       "difficulty": 3
@@ -4310,6 +4417,13 @@
       "tagSelectors": {
         "topic": [
           "preflop"
+        ],
+        "street": [
+          "preflop"
+        ],
+        "action": [
+          "squeeze",
+          "cold-call"
         ]
       },
       "difficulty": 3
@@ -4320,6 +4434,13 @@
       "tagSelectors": {
         "topic": [
           "preflop"
+        ],
+        "street": [
+          "preflop"
+        ],
+        "action": [
+          "4bet",
+          "all-in"
         ]
       },
       "difficulty": 3
@@ -4331,6 +4452,16 @@
         "topic": [
           "preflop",
           "adjustment"
+        ],
+        "street": [
+          "preflop"
+        ],
+        "stack": [
+          "short",
+          "deep"
+        ],
+        "action": [
+          "adjust"
         ]
       },
       "difficulty": 3
@@ -4767,7 +4898,11 @@
         "obj-late-opens",
         "obj-vs-limpers",
         "obj-vs-open",
-        "obj-blind-defense"
+        "obj-blind-defense",
+        "obj-3bet-construction",
+        "obj-squeeze-coldcall",
+        "obj-4bet-allin",
+        "obj-preflop-context"
       ],
       "minDecisionSamples": 60,
       "masteryThreshold": 0.8,

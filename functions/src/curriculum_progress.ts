@@ -170,27 +170,56 @@ export interface TableReadyStatus {
   passed: boolean;
 }
 
-/** Sections 0–2 must be complete and each gate objective must clear mastery. */
-export function evaluateTableReady(
+export interface PreflopStatus {
+  gateId: "preflop";
+  completedCount: number;
+  totalCount: number;
+  missingObjectiveIds: string[];
+  passed: boolean;
+}
+
+function lessonIdsForSectionOrders(
   catalog: CurriculumCatalog,
-  progress: LearningProgressSnapshot,
-): TableReadyStatus {
-  const gate = catalog.milestoneGates.find((item) => item.id === "table-ready");
+  minOrder: number,
+  maxOrder: number,
+): string[] {
   const lessonIds: string[] = [];
   for (const section of catalog.sections) {
-    if (section.order > 2) continue;
+    if (section.order < minOrder || section.order > maxOrder) continue;
     for (const unit of section.units) {
       for (const lesson of unit.lessons) lessonIds.push(lesson.id);
     }
   }
-  const completed = new Set(progress.completedLessonIds ?? []);
+  return lessonIds;
+}
+
+function evaluateGate(options: {
+  catalog: CurriculumCatalog;
+  progress: LearningProgressSnapshot;
+  gateId: string;
+  minSectionOrder: number;
+  maxSectionOrder: number;
+}): {
+  completedCount: number;
+  totalCount: number;
+  missingObjectiveIds: string[];
+  passed: boolean;
+} {
+  const gate = options.catalog.milestoneGates.find(
+    (item) => item.id === options.gateId,
+  );
+  const lessonIds = lessonIdsForSectionOrders(
+    options.catalog,
+    options.minSectionOrder,
+    options.maxSectionOrder,
+  );
+  const completed = new Set(options.progress.completedLessonIds ?? []);
   const completedCount = lessonIds.filter((id) => completed.has(id)).length;
   const threshold = gate?.masteryThreshold ?? 0.8;
   const missingObjectiveIds = (gate?.requiredObjectiveIds ?? []).filter(
-    (id) => (progress.masteryByObjectiveId?.[id] ?? 0) < threshold,
+    (id) => (options.progress.masteryByObjectiveId?.[id] ?? 0) < threshold,
   );
   return {
-    gateId: "table-ready",
     completedCount,
     totalCount: lessonIds.length,
     missingObjectiveIds,
@@ -198,6 +227,45 @@ export function evaluateTableReady(
       lessonIds.length > 0 &&
       completedCount === lessonIds.length &&
       missingObjectiveIds.length === 0,
+  };
+}
+
+/** Sections 0–2 must be complete and each gate objective must clear mastery. */
+export function evaluateTableReady(
+  catalog: CurriculumCatalog,
+  progress: LearningProgressSnapshot,
+): TableReadyStatus {
+  return {
+    gateId: "table-ready",
+    ...evaluateGate({
+      catalog,
+      progress,
+      gateId: "table-ready",
+      minSectionOrder: 0,
+      maxSectionOrder: 2,
+    }),
+  };
+}
+
+/**
+ * Sections 3–4, the preflop objectives, and a passed Table Ready gate.
+ * Lesson progress is only the 27 preflop lessons.
+ */
+export function evaluatePreflop(
+  catalog: CurriculumCatalog,
+  progress: LearningProgressSnapshot,
+): PreflopStatus {
+  const own = evaluateGate({
+    catalog,
+    progress,
+    gateId: "preflop",
+    minSectionOrder: 3,
+    maxSectionOrder: 4,
+  });
+  return {
+    gateId: "preflop",
+    ...own,
+    passed: own.passed && evaluateTableReady(catalog, progress).passed,
   };
 }
 

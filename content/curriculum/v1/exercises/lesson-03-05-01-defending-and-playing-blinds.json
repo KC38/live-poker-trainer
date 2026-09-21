@@ -1,0 +1,104 @@
+{
+  "id": "lesson-03-05-01-defending-and-playing-blinds",
+  "lessonId": "lesson-03-05-01-defending-and-playing-blinds",
+  "version": "1.0.0",
+  "title": "Defending and playing blinds",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Why does the big blind defend more hands than the small blind against the same open?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The big blind already has 1bb in the pot and closes the action."
+        },
+        {
+          "id": "b",
+          "text": "The big blind acts first postflop."
+        },
+        {
+          "id": "c",
+          "text": "The small blind is required to call."
+        },
+        {
+          "id": "d",
+          "text": "The big blind can only fold or all-in."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "You are getting a discount and no one acts behind you preflop. You still play out of position."
+    },
+    {
+      "id": "q2",
+      "prompt": "Small blind versus a button open at 100bb. What is the preferred shape?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Call every hand that is not trash, then play out of position."
+        },
+        {
+          "id": "b",
+          "text": "Prefer 3-bet or fold over a flat."
+        },
+        {
+          "id": "c",
+          "text": "Complete every hand because you already posted."
+        },
+        {
+          "id": "d",
+          "text": "Fold AA so you can trap later."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "The small blind is the worst seat. Flatting a wide range out of position is the leak."
+    },
+    {
+      "id": "q3",
+      "prompt": "Button opens, you are the big blind with 72o and 100bb. Best action?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Call. The big blind defends 100% of hands."
+        },
+        {
+          "id": "b",
+          "text": "3-bet. Seven-deuce is a standard bluff."
+        },
+        {
+          "id": "c",
+          "text": "Fold."
+        },
+        {
+          "id": "d",
+          "text": "All-in."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "A discount is not a reason to play the worst hand. 72o still folds to a button open."
+    },
+    {
+      "id": "q4",
+      "prompt": "Button opens, you are the big blind with AJo. Folding is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Required, because jacks are weak."
+        },
+        {
+          "id": "b",
+          "text": "Required, because the big blind must fold offsuit hands."
+        },
+        {
+          "id": "c",
+          "text": "The only legal option."
+        },
+        {
+          "id": "d",
+          "text": "Too tight. Call or 3-bet."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "AJo is a standard big-blind continue against a steal, unlike against a tight UTG open."
+    }
+  ]
+}

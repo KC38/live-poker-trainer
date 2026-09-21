@@ -10,6 +10,7 @@ import {
   calendarDayInTimeZone,
   COACHING_SCORE_WEIGHTS,
   emptyLearningProgress,
+  evaluatePreflop,
   evaluateTableReady,
   scoreFromCoachingRating,
   scoreStaticAnswers,
@@ -146,5 +147,35 @@ describe("curriculum_progress", () => {
       progress.masteryByObjectiveId[objectiveId] = 0.8;
     }
     expect(evaluateTableReady(catalog, progress).passed).toBe(true);
+  });
+
+  it("does not mark preflop passed until table-ready and sections 3–4 clear", () => {
+    const catalog = getCurriculumCatalog();
+    const empty = evaluatePreflop(catalog, emptyLearningProgress());
+    expect(empty.totalCount).toBe(27);
+    expect(empty.passed).toBe(false);
+
+    const progress = emptyLearningProgress();
+    const lessonIds = (min: number, max: number) =>
+      catalog.sections
+        .filter((section) => section.order >= min && section.order <= max)
+        .flatMap((section) =>
+          section.units.flatMap((unit) => unit.lessons.map((lesson) => lesson.id)),
+        );
+    progress.completedLessonIds = lessonIds(3, 4);
+    const preflopGate = catalog.milestoneGates.find((item) => item.id === "preflop");
+    for (const objectiveId of preflopGate?.requiredObjectiveIds ?? []) {
+      progress.masteryByObjectiveId[objectiveId] = 0.8;
+    }
+    expect(evaluatePreflop(catalog, progress).passed).toBe(false);
+
+    progress.completedLessonIds = [...lessonIds(0, 4)];
+    const tableGate = catalog.milestoneGates.find((item) => item.id === "table-ready");
+    for (const objectiveId of tableGate?.requiredObjectiveIds ?? []) {
+      progress.masteryByObjectiveId[objectiveId] = 0.8;
+    }
+    expect(evaluateTableReady(catalog, progress).passed).toBe(true);
+    expect(evaluatePreflop(catalog, progress).passed).toBe(true);
+    expect(evaluatePreflop(catalog, progress).completedCount).toBe(27);
   });
 });
