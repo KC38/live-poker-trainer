@@ -28,6 +28,9 @@ describe("course catalog bank", () => {
     expect(courseBank.catalogVersion).toBe("2.0.0");
     expect(courseBank.sections[0].units).toHaveLength(6);
     expect(courseBank.sections[1].units).toHaveLength(7);
+    expect(courseBank.sections[2].units).toHaveLength(8);
+    expect(courseBank.sections[3].units).toHaveLength(10);
+    expect(courseBank.handLabsById["lab-04-10-01-btn-vs-nit"]).toBeTruthy();
   });
 
   it("matches the generated client catalog checksum and id order", () => {
@@ -98,5 +101,11 @@ describe("course catalog bank", () => {
     const jump = findLesson("lesson-01-06-02-section-one-jump");
     expect(lessonRequiresPlacementFlag(jump!.lesson)).toBe(true);
     expect(lessonGrantsLiveTrainingEntitlement(located!)).toBe(false);
+    const sec4Jump = findLesson("lesson-04-10-02-section-four-jump-test");
+    expect(sec4Jump?.section.id).toBe("sec-04-regular-live");
+    expect(lessonRequiresPlacementFlag(sec4Jump!.lesson)).toBe(true);
+    expect(lessonGrantsLiveTrainingEntitlement(sec4Jump!)).toBe(true);
+    const sec3Jump = findLesson("lesson-03-08-02-section-three-jump-test");
+    expect(lessonGrantsLiveTrainingEntitlement(sec3Jump!)).toBe(false);
   });
 });

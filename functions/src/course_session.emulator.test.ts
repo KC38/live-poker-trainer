@@ -388,4 +388,64 @@ describe("course session integration", () => {
       .get();
     expect(ledger.size).toBe(2); // step + one complete
   });
+
+  test("section 4 jump grants liveTraining entitlement", async () => {
+    await seedFlags({placementTestsEnabled: true});
+    await initializeCourseProfileForUser({
+      uid: "unlock-user",
+      raw: {clientVersion: "2.0.0"},
+      db,
+    });
+    const lessonId = "lesson-04-10-02-section-four-jump-test";
+    const started = await startCourseLessonForUser({
+      uid: "unlock-user",
+      raw: {
+        clientVersion: "2.0.0",
+        lessonId,
+        startRequestId: "start_unlock_01",
+      },
+      db,
+    });
+    const steps: Array<Record<string, unknown>> = [
+      {activityId: "act-04-10-02-jump-range", choiceId: "j4-range"},
+      {activityId: "act-04-10-02-jump-3bet", choiceId: "j4-3bet"},
+      {activityId: "act-04-10-02-jump-spr", numericValue: 4},
+      {activityId: "act-04-10-02-jump-size", choiceId: "j4-10"},
+      {activityId: "act-04-10-02-jump-station", choiceId: "j4-cs"},
+      {activityId: "act-04-10-02-jump-nit", choiceId: "j4-nit"},
+      {activityId: "act-04-10-02-jump-maniac", choiceId: "j4-man"},
+    ];
+    for (const [i, step] of steps.entries()) {
+      await submitCourseStepForUser({
+        uid: "unlock-user",
+        raw: {
+          clientVersion: "2.0.0",
+          attemptId: started.attempt.attemptId,
+          activityId: step.activityId,
+          idempotencyKey: `unlock_step_${i}`,
+          ...("choiceId" in step ? {choiceId: step.choiceId} : {}),
+          ...("numericValue" in step ? {numericValue: step.numericValue} : {}),
+        },
+        db,
+      });
+    }
+    const completed = await completeCourseLessonForUser({
+      uid: "unlock-user",
+      raw: {
+        clientVersion: "2.0.0",
+        attemptId: started.attempt.attemptId,
+        idempotencyKey: "unlock_complete_01",
+      },
+      db,
+    });
+    expect(completed.liveTrainingGranted).toBe(true);
+    const entitlement = await db
+      .doc("users/unlock-user/entitlements/liveTraining")
+      .get();
+    expect(entitlement.exists).toBe(true);
+    expect(entitlement.data()?.unrestrictedAccess).toBe(true);
+    expect(entitlement.data()?.source).toBe("section4_jump");
+    expect(entitlement.data()?.grantedByLessonId).toBe(lessonId);
+  });
+
 });

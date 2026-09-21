@@ -101,6 +101,48 @@ test("wave one sections expose full unit trees and jump tests", () => {
   }
 });
 
+
+test("wave two sections expose postflop units, types, and jump tests", () => {
+  const course = loadCourseJson(resolve(ROOT, "content/course/v2/course.json"));
+  const {errors, clientCatalog, serverBank} = validateAndGenerate(course);
+  assert.equal(errors.length, 0, errors.join("\n"));
+  const sec3 = clientCatalog.sections[2];
+  const sec4 = clientCatalog.sections[3];
+  assert.equal(sec3.id, "sec-03-first-casino");
+  assert.equal(sec4.id, "sec-04-regular-live");
+  assert.equal(sec3.units.length, 8);
+  assert.equal(sec4.units.length, 10);
+  assert.ok(
+    sec3.units.some((u) =>
+      u.lessons.some((l) => l.id === "lesson-03-08-02-section-three-jump-test"),
+    ),
+  );
+  assert.ok(
+    sec4.units.some((u) =>
+      u.lessons.some((l) => l.id === "lesson-04-10-02-section-four-jump-test"),
+    ),
+  );
+  const sec3Blob = JSON.stringify(sec3);
+  for (const label of ["Calling Station", "Nit", "Maniac", "TAG", "LAG"]) {
+    assert.equal(sec3Blob.includes(label), false, `sec3 leaked ${label}`);
+  }
+  for (const id of [
+    "lesson-04-06-02-meet-calling-station",
+    "lesson-04-07-02-meet-nit",
+    "lesson-04-08-02-meet-maniac",
+  ]) {
+    assert.ok(clientCatalog.sections.flatMap((s) =>
+      s.units.flatMap((u) => u.lessons)).some((l) => l.id === id), id);
+  }
+  assert.ok(serverBank.handLabsById["lab-04-10-01-btn-vs-nit"]);
+  assert.equal(serverBank.handLabsById["lab-04-10-01-btn-vs-nit"].tableSize, 9);
+  const jump = course.sections[3].units
+    .flatMap((u) => u.lessons)
+    .find((l) => l.id === "lesson-04-10-02-section-four-jump-test");
+  assert.ok(jump);
+  assert.ok(jump.activities.every((a) => a.stage === "jump_test"));
+});
+
 test("invalid fixtures each fail validation", () => {
   const failures = runInvalidFixtureSuite();
   assert.deepEqual(failures, []);
