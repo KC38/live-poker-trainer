@@ -35,15 +35,24 @@ class CourseService {
   static const clientVersion = liveClientVersion;
 
   /// Initializes the course profile document when missing.
+  ///
+  /// Optional onboarding fields are written only when the profile is new or
+  /// the field is still empty server-side.
   Future<void> initializeProfile({
     required String catalogVersion,
     String timezone = 'UTC',
+    String? experienceBand,
+    int? dailyGoalMinutes,
+    String? recommendedLessonId,
   }) async {
     _requireAuth();
     await _callWithRetry('initializeCourseProfile', <String, dynamic>{
       'clientVersion': clientVersion,
       'catalogVersion': catalogVersion,
       'timezone': timezone,
+      if (experienceBand != null) 'experienceBand': experienceBand,
+      if (dailyGoalMinutes != null) 'dailyGoalMinutes': dailyGoalMinutes,
+      if (recommendedLessonId != null) 'recommendedLessonId': recommendedLessonId,
     });
   }
 
@@ -112,6 +121,30 @@ class CourseService {
     return _callWithRetry('getCourseState', <String, dynamic>{
       'clientVersion': clientVersion,
       if (catalogVersion != null) 'catalogVersion': catalogVersion,
+    });
+  }
+
+  /// Issues a short-lived anonymous progress transfer receipt.
+  Future<Map<String, dynamic>> issueAnonymousProgressTransfer({
+    String? catalogVersion,
+  }) async {
+    _requireAuth();
+    return _callWithRetry('issueAnonymousProgressTransfer', <String, dynamic>{
+      'clientVersion': clientVersion,
+      if (catalogVersion != null) 'catalogVersion': catalogVersion,
+    });
+  }
+
+  /// Redeems a transfer into the current permanent account.
+  Future<Map<String, dynamic>> redeemAnonymousProgressTransfer({
+    required String receiptId,
+    required String nonce,
+  }) async {
+    _requireAuth();
+    return _callWithRetry('redeemAnonymousProgressTransfer', <String, dynamic>{
+      'clientVersion': clientVersion,
+      'receiptId': receiptId,
+      'nonce': nonce,
     });
   }
 

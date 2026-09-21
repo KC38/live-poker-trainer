@@ -26,6 +26,11 @@ import {
   submitCourseStepForUser,
 } from "./course_session";
 import {
+  cleanupExpiredCourseTransfers,
+  issueAnonymousProgressTransferForUser,
+  redeemAnonymousProgressTransferForUser,
+} from "./course_transfer";
+import {
   resumeLiveHandForUser,
   startLiveHandForUser,
   submitLiveActionForUser,
@@ -59,6 +64,7 @@ export const startLiveHand = onCall(
   },
   async (request) => {
     const uid = requireAuth(request.auth?.uid);
+    rejectAnonymousLive(request.auth);
     try {
       return await startLiveHandForUser({uid, raw: request.data});
     } catch (error) {
@@ -77,6 +83,7 @@ export const submitLiveAction = onCall(
   },
   async (request) => {
     const uid = requireAuth(request.auth?.uid);
+    rejectAnonymousLive(request.auth);
     try {
       return await submitLiveActionForUser({
         uid,
@@ -98,6 +105,7 @@ export const resumeLiveHand = onCall(
   },
   async (request) => {
     const uid = requireAuth(request.auth?.uid);
+    rejectAnonymousLive(request.auth);
     try {
       const sessionId = String(request.data?.sessionId ?? "").trim();
       const clientVersion = String(request.data?.clientVersion ?? "").trim();
@@ -123,6 +131,7 @@ export const undoLiveAction = onCall(
   },
   async (request) => {
     const uid = requireAuth(request.auth?.uid);
+    rejectAnonymousLive(request.auth);
     try {
       return await undoLiveActionForUser({uid, raw: request.data});
     } catch (error) {
@@ -241,6 +250,51 @@ export const getCourseState = onCall(
   },
 );
 
+/** Issues a short-lived transfer receipt while still anonymous. */
+export const issueAnonymousProgressTransfer = onCall(
+  {
+    region: "us-central1",
+    timeoutSeconds: 30,
+    memory: "256MiB",
+  },
+  async (request) => {
+    const uid = requireAuth(request.auth?.uid, "Sign in required for transfer.");
+    try {
+      return await issueAnonymousProgressTransferForUser({
+        uid,
+        raw: request.data,
+        isAnonymous: request.auth?.token?.firebase?.sign_in_provider ===
+          "anonymous",
+      });
+    } catch (error) {
+      throw callableError("issueAnonymousProgressTransfer", error);
+    }
+  },
+);
+
+/** Redeems a transfer into the authenticated permanent account. */
+export const redeemAnonymousProgressTransfer = onCall(
+  {
+    region: "us-central1",
+    timeoutSeconds: 60,
+    memory: "512MiB",
+  },
+  async (request) => {
+    const uid = requireAuth(request.auth?.uid, "Sign in required for transfer.");
+    try {
+      return await redeemAnonymousProgressTransferForUser({
+        uid,
+        raw: request.data,
+        isAnonymous: request.auth?.token?.firebase?.sign_in_provider ===
+          "anonymous",
+        clientEntitlementClaim: request.data?.entitlement,
+      });
+    } catch (error) {
+      throw callableError("redeemAnonymousProgressTransfer", error);
+    }
+  },
+);
+
 /** Fans one setup refill request into independent warmed-hand jobs. */
 export const refillLiveHandPool = onDocumentWritten(
   {
@@ -303,6 +357,22 @@ export const recoverLiveGenerationLeases = onSchedule(
   },
 );
 
+/** Deletes expired transfer receipts and tombstoned anonymous course data. */
+export const cleanupExpiredCourseTransfersJob = onSchedule(
+  {
+    schedule: "every 24 hours",
+    region: "us-central1",
+    timeoutSeconds: 300,
+    memory: "256MiB",
+  },
+  async () => {
+    const result = await cleanupExpiredCourseTransfers();
+    if (result.receiptsDeleted > 0 || result.profilesDeleted > 0) {
+      logger.info("cleanupExpiredCourseTransfers completed", result);
+    }
+  },
+);
+
 function requireAuth(
   uid: string | undefined,
   message = "Sign in required for live training.",
@@ -311,6 +381,17 @@ function requireAuth(
     throw new HttpsError("unauthenticated", message);
   }
   return uid;
+}
+
+function rejectAnonymousLive(
+  auth: {token?: {firebase?: {sign_in_provider?: string}}} | undefined,
+): void {
+  if (auth?.token?.firebase?.sign_in_provider === "anonymous") {
+    throw new HttpsError(
+      "permission-denied",
+      "Create an account before Live Training.",
+    );
+  }
 }
 
 function callableError(name: string, error: unknown): HttpsError {

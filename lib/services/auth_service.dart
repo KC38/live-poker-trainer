@@ -16,27 +16,114 @@ class AuthService {
   AuthService({
     FirebaseAuth? firebaseAuth,
     GoogleSignIn? googleSignIn,
-  })  : _auth = firebaseAuth ?? FirebaseAuth.instance,
+  })  : _authOverride = firebaseAuth,
         _google = googleSignIn ?? GoogleSignIn.instance;
 
-  final FirebaseAuth _auth;
+  final FirebaseAuth? _authOverride;
   final GoogleSignIn _google;
   Future<void>? _googleInit;
+
+  FirebaseAuth get _auth => _authOverride ?? FirebaseAuth.instance;
 
   /// Auth state changes (null when signed out).
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
   /// Current Firebase user, or null.
-  User? get currentUser => _auth.currentUser;
+  User? get currentUser {
+    try {
+      return _auth.currentUser;
+    } catch (_) {
+      return null;
+    }
+  }
 
   /// Current uid, or null when signed out.
-  String? get currentUid => _auth.currentUser?.uid;
+  String? get currentUid => currentUser?.uid;
+
+  /// Whether the current user is an anonymous guest.
+  bool get isAnonymous => currentUser?.isAnonymous == true;
 
   Future<void> _ensureGoogleInitialized() {
     return _googleInit ??= _google.initialize(
       clientId: kIsWeb ? kGoogleServerClientId : null,
       serverClientId: kGoogleServerClientId,
     );
+  }
+
+  /// Signs in anonymously for guest course attempts (transparent UID).
+  Future<User> signInAnonymously() async {
+    final cred = await _auth.signInAnonymously();
+    final user = cred.user;
+    if (user == null) {
+      throw FirebaseAuthException(
+        code: 'user-null',
+        message: 'Anonymous sign-in succeeded but no user was returned.',
+      );
+    }
+    return user;
+  }
+
+  /// Links email/password to the current anonymous user (same UID).
+  Future<User> linkWithEmail({
+    required String email,
+    required String password,
+    String? displayName,
+  }) async {
+    final user = _auth.currentUser;
+    if (user == null || !user.isAnonymous) {
+      throw FirebaseAuthException(
+        code: 'not-anonymous',
+        message: 'Email linking requires an anonymous session.',
+      );
+    }
+    final credential = EmailAuthProvider.credential(
+      email: email.trim(),
+      password: password,
+    );
+    final cred = await user.linkWithCredential(credential);
+    final linked = cred.user;
+    if (linked == null) {
+      throw FirebaseAuthException(
+        code: 'user-null',
+        message: 'Linking succeeded but no user was returned.',
+      );
+    }
+    final name = displayName?.trim();
+    if (name != null && name.isNotEmpty) {
+      await linked.updateDisplayName(name);
+      await linked.reload();
+    }
+    return _auth.currentUser ?? linked;
+  }
+
+  /// Links Google to the current anonymous user (same UID).
+  Future<User> linkWithGoogle() async {
+    final user = _auth.currentUser;
+    if (user == null || !user.isAnonymous) {
+      throw FirebaseAuthException(
+        code: 'not-anonymous',
+        message: 'Google linking requires an anonymous session.',
+      );
+    }
+    await _ensureGoogleInitialized();
+    final account = await _google.authenticate();
+    final idToken = account.authentication.idToken;
+    if (idToken == null || idToken.isEmpty) {
+      throw FirebaseAuthException(
+        code: 'missing-id-token',
+        message: 'Google Sign-In did not return an ID token.',
+      );
+    }
+    final credential = GoogleAuthProvider.credential(idToken: idToken);
+    final cred = await user.linkWithCredential(credential);
+    final linked = cred.user;
+    if (linked == null) {
+      throw FirebaseAuthException(
+        code: 'user-null',
+        message: 'Google linking succeeded but no user was returned.',
+      );
+    }
+    return linked;
   }
 
   /// Registers with email + password and returns the Firebase user.

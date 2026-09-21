@@ -85,6 +85,10 @@ export interface CourseProfile {
   completedLessonIds: string[];
   currentLessonId: string | null;
   resume: CourseResumePointer | null;
+  experienceBand?: string | null;
+  dailyGoalMinutes?: number | null;
+  recommendedLessonId?: string | null;
+  firstLessonCompletedAtMs?: number | null;
   createdAtMs?: number;
   updatedAtMs?: number;
 }
@@ -429,6 +433,11 @@ export async function initializeCourseProfileForUser(options: {
   const catalogVersion = optionalString(input.catalogVersion) ??
     courseBank.catalogVersion;
   const timezone = sanitizeTimezone(optionalString(input.timezone) ?? "UTC");
+  const experienceBand = sanitizeExperienceBand(
+    optionalString(input.experienceBand),
+  );
+  const dailyGoalMinutes = sanitizeDailyGoalMinutes(input.dailyGoalMinutes);
+  const recommendedLessonId = optionalString(input.recommendedLessonId) ?? null;
   const flags = await assertCourseAvailable({
     db,
     clientVersion,
@@ -447,12 +456,46 @@ export async function initializeCourseProfileForUser(options: {
   return db.runTransaction(async (tx) => {
     const snap = await tx.get(profileRef);
     if (snap.exists) {
-      return {profile: profileFromData(snap.data()!), created: false};
+      const existing = snap.data()!;
+      if (existing.tombstoned === true) {
+        throw new HttpsError(
+          "failed-precondition",
+          "This guest progress was transferred and can no longer be used.",
+        );
+      }
+      const patch: DocumentData = {
+        updatedAt: FieldValue.serverTimestamp(),
+        updatedAtMs: nowMs,
+      };
+      let changed = false;
+      if (experienceBand && !optionalString(existing.experienceBand)) {
+        patch.experienceBand = experienceBand;
+        changed = true;
+      }
+      if (
+        dailyGoalMinutes != null &&
+        !Number.isFinite(Number(existing.dailyGoalMinutes))
+      ) {
+        patch.dailyGoalMinutes = dailyGoalMinutes;
+        changed = true;
+      }
+      if (recommendedLessonId && !optionalString(existing.recommendedLessonId)) {
+        patch.recommendedLessonId = recommendedLessonId;
+        changed = true;
+      }
+      if (changed) tx.set(profileRef, patch, {merge: true});
+      return {
+        profile: profileFromData({...existing, ...patch}),
+        created: false,
+      };
     }
     const profile = emptyProfile({
       catalogVersion: flags.catalogVersion,
       timezone,
       nowMs,
+      experienceBand,
+      dailyGoalMinutes,
+      recommendedLessonId,
     });
     tx.set(profileRef, {
       ...profileToFirestore(profile),
@@ -519,6 +562,27 @@ export async function startCourseLessonForUser(options: {
       tx.get(requestRef),
       tx.get(profileRef),
     ]);
+    if (profileSnap.exists && profileSnap.data()?.tombstoned === true) {
+      throw new HttpsError(
+        "failed-precondition",
+        "This guest progress was transferred and can no longer be used.",
+      );
+    }
+    // Default policy: account required before lesson two for anonymous guests.
+    if (options.isAnonymous === true) {
+      const completed = Array.isArray(profileSnap.data()?.completedLessonIds) ?
+        profileSnap.data()!.completedLessonIds as string[] :
+        [];
+      const resumeData = profileSnap.data()?.resume as DocumentData | undefined;
+      const resumeLessonId = optionalString(resumeData?.lessonId);
+      const resumingSameLesson = resumeLessonId === lessonId;
+      if (completed.length >= 1 && !resumingSameLesson) {
+        throw new HttpsError(
+          "failed-precondition",
+          "Create an account to save progress before lesson two.",
+        );
+      }
+    }
     const existing = requestSnap.data();
     const resumeData = profileSnap.data()?.resume as DocumentData | undefined;
     const resumeAttemptId = optionalString(resumeData?.attemptId);
@@ -1078,6 +1142,9 @@ export async function completeCourseLessonForUser(options: {
       0 :
       acceptedAnswers / totalScored;
 
+    const firstLessonCompletedAtMs =
+      Number(profileSnap.data()?.firstLessonCompletedAtMs ?? 0) ||
+      (completedLessonIds.length === 1 ? nowMs : null);
     tx.set(profileRef, {
       lifetimeXp: FieldValue.increment(xpAwarded),
       currentStreak: streak.currentStreak,
@@ -1088,6 +1155,9 @@ export async function completeCourseLessonForUser(options: {
       currentLessonId: null,
       resume: null,
       acceptedAccuracy,
+      ...(firstLessonCompletedAtMs ?
+        {firstLessonCompletedAtMs} :
+        {}),
       updatedAt: FieldValue.serverTimestamp(),
     }, {merge: true});
 
@@ -1349,10 +1419,33 @@ function gradingRecord(
   };
 }
 
+const EXPERIENCE_BANDS = new Set([
+  "never_played",
+  "rules_known",
+  "first_casino",
+  "regular_live",
+]);
+
+const DAILY_GOAL_MINUTES = new Set([5, 10, 15, 20]);
+
+function sanitizeExperienceBand(value: string | undefined): string | null {
+  if (!value) return null;
+  return EXPERIENCE_BANDS.has(value) ? value : null;
+}
+
+function sanitizeDailyGoalMinutes(value: unknown): number | null {
+  const n = typeof value === "number" ? value : Number(value);
+  if (!Number.isFinite(n)) return null;
+  return DAILY_GOAL_MINUTES.has(n) ? n : null;
+}
+
 function emptyProfile(options: {
   catalogVersion: string;
   timezone: string;
   nowMs: number;
+  experienceBand?: string | null;
+  dailyGoalMinutes?: number | null;
+  recommendedLessonId?: string | null;
 }): CourseProfile {
   return {
     catalogVersion: options.catalogVersion,
@@ -1368,6 +1461,10 @@ function emptyProfile(options: {
     completedLessonIds: [],
     currentLessonId: null,
     resume: null,
+    experienceBand: options.experienceBand ?? null,
+    dailyGoalMinutes: options.dailyGoalMinutes ?? null,
+    recommendedLessonId: options.recommendedLessonId ?? null,
+    firstLessonCompletedAtMs: null,
     createdAtMs: options.nowMs,
     updatedAtMs: options.nowMs,
   };
@@ -1388,6 +1485,10 @@ function profileToFirestore(profile: CourseProfile): DocumentData {
     completedLessonIds: profile.completedLessonIds,
     currentLessonId: profile.currentLessonId,
     resume: profile.resume,
+    experienceBand: profile.experienceBand ?? null,
+    dailyGoalMinutes: profile.dailyGoalMinutes ?? null,
+    recommendedLessonId: profile.recommendedLessonId ?? null,
+    firstLessonCompletedAtMs: profile.firstLessonCompletedAtMs ?? null,
   };
 }
 
@@ -1418,6 +1519,13 @@ function profileFromData(data: DocumentData): CourseProfile {
         activityId: String((data.resume as DocumentData).activityId ?? ""),
         activityIndex: Number((data.resume as DocumentData).activityIndex ?? 0),
       } :
+      null,
+    experienceBand: optionalString(data.experienceBand) ?? null,
+    dailyGoalMinutes: Number.isFinite(Number(data.dailyGoalMinutes)) ?
+      Number(data.dailyGoalMinutes) :
+      null,
+    recommendedLessonId: optionalString(data.recommendedLessonId) ?? null,
+    firstLessonCompletedAtMs: optionalNumber(data.firstLessonCompletedAtMs) ??
       null,
   };
 }

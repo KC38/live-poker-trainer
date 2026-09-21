@@ -13,6 +13,15 @@ abstract final class AnalyticsScreens {
   /// Signed-out auth gate.
   static const auth = 'auth';
 
+  /// Lesson-first welcome.
+  static const welcome = 'welcome';
+
+  /// Guest onboarding steps.
+  static const onboarding = 'onboarding';
+
+  /// Post-first-lesson save-progress prompt.
+  static const saveProgress = 'save_progress';
+
   /// Home / course path.
   static const home = 'home';
 
@@ -173,6 +182,11 @@ class AnalyticsService {
   Future<void> logAnalyticsConsentChanged({required bool enabled}) async {
     // Always attempt once so opt-out itself is observable when still enabled.
     await _event('analytics_consent_changed', {'enabled': enabled ? 1 : 0});
+  }
+
+  /// Best-effort named event without free-form PII payloads.
+  Future<void> logEventSafe(String name, [Map<String, Object>? params]) async {
+    await _event(name, params);
   }
 
   Future<void> _event(String name, [Map<String, Object>? params]) async {
