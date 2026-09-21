@@ -1416,8 +1416,8 @@
                   "choices": [
                     {
                       "id": "check-free",
-                      "label": "Check",
-                      "accessibilityText": "Check",
+                      "label": "Check free",
+                      "accessibilityText": "Check free",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "No bet to match — check is available."

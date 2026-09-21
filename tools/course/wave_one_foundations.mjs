@@ -676,7 +676,7 @@ export function buildSectionOne() {
                 a11y: "Tap Check when the action is free.",
                 objectives: ["Check when no bet faces you"],
                 choices: [
-                  choice("check-free", "Check", "recommended",
+                  choice("check-free", "Check free", "recommended",
                     "No bet to match — check is available.", {action: "CHECK"}),
                   choice("call-free", "Call", "clear_mistake",
                     "Call needs a bet to match.", {action: "CALL", betterChoiceId: "check-free"}),

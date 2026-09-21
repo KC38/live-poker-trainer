@@ -465,7 +465,8 @@ class _DockButton extends StatelessWidget {
             ? 'CHECK (off)'
             : switch (action.split(' ').first) {
               'FOLD' => 'FOLD',
-              'CHECK' => 'CHECK',
+              'CHECK' =>
+                choice.label.toUpperCase() == 'CHECK' ? 'CHECK' : choice.label.toUpperCase(),
               'CALL' => choice.label.toUpperCase().startsWith('CALL')
                   ? choice.label.toUpperCase()
                   : 'CALL',

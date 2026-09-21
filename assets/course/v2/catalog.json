@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "8748572d27d103b1f99511b9dcb3d4657708c783eb9b1895127999ec2529c3d5",
+  "contentChecksum": "54c32e60926935b57fef619db804d3802fdc7329ed0cd9e8b037e0d108f8b318",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -1121,8 +1121,8 @@
                   "choices": [
                     {
                       "id": "check-free",
-                      "label": "Check",
-                      "accessibilityText": "Check",
+                      "label": "Check free",
+                      "accessibilityText": "Check free",
                       "action": "CHECK"
                     },
                     {
