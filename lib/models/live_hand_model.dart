@@ -642,6 +642,14 @@ String polishCoachCopy(String raw) {
     RegExp(r'\$?([1-9]\d*)-chip\s+pot\b', caseSensitive: false),
     (match) => '\$${match[1]}-chip pot',
   );
+  // "81 chip pot" / "81 chips pot" (batch 0347 H1).
+  text = text.replaceAllMapped(
+    RegExp(
+      r'(?<![\d$])([1-9]\d*)(?!\.\d)(?!\s*%)\s+chips?\s+pot\b',
+      caseSensitive: false,
+    ),
+    (match) => '\$${match[1]}-chip pot',
+  );
   // "120-chip effective shove" / "120-chip shove" / "69-chip call"
   // (batch 0339 H4).
   text = text.replaceAllMapped(
