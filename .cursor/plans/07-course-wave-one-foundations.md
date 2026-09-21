@@ -1,5 +1,19 @@
 # Plan 07 — Course Wave One: Foundations
 
+**Status: Done**
+
+- Merged: https://github.com/KC38/live-poker-trainer/pull/174
+  (`ecf3ba9`) on `main`
+- Cloud Functions deploy: completed from `origin/main` at `ecf3ba9`
+  (course bank regenerated with Sections 1–2 content)
+- CI: `course-contract` passed on PR #174
+  (https://github.com/KC38/live-poker-trainer/actions/runs/35582055586)
+- Simulator: hot-restarted attached Flutter sessions after merge
+- Content: Section 1 (Never Played) — 6 units / 11 lessons including jump
+  check; Section 2 (Rules Known / Home Games) — 7 units / 9 lessons
+  including full-ring checkpoint lab and jump check
+- Authoring source: `tools/course/wave_one_foundations.mjs`
+
 ## Objective
 
 Author and validate Sections 1–2 for learners who have never played or know
