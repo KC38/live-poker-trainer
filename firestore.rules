@@ -19,6 +19,18 @@ rules_version = '2';
 // users/{uid}/progress/main
 //   Functions-authored aggregates; owner-readable
 //
+// users/{uid}/learning/main
+// users/{uid}/learningAttempts/{attemptId}
+// users/{uid}/learningSkills/{objectiveId}
+// users/{uid}/learningReviews/{reviewId}
+// users/{uid}/learningAchievements/{id}
+// users/{uid}/learningXpLedger/{entryId}
+// users/{uid}/learningMergeReceipts/{receiptId}
+//   Functions-authored learning progress; owner-readable, Admin-write only
+//
+// appConfig/featureFlags
+//   Public read of boolean rollout flags; Admin-write only
+//
 // tableSetups/{setupKey}/situations/{situationId}
 //   Private server-generated pool; Admin SDK only
 // ===============================================================
@@ -183,9 +195,49 @@ service cloud.firestore {
         allow read, write: if false;
       }
 
+      match /learning/{docId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      match /learningAttempts/{attemptId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      match /learningSkills/{objectiveId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      match /learningReviews/{reviewId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      match /learningAchievements/{id} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      match /learningXpLedger/{entryId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      match /learningMergeReceipts/{receiptId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
       match /{document=**} {
         allow read, write: if false;
       }
+    }
+
+    match /appConfig/{docId} {
+      allow read: if signedIn() && docId == 'featureFlags';
+      allow write: if false;
     }
 
     match /tableSetups/{setupKey} {

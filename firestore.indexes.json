@@ -24,6 +24,30 @@
         { "fieldPath": "timesServed", "order": "ASCENDING" },
         { "fieldPath": "__name__", "order": "ASCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "learningAttempts",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "lessonId", "order": "ASCENDING" },
+        { "fieldPath": "completedAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "learningReviews",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "dueAt", "order": "ASCENDING" },
+        { "fieldPath": "objectiveId", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "learningXpLedger",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "createdAt", "order": "DESCENDING" },
+        { "fieldPath": "__name__", "order": "DESCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

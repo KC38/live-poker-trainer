@@ -1,0 +1,350 @@
+{
+  "catalogVersion": "1.0.0",
+  "minClientVersion": "2.1.0",
+  "sections": [
+    {
+      "id": "sec-00-start-safely",
+      "order": 0,
+      "title": "Start safely",
+      "summary": "Orientation for safe first sessions in live cash poker.",
+      "units": [
+        {
+          "id": "unit-00-01-cash-poker-map",
+          "order": 1,
+          "title": "Cash poker map",
+          "summary": "Cash poker map for Section 0.",
+          "objectiveIds": [
+            "obj-cash-vs-tournament"
+          ],
+          "lessons": [
+            {
+              "id": "lesson-00-01-01-cash-vs-tournaments",
+              "order": 1,
+              "title": "Cash vs tournaments",
+              "format": "concept",
+              "objectiveIds": [
+                "obj-cash-vs-tournament"
+              ],
+              "estimatedMinutes": 8,
+              "mediaIds": [],
+              "exerciseRefs": [],
+              "simulationClaims": "conceptual_only",
+              "prerequisites": [],
+              "remediationLessonIds": []
+            },
+            {
+              "id": "lesson-00-01-02-map-a-live-cash-game",
+              "order": 2,
+              "title": "Map a live cash game",
+              "format": "scenario",
+              "objectiveIds": [
+                "obj-cash-vs-tournament"
+              ],
+              "estimatedMinutes": 12,
+              "mediaIds": [],
+              "exerciseRefs": [],
+              "simulationClaims": "engine_supported",
+              "prerequisites": [
+                "lesson-00-01-01-cash-vs-tournaments"
+              ],
+              "remediationLessonIds": []
+            },
+            {
+              "id": "lesson-00-01-03-cash-poker-map-check",
+              "order": 3,
+              "title": "Cash poker map check",
+              "format": "assessment",
+              "objectiveIds": [
+                "obj-cash-vs-tournament"
+              ],
+              "estimatedMinutes": 10,
+              "mediaIds": [],
+              "exerciseRefs": [],
+              "simulationClaims": "engine_supported",
+              "prerequisites": [
+                "lesson-00-01-02-map-a-live-cash-game"
+              ],
+              "remediationLessonIds": [
+                "lesson-00-01-01-cash-vs-tournaments"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "unit-00-02-your-first-orbit",
+          "order": 2,
+          "title": "Your first orbit",
+          "summary": "Your first orbit for Section 0.",
+          "objectiveIds": [
+            "obj-table-flow"
+          ],
+          "lessons": [
+            {
+              "id": "lesson-00-02-01-table-flow-and-seating",
+              "order": 1,
+              "title": "Table flow and seating",
+              "format": "concept",
+              "objectiveIds": [
+                "obj-table-flow"
+              ],
+              "estimatedMinutes": 8,
+              "mediaIds": [],
+              "exerciseRefs": [],
+              "simulationClaims": "conceptual_only",
+              "prerequisites": [
+                "lesson-00-01-03-cash-poker-map-check"
+              ],
+              "remediationLessonIds": []
+            },
+            {
+              "id": "lesson-00-02-02-survive-your-first-orbit",
+              "order": 2,
+              "title": "Survive your first orbit",
+              "format": "scenario",
+              "objectiveIds": [
+                "obj-table-flow"
+              ],
+              "estimatedMinutes": 12,
+              "mediaIds": [],
+              "exerciseRefs": [],
+              "simulationClaims": "engine_supported",
+              "prerequisites": [
+                "lesson-00-02-01-table-flow-and-seating"
+              ],
+              "remediationLessonIds": []
+            },
+            {
+              "id": "lesson-00-02-03-first-orbit-check",
+              "order": 3,
+              "title": "First orbit check",
+              "format": "assessment",
+              "objectiveIds": [
+                "obj-table-flow"
+              ],
+              "estimatedMinutes": 10,
+              "mediaIds": [],
+              "exerciseRefs": [],
+              "simulationClaims": "engine_supported",
+              "prerequisites": [
+                "lesson-00-02-02-survive-your-first-orbit"
+              ],
+              "remediationLessonIds": [
+                "lesson-00-02-01-table-flow-and-seating"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "unit-00-03-safe-start-essentials",
+          "order": 3,
+          "title": "Safe-start essentials",
+          "summary": "Safe-start essentials for Section 0.",
+          "objectiveIds": [
+            "obj-safe-session"
+          ],
+          "lessons": [
+            {
+              "id": "lesson-00-03-01-bankroll-and-session-basics",
+              "order": 1,
+              "title": "Bankroll and session basics",
+              "format": "concept",
+              "objectiveIds": [
+                "obj-safe-session"
+              ],
+              "estimatedMinutes": 8,
+              "mediaIds": [],
+              "exerciseRefs": [],
+              "simulationClaims": "conceptual_only",
+              "prerequisites": [
+                "lesson-00-02-03-first-orbit-check"
+              ],
+              "remediationLessonIds": []
+            },
+            {
+              "id": "lesson-00-03-02-choose-a-safe-first-session",
+              "order": 2,
+              "title": "Choose a safe first session",
+              "format": "decision_drill",
+              "objectiveIds": [
+                "obj-safe-session"
+              ],
+              "estimatedMinutes": 12,
+              "mediaIds": [],
+              "exerciseRefs": [],
+              "simulationClaims": "engine_supported",
+              "prerequisites": [
+                "lesson-00-03-01-bankroll-and-session-basics"
+              ],
+              "remediationLessonIds": []
+            },
+            {
+              "id": "lesson-00-03-03-safe-start-check",
+              "order": 3,
+              "title": "Safe-start check",
+              "format": "assessment",
+              "objectiveIds": [
+                "obj-safe-session"
+              ],
+              "estimatedMinutes": 10,
+              "mediaIds": [],
+              "exerciseRefs": [],
+              "simulationClaims": "engine_supported",
+              "prerequisites": [
+                "lesson-00-03-02-choose-a-safe-first-session"
+              ],
+              "remediationLessonIds": [
+                "lesson-00-03-01-bankroll-and-session-basics"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sec-08-depth-stakes-and-variants",
+      "order": 8,
+      "title": "Depth, stakes, and variants",
+      "summary": "Depth, stakes economics, and local variants. (slim foundation subset: local variants unit only)",
+      "units": [
+        {
+          "id": "unit-08-06-local-variants",
+          "order": 6,
+          "title": "Local variants",
+          "summary": "Straddles, bomb pots, run-it-twice, and other local live variants.",
+          "objectiveIds": [
+            "obj-local-variants"
+          ],
+          "lessons": [
+            {
+              "id": "lesson-08-06-01-straddles-bomb-pots-and-run-it-twice",
+              "order": 1,
+              "title": "Straddles, bomb pots, and run-it-twice",
+              "format": "concept",
+              "objectiveIds": [
+                "obj-local-variants"
+              ],
+              "estimatedMinutes": 8,
+              "mediaIds": [],
+              "exerciseRefs": [],
+              "simulationClaims": "conceptual_only",
+              "prerequisites": [
+                "lesson-08-05-03-stakes-economics-check"
+              ],
+              "remediationLessonIds": []
+            },
+            {
+              "id": "lesson-08-06-02-navigate-straddles-and-bomb-pots",
+              "order": 2,
+              "title": "Navigate straddles and bomb pots",
+              "format": "scenario",
+              "objectiveIds": [
+                "obj-local-variants"
+              ],
+              "estimatedMinutes": 12,
+              "mediaIds": [],
+              "exerciseRefs": [],
+              "simulationClaims": "conceptual_only",
+              "prerequisites": [
+                "lesson-08-06-01-straddles-bomb-pots-and-run-it-twice"
+              ],
+              "remediationLessonIds": []
+            },
+            {
+              "id": "lesson-08-06-03-local-variants-check",
+              "order": 3,
+              "title": "Local variants check",
+              "format": "assessment",
+              "objectiveIds": [
+                "obj-local-variants"
+              ],
+              "estimatedMinutes": 10,
+              "mediaIds": [],
+              "exerciseRefs": [],
+              "simulationClaims": "conceptual_only",
+              "prerequisites": [
+                "lesson-08-06-02-navigate-straddles-and-bomb-pots"
+              ],
+              "remediationLessonIds": [
+                "lesson-08-06-01-straddles-bomb-pots-and-run-it-twice"
+              ]
+            }
+          ]
+        }
+      ],
+      "milestoneGateId": "live-environment"
+    }
+  ],
+  "objectives": [
+    {
+      "id": "obj-cash-vs-tournament",
+      "title": "Distinguish cash games from tournaments",
+      "tagSelectors": {
+        "topic": [
+          "cash",
+          "formats"
+        ]
+      },
+      "difficulty": 1
+    },
+    {
+      "id": "obj-table-flow",
+      "title": "Follow live table seating and action flow",
+      "tagSelectors": {
+        "topic": [
+          "live-procedure"
+        ]
+      },
+      "difficulty": 1
+    },
+    {
+      "id": "obj-safe-session",
+      "title": "Start sessions within safe bankroll and stop-loss rules",
+      "tagSelectors": {
+        "topic": [
+          "bankroll",
+          "safety"
+        ]
+      },
+      "difficulty": 1
+    },
+    {
+      "id": "obj-local-variants",
+      "title": "Understand straddles, bomb pots, and run-it-twice",
+      "tagSelectors": {
+        "topic": [
+          "variants"
+        ],
+        "simulation": [
+          "conceptual"
+        ]
+      },
+      "difficulty": 3
+    }
+  ],
+  "milestoneGates": [
+    {
+      "id": "table-ready",
+      "title": "Table-ready (slim)",
+      "requiredObjectiveIds": [
+        "obj-cash-vs-tournament",
+        "obj-table-flow",
+        "obj-safe-session"
+      ],
+      "minDecisionSamples": 30,
+      "masteryThreshold": 0.8,
+      "criticalMistakeCap": 2,
+      "safetyCritical": true
+    },
+    {
+      "id": "live-environment",
+      "title": "Live environment (slim)",
+      "requiredObjectiveIds": [
+        "obj-local-variants"
+      ],
+      "minDecisionSamples": 40,
+      "masteryThreshold": 0.75,
+      "criticalMistakeCap": 3,
+      "safetyCritical": false
+    }
+  ]
+}

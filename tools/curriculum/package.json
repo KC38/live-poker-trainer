@@ -1,0 +1,8 @@
+{
+  "name": "curriculum-tools",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "node ./validate_catalog.mjs"
+  }
+}
