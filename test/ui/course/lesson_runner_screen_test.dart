@@ -212,7 +212,7 @@ void main() {
     await tester.pump();
     expect(find.text('Think again'), findsOneWidget);
     expect(find.text('Try again'), findsOneWidget);
-    await tester.ensureVisible(find.text('Try again'));
+    // Sticky footer keeps Try again reachable without scrolling the sheet.
     await tester.tap(find.text('Try again'));
     await tester.pump();
     expect(find.text('Think again'), findsNothing);
@@ -265,4 +265,109 @@ void main() {
     expect(find.text('Could not start the lesson'), findsOneWidget);
     expect(find.text('Retry'), findsOneWidget);
   });
+
+  testWidgets('stale activity submit resyncs to server resume cursor', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 1200);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final stale = _StaleThenResumeCourseService(catalog);
+    await tester.pumpWidget(
+      _app(
+        LessonRunnerScreen(
+          lessonId: kFirstCourseLessonId,
+          courseService: stale,
+          startRequestId: 'start_stale',
+        ),
+        catalog: catalog,
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+    for (var i = 0; i < 40 && find.text('Continue').evaluate().isEmpty; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+
+    expect(find.text('Continue'), findsOneWidget);
+    await tester.tap(find.text('Continue'));
+    await tester.pump();
+    await tester.pump();
+    expect(find.text('Caught up to your saved progress.'), findsOneWidget);
+    // Resync lands on the guided hole-card step (server cursor).
+    expect(find.text('Tap your hole cards on the table.'), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'Check'), findsOneWidget);
+  });
+}
+
+/// First explain Continue is rejected as stale; resume points at guided.
+class _StaleThenResumeCourseService extends CourseService {
+  _StaleThenResumeCourseService(this.catalog) : super();
+
+  final CourseCatalog catalog;
+  var _startCount = 0;
+
+  List<CourseActivity> get activities =>
+      catalog.activitiesForLesson(kFirstCourseLessonId);
+
+  @override
+  Future<void> initializeProfile({
+    required String catalogVersion,
+    String timezone = 'UTC',
+    String? experienceBand,
+    int? dailyGoalMinutes,
+    String? recommendedLessonId,
+  }) async {}
+
+  @override
+  Future<StartCourseLessonResult> startLesson({
+    required String lessonId,
+    required String catalogVersion,
+    required String startRequestId,
+    String timezone = 'UTC',
+  }) async {
+    _startCount += 1;
+    final activity =
+        _startCount == 1 ? activities.first : activities[1];
+    final index = _startCount == 1 ? 0 : 1;
+    return StartCourseLessonResult(
+      attempt: CourseAttemptSnapshot(
+        attemptId: 'attempt-stale',
+        lessonId: lessonId,
+        catalogVersion: catalogVersion,
+        status: 'in_progress',
+        activityIndex: index,
+        currentActivityId: activity.id,
+        livesRemaining: 3,
+        livesMax: 3,
+        acceptedCount: index,
+        scoredCount: 0,
+        stepCount: index,
+      ),
+      resume: CourseResumePointer(
+        attemptId: 'attempt-stale',
+        lessonId: lessonId,
+        activityId: activity.id,
+        activityIndex: index,
+      ),
+      duplicate: _startCount > 1,
+    );
+  }
+
+  @override
+  Future<SubmitCourseStepResult> submitStep({
+    required String attemptId,
+    required String activityId,
+    required String idempotencyKey,
+    String? catalogVersion,
+    String? choiceId,
+    List<String>? orderedIds,
+    double? numericValue,
+  }) async {
+    throw const CourseServiceException(
+      'Stale activity. Resume the lesson and retry.',
+      code: 'aborted',
+    );
+  }
 }
