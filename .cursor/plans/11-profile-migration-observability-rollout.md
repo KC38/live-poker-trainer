@@ -4,12 +4,24 @@
 
 - Merged: https://github.com/KC38/live-poker-trainer/pull/192
   (`7c3117c`) on `main`
-- Cloud Functions deploy: completed from `origin/main` at `7c3117c`
-  (updated course and live callables; v2 `fetchSituation` / `recordProgress`
+- Acceptance fix: https://github.com/KC38/live-poker-trainer/pull/195
+  (`95fcb15`) on `main`. Signed-out clients can read `appConfig/courseFlags`,
+  and flags reload when the auth uid changes (including after anonymous
+  sign-in). `guestCourseEnabled` gates guest welcome and new anonymous
+  onboarding. `courseStartsEnabled=false` does not present a startable Home
+  path; an in-progress attempt can still finish. Malformed, failed, and
+  too-old-client reads stay fail-closed.
+- Cloud Functions deploy: completed from `origin/main` at `95fcb15`
+  (includes `completeCalibrationWarmUp`; v2 `fetchSituation` / `recordProgress`
   pool exports stay undeployed)
+- Firestore rules deploy: released from `origin/main` at `95fcb15`
+  (`appConfig/courseFlags` readable without sign-in; writes still denied)
 - CI: `course-contract` passed on PR #192
   (https://github.com/KC38/live-poker-trainer/actions/runs/35592682209)
+  and on the acceptance fix PR #195
+  (https://github.com/KC38/live-poker-trainer/actions/runs/35595600615)
 - Simulator: hot-restarted attached Flutter sessions (pids 19321 and 44612)
+  after the original ship and again after the acceptance fix
 
 ## Objective
 
