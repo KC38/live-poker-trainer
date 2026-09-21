@@ -704,6 +704,14 @@ String polishCoachCopy(String raw) {
     ),
     (match) => '${match[1]} \$${match[2]}',
   );
+  // "total pot over 1194" (batch 0342 H8).
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b(pot\s+over)\s+(?!\$)([1-9]\d{2,})(?!\.\d)(?!\s*%)\b',
+      caseSensitive: false,
+    ),
+    (match) => '${match[1]} \$${match[2]}',
+  );
   // "65%-74" percent ranges missing the trailing mark.
   text = text.replaceAllMapped(
     RegExp(r'(\d+(?:\.\d+)?%)-(\d+(?:\.\d+)?)(?!\s*%)'),
