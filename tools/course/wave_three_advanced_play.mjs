@@ -1396,12 +1396,12 @@ export function buildSectionSix() {
           lesson({
             id: L061101, order: 1,
             title: "Observe selective aggression",
-            summary: "Tag tight entry with disciplined barrels before naming TAG.",
+            summary: "Note tight entry with disciplined barrels before any label.",
             objectives: ["Note selective entry", "Note disciplined aggression", "Delay the label until samples exist"],
             prereq: L061001, remediation: L061001, minutes: 7, band: 5,
             activities: [
               dialogue("act-06-11-01-explain", 1,
-                "Before TAG: who enters tight, then barrels with a plan?",
+                "Before labels: who enters tight, then barrels with a plan? Count samples.",
                 {objectives: ["Note selective entry"]}),
               selectAct({
                 id: "act-06-11-01-guided", order: 2, stage: "guided",
@@ -1410,11 +1410,11 @@ export function buildSectionSix() {
                 objectives: ["Note selective entry"],
                 choices: [
                   choice("sel", "Selective entry with disciplined aggression", "recommended",
-                    "Evidence bundle for TAG."),
+                    "That is the evidence bundle."),
                   choice("loose", "Loose passive", "clear_mistake",
                     "Opposite.", {betterChoiceId: "sel"}),
-                  choice("label", "Scream TAG after one hand", "clear_mistake",
-                    "Need samples.", {betterChoiceId: "sel"})
+                  choice("label", "Name an archetype immediately", "clear_mistake",
+                    "Observe first — need samples.", {betterChoiceId: "sel"})
                 ],
               }),
               selectAct({
@@ -1424,7 +1424,7 @@ export function buildSectionSix() {
                 objectives: ["Note disciplined aggression"],
                 choices: [
                   choice("disc", "Disciplined give-ups — not spewy", "recommended",
-                    "Separates TAG from maniac."),
+                    "Separates planned aggression from maniac spew."),
                   choice("mania", "Identical to maniac", "clear_mistake",
                     "Maniacs continue too wide.", {betterChoiceId: "disc"})
                 ],
@@ -1443,7 +1443,7 @@ export function buildSectionSix() {
               }),
               selectAct({
                 id: "act-06-11-01-checkpoint", order: 5, stage: "checkpoint",
-                prompt: "Pre-label TAG evidence?",
+                prompt: "Best pre-label note bundle?",
                 a11y: "Tight in, aggressive with discipline.",
                 objectives: ["Delay the label until samples exist"], lifeLoss: true,
                 choices: [
@@ -1475,7 +1475,7 @@ export function buildSectionSix() {
                 playerTypeRefs: ["tag"],
                 choices: [
                   choice("tag", "TAG", "recommended",
-                    "Selective + disciplined.", {reversalRead: "If entry widens and barrels never stop, consider LAG/maniac."}),
+                    "Selective + disciplined.", {reversalRead: "If entry widens and barrels never stop, consider maniac."}),
                   choice("station", "Calling Station", "clear_mistake",
                     "Stations call; this seat raises selectively.", {betterChoiceId: "tag"})
                 ],
@@ -1502,8 +1502,8 @@ export function buildSectionSix() {
                 choices: [
                   choice("tag2", "TAG", "recommended",
                     "Fits.", {reversalRead: "Loose opens + endless barrels → not TAG."}),
-                  choice("lag2", "LAG", "clear_mistake",
-                    "LAG enters wider.", {betterChoiceId: "tag2"})
+                  choice("mania2", "Maniac", "clear_mistake",
+                    "Maniacs enter and continue far too wide.", {betterChoiceId: "tag2"})
                 ],
               }),
               selectAct({
@@ -1592,12 +1592,12 @@ export function buildSectionSix() {
           lesson({
             id: L061201, order: 1,
             title: "Observe wide sustained pressure",
-            summary: "Tag wide entry with ongoing barrels before naming LAG.",
-            objectives: ["Note wide entry", "Note sustained pressure", "Separate LAG from maniac samples"],
+            summary: "Note wide entry with ongoing barrels before any label.",
+            objectives: ["Note wide entry", "Note sustained pressure", "Separate planned pressure from maniac samples"],
             prereq: L061103, remediation: L061103, minutes: 7, band: 5,
             activities: [
               dialogue("act-06-12-01-explain", 1,
-                "Before LAG: wide entry plus pressure that still has a plan.",
+                "Before labels: wide entry plus pressure that still has a plan. Count samples.",
                 {objectives: ["Note wide entry"]}),
               selectAct({
                 id: "act-06-12-01-guided", order: 2, stage: "guided",
@@ -1606,18 +1606,20 @@ export function buildSectionSix() {
                 objectives: ["Note wide entry"],
                 choices: [
                   choice("wide", "Wide entry with sustained pressure", "recommended",
-                    "LAG evidence bundle."),
+                    "That is the evidence bundle."),
                   choice("nit", "Nit", "clear_mistake",
-                    "Opposite entry.", {betterChoiceId: "wide"})
+                    "Opposite entry.", {betterChoiceId: "wide"}),
+                  choice("label", "Name an archetype immediately", "clear_mistake",
+                    "Observe first — need samples.", {betterChoiceId: "wide"})
                 ],
               }),
               selectAct({
                 id: "act-06-12-01-scaffolded", order: 3, stage: "scaffolded",
                 prompt: "Difference brewing vs maniac?",
-                a11y: "LAG still folds sometimes; maniac rarely.",
-                objectives: ["Separate LAG from maniac samples"],
+                a11y: "This seat still folds sometimes; maniac rarely.",
+                objectives: ["Separate planned pressure from maniac samples"],
                 choices: [
-                  choice("sep", "LAG still makes some folds; maniac rarely does", "recommended",
+                  choice("sep", "Still makes some folds; maniac rarely does", "recommended",
                     "Discipline vs chaos."),
                   choice("same", "No difference ever", "clear_mistake",
                     "There is.", {betterChoiceId: "sep"})
@@ -1631,15 +1633,15 @@ export function buildSectionSix() {
                 choices: [
                   choice("wait", "Wait for more samples", "recommended",
                     "One hand is a note."),
-                  choice("now", "Label LAG immediately", "clear_mistake",
+                  choice("now", "Lock a type label immediately", "clear_mistake",
                     "Too soon.", {betterChoiceId: "wait"})
                 ],
               }),
               selectAct({
                 id: "act-06-12-01-checkpoint", order: 5, stage: "checkpoint",
-                prompt: "LAG pre-label bundle?",
+                prompt: "Best pre-label note bundle?",
                 a11y: "Wide + pressure + some discipline.",
-                objectives: ["Separate LAG from maniac samples"], lifeLoss: true,
+                objectives: ["Separate planned pressure from maniac samples"], lifeLoss: true,
                 choices: [
                   choice("bundle", "Wide entry, sustained barrels, occasional folds", "recommended",
                     "Bundle ready."),
@@ -1948,6 +1950,8 @@ export function buildSectionSeven() {
   const L071001 = "lesson-07-10-01-capstone-srp";
   const L071002 = "lesson-07-10-02-capstone-3bet";
   const L071003 = "lesson-07-10-03-capstone-multiway-deep";
+  const L071004 = "lesson-07-10-04-capstone-limped";
+  const L071005 = "lesson-07-10-05-capstone-4bet";
   const L071101 = "lesson-07-11-01-live-warmup-prep";
   const L071201 = "lesson-07-12-01-five-type-final";
 
@@ -2710,6 +2714,120 @@ export function buildSectionSeven() {
               }),
             ],
           }),
+          lesson({
+            id: L071004, order: 4,
+            title: "Capstone: limped pot",
+            summary: "Play a multiway limped pot without hints.",
+            objectives: ["Prefer nut potential limped multiway", "Avoid light multiway bluffs", "Use depth for draws carefully"],
+            prereq: L071003, remediation: L070401, minutes: 12, band: 5,
+            activities: [
+              dialogue("act-07-10-04-explain", 1,
+                "Capstone limped pot. Crowded. No hints.",
+                {objectives: ["Prefer nut potential limped multiway"]}),
+              multiStepAct({
+                id: "act-07-10-04-hand", order: 2, stage: "unguided",
+                a11y: "Four-way limp, 150bb, you hold AhKh on BTN.",
+                objectives: ["Prefer nut potential limped multiway", "Avoid light multiway bluffs", "Use depth for draws carefully"],
+                lifeLoss: true,
+                steps: [
+                  {
+                    id: "step-limp-flop", street: "flop",
+                    prompt: "Flop Kd 9c 4h. Checked to you. Action?",
+                    accessibilityText: "Value bet top pair strong kicker multiway.",
+                    choices: [
+                      choice("bet", "Bet value", "recommended",
+                        "Strong made hand; still multiway.", {action: "BET", amountBb: 8}),
+                      choice("check", "Check forever", "questionable",
+                        "Misses value.", {action: "CHECK"}),
+                      choice("jam", "Jam 150bb", "clear_mistake",
+                        "Overplay.", {action: "RAISE", amountBb: 150, betterChoiceId: "bet"}),
+                    ],
+                  },
+                  {
+                    id: "step-limp-turn", street: "turn",
+                    prompt: "Called by two. Turn 2s. Action?",
+                    accessibilityText: "Continue value or slow down with a plan.",
+                    choices: [
+                      choice("barrel", "Continue value", "recommended",
+                        "Still best often multiway.", {action: "BET", amountBb: 18}),
+                      choice("check-t", "Check", "questionable",
+                        "Allows free cards / thinner.", {action: "CHECK"}),
+                    ],
+                  },
+                  {
+                    id: "step-limp-river", street: "river",
+                    prompt: "Both call. River 8d. Action?",
+                    accessibilityText: "Thin value carefully; do not invent a bluff.",
+                    choices: [
+                      choice("value", "Bet thin value", "recommended",
+                        "Still often ahead; size down.", {action: "BET", amountBb: 22}),
+                      choice("check-r", "Check", "strong",
+                        "Also fine versus sticky crowds.", {action: "CHECK"}),
+                      choice("bluff", "Blast as a pure bluff", "clear_mistake",
+                        "Crowds call limped pots.", {action: "BET", amountBb: 80, betterChoiceId: "value"}),
+                    ],
+                  },
+                ],
+              }),
+            ],
+          }),
+          lesson({
+            id: L071005, order: 5,
+            title: "Capstone: 4-bet pot",
+            summary: "Play a 4-bet pot across streets without hints.",
+            objectives: ["Respect short SPR commitment", "Avoid ego bluffs in 4-bet pots", "Close river without hero calls"],
+            prereq: L071004, remediation: "lesson-06-09-01-threebet-fourbet", minutes: 12, band: 5,
+            activities: [
+              dialogue("act-07-10-05-explain", 1,
+                "Capstone 4-bet. Short SPR. No hints.",
+                {objectives: ["Respect short SPR commitment"]}),
+              multiStepAct({
+                id: "act-07-10-05-hand", order: 2, stage: "unguided",
+                a11y: "100bb 4-bet pot; you hold KK after 4-betting.",
+                objectives: ["Respect short SPR commitment", "Avoid ego bluffs in 4-bet pots", "Close river without hero calls"],
+                lifeLoss: true,
+                steps: [
+                  {
+                    id: "step-4b-flop", street: "flop",
+                    prompt: "Flop Q83r. Action?",
+                    accessibilityText: "C-bet for value/protection in a committed pot.",
+                    choices: [
+                      choice("bet", "C-bet", "recommended",
+                        "Overpair; SPR is short.", {action: "BET", amountBb: 12}),
+                      choice("check", "Check", "questionable",
+                        "Gives free equity.", {action: "CHECK"}),
+                      choice("min", "Bet 1bb", "clear_mistake",
+                        "Not a 4-bet-pot size.", {action: "BET", amountBb: 1, betterChoiceId: "bet"}),
+                    ],
+                  },
+                  {
+                    id: "step-4b-turn", street: "turn",
+                    prompt: "Called. Turn 2d. Action?",
+                    accessibilityText: "Often continue or stack off with overpair.",
+                    choices: [
+                      choice("barrel", "Continue / commit", "recommended",
+                        "Overpair in a short-SPR pot.", {action: "BET", amountBb: 28}),
+                      choice("check-t", "Check/give up", "questionable",
+                        "Too weak with KK here often.", {action: "CHECK"}),
+                    ],
+                  },
+                  {
+                    id: "step-4b-river", street: "river",
+                    prompt: "Called. River Ad. Opponent jams. Action?",
+                    accessibilityText: "Ace is a bad card — fold more without a read.",
+                    choices: [
+                      choice("fold", "Fold", "recommended",
+                        "Ace caps many value lines; avoid ego hero call.", {action: "FOLD", reversalRead: "Known maniac: call wider."}),
+                      choice("call", "Hero call", "questionable",
+                        "Needs a wide spew read.", {action: "CALL"}),
+                      choice("jam", "Rejam for style", "clear_mistake",
+                        "Already facing a jam.", {action: "RAISE", amountBb: 60, betterChoiceId: "fold"}),
+                    ],
+                  },
+                ],
+              }),
+            ],
+          }),
         ]),
       unit("unit-07-11-warmup", 11, "Live Training warm-up prep",
         "Prepare for a coached warm-up hand in Live Training.", [
@@ -2718,7 +2836,7 @@ export function buildSectionSeven() {
             title: "Prep a coached Live warm-up hand",
             summary: "Carry course defaults into Live Training with a short plan checklist.",
             objectives: ["List warm-up checklist items", "Carry defaults into Live", "Stay inside live cash NLH scope"],
-            prereq: L071003, remediation: L070901, minutes: 8, band: 5,
+            prereq: L071005, remediation: L070901, minutes: 8, band: 5,
             activities: [
               dialogue("act-07-11-01-explain", 1,
                 "Live warm-up: short checklist, then play. Plan 10 wires the bridge.",
