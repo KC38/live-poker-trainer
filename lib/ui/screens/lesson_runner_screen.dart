@@ -17,6 +17,7 @@ import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/services/firestore/course_service.dart';
 import 'package:live_poker_trainer/ui/course/activity_registry.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_progress_header.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
@@ -657,6 +658,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                                 : activity.renderer ==
                                     ActivityRenderer.coachDialogue
                                 ? 'Continue'
+                                : isLessonActionTableActivity(activity)
+                                // Avoid colliding with dock CHECK / CHECK (off).
+                                ? 'Lock in'
                                 : 'Check',
                           ),
                         ),

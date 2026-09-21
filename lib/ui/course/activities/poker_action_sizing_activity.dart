@@ -76,7 +76,7 @@ class PokerActionSizingActivity extends StatelessWidget {
                     ? (spot.identifyUnavailable
                         ? 'Tap the illegal action.'
                         : 'Tap Fold, Check, or Call on the dock.')
-                    : 'Ready — Check when it looks right.',
+                    : 'Ready — Lock in below.',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.slate,

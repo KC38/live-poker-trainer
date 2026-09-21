@@ -918,6 +918,51 @@ void main() {
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'fold-72');
+    expect(find.text('Ready — Lock in below.'), findsOneWidget);
+    controller.dispose();
+  });
+
+  testWidgets('free-check dock shows CHECK with Check free semantics', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-03-01-scaffolded-check',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Tap Check',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap the free action.',
+      choices: const [
+        CourseChoice(
+          id: 'check-free',
+          label: 'Check free',
+          accessibilityText: 'Check free',
+          action: 'CHECK',
+        ),
+        CourseChoice(id: 'call-free', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'fold-free', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('CHECK'), findsOneWidget);
+    expect(find.text('CHECK FREE'), findsNothing);
+    final handle = tester.ensureSemantics();
+    expect(find.bySemanticsLabel('Check free'), findsOneWidget);
+    await tester.tap(find.bySemanticsLabel('Check free'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'check-free');
+    handle.dispose();
     controller.dispose();
   });
 

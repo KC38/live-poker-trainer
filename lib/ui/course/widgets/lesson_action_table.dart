@@ -460,13 +460,14 @@ class _DockButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final action = (choice.action ?? choice.label).toUpperCase();
+    // Live-table labels stay short (CHECK / CALL 5). Longer content labels like
+    // "Check free" stay in Semantics so agents can disambiguate from footer.
     final short =
         unavailableLook
             ? 'CHECK (off)'
             : switch (action.split(' ').first) {
               'FOLD' => 'FOLD',
-              'CHECK' =>
-                choice.label.toUpperCase() == 'CHECK' ? 'CHECK' : choice.label.toUpperCase(),
+              'CHECK' => 'CHECK',
               'CALL' => choice.label.toUpperCase().startsWith('CALL')
                   ? choice.label.toUpperCase()
                   : 'CALL',
@@ -479,6 +480,7 @@ class _DockButton extends StatelessWidget {
     return Semantics(
       button: true,
       selected: selected,
+      excludeSemantics: true,
       label: choice.accessibilityText ??
           [if (choice.action != null) choice.action!, choice.label].join(' '),
       child: Material(
