@@ -53,7 +53,8 @@ git checkout -b <type>/<short-slug>
 
 1. `git status` / `git diff` / `git log -5 --oneline` for style.
 2. Stage only intentional project files. **Never** stage secrets:
-   - `.env*`, `*.pem`
+   - `.env*`
+   - `*.pem`
    - `android/app/google-services.json`
    - `ios/Runner/GoogleService-Info.plist`
    - `lib/firebase_options.dart`
@@ -102,22 +103,32 @@ Confirm with `git status -sb` (should be `main` clean, in sync with `origin/main
 
 ## 7. Deploy Cloud Functions (always)
 
-After merge, **always** deploy Functions so production matches `origin/main`.
-Do not wait for the user to ask. Skip only if they explicitly say not to deploy,
-or if the ship stopped before merge (commit-only / no PR).
+After merge, Functions should match `origin/main`.
 
-Run:
+GitHub Actions (`.github/workflows/deploy-functions.yml`, sourced from
+`docs/github-actions/deploy-functions.yml`) deploys on pushes to `main`
+that change `functions/`, using repository secrets
+`FIREBASE_SERVICE_ACCOUNT` (preferred) or `FIREBASE_TOKEN` (`login:ci`).
+If that workflow ran for the merge, wait for it rather than an interactive
+`firebase login`.
+
+If `FIREBASE_SERVICE_ACCOUNT`, `GOOGLE_APPLICATION_CREDENTIALS`, or
+`FIREBASE_TOKEN` is already in this environment, also run:
 
 ```bash
 .cursor/skills/ship-change/scripts/deploy-functions.sh
 ```
 
+If none of those credentials are set, skip the local script and report that
+production depends on the main-branch workflow (and on the GitHub secret
+being present). Do not run `firebase login` in a headless agent.
+
 Notes:
 
-- Deploys from a disposable worktree on `origin/main` (never from unrelated WIP).
-- Requires Node 22 (`brew` `node@22` on PATH).
-- Uses `firebase-tools@15+` (older CLI fails analyzing `jose` ESM).
-- If deploy fails, report the error and stop — do not claim the ship is live.
+- The local script deploys from a disposable worktree on `origin/main`.
+- Requires Node 22 (`brew` `node@22` on PATH when present).
+- Uses `firebase-tools@15.30.2` (older CLI fails analyzing `jose` ESM).
+- If a local deploy fails, report the error — do not claim the ship is live.
 
 ## 8. Flutter simulator refresh (all sims)
 
