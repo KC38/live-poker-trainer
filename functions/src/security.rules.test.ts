@@ -269,7 +269,7 @@ describe("Firestore security rules", () => {
     await assertFails(deleteDoc(progressRef));
   });
 
-  it("allows signed-in users to read courseFlags but denies writes", async () => {
+  it("allows anyone to read courseFlags but denies writes", async () => {
     await seedFirestore("appConfig/courseFlags", {
       courseEnabled: true,
       courseStartsEnabled: true,
@@ -285,10 +285,13 @@ describe("Firestore security rules", () => {
     const unauthDb = testEnv.unauthenticatedContext().firestore();
     await assertSucceeds(getDoc(doc(ownerDb, "appConfig/courseFlags")));
     await assertSucceeds(getDoc(doc(anonDb, "appConfig/courseFlags")));
+    await assertSucceeds(getDoc(doc(unauthDb, "appConfig/courseFlags")));
     await assertFails(
       setDoc(doc(ownerDb, "appConfig/courseFlags"), {courseEnabled: false}),
     );
-    await assertFails(getDoc(doc(unauthDb, "appConfig/courseFlags")));
+    await assertFails(
+      setDoc(doc(unauthDb, "appConfig/courseFlags"), {courseEnabled: true}),
+    );
   });
 
   it("denies course receipts and rate limits even to the owner", async () => {

@@ -52,11 +52,7 @@ CourseCatalog _miniCatalog() {
                     'acceptedGrades': ['recommended'],
                     'objectives': <String>['a'],
                     'coachMedia': [
-                      {
-                        'id': 'm1',
-                        'kind': 'dialogue',
-                        'text': 'Hello',
-                      },
+                      {'id': 'm1', 'kind': 'dialogue', 'text': 'Hello'},
                     ],
                   },
                 ],
@@ -124,13 +120,13 @@ CourseCatalog _miniCatalog() {
 }
 
 CourseFlags _enabledFlags() => const CourseFlags(
-      courseEnabled: true,
-      courseStartsEnabled: true,
-      guestCourseEnabled: true,
-      placementTestsEnabled: true,
-      catalogVersion: '2.0.0',
-      minimumClientVersion: '2.0.0',
-    );
+  courseEnabled: true,
+  courseStartsEnabled: true,
+  guestCourseEnabled: true,
+  placementTestsEnabled: true,
+  catalogVersion: '2.0.0',
+  minimumClientVersion: '2.0.0',
+);
 
 void main() {
   final catalog = _miniCatalog();
@@ -233,5 +229,69 @@ void main() {
       available: true,
     );
     expect(stale.status, CourseHomeLoadStatus.staleCatalog);
+  });
+
+  test('paused starts are not a startable path but keep an open attempt', () {
+    const paused = CourseFlags(
+      courseEnabled: true,
+      courseStartsEnabled: false,
+      guestCourseEnabled: true,
+      placementTestsEnabled: true,
+      catalogVersion: '2.0.0',
+      minimumClientVersion: '2.0.0',
+    );
+    final fresh = buildCourseHomeSnapshot(
+      catalog: catalog,
+      flags: paused,
+      available: true,
+      profile: const CourseProfileView(
+        lifetimeXp: 0,
+        currentStreak: 0,
+        acceptedAccuracy: 0,
+        completedLessonIds: [],
+        masteryByLessonId: {},
+        catalogVersion: '2.0.0',
+      ),
+    );
+    expect(fresh.status, CourseHomeLoadStatus.ready);
+    expect(fresh.startsEnabled, isFalse);
+    expect(fresh.nextLessonId, isNull);
+    expect(fresh.nodes[0].state, CourseNodeState.locked);
+    expect(fresh.nodes[0].lockReason, contains('paused'));
+    expect(fresh.rexLine, contains('paused'));
+
+    final resumed = buildCourseHomeSnapshot(
+      catalog: catalog,
+      flags: paused,
+      available: true,
+      profile: const CourseProfileView(
+        lifetimeXp: 20,
+        currentStreak: 2,
+        acceptedAccuracy: 0.8,
+        completedLessonIds: ['lesson-a'],
+        masteryByLessonId: {'lesson-a': 0.9},
+        catalogVersion: '2.0.0',
+      ),
+      openAttempt: const CourseAttemptSnapshot(
+        attemptId: 'att-1',
+        lessonId: 'lesson-b',
+        catalogVersion: '2.0.0',
+        status: 'in_progress',
+        activityIndex: 0,
+        currentActivityId: 'act-b1',
+        livesRemaining: 3,
+        livesMax: 3,
+        acceptedCount: 0,
+        scoredCount: 0,
+        stepCount: 0,
+      ),
+    );
+    expect(resumed.startsEnabled, isFalse);
+    expect(resumed.nextLessonId, 'lesson-b');
+    expect(resumed.nodes[0].state, CourseNodeState.mastered);
+    expect(resumed.nodes[1].state, CourseNodeState.active);
+    expect(resumed.resume?.attemptId, 'att-1');
+    expect(resumed.nodes[2].state, CourseNodeState.locked);
+    expect(resumed.nodes[2].lockReason, contains('paused'));
   });
 }

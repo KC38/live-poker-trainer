@@ -19,6 +19,27 @@ void main() {
       expect(flags.placementTestsEnabled, isTrue);
     });
 
+    test(
+      'guest cohort and paused starts are independent of the kill switch',
+      () {
+        final guestsOff = CourseFlags.fromMap({
+          ...enabled,
+          'guestCourseEnabled': false,
+        });
+        expect(guestsOff.courseEnabled, isTrue);
+        expect(guestsOff.canStartCourse, isTrue);
+        expect(guestsOff.canStartAsGuest, isFalse);
+
+        final startsPaused = CourseFlags.fromMap({
+          ...enabled,
+          'courseStartsEnabled': false,
+        });
+        expect(startsPaused.courseEnabled, isTrue);
+        expect(startsPaused.guestCourseEnabled, isTrue);
+        expect(startsPaused.canStartCourse, isFalse);
+        expect(startsPaused.canStartAsGuest, isFalse);
+      },
+    );
     test('disabled document cannot start the course', () {
       final flags = CourseFlags.fromMap({
         ...enabled,

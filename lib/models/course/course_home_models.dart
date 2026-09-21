@@ -9,14 +9,7 @@ import 'package:live_poker_trainer/models/course/course_session_models.dart';
 const kCourseMasteryThreshold = 0.85;
 
 /// Visual / semantic kind of a Home path node.
-enum CourseNodeKind {
-  lesson,
-  practice,
-  checkpoint,
-  reward,
-  jumpTest,
-  handLab,
-}
+enum CourseNodeKind { lesson, practice, checkpoint, reward, jumpTest, handLab }
 
 /// Durable path node state (server completion + catalog prerequisites).
 enum CourseNodeState {
@@ -109,6 +102,7 @@ class CourseHomeSnapshot {
     this.errorMessage,
     this.catalogVersion,
     this.serverCatalogVersion,
+    this.startsEnabled = true,
   });
 
   final CourseHomeLoadStatus status;
@@ -123,6 +117,10 @@ class CourseHomeSnapshot {
   final String? errorMessage;
   final String? catalogVersion;
   final String? serverCatalogVersion;
+
+  /// When false, Home must not offer a new attempt. An in-progress node can
+  /// still be resumed.
+  final bool startsEnabled;
 
   CourseMapNode? get nextNode {
     final id = nextLessonId;
@@ -287,8 +285,10 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
   final completed = profile?.completedLessonIds.toSet() ?? <String>{};
   final mastery = profile?.masteryByLessonId ?? const <String, double>{};
   final reviews = reviewLessonIds.toSet();
-  final activeLessonId = openAttempt?.lessonId ??
+  final activeLessonId =
+      openAttempt?.lessonId ??
       (profile?.resume != null ? profile!.resume!.lessonId : null);
+  final startsOpen = flags.courseStartsEnabled;
   final lessonTitles = <String, String>{};
   for (final section in catalog.sections) {
     for (final unit in section.units) {
@@ -309,6 +309,15 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
         String? lockReason;
         if (activeLessonId == lesson.id) {
           state = CourseNodeState.active;
+        } else if (!startsOpen) {
+          if (isComplete && masteryScore >= kCourseMasteryThreshold) {
+            state = CourseNodeState.mastered;
+          } else if (isComplete) {
+            state = CourseNodeState.completed;
+          } else {
+            state = CourseNodeState.locked;
+            lockReason = 'New course attempts are paused.';
+          }
         } else if (reviews.contains(lesson.id)) {
           state = CourseNodeState.reviewDue;
         } else if (isComplete && masteryScore >= kCourseMasteryThreshold) {
@@ -360,14 +369,21 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
           'No lessons published yet. Check back after the next content wave.',
       catalogVersion: catalog.catalogVersion,
       serverCatalogVersion: flags.catalogVersion,
+      startsEnabled: startsOpen,
     );
   }
 
-  final nextId = _selectNextLessonId(
-    nodes: nodes,
-    activeLessonId: activeLessonId,
-    recommendedLessonId: profile?.recommendedLessonId,
-  );
+  final nextId =
+      startsOpen
+          ? _selectNextLessonId(
+            nodes: nodes,
+            activeLessonId: activeLessonId,
+            recommendedLessonId: profile?.recommendedLessonId,
+          )
+          : (activeLessonId != null &&
+                  nodes.any((node) => node.lessonId == activeLessonId)
+              ? activeLessonId
+              : null);
   final withNext = [
     for (final node in nodes)
       CourseMapNode(
@@ -386,16 +402,18 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
       ),
   ];
 
-  final resume = openAttempt != null
-      ? CourseResumePointer(
-          attemptId: openAttempt.attemptId,
-          lessonId: openAttempt.lessonId,
-          activityId: openAttempt.currentActivityId,
-          activityIndex: openAttempt.activityIndex,
-        )
-      : (profile?.resume != null && activeLessonId == profile!.resume!.lessonId
-          ? profile.resume
-          : null);
+  final resume =
+      openAttempt != null
+          ? CourseResumePointer(
+            attemptId: openAttempt.attemptId,
+            lessonId: openAttempt.lessonId,
+            activityId: openAttempt.currentActivityId,
+            activityIndex: openAttempt.activityIndex,
+          )
+          : (profile?.resume != null &&
+                  activeLessonId == profile!.resume!.lessonId
+              ? profile.resume
+              : null);
 
   return CourseHomeSnapshot(
     status: CourseHomeLoadStatus.ready,
@@ -406,13 +424,17 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
     acceptedAccuracy: profile?.acceptedAccuracy ?? 0,
     nextLessonId: nextId,
     resume: resume,
-    rexLine: _rexLineFor(
-      nodes: withNext,
-      nextId: nextId,
-      hasResume: resume != null,
-    ),
+    rexLine:
+        !startsOpen && resume == null
+            ? 'New lessons are paused. Live Training and Profile still work.'
+            : _rexLineFor(
+              nodes: withNext,
+              nextId: nextId,
+              hasResume: resume != null,
+            ),
     catalogVersion: catalog.catalogVersion,
     serverCatalogVersion: flags.catalogVersion,
+    startsEnabled: startsOpen,
   );
 }
 

@@ -158,10 +158,13 @@ Profile shows course metrics and Live Training metrics in separate sections.
 Accepted course accuracy is the share of accepted scored lesson answers.
 Live "strong decisions" is the coaching record. Those numbers are not merged.
 
-`appConfig/courseFlags` is the course kill switch. Clients may read it.
+`appConfig/courseFlags` is the course kill switch. Signed-out guests may read
+it before anonymous sign-in; the client reloads it when the auth uid changes.
 Writes are Admin SDK only. Fetch, parse, and minimum-client-version failures
-disable course entry and guest onboarding. Authenticated Live Training and
-Profile remain usable.
+disable course entry and guest onboarding. `guestCourseEnabled=false` sends
+new guests to sign-in. `courseStartsEnabled=false` hides new Home starts
+while an in-progress attempt can still finish. Authenticated Live Training
+and Profile remain usable.
 
 Analytics events use public lesson and activity ids, timing, grade band, and
 closed-set outcomes. Hole cards, unrevealed cards, private grading keys,

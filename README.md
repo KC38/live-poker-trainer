@@ -165,10 +165,12 @@ sign-out are on Profile.
 
 ## Course rollout
 
-`appConfig/courseFlags` is server-owned and client read-only. A missing,
-malformed, failed, or too-old-client read disables the course. That kill
-switch hides course starts and guest onboarding. Signed-in Live Training and
-Profile stay available.
+`appConfig/courseFlags` is server-owned. Clients, including signed-out guests,
+may read it and cannot write it. A missing, malformed, failed, or
+too-old-client read disables the course. The client reloads flags when the
+auth uid changes so a signed-out failure is not reused after anonymous
+sign-in. The kill switch hides course starts and guest onboarding. Signed-in
+Live Training and Profile stay available.
 
 Rollout order:
 
@@ -178,9 +180,12 @@ Rollout order:
 4. Authenticated existing-user cohort.
 5. Full rollout after crash, completion, merge, and Live Training checks.
 
-`courseEnabled=false` stops course entry. `courseStartsEnabled=false` pauses
-new attempts while an already started attempt can finish. Neither flag
-disables Live Training.
+`courseEnabled=false` stops course entry. `guestCourseEnabled=false` keeps
+the course available for signed-in accounts but sends signed-out and new
+anonymous guests to sign-in; a guest who already finished the first lesson
+can still save progress. `courseStartsEnabled=false` pauses new Home starts
+while an already started attempt can finish. None of these flags disable
+Live Training.
 
 ## Analytics
 

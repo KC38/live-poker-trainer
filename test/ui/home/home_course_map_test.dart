@@ -80,9 +80,10 @@ CourseHomeSnapshot _readySnapshot({
         unitId: 'unit-1',
         unitTitle: 'Unit One',
         isNext: false,
-        lockReason: second == CourseNodeState.locked
-            ? 'Finish "Lesson A" first.'
-            : null,
+        lockReason:
+            second == CourseNodeState.locked
+                ? 'Finish "Lesson A" first.'
+                : null,
       ),
     ],
   );
@@ -157,6 +158,44 @@ void main() {
     await tester.pump();
     expect(find.textContaining('Finish "Lesson A" first.'), findsWidgets);
     expect(analytics.events, contains('home_node_locked_tap:lesson-b'));
+  });
+
+  testWidgets('paused starts do not open a completed lesson', (tester) async {
+    final analytics = _RecordingAnalytics();
+    final snapshot = _readySnapshot();
+    await _pumpHome(
+      tester,
+      snapshot: CourseHomeSnapshot(
+        status: snapshot.status,
+        nodes: [
+          const CourseMapNode(
+            lessonId: 'lesson-a',
+            title: 'Lesson A',
+            summary: 'First',
+            kind: CourseNodeKind.lesson,
+            state: CourseNodeState.completed,
+            sectionId: 'sec-1',
+            sectionTitle: 'Section One',
+            unitId: 'unit-1',
+            unitTitle: 'Unit One',
+            isNext: false,
+          ),
+          snapshot.nodes[1],
+        ],
+        sections: snapshot.sections,
+        startsEnabled: false,
+        rexLine:
+            'New lessons are paused. Live Training and Profile still work.',
+      ),
+      analytics: analytics,
+    );
+
+    await tester.ensureVisible(find.text('Lesson A'));
+    await tester.tap(find.text('Lesson A'));
+    await tester.pump();
+    expect(find.text('New course attempts are paused.'), findsOneWidget);
+    expect(analytics.events, contains('home_node_locked_tap:lesson-a'));
+    expect(find.byType(HomeScreen), findsOneWidget);
   });
 
   testWidgets('disabled course shows recoverable unavailable state', (
