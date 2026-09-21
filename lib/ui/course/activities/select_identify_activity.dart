@@ -27,6 +27,14 @@ class SelectIdentifyActivity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final presentation = resolveSelectIdentifyPresentation(activity);
+    if (presentation == SelectIdentifyPresentation.tableRegionTap) {
+      return _TableRegionTapActivity(
+        activity: activity,
+        controller: controller,
+        showGuidance: showGuidance,
+      );
+    }
+
     final scene = resolveLessonTableScene(activity);
     final coachText = _coachText(presentation, scene != null);
 
@@ -90,6 +98,8 @@ class SelectIdentifyActivity extends StatelessWidget {
         'Look at the cards — pick the matching pair.',
       SelectIdentifyPresentation.suitSets =>
         'Read the suits, then pick the complete set.',
+      SelectIdentifyPresentation.tableRegionTap =>
+        'Tap the answer on the table.',
       SelectIdentifyPresentation.text =>
         hasScene
             ? 'Look at the table, then pick the answer that matches.'
@@ -133,6 +143,7 @@ class SelectIdentifyActivity extends StatelessWidget {
           onPressed: onPressed,
         );
       case SelectIdentifyPresentation.suitTapPicker:
+      case SelectIdentifyPresentation.tableRegionTap:
       case SelectIdentifyPresentation.text:
         return LessonChoiceButton(
           label: choice.label,
@@ -143,6 +154,139 @@ class SelectIdentifyActivity extends StatelessWidget {
           onPressed: onPressed,
         );
     }
+  }
+}
+
+class _TableRegionTapActivity extends StatefulWidget {
+  const _TableRegionTapActivity({
+    required this.activity,
+    required this.controller,
+    required this.showGuidance,
+  });
+
+  final CourseActivity activity;
+  final LessonActivityController controller;
+  final bool showGuidance;
+
+  @override
+  State<_TableRegionTapActivity> createState() =>
+      _TableRegionTapActivityState();
+}
+
+class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
+  LessonTableRegion? _selectedRegion;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_onController);
+  }
+
+  @override
+  void didUpdateWidget(covariant _TableRegionTapActivity oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      oldWidget.controller.removeListener(_onController);
+      widget.controller.addListener(_onController);
+      _selectedRegion = null;
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_onController);
+    super.dispose();
+  }
+
+  void _onController() {
+    if (widget.controller.draft.choiceId == null && _selectedRegion != null) {
+      setState(() => _selectedRegion = null);
+    }
+  }
+
+  String get _coachText {
+    final authored = widget.activity.primaryCoachLine?.text;
+    if (authored != null) return authored;
+    return switch (widget.activity.id) {
+      'act-01-01-01-guided-find-holes' =>
+        'Your private cards are on the felt. Find them.',
+      'act-01-01-01-scaffolded-private' =>
+        'Nobody else can peek at your holes.',
+      'act-01-01-01-unguided-mix' =>
+        'Everyone shares the cards in the middle.',
+      'act-01-01-01-checkpoint-table' =>
+        'Ownership stays split — board is shared.',
+      _ => 'Tap the answer on the table.',
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final scene = resolveLessonTableScene(widget.activity);
+    return AnimatedBuilder(
+      animation: widget.controller,
+      builder: (context, _) {
+        final locked =
+            widget.controller.submitting ||
+            widget.controller.lastResult != null;
+        final selected = widget.controller.draft.choiceId;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            RexCoachLine(text: _coachText),
+            if (widget.activity.prompt != null) ...[
+              const SizedBox(height: 14),
+              Text(
+                widget.activity.prompt!,
+                style: GoogleFonts.manrope(
+                  color: AppColors.cream,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  height: 1.3,
+                ),
+              ),
+            ],
+            if (scene != null) ...[
+              const SizedBox(height: 14),
+              LessonTableContext(
+                scene: scene,
+                selectedRegion: _selectedRegion,
+                showSoftPulse:
+                    widget.showGuidance &&
+                    selected == null &&
+                    widget.activity.stage == ActivityStage.guided,
+                enabled: !locked,
+                onRegionTap:
+                    locked
+                        ? null
+                        : (region) {
+                          final mapped = mapTableRegionToChoiceId(
+                            activityId: widget.activity.id,
+                            region: region,
+                            choices: widget.activity.choices,
+                          );
+                          if (mapped == null) return;
+                          setState(() => _selectedRegion = region);
+                          widget.controller.selectChoice(mapped);
+                        },
+              ),
+            ],
+            const SizedBox(height: 12),
+            Text(
+              selected == null
+                  ? 'Tap a region on the table.'
+                  : 'Ready — Check when it looks right.',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
@@ -201,8 +345,6 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
   void _syncFromController() {
     final choiceId = widget.controller.draft.choiceId;
     if (choiceId == null) {
-      // Footer Undo clears a mapped answer — reset tiles only when the
-      // current taps still encode a complete choice (not mid-edit).
       final mapped = mapSuitTapSelectionToChoiceId(
         selected: _selected,
         choices: widget.activity.choices,
@@ -263,7 +405,6 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
       widget.controller.selectChoice(mapped);
       return;
     }
-    // Incomplete / non-matching — clear draft so Check stays disabled.
     if (widget.controller.draft.choiceId != null) {
       widget.controller.undoDraft();
     }

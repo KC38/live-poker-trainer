@@ -122,7 +122,7 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('first-lesson privacy select shows table and selection chrome', (
+  testWidgets('first-lesson privacy select taps hole cards on the table', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -131,9 +131,9 @@ void main() {
       stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
-      accessibilityText: 'Decide who can see your hole cards during the hand.',
+      accessibilityText: 'Tap your private hole cards.',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Who can see your hole cards right now?',
+      prompt: 'Tap the cards only you can see.',
       choices: const [
         CourseChoice(id: 'choice-only-you', label: 'Only you'),
         CourseChoice(id: 'choice-whole-table', label: 'Everyone at the table'),
@@ -151,15 +151,18 @@ void main() {
       ),
     );
 
-    expect(find.text('Who can see your hole cards right now?'), findsOneWidget);
-    expect(
-      find.text('Look at the table, then pick the answer that matches.'),
-      findsOneWidget,
-    );
+    expect(find.text('Tap the cards only you can see.'), findsOneWidget);
+    expect(find.text('Tap the cards only you can see.'), findsOneWidget);
     expect(find.byType(LessonTableContext), findsOneWidget);
     expect(find.byType(MiniCard), findsAtLeastNWidgets(2));
+    expect(find.text('Only you'), findsNothing);
+    expect(find.text('Everyone at the table'), findsNothing);
 
-    await tester.tap(find.text('Only you'));
+    final heroRail = find.byWidgetPredicate(
+      (w) => w is MiniCard && w.size == MiniCardSize.hero,
+    );
+    expect(heroRail, findsAtLeastNWidgets(2));
+    await tester.tap(heroRail.first);
     await tester.pump();
     expect(controller.draft.choiceId, 'choice-only-you');
     controller.dispose();
@@ -174,13 +177,15 @@ void main() {
       estimatedSeconds: 40,
       accessibilityText: 'a11y',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Who can see your hole cards right now?',
+      prompt: 'Tap the cards only you can see.',
     );
     final scene = resolveLessonTableScene(privacy);
     expect(scene, isNotNull);
     expect(scene!.heroCodes, ['Ah', 'Kd']);
     expect(scene.boardCodes, ['Qs', 'Jh', '2c']);
-    expect(scene.highlight, LessonTableHighlight.hero);
+    expect(scene.highlight, LessonTableHighlight.none);
+    expect(scene.showDealerChip, isTrue);
+    expect(scene.caption, 'You');
 
     final suits = CourseActivity(
       id: 'act-01-01-02-guided-suits',
@@ -217,6 +222,45 @@ void main() {
     final checkpointScene = resolveLessonTableScene(checkpoint);
     expect(checkpointScene, isNotNull);
     expect(checkpointScene!.heroCodes, ['9h', '9d']);
+  });
+
+  test('table region mapping covers Your two cards activities', () {
+    const holeChoices = [
+      CourseChoice(id: 'choice-hero-holes', label: 'Ah Kd in front of you'),
+      CourseChoice(id: 'choice-board', label: 'The flop cards in the middle'),
+      CourseChoice(
+        id: 'choice-villain',
+        label: 'Face-down cards at another seat',
+      ),
+    ];
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-01-01-01-guided-find-holes',
+        region: LessonTableRegion.hero,
+        choices: holeChoices,
+      ),
+      'choice-hero-holes',
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-01-01-01-guided-find-holes',
+        region: LessonTableRegion.board,
+        choices: holeChoices,
+      ),
+      'choice-board',
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-01-01-01-scaffolded-private',
+        region: LessonTableRegion.dealer,
+        choices: const [
+          CourseChoice(id: 'choice-only-you', label: 'Only you'),
+          CourseChoice(id: 'choice-whole-table', label: 'Everyone'),
+          CourseChoice(id: 'choice-dealer-only', label: 'Dealer'),
+        ],
+      ),
+      'choice-dealer-only',
+    );
   });
 
   test('suit tap mapping covers full / missing / extra', () {

@@ -191,12 +191,17 @@ void main() {
     await tester.pump();
     await tester.pump();
 
-    expect(find.text('Which cards are your hole cards?'), findsOneWidget);
+    expect(find.text('Tap your hole cards on the table.'), findsOneWidget);
     expect(find.byType(MiniCard), findsWidgets);
     final checkFinder = find.widgetWithText(FilledButton, 'Check');
     expect(tester.widget<FilledButton>(checkFinder).onPressed, isNull);
 
-    await tester.tap(find.text('The flop cards in the middle'));
+    // Wrong region first — board MiniCards (small), then Check.
+    final boardCards = find.byWidgetPredicate(
+      (w) => w is MiniCard && w.size == MiniCardSize.small,
+    );
+    expect(boardCards, findsAtLeastNWidgets(3));
+    await tester.tap(boardCards.first);
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 50));
     final enabledCheck = tester.widget<FilledButton>(checkFinder);
@@ -213,8 +218,11 @@ void main() {
     expect(find.text('Think again'), findsNothing);
     expect(find.widgetWithText(FilledButton, 'Check'), findsOneWidget);
 
-    // Advance with the recommended choice to the scaffolded privacy step.
-    await tester.tap(find.text('Ah Kd in front of you'));
+    // Advance with the recommended hole-card tap (hero size).
+    final heroRail = find.byWidgetPredicate(
+      (w) => w is MiniCard && w.size == MiniCardSize.hero,
+    );
+    await tester.tap(heroRail.first);
     await tester.pump();
     await tester.tap(find.widgetWithText(FilledButton, 'Check'));
     await tester.pump();
@@ -224,16 +232,12 @@ void main() {
     await tester.pump();
     await tester.pump();
 
-    expect(find.text('Who can see your hole cards right now?'), findsOneWidget);
-    expect(
-      find.text('Look at the table, then pick the answer that matches.'),
-      findsOneWidget,
-    );
+    expect(find.text('Tap the cards only you can see.'), findsOneWidget);
     expect(find.byType(MiniCard), findsWidgets);
     final privacyCheck = find.widgetWithText(FilledButton, 'Check');
     expect(tester.widget<FilledButton>(privacyCheck).onPressed, isNull);
 
-    await tester.tap(find.text('Only you'));
+    await tester.tap(heroRail.first);
     await tester.pump();
     expect(tester.widget<FilledButton>(privacyCheck).onPressed, isNotNull);
   });

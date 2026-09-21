@@ -240,10 +240,10 @@ export function buildSectionOne() {
                 {objectives: ["Identify your two hole cards"]}),
               selectAct({
                 id: "act-01-01-01-guided-find-holes", order: 2, stage: "guided",
-                prompt: "Which cards are your hole cards?",
-                a11y: "Choose which pair are your private hole cards.",
+                prompt: "Tap your hole cards on the table.",
+                a11y: "Tap the two private hole cards in front of you.",
                 objectives: ["Identify your two hole cards"],
-                hint: "Look at the two cards in front of you — not the board.",
+                hint: "Your two cards sit at your seat — not the board.",
                 choices: [
                   choice("choice-hero-holes", "Ah Kd in front of you", "recommended",
                     "Right. Those two stay private until showdown."),
@@ -257,8 +257,8 @@ export function buildSectionOne() {
               }),
               selectAct({
                 id: "act-01-01-01-scaffolded-private", order: 3, stage: "scaffolded",
-                prompt: "Who can see your hole cards right now?",
-                a11y: "Decide who can see your hole cards during the hand.",
+                prompt: "Tap the cards only you can see.",
+                a11y: "Tap your private hole cards — not the board or other seats.",
                 objectives: ["Recognize that other seats hide their hole cards"],
                 choices: [
                   choice("choice-only-you", "Only you", "recommended",
@@ -273,8 +273,8 @@ export function buildSectionOne() {
               }),
               selectAct({
                 id: "act-01-01-01-unguided-mix", order: 4, stage: "unguided",
-                prompt: "Which cards are community cards?",
-                a11y: "Pick the shared community cards on a simple flop.",
+                prompt: "Tap the community cards.",
+                a11y: "Tap the shared community cards on the flop.",
                 objectives: ["Distinguish hole cards from community cards"],
                 lifeLoss: true,
                 choices: [
@@ -290,8 +290,8 @@ export function buildSectionOne() {
               }),
               selectAct({
                 id: "act-01-01-01-checkpoint-table", order: 5, stage: "checkpoint",
-                prompt: "Six seats, flop out. Which cards are only yours?",
-                a11y: "On a fuller table, identify your private hole cards again.",
+                prompt: "Tap the cards that are only yours.",
+                a11y: "On a fuller table, tap your private hole cards again.",
                 objectives: [
                   "Identify your two hole cards",
                   "Distinguish hole cards from community cards",

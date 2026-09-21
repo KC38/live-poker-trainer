@@ -59,12 +59,19 @@ enum SelectIdentifyPresentation {
 
   /// Tap real suits (plus optional decoy) to assemble the answer.
   suitTapPicker,
+
+  /// Tap regions on the mini-table (hole cards / board / seats).
+  tableRegionTap,
 }
 
 /// Detects the best interactive presentation for [activity].
 SelectIdentifyPresentation resolveSelectIdentifyPresentation(
   CourseActivity activity,
 ) {
+  if (activity.renderer == ActivityRenderer.selectIdentify &&
+      activity.id.startsWith('act-01-01-01-')) {
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id == 'act-01-01-02-guided-suits' ||
       activity.choices.any((c) => c.id == 'suits-full')) {
     return SelectIdentifyPresentation.suitTapPicker;
