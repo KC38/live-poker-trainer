@@ -96,7 +96,7 @@ scaffolding over repeated attempts, and keeps reading short.
 | [02](02-course-contract-and-content-pipeline.md) | Course schema and validator | — | Done (PR #168; deploy from `9e3c93e`) |
 | [03](03-course-state-and-gamification-backend.md) | Attempts, grading, XP, streak, lives | 02 | Done (PR #170; deploy from `90b2cdf`) |
 | [04](04-interactive-lesson-runtime.md) | Guided-to-unguided activity engine | 02, 03 | Done (PR #172; deploy from `192fdb3`) |
-| [05](05-lesson-first-onboarding-and-account-linking.md) | Anonymous lesson-first onboarding/linking | 01–04 | |
+| [05](05-lesson-first-onboarding-and-account-linking.md) | Anonymous lesson-first onboarding/linking | 01–04 | Done (PR #176; deploy verified from `3adb18e`) |
 | [06](06-home-course-map-and-rex-coach.md) | Home path and coach | 01–05 | |
 | [07](07-course-wave-one-foundations.md) | Sections 1–2 | 02, 04 | Done (PR #174; deploy from `ecf3ba9`) |
 | [08](08-course-wave-two-live-competence.md) | Sections 3–4 and player types | 07 | |
