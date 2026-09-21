@@ -69,7 +69,15 @@ AppRootDestination resolveAppRoot({
   final guestEntry = guestCourseEntryEnabled(flags);
   if (!signedIn) {
     if (!flagsReady) return AppRootDestination.loading;
-    return guestEntry ? AppRootDestination.welcome : AppRootDestination.auth;
+    if (!guestEntry) return AppRootDestination.auth;
+    // Once the learner leaves the welcome gate, keep the guestCourse root so
+    // anonymous sign-in (during the first lesson bootstrap) does not change
+    // MaterialApp.home and dispose the in-progress lesson route.
+    if (onboarding.step == OnboardingStep.firstLesson ||
+        onboarding.step == OnboardingStep.recommendedStart) {
+      return AppRootDestination.guestCourse;
+    }
+    return AppRootDestination.welcome;
   }
   if (anonymous) {
     if (!flagsReady) return AppRootDestination.loading;
