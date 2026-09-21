@@ -74,6 +74,20 @@ void main() {
         anonymous: true,
         flagsReady: true,
         flags: enabled,
+        onboarding: const OnboardingDraft(
+          step: OnboardingStep.done,
+          firstLessonCompleted: true,
+          pendingSaveProgress: false,
+        ),
+      ),
+      AppRootDestination.shell,
+    );
+    expect(
+      resolveAppRoot(
+        signedIn: true,
+        anonymous: true,
+        flagsReady: true,
+        flags: enabled,
         onboarding: const OnboardingDraft(),
       ),
       AppRootDestination.guestCourse,
@@ -118,7 +132,7 @@ void main() {
         flags: guestsOff,
         onboarding: const OnboardingDraft(firstLessonCompleted: true),
       ),
-      AppRootDestination.saveProgress,
+      AppRootDestination.shell,
     );
     expect(
       resolveAppRoot(

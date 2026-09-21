@@ -100,6 +100,16 @@ class OnboardingController extends StateNotifier<OnboardingDraft> {
     await _prefs?.remove(_prefsKey);
   }
 
+  /// Dismiss the soft save-progress CTA and continue as an anonymous guest.
+  Future<void> continueLearningAsGuest() async {
+    state = state.copyWith(
+      step: OnboardingStep.done,
+      pendingSaveProgress: false,
+      firstLessonCompleted: true,
+    );
+    await _persist();
+  }
+
   Future<void> resetToWelcome() async {
     state = const OnboardingDraft();
     await _prefs?.remove(_prefsKey);

@@ -483,6 +483,17 @@ class SaveProgressScreen extends ConsumerWidget {
             },
             child: const Text('I already have an account'),
           ),
+          const SizedBox(height: 8),
+          TextButton(
+            onPressed: () {
+              unawaited(
+                ref
+                    .read(onboardingControllerProvider.notifier)
+                    .continueLearningAsGuest(),
+              );
+            },
+            child: const Text('Continue learning'),
+          ),
         ],
       ),
     );
