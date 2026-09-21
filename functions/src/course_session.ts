@@ -1428,7 +1428,7 @@ export function shouldAdvanceActivityAfterSubmit(options: {
   if (!choiceId) return true;
   let stepIndex = -1;
   for (let i = 0; i < steps.length; i++) {
-    if (steps[i]?.choices?.some((choice) => choice.id === choiceId)) {
+    if (steps[i]?.choices?.some((choice: CourseChoice) => choice.id === choiceId)) {
       stepIndex = i;
       break;
     }
