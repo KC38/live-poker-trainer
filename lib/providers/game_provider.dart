@@ -839,6 +839,15 @@ class GameController extends StateNotifier<TableSession> {
       }
       return;
     }
+    // UI / auth bus commands are handled by AgentUiDriver.
+    if (cmd == 'signout' ||
+        cmd == 'sign_out' ||
+        cmd == 'tap' ||
+        cmd == 'taptext' ||
+        cmd.startsWith('tap:') ||
+        cmd.startsWith('taptext:')) {
+      return;
+    }
     unawaited(debugHeroShortcut(command));
   }
 

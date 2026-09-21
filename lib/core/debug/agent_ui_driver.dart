@@ -1,0 +1,169 @@
+/// Debug-only agent UI taps via the Dart VM service command bus.
+///
+/// Listens for `tap` / `taptext` (optional `text` query param or `tap:label`)
+/// and `signout`, so course/onboarding flows can be driven when the host has
+/// no Simulator GUI window for OS-level clicks.
+library;
+
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:live_poker_trainer/core/debug/agent_commands.dart';
+
+/// Installs a global agent UI driver (debug builds only).
+final class AgentUiDriver {
+  AgentUiDriver._();
+
+  static StreamSubscription<String>? _sub;
+  static Future<void> Function()? _signOut;
+
+  /// Registers the driver. Call once from app startup.
+  ///
+  /// [signOut] is invoked for `signout` / `sign_out` commands.
+  static void install({Future<void> Function()? signOut}) {
+    if (!kDebugMode) return;
+    _signOut = signOut;
+    unawaited(_sub?.cancel());
+    _sub = AgentCommands.stream.listen(_onCommand);
+  }
+
+  static Future<void> _onCommand(String cmd) async {
+    final normalized = cmd.trim().toLowerCase();
+    if (normalized == 'signout' || normalized == 'sign_out') {
+      await _signOut?.call();
+      return;
+    }
+
+    String? needle;
+    if (normalized.startsWith('tap:') || normalized.startsWith('taptext:')) {
+      needle = normalized.substring(normalized.indexOf(':') + 1).trim();
+    }
+    if (needle == null || needle.isEmpty) return;
+    await _tapText(needle);
+  }
+
+  static Future<void> _tapText(String needle) async {
+    final binding = WidgetsBinding.instance;
+    final needleLower = needle.toLowerCase();
+    final candidates = <_TapCandidate>[];
+
+    void visit(Element element) {
+      final widget = element.widget;
+      String? text;
+      if (widget is Text) {
+        text = widget.data ?? widget.textSpan?.toPlainText();
+      } else if (widget is RichText) {
+        text = widget.text.toPlainText();
+      } else if (widget is EditableText) {
+        text = widget.controller.text;
+      }
+      if (text != null) {
+        final lower = text.toLowerCase().trim();
+        if (lower == needleLower || lower.contains(needleLower)) {
+          final ro = element.renderObject;
+          if (ro is RenderBox && ro.hasSize && ro.attached) {
+            VoidCallback? onPressed;
+            element.visitAncestorElements((ancestor) {
+              final w = ancestor.widget;
+              if (w is ButtonStyleButton) {
+                onPressed = w.onPressed;
+                return false;
+              }
+              if (w is InkWell) {
+                onPressed = w.onTap;
+                return false;
+              }
+              if (w is GestureDetector) {
+                onPressed = w.onTap;
+                return false;
+              }
+              if (w is IconButton) {
+                onPressed = w.onPressed;
+                return false;
+              }
+              return true;
+            });
+            candidates.add(
+              _TapCandidate(
+                text: lower,
+                offset: ro.localToGlobal(ro.size.center(Offset.zero)),
+                exact: lower == needleLower,
+                buttonish: onPressed != null,
+                length: lower.length,
+                onPressed: onPressed,
+              ),
+            );
+          }
+        }
+      }
+      element.visitChildren(visit);
+    }
+
+    binding.rootElement?.visitChildren(visit);
+    if (candidates.isEmpty) {
+      debugPrint('AgentUiDriver: no match for "$needle"');
+      return;
+    }
+
+    candidates.sort((a, b) {
+      if (a.exact != b.exact) return a.exact ? -1 : 1;
+      if (a.buttonish != b.buttonish) return a.buttonish ? -1 : 1;
+      if (!a.exact && !b.exact && a.length != b.length) {
+        return a.length.compareTo(b.length);
+      }
+      return 0;
+    });
+
+    final chosen = candidates.first;
+    if (chosen.onPressed != null) {
+      chosen.onPressed!();
+      debugPrint(
+        'AgentUiDriver: invoked onPressed for "$needle" -> "${chosen.text}"',
+      );
+      return;
+    }
+
+    final point = chosen.offset;
+    final view = binding.platformDispatcher.views.first;
+    GestureBinding.instance.handlePointerEvent(
+      PointerDownEvent(
+        pointer: 1,
+        position: point,
+        kind: PointerDeviceKind.touch,
+        viewId: view.viewId,
+      ),
+    );
+    await Future<void>.delayed(const Duration(milliseconds: 40));
+    GestureBinding.instance.handlePointerEvent(
+      PointerUpEvent(
+        pointer: 1,
+        position: point,
+        kind: PointerDeviceKind.touch,
+        viewId: view.viewId,
+      ),
+    );
+    debugPrint(
+      'AgentUiDriver: pointer-tapped "$needle" -> "${chosen.text}" at $point',
+    );
+  }
+}
+
+class _TapCandidate {
+  _TapCandidate({
+    required this.text,
+    required this.offset,
+    required this.exact,
+    required this.buttonish,
+    required this.length,
+    required this.onPressed,
+  });
+
+  final String text;
+  final Offset offset;
+  final bool exact;
+  final bool buttonish;
+  final int length;
+  final VoidCallback? onPressed;
+}

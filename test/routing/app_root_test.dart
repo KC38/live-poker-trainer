@@ -195,4 +195,39 @@ void main() {
       'guest-auth',
     );
   });
+
+  test('signed-out first-lesson keeps guestCourse root', () {
+    expect(
+      resolveAppRoot(
+        signedIn: false,
+        anonymous: false,
+        flagsReady: true,
+        flags: enabled,
+        onboarding: const OnboardingDraft(step: OnboardingStep.firstLesson),
+      ),
+      AppRootDestination.guestCourse,
+    );
+    expect(
+      resolveAppRoot(
+        signedIn: false,
+        anonymous: false,
+        flagsReady: true,
+        flags: enabled,
+        onboarding: const OnboardingDraft(
+          step: OnboardingStep.recommendedStart,
+        ),
+      ),
+      AppRootDestination.guestCourse,
+    );
+    expect(
+      resolveAppRoot(
+        signedIn: false,
+        anonymous: false,
+        flagsReady: true,
+        flags: enabled,
+        onboarding: const OnboardingDraft(step: OnboardingStep.experience),
+      ),
+      AppRootDestination.welcome,
+    );
+  });
 }
