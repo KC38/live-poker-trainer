@@ -96,7 +96,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Choose which pair are your private hole cards.",
+                  "accessibilityText": "Tap the two private hole cards in front of you.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -106,7 +106,7 @@
                   "objectives": [
                     "Identify your two hole cards"
                   ],
-                  "prompt": "Which cards are your hole cards?",
+                  "prompt": "Tap your hole cards on the table.",
                   "choices": [
                     {
                       "id": "choice-hero-holes",
@@ -142,7 +142,7 @@
                     {
                       "id": "act-01-01-01-guided-find-holes-hint",
                       "kind": "hint",
-                      "text": "Look at the two cards in front of you — not the board."
+                      "text": "Your two cards sit at your seat — not the board."
                     }
                   ]
                 },
@@ -152,7 +152,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Decide who can see your hole cards during the hand.",
+                  "accessibilityText": "Tap your private hole cards — not the board or other seats.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -162,7 +162,7 @@
                   "objectives": [
                     "Recognize that other seats hide their hole cards"
                   ],
-                  "prompt": "Who can see your hole cards right now?",
+                  "prompt": "Tap the cards only you can see.",
                   "choices": [
                     {
                       "id": "choice-only-you",
@@ -201,7 +201,7 @@
                   "stage": "unguided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Pick the shared community cards on a simple flop.",
+                  "accessibilityText": "Tap the shared community cards on the flop.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -211,7 +211,7 @@
                   "objectives": [
                     "Distinguish hole cards from community cards"
                   ],
-                  "prompt": "Which cards are community cards?",
+                  "prompt": "Tap the community cards.",
                   "choices": [
                     {
                       "id": "choice-flop",
@@ -250,7 +250,7 @@
                   "stage": "checkpoint",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "On a fuller table, identify your private hole cards again.",
+                  "accessibilityText": "On a fuller table, tap your private hole cards again.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -261,7 +261,7 @@
                     "Identify your two hole cards",
                     "Distinguish hole cards from community cards"
                   ],
-                  "prompt": "Six seats, flop out. Which cards are only yours?",
+                  "prompt": "Tap the cards that are only yours.",
                   "choices": [
                     {
                       "id": "choice-checkpoint-holes",
