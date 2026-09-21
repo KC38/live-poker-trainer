@@ -92,7 +92,7 @@ class OrderSequenceActivity extends StatelessWidget {
                   ),
                   child: ordered.isEmpty
                       ? Text(
-                          'Tap hands below, weakest → strongest',
+                          'Tap hands below in the order asked',
                           style: GoogleFonts.manrope(
                             color: AppColors.slate,
                             fontSize: 13,

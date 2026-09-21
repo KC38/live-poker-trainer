@@ -406,6 +406,7 @@ class _HandCategoryTapActivity extends StatelessWidget {
                     example: example,
                     selected: selected == choice.id,
                     enabled: !locked,
+                    compact: true,
                     onPressed:
                         locked ? null : () => controller.selectChoice(choice.id),
                   );
@@ -480,6 +481,7 @@ class _ShowdownTapActivity extends StatelessWidget {
                 example: you,
                 selected: selected == 'you-win',
                 enabled: !locked,
+                compact: true,
                 onPressed:
                     locked ? null : () => controller.selectChoice('you-win'),
               ),
@@ -489,6 +491,7 @@ class _ShowdownTapActivity extends StatelessWidget {
                 example: them,
                 selected: selected == 'they-win',
                 enabled: !locked,
+                compact: true,
                 onPressed:
                     locked ? null : () => controller.selectChoice('they-win'),
               ),
