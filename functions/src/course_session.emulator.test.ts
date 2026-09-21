@@ -279,6 +279,11 @@ describe("course session integration", () => {
       raw: {clientVersion: "2.0.0"},
       db,
     });
+    // Seed the direct prerequisite so this isolation test can start mid-path
+    // without authoring the entire Section 1 completion chain.
+    await db.doc("users/iso-user/course/main").set({
+      completedLessonIds: ["lesson-01-06-02-section-one-jump"],
+    }, {merge: true});
     const started = await startCourseLessonForUser({
       uid: "iso-user",
       raw: {
@@ -323,6 +328,41 @@ describe("course session integration", () => {
       "lesson-02-01-01-position-labels",
     );
     expect(state.profile?.lifetimeXp).toBeGreaterThan(0);
+  });
+
+
+  test("locked lessons cannot start until prerequisites complete", async () => {
+    await seedFlags();
+    await initializeCourseProfileForUser({
+      uid: "lock-user",
+      raw: {clientVersion: "2.0.0"},
+      db,
+    });
+    await expect(
+      startCourseLessonForUser({
+        uid: "lock-user",
+        raw: {
+          clientVersion: "2.0.0",
+          lessonId: "lesson-01-01-02-suits-and-ranks",
+          startRequestId: "start_lock_01",
+        },
+        db,
+      }),
+    ).rejects.toMatchObject({code: "failed-precondition"});
+
+    await db.doc("users/lock-user/course/main").set({
+      completedLessonIds: ["lesson-01-01-01-your-two-cards"],
+    }, {merge: true});
+    const started = await startCourseLessonForUser({
+      uid: "lock-user",
+      raw: {
+        clientVersion: "2.0.0",
+        lessonId: "lesson-01-01-02-suits-and-ranks",
+        startRequestId: "start_lock_02",
+      },
+      db,
+    });
+    expect(started.attempt.lessonId).toBe("lesson-01-01-02-suits-and-ranks");
   });
 
   test("anonymous starts require guestCourseEnabled", async () => {

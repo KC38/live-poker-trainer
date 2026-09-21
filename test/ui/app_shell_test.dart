@@ -9,8 +9,10 @@ import 'package:live_poker_trainer/models/hand_history_sample.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
 import 'package:live_poker_trainer/models/user_document.dart';
 import 'package:live_poker_trainer/models/user_stats_model.dart';
+import 'package:live_poker_trainer/models/course/course_home_models.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
+import 'package:live_poker_trainer/providers/course_home_provider.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
@@ -23,6 +25,21 @@ import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
 import 'package:live_poker_trainer/ui/screens/profile_screen.dart';
 import 'package:live_poker_trainer/ui/screens/settings_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+
+class _FixedHomeController extends CourseHomeController {
+  @override
+  Future<CourseHomeSnapshot> build() async {
+    return const CourseHomeSnapshot(
+      status: CourseHomeLoadStatus.ready,
+      nodes: [],
+      sections: [],
+      streak: 0,
+      lifetimeXp: 0,
+      acceptedAccuracy: 0,
+      rexLine: 'Your live cash path — one clear next step.',
+    );
+  }
+}
 
 class _FakeUserRepository extends UserRepository {
   _FakeUserRepository()
@@ -82,6 +99,7 @@ List<Override> _shellOverrides() {
     analyticsServiceProvider.overrideWithValue(
       AnalyticsService(enabled: false),
     ),
+    courseHomeProvider.overrideWith(_FixedHomeController.new),
   ];
 }
 
@@ -160,8 +178,8 @@ void main() {
     await tester.tap(_navLabel('Home'));
     await tester.pumpAndSettle();
     expect(
-      find.textContaining('Your live cash course starts with a short'),
-      findsOneWidget,
+      find.textContaining('Your live cash path'),
+      findsWidgets,
     );
 
     await tester.tap(_navLabel('Live Training'));

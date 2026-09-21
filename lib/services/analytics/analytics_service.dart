@@ -178,6 +178,32 @@ class AnalyticsService {
     });
   }
 
+  /// Home course map became visible.
+  Future<void> logHomeCourseView({required String status}) async {
+    await _event('home_course_view', {'status': status});
+  }
+
+  /// User opened a course path node.
+  Future<void> logHomeNodeOpen({
+    required String lessonId,
+    required String nodeState,
+  }) async {
+    await _event('home_node_open', {
+      'lesson_id': lessonId,
+      'node_state': nodeState,
+    });
+  }
+
+  /// User tapped a locked course node.
+  Future<void> logHomeNodeLockedTap({required String lessonId}) async {
+    await _event('home_node_locked_tap', {'lesson_id': lessonId});
+  }
+
+  /// User resumed an interrupted course attempt from Home.
+  Future<void> logHomeResume({required String lessonId}) async {
+    await _event('home_resume', {'lesson_id': lessonId});
+  }
+
   /// Analytics opt-in/out toggle changed.
   Future<void> logAnalyticsConsentChanged({required bool enabled}) async {
     // Always attempt once so opt-out itself is observable when still enabled.
