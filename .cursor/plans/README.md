@@ -94,15 +94,15 @@ scaffolding over repeated attempts, and keeps reading short.
 |---|---|---|---|
 | [01](01-three-tab-shell-and-live-hub.md) | Three-tab shell and Live hub | — | Done (PR #164 / #165; deploy from `db50d28`) |
 | [02](02-course-contract-and-content-pipeline.md) | Course schema and validator | — | |
-| [03](03-course-state-and-gamification-backend.md) | Attempts, grading, XP, streak, lives | 02 |
-| [04](04-interactive-lesson-runtime.md) | Guided-to-unguided activity engine | 02, 03 |
-| [05](05-lesson-first-onboarding-and-account-linking.md) | Anonymous lesson-first onboarding/linking | 01–04 |
-| [06](06-home-course-map-and-rex-coach.md) | Home path and coach | 01–05 |
-| [07](07-course-wave-one-foundations.md) | Sections 1–2 | 02, 04 |
-| [08](08-course-wave-two-live-competence.md) | Sections 3–4 and player types | 07 |
-| [09](09-course-wave-three-advanced-play.md) | Sections 5–7 and integrated play | 08 |
-| [10](10-live-training-course-bridge.md) | Coached warm-up and hand labs | 03, 04, 07–09 |
-| [11](11-profile-migration-observability-rollout.md) | Profile, cleanup, rollout | 01–10 |
+| [03](03-course-state-and-gamification-backend.md) | Attempts, grading, XP, streak, lives | 02 | |
+| [04](04-interactive-lesson-runtime.md) | Guided-to-unguided activity engine | 02, 03 | |
+| [05](05-lesson-first-onboarding-and-account-linking.md) | Anonymous lesson-first onboarding/linking | 01–04 | |
+| [06](06-home-course-map-and-rex-coach.md) | Home path and coach | 01–05 | |
+| [07](07-course-wave-one-foundations.md) | Sections 1–2 | 02, 04 | |
+| [08](08-course-wave-two-live-competence.md) | Sections 3–4 and player types | 07 | |
+| [09](09-course-wave-three-advanced-play.md) | Sections 5–7 and integrated play | 08 | |
+| [10](10-live-training-course-bridge.md) | Coached warm-up and hand labs | 03, 04, 07–09 | |
+| [11](11-profile-migration-observability-rollout.md) | Profile, cleanup, rollout | 01–10 | |
 
 Plans 01 and 02 can run in parallel. Then implement 03 → 04 → 05 → 06.
 Content waves begin only after the content validator and interactive runtime are
