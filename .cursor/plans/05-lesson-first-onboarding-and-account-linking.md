@@ -1,5 +1,20 @@
 # Plan 05 — Lesson-First Onboarding and Account Linking
 
+**Status: Done**
+
+- Merged: https://github.com/KC38/live-poker-trainer/pull/176
+  (`166a67f`) on `main`
+- Cloud Functions deploy: verified from `origin/main` at `3adb18e`
+  (includes `issueAnonymousProgressTransfer`,
+  `redeemAnonymousProgressTransfer`,
+  `cleanupExpiredCourseTransfersJob`; redeploy reported unchanged)
+- Firestore rules deploy: released `courseTransferReceipts` /
+  `courseTombstones` admin-only rules from the same main tip
+- Acceptance review: PASS (guest-first onboarding, anonymous UID grading,
+  link-preserves-UID, single-use transfer + entitlement merge, lesson-two
+  account gate, Live Training blocked for anonymous)
+- Simulator: refresh attempted after deploy; skip if no attached session
+
 ## Objective
 
 Let a new user choose an experience level and complete the first interactive
