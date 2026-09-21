@@ -11,15 +11,15 @@ entries:
       - usage.coach.shelf.idle
       - usage.learning.coach.portrait
     source:
-      system: repo
-      path: assets/brand/logo_mark.png
+      system: generated
+      path: assets/media/characters/meridian/idle_listen.png
     provenanceId: provenance.internal.brand.v1
     licenseId: license.internal.owned.v1
     variants:
       - locale: en
         theme: dark_felt
         motion: none
-        uri: asset://brand/logo_mark.png
+        uri: asset://media/characters/meridian/idle_listen.png
     accessibility:
       decorative: false
       altMessageId: msg.media.coach.meridian.idle.alt

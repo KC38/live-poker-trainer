@@ -1,7 +1,7 @@
 /// Four-tab learning shell (Learn / Practice / Progress / You).
 ///
-/// Scaffold only — not wired into [main.dart] until
-/// `learningPlatformEnabled` is true. Existing auth → Home flow stays default.
+/// Wired from [main.dart] only when `learningPlatformEnabled` is true.
+/// Existing auth → Home flow stays the default (flags false).
 library;
 
 import 'package:flutter/material.dart';
