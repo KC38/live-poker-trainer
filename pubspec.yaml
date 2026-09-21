@@ -78,6 +78,3 @@ flutter:
   assets:
     - assets/sounds/
     - assets/brand/
-    - assets/curriculum/catalog.json
-    - assets/curriculum/exercises/
-    - assets/media/characters/meridian/

@@ -150,16 +150,6 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
     return _run(_auth.signInWithGoogle, method: 'google', isSignUp: false);
   }
 
-  /// Anonymous guest session (feature-flag gated in the auth UI).
-  Future<void> continueAsGuest() {
-    return _run(
-      _auth.signInAnonymously,
-      seedLocalPreferences: true,
-      method: 'anonymous',
-      isSignUp: true,
-    );
-  }
-
   /// Emails a password-reset link. Does not sign the user in.
   Future<void> sendPasswordReset({required String email}) {
     return _auth.sendPasswordResetEmail(email: email);

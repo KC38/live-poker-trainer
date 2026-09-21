@@ -24,9 +24,6 @@ import {
   submitLiveActionForUser,
   undoLiveActionForUser,
 } from "./live_session";
-import {completeLessonForUser} from "./complete_lesson";
-import {getLearningStateForUser} from "./get_learning_state";
-import {startLessonForUser} from "./start_lesson";
 
 initializeApp();
 
@@ -189,63 +186,6 @@ export const recoverLiveGenerationLeases = onSchedule(
   },
 );
 
-/**
- * Learning-platform callables (gated by LearningFeatureFlags;
- * learningPlatformEnabled defaults false).
- * Still planned: getNextActivity, mergeGuestProgress.
- */
-
-/** Starts a curated lesson attempt and returns client-safe questions. */
-export const startLesson = onCall(
-  {
-    region: "us-central1",
-    timeoutSeconds: 60,
-    memory: "256MiB",
-  },
-  async (request) => {
-    const uid = requireAuth(request.auth?.uid);
-    try {
-      return await startLessonForUser({uid, raw: request.data});
-    } catch (error) {
-      throw callableError("startLesson", error);
-    }
-  },
-);
-
-/** Grades lesson answers idempotently and updates learning progress. */
-export const completeLesson = onCall(
-  {
-    region: "us-central1",
-    timeoutSeconds: 60,
-    memory: "256MiB",
-  },
-  async (request) => {
-    const uid = requireAuth(request.auth?.uid);
-    try {
-      return await completeLessonForUser({uid, raw: request.data});
-    } catch (error) {
-      throw callableError("completeLesson", error);
-    }
-  },
-);
-
-/** Returns the server-owned learning progress snapshot. */
-export const getLearningState = onCall(
-  {
-    region: "us-central1",
-    timeoutSeconds: 30,
-    memory: "256MiB",
-  },
-  async (request) => {
-    const uid = requireAuth(request.auth?.uid);
-    try {
-      return await getLearningStateForUser({uid});
-    } catch (error) {
-      throw callableError("getLearningState", error);
-    }
-  },
-);
-
 function requireAuth(uid: string | undefined): string {
   if (!uid) {
     throw new HttpsError(
@@ -260,14 +200,5 @@ function callableError(name: string, error: unknown): HttpsError {
   if (error instanceof HttpsError) return error;
   const message = error instanceof Error ? error.message : String(error);
   logger.error(`${name} failed`, {error: message});
-  const learning =
-    name === "startLesson" ||
-    name === "completeLesson" ||
-    name === "getLearningState";
-  return new HttpsError(
-    "internal",
-    learning ?
-      "Learning request failed. Retry shortly." :
-      "Live training failed. Retry shortly.",
-  );
+  return new HttpsError("internal", "Live training failed. Retry shortly.");
 }
