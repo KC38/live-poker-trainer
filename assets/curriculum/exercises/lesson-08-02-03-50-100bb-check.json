@@ -1,0 +1,104 @@
+{
+  "id": "lesson-08-02-03-50-100bb-check",
+  "lessonId": "lesson-08-02-03-50-100bb-check",
+  "version": "1.0.0",
+  "title": "50-100BB check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Which statement matches 100bb better than 25bb?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "You can check back a medium pair and still have a river decision."
+        },
+        {
+          "id": "b",
+          "text": "Every open is a shove"
+        },
+        {
+          "id": "c",
+          "text": "Set-mining is impossible"
+        },
+        {
+          "id": "d",
+          "text": "There is no postflop play"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Standard depth still has streets. Short depth often does not."
+    },
+    {
+      "id": "q2",
+      "prompt": "Avoiding premature commitment at 100bb means\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Not putting the stack in with one pair when the board and the action say you are behind."
+        },
+        {
+          "id": "b",
+          "text": "Folding every pair"
+        },
+        {
+          "id": "c",
+          "text": "Never betting"
+        },
+        {
+          "id": "d",
+          "text": "Jamming every draw"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Commitment is for hands that are ahead or correctly priced. It is not a mood."
+    },
+    {
+      "id": "q3",
+      "prompt": "A 3-bet pot at 100bb has a lower stack-to-pot ratio than a single-raised pot, so\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Good one pair commits more often than in a single-raised pot."
+        },
+        {
+          "id": "b",
+          "text": "You should play it like 500bb"
+        },
+        {
+          "id": "c",
+          "text": "Bluffs increase"
+        },
+        {
+          "id": "d",
+          "text": "The 3-bet is refunded"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "More money is in. The same top pair is stronger relative to the remaining stack."
+    },
+    {
+      "id": "q4",
+      "prompt": "Which depth is the usual live open-raise baseline in this academy?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "About 100 big blinds, with 3\u20135bb opens when nobody has limped."
+        },
+        {
+          "id": "b",
+          "text": "10 big blinds"
+        },
+        {
+          "id": "c",
+          "text": "500 big blinds only"
+        },
+        {
+          "id": "d",
+          "text": "The tournament clock"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Adjust when the actual stack is far from that baseline. Do not pretend every stack is 100bb."
+    }
+  ]
+}

@@ -210,6 +210,14 @@ export interface PostflopStatus {
   passed: boolean;
 }
 
+export interface LiveEnvironmentStatus {
+  gateId: "live-environment";
+  completedCount: number;
+  totalCount: number;
+  missingObjectiveIds: string[];
+  passed: boolean;
+}
+
 function lessonIdsForSectionOrders(
   catalog: CurriculumCatalog,
   minOrder: number,
@@ -320,6 +328,29 @@ export function evaluatePostflop(
     gateId: "postflop-core",
     ...own,
     passed: own.passed && evaluatePreflop(catalog, progress).passed,
+  };
+}
+
+/**
+ * Section 8, the live-environment objectives, and a passed Postflop Core gate.
+ * Lesson progress is only the 18 depth, stakes, and variant lessons.
+ * Variant content stays conceptual until the engine deals those mechanics.
+ */
+export function evaluateLiveEnvironment(
+  catalog: CurriculumCatalog,
+  progress: LearningProgressSnapshot,
+): LiveEnvironmentStatus {
+  const own = evaluateGate({
+    catalog,
+    progress,
+    gateId: "live-environment",
+    minSectionOrder: 8,
+    maxSectionOrder: 8,
+  });
+  return {
+    gateId: "live-environment",
+    ...own,
+    passed: own.passed && evaluatePostflop(catalog, progress).passed,
   };
 }
 

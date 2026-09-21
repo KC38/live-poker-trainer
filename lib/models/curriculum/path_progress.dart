@@ -5,7 +5,7 @@ import 'package:live_poker_trainer/models/curriculum/curriculum_models.dart';
 import 'package:live_poker_trainer/models/curriculum/learning_snapshot.dart';
 
 /// Last section shown on the path. Later sections stay off the path until authored.
-const int kVisiblePathMaxSectionOrder = 7;
+const int kVisiblePathMaxSectionOrder = 8;
 
 /// First section that requires the Table Ready gate.
 const int kPreflopMinSectionOrder = 3;
@@ -13,10 +13,13 @@ const int kPreflopMinSectionOrder = 3;
 /// First section that requires the Preflop gate.
 const int kPostflopMinSectionOrder = 5;
 
+/// First section that requires the Postflop Core gate.
+const int kLiveEnvironmentMinSectionOrder = 8;
+
 /// Mastery below this sends a finished path back to review.
 const double kReviewMasteryThreshold = 0.8;
 
-/// Lessons in path order for sections 0–7.
+/// Lessons in path order for sections 0–8.
 List<CurriculumLesson> orderedPathLessons(CurriculumCatalog catalog) {
   final sections = [...catalog.sections]
     ..sort((a, b) => a.order.compareTo(b.order));
@@ -37,7 +40,8 @@ List<CurriculumLesson> orderedPathLessons(CurriculumCatalog catalog) {
 /// Whether [lessonId] can be started.
 ///
 /// Sections 0–2 unlock in order. Sections 3–4 stay locked until Table Ready
-/// passes. Sections 5–7 stay locked until the Preflop gate passes.
+/// passes. Sections 5–7 stay locked until the Preflop gate passes. Section 8
+/// stays locked until Postflop Core passes.
 bool isPathLessonUnlocked({
   required CurriculumCatalog catalog,
   required LearningSnapshot snapshot,
@@ -48,6 +52,10 @@ bool isPathLessonUnlocked({
   if (index < 0) return false;
   final sectionOrder = _sectionOrder(catalog, lessonId);
   if (sectionOrder == null) return false;
+  if (sectionOrder >= kLiveEnvironmentMinSectionOrder &&
+      !snapshot.postflopPassed) {
+    return false;
+  }
   if (sectionOrder >= kPostflopMinSectionOrder && !snapshot.preflopPassed) {
     return false;
   }

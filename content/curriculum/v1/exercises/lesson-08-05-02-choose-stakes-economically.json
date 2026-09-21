@@ -1,0 +1,104 @@
+{
+  "id": "lesson-08-05-02-choose-stakes-economically",
+  "lessonId": "lesson-08-05-02-choose-stakes-economically",
+  "version": "1.0.0",
+  "title": "Choose stakes economically",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "You won two buy-ins at $1/$2 tonight. Moving to $5/$10 for the next hand is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "A mistake. One session is not a bankroll or a skill proof."
+        },
+        {
+          "id": "b",
+          "text": "Required, because winners must move up"
+        },
+        {
+          "id": "c",
+          "text": "The same stake"
+        },
+        {
+          "id": "d",
+          "text": "How rake is avoided"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Stake choice is a money decision, not a celebration."
+    },
+    {
+      "id": "q2",
+      "prompt": "$1/$2 with a drop makes which play less profitable than the unraked chart?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "A thin call of a small bet, and a steal of a tiny pot."
+        },
+        {
+          "id": "b",
+          "text": "Folding 72o"
+        },
+        {
+          "id": "c",
+          "text": "Getting a set all-in when you are a big favorite in a large pot"
+        },
+        {
+          "id": "d",
+          "text": "Looking at your cards"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "The drop takes the edge off small pots. Big favorite pots still clear a capped rake."
+    },
+    {
+      "id": "q3",
+      "prompt": "A $2/$5 game that is tougher and uses a percent rake, compared with a soft $1/$2, should be chosen when\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Your edge is real and the buy-in does not threaten rent or food."
+        },
+        {
+          "id": "b",
+          "text": "You are stuck in the $1/$2 game"
+        },
+        {
+          "id": "c",
+          "text": "The bigger chips look better"
+        },
+        {
+          "id": "d",
+          "text": "You want a faster loss"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Higher stakes are not a reward. They are a higher price for the same mistakes."
+    },
+    {
+      "id": "q4",
+      "prompt": "This app\u2019s hands do not currently subtract rake. When you practice a close call you should remember\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "A live room may take that edge away. Do not treat a break-even unraked call as a must-call live."
+        },
+        {
+          "id": "b",
+          "text": "Rake makes every call better"
+        },
+        {
+          "id": "c",
+          "text": "The app\u2019s result is the casino\u2019s result"
+        },
+        {
+          "id": "d",
+          "text": "Time rake is dealt as a community card"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Practice the decision. Adjust the price when the house takes a piece."
+    }
+  ]
+}

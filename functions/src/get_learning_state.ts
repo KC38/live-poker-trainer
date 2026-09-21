@@ -8,6 +8,7 @@ import {getCurriculumCatalog} from "./curriculum_catalog";
 import {
   dueLessonIds,
   emptyLearningProgress,
+  evaluateLiveEnvironment,
   evaluatePostflop,
   evaluatePreflop,
   evaluateTableReady,
@@ -28,6 +29,7 @@ export interface GetLearningStateResult {
   tableReady: ReturnType<typeof evaluateTableReady>;
   preflop: ReturnType<typeof evaluatePreflop>;
   postflop: ReturnType<typeof evaluatePostflop>;
+  liveEnvironment: ReturnType<typeof evaluateLiveEnvironment>;
   dueLessonIds: string[];
 }
 
@@ -63,6 +65,7 @@ export async function getLearningStateForUser(options: {
     tableReady: evaluateTableReady(catalog, progress),
     preflop: evaluatePreflop(catalog, progress),
     postflop: evaluatePostflop(catalog, progress),
+    liveEnvironment: evaluateLiveEnvironment(catalog, progress),
     dueLessonIds: dueLessonIds(
       progress,
       calendarDayInTimeZone(new Date(), "UTC"),

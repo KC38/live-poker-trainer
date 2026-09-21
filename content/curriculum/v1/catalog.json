@@ -2690,7 +2690,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-08-01-01-short-stack-20-50bb-play"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-07-05-03-player-count-check"
@@ -2707,7 +2709,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-08-01-02-decide-at-20-50bb"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-08-01-01-short-stack-20-50bb-play"
@@ -2724,7 +2728,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-08-01-03-20-50bb-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-08-01-02-decide-at-20-50bb"
@@ -2754,7 +2760,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-08-02-01-standard-50-100bb-play"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-08-01-03-20-50bb-check"
@@ -2771,7 +2779,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-08-02-02-decide-at-50-100bb"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-08-02-01-standard-50-100bb-play"
@@ -2788,7 +2798,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-08-02-03-50-100bb-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-08-02-02-decide-at-50-100bb"
@@ -2818,7 +2830,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-08-03-01-deep-100-200bb-play"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-08-02-03-50-100bb-check"
@@ -2835,7 +2849,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-08-03-02-decide-at-100-200bb"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-08-03-01-deep-100-200bb-play"
@@ -2852,7 +2868,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-08-03-03-100-200bb-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-08-03-02-decide-at-100-200bb"
@@ -2882,7 +2900,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-08-04-01-very-deep-200-500bb-play"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-08-03-03-100-200bb-check"
@@ -2899,7 +2919,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-08-04-02-decide-at-200-500bb"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-08-04-01-very-deep-200-500bb-play"
@@ -2916,7 +2938,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-08-04-03-200-500bb-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-08-04-02-decide-at-200-500bb"
@@ -2946,7 +2970,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-08-05-01-stakes-rake-and-ev-economics"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-08-04-03-200-500bb-check"
@@ -2963,7 +2989,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-08-05-02-choose-stakes-economically"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-08-05-01-stakes-rake-and-ev-economics"
@@ -2980,7 +3008,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-08-05-03-stakes-economics-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-08-05-02-choose-stakes-economically"
@@ -3010,7 +3040,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-08-06-01-straddles-bomb-pots-and-run-it-twice"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-08-05-03-stakes-economics-check"
@@ -3027,7 +3059,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-08-06-02-navigate-straddles-and-bomb-pots"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-08-06-01-straddles-bomb-pots-and-run-it-twice"
@@ -3044,7 +3078,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-08-06-03-local-variants-check"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-08-06-02-navigate-straddles-and-bomb-pots"
@@ -4776,6 +4812,9 @@
       "tagSelectors": {
         "topic": [
           "depth"
+        ],
+        "stack": [
+          "20-50bb"
         ]
       },
       "difficulty": 3
@@ -4786,6 +4825,9 @@
       "tagSelectors": {
         "topic": [
           "depth"
+        ],
+        "stack": [
+          "50-100bb"
         ]
       },
       "difficulty": 2
@@ -4796,6 +4838,10 @@
       "tagSelectors": {
         "topic": [
           "depth"
+        ],
+        "stack": [
+          "100-200bb",
+          "200-500bb"
         ]
       },
       "difficulty": 4
@@ -4806,7 +4852,8 @@
       "tagSelectors": {
         "topic": [
           "stakes",
-          "economics"
+          "economics",
+          "rake"
         ]
       },
       "difficulty": 3
@@ -4816,7 +4863,10 @@
       "title": "Understand straddles, bomb pots, and run-it-twice",
       "tagSelectors": {
         "topic": [
-          "variants"
+          "variants",
+          "straddle",
+          "bomb-pot",
+          "run-it-twice"
         ],
         "simulation": [
           "conceptual"

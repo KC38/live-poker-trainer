@@ -1,0 +1,104 @@
+{
+  "id": "lesson-08-02-02-decide-at-50-100bb",
+  "lessonId": "lesson-08-02-02-decide-at-50-100bb",
+  "version": "1.0.0",
+  "title": "Decide at 50-100BB",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "100bb, single-raised pot, you have top pair top kicker on A72 rainbow, heads-up, in position. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Bet for value. You are not all-in yet and the board is dry."
+        },
+        {
+          "id": "b",
+          "text": "Fold"
+        },
+        {
+          "id": "c",
+          "text": "Check-fold the turn no matter what"
+        },
+        {
+          "id": "d",
+          "text": "Jam 100bb on the flop as the only size"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "This is the standard-depth value bet from the postflop path, not a short-stack shove."
+    },
+    {
+      "id": "q2",
+      "prompt": "70bb, you called a 3-bet with 76s and the flop is ace-high and dry. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold to a bet. The stack is too short to float a miss."
+        },
+        {
+          "id": "b",
+          "text": "Stack off"
+        },
+        {
+          "id": "c",
+          "text": "Call any size because suited connectors always continue"
+        },
+        {
+          "id": "d",
+          "text": "Limp"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "At 70bb the implied odds you wanted are already gone if you missed."
+    },
+    {
+      "id": "q3",
+      "prompt": "100bb, you have a set on a wet flop. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Bet or raise. There is enough behind to get value and to charge draws."
+        },
+        {
+          "id": "b",
+          "text": "Check-fold"
+        },
+        {
+          "id": "c",
+          "text": "Open-limp"
+        },
+        {
+          "id": "d",
+          "text": "Treat the stack as 20bb and jam only aces"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "A set at 100bb wants a bigger pot. You are not forced all-in before the bet."
+    },
+    {
+      "id": "q4",
+      "prompt": "You cover the table with 100bb and a player has 15bb. A decision against that player uses\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "15bb, the effective stack, not your 100bb."
+        },
+        {
+          "id": "b",
+          "text": "100bb"
+        },
+        {
+          "id": "c",
+          "text": "The average of every stack"
+        },
+        {
+          "id": "d",
+          "text": "500bb"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "You cannot win more than they have in front of them."
+    }
+  ]
+}

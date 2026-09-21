@@ -92,6 +92,9 @@ LearningSnapshot _snapshot({
     postflopCompleted: 0,
     postflopTotal: 1,
     postflopPassed: false,
+    liveCompleted: 0,
+    liveTotal: 1,
+    livePassed: false,
     dueLessonIds: dueLessonIds,
     masteryByObjectiveId: mastery,
   );

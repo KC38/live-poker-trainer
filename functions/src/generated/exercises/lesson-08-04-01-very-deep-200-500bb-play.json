@@ -1,0 +1,104 @@
+{
+  "id": "lesson-08-04-01-very-deep-200-500bb-play",
+  "lessonId": "lesson-08-04-01-very-deep-200-500bb-play",
+  "version": "1.0.0",
+  "title": "Very deep 200-500BB play",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "At 300\u2013500bb, the hands that can stack someone are mostly\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Sets, straights, flushes, and the nutted two pair. One pair is not enough."
+        },
+        {
+          "id": "b",
+          "text": "Any pair"
+        },
+        {
+          "id": "c",
+          "text": "Ace-high"
+        },
+        {
+          "id": "d",
+          "text": "A preflop limp"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Nut potential is the whole game when stacks are this deep."
+    },
+    {
+      "id": "q2",
+      "prompt": "Position is worth more very deep because\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "More streets remain, so acting last avoids the big blunders."
+        },
+        {
+          "id": "b",
+          "text": "The button posts nothing"
+        },
+        {
+          "id": "c",
+          "text": "Blinds disappear"
+        },
+        {
+          "id": "d",
+          "text": "You must act first"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "A mistake at 400bb costs a buy-in, not a few blinds."
+    },
+    {
+      "id": "q3",
+      "prompt": "Large-pot risk means\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Do not put in 400bb without a hand that beats the hands willing to call."
+        },
+        {
+          "id": "b",
+          "text": "Bet the pot with air because the stack is large"
+        },
+        {
+          "id": "c",
+          "text": "Ignore the nuts"
+        },
+        {
+          "id": "d",
+          "text": "Rake makes deep pots free"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "The deeper you are, the stronger the hand you need to build the biggest pot."
+    },
+    {
+      "id": "q4",
+      "prompt": "A multi-street plan at 400bb starts\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Before the flop: which hands can make the nuts, and which cannot."
+        },
+        {
+          "id": "b",
+          "text": "On the river only"
+        },
+        {
+          "id": "c",
+          "text": "After you are all-in"
+        },
+        {
+          "id": "d",
+          "text": "By copying a 20bb jam chart"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "If the hand cannot make a very strong hand, it should not play a very large pot."
+    }
+  ]
+}
