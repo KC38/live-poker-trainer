@@ -76,7 +76,7 @@ export interface CourseActivity {
   playerTypeRefs?: readonly CoursePlayerTypeId[];
   prompt?: string;
   choices?: readonly CourseChoice[];
-  handSteps?: readonly Array<{
+  handSteps?: ReadonlyArray<{
     id: string;
     street?: string;
     prompt?: string;
