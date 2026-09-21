@@ -27,7 +27,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-00-01-01-cash-vs-tournaments"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [],
               "remediationLessonIds": []

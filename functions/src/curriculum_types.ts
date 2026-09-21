@@ -96,20 +96,56 @@ export interface LearningFeatureFlags {
 }
 
 /**
- * Server-owned learning progress snapshot placeholders.
- * Persisted later under `users/{uid}/learning/main` (not wired yet).
+ * Server-owned learning progress under `users/{uid}/learning/main`.
  */
 export interface LearningProgressSnapshot {
   /** Lifetime learning XP (study / decision quality, never chip results). */
   xp: number;
   /** Current consecutive-day study streak. */
   streak: number;
+  /**
+   * Last calendar day (YYYY-MM-DD) that counted toward the streak, in the
+   * learner's IANA timezone at write time.
+   */
+  lastStudyDay?: string;
   /** Mastery scores keyed by objective id (0–1 placeholders). */
   masteryByObjectiveId: Record<string, number>;
+  /** Lesson ids completed at least once (placeholder unlock tracking). */
+  completedLessonIds?: readonly string[];
   /** Catalog version this snapshot was last graded against. */
   catalogVersion?: string;
   /** Epoch ms of last progress write. */
   updatedAtMs?: number;
+}
+
+/** Multiple-choice choice inside a static exercise question. */
+export interface StaticExerciseChoice {
+  id: string;
+  text: string;
+}
+
+/** Graded multiple-choice question (correct id stays server-side). */
+export interface StaticExerciseQuestion {
+  id: string;
+  prompt: string;
+  choices: readonly StaticExerciseChoice[];
+  correctChoiceId: string;
+  explanation?: string;
+}
+
+/** Curated static exercise set referenced by a lesson `exerciseRefs` entry. */
+export interface StaticExerciseSet {
+  id: string;
+  lessonId: string;
+  version: string;
+  questions: readonly StaticExerciseQuestion[];
+}
+
+/** Client-safe question projection (no correct answer). */
+export interface PublicExerciseQuestion {
+  id: string;
+  prompt: string;
+  choices: readonly StaticExerciseChoice[];
 }
 
 /**

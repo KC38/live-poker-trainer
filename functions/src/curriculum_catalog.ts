@@ -1,8 +1,8 @@
 /**
  * Frozen curriculum catalog loader for the learning platform foundation.
  *
- * Imports a generated slim subset under `generated/`. Production callables are
- * not exported yet; this module is safe to import without changing runtime.
+ * Imports a generated slim subset under `generated/`. Learning callables import
+ * this module and gate on LearningFeatureFlags (default off).
  */
 
 import rawCatalog from "./generated/curriculum_catalog.json";

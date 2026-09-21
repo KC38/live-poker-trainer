@@ -47,6 +47,29 @@ class _FakeAuthService implements AuthService {
   }
 
   @override
+  Future<User> signInAnonymously() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<User> linkWithCredential(AuthCredential credential) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<User> linkWithEmailPassword({
+    required String email,
+    required String password,
+  }) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<User> linkWithGoogle() {
+    throw UnimplementedError();
+  }
+
+  @override
   Future<void> sendPasswordResetEmail({required String email}) async {
     resetCalls += 1;
     resetEmail = email;

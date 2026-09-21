@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
+import 'package:live_poker_trainer/providers/feature_flags_provider.dart';
 
 /// Signed-out landing: create account or sign in.
 class AuthScreen extends ConsumerStatefulWidget {
@@ -114,6 +115,19 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     }
   }
 
+  Future<void> _continueAsGuest() async {
+    setState(() {
+      _error = null;
+      _info = null;
+    });
+    try {
+      await ref.read(authControllerProvider.notifier).continueAsGuest();
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _error = _friendlyError(e));
+    }
+  }
+
   String _friendlyError(Object error) {
     if (error is FirebaseAuthException) {
       return switch (error.code) {
@@ -125,6 +139,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
         'network-request-failed' => 'Network error — check your connection.',
         'too-many-requests' =>
           'Too many attempts. Wait a minute and try again.',
+        'operation-not-allowed' =>
+          'Guest sign-in is not enabled yet. Use email or Google.',
         'missing-id-token' =>
           'Google Sign-In could not get an ID token. On Android, add the app SHA-1 in the Firebase console.',
         _ => error.message ?? 'Sign-in failed (${error.code}).',
@@ -141,6 +157,10 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final learningEnabled = ref
+        .watch(learningFeatureFlagsValueProvider)
+        .learningPlatformEnabled;
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -304,6 +324,14 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                         icon: const Icon(Icons.g_mobiledata, size: 28),
                         label: const Text('Continue with Google'),
                       ),
+                      if (learningEnabled) ...[
+                        const SizedBox(height: 12),
+                        TextButton(
+                          key: const Key('continue_as_guest'),
+                          onPressed: _busy ? null : _continueAsGuest,
+                          child: const Text('Continue as guest'),
+                        ),
+                      ],
                       const SizedBox(height: 18),
                       TextButton(
                         onPressed: _busy

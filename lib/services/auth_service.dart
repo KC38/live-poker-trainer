@@ -109,6 +109,71 @@ class AuthService {
     return user;
   }
 
+  /// Creates an anonymous Firebase session (guest bootstrap).
+  ///
+  /// Requires Anonymous Auth enabled in the Firebase console.
+  Future<User> signInAnonymously() async {
+    final cred = await _auth.signInAnonymously();
+    final user = cred.user;
+    if (user == null) {
+      throw FirebaseAuthException(
+        code: 'user-null',
+        message: 'Anonymous sign-in succeeded but no user was returned.',
+      );
+    }
+    return user;
+  }
+
+  /// Links the current user (typically anonymous) with [credential].
+  ///
+  /// Used to upgrade a guest session to a durable email/Google account
+  /// without losing the same Firebase uid.
+  Future<User> linkWithCredential(AuthCredential credential) async {
+    final current = _auth.currentUser;
+    if (current == null) {
+      throw FirebaseAuthException(
+        code: 'no-current-user',
+        message: 'Sign in before linking a credential.',
+      );
+    }
+    final cred = await current.linkWithCredential(credential);
+    final user = cred.user;
+    if (user == null) {
+      throw FirebaseAuthException(
+        code: 'user-null',
+        message: 'Link succeeded but no user was returned.',
+      );
+    }
+    return _auth.currentUser ?? user;
+  }
+
+  /// Links the current user with email + password credentials.
+  Future<User> linkWithEmailPassword({
+    required String email,
+    required String password,
+  }) {
+    final credential = EmailAuthProvider.credential(
+      email: email.trim(),
+      password: password,
+    );
+    return linkWithCredential(credential);
+  }
+
+  /// Interactive Google account link for the current (guest) user.
+  Future<User> linkWithGoogle() async {
+    await _ensureGoogleInitialized();
+    final account = await _google.authenticate();
+    final idToken = account.authentication.idToken;
+    if (idToken == null || idToken.isEmpty) {
+      throw FirebaseAuthException(
+        code: 'missing-id-token',
+        message: 'Google Sign-In did not return an ID token.',
+      );
+    }
+    final credential = GoogleAuthProvider.credential(idToken: idToken);
+    return linkWithCredential(credential);
+  }
+
   /// Sends a password-reset email for [email].
   ///
   /// Treats `user-not-found` as success so the UI cannot leak whether an
