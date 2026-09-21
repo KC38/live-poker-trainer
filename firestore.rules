@@ -19,6 +19,27 @@ rules_version = '2';
 // users/{uid}/progress/main
 //   Functions-authored aggregates; owner-readable
 //
+// users/{uid}/course/main
+//   Functions-authored course progress; owner-readable
+//
+// users/{uid}/courseAttempts/{attemptId}
+//   Functions-authored lesson attempts; owner-readable
+//
+// users/{uid}/courseStepReceipts/{idempotencyKey}
+//   Functions-only step receipts
+//
+// users/{uid}/courseReviews/{reviewId}
+//   Functions-authored review schedule; owner-readable
+//
+// users/{uid}/courseXpLedger/{entryId}
+//   Functions-authored XP audit; owner-readable
+//
+// users/{uid}/entitlements/liveTraining
+//   Functions-authored Live Training entitlement; owner-readable
+//
+// appConfig/courseFlags
+//   Server-controlled course feature flags; signed-in read-only
+//
 // tableSetups/{setupKey}/situations/{situationId}
 //   Private server-generated pool; Admin SDK only
 // ===============================================================
@@ -175,6 +196,43 @@ service cloud.firestore {
         allow read, write: if false;
       }
 
+      match /course/{docId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      match /courseAttempts/{attemptId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      match /courseStepReceipts/{idempotencyKey} {
+        allow read, write: if false;
+      }
+
+      match /courseReviews/{reviewId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      match /courseXpLedger/{entryId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      match /courseStartRequests/{requestId} {
+        allow read, write: if false;
+      }
+
+      match /courseRateLimits/{bucket} {
+        allow read, write: if false;
+      }
+
+      match /entitlements/{docId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
       match /playedScenarios/{id} {
         allow read, write: if false;
       }
@@ -186,6 +244,12 @@ service cloud.firestore {
       match /{document=**} {
         allow read, write: if false;
       }
+    }
+
+    match /appConfig/{docId} {
+      // Course feature flags are readable by any signed-in user (incl. anon).
+      allow read: if signedIn() && docId == 'courseFlags';
+      allow write: if false;
     }
 
     match /tableSetups/{setupKey} {
