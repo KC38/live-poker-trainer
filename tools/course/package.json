@@ -1,0 +1,10 @@
+{
+  "name": "course-tools",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "node ./validate_course.mjs",
+    "check": "node ./validate_course.mjs --check",
+    "fixtures": "node ./validate_course.mjs --validate-only"
+  }
+}

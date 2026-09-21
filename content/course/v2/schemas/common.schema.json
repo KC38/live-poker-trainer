@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://livepokertrainer.local/schemas/course/v2/common.schema.json",
+  "title": "Shared course contract definitions",
+  "definitions": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "idString": { "type": "string", "pattern": "^[a-z][a-z0-9_-]{1,63}$" },
+    "positiveInt": { "type": "integer", "minimum": 1 },
+    "softGrade": {
+      "type": "string",
+      "enum": ["recommended", "strong", "reasonable", "questionable", "clear_mistake"]
+    },
+    "acceptedGrades": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/softGrade" },
+      "uniqueItems": true
+    },
+    "activityStage": {
+      "type": "string",
+      "enum": ["explain", "guided", "scaffolded", "unguided", "checkpoint", "jump_test"]
+    },
+    "activityRenderer": {
+      "type": "string",
+      "enum": [
+        "coach_dialogue",
+        "select_identify",
+        "order_sequence",
+        "compare_rank",
+        "numeric_pot_price",
+        "poker_action_sizing",
+        "player_read_classify",
+        "authored_multi_step_hand",
+        "full_table_hand_lab"
+      ]
+    },
+    "difficultyBand": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "experienceBand": {
+      "type": "string",
+      "enum": [
+        "never_played",
+        "rules_known",
+        "first_casino",
+        "regular_live",
+        "winning_12",
+        "advanced_live",
+        "full_hand_integration"
+      ]
+    },
+    "playerTypeId": {
+      "type": "string",
+      "enum": ["calling_station", "nit", "maniac", "tag", "lag"]
+    }
+  }
+}

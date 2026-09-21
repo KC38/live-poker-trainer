@@ -1,7 +1,11 @@
 {
   "name": "functions",
   "scripts": {
-    "build": "tsc",
+    "clean": "node -e \"require('fs').rmSync('lib',{recursive:true,force:true})\"",
+    "course:generate": "node ../tools/course/validate_course.mjs --write",
+    "course:check": "node ../tools/course/validate_course.mjs --check",
+    "prebuild": "npm run course:check && npm run clean",
+    "build": "npm run course:generate && tsc",
     "build:watch": "tsc --watch",
     "test": "vitest run",
     "test:rules": "cd .. && npx -y firebase-tools@latest emulators:exec --project live-poker-trainer-rules-test --only firestore,storage \"npm --prefix functions run test:rules:unit\"",

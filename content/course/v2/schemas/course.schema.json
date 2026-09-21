@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://livepokertrainer.local/schemas/course/v2/course.schema.json",
+  "title": "Live cash NLH course catalog v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["catalogVersion", "minClientVersion", "scope", "coachId", "playerTypes", "sections"],
+  "properties": {
+    "catalogVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "minClientVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "scope": { "type": "string", "const": "live_cash_nlh" },
+    "coachId": { "type": "string", "const": "rex" },
+    "playerTypes": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "introducedByLessonId"],
+        "properties": {
+          "id": { "$ref": "common.schema.json#/definitions/playerTypeId" },
+          "label": { "$ref": "common.schema.json#/definitions/nonEmptyString" },
+          "introducedByLessonId": { "$ref": "common.schema.json#/definitions/idString" },
+          "summary": { "$ref": "common.schema.json#/definitions/nonEmptyString" }
+        }
+      }
+    },
+    "sections": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": { "$ref": "section.schema.json#/definitions/section" }
+    }
+  }
+}

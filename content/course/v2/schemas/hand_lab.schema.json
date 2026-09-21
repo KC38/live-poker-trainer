@@ -1,0 +1,178 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://livepokertrainer.local/schemas/course/v2/hand_lab.schema.json",
+  "title": "Authoritative hand-lab server specification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "tableSize",
+    "heroSeat",
+    "smallBlind",
+    "bigBlind",
+    "startingStackBb",
+    "scriptedActions",
+    "decisionPoints"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "common.schema.json#/definitions/idString"
+    },
+    "title": {
+      "$ref": "common.schema.json#/definitions/nonEmptyString"
+    },
+    "tableSize": {
+      "type": "integer",
+      "minimum": 2,
+      "maximum": 10
+    },
+    "heroSeat": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9
+    },
+    "smallBlind": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "bigBlind": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "startingStackBb": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "heroCards": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "string",
+        "pattern": "^[2-9TJQKA][cdhs]$"
+      }
+    },
+    "board": {
+      "type": "array",
+      "maxItems": 5,
+      "items": {
+        "type": "string",
+        "pattern": "^[2-9TJQKA][cdhs]$"
+      }
+    },
+    "scriptedActions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "seat",
+          "street",
+          "action"
+        ],
+        "properties": {
+          "seat": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9
+          },
+          "street": {
+            "type": "string",
+            "enum": [
+              "preflop",
+              "flop",
+              "turn",
+              "river"
+            ]
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "FOLD",
+              "CHECK",
+              "CALL",
+              "BET",
+              "RAISE",
+              "ALL_IN"
+            ]
+          },
+          "amountBb": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        }
+      }
+    },
+    "decisionPoints": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "street",
+          "prompt",
+          "choices"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "common.schema.json#/definitions/idString"
+          },
+          "street": {
+            "type": "string",
+            "enum": [
+              "preflop",
+              "flop",
+              "turn",
+              "river"
+            ]
+          },
+          "prompt": {
+            "$ref": "common.schema.json#/definitions/nonEmptyString"
+          },
+          "choices": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "label",
+                "grading"
+              ],
+              "properties": {
+                "id": {
+                  "$ref": "common.schema.json#/definitions/idString"
+                },
+                "label": {
+                  "$ref": "common.schema.json#/definitions/nonEmptyString"
+                },
+                "action": {
+                  "type": "string",
+                  "enum": [
+                    "FOLD",
+                    "CHECK",
+                    "CALL",
+                    "BET",
+                    "RAISE",
+                    "ALL_IN"
+                  ]
+                },
+                "amountBb": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "grading": {
+                  "$ref": "grading.schema.json"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

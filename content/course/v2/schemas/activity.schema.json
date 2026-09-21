@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://livepokertrainer.local/schemas/course/v2/activity.schema.json",
+  "title": "Course activity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "order", "stage", "renderer", "estimatedSeconds", "accessibilityText", "acceptedGrades", "lifeLossEligible"],
+  "properties": {
+    "id": { "$ref": "common.schema.json#/definitions/idString" },
+    "order": { "$ref": "common.schema.json#/definitions/positiveInt" },
+    "stage": { "$ref": "common.schema.json#/definitions/activityStage" },
+    "renderer": { "$ref": "common.schema.json#/definitions/activityRenderer" },
+    "estimatedSeconds": { "$ref": "common.schema.json#/definitions/positiveInt" },
+    "accessibilityText": { "$ref": "common.schema.json#/definitions/nonEmptyString" },
+    "acceptedGrades": { "$ref": "common.schema.json#/definitions/acceptedGrades" },
+    "lifeLossEligible": { "type": "boolean" },
+    "objectives": { "type": "array", "items": { "$ref": "common.schema.json#/definitions/nonEmptyString" }, "uniqueItems": true },
+    "playerTypeRefs": { "type": "array", "items": { "$ref": "common.schema.json#/definitions/playerTypeId" }, "uniqueItems": true },
+    "coachMedia": { "type": "array", "items": { "$ref": "coach_media.schema.json" } },
+    "prompt": { "$ref": "common.schema.json#/definitions/nonEmptyString" },
+    "choices": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "grading"],
+        "properties": {
+          "id": { "$ref": "common.schema.json#/definitions/idString" },
+          "label": { "$ref": "common.schema.json#/definitions/nonEmptyString" },
+          "accessibilityText": { "$ref": "common.schema.json#/definitions/nonEmptyString" },
+          "action": { "type": "string", "enum": ["FOLD", "CHECK", "CALL", "BET", "RAISE", "ALL_IN"] },
+          "amountBb": { "type": "number", "exclusiveMinimum": 0 },
+          "grading": { "$ref": "grading.schema.json" }
+        }
+      }
+    },
+    "sequenceItems": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label"],
+        "properties": {
+          "id": { "$ref": "common.schema.json#/definitions/idString" },
+          "label": { "$ref": "common.schema.json#/definitions/nonEmptyString" }
+        }
+      }
+    },
+    "correctSequence": { "type": "array", "minItems": 2, "items": { "$ref": "common.schema.json#/definitions/idString" } },
+    "sequenceGrading": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["correct", "incorrect"],
+      "properties": {
+        "correct": { "$ref": "grading.schema.json" },
+        "incorrect": { "$ref": "grading.schema.json" }
+      }
+    },
+    "numericPrompt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["question", "unit", "acceptedMin", "acceptedMax", "grading"],
+      "properties": {
+        "question": { "$ref": "common.schema.json#/definitions/nonEmptyString" },
+        "unit": { "type": "string", "enum": ["chips", "bb", "percent", "outs"] },
+        "acceptedMin": { "type": "number" },
+        "acceptedMax": { "type": "number" },
+        "grading": { "$ref": "grading.schema.json" },
+        "missGrading": { "$ref": "grading.schema.json" }
+      }
+    },
+    "handSteps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "street", "prompt", "choices"],
+        "properties": {
+          "id": { "$ref": "common.schema.json#/definitions/idString" },
+          "street": { "type": "string", "enum": ["preflop", "flop", "turn", "river"] },
+          "prompt": { "$ref": "common.schema.json#/definitions/nonEmptyString" },
+          "accessibilityText": { "$ref": "common.schema.json#/definitions/nonEmptyString" },
+          "choices": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["id", "label", "grading"],
+              "properties": {
+                "id": { "$ref": "common.schema.json#/definitions/idString" },
+                "label": { "$ref": "common.schema.json#/definitions/nonEmptyString" },
+                "action": { "type": "string", "enum": ["FOLD", "CHECK", "CALL", "BET", "RAISE", "ALL_IN"] },
+                "amountBb": { "type": "number", "exclusiveMinimum": 0 },
+                "grading": { "$ref": "grading.schema.json" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "handLabSpec": { "$ref": "hand_lab.schema.json" }
+  }
+}

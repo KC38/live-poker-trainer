@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://livepokertrainer.local/schemas/course/v2/grading.schema.json",
+  "title": "Private activity grading payload",
+  "description": "Server-only soft grade, feedback, and optional reversal read. Never ship in Flutter assets.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["grade", "feedback"],
+  "properties": {
+    "grade": { "$ref": "common.schema.json#/definitions/softGrade" },
+    "feedback": { "$ref": "common.schema.json#/definitions/nonEmptyString" },
+    "reversalRead": { "$ref": "common.schema.json#/definitions/nonEmptyString" },
+    "betterChoiceId": { "$ref": "common.schema.json#/definitions/idString" }
+  }
+}
