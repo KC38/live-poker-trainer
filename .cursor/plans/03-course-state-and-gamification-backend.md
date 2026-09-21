@@ -1,5 +1,17 @@
 # Plan 03 — Course State and Gamification Backend
 
+**Status: Done**
+
+- Merged: https://github.com/KC38/live-poker-trainer/pull/170
+  (`90b2cdf`) on `main`
+- Cloud Functions deploy: completed from `origin/main` at `90b2cdf`
+  (created `initializeCourseProfile`, `startCourseLesson`, `submitCourseStep`,
+  `completeCourseLesson`, `getCourseState`)
+- Firestore rules deploy: released course collections + `appConfig/courseFlags`
+- CI: `course-contract` passed on PR #170
+  (https://github.com/KC38/live-poker-trainer/actions/runs/35577519565)
+- Simulator: hot-restarted attached Flutter sessions after merge
+
 ## Objective
 
 Add authoritative course attempts, soft grading, XP, accepted accuracy,
