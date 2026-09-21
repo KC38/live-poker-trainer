@@ -11,17 +11,29 @@
   onboarding. `courseStartsEnabled=false` does not present a startable Home
   path; an in-progress attempt can still finish. Malformed, failed, and
   too-old-client reads stay fail-closed.
+- Flags reload fix: https://github.com/KC38/live-poker-trainer/pull/197
+  (`bef5d13`) on `main`. While flags reload after anonymous sign-in, root
+  routing keeps the previous successful flags instead of treating Riverpod
+  `AsyncLoading` as ready with null flags. A new anonymous guest is not sent
+  to Auth during that reload when guest course is already enabled. Signed-out
+  and anonymous sessions share the root navigator key, so an in-progress first
+  lesson is not disposed just because flags reloaded. A completed error or
+  disabled/malformed/too-old read still fails closed and clears that lesson.
+  Functions and Firestore rules did not change, so they were not redeployed.
 - Cloud Functions deploy: completed from `origin/main` at `95fcb15`
   (includes `completeCalibrationWarmUp`; v2 `fetchSituation` / `recordProgress`
   pool exports stay undeployed)
 - Firestore rules deploy: released from `origin/main` at `95fcb15`
   (`appConfig/courseFlags` readable without sign-in; writes still denied)
 - CI: `course-contract` passed on PR #192
-  (https://github.com/KC38/live-poker-trainer/actions/runs/35592682209)
-  and on the acceptance fix PR #195
-  (https://github.com/KC38/live-poker-trainer/actions/runs/35595600615)
+  (https://github.com/KC38/live-poker-trainer/actions/runs/35592682209),
+  on the acceptance fix PR #195
+  (https://github.com/KC38/live-poker-trainer/actions/runs/35595600615),
+  and on the flags reload fix PR #197
+  (https://github.com/KC38/live-poker-trainer/actions/runs/35599163271)
 - Simulator: hot-restarted attached Flutter sessions (pids 19321 and 44612)
-  after the original ship and again after the acceptance fix
+  after the original ship, after the acceptance fix, and after the flags
+  reload fix
 
 ## Objective
 
