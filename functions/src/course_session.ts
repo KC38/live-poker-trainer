@@ -201,6 +201,25 @@ export function disabledCourseFlags(
   };
 }
 
+/**
+ * True when every activity has already been accepted and the attempt should
+ * complete rather than accept another submit.
+ *
+ * Explain steps count as accepted, so acceptedCount is compared directly to
+ * the activity list length — do not add explainCount again.
+ */
+export function isLessonAttemptReadyToComplete(
+  attempt: Pick<CourseAttempt, "status" | "activityIndex" | "acceptedCount">,
+  lesson: CourseLesson,
+): boolean {
+  if (attempt.status === "remediation") return false;
+  const activities = sortedActivities(lesson);
+  if (activities.length === 0) return false;
+  if (attempt.status === "completed") return true;
+  return attempt.activityIndex >= activities.length ||
+    attempt.acceptedCount >= activities.length;
+}
+
 /** Soft-grade acceptance and life-loss rules for one scored response. */
 export function evaluateLifeAndAcceptance(options: {
   grade: SoftGrade;
@@ -787,15 +806,21 @@ export async function submitCourseStepForUser(options: {
     if (attempt.status === "completed") {
       throw new HttpsError("failed-precondition", "Lesson attempt is complete.");
     }
+    const located = findLesson(attempt.lessonId);
+    if (!located) {
+      throw new HttpsError("failed-precondition", "Lesson missing from catalog.");
+    }
+    if (isLessonAttemptReadyToComplete(attempt, located.lesson)) {
+      throw new HttpsError(
+        "failed-precondition",
+        "All activities are finished. Complete the lesson.",
+      );
+    }
     if (attempt.currentActivityId !== activityId) {
       throw new HttpsError(
         "aborted",
         "Stale activity. Resume the lesson and retry.",
       );
-    }
-    const located = findLesson(attempt.lessonId);
-    if (!located) {
-      throw new HttpsError("failed-precondition", "Lesson missing from catalog.");
     }
     const activity = findActivity(located.lesson, activityId);
     if (!activity) {
@@ -831,7 +856,6 @@ export async function submitCourseStepForUser(options: {
       Math.min(currentIndex + 1, activities.length - 1) :
       currentIndex;
     const nextActivityId = activities[nextIndex]?.id ?? activityId;
-    const stayed = !advance || currentIndex >= activities.length - 1;
 
     const xpAwarded = outcome.accepted ? XP_PER_ACCEPTED_STEP : 0;
     const timezone = String(profileSnap.data()?.timezone ?? "UTC");
@@ -852,9 +876,7 @@ export async function submitCourseStepForUser(options: {
 
     const nextAttempt: CourseAttempt = {
       ...attempt,
-      activityIndex: stayed && advance && currentIndex >= activities.length - 1 ?
-        currentIndex :
-        nextIndex,
+      activityIndex: nextIndex,
       currentActivityId: advance && currentIndex < activities.length - 1 ?
         nextActivityId :
         activityId,
@@ -868,10 +890,11 @@ export async function submitCourseStepForUser(options: {
       status: nextStatus,
       updatedAtMs: nowMs,
     };
-    // After an accepted final activity, stay on last activity until complete.
+    // After an accepted final activity, move the cursor past the end so
+    // resume cannot re-grade the last step (double XP / extra life loss).
     if (advance && currentIndex >= activities.length - 1) {
       nextAttempt.currentActivityId = activityId;
-      nextAttempt.activityIndex = currentIndex;
+      nextAttempt.activityIndex = activities.length;
     }
 
     const resume = resumeFromAttempt(nextAttempt);
@@ -1056,22 +1079,11 @@ export async function completeCourseLessonForUser(options: {
     if (!located) {
       throw new HttpsError("failed-precondition", "Lesson missing from catalog.");
     }
-    const activities = sortedActivities(located.lesson);
-    const last = activities[activities.length - 1];
-    if (
-      attempt.currentActivityId !== last?.id ||
-      attempt.stepCount < activities.length
-    ) {
-      // Allow complete when every activity was accepted (stepCount covers explains).
-      const allReached = attempt.activityIndex >= activities.length - 1 &&
-        attempt.acceptedCount + explainCount(located.lesson) >=
-          activities.length;
-      if (!allReached && attempt.stepCount < activities.length) {
-        throw new HttpsError(
-          "failed-precondition",
-          "Finish every activity before completing the lesson.",
-        );
-      }
+    if (!isLessonAttemptReadyToComplete(attempt, located.lesson)) {
+      throw new HttpsError(
+        "failed-precondition",
+        "Finish every activity before completing the lesson.",
+      );
     }
 
     const mastery = masteryRatio(attempt);
@@ -1663,11 +1675,6 @@ function sortedActivities(lesson: CourseLesson): CourseActivity[] {
 function masteryRatio(attempt: CourseAttempt): number {
   if (attempt.masteryWeight <= 0) return 0;
   return attempt.masteryPoints / attempt.masteryWeight;
-}
-
-function explainCount(lesson: CourseLesson): number {
-  return lesson.activities.filter((activity) => activity.stage === "explain")
-    .length;
 }
 
 function sanitizeEntitlement(data: DocumentData): Record<string, unknown> {
