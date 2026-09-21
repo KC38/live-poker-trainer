@@ -305,27 +305,27 @@ class LessonActionTable extends StatelessWidget {
             children: [
               for (var i = 0; i < hero.length; i++) ...[
                 if (i > 0) const SizedBox(width: 6),
-                MiniCard(card: hero[i], size: MiniCardSize.hero),
+                MiniCard(card: hero[i], size: MiniCardSize.small),
               ],
             ],
           ),
           if (spot.facingBet) ...[
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             Text(
               'A bet faces you',
               style: GoogleFonts.manrope(
                 color: AppColors.gold,
-                fontSize: 12,
+                fontSize: 11,
                 fontWeight: FontWeight.w700,
               ),
             ),
           ] else ...[
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             Text(
               'No bet to match',
               style: GoogleFonts.manrope(
                 color: AppColors.slate,
-                fontSize: 12,
+                fontSize: 11,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -397,20 +397,21 @@ class LessonActionDock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    return Row(
       children: [
         for (var i = 0; i < choices.length; i++) ...[
-          if (i > 0) const SizedBox(height: 10),
-          _DockButton(
-            choice: choices[i],
-            selected: selectedId == choices[i].id,
-            enabled: enabled,
-            unavailableLook:
-                identifyUnavailable &&
-                (choices[i].action?.toUpperCase() == 'CHECK' ||
-                    choices[i].id.contains('check')),
-            onPressed: () => onSelect(choices[i].id),
+          if (i > 0) const SizedBox(width: 8),
+          Expanded(
+            child: _DockButton(
+              choice: choices[i],
+              selected: selectedId == choices[i].id,
+              enabled: enabled,
+              unavailableLook:
+                  identifyUnavailable &&
+                  (choices[i].action?.toUpperCase() == 'CHECK' ||
+                      choices[i].id.contains('check')),
+              onPressed: () => onSelect(choices[i].id),
+            ),
           ),
         ],
       ],
@@ -458,8 +459,22 @@ class _DockButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final label =
-        unavailableLook ? '${choice.label}  ·  off' : choice.label;
+    final action = (choice.action ?? choice.label).toUpperCase();
+    final short =
+        unavailableLook
+            ? 'CHECK · off'
+            : switch (action.split(' ').first) {
+              'FOLD' => 'FOLD',
+              'CHECK' => 'CHECK',
+              'CALL' => choice.label.toUpperCase().startsWith('CALL')
+                  ? choice.label.toUpperCase()
+                  : 'CALL',
+              'RAISE' => choice.label.toUpperCase().startsWith('RAISE')
+                  ? choice.label.toUpperCase()
+                  : 'RAISE',
+              'BET' => choice.label.toUpperCase(),
+              _ => choice.label.toUpperCase(),
+            };
     return Semantics(
       button: true,
       selected: selected,
@@ -467,31 +482,31 @@ class _DockButton extends StatelessWidget {
           [if (choice.action != null) choice.action!, choice.label].join(' '),
       child: Material(
         color: _fill,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(12),
         child: InkWell(
           onTap: enabled ? onPressed : null,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(12),
           child: Container(
-            constraints: const BoxConstraints(minHeight: 52),
+            constraints: const BoxConstraints(minHeight: 48),
             alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: _border,
                 width: selected ? 2.2 : 1.4,
               ),
             ),
             child: Text(
-              label,
+              short,
               textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: GoogleFonts.manrope(
-                color:
-                    unavailableLook
-                        ? AppColors.slate
-                        : AppColors.cream,
-                fontWeight: FontWeight.w800,
-                fontSize: 16,
+                color: unavailableLook ? AppColors.slate : AppColors.cream,
+                fontWeight: FontWeight.w900,
+                fontSize: 13,
+                height: 1.15,
                 decoration:
                     unavailableLook ? TextDecoration.lineThrough : null,
                 decorationColor: AppColors.slate,

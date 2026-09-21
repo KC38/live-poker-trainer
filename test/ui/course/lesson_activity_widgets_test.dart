@@ -915,7 +915,7 @@ void main() {
     );
     expect(find.byType(LessonActionTable), findsOneWidget);
     expect(find.byType(LessonActionDock), findsOneWidget);
-    await tester.tap(find.text('Fold'));
+    await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'fold-72');
     controller.dispose();
@@ -947,8 +947,8 @@ void main() {
         ),
       ),
     );
-    expect(find.text('Check  ·  off'), findsOneWidget);
-    await tester.tap(find.text('Check  ·  off'));
+    expect(find.text('CHECK · off'), findsOneWidget);
+    await tester.tap(find.text('CHECK · off'));
     await tester.pump();
     expect(controller.draft.choiceId, 'check-illegal');
     controller.dispose();
