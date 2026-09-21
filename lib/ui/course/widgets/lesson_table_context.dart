@@ -90,6 +90,20 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.hero,
         caption: 'Hole cards',
       );
+    case 'act-01-01-02-unguided-suited':
+      return const LessonTableScene(
+        heroCodes: ['Ah', 'Kh'],
+        villainSeatCount: 0,
+        highlight: LessonTableHighlight.hero,
+        caption: 'Same suit = suited',
+      );
+    case 'act-01-01-02-checkpoint-pair':
+      return const LessonTableScene(
+        heroCodes: ['9h', '9d'],
+        villainSeatCount: 1,
+        highlight: LessonTableHighlight.hero,
+        caption: 'Your two cards',
+      );
   }
 
   final hero = <String>[];

@@ -534,8 +534,11 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
               ),
               if (controller.lastResult == null) ...[
                 const SizedBox(height: 12),
-                Builder(
-                  builder: (context) {
+                // Rebuild with the activity controller so Check enables as
+                // soon as a draft answer lands (selection / order / numeric).
+                AnimatedBuilder(
+                  animation: controller,
+                  builder: (context, _) {
                     final canSubmit = _canSubmit && !_completing;
                     return Row(
                       children: [
