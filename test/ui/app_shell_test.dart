@@ -13,7 +13,9 @@ import 'package:live_poker_trainer/models/course/course_home_models.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/course_home_provider.dart';
+import 'package:live_poker_trainer/models/live_access.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
+import 'package:live_poker_trainer/providers/live_access_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/services/firestore/progress_repository.dart';
@@ -72,7 +74,7 @@ class _TrackingController extends GameController {
   final List<String> log = <String>[];
 
   @override
-  void prepareTraining() {
+  void prepareTraining({CourseLiveContext? courseContext}) {
     log.add('prepare');
     super.prepareTraining();
   }
@@ -100,6 +102,14 @@ List<Override> _shellOverrides() {
       AnalyticsService(enabled: false),
     ),
     courseHomeProvider.overrideWith(_FixedHomeController.new),
+    liveAccessProvider.overrideWith(
+      (ref) async => const LiveAccessSnapshot(
+        tier: LiveAccessTier.unrestricted,
+        source: 'test',
+        unrestrictedAccess: true,
+        warmUpAvailable: true,
+      ),
+    ),
   ];
 }
 

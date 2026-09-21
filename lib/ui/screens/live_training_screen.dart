@@ -15,16 +15,21 @@ import 'package:live_poker_trainer/models/game_settings_model.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
+import 'package:live_poker_trainer/providers/live_access_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/models/live_access.dart';
 
 /// Live Training destination — full-hand simulator launcher and table setup.
 class LiveTrainingScreen extends ConsumerStatefulWidget {
   /// Creates the Live Training hub.
-  const LiveTrainingScreen({super.key});
+  const LiveTrainingScreen({super.key, this.onOpenHome});
+
+  /// Switches the shell to Home (next lesson / warm-up).
+  final VoidCallback? onOpenHome;
 
   @override
   ConsumerState<LiveTrainingScreen> createState() => _LiveTrainingScreenState();
@@ -77,6 +82,20 @@ class _LiveTrainingScreenState extends ConsumerState<LiveTrainingScreen> {
       );
       return;
     }
+    final access = ref.read(liveAccessProvider).asData?.value;
+    if (access != null && !access.unrestrictedAccess) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            access.warmUpAvailable
+                ? 'Unrestricted Live Training unlocks after the Section 4 jump. Warm-ups stay on Home.'
+                : 'Live Training unlocks after the Section 2 checkpoint. Continue on Home.',
+          ),
+        ),
+      );
+      return;
+    }
     setState(() => _launching = true);
 
     final sound = ref.read(soundServiceProvider);
@@ -113,6 +132,25 @@ class _LiveTrainingScreenState extends ConsumerState<LiveTrainingScreen> {
     }
   }
 
+  Future<void> _launchWarmUp() async {
+    ref.read(gameControllerProvider.notifier).prepareTraining(
+      courseContext: const CourseLiveContext(
+        courseHandId: '',
+        kind: 'warm_up',
+        scaffolding: 'full',
+        rexPrompt: 'Warm-up: defend or fold with a plan.',
+      ),
+    );
+    if (!mounted) return;
+    await Navigator.push(
+      context,
+      softFadeRoute(
+        const PokerTableScreen(),
+        name: AnalyticsScreens.pokerTable,
+      ),
+    );
+  }
+
   String _setupSummary(GameSettingsModel s) {
     final blinds =
         '\$${s.smallBlind % 1 == 0 ? s.smallBlind.toInt() : s.smallBlind}/'
@@ -125,6 +163,9 @@ class _LiveTrainingScreenState extends ConsumerState<LiveTrainingScreen> {
   Widget build(BuildContext context) {
     final settings = ref.watch(settingsProvider);
     final notifier = ref.read(settingsProvider.notifier);
+    final access = ref.watch(liveAccessProvider).asData?.value;
+    final gated =
+        access != null && access.tier != LiveAccessTier.unrestricted;
 
     return Focus(
       autofocus: kDebugMode,
@@ -148,6 +189,15 @@ class _LiveTrainingScreenState extends ConsumerState<LiveTrainingScreen> {
             child: SafeArea(
               child: LayoutBuilder(
                 builder: (context, constraints) {
+                  if (gated) {
+                    return _LiveAccessGate(
+                      access: access,
+                      onOpenHome: widget.onOpenHome,
+                      onWarmUp: access.warmUpAvailable
+                          ? () => unawaited(_launchWarmUp())
+                          : null,
+                    );
+                  }
                   return SingleChildScrollView(
                     padding: const EdgeInsets.fromLTRB(22, 20, 22, 28),
                     child: ConstrainedBox(
@@ -301,6 +351,67 @@ class _LiveTrainingScreenState extends ConsumerState<LiveTrainingScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _LiveAccessGate extends StatelessWidget {
+  const _LiveAccessGate({
+    required this.access,
+    this.onOpenHome,
+    this.onWarmUp,
+  });
+
+  final LiveAccessSnapshot access;
+  final VoidCallback? onOpenHome;
+  final VoidCallback? onWarmUp;
+
+  @override
+  Widget build(BuildContext context) {
+    final warm = access.tier == LiveAccessTier.warmUp;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(22, 28, 22, 28),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Live Training',
+            style: Theme.of(context).textTheme.displayLarge,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            warm
+                ? 'Rex warm-ups are open. Random Live Training unlocks after the Section 4 jump test.'
+                : 'Live Training is advanced. Finish the Section 2 checkpoint on Home to unlock a coached warm-up.',
+            style: GoogleFonts.manrope(
+              color: AppColors.cream,
+              fontSize: 16,
+              height: 1.4,
+            ),
+          ),
+          const SizedBox(height: 24),
+          if (warm && onWarmUp != null)
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: onWarmUp,
+                child: const Text('Start Rex warm-up'),
+              ),
+            ),
+          if (warm) const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: onOpenHome,
+              child: Text(
+                access.nextLessonId == null
+                    ? 'Continue on Home'
+                    : 'Next lesson on Home',
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -14,6 +14,7 @@ import 'package:live_poker_trainer/models/coach_feedback.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/live_hand_model.dart';
+import 'package:live_poker_trainer/models/live_access.dart';
 import 'package:live_poker_trainer/models/situation_model.dart';
 import 'package:live_poker_trainer/models/table_setup.dart';
 import 'package:live_poker_trainer/models/user_stats_model.dart';
@@ -51,6 +52,7 @@ class TableSession {
     this.collectingChips = false,
     this.awardingChips = false,
     this.liveActions = const [],
+    this.courseContext,
     this.waitingOnSeat,
     this.awaitingCoach = false,
     List<HeroActionEdge> authoredHeroEdges = const [],
@@ -68,6 +70,9 @@ class TableSession {
   final bool collectingChips;
   final bool awardingChips;
   final List<LiveLegalActionModel> liveActions;
+
+  /// Course warm-up / hand-lab context when launched from Home.
+  final CourseLiveContext? courseContext;
 
   /// Villain seat whose LLM decision is in flight, if any.
   final int? waitingOnSeat;
@@ -101,6 +106,8 @@ class TableSession {
 
   bool get highlightNext => game != null && game!.isHandOver && !loading;
 
+  bool get isCourseSession => courseContext != null;
+
   TableSession copyWith({
     GameState? game,
     LiveHandViewModel? liveView,
@@ -112,6 +119,8 @@ class TableSession {
     bool? collectingChips,
     bool? awardingChips,
     List<LiveLegalActionModel>? liveActions,
+    CourseLiveContext? courseContext,
+    bool clearCourseContext = false,
     int? waitingOnSeat,
     bool clearWaitingOnSeat = false,
     bool? awaitingCoach,
@@ -128,6 +137,8 @@ class TableSession {
       collectingChips: collectingChips ?? this.collectingChips,
       awardingChips: awardingChips ?? this.awardingChips,
       liveActions: liveActions ?? this.liveActions,
+      courseContext:
+          clearCourseContext ? null : (courseContext ?? this.courseContext),
       waitingOnSeat:
           clearWaitingOnSeat ? null : (waitingOnSeat ?? this.waitingOnSeat),
       awaitingCoach: awaitingCoach ?? this.awaitingCoach,
@@ -182,16 +193,25 @@ class GameController extends StateNotifier<TableSession> {
     super.dispose();
   }
 
-  void prepareTraining() {
+  void prepareTraining({CourseLiveContext? courseContext}) {
     _replayToken++;
     _heldStreetReveal = null;
-    state = const TableSession(loading: true);
+    _courseLaunch = courseContext;
+    state = TableSession(loading: true, courseContext: courseContext);
   }
+
+  CourseLiveContext? _courseLaunch;
 
   Future<void> startTraining({bool continueTable = false}) async {
     final token = ++_replayToken;
     _heldStreetReveal = null;
-    state = TableSession(game: state.game, loading: true, replaying: false);
+    final launch = _courseLaunch;
+    state = TableSession(
+      game: state.game,
+      loading: true,
+      replaying: false,
+      courseContext: launch,
+    );
     final uid = _ref.read(authUidProvider);
     if (uid == null || uid.isEmpty) {
       state = state.copyWith(
@@ -203,17 +223,38 @@ class GameController extends StateNotifier<TableSession> {
     try {
       final sound = _ref.read(soundServiceProvider);
       await sound.unlock();
-      final result = await _ref
-          .read(liveHandServiceProvider)
-          .startHand(_ref.read(settingsProvider));
+      final result =
+          launch == null
+              ? await _ref
+                  .read(liveHandServiceProvider)
+                  .startHand(_ref.read(settingsProvider))
+              : await _ref
+                  .read(liveHandServiceProvider)
+                  .startCourseHand(
+                    courseKind: launch.kind,
+                    courseHandId:
+                        launch.courseHandId.isEmpty
+                            ? null
+                            : launch.courseHandId,
+                    handLabSpecId: launch.handLabSpecId,
+                    attemptId: launch.attemptId,
+                    activityId: launch.activityId,
+                    lessonId: launch.lessonId,
+                    returnNodeId: launch.returnNodeId,
+                  );
       if (_disposed || token != _replayToken) return;
       _handCount++;
       await sound.deal();
       if (_disposed || token != _replayToken) return;
+      final course =
+          result.courseContext != null
+              ? CourseLiveContext.fromJson(result.courseContext)
+              : launch;
       state = TableSession(
         game: result.view.toGameState(handCount: _handCount),
         liveView: result.view,
         liveActions: result.view.legalActions,
+        courseContext: course,
       );
     } catch (error) {
       if (_disposed || token != _replayToken) return;
@@ -228,6 +269,10 @@ class GameController extends StateNotifier<TableSession> {
 
   Future<void> nextHand() async {
     if (!state.heroDoneForHand) return;
+    if (state.courseContext != null) {
+      // Course sessions return to Home / lesson result — no random next hand.
+      return;
+    }
     await startTraining(continueTable: false);
   }
 
@@ -246,6 +291,7 @@ class GameController extends StateNotifier<TableSession> {
       liveView: held.view,
       liveActions: held.liveActions,
       awardingChips: game.isHandOver && game.winnerIds.isNotEmpty,
+      courseContext: state.courseContext,
     );
     if (state.awardingChips) {
       unawaited(_finishAwardAnimation(_replayToken));
@@ -275,6 +321,7 @@ class GameController extends StateNotifier<TableSession> {
         game: restored.toGameState(handCount: _handCount),
         liveView: restored,
         liveActions: restored.legalActions,
+        courseContext: state.courseContext,
       );
     } catch (error) {
       if (_disposed || token != _replayToken) return;
@@ -422,6 +469,7 @@ class GameController extends StateNotifier<TableSession> {
           liveView: result.view,
           coach: coaching,
           liveActions: const [],
+          courseContext: state.courseContext,
         );
         return;
       }
@@ -435,6 +483,7 @@ class GameController extends StateNotifier<TableSession> {
         coach: coaching,
         liveActions: result.view.legalActions,
         awardingChips: finalGame.isHandOver && finalGame.winnerIds.isNotEmpty,
+        courseContext: state.courseContext,
       );
       if (state.awardingChips) {
         await _finishAwardAnimation(token);
@@ -546,6 +595,10 @@ class GameController extends StateNotifier<TableSession> {
         game: result.view.toGameState(handCount: _handCount),
         liveView: result.view,
         liveActions: result.view.legalActions,
+        courseContext:
+            result.courseContext != null
+                ? CourseLiveContext.fromJson(result.courseContext)
+                : state.courseContext,
       );
     } catch (error) {
       if (_disposed || token != _replayToken) return;

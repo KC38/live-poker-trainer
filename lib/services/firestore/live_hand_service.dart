@@ -117,6 +117,41 @@ class LiveHandService {
     return LiveHandStartResult.fromJson(data);
   }
 
+  /// Starts an isolated course warm-up, calibration, or hand lab.
+  Future<LiveHandStartResult> startCourseHand({
+    required String courseKind,
+    String? courseHandId,
+    String? handLabSpecId,
+    String? attemptId,
+    String? activityId,
+    String? lessonId,
+    String? returnNodeId,
+  }) async {
+    _requireAuth();
+    final startRequestId = _requestKey('course');
+    final data = await _callWithRetry('startLiveHand', <String, dynamic>{
+      'clientVersion': liveClientVersion,
+      'startRequestId': startRequestId,
+      'tableSetup': <String, dynamic>{
+        'mode': 'course',
+        'courseKind': courseKind,
+        if (courseHandId != null) 'courseHandId': courseHandId,
+        if (handLabSpecId != null) 'handLabSpecId': handLabSpecId,
+        if (attemptId != null) 'attemptId': attemptId,
+        if (activityId != null) 'activityId': activityId,
+        if (lessonId != null) 'lessonId': lessonId,
+        if (returnNodeId != null) 'returnNodeId': returnNodeId,
+      },
+    });
+    return LiveHandStartResult.fromJson(data);
+  }
+
+  /// Reads Live access tier (also returned on getCourseState).
+  Future<Map<String, dynamic>> getLiveAccess() async {
+    _requireAuth();
+    return _callWithRetry('getLiveAccess', const <String, dynamic>{});
+  }
+
   static String _requestKey(String prefix) =>
       '${prefix}_${DateTime.now().microsecondsSinceEpoch}';
 

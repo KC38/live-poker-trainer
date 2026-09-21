@@ -53,7 +53,8 @@ export type LiveActionBucket =
 
 /** Canonical setup shared by a pool of independently generated hands. */
 export interface LiveTableSetup {
-  mode: "random";
+  /** `random` = Live Training pool; `course` = lesson/warm-up isolation. */
+  mode: "random" | "course";
   seatCount: number;
   smallBlind: number;
   bigBlind: number;
@@ -103,7 +104,7 @@ export interface LiveHandDefinition {
   buttonSeat: number;
   seats: LiveSeatDefinition[];
   runout: [string, string, string, string, string];
-  source: "gemini";
+  source: "gemini" | "course_authored";
   modelId: string;
 }
 
@@ -233,6 +234,8 @@ export interface StartLiveHandResult {
   ok: true;
   view: LiveHandView;
   events: LiveActionEvent[];
+  sessionMode?: "live" | "course";
+  courseContext?: Record<string, unknown> | null;
 }
 
 export interface SubmitLiveActionInput {
@@ -250,4 +253,6 @@ export interface SubmitLiveActionResult {
   events: LiveActionEvent[];
   coaching: CoachingActionAssessment;
   replayed: boolean;
+  sessionMode?: "live" | "course";
+  courseContext?: Record<string, unknown> | null;
 }

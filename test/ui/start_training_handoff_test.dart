@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
+import 'package:live_poker_trainer/models/live_access.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
+import 'package:live_poker_trainer/providers/live_access_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/ui/screens/live_training_screen.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
@@ -21,7 +23,7 @@ class _TrackingController extends GameController {
   final Completer<void> started = Completer<void>();
 
   @override
-  void prepareTraining() {
+  void prepareTraining({CourseLiveContext? courseContext}) {
     log.add('prepare');
     super.prepareTraining();
   }
@@ -64,6 +66,14 @@ void main() {
               AnalyticsService(enabled: false),
             ),
             gameControllerProvider.overrideWith(_TrackingController.new),
+            liveAccessProvider.overrideWith(
+              (ref) async => const LiveAccessSnapshot(
+                tier: LiveAccessTier.unrestricted,
+                source: 'test',
+                unrestrictedAccess: true,
+                warmUpAvailable: true,
+              ),
+            ),
           ],
           child: MaterialApp(
             theme: buildPokerTheme(),

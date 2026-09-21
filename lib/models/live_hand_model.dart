@@ -1105,17 +1105,28 @@ class LiveSeatViewModel {
 /// Response from start/resume.
 @immutable
 class LiveHandStartResult {
-  const LiveHandStartResult({required this.view, required this.events});
+  const LiveHandStartResult({
+    required this.view,
+    required this.events,
+    this.sessionMode = 'live',
+    this.courseContext,
+  });
 
   final LiveHandViewModel view;
   final List<LiveActionEventModel> events;
+  final String sessionMode;
+  final Map<String, dynamic>? courseContext;
 
   factory LiveHandStartResult.fromJson(Map<String, dynamic> json) {
+    final context = json['courseContext'];
     return LiveHandStartResult(
       view: LiveHandViewModel.fromJson(_map(json['view'])),
       events: _maps(
         json['events'],
       ).map(LiveActionEventModel.fromJson).toList(growable: false),
+      sessionMode: json['sessionMode'] as String? ?? 'live',
+      courseContext:
+          context is Map ? Map<String, dynamic>.from(context) : null,
     );
   }
 }

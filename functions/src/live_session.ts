@@ -33,6 +33,19 @@ import {
 } from "./live_usage";
 import {livePotSize, visibleLastAction} from "./live_poker_engine";
 import {buildLiveSetupKey, parseLiveTableSetup} from "./live_setup";
+import {
+  assertUnrestrictedLiveAccess,
+  type LiveAccessDeps,
+} from "./live_access";
+import {
+  allocateCourseHandForUser,
+  expandCourseHeroAction,
+  isCourseModeRequest,
+  loadCoursePreparedNode,
+  writeCourseLiveHistory,
+  type CourseSessionContext,
+} from "./course_live_bridge";
+import {curatedCourseHandById} from "./course_live_hands";
 import type {
   CoachingActionAssessment,
   LiveActionEvent,
@@ -73,6 +86,9 @@ interface LiveSessionDoc {
   coaching: CoachingActionAssessment[];
   /** Present after the latest submit until Continue advances or Undo rewinds. */
   undoCheckpoint?: LiveUndoCheckpoint | null;
+  /** `live` (default) or isolated `course` warm-up / hand lab. */
+  sessionMode?: "live" | "course";
+  courseContext?: CourseSessionContext | null;
 }
 
 interface UndoLiveActionInput {
@@ -86,11 +102,27 @@ export async function startLiveHandForUser(options: {
   uid: string;
   raw: unknown;
   db?: Firestore;
+  accessDeps?: LiveAccessDeps;
 }): Promise<StartLiveHandResult> {
   const db = options.db ?? getFirestore();
   const input = record(options.raw, "request");
   const clientVersion = nonEmpty(input.clientVersion, "clientVersion");
   await assertLiveServiceAvailable(db, clientVersion);
+
+  if (isCourseModeRequest(input.tableSetup)) {
+    return startCourseLiveHandForUser({
+      uid: options.uid,
+      raw: options.raw,
+      db,
+      accessDeps: options.accessDeps,
+    });
+  }
+
+  await assertUnrestrictedLiveAccess(options.uid, {
+    db,
+    ...options.accessDeps,
+  });
+
   const setup = parseLiveTableSetup(input.tableSetup);
   const startRequestId = safeCommandKey(
     input.startRequestId,
@@ -207,6 +239,8 @@ export async function startLiveHandForUser(options: {
     stateVersion: 0,
     status: allocated.root.state.status,
     coaching: [],
+    sessionMode: "live",
+    courseContext: null,
   };
   await db.runTransaction(async (tx) => {
     const [request, open] = await Promise.all([
@@ -258,6 +292,355 @@ export async function startLiveHandForUser(options: {
   };
 }
 
+/** Starts an isolated course / warm-up hand (never touches live pools). */
+async function startCourseLiveHandForUser(options: {
+  uid: string;
+  raw: unknown;
+  db: Firestore;
+  accessDeps?: LiveAccessDeps;
+}): Promise<StartLiveHandResult> {
+  const db = options.db;
+  const input = record(options.raw, "request");
+  const startRequestId = safeCommandKey(
+    input.startRequestId,
+    "startRequestId",
+  );
+  const newSessionId = randomUUID();
+  const requestRef = db
+    .collection("users")
+    .doc(options.uid)
+    .collection("liveStartRequests")
+    .doc(startRequestId);
+  const openRef = openSessionReference(db, options.uid);
+  const claimId = randomUUID();
+  const claim = await db.runTransaction(async (tx) => {
+    const [snapshot, openSnapshot] = await Promise.all([
+      tx.get(requestRef),
+      tx.get(openRef),
+    ]);
+    const data = snapshot.data();
+    const open = openSnapshot.data();
+    if (open?.status === "playing" && typeof open.sessionId === "string") {
+      return {sessionId: open.sessionId as string, claimed: false};
+    }
+    if (
+      open?.status === "starting" &&
+      open.startRequestId !== startRequestId &&
+      Number(open.leaseExpiresAtMs ?? 0) > Date.now()
+    ) {
+      throw new HttpsError(
+        "unavailable",
+        "Another device is already starting a hand. Retry shortly.",
+      );
+    }
+    if (data?.status === "ready" && typeof data.sessionId === "string") {
+      return {sessionId: data.sessionId as string, claimed: false};
+    }
+    if (
+      data?.status === "pending" &&
+      Number(data.leaseExpiresAtMs ?? 0) > Date.now()
+    ) {
+      throw new HttpsError(
+        "unavailable",
+        "This hand is still starting. Retry shortly.",
+      );
+    }
+    const claimedSessionId =
+      typeof data?.sessionId === "string" ? data.sessionId : newSessionId;
+    tx.set(requestRef, {
+      status: "pending",
+      setupKey: "course",
+      sessionMode: "course",
+      sessionId: claimedSessionId,
+      claimId,
+      leaseExpiresAtMs: Date.now() + START_LEASE_MS,
+      updatedAt: FieldValue.serverTimestamp(),
+    }, {merge: true});
+    tx.set(openRef, {
+      status: "starting",
+      startRequestId,
+      sessionId: claimedSessionId,
+      claimId,
+      leaseExpiresAtMs: Date.now() + START_LEASE_MS,
+      updatedAt: FieldValue.serverTimestamp(),
+    });
+    return {sessionId: claimedSessionId, claimed: true};
+  });
+  if (!claim.claimed) {
+    return resumeLiveHandForUser({
+      uid: options.uid,
+      sessionId: claim.sessionId,
+      clientVersion: nonEmpty(input.clientVersion, "clientVersion"),
+      db,
+    });
+  }
+  const sessionId = claim.sessionId;
+  const sessionRef = sessionReference(db, options.uid, sessionId);
+  let allocated: Awaited<ReturnType<typeof allocateCourseHandForUser>>;
+  try {
+    allocated = await allocateCourseHandForUser({
+      uid: options.uid,
+      rawSetup: input.tableSetup,
+      sessionId,
+      startRequestId,
+      db,
+      accessDeps: options.accessDeps,
+    });
+  } catch (error) {
+    await releaseStartClaim({db, requestRef, openRef, claimId, error});
+    throw error;
+  }
+  const session: LiveSessionDoc = {
+    sessionId,
+    uid: options.uid,
+    handId: allocated.definition.handId,
+    setupKey: allocated.setupKey,
+    stateHash: allocated.root.stateHash,
+    state: allocated.root.state,
+    history: allocated.root.history,
+    stateVersion: 0,
+    status: allocated.root.state.status,
+    coaching: [],
+    sessionMode: "course",
+    courseContext: allocated.courseContext,
+  };
+  await db.runTransaction(async (tx) => {
+    const [request, open] = await Promise.all([
+      tx.get(requestRef),
+      tx.get(openRef),
+    ]);
+    if (
+      request.data()?.status !== "pending" ||
+      request.data()?.claimId !== claimId
+    ) {
+      throw new HttpsError("aborted", "Start request lease was lost.");
+    }
+    if (
+      open.data()?.status !== "starting" ||
+      open.data()?.claimId !== claimId
+    ) {
+      throw new HttpsError("aborted", "Open-session lease was lost.");
+    }
+    tx.create(sessionRef, {
+      ...session,
+      createdAt: FieldValue.serverTimestamp(),
+      updatedAt: FieldValue.serverTimestamp(),
+    });
+    tx.set(requestRef, {
+      status: "ready",
+      sessionId,
+      claimId: null,
+      leaseExpiresAtMs: null,
+      completedAt: FieldValue.serverTimestamp(),
+    }, {merge: true});
+    tx.set(openRef, {
+      status: "playing",
+      sessionId,
+      startRequestId,
+      claimId: null,
+      leaseExpiresAtMs: null,
+      updatedAt: FieldValue.serverTimestamp(),
+    });
+  });
+  return {
+    ok: true,
+    view: projectLiveView({
+      session,
+      hand: allocated.definition,
+      node: allocated.root,
+    }),
+    events: allocated.root.history,
+    sessionMode: "course",
+    courseContext: allocated.courseContext as unknown as Record<string, unknown>,
+  };
+}
+
+/** Course-mode submit: deterministic villains, course mastery only. */
+async function submitCourseLiveActionForUser(options: {
+  uid: string;
+  raw: unknown;
+  db: Firestore;
+  session: LiveSessionDoc;
+}): Promise<SubmitLiveActionResult> {
+  const db = options.db;
+  const input = parseSubmitInput(options.raw);
+  const sessionRef = sessionReference(db, options.uid, input.sessionId);
+  const decisionRef = sessionRef.collection("decisions").doc(input.idempotencyKey);
+  const decisionClaimId = randomUUID();
+  const claimed = await db.runTransaction(async (tx) => {
+    const [sessionSnapshot, decisionSnapshot] = await Promise.all([
+      tx.get(sessionRef),
+      tx.get(decisionRef),
+    ]);
+    if (decisionSnapshot.exists) {
+      const decision = decisionSnapshot.data();
+      if (!decisionCommandMatches(decision, input)) {
+        throw new HttpsError(
+          "already-exists",
+          "idempotencyKey was reused for a different command.",
+        );
+      }
+      if (decision?.status === "ready" && decision.result) {
+        return {
+          result: {
+            ...(decision.result as SubmitLiveActionResult),
+            replayed: true,
+          },
+        };
+      }
+      if (
+        decision?.status === "pending" &&
+        Number(decision.leaseExpiresAtMs ?? 0) > Date.now()
+      ) {
+        throw new HttpsError(
+          "unavailable",
+          "This decision is still resolving. Retry shortly.",
+        );
+      }
+    }
+    if (!sessionSnapshot.exists) {
+      throw new HttpsError("not-found", "Live hand session not found.");
+    }
+    const session = sessionSnapshot.data() as LiveSessionDoc;
+    validateSessionCommand(session, input);
+    tx.set(decisionRef, {
+      status: "pending",
+      actionId: input.actionId,
+      decisionId: input.decisionId,
+      stateVersion: input.stateVersion,
+      claimId: decisionClaimId,
+      leaseExpiresAtMs: Date.now() + DECISION_LEASE_MS,
+      createdAt: FieldValue.serverTimestamp(),
+    });
+    return {session};
+  });
+  if ("result" in claimed && claimed.result) return claimed.result;
+  const session = claimed.session;
+  const courseContext = session.courseContext;
+  if (!courseContext) {
+    throw new HttpsError("failed-precondition", "Course session missing context.");
+  }
+  const curated = curatedCourseHandById(courseContext.courseHandId);
+  if (!curated) {
+    throw new HttpsError("internal", "Curated course hand missing.");
+  }
+  try {
+    const loaded = await loadCoursePreparedNode({
+      db,
+      setupKey: session.setupKey,
+      handId: session.handId,
+      stateHash: session.stateHash,
+    });
+    const expanded = await expandCourseHeroAction({
+      db,
+      uid: options.uid,
+      hand: loaded.hand,
+      parent: loaded.node,
+      actionId: input.actionId,
+      courseContext,
+      curated,
+    });
+    const undoCheckpoint: LiveUndoCheckpoint = {
+      stateHash: session.stateHash,
+      state: session.state,
+      history: session.history,
+      stateVersion: session.stateVersion,
+      status: session.status,
+      coaching: session.coaching,
+    };
+    const nextSession: LiveSessionDoc = {
+      ...session,
+      stateHash: expanded.child.stateHash,
+      state: expanded.child.state,
+      history: expanded.child.history,
+      stateVersion: session.stateVersion + 1,
+      status: expanded.child.state.status,
+      coaching: [...session.coaching, expanded.coaching],
+      undoCheckpoint,
+      sessionMode: "course",
+      courseContext: expanded.courseContext,
+    };
+    const result: SubmitLiveActionResult = {
+      ok: true,
+      view: projectLiveView({
+        session: nextSession,
+        hand: loaded.hand,
+        node: expanded.child,
+      }),
+      events: expanded.events,
+      coaching: expanded.coaching,
+      replayed: false,
+      sessionMode: "course",
+      courseContext: expanded.courseContext as unknown as Record<string, unknown>,
+    };
+    await db.runTransaction(async (tx) => {
+      const [currentSession, currentDecision] = await Promise.all([
+        tx.get(sessionRef),
+        tx.get(decisionRef),
+      ]);
+      const current = currentSession.data() as LiveSessionDoc | undefined;
+      if (
+        !current ||
+        current.stateVersion !== session.stateVersion ||
+        current.stateHash !== session.stateHash
+      ) {
+        throw new HttpsError(
+          "aborted",
+          "Session advanced while this action was resolving.",
+        );
+      }
+      if (
+        currentDecision.data()?.status !== "pending" ||
+        currentDecision.data()?.claimId !== decisionClaimId
+      ) {
+        throw new HttpsError("aborted", "Decision is no longer pending.");
+      }
+      tx.update(sessionRef, {
+        stateHash: nextSession.stateHash,
+        state: nextSession.state,
+        history: nextSession.history,
+        coaching: nextSession.coaching,
+        stateVersion: nextSession.stateVersion,
+        status: nextSession.status,
+        undoCheckpoint,
+        courseContext: nextSession.courseContext,
+        updatedAt: FieldValue.serverTimestamp(),
+      });
+      tx.set(decisionRef, {
+        status: "ready",
+        result,
+        claimId: null,
+        leaseExpiresAtMs: null,
+        completedAt: FieldValue.serverTimestamp(),
+      }, {merge: true});
+      if (nextSession.status !== "playing") {
+        // Isolation: delete open session only — never liveProgress/history.
+        tx.delete(openSessionReference(db, options.uid));
+      }
+    });
+    if (nextSession.status !== "playing") {
+      await writeCourseLiveHistory({
+        db,
+        uid: options.uid,
+        sessionId: nextSession.sessionId,
+        hand: loaded.hand,
+        courseContext: expanded.courseContext,
+        coaching: nextSession.coaching,
+      });
+    }
+    return result;
+  } catch (error) {
+    await decisionRef.set({
+      status: "error",
+      claimId: null,
+      leaseExpiresAtMs: null,
+      error: error instanceof Error ? error.message : String(error),
+      updatedAt: FieldValue.serverTimestamp(),
+    }, {merge: true});
+    throw error;
+  }
+}
+
 /** Applies one Hero action and resolves/caches its shared continuation. */
 export async function submitLiveActionForUser(options: {
   uid: string;
@@ -268,6 +651,18 @@ export async function submitLiveActionForUser(options: {
   const db = options.db ?? getFirestore();
   const input = parseSubmitInput(options.raw);
   const sessionRef = sessionReference(db, options.uid, input.sessionId);
+  const earlySession = await sessionRef.get();
+  if (
+    earlySession.exists &&
+    (earlySession.data() as LiveSessionDoc).sessionMode === "course"
+  ) {
+    return submitCourseLiveActionForUser({
+      uid: options.uid,
+      raw: options.raw,
+      db,
+      session: earlySession.data() as LiveSessionDoc,
+    });
+  }
   const decisionRef = sessionRef.collection("decisions").doc(input.idempotencyKey);
   const decisionClaimId = randomUUID();
   const claimed = await db.runTransaction(async (tx) => {
@@ -505,6 +900,26 @@ export async function resumeLiveHandForUser(options: {
     throw new HttpsError("not-found", "Live hand session not found.");
   }
   const session = sessionSnapshot.data() as LiveSessionDoc;
+  if (session.sessionMode === "course") {
+    const loaded = await loadCoursePreparedNode({
+      db,
+      setupKey: session.setupKey,
+      handId: session.handId,
+      stateHash: session.stateHash,
+    });
+    return {
+      ok: true,
+      view: projectLiveView({
+        session,
+        hand: loaded.hand,
+        node: loaded.node,
+      }),
+      events: [],
+      sessionMode: "course",
+      courseContext: (session.courseContext ?? null) as
+        Record<string, unknown> | null,
+    };
+  }
   const handRef = db
     .collection("liveTableSetups")
     .doc(session.setupKey)
@@ -523,6 +938,7 @@ export async function resumeLiveHandForUser(options: {
     ok: true,
     view: projectLiveView({session, hand, node}),
     events: [],
+    sessionMode: "live",
   };
 }
 
@@ -572,11 +988,12 @@ export async function undoLiveActionForUser(options: {
         "Another hand is already open.",
       );
     }
-    const handRef = db
-      .collection("liveTableSetups")
-      .doc(session.setupKey)
-      .collection("hands")
-      .doc(session.handId);
+    const isCourse = session.sessionMode === "course";
+    const handRef = isCourse ?
+      db.collection("courseLiveSetups").doc(session.setupKey)
+        .collection("hands").doc(session.handId) :
+      db.collection("liveTableSetups").doc(session.setupKey)
+        .collection("hands").doc(session.handId);
     const handSnapshot = await tx.get(handRef);
     const hand = handSnapshot.data()?.definition as
       LiveHandDefinition | undefined;
@@ -590,7 +1007,7 @@ export async function undoLiveActionForUser(options: {
       throw new HttpsError("internal", "Parent decision node missing.");
     }
     const handWasComplete = session.status !== "playing";
-    if (handWasComplete) {
+    if (handWasComplete && !isCourse) {
       reverseCompleteLiveHandInTransaction({
         tx,
         db,
@@ -610,6 +1027,8 @@ export async function undoLiveActionForUser(options: {
       stateVersion: checkpoint.stateVersion,
       status: checkpoint.status,
       coaching: checkpoint.coaching,
+      sessionMode: session.sessionMode,
+      courseContext: session.courseContext ?? null,
     };
     tx.update(sessionRef, {
       stateHash: restoredSession.stateHash,
