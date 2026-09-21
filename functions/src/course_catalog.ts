@@ -76,6 +76,12 @@ export interface CourseActivity {
   playerTypeRefs?: readonly CoursePlayerTypeId[];
   prompt?: string;
   choices?: readonly CourseChoice[];
+  handSteps?: readonly Array<{
+    id: string;
+    street?: string;
+    prompt?: string;
+    choices?: readonly CourseChoice[];
+  }>;
   handLabSpecId?: string;
   handLabSpec?: Record<string, unknown>;
 }

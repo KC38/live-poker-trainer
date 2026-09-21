@@ -2717,8 +2717,8 @@
                       "choices": [
                         {
                           "id": "open-kq",
-                          "label": "Open to 6",
-                          "accessibilityText": "Open to 6",
+                          "label": "Raise to 6",
+                          "accessibilityText": "Raise to 6",
                           "grading": {
                             "grade": "recommended",
                             "feedback": "Strong button open."

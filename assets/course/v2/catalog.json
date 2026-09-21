@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "06c0d5db88da58edfd787015d8431c1016b2afc1a13e332d42b3036666bf4299",
+  "contentChecksum": "1160a6b9001a73d20db3b472e214feb86a2ef57fd0946f460ed9f3bd38e80d5f",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -2070,8 +2070,8 @@
                       "choices": [
                         {
                           "id": "open-kq",
-                          "label": "Open to 6",
-                          "accessibilityText": "Open to 6",
+                          "label": "Raise to 6",
+                          "accessibilityText": "Raise to 6",
                           "action": "RAISE",
                           "amountBb": 3
                         },

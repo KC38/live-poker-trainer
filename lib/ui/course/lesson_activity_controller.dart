@@ -130,6 +130,16 @@ class LessonActivityController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Clear feedback and move to the next authored hand street in-place.
+  void advanceToNextHandStep() {
+    if (_submitting) return;
+    _lastResult = null;
+    _pendingIdempotencyKey = null;
+    _hintVisible = false;
+    _draft = ActivityDraft(handStepIndex: _draft.handStepIndex + 1);
+    notifyListeners();
+  }
+
   void beginSubmit(String idempotencyKey) {
     _pendingIdempotencyKey = idempotencyKey;
     _submitting = true;

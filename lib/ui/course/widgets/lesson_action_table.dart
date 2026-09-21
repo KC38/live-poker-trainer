@@ -693,28 +693,27 @@ class _DockButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final action = (choice.action ?? choice.label).toUpperCase();
-    // Live-table labels stay short (CHECK / CALL 5 / ALL-IN 12). Longer content
-    // labels stay in Semantics so agents can disambiguate from footer.
+    final authored = choice.label.trim().toUpperCase();
+    final authoredWords = authored.split(RegExp(r'\s+'));
+    // Prefer multi-word teaching labels (Raise to 6, See flop, Jam 100bb).
+    // Keep Check/Fold chrome short even when content adds a caption word.
+    final preferAuthoredLabel = authoredWords.length >= 2 &&
+        authoredWords.first != 'CHECK' &&
+        authoredWords.first != 'FOLD';
     final short =
         unavailableLook
             ? 'CHECK (off)'
+            : preferAuthoredLabel
+            ? authored
             : action.startsWith('ALL')
-            ? (choice.label.toUpperCase().contains('12')
-                ? 'ALL-IN 12'
-                : 'ALL-IN')
+            ? (authored.contains('12') ? 'ALL-IN 12' : 'ALL-IN')
             : switch (action.split(' ').first) {
               'FOLD' => 'FOLD',
               'CHECK' => 'CHECK',
-              'CALL' => choice.label.toUpperCase().startsWith('CALL')
-                  ? choice.label.toUpperCase()
-                  : 'CALL',
-              'RAISE' => choice.label.toUpperCase().startsWith('RAISE')
-                  ? choice.label.toUpperCase()
-                  : 'RAISE',
-              'BET' => choice.label.toUpperCase().startsWith('BET')
-                  ? choice.label.toUpperCase()
-                  : 'BET',
-              _ => choice.label.toUpperCase(),
+              'CALL' => authored.startsWith('CALL') ? authored : 'CALL',
+              'RAISE' => authored.startsWith('RAISE') ? authored : 'RAISE',
+              'BET' => authored.startsWith('BET') ? authored : 'BET',
+              _ => authored,
             };
     return Semantics(
       button: true,
