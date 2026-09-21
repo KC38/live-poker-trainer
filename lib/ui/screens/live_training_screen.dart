@@ -13,6 +13,7 @@ import 'package:live_poker_trainer/core/constants/poker_constants.dart';
 import 'package:live_poker_trainer/core/debug/agent_commands.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
+import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
@@ -66,6 +67,16 @@ class _LiveTrainingScreenState extends ConsumerState<LiveTrainingScreen> {
   /// Navigates immediately; the table kicks off deal + SFX once it is visible.
   Future<void> _launchTraining() async {
     if (_launching) return;
+    final user = ref.read(authServiceProvider).currentUser;
+    if (user != null && user.isAnonymous) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Create an account before Live Training.'),
+        ),
+      );
+      return;
+    }
     setState(() => _launching = true);
 
     final sound = ref.read(soundServiceProvider);

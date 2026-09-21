@@ -316,6 +316,34 @@ describe("Firestore security rules", () => {
     }
   });
 
+  it("denies course transfer receipts and tombstones to all clients", async () => {
+    await seedFirestore("courseTransferReceipts/r1", {
+      sourceUid: OWNER_UID,
+      status: "issued",
+    });
+    await seedFirestore("courseTombstones/anon-1", {
+      sourceUid: "anon-1",
+      status: "pending_delete",
+    });
+    await seedFirestore(`users/${OWNER_UID}/courseTransferMerges/r1`, {
+      receiptId: "r1",
+    });
+    const ownerDb = testEnv.authenticatedContext(OWNER_UID).firestore();
+    const anonDb = testEnv.authenticatedContext("anon-user", {
+      firebase: {sign_in_provider: "anonymous"},
+    }).firestore();
+    for (const database of [ownerDb, anonDb]) {
+      await assertFails(getDoc(doc(database, "courseTransferReceipts/r1")));
+      await assertFails(
+        setDoc(doc(database, "courseTransferReceipts/r1"), {hack: true}),
+      );
+      await assertFails(getDoc(doc(database, "courseTombstones/anon-1")));
+      await assertFails(
+        getDoc(doc(database, `users/${OWNER_UID}/courseTransferMerges/r1`)),
+      );
+    }
+  });
+
   it("denies receipts and private situation pools even to the owner", async () => {
     await seedFirestore(
       `users/${OWNER_UID}/situationReceipts/situation-1`,

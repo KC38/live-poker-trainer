@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
 import 'package:live_poker_trainer/models/user_document.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
+import 'package:live_poker_trainer/providers/course_catalog_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
 import 'package:live_poker_trainer/services/auth_service.dart';
@@ -114,6 +115,34 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
     }
   }
 
+  /// Transparent anonymous session for the first course lesson.
+  Future<User> ensureAnonymousSession() async {
+    final existing = _auth.currentUser;
+    if (existing != null) return existing;
+    state = const AsyncValue.loading();
+    try {
+      final user = await _auth.signInAnonymously();
+      final repo = _ref.read(userRepositoryProvider);
+      await repo.ensureUserDoc(
+        uid: user.uid,
+        displayName: 'Guest',
+        preferences: const GameSettingsModel(),
+      );
+      _ref.invalidate(userDocProvider);
+      unawaited(_ref.read(analyticsServiceProvider).setUserId(user.uid));
+      unawaited(
+        _ref.read(analyticsServiceProvider).logEventSafe(
+          'guest_session_started',
+        ),
+      );
+      state = const AsyncValue.data(null);
+      return user;
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+      rethrow;
+    }
+  }
+
   /// Email / password registration.
   Future<void> register({
     required String email,
@@ -133,21 +162,126 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
     );
   }
 
-  /// Email / password sign-in.
+  /// Link email to the current anonymous user, or transfer on conflict.
+  Future<void> registerOrLinkEmail({
+    required String email,
+    required String password,
+    String? displayName,
+  }) async {
+    final current = _auth.currentUser;
+    if (current != null && current.isAnonymous) {
+      try {
+        await _run(
+          () => _auth.linkWithEmail(
+            email: email,
+            password: password,
+            displayName: displayName,
+          ),
+          seedLocalPreferences: false,
+          method: 'email_link',
+          isSignUp: true,
+          displayName: displayName,
+        );
+        return;
+      } on FirebaseAuthException catch (error) {
+        if (error.code != 'email-already-in-use' &&
+            error.code != 'credential-already-in-use') {
+          rethrow;
+        }
+        await _transferThenSignIn(
+          () => _auth.signInWithEmail(email: email, password: password),
+          method: 'email',
+        );
+        return;
+      }
+    }
+    await register(
+      email: email,
+      password: password,
+      displayName: displayName,
+    );
+  }
+
+  /// Email / password sign-in (issues transfer first when anonymous).
   Future<void> signInWithEmail({
     required String email,
     required String password,
-  }) {
-    return _run(
+  }) async {
+    final current = _auth.currentUser;
+    if (current != null && current.isAnonymous) {
+      await _transferThenSignIn(
+        () => _auth.signInWithEmail(email: email, password: password),
+        method: 'email',
+      );
+      return;
+    }
+    await _run(
       () => _auth.signInWithEmail(email: email, password: password),
       method: 'email',
       isSignUp: false,
     );
   }
 
-  /// Google Sign-In.
-  Future<void> signInWithGoogle() {
-    return _run(_auth.signInWithGoogle, method: 'google', isSignUp: false);
+  /// Google Sign-In / link / transfer.
+  Future<void> signInWithGoogle() async {
+    final current = _auth.currentUser;
+    if (current != null && current.isAnonymous) {
+      try {
+        await _run(
+          _auth.linkWithGoogle,
+          method: 'google_link',
+          isSignUp: true,
+        );
+        return;
+      } on FirebaseAuthException catch (error) {
+        if (error.code != 'credential-already-in-use' &&
+            error.code != 'email-already-in-use') {
+          rethrow;
+        }
+        await _transferThenSignIn(_auth.signInWithGoogle, method: 'google');
+        return;
+      }
+    }
+    await _run(_auth.signInWithGoogle, method: 'google', isSignUp: false);
+  }
+
+  Future<void> _transferThenSignIn(
+    Future<User> Function() signIn, {
+    required String method,
+  }) async {
+    state = const AsyncValue.loading();
+    try {
+      final course = _ref.read(courseServiceProvider);
+      final issued = await course.issueAnonymousProgressTransfer();
+      final receiptId = issued['receiptId'] as String?;
+      final nonce = issued['nonce'] as String?;
+      if (receiptId == null ||
+          receiptId.isEmpty ||
+          nonce == null ||
+          nonce.isEmpty) {
+        throw StateError('Transfer receipt missing nonce.');
+      }
+      final user = await signIn();
+      final repo = _ref.read(userRepositoryProvider);
+      await repo.ensureUserDoc(
+        uid: user.uid,
+        displayName: user.displayName,
+        preferences: const GameSettingsModel(),
+      );
+      await course.redeemAnonymousProgressTransfer(
+        receiptId: receiptId,
+        nonce: nonce,
+      );
+      _ref.invalidate(userDocProvider);
+      final analytics = _ref.read(analyticsServiceProvider);
+      unawaited(analytics.setUserId(user.uid));
+      unawaited(analytics.logLogin(method: method));
+      unawaited(analytics.logEventSafe('guest_progress_transferred'));
+      state = const AsyncValue.data(null);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+      rethrow;
+    }
   }
 
   /// Emails a password-reset link. Does not sign the user in.

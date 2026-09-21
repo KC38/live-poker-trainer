@@ -8,11 +8,23 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
+import 'package:live_poker_trainer/providers/onboarding_provider.dart';
 
 /// Signed-out landing: create account or sign in.
 class AuthScreen extends ConsumerStatefulWidget {
   /// Creates the auth screen.
-  const AuthScreen({super.key});
+  const AuthScreen({
+    super.key,
+    this.saveProgressMode = false,
+    this.initialRegisterMode = false,
+  });
+
+  /// When true, copy explains saving guest progress and cancelled auth returns
+  /// to the prior route (save-progress / lesson result).
+  final bool saveProgressMode;
+
+  /// Initial register vs sign-in mode.
+  final bool initialRegisterMode;
 
   @override
   ConsumerState<AuthScreen> createState() => _AuthScreenState();
@@ -24,7 +36,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   final _password = TextEditingController();
   final _displayName = TextEditingController();
 
-  bool _registerMode = false;
+  late bool _registerMode = widget.initialRegisterMode;
   bool _obscure = true;
   bool _resetBusy = false;
   String? _error;
@@ -51,18 +63,31 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     final controller = ref.read(authControllerProvider.notifier);
     try {
       if (_registerMode) {
-        await controller.register(
-          email: _email.text,
-          password: _password.text,
-          displayName: _displayName.text.trim().isEmpty
-              ? null
-              : _displayName.text.trim(),
-        );
+        if (widget.saveProgressMode) {
+          await controller.registerOrLinkEmail(
+            email: _email.text,
+            password: _password.text,
+            displayName: _displayName.text.trim().isEmpty
+                ? null
+                : _displayName.text.trim(),
+          );
+        } else {
+          await controller.register(
+            email: _email.text,
+            password: _password.text,
+            displayName: _displayName.text.trim().isEmpty
+                ? null
+                : _displayName.text.trim(),
+          );
+        }
       } else {
         await controller.signInWithEmail(
           email: _email.text,
           password: _password.text,
         );
+      }
+      if (widget.saveProgressMode && mounted) {
+        await ref.read(onboardingControllerProvider.notifier).clearAfterLinked();
       }
     } catch (e) {
       if (!mounted) return;
@@ -108,6 +133,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     });
     try {
       await ref.read(authControllerProvider.notifier).signInWithGoogle();
+      if (widget.saveProgressMode && mounted) {
+        await ref.read(onboardingControllerProvider.notifier).clearAfterLinked();
+      }
     } catch (e) {
       if (!mounted) return;
       setState(() => _error = _friendlyError(e));
@@ -127,6 +155,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
           'Too many attempts. Wait a minute and try again.',
         'missing-id-token' =>
           'Google Sign-In could not get an ID token. On Android, add the app SHA-1 in the Firebase console.',
+        'credential-already-in-use' =>
+          'That Google account is already linked to another user.',
         _ => error.message ?? 'Sign-in failed (${error.code}).',
       };
     }
@@ -141,7 +171,25 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final subtitle = widget.saveProgressMode
+        ? (_registerMode
+            ? 'Create an account to keep the progress from your first lesson.'
+            : 'Sign in to transfer your guest progress to this account.')
+        : (_registerMode
+            ? 'Create an account to sync progress across devices.'
+            : 'Sign in to continue training.');
+
     return Scaffold(
+      appBar: widget.saveProgressMode
+          ? AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              leading: IconButton(
+                icon: const Icon(Icons.close, color: AppColors.slate),
+                onPressed: () => Navigator.of(context).maybePop(),
+              ),
+            )
+          : null,
       body: Container(
         decoration: const BoxDecoration(
           gradient: RadialGradient(
@@ -184,15 +232,24 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        _registerMode
-                            ? 'Create an account to sync progress across devices.'
-                            : 'Sign in to continue training.',
+                        subtitle,
                         style: GoogleFonts.manrope(
                           color: AppColors.slate,
                           fontSize: 15,
                           height: 1.4,
                         ),
                       ),
+                      if (widget.saveProgressMode) ...[
+                        const SizedBox(height: 10),
+                        Text(
+                          'Guest progress is temporary and can be lost if this session is cleared.',
+                          style: GoogleFonts.manrope(
+                            color: AppColors.slate.withValues(alpha: 0.85),
+                            fontSize: 13,
+                            height: 1.35,
+                          ),
+                        ),
+                      ],
                       const SizedBox(height: 28),
                       if (_registerMode) ...[
                         TextFormField(
@@ -330,3 +387,4 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     );
   }
 }
+

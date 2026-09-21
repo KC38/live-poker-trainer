@@ -9,7 +9,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
+import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/course_catalog_provider.dart';
+import 'package:live_poker_trainer/providers/onboarding_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/services/firestore/course_service.dart';
 import 'package:live_poker_trainer/ui/course/activity_registry.dart';
@@ -18,6 +20,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart'
 import 'package:live_poker_trainer/ui/course/widgets/lesson_progress_header.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_result_screen.dart';
+import 'package:live_poker_trainer/ui/screens/onboarding_screens.dart';
 
 /// Runs one catalog lesson through Plan 03 course callables.
 class LessonRunnerScreen extends ConsumerStatefulWidget {
@@ -80,6 +83,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       _error = null;
     });
     try {
+      await ref.read(authControllerProvider.notifier).ensureAnonymousSession();
       final catalog = await ref.read(courseCatalogProvider.future);
       final lesson = catalog.lessonById(widget.lessonId);
       if (lesson == null) {
@@ -88,7 +92,13 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
           code: 'not-found',
         );
       }
-      await _service.initializeProfile(catalogVersion: catalog.catalogVersion);
+      final draft = ref.read(onboardingControllerProvider);
+      await _service.initializeProfile(
+        catalogVersion: catalog.catalogVersion,
+        experienceBand: draft.experienceBand?.wireValue,
+        dailyGoalMinutes: draft.dailyGoalMinutes,
+        recommendedLessonId: draft.recommendedLessonId ?? widget.lessonId,
+      );
       final started = await _service.startLesson(
         lessonId: widget.lessonId,
         catalogVersion: catalog.catalogVersion,
@@ -278,6 +288,22 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       );
       if (!mounted) return;
       unawaited(ref.read(soundServiceProvider).win());
+      final isAnonymous =
+          ref.read(authServiceProvider).currentUser?.isAnonymous == true;
+      if (isAnonymous && !widget.embeddedInShell) {
+        await ref.read(onboardingControllerProvider.notifier).markFirstLessonComplete(
+              lessonTitle: _lesson?.title ?? 'Lesson',
+              result: complete,
+            );
+        if (!mounted) return;
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute<void>(
+            builder: (_) => const SaveProgressScreen(),
+          ),
+          (route) => false,
+        );
+        return;
+      }
       await Navigator.of(context).pushReplacement(
         MaterialPageRoute<void>(
           builder: (_) => LessonResultScreen(
