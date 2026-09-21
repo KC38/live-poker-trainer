@@ -66,54 +66,79 @@ class OrderSequenceActivity extends StatelessWidget {
               ),
             ],
             const SizedBox(height: 14),
-            Semantics(
-              label:
-                  'Current order: ${ordered.isEmpty ? 'empty' : ordered.join(', ')}',
-              child: Wrap(
+            if (_handMode) ...[
+              Text(
+                ordered.isEmpty ? 'Your order (empty)' : 'Your order',
+                style: GoogleFonts.manrope(
+                  color: AppColors.slate,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Semantics(
+                label:
+                    'Current order: ${ordered.isEmpty ? 'empty' : ordered.join(', ')}',
+                child: Container(
+                  width: double.infinity,
+                  constraints: const BoxConstraints(minHeight: 56),
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: AppColors.feltDark.withValues(alpha: 0.55),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: AppColors.feltBorder.withValues(alpha: 0.8),
+                    ),
+                  ),
+                  child: ordered.isEmpty
+                      ? Text(
+                          'Tap hands below, weakest → strongest',
+                          style: GoogleFonts.manrope(
+                            color: AppColors.slate,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )
+                      : Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            for (var i = 0; i < ordered.length; i++)
+                              HandExampleTile(
+                                example:
+                                    resolveHandExample(
+                                      id: ordered[i],
+                                      label: _labelFor(ordered[i]),
+                                    ) ??
+                                    LessonHandExample(
+                                      id: ordered[i],
+                                      title: _labelFor(ordered[i]),
+                                      codes: const [],
+                                    ),
+                                badge: '${i + 1}',
+                                selected: true,
+                                enabled: false,
+                                compact: true,
+                              ),
+                          ],
+                        ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                remaining.isEmpty ? 'All hands placed' : 'Tap next',
+                style: GoogleFonts.manrope(
+                  color: AppColors.slate,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  for (var i = 0; i < ordered.length; i++)
-                    if (_handMode)
-                      HandExampleTile(
-                        example:
-                            resolveHandExample(
-                              id: ordered[i],
-                              label: _labelFor(ordered[i]),
-                            ) ??
-                            LessonHandExample(
-                              id: ordered[i],
-                              title: _labelFor(ordered[i]),
-                              codes: const [],
-                            ),
-                        badge: '${i + 1}',
-                        selected: true,
-                        enabled: false,
-                        compact: true,
-                      )
-                    else if (_rankMode)
-                      _RankTile(
-                        label: _labelFor(ordered[i]),
-                        badge: '${i + 1}',
-                        selected: true,
-                      )
-                    else
-                      Chip(
-                        label: Text('${i + 1}. ${_labelFor(ordered[i])}'),
-                        backgroundColor: AppColors.gold.withValues(
-                          alpha: 0.2,
-                        ),
-                      ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                for (final item in remaining)
-                  if (_handMode)
+                  for (final item in remaining)
                     HandExampleTile(
                       example:
                           resolveHandExample(id: item.id, label: item.label) ??
@@ -132,31 +157,65 @@ class OrderSequenceActivity extends StatelessWidget {
                                 ...ordered,
                                 item.id,
                               ]),
-                    )
-                  else if (_rankMode)
-                    _RankTile(
-                      label: item.label,
-                      onPressed:
-                          locked
-                              ? null
-                              : () => controller.setOrderedIds([
-                                ...ordered,
-                                item.id,
-                              ]),
-                    )
-                  else
-                    ActionChip(
-                      onPressed:
-                          locked
-                              ? null
-                              : () => controller.setOrderedIds([
-                                ...ordered,
-                                item.id,
-                              ]),
-                      label: Text(item.label),
                     ),
-              ],
-            ),
+                ],
+              ),
+            ] else ...[
+              Semantics(
+                label:
+                    'Current order: ${ordered.isEmpty ? 'empty' : ordered.join(', ')}',
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (var i = 0; i < ordered.length; i++)
+                      if (_rankMode)
+                        _RankTile(
+                          label: _labelFor(ordered[i]),
+                          badge: '${i + 1}',
+                          selected: true,
+                        )
+                      else
+                        Chip(
+                          label: Text('${i + 1}. ${_labelFor(ordered[i])}'),
+                          backgroundColor: AppColors.gold.withValues(
+                            alpha: 0.2,
+                          ),
+                        ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final item in remaining)
+                    if (_rankMode)
+                      _RankTile(
+                        label: item.label,
+                        onPressed:
+                            locked
+                                ? null
+                                : () => controller.setOrderedIds([
+                                  ...ordered,
+                                  item.id,
+                                ]),
+                      )
+                    else
+                      ActionChip(
+                        onPressed:
+                            locked
+                                ? null
+                                : () => controller.setOrderedIds([
+                                  ...ordered,
+                                  item.id,
+                                ]),
+                        label: Text(item.label),
+                      ),
+                ],
+              ),
+            ],
             if (ordered.isNotEmpty && !locked) ...[
               const SizedBox(height: 8),
               Align(

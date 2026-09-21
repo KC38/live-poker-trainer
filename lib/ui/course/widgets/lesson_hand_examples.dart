@@ -38,7 +38,7 @@ LessonHandExample? resolveHandExample({
       return const LessonHandExample(
         id: 'hr-pair',
         title: 'One pair',
-        codes: ['Ah', 'Ad', 'Kc', '9s', '3h'],
+        codes: ['Qh', 'Qd', 'Jc', '8s', '4h'],
       );
     case 'hr-flush':
       return const LessonHandExample(
@@ -56,7 +56,7 @@ LessonHandExample? resolveHandExample({
       return const LessonHandExample(
         id: 'cat-pair',
         title: 'One pair',
-        codes: ['Ah', 'Ad', 'Kc', '9s', '3h'],
+        codes: ['Kh', 'Kd', 'Qc', '8s', '3h'],
       );
     case 'cat-straight':
       return const LessonHandExample(
@@ -80,7 +80,7 @@ LessonHandExample? resolveHandExample({
       return const LessonHandExample(
         id: 'two',
         title: 'Two pair',
-        codes: ['Ah', 'Ad', 'Kc', 'Kd', '3s'],
+        codes: ['Jh', 'Jd', 'Tc', 'Td', '3s'],
       );
     case 'you-win':
       return const LessonHandExample(
@@ -285,7 +285,7 @@ class HandRankLadderDemo extends StatelessWidget {
     LessonHandExample(
       id: 'demo-pair',
       title: 'One pair',
-      codes: ['Ah', 'Ad', 'Kc', '9s', '3h'],
+      codes: ['Qh', 'Qd', 'Jc', '8s', '4h'],
     ),
     LessonHandExample(
       id: 'demo-flush',
@@ -296,47 +296,49 @@ class HandRankLadderDemo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.feltLight, AppColors.feltDark],
-        ),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'Weakest → strongest',
-            style: GoogleFonts.manrope(
-              color: AppColors.slate,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-            ),
+    return ExcludeSemantics(
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [AppColors.feltLight, AppColors.feltDark],
           ),
-          const SizedBox(height: 12),
-          for (var i = 0; i < _rungs.length; i++) ...[
-            if (i > 0) ...[
-              const SizedBox(height: 6),
-              Icon(
-                Icons.arrow_downward_rounded,
-                color: AppColors.gold.withValues(alpha: 0.75),
-                size: 18,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+        ),
+        child: Column(
+          children: [
+            Text(
+              'Weakest → strongest',
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
               ),
-              const SizedBox(height: 6),
-            ],
-            HandExampleTile(
-              example: _rungs[i],
-              selected: false,
-              enabled: false,
-              compact: true,
             ),
+            const SizedBox(height: 12),
+            for (var i = 0; i < _rungs.length; i++) ...[
+              if (i > 0) ...[
+                const SizedBox(height: 6),
+                Icon(
+                  Icons.arrow_downward_rounded,
+                  color: AppColors.gold.withValues(alpha: 0.75),
+                  size: 18,
+                ),
+                const SizedBox(height: 6),
+              ],
+              HandExampleTile(
+                example: _rungs[i],
+                selected: false,
+                enabled: false,
+                compact: true,
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
