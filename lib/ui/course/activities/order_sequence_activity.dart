@@ -54,12 +54,15 @@ class OrderSequenceActivity extends StatelessWidget {
                 : isSeatOrderSequenceActivity(activity)
                 ? 'Tap seats in the order they act.'
                 : 'Tap seats in the order they act.');
+        final showPrompt =
+            activity.prompt != null &&
+            activity.prompt!.trim().toLowerCase() != coach.trim().toLowerCase();
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (showGuidance || activity.primaryCoachLine != null)
               RexCoachLine(text: coach),
-            if (activity.prompt != null) ...[
+            if (showPrompt) ...[
               const SizedBox(height: 12),
               Text(
                 activity.prompt!,
@@ -247,25 +250,20 @@ class OrderSequenceActivity extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      alignment: WrapAlignment.center,
-                      children: [
-                        for (final item in remaining)
-                          if (isStreetSequenceActivity(activity))
-                            StreetOrderTile(
-                              label: item.label,
-                              enabled: !locked,
-                              onPressed:
-                                  locked
-                                      ? null
-                                      : () => controller.setOrderedIds([
-                                        ...ordered,
-                                        item.id,
-                                      ]),
-                            )
-                          else
+                    if (isStreetSequenceActivity(activity))
+                      _StreetTileGrid(
+                        items: remaining,
+                        locked: locked,
+                        onPick:
+                            (id) => controller.setOrderedIds([...ordered, id]),
+                      )
+                    else
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        alignment: WrapAlignment.center,
+                        children: [
+                          for (final item in remaining)
                             SeatOrderTile(
                               label: item.label,
                               enabled: !locked,
@@ -277,8 +275,8 @@ class OrderSequenceActivity extends StatelessWidget {
                                         item.id,
                                       ]),
                             ),
-                      ],
-                    ),
+                        ],
+                      ),
                   ],
                 ),
               ),
@@ -363,6 +361,52 @@ class OrderSequenceActivity extends StatelessWidget {
       if (item.id == id) return item.label;
     }
     return id;
+  }
+}
+
+class _StreetTileGrid extends StatelessWidget {
+  const _StreetTileGrid({
+    required this.items,
+    required this.locked,
+    required this.onPick,
+  });
+
+  final List<CourseChoice> items;
+  final bool locked;
+  final ValueChanged<String> onPick;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget row(List<CourseChoice> slice) {
+      return Row(
+        children: [
+          for (var i = 0; i < slice.length; i++) ...[
+            if (i > 0) const SizedBox(width: 8),
+            Expanded(
+              child: StreetOrderTile(
+                label: slice[i].label,
+                enabled: !locked,
+                expand: true,
+                onPressed: locked ? null : () => onPick(slice[i].id),
+              ),
+            ),
+          ],
+          for (var i = slice.length; i < 2; i++) ...[
+            if (i > 0 || slice.isNotEmpty) const SizedBox(width: 8),
+            const Expanded(child: SizedBox()),
+          ],
+        ],
+      );
+    }
+
+    final top = items.take(2).toList(growable: false);
+    final bottom = items.skip(2).toList(growable: false);
+    return Column(
+      children: [
+        if (top.isNotEmpty) row(top),
+        if (bottom.isNotEmpty) ...[const SizedBox(height: 8), row(bottom)],
+      ],
+    );
   }
 }
 

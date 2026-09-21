@@ -187,6 +187,7 @@ class StreetOrderTile extends StatelessWidget {
     this.badge,
     this.selected = false,
     this.enabled = true,
+    this.expand = false,
     this.onPressed,
   });
 
@@ -194,6 +195,7 @@ class StreetOrderTile extends StatelessWidget {
   final String? badge;
   final bool selected;
   final bool enabled;
+  final bool expand;
   final VoidCallback? onPressed;
 
   List<String> get _board {
@@ -225,7 +227,7 @@ class StreetOrderTile extends StatelessWidget {
           onTap: enabled ? onPressed : null,
           borderRadius: BorderRadius.circular(14),
           child: Container(
-            width: 96,
+            width: expand ? double.infinity : 96,
             padding: const EdgeInsets.fromLTRB(6, 10, 6, 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14),
