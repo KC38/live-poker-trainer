@@ -25,6 +25,23 @@ enum AppRootDestination {
   shell,
 }
 
+/// [MaterialApp] key for the root navigator.
+///
+/// Signed-out and anonymous sessions share `guest` so anonymous sign-in does
+/// not dispose an in-progress first lesson. [resetForAuthGate] is set only
+/// when routing has resolved to sign-in, so a real denial still clears guest
+/// routes. A linked account keeps its uid so sign-out and account switches
+/// still drop pushed routes such as Settings.
+String rootNavigatorKeyFor({
+  String? uid,
+  bool anonymous = false,
+  bool resetForAuthGate = false,
+}) {
+  final identity = (uid == null || anonymous) ? 'guest' : uid;
+  if (resetForAuthGate) return '$identity-auth';
+  return identity;
+}
+
 /// Guest welcome and anonymous course entry.
 ///
 /// Requires the course kill switch and [CourseFlags.guestCourseEnabled].
