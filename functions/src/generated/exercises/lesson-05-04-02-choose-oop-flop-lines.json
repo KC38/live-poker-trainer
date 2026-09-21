@@ -1,0 +1,104 @@
+{
+  "id": "lesson-05-04-02-choose-oop-flop-lines",
+  "lessonId": "lesson-05-04-02-choose-oop-flop-lines",
+  "version": "1.0.0",
+  "title": "Choose OOP flop lines",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Big blind versus button, you have a set on A72 rainbow. The button bets small. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Raise. A set wants a bigger pot, even on a dry board."
+        },
+        {
+          "id": "b",
+          "text": "Fold"
+        },
+        {
+          "id": "c",
+          "text": "Only call and never raise a set"
+        },
+        {
+          "id": "d",
+          "text": "Donk the next street for the minimum no matter what"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Slow-playing a set on a dry board lets the button check back the turn and realize equity for free."
+    },
+    {
+      "id": "q2",
+      "prompt": "Big blind versus button, you have bottom pair on As Kd 4c and face a pot-size bet. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold. Bottom pair does not beat a real value range and has little equity."
+        },
+        {
+          "id": "b",
+          "text": "Call every time"
+        },
+        {
+          "id": "c",
+          "text": "Check-raise all-in"
+        },
+        {
+          "id": "d",
+          "text": "Raise small and call a jam"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Out of position, weak pairs against a large bet are folds, not hero calls."
+    },
+    {
+      "id": "q3",
+      "prompt": "Big blind, you called a button open and flopped a nut flush draw on a dry-ish two-tone board. Facing a small bet, a sound continue is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Call or raise. You have nine outs to the nuts plus fold equity if you raise."
+        },
+        {
+          "id": "b",
+          "text": "Fold. Draws cannot continue"
+        },
+        {
+          "id": "c",
+          "text": "Call and stack off if you miss"
+        },
+        {
+          "id": "d",
+          "text": "Lead all-in before the bet"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Nine outs is enough to continue against a small bet. Missing later is a new decision."
+    },
+    {
+      "id": "q4",
+      "prompt": "You are the preflop raiser out of position, heads-up, on a dry board. A check is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Allowed. You can check-call, check-raise, or check-fold. Betting is common but not mandatory."
+        },
+        {
+          "id": "b",
+          "text": "Illegal for the raiser"
+        },
+        {
+          "id": "c",
+          "text": "A guaranteed loss"
+        },
+        {
+          "id": "d",
+          "text": "Only correct with the nuts"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Out of position, checking a dry board with a medium hand controls the pot."
+    }
+  ]
+}

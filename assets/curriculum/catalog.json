@@ -1607,7 +1607,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-05-01-01-flop-textures-and-categories"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-04-04-03-contextual-adjustment-check"
@@ -1624,7 +1626,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-05-01-02-classify-flop-textures"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-05-01-01-flop-textures-and-categories"
@@ -1641,7 +1645,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-05-01-03-board-texture-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-05-01-02-classify-flop-textures"
@@ -1671,7 +1677,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-05-02-01-made-hands-draws-and-air"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-05-01-03-board-texture-check"
@@ -1688,7 +1696,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-05-02-02-assign-flop-hand-classes"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-05-02-01-made-hands-draws-and-air"
@@ -1705,7 +1715,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-05-02-03-hand-classes-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-05-02-02-assign-flop-hand-classes"
@@ -1735,7 +1747,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-05-03-01-in-position-flop-aggression"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-05-02-03-hand-classes-check"
@@ -1752,7 +1766,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-05-03-02-choose-ip-flop-lines"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-05-03-01-in-position-flop-aggression"
@@ -1769,7 +1785,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-05-03-03-ip-aggression-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-05-03-02-choose-ip-flop-lines"
@@ -1799,7 +1817,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-05-04-01-out-of-position-flop-strategy"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-05-03-03-ip-aggression-check"
@@ -1816,7 +1836,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-05-04-02-choose-oop-flop-lines"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-05-04-01-out-of-position-flop-strategy"
@@ -1833,7 +1855,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-05-04-03-oop-play-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-05-04-02-choose-oop-flop-lines"
@@ -1867,7 +1891,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-05-05-01-integrating-flop-concepts"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-05-04-03-oop-play-check"
@@ -1886,7 +1912,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-05-05-02-solve-multi-factor-flop-spots"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-05-05-01-integrating-flop-concepts"
@@ -1905,7 +1933,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-05-05-03-flop-integration-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-05-05-02-solve-multi-factor-flop-spots"
@@ -1943,7 +1973,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-06-01-01-how-turn-cards-change-ranges"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-05-05-03-flop-integration-check"
@@ -1960,7 +1992,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-06-01-02-evaluate-turn-card-impact"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-06-01-01-how-turn-cards-change-ranges"
@@ -1977,7 +2011,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-06-01-03-turn-card-effects-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-06-01-02-evaluate-turn-card-impact"
@@ -2007,7 +2043,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-06-02-01-barrels-checks-and-turn-sizing"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-06-01-03-turn-card-effects-check"
@@ -2024,7 +2062,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-06-02-02-select-turn-lines"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-06-02-01-barrels-checks-and-turn-sizing"
@@ -2041,7 +2081,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-06-02-03-turn-lines-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-06-02-02-select-turn-lines"
@@ -2071,7 +2113,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-06-03-01-thin-and-thick-river-value"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-06-02-03-turn-lines-check"
@@ -2088,7 +2132,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-06-03-02-choose-river-value-bets"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-06-03-01-thin-and-thick-river-value"
@@ -2105,7 +2151,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-06-03-03-river-value-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-06-03-02-choose-river-value-bets"
@@ -2135,7 +2183,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-06-04-01-bluff-selection-and-blockers"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-06-03-03-river-value-check"
@@ -2152,7 +2202,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-06-04-02-select-river-bluffs"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-06-04-01-bluff-selection-and-blockers"
@@ -2169,7 +2221,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-06-04-03-river-bluffs-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-06-04-02-select-river-bluffs"
@@ -2199,7 +2253,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-06-05-01-calling-raising-and-folding-rivers"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-06-04-03-river-bluffs-check"
@@ -2216,7 +2272,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-06-05-02-face-river-bets"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-06-05-01-calling-raising-and-folding-rivers"
@@ -2233,7 +2291,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-06-05-03-facing-river-action-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-06-05-02-face-river-bets"
@@ -2271,7 +2331,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-07-01-01-limped-pot-strategy"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-06-05-03-facing-river-action-check"
@@ -2288,7 +2350,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-07-01-02-play-limped-pots"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-07-01-01-limped-pot-strategy"
@@ -2305,7 +2369,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-07-01-03-limped-pots-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-07-01-02-play-limped-pots"
@@ -2335,7 +2401,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-07-02-01-single-raised-pot-strategy"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-07-01-03-limped-pots-check"
@@ -2352,7 +2420,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-07-02-02-play-single-raised-pots"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-07-02-01-single-raised-pot-strategy"
@@ -2369,7 +2439,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-07-02-03-srp-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-07-02-02-play-single-raised-pots"
@@ -2399,7 +2471,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-07-03-01-3-bet-pot-strategy"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-07-02-03-srp-check"
@@ -2416,7 +2490,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-07-03-02-play-3-bet-pots"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-07-03-01-3-bet-pot-strategy"
@@ -2433,7 +2509,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-07-03-03-3-bet-pots-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-07-03-02-play-3-bet-pots"
@@ -2463,7 +2541,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-07-04-01-4-bet-and-all-in-pot-strategy"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-07-03-03-3-bet-pots-check"
@@ -2480,7 +2560,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-07-04-02-play-4-bet-and-all-in-pots"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-07-04-01-4-bet-and-all-in-pot-strategy"
@@ -2497,7 +2579,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-07-04-03-4-bet-pots-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-07-04-02-play-4-bet-and-all-in-pots"
@@ -2527,7 +2611,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-07-05-01-multiway-vs-heads-up-effects"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-07-04-03-4-bet-pots-check"
@@ -2544,7 +2630,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-07-05-02-adjust-for-player-count"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-07-05-01-multiway-vs-heads-up-effects"
@@ -2561,7 +2649,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-07-05-03-player-count-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-07-05-02-adjust-for-player-count"
@@ -4473,6 +4563,9 @@
         "topic": [
           "flop",
           "texture"
+        ],
+        "street": [
+          "flop"
         ]
       },
       "difficulty": 2
@@ -4482,6 +4575,10 @@
       "title": "Assign flop hand classes and draws",
       "tagSelectors": {
         "topic": [
+          "flop",
+          "hand-class"
+        ],
+        "street": [
           "flop"
         ]
       },
@@ -4494,6 +4591,15 @@
         "topic": [
           "flop",
           "ip"
+        ],
+        "street": [
+          "flop"
+        ],
+        "position": [
+          "ip"
+        ],
+        "action": [
+          "cbet"
         ]
       },
       "difficulty": 3
@@ -4505,6 +4611,15 @@
         "topic": [
           "flop",
           "oop"
+        ],
+        "street": [
+          "flop"
+        ],
+        "position": [
+          "oop"
+        ],
+        "action": [
+          "check"
         ]
       },
       "difficulty": 3
@@ -4514,6 +4629,10 @@
       "title": "Evaluate turn-card range effects",
       "tagSelectors": {
         "topic": [
+          "turn",
+          "runout"
+        ],
+        "street": [
           "turn"
         ]
       },
@@ -4525,6 +4644,12 @@
       "tagSelectors": {
         "topic": [
           "turn"
+        ],
+        "street": [
+          "turn"
+        ],
+        "action": [
+          "barrel"
         ]
       },
       "difficulty": 3
@@ -4535,6 +4660,12 @@
       "tagSelectors": {
         "topic": [
           "river"
+        ],
+        "street": [
+          "river"
+        ],
+        "action": [
+          "value"
         ]
       },
       "difficulty": 3
@@ -4546,6 +4677,12 @@
         "topic": [
           "river",
           "blockers"
+        ],
+        "street": [
+          "river"
+        ],
+        "action": [
+          "bluff"
         ]
       },
       "difficulty": 4
@@ -4556,6 +4693,12 @@
       "tagSelectors": {
         "topic": [
           "river"
+        ],
+        "street": [
+          "river"
+        ],
+        "action": [
+          "bluff-catch"
         ]
       },
       "difficulty": 3
@@ -4566,6 +4709,9 @@
       "tagSelectors": {
         "topic": [
           "pot-family"
+        ],
+        "potFamily": [
+          "limped"
         ]
       },
       "difficulty": 2
@@ -4576,6 +4722,9 @@
       "tagSelectors": {
         "topic": [
           "pot-family"
+        ],
+        "potFamily": [
+          "srp"
         ]
       },
       "difficulty": 2
@@ -4587,6 +4736,9 @@
         "topic": [
           "pot-family",
           "3bet"
+        ],
+        "potFamily": [
+          "3bet"
         ]
       },
       "difficulty": 3
@@ -4597,6 +4749,9 @@
       "tagSelectors": {
         "topic": [
           "pot-family"
+        ],
+        "potFamily": [
+          "4bet"
         ]
       },
       "difficulty": 4
@@ -4607,6 +4762,10 @@
       "tagSelectors": {
         "topic": [
           "multiway"
+        ],
+        "playerCount": [
+          "multiway",
+          "heads-up"
         ]
       },
       "difficulty": 3
@@ -4923,7 +5082,10 @@
         "obj-river-defense",
         "obj-limped-pots",
         "obj-srp",
-        "obj-3bet-pots"
+        "obj-3bet-pots",
+        "obj-river-bluffs",
+        "obj-4bet-pots",
+        "obj-player-count"
       ],
       "minDecisionSamples": 80,
       "masteryThreshold": 0.8,

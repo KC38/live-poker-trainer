@@ -9,7 +9,9 @@ import {
   BASE_LESSON_XP,
   calendarDayInTimeZone,
   COACHING_SCORE_WEIGHTS,
+  dueLessonIds,
   emptyLearningProgress,
+  evaluatePostflop,
   evaluatePreflop,
   evaluateTableReady,
   scoreFromCoachingRating,
@@ -177,5 +179,65 @@ describe("curriculum_progress", () => {
     expect(evaluateTableReady(catalog, progress).passed).toBe(true);
     expect(evaluatePreflop(catalog, progress).passed).toBe(true);
     expect(evaluatePreflop(catalog, progress).completedCount).toBe(27);
+  });
+
+  it("does not mark postflop passed until preflop and sections 5–7 clear", () => {
+    const catalog = getCurriculumCatalog();
+    const empty = evaluatePostflop(catalog, emptyLearningProgress());
+    expect(empty.totalCount).toBe(45);
+    expect(empty.passed).toBe(false);
+
+    const progress = emptyLearningProgress();
+    const lessonIds = (min: number, max: number) =>
+      catalog.sections
+        .filter((section) => section.order >= min && section.order <= max)
+        .flatMap((section) =>
+          section.units.flatMap((unit) => unit.lessons.map((lesson) => lesson.id)),
+        );
+    const fill = (gateId: string) => {
+      const gate = catalog.milestoneGates.find((item) => item.id === gateId);
+      for (const objectiveId of gate?.requiredObjectiveIds ?? []) {
+        progress.masteryByObjectiveId[objectiveId] = 0.8;
+      }
+    };
+    progress.completedLessonIds = lessonIds(5, 7);
+    fill("postflop-core");
+    expect(evaluatePostflop(catalog, progress).passed).toBe(false);
+
+    progress.completedLessonIds = lessonIds(0, 7);
+    fill("table-ready");
+    fill("preflop");
+    expect(evaluatePreflop(catalog, progress).passed).toBe(true);
+    expect(evaluatePostflop(catalog, progress).passed).toBe(true);
+    expect(evaluatePostflop(catalog, progress).completedCount).toBe(45);
+  });
+
+  it("schedules next-day review under 80% and same-day remediation under 65%", () => {
+    const lesson = getLessonById("lesson-02-05-03-ranges-and-combos-check");
+    expect(lesson).toBeDefined();
+    expect(lesson!.remediationLessonIds.length).toBeGreaterThan(0);
+    const done = applyLessonCompletion({
+      progress: emptyLearningProgress(),
+      lesson: lesson!,
+      score: 0.5,
+      now: new Date("2024-06-01T18:00:00.000Z"),
+      timezone: "UTC",
+    });
+    expect(done.reviewDueByLessonId?.[lesson!.id]).toBe("2024-06-02");
+    expect(done.reviewDueByLessonId?.[lesson!.remediationLessonIds[0]]).toBe(
+      "2024-06-01",
+    );
+    expect(dueLessonIds(done, "2024-06-01")).toEqual([
+      lesson!.remediationLessonIds[0],
+    ]);
+
+    const mastered = applyLessonCompletion({
+      progress: done,
+      lesson: lesson!,
+      score: 1,
+      now: new Date("2024-06-02T18:00:00.000Z"),
+      timezone: "UTC",
+    });
+    expect(mastered.reviewDueByLessonId?.[lesson!.id]).toBeUndefined();
   });
 });

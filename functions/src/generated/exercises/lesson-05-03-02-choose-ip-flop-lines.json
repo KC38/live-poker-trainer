@@ -1,0 +1,104 @@
+{
+  "id": "lesson-05-03-02-choose-ip-flop-lines",
+  "lessonId": "lesson-05-03-02-choose-ip-flop-lines",
+  "version": "1.0.0",
+  "title": "Choose IP flop lines",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Button versus big blind, you have AK on A72 rainbow. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Bet for value. Top pair, top kicker is ahead of the calling range."
+        },
+        {
+          "id": "b",
+          "text": "Check because an ace hits the caller"
+        },
+        {
+          "id": "c",
+          "text": "Fold"
+        },
+        {
+          "id": "d",
+          "text": "All-in for 100 big blinds as the only value bet"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "This is a value bet, usually a smaller size on a dry board, not a check and not a stack-off size."
+    },
+    {
+      "id": "q2",
+      "prompt": "Same pot, you have 76 with no pair and no draw on A72 rainbow. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Check back. You have little equity and little fold equity against a hand that called an ace-high board."
+        },
+        {
+          "id": "b",
+          "text": "Pot-size bluff"
+        },
+        {
+          "id": "c",
+          "text": "All-in"
+        },
+        {
+          "id": "d",
+          "text": "Bet large because you were the raiser"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Being the raiser is not a reason to fire air into a board that already favors you with better hands."
+    },
+    {
+      "id": "q3",
+      "prompt": "Button versus big blind, you have a set on 9h 8h 6c. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Bet larger. You want calls from draws and worse made hands."
+        },
+        {
+          "id": "b",
+          "text": "Check back so the draws see a free card"
+        },
+        {
+          "id": "c",
+          "text": "Fold"
+        },
+        {
+          "id": "d",
+          "text": "Bet the minimum and fold to a raise"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "A set on a wet board wants a bigger pot. Giving a free card lets flushes and straights catch up."
+    },
+    {
+      "id": "q4",
+      "prompt": "In position with a medium pocket pair that did not set, on a king-high dry board, a sound line is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Check back and reevaluate the turn."
+        },
+        {
+          "id": "b",
+          "text": "All-in"
+        },
+        {
+          "id": "c",
+          "text": "Fold the best hand automatically"
+        },
+        {
+          "id": "d",
+          "text": "Bet pot and call a check-raise"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Underpairs have showdown value against ace-high and missed hands. They do not want a huge pot."
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "id": "lesson-05-01-02-classify-flop-textures",
+  "lessonId": "lesson-05-01-02-classify-flop-textures",
+  "version": "1.0.0",
+  "title": "Classify flop textures",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Ts 6c 2d is best classified as\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Dry"
+        },
+        {
+          "id": "b",
+          "text": "Monotone"
+        },
+        {
+          "id": "c",
+          "text": "Four-straight"
+        },
+        {
+          "id": "d",
+          "text": "A paired board"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "One broadway, two low unconnected cards, three suits. Few draws."
+    },
+    {
+      "id": "q2",
+      "prompt": "8h 7h 6c is best classified as\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Wet"
+        },
+        {
+          "id": "b",
+          "text": "Dry and static"
+        },
+        {
+          "id": "c",
+          "text": "A blank"
+        },
+        {
+          "id": "d",
+          "text": "A board with no straights possible"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Two-tone and connected. Straights, two pair, and flush draws are all live."
+    },
+    {
+      "id": "q3",
+      "prompt": "Ah Kh Qh. What is true?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The board is monotone, so the nut hand is often the nut flush, not top pair."
+        },
+        {
+          "id": "b",
+          "text": "Top pair of aces is always the nuts"
+        },
+        {
+          "id": "c",
+          "text": "There is no flush draw"
+        },
+        {
+          "id": "d",
+          "text": "The board is dry"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Three hearts mean any heart makes a flush, and the ace of hearts makes the nut flush."
+    },
+    {
+      "id": "q4",
+      "prompt": "A paired flop such as Ks Kd 4c favors\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The preflop raiser more than a wide caller, because the raiser has more kings and pocket pairs."
+        },
+        {
+          "id": "b",
+          "text": "Only the player who limped"
+        },
+        {
+          "id": "c",
+          "text": "A random hand equally"
+        },
+        {
+          "id": "d",
+          "text": "The player who folded preflop"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Trips and overpairs sit in the raising range. A wide call has more air."
+    }
+  ]
+}

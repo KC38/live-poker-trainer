@@ -1,0 +1,104 @@
+{
+  "id": "lesson-05-02-03-hand-classes-check",
+  "lessonId": "lesson-05-02-03-hand-classes-check",
+  "version": "1.0.0",
+  "title": "Hand classes check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Which hand is air on As Kd 4c?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "7c 6d"
+        },
+        {
+          "id": "b",
+          "text": "Ac Qd"
+        },
+        {
+          "id": "c",
+          "text": "Ad Ah"
+        },
+        {
+          "id": "d",
+          "text": "Kd Kc"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Seven-six missed. Ace-queen is top pair. Pocket aces and kings are sets or an overpair."
+    },
+    {
+      "id": "q2",
+      "prompt": "Ah 5h on Qh 9h 2c is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The nut flush draw, 9 outs."
+        },
+        {
+          "id": "b",
+          "text": "A made nut flush"
+        },
+        {
+          "id": "c",
+          "text": "A gutshot only"
+        },
+        {
+          "id": "d",
+          "text": "12 flush outs"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Two hearts remain in your hand and two are on the board, so nine hearts are left. You do not have a flush yet."
+    },
+    {
+      "id": "q3",
+      "prompt": "The rule-of-two shortcut belongs on\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The turn, one card to come. The flop uses about four."
+        },
+        {
+          "id": "b",
+          "text": "The flop, because two cards remain so you multiply by 2"
+        },
+        {
+          "id": "c",
+          "text": "Only preflop"
+        },
+        {
+          "id": "d",
+          "text": "Only when you are all-in"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "One card left: outs times 2. Two cards left: outs times 4. Both are approximations."
+    },
+    {
+      "id": "q4",
+      "prompt": "Second pair on a dry board is usually\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Showdown value. It does not need a huge bluff and it is not the nuts."
+        },
+        {
+          "id": "b",
+          "text": "A mandatory all-in"
+        },
+        {
+          "id": "c",
+          "text": "Air"
+        },
+        {
+          "id": "d",
+          "text": "A flush"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Medium made hands want to get to showdown more than they want to build a huge pot."
+    }
+  ]
+}

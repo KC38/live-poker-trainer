@@ -6,9 +6,12 @@ import {getFirestore, type DocumentData, type Firestore} from "firebase-admin/fi
 import type {FeatureFlagsDocReader} from "./feature_flags";
 import {getCurriculumCatalog} from "./curriculum_catalog";
 import {
+  dueLessonIds,
   emptyLearningProgress,
+  evaluatePostflop,
   evaluatePreflop,
   evaluateTableReady,
+  calendarDayInTimeZone,
 } from "./curriculum_progress";
 import type {LearningProgressSnapshot} from "./curriculum_types";
 import {
@@ -24,6 +27,8 @@ export interface GetLearningStateResult {
   activeAttemptId?: string;
   tableReady: ReturnType<typeof evaluateTableReady>;
   preflop: ReturnType<typeof evaluatePreflop>;
+  postflop: ReturnType<typeof evaluatePostflop>;
+  dueLessonIds: string[];
 }
 
 /** Returns learning/main for the user (empty defaults when missing). */
@@ -57,6 +62,11 @@ export async function getLearningStateForUser(options: {
         undefined,
     tableReady: evaluateTableReady(catalog, progress),
     preflop: evaluatePreflop(catalog, progress),
+    postflop: evaluatePostflop(catalog, progress),
+    dueLessonIds: dueLessonIds(
+      progress,
+      calendarDayInTimeZone(new Date(), "UTC"),
+    ),
   };
 }
 
@@ -80,6 +90,17 @@ function progressFromDoc(
       (id): id is string => typeof id === "string",
     ) :
     [];
+  const reviewRaw = data.reviewDueByLessonId;
+  const reviewDueByLessonId: Record<string, string> = {};
+  if (reviewRaw && typeof reviewRaw === "object" && !Array.isArray(reviewRaw)) {
+    for (const [key, value] of Object.entries(
+      reviewRaw as Record<string, unknown>,
+    )) {
+      if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+        reviewDueByLessonId[key] = value;
+      }
+    }
+  }
   return {
     xp: typeof data.xp === "number" ? data.xp : 0,
     streak: typeof data.streak === "number" ? data.streak : 0,
@@ -87,6 +108,7 @@ function progressFromDoc(
       typeof data.lastStudyDay === "string" ? data.lastStudyDay : undefined,
     masteryByObjectiveId,
     completedLessonIds,
+    reviewDueByLessonId,
     catalogVersion:
       typeof data.catalogVersion === "string" ? data.catalogVersion : undefined,
     updatedAtMs:

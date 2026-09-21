@@ -1,0 +1,104 @@
+{
+  "id": "lesson-07-02-03-srp-check",
+  "lessonId": "lesson-07-02-03-srp-check",
+  "version": "1.0.0",
+  "title": "SRP check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "A single-raised pot is not a limped pot because\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Someone showed a stronger range by raising."
+        },
+        {
+          "id": "b",
+          "text": "The blinds are dead"
+        },
+        {
+          "id": "c",
+          "text": "Nobody can bet"
+        },
+        {
+          "id": "d",
+          "text": "Stacks do not matter"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Use the raiser\u2019s range, not a limp range, when you put them on hands."
+    },
+    {
+      "id": "q2",
+      "prompt": "Which c-bet is standard?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Small, in position, dry ace-high, as the raiser."
+        },
+        {
+          "id": "b",
+          "text": "Huge, multiway, with air on 876"
+        },
+        {
+          "id": "c",
+          "text": "A donk with bottom pair into the raiser"
+        },
+        {
+          "id": "d",
+          "text": "All-in with a gutshot"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Small on dry high boards. Not the other three."
+    },
+    {
+      "id": "q3",
+      "prompt": "The caller should lead most often when\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The flop hits the calling range much harder than the opening range."
+        },
+        {
+          "id": "b",
+          "text": "The flop is A72"
+        },
+        {
+          "id": "c",
+          "text": "They have air"
+        },
+        {
+          "id": "d",
+          "text": "They are in position and can check back"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Leads are the exception inside single-raised pots."
+    },
+    {
+      "id": "q4",
+      "prompt": "If the flop checks through, the turn plan\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Starts fresh. Either player can bet a card that helps them."
+        },
+        {
+          "id": "b",
+          "text": "Is over. The hand checks down"
+        },
+        {
+          "id": "c",
+          "text": "Must be an all-in"
+        },
+        {
+          "id": "d",
+          "text": "Belongs only to the big blind"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "A checked flop is a delayed-bet spot, not a surrender."
+    }
+  ]
+}

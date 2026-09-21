@@ -1,0 +1,104 @@
+{
+  "id": "lesson-06-01-03-turn-card-effects-check",
+  "lessonId": "lesson-06-01-03-turn-card-effects-check",
+  "version": "1.0.0",
+  "title": "Turn-card effects check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Which turn is the biggest scare card on Th 8h 3c?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "7h, putting a third heart and a straight card out."
+        },
+        {
+          "id": "b",
+          "text": "2c, a low offsuit brick"
+        },
+        {
+          "id": "c",
+          "text": "3d, pairing the three"
+        },
+        {
+          "id": "d",
+          "text": "Td, pairing the ten"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "The heart completes the flush and connects. Pairing the ten is a smaller change for the raiser."
+    },
+    {
+      "id": "q2",
+      "prompt": "You were ahead with top pair. The turn completes the obvious flush and you have none. Your equity\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Dropped against any calling range that had flush draws."
+        },
+        {
+          "id": "b",
+          "text": "Went to 100%"
+        },
+        {
+          "id": "c",
+          "text": "Stayed the same"
+        },
+        {
+          "id": "d",
+          "text": "Only matters if you are all-in"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Draws that called the flop got there. Update the range before you barrel."
+    },
+    {
+      "id": "q3",
+      "prompt": "A brick favors the player who\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Already had the stronger made-hand range on the flop."
+        },
+        {
+          "id": "b",
+          "text": "Missed every draw and has no pair"
+        },
+        {
+          "id": "c",
+          "text": "Folded"
+        },
+        {
+          "id": "d",
+          "text": "Has fewer strong hands"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "When nothing completes, the flop leader is still the leader."
+    },
+    {
+      "id": "q4",
+      "prompt": "Before the river, re-rank the hand because\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The turn can change both the nuts and how many outs remain."
+        },
+        {
+          "id": "b",
+          "text": "The flop action is binding"
+        },
+        {
+          "id": "c",
+          "text": "Outs never change"
+        },
+        {
+          "id": "d",
+          "text": "The dealer will tell you the winner"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "A plan that ignores the turn card is a flop plan, not a turn plan."
+    }
+  ]
+}

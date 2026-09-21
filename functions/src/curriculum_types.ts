@@ -112,6 +112,11 @@ export interface LearningProgressSnapshot {
   masteryByObjectiveId: Record<string, number>;
   /** Lesson ids completed at least once (placeholder unlock tracking). */
   completedLessonIds?: readonly string[];
+  /**
+   * Lesson id → YYYY-MM-DD when that lesson becomes due for spaced review
+   * or immediate remediation.
+   */
+  reviewDueByLessonId?: Record<string, string>;
   /** Catalog version this snapshot was last graded against. */
   catalogVersion?: string;
   /** Epoch ms of last progress write. */

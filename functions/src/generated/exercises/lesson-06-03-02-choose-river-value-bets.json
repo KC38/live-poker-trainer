@@ -1,0 +1,104 @@
+{
+  "id": "lesson-06-03-02-choose-river-value-bets",
+  "lessonId": "lesson-06-03-02-choose-river-value-bets",
+  "version": "1.0.0",
+  "title": "Choose river value bets",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "You have the nut flush on the river against one opponent who calls too much. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Bet large. Thick value."
+        },
+        {
+          "id": "b",
+          "text": "Check so you can trap a raise that will not come"
+        },
+        {
+          "id": "c",
+          "text": "Bet the minimum only"
+        },
+        {
+          "id": "d",
+          "text": "Fold"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "The nuts want a big call from worse flushes, sets, and stubborn one-pair hands."
+    },
+    {
+      "id": "q2",
+      "prompt": "You have top pair, decent kicker, on a dry river against a calling station. A small value bet\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Can be right. They call with worse pairs."
+        },
+        {
+          "id": "b",
+          "text": "Is a bluff"
+        },
+        {
+          "id": "c",
+          "text": "Must be a check because top pair is weak"
+        },
+        {
+          "id": "d",
+          "text": "Must be all-in or nothing"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Stations pay thin value. Do not turn the bet into a size only the nuts can call."
+    },
+    {
+      "id": "q3",
+      "prompt": "Same top pair against a tight player who folds one pair. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Check. A bet gets called by better and folds out worse."
+        },
+        {
+          "id": "b",
+          "text": "Overbet as thin value"
+        },
+        {
+          "id": "c",
+          "text": "All-in"
+        },
+        {
+          "id": "d",
+          "text": "Bet and call a shove"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "If they only continue when they beat you, the bet is not value."
+    },
+    {
+      "id": "q4",
+      "prompt": "You bet the river for value and face a raise. With one pair you\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold most of the time. River raises are strong, especially live."
+        },
+        {
+          "id": "b",
+          "text": "Always call"
+        },
+        {
+          "id": "c",
+          "text": "Always re-raise"
+        },
+        {
+          "id": "d",
+          "text": "Call because the bet was for value"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Live river raises are value-heavy. One pair is a bluff-catcher at best, and usually a fold to the raise."
+    }
+  ]
+}

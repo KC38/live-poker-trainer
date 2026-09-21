@@ -1,0 +1,104 @@
+{
+  "id": "lesson-07-05-03-player-count-check",
+  "lessonId": "lesson-07-05-03-player-count-check",
+  "version": "1.0.0",
+  "title": "Player-count check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Which pot allows the most bluffs?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Heads-up."
+        },
+        {
+          "id": "b",
+          "text": "Four-way"
+        },
+        {
+          "id": "c",
+          "text": "Full ring, five players"
+        },
+        {
+          "id": "d",
+          "text": "A family limped pot"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "One opponent, one range, the most folds."
+    },
+    {
+      "id": "q2",
+      "prompt": "Which value hand needs to be stronger as players are added?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "All of them. The calling range gets stronger when more people stay."
+        },
+        {
+          "id": "b",
+          "text": "None. Value does not change"
+        },
+        {
+          "id": "c",
+          "text": "Only bluffs get stronger"
+        },
+        {
+          "id": "d",
+          "text": "Only the nuts get weaker"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Multiway, wait for a better hand before you build a big pot."
+    },
+    {
+      "id": "q3",
+      "prompt": "From heads-up through full ring, the checkpoint is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Name the player count before you copy a heads-up line."
+        },
+        {
+          "id": "b",
+          "text": "Ignore the extra players"
+        },
+        {
+          "id": "c",
+          "text": "Use one chart for every table"
+        },
+        {
+          "id": "d",
+          "text": "Bluff more as the table fills up"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "A nine-handed pot is not a heads-up pot with extra chips."
+    },
+    {
+      "id": "q4",
+      "prompt": "Postflop core ties together\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Texture, hand class, position, street, pot family, and player count."
+        },
+        {
+          "id": "b",
+          "text": "Only preflop charts"
+        },
+        {
+          "id": "c",
+          "text": "Only the chip result"
+        },
+        {
+          "id": "d",
+          "text": "Only the dealer button\u2019s name"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "If you can name those and choose bet, check, call, raise, or fold, the core is in place."
+    }
+  ]
+}

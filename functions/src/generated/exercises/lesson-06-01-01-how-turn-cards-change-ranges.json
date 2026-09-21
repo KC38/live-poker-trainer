@@ -1,0 +1,104 @@
+{
+  "id": "lesson-06-01-01-how-turn-cards-change-ranges",
+  "lessonId": "lesson-06-01-01-how-turn-cards-change-ranges",
+  "version": "1.0.0",
+  "title": "How turn cards change ranges",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Flop As 7d 2c, turn 3h. For a preflop raiser who c-bet, this turn is mostly\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "A brick. It completes few draws and does not change the nuts."
+        },
+        {
+          "id": "b",
+          "text": "A four-flush"
+        },
+        {
+          "id": "c",
+          "text": "A card that always gives the caller the nuts"
+        },
+        {
+          "id": "d",
+          "text": "A paired board"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "The three does not connect with ace-seven-deuce. Overpairs and top pair stay best."
+    },
+    {
+      "id": "q2",
+      "prompt": "Flop Kh 7d 3c, turn Ah. What changed?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "An ace is now top pair, and a heart flush draw appeared."
+        },
+        {
+          "id": "b",
+          "text": "Nothing. Kickers do not change"
+        },
+        {
+          "id": "c",
+          "text": "The board paired"
+        },
+        {
+          "id": "d",
+          "text": "The pot is awarded to the preflop raiser"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "The ace leapfrogs kings. Anyone with the ace of hearts also picked up the nut flush draw."
+    },
+    {
+      "id": "q3",
+      "prompt": "A scare card is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "A turn that completes an obvious draw, such as a third flush card."
+        },
+        {
+          "id": "b",
+          "text": "Any deuce"
+        },
+        {
+          "id": "c",
+          "text": "Only a card that pairs your hole card"
+        },
+        {
+          "id": "d",
+          "text": "A card the dealer burns"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Scare cards shift the nuts toward the draw that just got there. Bluffing them without a blocker is how stations get paid."
+    },
+    {
+      "id": "q4",
+      "prompt": "Who is hurt more when the third flush card comes and they have no flush?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The player who was betting one pair for value. Their hand is now behind every flush."
+        },
+        {
+          "id": "b",
+          "text": "The player who folded preflop"
+        },
+        {
+          "id": "c",
+          "text": "Nobody. One pair still beats a flush"
+        },
+        {
+          "id": "d",
+          "text": "Only the player with the nuts"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "One pair does not improve when the flush arrives. Value bets have to shrink or stop."
+    }
+  ]
+}
