@@ -1,5 +1,14 @@
 # Plan 01 — Three-Tab Shell and Live Training Hub
 
+**Status: Done**
+
+- Merged: https://github.com/KC38/live-poker-trainer/pull/164
+  (`44d1305`) and follow-up https://github.com/KC38/live-poker-trainer/pull/165
+  (`db50d28`) on `main`
+- Cloud Functions deploy: completed from `origin/main` at `db50d28`
+  (unchanged Functions skipped — UI-only ship)
+- Simulator: hot-restarted attached Flutter sessions after merge
+
 ## Objective
 
 Create exactly three persistent destinations—Home, Live Training, and
