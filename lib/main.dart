@@ -20,8 +20,8 @@ import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/services/analytics/crashlytics_diagnostics_sink.dart';
 import 'package:live_poker_trainer/services/legacy_local_data_cleanup.dart';
+import 'package:live_poker_trainer/ui/screens/app_shell.dart';
 import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
-import 'package:live_poker_trainer/ui/screens/home_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -62,7 +62,7 @@ Future<void> _installCrashReporting({required bool enabled}) async {
 
 /// Root application widget.
 ///
-/// Auth gate: signed-out → [AuthScreen]; signed-in → [HomeScreen].
+/// Auth gate: signed-out → [AuthScreen]; signed-in → [AppShell].
 class PokerLabApp extends ConsumerStatefulWidget {
   /// Creates the app.
   const PokerLabApp({super.key});
@@ -109,13 +109,13 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
       home: auth.when(
         data: (user) {
           if (user == null) return const AuthScreen();
-          // Hold Home until cloud gameplay prefs hydrate so table-setup
+          // Hold shell until cloud gameplay prefs hydrate so table-setup
           // edits cannot clobber Firestore with in-memory defaults.
           final userDoc = ref.watch(userDocProvider);
           return userDoc.when(
-            data: (_) => const HomeScreen(),
+            data: (_) => const AppShell(),
             loading: () => const _AuthLoadingScreen(),
-            error: (_, _) => const HomeScreen(),
+            error: (_, _) => const AppShell(),
           );
         },
         loading: () => const _AuthLoadingScreen(),

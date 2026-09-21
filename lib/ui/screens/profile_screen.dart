@@ -19,6 +19,8 @@ import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
+import 'package:live_poker_trainer/ui/screens/settings_screen.dart';
+import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_avatar.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_identity_sheet.dart';
 
@@ -64,7 +66,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Progress'),
+        title: const Text('Profile'),
+        // Tab root: no back when Profile is not pushed above another route.
+        automaticallyImplyLeading: canPop,
         leading:
             canPop
                 ? IconButton(
@@ -77,6 +81,23 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   ),
                 )
                 : null,
+        actions: [
+          IconButton(
+            tooltip: 'Settings',
+            onPressed:
+                () => Navigator.push(
+                  context,
+                  softFadeRoute(
+                    const SettingsScreen(),
+                    name: AnalyticsScreens.settings,
+                  ),
+                ),
+            icon: const Icon(
+              Icons.settings_outlined,
+              color: AppColors.slate,
+            ),
+          ),
+        ],
       ),
       body: Container(
         decoration: const BoxDecoration(

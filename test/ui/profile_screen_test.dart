@@ -107,7 +107,8 @@ void main() {
   ) async {
     await pumpProfile(tester);
 
-    expect(find.text('Progress'), findsOneWidget);
+    expect(find.text('Profile'), findsOneWidget);
+    expect(find.byTooltip('Settings'), findsOneWidget);
     // No style is claimed, and the reason is spelled out.
     expect(find.text('Style forming'), findsOneWidget);
     expect(find.textContaining('0 hands logged'), findsOneWidget);

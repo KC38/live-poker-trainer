@@ -6,8 +6,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
-import 'package:live_poker_trainer/ui/screens/home_screen.dart';
+import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
+import 'package:live_poker_trainer/ui/screens/live_training_screen.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 
@@ -53,22 +55,28 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets(
-    'Start training prepares on Home, starts only after table is visible',
+    'Start training prepares on Live Training, starts only after table is visible',
     (tester) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
+            analyticsServiceProvider.overrideWithValue(
+              AnalyticsService(enabled: false),
+            ),
             gameControllerProvider.overrideWith(_TrackingController.new),
           ],
           child: MaterialApp(
             theme: buildPokerTheme(),
-            home: const HomeScreen(),
+            home: const LiveTrainingScreen(),
           ),
         ),
       );
       await tester.pump();
 
-      final controller = _readController(tester, find.byType(HomeScreen));
+      final controller = _readController(
+        tester,
+        find.byType(LiveTrainingScreen),
+      );
       expect(find.text('Start training'), findsOneWidget);
       expect(controller.log, isEmpty);
 
@@ -107,6 +115,9 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
+            analyticsServiceProvider.overrideWithValue(
+              AnalyticsService(enabled: false),
+            ),
             gameControllerProvider.overrideWith(_TrackingController.new),
           ],
           child: MaterialApp(
