@@ -402,6 +402,16 @@ void main() {
       ),
       allOf(contains(r'for $42 chips'), contains(r'$570-chip pot')),
     );
+    // "81 chip pot" (batch 0347 H1).
+    expect(
+      polishCoachCopy(
+        r'Investing $17 chips into an 81 chip pot yields poor equity.',
+      ),
+      allOf(
+        contains(r'$81-chip pot'),
+        isNot(contains(RegExp(r'\ban 81 chip pot\b'))),
+      ),
+    );
     expect(
       polishCoachCopy(
         'Folding retains 164 chips but ignores the 20% pot odds.',
