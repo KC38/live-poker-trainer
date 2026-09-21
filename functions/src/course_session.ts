@@ -25,6 +25,7 @@ import {
   type ActivityStage,
   type CourseActivity,
   type CourseBank,
+  type CourseChoice,
   type CourseLesson,
   type SoftGrade,
 } from "./course_catalog";
@@ -237,10 +238,14 @@ export function gradeCourseResponse(options: {
   }
 
   if (options.choiceId) {
-    const fromActivity = options.activity.choices?.find(
-      (choice) => choice.id === options.choiceId,
+    const fromActivity =
+      findChoiceOnActivity(options.activity, options.choiceId);
+    const fromBank = choiceGradingFromBank(
+      privateEntry,
+      options.choiceId,
+      bank,
+      options.activity,
     );
-    const fromBank = choiceGradingFromBank(privateEntry, options.choiceId);
     const grading = fromActivity?.grading ?? fromBank;
     if (!grading) {
       throw new HttpsError("invalid-argument", "Unknown choiceId.");
@@ -1253,9 +1258,27 @@ function outcomeFromGrading(
   };
 }
 
+function findChoiceOnActivity(
+  activity: CourseActivity,
+  choiceId: string,
+): CourseChoice | undefined {
+  const direct = activity.choices?.find((choice) => choice.id === choiceId);
+  if (direct) return direct;
+  const steps = (activity as {handSteps?: Array<{choices?: CourseChoice[]}>})
+    .handSteps;
+  if (!steps) return undefined;
+  for (const step of steps) {
+    const match = step.choices?.find((choice) => choice.id === choiceId);
+    if (match) return match;
+  }
+  return undefined;
+}
+
 function choiceGradingFromBank(
   privateEntry: Record<string, unknown> | undefined,
   choiceId: string,
+  bank?: CourseBank,
+  activity?: CourseActivity,
 ): {
   grade: SoftGrade;
   feedback: string;
@@ -1265,8 +1288,37 @@ function choiceGradingFromBank(
   const map = privateEntry?.choiceGrading as
     | Record<string, Record<string, unknown>>
     | undefined;
-  if (!map || !map[choiceId]) return null;
-  return gradingRecord(map[choiceId]);
+  if (map?.[choiceId]) {
+    return gradingRecord(map[choiceId]);
+  }
+
+  const steps = privateEntry?.handSteps;
+  if (Array.isArray(steps)) {
+    for (const step of steps) {
+      if (!step || typeof step !== "object") continue;
+      const gradingMap = (step as {choiceGrading?: Record<string, unknown>})
+        .choiceGrading;
+      if (gradingMap && gradingMap[choiceId]) {
+        return gradingRecord(gradingMap[choiceId]);
+      }
+    }
+  }
+
+  const labId = (privateEntry?.handLabSpecId as string | undefined) ??
+    activity?.handLabSpecId;
+  if (labId && bank?.handLabsById?.[labId]) {
+    const lab = bank.handLabsById[labId] as {
+      decisionPoints?: Array<{choices?: CourseChoice[]}>;
+    };
+    for (const point of lab.decisionPoints ?? []) {
+      const match = point.choices?.find((choice) => choice.id === choiceId);
+      if (match?.grading) {
+        return gradingRecord(match.grading);
+      }
+    }
+  }
+
+  return null;
 }
 
 function gradingRecord(

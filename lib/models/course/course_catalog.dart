@@ -5,6 +5,12 @@
 /// server bank and must never appear in this tree.
 library;
 
+/// Stable production first-lesson id (Section 1 → Cards and the table).
+const kFirstCourseLessonId = 'lesson-01-01-01-your-two-cards';
+
+/// Bundled public catalog asset path.
+const kCourseCatalogAssetPath = 'assets/course/v2/catalog.json';
+
 /// Soft coaching grades shared with live training.
 enum SoftGrade {
   recommended,
@@ -211,6 +217,55 @@ class CourseChoice {
   }
 }
 
+/// Authored multi-step hand street.
+class CourseHandStep {
+  /// Creates a hand step.
+  const CourseHandStep({
+    required this.id,
+    required this.street,
+    required this.prompt,
+    this.accessibilityText,
+    this.choices = const <CourseChoice>[],
+  });
+
+  /// Step id.
+  final String id;
+
+  /// Street label.
+  final String street;
+
+  /// Prompt.
+  final String prompt;
+
+  /// Accessibility summary.
+  final String? accessibilityText;
+
+  /// Public choices (no grading).
+  final List<CourseChoice> choices;
+
+  /// Parses JSON.
+  factory CourseHandStep.fromJson(Map<String, dynamic> json) {
+    final choices = <CourseChoice>[];
+    final raw = json['choices'];
+    if (raw is List) {
+      for (final item in raw) {
+        if (item is Map<String, dynamic>) {
+          choices.add(CourseChoice.fromJson(item));
+        } else if (item is Map) {
+          choices.add(CourseChoice.fromJson(Map<String, dynamic>.from(item)));
+        }
+      }
+    }
+    return CourseHandStep(
+      id: json['id'] as String,
+      street: json['street'] as String,
+      prompt: json['prompt'] as String,
+      accessibilityText: json['accessibilityText'] as String?,
+      choices: List.unmodifiable(choices),
+    );
+  }
+}
+
 /// Public activity node.
 class CourseActivity {
   /// Creates an activity.
@@ -232,6 +287,7 @@ class CourseActivity {
     this.numericQuestion,
     this.numericUnit,
     this.handLabSpecId,
+    this.handSteps = const <CourseHandStep>[],
   });
 
   /// Activity id.
@@ -285,6 +341,23 @@ class CourseActivity {
   /// Server hand-lab id reference.
   final String? handLabSpecId;
 
+  /// Authored multi-step streets (public choices only).
+  final List<CourseHandStep> handSteps;
+
+  /// Hint media lines for this activity.
+  List<CoachMediaRef> get hintMedia =>
+      coachMedia.where((m) => m.kind == 'hint').toList(growable: false);
+
+  /// Primary Rex dialogue/demonstration line.
+  CoachMediaRef? get primaryCoachLine {
+    for (final media in coachMedia) {
+      if (media.kind == 'dialogue' || media.kind == 'demonstration') {
+        return media;
+      }
+    }
+    return coachMedia.isEmpty ? null : coachMedia.first;
+  }
+
   /// Parses JSON.
   factory CourseActivity.fromJson(Map<String, dynamic> json) {
     final grades = _stringList(json['acceptedGrades'])
@@ -335,6 +408,19 @@ class CourseActivity {
       numericQuestion = numeric['question']?.toString();
       numericUnit = numeric['unit']?.toString();
     }
+    final handSteps = <CourseHandStep>[];
+    final rawSteps = json['handSteps'];
+    if (rawSteps is List) {
+      for (final item in rawSteps) {
+        if (item is Map<String, dynamic>) {
+          handSteps.add(CourseHandStep.fromJson(item));
+        } else if (item is Map) {
+          handSteps.add(
+            CourseHandStep.fromJson(Map<String, dynamic>.from(item)),
+          );
+        }
+      }
+    }
     return CourseActivity(
       id: json['id'] as String,
       order: json['order'] as int,
@@ -353,6 +439,7 @@ class CourseActivity {
       numericQuestion: numericQuestion,
       numericUnit: numericUnit,
       handLabSpecId: json['handLabSpecId'] as String?,
+      handSteps: List.unmodifiable(handSteps),
     );
   }
 }
@@ -680,5 +767,40 @@ class CourseCatalog {
       playerTypes: List.unmodifiable(playerTypes),
       sections: List.unmodifiable(sections),
     );
+  }
+
+  /// Finds a lesson by id.
+  CourseLesson? lessonById(String lessonId) {
+    for (final section in sections) {
+      for (final unit in section.units) {
+        for (final lesson in unit.lessons) {
+          if (lesson.id == lessonId) return lesson;
+        }
+      }
+    }
+    return null;
+  }
+
+  /// Finds an activity by id across the catalog.
+  CourseActivity? activityById(String activityId) {
+    for (final section in sections) {
+      for (final unit in section.units) {
+        for (final lesson in unit.lessons) {
+          for (final activity in lesson.activities) {
+            if (activity.id == activityId) return activity;
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  /// Activities for [lessonId] sorted by order.
+  List<CourseActivity> activitiesForLesson(String lessonId) {
+    final lesson = lessonById(lessonId);
+    if (lesson == null) return const <CourseActivity>[];
+    final activities = [...lesson.activities]
+      ..sort((a, b) => a.order.compareTo(b.order));
+    return List.unmodifiable(activities);
   }
 }
