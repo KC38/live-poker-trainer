@@ -22,8 +22,12 @@ describe("course catalog bank", () => {
       "lesson-01-01-01-your-two-cards",
     );
     expect(lessonIdsInOrder().at(-1)).toBe("lesson-07-01-01-plan-stub");
-    expect(activityIdsInOrder()).toContain("act-01-01-02-hand-lab-seed");
-    expect(courseBank.handLabsById["lab-01-01-02-bb-defend-seed"]).toBeTruthy();
+    expect(activityIdsInOrder()).toContain("act-01-06-01-unguided-lab");
+    expect(courseBank.handLabsById["lab-01-06-01-bb-defend"]).toBeTruthy();
+    expect(courseBank.handLabsById["lab-02-07-01-full-ring-btn"]).toBeTruthy();
+    expect(courseBank.catalogVersion).toBe("2.0.0");
+    expect(courseBank.sections[0].units).toHaveLength(6);
+    expect(courseBank.sections[1].units).toHaveLength(7);
   });
 
   it("matches the generated client catalog checksum and id order", () => {
@@ -91,8 +95,8 @@ describe("course catalog bank", () => {
     expect(findActivity(located!.lesson, "act-01-01-01-explain-hole-cards")?.stage)
       .toBe("explain");
     expect(lessonRequiresPlacementFlag(located!.lesson)).toBe(false);
-    const coverage = findLesson("lesson-01-01-02-renderer-coverage-seed");
-    expect(lessonRequiresPlacementFlag(coverage!.lesson)).toBe(true);
+    const jump = findLesson("lesson-01-06-02-section-one-jump");
+    expect(lessonRequiresPlacementFlag(jump!.lesson)).toBe(true);
     expect(lessonGrantsLiveTrainingEntitlement(located!)).toBe(false);
   });
 });

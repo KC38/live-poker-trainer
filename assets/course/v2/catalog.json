@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "d84084be78adeb66af550f96d5bd011f9045ae87fa05880432953bb49fee715e",
+  "contentChecksum": "a711ccb4f981d1b6581946c7492084dcfdad9e7505247edef3cfc48420df7189",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -108,28 +108,28 @@
                     "Identify your two hole cards"
                   ],
                   "prompt": "Which cards are your hole cards?",
+                  "choices": [
+                    {
+                      "id": "choice-hero-holes",
+                      "label": "Ah Kd in front of you",
+                      "accessibilityText": "Ah Kd in front of you"
+                    },
+                    {
+                      "id": "choice-board",
+                      "label": "The flop cards in the middle",
+                      "accessibilityText": "The flop cards in the middle"
+                    },
+                    {
+                      "id": "choice-villain",
+                      "label": "Face-down cards at another seat",
+                      "accessibilityText": "Face-down cards at another seat"
+                    }
+                  ],
                   "coachMedia": [
                     {
                       "id": "act-01-01-01-guided-find-holes-hint",
                       "kind": "hint",
                       "text": "Look at the two cards in front of you — not the board."
-                    }
-                  ],
-                  "choices": [
-                    {
-                      "id": "choice-hero-holes",
-                      "label": "Ah Kd in front of you",
-                      "accessibilityText": "Select ace of hearts and king of diamonds as your hole cards."
-                    },
-                    {
-                      "id": "choice-board",
-                      "label": "The flop cards in the middle",
-                      "accessibilityText": "Select the community flop cards."
-                    },
-                    {
-                      "id": "choice-villain",
-                      "label": "Face-down cards at another seat",
-                      "accessibilityText": "Select another seat's face-down cards."
                     }
                   ]
                 },
@@ -154,17 +154,17 @@
                     {
                       "id": "choice-only-you",
                       "label": "Only you",
-                      "accessibilityText": "Select that only you see your hole cards."
+                      "accessibilityText": "Only you"
                     },
                     {
                       "id": "choice-whole-table",
                       "label": "Everyone at the table",
-                      "accessibilityText": "Select that the whole table sees your hole cards."
+                      "accessibilityText": "Everyone at the table"
                     },
                     {
                       "id": "choice-dealer-only",
                       "label": "Only the dealer",
-                      "accessibilityText": "Select that only the dealer sees your hole cards."
+                      "accessibilityText": "Only the dealer"
                     }
                   ]
                 },
@@ -173,7 +173,7 @@
                   "order": 4,
                   "stage": "unguided",
                   "renderer": "select_identify",
-                  "estimatedSeconds": 35,
+                  "estimatedSeconds": 40,
                   "accessibilityText": "Pick the shared community cards on a simple flop.",
                   "acceptedGrades": [
                     "recommended",
@@ -189,17 +189,17 @@
                     {
                       "id": "choice-flop",
                       "label": "Qs Jh 2c in the middle",
-                      "accessibilityText": "Select the queen, jack, and deuce in the middle."
+                      "accessibilityText": "Qs Jh 2c in the middle"
                     },
                     {
                       "id": "choice-hero-again",
                       "label": "Your Ah Kd",
-                      "accessibilityText": "Select your ace-king as community cards."
+                      "accessibilityText": "Your Ah Kd"
                     },
                     {
                       "id": "choice-muck",
                       "label": "Folded cards in the muck",
-                      "accessibilityText": "Select folded cards in the muck."
+                      "accessibilityText": "Folded cards in the muck"
                     }
                   ]
                 },
@@ -225,29 +225,31 @@
                     {
                       "id": "choice-checkpoint-holes",
                       "label": "The two cards at your seat",
-                      "accessibilityText": "Select the two cards at your seat."
+                      "accessibilityText": "The two cards at your seat"
                     },
                     {
                       "id": "choice-checkpoint-board",
                       "label": "Flop plus your two cards",
-                      "accessibilityText": "Select the flop plus your hole cards."
+                      "accessibilityText": "Flop plus your two cards"
                     },
                     {
                       "id": "choice-checkpoint-all",
                       "label": "Every face-up card you can see",
-                      "accessibilityText": "Select every face-up card in view."
+                      "accessibilityText": "Every face-up card you can see"
                     }
                   ]
                 }
               ]
             },
             {
-              "id": "lesson-01-01-02-renderer-coverage-seed",
+              "id": "lesson-01-01-02-suits-and-ranks",
               "order": 2,
-              "title": "Table coverage seed",
-              "summary": "Seed activities that cover remaining renderers until Plan 07 authoring.",
+              "title": "Suits and ranks",
+              "summary": "Name ranks and suits, and spot when cards match.",
               "objectives": [
-                "Exercise remaining activity renderers"
+                "Name the four suits",
+                "Order ranks from deuce to ace",
+                "Spot pairs and suited cards"
               ],
               "prerequisites": [
                 "lesson-01-01-01-your-two-cards"
@@ -255,18 +257,40 @@
               "remediationLessonIds": [
                 "lesson-01-01-01-your-two-cards"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 6,
               "difficultyBand": 1,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
               "activities": [
                 {
-                  "id": "act-01-01-02-scaffolded-action-order",
+                  "id": "act-01-01-02-explain-suits",
                   "order": 1,
-                  "stage": "scaffolded",
-                  "renderer": "order_sequence",
-                  "estimatedSeconds": 50,
-                  "accessibilityText": "Put preflop action seats in order after the big blind.",
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Four suits, thirteen ranks. Ace is high here.",
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-01-01-02-explain-suits-media",
+                      "kind": "dialogue",
+                      "text": "Four suits, thirteen ranks. Ace is high here."
+                    }
+                  ],
+                  "objectives": [
+                    "Name the four suits"
+                  ]
+                },
+                {
+                  "id": "act-01-01-02-guided-suits",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Pick the complete list of card suits.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -274,9 +298,1229 @@
                   ],
                   "lifeLossEligible": false,
                   "objectives": [
-                    "Exercise remaining activity renderers"
+                    "Name the four suits"
                   ],
-                  "prompt": "Order the first three seats to act preflop after the blinds post.",
+                  "prompt": "Which set lists every suit?",
+                  "choices": [
+                    {
+                      "id": "suits-full",
+                      "label": "Hearts, diamonds, clubs, spades",
+                      "accessibilityText": "Hearts, diamonds, clubs, spades"
+                    },
+                    {
+                      "id": "suits-missing",
+                      "label": "Hearts, diamonds, clubs",
+                      "accessibilityText": "Hearts, diamonds, clubs"
+                    },
+                    {
+                      "id": "suits-extra",
+                      "label": "Hearts, diamonds, clubs, spades, stars",
+                      "accessibilityText": "Hearts, diamonds, clubs, spades, stars"
+                    }
+                  ],
+                  "coachMedia": [
+                    {
+                      "id": "act-01-01-02-guided-suits-hint",
+                      "kind": "hint",
+                      "text": "Hearts, diamonds, clubs, spades — nothing else."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-01-02-scaffolded-ranks",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "order_sequence",
+                  "estimatedSeconds": 50,
+                  "accessibilityText": "Put deuce, ten, and ace in ascending rank order.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Order ranks from deuce to ace"
+                  ],
+                  "prompt": "Order these ranks from lowest to highest.",
+                  "sequenceItems": [
+                    {
+                      "id": "rank-2",
+                      "label": "2"
+                    },
+                    {
+                      "id": "rank-T",
+                      "label": "T"
+                    },
+                    {
+                      "id": "rank-A",
+                      "label": "A"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-01-02-unguided-suited",
+                  "order": 4,
+                  "stage": "unguided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Identify which pair shares a suit.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Spot pairs and suited cards"
+                  ],
+                  "prompt": "Which hole cards are suited?",
+                  "choices": [
+                    {
+                      "id": "suited-ah-kh",
+                      "label": "Ah Kh",
+                      "accessibilityText": "Ah Kh"
+                    },
+                    {
+                      "id": "offsuit-ah-kd",
+                      "label": "Ah Kd",
+                      "accessibilityText": "Ah Kd"
+                    },
+                    {
+                      "id": "pair-77",
+                      "label": "7c 7d",
+                      "accessibilityText": "7c 7d"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-01-02-checkpoint-pair",
+                  "order": 5,
+                  "stage": "checkpoint",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Classify pocket nines.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Spot pairs and suited cards"
+                  ],
+                  "prompt": "You hold 9h 9d. What do you have?",
+                  "choices": [
+                    {
+                      "id": "pocket-pair",
+                      "label": "A pocket pair",
+                      "accessibilityText": "A pocket pair"
+                    },
+                    {
+                      "id": "suited-nine",
+                      "label": "Suited nines",
+                      "accessibilityText": "Suited nines"
+                    },
+                    {
+                      "id": "two-high",
+                      "label": "Two high cards",
+                      "accessibilityText": "Two high cards"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "lesson-01-01-03-blinds-and-button",
+              "order": 3,
+              "title": "Button and blinds",
+              "summary": "Find the dealer button, small blind, and big blind.",
+              "objectives": [
+                "Locate the dealer button",
+                "Identify the small and big blinds",
+                "Know blinds post before cards are dealt"
+              ],
+              "prerequisites": [
+                "lesson-01-01-02-suits-and-ranks"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-01-02-suits-and-ranks"
+              ],
+              "estimatedMinutes": 6,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-01-03-explain-button",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Button marks the dealer. Blinds sit left of it.",
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-01-01-03-explain-button-media",
+                      "kind": "dialogue",
+                      "text": "Button marks the dealer. Blinds sit left of it."
+                    }
+                  ],
+                  "objectives": [
+                    "Locate the dealer button"
+                  ]
+                },
+                {
+                  "id": "act-01-01-03-guided-button",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Identify the seat that has the dealer button.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Locate the dealer button"
+                  ],
+                  "prompt": "Where is the dealer button?",
+                  "choices": [
+                    {
+                      "id": "btn-seat",
+                      "label": "The seat with the D chip",
+                      "accessibilityText": "The seat with the D chip"
+                    },
+                    {
+                      "id": "bb-seat",
+                      "label": "The seat that posted 2 chips",
+                      "accessibilityText": "The seat that posted 2 chips"
+                    },
+                    {
+                      "id": "empty-seat",
+                      "label": "Any empty seat",
+                      "accessibilityText": "Any empty seat"
+                    }
+                  ],
+                  "coachMedia": [
+                    {
+                      "id": "act-01-01-03-guided-button-hint",
+                      "kind": "hint",
+                      "text": "Look for the chip labeled D or Dealer."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-01-03-scaffolded-blinds",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Choose which seat posts the big blind.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Identify the small and big blinds"
+                  ],
+                  "prompt": "Blinds are 1/2. Who posts the big blind?",
+                  "choices": [
+                    {
+                      "id": "bb-two",
+                      "label": "The seat two left of the button, posting 2",
+                      "accessibilityText": "The seat two left of the button, posting 2"
+                    },
+                    {
+                      "id": "sb-one",
+                      "label": "The seat immediately left of the button",
+                      "accessibilityText": "The seat immediately left of the button"
+                    },
+                    {
+                      "id": "btn-posts",
+                      "label": "The button posts both blinds",
+                      "accessibilityText": "The button posts both blinds"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-01-03-unguided-when",
+                  "order": 4,
+                  "stage": "unguided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Decide when blinds are posted relative to the deal.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Know blinds post before cards are dealt"
+                  ],
+                  "prompt": "When do the blinds go in?",
+                  "choices": [
+                    {
+                      "id": "before-deal",
+                      "label": "Before any hole cards are dealt",
+                      "accessibilityText": "Before any hole cards are dealt"
+                    },
+                    {
+                      "id": "after-flop",
+                      "label": "After the flop",
+                      "accessibilityText": "After the flop"
+                    },
+                    {
+                      "id": "only-showdown",
+                      "label": "Only if the hand reaches showdown",
+                      "accessibilityText": "Only if the hand reaches showdown"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-01-03-checkpoint-layout",
+                  "order": 5,
+                  "stage": "checkpoint",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "On a six-handed table, name the small blind seat.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Locate the dealer button",
+                    "Identify the small and big blinds"
+                  ],
+                  "prompt": "Button is seat 5. Who is the small blind?",
+                  "choices": [
+                    {
+                      "id": "sb-seat0",
+                      "label": "Seat 0 (first left of button)",
+                      "accessibilityText": "Seat 0 (first left of button)"
+                    },
+                    {
+                      "id": "sb-seat4",
+                      "label": "Seat 4 (right of button)",
+                      "accessibilityText": "Seat 4 (right of button)"
+                    },
+                    {
+                      "id": "sb-seat1",
+                      "label": "Seat 1 (big blind seat)",
+                      "accessibilityText": "Seat 1 (big blind seat)"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "unit-01-02-what-beats-what",
+          "order": 2,
+          "title": "What beats what",
+          "summary": "Hand ranks, best five of seven, ties and kickers.",
+          "lessons": [
+            {
+              "id": "lesson-01-02-01-hand-ranks",
+              "order": 1,
+              "title": "Hand ranks",
+              "summary": "Rank made hands from high card up through straight flush.",
+              "objectives": [
+                "Order common hand ranks",
+                "Recognize pairs, straights, and flushes",
+                "Compare two finished hands"
+              ],
+              "prerequisites": [
+                "lesson-01-01-03-blinds-and-button"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-01-03-blinds-and-button"
+              ],
+              "estimatedMinutes": 8,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-02-01-explain-ladder",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Pair beats high card. Flush beats straight. Remember the ladder.",
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-01-02-01-explain-ladder-media",
+                      "kind": "dialogue",
+                      "text": "Pair beats high card. Flush beats straight. Remember the ladder."
+                    }
+                  ],
+                  "objectives": [
+                    "Order common hand ranks"
+                  ]
+                },
+                {
+                  "id": "act-01-02-01-guided-ladder",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "compare_rank",
+                  "estimatedSeconds": 50,
+                  "accessibilityText": "Order high card, pair, and flush from weakest to strongest.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Order common hand ranks"
+                  ],
+                  "prompt": "Rank these from weakest to strongest.",
+                  "sequenceItems": [
+                    {
+                      "id": "hr-high",
+                      "label": "High card"
+                    },
+                    {
+                      "id": "hr-pair",
+                      "label": "One pair"
+                    },
+                    {
+                      "id": "hr-flush",
+                      "label": "Flush"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-02-01-scaffolded-spot",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Identify the hand category with ace-high clubs.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Recognize pairs, straights, and flushes"
+                  ],
+                  "prompt": "Board Kc 9c 4c. You hold Ac 2d. What is your best category?",
+                  "choices": [
+                    {
+                      "id": "cat-flush",
+                      "label": "Flush",
+                      "accessibilityText": "Flush"
+                    },
+                    {
+                      "id": "cat-pair",
+                      "label": "One pair",
+                      "accessibilityText": "One pair"
+                    },
+                    {
+                      "id": "cat-straight",
+                      "label": "Straight",
+                      "accessibilityText": "Straight"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-02-01-unguided-compare",
+                  "order": 4,
+                  "stage": "unguided",
+                  "renderer": "compare_rank",
+                  "estimatedSeconds": 50,
+                  "accessibilityText": "Order full house, two pair, and three of a kind.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Compare two finished hands"
+                  ],
+                  "prompt": "Strongest to weakest: full house, two pair, trips.",
+                  "sequenceItems": [
+                    {
+                      "id": "fh",
+                      "label": "Full house"
+                    },
+                    {
+                      "id": "trips",
+                      "label": "Three of a kind"
+                    },
+                    {
+                      "id": "two",
+                      "label": "Two pair"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-02-01-checkpoint-winner",
+                  "order": 5,
+                  "stage": "checkpoint",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Decide whether flush beats straight.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Compare two finished hands",
+                    "Order common hand ranks"
+                  ],
+                  "prompt": "Showdown: your flush vs their straight. Who wins?",
+                  "choices": [
+                    {
+                      "id": "you-win",
+                      "label": "You win with the flush",
+                      "accessibilityText": "You win with the flush"
+                    },
+                    {
+                      "id": "they-win",
+                      "label": "They win with the straight",
+                      "accessibilityText": "They win with the straight"
+                    },
+                    {
+                      "id": "split",
+                      "label": "Chop the pot",
+                      "accessibilityText": "Chop the pot"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "lesson-01-02-02-best-five-kickers",
+              "order": 2,
+              "title": "Best five and kickers",
+              "summary": "Use exactly five cards; kickers break ties.",
+              "objectives": [
+                "Build the best five-card hand from seven",
+                "Use kickers when categories tie",
+                "Spot board-tied pots"
+              ],
+              "prerequisites": [
+                "lesson-01-02-01-hand-ranks"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-02-01-hand-ranks"
+              ],
+              "estimatedMinutes": 7,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-02-02-explain-five",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Only five cards count. Pick the strongest five.",
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-01-02-02-explain-five-media",
+                      "kind": "dialogue",
+                      "text": "Only five cards count. Pick the strongest five."
+                    }
+                  ],
+                  "objectives": [
+                    "Build the best five-card hand from seven"
+                  ]
+                },
+                {
+                  "id": "act-01-02-02-guided-seven",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Choose the best five-card combination.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Build the best five-card hand from seven"
+                  ],
+                  "prompt": "You have Ah Kd. Board As 7c 2d 9h 3s. Best hand?",
+                  "choices": [
+                    {
+                      "id": "best-pair-k",
+                      "label": "Pair of aces with king kicker",
+                      "accessibilityText": "Pair of aces with king kicker"
+                    },
+                    {
+                      "id": "use-all-seven",
+                      "label": "All seven cards as the hand",
+                      "accessibilityText": "All seven cards as the hand"
+                    },
+                    {
+                      "id": "ignore-ace",
+                      "label": "King-high only",
+                      "accessibilityText": "King-high only"
+                    }
+                  ],
+                  "coachMedia": [
+                    {
+                      "id": "act-01-02-02-guided-seven-hint",
+                      "kind": "hint",
+                      "text": "You only need one ace from the board for top pair."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-02-02-scaffolded-kicker",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Resolve a kicker battle with king pair.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Use kickers when categories tie"
+                  ],
+                  "prompt": "Both have pair of kings. You have AQ; they have AJ. Winner?",
+                  "choices": [
+                    {
+                      "id": "you-kicker",
+                      "label": "You win — queen kicker",
+                      "accessibilityText": "You win — queen kicker"
+                    },
+                    {
+                      "id": "they-kicker",
+                      "label": "They win — jack is live",
+                      "accessibilityText": "They win — jack is live"
+                    },
+                    {
+                      "id": "chop-kicker",
+                      "label": "Always chop with the same pair",
+                      "accessibilityText": "Always chop with the same pair"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-02-02-unguided-board",
+                  "order": 4,
+                  "stage": "unguided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Recognize a board that plays for everyone.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Spot board-tied pots"
+                  ],
+                  "prompt": "Board is Ac Kc Qc Jc Tc. Both players checked down. Result?",
+                  "choices": [
+                    {
+                      "id": "chop-broadway",
+                      "label": "Chop — both play the board straight flush",
+                      "accessibilityText": "Chop — both play the board straight flush"
+                    },
+                    {
+                      "id": "button-wins",
+                      "label": "Button wins automatically",
+                      "accessibilityText": "Button wins automatically"
+                    },
+                    {
+                      "id": "high-card-wins",
+                      "label": "Whoever has the higher hole card wins",
+                      "accessibilityText": "Whoever has the higher hole card wins"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-02-02-checkpoint-build",
+                  "order": 5,
+                  "stage": "checkpoint",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Identify full house eights full of kings.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Build the best five-card hand from seven",
+                    "Use kickers when categories tie"
+                  ],
+                  "prompt": "You hold 8h 8d. Board 8c Kd Ks 2h 2c. Best hand?",
+                  "choices": [
+                    {
+                      "id": "fh-eights",
+                      "label": "Full house — eights full of kings",
+                      "accessibilityText": "Full house — eights full of kings"
+                    },
+                    {
+                      "id": "fh-kings",
+                      "label": "Full house — kings full of eights",
+                      "accessibilityText": "Full house — kings full of eights"
+                    },
+                    {
+                      "id": "two-pair-only",
+                      "label": "Two pair, eights and kings",
+                      "accessibilityText": "Two pair, eights and kings"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "unit-01-03-five-actions",
+          "order": 3,
+          "title": "The five actions",
+          "summary": "Fold, check, call, bet, raise — and all-in limits.",
+          "lessons": [
+            {
+              "id": "lesson-01-03-01-fold-check-call",
+              "order": 1,
+              "title": "Fold, check, call",
+              "summary": "Passive choices when facing a bet or a free option.",
+              "objectives": [
+                "Fold to give up the hand",
+                "Check when no bet faces you",
+                "Call to match the current bet"
+              ],
+              "prerequisites": [
+                "lesson-01-02-02-best-five-kickers"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-02-02-best-five-kickers"
+              ],
+              "estimatedMinutes": 6,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-03-01-explain-passive",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Fold ends your hand. Check passes. Call matches.",
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-01-03-01-explain-passive-media",
+                      "kind": "dialogue",
+                      "text": "Fold ends your hand. Check passes. Call matches."
+                    }
+                  ],
+                  "objectives": [
+                    "Fold to give up the hand"
+                  ]
+                },
+                {
+                  "id": "act-01-03-01-guided-fold",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Choose fold with seven-two offsuit versus an open.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Fold to give up the hand"
+                  ],
+                  "prompt": "UTG opens to 6. You have 72o on the button. Action?",
+                  "choices": [
+                    {
+                      "id": "fold-72",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
+                    },
+                    {
+                      "id": "call-72",
+                      "label": "Call 6",
+                      "accessibilityText": "Call 6",
+                      "action": "CALL"
+                    },
+                    {
+                      "id": "raise-72",
+                      "label": "Raise to 18",
+                      "accessibilityText": "Raise to 18",
+                      "action": "RAISE",
+                      "amountBb": 9
+                    }
+                  ],
+                  "coachMedia": [
+                    {
+                      "id": "act-01-03-01-guided-fold-hint",
+                      "kind": "hint",
+                      "text": "Trash hands fold to raises."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-03-01-scaffolded-check",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Choose check when the action is free.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Check when no bet faces you"
+                  ],
+                  "prompt": "Flop checked to you. Nobody bet. You want a free card. Action?",
+                  "choices": [
+                    {
+                      "id": "check-free",
+                      "label": "Check",
+                      "accessibilityText": "Check",
+                      "action": "CHECK"
+                    },
+                    {
+                      "id": "call-free",
+                      "label": "Call",
+                      "accessibilityText": "Call",
+                      "action": "CALL"
+                    },
+                    {
+                      "id": "fold-free",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-03-01-unguided-call",
+                  "order": 4,
+                  "stage": "unguided",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Choose call to match a half-pot bet.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Call to match the current bet"
+                  ],
+                  "prompt": "Villain bets 5 into 10. You want to continue cheaply. Action?",
+                  "choices": [
+                    {
+                      "id": "call-5",
+                      "label": "Call 5",
+                      "accessibilityText": "Call 5",
+                      "action": "CALL"
+                    },
+                    {
+                      "id": "check-5",
+                      "label": "Check",
+                      "accessibilityText": "Check",
+                      "action": "CHECK"
+                    },
+                    {
+                      "id": "fold-strong",
+                      "label": "Fold always when bet into",
+                      "accessibilityText": "Fold always when bet into",
+                      "action": "FOLD"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-03-01-checkpoint-legal",
+                  "order": 5,
+                  "stage": "checkpoint",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Identify that check is illegal facing a bet.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Check when no bet faces you",
+                    "Call to match the current bet"
+                  ],
+                  "prompt": "A bet faces you. Which action is unavailable?",
+                  "choices": [
+                    {
+                      "id": "check-illegal",
+                      "label": "Check",
+                      "accessibilityText": "Check"
+                    },
+                    {
+                      "id": "call-legal",
+                      "label": "Call",
+                      "accessibilityText": "Call"
+                    },
+                    {
+                      "id": "fold-legal",
+                      "label": "Fold",
+                      "accessibilityText": "Fold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "lesson-01-03-02-bet-raise-allin",
+              "order": 2,
+              "title": "Bet, raise, all-in",
+              "summary": "Add chips; all-in is capped by your stack.",
+              "objectives": [
+                "Bet when the pot is unchecked",
+                "Raise to increase a facing bet",
+                "Treat all-in as a sized bet or raise"
+              ],
+              "prerequisites": [
+                "lesson-01-03-01-fold-check-call"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-03-01-fold-check-call"
+              ],
+              "estimatedMinutes": 6,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-03-02-explain-aggro",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Bet opens the betting. Raise reopens it. All-in is just size-capped.",
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-01-03-02-explain-aggro-media",
+                      "kind": "dialogue",
+                      "text": "Bet opens the betting. Raise reopens it. All-in is just size-capped."
+                    }
+                  ],
+                  "objectives": [
+                    "Bet when the pot is unchecked"
+                  ]
+                },
+                {
+                  "id": "act-01-03-02-guided-bet",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Choose a bet for value when checked to.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Bet when the pot is unchecked"
+                  ],
+                  "prompt": "Checked to you on the flop with top pair. You want value. Action?",
+                  "choices": [
+                    {
+                      "id": "bet-half",
+                      "label": "Bet 5 into 10",
+                      "accessibilityText": "Bet 5 into 10",
+                      "action": "BET",
+                      "amountBb": 2.5
+                    },
+                    {
+                      "id": "check-value",
+                      "label": "Check",
+                      "accessibilityText": "Check",
+                      "action": "CHECK"
+                    },
+                    {
+                      "id": "raise-no-bet",
+                      "label": "Raise",
+                      "accessibilityText": "Raise",
+                      "action": "RAISE",
+                      "amountBb": 5
+                    }
+                  ],
+                  "coachMedia": [
+                    {
+                      "id": "act-01-03-02-guided-bet-hint",
+                      "kind": "hint",
+                      "text": "Nobody put in a bet yet — betting is open."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-03-02-scaffolded-raise",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Choose raise facing a bet.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Raise to increase a facing bet"
+                  ],
+                  "prompt": "Villain bets 5. You have a strong hand and want to charge. Action?",
+                  "choices": [
+                    {
+                      "id": "raise-15",
+                      "label": "Raise to 15",
+                      "accessibilityText": "Raise to 15",
+                      "action": "RAISE",
+                      "amountBb": 7.5
+                    },
+                    {
+                      "id": "call-flat",
+                      "label": "Call 5",
+                      "accessibilityText": "Call 5",
+                      "action": "CALL"
+                    },
+                    {
+                      "id": "bet-again",
+                      "label": "Bet 5",
+                      "accessibilityText": "Bet 5",
+                      "action": "BET",
+                      "amountBb": 2.5
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-03-02-unguided-allin",
+                  "order": 4,
+                  "stage": "unguided",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Recognize all-in is limited to the remaining stack.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Treat all-in as a sized bet or raise"
+                  ],
+                  "prompt": "You have 12 chips left. Villain bets 20. What can all-in do?",
+                  "choices": [
+                    {
+                      "id": "shove-12",
+                      "label": "Move all-in for 12",
+                      "accessibilityText": "Move all-in for 12",
+                      "action": "ALL_IN"
+                    },
+                    {
+                      "id": "call-20",
+                      "label": "Call the full 20 without the chips",
+                      "accessibilityText": "Call the full 20 without the chips",
+                      "action": "CALL"
+                    },
+                    {
+                      "id": "fold-only",
+                      "label": "Only fold is legal short",
+                      "accessibilityText": "Only fold is legal short",
+                      "action": "FOLD"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-03-02-checkpoint-names",
+                  "order": 5,
+                  "stage": "checkpoint",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Name a bet versus a raise.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Bet when the pot is unchecked",
+                    "Raise to increase a facing bet"
+                  ],
+                  "prompt": "Pot is unchecked. You put in the first chips. What did you do?",
+                  "choices": [
+                    {
+                      "id": "named-bet",
+                      "label": "Bet",
+                      "accessibilityText": "Bet"
+                    },
+                    {
+                      "id": "named-raise",
+                      "label": "Raise",
+                      "accessibilityText": "Raise"
+                    },
+                    {
+                      "id": "named-call",
+                      "label": "Call",
+                      "accessibilityText": "Call"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "unit-01-04-streets",
+          "order": 4,
+          "title": "Streets of a hand",
+          "summary": "Preflop through river, and when a street ends.",
+          "lessons": [
+            {
+              "id": "lesson-01-04-01-streets-and-order",
+              "order": 1,
+              "title": "Streets and action order",
+              "summary": "Name each street and know who acts when.",
+              "objectives": [
+                "Name preflop, flop, turn, and river",
+                "Know preflop order starts left of the big blind",
+                "Know a street ends when bets are matched"
+              ],
+              "prerequisites": [
+                "lesson-01-03-02-bet-raise-allin"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-03-02-bet-raise-allin"
+              ],
+              "estimatedMinutes": 7,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-04-01-explain-streets",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Four streets: preflop, flop, turn, river. Match bets to move on.",
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-01-04-01-explain-streets-media",
+                      "kind": "dialogue",
+                      "text": "Four streets: preflop, flop, turn, river. Match bets to move on."
+                    }
+                  ],
+                  "objectives": [
+                    "Name preflop, flop, turn, and river"
+                  ]
+                },
+                {
+                  "id": "act-01-04-01-guided-streets",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "order_sequence",
+                  "estimatedSeconds": 50,
+                  "accessibilityText": "Put preflop, flop, and river in chronological order.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Name preflop, flop, turn, and river"
+                  ],
+                  "prompt": "Order the streets from first to last.",
+                  "sequenceItems": [
+                    {
+                      "id": "st-pre",
+                      "label": "Preflop"
+                    },
+                    {
+                      "id": "st-flop",
+                      "label": "Flop"
+                    },
+                    {
+                      "id": "st-river",
+                      "label": "River"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-04-01-scaffolded-order",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "order_sequence",
+                  "estimatedSeconds": 50,
+                  "accessibilityText": "Put UTG, HJ, and BTN in preflop action order.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Know preflop order starts left of the big blind"
+                  ],
+                  "prompt": "Order the first three seats to act preflop after blinds post.",
                   "sequenceItems": [
                     {
                       "id": "seat-utg",
@@ -293,12 +1537,12 @@
                   ]
                 },
                 {
-                  "id": "act-01-01-02-unguided-pot-price",
-                  "order": 2,
+                  "id": "act-01-04-01-unguided-end",
+                  "order": 4,
                   "stage": "unguided",
-                  "renderer": "numeric_pot_price",
+                  "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Enter the pot size after a three-big-blind open into a one-big-blind pot.",
+                  "accessibilityText": "Identify that a street ends when action is complete.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -306,20 +1550,221 @@
                   ],
                   "lifeLossEligible": true,
                   "objectives": [
-                    "Exercise remaining activity renderers"
+                    "Know a street ends when bets are matched"
+                  ],
+                  "prompt": "When does the flop betting round end?",
+                  "choices": [
+                    {
+                      "id": "matched",
+                      "label": "When every live player has matched the bet and no one re-raises",
+                      "accessibilityText": "When every live player has matched the bet and no one re-raises"
+                    },
+                    {
+                      "id": "three-cards",
+                      "label": "As soon as three cards appear",
+                      "accessibilityText": "As soon as three cards appear"
+                    },
+                    {
+                      "id": "someone-folds",
+                      "label": "When anyone folds",
+                      "accessibilityText": "When anyone folds"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-04-01-checkpoint-postflop",
+                  "order": 5,
+                  "stage": "checkpoint",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Identify first-to-act postflop as left of the button.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Know preflop order starts left of the big blind",
+                    "Name preflop, flop, turn, and river"
+                  ],
+                  "prompt": "Postflop multiway. Who acts first?",
+                  "choices": [
+                    {
+                      "id": "sb-first",
+                      "label": "First live seat left of the button",
+                      "accessibilityText": "First live seat left of the button"
+                    },
+                    {
+                      "id": "btn-first",
+                      "label": "The button always acts first",
+                      "accessibilityText": "The button always acts first"
+                    },
+                    {
+                      "id": "bb-first-always",
+                      "label": "Big blind always acts first every street",
+                      "accessibilityText": "Big blind always acts first every street"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "unit-01-05-winning-pots",
+          "order": 5,
+          "title": "Winning and protecting pots",
+          "summary": "Folds versus showdown, and side-pot intuition.",
+          "lessons": [
+            {
+              "id": "lesson-01-05-01-winning-pots",
+              "order": 1,
+              "title": "How pots are won",
+              "summary": "Win when everyone folds, or at showdown; sense side pots.",
+              "objectives": [
+                "Win the pot when everyone else folds",
+                "Win at showdown with the best five",
+                "Sense main pot versus side pot without deep math"
+              ],
+              "prerequisites": [
+                "lesson-01-04-01-streets-and-order"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-04-01-streets-and-order"
+              ],
+              "estimatedMinutes": 6,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-05-01-explain-win",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Folds win pots early. Showdown compares hands. Short stacks make side pots.",
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-01-05-01-explain-win-media",
+                      "kind": "dialogue",
+                      "text": "Folds win pots early. Showdown compares hands. Short stacks make side pots."
+                    }
+                  ],
+                  "objectives": [
+                    "Win the pot when everyone else folds"
+                  ]
+                },
+                {
+                  "id": "act-01-05-01-guided-fold-win",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Decide whether to show after winning uncontested.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Win the pot when everyone else folds"
+                  ],
+                  "prompt": "You bet. Everyone folds. Do you show?",
+                  "choices": [
+                    {
+                      "id": "no-show",
+                      "label": "No — take the pot without showing",
+                      "accessibilityText": "No — take the pot without showing"
+                    },
+                    {
+                      "id": "must-show",
+                      "label": "Yes — always show winning bets",
+                      "accessibilityText": "Yes — always show winning bets"
+                    },
+                    {
+                      "id": "dealer-shows",
+                      "label": "Dealer reveals your cards anyway",
+                      "accessibilityText": "Dealer reveals your cards anyway"
+                    }
+                  ],
+                  "coachMedia": [
+                    {
+                      "id": "act-01-05-01-guided-fold-win-hint",
+                      "kind": "hint",
+                      "text": "No contest means no showdown."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-05-01-scaffolded-showdown",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Identify that showdown compares hands.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Win at showdown with the best five"
+                  ],
+                  "prompt": "River bets are called. Two players remain. Next step?",
+                  "choices": [
+                    {
+                      "id": "showdown",
+                      "label": "Showdown — best five-card hand wins",
+                      "accessibilityText": "Showdown — best five-card hand wins"
+                    },
+                    {
+                      "id": "last-bet-wins",
+                      "label": "Last bettor wins without showing",
+                      "accessibilityText": "Last bettor wins without showing"
+                    },
+                    {
+                      "id": "chop-default",
+                      "label": "Always chop when two remain",
+                      "accessibilityText": "Always chop when two remain"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-05-01-unguided-pot",
+                  "order": 4,
+                  "stage": "unguided",
+                  "renderer": "numeric_pot_price",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Enter the pot size after a three-big-blind open.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Sense main pot versus side pot without deep math"
                   ],
                   "numericPrompt": {
-                    "question": "Blinds are 1/2. Nobody limps. BTN opens to 6. What is the pot before the blinds act?",
+                    "question": "Blinds 1/2. Nobody limps. BTN opens to 6. Pot before blinds act?",
                     "unit": "chips"
                   }
                 },
                 {
-                  "id": "act-01-01-02-checkpoint-open-fold",
-                  "order": 3,
+                  "id": "act-01-05-01-checkpoint-side",
+                  "order": 5,
                   "stage": "checkpoint",
-                  "renderer": "poker_action_sizing",
-                  "estimatedSeconds": 55,
-                  "accessibilityText": "Choose whether to open or fold UTG with seven-two offsuit.",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Describe main pot versus side pot at a basic level.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -327,63 +1772,216 @@
                   ],
                   "lifeLossEligible": true,
                   "objectives": [
-                    "Exercise remaining activity renderers"
+                    "Sense main pot versus side pot without deep math"
                   ],
-                  "prompt": "You are UTG with 72o at 1/2. What do you do?",
+                  "prompt": "You are all-in for less; two big stacks keep betting. What is true?",
                   "choices": [
                     {
-                      "id": "fold",
-                      "label": "Fold",
-                      "action": "FOLD"
+                      "id": "side-exists",
+                      "label": "A side pot forms for the chips you cannot match",
+                      "accessibilityText": "A side pot forms for the chips you cannot match"
                     },
                     {
-                      "id": "open-six",
-                      "label": "Open to 6",
-                      "action": "RAISE",
-                      "amountBb": 3
+                      "id": "you-win-all",
+                      "label": "You can still win every chip they put in later",
+                      "accessibilityText": "You can still win every chip they put in later"
                     },
                     {
-                      "id": "limp",
-                      "label": "Limp",
-                      "action": "CALL"
+                      "id": "hand-void",
+                      "label": "Your hand is dead because you are short",
+                      "accessibilityText": "Your hand is dead because you are short"
                     }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "unit-01-06-first-complete-hand",
+          "order": 6,
+          "title": "First complete hand",
+          "summary": "Guided hand from blinds through a terminal state.",
+          "lessons": [
+            {
+              "id": "lesson-01-06-01-guided-complete-hand",
+              "order": 1,
+              "title": "Play a full toy hand",
+              "summary": "Walk a short live cash hand from blinds to a finish.",
+              "objectives": [
+                "Follow a hand from blinds to a terminal state",
+                "Choose legal actions on more than one street",
+                "Finish without freezing on basic decisions"
+              ],
+              "prerequisites": [
+                "lesson-01-05-01-winning-pots"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-05-01-winning-pots"
+              ],
+              "estimatedMinutes": 10,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-06-01-explain-run",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "One short hand. Blinds post, you act, we reach an ending.",
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-01-06-01-explain-run-media",
+                      "kind": "dialogue",
+                      "text": "One short hand. Blinds post, you act, we reach an ending."
+                    }
+                  ],
+                  "objectives": [
+                    "Follow a hand from blinds to a terminal state"
                   ]
                 },
                 {
-                  "id": "act-01-01-02-jump-compare",
-                  "order": 4,
-                  "stage": "jump_test",
-                  "renderer": "compare_rank",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Rank three starting hands from strongest to weakest for an early-position open.",
+                  "id": "act-01-06-01-guided-steps",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "authored_multi_step_hand",
+                  "estimatedSeconds": 70,
+                  "accessibilityText": "Play a two-street guided hand on the button.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
+                  "lifeLossEligible": false,
                   "objectives": [
-                    "Exercise remaining activity renderers"
+                    "Choose legal actions on more than one street"
                   ],
-                  "prompt": "Rank these UTG open candidates from strongest to weakest.",
-                  "sequenceItems": [
+                  "handSteps": [
                     {
-                      "id": "hand-aa",
-                      "label": "AA"
+                      "id": "step-01-06-pre",
+                      "street": "preflop",
+                      "prompt": "Folds to you on the button with A9s. Blinds 1/2. Action?",
+                      "accessibilityText": "Choose a button open with ace-nine suited.",
+                      "choices": [
+                        {
+                          "id": "open-6",
+                          "label": "Open to 6",
+                          "accessibilityText": "Open to 6",
+                          "action": "RAISE",
+                          "amountBb": 3
+                        },
+                        {
+                          "id": "limp-a9",
+                          "label": "Limp",
+                          "accessibilityText": "Limp",
+                          "action": "CALL"
+                        },
+                        {
+                          "id": "fold-a9",
+                          "label": "Fold",
+                          "accessibilityText": "Fold",
+                          "action": "FOLD"
+                        }
+                      ]
                     },
                     {
-                      "id": "hand-aqs",
-                      "label": "AQs"
-                    },
-                    {
-                      "id": "hand-72o",
-                      "label": "72o"
+                      "id": "step-01-06-flop",
+                      "street": "flop",
+                      "prompt": "Blinds fold. Pot is yours. What happened?",
+                      "accessibilityText": "Recognize winning when everyone folds.",
+                      "choices": [
+                        {
+                          "id": "won-folds",
+                          "label": "You won — everyone folded",
+                          "accessibilityText": "You won — everyone folded"
+                        },
+                        {
+                          "id": "must-deal",
+                          "label": "You must still see a flop",
+                          "accessibilityText": "You must still see a flop"
+                        },
+                        {
+                          "id": "show-anyway",
+                          "label": "Show your cards to claim the pot",
+                          "accessibilityText": "Show your cards to claim the pot"
+                        }
+                      ]
                     }
                   ]
                 },
                 {
-                  "id": "act-01-01-02-hand-lab-seed",
-                  "order": 5,
+                  "id": "act-01-06-01-scaffolded-multi",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "authored_multi_step_hand",
+                  "estimatedSeconds": 70,
+                  "accessibilityText": "Continue a called open through a flop decision.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Choose legal actions on more than one street"
+                  ],
+                  "handSteps": [
+                    {
+                      "id": "step-01-06-bb-defend",
+                      "street": "preflop",
+                      "prompt": "You open BTN to 6. BB calls. Flop coming. Ready?",
+                      "accessibilityText": "Confirm the hand continues to the flop.",
+                      "choices": [
+                        {
+                          "id": "ready-flop",
+                          "label": "Yes — watch the flop next",
+                          "accessibilityText": "Yes — watch the flop next"
+                        },
+                        {
+                          "id": "already-won",
+                          "label": "Hand is already over",
+                          "accessibilityText": "Hand is already over"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "step-01-06-flop-cbet",
+                      "street": "flop",
+                      "prompt": "Flop A72 rainbow. BB checks. You hold A9s. Action?",
+                      "accessibilityText": "Choose a bet with top pair on the flop.",
+                      "choices": [
+                        {
+                          "id": "cbet",
+                          "label": "Bet 6 into 13",
+                          "accessibilityText": "Bet 6 into 13",
+                          "action": "BET",
+                          "amountBb": 3
+                        },
+                        {
+                          "id": "check-back",
+                          "label": "Check",
+                          "accessibilityText": "Check",
+                          "action": "CHECK"
+                        },
+                        {
+                          "id": "jam-flop",
+                          "label": "Jam 100bb",
+                          "accessibilityText": "Jam 100bb",
+                          "action": "ALL_IN"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-06-01-unguided-lab",
+                  "order": 4,
                   "stage": "unguided",
                   "renderer": "full_table_hand_lab",
                   "estimatedSeconds": 90,
@@ -395,27 +1993,276 @@
                   ],
                   "lifeLossEligible": true,
                   "objectives": [
-                    "Exercise remaining activity renderers"
+                    "Finish without freezing on basic decisions"
                   ],
                   "prompt": "Defend or fold this big-blind hand.",
                   "choices": [
                     {
                       "id": "fold-bb",
                       "label": "Fold",
+                      "accessibilityText": "Fold",
                       "action": "FOLD"
                     },
                     {
                       "id": "call-bb",
                       "label": "Call 4 more",
+                      "accessibilityText": "Call 4 more",
                       "action": "CALL"
                     },
                     {
                       "id": "shove-bb",
                       "label": "Jam 100bb",
+                      "accessibilityText": "Jam 100bb",
                       "action": "ALL_IN"
                     }
                   ],
-                  "handLabSpecId": "lab-01-01-02-bb-defend-seed"
+                  "handLabSpecId": "lab-01-06-01-bb-defend"
+                },
+                {
+                  "id": "act-01-06-01-checkpoint-finish",
+                  "order": 5,
+                  "stage": "checkpoint",
+                  "renderer": "authored_multi_step_hand",
+                  "estimatedSeconds": 70,
+                  "accessibilityText": "Finish a short hand from open to fold-win.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Follow a hand from blinds to a terminal state",
+                    "Finish without freezing on basic decisions"
+                  ],
+                  "handSteps": [
+                    {
+                      "id": "step-01-06-cp-open",
+                      "street": "preflop",
+                      "prompt": "CO folds. You are on the button with KQo. Action?",
+                      "accessibilityText": "Open king-queen offsuit on the button.",
+                      "choices": [
+                        {
+                          "id": "open-kq",
+                          "label": "Open to 6",
+                          "accessibilityText": "Open to 6",
+                          "action": "RAISE",
+                          "amountBb": 3
+                        },
+                        {
+                          "id": "fold-kq",
+                          "label": "Fold",
+                          "accessibilityText": "Fold",
+                          "action": "FOLD"
+                        },
+                        {
+                          "id": "limp-kq",
+                          "label": "Limp",
+                          "accessibilityText": "Limp",
+                          "action": "CALL"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "step-01-06-cp-end",
+                      "street": "preflop",
+                      "prompt": "Both blinds fold. Result?",
+                      "accessibilityText": "Confirm the hand ends when blinds fold.",
+                      "choices": [
+                        {
+                          "id": "take-down",
+                          "label": "You win the blinds",
+                          "accessibilityText": "You win the blinds"
+                        },
+                        {
+                          "id": "force-flop",
+                          "label": "Still deal a flop",
+                          "accessibilityText": "Still deal a flop"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "lesson-01-06-02-section-one-jump",
+              "order": 2,
+              "title": "Section 1 jump check",
+              "summary": "Quick placement-style check on foundations.",
+              "objectives": [
+                "Confirm hand ranking",
+                "Confirm acting order",
+                "Confirm legal action",
+                "Confirm a complete toy hand"
+              ],
+              "prerequisites": [
+                "lesson-01-06-01-guided-complete-hand"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-02-01-hand-ranks"
+              ],
+              "estimatedMinutes": 8,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-06-02-jump-ranks",
+                  "order": 1,
+                  "stage": "jump_test",
+                  "renderer": "compare_rank",
+                  "estimatedSeconds": 50,
+                  "accessibilityText": "Jump test: order straight, two pair, and flush.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Confirm hand ranking"
+                  ],
+                  "prompt": "Strongest to weakest: straight, two pair, flush.",
+                  "sequenceItems": [
+                    {
+                      "id": "j-flush",
+                      "label": "Flush"
+                    },
+                    {
+                      "id": "j-straight",
+                      "label": "Straight"
+                    },
+                    {
+                      "id": "j-two",
+                      "label": "Two pair"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-06-02-jump-order",
+                  "order": 2,
+                  "stage": "jump_test",
+                  "renderer": "order_sequence",
+                  "estimatedSeconds": 50,
+                  "accessibilityText": "Jump test: UTG then HJ then BTN.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Confirm acting order"
+                  ],
+                  "prompt": "Preflop order after blinds: first three to act.",
+                  "sequenceItems": [
+                    {
+                      "id": "j-utg",
+                      "label": "UTG"
+                    },
+                    {
+                      "id": "j-hj",
+                      "label": "HJ"
+                    },
+                    {
+                      "id": "j-btn",
+                      "label": "BTN"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-06-02-jump-legal",
+                  "order": 3,
+                  "stage": "jump_test",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Jump test: check is illegal facing a bet.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Confirm legal action"
+                  ],
+                  "prompt": "Facing a bet, which action is illegal?",
+                  "choices": [
+                    {
+                      "id": "j-check",
+                      "label": "Check",
+                      "accessibilityText": "Check"
+                    },
+                    {
+                      "id": "j-call",
+                      "label": "Call",
+                      "accessibilityText": "Call"
+                    },
+                    {
+                      "id": "j-raise",
+                      "label": "Raise",
+                      "accessibilityText": "Raise"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-01-06-02-jump-hand",
+                  "order": 4,
+                  "stage": "jump_test",
+                  "renderer": "authored_multi_step_hand",
+                  "estimatedSeconds": 70,
+                  "accessibilityText": "Jump test: complete a tiny button steal hand.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Confirm a complete toy hand"
+                  ],
+                  "handSteps": [
+                    {
+                      "id": "j-hand-open",
+                      "street": "preflop",
+                      "prompt": "Button with ATs. Folds to you. Action?",
+                      "accessibilityText": "Open ace-ten suited on the button.",
+                      "choices": [
+                        {
+                          "id": "j-open",
+                          "label": "Open to 6",
+                          "accessibilityText": "Open to 6",
+                          "action": "RAISE",
+                          "amountBb": 3
+                        },
+                        {
+                          "id": "j-fold",
+                          "label": "Fold",
+                          "accessibilityText": "Fold",
+                          "action": "FOLD"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "j-hand-end",
+                      "street": "preflop",
+                      "prompt": "Blinds fold. You win. Correct?",
+                      "accessibilityText": "Confirm the pot is won.",
+                      "choices": [
+                        {
+                          "id": "j-yes",
+                          "label": "Yes — pot is yours",
+                          "accessibilityText": "Yes — pot is yours"
+                        },
+                        {
+                          "id": "j-no",
+                          "label": "No — still need a showdown",
+                          "accessibilityText": "No — still need a showdown"
+                        }
+                      ]
+                    }
+                  ]
                 }
               ]
             }
@@ -433,30 +2280,32 @@
         {
           "id": "unit-02-01-position-power",
           "order": 1,
-          "title": "Rules Known / Home Games stub unit",
-          "summary": "Stub unit for pipeline coverage.",
+          "title": "Position is power",
+          "summary": "EP through blinds, and who acts when.",
           "lessons": [
             {
-              "id": "lesson-02-01-01-position-stub",
+              "id": "lesson-02-01-01-position-labels",
               "order": 1,
-              "title": "Rules Known / Home Games stub",
-              "summary": "Placeholder lesson until later content waves.",
+              "title": "Position labels",
+              "summary": "Name EP, HJ, CO, BTN, SB, and BB.",
               "objectives": [
-                "Recognize position labels"
+                "Label EP, HJ, CO, and BTN",
+                "Label SB and BB",
+                "Prefer later seats when choosing hands"
               ],
               "prerequisites": [
-                "lesson-01-01-01-your-two-cards"
+                "lesson-01-06-02-section-one-jump"
               ],
               "remediationLessonIds": [
-                "lesson-01-01-01-your-two-cards"
+                "lesson-01-06-02-section-one-jump"
               ],
-              "estimatedMinutes": 5,
+              "estimatedMinutes": 6,
               "difficultyBand": 2,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
               "activities": [
                 {
-                  "id": "act-lesson-02-01-01-position-stub-explain",
+                  "id": "act-02-01-01-explain-pos",
                   "order": 1,
                   "stage": "explain",
                   "renderer": "coach_dialogue",
@@ -468,9 +2317,1752 @@
                   "lifeLossEligible": false,
                   "coachMedia": [
                     {
-                      "id": "act-lesson-02-01-01-position-stub-explain-media",
+                      "id": "act-02-01-01-explain-pos-media",
                       "kind": "dialogue",
                       "text": "Later seats see more. That is the whole edge."
+                    }
+                  ],
+                  "objectives": [
+                    "Prefer later seats when choosing hands"
+                  ]
+                },
+                {
+                  "id": "act-02-01-01-guided-btn",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Identify the button as last to act postflop.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Label EP, HJ, CO, and BTN"
+                  ],
+                  "prompt": "Which seat acts last postflop?",
+                  "choices": [
+                    {
+                      "id": "pos-btn",
+                      "label": "BTN",
+                      "accessibilityText": "BTN"
+                    },
+                    {
+                      "id": "pos-bb",
+                      "label": "BB",
+                      "accessibilityText": "BB"
+                    },
+                    {
+                      "id": "pos-ep",
+                      "label": "EP",
+                      "accessibilityText": "EP"
+                    }
+                  ],
+                  "coachMedia": [
+                    {
+                      "id": "act-02-01-01-guided-btn-hint",
+                      "kind": "hint",
+                      "text": "The dealer button acts last after the flop."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-01-01-scaffolded-blinds",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Identify small blind and big blind.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Label SB and BB"
+                  ],
+                  "prompt": "Which seats post forced bets every hand?",
+                  "choices": [
+                    {
+                      "id": "sb-bb",
+                      "label": "SB and BB",
+                      "accessibilityText": "SB and BB"
+                    },
+                    {
+                      "id": "btn-bb",
+                      "label": "BTN and BB",
+                      "accessibilityText": "BTN and BB"
+                    },
+                    {
+                      "id": "ep-only",
+                      "label": "Only EP",
+                      "accessibilityText": "Only EP"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-01-01-unguided-co",
+                  "order": 4,
+                  "stage": "unguided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Name the cutoff seat.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Label EP, HJ, CO, and BTN"
+                  ],
+                  "prompt": "Seat right before the button is called?",
+                  "choices": [
+                    {
+                      "id": "label-co",
+                      "label": "Cutoff (CO)",
+                      "accessibilityText": "Cutoff (CO)"
+                    },
+                    {
+                      "id": "label-hj",
+                      "label": "Hijack (HJ)",
+                      "accessibilityText": "Hijack (HJ)"
+                    },
+                    {
+                      "id": "label-ep",
+                      "label": "Early position",
+                      "accessibilityText": "Early position"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-01-01-checkpoint-edge",
+                  "order": 5,
+                  "stage": "checkpoint",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Prefer button over early position.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Prefer later seats when choosing hands"
+                  ],
+                  "prompt": "Same hand, EP vs BTN. Where is it stronger to play?",
+                  "choices": [
+                    {
+                      "id": "prefer-btn",
+                      "label": "On the button",
+                      "accessibilityText": "On the button"
+                    },
+                    {
+                      "id": "prefer-ep",
+                      "label": "Under the gun",
+                      "accessibilityText": "Under the gun"
+                    },
+                    {
+                      "id": "same-always",
+                      "label": "Seat never matters",
+                      "accessibilityText": "Seat never matters"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "lesson-02-01-02-acting-order",
+              "order": 2,
+              "title": "Acting order",
+              "summary": "Track who acts preflop and postflop.",
+              "objectives": [
+                "Order preflop action after the blinds",
+                "Order postflop action from the button",
+                "Wait for your turn before acting"
+              ],
+              "prerequisites": [
+                "lesson-02-01-01-position-labels"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-01-01-position-labels"
+              ],
+              "estimatedMinutes": 6,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-01-02-explain-order",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Preflop starts left of the big blind. Postflop starts left of the button.",
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-02-01-02-explain-order-media",
+                      "kind": "dialogue",
+                      "text": "Preflop starts left of the big blind. Postflop starts left of the button."
+                    }
+                  ],
+                  "objectives": [
+                    "Order preflop action after the blinds"
+                  ]
+                },
+                {
+                  "id": "act-02-01-02-guided-pre",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "order_sequence",
+                  "estimatedSeconds": 50,
+                  "accessibilityText": "Order cutoff, button, then small blind preflop.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Order preflop action after the blinds"
+                  ],
+                  "prompt": "Order CO, BTN, SB to act preflop after an open folds to them.",
+                  "sequenceItems": [
+                    {
+                      "id": "ord-co",
+                      "label": "CO"
+                    },
+                    {
+                      "id": "ord-btn",
+                      "label": "BTN"
+                    },
+                    {
+                      "id": "ord-sb",
+                      "label": "SB"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-01-02-scaffolded-post",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "order_sequence",
+                  "estimatedSeconds": 50,
+                  "accessibilityText": "Order small blind before button postflop.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Order postflop action from the button"
+                  ],
+                  "prompt": "Heads-up flop: SB vs BTN. Who acts first?",
+                  "sequenceItems": [
+                    {
+                      "id": "post-sb",
+                      "label": "SB"
+                    },
+                    {
+                      "id": "post-btn",
+                      "label": "BTN"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-01-02-unguided-wait",
+                  "order": 4,
+                  "stage": "unguided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Wait for earlier seats before acting.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Wait for your turn before acting"
+                  ],
+                  "prompt": "Action is on UTG. You are on the button. What do you do?",
+                  "choices": [
+                    {
+                      "id": "wait",
+                      "label": "Wait — do not act yet",
+                      "accessibilityText": "Wait — do not act yet"
+                    },
+                    {
+                      "id": "open-early",
+                      "label": "Open now to save time",
+                      "accessibilityText": "Open now to save time"
+                    },
+                    {
+                      "id": "flash-cards",
+                      "label": "Show your cards while waiting",
+                      "accessibilityText": "Show your cards while waiting"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-01-02-checkpoint-full",
+                  "order": 5,
+                  "stage": "checkpoint",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Confirm button acts last postflop multiway.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Order postflop action from the button",
+                    "Wait for your turn before acting"
+                  ],
+                  "prompt": "Six-max flop, everyone in. Who acts last?",
+                  "choices": [
+                    {
+                      "id": "last-btn",
+                      "label": "BTN",
+                      "accessibilityText": "BTN"
+                    },
+                    {
+                      "id": "last-bb",
+                      "label": "BB",
+                      "accessibilityText": "BB"
+                    },
+                    {
+                      "id": "last-utg",
+                      "label": "UTG",
+                      "accessibilityText": "UTG"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "unit-02-02-starting-hands",
+          "order": 2,
+          "title": "Starting-hand families",
+          "summary": "Pairs, broadways, suited aces, suited connectors, trash.",
+          "lessons": [
+            {
+              "id": "lesson-02-02-01-hand-families",
+              "order": 1,
+              "title": "Hand families",
+              "summary": "Sort starting hands into useful families.",
+              "objectives": [
+                "Recognize pocket pairs",
+                "Recognize broadways and suited aces",
+                "Recognize suited connectors versus offsuit trash"
+              ],
+              "prerequisites": [
+                "lesson-02-01-02-acting-order"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-01-02-acting-order"
+              ],
+              "estimatedMinutes": 6,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-02-01-explain-families",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Pairs, broadways, suited aces, connectors — trash is everything else.",
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-02-02-01-explain-families-media",
+                      "kind": "dialogue",
+                      "text": "Pairs, broadways, suited aces, connectors — trash is everything else."
+                    }
+                  ],
+                  "objectives": [
+                    "Recognize pocket pairs"
+                  ]
+                },
+                {
+                  "id": "act-02-02-01-guided-pair",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Identify pocket eights.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Recognize pocket pairs"
+                  ],
+                  "prompt": "Which hand is a pocket pair?",
+                  "choices": [
+                    {
+                      "id": "fam-88",
+                      "label": "8h 8c",
+                      "accessibilityText": "8h 8c"
+                    },
+                    {
+                      "id": "fam-a9s",
+                      "label": "Ah 9h",
+                      "accessibilityText": "Ah 9h"
+                    },
+                    {
+                      "id": "fam-jt",
+                      "label": "Jd Tc",
+                      "accessibilityText": "Jd Tc"
+                    }
+                  ],
+                  "coachMedia": [
+                    {
+                      "id": "act-02-02-01-guided-pair-hint",
+                      "kind": "hint",
+                      "text": "Matching ranks in the hole."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-02-01-scaffolded-broadway",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Identify ace-king as broadway.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Recognize broadways and suited aces"
+                  ],
+                  "prompt": "Which hand is a broadway?",
+                  "choices": [
+                    {
+                      "id": "fam-ak",
+                      "label": "As Kd",
+                      "accessibilityText": "As Kd"
+                    },
+                    {
+                      "id": "fam-55",
+                      "label": "5h 5d",
+                      "accessibilityText": "5h 5d"
+                    },
+                    {
+                      "id": "fam-72",
+                      "label": "7c 2d",
+                      "accessibilityText": "7c 2d"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-02-01-unguided-sc",
+                  "order": 4,
+                  "stage": "unguided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Identify seven-six suited as a suited connector.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Recognize suited connectors versus offsuit trash"
+                  ],
+                  "prompt": "Which is a suited connector?",
+                  "choices": [
+                    {
+                      "id": "fam-76s",
+                      "label": "7h 6h",
+                      "accessibilityText": "7h 6h"
+                    },
+                    {
+                      "id": "fam-76o",
+                      "label": "7h 6d",
+                      "accessibilityText": "7h 6d"
+                    },
+                    {
+                      "id": "fam-a4o",
+                      "label": "Ac 4d",
+                      "accessibilityText": "Ac 4d"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-02-01-checkpoint-trash",
+                  "order": 5,
+                  "stage": "checkpoint",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Identify seven-two offsuit as trash.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Recognize suited connectors versus offsuit trash"
+                  ],
+                  "prompt": "Which hand is offsuit trash from early position?",
+                  "choices": [
+                    {
+                      "id": "trash-72o",
+                      "label": "7c 2d",
+                      "accessibilityText": "7c 2d"
+                    },
+                    {
+                      "id": "trash-qq",
+                      "label": "Qh Qd",
+                      "accessibilityText": "Qh Qd"
+                    },
+                    {
+                      "id": "trash-a5s",
+                      "label": "Ah 5h",
+                      "accessibilityText": "Ah 5h"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "unit-02-03-open-fold",
+          "order": 3,
+          "title": "Open or fold",
+          "summary": "Position-dependent baseline opens and live sizes.",
+          "lessons": [
+            {
+              "id": "lesson-02-03-01-open-fold",
+              "order": 1,
+              "title": "Open or fold baseline",
+              "summary": "Tighten early; open wider on the button at live sizes.",
+              "objectives": [
+                "Fold trash from early position",
+                "Open strong hands for a live size",
+                "Widen opens on the button"
+              ],
+              "prerequisites": [
+                "lesson-02-02-01-hand-families"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-02-01-hand-families"
+              ],
+              "estimatedMinutes": 6,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-03-01-explain-open",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Early: strong only. Button: wider. Live opens often look like 3x.",
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-02-03-01-explain-open-media",
+                      "kind": "dialogue",
+                      "text": "Early: strong only. Button: wider. Live opens often look like 3x."
+                    }
+                  ],
+                  "objectives": [
+                    "Fold trash from early position"
+                  ]
+                },
+                {
+                  "id": "act-02-03-01-guided-utg",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Fold seven-two offsuit under the gun.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Fold trash from early position"
+                  ],
+                  "prompt": "You are UTG with 72o at 1/2. What do you do?",
+                  "choices": [
+                    {
+                      "id": "fold",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
+                    },
+                    {
+                      "id": "open-six",
+                      "label": "Open to 6",
+                      "accessibilityText": "Open to 6",
+                      "action": "RAISE",
+                      "amountBb": 3
+                    },
+                    {
+                      "id": "limp",
+                      "label": "Limp",
+                      "accessibilityText": "Limp",
+                      "action": "CALL"
+                    }
+                  ],
+                  "coachMedia": [
+                    {
+                      "id": "act-02-03-01-guided-utg-hint",
+                      "kind": "hint",
+                      "text": "Trash from early position is an easy fold."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-03-01-scaffolded-qq",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Open queens to a live size.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Open strong hands for a live size"
+                  ],
+                  "prompt": "UTG with QQ at 1/2. Action?",
+                  "choices": [
+                    {
+                      "id": "open-qq",
+                      "label": "Open to 6",
+                      "accessibilityText": "Open to 6",
+                      "action": "RAISE",
+                      "amountBb": 3
+                    },
+                    {
+                      "id": "limp-qq",
+                      "label": "Limp",
+                      "accessibilityText": "Limp",
+                      "action": "CALL"
+                    },
+                    {
+                      "id": "fold-qq",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-03-01-unguided-btn",
+                  "order": 4,
+                  "stage": "unguided",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Open king-nine suited on the button.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Widen opens on the button"
+                  ],
+                  "prompt": "Folds to you on the button with K9s. Action?",
+                  "choices": [
+                    {
+                      "id": "open-k9s",
+                      "label": "Open to 6",
+                      "accessibilityText": "Open to 6",
+                      "action": "RAISE",
+                      "amountBb": 3
+                    },
+                    {
+                      "id": "fold-k9s",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
+                    },
+                    {
+                      "id": "limp-k9s",
+                      "label": "Limp",
+                      "accessibilityText": "Limp",
+                      "action": "CALL"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-03-01-checkpoint-hj",
+                  "order": 5,
+                  "stage": "checkpoint",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Open ace-ten offsuit from the hijack.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Open strong hands for a live size",
+                    "Widen opens on the button"
+                  ],
+                  "prompt": "HJ with ATo. Folds to you. Action?",
+                  "choices": [
+                    {
+                      "id": "open-ato",
+                      "label": "Open to 6",
+                      "accessibilityText": "Open to 6",
+                      "action": "RAISE",
+                      "amountBb": 3
+                    },
+                    {
+                      "id": "fold-ato",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
+                    },
+                    {
+                      "id": "jam-ato",
+                      "label": "Jam 100bb",
+                      "accessibilityText": "Jam 100bb",
+                      "action": "ALL_IN"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "unit-02-04-facing-raise",
+          "order": 4,
+          "title": "Facing a raise",
+          "summary": "Fold, call, or value 3-bet with a plan.",
+          "lessons": [
+            {
+              "id": "lesson-02-04-01-facing-raise",
+              "order": 1,
+              "title": "Versus an open",
+              "summary": "Respond to a raise without guessing.",
+              "objectives": [
+                "Fold weak hands to an open",
+                "Call with playable hands in position",
+                "Value 3-bet strong hands"
+              ],
+              "prerequisites": [
+                "lesson-02-03-01-open-fold"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-03-01-open-fold"
+              ],
+              "estimatedMinutes": 6,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-04-01-explain-vs",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Weak hands fold. Playable hands call. Strong hands make it more.",
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-02-04-01-explain-vs-media",
+                      "kind": "dialogue",
+                      "text": "Weak hands fold. Playable hands call. Strong hands make it more."
+                    }
+                  ],
+                  "objectives": [
+                    "Fold weak hands to an open"
+                  ]
+                },
+                {
+                  "id": "act-02-04-01-guided-fold",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Fold jack-three offsuit versus an open.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Fold weak hands to an open"
+                  ],
+                  "prompt": "UTG opens to 6. You have J3o in the big blind. Action?",
+                  "choices": [
+                    {
+                      "id": "fold-j3",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
+                    },
+                    {
+                      "id": "call-j3",
+                      "label": "Call",
+                      "accessibilityText": "Call",
+                      "action": "CALL"
+                    },
+                    {
+                      "id": "3bet-j3",
+                      "label": "3-bet to 18",
+                      "accessibilityText": "3-bet to 18",
+                      "action": "RAISE",
+                      "amountBb": 9
+                    }
+                  ],
+                  "coachMedia": [
+                    {
+                      "id": "act-02-04-01-guided-fold-hint",
+                      "kind": "hint",
+                      "text": "Dominated junk folds."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-04-01-scaffolded-call",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Call with suited connectors on the button.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Call with playable hands in position"
+                  ],
+                  "prompt": "CO opens to 6. You have 87s on the button. Action?",
+                  "choices": [
+                    {
+                      "id": "call-87s",
+                      "label": "Call",
+                      "accessibilityText": "Call",
+                      "action": "CALL"
+                    },
+                    {
+                      "id": "fold-87s",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
+                    },
+                    {
+                      "id": "3bet-87s",
+                      "label": "3-bet to 18",
+                      "accessibilityText": "3-bet to 18",
+                      "action": "RAISE",
+                      "amountBb": 9
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-04-01-unguided-3bet",
+                  "order": 4,
+                  "stage": "unguided",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Value three-bet kings.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Value 3-bet strong hands"
+                  ],
+                  "prompt": "BTN opens to 6. You have KK in the small blind. Action?",
+                  "choices": [
+                    {
+                      "id": "3bet-kk",
+                      "label": "3-bet to 18",
+                      "accessibilityText": "3-bet to 18",
+                      "action": "RAISE",
+                      "amountBb": 9
+                    },
+                    {
+                      "id": "call-kk",
+                      "label": "Call",
+                      "accessibilityText": "Call",
+                      "action": "CALL"
+                    },
+                    {
+                      "id": "fold-kk",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-04-01-checkpoint-aq",
+                  "order": 5,
+                  "stage": "checkpoint",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Value three-bet ace-queen suited.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Call with playable hands in position",
+                    "Value 3-bet strong hands"
+                  ],
+                  "prompt": "HJ opens to 6. You have AQs on the CO. Action?",
+                  "choices": [
+                    {
+                      "id": "3bet-aqs",
+                      "label": "3-bet to 18",
+                      "accessibilityText": "3-bet to 18",
+                      "action": "RAISE",
+                      "amountBb": 9
+                    },
+                    {
+                      "id": "call-aqs",
+                      "label": "Call",
+                      "accessibilityText": "Call",
+                      "action": "CALL"
+                    },
+                    {
+                      "id": "fold-aqs",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "unit-02-05-stacks",
+          "order": 5,
+          "title": "Stacks in big blinds",
+          "summary": "Effective stack and 50/100/200 BB intuition.",
+          "lessons": [
+            {
+              "id": "lesson-02-05-01-effective-stack",
+              "order": 1,
+              "title": "Effective stacks",
+              "summary": "Measure stacks in big blinds and use the shorter one.",
+              "objectives": [
+                "Convert chips to big blinds",
+                "Use the shorter stack as effective",
+                "Sense 50bb vs 100bb vs 200bb depth"
+              ],
+              "prerequisites": [
+                "lesson-02-04-01-facing-raise"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-04-01-facing-raise"
+              ],
+              "estimatedMinutes": 6,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-05-01-explain-bb",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Count stacks in big blinds. The shorter stack sets the ceiling.",
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-02-05-01-explain-bb-media",
+                      "kind": "dialogue",
+                      "text": "Count stacks in big blinds. The shorter stack sets the ceiling."
+                    }
+                  ],
+                  "objectives": [
+                    "Convert chips to big blinds"
+                  ]
+                },
+                {
+                  "id": "act-02-05-01-guided-convert",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "numeric_pot_price",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Convert 200 chips at 1/2 into big blinds.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Convert chips to big blinds"
+                  ],
+                  "numericPrompt": {
+                    "question": "Blinds 1/2. You have 200 chips. How many big blinds?",
+                    "unit": "bb"
+                  }
+                },
+                {
+                  "id": "act-02-05-01-scaffolded-eff",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Choose the shorter stack as effective.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Use the shorter stack as effective"
+                  ],
+                  "prompt": "You have 150bb. Villain has 60bb. Effective stack?",
+                  "choices": [
+                    {
+                      "id": "eff-60",
+                      "label": "60bb",
+                      "accessibilityText": "60bb"
+                    },
+                    {
+                      "id": "eff-150",
+                      "label": "150bb",
+                      "accessibilityText": "150bb"
+                    },
+                    {
+                      "id": "eff-210",
+                      "label": "210bb combined",
+                      "accessibilityText": "210bb combined"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-05-01-unguided-depth",
+                  "order": 4,
+                  "stage": "unguided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Identify 50bb as shallower than 100 or 200.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Sense 50bb vs 100bb vs 200bb depth"
+                  ],
+                  "prompt": "Which depth plays closest to a short-stack shove game?",
+                  "choices": [
+                    {
+                      "id": "depth-50",
+                      "label": "50bb",
+                      "accessibilityText": "50bb"
+                    },
+                    {
+                      "id": "depth-100",
+                      "label": "100bb",
+                      "accessibilityText": "100bb"
+                    },
+                    {
+                      "id": "depth-200",
+                      "label": "200bb",
+                      "accessibilityText": "200bb"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-05-01-checkpoint-200",
+                  "order": 5,
+                  "stage": "checkpoint",
+                  "renderer": "numeric_pot_price",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Convert a 1000 chip buy-in at 2/5 to big blinds.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Convert chips to big blinds",
+                    "Sense 50bb vs 100bb vs 200bb depth"
+                  ],
+                  "numericPrompt": {
+                    "question": "Blinds 2/5. You buy in for 1000 chips. Stack in big blinds?",
+                    "unit": "bb"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "unit-02-06-table-habits",
+          "order": 6,
+          "title": "First live table habits",
+          "summary": "Follow action, speak clearly, protect cards, act in turn.",
+          "lessons": [
+            {
+              "id": "lesson-02-06-01-live-habits",
+              "order": 1,
+              "title": "Live table habits",
+              "summary": "Basic live room discipline for every hand.",
+              "objectives": [
+                "Follow the action before deciding",
+                "Verbalize actions clearly",
+                "Protect cards and avoid acting out of turn"
+              ],
+              "prerequisites": [
+                "lesson-02-05-01-effective-stack"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-05-01-effective-stack"
+              ],
+              "estimatedMinutes": 6,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-06-01-explain-habits",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Watch the action. Say your action. Cover your cards. Wait your turn.",
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-02-06-01-explain-habits-media",
+                      "kind": "dialogue",
+                      "text": "Watch the action. Say your action. Cover your cards. Wait your turn."
+                    }
+                  ],
+                  "objectives": [
+                    "Follow the action before deciding"
+                  ]
+                },
+                {
+                  "id": "act-02-06-01-guided-follow",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Follow earlier actions before choosing yours.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Follow the action before deciding"
+                  ],
+                  "prompt": "Two seats act before you. What first?",
+                  "choices": [
+                    {
+                      "id": "watch",
+                      "label": "Watch what they do, then decide",
+                      "accessibilityText": "Watch what they do, then decide"
+                    },
+                    {
+                      "id": "look-away",
+                      "label": "Stare at your phone until it is your turn",
+                      "accessibilityText": "Stare at your phone until it is your turn"
+                    },
+                    {
+                      "id": "decide-now",
+                      "label": "Decide your action before they act",
+                      "accessibilityText": "Decide your action before they act"
+                    }
+                  ],
+                  "coachMedia": [
+                    {
+                      "id": "act-02-06-01-guided-follow-hint",
+                      "kind": "hint",
+                      "text": "Information first."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-06-01-scaffolded-verbal",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Verbalize a raise clearly.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Verbalize actions clearly"
+                  ],
+                  "prompt": "You want to raise. Clearest live choice?",
+                  "choices": [
+                    {
+                      "id": "say-raise",
+                      "label": "Say \"raise\" and put out the chips",
+                      "accessibilityText": "Say \"raise\" and put out the chips"
+                    },
+                    {
+                      "id": "silent-toss",
+                      "label": "Toss chips without a word",
+                      "accessibilityText": "Toss chips without a word"
+                    },
+                    {
+                      "id": "tap-table",
+                      "label": "Tap the table then shove a stack",
+                      "accessibilityText": "Tap the table then shove a stack"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-06-01-unguided-protect",
+                  "order": 4,
+                  "stage": "unguided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Protect hole cards with a chip or hand.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Protect cards and avoid acting out of turn"
+                  ],
+                  "prompt": "Your cards sit near the muck. Best habit?",
+                  "choices": [
+                    {
+                      "id": "chip-on-cards",
+                      "label": "Keep a chip or hand on your cards",
+                      "accessibilityText": "Keep a chip or hand on your cards"
+                    },
+                    {
+                      "id": "spread-out",
+                      "label": "Spread them face-up for the camera",
+                      "accessibilityText": "Spread them face-up for the camera"
+                    },
+                    {
+                      "id": "leave-loose",
+                      "label": "Leave them loose near the dealer",
+                      "accessibilityText": "Leave them loose near the dealer"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-06-01-checkpoint-oot",
+                  "order": 5,
+                  "stage": "checkpoint",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Recognize acting out of turn.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Protect cards and avoid acting out of turn",
+                    "Follow the action before deciding"
+                  ],
+                  "prompt": "Action is two seats left. You toss in a raise early. Problem?",
+                  "choices": [
+                    {
+                      "id": "oot-bad",
+                      "label": "You acted out of turn",
+                      "accessibilityText": "You acted out of turn"
+                    },
+                    {
+                      "id": "oot-fine",
+                      "label": "Faster play is always rewarded",
+                      "accessibilityText": "Faster play is always rewarded"
+                    },
+                    {
+                      "id": "oot-dealer",
+                      "label": "Dealer should have stopped earlier seats",
+                      "accessibilityText": "Dealer should have stopped earlier seats"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "unit-02-07-baseline-checkpoint",
+          "order": 7,
+          "title": "Baseline full-hand checkpoint",
+          "summary": "Full-ring baseline decisions and section jump.",
+          "lessons": [
+            {
+              "id": "lesson-02-07-01-baseline-full-hand",
+              "order": 1,
+              "title": "Full-ring baseline hand",
+              "summary": "Apply open/fold and facing-raise skills on a full ring.",
+              "objectives": [
+                "Make a baseline open on a full ring",
+                "Respond to a raise with a planned action",
+                "Keep live habits while deciding"
+              ],
+              "prerequisites": [
+                "lesson-02-06-01-live-habits"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-03-01-open-fold"
+              ],
+              "estimatedMinutes": 10,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-07-01-explain-full",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Nine seats. Same rules. Position still runs the show.",
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-02-07-01-explain-full-media",
+                      "kind": "dialogue",
+                      "text": "Nine seats. Same rules. Position still runs the show."
+                    }
+                  ],
+                  "objectives": [
+                    "Make a baseline open on a full ring"
+                  ]
+                },
+                {
+                  "id": "act-02-07-01-guided-ep",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Open ace-jack suited under the gun full ring.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Make a baseline open on a full ring"
+                  ],
+                  "prompt": "Nine-handed. UTG with AJs. Action?",
+                  "choices": [
+                    {
+                      "id": "open-ajs",
+                      "label": "Open to 6",
+                      "accessibilityText": "Open to 6",
+                      "action": "RAISE",
+                      "amountBb": 3
+                    },
+                    {
+                      "id": "fold-ajs",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
+                    },
+                    {
+                      "id": "limp-ajs",
+                      "label": "Limp",
+                      "accessibilityText": "Limp",
+                      "action": "CALL"
+                    }
+                  ],
+                  "coachMedia": [
+                    {
+                      "id": "act-02-07-01-guided-ep-hint",
+                      "kind": "hint",
+                      "text": "Suited broadway opens from early seats."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-07-01-scaffolded-vs",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Call a small pair on the button versus an open.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "objectives": [
+                    "Respond to a raise with a planned action"
+                  ],
+                  "prompt": "UTG opens to 6. You have 22 on the button. Action?",
+                  "choices": [
+                    {
+                      "id": "call-22",
+                      "label": "Call",
+                      "accessibilityText": "Call",
+                      "action": "CALL"
+                    },
+                    {
+                      "id": "fold-22",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
+                    },
+                    {
+                      "id": "3bet-22",
+                      "label": "3-bet to 18",
+                      "accessibilityText": "3-bet to 18",
+                      "action": "RAISE",
+                      "amountBb": 9
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-07-01-unguided-lab",
+                  "order": 4,
+                  "stage": "unguided",
+                  "renderer": "full_table_hand_lab",
+                  "estimatedSeconds": 90,
+                  "accessibilityText": "Full-ring hand lab: button versus cutoff open.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Respond to a raise with a planned action",
+                    "Keep live habits while deciding"
+                  ],
+                  "prompt": "Full ring. Decide versus a cutoff open.",
+                  "choices": [
+                    {
+                      "id": "lab-fold",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
+                    },
+                    {
+                      "id": "lab-call",
+                      "label": "Call",
+                      "accessibilityText": "Call",
+                      "action": "CALL"
+                    },
+                    {
+                      "id": "lab-3bet",
+                      "label": "3-bet to 18",
+                      "accessibilityText": "3-bet to 18",
+                      "action": "RAISE",
+                      "amountBb": 9
+                    }
+                  ],
+                  "handLabSpecId": "lab-02-07-01-full-ring-btn"
+                },
+                {
+                  "id": "act-02-07-01-checkpoint-habit",
+                  "order": 5,
+                  "stage": "checkpoint",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Protect cards and wait for action on a full ring.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Keep live habits while deciding"
+                  ],
+                  "prompt": "Full ring. Action two seats left. Your cards are uncovered. Fix?",
+                  "choices": [
+                    {
+                      "id": "cover-wait",
+                      "label": "Cover your cards and wait your turn",
+                      "accessibilityText": "Cover your cards and wait your turn"
+                    },
+                    {
+                      "id": "act-now",
+                      "label": "Announce fold immediately to speed up",
+                      "accessibilityText": "Announce fold immediately to speed up"
+                    },
+                    {
+                      "id": "leave-cards",
+                      "label": "Leave cards bare so the table can see you are folding",
+                      "accessibilityText": "Leave cards bare so the table can see you are folding"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "lesson-02-07-02-section-two-jump",
+              "order": 2,
+              "title": "Section 2 jump check",
+              "summary": "Placement-style check on baseline skills.",
+              "objectives": [
+                "Confirm position labels",
+                "Confirm starting-hand family",
+                "Confirm open or fold",
+                "Confirm facing a raise",
+                "Confirm effective stack"
+              ],
+              "prerequisites": [
+                "lesson-02-07-01-baseline-full-hand"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-01-01-position-labels"
+              ],
+              "estimatedMinutes": 8,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-07-02-jump-pos",
+                  "order": 1,
+                  "stage": "jump_test",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Jump test: cutoff label.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Confirm position labels"
+                  ],
+                  "prompt": "Seat right before the button?",
+                  "choices": [
+                    {
+                      "id": "j2-co",
+                      "label": "Cutoff",
+                      "accessibilityText": "Cutoff"
+                    },
+                    {
+                      "id": "j2-hj",
+                      "label": "Hijack",
+                      "accessibilityText": "Hijack"
+                    },
+                    {
+                      "id": "j2-sb",
+                      "label": "Small blind",
+                      "accessibilityText": "Small blind"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-07-02-jump-family",
+                  "order": 2,
+                  "stage": "jump_test",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Jump test: suited ace family.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Confirm starting-hand family"
+                  ],
+                  "prompt": "Ah 5h belongs to which family?",
+                  "choices": [
+                    {
+                      "id": "j2-sa",
+                      "label": "Suited ace",
+                      "accessibilityText": "Suited ace"
+                    },
+                    {
+                      "id": "j2-pair",
+                      "label": "Pocket pair",
+                      "accessibilityText": "Pocket pair"
+                    },
+                    {
+                      "id": "j2-trash",
+                      "label": "Offsuit trash",
+                      "accessibilityText": "Offsuit trash"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-07-02-jump-open",
+                  "order": 3,
+                  "stage": "jump_test",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Jump test: fold trash early.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Confirm open or fold"
+                  ],
+                  "prompt": "UTG with 72o. Action?",
+                  "choices": [
+                    {
+                      "id": "j2-fold",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
+                    },
+                    {
+                      "id": "j2-open",
+                      "label": "Open to 6",
+                      "accessibilityText": "Open to 6",
+                      "action": "RAISE",
+                      "amountBb": 3
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-07-02-jump-vs",
+                  "order": 4,
+                  "stage": "jump_test",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Jump test: value 3-bet aces.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Confirm facing a raise"
+                  ],
+                  "prompt": "Open to 6. You have AA in the big blind. Action?",
+                  "choices": [
+                    {
+                      "id": "j2-3bet",
+                      "label": "3-bet to 18",
+                      "accessibilityText": "3-bet to 18",
+                      "action": "RAISE",
+                      "amountBb": 9
+                    },
+                    {
+                      "id": "j2-call",
+                      "label": "Call",
+                      "accessibilityText": "Call",
+                      "action": "CALL"
+                    },
+                    {
+                      "id": "j2-fold-aa",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
+                    }
+                  ]
+                },
+                {
+                  "id": "act-02-07-02-jump-stack",
+                  "order": 5,
+                  "stage": "jump_test",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Jump test: effective stack is 55bb.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "objectives": [
+                    "Confirm effective stack"
+                  ],
+                  "prompt": "You 120bb, villain 55bb. Effective stack?",
+                  "choices": [
+                    {
+                      "id": "j2-55",
+                      "label": "55bb",
+                      "accessibilityText": "55bb"
+                    },
+                    {
+                      "id": "j2-120",
+                      "label": "120bb",
+                      "accessibilityText": "120bb"
+                    },
+                    {
+                      "id": "j2-175",
+                      "label": "175bb",
+                      "accessibilityText": "175bb"
                     }
                   ]
                 }
@@ -502,10 +4094,10 @@
                 "Track pot and stacks"
               ],
               "prerequisites": [
-                "lesson-02-01-01-position-stub"
+                "lesson-02-07-02-section-two-jump"
               ],
               "remediationLessonIds": [
-                "lesson-02-01-01-position-stub"
+                "lesson-02-07-02-section-two-jump"
               ],
               "estimatedMinutes": 5,
               "difficultyBand": 3,

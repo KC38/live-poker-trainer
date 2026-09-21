@@ -24,6 +24,8 @@ void main() {
     expect(catalog.contentChecksum, isNotEmpty);
     expect(catalog.sections, hasLength(7));
     expect(catalog.playerTypes, hasLength(5));
+    expect(catalog.sections[0].units, hasLength(6));
+    expect(catalog.sections[1].units, hasLength(7));
   });
 
   test('lesson and activity ids are unique and ordered', () {
@@ -33,7 +35,8 @@ void main() {
     expect(activityIds.toSet(), hasLength(activityIds.length));
     expect(lessonIds.first, 'lesson-01-01-01-your-two-cards');
     expect(lessonIds.last, 'lesson-07-01-01-plan-stub');
-    expect(activityIds, contains('act-01-01-02-hand-lab-seed'));
+    expect(activityIds, contains('act-01-06-01-unguided-lab'));
+    expect(activityIds, contains('act-02-07-01-unguided-lab'));
     expect(activityIds, contains('act-01-01-01-explain-hole-cards'));
   });
 
