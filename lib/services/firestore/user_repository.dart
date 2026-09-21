@@ -34,6 +34,10 @@ class UserRepository {
   /// A later create that only has the default name does not replace a name
   /// the player already chose. The reverse does upgrade `Hero` when registration
   /// supplies a real name after auth state has already created the doc.
+  ///
+  /// Uses get/set instead of [FirebaseFirestore.runTransaction]. Transactions
+  /// have hung indefinitely on cold start for linked accounts (shell stuck on
+  /// the auth loading gate) and have aborted with EnsureCommitNotCalled.
   Future<UserDocument> ensureUserDoc({
     required String uid,
     String? displayName,
@@ -44,37 +48,37 @@ class UserRepository {
       displayName ?? HeroIdentity.defaultDisplayName,
     );
     final now = DateTime.now().toUtc();
-    return _db.runTransaction((tx) async {
-      final snap = await tx.get(_doc(uid));
-      if (snap.exists && snap.data() != null) {
-        final existing = UserDocument.fromFirestore(snap.data()!);
-        final upgrade =
-            existing.displayName == HeroIdentity.defaultDisplayName &&
-            requested != HeroIdentity.defaultDisplayName;
-        if (!upgrade) return existing;
-        tx.update(_doc(uid), {
-          'displayName': requested,
-          'updatedAt': FieldValue.serverTimestamp(),
-        });
-        return UserDocument(
-          displayName: requested,
-          avatarRef: existing.avatarRef,
-          createdAt: existing.createdAt,
-          updatedAt: now,
-          preferences: existing.preferences,
-        );
-      }
-
-      final doc = UserDocument(
+    // Prefer cache+server default get. Source.server-only reads have hung
+    // indefinitely for some linked accounts on cold start.
+    final snap = await _doc(uid).get();
+    if (snap.exists && snap.data() != null) {
+      final existing = UserDocument.fromFirestore(snap.data()!);
+      final upgrade =
+          existing.displayName == HeroIdentity.defaultDisplayName &&
+          requested != HeroIdentity.defaultDisplayName;
+      if (!upgrade) return existing;
+      await _doc(uid).update({
+        'displayName': requested,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+      return UserDocument(
         displayName: requested,
-        avatarRef: avatarRef ?? '',
-        createdAt: now,
+        avatarRef: existing.avatarRef,
+        createdAt: existing.createdAt,
         updatedAt: now,
-        preferences: preferences,
+        preferences: existing.preferences,
       );
-      tx.set(_doc(uid), doc.toFirestoreMap());
-      return doc;
-    });
+    }
+
+    final doc = UserDocument(
+      displayName: requested,
+      avatarRef: avatarRef ?? '',
+      createdAt: now,
+      updatedAt: now,
+      preferences: preferences,
+    );
+    await _doc(uid).set(doc.toFirestoreMap());
+    return doc;
   }
 
   /// Updates profile identity fields and stamps [updatedAt].

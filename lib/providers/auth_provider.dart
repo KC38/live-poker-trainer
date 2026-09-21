@@ -78,11 +78,15 @@ final userDocProvider = FutureProvider<UserDocument?>((ref) async {
 
   final settings = ref.read(settingsProvider);
   final repo = ref.read(userRepositoryProvider);
-  final doc = await repo.ensureUserDoc(
-    uid: user.uid,
-    displayName: user.displayName,
-    preferences: settings,
-  );
+  // Bound the cold-start hydrate so a hung Firestore call cannot pin the
+  // root navigator on [_AuthLoadingScreen] forever (shell destination).
+  final doc = await repo
+      .ensureUserDoc(
+        uid: user.uid,
+        displayName: user.displayName,
+        preferences: settings,
+      )
+      .timeout(const Duration(seconds: 12));
 
   // Apply remote gameplay prefs (table setup, blinds, lineup, …); keep audio local.
   final settingsNotifier = ref.read(settingsProvider.notifier);
