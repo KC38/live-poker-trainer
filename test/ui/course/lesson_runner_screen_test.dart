@@ -18,6 +18,7 @@ import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/services/firestore/course_service.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_runner_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 
 class _ScriptedCourseService extends CourseService {
   _ScriptedCourseService(this.catalog) : super();
@@ -84,10 +85,10 @@ class _ScriptedCourseService extends CourseService {
     final index = activities.indexWhere((a) => a.id == activityId);
     final accepted =
         activityId == 'act-01-01-01-explain-hole-cards' ||
-        choiceId == 'choice-hero-holes';
-    final nextIndex = accepted
-        ? (index + 1).clamp(0, activities.length - 1)
-        : index;
+        choiceId == 'choice-hero-holes' ||
+        choiceId == 'choice-only-you';
+    final nextIndex =
+        accepted ? (index + 1).clamp(0, activities.length - 1) : index;
     return SubmitCourseStepResult(
       attemptId: attemptId,
       activityId: activityId,
@@ -190,16 +191,16 @@ void main() {
     await tester.pump();
     await tester.pump();
 
-    expect(
-      find.text('Which cards are your hole cards?'),
-      findsAtLeastNWidgets(1),
-    );
+    expect(find.text('Which cards are your hole cards?'), findsOneWidget);
+    expect(find.byType(MiniCard), findsWidgets);
     final checkFinder = find.widgetWithText(FilledButton, 'Check');
     expect(tester.widget<FilledButton>(checkFinder).onPressed, isNull);
 
     await tester.tap(find.text('The flop cards in the middle'));
     await tester.pump();
-    expect(tester.widget<FilledButton>(checkFinder).onPressed, isNotNull);
+    await tester.pump(const Duration(milliseconds: 50));
+    final enabledCheck = tester.widget<FilledButton>(checkFinder);
+    expect(enabledCheck.onPressed, isNotNull);
 
     await tester.tap(checkFinder);
     await tester.pump();
@@ -211,6 +212,30 @@ void main() {
     await tester.pump();
     expect(find.text('Think again'), findsNothing);
     expect(find.widgetWithText(FilledButton, 'Check'), findsOneWidget);
+
+    // Advance with the recommended choice to the scaffolded privacy step.
+    await tester.tap(find.text('Ah Kd in front of you'));
+    await tester.pump();
+    await tester.tap(find.widgetWithText(FilledButton, 'Check'));
+    await tester.pump();
+    await tester.pump();
+    expect(find.text('Solid'), findsOneWidget);
+    await tester.tap(find.text('Continue'));
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('Who can see your hole cards right now?'), findsOneWidget);
+    expect(
+      find.text('Look at the table, then pick the answer that matches.'),
+      findsOneWidget,
+    );
+    expect(find.byType(MiniCard), findsWidgets);
+    final privacyCheck = find.widgetWithText(FilledButton, 'Check');
+    expect(tester.widget<FilledButton>(privacyCheck).onPressed, isNull);
+
+    await tester.tap(find.text('Only you'));
+    await tester.pump();
+    expect(tester.widget<FilledButton>(privacyCheck).onPressed, isNotNull);
   });
 
   testWidgets('unknown lesson shows retry chrome', (tester) async {

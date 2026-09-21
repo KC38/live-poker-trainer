@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 /// Multiple-choice identify activity with optional guided highlight.
@@ -24,19 +25,27 @@ class SelectIdentifyActivity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selected = controller.draft.choiceId;
-    final locked = controller.submitting || controller.lastResult != null;
+    final scene = resolveLessonTableScene(activity);
+    final coachText =
+        activity.primaryCoachLine?.text ??
+        (scene == null
+            ? 'Pick the best answer.'
+            : 'Look at the table, then pick the answer that matches.');
+
     return AnimatedBuilder(
       animation: controller,
       builder: (context, _) {
+        final selected = controller.draft.choiceId;
+        final locked = controller.submitting || controller.lastResult != null;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (activity.primaryCoachLine != null || showGuidance)
-              RexCoachLine(
-                text: activity.primaryCoachLine?.text ??
-                    'Pick the answer that matches the table.',
-              ),
+              RexCoachLine(text: coachText),
+            if (scene != null) ...[
+              const SizedBox(height: 14),
+              LessonTableContext(scene: scene),
+            ],
             if (activity.prompt != null) ...[
               const SizedBox(height: 14),
               Text(
@@ -56,12 +65,14 @@ class SelectIdentifyActivity extends StatelessWidget {
                 label: activity.choices[i].label,
                 accessibilityText: activity.choices[i].accessibilityText,
                 selected: selected == activity.choices[i].id,
-                highlighted: showGuidance &&
+                highlighted:
+                    showGuidance &&
                     activity.stage == ActivityStage.guided &&
-                    i == 0,
+                    i == 0 &&
+                    selected == null,
                 enabled: !locked,
-                onPressed: () =>
-                    controller.selectChoice(activity.choices[i].id),
+                onPressed:
+                    () => controller.selectChoice(activity.choices[i].id),
               ),
             ],
           ],
