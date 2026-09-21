@@ -53,6 +53,13 @@ final class AgentCommands {
               cmd.startsWith('taptext:'))) {
         cmd = 'tap:${textRaw.toLowerCase()}';
       }
+      if (textRaw.isNotEmpty &&
+          (cmd == 'openlesson' ||
+              cmd == 'open_lesson' ||
+              cmd.startsWith('openlesson:') ||
+              cmd.startsWith('open_lesson:'))) {
+        cmd = 'openlesson:$textRaw';
+      }
       _controller.add(cmd);
       return developer.ServiceExtensionResponse.result(
         jsonEncode({'ok': true, 'cmd': cmd}),

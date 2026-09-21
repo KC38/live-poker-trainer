@@ -18,13 +18,19 @@ final class AgentUiDriver {
 
   static StreamSubscription<String>? _sub;
   static Future<void> Function()? _signOut;
+  static Future<void> Function(String lessonId)? _openLesson;
 
   /// Registers the driver. Call once from app startup.
   ///
   /// [signOut] is invoked for `signout` / `sign_out` commands.
-  static void install({Future<void> Function()? signOut}) {
+  /// [openLesson] opens a course lesson by id (`openlesson:<id>`).
+  static void install({
+    Future<void> Function()? signOut,
+    Future<void> Function(String lessonId)? openLesson,
+  }) {
     if (!kDebugMode) return;
     _signOut = signOut;
+    _openLesson = openLesson;
     unawaited(_sub?.cancel());
     _sub = AgentCommands.stream.listen(_onCommand);
   }
@@ -33,6 +39,17 @@ final class AgentUiDriver {
     final normalized = cmd.trim().toLowerCase();
     if (normalized == 'signout' || normalized == 'sign_out') {
       await _signOut?.call();
+      return;
+    }
+    if (normalized.startsWith('openlesson:') ||
+        normalized.startsWith('open_lesson:')) {
+      final id =
+          cmd
+              .substring(cmd.indexOf(':') + 1)
+              .trim();
+      if (id.isEmpty) return;
+      await _openLesson?.call(id);
+      debugPrint('AgentUiDriver: openLesson "$id"');
       return;
     }
 
@@ -49,6 +66,75 @@ final class AgentUiDriver {
     final needleLower = needle.toLowerCase();
     final candidates = <_TapCandidate>[];
 
+    void consider({
+      required String text,
+      required Element element,
+      required bool fromSemantics,
+    }) {
+      final lower = text.toLowerCase().trim();
+      if (lower.isEmpty) return;
+      if (lower != needleLower && !lower.contains(needleLower)) return;
+      final ro = element.renderObject;
+      if (ro is! RenderBox || !ro.hasSize || !ro.attached) return;
+
+      VoidCallback? onPressed;
+      element.visitAncestorElements((ancestor) {
+        final w = ancestor.widget;
+        if (w is ButtonStyleButton) {
+          onPressed = w.onPressed;
+          return false;
+        }
+        if (w is InkWell) {
+          onPressed = w.onTap;
+          return false;
+        }
+        if (w is GestureDetector) {
+          onPressed = w.onTap;
+          return false;
+        }
+        if (w is IconButton) {
+          onPressed = w.onPressed;
+          return false;
+        }
+        return true;
+      });
+      // Semantics(button) often wraps InkWell as a child, not an ancestor.
+      if (onPressed == null) {
+        element.visitChildren((child) {
+          void dig(Element e) {
+            if (onPressed != null) return;
+            final w = e.widget;
+            if (w is InkWell) {
+              onPressed = w.onTap;
+              return;
+            }
+            if (w is GestureDetector) {
+              onPressed = w.onTap;
+              return;
+            }
+            if (w is ButtonStyleButton) {
+              onPressed = w.onPressed;
+              return;
+            }
+            e.visitChildren(dig);
+          }
+
+          dig(child);
+        });
+      }
+      candidates.add(
+        _TapCandidate(
+          text: lower,
+          offset: ro.localToGlobal(ro.size.center(Offset.zero)),
+          exact: lower == needleLower,
+          buttonish: onPressed != null,
+          length: lower.length,
+          onPressed: onPressed,
+          fromSemantics: fromSemantics,
+        ),
+      );
+    }
+
     void visit(Element element) {
       final widget = element.widget;
       String? text;
@@ -60,42 +146,12 @@ final class AgentUiDriver {
         text = widget.controller.text;
       }
       if (text != null) {
-        final lower = text.toLowerCase().trim();
-        if (lower == needleLower || lower.contains(needleLower)) {
-          final ro = element.renderObject;
-          if (ro is RenderBox && ro.hasSize && ro.attached) {
-            VoidCallback? onPressed;
-            element.visitAncestorElements((ancestor) {
-              final w = ancestor.widget;
-              if (w is ButtonStyleButton) {
-                onPressed = w.onPressed;
-                return false;
-              }
-              if (w is InkWell) {
-                onPressed = w.onTap;
-                return false;
-              }
-              if (w is GestureDetector) {
-                onPressed = w.onTap;
-                return false;
-              }
-              if (w is IconButton) {
-                onPressed = w.onPressed;
-                return false;
-              }
-              return true;
-            });
-            candidates.add(
-              _TapCandidate(
-                text: lower,
-                offset: ro.localToGlobal(ro.size.center(Offset.zero)),
-                exact: lower == needleLower,
-                buttonish: onPressed != null,
-                length: lower.length,
-                onPressed: onPressed,
-              ),
-            );
-          }
+        consider(text: text, element: element, fromSemantics: false);
+      }
+      if (widget is Semantics) {
+        final label = widget.properties.label;
+        if (label != null && label.isNotEmpty) {
+          consider(text: label, element: element, fromSemantics: true);
         }
       }
       element.visitChildren(visit);
@@ -110,9 +166,10 @@ final class AgentUiDriver {
     candidates.sort((a, b) {
       if (a.exact != b.exact) return a.exact ? -1 : 1;
       if (a.buttonish != b.buttonish) return a.buttonish ? -1 : 1;
-      if (!a.exact && !b.exact && a.length != b.length) {
-        return a.length.compareTo(b.length);
+      if (a.fromSemantics != b.fromSemantics) {
+        return a.fromSemantics ? -1 : 1;
       }
+      if (a.length != b.length) return a.length.compareTo(b.length);
       return 0;
     });
 
@@ -158,6 +215,7 @@ class _TapCandidate {
     required this.buttonish,
     required this.length,
     required this.onPressed,
+    this.fromSemantics = false,
   });
 
   final String text;
@@ -166,4 +224,5 @@ class _TapCandidate {
   final bool buttonish;
   final int length;
   final VoidCallback? onPressed;
+  final bool fromSemantics;
 }

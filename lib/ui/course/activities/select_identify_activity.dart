@@ -182,6 +182,7 @@ class _TableRegionTapActivity extends StatefulWidget {
 
 class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
   LessonTableRegion? _selectedRegion;
+  int? _selectedSeatIndex;
 
   @override
   void initState() {
@@ -196,6 +197,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       oldWidget.controller.removeListener(_onController);
       widget.controller.addListener(_onController);
       _selectedRegion = null;
+      _selectedSeatIndex = null;
     }
   }
 
@@ -206,8 +208,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
   }
 
   void _onController() {
-    if (widget.controller.draft.choiceId == null && _selectedRegion != null) {
-      setState(() => _selectedRegion = null);
+    if (widget.controller.draft.choiceId == null &&
+        (_selectedRegion != null || _selectedSeatIndex != null)) {
+      setState(() {
+        _selectedRegion = null;
+        _selectedSeatIndex = null;
+      });
     }
   }
 
@@ -223,6 +229,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         'Everyone shares the cards in the middle.',
       'act-01-01-01-checkpoint-table' =>
         'Ownership stays split — board is shared.',
+      'act-01-01-03-guided-button' =>
+        'Find the dealer button on the felt.',
+      'act-01-01-03-scaffolded-blinds' =>
+        'Blinds sit left of the button. Tap the big blind.',
+      'act-01-01-03-unguided-when' =>
+        'When do those forced bets go in?',
+      'act-01-01-03-checkpoint-layout' =>
+        'Button is marked. Tap the small blind seat.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -258,6 +272,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
               LessonTableContext(
                 scene: scene,
                 selectedRegion: _selectedRegion,
+                selectedSeatIndex: _selectedSeatIndex,
                 showSoftPulse:
                     widget.showGuidance &&
                     selected == null &&
@@ -266,14 +281,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                 onRegionTap:
                     locked
                         ? null
-                        : (region) {
+                        : (target) {
                           final mapped = mapTableRegionToChoiceId(
                             activityId: widget.activity.id,
-                            region: region,
+                            region: target.region,
+                            seatIndex: target.seatIndex,
                             choices: widget.activity.choices,
                           );
                           if (mapped == null) return;
-                          setState(() => _selectedRegion = region);
+                          setState(() {
+                            _selectedRegion = target.region;
+                            _selectedSeatIndex = target.seatIndex;
+                          });
                           widget.controller.selectChoice(mapped);
                         },
               ),

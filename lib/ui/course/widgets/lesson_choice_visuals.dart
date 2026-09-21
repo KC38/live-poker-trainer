@@ -69,7 +69,8 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
   CourseActivity activity,
 ) {
   if (activity.renderer == ActivityRenderer.selectIdentify &&
-      activity.id.startsWith('act-01-01-01-')) {
+      (activity.id.startsWith('act-01-01-01-') ||
+          activity.id.startsWith('act-01-01-03-'))) {
     return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-01-01-02-guided-suits' ||
