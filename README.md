@@ -76,10 +76,30 @@ Runtime services:
 
 Deploy:
 
+GitHub Actions deploys Functions on pushes to `main` once
+`.github/workflows/deploy-functions.yml` exists (copy from
+[docs/github-actions/deploy-functions.yml](docs/github-actions/deploy-functions.yml)
+in the GitHub UI; agent tokens cannot write workflow files).
+
+The job is non-interactive and needs one GitHub Actions secret (Settings →
+Secrets and variables → Actions):
+
+- `FIREBASE_SERVICE_ACCOUNT` — JSON key for a GCP service account that can
+  deploy Firebase Functions (preferred), or
+- `FIREBASE_TOKEN` — token from
+  `npx -y firebase-tools@15.30.2 login:ci`
+
+The same variable names work in a Cloud Agent environment secret so local
+`.cursor/skills/ship-change/scripts/deploy-functions.sh` can deploy without
+a browser login.
+
+Manual deploy (still requires one of those credentials):
+
 ```bash
-npx -y firebase-tools@latest deploy \
+npx -y firebase-tools@15.30.2 deploy \
   --project live-poker-trainer \
-  --only firestore:rules,firestore:indexes,storage,functions
+  --only firestore:rules,firestore:indexes,storage,functions \
+  --non-interactive
 ```
 
 Set or rotate the secret separately:
@@ -218,4 +238,3 @@ running `tsc`, so stale academy output cannot survive into the deploy bundle.
 Deployed exports are the live-hand, course, and transfer callables plus the
 live pool workers. The v2 situation fetch, progress, and pool callables are
 not exported.
-
