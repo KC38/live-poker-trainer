@@ -1,0 +1,104 @@
+{
+  "id": "lesson-02-01-03-chip-accounting-check",
+  "lessonId": "lesson-02-01-03-chip-accounting-check",
+  "version": "1.0.0",
+  "title": "Chip accounting check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "$5/$10, stack of $1,000. Depth is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "100 big blinds."
+        },
+        {
+          "id": "b",
+          "text": "200 big blinds."
+        },
+        {
+          "id": "c",
+          "text": "50 big blinds."
+        },
+        {
+          "id": "d",
+          "text": "1,000 big blinds."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "1000 / 10 = 100 big blinds."
+    },
+    {
+      "id": "q2",
+      "prompt": "Call $40 into a pot that will be $160 after your call. You are risking 40 to win\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "$40."
+        },
+        {
+          "id": "b",
+          "text": "$120."
+        },
+        {
+          "id": "c",
+          "text": "$160."
+        },
+        {
+          "id": "d",
+          "text": "$200."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "The $160 includes your call, so the amount you win if they are bluffing is $120."
+    },
+    {
+      "id": "q3",
+      "prompt": "Which count is wrong?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "$10 + $10 = $20."
+        },
+        {
+          "id": "b",
+          "text": "A $15 bet into $45 is one-third pot."
+        },
+        {
+          "id": "c",
+          "text": "A $50 call into a $50 pot makes the final pot $50."
+        },
+        {
+          "id": "d",
+          "text": "Two $25 calls of a $25 bet add $75 to the previous pot."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "A $50 pot plus a $50 call becomes $100, not $50."
+    },
+    {
+      "id": "q4",
+      "prompt": "Before a big call, the disciplined step is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Guess the pot from the chip pile's height."
+        },
+        {
+          "id": "b",
+          "text": "Trust the bettor's announced pot."
+        },
+        {
+          "id": "c",
+          "text": "Skip the count because live pots are unknowable."
+        },
+        {
+          "id": "d",
+          "text": "Confirm the bet size and the pot."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "Price first, then decide. Do not skip the count on a large call."
+    }
+  ]
+}

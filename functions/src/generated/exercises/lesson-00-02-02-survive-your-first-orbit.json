@@ -1,0 +1,104 @@
+{
+  "id": "lesson-00-02-02-survive-your-first-orbit",
+  "lessonId": "lesson-00-02-02-survive-your-first-orbit",
+  "version": "1.0.0",
+  "title": "Survive your first orbit",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Cards are in the air and it is not your turn. You should\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Wait. Acting out of turn creates confusion and can bind you."
+        },
+        {
+          "id": "b",
+          "text": "Fold out of turn to speed the game up."
+        },
+        {
+          "id": "c",
+          "text": "Announce 'raise' before the player on your right."
+        },
+        {
+          "id": "d",
+          "text": "Show one card so the table can help."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Act in turn. Early declarations can be binding or angle-adjacent."
+    },
+    {
+      "id": "q2",
+      "prompt": "Your neighbor bets and you have not looked yet. Best action?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Call while still looking at your cards."
+        },
+        {
+          "id": "b",
+          "text": "Look first, then act in turn when action reaches you."
+        },
+        {
+          "id": "c",
+          "text": "Muck face-up."
+        },
+        {
+          "id": "d",
+          "text": "Ask the dealer to pause the hand until you choose a seat."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "Protect the order of action. Look before it is your turn, then act once."
+    },
+    {
+      "id": "q3",
+      "prompt": "A player asks what you folded. A clean answer is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Tell them the exact two cards every time."
+        },
+        {
+          "id": "b",
+          "text": "Show the fold to the whole table."
+        },
+        {
+          "id": "c",
+          "text": "Decline. Folded cards stay hidden unless a rule requires otherwise."
+        },
+        {
+          "id": "d",
+          "text": "Write the hand on a phone in the middle of the hand."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "You do not owe folded-hand information. Phones at the table are often restricted."
+    },
+    {
+      "id": "q4",
+      "prompt": "The first orbit goal is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Win the most pots, even by guessing."
+        },
+        {
+          "id": "b",
+          "text": "Stack off light to 'see where you are'."
+        },
+        {
+          "id": "c",
+          "text": "Straddle every hand so you look active."
+        },
+        {
+          "id": "d",
+          "text": "Avoid big mistakes while you learn the table."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "Survival and information beat heroics on a brand-new table."
+    }
+  ]
+}

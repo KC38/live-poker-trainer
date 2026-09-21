@@ -4,11 +4,12 @@
 
 import {getFirestore, type DocumentData, type Firestore} from "firebase-admin/firestore";
 import type {FeatureFlagsDocReader} from "./feature_flags";
+import {getCurriculumCatalog} from "./curriculum_catalog";
 import {
   emptyLearningProgress,
+  evaluateTableReady,
 } from "./curriculum_progress";
 import type {LearningProgressSnapshot} from "./curriculum_types";
-import {getCurriculumCatalog} from "./curriculum_catalog";
 import {
   assertLearningPlatformEnabled,
   firestoreFlagReader,
@@ -20,6 +21,7 @@ export interface GetLearningStateResult {
   catalogVersion: string;
   activeLessonId?: string;
   activeAttemptId?: string;
+  tableReady: ReturnType<typeof evaluateTableReady>;
 }
 
 /** Returns learning/main for the user (empty defaults when missing). */
@@ -51,6 +53,7 @@ export async function getLearningStateForUser(options: {
       typeof data?.activeAttemptId === "string" ?
         data.activeAttemptId :
         undefined,
+    tableReady: evaluateTableReady(catalog, progress),
   };
 }
 

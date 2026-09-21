@@ -1,0 +1,104 @@
+{
+  "id": "lesson-01-04-01-stacks-pots-and-side-pots",
+  "lessonId": "lesson-01-04-01-stacks-pots-and-side-pots",
+  "version": "1.0.0",
+  "title": "Stacks, pots, and side pots",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Effective stack between you and one opponent is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The smaller of the two stacks."
+        },
+        {
+          "id": "b",
+          "text": "Always your stack."
+        },
+        {
+          "id": "c",
+          "text": "The pot plus both stacks."
+        },
+        {
+          "id": "d",
+          "text": "The big blind."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "You can only win what the shorter player can put in."
+    },
+    {
+      "id": "q2",
+      "prompt": "A side pot exists when\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Everyone has the same stack."
+        },
+        {
+          "id": "b",
+          "text": "One player is all-in and others continue betting."
+        },
+        {
+          "id": "c",
+          "text": "The flop is paired."
+        },
+        {
+          "id": "d",
+          "text": "The button posts a straddle."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "Extra chips between the covering players go into a side pot the all-in player cannot win."
+    },
+    {
+      "id": "q3",
+      "prompt": "Unmatched chips that cannot be called are\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Left in the pot as a bonus."
+        },
+        {
+          "id": "b",
+          "text": "Awarded to the dealer."
+        },
+        {
+          "id": "c",
+          "text": "Returned to the bettor."
+        },
+        {
+          "id": "d",
+          "text": "Moved to the next hand."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "If nobody can call the extra, that extra comes back."
+    },
+    {
+      "id": "q4",
+      "prompt": "You cover two all-in opponents who have different stacks. You might win\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Only the main pot."
+        },
+        {
+          "id": "b",
+          "text": "Nothing if you have the best hand."
+        },
+        {
+          "id": "c",
+          "text": "A single combined pot with no eligibility rules."
+        },
+        {
+          "id": "d",
+          "text": "The main pot and a side pot, depending on who you beat."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "Each pot is awarded only among players who contributed to it."
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "id": "lesson-02-01-01-chip-denominations-and-pot-math",
+  "lessonId": "lesson-02-01-01-chip-denominations-and-pot-math",
+  "version": "1.0.0",
+  "title": "Chip denominations and pot math",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "$1/$2 with a $200 stack is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "50 big blinds."
+        },
+        {
+          "id": "b",
+          "text": "100 big blinds."
+        },
+        {
+          "id": "c",
+          "text": "200 big blinds."
+        },
+        {
+          "id": "d",
+          "text": "2 big blinds."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "Divide the stack by the big blind. 200 / 2 = 100."
+    },
+    {
+      "id": "q2",
+      "prompt": "A pot-sized bet into a $40 pot is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "$40."
+        },
+        {
+          "id": "b",
+          "text": "$20."
+        },
+        {
+          "id": "c",
+          "text": "$80."
+        },
+        {
+          "id": "d",
+          "text": "$4."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Pot-sized means the amount already in the pot, before your bet."
+    },
+    {
+      "id": "q3",
+      "prompt": "You are asked to call $25 into a $100 pot. The final pot if you call is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "$100."
+        },
+        {
+          "id": "b",
+          "text": "$25."
+        },
+        {
+          "id": "c",
+          "text": "$150."
+        },
+        {
+          "id": "d",
+          "text": "$125."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "The $25 is added to the $100, so you risk 25 to win 125, and the pot becomes 150."
+    },
+    {
+      "id": "q4",
+      "prompt": "Converting everything to big blinds helps because\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Chips of different colors cannot be counted."
+        },
+        {
+          "id": "b",
+          "text": "The casino requires BB speech."
+        },
+        {
+          "id": "c",
+          "text": "Dollars are illegal at the table."
+        },
+        {
+          "id": "d",
+          "text": "Stakes change, but 100 big blinds means the same depth at $1/$2 or $2/$5."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "Big blinds compare depth across stake sizes."
+    }
+  ]
+}

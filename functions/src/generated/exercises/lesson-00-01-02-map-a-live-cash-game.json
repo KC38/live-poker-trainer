@@ -1,0 +1,104 @@
+{
+  "id": "lesson-00-01-02-map-a-live-cash-game",
+  "lessonId": "lesson-00-01-02-map-a-live-cash-game",
+  "version": "1.0.0",
+  "title": "Map a live cash game",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "A floor card says $1/$2 NL, $100\u2013$300 buy-in. What does that mean?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Blinds are $1 and $2; you may buy in between $100 and $300."
+        },
+        {
+          "id": "b",
+          "text": "The tournament starts at level 1 and ends at level 2."
+        },
+        {
+          "id": "c",
+          "text": "You must buy in for exactly $200 every orbit."
+        },
+        {
+          "id": "d",
+          "text": "The big blind doubles every 20 minutes."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Cash stakes are fixed blinds plus a buy-in range, not a tournament clock."
+    },
+    {
+      "id": "q2",
+      "prompt": "Which seat count is a full ring?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Heads-up"
+        },
+        {
+          "id": "b",
+          "text": "Six-handed"
+        },
+        {
+          "id": "c",
+          "text": "Nine-handed"
+        },
+        {
+          "id": "d",
+          "text": "Three-handed"
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "Full ring is typically 8\u20139 handed. Six-handed is short-handed but not full ring."
+    },
+    {
+      "id": "q3",
+      "prompt": "Effective stack is best described as\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The largest stack at the table, always."
+        },
+        {
+          "id": "b",
+          "text": "The smallest stack that can still contest the pot between the players involved."
+        },
+        {
+          "id": "c",
+          "text": "The sum of every chip on the table."
+        },
+        {
+          "id": "d",
+          "text": "Only the big blind amount."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "You cannot win more from an opponent than they have in front of them."
+    },
+    {
+      "id": "q4",
+      "prompt": "Why does position matter more as stacks get deeper?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Deeper stacks remove all postflop decisions."
+        },
+        {
+          "id": "b",
+          "text": "The button must fold every hand when deep."
+        },
+        {
+          "id": "c",
+          "text": "Blinds disappear once stacks exceed 100 big blinds."
+        },
+        {
+          "id": "d",
+          "text": "More streets remain, so acting last gains more information."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "Deep cash play is multi-street. Acting last sees how others bet before you choose."
+    }
+  ]
+}

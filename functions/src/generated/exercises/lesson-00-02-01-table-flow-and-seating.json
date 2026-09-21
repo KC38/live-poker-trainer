@@ -1,0 +1,104 @@
+{
+  "id": "lesson-00-02-01-table-flow-and-seating",
+  "lessonId": "lesson-00-02-01-table-flow-and-seating",
+  "version": "1.0.0",
+  "title": "Table flow and seating",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Before you sit, the most useful first habit is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Watch one orbit: seats, stacks, and who is playing which streets."
+        },
+        {
+          "id": "b",
+          "text": "Post the big blind from the rail and throw cards in."
+        },
+        {
+          "id": "c",
+          "text": "Announce your strategy to the table."
+        },
+        {
+          "id": "d",
+          "text": "Buy the maximum and open every button immediately."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "A quiet orbit shows action order, stack sizes, and obvious tendencies."
+    },
+    {
+      "id": "q2",
+      "prompt": "The button is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The first player to act preflop in a full ring."
+        },
+        {
+          "id": "b",
+          "text": "The dealer position, last to act postflop."
+        },
+        {
+          "id": "c",
+          "text": "Always the big blind."
+        },
+        {
+          "id": "d",
+          "text": "The player who must straddle."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "The button acts last on the flop, turn, and river in a normal hand."
+    },
+    {
+      "id": "q3",
+      "prompt": "You are dealt in on the big blind your first hand. You should\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Skip the blind because you just sat down."
+        },
+        {
+          "id": "b",
+          "text": "Post both blinds twice."
+        },
+        {
+          "id": "c",
+          "text": "Post the big blind; you are live for that hand."
+        },
+        {
+          "id": "d",
+          "text": "Wait until the button passes you to post anything."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "A new player dealt into the big blind posts it and receives a hand."
+    },
+    {
+      "id": "q4",
+      "prompt": "Missed-blind rules vary, but a safe default is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Invent a rule and enforce it yourself."
+        },
+        {
+          "id": "b",
+          "text": "Never post and keep taking free hands."
+        },
+        {
+          "id": "c",
+          "text": "Move the button yourself."
+        },
+        {
+          "id": "d",
+          "text": "Ask the dealer how this room handles a missed blind before you act."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "Rooms differ on posting, waiting, and dead blinds. The dealer is the source."
+    }
+  ]
+}

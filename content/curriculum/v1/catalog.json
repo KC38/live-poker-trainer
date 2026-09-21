@@ -44,7 +44,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-00-01-02-map-a-live-cash-game"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-00-01-01-cash-vs-tournaments"
@@ -61,7 +63,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-00-01-03-cash-poker-map-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-00-01-02-map-a-live-cash-game"
@@ -91,7 +95,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-00-02-01-table-flow-and-seating"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-00-01-03-cash-poker-map-check"
@@ -108,7 +114,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-00-02-02-survive-your-first-orbit"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-00-02-01-table-flow-and-seating"
@@ -125,7 +133,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-00-02-03-first-orbit-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-00-02-02-survive-your-first-orbit"
@@ -155,7 +165,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-00-03-01-bankroll-and-session-basics"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-00-02-03-first-orbit-check"
@@ -172,7 +184,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-00-03-02-choose-a-safe-first-session"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-00-03-01-bankroll-and-session-basics"
@@ -189,7 +203,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-00-03-03-safe-start-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-00-03-02-choose-a-safe-first-session"
@@ -227,7 +243,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-01-01-01-hand-rankings-and-showdown-order"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-00-03-03-safe-start-check"
@@ -244,7 +262,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-01-01-02-resolve-contested-showdowns"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-01-01-01-hand-rankings-and-showdown-order"
@@ -261,7 +281,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-01-01-03-hands-and-showdowns-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-01-01-02-resolve-contested-showdowns"
@@ -291,7 +313,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-01-02-01-positions-and-action-order"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-01-01-03-hands-and-showdowns-check"
@@ -308,7 +332,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-01-02-02-act-correctly-by-position"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-01-02-01-positions-and-action-order"
@@ -325,7 +351,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-01-02-03-action-and-position-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-01-02-02-act-correctly-by-position"
@@ -355,7 +383,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-01-03-01-bets-raises-and-all-ins"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-01-02-03-action-and-position-check"
@@ -372,7 +402,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-01-03-02-apply-betting-rules-live"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-01-03-01-bets-raises-and-all-ins"
@@ -389,7 +421,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-01-03-03-betting-mechanics-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-01-03-02-apply-betting-rules-live"
@@ -419,7 +453,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-01-04-01-stacks-pots-and-side-pots"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-01-03-03-betting-mechanics-check"
@@ -436,7 +472,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-01-04-02-track-stacks-and-pots"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-01-04-01-stacks-pots-and-side-pots"
@@ -453,7 +491,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-01-04-03-stacks-and-pots-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-01-04-02-track-stacks-and-pots"
@@ -483,7 +523,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-01-05-01-dealer-and-floor-procedure"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-01-04-03-stacks-and-pots-check"
@@ -500,7 +542,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-01-05-02-handle-table-procedure"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-01-05-01-dealer-and-floor-procedure"
@@ -517,7 +561,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-01-05-03-room-procedure-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-01-05-02-handle-table-procedure"
@@ -556,7 +602,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-02-01-01-chip-denominations-and-pot-math"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-01-05-03-room-procedure-check"
@@ -573,7 +621,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-02-01-02-account-chips-and-pots"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-02-01-01-chip-denominations-and-pot-math"
@@ -590,7 +640,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-02-01-03-chip-accounting-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-02-01-02-account-chips-and-pots"
@@ -620,7 +672,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-02-02-01-equity-outs-and-draws"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-02-01-03-chip-accounting-check"
@@ -637,7 +691,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-02-02-02-estimate-equity-on-draws"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-02-02-01-equity-outs-and-draws"
@@ -654,7 +710,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-02-02-03-equity-and-draws-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-02-02-02-estimate-equity-on-draws"
@@ -684,7 +742,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-02-03-01-pot-odds-and-expected-value"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-02-02-03-equity-and-draws-check"
@@ -701,7 +761,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-02-03-02-compute-pot-odds-decisions"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-02-03-01-pot-odds-and-expected-value"
@@ -718,7 +780,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-02-03-03-pot-odds-and-ev-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-02-03-02-compute-pot-odds-decisions"
@@ -748,7 +812,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-02-04-01-implied-and-reverse-implied-odds"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-02-03-03-pot-odds-and-ev-check"
@@ -765,7 +831,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-02-04-02-price-future-street-value"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-02-04-01-implied-and-reverse-implied-odds"
@@ -782,7 +850,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-02-04-03-future-street-value-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-02-04-02-price-future-street-value"
@@ -812,7 +882,9 @@
               ],
               "estimatedMinutes": 8,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-02-05-01-ranges-and-combo-counting"
+              ],
               "simulationClaims": "conceptual_only",
               "prerequisites": [
                 "lesson-02-04-03-future-street-value-check"
@@ -829,7 +901,9 @@
               ],
               "estimatedMinutes": 12,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-02-05-02-count-key-combinations"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-02-05-01-ranges-and-combo-counting"
@@ -846,7 +920,9 @@
               ],
               "estimatedMinutes": 10,
               "mediaIds": [],
-              "exerciseRefs": [],
+              "exerciseRefs": [
+                "lesson-02-05-03-ranges-and-combos-check"
+              ],
               "simulationClaims": "engine_supported",
               "prerequisites": [
                 "lesson-02-05-02-count-key-combinations"
@@ -4668,7 +4744,12 @@
         "obj-position-action",
         "obj-betting-rules",
         "obj-stack-pot-tracking",
-        "obj-room-procedure"
+        "obj-room-procedure",
+        "obj-chip-accounting",
+        "obj-equity-draws",
+        "obj-pot-odds-ev",
+        "obj-implied-odds",
+        "obj-combo-counting"
       ],
       "minDecisionSamples": 30,
       "masteryThreshold": 0.8,

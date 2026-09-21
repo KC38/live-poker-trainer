@@ -10,12 +10,9 @@ import type {
   PublicExerciseQuestion,
   StaticExerciseSet,
 } from "./curriculum_types";
-import rawCashVsTournaments from "./generated/exercises/lesson-00-01-01-cash-vs-tournaments.json";
+import rawBank from "./generated/exercise_bank.json";
 
-const BANK: Record<string, StaticExerciseSet> = {
-  "lesson-00-01-01-cash-vs-tournaments":
-    rawCashVsTournaments as StaticExerciseSet,
-};
+const BANK = rawBank as Record<string, StaticExerciseSet>;
 
 /** Look up one exercise set by id (matches catalog `exerciseRefs`). */
 export function getExerciseById(

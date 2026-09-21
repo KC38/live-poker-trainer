@@ -9,6 +9,7 @@ import type {
   CoachingRating,
 } from "./live_types";
 import type {
+  CurriculumCatalog,
   CurriculumLesson,
   LearningProgressSnapshot,
 } from "./curriculum_types";
@@ -136,7 +137,10 @@ export function applyLessonCompletion(
   const today = calendarDayInTimeZone(now, timezone);
   const prev = input.progress;
   const streak = nextStreak(prev.streak, prev.lastStudyDay, today);
-  const xpGain = Math.round(BASE_LESSON_XP * score);
+  const alreadyCompleted = (prev.completedLessonIds ?? []).includes(
+    input.lesson.id,
+  );
+  const xpGain = alreadyCompleted ? 0 : Math.round(BASE_LESSON_XP * score);
 
   const masteryByObjectiveId = {...(prev.masteryByObjectiveId ?? {})};
   for (const objectiveId of input.lesson.objectiveIds) {
@@ -155,6 +159,45 @@ export function applyLessonCompletion(
     completedLessonIds: [...completed],
     catalogVersion: prev.catalogVersion,
     updatedAtMs: now.getTime(),
+  };
+}
+
+export interface TableReadyStatus {
+  gateId: "table-ready";
+  completedCount: number;
+  totalCount: number;
+  missingObjectiveIds: string[];
+  passed: boolean;
+}
+
+/** Sections 0–2 must be complete and each gate objective must clear mastery. */
+export function evaluateTableReady(
+  catalog: CurriculumCatalog,
+  progress: LearningProgressSnapshot,
+): TableReadyStatus {
+  const gate = catalog.milestoneGates.find((item) => item.id === "table-ready");
+  const lessonIds: string[] = [];
+  for (const section of catalog.sections) {
+    if (section.order > 2) continue;
+    for (const unit of section.units) {
+      for (const lesson of unit.lessons) lessonIds.push(lesson.id);
+    }
+  }
+  const completed = new Set(progress.completedLessonIds ?? []);
+  const completedCount = lessonIds.filter((id) => completed.has(id)).length;
+  const threshold = gate?.masteryThreshold ?? 0.8;
+  const missingObjectiveIds = (gate?.requiredObjectiveIds ?? []).filter(
+    (id) => (progress.masteryByObjectiveId?.[id] ?? 0) < threshold,
+  );
+  return {
+    gateId: "table-ready",
+    completedCount,
+    totalCount: lessonIds.length,
+    missingObjectiveIds,
+    passed:
+      lessonIds.length > 0 &&
+      completedCount === lessonIds.length &&
+      missingObjectiveIds.length === 0,
   };
 }
 

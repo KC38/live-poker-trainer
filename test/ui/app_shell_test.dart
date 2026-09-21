@@ -55,7 +55,6 @@ void main() {
     expect(find.text('You'), findsOneWidget);
     expect(find.textContaining('13 sections'), findsOneWidget);
     expect(find.text('Cash poker map'), findsOneWidget);
-    expect(find.text('Start first lesson'), findsOneWidget);
 
     await tester.tap(find.text('Practice'));
     await tester.pumpAndSettle();

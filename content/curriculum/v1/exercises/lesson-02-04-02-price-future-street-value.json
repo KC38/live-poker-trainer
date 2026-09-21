@@ -1,0 +1,104 @@
+{
+  "id": "lesson-02-04-02-price-future-street-value",
+  "lessonId": "lesson-02-04-02-price-future-street-value",
+  "version": "1.0.0",
+  "title": "Price future-street value",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "You are all-in on the flop with a draw. Which odds matter?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Pot odds and raw equity. There are no future bets to imply."
+        },
+        {
+          "id": "b",
+          "text": "Only implied odds."
+        },
+        {
+          "id": "c",
+          "text": "Only reverse implied odds from later bets."
+        },
+        {
+          "id": "d",
+          "text": "Neither, because all-in pots are not real."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Once all-in, the rest of the cards are free. Use equity versus the current pot."
+    },
+    {
+      "id": "q2",
+      "prompt": "Deep stacks and a nut flush draw in position improve\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Nothing."
+        },
+        {
+          "id": "b",
+          "text": "Implied odds, because you can still win more when you hit."
+        },
+        {
+          "id": "c",
+          "text": "The number of flush outs from 9 to 15."
+        },
+        {
+          "id": "d",
+          "text": "The board texture by itself."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "Position and leftover stacks let you extract more on later streets."
+    },
+    {
+      "id": "q3",
+      "prompt": "Calling a large river bet with a bluff-catcher is not an implied-odds call because\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The river still has two cards to come."
+        },
+        {
+          "id": "b",
+          "text": "You can still bet later."
+        },
+        {
+          "id": "c",
+          "text": "There is no later street. You are deciding on the current price."
+        },
+        {
+          "id": "d",
+          "text": "Pot odds expire on the river."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "Implied odds need future betting. The river is the last card."
+    },
+    {
+      "id": "q4",
+      "prompt": "A dominated flush draw (you have the low flush draw, they can have the nut draw) has\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Perfect implied odds."
+        },
+        {
+          "id": "b",
+          "text": "Nine outs that always win."
+        },
+        {
+          "id": "c",
+          "text": "No reverse implied odds."
+        },
+        {
+          "id": "d",
+          "text": "Reverse implied odds: some of your flush cards still lose."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "Do not count outs that make you second best as clean."
+    }
+  ]
+}
