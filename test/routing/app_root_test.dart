@@ -176,4 +176,23 @@ void main() {
       AppRootDestination.shell,
     );
   });
+
+  test('anonymous sign-in keeps the guest navigator key', () {
+    expect(
+      rootNavigatorKeyFor(uid: null),
+      rootNavigatorKeyFor(uid: 'anon-uid', anonymous: true),
+    );
+    expect(
+      rootNavigatorKeyFor(uid: 'linked-uid'),
+      isNot(rootNavigatorKeyFor(uid: null)),
+    );
+    expect(
+      rootNavigatorKeyFor(
+        uid: 'anon-uid',
+        anonymous: true,
+        resetForAuthGate: true,
+      ),
+      'guest-auth',
+    );
+  });
 }

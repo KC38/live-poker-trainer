@@ -21,11 +21,47 @@ final authStateProvider = StreamProvider<User?>((ref) {
   return ref.watch(authServiceProvider).authStateChanges;
 });
 
+/// Auth identity used for root routing.
+///
+/// Signed-out is [uid] `null`. Anonymous course guests set [isAnonymous].
+class AppAuthSnapshot {
+  /// Creates a snapshot. Omit [uid] for signed-out.
+  const AppAuthSnapshot({this.uid, this.isAnonymous = false});
+
+  /// Firebase uid, or null when signed out.
+  final String? uid;
+
+  /// True for a Firebase anonymous user.
+  final bool isAnonymous;
+
+  /// Whether a Firebase user is present.
+  bool get signedIn => uid != null;
+}
+
+/// Routing view of [authStateProvider].
+///
+/// Loading and error states do not expose a previous user, matching
+/// [AsyncValue.asData] on the auth stream.
+final appAuthProvider = Provider<AsyncValue<AppAuthSnapshot>>((ref) {
+  final auth = ref.watch(authStateProvider);
+  return auth.when(
+    data:
+        (user) => AsyncData(
+          AppAuthSnapshot(
+            uid: user?.uid,
+            isAnonymous: user?.isAnonymous == true,
+          ),
+        ),
+    loading: () => const AsyncLoading(),
+    error: (error, stackTrace) => AsyncError(error, stackTrace),
+  );
+});
+
 /// Current Firebase uid, or `null` when signed out.
 ///
 /// All user-scoped data requires this authenticated server identity.
 final authUidProvider = Provider<String?>((ref) {
-  return ref.watch(authStateProvider).asData?.value?.uid;
+  return ref.watch(appAuthProvider).asData?.value.uid;
 });
 
 /// Ensures `users/{uid}` exists and hydrates synced settings after sign-in.

@@ -4,7 +4,6 @@ library;
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -89,20 +88,20 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
 
   @override
   Widget build(BuildContext context) {
-    final auth = ref.watch(authStateProvider);
+    final auth = ref.watch(appAuthProvider);
     // Ensure users/{uid} exists and prefs hydrate after sign-in / cold start.
     ref.watch(userDocProvider);
     final analytics = ref.watch(analyticsServiceProvider);
     final navObserver = ref.watch(analyticsNavigatorObserverProvider);
     final onboarding = ref.watch(onboardingControllerProvider);
-    final flagsAsync = ref.watch(courseFlagsProvider);
-    final flags = flagsAsync.asData?.value;
-    final flagsReady = flagsAsync.hasValue;
+    final gate = courseFlagsForRouting(ref.watch(courseFlagsProvider));
+    final flags = gate.flags;
+    final flagsReady = gate.ready;
 
-    ref.listen(authStateProvider, (prev, next) {
-      final prevUid = prev?.asData?.value?.uid;
-      final nextUser = next.asData?.value;
-      final nextUid = nextUser?.uid;
+    ref.listen(appAuthProvider, (prev, next) {
+      final prevUid = prev?.asData?.value.uid;
+      final nextSession = next.asData?.value;
+      final nextUid = nextSession?.uid;
       if (prevUid == nextUid) return;
       ref.invalidate(userDocProvider);
       ref.invalidate(userStatsProvider);
@@ -111,26 +110,35 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
       unawaited(analytics.setUserId(nextUid));
       _logRootScreen(
         analytics,
-        _rootScreenName(nextUser, onboarding, flags, flagsReady),
+        _rootScreenName(nextSession, onboarding, flags, flagsReady),
       );
     });
 
-    // Key on uid so sign-out/in rebuilds MaterialApp and clears pushed routes
-    // (e.g. Settings) that would otherwise stay on top of the new home.
-    final uid = auth.asData?.value?.uid;
-    _logRootScreen(
-      analytics,
-      _rootScreenName(auth.asData?.value, onboarding, flags, flagsReady),
-    );
+    // Signed-out and anonymous share a navigator key so the first lesson
+    // survives anonymous sign-in. A resolved auth gate still remounts so a
+    // real flag denial clears that lesson. Linked accounts key on uid.
+    final session = auth.asData?.value;
+    final destination = _destinationFor(session, onboarding, flags, flagsReady);
+    _logRootScreen(analytics, _screenName(destination));
 
     return MaterialApp(
-      key: ValueKey(uid ?? 'signed-out'),
+      key: ValueKey(
+        rootNavigatorKeyFor(
+          uid: session?.uid,
+          anonymous: session?.isAnonymous == true,
+          resetForAuthGate: destination == AppRootDestination.auth,
+        ),
+      ),
       title: 'Exploitative Poker Lab',
       debugShowCheckedModeBanner: false,
       theme: buildPokerTheme(),
       navigatorObservers: [navObserver],
       home: auth.when(
-        data: (user) => _homeForUser(user, onboarding, flags, flagsReady),
+        data:
+            (session) => _homeForDestination(
+              _destinationFor(session, onboarding, flags, flagsReady),
+              onboarding,
+            ),
         loading: () => const _AuthLoadingScreen(),
         error:
             (_, _) =>
@@ -143,19 +151,25 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
     );
   }
 
-  Widget _homeForUser(
-    User? user,
+  AppRootDestination _destinationFor(
+    AppAuthSnapshot? session,
     OnboardingDraft onboarding,
     CourseFlags? flags,
     bool flagsReady,
   ) {
-    final destination = resolveAppRoot(
-      signedIn: user != null,
-      anonymous: user?.isAnonymous == true,
+    return resolveAppRoot(
+      signedIn: session?.signedIn == true,
+      anonymous: session?.isAnonymous == true,
       flagsReady: flagsReady,
       flags: flags,
       onboarding: onboarding,
     );
+  }
+
+  Widget _homeForDestination(
+    AppRootDestination destination,
+    OnboardingDraft onboarding,
+  ) {
     switch (destination) {
       case AppRootDestination.loading:
         return const _AuthLoadingScreen();
@@ -186,18 +200,15 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
   }
 
   String _rootScreenName(
-    User? user,
+    AppAuthSnapshot? session,
     OnboardingDraft onboarding,
     CourseFlags? flags,
     bool flagsReady,
   ) {
-    final destination = resolveAppRoot(
-      signedIn: user != null,
-      anonymous: user?.isAnonymous == true,
-      flagsReady: flagsReady,
-      flags: flags,
-      onboarding: onboarding,
-    );
+    return _screenName(_destinationFor(session, onboarding, flags, flagsReady));
+  }
+
+  String _screenName(AppRootDestination destination) {
     return switch (destination) {
       AppRootDestination.welcome => AnalyticsScreens.welcome,
       AppRootDestination.guestCourse => AnalyticsScreens.onboarding,
