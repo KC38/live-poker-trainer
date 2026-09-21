@@ -19,6 +19,13 @@ import {
   refillQueuedLiveSetup,
 } from "./live_pool";
 import {
+  completeCourseLessonForUser,
+  getCourseStateForUser,
+  initializeCourseProfileForUser,
+  startCourseLessonForUser,
+  submitCourseStepForUser,
+} from "./course_session";
+import {
   resumeLiveHandForUser,
   startLiveHandForUser,
   submitLiveActionForUser,
@@ -124,6 +131,116 @@ export const undoLiveAction = onCall(
   },
 );
 
+/** Creates users/{uid}/course/main when missing. */
+export const initializeCourseProfile = onCall(
+  {
+    region: "us-central1",
+    timeoutSeconds: 30,
+    memory: "256MiB",
+  },
+  async (request) => {
+    const uid = requireAuth(request.auth?.uid, "Sign in required for course.");
+    try {
+      return await initializeCourseProfileForUser({
+        uid,
+        raw: request.data,
+        isAnonymous: request.auth?.token?.firebase?.sign_in_provider ===
+          "anonymous",
+      });
+    } catch (error) {
+      throw callableError("initializeCourseProfile", error);
+    }
+  },
+);
+
+/** Starts or resumes one lesson attempt. */
+export const startCourseLesson = onCall(
+  {
+    region: "us-central1",
+    timeoutSeconds: 30,
+    memory: "256MiB",
+  },
+  async (request) => {
+    const uid = requireAuth(request.auth?.uid, "Sign in required for course.");
+    try {
+      return await startCourseLessonForUser({
+        uid,
+        raw: request.data,
+        isAnonymous: request.auth?.token?.firebase?.sign_in_provider ===
+          "anonymous",
+      });
+    } catch (error) {
+      throw callableError("startCourseLesson", error);
+    }
+  },
+);
+
+/** Grades one activity response without trusting client grades. */
+export const submitCourseStep = onCall(
+  {
+    region: "us-central1",
+    timeoutSeconds: 30,
+    memory: "256MiB",
+  },
+  async (request) => {
+    const uid = requireAuth(request.auth?.uid, "Sign in required for course.");
+    try {
+      return await submitCourseStepForUser({
+        uid,
+        raw: request.data,
+        isAnonymous: request.auth?.token?.firebase?.sign_in_provider ===
+          "anonymous",
+      });
+    } catch (error) {
+      throw callableError("submitCourseStep", error);
+    }
+  },
+);
+
+/** Completes a finished lesson attempt and may grant Live entitlement. */
+export const completeCourseLesson = onCall(
+  {
+    region: "us-central1",
+    timeoutSeconds: 30,
+    memory: "256MiB",
+  },
+  async (request) => {
+    const uid = requireAuth(request.auth?.uid, "Sign in required for course.");
+    try {
+      return await completeCourseLessonForUser({
+        uid,
+        raw: request.data,
+        isAnonymous: request.auth?.token?.firebase?.sign_in_provider ===
+          "anonymous",
+      });
+    } catch (error) {
+      throw callableError("completeCourseLesson", error);
+    }
+  },
+);
+
+/** Returns aggregate course progress, resume pointer, and flags. */
+export const getCourseState = onCall(
+  {
+    region: "us-central1",
+    timeoutSeconds: 30,
+    memory: "256MiB",
+  },
+  async (request) => {
+    const uid = requireAuth(request.auth?.uid, "Sign in required for course.");
+    try {
+      return await getCourseStateForUser({
+        uid,
+        raw: request.data,
+        isAnonymous: request.auth?.token?.firebase?.sign_in_provider ===
+          "anonymous",
+      });
+    } catch (error) {
+      throw callableError("getCourseState", error);
+    }
+  },
+);
+
 /** Fans one setup refill request into independent warmed-hand jobs. */
 export const refillLiveHandPool = onDocumentWritten(
   {
@@ -186,12 +303,12 @@ export const recoverLiveGenerationLeases = onSchedule(
   },
 );
 
-function requireAuth(uid: string | undefined): string {
+function requireAuth(
+  uid: string | undefined,
+  message = "Sign in required for live training.",
+): string {
   if (!uid) {
-    throw new HttpsError(
-      "unauthenticated",
-      "Sign in required for live training.",
-    );
+    throw new HttpsError("unauthenticated", message);
   }
   return uid;
 }
@@ -200,5 +317,5 @@ function callableError(name: string, error: unknown): HttpsError {
   if (error instanceof HttpsError) return error;
   const message = error instanceof Error ? error.message : String(error);
   logger.error(`${name} failed`, {error: message});
-  return new HttpsError("internal", "Live training failed. Retry shortly.");
+  return new HttpsError("internal", "Request failed. Retry shortly.");
 }

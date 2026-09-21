@@ -154,3 +154,56 @@ export function activityIdsInOrder(bank: CourseBank = courseBank): string[] {
   }
   return ids;
 }
+
+/** Lesson located with its section/unit parents. */
+export interface LocatedLesson {
+  section: CourseSection;
+  unit: CourseUnit;
+  lesson: CourseLesson;
+}
+
+/** Finds a lesson by id in the private bank. */
+export function findLesson(
+  lessonId: string,
+  bank: CourseBank = courseBank,
+): LocatedLesson | null {
+  for (const section of bank.sections) {
+    for (const unit of section.units) {
+      for (const lesson of unit.lessons) {
+        if (lesson.id === lessonId) {
+          return {section, unit, lesson};
+        }
+      }
+    }
+  }
+  return null;
+}
+
+/** Finds an activity inside a lesson. */
+export function findActivity(
+  lesson: CourseLesson,
+  activityId: string,
+): CourseActivity | null {
+  return lesson.activities.find((activity) => activity.id === activityId) ??
+    null;
+}
+
+/** True when the lesson contains a jump-test or placement-style activity. */
+export function lessonRequiresPlacementFlag(lesson: CourseLesson): boolean {
+  return lesson.activities.some((activity) => activity.stage === "jump_test");
+}
+
+/**
+ * Section whose validated jump-test completion grants unrestricted Live
+ * Training. Content waves publish the actual jump node; Plan 10 enforces the
+ * entitlement at Live callables.
+ */
+export const LIVE_UNLOCK_SECTION_ID = "sec-04-regular-live";
+
+/** True when completing this lesson's jump test may grant Live entitlement. */
+export function lessonGrantsLiveTrainingEntitlement(
+  located: LocatedLesson,
+): boolean {
+  return located.section.id === LIVE_UNLOCK_SECTION_ID &&
+    lessonRequiresPlacementFlag(located.lesson);
+}

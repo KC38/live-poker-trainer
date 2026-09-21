@@ -214,6 +214,18 @@ describe("Firestore security rules", () => {
       status: "acting",
       events: [],
     });
+    await seedFirestore(`users/${OWNER_UID}/course/main`, {lifetimeXp: 10});
+    await seedFirestore(`users/${OWNER_UID}/courseAttempts/attempt-1`, {
+      lessonId: "lesson-1",
+    });
+    await seedFirestore(`users/${OWNER_UID}/courseReviews/review-1`, {
+      dueAtMs: 1,
+    });
+    await seedFirestore(`users/${OWNER_UID}/courseXpLedger/entry-1`, {amount: 10});
+    await seedFirestore(`users/${OWNER_UID}/entitlements/liveTraining`, {
+      unrestrictedAccess: true,
+      source: "section4_jump",
+    });
     const database = testEnv.authenticatedContext(OWNER_UID).firestore();
     const progressRef = doc(database, `users/${OWNER_UID}/liveProgress/main`);
     const historyRef = doc(
@@ -221,14 +233,87 @@ describe("Firestore security rules", () => {
       `users/${OWNER_UID}/liveHandHistory/hand-1`,
     );
     const feedRef = doc(database, `users/${OWNER_UID}/liveActionFeed/current`);
+    const courseRef = doc(database, `users/${OWNER_UID}/course/main`);
+    const attemptRef = doc(
+      database,
+      `users/${OWNER_UID}/courseAttempts/attempt-1`,
+    );
+    const reviewRef = doc(
+      database,
+      `users/${OWNER_UID}/courseReviews/review-1`,
+    );
+    const xpRef = doc(database, `users/${OWNER_UID}/courseXpLedger/entry-1`);
+    const entitlementRef = doc(
+      database,
+      `users/${OWNER_UID}/entitlements/liveTraining`,
+    );
 
     await assertSucceeds(getDoc(progressRef));
     await assertSucceeds(getDoc(historyRef));
     await assertSucceeds(getDoc(feedRef));
+    await assertSucceeds(getDoc(courseRef));
+    await assertSucceeds(getDoc(attemptRef));
+    await assertSucceeds(getDoc(reviewRef));
+    await assertSucceeds(getDoc(xpRef));
+    await assertSucceeds(getDoc(entitlementRef));
     await assertFails(setDoc(progressRef, {handsPlayed: 4}));
     await assertFails(updateDoc(historyRef, {result: 20}));
     await assertFails(setDoc(feedRef, {status: "done"}));
+    await assertFails(setDoc(courseRef, {lifetimeXp: 99}));
+    await assertFails(setDoc(attemptRef, {lessonId: "hacked"}));
+    await assertFails(setDoc(reviewRef, {dueAtMs: 2}));
+    await assertFails(setDoc(xpRef, {amount: 99}));
+    await assertFails(
+      setDoc(entitlementRef, {unrestrictedAccess: true, source: "admin"}),
+    );
     await assertFails(deleteDoc(progressRef));
+  });
+
+  it("allows signed-in users to read courseFlags but denies writes", async () => {
+    await seedFirestore("appConfig/courseFlags", {
+      courseEnabled: true,
+      courseStartsEnabled: true,
+      guestCourseEnabled: false,
+      placementTestsEnabled: false,
+      catalogVersion: "2.0.0",
+      minimumClientVersion: "2.0.0",
+    });
+    const ownerDb = testEnv.authenticatedContext(OWNER_UID).firestore();
+    const anonDb = testEnv.authenticatedContext("anon-user", {
+      firebase: {sign_in_provider: "anonymous"},
+    }).firestore();
+    const unauthDb = testEnv.unauthenticatedContext().firestore();
+    await assertSucceeds(getDoc(doc(ownerDb, "appConfig/courseFlags")));
+    await assertSucceeds(getDoc(doc(anonDb, "appConfig/courseFlags")));
+    await assertFails(
+      setDoc(doc(ownerDb, "appConfig/courseFlags"), {courseEnabled: false}),
+    );
+    await assertFails(getDoc(doc(unauthDb, "appConfig/courseFlags")));
+  });
+
+  it("denies course receipts and rate limits even to the owner", async () => {
+    await seedFirestore(
+      `users/${OWNER_UID}/courseStepReceipts/key-1`,
+      {accepted: true},
+    );
+    await seedFirestore(
+      `users/${OWNER_UID}/courseStartRequests/req-1`,
+      {status: "ready"},
+    );
+    await seedFirestore(
+      `users/${OWNER_UID}/courseRateLimits/start`,
+      {count: 1},
+    );
+    const database = testEnv.authenticatedContext(OWNER_UID).firestore();
+    for (const path of [
+      `users/${OWNER_UID}/courseStepReceipts/key-1`,
+      `users/${OWNER_UID}/courseStartRequests/req-1`,
+      `users/${OWNER_UID}/courseRateLimits/start`,
+    ]) {
+      const document = doc(database, path);
+      await assertFails(getDoc(document));
+      await assertFails(setDoc(document, {client: true}));
+    }
   });
 
   it("denies receipts and private situation pools even to the owner", async () => {

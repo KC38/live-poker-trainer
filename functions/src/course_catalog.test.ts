@@ -5,7 +5,11 @@ import {describe, expect, it} from "vitest";
 import {
   activityIdsInOrder,
   courseBank,
+  findActivity,
+  findLesson,
+  lessonGrantsLiveTrainingEntitlement,
   lessonIdsInOrder,
+  lessonRequiresPlacementFlag,
 } from "./course_catalog";
 
 describe("course catalog bank", () => {
@@ -79,5 +83,14 @@ describe("course catalog bank", () => {
     // Public metadata required by the contract.
     expect(raw.includes('"lifeLossEligible"')).toBe(true);
     expect(raw.includes('"acceptedGrades"')).toBe(true);
+  });
+
+  it("exposes lesson lookup helpers for course session consumers", () => {
+    const located = findLesson("lesson-01-01-01-suits-ranks-and-seats");
+    expect(located?.section.id).toBe("sec-01-never-played");
+    expect(findActivity(located!.lesson, "act-01-01-01-explain-deck")?.stage)
+      .toBe("explain");
+    expect(lessonRequiresPlacementFlag(located!.lesson)).toBe(true);
+    expect(lessonGrantsLiveTrainingEntitlement(located!)).toBe(false);
   });
 });
