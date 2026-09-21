@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
@@ -50,6 +51,16 @@ class SelectIdentifyActivity extends StatelessWidget {
     }
     if (presentation == SelectIdentifyPresentation.showdownTap) {
       return _ShowdownTapActivity(
+        key: ValueKey<String>(
+          '${activity.id}-${controller.bindGeneration}',
+        ),
+        activity: activity,
+        controller: controller,
+        showGuidance: showGuidance,
+      );
+    }
+    if (presentation == SelectIdentifyPresentation.bestFiveCardTap) {
+      return _BestFiveCardTapActivity(
         key: ValueKey<String>(
           '${activity.id}-${controller.bindGeneration}',
         ),
@@ -131,6 +142,8 @@ class SelectIdentifyActivity extends StatelessWidget {
         'Read the board and your holes — tap the category you made.',
       SelectIdentifyPresentation.showdownTap =>
         'Look at both hands — tap who wins.',
+      SelectIdentifyPresentation.bestFiveCardTap =>
+        'Tap the five cards that play in your best hand.',
       SelectIdentifyPresentation.text =>
         hasScene
             ? 'Look at the table, then pick the answer that matches.'
@@ -177,6 +190,7 @@ class SelectIdentifyActivity extends StatelessWidget {
       case SelectIdentifyPresentation.tableRegionTap:
       case SelectIdentifyPresentation.handCategoryTap:
       case SelectIdentifyPresentation.showdownTap:
+      case SelectIdentifyPresentation.bestFiveCardTap:
       case SelectIdentifyPresentation.text:
         return LessonChoiceButton(
           label: choice.label,
@@ -447,13 +461,18 @@ class _ShowdownTapActivity extends StatelessWidget {
   String get _coachText {
     final authored = activity.primaryCoachLine?.text;
     if (authored != null) return authored;
-    return 'Flush vs straight — tap the winner.';
+    if (activity.id == 'act-01-02-02-scaffolded-kicker') {
+      return 'Same pair — tap who wins on kickers.';
+    }
+    if (activity.id == 'act-01-02-02-unguided-board') {
+      return 'Board is broadway clubs — tap the showdown result.';
+    }
+    return 'Look at both hands — tap who wins.';
   }
 
   @override
   Widget build(BuildContext context) {
-    final you = resolveHandExample(id: 'you-win', label: 'Your flush');
-    final them = resolveHandExample(id: 'they-win', label: 'Their straight');
+    final scene = resolveLessonTableScene(activity);
     return AnimatedBuilder(
       animation: controller,
       builder: (context, _) {
@@ -475,43 +494,40 @@ class _ShowdownTapActivity extends StatelessWidget {
                 ),
               ),
             ],
+            if (scene != null) ...[
+              const SizedBox(height: 14),
+              LessonTableContext(scene: scene),
+            ],
             const SizedBox(height: 14),
-            if (you != null)
-              HandExampleTile(
-                example: you,
-                selected: selected == 'you-win',
-                enabled: !locked,
-                compact: true,
-                onPressed:
-                    locked ? null : () => controller.selectChoice('you-win'),
+            for (var i = 0; i < activity.choices.length; i++) ...[
+              if (i > 0) const SizedBox(height: 10),
+              Builder(
+                builder: (context) {
+                  final choice = activity.choices[i];
+                  final example =
+                      resolveHandExample(id: choice.id, label: choice.label) ??
+                      LessonHandExample(
+                        id: choice.id,
+                        title: choice.label,
+                        codes: const [],
+                      );
+                  return HandExampleTile(
+                    example: example,
+                    selected: selected == choice.id,
+                    enabled: !locked,
+                    compact: true,
+                    onPressed:
+                        locked
+                            ? null
+                            : () => controller.selectChoice(choice.id),
+                  );
+                },
               ),
-            const SizedBox(height: 10),
-            if (them != null)
-              HandExampleTile(
-                example: them,
-                selected: selected == 'they-win',
-                enabled: !locked,
-                compact: true,
-                onPressed:
-                    locked ? null : () => controller.selectChoice('they-win'),
-              ),
-            const SizedBox(height: 10),
-            HandExampleTile(
-              example: const LessonHandExample(
-                id: 'split',
-                title: 'Chop the pot',
-                codes: [],
-              ),
-              selected: selected == 'split',
-              enabled: !locked,
-              compact: true,
-              onPressed:
-                  locked ? null : () => controller.selectChoice('split'),
-            ),
+            ],
             const SizedBox(height: 12),
             Text(
               selected == null
-                  ? 'Tap the hand that wins the pot.'
+                  ? 'Tap the result that wins the pot.'
                   : 'Ready — Check when it looks right.',
               textAlign: TextAlign.center,
               style: GoogleFonts.manrope(
@@ -519,6 +535,70 @@ class _ShowdownTapActivity extends StatelessWidget {
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
               ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _BestFiveCardTapActivity extends StatelessWidget {
+  const _BestFiveCardTapActivity({
+    super.key,
+    required this.activity,
+    required this.controller,
+    required this.showGuidance,
+  });
+
+  final CourseActivity activity;
+  final LessonActivityController controller;
+  final bool showGuidance;
+
+  String get _coachText {
+    final authored = activity.primaryCoachLine?.text;
+    if (authored != null) return authored;
+    return 'Only five cards count — tap the ones that play.';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final spot = resolveBestFiveSpot(activity);
+    if (spot == null) {
+      return Text(
+        'Missing best-five spot for ${activity.id}',
+        style: GoogleFonts.manrope(color: AppColors.cream),
+      );
+    }
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, _) {
+        final locked = controller.submitting || controller.lastResult != null;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            RexCoachLine(text: _coachText),
+            if (activity.prompt != null) ...[
+              const SizedBox(height: 14),
+              Text(
+                activity.prompt!,
+                style: GoogleFonts.manrope(
+                  color: AppColors.cream,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  height: 1.3,
+                ),
+              ),
+            ],
+            const SizedBox(height: 14),
+            BestFiveCardPicker(
+              key: ValueKey<String>(
+                '${activity.id}-${controller.bindGeneration}',
+              ),
+              activity: activity,
+              controller: controller,
+              spot: spot,
+              locked: locked,
             ),
           ],
         );

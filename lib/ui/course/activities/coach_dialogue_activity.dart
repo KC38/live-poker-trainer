@@ -7,6 +7,7 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
@@ -63,6 +64,9 @@ enum CoachDialogueVisualKind {
 
   /// Weakest-to-strongest made-hand ladder.
   handLadder,
+
+  /// Seven cards with five highlighted as the playing hand.
+  bestFive,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -87,6 +91,8 @@ class CoachDialogueVisual {
       'Tap Continue when you can spot the button and blinds.',
     CoachDialogueVisualKind.handLadder =>
       'Tap Continue when the ladder from high card to flush clicks.',
+    CoachDialogueVisualKind.bestFive =>
+      'Tap Continue when you see that only five of seven play.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -101,6 +107,8 @@ class CoachDialogueVisual {
       'Poker table showing dealer button and blinds',
     CoachDialogueVisualKind.handLadder =>
       'Hand rank ladder from high card to flush',
+    CoachDialogueVisualKind.bestFive =>
+      'Seven cards with five highlighted as the playing hand',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -122,6 +130,8 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
+    case 'act-01-02-02-explain-five':
+      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.bestFive);
   }
 
   final blob =
@@ -130,6 +140,12 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
               '${activity.objectives.join(' ')}'
           .toLowerCase();
 
+  if (blob.contains('only five') ||
+      blob.contains('strongest five') ||
+      blob.contains('five cards count') ||
+      blob.contains('best five')) {
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.bestFive);
+  }
   if (blob.contains('flush beats') ||
       blob.contains('hand rank') ||
       blob.contains('pair beats') ||
@@ -181,6 +197,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
         CoachDialogueVisualKind.suitsRanks => const _SuitsRanksDemo(),
         CoachDialogueVisualKind.dealerButton => const _DealerButtonDemo(),
         CoachDialogueVisualKind.handLadder => const HandRankLadderDemo(),
+        CoachDialogueVisualKind.bestFive => const BestFiveDemo(),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
     );

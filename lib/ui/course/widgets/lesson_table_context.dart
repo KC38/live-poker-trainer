@@ -219,6 +219,24 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-01-02-01-explain-ladder':
       return null;
+    case 'act-01-02-02-explain-five':
+      return null;
+    case 'act-01-02-02-scaffolded-kicker':
+      return const LessonTableScene(
+        heroCodes: ['Ah', 'Qd'],
+        boardCodes: ['Kh', 'Kd', '7c', '3s', '2d'],
+        villainSeatCount: 1,
+        highlight: LessonTableHighlight.none,
+        caption: 'You (AQ)',
+      );
+    case 'act-01-02-02-unguided-board':
+      return const LessonTableScene(
+        heroCodes: ['2h', '2d'],
+        boardCodes: ['Ac', 'Kc', 'Qc', 'Jc', 'Tc'],
+        villainSeatCount: 1,
+        highlight: LessonTableHighlight.board,
+        caption: 'You',
+      );
   }
 
   final hero = <String>[];

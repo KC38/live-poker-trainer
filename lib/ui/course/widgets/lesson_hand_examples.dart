@@ -94,6 +94,48 @@ LessonHandExample? resolveHandExample({
         title: 'Their straight',
         codes: ['9h', '8d', '7c', '6s', '5h'],
       );
+    case 'you-kicker':
+      return const LessonHandExample(
+        id: 'you-kicker',
+        title: 'You — kings, Q kicker',
+        codes: ['Kh', 'Kd', 'Ah', 'Qd', '7c'],
+      );
+    case 'they-kicker':
+      return const LessonHandExample(
+        id: 'they-kicker',
+        title: 'They — kings, J kicker',
+        codes: ['Kh', 'Kd', 'As', 'Jd', '7c'],
+      );
+    case 'chop-kicker':
+      return const LessonHandExample(
+        id: 'chop-kicker',
+        title: 'Chop the pot',
+        codes: [],
+      );
+    case 'chop-broadway':
+      return const LessonHandExample(
+        id: 'chop-broadway',
+        title: 'Chop — board plays',
+        codes: ['Ac', 'Kc', 'Qc', 'Jc', 'Tc'],
+      );
+    case 'button-wins':
+      return const LessonHandExample(
+        id: 'button-wins',
+        title: 'Button wins',
+        codes: [],
+      );
+    case 'high-card-wins':
+      return const LessonHandExample(
+        id: 'high-card-wins',
+        title: 'Higher hole card',
+        codes: ['Ah', '2d'],
+      );
+    case 'split':
+      return const LessonHandExample(
+        id: 'split',
+        title: 'Chop the pot',
+        codes: [],
+      );
   }
 
   final blob = '$id ${label ?? ''}'.toLowerCase();

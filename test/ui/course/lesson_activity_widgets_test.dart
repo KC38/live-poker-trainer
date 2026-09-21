@@ -11,6 +11,7 @@ import 'package:live_poker_trainer/ui/course/activities/order_sequence_activity.
 import 'package:live_poker_trainer/ui/course/activities/poker_action_sizing_activity.dart';
 import 'package:live_poker_trainer/ui/course/activities/select_identify_activity.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -1086,6 +1087,169 @@ void main() {
     await tester.tap(find.text('Your flush'));
     await tester.pump();
     expect(controller.draft.choiceId, 'you-win');
+    controller.dispose();
+  });
+
+  test('best five spots map five-card taps to choice ids', () {
+    final guided = CourseActivity(
+      id: 'act-01-02-02-guided-seven',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap five',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap your best five.',
+      choices: const [
+        CourseChoice(id: 'best-pair-k', label: 'Aces with king'),
+        CourseChoice(id: 'weak-kickers', label: 'Aces with nine'),
+        CourseChoice(id: 'ignore-ace', label: 'King high'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(guided),
+      SelectIdentifyPresentation.bestFiveCardTap,
+    );
+    final spot = resolveBestFiveSpot(guided)!;
+    expect(
+      mapBestFiveSelectionToChoiceId(
+        selected: {'Ah', 'As', 'Kd', '9h', '7c'},
+        spot: spot,
+        choices: guided.choices,
+      ),
+      'best-pair-k',
+    );
+    expect(
+      mapBestFiveSelectionToChoiceId(
+        selected: {'Kd', '9h', '7c', '3s', '2d'},
+        spot: spot,
+        choices: guided.choices,
+      ),
+      'ignore-ace',
+    );
+    expect(
+      mapBestFiveSelectionToChoiceId(
+        selected: {'Ah', 'As', 'Kd'},
+        spot: spot,
+        choices: guided.choices,
+      ),
+      isNull,
+    );
+
+    final checkpoint = CourseActivity(
+      id: 'act-01-02-02-checkpoint-build',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap five',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap your best five.',
+      choices: const [
+        CourseChoice(id: 'fh-eights', label: 'Eights full'),
+        CourseChoice(id: 'fh-deuces', label: 'Eights full deuces'),
+        CourseChoice(id: 'two-pair-only', label: 'Two pair'),
+      ],
+    );
+    final cpSpot = resolveBestFiveSpot(checkpoint)!;
+    expect(
+      mapBestFiveSelectionToChoiceId(
+        selected: {'8h', '8d', '8c', 'Kd', 'Ks'},
+        spot: cpSpot,
+        choices: checkpoint.choices,
+      ),
+      'fh-eights',
+    );
+
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-01-02-02-explain-five',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText: 'Five',
+          acceptedGrades: const [SoftGrade.recommended],
+          prompt: 'Only five cards count.',
+        ),
+      ).kind,
+      CoachDialogueVisualKind.bestFive,
+    );
+  });
+
+  testWidgets('best five card picker selects aces with king kicker', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-02-02-guided-seven',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap five',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap your best five.',
+      choices: const [
+        CourseChoice(id: 'best-pair-k', label: 'Aces with king'),
+        CourseChoice(id: 'weak-kickers', label: 'Aces with nine'),
+        CourseChoice(id: 'ignore-ace', label: 'King high'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byType(BestFiveCardPicker), findsOneWidget);
+
+    for (final code in ['Ah', 'As', 'Kd', '9h', '7c']) {
+      await tester.tap(find.byKey(ValueKey<String>('best-five-$code')));
+      await tester.pump();
+    }
+    expect(controller.draft.choiceId, 'best-pair-k');
+    controller.dispose();
+  });
+
+  testWidgets('kicker showdown taps you-win tile', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-01-02-02-scaffolded-kicker',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap who wins',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap who wins.',
+      choices: const [
+        CourseChoice(id: 'you-kicker', label: 'You win — queen kicker'),
+        CourseChoice(id: 'they-kicker', label: 'They win'),
+        CourseChoice(id: 'chop-kicker', label: 'Chop'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.showdownTap,
+    );
+    expect(find.text('You — kings, Q kicker'), findsOneWidget);
+    await tester.tap(find.text('You — kings, Q kicker'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'you-kicker');
     controller.dispose();
   });
 }
