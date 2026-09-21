@@ -7,6 +7,7 @@
 /// `next`/`dismiss` (dismisses mid-hand coach; otherwise next hand),
 /// `retry`/`resume`, `back`,
 /// `tap` / `taptext` / `tap:<label>` (UI text tap; optional `text=` param),
+/// `type` / `enter` / `type:<value>` (fill focused/first EditableText),
 /// `signout`.
 /// Optional `amount` query param becomes `raise:<amount>`.
 library;
@@ -59,6 +60,13 @@ final class AgentCommands {
               cmd.startsWith('openlesson:') ||
               cmd.startsWith('open_lesson:'))) {
         cmd = 'openlesson:$textRaw';
+      }
+      if (textRaw.isNotEmpty &&
+          (cmd == 'type' ||
+              cmd == 'enter' ||
+              cmd.startsWith('type:') ||
+              cmd.startsWith('enter:'))) {
+        cmd = 'type:$textRaw';
       }
       _controller.add(cmd);
       return developer.ServiceExtensionResponse.result(

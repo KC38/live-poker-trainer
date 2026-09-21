@@ -82,6 +82,15 @@ enum LessonTableRegion {
 
   /// Side pot distractor: short stack hand is dead.
   potHandDead,
+
+  /// Open-pot size: correct total (blinds + open).
+  potChipsNine,
+
+  /// Open-pot size distractor: forgot a blind.
+  potChipsSeven,
+
+  /// Open-pot size distractor: too large.
+  potChipsTwelve,
 }
 
 /// How the mini-table is arranged.
@@ -106,6 +115,9 @@ enum LessonTableLayout {
 
   /// Side-pot outcome tiles when short all-in.
   potSideOutcomes,
+
+  /// Open-to-6 pot size tiles (7 / 9 / 12 chips).
+  potOpenSizeOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -289,6 +301,11 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         layout: LessonTableLayout.potSideOutcomes,
         caption: 'You all-in short · others keep betting',
+      );
+    case 'act-01-05-01-unguided-pot':
+      return const LessonTableScene(
+        layout: LessonTableLayout.potOpenSizeOutcomes,
+        caption: '1/2 · BTN opens 6 · blinds still to act',
       );
     case 'act-01-02-01-scaffolded-spot':
       return const LessonTableScene(
@@ -487,6 +504,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.potHandDead => pick('hand-void'),
         _ => null,
       };
+    case 'act-01-05-01-unguided-pot':
+      return switch (region) {
+        LessonTableRegion.potChipsNine => pick('pot-9'),
+        LessonTableRegion.potChipsSeven => pick('pot-7'),
+        LessonTableRegion.potChipsTwelve => pick('pot-12'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -579,6 +603,7 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.potFoldWinOutcomes => _buildPotFoldWinOutcomes(),
       LessonTableLayout.potShowdownOutcomes => _buildPotShowdownOutcomes(),
       LessonTableLayout.potSideOutcomes => _buildPotSideOutcomes(),
+      LessonTableLayout.potOpenSizeOutcomes => _buildPotOpenSizeOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -1022,6 +1047,34 @@ class LessonTableContext extends StatelessWidget {
             color: AppColors.slate,
             size: 28,
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPotOpenSizeOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive: 'Interactive pot size — tap the chip total',
+      semanticsStatic: 'Open pot size outcomes',
+      caption: scene.caption ?? '1/2 · BTN opens 6',
+      phases: [
+        (
+          region: LessonTableRegion.potChipsSeven,
+          title: '7 chips',
+          detail: 'Miss a blind',
+          visual: const _PotChipDot(label: '7', gold: false),
+        ),
+        (
+          region: LessonTableRegion.potChipsNine,
+          title: '9 chips',
+          detail: '1+2+6',
+          visual: const _PotChipDot(label: '9', gold: true),
+        ),
+        (
+          region: LessonTableRegion.potChipsTwelve,
+          title: '12 chips',
+          detail: 'Too big',
+          visual: const _PotChipDot(label: '12', gold: false),
         ),
       ],
     );
@@ -1517,7 +1570,7 @@ class _PotChipDot extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = gold ? AppColors.gold : AppColors.slate;
     return Container(
-      width: 26,
+      width: label.length > 1 ? 32 : 26,
       height: 26,
       alignment: Alignment.center,
       decoration: BoxDecoration(

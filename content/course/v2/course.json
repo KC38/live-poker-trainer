@@ -2230,9 +2230,9 @@
                   "id": "act-01-05-01-unguided-pot",
                   "order": 4,
                   "stage": "unguided",
-                  "renderer": "numeric_pot_price",
+                  "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Enter the pot size after a three-big-blind open.",
+                  "accessibilityText": "Tap 9 chips — blinds plus the open: 1 + 2 + 6.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2242,20 +2242,38 @@
                   "objectives": [
                     "Sense main pot versus side pot without deep math"
                   ],
-                  "numericPrompt": {
-                    "question": "Blinds 1/2. Nobody limps. BTN opens to 6. Pot before blinds act?",
-                    "unit": "chips",
-                    "acceptedMin": 9,
-                    "acceptedMax": 9,
-                    "grading": {
-                      "grade": "recommended",
-                      "feedback": "1 + 2 + 6 = 9 chips in the middle."
+                  "prompt": "Blinds 1/2. BTN opens to 6. Tap the pot before blinds act.",
+                  "choices": [
+                    {
+                      "id": "pot-9",
+                      "label": "9 chips",
+                      "accessibilityText": "9 chips",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "1 + 2 + 6 = 9 chips in the middle."
+                      }
                     },
-                    "missGrading": {
-                      "grade": "clear_mistake",
-                      "feedback": "Add both blinds and the open: 1 + 2 + 6."
+                    {
+                      "id": "pot-7",
+                      "label": "7 chips",
+                      "accessibilityText": "7 chips",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Add both blinds and the open: 1 + 2 + 6.",
+                        "betterChoiceId": "pot-9"
+                      }
+                    },
+                    {
+                      "id": "pot-12",
+                      "label": "12 chips",
+                      "accessibilityText": "12 chips",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "That would be a bigger open. Here it is 1 + 2 + 6.",
+                        "betterChoiceId": "pot-9"
+                      }
                     }
-                  }
+                  ]
                 },
                 {
                   "id": "act-01-05-01-checkpoint-side",

@@ -945,15 +945,22 @@ export function buildSectionOne() {
                     "Hands still compare.", {betterChoiceId: "showdown"}),
                 ],
               }),
-              numericAct({
+              selectAct({
                 id: "act-01-05-01-unguided-pot", order: 4, stage: "unguided",
-                question: "Blinds 1/2. Nobody limps. BTN opens to 6. Pot before blinds act?",
-                a11y: "Enter the pot size after a three-big-blind open.",
+                prompt: "Blinds 1/2. BTN opens to 6. Tap the pot before blinds act.",
+                a11y: "Tap 9 chips — blinds plus the open: 1 + 2 + 6.",
                 objectives: ["Sense main pot versus side pot without deep math"],
-                unit: "chips", min: 9, max: 9,
-                okFeedback: "1 + 2 + 6 = 9 chips in the middle.",
-                missFeedback: "Add both blinds and the open: 1 + 2 + 6.",
                 lifeLoss: true,
+                choices: [
+                  choice("pot-9", "9 chips", "recommended",
+                    "1 + 2 + 6 = 9 chips in the middle."),
+                  choice("pot-7", "7 chips", "clear_mistake",
+                    "Add both blinds and the open: 1 + 2 + 6.",
+                    {betterChoiceId: "pot-9"}),
+                  choice("pot-12", "12 chips", "clear_mistake",
+                    "That would be a bigger open. Here it is 1 + 2 + 6.",
+                    {betterChoiceId: "pot-9"}),
+                ],
               }),
               selectAct({
                 id: "act-01-05-01-checkpoint-side", order: 5, stage: "checkpoint",

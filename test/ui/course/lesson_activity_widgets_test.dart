@@ -681,6 +681,37 @@ void main() {
       'side-exists',
     );
     expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-01-05-01-unguided-pot',
+        region: LessonTableRegion.potChipsNine,
+        choices: const [
+          CourseChoice(id: 'pot-9', label: '9 chips'),
+          CourseChoice(id: 'pot-7', label: '7 chips'),
+          CourseChoice(id: 'pot-12', label: '12 chips'),
+        ],
+      ),
+      'pot-9',
+    );
+    expect(
+      resolveLessonTableScene(
+        CourseActivity(
+          id: 'act-01-05-01-unguided-pot',
+          order: 4,
+          stage: ActivityStage.unguided,
+          renderer: ActivityRenderer.selectIdentify,
+          estimatedSeconds: 40,
+          accessibilityText: 'pot size',
+          acceptedGrades: const [SoftGrade.recommended],
+          choices: const [
+            CourseChoice(id: 'pot-9', label: '9 chips'),
+            CourseChoice(id: 'pot-7', label: '7 chips'),
+            CourseChoice(id: 'pot-12', label: '12 chips'),
+          ],
+        ),
+      )?.layout,
+      LessonTableLayout.potOpenSizeOutcomes,
+    );
+    expect(
       resolveLessonTableScene(
         CourseActivity(
           id: 'act-01-05-01-guided-fold-win',
