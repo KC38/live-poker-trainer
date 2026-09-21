@@ -462,7 +462,7 @@ class _DockButton extends StatelessWidget {
     final action = (choice.action ?? choice.label).toUpperCase();
     final short =
         unavailableLook
-            ? 'CHECK · off'
+            ? 'CHECK (off)'
             : switch (action.split(' ').first) {
               'FOLD' => 'FOLD',
               'CHECK' => 'CHECK',

@@ -947,8 +947,8 @@ void main() {
         ),
       ),
     );
-    expect(find.text('CHECK · off'), findsOneWidget);
-    await tester.tap(find.text('CHECK · off'));
+    expect(find.text('CHECK (off)'), findsOneWidget);
+    await tester.tap(find.text('CHECK (off)'));
     await tester.pump();
     expect(controller.draft.choiceId, 'check-illegal');
     controller.dispose();
