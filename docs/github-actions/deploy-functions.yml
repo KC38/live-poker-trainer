@@ -1,0 +1,68 @@
+# Copy this file to `.github/workflows/deploy-functions.yml` in the GitHub UI
+# (agent GitHub tokens cannot create workflow files: they lack `workflow` scope).
+#
+# Then add one repository Actions secret:
+#   FIREBASE_SERVICE_ACCOUNT  (preferred: GCP service-account JSON) or
+#   FIREBASE_TOKEN            (`npx -y firebase-tools@15.30.2 login:ci`)
+name: Deploy Cloud Functions
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "functions/**"
+      - "firebase.json"
+      - ".firebaserc"
+      - ".github/workflows/deploy-functions.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-functions-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: functions/package-lock.json
+
+      - name: Require Firebase credentials
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -n "${FIREBASE_SERVICE_ACCOUNT:-}" ]; then
+            creds="${RUNNER_TEMP}/firebase-sa.json"
+            printf '%s\n' "$FIREBASE_SERVICE_ACCOUNT" > "$creds"
+            chmod 600 "$creds"
+            echo "GOOGLE_APPLICATION_CREDENTIALS=$creds" >> "$GITHUB_ENV"
+          elif [ -n "${FIREBASE_TOKEN:-}" ]; then
+            echo "Using FIREBASE_TOKEN for Firebase CLI auth"
+          else
+            echo "::error::Add a GitHub Actions secret before deploys can run: FIREBASE_SERVICE_ACCOUNT (GCP/Firebase service-account JSON) or FIREBASE_TOKEN (output of firebase login:ci)."
+            exit 1
+          fi
+
+      - name: Install and build functions
+        working-directory: functions
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy functions
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          npx -y firebase-tools@15.30.2 deploy \
+            --only functions \
+            --project live-poker-trainer \
+            --non-interactive
