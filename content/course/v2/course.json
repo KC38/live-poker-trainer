@@ -2127,7 +2127,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Decide whether to show after winning uncontested.",
+                  "accessibilityText": "Tap take pot — uncontested pots do not require a show.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2137,12 +2137,12 @@
                   "objectives": [
                     "Win the pot when everyone else folds"
                   ],
-                  "prompt": "You bet. Everyone folds. Do you show?",
+                  "prompt": "You bet. Everyone folds. Tap how you take the pot.",
                   "choices": [
                     {
                       "id": "no-show",
-                      "label": "No — take the pot without showing",
-                      "accessibilityText": "No — take the pot without showing",
+                      "label": "Take pot",
+                      "accessibilityText": "Take pot",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Uncontested pots do not require a show."
@@ -2150,8 +2150,8 @@
                     },
                     {
                       "id": "must-show",
-                      "label": "Yes — always show winning bets",
-                      "accessibilityText": "Yes — always show winning bets",
+                      "label": "Must show",
+                      "accessibilityText": "Must show",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "You only show when called to showdown.",
@@ -2160,8 +2160,8 @@
                     },
                     {
                       "id": "dealer-shows",
-                      "label": "Dealer reveals your cards anyway",
-                      "accessibilityText": "Dealer reveals your cards anyway",
+                      "label": "Dealer shows",
+                      "accessibilityText": "Dealer shows",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Your cards stay private if uncalled.",
@@ -2183,7 +2183,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Identify that showdown compares hands.",
+                  "accessibilityText": "Tap showdown — best five-card hand wins.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2193,12 +2193,12 @@
                   "objectives": [
                     "Win at showdown with the best five"
                   ],
-                  "prompt": "River bets are called. Two players remain. Next step?",
+                  "prompt": "River bets are called. Tap what happens next.",
                   "choices": [
                     {
                       "id": "showdown",
-                      "label": "Showdown — best five-card hand wins",
-                      "accessibilityText": "Showdown — best five-card hand wins",
+                      "label": "Showdown",
+                      "accessibilityText": "Showdown",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Cards speak."
@@ -2206,8 +2206,8 @@
                     },
                     {
                       "id": "last-bet-wins",
-                      "label": "Last bettor wins without showing",
-                      "accessibilityText": "Last bettor wins without showing",
+                      "label": "Last bettor",
+                      "accessibilityText": "Last bettor",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "A call forces showdown.",
@@ -2216,8 +2216,8 @@
                     },
                     {
                       "id": "chop-default",
-                      "label": "Always chop when two remain",
-                      "accessibilityText": "Always chop when two remain",
+                      "label": "Always chop",
+                      "accessibilityText": "Always chop",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Hands still compare.",
@@ -2263,7 +2263,7 @@
                   "stage": "checkpoint",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Describe main pot versus side pot at a basic level.",
+                  "accessibilityText": "Tap side pot — unmatched chips form a side pot you cannot win.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2273,12 +2273,12 @@
                   "objectives": [
                     "Sense main pot versus side pot without deep math"
                   ],
-                  "prompt": "You are all-in for less; two big stacks keep betting. What is true?",
+                  "prompt": "You are all-in for less; two big stacks keep betting. Tap what is true.",
                   "choices": [
                     {
                       "id": "side-exists",
-                      "label": "A side pot forms for the chips you cannot match",
-                      "accessibilityText": "A side pot forms for the chips you cannot match",
+                      "label": "Side pot",
+                      "accessibilityText": "Side pot",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "You can only win the main pot you covered."
@@ -2286,8 +2286,8 @@
                     },
                     {
                       "id": "you-win-all",
-                      "label": "You can still win every chip they put in later",
-                      "accessibilityText": "You can still win every chip they put in later",
+                      "label": "Win all",
+                      "accessibilityText": "Win all",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Extra chips beyond your all-in go to a side pot.",
@@ -2296,8 +2296,8 @@
                     },
                     {
                       "id": "hand-void",
-                      "label": "Your hand is dead because you are short",
-                      "accessibilityText": "Your hand is dead because you are short",
+                      "label": "Hand dead",
+                      "accessibilityText": "Hand dead",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "You remain live for the main pot.",

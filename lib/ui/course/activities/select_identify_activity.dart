@@ -282,6 +282,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         'Betting is live. Tap when this street is done.',
       'act-01-04-01-checkpoint-postflop' =>
         'Postflop — tap who acts first.',
+      'act-01-05-01-guided-fold-win' =>
+        'Everyone folded. Tap how you take the pot.',
+      'act-01-05-01-scaffolded-showdown' =>
+        'River is called. Tap what happens next.',
+      'act-01-05-01-checkpoint-side' =>
+        'You are short all-in. Tap what is true.',
       _ => 'Tap the answer on the table.',
     };
   }
