@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "16b75478afdcb3cfadf80c223c7723291cd883beed8b10f381ecf99cce4433d0",
+  "contentChecksum": "f7d55e808c66d00afc0c641c90742af35bb9e258b3117ef9b957675e49a78bce",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -1486,7 +1486,7 @@
                   "stage": "guided",
                   "renderer": "order_sequence",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Put preflop, flop, and river in chronological order.",
+                  "accessibilityText": "Put preflop, flop, turn, and river in chronological order.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1496,7 +1496,7 @@
                   "objectives": [
                     "Name preflop, flop, turn, and river"
                   ],
-                  "prompt": "Order the streets from first to last.",
+                  "prompt": "Tap the streets from first to last.",
                   "sequenceItems": [
                     {
                       "id": "st-pre",
@@ -1505,6 +1505,10 @@
                     {
                       "id": "st-flop",
                       "label": "Flop"
+                    },
+                    {
+                      "id": "st-turn",
+                      "label": "Turn"
                     },
                     {
                       "id": "st-river",
@@ -1528,7 +1532,7 @@
                   "objectives": [
                     "Know preflop order starts left of the big blind"
                   ],
-                  "prompt": "Order the first three seats to act preflop after blinds post.",
+                  "prompt": "Tap seats in the order they act preflop after blinds.",
                   "sequenceItems": [
                     {
                       "id": "seat-utg",
@@ -1550,7 +1554,7 @@
                   "stage": "unguided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Identify that a street ends when action is complete.",
+                  "accessibilityText": "Tap bets matched — a street ends when action is complete.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1560,22 +1564,22 @@
                   "objectives": [
                     "Know a street ends when bets are matched"
                   ],
-                  "prompt": "When does the flop betting round end?",
+                  "prompt": "Flop betting is live. Tap when this street ends.",
                   "choices": [
                     {
                       "id": "matched",
-                      "label": "When every live player has matched the bet and no one re-raises",
-                      "accessibilityText": "When every live player has matched the bet and no one re-raises"
+                      "label": "Bets matched",
+                      "accessibilityText": "Bets matched"
                     },
                     {
                       "id": "three-cards",
-                      "label": "As soon as three cards appear",
-                      "accessibilityText": "As soon as three cards appear"
+                      "label": "Flop appears",
+                      "accessibilityText": "Flop appears"
                     },
                     {
                       "id": "someone-folds",
-                      "label": "When anyone folds",
-                      "accessibilityText": "When anyone folds"
+                      "label": "Someone folds",
+                      "accessibilityText": "Someone folds"
                     }
                   ]
                 },
@@ -1585,7 +1589,7 @@
                   "stage": "checkpoint",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Identify first-to-act postflop as left of the button.",
+                  "accessibilityText": "Tap the seat left of the button — first to act postflop.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1596,22 +1600,22 @@
                     "Know preflop order starts left of the big blind",
                     "Name preflop, flop, turn, and river"
                   ],
-                  "prompt": "Postflop multiway. Who acts first?",
+                  "prompt": "Postflop multiway. Tap who acts first.",
                   "choices": [
                     {
                       "id": "sb-first",
-                      "label": "First live seat left of the button",
-                      "accessibilityText": "First live seat left of the button"
+                      "label": "SB",
+                      "accessibilityText": "SB"
                     },
                     {
                       "id": "btn-first",
-                      "label": "The button always acts first",
-                      "accessibilityText": "The button always acts first"
+                      "label": "BTN",
+                      "accessibilityText": "BTN"
                     },
                     {
                       "id": "bb-first-always",
-                      "label": "Big blind always acts first every street",
-                      "accessibilityText": "Big blind always acts first every street"
+                      "label": "BB",
+                      "accessibilityText": "BB"
                     }
                   ]
                 }

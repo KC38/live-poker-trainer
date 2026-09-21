@@ -46,6 +46,15 @@ enum LessonTableRegion {
 
   /// Timing: only at showdown.
   showdown,
+
+  /// Street ends when bets are matched / action equalizes.
+  streetActionMatched,
+
+  /// Distractor: flop cards appear (deal starts the street).
+  streetFlopDealt,
+
+  /// Distractor: someone folds (others may still act).
+  streetSomeoneFolds,
 }
 
 /// How the mini-table is arranged.
@@ -58,6 +67,9 @@ enum LessonTableLayout {
 
   /// Hand-phase timing tiles for when blinds post.
   blindsTiming,
+
+  /// Timing tiles for when a betting street ends.
+  streetEndPhases,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -208,6 +220,18 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         seatCount: 6,
         buttonSeat: 5,
         numberSeats: true,
+      );
+    case 'act-01-04-01-unguided-end':
+      return const LessonTableScene(
+        layout: LessonTableLayout.streetEndPhases,
+      );
+    case 'act-01-04-01-checkpoint-postflop':
+      return const LessonTableScene(
+        layout: LessonTableLayout.blindsSeats,
+        highlight: LessonTableHighlight.button,
+        seatCount: 6,
+        buttonSeat: 3,
+        caption: 'Postflop · tap who acts first',
       );
     case 'act-01-02-01-scaffolded-spot':
       return const LessonTableScene(
@@ -371,6 +395,20 @@ String? mapTableRegionToChoiceId({
         1 => pick('sb-seat1'),
         _ => null,
       };
+    case 'act-01-04-01-unguided-end':
+      return switch (region) {
+        LessonTableRegion.streetActionMatched => pick('matched'),
+        LessonTableRegion.streetFlopDealt => pick('three-cards'),
+        LessonTableRegion.streetSomeoneFolds => pick('someone-folds'),
+        _ => null,
+      };
+    case 'act-01-04-01-checkpoint-postflop':
+      return switch (region) {
+        LessonTableRegion.smallBlind => pick('sb-first'),
+        LessonTableRegion.button => pick('btn-first'),
+        LessonTableRegion.bigBlind => pick('bb-first-always'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -379,7 +417,8 @@ String? mapTableRegionToChoiceId({
 bool isTableRegionTapActivity(CourseActivity activity) {
   if (activity.renderer != ActivityRenderer.selectIdentify) return false;
   return activity.id.startsWith('act-01-01-01-') ||
-      activity.id.startsWith('act-01-01-03-');
+      activity.id.startsWith('act-01-01-03-') ||
+      activity.id.startsWith('act-01-04-01-');
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -457,6 +496,7 @@ class LessonTableContext extends StatelessWidget {
     return switch (scene.layout) {
       LessonTableLayout.blindsSeats => _buildBlindsSeats(),
       LessonTableLayout.blindsTiming => _buildBlindsTiming(),
+      LessonTableLayout.streetEndPhases => _buildStreetEndPhases(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -550,9 +590,11 @@ class LessonTableContext extends StatelessWidget {
             ),
           const SizedBox(height: 12),
           Text(
-            scene.numberSeats
-                ? 'Button is seat $button · tap the small blind'
-                : 'Clockwise: button → small blind → big blind',
+            scene.caption ??
+                (scene.numberSeats
+                    ? 'Button is seat $button · tap the small blind'
+                    : 'Clockwise: button → small blind → big blind'),
+            textAlign: TextAlign.center,
             style: GoogleFonts.manrope(
               color: AppColors.slate,
               fontSize: 11,
@@ -662,6 +704,103 @@ class LessonTableContext extends StatelessWidget {
                 SizedBox(width: 2),
                 CardBack(size: MiniCardSize.tiny),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStreetEndPhases() {
+    Widget phase({
+      required LessonTableRegion region,
+      required String title,
+      required String detail,
+      required Widget visual,
+    }) {
+      final selected = selectedRegion == region;
+      return Expanded(
+        child: _TappableRegion(
+          label: title,
+          selected: selected,
+          enabled: enabled && _interactive,
+          onTap:
+              _interactive
+                  ? () => onRegionTap!(LessonTableTapTarget(region))
+                  : null,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
+            child: Column(
+              children: [
+                visual,
+                const SizedBox(height: 8),
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.cream,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  detail,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.slate,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return _feltShell(
+      semanticsLabel:
+          _interactive
+              ? 'Interactive street timing — when betting ends'
+              : 'Street end phases',
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          phase(
+            region: LessonTableRegion.streetActionMatched,
+            title: 'Bets matched',
+            detail: 'Action equal',
+            visual: const _BlindChipStack(amount: 3),
+          ),
+          const SizedBox(width: 8),
+          phase(
+            region: LessonTableRegion.streetFlopDealt,
+            title: 'Flop appears',
+            detail: 'Deal only',
+            visual: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                for (final code in const ['Qs', 'Jh', '2c']) ...[
+                  MiniCard(
+                    card: CardModel.fromCode(code),
+                    size: MiniCardSize.tiny,
+                  ),
+                  const SizedBox(width: 2),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          phase(
+            region: LessonTableRegion.streetSomeoneFolds,
+            title: 'Someone folds',
+            detail: 'Others act',
+            visual: const Icon(
+              Icons.person_off_outlined,
+              color: AppColors.slate,
+              size: 28,
             ),
           ),
         ],
