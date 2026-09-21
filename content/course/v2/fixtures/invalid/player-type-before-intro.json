@@ -1,0 +1,1452 @@
+{
+  "catalogVersion": "2.0.0",
+  "minClientVersion": "2.0.0",
+  "scope": "live_cash_nlh",
+  "coachId": "rex",
+  "playerTypes": [
+    {
+      "id": "calling_station",
+      "label": "Calling Station",
+      "introducedByLessonId": "lesson-4-1-01-calling-station",
+      "summary": "High participation and low folding."
+    },
+    {
+      "id": "nit",
+      "label": "Nit",
+      "introducedByLessonId": "lesson-4-1-02-nit",
+      "summary": "Narrow entry with strong aggression."
+    },
+    {
+      "id": "maniac",
+      "label": "Maniac",
+      "introducedByLessonId": "lesson-4-1-03-maniac",
+      "summary": "Extreme entry and aggression."
+    },
+    {
+      "id": "tag",
+      "label": "TAG",
+      "introducedByLessonId": "lesson-6-1-01-tag",
+      "summary": "Selective entry with disciplined aggression."
+    },
+    {
+      "id": "lag",
+      "label": "LAG",
+      "introducedByLessonId": "lesson-6-1-02-lag",
+      "summary": "Wide entry with sustained pressure."
+    }
+  ],
+  "sections": [
+    {
+      "id": "section-1-never-played",
+      "order": 1,
+      "title": "Never Played",
+      "summary": "Sit down and play a complete live cash hand without freezing.",
+      "experienceBand": "never_played",
+      "units": [
+        {
+          "id": "unit-1-1-cards-and-table",
+          "order": 1,
+          "title": "Cards and the table",
+          "summary": "Suits, ranks, hole cards, seats, and blinds.",
+          "lessons": [
+            {
+              "id": "lesson-1-1-01-suits-and-ranks",
+              "order": 1,
+              "title": "Suits and ranks",
+              "summary": "Identify the four suits and thirteen ranks.",
+              "objectives": [
+                "Name the four suits",
+                "Order ranks from deuce to ace"
+              ],
+              "prerequisites": [],
+              "remediationLessonIds": [
+                "lesson-1-1-01-suits-and-ranks"
+              ],
+              "estimatedMinutes": 4,
+              "difficultyBand": 1,
+              "playerTypeRefs": [
+                "nit"
+              ],
+              "activities": [
+                {
+                  "id": "act-1-1-01-explain",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Four suits. Thirteen ranks. That is the whole deck.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-1-1-01-explain-line",
+                      "kind": "line",
+                      "text": "Four suits. Thirteen ranks. That is the whole deck.",
+                      "accessibilityText": "Four suits. Thirteen ranks. That is the whole deck."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-1-1-01-guided",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Which symbol is hearts?",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "prompt": "Which symbol is hearts?",
+                  "choices": [
+                    {
+                      "id": "hearts",
+                      "label": "Hearts",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Right \u2014 hearts.",
+                        "lifeLossEligible": false
+                      }
+                    },
+                    {
+                      "id": "spades",
+                      "label": "Spades",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "That is spades.",
+                        "lifeLossEligible": false
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "act-1-1-01-order",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "order_sequence",
+                  "estimatedSeconds": 50,
+                  "accessibilityText": "Order these streets from first to last.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "prompt": "Put the streets in order.",
+                  "sequenceItems": [
+                    {
+                      "id": "preflop",
+                      "label": "Preflop"
+                    },
+                    {
+                      "id": "flop",
+                      "label": "Flop"
+                    },
+                    {
+                      "id": "turn",
+                      "label": "Turn"
+                    },
+                    {
+                      "id": "river",
+                      "label": "River"
+                    }
+                  ],
+                  "correctSequence": [
+                    "preflop",
+                    "flop",
+                    "turn",
+                    "river"
+                  ],
+                  "sequenceGrading": {
+                    "correct": {
+                      "grade": "recommended",
+                      "feedback": "Street order locked in.",
+                      "lifeLossEligible": false
+                    },
+                    "incorrect": {
+                      "grade": "questionable",
+                      "feedback": "Replay the street order.",
+                      "lifeLossEligible": false
+                    }
+                  }
+                },
+                {
+                  "id": "act-1-1-01-compare",
+                  "order": 4,
+                  "stage": "unguided",
+                  "renderer": "compare_rank",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Pick the stronger made hand.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "prompt": "Which hand wins at showdown?",
+                  "choices": [
+                    {
+                      "id": "pair-aces",
+                      "label": "Pair of aces",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Aces beat kings.",
+                        "lifeLossEligible": false
+                      }
+                    },
+                    {
+                      "id": "pair-kings",
+                      "label": "Pair of kings",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Kings lose to aces.",
+                        "lifeLossEligible": true
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "act-1-1-01-numeric",
+                  "order": 5,
+                  "stage": "checkpoint",
+                  "renderer": "numeric_pot_price",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Enter the pot size in chips.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "numericPrompt": {
+                    "question": "Blinds are 1/2. Both blinds posted. Pot is?",
+                    "unit": "chips",
+                    "acceptedMin": 3,
+                    "acceptedMax": 3,
+                    "grading": {
+                      "grade": "recommended",
+                      "feedback": "Pot is three chips.",
+                      "lifeLossEligible": false
+                    },
+                    "missGrading": {
+                      "grade": "clear_mistake",
+                      "feedback": "Add the small and big blind.",
+                      "lifeLossEligible": true
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-1-1-02-first-actions",
+              "order": 2,
+              "title": "The five actions",
+              "summary": "Fold, check, call, bet, and raise at a live table.",
+              "objectives": [
+                "Name the five core actions",
+                "Choose a legal action in a toy spot"
+              ],
+              "prerequisites": [
+                "lesson-1-1-01-suits-and-ranks"
+              ],
+              "remediationLessonIds": [
+                "lesson-1-1-01-suits-and-ranks"
+              ],
+              "estimatedMinutes": 5,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "activities": [
+                {
+                  "id": "act-1-1-02-explain",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Fold, check, call, bet, raise. All-in is just a sized bet or raise.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-1-1-02-explain-line",
+                      "kind": "line",
+                      "text": "Fold, check, call, bet, raise. All-in is just a sized bet or raise.",
+                      "accessibilityText": "Fold, check, call, bet, raise. All-in is just a sized bet or raise."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-1-1-02-action",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Choose fold when you are crushed.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "prompt": "UTG opens large. You have seven-deuce offsuit on the button. Act.",
+                  "choices": [
+                    {
+                      "id": "fold",
+                      "label": "Fold",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Walk away clean.",
+                        "lifeLossEligible": false
+                      }
+                    },
+                    {
+                      "id": "call",
+                      "label": "Call",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Calling trash here is a leak.",
+                        "lifeLossEligible": false
+                      }
+                    },
+                    {
+                      "id": "raise-3bb",
+                      "label": "Raise to 3bb",
+                      "grading": {
+                        "grade": "questionable",
+                        "feedback": "Too wide for a first-orbit button raise.",
+                        "lifeLossEligible": false
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "act-1-1-02-hand",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "authored_multi_step_hand",
+                  "estimatedSeconds": 90,
+                  "accessibilityText": "Play a short guided hand.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "handSteps": [
+                    {
+                      "id": "step-preflop",
+                      "street": "preflop",
+                      "prompt": "Everyone folds to you in the big blind. Action?",
+                      "accessibilityText": "Big blind option with no raise.",
+                      "choices": [
+                        {
+                          "id": "check",
+                          "label": "Check",
+                          "grading": {
+                            "grade": "recommended",
+                            "feedback": "Take a free flop.",
+                            "lifeLossEligible": false
+                          }
+                        },
+                        {
+                          "id": "fold",
+                          "label": "Fold",
+                          "grading": {
+                            "grade": "clear_mistake",
+                            "feedback": "You already posted; do not fold unraised.",
+                            "lifeLossEligible": false
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": "step-flop",
+                      "street": "flop",
+                      "prompt": "Flop misses everyone. Opponent checks. Action?",
+                      "accessibilityText": "Checked to you on a dry flop.",
+                      "choices": [
+                        {
+                          "id": "bet-half",
+                          "label": "Bet half pot",
+                          "grading": {
+                            "grade": "strong",
+                            "feedback": "A small stab is fine.",
+                            "lifeLossEligible": false
+                          }
+                        },
+                        {
+                          "id": "check",
+                          "label": "Check",
+                          "grading": {
+                            "grade": "reasonable",
+                            "feedback": "Checking back is fine too.",
+                            "lifeLossEligible": false
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "act-1-1-02-lab",
+                  "order": 4,
+                  "stage": "unguided",
+                  "renderer": "full_table_hand_lab",
+                  "estimatedSeconds": 120,
+                  "accessibilityText": "Play a full-table authored hand lab.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "handLabSpec": {
+                    "seatCount": 6,
+                    "heroSeat": 3,
+                    "buttonSeat": 1,
+                    "smallBlind": 1,
+                    "bigBlind": 2,
+                    "stacksBb": [
+                      100,
+                      100,
+                      100,
+                      100,
+                      100,
+                      100
+                    ],
+                    "heroCards": [
+                      "As",
+                      "Kd"
+                    ],
+                    "villainCards": {
+                      "0": [
+                        "7c",
+                        "2d"
+                      ],
+                      "1": [
+                        "9h",
+                        "5s"
+                      ],
+                      "2": [
+                        "Jc",
+                        "8d"
+                      ],
+                      "4": [
+                        "3c",
+                        "3h"
+                      ],
+                      "5": [
+                        "Qd",
+                        "Td"
+                      ]
+                    },
+                    "runout": [
+                      "Ah",
+                      "7s",
+                      "2c",
+                      "9d",
+                      "4h"
+                    ],
+                    "lineup": [
+                      {
+                        "seat": 0,
+                        "name": "Seat 1",
+                        "archetype": "TAG"
+                      },
+                      {
+                        "seat": 1,
+                        "name": "Seat 2",
+                        "archetype": "NIT"
+                      },
+                      {
+                        "seat": 2,
+                        "name": "Seat 3",
+                        "archetype": "CALLING_STATION"
+                      },
+                      {
+                        "seat": 3,
+                        "name": "You",
+                        "archetype": "HERO"
+                      },
+                      {
+                        "seat": 4,
+                        "name": "Seat 5",
+                        "archetype": "LAG"
+                      },
+                      {
+                        "seat": 5,
+                        "name": "Seat 6",
+                        "archetype": "MANIAC"
+                      }
+                    ],
+                    "scriptedActions": [
+                      {
+                        "seat": 2,
+                        "street": "preflop",
+                        "action": "RAISE",
+                        "amountBb": 6
+                      },
+                      {
+                        "seat": 4,
+                        "street": "preflop",
+                        "action": "FOLD"
+                      },
+                      {
+                        "seat": 5,
+                        "street": "preflop",
+                        "action": "FOLD"
+                      },
+                      {
+                        "seat": 0,
+                        "street": "preflop",
+                        "action": "FOLD"
+                      },
+                      {
+                        "seat": 1,
+                        "street": "preflop",
+                        "action": "FOLD"
+                      }
+                    ],
+                    "decisionPoints": [
+                      {
+                        "id": "lab-hero-preflop",
+                        "street": "preflop",
+                        "prompt": "Facing a 3x open. Ace-king on the button. Act.",
+                        "accessibilityText": "Hero holds ace-king facing a raise.",
+                        "choices": [
+                          {
+                            "id": "three-bet",
+                            "label": "3-bet to 18bb",
+                            "action": "RAISE",
+                            "amountBb": 18,
+                            "grading": {
+                              "grade": "recommended",
+                              "feedback": "Three-bet value.",
+                              "lifeLossEligible": false
+                            }
+                          },
+                          {
+                            "id": "call",
+                            "label": "Call",
+                            "action": "CALL",
+                            "grading": {
+                              "grade": "reasonable",
+                              "feedback": "Flat is playable.",
+                              "lifeLossEligible": false
+                            }
+                          },
+                          {
+                            "id": "fold",
+                            "label": "Fold",
+                            "action": "FOLD",
+                            "grading": {
+                              "grade": "clear_mistake",
+                              "feedback": "Do not fold ace-king here.",
+                              "lifeLossEligible": true
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "id": "hand-lab-1-1-02-orbit"
+                  }
+                },
+                {
+                  "id": "act-1-1-02-jump",
+                  "order": 5,
+                  "stage": "jump_test",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "You are first to act preflop with seven-deuce offsuit. Best default?",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "prompt": "You are first to act preflop with seven-deuce offsuit. Best default?",
+                  "choices": [
+                    {
+                      "id": "fold",
+                      "label": "Fold",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Default is fold.",
+                        "lifeLossEligible": false
+                      }
+                    },
+                    {
+                      "id": "raise",
+                      "label": "Open raise",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Do not open trash first in.",
+                        "lifeLossEligible": true
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "section-2-home-games",
+      "order": 2,
+      "title": "Rules Known / Home Games",
+      "summary": "Play a disciplined baseline instead of guessing.",
+      "experienceBand": "home_games",
+      "units": [
+        {
+          "id": "unit-2-1-position",
+          "order": 1,
+          "title": "Position is power",
+          "summary": "EP through blinds and why acting last matters.",
+          "lessons": [
+            {
+              "id": "lesson-2-1-01-positions",
+              "order": 1,
+              "title": "Name the seats",
+              "summary": "Map EP, HJ, CO, BTN, SB, and BB.",
+              "objectives": [
+                "Label six core positions"
+              ],
+              "prerequisites": [
+                "lesson-1-1-02-first-actions"
+              ],
+              "remediationLessonIds": [
+                "lesson-1-1-02-first-actions"
+              ],
+              "estimatedMinutes": 4,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "activities": [
+                {
+                  "id": "act-2-1-01-explain",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Later seats see more action. That is position.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-2-1-01-explain-line",
+                      "kind": "line",
+                      "text": "Later seats see more action. That is position.",
+                      "accessibilityText": "Later seats see more action. That is position."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-2-1-01-guided",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Which seat acts last postflop?",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "prompt": "Which seat acts last postflop?",
+                  "choices": [
+                    {
+                      "id": "btn",
+                      "label": "Button",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Button acts last.",
+                        "lifeLossEligible": false
+                      }
+                    },
+                    {
+                      "id": "sb",
+                      "label": "Small blind",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Blinds act early.",
+                        "lifeLossEligible": false
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "section-3-first-casino",
+      "order": 3,
+      "title": "First Casino Sessions",
+      "summary": "Reach the river with a plan and avoid common beginner leaks.",
+      "experienceBand": "first_casino",
+      "units": [
+        {
+          "id": "unit-3-1-flop-plan",
+          "order": 1,
+          "title": "Flop decisions",
+          "summary": "Classify made hands, draws, and air.",
+          "lessons": [
+            {
+              "id": "lesson-3-1-01-hand-classes",
+              "order": 1,
+              "title": "Flop hand classes",
+              "summary": "Sort holdings into made, draw, showdown value, or air.",
+              "objectives": [
+                "Classify a flop holding"
+              ],
+              "prerequisites": [
+                "lesson-2-1-01-positions"
+              ],
+              "remediationLessonIds": [
+                "lesson-2-1-01-positions"
+              ],
+              "estimatedMinutes": 5,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "activities": [
+                {
+                  "id": "act-3-1-01-explain",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Made hand, draw, showdown value, or air. Pick one bucket.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-3-1-01-explain-line",
+                      "kind": "line",
+                      "text": "Made hand, draw, showdown value, or air. Pick one bucket.",
+                      "accessibilityText": "Made hand, draw, showdown value, or air. Pick one bucket."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-3-1-01-unguided",
+                  "order": 2,
+                  "stage": "unguided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Top pair good kicker on a dry flop is mainly:",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "prompt": "Top pair good kicker on a dry flop is mainly:",
+                  "choices": [
+                    {
+                      "id": "made",
+                      "label": "Made hand",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Top pair is made.",
+                        "lifeLossEligible": false
+                      }
+                    },
+                    {
+                      "id": "air",
+                      "label": "Air",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "That is not air.",
+                        "lifeLossEligible": true
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "section-4-regular-live",
+      "order": 4,
+      "title": "Regular Live Cash Player",
+      "summary": "Build ranges, recognize opponents, and make deliberate exploits.",
+      "experienceBand": "regular_live",
+      "units": [
+        {
+          "id": "unit-4-1-player-types",
+          "order": 1,
+          "title": "Player types begin",
+          "summary": "Introduce Calling Station, Nit, and Maniac from evidence.",
+          "lessons": [
+            {
+              "id": "lesson-4-1-01-calling-station",
+              "order": 1,
+              "title": "Player type: Calling Station",
+              "summary": "High participation, low folding \u2014 value thicker, bluff less.",
+              "objectives": [
+                "Identify calling-station evidence"
+              ],
+              "prerequisites": [
+                "lesson-3-1-01-hand-classes"
+              ],
+              "remediationLessonIds": [
+                "lesson-3-1-01-hand-classes"
+              ],
+              "estimatedMinutes": 6,
+              "difficultyBand": 3,
+              "playerTypeRefs": [
+                "calling_station"
+              ],
+              "introducesPlayerTypes": [
+                "calling_station"
+              ],
+              "activities": [
+                {
+                  "id": "act-4-1-01-explain",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "They call too much. Value up. Bluff down.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-4-1-01-explain-line",
+                      "kind": "line",
+                      "text": "They call too much. Value up. Bluff down.",
+                      "accessibilityText": "They call too much. Value up. Bluff down."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-4-1-01-read",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "player_read_classify",
+                  "estimatedSeconds": 50,
+                  "accessibilityText": "Classify the observed player type.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "playerTypeRefs": [
+                    "calling_station"
+                  ],
+                  "prompt": "Seat calls three streets with weak pairs. Working label?",
+                  "choices": [
+                    {
+                      "id": "calling_station",
+                      "label": "Calling Station",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "High call frequency fits.",
+                        "lifeLossEligible": false
+                      }
+                    },
+                    {
+                      "id": "nit",
+                      "label": "Nit",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Nits fold too much.",
+                        "lifeLossEligible": false
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "lesson-4-1-02-nit",
+              "order": 2,
+              "title": "Player type: Nit",
+              "summary": "Narrow entry and strong aggression \u2014 steal more, respect heat.",
+              "objectives": [
+                "Identify nit evidence"
+              ],
+              "prerequisites": [
+                "lesson-4-1-01-calling-station"
+              ],
+              "remediationLessonIds": [
+                "lesson-4-1-01-calling-station"
+              ],
+              "estimatedMinutes": 5,
+              "difficultyBand": 3,
+              "playerTypeRefs": [
+                "nit"
+              ],
+              "introducesPlayerTypes": [
+                "nit"
+              ],
+              "activities": [
+                {
+                  "id": "act-4-1-02-explain",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Tight entry. Heavy when they bet.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-4-1-02-explain-line",
+                      "kind": "line",
+                      "text": "Tight entry. Heavy when they bet.",
+                      "accessibilityText": "Tight entry. Heavy when they bet."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-4-1-02-read",
+                  "order": 2,
+                  "stage": "scaffolded",
+                  "renderer": "player_read_classify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Classify a tight aggressive seat.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "playerTypeRefs": [
+                    "nit"
+                  ],
+                  "prompt": "Seat folds most hands, then jams over a steal. Label?",
+                  "choices": [
+                    {
+                      "id": "nit",
+                      "label": "Nit",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Narrow and strong.",
+                        "lifeLossEligible": false
+                      }
+                    },
+                    {
+                      "id": "maniac",
+                      "label": "Maniac",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Maniacs enter wide.",
+                        "lifeLossEligible": false
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "lesson-4-1-03-maniac",
+              "order": 3,
+              "title": "Player type: Maniac",
+              "summary": "Extreme entry and aggression \u2014 widen value and bluff-catching.",
+              "objectives": [
+                "Identify maniac evidence"
+              ],
+              "prerequisites": [
+                "lesson-4-1-02-nit"
+              ],
+              "remediationLessonIds": [
+                "lesson-4-1-02-nit"
+              ],
+              "estimatedMinutes": 5,
+              "difficultyBand": 3,
+              "playerTypeRefs": [
+                "maniac"
+              ],
+              "introducesPlayerTypes": [
+                "maniac"
+              ],
+              "activities": [
+                {
+                  "id": "act-4-1-03-explain",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "They pressure everyone. Widen calls. Avoid ego wars.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-4-1-03-explain-line",
+                      "kind": "line",
+                      "text": "They pressure everyone. Widen calls. Avoid ego wars.",
+                      "accessibilityText": "They pressure everyone. Widen calls. Avoid ego wars."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-4-1-03-read",
+                  "order": 2,
+                  "stage": "unguided",
+                  "renderer": "player_read_classify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Classify a hyper-aggressive seat.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "playerTypeRefs": [
+                    "maniac"
+                  ],
+                  "prompt": "Seat opens every fold-to and barrels thrice. Label?",
+                  "choices": [
+                    {
+                      "id": "maniac",
+                      "label": "Maniac",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Extreme pressure.",
+                        "lifeLossEligible": false
+                      }
+                    },
+                    {
+                      "id": "calling_station",
+                      "label": "Calling Station",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Stations call; they do not barrel thrice.",
+                        "lifeLossEligible": true
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "section-5-winning-12",
+      "order": 5,
+      "title": "Winning 1/2",
+      "summary": "Win larger value pots and avoid expensive marginal mistakes.",
+      "experienceBand": "winning_12",
+      "units": [
+        {
+          "id": "unit-5-1-thin-value",
+          "order": 1,
+          "title": "Thin value",
+          "summary": "Size for value against calling stations without overbluffing.",
+          "lessons": [
+            {
+              "id": "lesson-5-1-01-thin-value",
+              "order": 1,
+              "title": "Thin value vs calling stations",
+              "summary": "Bet thicker for value when they cannot fold.",
+              "objectives": [
+                "Choose a value size versus a calling station"
+              ],
+              "prerequisites": [
+                "lesson-4-1-03-maniac"
+              ],
+              "remediationLessonIds": [
+                "lesson-4-1-01-calling-station"
+              ],
+              "estimatedMinutes": 6,
+              "difficultyBand": 4,
+              "playerTypeRefs": [
+                "calling_station"
+              ],
+              "activities": [
+                {
+                  "id": "act-5-1-01-explain",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "They call light. Size up for value. Skip fancy bluffs.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-5-1-01-explain-line",
+                      "kind": "line",
+                      "text": "They call light. Size up for value. Skip fancy bluffs.",
+                      "accessibilityText": "They call light. Size up for value. Skip fancy bluffs."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-5-1-01-unguided",
+                  "order": 2,
+                  "stage": "unguided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "River vs a calling station with top pair. Best default?",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "prompt": "River vs a calling station with top pair. Best default?",
+                  "choices": [
+                    {
+                      "id": "value-bet",
+                      "label": "Value bet larger",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Extract when they call too wide.",
+                        "lifeLossEligible": false
+                      }
+                    },
+                    {
+                      "id": "tiny-bluff",
+                      "label": "Tiny bluff",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "They do not fold.",
+                        "lifeLossEligible": true
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "section-6-advanced-live",
+      "order": 6,
+      "title": "Advanced Live Cash",
+      "summary": "Think in ranges, incentives, and future streets.",
+      "experienceBand": "advanced_live",
+      "units": [
+        {
+          "id": "unit-6-1-tag-lag",
+          "order": 1,
+          "title": "TAG and LAG",
+          "summary": "Introduce selective aggression and wide pressure labels.",
+          "lessons": [
+            {
+              "id": "lesson-6-1-01-tag",
+              "order": 1,
+              "title": "Player type: TAG",
+              "summary": "Selective entry with disciplined aggression.",
+              "objectives": [
+                "Identify TAG evidence"
+              ],
+              "prerequisites": [
+                "lesson-5-1-01-thin-value"
+              ],
+              "remediationLessonIds": [
+                "lesson-4-1-02-nit"
+              ],
+              "estimatedMinutes": 5,
+              "difficultyBand": 4,
+              "playerTypeRefs": [
+                "tag"
+              ],
+              "introducesPlayerTypes": [
+                "tag"
+              ],
+              "activities": [
+                {
+                  "id": "act-6-1-01-explain",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Tight entry. When they bet, believe the story.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-6-1-01-explain-line",
+                      "kind": "line",
+                      "text": "Tight entry. When they bet, believe the story.",
+                      "accessibilityText": "Tight entry. When they bet, believe the story."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-6-1-01-read",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "player_read_classify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Classify a TAG.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "playerTypeRefs": [
+                    "tag"
+                  ],
+                  "prompt": "Solid open range, continuation bets with a plan. Label?",
+                  "choices": [
+                    {
+                      "id": "tag",
+                      "label": "TAG",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Selective and aggressive.",
+                        "lifeLossEligible": false
+                      }
+                    },
+                    {
+                      "id": "lag",
+                      "label": "LAG",
+                      "grading": {
+                        "grade": "questionable",
+                        "feedback": "LAG enters wider.",
+                        "lifeLossEligible": false
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "lesson-6-1-02-lag",
+              "order": 2,
+              "title": "Player type: LAG",
+              "summary": "Wide entry with sustained pressure.",
+              "objectives": [
+                "Identify LAG evidence"
+              ],
+              "prerequisites": [
+                "lesson-6-1-01-tag"
+              ],
+              "remediationLessonIds": [
+                "lesson-6-1-01-tag"
+              ],
+              "estimatedMinutes": 5,
+              "difficultyBand": 4,
+              "playerTypeRefs": [
+                "lag"
+              ],
+              "introducesPlayerTypes": [
+                "lag"
+              ],
+              "activities": [
+                {
+                  "id": "act-6-1-02-explain",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Wide pressure. Defend wider. Pick spots to punish.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-6-1-02-explain-line",
+                      "kind": "line",
+                      "text": "Wide pressure. Defend wider. Pick spots to punish.",
+                      "accessibilityText": "Wide pressure. Defend wider. Pick spots to punish."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-6-1-02-read",
+                  "order": 2,
+                  "stage": "unguided",
+                  "renderer": "player_read_classify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Classify a LAG.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "playerTypeRefs": [
+                    "lag"
+                  ],
+                  "prompt": "Opens wide and keeps barreling with equity. Label?",
+                  "choices": [
+                    {
+                      "id": "lag",
+                      "label": "LAG",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Wide sustained pressure.",
+                        "lifeLossEligible": false
+                      }
+                    },
+                    {
+                      "id": "nit",
+                      "label": "Nit",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Nits do not open wide.",
+                        "lifeLossEligible": true
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "section-7-integration",
+      "order": 7,
+      "title": "Full-Hand Integration",
+      "summary": "Build, execute, and review a complete exploitative plan.",
+      "experienceBand": "integrated_live",
+      "units": [
+        {
+          "id": "unit-7-1-capstone",
+          "order": 1,
+          "title": "Capstone planning",
+          "summary": "Combine types, boards, and lines into one plan.",
+          "lessons": [
+            {
+              "id": "lesson-7-1-01-capstone-plan",
+              "order": 1,
+              "title": "Same cards, five types",
+              "summary": "Adjust one holding across all five player types.",
+              "objectives": [
+                "Adjust a river decision across five player types"
+              ],
+              "prerequisites": [
+                "lesson-6-1-02-lag"
+              ],
+              "remediationLessonIds": [
+                "lesson-4-1-01-calling-station",
+                "lesson-6-1-01-tag"
+              ],
+              "estimatedMinutes": 8,
+              "difficultyBand": 5,
+              "playerTypeRefs": [
+                "calling_station",
+                "nit",
+                "maniac",
+                "tag",
+                "lag"
+              ],
+              "activities": [
+                {
+                  "id": "act-7-1-01-explain",
+                  "order": 1,
+                  "stage": "explain",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Same cards. Five types. Change the plan, not your ego.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": false,
+                  "coachMedia": [
+                    {
+                      "id": "act-7-1-01-explain-line",
+                      "kind": "line",
+                      "text": "Same cards. Five types. Change the plan, not your ego.",
+                      "accessibilityText": "Same cards. Five types. Change the plan, not your ego."
+                    }
+                  ]
+                },
+                {
+                  "id": "act-7-1-01-checkpoint",
+                  "order": 2,
+                  "stage": "checkpoint",
+                  "renderer": "player_read_classify",
+                  "estimatedSeconds": 60,
+                  "accessibilityText": "Pick the best river plan versus a nit.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "lifeLossEligible": true,
+                  "playerTypeRefs": [
+                    "nit"
+                  ],
+                  "prompt": "River bluff versus a nit who never folds top pair?",
+                  "choices": [
+                    {
+                      "id": "give-up",
+                      "label": "Give up",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Nits do not fold strong made hands.",
+                        "lifeLossEligible": false
+                      }
+                    },
+                    {
+                      "id": "huge-bluff",
+                      "label": "Overbet bluff",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "That money is gone.",
+                        "lifeLossEligible": true
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

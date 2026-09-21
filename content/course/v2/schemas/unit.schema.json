@@ -1,0 +1,6 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://livepokertrainer.local/schemas/course/v2/unit.schema.json",
+  "title": "Course unit",
+  "$ref": "section.schema.json#/definitions/unit"
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://livepokertrainer.local/schemas/course/v2/coach_media.schema.json",
+  "title": "Coach media reference",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "kind", "text"],
+  "properties": {
+    "id": { "$ref": "common.schema.json#/definitions/idString" },
+    "kind": { "type": "string", "enum": ["dialogue", "demonstration", "hint"] },
+    "text": { "$ref": "common.schema.json#/definitions/nonEmptyString" },
+    "assetPath": { "type": "string", "minLength": 1 },
+    "altText": { "$ref": "common.schema.json#/definitions/nonEmptyString" }
+  }
+}

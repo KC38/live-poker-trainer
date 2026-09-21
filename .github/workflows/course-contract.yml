@@ -1,0 +1,36 @@
+name: Course contract validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  course-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate and check generated catalogs
+        run: |
+          npm run course:test
+          npm run course:check
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Dart course catalog parser tests
+        run: |
+          flutter pub get
+          flutter test test/models/course/course_catalog_test.dart
+
+      - name: Functions course catalog parser tests
+        working-directory: functions
+        run: |
+          npm ci
+          npx vitest run src/course_catalog.test.ts
