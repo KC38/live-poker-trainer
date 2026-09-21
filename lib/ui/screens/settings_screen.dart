@@ -64,7 +64,7 @@ class SettingsScreen extends ConsumerWidget {
                       style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
                     ),
                     subtitle: Text(
-                      'Quiet lounge ambient on Home',
+                      'Quiet lounge ambient between hands',
                       style: GoogleFonts.manrope(
                         color: AppColors.slate,
                         fontSize: 13,

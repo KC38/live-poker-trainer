@@ -8,6 +8,7 @@ void main() {
   test('disabled service skips events without throwing', () async {
     final analytics = AnalyticsService(enabled: false);
     await analytics.logScreenView(AnalyticsScreens.progress);
+    await analytics.logTabSelected(tab: AnalyticsScreens.liveTraining);
     await analytics.logProgressDwell(durationMs: 12_000);
     await analytics.logHeroDecision(
       street: 'flop',

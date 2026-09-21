@@ -13,10 +13,13 @@ abstract final class AnalyticsScreens {
   /// Signed-out auth gate.
   static const auth = 'auth';
 
-  /// Home / table setup.
+  /// Home / course path.
   static const home = 'home';
 
-  /// Progress ("You") screen.
+  /// Live Training hub (table setup + launch).
+  static const liveTraining = 'live_training';
+
+  /// Progress / Profile tab.
   static const progress = 'progress';
 
   /// Settings.
@@ -90,6 +93,11 @@ class AnalyticsService {
   /// User signed out.
   Future<void> logLogout() async {
     await _event('logout');
+  }
+
+  /// User selected a shell tab ([IndexedStack] is not observed by Navigator).
+  Future<void> logTabSelected({required String tab}) async {
+    await _event('tab_selected', {'tab': tab});
   }
 
   /// User tapped Start Training (before navigation).
