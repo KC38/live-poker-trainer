@@ -11,8 +11,6 @@ import type {
 import type {
   CurriculumLesson,
   LearningProgressSnapshot,
-  StaticExerciseQuestion,
-  StaticExerciseSet,
 } from "./curriculum_types";
 import {getExercisesForLesson} from "./curriculum_exercises";
 
