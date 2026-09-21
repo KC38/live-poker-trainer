@@ -169,6 +169,10 @@ final class AgentUiDriver {
 
     candidates.sort((a, b) {
       if (a.exact != b.exact) return a.exact ? -1 : 1;
+      // Prefer a live onPressed target over a disabled FilledButton.
+      final aLive = a.onPressed != null;
+      final bLive = b.onPressed != null;
+      if (aLive != bLive) return aLive ? -1 : 1;
       if (a.filledStyle != b.filledStyle) return a.filledStyle ? -1 : 1;
       if (a.buttonish != b.buttonish) return a.buttonish ? -1 : 1;
       if (a.fromSemantics != b.fromSemantics) {
