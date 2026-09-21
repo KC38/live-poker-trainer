@@ -45,7 +45,9 @@ describe("course flags", () => {
 
 describe("soft grading and life loss", () => {
   const lesson = findLesson("lesson-01-01-01-your-two-cards")!.lesson;
-  const coverage = findLesson("lesson-01-01-02-renderer-coverage-seed")!.lesson;
+  const openFold = findLesson("lesson-02-03-01-open-fold")!.lesson;
+  const streets = findLesson("lesson-01-04-01-streets-and-order")!.lesson;
+  const pots = findLesson("lesson-01-05-01-winning-pots")!.lesson;
 
   it("never loses a life on reasonable or questionable answers", () => {
     for (const grade of ["reasonable", "questionable"] as const) {
@@ -117,8 +119,8 @@ describe("soft grading and life loss", () => {
       lifeLost: false,
     });
 
-    const checkpoint = coverage.activities.find(
-      (activity) => activity.id === "act-01-01-02-checkpoint-open-fold",
+    const checkpoint = openFold.activities.find(
+      (activity) => activity.id === "act-02-03-01-guided-utg",
     )!;
     expect(gradeCourseResponse({
       activity: checkpoint,
@@ -126,7 +128,7 @@ describe("soft grading and life loss", () => {
     })).toMatchObject({
       grade: "clear_mistake",
       accepted: false,
-      lifeLost: true,
+      lifeLost: false, // guided: never life loss
     });
     expect(gradeCourseResponse({
       activity: checkpoint,
@@ -137,8 +139,20 @@ describe("soft grading and life loss", () => {
       lifeLost: false,
     });
 
-    const scaffolded = coverage.activities.find(
-      (activity) => activity.id === "act-01-01-02-scaffolded-action-order",
+    const lifeLossCheckpoint = openFold.activities.find(
+      (activity) => activity.id === "act-02-03-01-checkpoint-hj",
+    )!;
+    expect(gradeCourseResponse({
+      activity: lifeLossCheckpoint,
+      choiceId: "jam-ato",
+    })).toMatchObject({
+      grade: "clear_mistake",
+      accepted: false,
+      lifeLost: true,
+    });
+
+    const scaffolded = streets.activities.find(
+      (activity) => activity.id === "act-01-04-01-scaffolded-order",
     )!;
     expect(gradeCourseResponse({
       activity: scaffolded,
@@ -148,8 +162,8 @@ describe("soft grading and life loss", () => {
       lifeLost: false,
     });
 
-    const unguided = coverage.activities.find(
-      (activity) => activity.id === "act-01-01-02-unguided-pot-price",
+    const unguided = pots.activities.find(
+      (activity) => activity.id === "act-01-05-01-unguided-pot",
     )!;
     expect(gradeCourseResponse({
       activity: unguided,
@@ -239,10 +253,10 @@ describe("placement and live unlock helpers", () => {
   it("requires placement flag for jump-test lessons only", () => {
     const first = findLesson("lesson-01-01-01-your-two-cards")!;
     expect(lessonRequiresPlacementFlag(first.lesson)).toBe(false);
-    const coverage = findLesson("lesson-01-01-02-renderer-coverage-seed")!;
-    expect(lessonRequiresPlacementFlag(coverage.lesson)).toBe(true);
-    const stub = findLesson("lesson-02-01-01-position-stub")!;
-    expect(lessonRequiresPlacementFlag(stub.lesson)).toBe(false);
+    const jump = findLesson("lesson-01-06-02-section-one-jump")!;
+    expect(lessonRequiresPlacementFlag(jump.lesson)).toBe(true);
+    const position = findLesson("lesson-02-01-01-position-labels")!;
+    expect(lessonRequiresPlacementFlag(position.lesson)).toBe(false);
   });
 
   it("only section 4 jump lessons grant Live entitlement", () => {

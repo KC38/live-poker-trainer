@@ -1,8 +1,9 @@
 # Course contract v2
 
 Canonical live-cash No-Limit Hold'em course source for Flutter and Cloud
-Functions. Plan 02 defines the contract and pipeline only — full lesson
-authoring lands in later content-wave plans.
+Functions. Plan 02 defines the contract and pipeline. Plan 07 authors
+Sections 1–2 (Never Played; Rules Known / Home Games). Later sections remain
+stubs until waves two and three.
 
 ## Layout
 
@@ -38,6 +39,9 @@ Rebuild the seed catalog from the checked-in builder:
 ```bash
 node tools/course/build_seed_course.mjs
 ```
+
+Section 1–2 authoring lives in `tools/course/wave_one_foundations.mjs` and is
+composed by `build_seed_course.mjs`.
 
 ## Scope
 

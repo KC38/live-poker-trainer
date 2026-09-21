@@ -246,7 +246,7 @@ describe("course session integration", () => {
         uid: "gate-user",
         raw: {
           clientVersion: "2.0.0",
-          lessonId: "lesson-02-01-01-position-stub",
+          lessonId: "lesson-02-01-01-position-labels",
           startRequestId: "start_gate_02",
         },
         db,
@@ -259,7 +259,7 @@ describe("course session integration", () => {
         uid: "gate-user",
         raw: {
           clientVersion: "2.0.0",
-          lessonId: "lesson-01-01-02-renderer-coverage-seed",
+          lessonId: "lesson-01-06-02-section-one-jump",
           startRequestId: "start_gate_03",
         },
         db,
@@ -283,7 +283,7 @@ describe("course session integration", () => {
       uid: "iso-user",
       raw: {
         clientVersion: "2.0.0",
-        lessonId: "lesson-02-01-01-position-stub",
+        lessonId: "lesson-02-01-01-position-labels",
         startRequestId: "start_iso_01",
       },
       db,
@@ -293,7 +293,7 @@ describe("course session integration", () => {
       raw: {
         clientVersion: "2.0.0",
         attemptId: started.attempt.attemptId,
-        activityId: "act-lesson-02-01-01-position-stub-explain",
+        activityId: "act-02-01-01-explain-pos",
         idempotencyKey: "iso_step_01",
       },
       db,
@@ -320,7 +320,7 @@ describe("course session integration", () => {
       db,
     });
     expect(state.profile?.completedLessonIds).toContain(
-      "lesson-02-01-01-position-stub",
+      "lesson-02-01-01-position-labels",
     );
     expect(state.profile?.lifetimeXp).toBeGreaterThan(0);
   });
@@ -348,7 +348,7 @@ describe("course session integration", () => {
       uid: "complete-user",
       raw: {
         clientVersion: "2.0.0",
-        lessonId: "lesson-02-01-01-position-stub",
+        lessonId: "lesson-02-01-01-position-labels",
         startRequestId: "start_complete_01",
       },
       db,
@@ -358,7 +358,7 @@ describe("course session integration", () => {
       raw: {
         clientVersion: "2.0.0",
         attemptId: started.attempt.attemptId,
-        activityId: "act-lesson-02-01-01-position-stub-explain",
+        activityId: "act-02-01-01-explain-pos",
         idempotencyKey: "complete_step_01",
       },
       db,
