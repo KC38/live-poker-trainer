@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "90626cc467cfc9475bcb15ac175f15bde8a3367b5d587a2aa23cf4abf886077c",
+  "contentChecksum": "14866c27c3db51bc6f41e52231cf0608f6f6653cb72e88584ef962b6a76e4a0f",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -290,7 +290,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Pick the complete list of card suits.",
+                  "accessibilityText": "Tap hearts, diamonds, clubs, and spades. Skip decoys.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -300,7 +300,7 @@
                   "objectives": [
                     "Name the four suits"
                   ],
-                  "prompt": "Which set lists every suit?",
+                  "prompt": "Tap every suit in a standard deck.",
                   "choices": [
                     {
                       "id": "suits-full",
@@ -322,7 +322,7 @@
                     {
                       "id": "act-01-01-02-guided-suits-hint",
                       "kind": "hint",
-                      "text": "Hearts, diamonds, clubs, spades — nothing else."
+                      "text": "Four suits only — hearts, diamonds, clubs, spades."
                     }
                   ]
                 },
@@ -364,7 +364,7 @@
                   "stage": "unguided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Identify which pair shares a suit.",
+                  "accessibilityText": "Tap the hole-card pair that shares a suit.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -399,7 +399,7 @@
                   "stage": "checkpoint",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Classify pocket nines.",
+                  "accessibilityText": "Classify the pocket nines shown on the table.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -409,7 +409,7 @@
                   "objectives": [
                     "Spot pairs and suited cards"
                   ],
-                  "prompt": "You hold 9h 9d. What do you have?",
+                  "prompt": "Look at your two cards. What do you have?",
                   "choices": [
                     {
                       "id": "pocket-pair",

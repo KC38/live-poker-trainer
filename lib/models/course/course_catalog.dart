@@ -337,13 +337,16 @@ class CourseActivity {
       coachMedia.where((m) => m.kind == 'hint').toList(growable: false);
 
   /// Primary Rex dialogue/demonstration line.
+  ///
+  /// Hints never count — showing hint text as the coach line spoils the
+  /// interaction before the learner taps Hint.
   CoachMediaRef? get primaryCoachLine {
     for (final media in coachMedia) {
       if (media.kind == 'dialogue' || media.kind == 'demonstration') {
         return media;
       }
     }
-    return coachMedia.isEmpty ? null : coachMedia.first;
+    return null;
   }
 
   /// Parses JSON.

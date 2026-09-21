@@ -11,6 +11,7 @@ import 'package:live_poker_trainer/ui/course/activities/order_sequence_activity.
 import 'package:live_poker_trainer/ui/course/activities/poker_action_sizing_activity.dart';
 import 'package:live_poker_trainer/ui/course/activities/select_identify_activity.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
@@ -189,7 +190,7 @@ void main() {
       estimatedSeconds: 40,
       accessibilityText: 'Pick suits',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Which set lists every suit?',
+      prompt: 'Tap every suit in a standard deck.',
       choices: const [
         CourseChoice(
           id: 'suits-full',
@@ -198,6 +199,166 @@ void main() {
       ],
     );
     expect(resolveLessonTableScene(suits), isNull);
+    expect(
+      resolveSelectIdentifyPresentation(suits),
+      SelectIdentifyPresentation.suitTapPicker,
+    );
+
+    final checkpoint = CourseActivity(
+      id: 'act-01-01-02-checkpoint-pair',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Classify pocket nines',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Look at your two cards. What do you have?',
+    );
+    final checkpointScene = resolveLessonTableScene(checkpoint);
+    expect(checkpointScene, isNotNull);
+    expect(checkpointScene!.heroCodes, ['9h', '9d']);
+  });
+
+  test('suit tap mapping covers full / missing / extra', () {
+    const choices = [
+      CourseChoice(
+        id: 'suits-full',
+        label: 'Hearts, diamonds, clubs, spades',
+      ),
+      CourseChoice(id: 'suits-missing', label: 'Hearts, diamonds, clubs'),
+      CourseChoice(
+        id: 'suits-extra',
+        label: 'Hearts, diamonds, clubs, spades, stars',
+      ),
+    ];
+    expect(
+      mapSuitTapSelectionToChoiceId(
+        selected: {
+          LessonSuitToken.hearts,
+          LessonSuitToken.diamonds,
+          LessonSuitToken.clubs,
+          LessonSuitToken.spades,
+        },
+        choices: choices,
+      ),
+      'suits-full',
+    );
+    expect(
+      mapSuitTapSelectionToChoiceId(
+        selected: {
+          LessonSuitToken.hearts,
+          LessonSuitToken.diamonds,
+          LessonSuitToken.clubs,
+        },
+        choices: choices,
+      ),
+      'suits-missing',
+    );
+    expect(
+      mapSuitTapSelectionToChoiceId(
+        selected: {
+          LessonSuitToken.hearts,
+          LessonSuitToken.diamonds,
+          LessonSuitToken.clubs,
+          LessonSuitToken.spades,
+          LessonSuitToken.stars,
+        },
+        choices: choices,
+      ),
+      'suits-extra',
+    );
+    expect(
+      mapSuitTapSelectionToChoiceId(
+        selected: {LessonSuitToken.hearts},
+        choices: choices,
+      ),
+      isNull,
+    );
+  });
+
+  testWidgets('suit tap picker maps four suits onto Check-ready choice', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-01-02-guided-suits',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Pick suits',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap every suit in a standard deck.',
+      choices: const [
+        CourseChoice(
+          id: 'suits-full',
+          label: 'Hearts, diamonds, clubs, spades',
+        ),
+        CourseChoice(id: 'suits-missing', label: 'Hearts, diamonds, clubs'),
+        CourseChoice(
+          id: 'suits-extra',
+          label: 'Hearts, diamonds, clubs, spades, stars',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byType(SuitTapPicker), findsOneWidget);
+    expect(find.text('Hearts, diamonds, clubs, spades'), findsNothing);
+
+    await tester.tap(find.text('Hearts'));
+    await tester.pump();
+    await tester.tap(find.text('Diamonds'));
+    await tester.pump();
+    await tester.tap(find.text('Clubs'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'suits-missing');
+
+    await tester.tap(find.text('Spades'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'suits-full');
+    controller.dispose();
+  });
+
+  testWidgets('hole-card choices render MiniCard faces', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-01-01-02-unguided-suited',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'suited',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Which hole cards are suited?',
+      choices: const [
+        CourseChoice(id: 'suited-ah-kh', label: 'Ah Kh'),
+        CourseChoice(id: 'offsuit-ah-kd', label: 'Ah Kd'),
+        CourseChoice(id: 'pair-77', label: '7c 7d'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(find.byType(HoleCardChoiceButton), findsNWidgets(3));
+    expect(find.byType(MiniCard), findsAtLeastNWidgets(6));
+    await tester.tap(find.byType(HoleCardChoiceButton).first);
+    await tester.pump();
+    expect(controller.draft.choiceId, 'suited-ah-kh');
+    controller.dispose();
   });
 
   testWidgets('order sequence supports undo', (tester) async {

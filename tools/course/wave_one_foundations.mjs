@@ -328,10 +328,10 @@ export function buildSectionOne() {
                 {objectives: ["Name the four suits"]}),
               selectAct({
                 id: "act-01-01-02-guided-suits", order: 2, stage: "guided",
-                prompt: "Which set lists every suit?",
-                a11y: "Pick the complete list of card suits.",
+                prompt: "Tap every suit in a standard deck.",
+                a11y: "Tap hearts, diamonds, clubs, and spades. Skip decoys.",
                 objectives: ["Name the four suits"],
-                hint: "Hearts, diamonds, clubs, spades — nothing else.",
+                hint: "Four suits only — hearts, diamonds, clubs, spades.",
                 choices: [
                   choice("suits-full", "Hearts, diamonds, clubs, spades", "recommended",
                     "Those four cover the deck."),
@@ -358,7 +358,7 @@ export function buildSectionOne() {
               selectAct({
                 id: "act-01-01-02-unguided-suited", order: 4, stage: "unguided",
                 prompt: "Which hole cards are suited?",
-                a11y: "Identify which pair shares a suit.",
+                a11y: "Tap the hole-card pair that shares a suit.",
                 objectives: ["Spot pairs and suited cards"],
                 lifeLoss: true,
                 choices: [
@@ -372,8 +372,8 @@ export function buildSectionOne() {
               }),
               selectAct({
                 id: "act-01-01-02-checkpoint-pair", order: 5, stage: "checkpoint",
-                prompt: "You hold 9h 9d. What do you have?",
-                a11y: "Classify pocket nines.",
+                prompt: "Look at your two cards. What do you have?",
+                a11y: "Classify the pocket nines shown on the table.",
                 objectives: ["Spot pairs and suited cards"],
                 lifeLoss: true,
                 choices: [
