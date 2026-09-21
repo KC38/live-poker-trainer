@@ -8,7 +8,12 @@
 import type {
   CoachingRating,
 } from "./live_types";
-import type {CurriculumLesson} from "./curriculum_types";
+import type {
+  CurriculumLesson,
+  LearningProgressSnapshot,
+  StaticExerciseQuestion,
+  StaticExerciseSet,
+} from "./curriculum_types";
 import {getExercisesForLesson} from "./curriculum_exercises";
 
 /** XP awarded for a perfect static lesson completion. */
@@ -242,19 +247,4 @@ function clamp01(value: number): number {
   if (value < 0) return 0;
   if (value > 1) return 1;
   return value;
-}
-
-/** Test helper: grade one question against an in-memory set. */
-export function isCorrectChoice(
-  question: StaticExerciseQuestion,
-  choiceId: string | null | undefined,
-): boolean {
-  return Boolean(choiceId) && choiceId === question.correctChoiceId;
-}
-
-/** Test helper: flatten questions from exercise sets. */
-export function flattenQuestions(
-  exercises: readonly StaticExerciseSet[],
-): StaticExerciseQuestion[] {
-  return exercises.flatMap((exercise) => [...exercise.questions]);
 }
