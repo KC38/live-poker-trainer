@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "089e844019e3ded4783fd008b19214da65652cac5b447e22e3b6957d59eeced2",
+  "contentChecksum": "90626cc467cfc9475bcb15ac175f15bde8a3367b5d587a2aa23cf4abf886077c",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -10571,12 +10571,12 @@
                       }
                     },
                     {
-                      "id": "tag",
-                      "label": "Add TAG/LAG already",
-                      "accessibilityText": "Add TAG/LAG already",
+                      "id": "early",
+                      "label": "Add an unlabeled loose seat",
+                      "accessibilityText": "Add an unlabeled loose seat",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Those arrive in a later wave.",
+                        "feedback": "Only mix Calling Station, Nit, and Maniac.",
                         "betterChoiceId": "three"
                       }
                     }
@@ -26068,9 +26068,9 @@
           "grade": "recommended",
           "feedback": "Only mix types already introduced."
         },
-        "tag": {
+        "early": {
           "grade": "clear_mistake",
-          "feedback": "Those arrive in a later wave.",
+          "feedback": "Only mix Calling Station, Nit, and Maniac.",
           "betterChoiceId": "three"
         }
       }

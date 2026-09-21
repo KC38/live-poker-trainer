@@ -181,6 +181,28 @@ test("wave three sections expose advanced units, TAG/LAG, and capstones", () => 
   const lag = course.playerTypes.find((p) => p.id === "lag");
   assert.equal(tag?.introducedByLessonId, "lesson-06-11-02-meet-tag");
   assert.equal(lag?.introducedByLessonId, "lesson-06-12-02-meet-lag");
+  // Lesson bodies before the TAG intro must not name TAG/LAG.
+  // Unit chrome (for example "Player type: TAG") is not part of a lesson.
+  const lessonsBeforeTag = [];
+  for (const section of course.sections) {
+    let reachedIntro = false;
+    for (const lesson of section.units.flatMap((u) => u.lessons)) {
+      if (lesson.id === tag.introducedByLessonId) {
+        reachedIntro = true;
+        break;
+      }
+      lessonsBeforeTag.push(lesson);
+    }
+    if (reachedIntro) break;
+  }
+  assert.ok(
+    lessonsBeforeTag.some((l) => l.id === "lesson-04-08-02-meet-maniac"),
+  );
+  for (const lesson of lessonsBeforeTag) {
+    const blob = JSON.stringify(lesson);
+    assert.equal(blob.includes("TAG"), false, `${lesson.id} mentions TAG early`);
+    assert.equal(blob.includes("LAG"), false, `${lesson.id} mentions LAG early`);
+  }
   // Observe lessons must not name TAG/LAG before meet introductions.
   const sec6Lessons = course.sections[5].units.flatMap((u) => u.lessons);
   for (const observeId of [

@@ -1580,8 +1580,8 @@ export function buildSectionFour() {
                 choices: [
                   choice("three", "Calling Station, Nit, and Maniac", "recommended",
                     "Only mix types already introduced."),
-                  choice("tag", "Add TAG/LAG already", "clear_mistake",
-                    "Those arrive in a later wave.", {betterChoiceId: "three"})
+                  choice("early", "Add an unlabeled loose seat", "clear_mistake",
+                    "Only mix Calling Station, Nit, and Maniac.", {betterChoiceId: "three"})
                 ],
               }),
             ],

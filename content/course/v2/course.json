@@ -10570,12 +10570,12 @@
                       }
                     },
                     {
-                      "id": "tag",
-                      "label": "Add TAG/LAG already",
-                      "accessibilityText": "Add TAG/LAG already",
+                      "id": "early",
+                      "label": "Add an unlabeled loose seat",
+                      "accessibilityText": "Add an unlabeled loose seat",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Those arrive in a later wave.",
+                        "feedback": "Only mix Calling Station, Nit, and Maniac.",
                         "betterChoiceId": "three"
                       }
                     }
