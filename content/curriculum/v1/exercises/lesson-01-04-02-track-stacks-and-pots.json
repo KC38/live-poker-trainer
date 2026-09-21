@@ -1,0 +1,104 @@
+{
+  "id": "lesson-01-04-02-track-stacks-and-pots",
+  "lessonId": "lesson-01-04-02-track-stacks-and-pots",
+  "version": "1.0.0",
+  "title": "Track stacks and pots",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Pot is $30. Villain bets $15. Your call closes the action. The pot becomes\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "$30."
+        },
+        {
+          "id": "b",
+          "text": "$60."
+        },
+        {
+          "id": "c",
+          "text": "$45."
+        },
+        {
+          "id": "d",
+          "text": "$15."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "Thirty plus fifteen plus your fifteen is sixty."
+    },
+    {
+      "id": "q2",
+      "prompt": "You have $80 and villain has $200. You are all-in for $80 into a $40 pot. Villain calls. The pot you can win is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "$40 + $80 + $80 = $200."
+        },
+        {
+          "id": "b",
+          "text": "$40 + $200."
+        },
+        {
+          "id": "c",
+          "text": "$80 only."
+        },
+        {
+          "id": "d",
+          "text": "The whole $200 stack plus the pot with no matching."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Villain only matches your $80. Their extra $120 stays behind."
+    },
+    {
+      "id": "q3",
+      "prompt": "Counting the pot in a live game is easiest if you\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Guess from the chip colors."
+        },
+        {
+          "id": "b",
+          "text": "Ask an opponent to count for you mid-decision and trust them."
+        },
+        {
+          "id": "c",
+          "text": "Track the action street by street, then confirm with the dealer if needed."
+        },
+        {
+          "id": "d",
+          "text": "Ignore the pot and use only your stack."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "Rebuild the pot from the bets you saw. The dealer can confirm."
+    },
+    {
+      "id": "q4",
+      "prompt": "A short all-in call that does not match a raise still\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Folds the short stack."
+        },
+        {
+          "id": "b",
+          "text": "Reopens every previous raiser automatically."
+        },
+        {
+          "id": "c",
+          "text": "Is ignored."
+        },
+        {
+          "id": "d",
+          "text": "Creates a main pot for the all-in amount and may leave a side pot."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "Eligibility follows how much each player put in."
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "id": "lesson-01-03-03-betting-mechanics-check",
+  "lessonId": "lesson-01-03-03-betting-mechanics-check",
+  "version": "1.0.0",
+  "title": "Betting mechanics check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Minimum opening raise in a no-limit game is generally\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Half the big blind."
+        },
+        {
+          "id": "b",
+          "text": "A raise to at least two big blinds."
+        },
+        {
+          "id": "c",
+          "text": "Any amount above the big blind, even one dollar."
+        },
+        {
+          "id": "d",
+          "text": "The size of the pot only."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "An open must at least double the big blind, unless the house posts otherwise."
+    },
+    {
+      "id": "q2",
+      "prompt": "Checking is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Passing when there is no bet."
+        },
+        {
+          "id": "b",
+          "text": "The same as folding."
+        },
+        {
+          "id": "c",
+          "text": "A call of zero that closes the hand."
+        },
+        {
+          "id": "d",
+          "text": "Only legal in the big blind preflop."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Check means 'no bet' and keeps your cards live."
+    },
+    {
+      "id": "q3",
+      "prompt": "You say 'call' and then try to raise after seeing a frown. That raise\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Is always allowed."
+        },
+        {
+          "id": "b",
+          "text": "Is a legal string if chips remain."
+        },
+        {
+          "id": "c",
+          "text": "Is too late; the call stands."
+        },
+        {
+          "id": "d",
+          "text": "Becomes an all-in."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "The declaration bound you. Changing it is not a strategy, it is a rules problem."
+    },
+    {
+      "id": "q4",
+      "prompt": "All-in for less than the pot on the river\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Is ignored."
+        },
+        {
+          "id": "b",
+          "text": "Wins automatically."
+        },
+        {
+          "id": "c",
+          "text": "Is a check."
+        },
+        {
+          "id": "d",
+          "text": "Is a legal bet for the chips you have; opponents may call that amount."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "You may go all-in for whatever you have left. They call the lesser amount."
+    }
+  ]
+}

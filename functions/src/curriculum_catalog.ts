@@ -202,7 +202,7 @@ let cachedCatalog: CurriculumCatalog | undefined;
 /** Return the frozen catalog after validating invariants (cached). */
 export function getCurriculumCatalog(): CurriculumCatalog {
   if (cachedCatalog) return cachedCatalog;
-  const catalog = rawCatalog as CurriculumCatalog;
+  const catalog = rawCatalog as unknown as CurriculumCatalog;
   assertCatalogInvariants(catalog);
   cachedCatalog = catalog;
   return catalog;

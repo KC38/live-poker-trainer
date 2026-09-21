@@ -3,13 +3,14 @@
  */
 
 import {describe, expect, it} from "vitest";
-import {getLessonById} from "./curriculum_catalog";
+import {getCurriculumCatalog, getLessonById} from "./curriculum_catalog";
 import {
   applyLessonCompletion,
   BASE_LESSON_XP,
   calendarDayInTimeZone,
   COACHING_SCORE_WEIGHTS,
   emptyLearningProgress,
+  evaluateTableReady,
   scoreFromCoachingRating,
   scoreStaticAnswers,
 } from "./curriculum_progress";
@@ -104,7 +105,7 @@ describe("curriculum_progress", () => {
       timezone: "America/Chicago",
     });
     expect(sameDay.streak).toBe(1);
-    expect(sameDay.xp).toBe(BASE_LESSON_XP + Math.round(BASE_LESSON_XP * 0.6));
+    expect(sameDay.xp).toBe(BASE_LESSON_XP);
     expect(sameDay.masteryByObjectiveId["obj-cash-vs-tournament"]).toBe(1);
 
     const nextDay = applyLessonCompletion({
@@ -125,5 +126,25 @@ describe("curriculum_progress", () => {
       timezone: "America/Chicago",
     });
     expect(broken.streak).toBe(1);
+  });
+
+  it("does not mark table-ready until sections 0–2 and mastery clear", () => {
+    const catalog = getCurriculumCatalog();
+    const empty = evaluateTableReady(catalog, emptyLearningProgress());
+    expect(empty.totalCount).toBe(39);
+    expect(empty.passed).toBe(false);
+
+    const progress = emptyLearningProgress();
+    const lessonIds = catalog.sections
+      .filter((section) => section.order <= 2)
+      .flatMap((section) =>
+        section.units.flatMap((unit) => unit.lessons.map((lesson) => lesson.id)),
+      );
+    progress.completedLessonIds = lessonIds;
+    const gate = catalog.milestoneGates.find((item) => item.id === "table-ready");
+    for (const objectiveId of gate?.requiredObjectiveIds ?? []) {
+      progress.masteryByObjectiveId[objectiveId] = 0.8;
+    }
+    expect(evaluateTableReady(catalog, progress).passed).toBe(true);
   });
 });

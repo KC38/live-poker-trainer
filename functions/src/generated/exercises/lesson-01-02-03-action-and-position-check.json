@@ -1,0 +1,104 @@
+{
+  "id": "lesson-01-02-03-action-and-position-check",
+  "lessonId": "lesson-01-02-03-action-and-position-check",
+  "version": "1.0.0",
+  "title": "Action and position check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Cutoff open-raises, button folds, small blind folds. Who is next?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The cutoff again."
+        },
+        {
+          "id": "b",
+          "text": "The big blind."
+        },
+        {
+          "id": "c",
+          "text": "Under the gun."
+        },
+        {
+          "id": "d",
+          "text": "The dealer button, who already folded."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "Action continues in order. The big blind still has a decision."
+    },
+    {
+      "id": "q2",
+      "prompt": "Which seat has the most postflop advantage if all three see a flop?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The button."
+        },
+        {
+          "id": "b",
+          "text": "The small blind."
+        },
+        {
+          "id": "c",
+          "text": "Under the gun."
+        },
+        {
+          "id": "d",
+          "text": "The player with the most chips, regardless of seat."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "The button acts last on every postflop street."
+    },
+    {
+      "id": "q3",
+      "prompt": "'Check' is legal when\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Facing a bet."
+        },
+        {
+          "id": "b",
+          "text": "You are all-in and action is reopened."
+        },
+        {
+          "id": "c",
+          "text": "Nobody has bet on this street yet."
+        },
+        {
+          "id": "d",
+          "text": "You want to fold without saying fold."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "Checking passes the action only when there is no bet to call."
+    },
+    {
+      "id": "q4",
+      "prompt": "Nine-handed early position should usually\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Open as wide as the button."
+        },
+        {
+          "id": "b",
+          "text": "Limp every suited hand."
+        },
+        {
+          "id": "c",
+          "text": "Straddle blind."
+        },
+        {
+          "id": "d",
+          "text": "Play tighter, because many players remain to act."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "More players behind means more chances someone wakes up with a strong hand."
+    }
+  ]
+}

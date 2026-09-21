@@ -1,0 +1,104 @@
+{
+  "id": "lesson-02-05-03-ranges-and-combos-check",
+  "lessonId": "lesson-02-05-03-ranges-and-combos-check",
+  "version": "1.0.0",
+  "title": "Ranges and combos check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Which count is correct?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Pocket kings: 16 combinations."
+        },
+        {
+          "id": "b",
+          "text": "Pocket kings: 6 combinations."
+        },
+        {
+          "id": "c",
+          "text": "AK suited: 12 combinations."
+        },
+        {
+          "id": "d",
+          "text": "One specific suited hand: 6 combinations."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "Any pocket pair has 6 combos. One specific suited hand has 4. AKo has 12."
+    },
+    {
+      "id": "q2",
+      "prompt": "A range gets tighter when\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The player, the position, and the line remove weak hands."
+        },
+        {
+          "id": "b",
+          "text": "You want them to be bluffing."
+        },
+        {
+          "id": "c",
+          "text": "The pot is small."
+        },
+        {
+          "id": "d",
+          "text": "You have not watched them."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Tight lines and tight players delete combinations. Hope does not."
+    },
+    {
+      "id": "q3",
+      "prompt": "Using ranges at the table should stay\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "A full solver printout mid-hand."
+        },
+        {
+          "id": "b",
+          "text": "An excuse to ignore the action."
+        },
+        {
+          "id": "c",
+          "text": "A short list you can actually use: value, draws, and bluffs that took this line."
+        },
+        {
+          "id": "d",
+          "text": "Secret, so you never check it against the board."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "A usable range is small enough to count and still honest about the line."
+    },
+    {
+      "id": "q4",
+      "prompt": "Blockers are most useful when\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "You ignore the opponent's range."
+        },
+        {
+          "id": "b",
+          "text": "Every river call is a bluff-catch."
+        },
+        {
+          "id": "c",
+          "text": "You hold a card they need for their value hands or their bluffs."
+        },
+        {
+          "id": "d",
+          "text": "You want a reason to call without pot odds."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "A blocker changes the mix. It does not replace the price or the line."
+    }
+  ]
+}

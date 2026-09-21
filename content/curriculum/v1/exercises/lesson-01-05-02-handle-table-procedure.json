@@ -1,0 +1,104 @@
+{
+  "id": "lesson-01-05-02-handle-table-procedure",
+  "lessonId": "lesson-01-05-02-handle-table-procedure",
+  "version": "1.0.0",
+  "title": "Handle table procedure",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Two players show down and a third hand was mucked. That mucked hand\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Can be retrieved if the player remembers it."
+        },
+        {
+          "id": "b",
+          "text": "Is dead."
+        },
+        {
+          "id": "c",
+          "text": "Wins if it would have been a straight."
+        },
+        {
+          "id": "d",
+          "text": "Is shown by the dealer on request from a friend."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "A muck is not a live hand."
+    },
+    {
+      "id": "q2",
+      "prompt": "Someone is speaking for the action or looking at a neighbor's hole cards. You\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Tell the dealer. Do not police it by grabbing cards."
+        },
+        {
+          "id": "b",
+          "text": "Film it secretly."
+        },
+        {
+          "id": "c",
+          "text": "Announce their cards to the table."
+        },
+        {
+          "id": "d",
+          "text": "Fold every hand in protest without a word."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Report procedure and integrity problems to the dealer or floor."
+    },
+    {
+      "id": "q3",
+      "prompt": "You need a table change. You\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Pick up another player's chips as a joke."
+        },
+        {
+          "id": "b",
+          "text": "Move the button to your new seat."
+        },
+        {
+          "id": "c",
+          "text": "Ask the floor or brush and move only between hands."
+        },
+        {
+          "id": "d",
+          "text": "Sit down in a new game while still dealt into the old one."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "One live hand at a time. Changes go through staff."
+    },
+    {
+      "id": "q4",
+      "prompt": "A player wants you to soft-play their friend. The correct response is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Agree if the game is casual."
+        },
+        {
+          "id": "b",
+          "text": "Check-raise only their friend."
+        },
+        {
+          "id": "c",
+          "text": "Show them your cards each hand."
+        },
+        {
+          "id": "d",
+          "text": "Refuse. Soft-playing a partner is collusion."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "Playing a private alliance against the table is cheating, not etiquette."
+    }
+  ]
+}

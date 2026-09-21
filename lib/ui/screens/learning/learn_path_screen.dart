@@ -1,31 +1,42 @@
-/// Learn tab — guided curriculum path with section-0 catalog preview.
+/// Learn tab — Sections 0–2 path, streak, and Table Ready progress.
 library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
-import 'package:live_poker_trainer/models/curriculum/lesson_exercises.dart';
+import 'package:live_poker_trainer/models/curriculum/curriculum_models.dart';
+import 'package:live_poker_trainer/models/curriculum/learning_snapshot.dart';
 import 'package:live_poker_trainer/providers/learning_provider.dart';
 import 'package:live_poker_trainer/ui/screens/learning/lesson_runner_screen.dart';
 import 'package:live_poker_trainer/ui/tokens/learning_tokens.dart';
 
-/// Guided learning path with catalog-backed section 0 units.
+/// Guided learning path for the table-ready sections.
 class LearnPathScreen extends ConsumerWidget {
   /// Creates the Learn tab.
   const LearnPathScreen({super.key});
 
-  void _startFirstLesson(BuildContext context) {
-    Navigator.of(context).push(
+  Future<void> _openLesson(
+    BuildContext context,
+    WidgetRef ref,
+    String lessonId,
+  ) async {
+    await Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => const LessonRunnerScreen(lessonId: kFirstLessonId),
+        builder: (_) => LessonRunnerScreen(lessonId: lessonId),
       ),
     );
+    ref.invalidate(learningStateProvider);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final catalogAsync = ref.watch(curriculumCatalogProvider);
+    final stateAsync = ref.watch(learningStateProvider);
+    final snapshot = stateAsync.maybeWhen(
+      data: (value) => value,
+      orElse: () => LearningSnapshot.empty,
+    );
 
     return SafeArea(
       child: Padding(
@@ -60,7 +71,9 @@ class LearnPathScreen extends ConsumerWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    'Meridian guides short lessons on live cash fundamentals.',
+                    snapshot.tableReadyPassed
+                        ? 'Table Ready. Keep the streak with a review.'
+                        : 'Meridian’s table-ready path: rules, procedure, and the math under live cash.',
                     style: GoogleFonts.manrope(
                       color: AppColors.slate,
                       fontSize: 14,
@@ -72,6 +85,16 @@ class LearnPathScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             Text(
+              'XP ${snapshot.xp} · Streak ${snapshot.streak} · '
+              'Table Ready ${snapshot.tableReadyCompleted}/${snapshot.tableReadyTotal}',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
               'Guided live-cash path: 13 sections, 61 units, 183 lessons.',
               style: GoogleFonts.manrope(
                 color: AppColors.slate,
@@ -79,37 +102,21 @@ class LearnPathScreen extends ConsumerWidget {
                 height: 1.4,
               ),
             ),
-            const SizedBox(height: LearningTokens.sectionGap),
+            const SizedBox(height: 12),
             Expanded(
               child: catalogAsync.when(
                 loading: () => const Center(
                   child: CircularProgressIndicator(color: AppColors.gold),
                 ),
-                error: (e, _) => DecoratedBox(
-                  decoration: LearningTokens.panelDecoration(),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Text(
-                        'Catalog unavailable.\n$e',
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.manrope(
-                          color: AppColors.danger,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
+                error: (error, _) => Text(
+                  'Catalog unavailable.\n$error',
+                  style: GoogleFonts.manrope(color: AppColors.danger),
                 ),
-                data: (catalog) {
-                  final section = catalog.sections.isEmpty
-                      ? null
-                      : catalog.sections.first;
-                  if (section == null) {
-                    return const Center(child: Text('Catalog is empty.'));
-                  }
-                  return ListView(
-                    children: [
+                data: (catalog) => ListView(
+                  children: [
+                    for (final section in catalog.sections.where(
+                      (section) => section.order <= 2,
+                    )) ...[
                       Text(
                         section.title,
                         style: GoogleFonts.manrope(
@@ -118,48 +125,108 @@ class LearnPathScreen extends ConsumerWidget {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      if (section.summary.isNotEmpty) ...[
-                        const SizedBox(height: 6),
+                      const SizedBox(height: 8),
+                      for (final unit in section.units) ...[
                         Text(
-                          section.summary,
+                          unit.title,
                           style: GoogleFonts.manrope(
                             color: AppColors.slate,
-                            fontSize: 14,
-                            height: 1.35,
+                            fontSize: 13,
                           ),
                         ),
-                      ],
-                      const SizedBox(height: 16),
-                      for (final unit in section.units) ...[
-                        DecoratedBox(
-                          decoration: LearningTokens.panelDecoration(),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 14,
-                            ),
-                            child: Text(
-                              unit.title,
-                              style: GoogleFonts.manrope(
-                                color: AppColors.cream,
-                                fontSize: 15,
-                              ),
-                            ),
+                        const SizedBox(height: 6),
+                        for (final lesson in unit.lessons)
+                          _LessonTile(
+                            lesson: lesson,
+                            unlocked: _isUnlocked(catalog, snapshot, lesson.id),
+                            completed: snapshot.completedLessonIds
+                                .contains(lesson.id),
+                            onOpen: () => _openLesson(context, ref, lesson.id),
                           ),
-                        ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 8),
                       ],
                     ],
-                  );
-                },
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 12),
-            ElevatedButton(
-              onPressed: () => _startFirstLesson(context),
-              child: const Text('Start first lesson'),
-            ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+bool _isUnlocked(
+  CurriculumCatalog catalog,
+  LearningSnapshot snapshot,
+  String lessonId,
+) {
+  final ordered = <String>[];
+  for (final section in catalog.sections.where((section) => section.order <= 2)) {
+    for (final unit in section.units) {
+      for (final lesson in unit.lessons) {
+        ordered.add(lesson.id);
+      }
+    }
+  }
+  final index = ordered.indexOf(lessonId);
+  if (index <= 0) return index == 0;
+  return snapshot.completedLessonIds.contains(ordered[index - 1]);
+}
+
+class _LessonTile extends StatelessWidget {
+  const _LessonTile({
+    required this.lesson,
+    required this.unlocked,
+    required this.completed,
+    required this.onOpen,
+  });
+
+  final CurriculumLesson lesson;
+  final bool unlocked;
+  final bool completed;
+  final VoidCallback onOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    final label = completed
+        ? 'Done'
+        : unlocked
+            ? 'Start'
+            : 'Locked';
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Material(
+        color: AppColors.bgElevated,
+        borderRadius: BorderRadius.circular(LearningTokens.panelRadius),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(LearningTokens.panelRadius),
+          onTap: unlocked ? onOpen : null,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    lesson.title,
+                    style: GoogleFonts.manrope(
+                      color: unlocked ? AppColors.cream : AppColors.slate,
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+                Text(
+                  label,
+                  style: GoogleFonts.manrope(
+                    color: completed ? AppColors.success : AppColors.gold,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

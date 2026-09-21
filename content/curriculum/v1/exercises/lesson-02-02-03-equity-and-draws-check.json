@@ -1,0 +1,104 @@
+{
+  "id": "lesson-02-02-03-equity-and-draws-check",
+  "lessonId": "lesson-02-02-03-equity-and-draws-check",
+  "version": "1.0.0",
+  "title": "Equity and draws check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Which draw has more raw outs on the flop?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "A flush draw (9) versus a gutshot (4)."
+        },
+        {
+          "id": "b",
+          "text": "A gutshot versus a flush draw."
+        },
+        {
+          "id": "c",
+          "text": "One overcard versus a flush draw."
+        },
+        {
+          "id": "d",
+          "text": "A backdoor draw versus a made flush."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Nine flush outs is more than four gutshot outs."
+    },
+    {
+      "id": "q2",
+      "prompt": "Rule of 4 is for\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The river only."
+        },
+        {
+          "id": "b",
+          "text": "The flop, with two cards still to come."
+        },
+        {
+          "id": "c",
+          "text": "Preflop all-ins only."
+        },
+        {
+          "id": "d",
+          "text": "Counting the pot."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "Two cards to come, multiply outs by about four."
+    },
+    {
+      "id": "q3",
+      "prompt": "An out is dirty when\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "It is the same color as the felt."
+        },
+        {
+          "id": "b",
+          "text": "It completes your hand and also completes a better hand for the opponent."
+        },
+        {
+          "id": "c",
+          "text": "It is an ace."
+        },
+        {
+          "id": "d",
+          "text": "The dealer burns it."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "A dirty out gives you a hand that still loses."
+    },
+    {
+      "id": "q4",
+      "prompt": "Seeing both remaining cards is more likely when\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "You are all-in or the price to continue is small relative to the chance you hit."
+        },
+        {
+          "id": "b",
+          "text": "You fold."
+        },
+        {
+          "id": "c",
+          "text": "You bet huge with no fold equity and no draw."
+        },
+        {
+          "id": "d",
+          "text": "Stacks are deep and you will fold every turn."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "All-in equity is raw equity. As a favorite to fold later, you realize less."
+    }
+  ]
+}

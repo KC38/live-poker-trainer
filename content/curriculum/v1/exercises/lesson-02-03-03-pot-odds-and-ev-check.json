@@ -1,0 +1,104 @@
+{
+  "id": "lesson-02-03-03-pot-odds-and-ev-check",
+  "lessonId": "lesson-02-03-03-pot-odds-and-ev-check",
+  "version": "1.0.0",
+  "title": "Pot odds and EV check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Break-even percent for a call of $25 into $75 is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "25%."
+        },
+        {
+          "id": "b",
+          "text": "75%."
+        },
+        {
+          "id": "c",
+          "text": "10%."
+        },
+        {
+          "id": "d",
+          "text": "50%."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "25 / (75+25) = 25%."
+    },
+    {
+      "id": "q2",
+      "prompt": "You have 9% equity and the price requires 25%. A pure call is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Close."
+        },
+        {
+          "id": "b",
+          "text": "Not justified on pot odds alone."
+        },
+        {
+          "id": "c",
+          "text": "Mandatory because you have outs."
+        },
+        {
+          "id": "d",
+          "text": "Profitable because 9 is an odd number."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "Nine percent does not clear a twenty-five percent price."
+    },
+    {
+      "id": "q3",
+      "prompt": "Betting can be better than calling when\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "You have no hand and no fold equity."
+        },
+        {
+          "id": "b",
+          "text": "The pot is zero."
+        },
+        {
+          "id": "c",
+          "text": "Fold equity or protection adds value you do not get by only calling."
+        },
+        {
+          "id": "d",
+          "text": "You are facing an all-in and cannot bet."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "If they can still fold or you deny their equity, betting is a different action from calling."
+    },
+    {
+      "id": "q4",
+      "prompt": "Results-oriented thinking sounds like\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "I called because the price was right, and this time I lost."
+        },
+        {
+          "id": "b",
+          "text": "I will review the price, not the one outcome."
+        },
+        {
+          "id": "c",
+          "text": "Variance exists."
+        },
+        {
+          "id": "d",
+          "text": "I lost, so the call was wrong and I should chase it back."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "Chasing a single loss is not a pot-odds calculation."
+    }
+  ]
+}

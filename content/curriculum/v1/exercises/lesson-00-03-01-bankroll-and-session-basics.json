@@ -1,0 +1,104 @@
+{
+  "id": "lesson-00-03-01-bankroll-and-session-basics",
+  "lessonId": "lesson-00-03-01-bankroll-and-session-basics",
+  "version": "1.0.0",
+  "title": "Bankroll and session basics",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "A recreational cash bankroll should be\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Money you can lose without affecting rent, food, or debt payments."
+        },
+        {
+          "id": "b",
+          "text": "Next month's rent, because poker 'always pays it back'."
+        },
+        {
+          "id": "c",
+          "text": "A credit-card cash advance."
+        },
+        {
+          "id": "d",
+          "text": "Borrowed tournament makeup."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Live cash is gambling. Only risk money already separated from living expenses."
+    },
+    {
+      "id": "q2",
+      "prompt": "A stop-loss is useful because\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "It guarantees you win the session back."
+        },
+        {
+          "id": "b",
+          "text": "It ends a session before fatigue or chasing takes over."
+        },
+        {
+          "id": "c",
+          "text": "Rooms require one by law in every city."
+        },
+        {
+          "id": "d",
+          "text": "It raises your hourly win rate by itself."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "A precommitted stop is a process tool, not a promise of profit."
+    },
+    {
+      "id": "q3",
+      "prompt": "Which behavior is loss-chasing?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Leaving when you hit the stop you set earlier."
+        },
+        {
+          "id": "b",
+          "text": "Moving down in stakes after a downswing."
+        },
+        {
+          "id": "c",
+          "text": "Buying in again and again to 'get even tonight'."
+        },
+        {
+          "id": "d",
+          "text": "Taking a break after a bad beat."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "Chasing tries to erase a loss immediately. It is a common path to a bigger loss."
+    },
+    {
+      "id": "q4",
+      "prompt": "If poker stops being fun or you feel desperate to win it back\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Raise the stakes so one pot fixes it."
+        },
+        {
+          "id": "b",
+          "text": "Drink so the cards feel easier."
+        },
+        {
+          "id": "c",
+          "text": "Ask a stranger at the table for a private loan."
+        },
+        {
+          "id": "d",
+          "text": "Rack up, leave, and use a help line if gambling feels out of control."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "Leave. Higher stakes, alcohol, and credit make a bad state worse."
+    }
+  ]
+}

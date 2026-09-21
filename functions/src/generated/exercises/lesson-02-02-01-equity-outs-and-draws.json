@@ -1,0 +1,104 @@
+{
+  "id": "lesson-02-02-01-equity-outs-and-draws",
+  "lessonId": "lesson-02-02-01-equity-outs-and-draws",
+  "version": "1.0.0",
+  "title": "Equity, outs, and draws",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "A flush draw on the flop has how many outs to the flush, if no pair outs are counted?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "9."
+        },
+        {
+          "id": "b",
+          "text": "4."
+        },
+        {
+          "id": "c",
+          "text": "2."
+        },
+        {
+          "id": "d",
+          "text": "15."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "There are 13 cards of the suit and you already see 4, so 9 remain."
+    },
+    {
+      "id": "q2",
+      "prompt": "An open-ended straight draw on the flop has\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "2 outs."
+        },
+        {
+          "id": "b",
+          "text": "8 outs."
+        },
+        {
+          "id": "c",
+          "text": "9 outs."
+        },
+        {
+          "id": "d",
+          "text": "1 out."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "Four cards on each end complete the straight, so eight outs."
+    },
+    {
+      "id": "q3",
+      "prompt": "The rule of 2 and 4 says a 9-out draw has about\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "9% on the flop to the river."
+        },
+        {
+          "id": "b",
+          "text": "2% on the river."
+        },
+        {
+          "id": "c",
+          "text": "About 36% from the flop to the river, and about 18% with one card to come."
+        },
+        {
+          "id": "d",
+          "text": "50% exactly."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "Multiply outs by 4 with two cards to come, or by 2 with one. 9\u00d74=36, 9\u00d72=18."
+    },
+    {
+      "id": "q4",
+      "prompt": "Equity is not the same as realization because\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Outs are always paid in full."
+        },
+        {
+          "id": "b",
+          "text": "Position and future bets do not matter."
+        },
+        {
+          "id": "c",
+          "text": "A draw cannot win unimproved."
+        },
+        {
+          "id": "d",
+          "text": "You may not get to see all the cards, or you may win extra when you hit."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "Fold equity, position, and stacks change how much of your raw equity you keep."
+    }
+  ]
+}

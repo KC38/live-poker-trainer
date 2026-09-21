@@ -1,0 +1,4081 @@
+{
+  "lesson-00-01-01-cash-vs-tournaments": {
+    "id": "lesson-00-01-01-cash-vs-tournaments",
+    "lessonId": "lesson-00-01-01-cash-vs-tournaments",
+    "version": "1.0.0",
+    "questions": [
+      {
+        "id": "q1-chip-value",
+        "prompt": "What is the main difference between cash-game chips and tournament chips?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Cash chips represent real money you can leave with; tournament chips are only tournament equity."
+          },
+          {
+            "id": "b",
+            "text": "Tournament chips are always worth more dollars than cash chips."
+          },
+          {
+            "id": "c",
+            "text": "Cash chips expire at the end of each orbit; tournament chips do not."
+          },
+          {
+            "id": "d",
+            "text": "There is no meaningful difference once blinds are posted."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "In cash, your stack is withdrawable value. In tournaments, chips only buy tournament equity and cannot be cashed mid-event."
+      },
+      {
+        "id": "q2-leaving",
+        "prompt": "In a typical live cash game, when can you leave the table?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Only after you win a big pot."
+          },
+          {
+            "id": "b",
+            "text": "Generally anytime between hands (house rules permitting)."
+          },
+          {
+            "id": "c",
+            "text": "Only when the tournament clock hits a break."
+          },
+          {
+            "id": "d",
+            "text": "Never until the dealer forces a table change."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Cash games are continuous and optional: you can usually stand up when a hand ends, subject to room etiquette and rules."
+      },
+      {
+        "id": "q3-blinds",
+        "prompt": "How do blinds usually behave in live cash versus tournaments?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Cash blinds escalate every few minutes; tournament blinds stay fixed forever."
+          },
+          {
+            "id": "b",
+            "text": "Both formats keep identical blind schedules for fairness."
+          },
+          {
+            "id": "c",
+            "text": "Cash blinds stay at fixed stakes; tournament blinds escalate on a clock."
+          },
+          {
+            "id": "d",
+            "text": "Live cash has no blinds; only tournaments use blinds."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "A $1/$2 cash game stays $1/$2. Tournament structures raise blinds over time, forcing shorter stacks and rising pressure."
+      },
+      {
+        "id": "q4-bust",
+        "prompt": "If you lose your whole stack in a live cash game, what usually happens next?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "You are eliminated from the casino for the day."
+          },
+          {
+            "id": "b",
+            "text": "You may rebuy (or leave); the game continues without a tournament finish."
+          },
+          {
+            "id": "c",
+            "text": "You automatically win the next hand as compensation."
+          },
+          {
+            "id": "d",
+            "text": "The dealer converts your empty seat into a tournament bubble."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Busting in cash ends that buy-in, not the event. You can buy back in or walk away; there is no payout ladder."
+      },
+      {
+        "id": "q5-depth",
+        "prompt": "Why do live cash stacks often play deeper than late-stage tournament stacks?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Because cash games ban raises larger than 2 big blinds."
+          },
+          {
+            "id": "b",
+            "text": "Because players can keep reloading while blinds stay fixed, so effective stacks stay deep."
+          },
+          {
+            "id": "c",
+            "text": "Because live cash never uses a button or blinds."
+          },
+          {
+            "id": "d",
+            "text": "Because tournaments always start with more chips than cash games."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Fixed blinds plus optional reloads keep many cash tables deep. Escalating tournament blinds shrink stacks as the event progresses."
+      }
+    ]
+  },
+  "lesson-00-01-02-map-a-live-cash-game": {
+    "id": "lesson-00-01-02-map-a-live-cash-game",
+    "lessonId": "lesson-00-01-02-map-a-live-cash-game",
+    "version": "1.0.0",
+    "title": "Map a live cash game",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "A floor card says $1/$2 NL, $100\u2013$300 buy-in. What does that mean?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Blinds are $1 and $2; you may buy in between $100 and $300."
+          },
+          {
+            "id": "b",
+            "text": "The tournament starts at level 1 and ends at level 2."
+          },
+          {
+            "id": "c",
+            "text": "You must buy in for exactly $200 every orbit."
+          },
+          {
+            "id": "d",
+            "text": "The big blind doubles every 20 minutes."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Cash stakes are fixed blinds plus a buy-in range, not a tournament clock."
+      },
+      {
+        "id": "q2",
+        "prompt": "Which seat count is a full ring?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Heads-up"
+          },
+          {
+            "id": "b",
+            "text": "Six-handed"
+          },
+          {
+            "id": "c",
+            "text": "Nine-handed"
+          },
+          {
+            "id": "d",
+            "text": "Three-handed"
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Full ring is typically 8\u20139 handed. Six-handed is short-handed but not full ring."
+      },
+      {
+        "id": "q3",
+        "prompt": "Effective stack is best described as\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The largest stack at the table, always."
+          },
+          {
+            "id": "b",
+            "text": "The smallest stack that can still contest the pot between the players involved."
+          },
+          {
+            "id": "c",
+            "text": "The sum of every chip on the table."
+          },
+          {
+            "id": "d",
+            "text": "Only the big blind amount."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "You cannot win more from an opponent than they have in front of them."
+      },
+      {
+        "id": "q4",
+        "prompt": "Why does position matter more as stacks get deeper?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Deeper stacks remove all postflop decisions."
+          },
+          {
+            "id": "b",
+            "text": "The button must fold every hand when deep."
+          },
+          {
+            "id": "c",
+            "text": "Blinds disappear once stacks exceed 100 big blinds."
+          },
+          {
+            "id": "d",
+            "text": "More streets remain, so acting last gains more information."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Deep cash play is multi-street. Acting last sees how others bet before you choose."
+      }
+    ]
+  },
+  "lesson-00-01-03-cash-poker-map-check": {
+    "id": "lesson-00-01-03-cash-poker-map-check",
+    "lessonId": "lesson-00-01-03-cash-poker-map-check",
+    "version": "1.0.0",
+    "title": "Cash poker map check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "You bust a $1/$2 cash buy-in. The correct next step is usually\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "You are eliminated from the casino event."
+          },
+          {
+            "id": "b",
+            "text": "Rebuy within the table cap, or rack up and leave."
+          },
+          {
+            "id": "c",
+            "text": "Wait for the bubble to burst."
+          },
+          {
+            "id": "d",
+            "text": "The dealer must seat you in a satellite."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Cash has no elimination ladder. A lost buy-in ends that stack, not the game."
+      },
+      {
+        "id": "q2",
+        "prompt": "Which format uses a rising blind clock?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A tournament"
+          },
+          {
+            "id": "b",
+            "text": "A fixed $2/$5 cash game"
+          },
+          {
+            "id": "c",
+            "text": "A time-charge cash game with constant blinds"
+          },
+          {
+            "id": "d",
+            "text": "Neither cash nor tournaments"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Tournament blinds escalate. Standard cash blinds stay at the posted stakes."
+      },
+      {
+        "id": "q3",
+        "prompt": "Hero has 200 big blinds and the villain has 40. The effective stack is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "200 big blinds"
+          },
+          {
+            "id": "b",
+            "text": "240 big blinds"
+          },
+          {
+            "id": "c",
+            "text": "40 big blinds"
+          },
+          {
+            "id": "d",
+            "text": "The big blind only"
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Effective stack is the smaller of the stacks that can go into the pot."
+      },
+      {
+        "id": "q4",
+        "prompt": "A live cash table is most unlike a tournament because\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Cash games ban the button."
+          },
+          {
+            "id": "b",
+            "text": "Cash chips have no dollar value."
+          },
+          {
+            "id": "c",
+            "text": "You must play until one player has every chip."
+          },
+          {
+            "id": "d",
+            "text": "You can leave between hands and chips represent withdrawable money."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Cash is an optional, continuous game. Chips are money, not tournament equity."
+      }
+    ]
+  },
+  "lesson-00-02-01-table-flow-and-seating": {
+    "id": "lesson-00-02-01-table-flow-and-seating",
+    "lessonId": "lesson-00-02-01-table-flow-and-seating",
+    "version": "1.0.0",
+    "title": "Table flow and seating",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Before you sit, the most useful first habit is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Watch one orbit: seats, stacks, and who is playing which streets."
+          },
+          {
+            "id": "b",
+            "text": "Post the big blind from the rail and throw cards in."
+          },
+          {
+            "id": "c",
+            "text": "Announce your strategy to the table."
+          },
+          {
+            "id": "d",
+            "text": "Buy the maximum and open every button immediately."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "A quiet orbit shows action order, stack sizes, and obvious tendencies."
+      },
+      {
+        "id": "q2",
+        "prompt": "The button is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The first player to act preflop in a full ring."
+          },
+          {
+            "id": "b",
+            "text": "The dealer position, last to act postflop."
+          },
+          {
+            "id": "c",
+            "text": "Always the big blind."
+          },
+          {
+            "id": "d",
+            "text": "The player who must straddle."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "The button acts last on the flop, turn, and river in a normal hand."
+      },
+      {
+        "id": "q3",
+        "prompt": "You are dealt in on the big blind your first hand. You should\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Skip the blind because you just sat down."
+          },
+          {
+            "id": "b",
+            "text": "Post both blinds twice."
+          },
+          {
+            "id": "c",
+            "text": "Post the big blind; you are live for that hand."
+          },
+          {
+            "id": "d",
+            "text": "Wait until the button passes you to post anything."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "A new player dealt into the big blind posts it and receives a hand."
+      },
+      {
+        "id": "q4",
+        "prompt": "Missed-blind rules vary, but a safe default is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Invent a rule and enforce it yourself."
+          },
+          {
+            "id": "b",
+            "text": "Never post and keep taking free hands."
+          },
+          {
+            "id": "c",
+            "text": "Move the button yourself."
+          },
+          {
+            "id": "d",
+            "text": "Ask the dealer how this room handles a missed blind before you act."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Rooms differ on posting, waiting, and dead blinds. The dealer is the source."
+      }
+    ]
+  },
+  "lesson-00-02-02-survive-your-first-orbit": {
+    "id": "lesson-00-02-02-survive-your-first-orbit",
+    "lessonId": "lesson-00-02-02-survive-your-first-orbit",
+    "version": "1.0.0",
+    "title": "Survive your first orbit",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Cards are in the air and it is not your turn. You should\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Wait. Acting out of turn creates confusion and can bind you."
+          },
+          {
+            "id": "b",
+            "text": "Fold out of turn to speed the game up."
+          },
+          {
+            "id": "c",
+            "text": "Announce 'raise' before the player on your right."
+          },
+          {
+            "id": "d",
+            "text": "Show one card so the table can help."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Act in turn. Early declarations can be binding or angle-adjacent."
+      },
+      {
+        "id": "q2",
+        "prompt": "Your neighbor bets and you have not looked yet. Best action?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Call while still looking at your cards."
+          },
+          {
+            "id": "b",
+            "text": "Look first, then act in turn when action reaches you."
+          },
+          {
+            "id": "c",
+            "text": "Muck face-up."
+          },
+          {
+            "id": "d",
+            "text": "Ask the dealer to pause the hand until you choose a seat."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Protect the order of action. Look before it is your turn, then act once."
+      },
+      {
+        "id": "q3",
+        "prompt": "A player asks what you folded. A clean answer is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Tell them the exact two cards every time."
+          },
+          {
+            "id": "b",
+            "text": "Show the fold to the whole table."
+          },
+          {
+            "id": "c",
+            "text": "Decline. Folded cards stay hidden unless a rule requires otherwise."
+          },
+          {
+            "id": "d",
+            "text": "Write the hand on a phone in the middle of the hand."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "You do not owe folded-hand information. Phones at the table are often restricted."
+      },
+      {
+        "id": "q4",
+        "prompt": "The first orbit goal is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Win the most pots, even by guessing."
+          },
+          {
+            "id": "b",
+            "text": "Stack off light to 'see where you are'."
+          },
+          {
+            "id": "c",
+            "text": "Straddle every hand so you look active."
+          },
+          {
+            "id": "d",
+            "text": "Avoid big mistakes while you learn the table."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Survival and information beat heroics on a brand-new table."
+      }
+    ]
+  },
+  "lesson-00-02-03-first-orbit-check": {
+    "id": "lesson-00-02-03-first-orbit-check",
+    "lessonId": "lesson-00-02-03-first-orbit-check",
+    "version": "1.0.0",
+    "title": "First orbit check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Who acts last on the flop?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The small blind, always."
+          },
+          {
+            "id": "b",
+            "text": "The button, if still in the hand."
+          },
+          {
+            "id": "c",
+            "text": "Under the gun."
+          },
+          {
+            "id": "d",
+            "text": "The first player who posted a blind."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Postflop action starts left of the button and ends on the button."
+      },
+      {
+        "id": "q2",
+        "prompt": "You want a seat change. Do it\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Between hands, through the dealer, without delaying the game."
+          },
+          {
+            "id": "b",
+            "text": "Mid-hand while holding live cards."
+          },
+          {
+            "id": "c",
+            "text": "By swapping chips with a stranger."
+          },
+          {
+            "id": "d",
+            "text": "Only after winning a showdown."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Seat changes happen between hands and follow the room's list or dealer."
+      },
+      {
+        "id": "q3",
+        "prompt": "Protecting your cards means\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Throwing them toward the muck when you call."
+          },
+          {
+            "id": "b",
+            "text": "Leaving them behind your chips, unattended."
+          },
+          {
+            "id": "c",
+            "text": "Keeping them on the felt in front of you, usually capped by a chip."
+          },
+          {
+            "id": "d",
+            "text": "Holding them up for the table to see."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "A chip on your cards helps stop them from being taken as a fold."
+      },
+      {
+        "id": "q4",
+        "prompt": "The dealer pushes you the pot and an argument starts. You should\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Scoop and leave before anyone speaks."
+          },
+          {
+            "id": "b",
+            "text": "Re-deal the board yourself."
+          },
+          {
+            "id": "c",
+            "text": "Argue over the dealer."
+          },
+          {
+            "id": "d",
+            "text": "Leave the pot, let the dealer control it, and call the floor if needed."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Do not take a disputed pot. The dealer and floor resolve procedure."
+      }
+    ]
+  },
+  "lesson-00-03-01-bankroll-and-session-basics": {
+    "id": "lesson-00-03-01-bankroll-and-session-basics",
+    "lessonId": "lesson-00-03-01-bankroll-and-session-basics",
+    "version": "1.0.0",
+    "title": "Bankroll and session basics",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "A recreational cash bankroll should be\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Money you can lose without affecting rent, food, or debt payments."
+          },
+          {
+            "id": "b",
+            "text": "Next month's rent, because poker 'always pays it back'."
+          },
+          {
+            "id": "c",
+            "text": "A credit-card cash advance."
+          },
+          {
+            "id": "d",
+            "text": "Borrowed tournament makeup."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Live cash is gambling. Only risk money already separated from living expenses."
+      },
+      {
+        "id": "q2",
+        "prompt": "A stop-loss is useful because\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "It guarantees you win the session back."
+          },
+          {
+            "id": "b",
+            "text": "It ends a session before fatigue or chasing takes over."
+          },
+          {
+            "id": "c",
+            "text": "Rooms require one by law in every city."
+          },
+          {
+            "id": "d",
+            "text": "It raises your hourly win rate by itself."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "A precommitted stop is a process tool, not a promise of profit."
+      },
+      {
+        "id": "q3",
+        "prompt": "Which behavior is loss-chasing?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Leaving when you hit the stop you set earlier."
+          },
+          {
+            "id": "b",
+            "text": "Moving down in stakes after a downswing."
+          },
+          {
+            "id": "c",
+            "text": "Buying in again and again to 'get even tonight'."
+          },
+          {
+            "id": "d",
+            "text": "Taking a break after a bad beat."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Chasing tries to erase a loss immediately. It is a common path to a bigger loss."
+      },
+      {
+        "id": "q4",
+        "prompt": "If poker stops being fun or you feel desperate to win it back\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Raise the stakes so one pot fixes it."
+          },
+          {
+            "id": "b",
+            "text": "Drink so the cards feel easier."
+          },
+          {
+            "id": "c",
+            "text": "Ask a stranger at the table for a private loan."
+          },
+          {
+            "id": "d",
+            "text": "Rack up, leave, and use a help line if gambling feels out of control."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Leave. Higher stakes, alcohol, and credit make a bad state worse."
+      }
+    ]
+  },
+  "lesson-00-03-02-choose-a-safe-first-session": {
+    "id": "lesson-00-03-02-choose-a-safe-first-session",
+    "lessonId": "lesson-00-03-02-choose-a-safe-first-session",
+    "version": "1.0.0",
+    "title": "Choose a safe first session",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Your plan was two buy-ins and three hours. You lose the second buy-in. Best action?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Stop. The plan already answered this moment."
+          },
+          {
+            "id": "b",
+            "text": "Buy in a third time because the table 'owes you'."
+          },
+          {
+            "id": "c",
+            "text": "Jump to $5/$10 to recover faster."
+          },
+          {
+            "id": "d",
+            "text": "Stay until you are ahead."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "A plan only works if you follow the exit you chose while calm."
+      },
+      {
+        "id": "q2",
+        "prompt": "You are tired and tilting after a bad beat. The disciplined play is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Straddle to change the energy."
+          },
+          {
+            "id": "b",
+            "text": "Take a walk or end the session."
+          },
+          {
+            "id": "c",
+            "text": "Open every hand to 'reset variance'."
+          },
+          {
+            "id": "d",
+            "text": "Tell the table you are on tilt."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Fatigue and tilt produce clear mistakes. Pause or leave."
+      },
+      {
+        "id": "q3",
+        "prompt": "Which game is the safer first session?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The biggest game if a seat is open, regardless of bankroll."
+          },
+          {
+            "id": "b",
+            "text": "A private home game that offers you credit."
+          },
+          {
+            "id": "c",
+            "text": "A public limit you chose in advance, with cash you already set aside."
+          },
+          {
+            "id": "d",
+            "text": "Whatever table has the drunkest action."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Pick the stake and the money before you arrive. Do not take credit."
+      },
+      {
+        "id": "q4",
+        "prompt": "Recording the session should focus on\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Only the amount won."
+          },
+          {
+            "id": "b",
+            "text": "Blaming the dealer."
+          },
+          {
+            "id": "c",
+            "text": "Hands you want revenge for."
+          },
+          {
+            "id": "d",
+            "text": "Buy-ins, duration, and one or two decisions to review later."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Process notes beat a single result number."
+      }
+    ]
+  },
+  "lesson-00-03-03-safe-start-check": {
+    "id": "lesson-00-03-03-safe-start-check",
+    "lessonId": "lesson-00-03-03-safe-start-check",
+    "version": "1.0.0",
+    "title": "Safe-start check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Poker bankroll money and living expenses should be\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The same account so you can reload from rent."
+          },
+          {
+            "id": "b",
+            "text": "Separated before you play."
+          },
+          {
+            "id": "c",
+            "text": "Borrowed if you are confident."
+          },
+          {
+            "id": "d",
+            "text": "Ignored because skill removes risk."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Separation is the first safety control. Skill does not remove variance."
+      },
+      {
+        "id": "q2",
+        "prompt": "A stranger offers a private stake and wants the password to your account. You\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Refuse. Do not share accounts, devices, or credit."
+          },
+          {
+            "id": "b",
+            "text": "Accept if they seem friendly."
+          },
+          {
+            "id": "c",
+            "text": "Send half the password."
+          },
+          {
+            "id": "d",
+            "text": "Let them hold your chips overnight."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Account sharing and informal credit are common theft setups."
+      },
+      {
+        "id": "q3",
+        "prompt": "You hit your time limit but you are stuck half a buy-in. You\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Must stay until you are even."
+          },
+          {
+            "id": "b",
+            "text": "Move up in stakes."
+          },
+          {
+            "id": "c",
+            "text": "May leave. A time limit is allowed to cost money."
+          },
+          {
+            "id": "d",
+            "text": "Demand the table refund the blinds."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Stops are allowed to fire while you are stuck. That is what they are for."
+      },
+      {
+        "id": "q4",
+        "prompt": "Responsible-play lessons in this app are\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Locked until you subscribe."
+          },
+          {
+            "id": "b",
+            "text": "Optional color, not real guidance."
+          },
+          {
+            "id": "c",
+            "text": "Only for professionals."
+          },
+          {
+            "id": "d",
+            "text": "Free and not something you should skip to reach 'real' strategy."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Safety content stays available. It is part of being table-ready."
+      }
+    ]
+  },
+  "lesson-01-01-01-hand-rankings-and-showdown-order": {
+    "id": "lesson-01-01-01-hand-rankings-and-showdown-order",
+    "lessonId": "lesson-01-01-01-hand-rankings-and-showdown-order",
+    "version": "1.0.0",
+    "title": "Hand rankings and showdown order",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Which hand wins at showdown?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A flush beats a straight."
+          },
+          {
+            "id": "b",
+            "text": "A straight beats a flush."
+          },
+          {
+            "id": "c",
+            "text": "Two pair always beats three of a kind."
+          },
+          {
+            "id": "d",
+            "text": "High card beats one pair when the pairs are low."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Flush outranks straight. Three of a kind outranks two pair."
+      },
+      {
+        "id": "q2",
+        "prompt": "Board is Ah Kh Qh Jh Th. You hold 9c 8c. What do you play?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A straight to the nine."
+          },
+          {
+            "id": "b",
+            "text": "The royal flush on the board, which plays for everyone."
+          },
+          {
+            "id": "c",
+            "text": "One pair of aces."
+          },
+          {
+            "id": "d",
+            "text": "Nothing; the board is dead."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "The best five-card hand can be the board. Everyone ties if nobody has a better flush."
+      },
+      {
+        "id": "q3",
+        "prompt": "You hold 7h 7c on a board of Ks Qd 7d 2c 7s. Your hand is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Three sevens."
+          },
+          {
+            "id": "b",
+            "text": "A full house."
+          },
+          {
+            "id": "c",
+            "text": "Four sevens."
+          },
+          {
+            "id": "d",
+            "text": "Two pair, sevens and kings."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "All four sevens are available: two in hand and two on the board."
+      },
+      {
+        "id": "q4",
+        "prompt": "'Cards speak' means\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The dealer must accept a player's verbal claim over the cards."
+          },
+          {
+            "id": "b",
+            "text": "A mis-spoken hand name wins if said first."
+          },
+          {
+            "id": "c",
+            "text": "Folded cards can be declared live."
+          },
+          {
+            "id": "d",
+            "text": "The five cards determine the winner, not the player's announcement."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Say the hand if you want, but the cards decide."
+      }
+    ]
+  },
+  "lesson-01-01-02-resolve-contested-showdowns": {
+    "id": "lesson-01-01-02-resolve-contested-showdowns",
+    "lessonId": "lesson-01-01-02-resolve-contested-showdowns",
+    "version": "1.0.0",
+    "title": "Resolve contested showdowns",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "You and a villain both have ace-king. Board is paired. The pot\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Is split if neither has a better five-card hand."
+          },
+          {
+            "id": "b",
+            "text": "Goes to the player who tabled first."
+          },
+          {
+            "id": "c",
+            "text": "Goes to the bigger stack."
+          },
+          {
+            "id": "d",
+            "text": "Is awarded by the first verbal claim."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Identical five-card hands chop, including kickers that do not play."
+      },
+      {
+        "id": "q2",
+        "prompt": "Villain says 'two pair' but tables a straight. You should\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Accept the announcement and fold."
+          },
+          {
+            "id": "b",
+            "text": "Let the cards play; the straight stands."
+          },
+          {
+            "id": "c",
+            "text": "Call the floor only if you dislike the player."
+          },
+          {
+            "id": "d",
+            "text": "Muck because they mis-spoke."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Cards speak. A mistaken announcement does not kill a better hand."
+      },
+      {
+        "id": "q3",
+        "prompt": "At showdown the aggressor is supposed to table first in many rooms. If they hesitate\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "You may grab their cards."
+          },
+          {
+            "id": "b",
+            "text": "You should muck without showing."
+          },
+          {
+            "id": "c",
+            "text": "Ask the dealer to control order; do not expose extra cards yourself."
+          },
+          {
+            "id": "d",
+            "text": "Announce their hand for them."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Follow the dealer. Do not touch another player's cards."
+      },
+      {
+        "id": "q4",
+        "prompt": "Odd chips in a chopped pot are usually\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Returned to the house as a tip automatically."
+          },
+          {
+            "id": "b",
+            "text": "Given to the biggest stack."
+          },
+          {
+            "id": "c",
+            "text": "Left for the next hand's button always."
+          },
+          {
+            "id": "d",
+            "text": "Awarded by a posted house rule, often to the first actor or the button side."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Rooms differ. Do not invent a split; ask the dealer."
+      }
+    ]
+  },
+  "lesson-01-01-03-hands-and-showdowns-check": {
+    "id": "lesson-01-01-03-hands-and-showdowns-check",
+    "lessonId": "lesson-01-01-03-hands-and-showdowns-check",
+    "version": "1.0.0",
+    "title": "Hands and showdowns check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Board 9h 8h 7h 6c 2d. You have Th Jd. Villain has Ah 5d. Who wins?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "You, with a ten-high straight. Villain has no straight or flush."
+          },
+          {
+            "id": "b",
+            "text": "Villain, because ace high outkicks a straight."
+          },
+          {
+            "id": "c",
+            "text": "Chop, both play the board straight."
+          },
+          {
+            "id": "d",
+            "text": "You have a flush."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Th-Jd makes T-9-8-7-6. The ace does not complete a flush or a higher straight."
+      },
+      {
+        "id": "q2",
+        "prompt": "Aces full of kings beats\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Four deuces."
+          },
+          {
+            "id": "b",
+            "text": "Kings full of aces."
+          },
+          {
+            "id": "c",
+            "text": "A steel wheel only."
+          },
+          {
+            "id": "d",
+            "text": "Nothing; full houses always chop."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "The higher three of a kind decides. Aces full beats kings full."
+      },
+      {
+        "id": "q3",
+        "prompt": "You muck face-down at showdown. Your hand is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Still live if you remember it."
+          },
+          {
+            "id": "b",
+            "text": "Live if a friend speaks up."
+          },
+          {
+            "id": "c",
+            "text": "Dead. Mucked cards are not in the showdown."
+          },
+          {
+            "id": "d",
+            "text": "Saved by the board."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "A voluntary muck kills the hand. Table it if you want it considered."
+      },
+      {
+        "id": "q4",
+        "prompt": "Best five cards: you hold As Kd, board is Ac Ad Kc Kh 4s. You have\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Two pair, aces and kings."
+          },
+          {
+            "id": "b",
+            "text": "Aces full of kings."
+          },
+          {
+            "id": "c",
+            "text": "Four aces."
+          },
+          {
+            "id": "d",
+            "text": "A straight."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Three aces and two kings. That is aces full of kings, not four aces."
+      }
+    ]
+  },
+  "lesson-01-02-01-positions-and-action-order": {
+    "id": "lesson-01-02-01-positions-and-action-order",
+    "lessonId": "lesson-01-02-01-positions-and-action-order",
+    "version": "1.0.0",
+    "title": "Positions and action order",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Preflop, first to act in a nine-handed game is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The player left of the big blind (under the gun)."
+          },
+          {
+            "id": "b",
+            "text": "The button."
+          },
+          {
+            "id": "c",
+            "text": "The small blind."
+          },
+          {
+            "id": "d",
+            "text": "The cutoff."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Blinds post first, then action starts under the gun and ends on the button, then blinds."
+      },
+      {
+        "id": "q2",
+        "prompt": "Postflop, first to act is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The button."
+          },
+          {
+            "id": "b",
+            "text": "The first remaining player left of the button."
+          },
+          {
+            "id": "c",
+            "text": "Under the gun, even if folded."
+          },
+          {
+            "id": "d",
+            "text": "The big blind, always, even when folded."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "The button is last postflop. Action begins with the next live player to the left."
+      },
+      {
+        "id": "q3",
+        "prompt": "Heads-up, the small blind/button\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Acts last preflop and first postflop."
+          },
+          {
+            "id": "b",
+            "text": "Acts first preflop and last postflop."
+          },
+          {
+            "id": "c",
+            "text": "Acts first on every street."
+          },
+          {
+            "id": "d",
+            "text": "Posts no blind."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Heads-up, the button posts the small blind, acts first preflop, and last postflop."
+      },
+      {
+        "id": "q4",
+        "prompt": "Position is an advantage mainly because\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "You are forced to bluff more."
+          },
+          {
+            "id": "b",
+            "text": "You post fewer blinds."
+          },
+          {
+            "id": "c",
+            "text": "Your cards are dealt face-up."
+          },
+          {
+            "id": "d",
+            "text": "You act after others and can react to their bets."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Information and control come from acting later."
+      }
+    ]
+  },
+  "lesson-01-02-02-act-correctly-by-position": {
+    "id": "lesson-01-02-02-act-correctly-by-position",
+    "lessonId": "lesson-01-02-02-act-correctly-by-position",
+    "version": "1.0.0",
+    "title": "Act correctly by position",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Six-handed, folds to you on the button. Earlier positions have folded. You\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Act now. The blinds still follow you."
+          },
+          {
+            "id": "b",
+            "text": "Must wait for the cutoff who already folded."
+          },
+          {
+            "id": "c",
+            "text": "Are automatically all-in."
+          },
+          {
+            "id": "d",
+            "text": "Can skip the blinds."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "When it is your turn, act. Folded players are skipped."
+      },
+      {
+        "id": "q2",
+        "prompt": "You are in the small blind. Two players limp. Action is on you before the big blind. You\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Act after the big blind."
+          },
+          {
+            "id": "b",
+            "text": "Act now, then the big blind closes the action if nobody raised."
+          },
+          {
+            "id": "c",
+            "text": "Must raise."
+          },
+          {
+            "id": "d",
+            "text": "Are all-in for the small blind."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "The small blind acts before the big blind preflop."
+      },
+      {
+        "id": "q3",
+        "prompt": "Flop is out. Button bet, small blind folded, you are the big blind. You\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Act before the button."
+          },
+          {
+            "id": "b",
+            "text": "Must check."
+          },
+          {
+            "id": "c",
+            "text": "Face the button's bet and act now."
+          },
+          {
+            "id": "d",
+            "text": "Can check the option from the previous street."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "There is no free option facing a bet. Call, raise, or fold."
+      },
+      {
+        "id": "q4",
+        "prompt": "Someone acts out of turn and then action reaches them again. A safe approach is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Ignore the dealer."
+          },
+          {
+            "id": "b",
+            "text": "Treat every out-of-turn word as a joke."
+          },
+          {
+            "id": "c",
+            "text": "Change your hand."
+          },
+          {
+            "id": "d",
+            "text": "Follow the dealer's ruling; out-of-turn action may stand or be pulled back."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Do not negotiate the rule at the table. The dealer applies the room rule."
+      }
+    ]
+  },
+  "lesson-01-02-03-action-and-position-check": {
+    "id": "lesson-01-02-03-action-and-position-check",
+    "lessonId": "lesson-01-02-03-action-and-position-check",
+    "version": "1.0.0",
+    "title": "Action and position check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Cutoff open-raises, button folds, small blind folds. Who is next?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The cutoff again."
+          },
+          {
+            "id": "b",
+            "text": "The big blind."
+          },
+          {
+            "id": "c",
+            "text": "Under the gun."
+          },
+          {
+            "id": "d",
+            "text": "The dealer button, who already folded."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Action continues in order. The big blind still has a decision."
+      },
+      {
+        "id": "q2",
+        "prompt": "Which seat has the most postflop advantage if all three see a flop?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The button."
+          },
+          {
+            "id": "b",
+            "text": "The small blind."
+          },
+          {
+            "id": "c",
+            "text": "Under the gun."
+          },
+          {
+            "id": "d",
+            "text": "The player with the most chips, regardless of seat."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "The button acts last on every postflop street."
+      },
+      {
+        "id": "q3",
+        "prompt": "'Check' is legal when\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Facing a bet."
+          },
+          {
+            "id": "b",
+            "text": "You are all-in and action is reopened."
+          },
+          {
+            "id": "c",
+            "text": "Nobody has bet on this street yet."
+          },
+          {
+            "id": "d",
+            "text": "You want to fold without saying fold."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Checking passes the action only when there is no bet to call."
+      },
+      {
+        "id": "q4",
+        "prompt": "Nine-handed early position should usually\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Open as wide as the button."
+          },
+          {
+            "id": "b",
+            "text": "Limp every suited hand."
+          },
+          {
+            "id": "c",
+            "text": "Straddle blind."
+          },
+          {
+            "id": "d",
+            "text": "Play tighter, because many players remain to act."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "More players behind means more chances someone wakes up with a strong hand."
+      }
+    ]
+  },
+  "lesson-01-03-01-bets-raises-and-all-ins": {
+    "id": "lesson-01-03-01-bets-raises-and-all-ins",
+    "lessonId": "lesson-01-03-01-bets-raises-and-all-ins",
+    "version": "1.0.0",
+    "title": "Bets, raises, and all-ins",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "A legal raise must be at least\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The size of the previous full raise, subject to room and all-in exceptions."
+          },
+          {
+            "id": "b",
+            "text": "One chip, always."
+          },
+          {
+            "id": "c",
+            "text": "The whole pot or nothing."
+          },
+          {
+            "id": "d",
+            "text": "Twice the big blind on every street, even facing a huge bet."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "The minimum raise matches the last full raise. Short all-ins may not reopen action."
+      },
+      {
+        "id": "q2",
+        "prompt": "An all-in that is less than a full raise\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Always reopens betting for the original raiser."
+          },
+          {
+            "id": "b",
+            "text": "Often does not reopen action for players who already acted."
+          },
+          {
+            "id": "c",
+            "text": "Is an illegal bet and is returned."
+          },
+          {
+            "id": "d",
+            "text": "Forces every caller to fold."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Incomplete raises typically do not reopen players who already acted."
+      },
+      {
+        "id": "q3",
+        "prompt": "A string bet is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A single verbal 'raise to 50'."
+          },
+          {
+            "id": "b",
+            "text": "Putting out one chip to call."
+          },
+          {
+            "id": "c",
+            "text": "Going back to your stack for more chips after the first motion counted as a call."
+          },
+          {
+            "id": "d",
+            "text": "Checking and then betting after someone else acts."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Say the amount first, or put the full bet out in one motion."
+      },
+      {
+        "id": "q4",
+        "prompt": "In most cardrooms, a verbal declaration in turn\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Is a joke until chips are out."
+          },
+          {
+            "id": "b",
+            "text": "Can be changed after you see a reaction."
+          },
+          {
+            "id": "c",
+            "text": "Binds only if you repeat it twice."
+          },
+          {
+            "id": "d",
+            "text": "Is binding. Say what you mean once."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Speak clearly. 'Raise' without a number may be a minimum raise."
+      }
+    ]
+  },
+  "lesson-01-03-02-apply-betting-rules-live": {
+    "id": "lesson-01-03-02-apply-betting-rules-live",
+    "lessonId": "lesson-01-03-02-apply-betting-rules-live",
+    "version": "1.0.0",
+    "title": "Apply betting rules live",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "You want to raise a $20 bet to $60. The cleanest action is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Say 'raise to sixty' before moving extra chips."
+          },
+          {
+            "id": "b",
+            "text": "Place $20, watch, then go back for $40."
+          },
+          {
+            "id": "c",
+            "text": "Throw one chip and say nothing."
+          },
+          {
+            "id": "d",
+            "text": "Announce the raise after the next player folds."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "A clear amount avoids a string-bet ruling."
+      },
+      {
+        "id": "q2",
+        "prompt": "Facing a bet, one oversized chip without comment is often ruled\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "An all-in."
+          },
+          {
+            "id": "b",
+            "text": "A call, unless you state a raise."
+          },
+          {
+            "id": "c",
+            "text": "A fold."
+          },
+          {
+            "id": "d",
+            "text": "A check."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "The one-chip rule usually means call. Announce the raise first."
+      },
+      {
+        "id": "q3",
+        "prompt": "Action folds to you and you may check. You should not be offered\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A check."
+          },
+          {
+            "id": "b",
+            "text": "A bet."
+          },
+          {
+            "id": "c",
+            "text": "A free fold as if someone had bet."
+          },
+          {
+            "id": "d",
+            "text": "An all-in bet."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Do not fold when checking is free. Folding for free gives up the pot."
+      },
+      {
+        "id": "q4",
+        "prompt": "You are unsure whether an all-in reopened the action. You\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Guess and throw chips."
+          },
+          {
+            "id": "b",
+            "text": "Ask another player to decide."
+          },
+          {
+            "id": "c",
+            "text": "Take the pot down yourself."
+          },
+          {
+            "id": "d",
+            "text": "Ask the dealer before you act."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Reopening rules are procedural. The dealer rules; the floor can review."
+      }
+    ]
+  },
+  "lesson-01-03-03-betting-mechanics-check": {
+    "id": "lesson-01-03-03-betting-mechanics-check",
+    "lessonId": "lesson-01-03-03-betting-mechanics-check",
+    "version": "1.0.0",
+    "title": "Betting mechanics check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Minimum opening raise in a no-limit game is generally\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Half the big blind."
+          },
+          {
+            "id": "b",
+            "text": "A raise to at least two big blinds."
+          },
+          {
+            "id": "c",
+            "text": "Any amount above the big blind, even one dollar."
+          },
+          {
+            "id": "d",
+            "text": "The size of the pot only."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "An open must at least double the big blind, unless the house posts otherwise."
+      },
+      {
+        "id": "q2",
+        "prompt": "Checking is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Passing when there is no bet."
+          },
+          {
+            "id": "b",
+            "text": "The same as folding."
+          },
+          {
+            "id": "c",
+            "text": "A call of zero that closes the hand."
+          },
+          {
+            "id": "d",
+            "text": "Only legal in the big blind preflop."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Check means 'no bet' and keeps your cards live."
+      },
+      {
+        "id": "q3",
+        "prompt": "You say 'call' and then try to raise after seeing a frown. That raise\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Is always allowed."
+          },
+          {
+            "id": "b",
+            "text": "Is a legal string if chips remain."
+          },
+          {
+            "id": "c",
+            "text": "Is too late; the call stands."
+          },
+          {
+            "id": "d",
+            "text": "Becomes an all-in."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "The declaration bound you. Changing it is not a strategy, it is a rules problem."
+      },
+      {
+        "id": "q4",
+        "prompt": "All-in for less than the pot on the river\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Is ignored."
+          },
+          {
+            "id": "b",
+            "text": "Wins automatically."
+          },
+          {
+            "id": "c",
+            "text": "Is a check."
+          },
+          {
+            "id": "d",
+            "text": "Is a legal bet for the chips you have; opponents may call that amount."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "You may go all-in for whatever you have left. They call the lesser amount."
+      }
+    ]
+  },
+  "lesson-01-04-01-stacks-pots-and-side-pots": {
+    "id": "lesson-01-04-01-stacks-pots-and-side-pots",
+    "lessonId": "lesson-01-04-01-stacks-pots-and-side-pots",
+    "version": "1.0.0",
+    "title": "Stacks, pots, and side pots",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Effective stack between you and one opponent is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The smaller of the two stacks."
+          },
+          {
+            "id": "b",
+            "text": "Always your stack."
+          },
+          {
+            "id": "c",
+            "text": "The pot plus both stacks."
+          },
+          {
+            "id": "d",
+            "text": "The big blind."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "You can only win what the shorter player can put in."
+      },
+      {
+        "id": "q2",
+        "prompt": "A side pot exists when\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Everyone has the same stack."
+          },
+          {
+            "id": "b",
+            "text": "One player is all-in and others continue betting."
+          },
+          {
+            "id": "c",
+            "text": "The flop is paired."
+          },
+          {
+            "id": "d",
+            "text": "The button posts a straddle."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Extra chips between the covering players go into a side pot the all-in player cannot win."
+      },
+      {
+        "id": "q3",
+        "prompt": "Unmatched chips that cannot be called are\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Left in the pot as a bonus."
+          },
+          {
+            "id": "b",
+            "text": "Awarded to the dealer."
+          },
+          {
+            "id": "c",
+            "text": "Returned to the bettor."
+          },
+          {
+            "id": "d",
+            "text": "Moved to the next hand."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "If nobody can call the extra, that extra comes back."
+      },
+      {
+        "id": "q4",
+        "prompt": "You cover two all-in opponents who have different stacks. You might win\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Only the main pot."
+          },
+          {
+            "id": "b",
+            "text": "Nothing if you have the best hand."
+          },
+          {
+            "id": "c",
+            "text": "A single combined pot with no eligibility rules."
+          },
+          {
+            "id": "d",
+            "text": "The main pot and a side pot, depending on who you beat."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Each pot is awarded only among players who contributed to it."
+      }
+    ]
+  },
+  "lesson-01-04-02-track-stacks-and-pots": {
+    "id": "lesson-01-04-02-track-stacks-and-pots",
+    "lessonId": "lesson-01-04-02-track-stacks-and-pots",
+    "version": "1.0.0",
+    "title": "Track stacks and pots",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Pot is $30. Villain bets $15. Your call closes the action. The pot becomes\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "$30."
+          },
+          {
+            "id": "b",
+            "text": "$60."
+          },
+          {
+            "id": "c",
+            "text": "$45."
+          },
+          {
+            "id": "d",
+            "text": "$15."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Thirty plus fifteen plus your fifteen is sixty."
+      },
+      {
+        "id": "q2",
+        "prompt": "You have $80 and villain has $200. You are all-in for $80 into a $40 pot. Villain calls. The pot you can win is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "$40 + $80 + $80 = $200."
+          },
+          {
+            "id": "b",
+            "text": "$40 + $200."
+          },
+          {
+            "id": "c",
+            "text": "$80 only."
+          },
+          {
+            "id": "d",
+            "text": "The whole $200 stack plus the pot with no matching."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Villain only matches your $80. Their extra $120 stays behind."
+      },
+      {
+        "id": "q3",
+        "prompt": "Counting the pot in a live game is easiest if you\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Guess from the chip colors."
+          },
+          {
+            "id": "b",
+            "text": "Ask an opponent to count for you mid-decision and trust them."
+          },
+          {
+            "id": "c",
+            "text": "Track the action street by street, then confirm with the dealer if needed."
+          },
+          {
+            "id": "d",
+            "text": "Ignore the pot and use only your stack."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Rebuild the pot from the bets you saw. The dealer can confirm."
+      },
+      {
+        "id": "q4",
+        "prompt": "A short all-in call that does not match a raise still\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Folds the short stack."
+          },
+          {
+            "id": "b",
+            "text": "Reopens every previous raiser automatically."
+          },
+          {
+            "id": "c",
+            "text": "Is ignored."
+          },
+          {
+            "id": "d",
+            "text": "Creates a main pot for the all-in amount and may leave a side pot."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Eligibility follows how much each player put in."
+      }
+    ]
+  },
+  "lesson-01-04-03-stacks-and-pots-check": {
+    "id": "lesson-01-04-03-stacks-and-pots-check",
+    "lessonId": "lesson-01-04-03-stacks-and-pots-check",
+    "version": "1.0.0",
+    "title": "Stacks and pots check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Three players. A is all-in for $10, B and C each put in $50. A can win\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Only the main pot of $30, if A has the best hand."
+          },
+          {
+            "id": "b",
+            "text": "The entire $110."
+          },
+          {
+            "id": "c",
+            "text": "Nothing, because A was all-in."
+          },
+          {
+            "id": "d",
+            "text": "Only B's extra chips."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "A contributed $10 and is matched by $10 from each of the others."
+      },
+      {
+        "id": "q2",
+        "prompt": "B and C continue after A is all-in. Their extra $40 each is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Added to A's pot."
+          },
+          {
+            "id": "b",
+            "text": "A side pot only B and C can win."
+          },
+          {
+            "id": "c",
+            "text": "Returned immediately."
+          },
+          {
+            "id": "d",
+            "text": "A tip."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "The side pot is contested by the players who put that money in."
+      },
+      {
+        "id": "q3",
+        "prompt": "Before calling a river bet, you should know\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Only the dealer's name."
+          },
+          {
+            "id": "b",
+            "text": "The tournament clock."
+          },
+          {
+            "id": "c",
+            "text": "The price and the pot you are calling into."
+          },
+          {
+            "id": "d",
+            "text": "Your neighbor's folded cards."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "The call amount and the pot size are the minimum facts for pot odds."
+      },
+      {
+        "id": "q4",
+        "prompt": "If the board plays and two live players tie\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The bigger stack wins."
+          },
+          {
+            "id": "b",
+            "text": "The button wins."
+          },
+          {
+            "id": "c",
+            "text": "Both hands are killed."
+          },
+          {
+            "id": "d",
+            "text": "They split the pots they are both eligible for."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Ties split that pot. Side-pot eligibility still applies."
+      }
+    ]
+  },
+  "lesson-01-05-01-dealer-and-floor-procedure": {
+    "id": "lesson-01-05-01-dealer-and-floor-procedure",
+    "lessonId": "lesson-01-05-01-dealer-and-floor-procedure",
+    "version": "1.0.0",
+    "title": "Dealer and floor procedure",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "A card is exposed during the deal. You should\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Let the dealer apply the room's misdeal or exposed-card rule."
+          },
+          {
+            "id": "b",
+            "text": "Grab the deck and redeal."
+          },
+          {
+            "id": "c",
+            "text": "Ignore it and continue if you like your hand."
+          },
+          {
+            "id": "d",
+            "text": "Show your cards so the rule is fair."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Misdeals and exposed cards are procedural. Do not self-deal."
+      },
+      {
+        "id": "q2",
+        "prompt": "You believe the dealer awarded the pot wrong. The next step is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Take the chips and sort it out later."
+          },
+          {
+            "id": "b",
+            "text": "Ask the dealer for a ruling, then the floor if it is still disputed."
+          },
+          {
+            "id": "c",
+            "text": "Accuse the other player of collusion immediately."
+          },
+          {
+            "id": "d",
+            "text": "Post the hand on social media from the table."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Keep the dispute calm and inside the room's chain: dealer, then floor."
+      },
+      {
+        "id": "q3",
+        "prompt": "Protecting your action includes\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Acting out of turn."
+          },
+          {
+            "id": "b",
+            "text": "Hiding cards on your lap."
+          },
+          {
+            "id": "c",
+            "text": "Keeping cards and chips clearly on the felt in front of you."
+          },
+          {
+            "id": "d",
+            "text": "Holding the deck for the dealer."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Lap cards, hidden cards, and chips off the felt cause fouled-hand and angle problems."
+      },
+      {
+        "id": "q4",
+        "prompt": "Phones at the table are often restricted because\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "They are heavy."
+          },
+          {
+            "id": "b",
+            "text": "Dealers dislike ringtones only."
+          },
+          {
+            "id": "c",
+            "text": "They cannot show a clock."
+          },
+          {
+            "id": "d",
+            "text": "They can hide outside help or record other players' cards."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Follow the room rule. Do not relay live hands to anyone off the table."
+      }
+    ]
+  },
+  "lesson-01-05-02-handle-table-procedure": {
+    "id": "lesson-01-05-02-handle-table-procedure",
+    "lessonId": "lesson-01-05-02-handle-table-procedure",
+    "version": "1.0.0",
+    "title": "Handle table procedure",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Two players show down and a third hand was mucked. That mucked hand\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Can be retrieved if the player remembers it."
+          },
+          {
+            "id": "b",
+            "text": "Is dead."
+          },
+          {
+            "id": "c",
+            "text": "Wins if it would have been a straight."
+          },
+          {
+            "id": "d",
+            "text": "Is shown by the dealer on request from a friend."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "A muck is not a live hand."
+      },
+      {
+        "id": "q2",
+        "prompt": "Someone is speaking for the action or looking at a neighbor's hole cards. You\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Tell the dealer. Do not police it by grabbing cards."
+          },
+          {
+            "id": "b",
+            "text": "Film it secretly."
+          },
+          {
+            "id": "c",
+            "text": "Announce their cards to the table."
+          },
+          {
+            "id": "d",
+            "text": "Fold every hand in protest without a word."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Report procedure and integrity problems to the dealer or floor."
+      },
+      {
+        "id": "q3",
+        "prompt": "You need a table change. You\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Pick up another player's chips as a joke."
+          },
+          {
+            "id": "b",
+            "text": "Move the button to your new seat."
+          },
+          {
+            "id": "c",
+            "text": "Ask the floor or brush and move only between hands."
+          },
+          {
+            "id": "d",
+            "text": "Sit down in a new game while still dealt into the old one."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "One live hand at a time. Changes go through staff."
+      },
+      {
+        "id": "q4",
+        "prompt": "A player wants you to soft-play their friend. The correct response is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Agree if the game is casual."
+          },
+          {
+            "id": "b",
+            "text": "Check-raise only their friend."
+          },
+          {
+            "id": "c",
+            "text": "Show them your cards each hand."
+          },
+          {
+            "id": "d",
+            "text": "Refuse. Soft-playing a partner is collusion."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Playing a private alliance against the table is cheating, not etiquette."
+      }
+    ]
+  },
+  "lesson-01-05-03-room-procedure-check": {
+    "id": "lesson-01-05-03-room-procedure-check",
+    "lessonId": "lesson-01-05-03-room-procedure-check",
+    "version": "1.0.0",
+    "title": "Room procedure check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "The floor's job in a dispute is to\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Apply the house rules to the facts."
+          },
+          {
+            "id": "b",
+            "text": "Award the pot to the regular."
+          },
+          {
+            "id": "c",
+            "text": "Poll the table and take a vote."
+          },
+          {
+            "id": "d",
+            "text": "Ignore the dealer."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "The floor decides procedure. It is not a popularity contest."
+      },
+      {
+        "id": "q2",
+        "prompt": "Your cards hit the muck by accident and are irretrievably mixed. Expect\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A guaranteed refund of the pot."
+          },
+          {
+            "id": "b",
+            "text": "A dead hand, unless the dealer can still clearly identify them."
+          },
+          {
+            "id": "c",
+            "text": "An automatic win."
+          },
+          {
+            "id": "d",
+            "text": "A new deal of only your cards."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Fouled or indistinguishable cards are usually dead. Protect them before that happens."
+      },
+      {
+        "id": "q3",
+        "prompt": "Acting in turn matters because\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "It lets you see future cards."
+          },
+          {
+            "id": "b",
+            "text": "The button can skip seats."
+          },
+          {
+            "id": "c",
+            "text": "Out-of-turn action changes what later players do and may bind you."
+          },
+          {
+            "id": "d",
+            "text": "Only the big blind may speak."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Order of action is part of the game, not a courtesy."
+      },
+      {
+        "id": "q4",
+        "prompt": "Which request is appropriate?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Show me the cards you folded last hand."
+          },
+          {
+            "id": "b",
+            "text": "Let me use your account to hold my chips."
+          },
+          {
+            "id": "c",
+            "text": "Tell me what to bet; I will raise you back."
+          },
+          {
+            "id": "d",
+            "text": "Dealer, please count the pot before I call."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "A pot count is normal. Fishing for folded cards, sharing accounts, or chip-dumping is not."
+      }
+    ]
+  },
+  "lesson-02-01-01-chip-denominations-and-pot-math": {
+    "id": "lesson-02-01-01-chip-denominations-and-pot-math",
+    "lessonId": "lesson-02-01-01-chip-denominations-and-pot-math",
+    "version": "1.0.0",
+    "title": "Chip denominations and pot math",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "$1/$2 with a $200 stack is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "50 big blinds."
+          },
+          {
+            "id": "b",
+            "text": "100 big blinds."
+          },
+          {
+            "id": "c",
+            "text": "200 big blinds."
+          },
+          {
+            "id": "d",
+            "text": "2 big blinds."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Divide the stack by the big blind. 200 / 2 = 100."
+      },
+      {
+        "id": "q2",
+        "prompt": "A pot-sized bet into a $40 pot is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "$40."
+          },
+          {
+            "id": "b",
+            "text": "$20."
+          },
+          {
+            "id": "c",
+            "text": "$80."
+          },
+          {
+            "id": "d",
+            "text": "$4."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Pot-sized means the amount already in the pot, before your bet."
+      },
+      {
+        "id": "q3",
+        "prompt": "You are asked to call $25 into a $100 pot. The final pot if you call is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "$100."
+          },
+          {
+            "id": "b",
+            "text": "$25."
+          },
+          {
+            "id": "c",
+            "text": "$150."
+          },
+          {
+            "id": "d",
+            "text": "$125."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "The $25 is added to the $100, so you risk 25 to win 125, and the pot becomes 150."
+      },
+      {
+        "id": "q4",
+        "prompt": "Converting everything to big blinds helps because\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Chips of different colors cannot be counted."
+          },
+          {
+            "id": "b",
+            "text": "The casino requires BB speech."
+          },
+          {
+            "id": "c",
+            "text": "Dollars are illegal at the table."
+          },
+          {
+            "id": "d",
+            "text": "Stakes change, but 100 big blinds means the same depth at $1/$2 or $2/$5."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Big blinds compare depth across stake sizes."
+      }
+    ]
+  },
+  "lesson-02-01-02-account-chips-and-pots": {
+    "id": "lesson-02-01-02-account-chips-and-pots",
+    "lessonId": "lesson-02-01-02-account-chips-and-pots",
+    "version": "1.0.0",
+    "title": "Account chips and pots",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "$2/$5. Both blinds fold after you open to $15 and the button calls $15. Pot going to the flop is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "$32: the $2, the $5, your $15, and the button's $15."
+          },
+          {
+            "id": "b",
+            "text": "$15."
+          },
+          {
+            "id": "c",
+            "text": "$30, ignoring blinds."
+          },
+          {
+            "id": "d",
+            "text": "$5."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Posted blinds stay in the pot even when those players fold."
+      },
+      {
+        "id": "q2",
+        "prompt": "If you lose the count, the reliable fix is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Guess from chip height."
+          },
+          {
+            "id": "b",
+            "text": "Ask the dealer to count the pot."
+          },
+          {
+            "id": "c",
+            "text": "Let the bettor announce a number and ship it."
+          },
+          {
+            "id": "d",
+            "text": "Add only the last bet."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "A dealer count is a normal request before a big decision."
+      },
+      {
+        "id": "q3",
+        "prompt": "Hero shoves $90 into $30 and a covering player calls $90. Pot at showdown is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "$90."
+          },
+          {
+            "id": "b",
+            "text": "$30."
+          },
+          {
+            "id": "c",
+            "text": "$210."
+          },
+          {
+            "id": "d",
+            "text": "$120."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "30 + 90 + 90 = 210."
+      },
+      {
+        "id": "q4",
+        "prompt": "A half-pot bet into $60 is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "$60."
+          },
+          {
+            "id": "b",
+            "text": "$15."
+          },
+          {
+            "id": "c",
+            "text": "$120."
+          },
+          {
+            "id": "d",
+            "text": "$30."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Half of 60 is 30."
+      }
+    ]
+  },
+  "lesson-02-01-03-chip-accounting-check": {
+    "id": "lesson-02-01-03-chip-accounting-check",
+    "lessonId": "lesson-02-01-03-chip-accounting-check",
+    "version": "1.0.0",
+    "title": "Chip accounting check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "$5/$10, stack of $1,000. Depth is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "100 big blinds."
+          },
+          {
+            "id": "b",
+            "text": "200 big blinds."
+          },
+          {
+            "id": "c",
+            "text": "50 big blinds."
+          },
+          {
+            "id": "d",
+            "text": "1,000 big blinds."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "1000 / 10 = 100 big blinds."
+      },
+      {
+        "id": "q2",
+        "prompt": "Call $40 into a pot that will be $160 after your call. You are risking 40 to win\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "$40."
+          },
+          {
+            "id": "b",
+            "text": "$120."
+          },
+          {
+            "id": "c",
+            "text": "$160."
+          },
+          {
+            "id": "d",
+            "text": "$200."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "The $160 includes your call, so the amount you win if they are bluffing is $120."
+      },
+      {
+        "id": "q3",
+        "prompt": "Which count is wrong?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "$10 + $10 = $20."
+          },
+          {
+            "id": "b",
+            "text": "A $15 bet into $45 is one-third pot."
+          },
+          {
+            "id": "c",
+            "text": "A $50 call into a $50 pot makes the final pot $50."
+          },
+          {
+            "id": "d",
+            "text": "Two $25 calls of a $25 bet add $75 to the previous pot."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "A $50 pot plus a $50 call becomes $100, not $50."
+      },
+      {
+        "id": "q4",
+        "prompt": "Before a big call, the disciplined step is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Guess the pot from the chip pile's height."
+          },
+          {
+            "id": "b",
+            "text": "Trust the bettor's announced pot."
+          },
+          {
+            "id": "c",
+            "text": "Skip the count because live pots are unknowable."
+          },
+          {
+            "id": "d",
+            "text": "Confirm the bet size and the pot."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Price first, then decide. Do not skip the count on a large call."
+      }
+    ]
+  },
+  "lesson-02-02-01-equity-outs-and-draws": {
+    "id": "lesson-02-02-01-equity-outs-and-draws",
+    "lessonId": "lesson-02-02-01-equity-outs-and-draws",
+    "version": "1.0.0",
+    "title": "Equity, outs, and draws",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "A flush draw on the flop has how many outs to the flush, if no pair outs are counted?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "9."
+          },
+          {
+            "id": "b",
+            "text": "4."
+          },
+          {
+            "id": "c",
+            "text": "2."
+          },
+          {
+            "id": "d",
+            "text": "15."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "There are 13 cards of the suit and you already see 4, so 9 remain."
+      },
+      {
+        "id": "q2",
+        "prompt": "An open-ended straight draw on the flop has\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "2 outs."
+          },
+          {
+            "id": "b",
+            "text": "8 outs."
+          },
+          {
+            "id": "c",
+            "text": "9 outs."
+          },
+          {
+            "id": "d",
+            "text": "1 out."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Four cards on each end complete the straight, so eight outs."
+      },
+      {
+        "id": "q3",
+        "prompt": "The rule of 2 and 4 says a 9-out draw has about\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "9% on the flop to the river."
+          },
+          {
+            "id": "b",
+            "text": "2% on the river."
+          },
+          {
+            "id": "c",
+            "text": "About 36% from the flop to the river, and about 18% with one card to come."
+          },
+          {
+            "id": "d",
+            "text": "50% exactly."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Multiply outs by 4 with two cards to come, or by 2 with one. 9\u00d74=36, 9\u00d72=18."
+      },
+      {
+        "id": "q4",
+        "prompt": "Equity is not the same as realization because\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Outs are always paid in full."
+          },
+          {
+            "id": "b",
+            "text": "Position and future bets do not matter."
+          },
+          {
+            "id": "c",
+            "text": "A draw cannot win unimproved."
+          },
+          {
+            "id": "d",
+            "text": "You may not get to see all the cards, or you may win extra when you hit."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Fold equity, position, and stacks change how much of your raw equity you keep."
+      }
+    ]
+  },
+  "lesson-02-02-02-estimate-equity-on-draws": {
+    "id": "lesson-02-02-02-estimate-equity-on-draws",
+    "lessonId": "lesson-02-02-02-estimate-equity-on-draws",
+    "version": "1.0.0",
+    "title": "Estimate equity on draws",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Turn, 8 clean outs, one card left. A fair quick estimate is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "8%."
+          },
+          {
+            "id": "b",
+            "text": "About 16%."
+          },
+          {
+            "id": "c",
+            "text": "32%."
+          },
+          {
+            "id": "d",
+            "text": "50%."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Eight outs times two is about 16 percent with one card to come."
+      },
+      {
+        "id": "q2",
+        "prompt": "Flop, you have a nut flush draw and one overcard. A careful count is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Nine flush outs, plus any overcard outs that are still clean against the betting range."
+          },
+          {
+            "id": "b",
+            "text": "The nuts already."
+          },
+          {
+            "id": "c",
+            "text": "Two outs total."
+          },
+          {
+            "id": "d",
+            "text": "Zero equity if someone bets."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Do not turn the overcard into extra flush outs. Add it only if that card actually wins."
+      },
+      {
+        "id": "q3",
+        "prompt": "You have 4 outs on the river. Calling is mainly about\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Always calling because any out can hit."
+          },
+          {
+            "id": "b",
+            "text": "The suit color."
+          },
+          {
+            "id": "c",
+            "text": "Whether the price is better than about 8%, and whether the out is clean."
+          },
+          {
+            "id": "d",
+            "text": "The button's mood."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Four outs is about 8 percent. You need a very good price, and the out must actually win."
+      },
+      {
+        "id": "q4",
+        "prompt": "A gutshot has\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "8 outs."
+          },
+          {
+            "id": "b",
+            "text": "9 outs."
+          },
+          {
+            "id": "c",
+            "text": "12 outs."
+          },
+          {
+            "id": "d",
+            "text": "4 outs."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Only one rank completes a gutshot, and there are four cards of that rank."
+      }
+    ]
+  },
+  "lesson-02-02-03-equity-and-draws-check": {
+    "id": "lesson-02-02-03-equity-and-draws-check",
+    "lessonId": "lesson-02-02-03-equity-and-draws-check",
+    "version": "1.0.0",
+    "title": "Equity and draws check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Which draw has more raw outs on the flop?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A flush draw (9) versus a gutshot (4)."
+          },
+          {
+            "id": "b",
+            "text": "A gutshot versus a flush draw."
+          },
+          {
+            "id": "c",
+            "text": "One overcard versus a flush draw."
+          },
+          {
+            "id": "d",
+            "text": "A backdoor draw versus a made flush."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Nine flush outs is more than four gutshot outs."
+      },
+      {
+        "id": "q2",
+        "prompt": "Rule of 4 is for\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The river only."
+          },
+          {
+            "id": "b",
+            "text": "The flop, with two cards still to come."
+          },
+          {
+            "id": "c",
+            "text": "Preflop all-ins only."
+          },
+          {
+            "id": "d",
+            "text": "Counting the pot."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Two cards to come, multiply outs by about four."
+      },
+      {
+        "id": "q3",
+        "prompt": "An out is dirty when\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "It is the same color as the felt."
+          },
+          {
+            "id": "b",
+            "text": "It completes your hand and also completes a better hand for the opponent."
+          },
+          {
+            "id": "c",
+            "text": "It is an ace."
+          },
+          {
+            "id": "d",
+            "text": "The dealer burns it."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "A dirty out gives you a hand that still loses."
+      },
+      {
+        "id": "q4",
+        "prompt": "Seeing both remaining cards is more likely when\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "You are all-in or the price to continue is small relative to the chance you hit."
+          },
+          {
+            "id": "b",
+            "text": "You fold."
+          },
+          {
+            "id": "c",
+            "text": "You bet huge with no fold equity and no draw."
+          },
+          {
+            "id": "d",
+            "text": "Stacks are deep and you will fold every turn."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "All-in equity is raw equity. As a favorite to fold later, you realize less."
+      }
+    ]
+  },
+  "lesson-02-03-01-pot-odds-and-expected-value": {
+    "id": "lesson-02-03-01-pot-odds-and-expected-value",
+    "lessonId": "lesson-02-03-01-pot-odds-and-expected-value",
+    "version": "1.0.0",
+    "title": "Pot odds and expected value",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Pot odds are\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The price of a call compared with the pot you can win."
+          },
+          {
+            "id": "b",
+            "text": "Your probability of winning the tournament."
+          },
+          {
+            "id": "c",
+            "text": "The rake percentage only."
+          },
+          {
+            "id": "d",
+            "text": "A required bluff on the river."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "You compare the cost of calling with the size of the pot you are calling into."
+      },
+      {
+        "id": "q2",
+        "prompt": "Call $20 into a pot that already has $80 in it, and your call closes the action. You are getting\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "1 to 1."
+          },
+          {
+            "id": "b",
+            "text": "5 to 1, because you win 100 for a 20 call if the $80 includes only the current pot before your call \u2014 recount: risk 20 to win 100."
+          },
+          {
+            "id": "c",
+            "text": "20 to 1."
+          },
+          {
+            "id": "d",
+            "text": "Even money on a $20 pot."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "If $80 is already there and nobody else can raise, you risk 20 to win 100. That is 5 to 1."
+      },
+      {
+        "id": "q3",
+        "prompt": "A call is immediately profitable on raw equity when\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "You feel confident."
+          },
+          {
+            "id": "b",
+            "text": "The player seems weak."
+          },
+          {
+            "id": "c",
+            "text": "Your chance of winning is higher than the break-even percent of the price."
+          },
+          {
+            "id": "d",
+            "text": "You have position, even with zero equity."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Break-even percent is call / (pot you win + call). Equity above that is a profitable call if the out is clean and there is no more betting."
+      },
+      {
+        "id": "q4",
+        "prompt": "Fold equity is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The equity of a folded hand you already mucked."
+          },
+          {
+            "id": "b",
+            "text": "The chance you hit a flush."
+          },
+          {
+            "id": "c",
+            "text": "The rake."
+          },
+          {
+            "id": "d",
+            "text": "The extra value from opponents folding when you bet."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "A bet can win immediately when they fold, which a pure check cannot do."
+      }
+    ]
+  },
+  "lesson-02-03-02-compute-pot-odds-decisions": {
+    "id": "lesson-02-03-02-compute-pot-odds-decisions",
+    "lessonId": "lesson-02-03-02-compute-pot-odds-decisions",
+    "version": "1.0.0",
+    "title": "Compute pot odds decisions",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "You must call $10 into a $40 pot. Break-even equity is about\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "10%."
+          },
+          {
+            "id": "b",
+            "text": "20%."
+          },
+          {
+            "id": "c",
+            "text": "40%."
+          },
+          {
+            "id": "d",
+            "text": "50%."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Risk 10 to win 50 total after the call, so 10/50 = 20%. Or 10/(40+10)."
+      },
+      {
+        "id": "q2",
+        "prompt": "You have about 32% equity with a flush draw on the flop and the pot offers you 4 to 1. If you will see both cards\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The price is better than 20% break-even, so a call can be fine before implied odds."
+          },
+          {
+            "id": "b",
+            "text": "You must fold every draw."
+          },
+          {
+            "id": "c",
+            "text": "4 to 1 means you need 50%."
+          },
+          {
+            "id": "d",
+            "text": "Pot odds ignore the number of outs."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "4 to 1 is 20 percent. Thirty-two percent clears that price if the draw is clean and you see both cards."
+      },
+      {
+        "id": "q3",
+        "prompt": "A bluff that risks $50 to win $50 needs to work\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "More than 75% of the time."
+          },
+          {
+            "id": "b",
+            "text": "Never; bluffs are free."
+          },
+          {
+            "id": "c",
+            "text": "More than half the time if you never win when called."
+          },
+          {
+            "id": "d",
+            "text": "Less than 10% of the time."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Risk 50 to win 50 is even money. With no showdown value you need folds more than half the time."
+      },
+      {
+        "id": "q4",
+        "prompt": "Which statement about EV is right?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A winning session proves every call was correct."
+          },
+          {
+            "id": "b",
+            "text": "Losing a called bluff means the call was a mistake."
+          },
+          {
+            "id": "c",
+            "text": "You should never call without the nuts."
+          },
+          {
+            "id": "d",
+            "text": "A +EV call can still lose this particular hand."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "One result is not the decision. EV is the average over the chances."
+      }
+    ]
+  },
+  "lesson-02-03-03-pot-odds-and-ev-check": {
+    "id": "lesson-02-03-03-pot-odds-and-ev-check",
+    "lessonId": "lesson-02-03-03-pot-odds-and-ev-check",
+    "version": "1.0.0",
+    "title": "Pot odds and EV check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Break-even percent for a call of $25 into $75 is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "25%."
+          },
+          {
+            "id": "b",
+            "text": "75%."
+          },
+          {
+            "id": "c",
+            "text": "10%."
+          },
+          {
+            "id": "d",
+            "text": "50%."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "25 / (75+25) = 25%."
+      },
+      {
+        "id": "q2",
+        "prompt": "You have 9% equity and the price requires 25%. A pure call is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Close."
+          },
+          {
+            "id": "b",
+            "text": "Not justified on pot odds alone."
+          },
+          {
+            "id": "c",
+            "text": "Mandatory because you have outs."
+          },
+          {
+            "id": "d",
+            "text": "Profitable because 9 is an odd number."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Nine percent does not clear a twenty-five percent price."
+      },
+      {
+        "id": "q3",
+        "prompt": "Betting can be better than calling when\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "You have no hand and no fold equity."
+          },
+          {
+            "id": "b",
+            "text": "The pot is zero."
+          },
+          {
+            "id": "c",
+            "text": "Fold equity or protection adds value you do not get by only calling."
+          },
+          {
+            "id": "d",
+            "text": "You are facing an all-in and cannot bet."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "If they can still fold or you deny their equity, betting is a different action from calling."
+      },
+      {
+        "id": "q4",
+        "prompt": "Results-oriented thinking sounds like\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "I called because the price was right, and this time I lost."
+          },
+          {
+            "id": "b",
+            "text": "I will review the price, not the one outcome."
+          },
+          {
+            "id": "c",
+            "text": "Variance exists."
+          },
+          {
+            "id": "d",
+            "text": "I lost, so the call was wrong and I should chase it back."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Chasing a single loss is not a pot-odds calculation."
+      }
+    ]
+  },
+  "lesson-02-04-01-implied-and-reverse-implied-odds": {
+    "id": "lesson-02-04-01-implied-and-reverse-implied-odds",
+    "lessonId": "lesson-02-04-01-implied-and-reverse-implied-odds",
+    "version": "1.0.0",
+    "title": "Implied and reverse implied odds",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Implied odds are\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Chips you expect to win later when you hit, beyond the current pot."
+          },
+          {
+            "id": "b",
+            "text": "The current pot only."
+          },
+          {
+            "id": "c",
+            "text": "The rake."
+          },
+          {
+            "id": "d",
+            "text": "A rule that you may call any bet with a draw."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "They matter when stacks remain and you can get paid on later streets."
+      },
+      {
+        "id": "q2",
+        "prompt": "Reverse implied odds are\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Extra chips you win with the nuts."
+          },
+          {
+            "id": "b",
+            "text": "Extra chips you lose when you hit a second-best hand."
+          },
+          {
+            "id": "c",
+            "text": "The same as pot odds."
+          },
+          {
+            "id": "d",
+            "text": "A tournament bounty."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Dominated draws and weak pairs can 'hit' and still lose a big pot."
+      },
+      {
+        "id": "q3",
+        "prompt": "Implied odds are weaker when\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Stacks are deep and the opponent will pay you off."
+          },
+          {
+            "id": "b",
+            "text": "You have the nuts when you hit."
+          },
+          {
+            "id": "c",
+            "text": "You are already all-in, or the opponent will not pay a large bet."
+          },
+          {
+            "id": "d",
+            "text": "Position lets you control the pot."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "If there is no more money to win, only the current price matters."
+      },
+      {
+        "id": "q4",
+        "prompt": "A small pair calling a huge raise out of position, deep, mainly risks\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Too many immediate pot odds, which are excellent."
+          },
+          {
+            "id": "b",
+            "text": "Missing the rule of 4."
+          },
+          {
+            "id": "c",
+            "text": "Being unable to bluff the river with air only."
+          },
+          {
+            "id": "d",
+            "text": "Reverse implied odds: you flop a set rarely, and you often face large bets when you miss or are dominated."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Set-mining needs the right price and the right stacks. It is not an automatic call."
+      }
+    ]
+  },
+  "lesson-02-04-02-price-future-street-value": {
+    "id": "lesson-02-04-02-price-future-street-value",
+    "lessonId": "lesson-02-04-02-price-future-street-value",
+    "version": "1.0.0",
+    "title": "Price future-street value",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "You are all-in on the flop with a draw. Which odds matter?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Pot odds and raw equity. There are no future bets to imply."
+          },
+          {
+            "id": "b",
+            "text": "Only implied odds."
+          },
+          {
+            "id": "c",
+            "text": "Only reverse implied odds from later bets."
+          },
+          {
+            "id": "d",
+            "text": "Neither, because all-in pots are not real."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Once all-in, the rest of the cards are free. Use equity versus the current pot."
+      },
+      {
+        "id": "q2",
+        "prompt": "Deep stacks and a nut flush draw in position improve\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Nothing."
+          },
+          {
+            "id": "b",
+            "text": "Implied odds, because you can still win more when you hit."
+          },
+          {
+            "id": "c",
+            "text": "The number of flush outs from 9 to 15."
+          },
+          {
+            "id": "d",
+            "text": "The board texture by itself."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Position and leftover stacks let you extract more on later streets."
+      },
+      {
+        "id": "q3",
+        "prompt": "Calling a large river bet with a bluff-catcher is not an implied-odds call because\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The river still has two cards to come."
+          },
+          {
+            "id": "b",
+            "text": "You can still bet later."
+          },
+          {
+            "id": "c",
+            "text": "There is no later street. You are deciding on the current price."
+          },
+          {
+            "id": "d",
+            "text": "Pot odds expire on the river."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Implied odds need future betting. The river is the last card."
+      },
+      {
+        "id": "q4",
+        "prompt": "A dominated flush draw (you have the low flush draw, they can have the nut draw) has\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Perfect implied odds."
+          },
+          {
+            "id": "b",
+            "text": "Nine outs that always win."
+          },
+          {
+            "id": "c",
+            "text": "No reverse implied odds."
+          },
+          {
+            "id": "d",
+            "text": "Reverse implied odds: some of your flush cards still lose."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Do not count outs that make you second best as clean."
+      }
+    ]
+  },
+  "lesson-02-04-03-future-street-value-check": {
+    "id": "lesson-02-04-03-future-street-value-check",
+    "lessonId": "lesson-02-04-03-future-street-value-check",
+    "version": "1.0.0",
+    "title": "Future-street value check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Best spot for implied odds?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Deep stacks, nutted draw, opponent likely to pay."
+          },
+          {
+            "id": "b",
+            "text": "All-in for a few chips with air."
+          },
+          {
+            "id": "c",
+            "text": "River call with ace-high."
+          },
+          {
+            "id": "d",
+            "text": "A short stack already committed."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "You need money behind and a hand that can get paid when it hits."
+      },
+      {
+        "id": "q2",
+        "prompt": "Worst misuse of implied odds?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Folding a draw that is not getting the right price and will not get paid."
+          },
+          {
+            "id": "b",
+            "text": "Calling too much because 'I might hit and stack them' with no plan."
+          },
+          {
+            "id": "c",
+            "text": "Counting nine clean flush outs."
+          },
+          {
+            "id": "d",
+            "text": "Using pot odds when stacks are all-in."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Implied odds are not a reason to ignore a terrible price."
+      },
+      {
+        "id": "q3",
+        "prompt": "Rake and a tip reduce\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The number of outs."
+          },
+          {
+            "id": "b",
+            "text": "Your position."
+          },
+          {
+            "id": "c",
+            "text": "The net pot you actually win."
+          },
+          {
+            "id": "d",
+            "text": "The big blind."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "What you keep is smaller than the chips in the middle. Tight games feel this more."
+      },
+      {
+        "id": "q4",
+        "prompt": "Set-mining a pair is more reasonable when\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The raise is huge and stacks are shallow."
+          },
+          {
+            "id": "b",
+            "text": "You are out of position against a nit who will not pay a set."
+          },
+          {
+            "id": "c",
+            "text": "You will stack off without a set."
+          },
+          {
+            "id": "d",
+            "text": "The call is small relative to the effective stack you can win when you flop a set."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "A common live guide is a small price versus a deep stack, not a huge call versus a short stack."
+      }
+    ]
+  },
+  "lesson-02-05-01-ranges-and-combo-counting": {
+    "id": "lesson-02-05-01-ranges-and-combo-counting",
+    "lessonId": "lesson-02-05-01-ranges-and-combo-counting",
+    "version": "1.0.0",
+    "title": "Ranges and combo counting",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "A poker range is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The set of hands a player can still have, not one exact hand."
+          },
+          {
+            "id": "b",
+            "text": "The single hand you put them on."
+          },
+          {
+            "id": "c",
+            "text": "Only the nuts."
+          },
+          {
+            "id": "d",
+            "text": "The board."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Live reads start with every hand that would take the line, then remove what the line folds."
+      },
+      {
+        "id": "q2",
+        "prompt": "How many combinations of ace-king are in a fresh deck?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "6."
+          },
+          {
+            "id": "b",
+            "text": "16."
+          },
+          {
+            "id": "c",
+            "text": "12."
+          },
+          {
+            "id": "d",
+            "text": "4."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "AK offsuit has 12 combinations and AK suited has 4, totaling 16."
+      },
+      {
+        "id": "q3",
+        "prompt": "How many pocket-pair combinations of pocket aces?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "12."
+          },
+          {
+            "id": "b",
+            "text": "16."
+          },
+          {
+            "id": "c",
+            "text": "6."
+          },
+          {
+            "id": "d",
+            "text": "3."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Choose 2 suits of the ace from 4: 4\u00d73/2 = 6."
+      },
+      {
+        "id": "q4",
+        "prompt": "Why remove combinations as the hand continues?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "To make the range always 50%."
+          },
+          {
+            "id": "b",
+            "text": "Because folded cards stay in the range."
+          },
+          {
+            "id": "c",
+            "text": "Because the board does not matter."
+          },
+          {
+            "id": "d",
+            "text": "Betting, calling, and board cards make some holdings impossible or unlikely."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "A tight player's check-raise removes many weak hands they would not play that way."
+      }
+    ]
+  },
+  "lesson-02-05-02-count-key-combinations": {
+    "id": "lesson-02-05-02-count-key-combinations",
+    "lessonId": "lesson-02-05-02-count-key-combinations",
+    "version": "1.0.0",
+    "title": "Count key combinations",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Board is Ah 7c 2d. How many ace-king combinations remain?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "12. One ace is on the board, so the 4 suited AK with that ace are impossible and 12 offsuit-or-other-suit combinations remain from the original 16."
+          },
+          {
+            "id": "b",
+            "text": "16."
+          },
+          {
+            "id": "c",
+            "text": "6."
+          },
+          {
+            "id": "d",
+            "text": "1."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Four aces existed. One is visible, so each AK combo using that ace is gone. 16 \u2212 4 = 12."
+      },
+      {
+        "id": "q2",
+        "prompt": "Pocket pairs are fewer than offsuit broadways because\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Pairs use two cards of the same rank, and there are only six suit pairings."
+          },
+          {
+            "id": "b",
+            "text": "Pairs are illegal."
+          },
+          {
+            "id": "c",
+            "text": "Offsuit hands have six combinations."
+          },
+          {
+            "id": "d",
+            "text": "The deck has more ranks than suits."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Each pocket pair has six combinations. A specific offsuit hand like AKo has twelve."
+      },
+      {
+        "id": "q3",
+        "prompt": "If a nit 3-bets and you block aces with an ace in your hand\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "They have more ace combinations."
+          },
+          {
+            "id": "b",
+            "text": "Blockers do nothing."
+          },
+          {
+            "id": "c",
+            "text": "You reduce the combinations of strong aces they can hold."
+          },
+          {
+            "id": "d",
+            "text": "You guarantee they are bluffing."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "A blocker removes some strong combos. It does not prove a bluff."
+      },
+      {
+        "id": "q4",
+        "prompt": "Putting someone on exactly 7h 2c after one limp is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Sound range construction."
+          },
+          {
+            "id": "b",
+            "text": "Required before every call."
+          },
+          {
+            "id": "c",
+            "text": "Better than listing a range."
+          },
+          {
+            "id": "d",
+            "text": "Too narrow. Start with the hands that take the action."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "One exact hand is a guess. A range can be updated."
+      }
+    ]
+  },
+  "lesson-02-05-03-ranges-and-combos-check": {
+    "id": "lesson-02-05-03-ranges-and-combos-check",
+    "lessonId": "lesson-02-05-03-ranges-and-combos-check",
+    "version": "1.0.0",
+    "title": "Ranges and combos check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Which count is correct?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Pocket kings: 16 combinations."
+          },
+          {
+            "id": "b",
+            "text": "Pocket kings: 6 combinations."
+          },
+          {
+            "id": "c",
+            "text": "AK suited: 12 combinations."
+          },
+          {
+            "id": "d",
+            "text": "One specific suited hand: 6 combinations."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Any pocket pair has 6 combos. One specific suited hand has 4. AKo has 12."
+      },
+      {
+        "id": "q2",
+        "prompt": "A range gets tighter when\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The player, the position, and the line remove weak hands."
+          },
+          {
+            "id": "b",
+            "text": "You want them to be bluffing."
+          },
+          {
+            "id": "c",
+            "text": "The pot is small."
+          },
+          {
+            "id": "d",
+            "text": "You have not watched them."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Tight lines and tight players delete combinations. Hope does not."
+      },
+      {
+        "id": "q3",
+        "prompt": "Using ranges at the table should stay\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A full solver printout mid-hand."
+          },
+          {
+            "id": "b",
+            "text": "An excuse to ignore the action."
+          },
+          {
+            "id": "c",
+            "text": "A short list you can actually use: value, draws, and bluffs that took this line."
+          },
+          {
+            "id": "d",
+            "text": "Secret, so you never check it against the board."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "A usable range is small enough to count and still honest about the line."
+      },
+      {
+        "id": "q4",
+        "prompt": "Blockers are most useful when\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "You ignore the opponent's range."
+          },
+          {
+            "id": "b",
+            "text": "Every river call is a bluff-catch."
+          },
+          {
+            "id": "c",
+            "text": "You hold a card they need for their value hands or their bluffs."
+          },
+          {
+            "id": "d",
+            "text": "You want a reason to call without pot odds."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "A blocker changes the mix. It does not replace the price or the line."
+      }
+    ]
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "id": "lesson-00-03-03-safe-start-check",
+  "lessonId": "lesson-00-03-03-safe-start-check",
+  "version": "1.0.0",
+  "title": "Safe-start check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Poker bankroll money and living expenses should be\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The same account so you can reload from rent."
+        },
+        {
+          "id": "b",
+          "text": "Separated before you play."
+        },
+        {
+          "id": "c",
+          "text": "Borrowed if you are confident."
+        },
+        {
+          "id": "d",
+          "text": "Ignored because skill removes risk."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "Separation is the first safety control. Skill does not remove variance."
+    },
+    {
+      "id": "q2",
+      "prompt": "A stranger offers a private stake and wants the password to your account. You\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Refuse. Do not share accounts, devices, or credit."
+        },
+        {
+          "id": "b",
+          "text": "Accept if they seem friendly."
+        },
+        {
+          "id": "c",
+          "text": "Send half the password."
+        },
+        {
+          "id": "d",
+          "text": "Let them hold your chips overnight."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Account sharing and informal credit are common theft setups."
+    },
+    {
+      "id": "q3",
+      "prompt": "You hit your time limit but you are stuck half a buy-in. You\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Must stay until you are even."
+        },
+        {
+          "id": "b",
+          "text": "Move up in stakes."
+        },
+        {
+          "id": "c",
+          "text": "May leave. A time limit is allowed to cost money."
+        },
+        {
+          "id": "d",
+          "text": "Demand the table refund the blinds."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "Stops are allowed to fire while you are stuck. That is what they are for."
+    },
+    {
+      "id": "q4",
+      "prompt": "Responsible-play lessons in this app are\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Locked until you subscribe."
+        },
+        {
+          "id": "b",
+          "text": "Optional color, not real guidance."
+        },
+        {
+          "id": "c",
+          "text": "Only for professionals."
+        },
+        {
+          "id": "d",
+          "text": "Free and not something you should skip to reach 'real' strategy."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "Safety content stays available. It is part of being table-ready."
+    }
+  ]
+}
