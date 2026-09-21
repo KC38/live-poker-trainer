@@ -166,6 +166,8 @@ test("wave three sections expose advanced units, TAG/LAG, and capstones", () => 
     "lesson-07-10-01-capstone-srp",
     "lesson-07-10-02-capstone-3bet",
     "lesson-07-10-03-capstone-multiway-deep",
+    "lesson-07-10-04-capstone-limped",
+    "lesson-07-10-05-capstone-4bet",
     "lesson-07-12-01-five-type-final",
   ]) {
     assert.ok(
@@ -179,6 +181,40 @@ test("wave three sections expose advanced units, TAG/LAG, and capstones", () => 
   const lag = course.playerTypes.find((p) => p.id === "lag");
   assert.equal(tag?.introducedByLessonId, "lesson-06-11-02-meet-tag");
   assert.equal(lag?.introducedByLessonId, "lesson-06-12-02-meet-lag");
+  // Observe lessons must not name TAG/LAG before meet introductions.
+  const sec6Lessons = course.sections[5].units.flatMap((u) => u.lessons);
+  for (const observeId of [
+    "lesson-06-11-01-observe-selective",
+    "lesson-06-12-01-observe-wide-pressure",
+  ]) {
+    const observe = sec6Lessons.find((l) => l.id === observeId);
+    assert.ok(observe, observeId);
+    const blob = JSON.stringify(observe);
+    assert.equal(blob.includes("TAG"), false, `${observeId} leaked TAG`);
+    assert.equal(blob.includes("LAG"), false, `${observeId} leaked LAG`);
+  }
+  // Within Section 6, TAG/LAG labels must not appear in lesson bodies
+  // before their meet introductions (unit chrome may still name the type).
+  const tagIntroIdx = sec6Lessons.findIndex((l) => l.id === tag.introducedByLessonId);
+  const lagIntroIdx = sec6Lessons.findIndex((l) => l.id === lag.introducedByLessonId);
+  assert.ok(tagIntroIdx >= 0);
+  assert.ok(lagIntroIdx >= 0);
+  for (let i = 0; i < tagIntroIdx; i++) {
+    const lesson = sec6Lessons[i];
+    assert.equal(
+      JSON.stringify(lesson).includes("TAG"),
+      false,
+      `${lesson.id} mentions TAG before ${tag.introducedByLessonId}`,
+    );
+  }
+  for (let i = 0; i < lagIntroIdx; i++) {
+    const lesson = sec6Lessons[i];
+    assert.equal(
+      JSON.stringify(lesson).includes("LAG"),
+      false,
+      `${lesson.id} mentions LAG before ${lag.introducedByLessonId}`,
+    );
+  }
   const finalLesson = course.sections[6].units
     .flatMap((u) => u.lessons)
     .find((l) => l.id === "lesson-07-12-01-five-type-final");
