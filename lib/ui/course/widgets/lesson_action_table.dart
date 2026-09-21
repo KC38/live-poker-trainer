@@ -1,4 +1,4 @@
-/// Mini-table + action-dock visuals for Fold / Check / Call lessons.
+/// Mini-table + action-dock visuals for Fold/Check/Call and Bet/Raise/All-in.
 library;
 
 import 'package:flutter/material.dart';
@@ -17,8 +17,10 @@ class LessonActionSpot {
     this.potLabel = 'Pot',
     this.villainLine,
     this.streetLabel,
+    this.stackLabel,
     this.facingBet = false,
     this.identifyUnavailable = false,
+    this.openPot = false,
   });
 
   final List<String> heroCodes;
@@ -26,13 +28,19 @@ class LessonActionSpot {
   final String potLabel;
   final String? villainLine;
   final String? streetLabel;
+
+  /// Short-stack all-in teaching (e.g. "Stack 12").
+  final String? stackLabel;
   final bool facingBet;
 
   /// Checkpoint mode: tap the illegal action (Check facing a bet).
   final bool identifyUnavailable;
+
+  /// Unchecked pot — betting (not raising) is the open action.
+  final bool openPot;
 }
 
-/// Resolves a teaching spot for Fold / Check / Call activities.
+/// Resolves a teaching spot for Section 1 action lessons.
 LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
   switch (activity.id) {
     case 'act-01-03-01-guided-fold':
@@ -71,13 +79,53 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         facingBet: true,
         identifyUnavailable: true,
       );
+    case 'act-01-03-02-guided-bet':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', 'Qd'],
+        boardCodes: ['As', '7c', '2d'],
+        potLabel: 'Pot 10',
+        villainLine: 'Checked to you',
+        streetLabel: 'Flop · Top pair',
+        facingBet: false,
+        openPot: true,
+      );
+    case 'act-01-03-02-scaffolded-raise':
+      return const LessonActionSpot(
+        heroCodes: ['Kh', 'Kd'],
+        boardCodes: ['Qc', '9s', '3h'],
+        potLabel: 'Pot 10',
+        villainLine: 'Villain bets 5',
+        streetLabel: 'Flop',
+        facingBet: true,
+      );
+    case 'act-01-03-02-unguided-allin':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', 'Jc'],
+        boardCodes: ['Td', '8s', '2c'],
+        potLabel: 'Pot 30',
+        villainLine: 'Villain bets 20',
+        streetLabel: 'Flop',
+        stackLabel: 'Stack 12',
+        facingBet: true,
+      );
+    case 'act-01-03-02-checkpoint-names':
+      return const LessonActionSpot(
+        heroCodes: ['Ad', '9c'],
+        boardCodes: ['Kh', '7s', '2d'],
+        potLabel: 'Pot 8',
+        villainLine: 'Checked to you',
+        streetLabel: 'Flop',
+        facingBet: false,
+        openPot: true,
+      );
   }
   return null;
 }
 
 /// Whether this activity should render the mini-table action dock.
 bool isLessonActionTableActivity(CourseActivity activity) {
-  return activity.id.startsWith('act-01-03-01-') &&
+  final id = activity.id;
+  return (id.startsWith('act-01-03-01-') || id.startsWith('act-01-03-02-')) &&
       activity.renderer == ActivityRenderer.pokerActionSizing;
 }
 
@@ -153,6 +201,92 @@ class PassiveActionsDemo extends StatelessWidget {
               ),
               child: Text(
                 'Pot chips sit in the middle',
+                style: GoogleFonts.manrope(
+                  color: AppColors.gold,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Explain-step demo: Bet / Raise / All-in meanings on a mini felt.
+class AggressiveActionsDemo extends StatelessWidget {
+  /// Creates the demo.
+  const AggressiveActionsDemo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ExcludeSemantics(
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [AppColors.feltLight, AppColors.feltDark],
+          ),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: AppColors.feltBorder.withValues(alpha: 0.85),
+          ),
+        ),
+        child: Column(
+          children: [
+            Text(
+              'Your three aggressive buttons',
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 14),
+            Row(
+              children: const [
+                Expanded(
+                  child: _DemoActionCard(
+                    label: 'BET',
+                    caption: 'Open pot',
+                    color: AppColors.gold,
+                  ),
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: _DemoActionCard(
+                    label: 'RAISE',
+                    caption: 'Reopen bet',
+                    color: AppColors.gold,
+                  ),
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: _DemoActionCard(
+                    label: 'ALL-IN',
+                    caption: 'Stack-capped',
+                    color: AppColors.danger,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.feltDark.withValues(alpha: 0.65),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: AppColors.gold.withValues(alpha: 0.45),
+                ),
+              ),
+              child: Text(
+                'All-in never exceeds your stack',
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
                   fontSize: 12,
@@ -277,7 +411,15 @@ class LessonActionTable extends StatelessWidget {
             ),
           ],
           const SizedBox(height: 12),
-          _PotChip(label: spot.potLabel),
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              _PotChip(label: spot.potLabel),
+              if (spot.stackLabel != null) _PotChip(label: spot.stackLabel!),
+            ],
+          ),
           if (board.isNotEmpty) ...[
             const SizedBox(height: 12),
             Row(
@@ -313,6 +455,16 @@ class LessonActionTable extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               'A bet faces you',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ] else if (spot.openPot) ...[
+            const SizedBox(height: 8),
+            Text(
+              'Pot is open to a bet',
               style: GoogleFonts.manrope(
                 color: AppColors.gold,
                 fontSize: 11,
@@ -440,6 +592,9 @@ class _DockButton extends StatelessWidget {
       return AppColors.slateDark.withValues(alpha: 0.55);
     }
     if (action.startsWith('FOLD')) return AppColors.danger.withValues(alpha: 0.4);
+    if (action.startsWith('ALL')) {
+      return AppColors.danger.withValues(alpha: 0.45);
+    }
     if (action.startsWith('RAISE') || action.startsWith('BET')) {
       return AppColors.gold.withValues(alpha: 0.28);
     }
@@ -450,7 +605,9 @@ class _DockButton extends StatelessWidget {
     if (selected) return AppColors.gold;
     if (unavailableLook) return AppColors.slate;
     final action = (choice.action ?? choice.label).toUpperCase();
-    if (action.startsWith('FOLD')) return AppColors.danger;
+    if (action.startsWith('FOLD') || action.startsWith('ALL')) {
+      return AppColors.danger;
+    }
     if (action.startsWith('RAISE') || action.startsWith('BET')) {
       return AppColors.gold;
     }
@@ -460,11 +617,15 @@ class _DockButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final action = (choice.action ?? choice.label).toUpperCase();
-    // Live-table labels stay short (CHECK / CALL 5). Longer content labels like
-    // "Check free" stay in Semantics so agents can disambiguate from footer.
+    // Live-table labels stay short (CHECK / CALL 5 / ALL-IN 12). Longer content
+    // labels stay in Semantics so agents can disambiguate from footer.
     final short =
         unavailableLook
             ? 'CHECK (off)'
+            : action.startsWith('ALL')
+            ? (choice.label.toUpperCase().contains('12')
+                ? 'ALL-IN 12'
+                : 'ALL-IN')
             : switch (action.split(' ').first) {
               'FOLD' => 'FOLD',
               'CHECK' => 'CHECK',
@@ -474,7 +635,9 @@ class _DockButton extends StatelessWidget {
               'RAISE' => choice.label.toUpperCase().startsWith('RAISE')
                   ? choice.label.toUpperCase()
                   : 'RAISE',
-              'BET' => choice.label.toUpperCase(),
+              'BET' => choice.label.toUpperCase().startsWith('BET')
+                  ? choice.label.toUpperCase()
+                  : 'BET',
               _ => choice.label.toUpperCase(),
             };
     return Semantics(

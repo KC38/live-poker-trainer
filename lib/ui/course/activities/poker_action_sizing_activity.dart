@@ -37,6 +37,10 @@ class PokerActionSizingActivity extends StatelessWidget {
             activity.primaryCoachLine?.text ??
             (spot?.identifyUnavailable == true
                 ? 'A bet is out — tap the action you cannot take.'
+                : spot?.stackLabel != null
+                ? 'Short stack — tap what you can put in.'
+                : spot?.openPot == true
+                ? 'The pot is open — tap the first chips.'
                 : spot?.facingBet == true
                 ? 'Read the pot and the bet — tap your action.'
                 : spot != null
@@ -75,7 +79,11 @@ class PokerActionSizingActivity extends StatelessWidget {
                 selected == null
                     ? (spot.identifyUnavailable
                         ? 'Tap the illegal action.'
-                        : 'Tap Fold, Check, or Call on the dock.')
+                        : spot.stackLabel != null
+                        ? 'Tap All-in, Call, or Fold on the dock.'
+                        : spot.openPot
+                        ? 'Tap Bet to open the pot.'
+                        : 'Tap your action on the dock.')
                     : 'Ready — Lock in below.',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(

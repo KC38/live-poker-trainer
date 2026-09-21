@@ -887,6 +887,60 @@ void main() {
     );
   });
 
+  test('bet raise all-in spots resolve mini-table dock mode', () {
+    final bet = CourseActivity(
+      id: 'act-01-03-02-guided-bet',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Tap Bet',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap a value size.',
+      choices: const [
+        CourseChoice(id: 'bet-half', label: 'Bet 5', action: 'BET'),
+        CourseChoice(id: 'check-value', label: 'Check', action: 'CHECK'),
+        CourseChoice(id: 'raise-no-bet', label: 'Raise', action: 'RAISE'),
+      ],
+    );
+    expect(isLessonActionTableActivity(bet), isTrue);
+    final spot = resolveLessonActionSpot(bet)!;
+    expect(spot.openPot, isTrue);
+    expect(spot.facingBet, isFalse);
+
+    final allIn = CourseActivity(
+      id: 'act-01-03-02-unguided-allin',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Tap All-in',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap what you can put in.',
+      choices: const [
+        CourseChoice(id: 'shove-12', label: 'All-in 12', action: 'ALL_IN'),
+        CourseChoice(id: 'call-20', label: 'Call 20', action: 'CALL'),
+        CourseChoice(id: 'fold-only', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    expect(resolveLessonActionSpot(allIn)!.stackLabel, 'Stack 12');
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-01-03-02-explain-aggro',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText: 'Bet opens',
+          acceptedGrades: const [SoftGrade.recommended],
+          prompt: 'Bet opens the betting.',
+        ),
+      ).kind,
+      CoachDialogueVisualKind.aggressiveActions,
+    );
+  });
+
   testWidgets('fold check call dock taps Fold on mini-table', (tester) async {
     final activity = CourseActivity(
       id: 'act-01-03-01-guided-fold',
@@ -997,6 +1051,75 @@ void main() {
     await tester.pump();
     expect(controller.draft.choiceId, 'check-illegal');
     controller.dispose();
+  });
+
+  testWidgets('bet raise all-in dock taps Bet and All-in on mini-table', (
+    tester,
+  ) async {
+    final bet = CourseActivity(
+      id: 'act-01-03-02-guided-bet',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Tap Bet',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap a value size.',
+      choices: const [
+        CourseChoice(id: 'bet-half', label: 'Bet 5', action: 'BET'),
+        CourseChoice(id: 'check-value', label: 'Check', action: 'CHECK'),
+        CourseChoice(id: 'raise-no-bet', label: 'Raise', action: 'RAISE'),
+      ],
+    );
+    final betController = LessonActivityController(activity: bet);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: bet,
+          controller: betController,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byType(LessonActionTable), findsOneWidget);
+    expect(find.text('Pot is open to a bet'), findsOneWidget);
+    await tester.tap(find.text('BET 5'));
+    await tester.pump();
+    expect(betController.draft.choiceId, 'bet-half');
+    expect(find.text('Ready — Lock in below.'), findsOneWidget);
+    betController.dispose();
+
+    final allIn = CourseActivity(
+      id: 'act-01-03-02-unguided-allin',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Tap All-in',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap what you can put in.',
+      choices: const [
+        CourseChoice(id: 'shove-12', label: 'All-in 12', action: 'ALL_IN'),
+        CourseChoice(id: 'call-20', label: 'Call 20', action: 'CALL'),
+        CourseChoice(id: 'fold-only', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    final allInController = LessonActivityController(activity: allIn);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: allIn,
+          controller: allInController,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Stack 12'), findsOneWidget);
+    expect(find.text('ALL-IN 12'), findsOneWidget);
+    await tester.tap(find.text('ALL-IN 12'));
+    await tester.pump();
+    expect(allInController.draft.choiceId, 'shove-12');
+    allInController.dispose();
   });
 
   testWidgets('feedback sheet never shows life loss for questionable', (

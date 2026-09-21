@@ -71,6 +71,9 @@ enum CoachDialogueVisualKind {
 
   /// Fold / Check / Call action meanings.
   passiveActions,
+
+  /// Bet / Raise / All-in action meanings.
+  aggressiveActions,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -99,6 +102,8 @@ class CoachDialogueVisual {
       'Tap Continue when you see that only five of seven play.',
     CoachDialogueVisualKind.passiveActions =>
       'Tap Continue when Fold, Check, and Call click.',
+    CoachDialogueVisualKind.aggressiveActions =>
+      'Tap Continue when Bet, Raise, and All-in click.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -117,6 +122,8 @@ class CoachDialogueVisual {
       'Seven cards with five highlighted as the playing hand',
     CoachDialogueVisualKind.passiveActions =>
       'Fold, Check, and Call action buttons',
+    CoachDialogueVisualKind.aggressiveActions =>
+      'Bet, Raise, and All-in action buttons',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -144,6 +151,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.passiveActions,
       );
+    case 'act-01-03-02-explain-aggro':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.aggressiveActions,
+      );
   }
 
   final blob =
@@ -152,6 +163,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
               '${activity.objectives.join(' ')}'
           .toLowerCase();
 
+  if (blob.contains('bet opens') ||
+      blob.contains('raise reopens') ||
+      blob.contains('all-in is just') ||
+      blob.contains('size-capped')) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.aggressiveActions,
+    );
+  }
   if (blob.contains('fold ends') ||
       blob.contains('check passes') ||
       blob.contains('call matches')) {
@@ -218,6 +237,8 @@ class _CoachDialogueVisualPane extends StatelessWidget {
         CoachDialogueVisualKind.handLadder => const HandRankLadderDemo(),
         CoachDialogueVisualKind.bestFive => const BestFiveDemo(),
         CoachDialogueVisualKind.passiveActions => const PassiveActionsDemo(),
+        CoachDialogueVisualKind.aggressiveActions =>
+          const AggressiveActionsDemo(),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
     );

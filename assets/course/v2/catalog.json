@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "54c32e60926935b57fef619db804d3802fdc7329ed0cd9e8b037e0d108f8b318",
+  "contentChecksum": "16b75478afdcb3cfadf80c223c7723291cd883beed8b10f381ecf99cce4433d0",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -1267,7 +1267,7 @@
                   "stage": "guided",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
-                  "accessibilityText": "Choose a bet for value when checked to.",
+                  "accessibilityText": "Tap Bet 5 into 10 for value when checked to.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1277,12 +1277,12 @@
                   "objectives": [
                     "Bet when the pot is unchecked"
                   ],
-                  "prompt": "Checked to you on the flop with top pair. You want value. Action?",
+                  "prompt": "Checked to you on the flop with top pair. Tap a value size.",
                   "choices": [
                     {
                       "id": "bet-half",
-                      "label": "Bet 5 into 10",
-                      "accessibilityText": "Bet 5 into 10",
+                      "label": "Bet 5",
+                      "accessibilityText": "Bet 5",
                       "action": "BET",
                       "amountBb": 2.5
                     },
@@ -1314,7 +1314,7 @@
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
-                  "accessibilityText": "Choose raise facing a bet.",
+                  "accessibilityText": "Tap Raise to 15 facing a bet.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1324,7 +1324,7 @@
                   "objectives": [
                     "Raise to increase a facing bet"
                   ],
-                  "prompt": "Villain bets 5. You have a strong hand and want to charge. Action?",
+                  "prompt": "Villain bets 5. Strong hand — tap how you charge.",
                   "choices": [
                     {
                       "id": "raise-15",
@@ -1354,7 +1354,7 @@
                   "stage": "unguided",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
-                  "accessibilityText": "Recognize all-in is limited to the remaining stack.",
+                  "accessibilityText": "Tap All-in 12 — capped by your remaining stack.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1364,24 +1364,24 @@
                   "objectives": [
                     "Treat all-in as a sized bet or raise"
                   ],
-                  "prompt": "You have 12 chips left. Villain bets 20. What can all-in do?",
+                  "prompt": "Stack 12. Villain bets 20. Tap what you can put in.",
                   "choices": [
                     {
                       "id": "shove-12",
-                      "label": "Move all-in for 12",
-                      "accessibilityText": "Move all-in for 12",
+                      "label": "All-in 12",
+                      "accessibilityText": "All-in 12",
                       "action": "ALL_IN"
                     },
                     {
                       "id": "call-20",
-                      "label": "Call the full 20 without the chips",
-                      "accessibilityText": "Call the full 20 without the chips",
+                      "label": "Call 20",
+                      "accessibilityText": "Call 20",
                       "action": "CALL"
                     },
                     {
                       "id": "fold-only",
-                      "label": "Only fold is legal short",
-                      "accessibilityText": "Only fold is legal short",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
                       "action": "FOLD"
                     }
                   ]
@@ -1390,9 +1390,9 @@
                   "id": "act-01-03-02-checkpoint-names",
                   "order": 5,
                   "stage": "checkpoint",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Name a bet versus a raise.",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Tap Bet — first chips into an unchecked pot.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1403,22 +1403,27 @@
                     "Bet when the pot is unchecked",
                     "Raise to increase a facing bet"
                   ],
-                  "prompt": "Pot is unchecked. You put in the first chips. What did you do?",
+                  "prompt": "Pot is unchecked. Tap the first chips into the pot.",
                   "choices": [
                     {
                       "id": "named-bet",
-                      "label": "Bet",
-                      "accessibilityText": "Bet"
+                      "label": "Bet 4",
+                      "accessibilityText": "Bet 4",
+                      "action": "BET",
+                      "amountBb": 2
                     },
                     {
                       "id": "named-raise",
                       "label": "Raise",
-                      "accessibilityText": "Raise"
+                      "accessibilityText": "Raise",
+                      "action": "RAISE",
+                      "amountBb": 4
                     },
                     {
                       "id": "named-call",
                       "label": "Call",
-                      "accessibilityText": "Call"
+                      "accessibilityText": "Call",
+                      "action": "CALL"
                     }
                   ]
                 }
