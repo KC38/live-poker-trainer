@@ -105,4 +105,126 @@ void main() {
     expect(result.lifeLost, isTrue);
     expect(result.xpAwarded, 0);
   });
+
+  test('accepted submit locks the draft; reject can undo and retry', () {
+    final activity = CourseActivity(
+      id: 'a',
+      order: 1,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 30,
+      accessibilityText: 'a',
+      acceptedGrades: const [SoftGrade.recommended],
+      choices: const [CourseChoice(id: 'c1', label: 'One')],
+    );
+    final controller = LessonActivityController(activity: activity);
+    expect(controller.showTargetCue, isFalse);
+
+    controller.selectChoice('c1');
+    controller.beginSubmit('k1');
+    controller.selectChoice('c2');
+    expect(controller.draft.choiceId, 'c1');
+
+    controller.finishSubmit(
+      SubmitCourseStepResult(
+        attemptId: 'att',
+        activityId: 'a',
+        grade: SoftGrade.recommended,
+        feedback: 'ok',
+        accepted: true,
+        lifeLost: false,
+        livesRemaining: 3,
+        xpAwarded: 10,
+        remediationRequired: false,
+        resume: const CourseResumePointer(
+          attemptId: 'att',
+          lessonId: 'l',
+          activityId: 'b',
+          activityIndex: 1,
+        ),
+        duplicate: false,
+      ),
+    );
+    controller.undoDraft();
+    expect(controller.lastResult, isNotNull);
+    expect(controller.draft.choiceId, 'c1');
+    controller.dispose();
+  });
+
+  test('failSubmit keeps the idempotency key for a network retry', () {
+    UniqueKeySeed.reset();
+    final activity = CourseActivity(
+      id: 'a',
+      order: 1,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 30,
+      accessibilityText: 'a',
+      acceptedGrades: const [SoftGrade.recommended],
+    );
+    final controller = LessonActivityController(activity: activity);
+    final key = controller.ensureIdempotencyKey(
+      () => CourseService.newRequestKey('step'),
+    );
+    controller.beginSubmit(key);
+    controller.failSubmit();
+    expect(controller.submitting, isFalse);
+    expect(
+      controller.ensureIdempotencyKey(
+        () => CourseService.newRequestKey('step'),
+      ),
+      key,
+    );
+    controller.dispose();
+  });
+
+  test('bindActivity resets draft, feedback, and pending key', () {
+    final first = CourseActivity(
+      id: 'a',
+      order: 1,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 30,
+      accessibilityText: 'a',
+      acceptedGrades: const [SoftGrade.recommended],
+    );
+    final next = CourseActivity(
+      id: 'b',
+      order: 2,
+      stage: ActivityStage.jumpTest,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 30,
+      accessibilityText: 'b',
+      acceptedGrades: const [SoftGrade.recommended],
+    );
+    final controller = LessonActivityController(activity: first);
+    expect(controller.showTargetCue, isTrue);
+    controller.selectChoice('c1');
+    controller.ensureIdempotencyKey(() => 'fixed-key');
+    controller.bindActivity(next);
+    expect(controller.activity.id, 'b');
+    expect(controller.draft.hasAnswer, isFalse);
+    expect(controller.lastResult, isNull);
+    expect(controller.pendingIdempotencyKey, isNull);
+    expect(controller.showTargetCue, isFalse);
+    controller.dispose();
+  });
+
+  test('hand-lab step change clears a prior choice', () {
+    final activity = CourseActivity(
+      id: 'lab',
+      order: 1,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.fullTableHandLab,
+      estimatedSeconds: 40,
+      accessibilityText: 'lab',
+      acceptedGrades: const [SoftGrade.recommended],
+    );
+    final controller = LessonActivityController(activity: activity);
+    controller.selectChoice('fold');
+    controller.setHandStepIndex(1);
+    expect(controller.draft.choiceId, isNull);
+    expect(controller.draft.handStepIndex, 1);
+    controller.dispose();
+  });
 }
