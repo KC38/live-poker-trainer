@@ -482,7 +482,7 @@ class _ShowdownTapActivity extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             RexCoachLine(text: _coachText),
-            if (activity.prompt != null) ...[
+            if (scene == null && activity.prompt != null) ...[
               const SizedBox(height: 14),
               Text(
                 activity.prompt!,
@@ -495,12 +495,14 @@ class _ShowdownTapActivity extends StatelessWidget {
               ),
             ],
             if (scene != null) ...[
-              const SizedBox(height: 14),
+              const SizedBox(height: 12),
               LessonTableContext(scene: scene),
+            ] else if (activity.prompt != null) ...[
+              // prompt already shown above when no scene
             ],
-            const SizedBox(height: 14),
+            const SizedBox(height: 12),
             for (var i = 0; i < activity.choices.length; i++) ...[
-              if (i > 0) const SizedBox(height: 10),
+              if (i > 0) const SizedBox(height: 8),
               Builder(
                 builder: (context) {
                   final choice = activity.choices[i];
@@ -524,7 +526,7 @@ class _ShowdownTapActivity extends StatelessWidget {
                 },
               ),
             ],
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             Text(
               selected == null
                   ? 'Tap the result that wins the pot.'
