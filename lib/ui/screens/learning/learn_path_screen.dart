@@ -70,8 +70,10 @@ class LearnPathScreen extends ConsumerWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    snapshot.postflopPassed
-                        ? 'Postflop core is in. Review the spots you still miss.'
+                    snapshot.livePassed
+                        ? 'Live environment is in. Review the depths you still miss.'
+                        : snapshot.postflopPassed
+                        ? 'Postflop core is in. Depth, stakes, and local variants are unlocked.'
                         : snapshot.preflopPassed
                         ? 'Preflop is in. Flop, turn, river, and pot families are unlocked.'
                         : snapshot.tableReadyPassed
@@ -91,7 +93,8 @@ class LearnPathScreen extends ConsumerWidget {
               'XP ${snapshot.xp} · Streak ${snapshot.streak} · '
               'Table Ready ${snapshot.tableReadyCompleted}/${snapshot.tableReadyTotal} · '
               'Preflop ${snapshot.preflopCompleted}/${snapshot.preflopTotal} · '
-              'Postflop ${snapshot.postflopCompleted}/${snapshot.postflopTotal}',
+              'Postflop ${snapshot.postflopCompleted}/${snapshot.postflopTotal} · '
+              'Live ${snapshot.liveCompleted}/${snapshot.liveTotal}',
               style: GoogleFonts.manrope(
                 color: AppColors.gold,
                 fontSize: 13,

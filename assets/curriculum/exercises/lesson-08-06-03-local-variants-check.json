@@ -1,0 +1,104 @@
+{
+  "id": "lesson-08-06-03-local-variants-check",
+  "lessonId": "lesson-08-06-03-local-variants-check",
+  "version": "1.0.0",
+  "title": "Local variants check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Which mechanic does this trainer deal today?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "None of the variants. No straddles, bomb pots, run-it-twice, or insurance."
+        },
+        {
+          "id": "b",
+          "text": "Straddles only"
+        },
+        {
+          "id": "c",
+          "text": "Bomb pots only"
+        },
+        {
+          "id": "d",
+          "text": "Insurance on every all-in"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Learn the idea. Do not expect the felt to deal it until the engine supports it."
+    },
+    {
+      "id": "q2",
+      "prompt": "A straddle changes\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Who is in the blinds and who acts first. It is still no-limit hold\u2019em."
+        },
+        {
+          "id": "b",
+          "text": "The ranking of a flush"
+        },
+        {
+          "id": "c",
+          "text": "The number of hole cards"
+        },
+        {
+          "id": "d",
+          "text": "The dealer button into the big blind by rule"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Hand rankings stay. Position and the price change."
+    },
+    {
+      "id": "q3",
+      "prompt": "Before you play a local rule, you should\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Ask the dealer how this room does it. Rooms differ."
+        },
+        {
+          "id": "b",
+          "text": "Assume every straddle is a button straddle"
+        },
+        {
+          "id": "c",
+          "text": "Assume bomb pots are optional and free"
+        },
+        {
+          "id": "d",
+          "text": "Ignore the floor"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Conceptual knowledge is not a substitute for the room\u2019s actual rule."
+    },
+    {
+      "id": "q4",
+      "prompt": "The live-environment check is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Depth, stake, rake, and whether the variant is actually in the hand."
+        },
+        {
+          "id": "b",
+          "text": "Only the highest stake"
+        },
+        {
+          "id": "c",
+          "text": "Only the variant name"
+        },
+        {
+          "id": "d",
+          "text": "Only whether you are winning"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Play the stack and the game in front of you. Do not import a rule the cards did not use."
+    }
+  ]
+}

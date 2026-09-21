@@ -11565,5 +11565,1877 @@
         "explanation": "If you can name those and choose bet, check, call, raise, or fold, the core is in place."
       }
     ]
+  },
+  "lesson-08-01-01-short-stack-20-50bb-play": {
+    "id": "lesson-08-01-01-short-stack-20-50bb-play",
+    "lessonId": "lesson-08-01-01-short-stack-20-50bb-play",
+    "version": "1.0.0",
+    "title": "Short-stack 20-50BB play",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "At 20\u201330 big blinds, suited connectors are worth less because\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "You cannot win a deep implied-odds pot when you flop a monster."
+          },
+          {
+            "id": "b",
+            "text": "Short stacks make every draw the nuts"
+          },
+          {
+            "id": "c",
+            "text": "Position disappears"
+          },
+          {
+            "id": "d",
+            "text": "You are forced to limp"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Implied odds need chips behind. A short stack is paid off less when the draw gets there."
+      },
+      {
+        "id": "q2",
+        "prompt": "Hands that are ahead right now, such as offsuit broadways and pairs, \u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Go up in value. You are often committed if you continue."
+          },
+          {
+            "id": "b",
+            "text": "Become unplayable"
+          },
+          {
+            "id": "c",
+            "text": "Should all be limped"
+          },
+          {
+            "id": "d",
+            "text": "Are folds from the button"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Low stacks reward current equity, not speculative flop potential."
+      },
+      {
+        "id": "q3",
+        "prompt": "Under about 20 big blinds, a small open you hate folding is often replaced by\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A shove or a fold."
+          },
+          {
+            "id": "b",
+            "text": "A limp"
+          },
+          {
+            "id": "c",
+            "text": "A 100bb cold-call tree"
+          },
+          {
+            "id": "d",
+            "text": "Checking your option before cards are dealt"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "There is no room for a raise and a fold. Decide for the stack before you put chips in."
+      },
+      {
+        "id": "q4",
+        "prompt": "Set-mining 22 for 20 big blinds is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A mistake. The payoff is too small when you flop the set."
+          },
+          {
+            "id": "b",
+            "text": "The best use of a short stack"
+          },
+          {
+            "id": "c",
+            "text": "Required from every seat"
+          },
+          {
+            "id": "d",
+            "text": "Better than jamming aces"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "You need a deep stack behind the raiser to make small pairs profitable as calls."
+      }
+    ]
+  },
+  "lesson-08-01-02-decide-at-20-50bb": {
+    "id": "lesson-08-01-02-decide-at-20-50bb",
+    "lessonId": "lesson-08-01-02-decide-at-20-50bb",
+    "version": "1.0.0",
+    "title": "Decide at 20-50BB",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Effective stacks are 22bb. Folded to the button, you have AJo. A fitting plan is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Raise all-in, or raise an amount you are willing to call."
+          },
+          {
+            "id": "b",
+            "text": "Limp and fold to a jam"
+          },
+          {
+            "id": "c",
+            "text": "Use a 200bb call-and-see-five-streets plan"
+          },
+          {
+            "id": "d",
+            "text": "Fold. AJo is an under-the-gun hand only"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "At this depth the button does not have a long postflop tree."
+      },
+      {
+        "id": "q2",
+        "prompt": "Effective stacks are 40bb. You have 76s under the gun. Best default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold. You are early, short, and the hand needs depth and position."
+          },
+          {
+            "id": "b",
+            "text": "Open all-in"
+          },
+          {
+            "id": "c",
+            "text": "Limp and call any jam"
+          },
+          {
+            "id": "d",
+            "text": "Open and stack off preflop"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Speculative hands from early position get worse as stacks shrink."
+      },
+      {
+        "id": "q3",
+        "prompt": "You have top pair, good kicker, on a dry flop, and the pot already holds a third of your 30bb stack. Best default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Commit. There is not enough stack left to find a fold with this hand."
+          },
+          {
+            "id": "b",
+            "text": "Fold top pair because the stack is short"
+          },
+          {
+            "id": "c",
+            "text": "Check-fold"
+          },
+          {
+            "id": "d",
+            "text": "Open-limp the flop"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Low stack-to-pot ratio means good one pair is a get-in hand on a safe board."
+      },
+      {
+        "id": "q4",
+        "prompt": "A short stack jams 20bb over your open and you cover them with 200bb. Your extra chips\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Do not matter. You can only win the 20bb."
+          },
+          {
+            "id": "b",
+            "text": "Must be risked as well"
+          },
+          {
+            "id": "c",
+            "text": "Make aces a fold"
+          },
+          {
+            "id": "d",
+            "text": "Change the jam into a 200bb decision"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Effective stack is the smaller stack in the pot."
+      }
+    ]
+  },
+  "lesson-08-01-03-20-50bb-check": {
+    "id": "lesson-08-01-03-20-50bb-check",
+    "lessonId": "lesson-08-01-03-20-50bb-check",
+    "version": "1.0.0",
+    "title": "20-50BB check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Which hand gains when stacks drop from 100bb to 25bb?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "AQo. It is ahead now and does not need a deep flop."
+          },
+          {
+            "id": "b",
+            "text": "76s from under the gun"
+          },
+          {
+            "id": "c",
+            "text": "22 as a set-mine against a 3-bet"
+          },
+          {
+            "id": "d",
+            "text": "A hand that only wins if it flops a flush"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Current equity goes up. Implied-odds hands go down."
+      },
+      {
+        "id": "q2",
+        "prompt": "Which line is the short-stack leak?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Open-limping 40bb with a hand you will not call a jam with."
+          },
+          {
+            "id": "b",
+            "text": "Jamming 18bb with ace-king from the button"
+          },
+          {
+            "id": "c",
+            "text": "Folding 72o"
+          },
+          {
+            "id": "d",
+            "text": "Getting in top pair on a dry board when the pot is large"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "A limp that folds to a shove wasted the chance to shove or to fold for free."
+      },
+      {
+        "id": "q3",
+        "prompt": "At 50bb you still have\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A short postflop tree, not a 200bb one. One pair can commit on dry boards and fold on wet ones."
+          },
+          {
+            "id": "b",
+            "text": "No decisions after the flop"
+          },
+          {
+            "id": "c",
+            "text": "The same play as 500bb"
+          },
+          {
+            "id": "d",
+            "text": "A requirement to open every pair"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "50bb is short, not all-in. Texture still matters for the last bet."
+      },
+      {
+        "id": "q4",
+        "prompt": "Premature commitment means\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Putting in chips with a hand that needed more depth than you have."
+          },
+          {
+            "id": "b",
+            "text": "Folding 72o"
+          },
+          {
+            "id": "c",
+            "text": "Getting aces in at 20bb"
+          },
+          {
+            "id": "d",
+            "text": "Counting the effective stack"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Know the depth before you call a raise that prices you in."
+      }
+    ]
+  },
+  "lesson-08-02-01-standard-50-100bb-play": {
+    "id": "lesson-08-02-01-standard-50-100bb-play",
+    "lessonId": "lesson-08-02-01-standard-50-100bb-play",
+    "version": "1.0.0",
+    "title": "Standard 50-100BB play",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "100 big blinds is the baseline for the earlier path because\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "You have room for a preflop raise, a flop bet, and a turn decision without being all-in."
+          },
+          {
+            "id": "b",
+            "text": "The blinds double every orbit"
+          },
+          {
+            "id": "c",
+            "text": "Rake is zero at 100bb by rule"
+          },
+          {
+            "id": "d",
+            "text": "Position stops mattering"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Most live open, 3-bet, and c-bet sizes in this academy assume about 100bb."
+      },
+      {
+        "id": "q2",
+        "prompt": "At 80\u2013100bb, top pair on a wet multiway board should\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Not automatically stack off. There are still streets and stronger hands."
+          },
+          {
+            "id": "b",
+            "text": "Always jam"
+          },
+          {
+            "id": "c",
+            "text": "Always fold"
+          },
+          {
+            "id": "d",
+            "text": "Be played exactly like 20bb"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Standard depth leaves room to pot-control one pair when the board gets dangerous."
+      },
+      {
+        "id": "q3",
+        "prompt": "A common live leak at this depth is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Stacking off one pair on the flop because the pot 'feels big.'"
+          },
+          {
+            "id": "b",
+            "text": "Folding 72o under the gun"
+          },
+          {
+            "id": "c",
+            "text": "3-betting queens"
+          },
+          {
+            "id": "d",
+            "text": "Checking air on a wet board"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "100bb is deep enough that one pair is not a mandatory all-in on every texture."
+      },
+      {
+        "id": "q4",
+        "prompt": "50bb and 100bb are not the same plan. At 50bb you\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Commit more often with good one pair. At 100bb you can still find folds."
+          },
+          {
+            "id": "b",
+            "text": "Play deeper than 100bb"
+          },
+          {
+            "id": "c",
+            "text": "Ignore position"
+          },
+          {
+            "id": "d",
+            "text": "Only limp"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Name the depth. 'About 100' is not 'about 40.'"
+      }
+    ]
+  },
+  "lesson-08-02-02-decide-at-50-100bb": {
+    "id": "lesson-08-02-02-decide-at-50-100bb",
+    "lessonId": "lesson-08-02-02-decide-at-50-100bb",
+    "version": "1.0.0",
+    "title": "Decide at 50-100BB",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "100bb, single-raised pot, you have top pair top kicker on A72 rainbow, heads-up, in position. Best default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Bet for value. You are not all-in yet and the board is dry."
+          },
+          {
+            "id": "b",
+            "text": "Fold"
+          },
+          {
+            "id": "c",
+            "text": "Check-fold the turn no matter what"
+          },
+          {
+            "id": "d",
+            "text": "Jam 100bb on the flop as the only size"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "This is the standard-depth value bet from the postflop path, not a short-stack shove."
+      },
+      {
+        "id": "q2",
+        "prompt": "70bb, you called a 3-bet with 76s and the flop is ace-high and dry. Best default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold to a bet. The stack is too short to float a miss."
+          },
+          {
+            "id": "b",
+            "text": "Stack off"
+          },
+          {
+            "id": "c",
+            "text": "Call any size because suited connectors always continue"
+          },
+          {
+            "id": "d",
+            "text": "Limp"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "At 70bb the implied odds you wanted are already gone if you missed."
+      },
+      {
+        "id": "q3",
+        "prompt": "100bb, you have a set on a wet flop. Best default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Bet or raise. There is enough behind to get value and to charge draws."
+          },
+          {
+            "id": "b",
+            "text": "Check-fold"
+          },
+          {
+            "id": "c",
+            "text": "Open-limp"
+          },
+          {
+            "id": "d",
+            "text": "Treat the stack as 20bb and jam only aces"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "A set at 100bb wants a bigger pot. You are not forced all-in before the bet."
+      },
+      {
+        "id": "q4",
+        "prompt": "You cover the table with 100bb and a player has 15bb. A decision against that player uses\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "15bb, the effective stack, not your 100bb."
+          },
+          {
+            "id": "b",
+            "text": "100bb"
+          },
+          {
+            "id": "c",
+            "text": "The average of every stack"
+          },
+          {
+            "id": "d",
+            "text": "500bb"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "You cannot win more than they have in front of them."
+      }
+    ]
+  },
+  "lesson-08-02-03-50-100bb-check": {
+    "id": "lesson-08-02-03-50-100bb-check",
+    "lessonId": "lesson-08-02-03-50-100bb-check",
+    "version": "1.0.0",
+    "title": "50-100BB check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Which statement matches 100bb better than 25bb?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "You can check back a medium pair and still have a river decision."
+          },
+          {
+            "id": "b",
+            "text": "Every open is a shove"
+          },
+          {
+            "id": "c",
+            "text": "Set-mining is impossible"
+          },
+          {
+            "id": "d",
+            "text": "There is no postflop play"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Standard depth still has streets. Short depth often does not."
+      },
+      {
+        "id": "q2",
+        "prompt": "Avoiding premature commitment at 100bb means\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Not putting the stack in with one pair when the board and the action say you are behind."
+          },
+          {
+            "id": "b",
+            "text": "Folding every pair"
+          },
+          {
+            "id": "c",
+            "text": "Never betting"
+          },
+          {
+            "id": "d",
+            "text": "Jamming every draw"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Commitment is for hands that are ahead or correctly priced. It is not a mood."
+      },
+      {
+        "id": "q3",
+        "prompt": "A 3-bet pot at 100bb has a lower stack-to-pot ratio than a single-raised pot, so\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Good one pair commits more often than in a single-raised pot."
+          },
+          {
+            "id": "b",
+            "text": "You should play it like 500bb"
+          },
+          {
+            "id": "c",
+            "text": "Bluffs increase"
+          },
+          {
+            "id": "d",
+            "text": "The 3-bet is refunded"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "More money is in. The same top pair is stronger relative to the remaining stack."
+      },
+      {
+        "id": "q4",
+        "prompt": "Which depth is the usual live open-raise baseline in this academy?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "About 100 big blinds, with 3\u20135bb opens when nobody has limped."
+          },
+          {
+            "id": "b",
+            "text": "10 big blinds"
+          },
+          {
+            "id": "c",
+            "text": "500 big blinds only"
+          },
+          {
+            "id": "d",
+            "text": "The tournament clock"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Adjust when the actual stack is far from that baseline. Do not pretend every stack is 100bb."
+      }
+    ]
+  },
+  "lesson-08-03-01-deep-100-200bb-play": {
+    "id": "lesson-08-03-01-deep-100-200bb-play",
+    "lessonId": "lesson-08-03-01-deep-100-200bb-play",
+    "version": "1.0.0",
+    "title": "Deep 100-200BB play",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "From 100bb to 180bb, which hands gain?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Suited connectors and suited aces, because implied odds increase."
+          },
+          {
+            "id": "b",
+            "text": "Dominated offsuit broadways that make one pair"
+          },
+          {
+            "id": "c",
+            "text": "72o"
+          },
+          {
+            "id": "d",
+            "text": "Hands you will stack off with ace-high"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Extra depth pays the nuts and punishes one-pair domination."
+      },
+      {
+        "id": "q2",
+        "prompt": "Reverse implied odds at this depth means\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "You can lose a big pot when your one pair is dominated."
+          },
+          {
+            "id": "b",
+            "text": "You are guaranteed to win more"
+          },
+          {
+            "id": "c",
+            "text": "Draws lose equity"
+          },
+          {
+            "id": "d",
+            "text": "The pot is raked twice"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "KJo feels strong and loses a stack to AK or KJ with a better kicker."
+      },
+      {
+        "id": "q3",
+        "prompt": "Stacking off TT preflop at 180bb against a tight 4-bet is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Usually a mistake. You are deep and behind the continuing range."
+          },
+          {
+            "id": "b",
+            "text": "Automatic"
+          },
+          {
+            "id": "c",
+            "text": "The same as jamming 20bb"
+          },
+          {
+            "id": "d",
+            "text": "Required for balance"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Tens are a 100bb continue in many spots and a fold to heavy action when stacks get deep."
+      },
+      {
+        "id": "q4",
+        "prompt": "Top pair at 180bb, compared with 40bb, is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Less of an automatic stack-off. There is too much money behind."
+          },
+          {
+            "id": "b",
+            "text": "Always an all-in"
+          },
+          {
+            "id": "c",
+            "text": "Worthless"
+          },
+          {
+            "id": "d",
+            "text": "The nuts"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Deeper stacks make one pair a pot-control hand more often."
+      }
+    ]
+  },
+  "lesson-08-03-02-decide-at-100-200bb": {
+    "id": "lesson-08-03-02-decide-at-100-200bb",
+    "lessonId": "lesson-08-03-02-decide-at-100-200bb",
+    "version": "1.0.0",
+    "title": "Decide at 100-200BB",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "160bb, button, folded to you with 76s. Compared with 40bb, you should\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Open more happily. You can win a big pot if you flop a straight or two pair."
+          },
+          {
+            "id": "b",
+            "text": "Fold. Suited connectors hate depth"
+          },
+          {
+            "id": "c",
+            "text": "All-in"
+          },
+          {
+            "id": "d",
+            "text": "Limp only"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Depth is the reason this hand is playable in position."
+      },
+      {
+        "id": "q2",
+        "prompt": "150bb, you have KTo in the small blind facing an early open. Best default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold. You are dominated, out of position, and deep."
+          },
+          {
+            "id": "b",
+            "text": "Call and stack off top pair"
+          },
+          {
+            "id": "c",
+            "text": "All-in"
+          },
+          {
+            "id": "d",
+            "text": "Complete because you posted a blind"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Reverse implied odds are the point of this fold."
+      },
+      {
+        "id": "q3",
+        "prompt": "140bb, you flop top pair weak kicker on a wet board, multiway. Best default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Pot-control. Do not build a 140bb pot with this hand."
+          },
+          {
+            "id": "b",
+            "text": "Jam"
+          },
+          {
+            "id": "c",
+            "text": "Fold the best hand to a min-bet with no read"
+          },
+          {
+            "id": "d",
+            "text": "Ignore the extra players"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Weak kickers and depth do not mix in a big pot."
+      },
+      {
+        "id": "q4",
+        "prompt": "You have a set at 180bb on a dry board. Best default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Bet for value across streets. You are not forced to jam the flop."
+          },
+          {
+            "id": "b",
+            "text": "Check-fold"
+          },
+          {
+            "id": "c",
+            "text": "Open-shove the flop for 180bb every time"
+          },
+          {
+            "id": "d",
+            "text": "Fold"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Depth lets you get more from worse hands by betting, not by ending the hand immediately."
+      }
+    ]
+  },
+  "lesson-08-03-03-100-200bb-check": {
+    "id": "lesson-08-03-03-100-200bb-check",
+    "lessonId": "lesson-08-03-03-100-200bb-check",
+    "version": "1.0.0",
+    "title": "100-200BB check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Which adjustment is right as stacks move from 80bb toward 180bb?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Call more suited hands in position and fewer dominated offsuit hands."
+          },
+          {
+            "id": "b",
+            "text": "Jam more offsuit trash"
+          },
+          {
+            "id": "c",
+            "text": "Stop using position"
+          },
+          {
+            "id": "d",
+            "text": "Play every stack like 20bb"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Implied odds up, reverse implied odds up. The hands move in opposite directions."
+      },
+      {
+        "id": "q2",
+        "prompt": "A 180bb stack does not mean\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "You should see every flop. Folds are still free."
+          },
+          {
+            "id": "b",
+            "text": "Position matters more"
+          },
+          {
+            "id": "c",
+            "text": "One pair is less of a stack-off"
+          },
+          {
+            "id": "d",
+            "text": "Suited aces gain"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Depth is not a reason to play junk."
+      },
+      {
+        "id": "q3",
+        "prompt": "Effective stacks are 120bb because the short stack has 120bb and you have 300bb. Play\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "120bb, not 300bb."
+          },
+          {
+            "id": "b",
+            "text": "300bb"
+          },
+          {
+            "id": "c",
+            "text": "20bb"
+          },
+          {
+            "id": "d",
+            "text": "The sum"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "The extra chips you cannot win are not part of this pot."
+      },
+      {
+        "id": "q4",
+        "prompt": "Expanded calling ranges at this depth belong\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "In position, with hands that make the nuts, not out of position with offsuit broadways."
+          },
+          {
+            "id": "b",
+            "text": "Under the gun with 72o"
+          },
+          {
+            "id": "c",
+            "text": "In the small blind with KTo"
+          },
+          {
+            "id": "d",
+            "text": "Only all-in"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "The extra chips help the player who can realize them."
+      }
+    ]
+  },
+  "lesson-08-04-01-very-deep-200-500bb-play": {
+    "id": "lesson-08-04-01-very-deep-200-500bb-play",
+    "lessonId": "lesson-08-04-01-very-deep-200-500bb-play",
+    "version": "1.0.0",
+    "title": "Very deep 200-500BB play",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "At 300\u2013500bb, the hands that can stack someone are mostly\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Sets, straights, flushes, and the nutted two pair. One pair is not enough."
+          },
+          {
+            "id": "b",
+            "text": "Any pair"
+          },
+          {
+            "id": "c",
+            "text": "Ace-high"
+          },
+          {
+            "id": "d",
+            "text": "A preflop limp"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Nut potential is the whole game when stacks are this deep."
+      },
+      {
+        "id": "q2",
+        "prompt": "Position is worth more very deep because\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "More streets remain, so acting last avoids the big blunders."
+          },
+          {
+            "id": "b",
+            "text": "The button posts nothing"
+          },
+          {
+            "id": "c",
+            "text": "Blinds disappear"
+          },
+          {
+            "id": "d",
+            "text": "You must act first"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "A mistake at 400bb costs a buy-in, not a few blinds."
+      },
+      {
+        "id": "q3",
+        "prompt": "Large-pot risk means\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Do not put in 400bb without a hand that beats the hands willing to call."
+          },
+          {
+            "id": "b",
+            "text": "Bet the pot with air because the stack is large"
+          },
+          {
+            "id": "c",
+            "text": "Ignore the nuts"
+          },
+          {
+            "id": "d",
+            "text": "Rake makes deep pots free"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "The deeper you are, the stronger the hand you need to build the biggest pot."
+      },
+      {
+        "id": "q4",
+        "prompt": "A multi-street plan at 400bb starts\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Before the flop: which hands can make the nuts, and which cannot."
+          },
+          {
+            "id": "b",
+            "text": "On the river only"
+          },
+          {
+            "id": "c",
+            "text": "After you are all-in"
+          },
+          {
+            "id": "d",
+            "text": "By copying a 20bb jam chart"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "If the hand cannot make a very strong hand, it should not play a very large pot."
+      }
+    ]
+  },
+  "lesson-08-04-02-decide-at-200-500bb": {
+    "id": "lesson-08-04-02-decide-at-200-500bb",
+    "lessonId": "lesson-08-04-02-decide-at-200-500bb",
+    "version": "1.0.0",
+    "title": "Decide at 200-500BB",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "400bb, in position, folded to you with 76s. Best default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Open. This is a high nut-potential hand when you are deep and last to act."
+          },
+          {
+            "id": "b",
+            "text": "Fold. Deep stacks make suited connectors worse"
+          },
+          {
+            "id": "c",
+            "text": "All-in"
+          },
+          {
+            "id": "d",
+            "text": "Limp and call any 4-bet"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Very deep, suited connectors are a reason to play, not a fold."
+      },
+      {
+        "id": "q2",
+        "prompt": "350bb, you have top pair on the river and face a huge bet from a tight player. Best default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold most of the time. One pair does not beat a 300bb value bet."
+          },
+          {
+            "id": "b",
+            "text": "Call because you were ahead on the flop"
+          },
+          {
+            "id": "c",
+            "text": "Raise all-in"
+          },
+          {
+            "id": "d",
+            "text": "Call every river because you are deep"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Depth turns top pair into a bluff-catcher, and tight players under-bluff the river."
+      },
+      {
+        "id": "q3",
+        "prompt": "250bb, you flop the nut straight on a dry board. Best default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Bet for value over multiple streets. Do not check it away."
+          },
+          {
+            "id": "b",
+            "text": "Fold"
+          },
+          {
+            "id": "c",
+            "text": "Jam 250bb into a tiny pot with no callers who can have anything"
+          },
+          {
+            "id": "d",
+            "text": "Check-fold"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "You have the nuts and the stack to get paid. Build the pot. A single overbet is not the only way."
+      },
+      {
+        "id": "q4",
+        "prompt": "500bb effective, early position, KJo. Best default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold. Deep and early, this offsuit hand is dominated."
+          },
+          {
+            "id": "b",
+            "text": "Open and stack off"
+          },
+          {
+            "id": "c",
+            "text": "All-in"
+          },
+          {
+            "id": "d",
+            "text": "Call a 4-bet"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "The same hand that opens on the button at 100bb is a fold under the gun at 500bb."
+      }
+    ]
+  },
+  "lesson-08-04-03-200-500bb-check": {
+    "id": "lesson-08-04-03-200-500bb-check",
+    "lessonId": "lesson-08-04-03-200-500bb-check",
+    "version": "1.0.0",
+    "title": "200-500BB check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Which hand should play a bigger pot at 400bb?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A set."
+          },
+          {
+            "id": "b",
+            "text": "Bottom pair"
+          },
+          {
+            "id": "c",
+            "text": "Ace-high"
+          },
+          {
+            "id": "d",
+            "text": "A dominated offsuit king"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Nut potential, not the first pair you make."
+      },
+      {
+        "id": "q2",
+        "prompt": "Bluffing off 400bb with ace-high is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A clear mistake. The stack is too large for a one-card bluff."
+          },
+          {
+            "id": "b",
+            "text": "Standard"
+          },
+          {
+            "id": "c",
+            "text": "Required very deep"
+          },
+          {
+            "id": "d",
+            "text": "The same as a 20bb shove"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Bluff sizes and bluff hands shrink as the punishment grows."
+      },
+      {
+        "id": "q3",
+        "prompt": "Very deep play still uses the same streets. What changes is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "How strong a hand must be before you commit the stack."
+          },
+          {
+            "id": "b",
+            "text": "The ranking of poker hands"
+          },
+          {
+            "id": "c",
+            "text": "That flushes no longer count"
+          },
+          {
+            "id": "d",
+            "text": "That position is gone"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "A straight still beats a pair. You just should not stack off the pair."
+      },
+      {
+        "id": "q4",
+        "prompt": "A 200bb stack and a 40bb stack at the same table are\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Two different games. Use the effective stack for each opponent."
+          },
+          {
+            "id": "b",
+            "text": "Both 200bb"
+          },
+          {
+            "id": "c",
+            "text": "Both short"
+          },
+          {
+            "id": "d",
+            "text": "Illegal"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Covering someone does not make their pot deep."
+      }
+    ]
+  },
+  "lesson-08-05-01-stakes-rake-and-ev-economics": {
+    "id": "lesson-08-05-01-stakes-rake-and-ev-economics",
+    "lessonId": "lesson-08-05-01-stakes-rake-and-ev-economics",
+    "version": "1.0.0",
+    "title": "Stakes, rake, and EV economics",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "A pot rake or drop makes marginal calls worse because\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "You win less than the chips in the middle. The price you were getting shrinks."
+          },
+          {
+            "id": "b",
+            "text": "It adds chips to the pot"
+          },
+          {
+            "id": "c",
+            "text": "It only affects the loser"
+          },
+          {
+            "id": "d",
+            "text": "It removes the big blind"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "This trainer does not deduct rake yet. Live, the house takes a piece before you are paid."
+      },
+      {
+        "id": "q2",
+        "prompt": "Small pots are punished more by a percent rake or a drop than large pots because\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The rake is a bigger fraction of a small pot, up to the cap."
+          },
+          {
+            "id": "b",
+            "text": "Large pots are raked at a higher percent forever"
+          },
+          {
+            "id": "c",
+            "text": "Rake is a flat fee equal to the pot"
+          },
+          {
+            "id": "d",
+            "text": "Only jackpots are raked"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Stealing a tiny pot can be a loss after the drop. Winning a capped pot gives the rake back as a smaller percent."
+      },
+      {
+        "id": "q3",
+        "prompt": "Time rake, common at some $5/$10 and higher games, is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A seat charge for time, not a percent of each pot. This app does not charge it."
+          },
+          {
+            "id": "b",
+            "text": "A card that is dealt twice"
+          },
+          {
+            "id": "c",
+            "text": "The same as a pot drop"
+          },
+          {
+            "id": "d",
+            "text": "A straddle"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Time collection does not shrink each pot, so speculative hands are less taxed than under a drop. The lineup is usually tougher."
+      },
+      {
+        "id": "q4",
+        "prompt": "A tip is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Money you choose to give the dealer. It is not won back from the pot."
+          },
+          {
+            "id": "b",
+            "text": "Added to your stack by the casino"
+          },
+          {
+            "id": "c",
+            "text": "A required part of every call"
+          },
+          {
+            "id": "d",
+            "text": "Refunded when you fold"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Tipping is a cost of the session. It is not a strategy bet."
+      }
+    ]
+  },
+  "lesson-08-05-02-choose-stakes-economically": {
+    "id": "lesson-08-05-02-choose-stakes-economically",
+    "lessonId": "lesson-08-05-02-choose-stakes-economically",
+    "version": "1.0.0",
+    "title": "Choose stakes economically",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "You won two buy-ins at $1/$2 tonight. Moving to $5/$10 for the next hand is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A mistake. One session is not a bankroll or a skill proof."
+          },
+          {
+            "id": "b",
+            "text": "Required, because winners must move up"
+          },
+          {
+            "id": "c",
+            "text": "The same stake"
+          },
+          {
+            "id": "d",
+            "text": "How rake is avoided"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Stake choice is a money decision, not a celebration."
+      },
+      {
+        "id": "q2",
+        "prompt": "$1/$2 with a drop makes which play less profitable than the unraked chart?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A thin call of a small bet, and a steal of a tiny pot."
+          },
+          {
+            "id": "b",
+            "text": "Folding 72o"
+          },
+          {
+            "id": "c",
+            "text": "Getting a set all-in when you are a big favorite in a large pot"
+          },
+          {
+            "id": "d",
+            "text": "Looking at your cards"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "The drop takes the edge off small pots. Big favorite pots still clear a capped rake."
+      },
+      {
+        "id": "q3",
+        "prompt": "A $2/$5 game that is tougher and uses a percent rake, compared with a soft $1/$2, should be chosen when\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Your edge is real and the buy-in does not threaten rent or food."
+          },
+          {
+            "id": "b",
+            "text": "You are stuck in the $1/$2 game"
+          },
+          {
+            "id": "c",
+            "text": "The bigger chips look better"
+          },
+          {
+            "id": "d",
+            "text": "You want a faster loss"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Higher stakes are not a reward. They are a higher price for the same mistakes."
+      },
+      {
+        "id": "q4",
+        "prompt": "This app\u2019s hands do not currently subtract rake. When you practice a close call you should remember\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A live room may take that edge away. Do not treat a break-even unraked call as a must-call live."
+          },
+          {
+            "id": "b",
+            "text": "Rake makes every call better"
+          },
+          {
+            "id": "c",
+            "text": "The app\u2019s result is the casino\u2019s result"
+          },
+          {
+            "id": "d",
+            "text": "Time rake is dealt as a community card"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Practice the decision. Adjust the price when the house takes a piece."
+      }
+    ]
+  },
+  "lesson-08-05-03-stakes-economics-check": {
+    "id": "lesson-08-05-03-stakes-economics-check",
+    "lessonId": "lesson-08-05-03-stakes-economics-check",
+    "version": "1.0.0",
+    "title": "Stakes economics check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Which cost shrinks the pot you win?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A drop or percent rake, up to the cap."
+          },
+          {
+            "id": "b",
+            "text": "A time charge that never touches the pot"
+          },
+          {
+            "id": "c",
+            "text": "Folding before you put chips in"
+          },
+          {
+            "id": "d",
+            "text": "The button"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Pot rake comes out of the pot. A time charge is paid separately."
+      },
+      {
+        "id": "q2",
+        "prompt": "Which game is less harsh on small speculative pots?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A time-rake game, because the pot is not reduced. The players are often better."
+          },
+          {
+            "id": "b",
+            "text": "A high drop on every $1/$2 hand"
+          },
+          {
+            "id": "c",
+            "text": "A game that rakes 100% of the pot"
+          },
+          {
+            "id": "d",
+            "text": "A game with no opponents"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Time rake taxes the seat, not the small pot. Skill still has to be there."
+      },
+      {
+        "id": "q3",
+        "prompt": "EV of a session includes\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The decisions, the rake, and the tips. Not one lucky pot."
+          },
+          {
+            "id": "b",
+            "text": "Only the biggest win"
+          },
+          {
+            "id": "c",
+            "text": "Only the rack"
+          },
+          {
+            "id": "d",
+            "text": "The jackpot you did not hit"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "A winning night can be a bad decision if you paid too much rake at the wrong stake."
+      },
+      {
+        "id": "q4",
+        "prompt": "The economic check before you sit is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Can I lose a buy-in here without changing how I live, at a rake I understand?"
+          },
+          {
+            "id": "b",
+            "text": "Are the chips a nicer color"
+          },
+          {
+            "id": "c",
+            "text": "Did I win last time"
+          },
+          {
+            "id": "d",
+            "text": "Is the stake the highest in the room"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "If the answer is no, the strategy lesson does not matter yet."
+      }
+    ]
+  },
+  "lesson-08-06-01-straddles-bomb-pots-and-run-it-twice": {
+    "id": "lesson-08-06-01-straddles-bomb-pots-and-run-it-twice",
+    "lessonId": "lesson-08-06-01-straddles-bomb-pots-and-run-it-twice",
+    "version": "1.0.0",
+    "title": "Straddles, bomb pots, and run-it-twice",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "A live straddle is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "An extra blind posted before cards, often by under the gun. This trainer does not deal it."
+          },
+          {
+            "id": "b",
+            "text": "A fourth community card"
+          },
+          {
+            "id": "c",
+            "text": "A tournament ante that doubles the blinds"
+          },
+          {
+            "id": "d",
+            "text": "A rule that the button acts first on the flop"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Conceptually the straddler is a bigger big blind and acts last preflop. The first voluntary actor sits to their left."
+      },
+      {
+        "id": "q2",
+        "prompt": "A bomb pot is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Everyone posts, there is no preflop betting, and the hand starts on the flop. This trainer does not deal it."
+          },
+          {
+            "id": "b",
+            "text": "A normal open to 3 big blinds"
+          },
+          {
+            "id": "c",
+            "text": "An all-in preflop"
+          },
+          {
+            "id": "d",
+            "text": "A side pot from a short stack"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Ranges are random and wide. Play for nut potential, not for a preflop raiser\u2019s range advantage."
+      },
+      {
+        "id": "q3",
+        "prompt": "Running it twice, after an all-in, \u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Deals the remaining board twice and splits the pot by board. It reduces variance. It does not change a fair all-in price. This trainer does not offer it."
+          },
+          {
+            "id": "b",
+            "text": "Lets you fold after you see the first board"
+          },
+          {
+            "id": "c",
+            "text": "Doubles your equity"
+          },
+          {
+            "id": "d",
+            "text": "Is insurance"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "If you were getting the right price once, you are getting it on each run. You are not twice as good."
+      },
+      {
+        "id": "q4",
+        "prompt": "Insurance is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A side bet that pays when you are ahead and lose the runout. It is not a poker action, and this app does not sell it."
+          },
+          {
+            "id": "b",
+            "text": "A required call"
+          },
+          {
+            "id": "c",
+            "text": "The same as running it twice"
+          },
+          {
+            "id": "d",
+            "text": "A community card"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Do not confuse a proposition bet with the hand. Your poker decision is still the all-in price."
+      }
+    ]
+  },
+  "lesson-08-06-02-navigate-straddles-and-bomb-pots": {
+    "id": "lesson-08-06-02-navigate-straddles-and-bomb-pots",
+    "lessonId": "lesson-08-06-02-navigate-straddles-and-bomb-pots",
+    "version": "1.0.0",
+    "title": "Navigate straddles and bomb pots",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Under the gun posts a straddle to two big blinds. You are next to act. Conceptually you are\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The first voluntary actor, in the straddle\u2019s 'under the gun,' not in a normal big blind."
+          },
+          {
+            "id": "b",
+            "text": "The button"
+          },
+          {
+            "id": "c",
+            "text": "Forced to call the straddle"
+          },
+          {
+            "id": "d",
+            "text": "Allowed to check"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Do not use a 9-handed UTG chart from the seat that now faces a bigger blind. This app will not deal the straddle for you."
+      },
+      {
+        "id": "q2",
+        "prompt": "The straddler has not acted and you hold 72o. Best conceptual default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold. A bigger blind does not make trash playable."
+          },
+          {
+            "id": "b",
+            "text": "Call because a straddle is a limp"
+          },
+          {
+            "id": "c",
+            "text": "All-in"
+          },
+          {
+            "id": "d",
+            "text": "Check"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "The straddle changes position and price. It does not change hand values that much for junk."
+      },
+      {
+        "id": "q3",
+        "prompt": "A bomb pot is dealt to the flop with five players and you have top pair weak kicker. Conceptually\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Bet small or check. Ranges are wide and multiway, so weak kickers do not stack off."
+          },
+          {
+            "id": "b",
+            "text": "Jam because there was no preflop raiser"
+          },
+          {
+            "id": "c",
+            "text": "Fold the nuts"
+          },
+          {
+            "id": "d",
+            "text": "Play it as a 4-bet pot"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "No preflop raise means no capped-versus-uncapped story. Nut potential and player count still rule."
+      },
+      {
+        "id": "q4",
+        "prompt": "You are all-in and the table asks to run it twice. A sound poker answer is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Either once or twice is fine if the price was right. Running twice does not fix a bad call, and this app will not deal the second board."
+          },
+          {
+            "id": "b",
+            "text": "You must run it twice or the hand is dead"
+          },
+          {
+            "id": "c",
+            "text": "Running twice doubles your win"
+          },
+          {
+            "id": "d",
+            "text": "Refuse because the second board changes the ranking of hands"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Variance changes. The equity of each board does not."
+      }
+    ]
+  },
+  "lesson-08-06-03-local-variants-check": {
+    "id": "lesson-08-06-03-local-variants-check",
+    "lessonId": "lesson-08-06-03-local-variants-check",
+    "version": "1.0.0",
+    "title": "Local variants check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Which mechanic does this trainer deal today?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "None of the variants. No straddles, bomb pots, run-it-twice, or insurance."
+          },
+          {
+            "id": "b",
+            "text": "Straddles only"
+          },
+          {
+            "id": "c",
+            "text": "Bomb pots only"
+          },
+          {
+            "id": "d",
+            "text": "Insurance on every all-in"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Learn the idea. Do not expect the felt to deal it until the engine supports it."
+      },
+      {
+        "id": "q2",
+        "prompt": "A straddle changes\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Who is in the blinds and who acts first. It is still no-limit hold\u2019em."
+          },
+          {
+            "id": "b",
+            "text": "The ranking of a flush"
+          },
+          {
+            "id": "c",
+            "text": "The number of hole cards"
+          },
+          {
+            "id": "d",
+            "text": "The dealer button into the big blind by rule"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Hand rankings stay. Position and the price change."
+      },
+      {
+        "id": "q3",
+        "prompt": "Before you play a local rule, you should\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Ask the dealer how this room does it. Rooms differ."
+          },
+          {
+            "id": "b",
+            "text": "Assume every straddle is a button straddle"
+          },
+          {
+            "id": "c",
+            "text": "Assume bomb pots are optional and free"
+          },
+          {
+            "id": "d",
+            "text": "Ignore the floor"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Conceptual knowledge is not a substitute for the room\u2019s actual rule."
+      },
+      {
+        "id": "q4",
+        "prompt": "The live-environment check is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Depth, stake, rake, and whether the variant is actually in the hand."
+          },
+          {
+            "id": "b",
+            "text": "Only the highest stake"
+          },
+          {
+            "id": "c",
+            "text": "Only the variant name"
+          },
+          {
+            "id": "d",
+            "text": "Only whether you are winning"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Play the stack and the game in front of you. Do not import a rule the cards did not use."
+      }
+    ]
   }
 }

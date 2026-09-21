@@ -1,0 +1,104 @@
+{
+  "id": "lesson-08-04-02-decide-at-200-500bb",
+  "lessonId": "lesson-08-04-02-decide-at-200-500bb",
+  "version": "1.0.0",
+  "title": "Decide at 200-500BB",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "400bb, in position, folded to you with 76s. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Open. This is a high nut-potential hand when you are deep and last to act."
+        },
+        {
+          "id": "b",
+          "text": "Fold. Deep stacks make suited connectors worse"
+        },
+        {
+          "id": "c",
+          "text": "All-in"
+        },
+        {
+          "id": "d",
+          "text": "Limp and call any 4-bet"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Very deep, suited connectors are a reason to play, not a fold."
+    },
+    {
+      "id": "q2",
+      "prompt": "350bb, you have top pair on the river and face a huge bet from a tight player. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold most of the time. One pair does not beat a 300bb value bet."
+        },
+        {
+          "id": "b",
+          "text": "Call because you were ahead on the flop"
+        },
+        {
+          "id": "c",
+          "text": "Raise all-in"
+        },
+        {
+          "id": "d",
+          "text": "Call every river because you are deep"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Depth turns top pair into a bluff-catcher, and tight players under-bluff the river."
+    },
+    {
+      "id": "q3",
+      "prompt": "250bb, you flop the nut straight on a dry board. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Bet for value over multiple streets. Do not check it away."
+        },
+        {
+          "id": "b",
+          "text": "Fold"
+        },
+        {
+          "id": "c",
+          "text": "Jam 250bb into a tiny pot with no callers who can have anything"
+        },
+        {
+          "id": "d",
+          "text": "Check-fold"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "You have the nuts and the stack to get paid. Build the pot. A single overbet is not the only way."
+    },
+    {
+      "id": "q4",
+      "prompt": "500bb effective, early position, KJo. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold. Deep and early, this offsuit hand is dominated."
+        },
+        {
+          "id": "b",
+          "text": "Open and stack off"
+        },
+        {
+          "id": "c",
+          "text": "All-in"
+        },
+        {
+          "id": "d",
+          "text": "Call a 4-bet"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "The same hand that opens on the button at 100bb is a fold under the gun at 500bb."
+    }
+  ]
+}

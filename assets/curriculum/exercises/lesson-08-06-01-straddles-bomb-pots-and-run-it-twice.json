@@ -1,0 +1,104 @@
+{
+  "id": "lesson-08-06-01-straddles-bomb-pots-and-run-it-twice",
+  "lessonId": "lesson-08-06-01-straddles-bomb-pots-and-run-it-twice",
+  "version": "1.0.0",
+  "title": "Straddles, bomb pots, and run-it-twice",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "A live straddle is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "An extra blind posted before cards, often by under the gun. This trainer does not deal it."
+        },
+        {
+          "id": "b",
+          "text": "A fourth community card"
+        },
+        {
+          "id": "c",
+          "text": "A tournament ante that doubles the blinds"
+        },
+        {
+          "id": "d",
+          "text": "A rule that the button acts first on the flop"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Conceptually the straddler is a bigger big blind and acts last preflop. The first voluntary actor sits to their left."
+    },
+    {
+      "id": "q2",
+      "prompt": "A bomb pot is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Everyone posts, there is no preflop betting, and the hand starts on the flop. This trainer does not deal it."
+        },
+        {
+          "id": "b",
+          "text": "A normal open to 3 big blinds"
+        },
+        {
+          "id": "c",
+          "text": "An all-in preflop"
+        },
+        {
+          "id": "d",
+          "text": "A side pot from a short stack"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Ranges are random and wide. Play for nut potential, not for a preflop raiser\u2019s range advantage."
+    },
+    {
+      "id": "q3",
+      "prompt": "Running it twice, after an all-in, \u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Deals the remaining board twice and splits the pot by board. It reduces variance. It does not change a fair all-in price. This trainer does not offer it."
+        },
+        {
+          "id": "b",
+          "text": "Lets you fold after you see the first board"
+        },
+        {
+          "id": "c",
+          "text": "Doubles your equity"
+        },
+        {
+          "id": "d",
+          "text": "Is insurance"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "If you were getting the right price once, you are getting it on each run. You are not twice as good."
+    },
+    {
+      "id": "q4",
+      "prompt": "Insurance is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "A side bet that pays when you are ahead and lose the runout. It is not a poker action, and this app does not sell it."
+        },
+        {
+          "id": "b",
+          "text": "A required call"
+        },
+        {
+          "id": "c",
+          "text": "The same as running it twice"
+        },
+        {
+          "id": "d",
+          "text": "A community card"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Do not confuse a proposition bet with the hand. Your poker decision is still the all-in price."
+    }
+  ]
+}

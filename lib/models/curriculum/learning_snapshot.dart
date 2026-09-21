@@ -17,6 +17,9 @@ class LearningSnapshot {
     required this.postflopCompleted,
     required this.postflopTotal,
     required this.postflopPassed,
+    required this.liveCompleted,
+    required this.liveTotal,
+    required this.livePassed,
     required this.dueLessonIds,
     required this.masteryByObjectiveId,
   });
@@ -57,6 +60,15 @@ class LearningSnapshot {
   /// Whether the Preflop gate and Postflop Core are both passed.
   final bool postflopPassed;
 
+  /// Completed lessons in Section 8.
+  final int liveCompleted;
+
+  /// Lessons required for the live-environment gate.
+  final int liveTotal;
+
+  /// Whether Postflop Core and the live-environment gate are both passed.
+  final bool livePassed;
+
   /// Lessons due for spaced review or immediate remediation.
   final List<String> dueLessonIds;
 
@@ -77,6 +89,9 @@ class LearningSnapshot {
     postflopCompleted: 0,
     postflopTotal: 45,
     postflopPassed: false,
+    liveCompleted: 0,
+    liveTotal: 18,
+    livePassed: false,
     dueLessonIds: [],
     masteryByObjectiveId: {},
   );
@@ -87,6 +102,7 @@ class LearningSnapshot {
     final tableReady = json['tableReady'];
     final preflop = json['preflop'];
     final postflop = json['postflop'];
+    final liveEnvironment = json['liveEnvironment'];
     final completed = <String>{};
     if (progress is Map && progress['completedLessonIds'] is List) {
       for (final id in progress['completedLessonIds'] as List) {
@@ -123,6 +139,11 @@ class LearningSnapshot {
           postflop is Map ? asInt(postflop['completedCount']) : 0,
       postflopTotal: postflop is Map ? asInt(postflop['totalCount']) : 45,
       postflopPassed: postflop is Map && postflop['passed'] == true,
+      liveCompleted:
+          liveEnvironment is Map ? asInt(liveEnvironment['completedCount']) : 0,
+      liveTotal:
+          liveEnvironment is Map ? asInt(liveEnvironment['totalCount']) : 18,
+      livePassed: liveEnvironment is Map && liveEnvironment['passed'] == true,
       dueLessonIds: List.unmodifiable(due),
       masteryByObjectiveId: Map.unmodifiable(mastery),
     );

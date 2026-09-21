@@ -1,0 +1,104 @@
+{
+  "id": "lesson-08-03-02-decide-at-100-200bb",
+  "lessonId": "lesson-08-03-02-decide-at-100-200bb",
+  "version": "1.0.0",
+  "title": "Decide at 100-200BB",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "160bb, button, folded to you with 76s. Compared with 40bb, you should\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Open more happily. You can win a big pot if you flop a straight or two pair."
+        },
+        {
+          "id": "b",
+          "text": "Fold. Suited connectors hate depth"
+        },
+        {
+          "id": "c",
+          "text": "All-in"
+        },
+        {
+          "id": "d",
+          "text": "Limp only"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Depth is the reason this hand is playable in position."
+    },
+    {
+      "id": "q2",
+      "prompt": "150bb, you have KTo in the small blind facing an early open. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold. You are dominated, out of position, and deep."
+        },
+        {
+          "id": "b",
+          "text": "Call and stack off top pair"
+        },
+        {
+          "id": "c",
+          "text": "All-in"
+        },
+        {
+          "id": "d",
+          "text": "Complete because you posted a blind"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Reverse implied odds are the point of this fold."
+    },
+    {
+      "id": "q3",
+      "prompt": "140bb, you flop top pair weak kicker on a wet board, multiway. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Pot-control. Do not build a 140bb pot with this hand."
+        },
+        {
+          "id": "b",
+          "text": "Jam"
+        },
+        {
+          "id": "c",
+          "text": "Fold the best hand to a min-bet with no read"
+        },
+        {
+          "id": "d",
+          "text": "Ignore the extra players"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Weak kickers and depth do not mix in a big pot."
+    },
+    {
+      "id": "q4",
+      "prompt": "You have a set at 180bb on a dry board. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Bet for value across streets. You are not forced to jam the flop."
+        },
+        {
+          "id": "b",
+          "text": "Check-fold"
+        },
+        {
+          "id": "c",
+          "text": "Open-shove the flop for 180bb every time"
+        },
+        {
+          "id": "d",
+          "text": "Fold"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Depth lets you get more from worse hands by betting, not by ending the hand immediately."
+    }
+  ]
+}
