@@ -1,0 +1,104 @@
+{
+  "id": "lesson-07-03-02-play-3-bet-pots",
+  "lessonId": "lesson-07-03-02-play-3-bet-pots",
+  "version": "1.0.0",
+  "title": "Play 3-bet pots",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "You 3-bet preflop and the flop is A72 rainbow. You have AQ. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Bet. Top pair is strong in a 3-bet pot and the board is dry."
+        },
+        {
+          "id": "b",
+          "text": "Check-fold"
+        },
+        {
+          "id": "c",
+          "text": "Min-bet and fold to a tiny raise"
+        },
+        {
+          "id": "d",
+          "text": "Treat it like a limped pot and check the nuts-adjacent hand"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "This is value and a range advantage. Bet."
+    },
+    {
+      "id": "q2",
+      "prompt": "You called a 3-bet in position with 76s and missed a dry ace-high flop. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold to a bet, or check back if they check. You have almost no equity."
+        },
+        {
+          "id": "b",
+          "text": "Call a pot bet"
+        },
+        {
+          "id": "c",
+          "text": "Raise all-in"
+        },
+        {
+          "id": "d",
+          "text": "Float every ace-high board"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Suited connectors need a flop. This one missed. 3-bet pots do not pay floats the way single-raised pots do."
+    },
+    {
+      "id": "q3",
+      "prompt": "You have KK in a 3-bet pot on 9h 8h 7c. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Bet, but respect a large raise. The board is wet and your overpair is no longer the nuts."
+        },
+        {
+          "id": "b",
+          "text": "Fold to any bet"
+        },
+        {
+          "id": "c",
+          "text": "Check-fold the nuts"
+        },
+        {
+          "id": "d",
+          "text": "Ignore the texture"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "An overpair bets for value and protection. A shove or a big raise can mean a straight or a set."
+    },
+    {
+      "id": "q4",
+      "prompt": "Stack-to-pot ratio is about 4. You have top pair top kicker on a dry board. Getting it in\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Is often correct. There is not enough room to fold later."
+        },
+        {
+          "id": "b",
+          "text": "Is always a fold"
+        },
+        {
+          "id": "c",
+          "text": "Is only for flushes"
+        },
+        {
+          "id": "d",
+          "text": "Requires 200 big blinds behind"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Low SPR means one pair of good quality is a commit hand on safe boards."
+    }
+  ]
+}

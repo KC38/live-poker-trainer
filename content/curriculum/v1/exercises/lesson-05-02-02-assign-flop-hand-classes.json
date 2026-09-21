@@ -1,0 +1,104 @@
+{
+  "id": "lesson-05-02-02-assign-flop-hand-classes",
+  "lessonId": "lesson-05-02-02-assign-flop-hand-classes",
+  "version": "1.0.0",
+  "title": "Assign flop hand classes",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "You hold 9c 9d on 9h Ks 4c. That is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "A set, among the strongest made hands."
+        },
+        {
+          "id": "b",
+          "text": "Top pair only"
+        },
+        {
+          "id": "c",
+          "text": "A flush draw"
+        },
+        {
+          "id": "d",
+          "text": "Air"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Three nines. You are ahead of top pair and most two pair."
+    },
+    {
+      "id": "q2",
+      "prompt": "You hold Jc Td on Qh 9c 2d. That is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "An open-ended straight draw, 8 outs. King or eight completes it."
+        },
+        {
+          "id": "b",
+          "text": "A gutshot with 4 outs"
+        },
+        {
+          "id": "c",
+          "text": "The nuts"
+        },
+        {
+          "id": "d",
+          "text": "A flush draw with 9 outs"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Queen, jack, ten, and nine are consecutive. Either end completes the straight. There is no flush draw on this rainbow board."
+    },
+    {
+      "id": "q3",
+      "prompt": "You hold 7c 6c on Ks 8d 2h. That is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Air. No pair, no straight draw, no flush draw."
+        },
+        {
+          "id": "b",
+          "text": "A combo draw"
+        },
+        {
+          "id": "c",
+          "text": "Middle pair"
+        },
+        {
+          "id": "d",
+          "text": "The nut flush draw"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Do not invent equity. This hand needs help that the flop did not offer."
+    },
+    {
+      "id": "q4",
+      "prompt": "Combo draws are strong because\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "A flush draw plus an open-ender is about 15 outs, not a made hand and not 9 outs only."
+        },
+        {
+          "id": "b",
+          "text": "They are always the nuts already"
+        },
+        {
+          "id": "c",
+          "text": "They have 2 outs"
+        },
+        {
+          "id": "d",
+          "text": "They should be folded on every flop"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Count overlapping outs once. Fifteen outs is a strong draw, still not a guaranteed win."
+    }
+  ]
+}

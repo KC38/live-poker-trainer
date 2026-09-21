@@ -1,0 +1,104 @@
+{
+  "id": "lesson-07-03-01-3-bet-pot-strategy",
+  "lessonId": "lesson-07-03-01-3-bet-pot-strategy",
+  "version": "1.0.0",
+  "title": "3-bet pot strategy",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Three-bet pots have\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Stronger ranges and a lower stack-to-pot ratio than single-raised pots."
+        },
+        {
+          "id": "b",
+          "text": "Weaker ranges than a limp"
+        },
+        {
+          "id": "c",
+          "text": "The same SPR as a limped pot"
+        },
+        {
+          "id": "d",
+          "text": "No position"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "More money is in and the hands are tighter. Commitment comes sooner."
+    },
+    {
+      "id": "q2",
+      "prompt": "Top pair, good kicker, in a 3-bet pot at 100bb is often\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Strong enough to continue and often to stack off on dry boards."
+        },
+        {
+          "id": "b",
+          "text": "An automatic fold"
+        },
+        {
+          "id": "c",
+          "text": "Air"
+        },
+        {
+          "id": "d",
+          "text": "The same as bottom pair in a family pot"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "The ranges are strong, so top pair good kicker is near the top, not a bluff-catcher only."
+    },
+    {
+      "id": "q3",
+      "prompt": "Speculative hands that miss in a 3-bet pot should\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold more. The price to continue is higher and implied odds are worse."
+        },
+        {
+          "id": "b",
+          "text": "Call any bet because they were suited"
+        },
+        {
+          "id": "c",
+          "text": "All-in with no pair"
+        },
+        {
+          "id": "d",
+          "text": "Limp"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "You already paid a 3-bet price. Missing does not entitle you to another street."
+    },
+    {
+      "id": "q4",
+      "prompt": "Bluff frequency in 3-bet pots goes\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Down versus single-raised pots. Both ranges are stronger."
+        },
+        {
+          "id": "b",
+          "text": "Up, because the pot is bigger so bluffs always work"
+        },
+        {
+          "id": "c",
+          "text": "To 100%"
+        },
+        {
+          "id": "d",
+          "text": "To zero even with the nuts"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Strong ranges call more and fold less. Value more, bluff less."
+    }
+  ]
+}

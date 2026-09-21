@@ -77,6 +77,7 @@ LearningSnapshot _snapshot({
   Set<String> completed = const {},
   bool tableReadyPassed = false,
   Map<String, double> mastery = const {},
+  List<String> dueLessonIds = const [],
 }) {
   return LearningSnapshot(
     xp: 0,
@@ -88,6 +89,10 @@ LearningSnapshot _snapshot({
     preflopCompleted: 0,
     preflopTotal: 1,
     preflopPassed: false,
+    postflopCompleted: 0,
+    postflopTotal: 1,
+    postflopPassed: false,
+    dueLessonIds: dueLessonIds,
     masteryByObjectiveId: mastery,
   );
 }
@@ -131,5 +136,15 @@ void main() {
       mastery: {'obj-a': 1, 'obj-b': 0.4},
     );
     expect(nextPracticeLesson(catalog: catalog, snapshot: done)?.id, 'b');
+  });
+
+  test('due reviews come before the next new lesson', () {
+    final catalog = _catalog();
+    final due = _snapshot(
+      completed: {'a'},
+      tableReadyPassed: true,
+      dueLessonIds: const ['a'],
+    );
+    expect(nextPracticeLesson(catalog: catalog, snapshot: due)?.id, 'a');
   });
 }

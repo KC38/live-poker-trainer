@@ -1,0 +1,104 @@
+{
+  "id": "lesson-07-02-02-play-single-raised-pots",
+  "lessonId": "lesson-07-02-02-play-single-raised-pots",
+  "version": "1.0.0",
+  "title": "Play single-raised pots",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "You opened the button, big blind called, flop A72 rainbow, you have AQ. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Small value bet."
+        },
+        {
+          "id": "b",
+          "text": "Check back the nuts-adjacent hand with no plan"
+        },
+        {
+          "id": "c",
+          "text": "All-in"
+        },
+        {
+          "id": "d",
+          "text": "Fold"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Top pair top kicker on a dry single-raised board is a standard bet."
+    },
+    {
+      "id": "q2",
+      "prompt": "You are the big blind caller on 9h 8h 7c with a pair and a draw. The button bets small. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Continue. You have a real hand and equity."
+        },
+        {
+          "id": "b",
+          "text": "Fold a pair and a draw to a small bet"
+        },
+        {
+          "id": "c",
+          "text": "All-in with no thought about the raise size"
+        },
+        {
+          "id": "d",
+          "text": "Donk the river blind"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Single-raised wet boards are where the caller\u2019s range wakes up. Do not fold equity to a small bet."
+    },
+    {
+      "id": "q3",
+      "prompt": "You opened, got called, and the flop is 876 two-tone. You have ace-high. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Check back. This single-raised board favors the caller."
+        },
+        {
+          "id": "b",
+          "text": "Pot bluff"
+        },
+        {
+          "id": "c",
+          "text": "All-in"
+        },
+        {
+          "id": "d",
+          "text": "Bet because every open must c-bet"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Initiative is not a duty to bet every flop."
+    },
+    {
+      "id": "q4",
+      "prompt": "Single-raised, out of position, you have a set and they bet. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Raise for value."
+        },
+        {
+          "id": "b",
+          "text": "Fold"
+        },
+        {
+          "id": "c",
+          "text": "Only call and never raise"
+        },
+        {
+          "id": "d",
+          "text": "Check-fold the turn"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Sets in single-raised pots want a bigger pot while worse hands and draws exist."
+    }
+  ]
+}

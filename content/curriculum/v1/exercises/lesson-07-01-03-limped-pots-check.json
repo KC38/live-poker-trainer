@@ -1,0 +1,104 @@
+{
+  "id": "lesson-07-01-03-limped-pots-check",
+  "lessonId": "lesson-07-01-03-limped-pots-check",
+  "version": "1.0.0",
+  "title": "Limped pots check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Compared with a single-raised pot, a limped pot should be played\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Smaller, with fewer bluffs and thinner value."
+        },
+        {
+          "id": "b",
+          "text": "Identically"
+        },
+        {
+          "id": "c",
+          "text": "Only all-in"
+        },
+        {
+          "id": "d",
+          "text": "As if someone 4-bet"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "The preflop action is the tell. No raise means wider, weaker ranges."
+    },
+    {
+      "id": "q2",
+      "prompt": "Oversized bets with one pair in a limped pot\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold out the worse hands and get called by better."
+        },
+        {
+          "id": "b",
+          "text": "Are the standard value size"
+        },
+        {
+          "id": "c",
+          "text": "Always get folds"
+        },
+        {
+          "id": "d",
+          "text": "Are required"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "That is the opposite of thin value."
+    },
+    {
+      "id": "q3",
+      "prompt": "A limped flop that is four-way changes bluffing by\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Cutting it. More players, fewer successful bluffs."
+        },
+        {
+          "id": "b",
+          "text": "Doubling it"
+        },
+        {
+          "id": "c",
+          "text": "Making air profitable"
+        },
+        {
+          "id": "d",
+          "text": "Removing position"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Player count and pot family stack. Both say check the air."
+    },
+    {
+      "id": "q4",
+      "prompt": "You may still isolate a limper preflop. After the flop is already multiway and limped\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The isolation failed. Play a multiway pot, not a heads-up raised pot."
+        },
+        {
+          "id": "b",
+          "text": "The pot becomes heads-up by rule"
+        },
+        {
+          "id": "c",
+          "text": "You must jam"
+        },
+        {
+          "id": "d",
+          "text": "Ranges stay the same as a 3-bet pot"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Name the pot you are actually in."
+    }
+  ]
+}

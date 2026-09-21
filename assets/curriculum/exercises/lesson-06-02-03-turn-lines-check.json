@@ -1,0 +1,104 @@
+{
+  "id": "lesson-06-02-03-turn-lines-check",
+  "lessonId": "lesson-06-02-03-turn-lines-check",
+  "version": "1.0.0",
+  "title": "Turn lines check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Which turn barrel is the clearest give-up?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Air, no blocker, on the card that completes the caller\u2019s flush draw."
+        },
+        {
+          "id": "b",
+          "text": "Top pair on a brick"
+        },
+        {
+          "id": "c",
+          "text": "A set on any turn"
+        },
+        {
+          "id": "d",
+          "text": "The nut flush when it completes"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "No equity and a card that helped them is a check."
+    },
+    {
+      "id": "q2",
+      "prompt": "Pot and stack planning means\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Choosing a turn size that still leaves a sane river bet or a fold."
+        },
+        {
+          "id": "b",
+          "text": "Betting your stack on every street"
+        },
+        {
+          "id": "c",
+          "text": "Ignoring the river"
+        },
+        {
+          "id": "d",
+          "text": "Matching the big blind only"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "If the turn bet commits you, be sure the hand wants to be committed."
+    },
+    {
+      "id": "q3",
+      "prompt": "A probe bet is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "A small bet after the preflop raiser checked to you."
+        },
+        {
+          "id": "b",
+          "text": "An all-in with air"
+        },
+        {
+          "id": "c",
+          "text": "A check"
+        },
+        {
+          "id": "d",
+          "text": "A preflop limp"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Probing punishes a raiser who gave up the flop. It is not a license to blast."
+    },
+    {
+      "id": "q4",
+      "prompt": "You barrel the turn and get raised. With one pair and no draw you usually\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold. A turn raise is a strong range."
+        },
+        {
+          "id": "b",
+          "text": "Call because you bet"
+        },
+        {
+          "id": "c",
+          "text": "Jam every time"
+        },
+        {
+          "id": "d",
+          "text": "Limp"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "The raise represents the hands that beat one pair. Continue with strong hands and strong draws, not with weak pairs."
+    }
+  ]
+}

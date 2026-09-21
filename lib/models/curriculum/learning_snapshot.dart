@@ -14,6 +14,10 @@ class LearningSnapshot {
     required this.preflopCompleted,
     required this.preflopTotal,
     required this.preflopPassed,
+    required this.postflopCompleted,
+    required this.postflopTotal,
+    required this.postflopPassed,
+    required this.dueLessonIds,
     required this.masteryByObjectiveId,
   });
 
@@ -44,6 +48,18 @@ class LearningSnapshot {
   /// Whether Table Ready and the preflop gate are both passed.
   final bool preflopPassed;
 
+  /// Completed lessons in Sections 5–7.
+  final int postflopCompleted;
+
+  /// Lessons required for the postflop gate.
+  final int postflopTotal;
+
+  /// Whether the Preflop gate and Postflop Core are both passed.
+  final bool postflopPassed;
+
+  /// Lessons due for spaced review or immediate remediation.
+  final List<String> dueLessonIds;
+
   /// Best mastery by objective id, from 0 to 1.
   final Map<String, double> masteryByObjectiveId;
 
@@ -58,6 +74,10 @@ class LearningSnapshot {
     preflopCompleted: 0,
     preflopTotal: 27,
     preflopPassed: false,
+    postflopCompleted: 0,
+    postflopTotal: 45,
+    postflopPassed: false,
+    dueLessonIds: [],
     masteryByObjectiveId: {},
   );
 
@@ -66,6 +86,7 @@ class LearningSnapshot {
     final progress = json['progress'];
     final tableReady = json['tableReady'];
     final preflop = json['preflop'];
+    final postflop = json['postflop'];
     final completed = <String>{};
     if (progress is Map && progress['completedLessonIds'] is List) {
       for (final id in progress['completedLessonIds'] as List) {
@@ -77,6 +98,13 @@ class LearningSnapshot {
       for (final entry in (progress['masteryByObjectiveId'] as Map).entries) {
         final value = entry.value;
         if (value is num) mastery[entry.key.toString()] = value.toDouble();
+      }
+    }
+    final due = <String>[];
+    final rawDue = json['dueLessonIds'];
+    if (rawDue is List) {
+      for (final id in rawDue) {
+        due.add(id.toString());
       }
     }
     int asInt(Object? value) => value is num ? value.toInt() : 0;
@@ -91,6 +119,11 @@ class LearningSnapshot {
       preflopCompleted: preflop is Map ? asInt(preflop['completedCount']) : 0,
       preflopTotal: preflop is Map ? asInt(preflop['totalCount']) : 27,
       preflopPassed: preflop is Map && preflop['passed'] == true,
+      postflopCompleted:
+          postflop is Map ? asInt(postflop['completedCount']) : 0,
+      postflopTotal: postflop is Map ? asInt(postflop['totalCount']) : 45,
+      postflopPassed: postflop is Map && postflop['passed'] == true,
+      dueLessonIds: List.unmodifiable(due),
       masteryByObjectiveId: Map.unmodifiable(mastery),
     );
   }

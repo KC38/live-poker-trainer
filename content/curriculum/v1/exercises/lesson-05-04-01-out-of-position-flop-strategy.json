@@ -1,0 +1,104 @@
+{
+  "id": "lesson-05-04-01-out-of-position-flop-strategy",
+  "lessonId": "lesson-05-04-01-out-of-position-flop-strategy",
+  "version": "1.0.0",
+  "title": "Out-of-position flop strategy",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Out of position, the default start for a preflop caller is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Check, then decide to call, raise, or fold against a bet."
+        },
+        {
+          "id": "b",
+          "text": "Donk bet every flop"
+        },
+        {
+          "id": "c",
+          "text": "All-in"
+        },
+        {
+          "id": "d",
+          "text": "Check-fold every made hand"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Leading into the raiser is the exception. Checking keeps the raiser\u2019s bluffs in the pot."
+    },
+    {
+      "id": "q2",
+      "prompt": "A check-raise is for\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Strong made hands and some strong draws, not every missed hand."
+        },
+        {
+          "id": "b",
+          "text": "Only air"
+        },
+        {
+          "id": "c",
+          "text": "Only the nuts, never a draw"
+        },
+        {
+          "id": "d",
+          "text": "Any two cards, every flop"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "You build the pot when you are ahead or have a lot of equity, and you fold out better one-pair hands with some draws."
+    },
+    {
+      "id": "q3",
+      "prompt": "Check-calling fits\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Medium made hands and decent draws that cannot raise for value."
+        },
+        {
+          "id": "b",
+          "text": "The nuts, which should usually raise"
+        },
+        {
+          "id": "c",
+          "text": "Air with no plan"
+        },
+        {
+          "id": "d",
+          "text": "A hand you will stack off with no pair and no draw"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Call when you beat bluffs or have equity. Do not call when you beat nothing and cannot improve."
+    },
+    {
+      "id": "q4",
+      "prompt": "A donk bet can make sense when\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The flop hits your calling range much harder than the raiser\u2019s range."
+        },
+        {
+          "id": "b",
+          "text": "You have bottom pair on ace-high"
+        },
+        {
+          "id": "c",
+          "text": "You are in position"
+        },
+        {
+          "id": "d",
+          "text": "You want to bet air because you act first"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Leading 876 after you called in the big blind is more reasonable than leading A72 into the raiser."
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "id": "lesson-06-05-02-face-river-bets",
+  "lessonId": "lesson-06-05-02-face-river-bets",
+  "version": "1.0.0",
+  "title": "Face river bets",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "A nit bets the river large. You have a medium pair. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold. Their large bet is value."
+        },
+        {
+          "id": "b",
+          "text": "Call. Medium pairs must hero-call nits"
+        },
+        {
+          "id": "c",
+          "text": "Raise as a bluff"
+        },
+        {
+          "id": "d",
+          "text": "Call because the pot is big and ignore the size"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Pot odds matter, and a nit\u2019s large river bet is still too strong for a medium pair most of the time."
+    },
+    {
+      "id": "q2",
+      "prompt": "A loose, aggressive player bets small on the river. You have top pair. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Call. You beat bluffs and worse value."
+        },
+        {
+          "id": "b",
+          "text": "Fold top pair to any bet"
+        },
+        {
+          "id": "c",
+          "text": "All-in raise with no plan"
+        },
+        {
+          "id": "d",
+          "text": "Fold because populations never bluff"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Small bets from aggressive players include bluffs. Top pair is a call, not an automatic raise."
+    },
+    {
+      "id": "q3",
+      "prompt": "You have the second nuts and a tight player bets the river. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Call, and raise only if worse hands will pay the raise."
+        },
+        {
+          "id": "b",
+          "text": "Fold"
+        },
+        {
+          "id": "c",
+          "text": "Always fold the second nuts"
+        },
+        {
+          "id": "d",
+          "text": "Raise all-in with no worse hand that calls"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Do not fold a monster. Do not raise off the only worse hands that would have called a smaller bet if they will only call with better."
+    },
+    {
+      "id": "q4",
+      "prompt": "You missed your draw and they bet the river. You should\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold. Air does not bluff-catch."
+        },
+        {
+          "id": "b",
+          "text": "Call because your draw was strong on the flop"
+        },
+        {
+          "id": "c",
+          "text": "Raise"
+        },
+        {
+          "id": "d",
+          "text": "Call if the draw was a flush draw"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "The river ended the draw. No pair and no blocker plan is a fold to a bet."
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "id": "lesson-07-04-02-play-4-bet-and-all-in-pots",
+  "lessonId": "lesson-07-04-02-play-4-bet-and-all-in-pots",
+  "version": "1.0.0",
+  "title": "Play 4-bet and all-in pots",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "100bb, 4-bet pot, flop 9s 4d 2c, you have KK and face a bet. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Continue, usually by getting the rest in."
+        },
+        {
+          "id": "b",
+          "text": "Fold. A nine is too scary"
+        },
+        {
+          "id": "c",
+          "text": "Fold. Kings are a bluff"
+        },
+        {
+          "id": "d",
+          "text": "Call and fold the turn on a blank"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Dry nine-high does not beat kings in a 4-bet pot."
+    },
+    {
+      "id": "q2",
+      "prompt": "Same pot, you have A5s and missed. They bet. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold. Your bluff 4-bet candidate has little equity and little room."
+        },
+        {
+          "id": "b",
+          "text": "Stack off ace-high"
+        },
+        {
+          "id": "c",
+          "text": "Call because you 4-bet"
+        },
+        {
+          "id": "d",
+          "text": "Raise and call a jam with no pair"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "The 4-bet bluff needed a fold earlier. On this flop it is a give-up."
+    },
+    {
+      "id": "q3",
+      "prompt": "You are all-in preflop with QQ against a 100bb jam from the button. You should\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Accept the runout. There is no more decision."
+        },
+        {
+          "id": "b",
+          "text": "Fold after you called"
+        },
+        {
+          "id": "c",
+          "text": "Bet the flop"
+        },
+        {
+          "id": "d",
+          "text": "Ask for your cards back"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "The decision was the call. Play the board honestly when you review it. Do not invent new actions."
+    },
+    {
+      "id": "q4",
+      "prompt": "A wet flop in a 4-bet pot with AK and no pair, facing an all-in\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Depends on the price and the range. It is not an automatic call just because you 4-bet."
+        },
+        {
+          "id": "b",
+          "text": "Is always a call"
+        },
+        {
+          "id": "c",
+          "text": "Is always a fold, even for a tiny price"
+        },
+        {
+          "id": "d",
+          "text": "Is a limped-pot decision"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Low SPR pushes you in with equity, but a board that hits sets and straights can make ace-high a fold if the price is bad."
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "id": "lesson-05-04-03-oop-play-check",
+  "lessonId": "lesson-05-04-03-oop-play-check",
+  "version": "1.0.0",
+  "title": "OOP play check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "The usual mistake with a donk bet is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Leading a weak pair into a range that has the advantage."
+        },
+        {
+          "id": "b",
+          "text": "Checking a set once"
+        },
+        {
+          "id": "c",
+          "text": "Folding air to a large bet"
+        },
+        {
+          "id": "d",
+          "text": "Calling a small bet with a flush draw"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Donk bets announce a hand and fold out the bluffs you wanted to catch."
+    },
+    {
+      "id": "q2",
+      "prompt": "Check-raising air on every flop fails because\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "You are out of position on later streets when you get called."
+        },
+        {
+          "id": "b",
+          "text": "Raises are illegal"
+        },
+        {
+          "id": "c",
+          "text": "The raiser must fold"
+        },
+        {
+          "id": "d",
+          "text": "Air always has 15 outs"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "A raise that gets called leaves you playing a big pot first to act with nothing."
+    },
+    {
+      "id": "q3",
+      "prompt": "Which line matches a medium pair out of position against a small bet?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Check-call, and fold if later bets get too large for the hand."
+        },
+        {
+          "id": "b",
+          "text": "All-in"
+        },
+        {
+          "id": "c",
+          "text": "Fold to any bet including the minimum"
+        },
+        {
+          "id": "d",
+          "text": "Donk pot on the flop before they act"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Small bets can be called by hands that beat air. Large later bets are a new price."
+    },
+    {
+      "id": "q4",
+      "prompt": "You check-raised the flop and got called. On a blank turn with no pair, you should\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Slow down more often. The call means you are behind a lot."
+        },
+        {
+          "id": "b",
+          "text": "Automatically jam"
+        },
+        {
+          "id": "c",
+          "text": "Assume they folded"
+        },
+        {
+          "id": "d",
+          "text": "Bet only if you can fold out a better hand you do not block"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "One raise did not turn air into the nuts. Barrels need a new reason."
+    }
+  ]
+}

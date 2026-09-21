@@ -1,0 +1,104 @@
+{
+  "id": "lesson-06-04-02-select-river-bluffs",
+  "lessonId": "lesson-06-04-02-select-river-bluffs",
+  "version": "1.0.0",
+  "title": "Select river bluffs",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "The river completes a heart flush. You have Ah and no pair, no heart besides the ace. Against one thinking opponent\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "This is a possible bluff. You block the nut flush."
+        },
+        {
+          "id": "b",
+          "text": "This is the nut flush already"
+        },
+        {
+          "id": "c",
+          "text": "You must fold without betting because an ace cannot bluff"
+        },
+        {
+          "id": "d",
+          "text": "You should value-bet ace-high"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "One heart in your hand is not a flush. The ace removes the best calling hand."
+    },
+    {
+      "id": "q2",
+      "prompt": "Same completed flush, you have 72 with no heart against a station. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Check. You do not block the nuts and they will not fold."
+        },
+        {
+          "id": "b",
+          "text": "Overbet bluff"
+        },
+        {
+          "id": "c",
+          "text": "All-in"
+        },
+        {
+          "id": "d",
+          "text": "Value bet"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "No blocker and no fold equity is a give-up."
+    },
+    {
+      "id": "q3",
+      "prompt": "You missed a draw and the river is a blank. The opponent has called two streets from a tight range. A bluff\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Is usually a give-up. Their range is strong and the card did not scare them."
+        },
+        {
+          "id": "b",
+          "text": "Is mandatory"
+        },
+        {
+          "id": "c",
+          "text": "Works because blanks scare tight players"
+        },
+        {
+          "id": "d",
+          "text": "Should be an overbet with bottom pair"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Scare cards and blockers create bluffs. A blank against a strong caller does not."
+    },
+    {
+      "id": "q4",
+      "prompt": "Which hand should not be turned into a bluff?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "A medium pair that beats some worse hands and loses to a raise."
+        },
+        {
+          "id": "b",
+          "text": "Ace-high that blocks the nuts and loses to any call"
+        },
+        {
+          "id": "c",
+          "text": "A missed draw with the nut blocker"
+        },
+        {
+          "id": "d",
+          "text": "Air against a folder"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Medium pairs are bluff-catchers or thin value, not bluffs. Betting them as a bluff folds out worse and gets called by better."
+    }
+  ]
+}

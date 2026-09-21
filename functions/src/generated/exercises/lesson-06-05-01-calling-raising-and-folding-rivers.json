@@ -1,0 +1,104 @@
+{
+  "id": "lesson-06-05-01-calling-raising-and-folding-rivers",
+  "lessonId": "lesson-06-05-01-calling-raising-and-folding-rivers",
+  "version": "1.0.0",
+  "title": "Calling, raising, and folding rivers",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "A bluff-catcher is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "A hand that beats bluffs and loses to value."
+        },
+        {
+          "id": "b",
+          "text": "The nuts"
+        },
+        {
+          "id": "c",
+          "text": "Air"
+        },
+        {
+          "id": "d",
+          "text": "A draw that is still live on the river"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "The river is the last card. Draws that missed are air. Bluff-catchers are made hands in the middle."
+    },
+    {
+      "id": "q2",
+      "prompt": "Live players under-bluff big river bets. The adjustment is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold more bluff-catchers than a solver chart says, especially against tight players."
+        },
+        {
+          "id": "b",
+          "text": "Call every bluff-catcher"
+        },
+        {
+          "id": "c",
+          "text": "Raise every bluff-catcher"
+        },
+        {
+          "id": "d",
+          "text": "Fold the nuts"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "If they rarely bluff, a bluff-catcher is a fold. You do not need to hero-call to be balanced."
+    },
+    {
+      "id": "q3",
+      "prompt": "Raising the river as a bluff is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Rare. Most live river raises should be value."
+        },
+        {
+          "id": "b",
+          "text": "The standard defense"
+        },
+        {
+          "id": "c",
+          "text": "Required with every bluff-catcher"
+        },
+        {
+          "id": "d",
+          "text": "Safer than calling"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "A raise folds out bluffs and gets called by better. Value raises are the nuts."
+    },
+    {
+      "id": "q4",
+      "prompt": "You beat their betting range. The action is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Call or raise for value, depending how often they continue worse."
+        },
+        {
+          "id": "b",
+          "text": "Fold"
+        },
+        {
+          "id": "c",
+          "text": "Only check"
+        },
+        {
+          "id": "d",
+          "text": "Muck without looking"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "If you are ahead of the bet, you do not fold. Raising is for when worse hands still continue."
+    }
+  ]
+}

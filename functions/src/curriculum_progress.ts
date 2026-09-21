@@ -151,15 +151,39 @@ export function applyLessonCompletion(
   const completed = new Set(prev.completedLessonIds ?? []);
   completed.add(input.lesson.id);
 
+  const reviewDueByLessonId = {...(prev.reviewDueByLessonId ?? {})};
+  if (score >= 0.8) {
+    delete reviewDueByLessonId[input.lesson.id];
+  } else {
+    reviewDueByLessonId[input.lesson.id] = addCivilDays(today, 1);
+  }
+  if (score < 0.65) {
+    const refresher = input.lesson.remediationLessonIds[0];
+    if (refresher) reviewDueByLessonId[refresher] = today;
+  }
+
   return {
     xp: (prev.xp ?? 0) + xpGain,
     streak,
     lastStudyDay: today,
     masteryByObjectiveId,
     completedLessonIds: [...completed],
+    reviewDueByLessonId,
     catalogVersion: prev.catalogVersion,
     updatedAtMs: now.getTime(),
   };
+}
+
+/** Lesson ids whose review date is on or before [today] (YYYY-MM-DD). */
+export function dueLessonIds(
+  progress: LearningProgressSnapshot,
+  today: string,
+): string[] {
+  const due = progress.reviewDueByLessonId ?? {};
+  return Object.entries(due)
+    .filter(([, day]) => day <= today)
+    .map(([lessonId]) => lessonId)
+    .sort();
 }
 
 export interface TableReadyStatus {
@@ -172,6 +196,14 @@ export interface TableReadyStatus {
 
 export interface PreflopStatus {
   gateId: "preflop";
+  completedCount: number;
+  totalCount: number;
+  missingObjectiveIds: string[];
+  passed: boolean;
+}
+
+export interface PostflopStatus {
+  gateId: "postflop-core";
   completedCount: number;
   totalCount: number;
   missingObjectiveIds: string[];
@@ -267,6 +299,37 @@ export function evaluatePreflop(
     ...own,
     passed: own.passed && evaluateTableReady(catalog, progress).passed,
   };
+}
+
+/**
+ * Sections 5–7, the postflop objectives, and a passed Preflop gate.
+ * Lesson progress is only the 45 postflop lessons.
+ */
+export function evaluatePostflop(
+  catalog: CurriculumCatalog,
+  progress: LearningProgressSnapshot,
+): PostflopStatus {
+  const own = evaluateGate({
+    catalog,
+    progress,
+    gateId: "postflop-core",
+    minSectionOrder: 5,
+    maxSectionOrder: 7,
+  });
+  return {
+    gateId: "postflop-core",
+    ...own,
+    passed: own.passed && evaluatePreflop(catalog, progress).passed,
+  };
+}
+
+function addCivilDays(day: string, delta: number): string {
+  const index = civilDayIndex(day) + delta;
+  const date = new Date(index * 86_400_000);
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const dateNum = String(date.getUTCDate()).padStart(2, "0");
+  return `${year}-${month}-${dateNum}`;
 }
 
 /** YYYY-MM-DD civil date in an IANA timezone. */

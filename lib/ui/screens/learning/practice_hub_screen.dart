@@ -31,7 +31,9 @@ class PracticeHubScreen extends ConsumerWidget {
       orElse: () => null,
     );
     final reviewing =
-        next != null && snapshot.completedLessonIds.contains(next.id);
+        next != null &&
+        (snapshot.dueLessonIds.contains(next.id) ||
+            snapshot.completedLessonIds.contains(next.id));
 
     return SafeArea(
       child: Padding(

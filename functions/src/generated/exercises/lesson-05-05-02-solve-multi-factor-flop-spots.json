@@ -1,0 +1,104 @@
+{
+  "id": "lesson-05-05-02-solve-multi-factor-flop-spots",
+  "lessonId": "lesson-05-05-02-solve-multi-factor-flop-spots",
+  "version": "1.0.0",
+  "title": "Solve multi-factor flop spots",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "You are on the button, heads-up against the big blind, with top pair on a dry board. You bet small and get raised. A set or two pair is now more likely. You should\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Continue only with the top of that hand, and fold the weaker top pairs to a large raise."
+        },
+        {
+          "id": "b",
+          "text": "Always jam top pair"
+        },
+        {
+          "id": "c",
+          "text": "Always fold top pair, top kicker"
+        },
+        {
+          "id": "d",
+          "text": "Call any raise because you have top pair"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "A raise on a dry board is stronger than a call. Kicker and price still matter. Top pair is not one action."
+    },
+    {
+      "id": "q2",
+      "prompt": "Three players see a flop of 8h 7h 6c. You are under the gun with ace-high and no draw. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Check and give up to a bet. Multiway and wet, ace-high is air."
+        },
+        {
+          "id": "b",
+          "text": "Pot-size bluff"
+        },
+        {
+          "id": "c",
+          "text": "All-in"
+        },
+        {
+          "id": "d",
+          "text": "Call a pot bet because an ace is coming"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "You do not have a hand or a draw, and two players remain. This is a fold."
+    },
+    {
+      "id": "q3",
+      "prompt": "Heads-up, in position, you have the nut flush draw and two overcards on a wet flop. Facing a small bet\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Continue. You have a strong draw, not air."
+        },
+        {
+          "id": "b",
+          "text": "Fold. Overcards do not count"
+        },
+        {
+          "id": "c",
+          "text": "Fold. Flush draws have 2 outs"
+        },
+        {
+          "id": "d",
+          "text": "Only continue if you are already ahead"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "This is a high-equity draw. Calling or raising are both real. Folding is not."
+    },
+    {
+      "id": "q4",
+      "prompt": "Out of position, multiway, you flop bottom pair. Someone bets and a player calls. You should\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold. You are behind a bet and a call with a weak pair."
+        },
+        {
+          "id": "b",
+          "text": "Raise all-in"
+        },
+        {
+          "id": "c",
+          "text": "Call because the pot is big"
+        },
+        {
+          "id": "d",
+          "text": "Donk the turn no matter the card"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Bottom pair does not beat a bet-and-call on a multiway flop."
+    }
+  ]
+}

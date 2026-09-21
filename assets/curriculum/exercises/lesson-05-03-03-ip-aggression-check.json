@@ -1,0 +1,104 @@
+{
+  "id": "lesson-05-03-03-ip-aggression-check",
+  "lessonId": "lesson-05-03-03-ip-aggression-check",
+  "version": "1.0.0",
+  "title": "IP aggression check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "A continuation bet is most attractive when\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "You have range advantage and the board is dry."
+        },
+        {
+          "id": "b",
+          "text": "The board is 876 with two suits and you have no pair"
+        },
+        {
+          "id": "c",
+          "text": "You are out of position"
+        },
+        {
+          "id": "d",
+          "text": "Four players called your open"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Bet the boards you smash. Check the boards the caller smashes, especially multiway."
+    },
+    {
+      "id": "q2",
+      "prompt": "Checking back in position does not mean you give up the hand. It means\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "You can still bet a later street or win at showdown."
+        },
+        {
+          "id": "b",
+          "text": "You must fold the turn"
+        },
+        {
+          "id": "c",
+          "text": "The hand is over"
+        },
+        {
+          "id": "d",
+          "text": "You cannot win the pot"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Position lets you realize equity and choose a later bluff or value bet."
+    },
+    {
+      "id": "q3",
+      "prompt": "Which sizing story is backwards?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Bet tiny on a wet draw-heavy board and huge with air on a dry ace-high board."
+        },
+        {
+          "id": "b",
+          "text": "Bet small on dry ace-high"
+        },
+        {
+          "id": "c",
+          "text": "Bet larger with a set on a wet board"
+        },
+        {
+          "id": "d",
+          "text": "Check back weak showdown value"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Small on dry, larger when you charge draws or value a strong hand. The reverse leaks chips."
+    },
+    {
+      "id": "q4",
+      "prompt": "You are in position as the preflop caller, not the raiser, on A72. You should\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Not assume the raiser\u2019s c-bet frequency. Your calling range is the one that missed this board."
+        },
+        {
+          "id": "b",
+          "text": "Always lead all-in"
+        },
+        {
+          "id": "c",
+          "text": "Always have the nuts"
+        },
+        {
+          "id": "d",
+          "text": "Fold every ace"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "The raiser has the range advantage here. Floats and calls need a real hand or a plan, not hope."
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "id": "lesson-07-01-02-play-limped-pots",
+  "lessonId": "lesson-07-01-02-play-limped-pots",
+  "version": "1.0.0",
+  "title": "Play limped pots",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Four players limped. You have top pair on a dry board in position. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Bet small for value."
+        },
+        {
+          "id": "b",
+          "text": "Check because limped pots cannot be bet"
+        },
+        {
+          "id": "c",
+          "text": "All-in"
+        },
+        {
+          "id": "d",
+          "text": "Pot-size bluff with the same hand"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Top pair is ahead of a wide field. A small bet gets calls from worse without inflating a multiway pot."
+    },
+    {
+      "id": "q2",
+      "prompt": "Same limped pot, you have ace-high and no draw, multiway. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Check. Air does not bluff into four players."
+        },
+        {
+          "id": "b",
+          "text": "Pot bet"
+        },
+        {
+          "id": "c",
+          "text": "All-in"
+        },
+        {
+          "id": "d",
+          "text": "Bet large because the pot was limped"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Multiway limped pots are for made hands, not for steals."
+    },
+    {
+      "id": "q3",
+      "prompt": "You flop a set in a limped pot. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Bet. Do not give a free card to a wide field."
+        },
+        {
+          "id": "b",
+          "text": "Check forever"
+        },
+        {
+          "id": "c",
+          "text": "Fold"
+        },
+        {
+          "id": "d",
+          "text": "Bet one chip"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Sets want value from the many one-pair hands that limped."
+    },
+    {
+      "id": "q4",
+      "prompt": "Bottom pair, limped, multiway, someone bets pot. You should\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold. The size and the field are too strong for bottom pair."
+        },
+        {
+          "id": "b",
+          "text": "Call"
+        },
+        {
+          "id": "c",
+          "text": "Raise all-in"
+        },
+        {
+          "id": "d",
+          "text": "Call and stack off"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "A big bet into a limped pot is more honest than a small one. Weak pairs fold."
+    }
+  ]
+}

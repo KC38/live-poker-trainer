@@ -1,0 +1,104 @@
+{
+  "id": "lesson-05-01-01-flop-textures-and-categories",
+  "lessonId": "lesson-05-01-01-flop-textures-and-categories",
+  "version": "1.0.0",
+  "title": "Flop textures and categories",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Which flop is the driest?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Ks 7d 2c"
+        },
+        {
+          "id": "b",
+          "text": "Jh Th 9h"
+        },
+        {
+          "id": "c",
+          "text": "9h 8h 7c"
+        },
+        {
+          "id": "d",
+          "text": "Qs Js Td"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Unpaired, rainbow, and disconnected boards change on fewer turns than monotone or connected boards."
+    },
+    {
+      "id": "q2",
+      "prompt": "Which flop is dynamic?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Jh Th 9h"
+        },
+        {
+          "id": "b",
+          "text": "As Kd 2c"
+        },
+        {
+          "id": "c",
+          "text": "Kc 8d 3h"
+        },
+        {
+          "id": "d",
+          "text": "Ad 7c 2s"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "A monotone connected flop has many turns that complete straights and flushes."
+    },
+    {
+      "id": "q3",
+      "prompt": "On As 7d 2c, who usually has the range advantage in a single-raised pot?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The preflop raiser"
+        },
+        {
+          "id": "b",
+          "text": "The big blind caller"
+        },
+        {
+          "id": "c",
+          "text": "Whoever limped"
+        },
+        {
+          "id": "d",
+          "text": "The player with the smaller stack, always"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "The raiser has more strong aces and overpairs. The caller\u2019s range is capped and heavier in suited junk that missed."
+    },
+    {
+      "id": "q4",
+      "prompt": "Nut advantage means\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Who has more of the very strongest hands, not just who has more high cards."
+        },
+        {
+          "id": "b",
+          "text": "Who acts last"
+        },
+        {
+          "id": "c",
+          "text": "Who posted the big blind"
+        },
+        {
+          "id": "d",
+          "text": "Who has more chips off the table"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "On 9h 8h 7c the caller often has more straights and two pair than a tight early raiser."
+    }
+  ]
+}

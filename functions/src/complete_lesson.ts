@@ -133,6 +133,7 @@ export async function completeLessonForUser(options: {
         lastStudyDay: next.lastStudyDay ?? null,
         masteryByObjectiveId: next.masteryByObjectiveId,
         completedLessonIds: next.completedLessonIds ?? [],
+        reviewDueByLessonId: next.reviewDueByLessonId ?? {},
         catalogVersion: catalog.catalogVersion,
         activeAttemptId: FieldValue.delete(),
         activeLessonId: FieldValue.delete(),

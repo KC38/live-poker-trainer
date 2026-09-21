@@ -1,0 +1,104 @@
+{
+  "id": "lesson-06-04-03-river-bluffs-check",
+  "lessonId": "lesson-06-04-03-river-bluffs-check",
+  "version": "1.0.0",
+  "title": "River bluffs check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Pick the better bluff.",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The ace of the flush suit, no pair, against one opponent who can fold."
+        },
+        {
+          "id": "b",
+          "text": "72 with no blocker against a station"
+        },
+        {
+          "id": "c",
+          "text": "Bottom pair against a nit who only calls with better"
+        },
+        {
+          "id": "d",
+          "text": "Any hand, at random"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Blocker plus fold equity. The others have neither."
+    },
+    {
+      "id": "q2",
+      "prompt": "Polarized means\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Your betting range is very strong hands and selected bluffs, not medium strength."
+        },
+        {
+          "id": "b",
+          "text": "You bet the same size with every hand"
+        },
+        {
+          "id": "c",
+          "text": "You only check"
+        },
+        {
+          "id": "d",
+          "text": "You bet only medium pairs"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Overbets and large river bets tell this story. Do not put second pair in that range."
+    },
+    {
+      "id": "q3",
+      "prompt": "A bluff that gets called is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "A failed bluff. Do not add more chips with the same air."
+        },
+        {
+          "id": "b",
+          "text": "A value bet"
+        },
+        {
+          "id": "c",
+          "text": "A sign you should raise again"
+        },
+        {
+          "id": "d",
+          "text": "Profit, because you tried"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Once they call, ace-high does not improve. Give up."
+    },
+    {
+      "id": "q4",
+      "prompt": "Live populations make pure bluffs\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Less profitable, because they under-bluff and over-call in different spots. Pick opponents who actually fold."
+        },
+        {
+          "id": "b",
+          "text": "Automatic profit"
+        },
+        {
+          "id": "c",
+          "text": "Illegal"
+        },
+        {
+          "id": "d",
+          "text": "Required every river"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Bluff the folders. Do not bluff the callers. Do not assume a solver frequency at a live table."
+    }
+  ]
+}
