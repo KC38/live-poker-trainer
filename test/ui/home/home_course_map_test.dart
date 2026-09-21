@@ -193,9 +193,15 @@ void main() {
     expect(find.byType(HomeScreen), findsOneWidget);
     expect(find.text('Home'), findsWidgets);
     expect(find.byType(RexCoachCard), findsOneWidget);
+    expect(find.byType(CustomScrollView), findsOneWidget);
+    // Path nodes live in a lower sliver; scroll until the next node paints.
+    await tester.dragUntilVisible(
+      find.text('Lesson A'),
+      find.byType(CustomScrollView),
+      const Offset(0, -120),
+    );
     expect(find.text('Lesson A'), findsOneWidget);
     expect(find.text('NEXT'), findsOneWidget);
-    await tester.ensureVisible(find.text('Lesson A'));
   });
 
   testWidgets('every node exposes a semantic label', (tester) async {
