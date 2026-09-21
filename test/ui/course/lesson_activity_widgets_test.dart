@@ -77,8 +77,23 @@ SubmitCourseStepResult _result({
 }
 
 void main() {
-  testWidgets('coach dialogue exposes hole card semantics', (tester) async {
-    final activity = _activity(renderer: ActivityRenderer.coachDialogue);
+  testWidgets('hole-card explain shows demonstration cards', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-01-01-01-explain-hole-cards',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText: 'These two are yours alone.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text: 'These two are yours alone. Nobody else sees them.',
+        ),
+      ],
+    );
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
       _wrap(
@@ -90,8 +105,87 @@ void main() {
       ),
     );
     expect(find.byType(MiniCard), findsNWidgets(2));
-    expect(find.textContaining('Rex'), findsWidgets);
+    expect(find.textContaining('REX'), findsWidgets);
+    expect(
+      find.text('Tap Continue when you have looked at your two cards.'),
+      findsOneWidget,
+    );
     controller.dispose();
+  });
+
+  testWidgets('suits explain shows suits — not hole-card Ah/Kd demo', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-01-02-explain-suits',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText: 'Four suits, thirteen ranks. Ace is high here.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text: 'Four suits, thirteen ranks. Ace is high here.',
+        ),
+      ],
+      objectives: const ['Name the four suits'],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byType(SuitGlyphRow), findsOneWidget);
+    expect(find.text('Thirteen ranks — ace high'), findsOneWidget);
+    expect(find.byType(MiniCard), findsNothing);
+    expect(
+      find.text('Tap Continue when you have looked at your two cards.'),
+      findsNothing,
+    );
+    expect(
+      find.text('Tap Continue when the four suits and ranks click.'),
+      findsOneWidget,
+    );
+    controller.dispose();
+  });
+
+  test('resolveCoachDialogueVisual is content-driven', () {
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-01-01-02-explain-suits',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText: 'Four suits',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.suitsRanks,
+    );
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-generic-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText: 'Listen up.',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.none,
+    );
   });
 
   testWidgets('select identify selects a choice', (tester) async {
