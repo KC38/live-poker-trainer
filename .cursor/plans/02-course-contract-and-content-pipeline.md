@@ -1,5 +1,14 @@
 # Plan 02 — Course Contract and Content Pipeline
 
+**Status: Done**
+
+- Merged: https://github.com/KC38/live-poker-trainer/pull/168
+  (`9e3c93e`) on `main`
+- Cloud Functions deploy: completed from `origin/main` at `9e3c93e`
+- CI: `course-contract` passed on PR #168
+  (https://github.com/KC38/live-poker-trainer/actions/runs/35575745744)
+- Simulator: hot-restarted attached Flutter sessions after merge
+
 ## Objective
 
 Define a versioned, validated, live-cash-NLH-only curriculum contract shared by
