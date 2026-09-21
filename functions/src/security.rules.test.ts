@@ -272,6 +272,64 @@ describe("Firestore security rules", () => {
       await assertFails(setDoc(document, {client: true}));
     }
   });
+
+  it("allows owner reads but denies writes for learning records", async () => {
+    await seedFirestore(`users/${OWNER_UID}/learning/main`, {
+      catalogVersion: "1.0.0",
+      xp: 0,
+    });
+    await seedFirestore(`users/${OWNER_UID}/learningAttempts/attempt-1`, {
+      lessonId: "lesson-00-01-01",
+      completedAt: Timestamp.now(),
+    });
+    await seedFirestore(`users/${OWNER_UID}/learningSkills/obj-1`, {
+      mastery: 0.5,
+    });
+    await seedFirestore(`users/${OWNER_UID}/learningReviews/review-1`, {
+      objectiveId: "obj-1",
+      dueAt: Timestamp.now(),
+    });
+    await seedFirestore(`users/${OWNER_UID}/learningAchievements/ach-1`, {
+      unlockedAt: Timestamp.now(),
+    });
+    await seedFirestore(`users/${OWNER_UID}/learningXpLedger/xp-1`, {
+      amount: 10,
+      createdAt: Timestamp.now(),
+    });
+    await seedFirestore(`users/${OWNER_UID}/learningMergeReceipts/merge-1`, {
+      status: "merged",
+    });
+    await seedFirestore("appConfig/featureFlags", {
+      learningPlatformEnabled: false,
+    });
+
+    const owner = testEnv.authenticatedContext(OWNER_UID).firestore();
+    const other = testEnv.authenticatedContext(OTHER_UID).firestore();
+    const anon = testEnv.unauthenticatedContext().firestore();
+
+    for (const path of [
+      `users/${OWNER_UID}/learning/main`,
+      `users/${OWNER_UID}/learningAttempts/attempt-1`,
+      `users/${OWNER_UID}/learningSkills/obj-1`,
+      `users/${OWNER_UID}/learningReviews/review-1`,
+      `users/${OWNER_UID}/learningAchievements/ach-1`,
+      `users/${OWNER_UID}/learningXpLedger/xp-1`,
+      `users/${OWNER_UID}/learningMergeReceipts/merge-1`,
+    ]) {
+      await assertSucceeds(getDoc(doc(owner, path)));
+      await assertFails(setDoc(doc(owner, path), {client: true}));
+      await assertFails(getDoc(doc(other, path)));
+      await assertFails(getDoc(doc(anon, path)));
+    }
+
+    await assertSucceeds(getDoc(doc(owner, "appConfig/featureFlags")));
+    await assertFails(
+      setDoc(doc(owner, "appConfig/featureFlags"), {
+        learningPlatformEnabled: true,
+      }),
+    );
+    await assertFails(getDoc(doc(anon, "appConfig/featureFlags")));
+  });
 });
 
 describe("Storage security rules", () => {

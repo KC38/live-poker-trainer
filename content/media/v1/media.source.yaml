@@ -1,0 +1,210 @@
+# Placeholder media manifest (status: draft).
+# Schema: schemas/media.schema.json
+# URIs point at existing repo assets where available; illustration slots are TBD.
+
+entries:
+  - id: media.image.coach.meridian.idle
+    kind: image
+    semanticRole: instructional
+    characterId: character.coach.primary
+    usageIds:
+      - usage.coach.shelf.idle
+      - usage.learning.coach.portrait
+    source:
+      system: repo
+      path: assets/brand/logo_mark.png
+    provenanceId: provenance.internal.brand.v1
+    licenseId: license.internal.owned.v1
+    variants:
+      - locale: en
+        theme: dark_felt
+        motion: none
+        uri: asset://brand/logo_mark.png
+    accessibility:
+      decorative: false
+      altMessageId: msg.media.coach.meridian.idle.alt
+    version: 1
+    status: draft
+    approvals: []
+
+  - id: media.image.onboarding.panel.01
+    kind: image
+    semanticRole: instructional
+    usageIds:
+      - usage.onboarding.panel.01
+    source:
+      system: figma
+      fileKey: TBD
+      nodeId: TBD
+    provenanceId: provenance.internal.brand.v1
+    licenseId: license.internal.owned.v1
+    variants:
+      - locale: en
+        theme: dark_felt
+        motion: none
+        uri: placeholder://media.image.onboarding.panel.01
+    accessibility:
+      decorative: false
+      altMessageId: msg.media.onboarding.panel.01.alt
+    safeCrop:
+      phone:
+        x: 0.1
+        y: 0.05
+        width: 0.8
+        height: 0.9
+      tablet:
+        x: 0.05
+        y: 0.05
+        width: 0.9
+        height: 0.9
+    version: 1
+    status: draft
+    approvals: []
+
+  - id: media.image.section.00.hero
+    kind: image
+    semanticRole: decorative
+    usageIds:
+      - usage.learning.section.00.hero
+    source:
+      system: figma
+      fileKey: TBD
+      nodeId: TBD
+    provenanceId: provenance.internal.brand.v1
+    licenseId: license.internal.owned.v1
+    variants:
+      - locale: en
+        theme: dark_felt
+        motion: none
+        uri: placeholder://media.image.section.00.hero
+    accessibility:
+      decorative: true
+    version: 1
+    status: draft
+    approvals: []
+
+  - id: media.music.shell.lounge
+    kind: music
+    semanticRole: decorative
+    usageIds:
+      - usage.shell.home.bgm
+    source:
+      system: repo
+      path: assets/sounds/lounge_ambient.mp3
+    provenanceId: provenance.internal.sounds.v1
+    licenseId: license.internal.owned.v1
+    variants:
+      - locale: en
+        theme: dark_felt
+        motion: none
+        uri: asset://sounds/lounge_ambient.mp3
+    accessibility:
+      decorative: true
+    version: 1
+    status: draft
+    approvals: []
+
+  - id: media.sfx.table.deal
+    kind: sfx
+    semanticRole: control_feedback
+    usageIds:
+      - usage.table.sfx.deal
+    source:
+      system: repo
+      path: assets/sounds/deal.wav
+    provenanceId: provenance.internal.sounds.v1
+    licenseId: license.internal.owned.v1
+    variants:
+      - locale: en
+        theme: dark_felt
+        motion: none
+        uri: asset://sounds/deal.wav
+    accessibility:
+      decorative: true
+    version: 1
+    status: draft
+    approvals: []
+
+  - id: media.sfx.table.chip
+    kind: sfx
+    semanticRole: control_feedback
+    usageIds:
+      - usage.table.sfx.chip
+    source:
+      system: repo
+      path: assets/sounds/chip.wav
+    provenanceId: provenance.internal.sounds.v1
+    licenseId: license.internal.owned.v1
+    variants:
+      - locale: en
+        theme: dark_felt
+        motion: none
+        uri: asset://sounds/chip.wav
+    accessibility:
+      decorative: true
+    version: 1
+    status: draft
+    approvals: []
+
+  - id: media.sfx.table.knock
+    kind: sfx
+    semanticRole: control_feedback
+    usageIds:
+      - usage.table.sfx.knock
+    source:
+      system: repo
+      path: assets/sounds/knock.wav
+    provenanceId: provenance.internal.sounds.v1
+    licenseId: license.internal.owned.v1
+    variants:
+      - locale: en
+        theme: dark_felt
+        motion: none
+        uri: asset://sounds/knock.wav
+    accessibility:
+      decorative: true
+    version: 1
+    status: draft
+    approvals: []
+
+  - id: media.sfx.table.fold
+    kind: sfx
+    semanticRole: control_feedback
+    usageIds:
+      - usage.table.sfx.fold
+    source:
+      system: repo
+      path: assets/sounds/fold.wav
+    provenanceId: provenance.internal.sounds.v1
+    licenseId: license.internal.owned.v1
+    variants:
+      - locale: en
+        theme: dark_felt
+        motion: none
+        uri: asset://sounds/fold.wav
+    accessibility:
+      decorative: true
+    version: 1
+    status: draft
+    approvals: []
+
+  - id: media.sfx.table.win
+    kind: sfx
+    semanticRole: control_feedback
+    usageIds:
+      - usage.table.sfx.win
+    source:
+      system: repo
+      path: assets/sounds/win.wav
+    provenanceId: provenance.internal.sounds.v1
+    licenseId: license.internal.owned.v1
+    variants:
+      - locale: en
+        theme: dark_felt
+        motion: none
+        uri: asset://sounds/win.wav
+    accessibility:
+      decorative: true
+    version: 1
+    status: draft
+    approvals: []

@@ -186,6 +186,18 @@ export const recoverLiveGenerationLeases = onSchedule(
   },
 );
 
+/*
+ * Planned learning-platform callables (not exported yet — foundation only):
+ *   - startLesson
+ *   - completeLesson
+ *   - getLearningState
+ *   - getNextActivity
+ *   - mergeGuestProgress
+ * Modules to wire later: curriculum_catalog, curriculum_progress, start_lesson,
+ * complete_lesson, get_learning_state, get_next_activity, merge_guest_progress,
+ * gated by LearningFeatureFlags (all default false).
+ */
+
 function requireAuth(uid: string | undefined): string {
   if (!uid) {
     throw new HttpsError(

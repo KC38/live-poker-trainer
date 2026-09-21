@@ -1,0 +1,21 @@
+# License stubs for learning-platform media.
+# Existing brand and sound assets are internally owned.
+
+licenses:
+  - id: license.internal.owned.v1
+    name: Internal owned — Live Poker Trainer
+    spdxExpression: null
+    rightsHolder: Live Poker Trainer
+    notes: >
+      First-party brand marks and table audio created for or commissioned by
+      this product. Redistribution outside the app requires explicit grant.
+    status: draft
+
+  - id: license.internal.placeholder.v1
+    name: Internal placeholder — TBD commission
+    spdxExpression: null
+    rightsHolder: Live Poker Trainer
+    notes: >
+      Slot for future commissioned illustration, narration, or music before a
+      final license record is attached.
+    status: draft
