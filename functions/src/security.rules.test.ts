@@ -323,12 +323,17 @@ describe("Firestore security rules", () => {
     }
 
     await assertSucceeds(getDoc(doc(owner, "appConfig/featureFlags")));
+    await assertSucceeds(getDoc(doc(anon, "appConfig/featureFlags")));
     await assertFails(
       setDoc(doc(owner, "appConfig/featureFlags"), {
         learningPlatformEnabled: true,
       }),
     );
-    await assertFails(getDoc(doc(anon, "appConfig/featureFlags")));
+    await assertFails(
+      setDoc(doc(anon, "appConfig/featureFlags"), {
+        learningPlatformEnabled: true,
+      }),
+    );
   });
 });
 
