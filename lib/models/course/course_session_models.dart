@@ -62,6 +62,11 @@ class CourseAttemptSnapshot {
   bool get isComplete => status == 'completed';
   bool get needsRemediation => status == 'remediation';
 
+  /// True when every activity was accepted and completeLesson should run.
+  bool isReadyToComplete(int activityCount) =>
+      activityCount > 0 &&
+      (activityIndex >= activityCount || acceptedCount >= activityCount);
+
   factory CourseAttemptSnapshot.fromJson(Map<String, dynamic> json) {
     return CourseAttemptSnapshot(
       attemptId: json['attemptId'] as String,
