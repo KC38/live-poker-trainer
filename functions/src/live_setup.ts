@@ -30,6 +30,12 @@ export function parseLiveTableSetup(raw: unknown): LiveTableSetup {
   }
   const data = raw as Record<string, unknown>;
   const mode = data.mode ?? "random";
+  if (mode === "course") {
+    throw new HttpsError(
+      "invalid-argument",
+      "Course setups must use the course live bridge path.",
+    );
+  }
   if (mode !== "random") {
     throw new HttpsError(
       "invalid-argument",

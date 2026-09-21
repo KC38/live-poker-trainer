@@ -29,6 +29,7 @@ import {
   type CourseLesson,
   type SoftGrade,
 } from "./course_catalog";
+import {resolveLiveAccessForUser} from "./live_access";
 
 export const DEFAULT_LESSON_LIVES = 3;
 export const XP_PER_ACCEPTED_STEP = 10;
@@ -1211,6 +1212,7 @@ export async function getCourseStateForUser(options: {
   openAttempt: CourseAttempt | null;
   reviewsDue: Array<Record<string, unknown>>;
   liveTrainingEntitlement: Record<string, unknown> | null;
+  liveAccess: Record<string, unknown> | null;
 }> {
   const db = options.db ?? getFirestore();
   const input = record(options.raw ?? {}, "request");
@@ -1265,6 +1267,39 @@ export async function getCourseStateForUser(options: {
     .doc("liveTraining")
     .get();
 
+  let liveAccess: Record<string, unknown> | null = null;
+  if (options.isAnonymous !== true) {
+    try {
+      const access = await resolveLiveAccessForUser(options.uid, {db});
+      liveAccess = {
+        tier: access.tier,
+        source: access.source,
+        unrestrictedAccess: access.unrestrictedAccess,
+        warmUpAvailable: access.warmUpAvailable,
+        nextLessonId: access.nextLessonId,
+        rolloutCutoffMs: access.rolloutCutoffMs,
+      };
+    } catch {
+      liveAccess = {
+        tier: "locked",
+        source: "none",
+        unrestrictedAccess: false,
+        warmUpAvailable: false,
+        nextLessonId: null,
+        rolloutCutoffMs: null,
+      };
+    }
+  } else {
+    liveAccess = {
+      tier: "locked",
+      source: "none",
+      unrestrictedAccess: false,
+      warmUpAvailable: false,
+      nextLessonId: null,
+      rolloutCutoffMs: null,
+    };
+  }
+
   return {
     available: flags.courseEnabled,
     flags,
@@ -1274,6 +1309,7 @@ export async function getCourseStateForUser(options: {
     liveTrainingEntitlement: entitlementSnap.exists ?
       sanitizeEntitlement(entitlementSnap.data()!) :
       null,
+    liveAccess,
   };
 }
 

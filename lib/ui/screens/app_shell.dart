@@ -91,10 +91,10 @@ class _AppShellState extends ConsumerState<AppShell> {
     return Scaffold(
       body: IndexedStack(
         index: _index,
-        children: const [
-          HomeScreen(),
-          LiveTrainingScreen(),
-          ProfileScreen(),
+        children: [
+          const HomeScreen(),
+          LiveTrainingScreen(onOpenHome: () => _selectTab(0)),
+          const ProfileScreen(),
         ],
       ),
       bottomNavigationBar: NavigationBar(

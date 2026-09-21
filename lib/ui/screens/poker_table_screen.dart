@@ -173,14 +173,22 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                       replaying: session.replaying,
                       preparing: showCoachPrep,
                       maxHeight: maxHeight,
-                      dismissLabel: handDone ? 'Next hand' : 'Continue',
+                      dismissLabel:
+                          session.courseContext != null && handDone
+                              ? 'Back to course'
+                              : handDone
+                              ? 'Next hand'
+                              : 'Continue',
                       onDismiss:
                           showCoachAdvice
                               ? () {
                                 final controller = ref.read(
                                   gameControllerProvider.notifier,
                                 );
-                                if (handDone) {
+                                final course = session.courseContext;
+                                if (handDone && course != null) {
+                                  Navigator.of(context).pop(course.returnNodeId);
+                                } else if (handDone) {
                                   controller.nextHand();
                                 } else {
                                   controller.dismissCoach();
@@ -188,7 +196,10 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                               }
                               : null,
                       onUndo:
-                          showCoachAdvice
+                          showCoachAdvice &&
+                                  (session.courseContext == null ||
+                                      session.courseContext!.scaffolding !=
+                                          'none')
                               ? () {
                                 unawaited(
                                   ref

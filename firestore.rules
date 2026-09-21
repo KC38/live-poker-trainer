@@ -286,6 +286,10 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    match /courseLiveSetups/{setupKey}/{document=**} {
+      allow read, write: if false;
+    }
+
     match /liveGenerationJobs/{jobId} {
       allow read, write: if false;
     }

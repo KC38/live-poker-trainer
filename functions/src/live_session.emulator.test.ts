@@ -151,6 +151,12 @@ async function seedReadyHand(): Promise<{
   await db.doc("system/liveConfig").set({
     maintenance: false,
     minClientVersion: "2.0.0",
+    rolloutCutoffMs: Date.parse("2099-01-01T00:00:00.000Z"),
+  });
+  await db.doc("users/user-1/entitlements/liveTraining").set({
+    unrestrictedAccess: true,
+    source: "admin",
+    grantedAtMs: Date.now(),
   });
   return {definition, rootHash, foldActionId};
 }
@@ -358,5 +364,60 @@ describe("live session integration", () => {
         clientVersion: "2.0.0",
       },
     })).rejects.toMatchObject({code: "failed-precondition"});
+  });
+
+  test("course warm-up never writes live receipts or progress", async () => {
+    await db.doc("system/liveConfig").set({
+      maintenance: false,
+      minClientVersion: "2.0.0",
+      rolloutCutoffMs: Date.parse("2000-01-01T00:00:00.000Z"),
+    });
+    await db.doc("users/course-user/course/main").set({
+      completedLessonIds: ["lesson-02-07-02-section-two-jump"],
+    });
+    const progressBefore = await db.doc("users/course-user/liveProgress/main")
+      .get();
+    const started = await startLiveHandForUser({
+      uid: "course-user",
+      db,
+      accessDeps: {
+        getUserCreatedAtMs: async () => Date.parse("2026-09-22T00:00:00.000Z"),
+      },
+      raw: {
+        clientVersion: "2.0.0",
+        startRequestId: "course_start_1",
+        tableSetup: {mode: "course", courseKind: "warm_up"},
+      },
+    });
+    expect(started.view.setupKey.startsWith("course-v1|")).toBe(true);
+    const receipts = await db.collection("users/course-user/liveHandReceipts")
+      .get();
+    expect(receipts.size).toBe(0);
+    const courseReceipts = await db
+      .collection("users/course-user/courseLiveReceipts")
+      .get();
+    expect(courseReceipts.size).toBe(1);
+    const liveSetups = await db.collection("liveTableSetups").get();
+    expect(liveSetups.size).toBe(0);
+    const progressAfter = await db.doc("users/course-user/liveProgress/main")
+      .get();
+    expect(progressAfter.exists).toBe(progressBefore.exists);
+    expect(progressAfter.data() ?? null).toEqual(progressBefore.data() ?? null);
+  });
+
+  test("post-cutoff users without entitlement cannot start random live", async () => {
+    await seedReadyHand();
+    await expect(startLiveHandForUser({
+      uid: "new-user",
+      db,
+      accessDeps: {
+        getUserCreatedAtMs: async () => Date.parse("2099-06-01T00:00:00.000Z"),
+      },
+      raw: {
+        clientVersion: "2.0.0",
+        startRequestId: "blocked_start",
+        tableSetup: {...DEFAULT_LIVE_SETUP, seatCount: 2},
+      },
+    })).rejects.toMatchObject({code: "permission-denied"});
   });
 });

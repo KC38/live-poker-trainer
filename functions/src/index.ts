@@ -36,6 +36,7 @@ import {
   submitLiveActionForUser,
   undoLiveActionForUser,
 } from "./live_session";
+import {resolveLiveAccessForUser} from "./live_access";
 
 initializeApp();
 
@@ -224,6 +225,25 @@ export const completeCourseLesson = onCall(
       });
     } catch (error) {
       throw callableError("completeCourseLesson", error);
+    }
+  },
+);
+
+/** Returns Live Training access tier (warm-up / unrestricted / locked). */
+export const getLiveAccess = onCall(
+  {
+    region: "us-central1",
+    timeoutSeconds: 30,
+    memory: "256MiB",
+  },
+  async (request) => {
+    const uid = requireAuth(request.auth?.uid);
+    rejectAnonymousLive(request.auth);
+    try {
+      const access = await resolveLiveAccessForUser(uid);
+      return {ok: true, ...access};
+    } catch (error) {
+      throw callableError("getLiveAccess", error);
     }
   },
 );

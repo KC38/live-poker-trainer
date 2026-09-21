@@ -10,11 +10,16 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_home_models.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/course_home_provider.dart';
+import 'package:live_poker_trainer/providers/game_provider.dart';
+import 'package:live_poker_trainer/models/live_access.dart';
 import 'package:live_poker_trainer/ui/home/course_path_view.dart';
 import 'package:live_poker_trainer/ui/home/course_resume_card.dart';
 import 'package:live_poker_trainer/ui/home/course_status_bar.dart';
 import 'package:live_poker_trainer/ui/home/rex_coach_card.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_runner_screen.dart';
+import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
+import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 
 /// Home tab — interactive live-cash course path.
 class HomeScreen extends ConsumerStatefulWidget {
@@ -105,7 +110,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     _openLesson(node.lessonId);
   }
 
+  /// Section 7 capstone launches a calibration warm-up, then the lesson result.
+  static const calibrationLessonId = 'lesson-07-11-01-live-warmup-prep';
+
   void _openLesson(String lessonId) {
+    if (lessonId == calibrationLessonId) {
+      unawaited(_openCalibrationWarmUp(lessonId));
+      return;
+    }
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => LessonRunnerScreen(lessonId: lessonId),
@@ -114,6 +126,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       if (!mounted) return;
       unawaited(ref.read(courseHomeProvider.notifier).refresh());
     });
+  }
+
+  Future<void> _openCalibrationWarmUp(String lessonId) async {
+    ref.read(gameControllerProvider.notifier).prepareTraining(
+      courseContext: CourseLiveContext(
+        courseHandId: '',
+        kind: 'calibration',
+        lessonId: lessonId,
+        returnNodeId: lessonId,
+        scaffolding: 'reduced',
+        rexPrompt: 'Calibration: one clean plan, less scaffolding.',
+      ),
+    );
+    if (!mounted) return;
+    await Navigator.of(context).push(
+      softFadeRoute(
+        const PokerTableScreen(),
+        name: AnalyticsScreens.pokerTable,
+      ),
+    );
+    if (!mounted) return;
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => LessonRunnerScreen(lessonId: lessonId),
+      ),
+    );
+    if (!mounted) return;
+    unawaited(ref.read(courseHomeProvider.notifier).refresh());
   }
 }
 
