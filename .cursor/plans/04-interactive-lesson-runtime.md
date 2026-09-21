@@ -1,5 +1,20 @@
 # Plan 04 — Interactive Lesson Runtime
 
+**Status: Done**
+
+- Merged: https://github.com/KC38/live-poker-trainer/pull/172
+  (`192fdb3`) on `main`
+- Cloud Functions deploy: completed from `origin/main` at `192fdb3`
+  (updated course callables with hand-step / hand-lab choice grading lookup)
+- CI: `course-contract` passed on PR #172
+  (https://github.com/KC38/live-poker-trainer/actions/runs/35580206435)
+- Simulator: hot-restarted attached Flutter sessions after merge
+- Runtime: `LessonRunnerScreen` / `LessonResultScreen`, activity registry for
+  all 9 catalog renderers, soft-grade feedback, hint/undo/streak, resume +
+  idempotent submits, standalone first-lesson launch route
+- First lesson: Section 1 → Cards and the table → **Your two cards**
+  (`lesson-01-01-01-your-two-cards`)
+
 ## Objective
 
 Create a reusable lesson engine that teaches through short, tactile activities
