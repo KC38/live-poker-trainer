@@ -55,6 +55,42 @@ enum LessonTableRegion {
 
   /// Distractor: someone folds (others may still act).
   streetSomeoneFolds,
+
+  /// Fold-win: take the pot without showing.
+  potTakeQuiet,
+
+  /// Fold-win distractor: must always show.
+  potMustShow,
+
+  /// Fold-win distractor: dealer reveals cards.
+  potDealerShows,
+
+  /// Contested river: showdown compares hands.
+  potShowdown,
+
+  /// Showdown distractor: last bettor wins without showing.
+  potLastBettor,
+
+  /// Showdown distractor: always chop.
+  potChopDefault,
+
+  /// Side pot: unmatched chips form a side pot.
+  potSideForms,
+
+  /// Side pot distractor: short stack wins later chips too.
+  potWinAll,
+
+  /// Side pot distractor: short stack hand is dead.
+  potHandDead,
+
+  /// Open-pot size: correct total (blinds + open).
+  potChipsNine,
+
+  /// Open-pot size distractor: forgot a blind.
+  potChipsSeven,
+
+  /// Open-pot size distractor: too large.
+  potChipsTwelve,
 }
 
 /// How the mini-table is arranged.
@@ -70,6 +106,18 @@ enum LessonTableLayout {
 
   /// Timing tiles for when a betting street ends.
   streetEndPhases,
+
+  /// Fold-win outcome tiles (take pot / must show / dealer shows).
+  potFoldWinOutcomes,
+
+  /// Showdown outcome tiles after a river call.
+  potShowdownOutcomes,
+
+  /// Side-pot outcome tiles when short all-in.
+  potSideOutcomes,
+
+  /// Open-to-6 pot size tiles (7 / 9 / 12 chips).
+  potOpenSizeOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -232,6 +280,32 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         seatCount: 6,
         buttonSeat: 3,
         caption: 'Postflop · tap who acts first',
+      );
+    case 'act-01-05-01-guided-fold-win':
+      return const LessonTableScene(
+        layout: LessonTableLayout.potFoldWinOutcomes,
+        heroCodes: ['Ah', 'Kd'],
+        showMuck: true,
+        villainSeatCount: 0,
+        caption: 'You bet · all fold',
+      );
+    case 'act-01-05-01-scaffolded-showdown':
+      return const LessonTableScene(
+        layout: LessonTableLayout.potShowdownOutcomes,
+        heroCodes: ['Ah', 'Kd'],
+        boardCodes: ['Qs', '7c', '2d', '9h', '3s'],
+        villainSeatCount: 1,
+        caption: 'River · called',
+      );
+    case 'act-01-05-01-checkpoint-side':
+      return const LessonTableScene(
+        layout: LessonTableLayout.potSideOutcomes,
+        caption: 'You all-in short · others keep betting',
+      );
+    case 'act-01-05-01-unguided-pot':
+      return const LessonTableScene(
+        layout: LessonTableLayout.potOpenSizeOutcomes,
+        caption: '1/2 · BTN opens 6 · blinds still to act',
       );
     case 'act-01-02-01-scaffolded-spot':
       return const LessonTableScene(
@@ -409,6 +483,34 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.bigBlind => pick('bb-first-always'),
         _ => null,
       };
+    case 'act-01-05-01-guided-fold-win':
+      return switch (region) {
+        LessonTableRegion.potTakeQuiet => pick('no-show'),
+        LessonTableRegion.potMustShow => pick('must-show'),
+        LessonTableRegion.potDealerShows => pick('dealer-shows'),
+        _ => null,
+      };
+    case 'act-01-05-01-scaffolded-showdown':
+      return switch (region) {
+        LessonTableRegion.potShowdown => pick('showdown'),
+        LessonTableRegion.potLastBettor => pick('last-bet-wins'),
+        LessonTableRegion.potChopDefault => pick('chop-default'),
+        _ => null,
+      };
+    case 'act-01-05-01-checkpoint-side':
+      return switch (region) {
+        LessonTableRegion.potSideForms => pick('side-exists'),
+        LessonTableRegion.potWinAll => pick('you-win-all'),
+        LessonTableRegion.potHandDead => pick('hand-void'),
+        _ => null,
+      };
+    case 'act-01-05-01-unguided-pot':
+      return switch (region) {
+        LessonTableRegion.potChipsNine => pick('pot-9'),
+        LessonTableRegion.potChipsSeven => pick('pot-7'),
+        LessonTableRegion.potChipsTwelve => pick('pot-12'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -418,7 +520,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
   if (activity.renderer != ActivityRenderer.selectIdentify) return false;
   return activity.id.startsWith('act-01-01-01-') ||
       activity.id.startsWith('act-01-01-03-') ||
-      activity.id.startsWith('act-01-04-01-');
+      activity.id.startsWith('act-01-04-01-') ||
+      activity.id.startsWith('act-01-05-01-');
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -497,6 +600,10 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.blindsSeats => _buildBlindsSeats(),
       LessonTableLayout.blindsTiming => _buildBlindsTiming(),
       LessonTableLayout.streetEndPhases => _buildStreetEndPhases(),
+      LessonTableLayout.potFoldWinOutcomes => _buildPotFoldWinOutcomes(),
+      LessonTableLayout.potShowdownOutcomes => _buildPotShowdownOutcomes(),
+      LessonTableLayout.potSideOutcomes => _buildPotSideOutcomes(),
+      LessonTableLayout.potOpenSizeOutcomes => _buildPotOpenSizeOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -802,6 +909,266 @@ class LessonTableContext extends StatelessWidget {
               color: AppColors.slate,
               size: 28,
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPotFoldWinOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive: 'Interactive fold-win — tap how you take the pot',
+      semanticsStatic: 'Fold-win outcomes',
+      caption: scene.caption ?? 'You bet · everyone folds',
+      phases: [
+        (
+          region: LessonTableRegion.potTakeQuiet,
+          title: 'Take pot',
+          detail: 'No show',
+          visual: const Icon(
+            Icons.savings_outlined,
+            color: AppColors.gold,
+            size: 28,
+          ),
+        ),
+        (
+          region: LessonTableRegion.potMustShow,
+          title: 'Must show',
+          detail: 'Always',
+          visual: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              for (final code in const ['Ah', 'Kd']) ...[
+                MiniCard(
+                  card: CardModel.fromCode(code),
+                  size: MiniCardSize.tiny,
+                ),
+                const SizedBox(width: 2),
+              ],
+            ],
+          ),
+        ),
+        (
+          region: LessonTableRegion.potDealerShows,
+          title: 'Dealer shows',
+          detail: 'Forced',
+          visual: const Icon(
+            Icons.visibility_outlined,
+            color: AppColors.slate,
+            size: 28,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPotShowdownOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive: 'Interactive showdown — tap what happens next',
+      semanticsStatic: 'Showdown outcomes',
+      caption: scene.caption ?? 'River · called',
+      phases: [
+        (
+          region: LessonTableRegion.potShowdown,
+          title: 'Showdown',
+          detail: 'Best five',
+          visual: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              for (final code in const ['Ah', 'Qs']) ...[
+                MiniCard(
+                  card: CardModel.fromCode(code),
+                  size: MiniCardSize.tiny,
+                ),
+                const SizedBox(width: 2),
+              ],
+            ],
+          ),
+        ),
+        (
+          region: LessonTableRegion.potLastBettor,
+          title: 'Last bettor',
+          detail: 'No show',
+          visual: const Icon(
+            Icons.gavel_outlined,
+            color: AppColors.slate,
+            size: 28,
+          ),
+        ),
+        (
+          region: LessonTableRegion.potChopDefault,
+          title: 'Always chop',
+          detail: 'Split',
+          visual: const Icon(
+            Icons.call_split,
+            color: AppColors.slate,
+            size: 28,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPotSideOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive: 'Interactive side pot — tap what is true',
+      semanticsStatic: 'Side pot outcomes',
+      caption: scene.caption ?? 'You all-in short · others keep betting',
+      phases: [
+        (
+          region: LessonTableRegion.potSideForms,
+          title: 'Side pot',
+          detail: 'Unmatched',
+          visual: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _PotChipDot(label: 'M', gold: true),
+              SizedBox(width: 4),
+              _PotChipDot(label: 'S', gold: false),
+            ],
+          ),
+        ),
+        (
+          region: LessonTableRegion.potWinAll,
+          title: 'Win all',
+          detail: 'Later chips',
+          visual: const Icon(
+            Icons.all_inclusive,
+            color: AppColors.slate,
+            size: 28,
+          ),
+        ),
+        (
+          region: LessonTableRegion.potHandDead,
+          title: 'Hand dead',
+          detail: 'Short out',
+          visual: const Icon(
+            Icons.block,
+            color: AppColors.slate,
+            size: 28,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPotOpenSizeOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive: 'Interactive pot size — tap the chip total',
+      semanticsStatic: 'Open pot size outcomes',
+      caption: scene.caption ?? '1/2 · BTN opens 6',
+      phases: [
+        (
+          region: LessonTableRegion.potChipsSeven,
+          title: '7 chips',
+          detail: 'Miss a blind',
+          visual: const _PotChipDot(label: '7', gold: false),
+        ),
+        (
+          region: LessonTableRegion.potChipsNine,
+          title: '9 chips',
+          detail: '1+2+6',
+          visual: const _PotChipDot(label: '9', gold: true),
+        ),
+        (
+          region: LessonTableRegion.potChipsTwelve,
+          title: '12 chips',
+          detail: 'Too big',
+          visual: const _PotChipDot(label: '12', gold: false),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildOutcomePhases({
+    required String semanticsInteractive,
+    required String semanticsStatic,
+    required String caption,
+    required List<
+      ({
+        LessonTableRegion region,
+        String title,
+        String detail,
+        Widget visual,
+      })
+    >
+    phases,
+  }) {
+    Widget phase({
+      required LessonTableRegion region,
+      required String title,
+      required String detail,
+      required Widget visual,
+    }) {
+      final selected = selectedRegion == region;
+      return Expanded(
+        child: _TappableRegion(
+          label: title,
+          selected: selected,
+          enabled: enabled && _interactive,
+          onTap:
+              _interactive
+                  ? () => onRegionTap!(LessonTableTapTarget(region))
+                  : null,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(6, 10, 6, 10),
+            child: Column(
+              children: [
+                visual,
+                const SizedBox(height: 8),
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.cream,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  detail,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.slate,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return _feltShell(
+      semanticsLabel: _interactive ? semanticsInteractive : semanticsStatic,
+      child: Column(
+        children: [
+          Text(
+            caption,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (var i = 0; i < phases.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                phase(
+                  region: phases[i].region,
+                  title: phases[i].title,
+                  detail: phases[i].detail,
+                  visual: phases[i].visual,
+                ),
+              ],
+            ],
           ),
         ],
       ),
@@ -1188,6 +1555,36 @@ class _BlindChipStack extends StatelessWidget {
               ),
             ),
         ],
+      ),
+    );
+  }
+}
+
+class _PotChipDot extends StatelessWidget {
+  const _PotChipDot({required this.label, required this.gold});
+
+  final String label;
+  final bool gold;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = gold ? AppColors.gold : AppColors.slate;
+    return Container(
+      width: label.length > 1 ? 32 : 26,
+      height: 26,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color.withValues(alpha: 0.3),
+        border: Border.all(color: color, width: 1.5),
+      ),
+      child: Text(
+        label,
+        style: GoogleFonts.manrope(
+          color: color,
+          fontSize: 10,
+          fontWeight: FontWeight.w900,
+        ),
       ),
     );
   }

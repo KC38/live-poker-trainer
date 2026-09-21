@@ -643,6 +643,121 @@ void main() {
       'Postflop · tap who acts first',
     );
 
+    const foldWinChoices = [
+      CourseChoice(id: 'no-show', label: 'Take pot'),
+      CourseChoice(id: 'must-show', label: 'Must show'),
+      CourseChoice(id: 'dealer-shows', label: 'Dealer shows'),
+    ];
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-01-05-01-guided-fold-win',
+        region: LessonTableRegion.potTakeQuiet,
+        choices: foldWinChoices,
+      ),
+      'no-show',
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-01-05-01-scaffolded-showdown',
+        region: LessonTableRegion.potShowdown,
+        choices: const [
+          CourseChoice(id: 'showdown', label: 'Showdown'),
+          CourseChoice(id: 'last-bet-wins', label: 'Last bettor'),
+          CourseChoice(id: 'chop-default', label: 'Always chop'),
+        ],
+      ),
+      'showdown',
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-01-05-01-checkpoint-side',
+        region: LessonTableRegion.potSideForms,
+        choices: const [
+          CourseChoice(id: 'side-exists', label: 'Side pot'),
+          CourseChoice(id: 'you-win-all', label: 'Win all'),
+          CourseChoice(id: 'hand-void', label: 'Hand dead'),
+        ],
+      ),
+      'side-exists',
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-01-05-01-unguided-pot',
+        region: LessonTableRegion.potChipsNine,
+        choices: const [
+          CourseChoice(id: 'pot-9', label: '9 chips'),
+          CourseChoice(id: 'pot-7', label: '7 chips'),
+          CourseChoice(id: 'pot-12', label: '12 chips'),
+        ],
+      ),
+      'pot-9',
+    );
+    expect(
+      resolveLessonTableScene(
+        CourseActivity(
+          id: 'act-01-05-01-unguided-pot',
+          order: 4,
+          stage: ActivityStage.unguided,
+          renderer: ActivityRenderer.selectIdentify,
+          estimatedSeconds: 40,
+          accessibilityText: 'pot size',
+          acceptedGrades: const [SoftGrade.recommended],
+          choices: const [
+            CourseChoice(id: 'pot-9', label: '9 chips'),
+            CourseChoice(id: 'pot-7', label: '7 chips'),
+            CourseChoice(id: 'pot-12', label: '12 chips'),
+          ],
+        ),
+      )?.layout,
+      LessonTableLayout.potOpenSizeOutcomes,
+    );
+    expect(
+      resolveLessonTableScene(
+        CourseActivity(
+          id: 'act-01-05-01-guided-fold-win',
+          order: 2,
+          stage: ActivityStage.guided,
+          renderer: ActivityRenderer.selectIdentify,
+          estimatedSeconds: 40,
+          accessibilityText: 'fold win',
+          acceptedGrades: const [SoftGrade.recommended],
+          choices: foldWinChoices,
+        ),
+      )?.layout,
+      LessonTableLayout.potFoldWinOutcomes,
+    );
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-01-05-01-explain-win',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText: 'Folds win pots',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.winningPaths,
+    );
+    expect(
+      resolveSelectIdentifyPresentation(
+        CourseActivity(
+          id: 'act-01-05-01-checkpoint-side',
+          order: 5,
+          stage: ActivityStage.checkpoint,
+          renderer: ActivityRenderer.selectIdentify,
+          estimatedSeconds: 40,
+          accessibilityText: 'side',
+          acceptedGrades: const [SoftGrade.recommended],
+          choices: const [
+            CourseChoice(id: 'side-exists', label: 'Side pot'),
+          ],
+        ),
+      ),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+
     final guided = CourseActivity(
       id: 'act-01-01-03-guided-button',
       order: 2,
@@ -960,6 +1075,39 @@ void main() {
     await tester.tap(find.text('Bets matched').first);
     await tester.pump();
     expect(controller.draft.choiceId, 'matched');
+    controller.dispose();
+  });
+
+  testWidgets('how pots fold-win taps take pot on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-01-05-01-guided-fold-win',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'fold',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'You bet. Everyone folds. Tap how you take the pot.',
+      choices: const [
+        CourseChoice(id: 'no-show', label: 'Take pot'),
+        CourseChoice(id: 'must-show', label: 'Must show'),
+        CourseChoice(id: 'dealer-shows', label: 'Dealer shows'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Take pot'), findsWidgets);
+    await tester.tap(find.text('Take pot').first);
+    await tester.pump();
+    expect(controller.draft.choiceId, 'no-show');
     controller.dispose();
   });
 

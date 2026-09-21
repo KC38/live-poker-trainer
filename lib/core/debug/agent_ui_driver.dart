@@ -52,6 +52,11 @@ final class AgentUiDriver {
       debugPrint('AgentUiDriver: openLesson "$id"');
       return;
     }
+    if (normalized.startsWith('type:') || normalized.startsWith('enter:')) {
+      final value = cmd.substring(cmd.indexOf(':') + 1);
+      await _typeText(value);
+      return;
+    }
 
     String? needle;
     if (normalized.startsWith('tap:') || normalized.startsWith('taptext:')) {
@@ -59,6 +64,43 @@ final class AgentUiDriver {
     }
     if (needle == null || needle.isEmpty) return;
     await _tapText(needle);
+  }
+
+  static Future<void> _typeText(String value) async {
+    final binding = WidgetsBinding.instance;
+    EditableTextState? focused;
+    EditableTextState? fallback;
+
+    void visit(Element element) {
+      if (element is StatefulElement && element.state is EditableTextState) {
+        final state = element.state as EditableTextState;
+        fallback ??= state;
+        if (state.widget.focusNode.hasFocus) {
+          focused = state;
+        }
+      }
+      element.visitChildren(visit);
+    }
+
+    binding.rootElement?.visitChildren(visit);
+    final target = focused ?? fallback;
+    if (target == null) {
+      debugPrint('AgentUiDriver: no EditableText for type');
+      return;
+    }
+    target.userUpdateTextEditingValue(
+      TextEditingValue(
+        text: value,
+        selection: TextSelection.collapsed(offset: value.length),
+      ),
+      null,
+    );
+    // Notify listeners (e.g. NumericPotPriceActivity onChanged).
+    target.widget.controller.value = TextEditingValue(
+      text: value,
+      selection: TextSelection.collapsed(offset: value.length),
+    );
+    debugPrint('AgentUiDriver: typed "$value"');
   }
 
   static Future<void> _tapText(String needle) async {
