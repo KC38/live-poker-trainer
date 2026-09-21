@@ -633,10 +633,11 @@ String polishCoachCopy(String raw) {
     RegExp(r'\$?([1-9]\d*)-chip\s+pot\b', caseSensitive: false),
     (match) => '\$${match[1]}-chip pot',
   );
-  // "120-chip effective shove" / "120-chip shove".
+  // "120-chip effective shove" / "120-chip shove" / "69-chip call"
+  // (batch 0339 H4).
   text = text.replaceAllMapped(
     RegExp(
-      r'\$?([1-9]\d*)-chip\s+(effective\s+)?(shove|bet)\b',
+      r'\$?([1-9]\d*)-chip\s+(effective\s+)?(shove|bet|call)\b',
       caseSensitive: false,
     ),
     (match) => '\$${match[1]}-chip ${match[2] ?? ''}${match[3]}',

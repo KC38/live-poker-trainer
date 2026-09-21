@@ -885,6 +885,13 @@ void main() {
       ),
       contains(r'Paying $2400 chips out of position'),
     );
+    // "N-chip call" (batch 0339 H4).
+    expect(
+      polishCoachCopy(
+        'Folding to a 69-chip call getting better than 11:1 is a mistake.',
+      ),
+      contains(r'$69-chip call'),
+    );
     // Comparison operators must gain % (batch 0163).
     expect(
       polishCoachCopy(
