@@ -16,6 +16,7 @@ import {
   disabledCourseFlags,
   evaluateLifeAndAcceptance,
   gradeCourseResponse,
+  isLessonAttemptReadyToComplete,
   localDateString,
   parseCourseFlags,
 } from "./course_session";
@@ -269,5 +270,46 @@ describe("placement and live unlock helpers", () => {
     const sec4Jump = findLesson("lesson-04-10-02-section-four-jump-test")!;
     expect(lessonRequiresPlacementFlag(sec4Jump.lesson)).toBe(true);
     expect(lessonGrantsLiveTrainingEntitlement(sec4Jump)).toBe(true);
+  });
+});
+
+describe("lesson completion cursor", () => {
+  const lesson = findLesson("lesson-01-01-01-your-two-cards")!.lesson;
+
+  it("does not treat reaching the last activity as complete", () => {
+    expect(
+      isLessonAttemptReadyToComplete({
+        status: "in_progress",
+        activityIndex: lesson.activities.length - 1,
+        acceptedCount: lesson.activities.length - 1,
+      }, lesson),
+    ).toBe(false);
+  });
+
+  it("is ready after the last activity is accepted", () => {
+    expect(
+      isLessonAttemptReadyToComplete({
+        status: "in_progress",
+        activityIndex: lesson.activities.length,
+        acceptedCount: lesson.activities.length,
+      }, lesson),
+    ).toBe(true);
+    expect(
+      isLessonAttemptReadyToComplete({
+        status: "in_progress",
+        activityIndex: lesson.activities.length - 1,
+        acceptedCount: lesson.activities.length,
+      }, lesson),
+    ).toBe(true);
+  });
+
+  it("blocks completion during remediation", () => {
+    expect(
+      isLessonAttemptReadyToComplete({
+        status: "remediation",
+        activityIndex: lesson.activities.length,
+        acceptedCount: lesson.activities.length,
+      }, lesson),
+    ).toBe(false);
   });
 });
