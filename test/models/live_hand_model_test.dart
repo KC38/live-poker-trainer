@@ -899,6 +899,20 @@ void main() {
       ),
       contains(r'pot over $1194'),
     );
+    // "SPR near 1.15" must not gain a dollar (batch 0346 H6).
+    expect(
+      polishCoachCopy(
+        'Calling \$54 into \$116 with an effective SPR near 1.15.',
+      ),
+      allOf(
+        contains('SPR near 1.15'),
+        isNot(contains(RegExp(r'SPR near \$1\.15'))),
+      ),
+    );
+    expect(
+      polishCoachCopy('SPR near \$1.15 with position.'),
+      contains('SPR near 1.15'),
+    );
     // Comparison operators must gain % (batch 0163).
     expect(
       polishCoachCopy(

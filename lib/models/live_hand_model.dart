@@ -464,10 +464,19 @@ String polishCoachCopy(String raw) {
     },
   );
   // Two-decimal chip amounts (e.g. 33.33), but not pot multipliers like
-  // "0.37x pot" and not SPR ratios like "SPR of 0.04".
+  // "0.37x pot" and not SPR ratios like "SPR of 0.04" / "SPR near 1.15"
+  // (batch 0346 H6 — `1.15` must not become `$1.15`).
   text = text.replaceAllMapped(
     RegExp(r'(?<![\d$])([1-9]\d*\.\d{2})(?!\d)(?!\s*%)(?![xX])'),
-    (match) => '\$${match[1]}',
+    (match) {
+      final before = match.input.substring(0, match.start).toLowerCase();
+      if (RegExp(
+        r'spr\s+(?:of|near|around|at|under|over|=|:)?\s*~?\s*$',
+      ).hasMatch(before)) {
+        return match[0]!;
+      }
+      return '\$${match[1]}';
+    },
   );
   // Chip amounts before "pot" / "all-in", but not odds ratios like "8-to-1 pot
   // odds", pot fractions like "2/3 pot", and not the cents of an amount that is
@@ -711,6 +720,14 @@ String polishCoachCopy(String raw) {
       caseSensitive: false,
     ),
     (match) => '${match[1]} \$${match[2]}',
+  );
+  // Strip accidental $ on SPR ratios: "SPR near $1.15" (batch 0346 H6).
+  text = text.replaceAllMapped(
+    RegExp(
+      r'\b(SPR\s+(?:of|near|around|at|under|over|=|:)\s*~?\s*)\$(\d+(?:\.\d+)?)',
+      caseSensitive: false,
+    ),
+    (match) => '${match[1]}${match[2]}',
   );
   // "65%-74" percent ranges missing the trailing mark.
   text = text.replaceAllMapped(
