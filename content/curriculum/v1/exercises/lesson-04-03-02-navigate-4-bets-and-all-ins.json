@@ -1,0 +1,104 @@
+{
+  "id": "lesson-04-03-02-navigate-4-bets-and-all-ins",
+  "lessonId": "lesson-04-03-02-navigate-4-bets-and-all-ins",
+  "version": "1.0.0",
+  "title": "Navigate 4-bets and all-ins",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "You open under the gun, a tight player 3-bets, you have TT at 100bb. A sound line is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Call or fold to further pressure. Do not 5-bet jam as a default."
+        },
+        {
+          "id": "b",
+          "text": "5-bet all-in. Tens are the nuts."
+        },
+        {
+          "id": "c",
+          "text": "Limp after the 3-bet."
+        },
+        {
+          "id": "d",
+          "text": "Fold to the first open you already made"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Tens are often ahead of a 3-bet and behind a 4-bet or jam. They are not an automatic all-in."
+    },
+    {
+      "id": "q2",
+      "prompt": "Button 3-bets your cutoff open, you 4-bet KK, and the button jams 100bb. Against an unknown, the default is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold. Kings lose to aces."
+        },
+        {
+          "id": "b",
+          "text": "Call. Kings are ahead of a button jam that includes AK and queens."
+        },
+        {
+          "id": "c",
+          "text": "Fold every time because jams are exactly AA."
+        },
+        {
+          "id": "d",
+          "text": "Calling a jam is illegal after you 4-bet"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "A button jam is wider than a tight UTG jam. Kings are a continue; folding them only because aces exist is a leak."
+    },
+    {
+      "id": "q3",
+      "prompt": "Effective stacks are 18bb and you are reraised all-in after your open. Which idea is right?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Play exactly as you would at 100bb."
+        },
+        {
+          "id": "b",
+          "text": "Suited connectors go up in value because stacks are short."
+        },
+        {
+          "id": "c",
+          "text": "You are priced into more continues, and speculative hands that needed deep implied odds go down."
+        },
+        {
+          "id": "d",
+          "text": "You must fold AA because the stack is small."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "Short stacks remove room to fold later. Continue with hands that are ahead now, not hands that needed a deep flop."
+    },
+    {
+      "id": "q4",
+      "prompt": "You are facing an all-in and the pot already lays you 2 to 1. A hand that wins more than one-third of the time\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Must fold"
+        },
+        {
+          "id": "b",
+          "text": "Cannot be called because it is not a favorite"
+        },
+        {
+          "id": "c",
+          "text": "Must be AA or it loses money"
+        },
+        {
+          "id": "d",
+          "text": "Is a call even when it is not a favorite"
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "Pot odds, not pride, decide a priced-in call. You do not need to be ahead of 50% when you are getting 2 to 1."
+    }
+  ]
+}

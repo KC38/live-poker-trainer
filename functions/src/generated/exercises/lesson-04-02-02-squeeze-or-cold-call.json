@@ -1,0 +1,104 @@
+{
+  "id": "lesson-04-02-02-squeeze-or-cold-call",
+  "lessonId": "lesson-04-02-02-squeeze-or-cold-call",
+  "version": "1.0.0",
+  "title": "Squeeze or cold call",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Cutoff opens, button calls, you are the big blind with QQ. What do you do?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Squeeze"
+        },
+        {
+          "id": "b",
+          "text": "Fold"
+        },
+        {
+          "id": "c",
+          "text": "Complete"
+        },
+        {
+          "id": "d",
+          "text": "Check preflop, which is not an option after a raise"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Queens do not flat multiway out of position. Squeeze."
+    },
+    {
+      "id": "q2",
+      "prompt": "Hijack opens, cutoff calls, you are on the button with 76s and 100bb. A sound default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "All-in"
+        },
+        {
+          "id": "b",
+          "text": "Cold-call and play fit-or-fold in position"
+        },
+        {
+          "id": "c",
+          "text": "Fold. Suited connectors cannot call a single raise."
+        },
+        {
+          "id": "d",
+          "text": "Squeeze all-in"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "In position against a non-early open, 76s can take a flop. It is not a 100bb jam."
+    },
+    {
+      "id": "q3",
+      "prompt": "UTG opens, two players call, you are in the small blind with ATo. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Call. More players means defend wider with any ace."
+        },
+        {
+          "id": "b",
+          "text": "All-in for 100bb"
+        },
+        {
+          "id": "c",
+          "text": "Fold. Your ace is dominated and you are out of position multiway."
+        },
+        {
+          "id": "d",
+          "text": "Complete the small blind"
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "ATo hates a strong early range plus two callers from the worst seat."
+    },
+    {
+      "id": "q4",
+      "prompt": "You squeeze and both opponents call. On a dry flop with no pair, you should\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Automatically stack off"
+        },
+        {
+          "id": "b",
+          "text": "Assume they both folded"
+        },
+        {
+          "id": "c",
+          "text": "Ignore that the pot is multiway"
+        },
+        {
+          "id": "d",
+          "text": "Bluff less. Two callers reduced your fold equity."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "A squeeze that gets called twice is a made-hand pot, not a pure bluff pot."
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import type {FeatureFlagsDocReader} from "./feature_flags";
 import {getCurriculumCatalog} from "./curriculum_catalog";
 import {
   emptyLearningProgress,
+  evaluatePreflop,
   evaluateTableReady,
 } from "./curriculum_progress";
 import type {LearningProgressSnapshot} from "./curriculum_types";
@@ -22,6 +23,7 @@ export interface GetLearningStateResult {
   activeLessonId?: string;
   activeAttemptId?: string;
   tableReady: ReturnType<typeof evaluateTableReady>;
+  preflop: ReturnType<typeof evaluatePreflop>;
 }
 
 /** Returns learning/main for the user (empty defaults when missing). */
@@ -54,6 +56,7 @@ export async function getLearningStateForUser(options: {
         data.activeAttemptId :
         undefined,
     tableReady: evaluateTableReady(catalog, progress),
+    preflop: evaluatePreflop(catalog, progress),
   };
 }
 

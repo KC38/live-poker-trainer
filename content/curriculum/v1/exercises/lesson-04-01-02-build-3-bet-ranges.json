@@ -1,0 +1,104 @@
+{
+  "id": "lesson-04-01-02-build-3-bet-ranges",
+  "lessonId": "lesson-04-01-02-build-3-bet-ranges",
+  "version": "1.0.0",
+  "title": "Build 3-bet ranges",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Button versus a cutoff open. Which set is the value 3-bet core?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "TT+, AQ+"
+        },
+        {
+          "id": "b",
+          "text": "22\u201355 only"
+        },
+        {
+          "id": "c",
+          "text": "Every suited hand and nothing else"
+        },
+        {
+          "id": "d",
+          "text": "Only 72o"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Against a late open, pairs from tens up and AQ or better are the value core. You can widen further against a loose opener."
+    },
+    {
+      "id": "q2",
+      "prompt": "You 3-bet A5s as a bluff and a tight player 4-bets large. Best default?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Call and stack off"
+        },
+        {
+          "id": "b",
+          "text": "Fold"
+        },
+        {
+          "id": "c",
+          "text": "5-bet all-in. Suited aces are the nuts."
+        },
+        {
+          "id": "d",
+          "text": "Limp"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "The bluff 3-bet did its job when a tight range reraises. A5s is not a 100bb continue against that 4-bet."
+    },
+    {
+      "id": "q3",
+      "prompt": "Big blind versus a button open. Why is the 3-bet range wider than versus under the gun?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The button opened a stronger range than UTG."
+        },
+        {
+          "id": "b",
+          "text": "The big blind is in position."
+        },
+        {
+          "id": "c",
+          "text": "The button opens wide, so more hands are ahead and more bluffs work."
+        },
+        {
+          "id": "d",
+          "text": "UTG is forced to fold to any 3-bet."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "Steal ranges are wide. Early ranges are not, so you 3-bet them tighter."
+    },
+    {
+      "id": "q4",
+      "prompt": "Which construction is backwards?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "3-bet KK for value"
+        },
+        {
+          "id": "b",
+          "text": "Fold 72o to an open"
+        },
+        {
+          "id": "c",
+          "text": "Use A5s as a occasional bluff 3-bet and fold to a 4-bet"
+        },
+        {
+          "id": "d",
+          "text": "3-bet 72o for value and call every 4-bet with it"
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "72o is not a value hand and cannot call 4-bets."
+    }
+  ]
+}

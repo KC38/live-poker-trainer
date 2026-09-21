@@ -1,0 +1,104 @@
+{
+  "id": "lesson-04-01-01-value-and-bluff-3-bet-ranges",
+  "lessonId": "lesson-04-01-01-value-and-bluff-3-bet-ranges",
+  "version": "1.0.0",
+  "title": "Value and bluff 3-bet ranges",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "A value 3-bet is a hand that\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Is ahead of the opener\u2019s continuing range and wants more money in."
+        },
+        {
+          "id": "b",
+          "text": "Is too weak to call and has no blockers."
+        },
+        {
+          "id": "c",
+          "text": "Must be all-in or it is not value."
+        },
+        {
+          "id": "d",
+          "text": "Is always 72o, to balance."
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Value 3-bets are ahead when called: big pairs and strong broadways, widened against late opens."
+    },
+    {
+      "id": "q2",
+      "prompt": "Which hand is a value 3-bet against a tight under-the-gun open?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "76s"
+        },
+        {
+          "id": "b",
+          "text": "QQ"
+        },
+        {
+          "id": "c",
+          "text": "KJo"
+        },
+        {
+          "id": "d",
+          "text": "ATo"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "Queens are ahead of a tight early open. The others are dominated or speculative."
+    },
+    {
+      "id": "q3",
+      "prompt": "A bluff 3-bet should usually be\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Any two cards, chosen at random"
+        },
+        {
+          "id": "b",
+          "text": "A hand you will stack off if you get 4-bet"
+        },
+        {
+          "id": "c",
+          "text": "A suited ace or other blocker that can fold to a 4-bet"
+        },
+        {
+          "id": "d",
+          "text": "A small pair you refuse to fold"
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "A5s-style bluffs block strong continues and can still make a nut flush when called."
+    },
+    {
+      "id": "q4",
+      "prompt": "In position, a live 3-bet with no limpers is often about\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The minimum raise"
+        },
+        {
+          "id": "b",
+          "text": "100 big blinds every time"
+        },
+        {
+          "id": "c",
+          "text": "Less than the original open"
+        },
+        {
+          "id": "d",
+          "text": "3\u00d7 the open. Out of position, closer to 4\u00d7."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "Use about three times the open in position and about four times from the blinds, then add size for limpers."
+    }
+  ]
+}

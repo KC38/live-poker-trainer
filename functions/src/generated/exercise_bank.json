@@ -4077,5 +4077,2813 @@
         "explanation": "A blocker changes the mix. It does not replace the price or the line."
       }
     ]
+  },
+  "lesson-03-01-01-early-and-middle-position-opens": {
+    "id": "lesson-03-01-01-early-and-middle-position-opens",
+    "lessonId": "lesson-03-01-01-early-and-middle-position-opens",
+    "version": "1.0.0",
+    "title": "Early and middle position opens",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "At a 9-handed $2/$5 game with 100 big blinds, which open is the tightest?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Under the gun"
+          },
+          {
+            "id": "b",
+            "text": "Hijack"
+          },
+          {
+            "id": "c",
+            "text": "Cutoff"
+          },
+          {
+            "id": "d",
+            "text": "Button"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Earlier position acts first after the flop and faces more players, so the open is tighter."
+      },
+      {
+        "id": "q2",
+        "prompt": "Which hand is a standard open from under the gun at that table?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "JTo"
+          },
+          {
+            "id": "b",
+            "text": "72o"
+          },
+          {
+            "id": "c",
+            "text": "AKo"
+          },
+          {
+            "id": "d",
+            "text": "86s"
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "AKo is a clear early-position open. Weak offsuit broadways and low suited connectors are folds from UTG."
+      },
+      {
+        "id": "q3",
+        "prompt": "Why is AJo usually a fold from a tight 9-handed under the gun?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Aces are never playable in early position."
+          },
+          {
+            "id": "b",
+            "text": "It is dominated when a later player continues with a stronger ace or king."
+          },
+          {
+            "id": "c",
+            "text": "Offsuit hands cannot win at showdown."
+          },
+          {
+            "id": "d",
+            "text": "The big blind is forced to call any early open."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "AJo looks strong and still loses often to AK, AQ, and AJ that continue behind."
+      },
+      {
+        "id": "q4",
+        "prompt": "A normal live open with no limpers is closest to which size?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The minimum raise, about 2 big blinds, every time."
+          },
+          {
+            "id": "b",
+            "text": "All-in, because live cash has no postflop play."
+          },
+          {
+            "id": "c",
+            "text": "Exactly one big blind."
+          },
+          {
+            "id": "d",
+            "text": "About 3\u20135 big blinds, larger than a typical online open."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Live opens are bigger than online 2\u20132.5bb opens so the field does not get a cheap flop."
+      }
+    ]
+  },
+  "lesson-03-01-02-choose-ep-mp-opens": {
+    "id": "lesson-03-01-02-choose-ep-mp-opens",
+    "lessonId": "lesson-03-01-02-choose-ep-mp-opens",
+    "version": "1.0.0",
+    "title": "Choose EP/MP opens",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "9-handed, 100bb, folded to under the gun. What do you do with 22?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold"
+          },
+          {
+            "id": "b",
+            "text": "Limp, then call any raise"
+          },
+          {
+            "id": "c",
+            "text": "Open all-in"
+          },
+          {
+            "id": "d",
+            "text": "Open and call a 3-bet for set value"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "A small pair under the gun is dominated by the opens behind and plays poorly at 100bb from first position."
+      },
+      {
+        "id": "q2",
+        "prompt": "Same seat, folded to you, with QQ. What is the clear mistake?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Opening to 3 big blinds"
+          },
+          {
+            "id": "b",
+            "text": "Opening to 5 big blinds"
+          },
+          {
+            "id": "c",
+            "text": "Limping so you can trap the blinds"
+          },
+          {
+            "id": "d",
+            "text": "Opening and folding to a large 4-bet from a tight player"
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Limping queens gives the table a cheap flop and invites multiway pots. Open them."
+      },
+      {
+        "id": "q3",
+        "prompt": "Middle position, folded to you, 100bb. Which hand moves from a UTG fold to an open?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "72o"
+          },
+          {
+            "id": "b",
+            "text": "AJo"
+          },
+          {
+            "id": "c",
+            "text": "J4o"
+          },
+          {
+            "id": "d",
+            "text": "T5o"
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "AJo is too dominated for a tight UTG open and becomes a reasonable middle-position open."
+      },
+      {
+        "id": "q4",
+        "prompt": "You are under the gun with KQs. Which plan fits a 100bb live open?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Limp and fold to any raise"
+          },
+          {
+            "id": "b",
+            "text": "Open all-in for 100 big blinds"
+          },
+          {
+            "id": "c",
+            "text": "Fold because suited kings are speculative"
+          },
+          {
+            "id": "d",
+            "text": "Open to about 3\u20135 big blinds and continue versus a single reasonable 3-bet"
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "KQs is strong enough to open early and does not need an all-in or a limp."
+      }
+    ]
+  },
+  "lesson-03-01-03-ep-mp-opens-check": {
+    "id": "lesson-03-01-03-ep-mp-opens-check",
+    "lessonId": "lesson-03-01-03-ep-mp-opens-check",
+    "version": "1.0.0",
+    "title": "EP/MP opens check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Folded to the hijack at a 9-handed 100bb table. Which open is too loose?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "99"
+          },
+          {
+            "id": "b",
+            "text": "AQo"
+          },
+          {
+            "id": "c",
+            "text": "J4o"
+          },
+          {
+            "id": "d",
+            "text": "KQs"
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "J4o has no high-card strength and no suited playability. The others are standard hijack opens."
+      },
+      {
+        "id": "q2",
+        "prompt": "Under the gun opens to 3 big blinds. You are next with 76s and everyone else is still to act. Best default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold"
+          },
+          {
+            "id": "b",
+            "text": "Limp behind"
+          },
+          {
+            "id": "c",
+            "text": "Call and see a flop out of position against a strong range"
+          },
+          {
+            "id": "d",
+            "text": "All-in for 100 big blinds"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "76s is a later-position hand. Calling an early open while still out of position is a clear mistake."
+      },
+      {
+        "id": "q3",
+        "prompt": "Which statement about early-position opens is right?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Open every suited hand from under the gun."
+          },
+          {
+            "id": "b",
+            "text": "The earlier you act, the stronger the hands you open."
+          },
+          {
+            "id": "c",
+            "text": "Position does not change an opening range."
+          },
+          {
+            "id": "d",
+            "text": "Under the gun should open wider than the button."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "More players remain and you will be out of position, so the range tightens."
+      },
+      {
+        "id": "q4",
+        "prompt": "100bb, middle position, folded to you with AKo. A player behind 3-bets to a normal size. What is the mistake?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "4-betting for value"
+          },
+          {
+            "id": "b",
+            "text": "Calling and playing a flop in position"
+          },
+          {
+            "id": "c",
+            "text": "Continuing against an unknown 3-bettor"
+          },
+          {
+            "id": "d",
+            "text": "Folding because any 3-bet means aces"
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "AKo is ahead of a normal 3-bet range. Folding it to one raise is far too tight."
+      }
+    ]
+  },
+  "lesson-03-02-01-late-position-and-short-handed-opens": {
+    "id": "lesson-03-02-01-late-position-and-short-handed-opens",
+    "lessonId": "lesson-03-02-01-late-position-and-short-handed-opens",
+    "version": "1.0.0",
+    "title": "Late position and short-handed opens",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Folded to the button at 100bb. Which hand is now an open that was a fold under the gun?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Only AA"
+          },
+          {
+            "id": "b",
+            "text": "76s"
+          },
+          {
+            "id": "c",
+            "text": "72o at a full 9-handed table"
+          },
+          {
+            "id": "d",
+            "text": "Nothing changes by position"
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "The button acts last postflop and can open suited connectors that are folds from early position."
+      },
+      {
+        "id": "q2",
+        "prompt": "The table is 6-handed instead of 9-handed. How should the earliest open change?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Open wider. That seat plays more like a full-ring hijack than a 9-handed UTG."
+          },
+          {
+            "id": "b",
+            "text": "Open only AA and KK."
+          },
+          {
+            "id": "c",
+            "text": "Limp every hand because fewer players means less value."
+          },
+          {
+            "id": "d",
+            "text": "Use the same 9-handed UTG range."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Short-handed, the first seat is later in a full-ring sense, so the open widens."
+      },
+      {
+        "id": "q3",
+        "prompt": "Heads-up, you are the button and post the small blind. Which is true?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "You should fold every hand except premiums."
+          },
+          {
+            "id": "b",
+            "text": "You act last preflop and first postflop."
+          },
+          {
+            "id": "c",
+            "text": "You act first preflop and last postflop, and you open much wider than in a full ring."
+          },
+          {
+            "id": "d",
+            "text": "72o is always a fold heads-up."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Heads-up the button acts first preflop, last after the flop, and opens a very wide range."
+      },
+      {
+        "id": "q4",
+        "prompt": "Cutoff versus button at equal 100bb stacks, both folded to you. Who opens wider?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Cutoff, because more players remain."
+          },
+          {
+            "id": "b",
+            "text": "They open the same range."
+          },
+          {
+            "id": "c",
+            "text": "Cutoff, because the button is forced to fold."
+          },
+          {
+            "id": "d",
+            "text": "Button, because only the blinds remain and you act last postflop."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "The button steals wider. The cutoff still has the button left to act."
+      }
+    ]
+  },
+  "lesson-03-02-02-open-co-btn-and-short-handed": {
+    "id": "lesson-03-02-02-open-co-btn-and-short-handed",
+    "lessonId": "lesson-03-02-02-open-co-btn-and-short-handed",
+    "version": "1.0.0",
+    "title": "Open CO/BTN and short-handed",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "9-handed, 100bb, folded to the button with KJo. Best default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold. Offsuit broadways are never opened."
+          },
+          {
+            "id": "b",
+            "text": "Open to about 3\u20135 big blinds."
+          },
+          {
+            "id": "c",
+            "text": "Limp. The button should never raise."
+          },
+          {
+            "id": "d",
+            "text": "All-in. Late position means stack off."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "KJo is a standard button open and a poor under-the-gun open."
+      },
+      {
+        "id": "q2",
+        "prompt": "6-handed, folded to the earliest seat with ATo at 100bb. Compared with 9-handed UTG, you should\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Open. This seat is much later than a full-ring UTG."
+          },
+          {
+            "id": "b",
+            "text": "Fold. The first seat is always a 9-handed UTG range."
+          },
+          {
+            "id": "c",
+            "text": "Limp. Short-handed games are passive."
+          },
+          {
+            "id": "d",
+            "text": "Open all-in for 100 big blinds."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Six-handed early position is closer to a full-ring hijack or cutoff."
+      },
+      {
+        "id": "q3",
+        "prompt": "Folded to the cutoff with 72o at a 9-handed table. What do you do?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Open. Any two cards are a cutoff open."
+          },
+          {
+            "id": "b",
+            "text": "Limp. Seven-high plays well multiway."
+          },
+          {
+            "id": "c",
+            "text": "Fold. 72o is still too weak with the button and blinds behind."
+          },
+          {
+            "id": "d",
+            "text": "All-in so the blinds fold."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "The cutoff opens wide, not randomly. 72o is a fold until the game is extremely short-handed."
+      },
+      {
+        "id": "q4",
+        "prompt": "Button, 100bb, folded to you with 22. A reasonable plan is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold. Pairs cannot be opened in late position."
+          },
+          {
+            "id": "b",
+            "text": "Open all-in."
+          },
+          {
+            "id": "c",
+            "text": "Limp and fold to a min-raise."
+          },
+          {
+            "id": "d",
+            "text": "Open, and fold to a large 3-bet from a tight blind."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Small pairs open on the button for set value and position, then release versus a strong reraise."
+      }
+    ]
+  },
+  "lesson-03-02-03-late-position-opens-check": {
+    "id": "lesson-03-02-03-late-position-opens-check",
+    "lessonId": "lesson-03-02-03-late-position-opens-check",
+    "version": "1.0.0",
+    "title": "Late position opens check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Which open range is widest at the same 100bb stack?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "9-handed under the gun"
+          },
+          {
+            "id": "b",
+            "text": "9-handed hijack"
+          },
+          {
+            "id": "c",
+            "text": "9-handed cutoff"
+          },
+          {
+            "id": "d",
+            "text": "Heads-up button"
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Fewer opponents and position make the heads-up button the widest open."
+      },
+      {
+        "id": "q2",
+        "prompt": "Folded to the button with A5s. What is the mistake?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Folding because the ace is not suited to a broadway card"
+          },
+          {
+            "id": "b",
+            "text": "Opening to 3 big blinds"
+          },
+          {
+            "id": "c",
+            "text": "Folding to a tight big-blind 3-bet"
+          },
+          {
+            "id": "d",
+            "text": "Taking a flop in position when called"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Suited aces are standard button opens. They are not under-the-gun trash."
+      },
+      {
+        "id": "q3",
+        "prompt": "The game just dropped from 9-handed to 5-handed. Your unopened range should\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Stay frozen at the 9-handed UTG chart."
+          },
+          {
+            "id": "b",
+            "text": "Widen, because each seat is later relative to a full ring."
+          },
+          {
+            "id": "c",
+            "text": "Become limp-only."
+          },
+          {
+            "id": "d",
+            "text": "Become all-in or fold with no opens."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Player count changes position. Five-handed opens are wider than full-ring opens from the same seat name."
+      },
+      {
+        "id": "q4",
+        "prompt": "Cutoff opens, and you are on the button with 100bb and JTo. Calling can be fine. What is the clear mistake?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Calling a single 3bb open in position"
+          },
+          {
+            "id": "b",
+            "text": "Folding if a third player squeezes large"
+          },
+          {
+            "id": "c",
+            "text": "3-bet shoving 100 big blinds"
+          },
+          {
+            "id": "d",
+            "text": "Preferring a call over an all-in"
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "JTo can take a flop in position. Stacking off 100bb preflop with it is not a value jam."
+      }
+    ]
+  },
+  "lesson-03-03-01-opening-over-limpers-live": {
+    "id": "lesson-03-03-01-opening-over-limpers-live",
+    "lessonId": "lesson-03-03-01-opening-over-limpers-live",
+    "version": "1.0.0",
+    "title": "Opening over limpers live",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "One player limps and the action is on your button with AQo at 100bb. Best default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold. A limp means the pot is already taken."
+          },
+          {
+            "id": "b",
+            "text": "Raise larger than your normal no-limper open."
+          },
+          {
+            "id": "c",
+            "text": "Limp behind. Never raise a limper."
+          },
+          {
+            "id": "d",
+            "text": "All-in for 100 big blinds."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Isolate the limper with a stronger hand and a bigger size so you do not play a family pot."
+      },
+      {
+        "id": "q2",
+        "prompt": "Why does the raise get bigger when more players limp?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Each limper adds dead money you want to deny, so you add size."
+          },
+          {
+            "id": "b",
+            "text": "Limpers are forced to fold by the rules."
+          },
+          {
+            "id": "c",
+            "text": "The big blind shrinks after a limp."
+          },
+          {
+            "id": "d",
+            "text": "More limpers mean you should raise smaller."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "A common live adjustment is your normal open plus about one extra big blind per limper."
+      },
+      {
+        "id": "q3",
+        "prompt": "Three limpers, deep stacks, you are on the button with 22. Which is the clear mistake?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Calling and trying to flop a set"
+          },
+          {
+            "id": "b",
+            "text": "Raising to isolate"
+          },
+          {
+            "id": "c",
+            "text": "Folding if a player then reraises very large"
+          },
+          {
+            "id": "d",
+            "text": "Folding because pairs cannot be played multiway"
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Deep, multiway, a small pair has set value. Folding it automatically is too tight."
+      },
+      {
+        "id": "q4",
+        "prompt": "You have KTo in middle position after two limps. What is the problem with limping behind?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "KTo is the nuts."
+          },
+          {
+            "id": "b",
+            "text": "Limping is required by the rules once someone limps."
+          },
+          {
+            "id": "c",
+            "text": "You play a dominated offsuit hand multiway and out of position against later raises."
+          },
+          {
+            "id": "d",
+            "text": "Offsuit broadways always realize equity."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "KTo is a raise-or-fold hand over limps, not a multiway limp."
+      }
+    ]
+  },
+  "lesson-03-03-02-attack-and-isolate-limpers": {
+    "id": "lesson-03-03-02-attack-and-isolate-limpers",
+    "lessonId": "lesson-03-03-02-attack-and-isolate-limpers",
+    "version": "1.0.0",
+    "title": "Attack and isolate limpers",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Button, one limp, 100bb, you hold AJs. Which size is the isolate?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Call the one-chip limp"
+          },
+          {
+            "id": "b",
+            "text": "Raise to about your normal open plus one big blind"
+          },
+          {
+            "id": "c",
+            "text": "Raise to 1.5 big blinds total"
+          },
+          {
+            "id": "d",
+            "text": "Check. The button cannot raise a limp."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "An isolate is a raise, sized up for the dead limp, not a flat."
+      },
+      {
+        "id": "q2",
+        "prompt": "Under the gun limps and you are in the hijack with 72o. What do you do?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold"
+          },
+          {
+            "id": "b",
+            "text": "Limp behind"
+          },
+          {
+            "id": "c",
+            "text": "Isolate large"
+          },
+          {
+            "id": "d",
+            "text": "All-in"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "A limp is not a signal to play trash. 72o does not isolate."
+      },
+      {
+        "id": "q3",
+        "prompt": "You isolate a limper from the cutoff and the big blind calls as well. What changed?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The pot is now heads-up by rule."
+          },
+          {
+            "id": "b",
+            "text": "You should automatically stack off any pair."
+          },
+          {
+            "id": "c",
+            "text": "You are multiway. Continue more carefully than in a heads-up raised pot."
+          },
+          {
+            "id": "d",
+            "text": "Your isolate was illegal."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Isolation fails when extra players call. Speculative hands and bluffs go down in value."
+      },
+      {
+        "id": "q4",
+        "prompt": "Deep stacks, several limpers, button with 76s. A sound plan is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold. Suited connectors hate multiway pots."
+          },
+          {
+            "id": "b",
+            "text": "All-in."
+          },
+          {
+            "id": "c",
+            "text": "Limp only if you will call any later raise for 100bb."
+          },
+          {
+            "id": "d",
+            "text": "Call or raise, planning to play a fit-or-fold flop rather than stack off preflop."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Suited connectors gain from multiway implied odds and still should not commit 100bb with no pair."
+      }
+    ]
+  },
+  "lesson-03-03-03-limper-opens-check": {
+    "id": "lesson-03-03-03-limper-opens-check",
+    "lessonId": "lesson-03-03-03-limper-opens-check",
+    "version": "1.0.0",
+    "title": "Limper opens check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Which hand should isolate a single limper from the button?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "AQo"
+          },
+          {
+            "id": "b",
+            "text": "72o"
+          },
+          {
+            "id": "c",
+            "text": "J4o"
+          },
+          {
+            "id": "d",
+            "text": "32o"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Isolate hands that are ahead of a limp and play well heads-up. Trash still folds."
+      },
+      {
+        "id": "q2",
+        "prompt": "No one has opened. Two players limp. You are in the small blind with KK. Clear mistake?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Raising large"
+          },
+          {
+            "id": "b",
+            "text": "Completing the small blind to trap"
+          },
+          {
+            "id": "c",
+            "text": "Raising and continuing versus a caller"
+          },
+          {
+            "id": "d",
+            "text": "Raising bigger than a no-limper open"
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Completing kings lets the big blind see a cheap flop. Raise."
+      },
+      {
+        "id": "q3",
+        "prompt": "A limper is usually\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A premium that must be folded to."
+          },
+          {
+            "id": "b",
+            "text": "All-in by rule."
+          },
+          {
+            "id": "c",
+            "text": "A weaker, capped range you can attack with a raise."
+          },
+          {
+            "id": "d",
+            "text": "The same as an under-the-gun open."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Limpers are weighted toward hands that did not want to raise. Punish them with position and size."
+      },
+      {
+        "id": "q4",
+        "prompt": "You want to isolate, and three players have limped. Compared with zero limpers, your raise should be\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Smaller, so they all call"
+          },
+          {
+            "id": "b",
+            "text": "Exactly the minimum"
+          },
+          {
+            "id": "c",
+            "text": "An under-raise, which is legal in no-limit"
+          },
+          {
+            "id": "d",
+            "text": "Larger, because there is more dead money"
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "More limpers means more money to deny and more players to fold."
+      }
+    ]
+  },
+  "lesson-03-04-01-calling-and-3-betting-basics": {
+    "id": "lesson-03-04-01-calling-and-3-betting-basics",
+    "lessonId": "lesson-03-04-01-calling-and-3-betting-basics",
+    "version": "1.0.0",
+    "title": "Calling and 3-betting basics",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Under the gun opens to 3bb. You are next to act with 72o. Best action?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold"
+          },
+          {
+            "id": "b",
+            "text": "Call"
+          },
+          {
+            "id": "c",
+            "text": "3-bet to 9bb as a bluff"
+          },
+          {
+            "id": "d",
+            "text": "All-in for 100bb"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Do not continue trash against an early open. There is no blocker or playability."
+      },
+      {
+        "id": "q2",
+        "prompt": "Cutoff opens, you are on the button with AQs at 100bb. A sound continue is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold"
+          },
+          {
+            "id": "b",
+            "text": "Call or 3-bet. Both are ahead of folding."
+          },
+          {
+            "id": "c",
+            "text": "Limp after the open, which is not a legal call"
+          },
+          {
+            "id": "d",
+            "text": "All-in for 100bb as the only continue"
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "AQs is too strong to fold to one late open. Calling in position or 3-betting are both real continues."
+      },
+      {
+        "id": "q3",
+        "prompt": "Which hand is a better 3-bet bluff than a call against a late open?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "J4o"
+          },
+          {
+            "id": "b",
+            "text": "72o"
+          },
+          {
+            "id": "c",
+            "text": "A5s"
+          },
+          {
+            "id": "d",
+            "text": "KTo, because it always dominates"
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "A5s blocks aces and can make a nut flush when called. Random offsuit hands do not."
+      },
+      {
+        "id": "q4",
+        "prompt": "You are out of position versus an early open with KJo. Why is flatting the common mistake?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "KJo is the nuts against an early range."
+          },
+          {
+            "id": "b",
+            "text": "Position does not matter preflop."
+          },
+          {
+            "id": "c",
+            "text": "You are required to 3-bet every king."
+          },
+          {
+            "id": "d",
+            "text": "You are dominated and will play the flop first against a stronger range."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "KJo versus a tight early open is a fold more often than a call."
+      }
+    ]
+  },
+  "lesson-03-04-02-respond-to-an-open": {
+    "id": "lesson-03-04-02-respond-to-an-open",
+    "lessonId": "lesson-03-04-02-respond-to-an-open",
+    "version": "1.0.0",
+    "title": "Respond to an open",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "UTG opens, you are on the button with QQ at 100bb. What is the clear mistake?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Folding"
+          },
+          {
+            "id": "b",
+            "text": "3-betting to about 9\u201312 big blinds"
+          },
+          {
+            "id": "c",
+            "text": "Calling in position"
+          },
+          {
+            "id": "d",
+            "text": "Continuing versus a single normal 4-bet"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Queens are a value continue against an early open. Folding them is a large error."
+      },
+      {
+        "id": "q2",
+        "prompt": "Button opens to 3bb, you are in the big blind with 22 and 100bb. A reasonable plan?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "All-in"
+          },
+          {
+            "id": "b",
+            "text": "Call and play fit-or-fold, looking for a set"
+          },
+          {
+            "id": "c",
+            "text": "Fold. Pairs cannot call a button."
+          },
+          {
+            "id": "d",
+            "text": "3-bet to 30bb and call an all-in"
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "At 100bb the big blind can call a small button open with a pair and release when it misses."
+      },
+      {
+        "id": "q3",
+        "prompt": "Hijack opens, you are in the cutoff with ATo. Which continue is the clear mistake?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Folding"
+          },
+          {
+            "id": "b",
+            "text": "Calling if you will play fit-or-fold in position"
+          },
+          {
+            "id": "c",
+            "text": "3-betting small and folding to a 4-bet"
+          },
+          {
+            "id": "d",
+            "text": "Calling and then stacking off 100bb with ace-high on a blank flop"
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "ATo can take a flop. It is not a 100bb stack-off with no pair."
+      },
+      {
+        "id": "q4",
+        "prompt": "A tight under-the-gun player opens. You are in middle position with JJ. Best default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold. Jacks are a small pair."
+          },
+          {
+            "id": "b",
+            "text": "Limp."
+          },
+          {
+            "id": "c",
+            "text": "3-bet for value, and reevaluate a 4-bet."
+          },
+          {
+            "id": "d",
+            "text": "All-in for 100bb over the 3bb open."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Jacks 3-bet an early open for value. They do not need a 100bb jam over a small open, and they do not fold."
+      }
+    ]
+  },
+  "lesson-03-04-03-facing-an-open-check": {
+    "id": "lesson-03-04-03-facing-an-open-check",
+    "lessonId": "lesson-03-04-03-facing-an-open-check",
+    "version": "1.0.0",
+    "title": "Facing an open check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Against a tighter early open, your continuing range should be\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Wider than against a button open"
+          },
+          {
+            "id": "b",
+            "text": "Tighter than against a button open"
+          },
+          {
+            "id": "c",
+            "text": "Every suited hand"
+          },
+          {
+            "id": "d",
+            "text": "Only the blinds are allowed to continue"
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "An early range is stronger, so you continue fewer hands than against a steal."
+      },
+      {
+        "id": "q2",
+        "prompt": "Which spot is the best 3-bet, not a fold?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Button versus a cutoff open, holding AK"
+          },
+          {
+            "id": "b",
+            "text": "UTG+1 versus an UTG open, holding 96o"
+          },
+          {
+            "id": "c",
+            "text": "Big blind versus an UTG open, holding 72o"
+          },
+          {
+            "id": "d",
+            "text": "Any hand, because 3-bets cannot be value"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "AK is a value 3-bet against a late open. The trash hands fold."
+      },
+      {
+        "id": "q3",
+        "prompt": "You called an open in position with 76s and completely missed the flop. Default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Stack off because you called preflop"
+          },
+          {
+            "id": "b",
+            "text": "Check-raise every turn"
+          },
+          {
+            "id": "c",
+            "text": "Give up the pot unless you have a real reason to continue"
+          },
+          {
+            "id": "d",
+            "text": "The preflop call obligates you to see the river"
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "A preflop continue is not a promise to put in 100bb with no pair and no draw."
+      },
+      {
+        "id": "q4",
+        "prompt": "Cutoff opens to 3bb. You are on the button with AKo. Folding is wrong because\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The button must call every open"
+          },
+          {
+            "id": "b",
+            "text": "AKo cannot be 3-bet"
+          },
+          {
+            "id": "c",
+            "text": "Position makes folding illegal"
+          },
+          {
+            "id": "d",
+            "text": "AKo is ahead of a cutoff open and should call or 3-bet"
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "This is a standard value continue, usually a 3-bet."
+      }
+    ]
+  },
+  "lesson-03-05-01-defending-and-playing-blinds": {
+    "id": "lesson-03-05-01-defending-and-playing-blinds",
+    "lessonId": "lesson-03-05-01-defending-and-playing-blinds",
+    "version": "1.0.0",
+    "title": "Defending and playing blinds",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Why does the big blind defend more hands than the small blind against the same open?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The big blind already has 1bb in the pot and closes the action."
+          },
+          {
+            "id": "b",
+            "text": "The big blind acts first postflop."
+          },
+          {
+            "id": "c",
+            "text": "The small blind is required to call."
+          },
+          {
+            "id": "d",
+            "text": "The big blind can only fold or all-in."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "You are getting a discount and no one acts behind you preflop. You still play out of position."
+      },
+      {
+        "id": "q2",
+        "prompt": "Small blind versus a button open at 100bb. What is the preferred shape?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Call every hand that is not trash, then play out of position."
+          },
+          {
+            "id": "b",
+            "text": "Prefer 3-bet or fold over a flat."
+          },
+          {
+            "id": "c",
+            "text": "Complete every hand because you already posted."
+          },
+          {
+            "id": "d",
+            "text": "Fold AA so you can trap later."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "The small blind is the worst seat. Flatting a wide range out of position is the leak."
+      },
+      {
+        "id": "q3",
+        "prompt": "Button opens, you are the big blind with 72o and 100bb. Best action?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Call. The big blind defends 100% of hands."
+          },
+          {
+            "id": "b",
+            "text": "3-bet. Seven-deuce is a standard bluff."
+          },
+          {
+            "id": "c",
+            "text": "Fold."
+          },
+          {
+            "id": "d",
+            "text": "All-in."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "A discount is not a reason to play the worst hand. 72o still folds to a button open."
+      },
+      {
+        "id": "q4",
+        "prompt": "Button opens, you are the big blind with AJo. Folding is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Required, because jacks are weak."
+          },
+          {
+            "id": "b",
+            "text": "Required, because the big blind must fold offsuit hands."
+          },
+          {
+            "id": "c",
+            "text": "The only legal option."
+          },
+          {
+            "id": "d",
+            "text": "Too tight. Call or 3-bet."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "AJo is a standard big-blind continue against a steal, unlike against a tight UTG open."
+      }
+    ]
+  },
+  "lesson-03-05-02-play-from-the-blinds": {
+    "id": "lesson-03-05-02-play-from-the-blinds",
+    "lessonId": "lesson-03-05-02-play-from-the-blinds",
+    "version": "1.0.0",
+    "title": "Play from the blinds",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "UTG opens, you are the small blind with KQo at 100bb. Best default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold or 3-bet. Do not flat out of position against a tight range."
+          },
+          {
+            "id": "b",
+            "text": "Call. Offsuit broadways must flat the small blind."
+          },
+          {
+            "id": "c",
+            "text": "Complete, because you posted a small blind."
+          },
+          {
+            "id": "d",
+            "text": "All-in for 100bb."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "KQo is dominated by an early open and plays badly as a small-blind flat."
+      },
+      {
+        "id": "q2",
+        "prompt": "Button opens to 2.5bb, you are the big blind with 76s and 100bb. A sound continue?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold. Suited connectors are never defended."
+          },
+          {
+            "id": "b",
+            "text": "Call. You are priced in and can hit a strong flop."
+          },
+          {
+            "id": "c",
+            "text": "All-in."
+          },
+          {
+            "id": "d",
+            "text": "Limp, which does not apply after a raise."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "The big blind can defend suited connectors against a small button open and release when they miss."
+      },
+      {
+        "id": "q3",
+        "prompt": "You are the small blind with AA. Someone has opened. Clear mistake?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "3-betting"
+          },
+          {
+            "id": "b",
+            "text": "4-betting if they reraise small"
+          },
+          {
+            "id": "c",
+            "text": "Folding"
+          },
+          {
+            "id": "d",
+            "text": "Raising larger because you are out of position"
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Aces are never a fold to a single open."
+      },
+      {
+        "id": "q4",
+        "prompt": "Both blinds called a late open and the flop is multiway. You should\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Bluff every missed flop because you were in the blinds"
+          },
+          {
+            "id": "b",
+            "text": "Stack off any pair"
+          },
+          {
+            "id": "c",
+            "text": "Ignore the extra player"
+          },
+          {
+            "id": "d",
+            "text": "Continue tighter. Multiway, bluffs and weak pairs lose value."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Two blinds in the pot means you did not isolate. Make hands, do not blast air."
+      }
+    ]
+  },
+  "lesson-03-05-03-blind-play-check": {
+    "id": "lesson-03-05-03-blind-play-check",
+    "lessonId": "lesson-03-05-03-blind-play-check",
+    "version": "1.0.0",
+    "title": "Blind play check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Which continue belongs in the big blind against a button open?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "72o"
+          },
+          {
+            "id": "b",
+            "text": "AJs"
+          },
+          {
+            "id": "c",
+            "text": "32o"
+          },
+          {
+            "id": "d",
+            "text": "Folding AA"
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "AJs is a clear defend. Trash and folding aces are not."
+      },
+      {
+        "id": "q2",
+        "prompt": "Small blind versus a hijack open with JTo at 100bb. The leak is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Flatting and playing a dominated hand out of position"
+          },
+          {
+            "id": "b",
+            "text": "Folding"
+          },
+          {
+            "id": "c",
+            "text": "3-betting and folding to a 4-bet"
+          },
+          {
+            "id": "d",
+            "text": "Noticing that you are out of position"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "JTo does not flat well from the small blind against a solid open."
+      },
+      {
+        "id": "q3",
+        "prompt": "The big blind is not 'defending any two cards' because\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The big blind posted nothing"
+          },
+          {
+            "id": "b",
+            "text": "Calls are illegal from the big blind"
+          },
+          {
+            "id": "c",
+            "text": "Even with a discount, the worst hands lose more than the pot offers"
+          },
+          {
+            "id": "d",
+            "text": "The button is forced to fold if the big blind calls"
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Pot odds widen the defend. They do not make 72o profitable against a real open."
+      },
+      {
+        "id": "q4",
+        "prompt": "Button min-raises, big blind holds KK. What do you do?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold"
+          },
+          {
+            "id": "b",
+            "text": "Call only, so you never raise kings"
+          },
+          {
+            "id": "c",
+            "text": "Complete"
+          },
+          {
+            "id": "d",
+            "text": "3-bet for value"
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Kings 3-bet a steal. Slow-playing them from the big blind lets the button realize equity."
+      }
+    ]
+  },
+  "lesson-04-01-01-value-and-bluff-3-bet-ranges": {
+    "id": "lesson-04-01-01-value-and-bluff-3-bet-ranges",
+    "lessonId": "lesson-04-01-01-value-and-bluff-3-bet-ranges",
+    "version": "1.0.0",
+    "title": "Value and bluff 3-bet ranges",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "A value 3-bet is a hand that\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Is ahead of the opener\u2019s continuing range and wants more money in."
+          },
+          {
+            "id": "b",
+            "text": "Is too weak to call and has no blockers."
+          },
+          {
+            "id": "c",
+            "text": "Must be all-in or it is not value."
+          },
+          {
+            "id": "d",
+            "text": "Is always 72o, to balance."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Value 3-bets are ahead when called: big pairs and strong broadways, widened against late opens."
+      },
+      {
+        "id": "q2",
+        "prompt": "Which hand is a value 3-bet against a tight under-the-gun open?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "76s"
+          },
+          {
+            "id": "b",
+            "text": "QQ"
+          },
+          {
+            "id": "c",
+            "text": "KJo"
+          },
+          {
+            "id": "d",
+            "text": "ATo"
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Queens are ahead of a tight early open. The others are dominated or speculative."
+      },
+      {
+        "id": "q3",
+        "prompt": "A bluff 3-bet should usually be\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Any two cards, chosen at random"
+          },
+          {
+            "id": "b",
+            "text": "A hand you will stack off if you get 4-bet"
+          },
+          {
+            "id": "c",
+            "text": "A suited ace or other blocker that can fold to a 4-bet"
+          },
+          {
+            "id": "d",
+            "text": "A small pair you refuse to fold"
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "A5s-style bluffs block strong continues and can still make a nut flush when called."
+      },
+      {
+        "id": "q4",
+        "prompt": "In position, a live 3-bet with no limpers is often about\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The minimum raise"
+          },
+          {
+            "id": "b",
+            "text": "100 big blinds every time"
+          },
+          {
+            "id": "c",
+            "text": "Less than the original open"
+          },
+          {
+            "id": "d",
+            "text": "3\u00d7 the open. Out of position, closer to 4\u00d7."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Use about three times the open in position and about four times from the blinds, then add size for limpers."
+      }
+    ]
+  },
+  "lesson-04-01-02-build-3-bet-ranges": {
+    "id": "lesson-04-01-02-build-3-bet-ranges",
+    "lessonId": "lesson-04-01-02-build-3-bet-ranges",
+    "version": "1.0.0",
+    "title": "Build 3-bet ranges",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Button versus a cutoff open. Which set is the value 3-bet core?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "TT+, AQ+"
+          },
+          {
+            "id": "b",
+            "text": "22\u201355 only"
+          },
+          {
+            "id": "c",
+            "text": "Every suited hand and nothing else"
+          },
+          {
+            "id": "d",
+            "text": "Only 72o"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Against a late open, pairs from tens up and AQ or better are the value core. You can widen further against a loose opener."
+      },
+      {
+        "id": "q2",
+        "prompt": "You 3-bet A5s as a bluff and a tight player 4-bets large. Best default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Call and stack off"
+          },
+          {
+            "id": "b",
+            "text": "Fold"
+          },
+          {
+            "id": "c",
+            "text": "5-bet all-in. Suited aces are the nuts."
+          },
+          {
+            "id": "d",
+            "text": "Limp"
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "The bluff 3-bet did its job when a tight range reraises. A5s is not a 100bb continue against that 4-bet."
+      },
+      {
+        "id": "q3",
+        "prompt": "Big blind versus a button open. Why is the 3-bet range wider than versus under the gun?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The button opened a stronger range than UTG."
+          },
+          {
+            "id": "b",
+            "text": "The big blind is in position."
+          },
+          {
+            "id": "c",
+            "text": "The button opens wide, so more hands are ahead and more bluffs work."
+          },
+          {
+            "id": "d",
+            "text": "UTG is forced to fold to any 3-bet."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Steal ranges are wide. Early ranges are not, so you 3-bet them tighter."
+      },
+      {
+        "id": "q4",
+        "prompt": "Which construction is backwards?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "3-bet KK for value"
+          },
+          {
+            "id": "b",
+            "text": "Fold 72o to an open"
+          },
+          {
+            "id": "c",
+            "text": "Use A5s as a occasional bluff 3-bet and fold to a 4-bet"
+          },
+          {
+            "id": "d",
+            "text": "3-bet 72o for value and call every 4-bet with it"
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "72o is not a value hand and cannot call 4-bets."
+      }
+    ]
+  },
+  "lesson-04-01-03-3-bet-construction-check": {
+    "id": "lesson-04-01-03-3-bet-construction-check",
+    "lessonId": "lesson-04-01-03-3-bet-construction-check",
+    "version": "1.0.0",
+    "title": "3-bet construction check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Cutoff opens, button holds AK. The 3-bet is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Value"
+          },
+          {
+            "id": "b",
+            "text": "A fold"
+          },
+          {
+            "id": "c",
+            "text": "A pure bluff with no showdown value"
+          },
+          {
+            "id": "d",
+            "text": "Illegal in position"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "AK is ahead of a cutoff open and of many calls. That is a value 3-bet."
+      },
+      {
+        "id": "q2",
+        "prompt": "You are in the small blind and 3-bet to the same chips you would use on the button. The usual fix is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "3-bet smaller out of position"
+          },
+          {
+            "id": "b",
+            "text": "3-bet larger out of position, about 4\u00d7 the open rather than 3\u00d7"
+          },
+          {
+            "id": "c",
+            "text": "Never 3-bet from the small blind"
+          },
+          {
+            "id": "d",
+            "text": "Only limp"
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Out of position you want more folds and a bigger pot when called, so the 3-bet is larger."
+      },
+      {
+        "id": "q3",
+        "prompt": "A value 3-bet and a bluff 3-bet differ because\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Bluffs always go all-in and value always limps"
+          },
+          {
+            "id": "b",
+            "text": "Value hands fold to an open"
+          },
+          {
+            "id": "c",
+            "text": "Value continues against a 4-bet more often; bluffs with blockers usually fold"
+          },
+          {
+            "id": "d",
+            "text": "There is no difference"
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "QQ continues versus many 4-bets. A5s usually does not."
+      },
+      {
+        "id": "q4",
+        "prompt": "Against a very loose button opener, a sound adjustment is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold AK"
+          },
+          {
+            "id": "b",
+            "text": "3-bet only AA"
+          },
+          {
+            "id": "c",
+            "text": "Stop 3-betting"
+          },
+          {
+            "id": "d",
+            "text": "Widen value 3-bets. Their open contains more dominated hands."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Looser opens are attacked with a wider value range, not a tighter one."
+      }
+    ]
+  },
+  "lesson-04-02-01-squeezes-and-cold-call-criteria": {
+    "id": "lesson-04-02-01-squeezes-and-cold-call-criteria",
+    "lessonId": "lesson-04-02-01-squeezes-and-cold-call-criteria",
+    "version": "1.0.0",
+    "title": "Squeezes and cold-call criteria",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "A squeeze is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A call of a single open"
+          },
+          {
+            "id": "b",
+            "text": "A reraise after an open and at least one caller"
+          },
+          {
+            "id": "c",
+            "text": "A limp from the small blind"
+          },
+          {
+            "id": "d",
+            "text": "A check on the flop"
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "The dead money from the caller is why a squeeze is larger and stronger than a heads-up 3-bet."
+      },
+      {
+        "id": "q2",
+        "prompt": "UTG opens, hijack calls, you are on the button with AK. Best default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Squeeze"
+          },
+          {
+            "id": "b",
+            "text": "Fold"
+          },
+          {
+            "id": "c",
+            "text": "Cold-call only. AK cannot raise."
+          },
+          {
+            "id": "d",
+            "text": "Limp"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "AK is ahead of both ranges. Raise and take the dead money or play a bigger pot in position."
+      },
+      {
+        "id": "q3",
+        "prompt": "Which hand is a better cold-call on the button than a squeeze against a late open and one caller?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "AA"
+          },
+          {
+            "id": "b",
+            "text": "KK"
+          },
+          {
+            "id": "c",
+            "text": "76s"
+          },
+          {
+            "id": "d",
+            "text": "72o"
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "76s wants a cheap flop in position. Aces and kings raise. 72o folds."
+      },
+      {
+        "id": "q4",
+        "prompt": "Cold-calling out of position with KJo against an early open and a caller is a mistake because\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "You are in position"
+          },
+          {
+            "id": "b",
+            "text": "KJo is the nuts"
+          },
+          {
+            "id": "c",
+            "text": "Calls are illegal"
+          },
+          {
+            "id": "d",
+            "text": "You are dominated, multiway, and first to act after the flop"
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "That hand needs position and a weaker range in front of it. This spot has neither."
+      }
+    ]
+  },
+  "lesson-04-02-02-squeeze-or-cold-call": {
+    "id": "lesson-04-02-02-squeeze-or-cold-call",
+    "lessonId": "lesson-04-02-02-squeeze-or-cold-call",
+    "version": "1.0.0",
+    "title": "Squeeze or cold call",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Cutoff opens, button calls, you are the big blind with QQ. What do you do?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Squeeze"
+          },
+          {
+            "id": "b",
+            "text": "Fold"
+          },
+          {
+            "id": "c",
+            "text": "Complete"
+          },
+          {
+            "id": "d",
+            "text": "Check preflop, which is not an option after a raise"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Queens do not flat multiway out of position. Squeeze."
+      },
+      {
+        "id": "q2",
+        "prompt": "Hijack opens, cutoff calls, you are on the button with 76s and 100bb. A sound default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "All-in"
+          },
+          {
+            "id": "b",
+            "text": "Cold-call and play fit-or-fold in position"
+          },
+          {
+            "id": "c",
+            "text": "Fold. Suited connectors cannot call a single raise."
+          },
+          {
+            "id": "d",
+            "text": "Squeeze all-in"
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "In position against a non-early open, 76s can take a flop. It is not a 100bb jam."
+      },
+      {
+        "id": "q3",
+        "prompt": "UTG opens, two players call, you are in the small blind with ATo. Best default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Call. More players means defend wider with any ace."
+          },
+          {
+            "id": "b",
+            "text": "All-in for 100bb"
+          },
+          {
+            "id": "c",
+            "text": "Fold. Your ace is dominated and you are out of position multiway."
+          },
+          {
+            "id": "d",
+            "text": "Complete the small blind"
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "ATo hates a strong early range plus two callers from the worst seat."
+      },
+      {
+        "id": "q4",
+        "prompt": "You squeeze and both opponents call. On a dry flop with no pair, you should\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Automatically stack off"
+          },
+          {
+            "id": "b",
+            "text": "Assume they both folded"
+          },
+          {
+            "id": "c",
+            "text": "Ignore that the pot is multiway"
+          },
+          {
+            "id": "d",
+            "text": "Bluff less. Two callers reduced your fold equity."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "A squeeze that gets called twice is a made-hand pot, not a pure bluff pot."
+      }
+    ]
+  },
+  "lesson-04-02-03-squeezes-and-cold-calls-check": {
+    "id": "lesson-04-02-03-squeezes-and-cold-calls-check",
+    "lessonId": "lesson-04-02-03-squeezes-and-cold-calls-check",
+    "version": "1.0.0",
+    "title": "Squeezes and cold calls check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Which action is a squeeze?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Open-raising after folds"
+          },
+          {
+            "id": "b",
+            "text": "Reraising after a cutoff open and a button call"
+          },
+          {
+            "id": "c",
+            "text": "Calling one open on the button"
+          },
+          {
+            "id": "d",
+            "text": "Folding the small blind"
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Open plus caller plus your raise is the squeeze."
+      },
+      {
+        "id": "q2",
+        "prompt": "A cold-call wants which ingredient most?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Position, and a hand that makes strong flops rather than one pair"
+          },
+          {
+            "id": "b",
+            "text": "The worst offsuit hand"
+          },
+          {
+            "id": "c",
+            "text": "Being first to act against an under-the-gun range"
+          },
+          {
+            "id": "d",
+            "text": "A plan to stack off ace-high"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Suited connectors and small pairs realize better in position than dominated offsuit hands do."
+      },
+      {
+        "id": "q3",
+        "prompt": "Big blind, UTG open, two calls, you hold KK. Folding is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Standard"
+          },
+          {
+            "id": "b",
+            "text": "Required multiway"
+          },
+          {
+            "id": "c",
+            "text": "A large mistake. Squeeze."
+          },
+          {
+            "id": "d",
+            "text": "The only way to trap"
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Kings raise for value even multiway. Flatting lets the field see a cheap flop."
+      },
+      {
+        "id": "q4",
+        "prompt": "Why is a squeeze sized larger than a heads-up 3-bet?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The rules require an all-in"
+          },
+          {
+            "id": "b",
+            "text": "Callers remove the dead money"
+          },
+          {
+            "id": "c",
+            "text": "Smaller raises fold more players"
+          },
+          {
+            "id": "d",
+            "text": "The caller\u2019s chips are already in, and you need more folds"
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Start from your 3-bet size and add size for each caller."
+      }
+    ]
+  },
+  "lesson-04-03-01-4-bet-and-preflop-all-in-trees": {
+    "id": "lesson-04-03-01-4-bet-and-preflop-all-in-trees",
+    "lessonId": "lesson-04-03-01-4-bet-and-preflop-all-in-trees",
+    "version": "1.0.0",
+    "title": "4-bet and preflop all-in trees",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "At 100bb against an unknown 3-bet, which hand is a standard continue versus a 4-bet?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "KK"
+          },
+          {
+            "id": "b",
+            "text": "A5s used as a bluff"
+          },
+          {
+            "id": "c",
+            "text": "JTo"
+          },
+          {
+            "id": "d",
+            "text": "22"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Kings continue against a 4-bet. Folding them because 'they always have aces' is a leak."
+      },
+      {
+        "id": "q2",
+        "prompt": "You 3-bet A5s and face a tight 4-bet that would commit your 100bb stack. Best default?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "5-bet all-in"
+          },
+          {
+            "id": "b",
+            "text": "Fold"
+          },
+          {
+            "id": "c",
+            "text": "Call and stack off with no pair"
+          },
+          {
+            "id": "d",
+            "text": "The 3-bet forces you to call any raise"
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "A blocker bluff is built to fold to strength. Do not turn it into a stack-off."
+      },
+      {
+        "id": "q3",
+        "prompt": "AA facing a 3-bet and then a 4-bet at 100bb. What is true?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold. Aces are a trap only if you limp."
+          },
+          {
+            "id": "b",
+            "text": "You may fold if the 4-bet is large."
+          },
+          {
+            "id": "c",
+            "text": "Continue. Aces are not a fold preflop at 100bb."
+          },
+          {
+            "id": "d",
+            "text": "You must limp next time."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "There is no 100bb preflop fold with aces against a single 4-bet."
+      },
+      {
+        "id": "q4",
+        "prompt": "A 5-bet all-in at 100bb is mainly\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Every suited connector"
+          },
+          {
+            "id": "b",
+            "text": "The bottom of your cold-call range"
+          },
+          {
+            "id": "c",
+            "text": "72o, for balance, every time"
+          },
+          {
+            "id": "d",
+            "text": "The top of your range: AA, KK, and only sometimes QQ or AK"
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Once the 4-bet is large, the jam is value-heavy. QQ and AK depend on who 4-bet. Trash does not jam."
+      }
+    ]
+  },
+  "lesson-04-03-02-navigate-4-bets-and-all-ins": {
+    "id": "lesson-04-03-02-navigate-4-bets-and-all-ins",
+    "lessonId": "lesson-04-03-02-navigate-4-bets-and-all-ins",
+    "version": "1.0.0",
+    "title": "Navigate 4-bets and all-ins",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "You open under the gun, a tight player 3-bets, you have TT at 100bb. A sound line is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Call or fold to further pressure. Do not 5-bet jam as a default."
+          },
+          {
+            "id": "b",
+            "text": "5-bet all-in. Tens are the nuts."
+          },
+          {
+            "id": "c",
+            "text": "Limp after the 3-bet."
+          },
+          {
+            "id": "d",
+            "text": "Fold to the first open you already made"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Tens are often ahead of a 3-bet and behind a 4-bet or jam. They are not an automatic all-in."
+      },
+      {
+        "id": "q2",
+        "prompt": "Button 3-bets your cutoff open, you 4-bet KK, and the button jams 100bb. Against an unknown, the default is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold. Kings lose to aces."
+          },
+          {
+            "id": "b",
+            "text": "Call. Kings are ahead of a button jam that includes AK and queens."
+          },
+          {
+            "id": "c",
+            "text": "Fold every time because jams are exactly AA."
+          },
+          {
+            "id": "d",
+            "text": "Calling a jam is illegal after you 4-bet"
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "A button jam is wider than a tight UTG jam. Kings are a continue; folding them only because aces exist is a leak."
+      },
+      {
+        "id": "q3",
+        "prompt": "Effective stacks are 18bb and you are reraised all-in after your open. Which idea is right?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Play exactly as you would at 100bb."
+          },
+          {
+            "id": "b",
+            "text": "Suited connectors go up in value because stacks are short."
+          },
+          {
+            "id": "c",
+            "text": "You are priced into more continues, and speculative hands that needed deep implied odds go down."
+          },
+          {
+            "id": "d",
+            "text": "You must fold AA because the stack is small."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Short stacks remove room to fold later. Continue with hands that are ahead now, not hands that needed a deep flop."
+      },
+      {
+        "id": "q4",
+        "prompt": "You are facing an all-in and the pot already lays you 2 to 1. A hand that wins more than one-third of the time\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Must fold"
+          },
+          {
+            "id": "b",
+            "text": "Cannot be called because it is not a favorite"
+          },
+          {
+            "id": "c",
+            "text": "Must be AA or it loses money"
+          },
+          {
+            "id": "d",
+            "text": "Is a call even when it is not a favorite"
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Pot odds, not pride, decide a priced-in call. You do not need to be ahead of 50% when you are getting 2 to 1."
+      }
+    ]
+  },
+  "lesson-04-03-03-4-bets-and-all-ins-check": {
+    "id": "lesson-04-03-03-4-bets-and-all-ins-check",
+    "lessonId": "lesson-04-03-03-4-bets-and-all-ins-check",
+    "version": "1.0.0",
+    "title": "4-bets and all-ins check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Which fold is a clear mistake at 100bb?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Folding KK to a single 4-bet"
+          },
+          {
+            "id": "b",
+            "text": "Folding A5s to a tight 4-bet after you used it as a bluff"
+          },
+          {
+            "id": "c",
+            "text": "Folding 72o to an open"
+          },
+          {
+            "id": "d",
+            "text": "Folding JTo to an under-the-gun 4-bet"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Kings continue. The other folds are reasonable."
+      },
+      {
+        "id": "q2",
+        "prompt": "QQ versus a tight under-the-gun 4-bet all-in at 100bb is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "An automatic joyous call with no thought"
+          },
+          {
+            "id": "b",
+            "text": "A close spot. Against a range that is only AA and KK, queens are behind."
+          },
+          {
+            "id": "c",
+            "text": "A required fold every time, including against a loose button"
+          },
+          {
+            "id": "d",
+            "text": "Illegal to call"
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Who jammed matters. A nit\u2019s UTG jam is heavier than a button\u2019s. Do not use one rule for both."
+      },
+      {
+        "id": "q3",
+        "prompt": "Your 4-bet size at 100bb should usually\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Be a min-click that invites six callers"
+          },
+          {
+            "id": "b",
+            "text": "Be smaller than the 3-bet"
+          },
+          {
+            "id": "c",
+            "text": "Leave you a real decision, or commit you on purpose with the hands that want it"
+          },
+          {
+            "id": "d",
+            "text": "Always be all-in with A5s"
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "A tiny 4-bet gives the 3-bettor a cheap call. A size that commits the stack is for value, not for A5s."
+      },
+      {
+        "id": "q4",
+        "prompt": "Short-stacked (about 15\u201320bb), a small open that you will hate folding is often replaced by\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A limp"
+          },
+          {
+            "id": "b",
+            "text": "A 100bb-style deep 4-bet tree"
+          },
+          {
+            "id": "c",
+            "text": "Folding AA"
+          },
+          {
+            "id": "d",
+            "text": "A raise-all-in or a fold, because there is no room for postflop play"
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "When the remaining stack is only a few bets, decide preflop instead of open-folding a committed hand."
+      }
+    ]
+  },
+  "lesson-04-04-01-adjusting-to-table-and-stack-context": {
+    "id": "lesson-04-04-01-adjusting-to-table-and-stack-context",
+    "lessonId": "lesson-04-04-01-adjusting-to-table-and-stack-context",
+    "version": "1.0.0",
+    "title": "Adjusting to table and stack context",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Stacks are 200bb instead of 100bb. Which hands gain?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Suited connectors and suited aces that can make strong hands"
+          },
+          {
+            "id": "b",
+            "text": "Dominated offsuit broadways that make one pair"
+          },
+          {
+            "id": "c",
+            "text": "72o"
+          },
+          {
+            "id": "d",
+            "text": "Nothing. Depth does not change preflop."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Deeper stacks pay implied odds for suited and connected hands and punish one-pair domination."
+      },
+      {
+        "id": "q2",
+        "prompt": "Stacks are 30bb. Which adjustment fits?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Call more suited connectors because implied odds increased"
+          },
+          {
+            "id": "b",
+            "text": "Prefer hands that are ahead now. Speculative hands lose implied odds."
+          },
+          {
+            "id": "c",
+            "text": "Limp every pair"
+          },
+          {
+            "id": "d",
+            "text": "Ignore position"
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "At 30bb you cannot win a huge pot when you flop a set, and you are committed more often with one pair."
+      },
+      {
+        "id": "q3",
+        "prompt": "A tight table open-folds too much. A sound exploit is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Open only AA"
+          },
+          {
+            "id": "b",
+            "text": "Stop stealing"
+          },
+          {
+            "id": "c",
+            "text": "Open wider in late position and fold when they play back"
+          },
+          {
+            "id": "d",
+            "text": "All-in every button"
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Steal more against folders. Give up when a tight player 3-bets, because their continue is strong."
+      },
+      {
+        "id": "q4",
+        "prompt": "A live straddle is posted by the under-the-gun seat. This trainer does not deal straddles yet. Conceptually, you should\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Ignore it. A straddle is the same as no blind."
+          },
+          {
+            "id": "b",
+            "text": "Treat the straddler as an early-position open."
+          },
+          {
+            "id": "c",
+            "text": "Fold for the rest of the orbit by rule."
+          },
+          {
+            "id": "d",
+            "text": "Treat the straddle as a bigger big blind. The first voluntary actor sits to the left of the straddle."
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "A straddle changes who is in the blinds. Do not play a 9-handed UTG chart from the seat that now acts after the straddle."
+      }
+    ]
+  },
+  "lesson-04-04-02-adjust-preflop-by-context": {
+    "id": "lesson-04-04-02-adjust-preflop-by-context",
+    "lessonId": "lesson-04-04-02-adjust-preflop-by-context",
+    "version": "1.0.0",
+    "title": "Adjust preflop by context",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Loose callers on your left, you are under the gun with KJo at 100bb. Compared with a tight table, you should\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Open less often. You will be called and dominated."
+          },
+          {
+            "id": "b",
+            "text": "Open wider. Callers make KJo stronger."
+          },
+          {
+            "id": "c",
+            "text": "Limp. Loose tables require limps from UTG."
+          },
+          {
+            "id": "d",
+            "text": "All-in."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "When the field calls too much, remove dominated offsuit hands from early opens."
+      },
+      {
+        "id": "q2",
+        "prompt": "Same loose table, button, folded to you with KJo. Now\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold. The button uses the UTG range."
+          },
+          {
+            "id": "b",
+            "text": "Open. Position and their calling still favor a late steal that can win immediately or play in position."
+          },
+          {
+            "id": "c",
+            "text": "All-in for 200bb"
+          },
+          {
+            "id": "d",
+            "text": "Limp only"
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "The same hand changes with seat. Button versus blinds is not UTG versus a calling field."
+      },
+      {
+        "id": "q3",
+        "prompt": "You cover the table with 300bb. A short stack with 20bb open-jams. With QQ you\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold because you are deep"
+          },
+          {
+            "id": "b",
+            "text": "Call only if you also cover a third stack of 300bb"
+          },
+          {
+            "id": "c",
+            "text": "Call the 20bb. Your extra chips behind do not change this pot."
+          },
+          {
+            "id": "d",
+            "text": "Need 300bb of equity"
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "Effective stack is the jam, 20bb, not the 300bb you cannot win."
+      },
+      {
+        "id": "q4",
+        "prompt": "The table is 4-handed at 100bb. Your earliest open should look more like\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "A 9-handed UTG range"
+          },
+          {
+            "id": "b",
+            "text": "A limp-only range"
+          },
+          {
+            "id": "c",
+            "text": "AA or fold"
+          },
+          {
+            "id": "d",
+            "text": "A full-ring cutoff or button range, not a full-ring UTG range"
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Four-handed has no true early position. Opening the 9-handed UTG chart is far too tight."
+      }
+    ]
+  },
+  "lesson-04-04-03-contextual-adjustment-check": {
+    "id": "lesson-04-04-03-contextual-adjustment-check",
+    "lessonId": "lesson-04-04-03-contextual-adjustment-check",
+    "version": "1.0.0",
+    "title": "Contextual adjustment check",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt": "Which change is correct when the game gets deeper?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Stack off more dominated offsuit hands preflop"
+          },
+          {
+            "id": "b",
+            "text": "Value suited connectors more and offsuit one-pair hands less"
+          },
+          {
+            "id": "c",
+            "text": "Ignore position"
+          },
+          {
+            "id": "d",
+            "text": "Open only all-in"
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Depth rewards hands that can make the nuts and punishes big dominated pairs."
+      },
+      {
+        "id": "q2",
+        "prompt": "A nit 3-bets your button open. The exploit is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Fold the bottom of your continue range. Their 3-bet is strong."
+          },
+          {
+            "id": "b",
+            "text": "4-bet all-in with 76s"
+          },
+          {
+            "id": "c",
+            "text": "Assume every 3-bet is a bluff"
+          },
+          {
+            "id": "d",
+            "text": "Call every hand you opened"
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "Tight 3-bets are value. Do not pay them off with the hands you opened as steals."
+      },
+      {
+        "id": "q3",
+        "prompt": "Effective stacks are 15bb, folded to the button, you have AJo. The fitting plan is\u2026",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Limp and fold to a jam"
+          },
+          {
+            "id": "b",
+            "text": "Use a 100bb cold-call tree"
+          },
+          {
+            "id": "c",
+            "text": "Raise all-in or raise an amount you are willing to call off"
+          },
+          {
+            "id": "d",
+            "text": "Fold. AJo is an under-the-gun hand only."
+          }
+        ],
+        "correctChoiceId": "c",
+        "explanation": "At 15bb the button does not have a deep postflop tree. Decide for the stack now."
+      },
+      {
+        "id": "q4",
+        "prompt": "Which fact about a straddle should you remember in this app?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The trainer deals straddles, bomb pots, and rake in every hand"
+          },
+          {
+            "id": "b",
+            "text": "A straddle removes position"
+          },
+          {
+            "id": "c",
+            "text": "The straddler is the button"
+          },
+          {
+            "id": "d",
+            "text": "Straddles are conceptual here: the straddle acts like a larger big blind until the engine deals them"
+          }
+        ],
+        "correctChoiceId": "d",
+        "explanation": "Do not expect a dealt straddle in the current hand engine. Learn the position shift now and apply it live."
+      }
+    ]
   }
 }

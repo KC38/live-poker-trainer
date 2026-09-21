@@ -1,0 +1,104 @@
+{
+  "id": "lesson-03-05-03-blind-play-check",
+  "lessonId": "lesson-03-05-03-blind-play-check",
+  "version": "1.0.0",
+  "title": "Blind play check",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Which continue belongs in the big blind against a button open?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "72o"
+        },
+        {
+          "id": "b",
+          "text": "AJs"
+        },
+        {
+          "id": "c",
+          "text": "32o"
+        },
+        {
+          "id": "d",
+          "text": "Folding AA"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "AJs is a clear defend. Trash and folding aces are not."
+    },
+    {
+      "id": "q2",
+      "prompt": "Small blind versus a hijack open with JTo at 100bb. The leak is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Flatting and playing a dominated hand out of position"
+        },
+        {
+          "id": "b",
+          "text": "Folding"
+        },
+        {
+          "id": "c",
+          "text": "3-betting and folding to a 4-bet"
+        },
+        {
+          "id": "d",
+          "text": "Noticing that you are out of position"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "JTo does not flat well from the small blind against a solid open."
+    },
+    {
+      "id": "q3",
+      "prompt": "The big blind is not 'defending any two cards' because\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The big blind posted nothing"
+        },
+        {
+          "id": "b",
+          "text": "Calls are illegal from the big blind"
+        },
+        {
+          "id": "c",
+          "text": "Even with a discount, the worst hands lose more than the pot offers"
+        },
+        {
+          "id": "d",
+          "text": "The button is forced to fold if the big blind calls"
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "Pot odds widen the defend. They do not make 72o profitable against a real open."
+    },
+    {
+      "id": "q4",
+      "prompt": "Button min-raises, big blind holds KK. What do you do?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold"
+        },
+        {
+          "id": "b",
+          "text": "Call only, so you never raise kings"
+        },
+        {
+          "id": "c",
+          "text": "Complete"
+        },
+        {
+          "id": "d",
+          "text": "3-bet for value"
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "Kings 3-bet a steal. Slow-playing them from the big blind lets the button realize equity."
+    }
+  ]
+}

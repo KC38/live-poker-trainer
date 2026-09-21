@@ -1,0 +1,104 @@
+{
+  "id": "lesson-03-04-01-calling-and-3-betting-basics",
+  "lessonId": "lesson-03-04-01-calling-and-3-betting-basics",
+  "version": "1.0.0",
+  "title": "Calling and 3-betting basics",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Under the gun opens to 3bb. You are next to act with 72o. Best action?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold"
+        },
+        {
+          "id": "b",
+          "text": "Call"
+        },
+        {
+          "id": "c",
+          "text": "3-bet to 9bb as a bluff"
+        },
+        {
+          "id": "d",
+          "text": "All-in for 100bb"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "Do not continue trash against an early open. There is no blocker or playability."
+    },
+    {
+      "id": "q2",
+      "prompt": "Cutoff opens, you are on the button with AQs at 100bb. A sound continue is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold"
+        },
+        {
+          "id": "b",
+          "text": "Call or 3-bet. Both are ahead of folding."
+        },
+        {
+          "id": "c",
+          "text": "Limp after the open, which is not a legal call"
+        },
+        {
+          "id": "d",
+          "text": "All-in for 100bb as the only continue"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "AQs is too strong to fold to one late open. Calling in position or 3-betting are both real continues."
+    },
+    {
+      "id": "q3",
+      "prompt": "Which hand is a better 3-bet bluff than a call against a late open?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "J4o"
+        },
+        {
+          "id": "b",
+          "text": "72o"
+        },
+        {
+          "id": "c",
+          "text": "A5s"
+        },
+        {
+          "id": "d",
+          "text": "KTo, because it always dominates"
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "A5s blocks aces and can make a nut flush when called. Random offsuit hands do not."
+    },
+    {
+      "id": "q4",
+      "prompt": "You are out of position versus an early open with KJo. Why is flatting the common mistake?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "KJo is the nuts against an early range."
+        },
+        {
+          "id": "b",
+          "text": "Position does not matter preflop."
+        },
+        {
+          "id": "c",
+          "text": "You are required to 3-bet every king."
+        },
+        {
+          "id": "d",
+          "text": "You are dominated and will play the flop first against a stronger range."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "KJo versus a tight early open is a fold more often than a call."
+    }
+  ]
+}

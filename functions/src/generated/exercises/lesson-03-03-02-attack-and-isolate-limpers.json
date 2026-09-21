@@ -1,0 +1,104 @@
+{
+  "id": "lesson-03-03-02-attack-and-isolate-limpers",
+  "lessonId": "lesson-03-03-02-attack-and-isolate-limpers",
+  "version": "1.0.0",
+  "title": "Attack and isolate limpers",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Button, one limp, 100bb, you hold AJs. Which size is the isolate?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Call the one-chip limp"
+        },
+        {
+          "id": "b",
+          "text": "Raise to about your normal open plus one big blind"
+        },
+        {
+          "id": "c",
+          "text": "Raise to 1.5 big blinds total"
+        },
+        {
+          "id": "d",
+          "text": "Check. The button cannot raise a limp."
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "An isolate is a raise, sized up for the dead limp, not a flat."
+    },
+    {
+      "id": "q2",
+      "prompt": "Under the gun limps and you are in the hijack with 72o. What do you do?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold"
+        },
+        {
+          "id": "b",
+          "text": "Limp behind"
+        },
+        {
+          "id": "c",
+          "text": "Isolate large"
+        },
+        {
+          "id": "d",
+          "text": "All-in"
+        }
+      ],
+      "correctChoiceId": "a",
+      "explanation": "A limp is not a signal to play trash. 72o does not isolate."
+    },
+    {
+      "id": "q3",
+      "prompt": "You isolate a limper from the cutoff and the big blind calls as well. What changed?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The pot is now heads-up by rule."
+        },
+        {
+          "id": "b",
+          "text": "You should automatically stack off any pair."
+        },
+        {
+          "id": "c",
+          "text": "You are multiway. Continue more carefully than in a heads-up raised pot."
+        },
+        {
+          "id": "d",
+          "text": "Your isolate was illegal."
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "Isolation fails when extra players call. Speculative hands and bluffs go down in value."
+    },
+    {
+      "id": "q4",
+      "prompt": "Deep stacks, several limpers, button with 76s. A sound plan is\u2026",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Fold. Suited connectors hate multiway pots."
+        },
+        {
+          "id": "b",
+          "text": "All-in."
+        },
+        {
+          "id": "c",
+          "text": "Limp only if you will call any later raise for 100bb."
+        },
+        {
+          "id": "d",
+          "text": "Call or raise, planning to play a fit-or-fold flop rather than stack off preflop."
+        }
+      ],
+      "correctChoiceId": "d",
+      "explanation": "Suited connectors gain from multiway implied odds and still should not commit 100bb with no pair."
+    }
+  ]
+}
