@@ -11,6 +11,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_streets.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
@@ -74,6 +75,9 @@ enum CoachDialogueVisualKind {
 
   /// Bet / Raise / All-in action meanings.
   aggressiveActions,
+
+  /// Preflop → river street timeline.
+  streetsTimeline,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -104,6 +108,8 @@ class CoachDialogueVisual {
       'Tap Continue when Fold, Check, and Call click.',
     CoachDialogueVisualKind.aggressiveActions =>
       'Tap Continue when Bet, Raise, and All-in click.',
+    CoachDialogueVisualKind.streetsTimeline =>
+      'Tap Continue when the four streets click.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -124,6 +130,8 @@ class CoachDialogueVisual {
       'Fold, Check, and Call action buttons',
     CoachDialogueVisualKind.aggressiveActions =>
       'Bet, Raise, and All-in action buttons',
+    CoachDialogueVisualKind.streetsTimeline =>
+      'Street timeline from preflop to river',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -155,6 +163,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.aggressiveActions,
       );
+    case 'act-01-04-01-explain-streets':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.streetsTimeline,
+      );
   }
 
   final blob =
@@ -163,6 +175,13 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
               '${activity.objectives.join(' ')}'
           .toLowerCase();
 
+  if (blob.contains('four streets') ||
+      blob.contains('preflop, flop, turn, river') ||
+      blob.contains('match bets to move')) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.streetsTimeline,
+    );
+  }
   if (blob.contains('bet opens') ||
       blob.contains('raise reopens') ||
       blob.contains('all-in is just') ||
@@ -239,6 +258,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
         CoachDialogueVisualKind.passiveActions => const PassiveActionsDemo(),
         CoachDialogueVisualKind.aggressiveActions =>
           const AggressiveActionsDemo(),
+        CoachDialogueVisualKind.streetsTimeline => const StreetsTimelineDemo(),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
     );

@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "16b75478afdcb3cfadf80c223c7723291cd883beed8b10f381ecf99cce4433d0",
+  "contentChecksum": "f7d55e808c66d00afc0c641c90742af35bb9e258b3117ef9b957675e49a78bce",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -1877,7 +1877,7 @@
                   "stage": "guided",
                   "renderer": "order_sequence",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Put preflop, flop, and river in chronological order.",
+                  "accessibilityText": "Put preflop, flop, turn, and river in chronological order.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1887,7 +1887,7 @@
                   "objectives": [
                     "Name preflop, flop, turn, and river"
                   ],
-                  "prompt": "Order the streets from first to last.",
+                  "prompt": "Tap the streets from first to last.",
                   "sequenceItems": [
                     {
                       "id": "st-pre",
@@ -1898,6 +1898,10 @@
                       "label": "Flop"
                     },
                     {
+                      "id": "st-turn",
+                      "label": "Turn"
+                    },
+                    {
                       "id": "st-river",
                       "label": "River"
                     }
@@ -1905,16 +1909,17 @@
                   "correctSequence": [
                     "st-pre",
                     "st-flop",
+                    "st-turn",
                     "st-river"
                   ],
                   "sequenceGrading": {
                     "correct": {
                       "grade": "recommended",
-                      "feedback": "Preflop first, then flop, river last."
+                      "feedback": "Preflop → flop → turn → river."
                     },
                     "incorrect": {
                       "grade": "clear_mistake",
-                      "feedback": "Hole cards first; river is the last board card."
+                      "feedback": "Holes first; flop is three; turn then river."
                     }
                   }
                 },
@@ -1934,7 +1939,7 @@
                   "objectives": [
                     "Know preflop order starts left of the big blind"
                   ],
-                  "prompt": "Order the first three seats to act preflop after blinds post.",
+                  "prompt": "Tap seats in the order they act preflop after blinds.",
                   "sequenceItems": [
                     {
                       "id": "seat-utg",
@@ -1971,7 +1976,7 @@
                   "stage": "unguided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Identify that a street ends when action is complete.",
+                  "accessibilityText": "Tap bets matched — a street ends when action is complete.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1981,12 +1986,12 @@
                   "objectives": [
                     "Know a street ends when bets are matched"
                   ],
-                  "prompt": "When does the flop betting round end?",
+                  "prompt": "Flop betting is live. Tap when this street ends.",
                   "choices": [
                     {
                       "id": "matched",
-                      "label": "When every live player has matched the bet and no one re-raises",
-                      "accessibilityText": "When every live player has matched the bet and no one re-raises",
+                      "label": "Bets matched",
+                      "accessibilityText": "Bets matched",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Equalized action closes the street."
@@ -1994,8 +1999,8 @@
                     },
                     {
                       "id": "three-cards",
-                      "label": "As soon as three cards appear",
-                      "accessibilityText": "As soon as three cards appear",
+                      "label": "Flop appears",
+                      "accessibilityText": "Flop appears",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "The flop deal starts the street; betting still happens.",
@@ -2004,8 +2009,8 @@
                     },
                     {
                       "id": "someone-folds",
-                      "label": "When anyone folds",
-                      "accessibilityText": "When anyone folds",
+                      "label": "Someone folds",
+                      "accessibilityText": "Someone folds",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Folding removes a player; others may still act.",
@@ -2020,7 +2025,7 @@
                   "stage": "checkpoint",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Identify first-to-act postflop as left of the button.",
+                  "accessibilityText": "Tap the seat left of the button — first to act postflop.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2031,12 +2036,12 @@
                     "Know preflop order starts left of the big blind",
                     "Name preflop, flop, turn, and river"
                   ],
-                  "prompt": "Postflop multiway. Who acts first?",
+                  "prompt": "Postflop multiway. Tap who acts first.",
                   "choices": [
                     {
                       "id": "sb-first",
-                      "label": "First live seat left of the button",
-                      "accessibilityText": "First live seat left of the button",
+                      "label": "SB",
+                      "accessibilityText": "SB",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Postflop starts left of the button — usually the small blind if live."
@@ -2044,8 +2049,8 @@
                     },
                     {
                       "id": "btn-first",
-                      "label": "The button always acts first",
-                      "accessibilityText": "The button always acts first",
+                      "label": "BTN",
+                      "accessibilityText": "BTN",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Button acts last postflop.",
@@ -2054,8 +2059,8 @@
                     },
                     {
                       "id": "bb-first-always",
-                      "label": "Big blind always acts first every street",
-                      "accessibilityText": "Big blind always acts first every street",
+                      "label": "BB",
+                      "accessibilityText": "BB",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Big blind acts last preflop only.",
@@ -22167,16 +22172,17 @@
       "correctSequence": [
         "st-pre",
         "st-flop",
+        "st-turn",
         "st-river"
       ],
       "sequenceGrading": {
         "correct": {
           "grade": "recommended",
-          "feedback": "Preflop first, then flop, river last."
+          "feedback": "Preflop → flop → turn → river."
         },
         "incorrect": {
           "grade": "clear_mistake",
-          "feedback": "Hole cards first; river is the last board card."
+          "feedback": "Holes first; flop is three; turn then river."
         }
       }
     },

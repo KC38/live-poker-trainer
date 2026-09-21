@@ -16,6 +16,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_streets.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
@@ -540,6 +541,108 @@ void main() {
       1,
     );
 
+    const streetEndChoices = [
+      CourseChoice(id: 'matched', label: 'Bets matched'),
+      CourseChoice(id: 'three-cards', label: 'Flop appears'),
+      CourseChoice(id: 'someone-folds', label: 'Someone folds'),
+    ];
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-01-04-01-unguided-end',
+        region: LessonTableRegion.streetActionMatched,
+        choices: streetEndChoices,
+      ),
+      'matched',
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-01-04-01-checkpoint-postflop',
+        region: LessonTableRegion.smallBlind,
+        choices: const [
+          CourseChoice(id: 'sb-first', label: 'SB'),
+          CourseChoice(id: 'btn-first', label: 'BTN'),
+          CourseChoice(id: 'bb-first-always', label: 'BB'),
+        ],
+      ),
+      'sb-first',
+    );
+    expect(
+      resolveLessonTableScene(
+        CourseActivity(
+          id: 'act-01-04-01-unguided-end',
+          order: 4,
+          stage: ActivityStage.unguided,
+          renderer: ActivityRenderer.selectIdentify,
+          estimatedSeconds: 40,
+          accessibilityText: 'end',
+          acceptedGrades: const [SoftGrade.recommended],
+          choices: streetEndChoices,
+        ),
+      )?.layout,
+      LessonTableLayout.streetEndPhases,
+    );
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-01-04-01-explain-streets',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText: 'Four streets',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.streetsTimeline,
+    );
+    expect(
+      isStreetSequenceActivity(
+        CourseActivity(
+          id: 'act-01-04-01-guided-streets',
+          order: 2,
+          stage: ActivityStage.guided,
+          renderer: ActivityRenderer.orderSequence,
+          estimatedSeconds: 40,
+          accessibilityText: 'streets',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ),
+      isTrue,
+    );
+    expect(
+      isSeatOrderSequenceActivity(
+        CourseActivity(
+          id: 'act-01-04-01-scaffolded-order',
+          order: 3,
+          stage: ActivityStage.scaffolded,
+          renderer: ActivityRenderer.orderSequence,
+          estimatedSeconds: 40,
+          accessibilityText: 'seats',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ),
+      isTrue,
+    );
+    expect(
+      resolveLessonTableScene(
+        CourseActivity(
+          id: 'act-01-04-01-checkpoint-postflop',
+          order: 5,
+          stage: ActivityStage.checkpoint,
+          renderer: ActivityRenderer.selectIdentify,
+          estimatedSeconds: 40,
+          accessibilityText: 'postflop',
+          acceptedGrades: const [SoftGrade.recommended],
+          choices: const [
+            CourseChoice(id: 'sb-first', label: 'SB'),
+            CourseChoice(id: 'btn-first', label: 'BTN'),
+            CourseChoice(id: 'bb-first-always', label: 'BB'),
+          ],
+        ),
+      )?.caption,
+      'Postflop · tap who acts first',
+    );
+
     final guided = CourseActivity(
       id: 'act-01-01-03-guided-button',
       order: 2,
@@ -783,6 +886,80 @@ void main() {
     await tester.tap(find.text('Undo last'));
     await tester.pump();
     expect(controller.draft.orderedIds, isEmpty);
+    controller.dispose();
+  });
+
+  testWidgets('streets guided order taps street tiles with board cards', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-04-01-guided-streets',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.orderSequence,
+      estimatedSeconds: 40,
+      accessibilityText: 'streets',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap the streets from first to last.',
+      sequenceItems: const [
+        CourseChoice(id: 'st-pre', label: 'Preflop'),
+        CourseChoice(id: 'st-flop', label: 'Flop'),
+        CourseChoice(id: 'st-turn', label: 'Turn'),
+        CourseChoice(id: 'st-river', label: 'River'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        OrderSequenceActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('PREFLOP'), findsOneWidget);
+    expect(find.text('FLOP'), findsOneWidget);
+    expect(find.text('TURN'), findsOneWidget);
+    expect(find.text('RIVER'), findsOneWidget);
+    await tester.tap(find.text('PREFLOP'));
+    await tester.pump();
+    await tester.tap(find.text('FLOP'));
+    await tester.pump();
+    expect(controller.draft.orderedIds, ['st-pre', 'st-flop']);
+    controller.dispose();
+  });
+
+  testWidgets('streets unguided end taps bets matched on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-01-04-01-unguided-end',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'end',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Flop betting is live. Tap when this street ends.',
+      choices: const [
+        CourseChoice(id: 'matched', label: 'Bets matched'),
+        CourseChoice(id: 'three-cards', label: 'Flop appears'),
+        CourseChoice(id: 'someone-folds', label: 'Someone folds'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(find.text('Bets matched'), findsWidgets);
+    await tester.tap(find.text('Bets matched').first);
+    await tester.pump();
+    expect(controller.draft.choiceId, 'matched');
     controller.dispose();
   });
 
