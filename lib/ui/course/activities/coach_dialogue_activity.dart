@@ -80,7 +80,7 @@ class CoachDialogueVisual {
     CoachDialogueVisualKind.suitsRanks =>
       'Tap Continue when the four suits and ranks click.',
     CoachDialogueVisualKind.dealerButton =>
-      'Tap Continue when you know where the button sits.',
+      'Tap Continue when you can spot the button and blinds.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -276,42 +276,13 @@ class _DealerButtonDemo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: 72,
-          height: 72,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.cream,
-            border: Border.all(color: AppColors.gold, width: 3),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.gold.withValues(alpha: 0.25),
-                blurRadius: 12,
-              ),
-            ],
-          ),
-          child: Text(
-            'D',
-            style: GoogleFonts.manrope(
-              color: AppColors.bgDark,
-              fontSize: 28,
-              fontWeight: FontWeight.w900,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          'Dealer button',
-          style: GoogleFonts.manrope(
-            color: AppColors.slate,
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ],
+    return const LessonTableContext(
+      scene: LessonTableScene(
+        layout: LessonTableLayout.blindsSeats,
+        highlight: LessonTableHighlight.button,
+        seatCount: 6,
+        buttonSeat: 3,
+      ),
     );
   }
 }

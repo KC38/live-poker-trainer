@@ -403,10 +403,10 @@ export function buildSectionOne() {
                 {objectives: ["Locate the dealer button"]}),
               selectAct({
                 id: "act-01-01-03-guided-button", order: 2, stage: "guided",
-                prompt: "Where is the dealer button?",
-                a11y: "Identify the seat that has the dealer button.",
+                prompt: "Tap the dealer button on the table.",
+                a11y: "Tap the seat that has the dealer button chip.",
                 objectives: ["Locate the dealer button"],
-                hint: "Look for the chip labeled D or Dealer.",
+                hint: "Look for the chip labeled D.",
                 choices: [
                   choice("btn-seat", "The seat with the D chip", "recommended",
                     "That chip is the button."),
@@ -420,8 +420,8 @@ export function buildSectionOne() {
               }),
               selectAct({
                 id: "act-01-01-03-scaffolded-blinds", order: 3, stage: "scaffolded",
-                prompt: "Blinds are 1/2. Who posts the big blind?",
-                a11y: "Choose which seat posts the big blind.",
+                prompt: "Blinds are 1/2. Tap who posts the big blind.",
+                a11y: "Tap the seat that posts the big blind.",
                 objectives: ["Identify the small and big blinds"],
                 choices: [
                   choice("bb-two", "The seat two left of the button, posting 2", "recommended",
@@ -436,8 +436,8 @@ export function buildSectionOne() {
               }),
               selectAct({
                 id: "act-01-01-03-unguided-when", order: 4, stage: "unguided",
-                prompt: "When do the blinds go in?",
-                a11y: "Decide when blinds are posted relative to the deal.",
+                prompt: "Tap when the blinds go in.",
+                a11y: "Tap the hand phase when blinds are posted.",
                 objectives: ["Know blinds post before cards are dealt"],
                 lifeLoss: true,
                 choices: [
@@ -453,8 +453,8 @@ export function buildSectionOne() {
               }),
               selectAct({
                 id: "act-01-01-03-checkpoint-layout", order: 5, stage: "checkpoint",
-                prompt: "Button is seat 5. Who is the small blind?",
-                a11y: "On a six-handed table, name the small blind seat.",
+                prompt: "Button is seat 5. Tap the small blind.",
+                a11y: "On a six-handed table, tap the small blind seat.",
                 objectives: [
                   "Locate the dealer button",
                   "Identify the small and big blinds",

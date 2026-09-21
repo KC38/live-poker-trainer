@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "cc0d0a4a2b428bf972b6621a92e60affa9afcac0151bb82d9a8453d5155fea76",
+  "contentChecksum": "824e6a0977adc57cb98f3e4d35484404b6e5be70f8fc7560c83d62e2b8c94e81",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -591,7 +591,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Identify the seat that has the dealer button.",
+                  "accessibilityText": "Tap the seat that has the dealer button chip.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -601,7 +601,7 @@
                   "objectives": [
                     "Locate the dealer button"
                   ],
-                  "prompt": "Where is the dealer button?",
+                  "prompt": "Tap the dealer button on the table.",
                   "choices": [
                     {
                       "id": "btn-seat",
@@ -637,7 +637,7 @@
                     {
                       "id": "act-01-01-03-guided-button-hint",
                       "kind": "hint",
-                      "text": "Look for the chip labeled D or Dealer."
+                      "text": "Look for the chip labeled D."
                     }
                   ]
                 },
@@ -647,7 +647,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Choose which seat posts the big blind.",
+                  "accessibilityText": "Tap the seat that posts the big blind.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -657,7 +657,7 @@
                   "objectives": [
                     "Identify the small and big blinds"
                   ],
-                  "prompt": "Blinds are 1/2. Who posts the big blind?",
+                  "prompt": "Blinds are 1/2. Tap who posts the big blind.",
                   "choices": [
                     {
                       "id": "bb-two",
@@ -696,7 +696,7 @@
                   "stage": "unguided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Decide when blinds are posted relative to the deal.",
+                  "accessibilityText": "Tap the hand phase when blinds are posted.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -706,7 +706,7 @@
                   "objectives": [
                     "Know blinds post before cards are dealt"
                   ],
-                  "prompt": "When do the blinds go in?",
+                  "prompt": "Tap when the blinds go in.",
                   "choices": [
                     {
                       "id": "before-deal",
@@ -745,7 +745,7 @@
                   "stage": "checkpoint",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "On a six-handed table, name the small blind seat.",
+                  "accessibilityText": "On a six-handed table, tap the small blind seat.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -756,7 +756,7 @@
                     "Locate the dealer button",
                     "Identify the small and big blinds"
                   ],
-                  "prompt": "Button is seat 5. Who is the small blind?",
+                  "prompt": "Button is seat 5. Tap the small blind.",
                   "choices": [
                     {
                       "id": "sb-seat0",

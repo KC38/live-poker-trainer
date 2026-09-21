@@ -357,6 +357,117 @@ void main() {
     );
   });
 
+  test('table region mapping covers Button and blinds activities', () {
+    const buttonChoices = [
+      CourseChoice(id: 'btn-seat', label: 'The seat with the D chip'),
+      CourseChoice(id: 'bb-seat', label: 'The seat that posted 2 chips'),
+      CourseChoice(id: 'empty-seat', label: 'Any empty seat'),
+    ];
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-01-01-03-guided-button',
+        region: LessonTableRegion.button,
+        choices: buttonChoices,
+      ),
+      'btn-seat',
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-01-01-03-guided-button',
+        region: LessonTableRegion.bigBlind,
+        choices: buttonChoices,
+      ),
+      'bb-seat',
+    );
+
+    const blindsChoices = [
+      CourseChoice(id: 'bb-two', label: 'BB'),
+      CourseChoice(id: 'sb-one', label: 'SB'),
+      CourseChoice(id: 'btn-posts', label: 'Button'),
+    ];
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-01-01-03-scaffolded-blinds',
+        region: LessonTableRegion.bigBlind,
+        choices: blindsChoices,
+      ),
+      'bb-two',
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-01-01-03-scaffolded-blinds',
+        region: LessonTableRegion.smallBlind,
+        choices: blindsChoices,
+      ),
+      'sb-one',
+    );
+
+    const whenChoices = [
+      CourseChoice(id: 'before-deal', label: 'Before'),
+      CourseChoice(id: 'after-flop', label: 'After'),
+      CourseChoice(id: 'only-showdown', label: 'Showdown'),
+    ];
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-01-01-03-unguided-when',
+        region: LessonTableRegion.beforeDeal,
+        choices: whenChoices,
+      ),
+      'before-deal',
+    );
+
+    const layoutChoices = [
+      CourseChoice(id: 'sb-seat0', label: 'Seat 0'),
+      CourseChoice(id: 'sb-seat4', label: 'Seat 4'),
+      CourseChoice(id: 'sb-seat1', label: 'Seat 1'),
+    ];
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-01-01-03-checkpoint-layout',
+        region: LessonTableRegion.smallBlind,
+        seatIndex: 0,
+        choices: layoutChoices,
+      ),
+      'sb-seat0',
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-01-01-03-checkpoint-layout',
+        region: LessonTableRegion.bigBlind,
+        seatIndex: 1,
+        choices: layoutChoices,
+      ),
+      'sb-seat1',
+    );
+    expect(
+      blindsSmallBlindSeat(buttonSeat: 5, seatCount: 6),
+      0,
+    );
+    expect(
+      blindsBigBlindSeat(buttonSeat: 5, seatCount: 6),
+      1,
+    );
+
+    final guided = CourseActivity(
+      id: 'act-01-01-03-guided-button',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap button',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap the dealer button on the table.',
+      choices: buttonChoices,
+    );
+    expect(
+      resolveSelectIdentifyPresentation(guided),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final scene = resolveLessonTableScene(guided);
+    expect(scene, isNotNull);
+    expect(scene!.layout, LessonTableLayout.blindsSeats);
+  });
+
   test('suit tap mapping covers full / missing / extra', () {
     const choices = [
       CourseChoice(
