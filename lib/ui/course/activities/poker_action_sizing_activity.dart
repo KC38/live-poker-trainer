@@ -82,7 +82,7 @@ class PokerActionSizingActivity extends StatelessWidget {
                         : spot.stackLabel != null
                         ? 'Tap All-in, Call, or Fold on the dock.'
                         : spot.openPot
-                        ? 'Tap Bet, Raise, or Check on the dock.'
+                        ? 'Tap Bet to open the pot.'
                         : 'Tap your action on the dock.')
                     : 'Ready — Lock in below.',
                 textAlign: TextAlign.center,
