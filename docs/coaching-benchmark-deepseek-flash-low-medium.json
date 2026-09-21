@@ -1,0 +1,56 @@
+{
+  "version": "exploit-benchmark-v1",
+  "caseCount": 60,
+  "structuralRate": 1,
+  "acceptableRecommendationRate": 0.95,
+  "forbiddenAvoidanceRate": 1,
+  "tendencyGroundingRate": 1,
+  "calibrationRate": 1,
+  "totalEstimatedCostUsdMicros": 1193665,
+  "averageEstimatedCostUsdMicros": 19894,
+  "totalDurationMs": 4561821,
+  "averageDurationMs": 76030,
+  "maxDurationMs": 116969,
+  "passed": true,
+  "failures": [
+    {
+      "caseId": "MANIAC|preflop|20|v1|air_checked_to",
+      "structural": true,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": true,
+      "tendencyGrounded": true,
+      "calibrated": true,
+      "estimatedCostUsdMicros": 25163,
+      "durationMs": 91361,
+      "errors": [
+        "recommended OPEN_3_BB outside acceptable set"
+      ]
+    },
+    {
+      "caseId": "LAG|river|20|v0|thin_value_checked_to",
+      "structural": true,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": true,
+      "tendencyGrounded": true,
+      "calibrated": true,
+      "estimatedCostUsdMicros": 23432,
+      "durationMs": 88113,
+      "errors": [
+        "recommended BET_100 outside acceptable set"
+      ]
+    },
+    {
+      "caseId": "LAG|river|200|v1|thin_value_checked_to",
+      "structural": true,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": true,
+      "tendencyGrounded": true,
+      "calibrated": true,
+      "estimatedCostUsdMicros": 14156,
+      "durationMs": 56249,
+      "errors": [
+        "recommended BET_100 outside acceptable set"
+      ]
+    }
+  ]
+}

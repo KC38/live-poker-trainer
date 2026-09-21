@@ -1,0 +1,681 @@
+{
+  "version": "exploit-benchmark-v1",
+  "caseCount": 60,
+  "structuralRate": 0.23333333333333334,
+  "acceptableRecommendationRate": 0.16666666666666666,
+  "forbiddenAvoidanceRate": 0.21666666666666667,
+  "tendencyGroundingRate": 0.23333333333333334,
+  "calibrationRate": 0.21666666666666667,
+  "totalEstimatedCostUsdMicros": 355907,
+  "averageEstimatedCostUsdMicros": 5932,
+  "totalDurationMs": 698311,
+  "averageDurationMs": 11639,
+  "maxDurationMs": 60437,
+  "passed": false,
+  "failures": [
+    {
+      "caseId": "CALLING_STATION|preflop|100|v2|bluff_catch_facing_bet",
+      "structural": true,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": true,
+      "tendencyGrounded": true,
+      "calibrated": true,
+      "estimatedCostUsdMicros": 25966,
+      "durationMs": 55612,
+      "errors": [
+        "recommended CALL outside acceptable set"
+      ]
+    },
+    {
+      "caseId": "TAG|preflop|100|v2|strong_value_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment FOLD"
+      ]
+    },
+    {
+      "caseId": "LAG|preflop|200|v2|bluff_catch_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment ALL_IN:40000"
+      ]
+    },
+    {
+      "caseId": "LAG|flop|20|v0|air_checked_to",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment ALL_IN:3800"
+      ]
+    },
+    {
+      "caseId": "LAG|preflop|100|v1|bluff_catch_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment ALL_IN:20000"
+      ]
+    },
+    {
+      "caseId": "TAG|river|100|v2|thin_value_checked_to",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment ALL_IN:19800"
+      ]
+    },
+    {
+      "caseId": "CALLING_STATION|river|200|v2|thin_value_checked_to",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment ALL_IN:39800"
+      ]
+    },
+    {
+      "caseId": "MANIAC|turn|200|v0|air_checked_to",
+      "structural": true,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": true,
+      "tendencyGrounded": true,
+      "calibrated": true,
+      "estimatedCostUsdMicros": 24192,
+      "durationMs": 53064,
+      "errors": [
+        "recommended BET_33 outside acceptable set"
+      ]
+    },
+    {
+      "caseId": "NIT|turn|200|v1|thin_value_checked_to",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment ALL_IN:39800"
+      ]
+    },
+    {
+      "caseId": "MANIAC|turn|100|v0|strong_value_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: coaching must identify exactly one recommended action"
+      ]
+    },
+    {
+      "caseId": "NIT|flop|200|v0|strong_value_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment FOLD"
+      ]
+    },
+    {
+      "caseId": "LAG|turn|20|v1|thin_value_checked_to",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment ALL_IN:3800"
+      ]
+    },
+    {
+      "caseId": "CALLING_STATION|river|100|v1|strong_value_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment FOLD"
+      ]
+    },
+    {
+      "caseId": "NIT|preflop|20|v1|strong_value_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment FOLD"
+      ]
+    },
+    {
+      "caseId": "MANIAC|flop|200|v0|thin_value_checked_to",
+      "structural": true,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": true,
+      "calibrated": true,
+      "estimatedCostUsdMicros": 20366,
+      "durationMs": 31958,
+      "errors": [
+        "recommended CHECK outside acceptable set",
+        "recommended a forbidden exploit"
+      ]
+    },
+    {
+      "caseId": "TAG|flop|200|v1|strong_value_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment FOLD"
+      ]
+    },
+    {
+      "caseId": "TAG|turn|20|v2|air_checked_to",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment ALL_IN:3800"
+      ]
+    },
+    {
+      "caseId": "MANIAC|river|200|v0|strong_value_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: coaching must identify exactly one recommended action"
+      ]
+    },
+    {
+      "caseId": "TAG|turn|200|v0|thin_value_checked_to",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment ALL_IN:39800"
+      ]
+    },
+    {
+      "caseId": "TAG|preflop|200|v2|strong_value_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment FOLD"
+      ]
+    },
+    {
+      "caseId": "NIT|river|20|v0|thin_value_checked_to",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment ALL_IN:3800"
+      ]
+    },
+    {
+      "caseId": "LAG|flop|200|v2|air_checked_to",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment ALL_IN:39800"
+      ]
+    },
+    {
+      "caseId": "NIT|turn|20|v0|strong_value_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment FOLD"
+      ]
+    },
+    {
+      "caseId": "TAG|preflop|20|v1|strong_value_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment FOLD"
+      ]
+    },
+    {
+      "caseId": "NIT|river|100|v0|strong_value_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment FOLD"
+      ]
+    },
+    {
+      "caseId": "LAG|turn|100|v1|bluff_catch_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment ALL_IN:19800"
+      ]
+    },
+    {
+      "caseId": "TAG|river|20|v2|thin_value_checked_to",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment ALL_IN:3800"
+      ]
+    },
+    {
+      "caseId": "NIT|turn|100|v0|air_checked_to",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment ALL_IN:19800"
+      ]
+    },
+    {
+      "caseId": "LAG|flop|100|v1|air_checked_to",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment BET_100:400"
+      ]
+    },
+    {
+      "caseId": "MANIAC|preflop|20|v1|air_checked_to",
+      "structural": true,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": true,
+      "tendencyGrounded": true,
+      "calibrated": true,
+      "estimatedCostUsdMicros": 22194,
+      "durationMs": 55323,
+      "errors": [
+        "recommended OPEN_4_BB outside acceptable set"
+      ]
+    },
+    {
+      "caseId": "CALLING_STATION|flop|100|v0|strong_value_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment FOLD"
+      ]
+    },
+    {
+      "caseId": "TAG|river|200|v2|air_checked_to",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment BET_100:600"
+      ]
+    },
+    {
+      "caseId": "LAG|turn|200|v2|air_checked_to",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment ALL_IN:39800"
+      ]
+    },
+    {
+      "caseId": "LAG|river|20|v0|thin_value_checked_to",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment ALL_IN:3800"
+      ]
+    },
+    {
+      "caseId": "LAG|river|200|v1|thin_value_checked_to",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment ALL_IN:39800"
+      ]
+    },
+    {
+      "caseId": "MANIAC|flop|100|v0|strong_value_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment FOLD"
+      ]
+    },
+    {
+      "caseId": "MANIAC|river|20|v2|thin_value_checked_to",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment BET_100:600"
+      ]
+    },
+    {
+      "caseId": "CALLING_STATION|turn|20|v0|strong_value_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment FOLD"
+      ]
+    },
+    {
+      "caseId": "CALLING_STATION|river|20|v1|strong_value_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment FOLD"
+      ]
+    },
+    {
+      "caseId": "CALLING_STATION|turn|200|v1|bluff_catch_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment RAISE_100:1300"
+      ]
+    },
+    {
+      "caseId": "MANIAC|preflop|100|v2|strong_value_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment FOLD"
+      ]
+    },
+    {
+      "caseId": "NIT|flop|20|v0|strong_value_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment FOLD"
+      ]
+    },
+    {
+      "caseId": "TAG|flop|20|v2|air_checked_to",
+      "structural": true,
+      "acceptableRecommendation": true,
+      "avoidedForbiddenRecommendation": true,
+      "tendencyGrounded": true,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 26366,
+      "durationMs": 55360,
+      "errors": [
+        "high recommendation confidence despite a medium-confidence read"
+      ]
+    },
+    {
+      "caseId": "LAG|river|100|v2|bluff_catch_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment ALL_IN:19800"
+      ]
+    },
+    {
+      "caseId": "CALLING_STATION|turn|100|v0|air_checked_to",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment ALL_IN:19800"
+      ]
+    },
+    {
+      "caseId": "NIT|flop|100|v1|air_checked_to",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment ALL_IN:19800"
+      ]
+    },
+    {
+      "caseId": "LAG|preflop|20|v1|strong_value_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment FOLD"
+      ]
+    },
+    {
+      "caseId": "MANIAC|flop|20|v0|bluff_catch_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment FOLD"
+      ]
+    },
+    {
+      "caseId": "CALLING_STATION|flop|200|v0|strong_value_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment FOLD"
+      ]
+    },
+    {
+      "caseId": "CALLING_STATION|preflop|20|v0|thin_value_checked_to",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment ALL_IN:4000"
+      ]
+    },
+    {
+      "caseId": "CALLING_STATION|preflop|200|v0|strong_value_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: invalid coaching assessment FOLD"
+      ]
+    }
+  ]
+}

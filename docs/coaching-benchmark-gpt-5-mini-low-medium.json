@@ -1,0 +1,123 @@
+{
+  "version": "exploit-benchmark-v1",
+  "caseCount": 60,
+  "structuralRate": 0.9833333333333333,
+  "acceptableRecommendationRate": 0.8666666666666667,
+  "forbiddenAvoidanceRate": 0.95,
+  "tendencyGroundingRate": 0.9833333333333333,
+  "calibrationRate": 0.9833333333333333,
+  "totalEstimatedCostUsdMicros": 489269,
+  "averageEstimatedCostUsdMicros": 8154,
+  "totalDurationMs": 2400754,
+  "averageDurationMs": 40013,
+  "maxDurationMs": 55227,
+  "passed": false,
+  "failures": [
+    {
+      "caseId": "CALLING_STATION|preflop|100|v2|bluff_catch_facing_bet",
+      "structural": true,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": true,
+      "tendencyGrounded": true,
+      "calibrated": true,
+      "estimatedCostUsdMicros": 8317,
+      "durationMs": 39834,
+      "errors": [
+        "recommended CALL outside acceptable set"
+      ]
+    },
+    {
+      "caseId": "CALLING_STATION|river|200|v2|thin_value_checked_to",
+      "structural": true,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": true,
+      "calibrated": true,
+      "estimatedCostUsdMicros": 8153,
+      "durationMs": 43955,
+      "errors": [
+        "recommended CHECK outside acceptable set",
+        "recommended a forbidden exploit"
+      ]
+    },
+    {
+      "caseId": "MANIAC|turn|200|v0|air_checked_to",
+      "structural": true,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": true,
+      "tendencyGrounded": true,
+      "calibrated": true,
+      "estimatedCostUsdMicros": 6458,
+      "durationMs": 26812,
+      "errors": [
+        "recommended BET_67 outside acceptable set"
+      ]
+    },
+    {
+      "caseId": "LAG|flop|200|v2|air_checked_to",
+      "structural": true,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": true,
+      "tendencyGrounded": true,
+      "calibrated": true,
+      "estimatedCostUsdMicros": 7214,
+      "durationMs": 30257,
+      "errors": [
+        "recommended BET_67 outside acceptable set"
+      ]
+    },
+    {
+      "caseId": "MANIAC|preflop|20|v1|air_checked_to",
+      "structural": true,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": true,
+      "tendencyGrounded": true,
+      "calibrated": true,
+      "estimatedCostUsdMicros": 9130,
+      "durationMs": 41488,
+      "errors": [
+        "recommended OPEN_4_BB outside acceptable set"
+      ]
+    },
+    {
+      "caseId": "LAG|river|20|v0|thin_value_checked_to",
+      "structural": true,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": true,
+      "tendencyGrounded": true,
+      "calibrated": true,
+      "estimatedCostUsdMicros": 9766,
+      "durationMs": 55227,
+      "errors": [
+        "recommended BET_100 outside acceptable set"
+      ]
+    },
+    {
+      "caseId": "NIT|preflop|100|v0|air_checked_to",
+      "structural": true,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": true,
+      "calibrated": true,
+      "estimatedCostUsdMicros": 9031,
+      "durationMs": 41624,
+      "errors": [
+        "recommended OPEN_5_BB outside acceptable set",
+        "recommended a forbidden exploit"
+      ]
+    },
+    {
+      "caseId": "CALLING_STATION|flop|200|v0|strong_value_facing_bet",
+      "structural": false,
+      "acceptableRecommendation": false,
+      "avoidedForbiddenRecommendation": false,
+      "tendencyGrounded": false,
+      "calibrated": false,
+      "estimatedCostUsdMicros": 0,
+      "durationMs": 0,
+      "errors": [
+        "pipeline failure: coaching must identify exactly one recommended action"
+      ]
+    }
+  ]
+}

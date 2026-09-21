@@ -1,0 +1,16 @@
+{
+  "version": "exploit-benchmark-v1",
+  "caseCount": 60,
+  "structuralRate": 1,
+  "acceptableRecommendationRate": 1,
+  "forbiddenAvoidanceRate": 1,
+  "tendencyGroundingRate": 1,
+  "calibrationRate": 1,
+  "totalEstimatedCostUsdMicros": 751781,
+  "averageEstimatedCostUsdMicros": 12530,
+  "totalDurationMs": 599037,
+  "averageDurationMs": 9984,
+  "maxDurationMs": 14583,
+  "passed": true,
+  "failures": []
+}
