@@ -633,6 +633,22 @@ export async function startCourseLessonForUser(options: {
       );
     }
 
+    // Deep-link lock: new starts require catalog prerequisites completed.
+    const completedForPrereqs = Array.isArray(
+      profileSnap.data()?.completedLessonIds,
+    ) ?
+      profileSnap.data()!.completedLessonIds as string[] :
+      [];
+    const missingPrereq = located.lesson.prerequisites.find(
+      (prereqId) => !completedForPrereqs.includes(prereqId),
+    );
+    if (missingPrereq) {
+      throw new HttpsError(
+        "failed-precondition",
+        "Complete the previous lesson before starting this one.",
+      );
+    }
+
     ensureProfileTx(tx, profileRef, profileSnap, {
       catalogVersion,
       timezone,
