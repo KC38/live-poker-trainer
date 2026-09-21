@@ -10,18 +10,23 @@ import 'package:live_poker_trainer/models/course/course_session_models.dart';
 /// Maps server soft grades to lesson feedback chrome.
 class LessonFeedbackSheet extends StatelessWidget {
   /// Creates a feedback sheet.
+  ///
+  /// When [showActions] is false, the runner owns sticky Continue / Try again
+  /// buttons in the footer so they stay reachable above the home indicator.
   const LessonFeedbackSheet({
     super.key,
     required this.result,
     required this.onContinue,
     this.onRetry,
     this.betterChoiceLabel,
+    this.showActions = true,
   });
 
   final SubmitCourseStepResult result;
   final VoidCallback onContinue;
   final VoidCallback? onRetry;
   final String? betterChoiceLabel;
+  final bool showActions;
 
   Color get _accent {
     return switch (result.grade) {
@@ -125,30 +130,32 @@ class LessonFeedbackSheet extends StatelessWidget {
                 ),
               ),
             ],
-            const SizedBox(height: 14),
-            Row(
-              children: [
-                if (onRetry != null && !result.accepted) ...[
+            if (showActions) ...[
+              const SizedBox(height: 14),
+              Row(
+                children: [
+                  if (onRetry != null && !result.accepted) ...[
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: onRetry,
+                        child: const Text('Try again'),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                  ],
                   Expanded(
-                    child: OutlinedButton(
-                      onPressed: onRetry,
-                      child: const Text('Try again'),
+                    child: FilledButton(
+                      onPressed: onContinue,
+                      style: FilledButton.styleFrom(
+                        backgroundColor: AppColors.gold,
+                        foregroundColor: AppColors.bgDark,
+                      ),
+                      child: Text(result.accepted ? 'Continue' : 'Got it'),
                     ),
                   ),
-                  const SizedBox(width: 10),
                 ],
-                Expanded(
-                  child: FilledButton(
-                    onPressed: onContinue,
-                    style: FilledButton.styleFrom(
-                      backgroundColor: AppColors.gold,
-                      foregroundColor: AppColors.bgDark,
-                    ),
-                    child: Text(result.accepted ? 'Continue' : 'Got it'),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ],
         ),
       ),

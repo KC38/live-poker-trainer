@@ -201,12 +201,19 @@ void main() {
     expect(controller.showTargetCue, isTrue);
     controller.selectChoice('c1');
     controller.ensureIdempotencyKey(() => 'fixed-key');
+    final generation = controller.bindGeneration;
     controller.bindActivity(next);
     expect(controller.activity.id, 'b');
     expect(controller.draft.hasAnswer, isFalse);
     expect(controller.lastResult, isNull);
     expect(controller.pendingIdempotencyKey, isNull);
     expect(controller.showTargetCue, isFalse);
+    expect(controller.bindGeneration, generation + 1);
+    // Rebinding the same activity id still clears provisional state.
+    controller.selectChoice('c2');
+    controller.bindActivity(next);
+    expect(controller.draft.hasAnswer, isFalse);
+    expect(controller.bindGeneration, generation + 2);
     controller.dispose();
   });
 

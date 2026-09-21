@@ -29,6 +29,9 @@ class SelectIdentifyActivity extends StatelessWidget {
     final presentation = resolveSelectIdentifyPresentation(activity);
     if (presentation == SelectIdentifyPresentation.tableRegionTap) {
       return _TableRegionTapActivity(
+        key: ValueKey<String>(
+          '${activity.id}-${controller.bindGeneration}',
+        ),
         activity: activity,
         controller: controller,
         showGuidance: showGuidance,
@@ -67,6 +70,9 @@ class SelectIdentifyActivity extends StatelessWidget {
             const SizedBox(height: 16),
             if (presentation == SelectIdentifyPresentation.suitTapPicker)
               SuitTapPicker(
+                key: ValueKey<String>(
+                  '${activity.id}-${controller.bindGeneration}',
+                ),
                 activity: activity,
                 controller: controller,
                 locked: locked,
@@ -159,6 +165,7 @@ class SelectIdentifyActivity extends StatelessWidget {
 
 class _TableRegionTapActivity extends StatefulWidget {
   const _TableRegionTapActivity({
+    super.key,
     required this.activity,
     required this.controller,
     required this.showGuidance,
@@ -333,6 +340,11 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
       oldWidget.controller.removeListener(_syncFromController);
       widget.controller.addListener(_syncFromController);
       _hydrateFromChoice(widget.controller.draft.choiceId);
+      return;
+    }
+    // Same controller, new activity (resume / advance): drop provisional taps.
+    if (oldWidget.activity.id != widget.activity.id) {
+      _hydrateFromChoice(widget.controller.draft.choiceId);
     }
   }
 
@@ -345,6 +357,7 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
   void _syncFromController() {
     final choiceId = widget.controller.draft.choiceId;
     if (choiceId == null) {
+      // Undo after a Check-ready set: drop tiles. Keep provisional 1–2 taps.
       final mapped = mapSuitTapSelectionToChoiceId(
         selected: _selected,
         choices: widget.activity.choices,

@@ -53,6 +53,7 @@ class LessonActivityController extends ChangeNotifier {
   bool _hintVisible = false;
   int _hintRequests = 0;
   String? _pendingIdempotencyKey;
+  int _bindGeneration = 0;
 
   CourseActivity get activity => _activity;
   ActivityDraft get draft => _draft;
@@ -62,6 +63,9 @@ class LessonActivityController extends ChangeNotifier {
   int get hintRequests => _hintRequests;
   String? get pendingIdempotencyKey => _pendingIdempotencyKey;
 
+  /// Bumps when [bindActivity] runs so activity widgets can remount cleanly.
+  int get bindGeneration => _bindGeneration;
+
   /// Whether guided/scaffolded cues should remain visible.
   bool get showTargetCue =>
       activity.stage == ActivityStage.explain ||
@@ -69,13 +73,15 @@ class LessonActivityController extends ChangeNotifier {
       activity.stage == ActivityStage.scaffolded;
 
   void bindActivity(CourseActivity next) {
-    if (identical(_activity, next) && _activity.id == next.id) return;
+    // Always reset local draft/feedback — including rebinding the same
+    // activity id after a stale-activity resync or cold resume.
     _activity = next;
     _draft = const ActivityDraft();
     _lastResult = null;
     _submitting = false;
     _hintVisible = false;
     _pendingIdempotencyKey = null;
+    _bindGeneration += 1;
     notifyListeners();
   }
 

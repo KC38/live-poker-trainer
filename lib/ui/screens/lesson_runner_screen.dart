@@ -156,9 +156,11 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
 
   double get _progress {
     if (_activities.isEmpty || _attempt == null) return 0;
-    final index = _activities.indexWhere(
-      (a) => a.id == _attempt!.currentActivityId,
-    );
+    // Prefer the visible activity so progress does not jump ahead while
+    // soft-grade feedback is still on screen.
+    final visibleId =
+        _activityController?.activity.id ?? _attempt!.currentActivityId;
+    final index = _activities.indexWhere((a) => a.id == visibleId);
     if (index < 0) return 0;
     return (index +
             (_activityController?.lastResult?.accepted == true ? 1 : 0)) /
@@ -191,6 +193,13 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     if (controller == null || attempt == null || catalog == null) return;
     if (!_canSubmit) return;
 
+    // Local cursor drifted from the attempt snapshot (e.g. after a partial
+    // resume). Re-sync instead of sending a stale activityId.
+    if (controller.activity.id != attempt.currentActivityId) {
+      await _resyncToServerCursor();
+      return;
+    }
+
     final key = controller.ensureIdempotencyKey(
       () => CourseService.newRequestKey('step'),
     );
@@ -212,14 +221,20 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       );
       if (!mounted) return;
       controller.finishSubmit(result);
+      final gradedIndex = _activities.indexWhere(
+        (a) => a.id == controller.activity.id,
+      );
       setState(() {
         _attempt = CourseAttemptSnapshot(
           attemptId: attempt.attemptId,
           lessonId: attempt.lessonId,
           catalogVersion: attempt.catalogVersion,
           status: result.remediationRequired ? 'remediation' : attempt.status,
-          activityIndex: result.resume.activityIndex,
-          currentActivityId: result.resume.activityId,
+          // Stay on the graded activity until Continue binds resume. Advancing
+          // the local cursor early is what produced "Stale activity" after
+          // restarts when Check fired again against the previous step.
+          activityIndex: gradedIndex >= 0 ? gradedIndex : attempt.activityIndex,
+          currentActivityId: controller.activity.id,
           livesRemaining: result.livesRemaining,
           livesMax: attempt.livesMax,
           acceptedCount:
@@ -277,6 +292,61 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       }
     } catch (error) {
       controller.failSubmit();
+      if (!mounted) return;
+      if (_isStaleActivityError(error)) {
+        await _resyncToServerCursor(
+          notice: 'Caught up to your saved progress.',
+        );
+        return;
+      }
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('$error')));
+      setState(() {});
+    }
+  }
+
+  bool _isStaleActivityError(Object error) {
+    if (error is CourseServiceException) {
+      final message = error.message.toLowerCase();
+      return error.code == 'aborted' || message.contains('stale activity');
+    }
+    return '$error'.toLowerCase().contains('stale activity');
+  }
+
+  /// Re-reads the server resume pointer and rebinds the visible activity.
+  Future<void> _resyncToServerCursor({String? notice}) async {
+    final catalog = ref.read(courseCatalogProvider).asData?.value;
+    final controller = _activityController;
+    if (catalog == null || controller == null) return;
+    try {
+      final started = await _service.startLesson(
+        lessonId: widget.lessonId,
+        catalogVersion: catalog.catalogVersion,
+        startRequestId: CourseService.newRequestKey('resync'),
+      );
+      if (!mounted) return;
+      final activities =
+          _activities.isEmpty
+              ? catalog.activitiesForLesson(widget.lessonId)
+              : _activities;
+      final current = activities.firstWhere(
+        (a) => a.id == started.resume.activityId,
+        orElse: () => activities.first,
+      );
+      controller.bindActivity(current);
+      setState(() {
+        _activities = activities;
+        _attempt = started.attempt;
+        _error = null;
+        _bootstrapping = false;
+      });
+      if (notice != null && mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(notice)));
+      }
+    } catch (error) {
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
@@ -515,6 +585,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                                   activity,
                                   controller.lastResult!.betterChoiceId,
                                 ),
+                                // Sticky footer owns Continue / Try again so
+                                // CTAs stay reachable on short viewports.
+                                showActions: false,
                                 onContinue: _continueAfterFeedback,
                                 onRetry:
                                     controller.lastResult!.accepted
@@ -532,56 +605,67 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                   ),
                 ),
               ),
-              if (controller.lastResult == null) ...[
-                const SizedBox(height: 12),
-                // Rebuild with the activity controller so Check enables as
-                // soon as a draft answer lands (selection / order / numeric).
-                AnimatedBuilder(
-                  animation: controller,
-                  builder: (context, _) {
-                    final canSubmit = _canSubmit && !_completing;
-                    return Row(
-                      children: [
-                        if (controller.draft.hasAnswer)
-                          TextButton(
-                            onPressed:
-                                controller.submitting
-                                    ? null
-                                    : () {
-                                      controller.undoDraft();
-                                      setState(() {});
-                                    },
-                            child: const Text('Undo'),
-                          ),
-                        const Spacer(),
-                        ConstrainedBox(
-                          constraints: BoxConstraints(
-                            minWidth: largeText ? 160 : 140,
-                            minHeight: 48,
-                          ),
-                          child: FilledButton(
-                            onPressed: canSubmit ? _submit : null,
-                            style: FilledButton.styleFrom(
-                              backgroundColor: AppColors.gold,
-                              foregroundColor: AppColors.bgDark,
-                              disabledBackgroundColor: AppColors.slateDark,
-                              disabledForegroundColor: AppColors.slate,
-                            ),
-                            child: Text(
+              const SizedBox(height: 12),
+              AnimatedBuilder(
+                animation: controller,
+                builder: (context, _) {
+                  final result = controller.lastResult;
+                  if (result != null) {
+                    return _FeedbackFooter(
+                      result: result,
+                      completing: _completing,
+                      onContinue: _continueAfterFeedback,
+                      onRetry:
+                          result.accepted
+                              ? null
+                              : () {
+                                controller.clearFeedbackForRetry();
+                                setState(() {});
+                              },
+                    );
+                  }
+                  final canSubmit = _canSubmit && !_completing;
+                  return Row(
+                    children: [
+                      if (controller.draft.hasAnswer)
+                        TextButton(
+                          onPressed:
                               controller.submitting
-                                  ? 'Checking…'
-                                  : activity.renderer ==
-                                      ActivityRenderer.coachDialogue
-                                  ? 'Continue'
-                                  : 'Check',
-                            ),
+                                  ? null
+                                  : () {
+                                    controller.undoDraft();
+                                    setState(() {});
+                                  },
+                          child: const Text('Undo'),
+                        ),
+                      const Spacer(),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: largeText ? 160 : 140,
+                          minHeight: 48,
+                        ),
+                        child: FilledButton(
+                          onPressed: canSubmit ? _submit : null,
+                          style: FilledButton.styleFrom(
+                            backgroundColor: AppColors.gold,
+                            foregroundColor: AppColors.bgDark,
+                            disabledBackgroundColor: AppColors.slateDark,
+                            disabledForegroundColor: AppColors.slate,
+                          ),
+                          child: Text(
+                            controller.submitting
+                                ? 'Checking…'
+                                : activity.renderer ==
+                                    ActivityRenderer.coachDialogue
+                                ? 'Continue'
+                                : 'Check',
                           ),
                         ),
-                      ],
-                    );
-                  },
-                ),
-              ],
+                      ),
+                    ],
+                  );
+                },
+              ),
             ],
           ),
         );
@@ -622,4 +706,50 @@ String _stageWire(ActivityStage stage) {
     ActivityStage.checkpoint => 'checkpoint',
     ActivityStage.jumpTest => 'jump_test',
   };
+}
+
+/// Sticky Continue / Try again actions so feedback CTAs never sit under the fold.
+class _FeedbackFooter extends StatelessWidget {
+  const _FeedbackFooter({
+    required this.result,
+    required this.onContinue,
+    required this.completing,
+    this.onRetry,
+  });
+
+  final SubmitCourseStepResult result;
+  final VoidCallback onContinue;
+  final VoidCallback? onRetry;
+  final bool completing;
+
+  @override
+  Widget build(BuildContext context) {
+    final largeText = MediaQuery.textScalerOf(context).scale(1) > 1.15;
+    return Row(
+      children: [
+        if (onRetry != null && !result.accepted) ...[
+          Expanded(
+            child: OutlinedButton(
+              onPressed: completing ? null : onRetry,
+              child: const Text('Try again'),
+            ),
+          ),
+          const SizedBox(width: 10),
+        ],
+        Expanded(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: largeText ? 52 : 48),
+            child: FilledButton(
+              onPressed: completing ? null : onContinue,
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.gold,
+                foregroundColor: AppColors.bgDark,
+              ),
+              child: Text(result.accepted ? 'Continue' : 'Got it'),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }

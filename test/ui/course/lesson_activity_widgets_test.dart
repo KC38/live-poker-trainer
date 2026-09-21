@@ -371,6 +371,64 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('suit tap picker cold-starts empty after activity rebind', (
+    tester,
+  ) async {
+    final guided = CourseActivity(
+      id: 'act-01-01-02-guided-suits',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Pick suits',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap every suit in a standard deck.',
+      choices: const [
+        CourseChoice(
+          id: 'suits-full',
+          label: 'Hearts, diamonds, clubs, spades',
+        ),
+        CourseChoice(id: 'suits-missing', label: 'Hearts, diamonds, clubs'),
+        CourseChoice(
+          id: 'suits-extra',
+          label: 'Hearts, diamonds, clubs, spades, stars',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: guided);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: guided,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    await tester.tap(find.text('Hearts'));
+    await tester.pump();
+    expect(find.text('Keep tapping — include every real suit.'), findsOneWidget);
+
+    // Simulate lesson resume onto a fresh controller bind of the same step.
+    controller.bindActivity(guided);
+    await tester.pump();
+    expect(controller.draft.choiceId, isNull);
+    expect(find.text('Tap suits to build your answer.'), findsOneWidget);
+    expect(find.byType(SuitTapPicker), findsOneWidget);
+
+    await tester.tap(find.text('Hearts'));
+    await tester.pump();
+    await tester.tap(find.text('Diamonds'));
+    await tester.pump();
+    await tester.tap(find.text('Clubs'));
+    await tester.pump();
+    await tester.tap(find.text('Spades'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'suits-full');
+    expect(find.text('Ready — Check when it looks right.'), findsOneWidget);
+    controller.dispose();
+  });
+
   testWidgets('hole-card choices render MiniCard faces', (tester) async {
     final activity = CourseActivity(
       id: 'act-01-01-02-unguided-suited',
