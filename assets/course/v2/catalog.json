@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "c2c2d62e8035de32b20426bd76e2a2029619f34b1fd283e553533f317d5b07c0",
+  "contentChecksum": "06c0d5db88da58edfd787015d8431c1016b2afc1a13e332d42b3036666bf4299",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -1878,7 +1878,7 @@
                   "stage": "guided",
                   "renderer": "authored_multi_step_hand",
                   "estimatedSeconds": 70,
-                  "accessibilityText": "Play a two-street guided hand on the button.",
+                  "accessibilityText": "Button with A9s — open to 6, then take the pot when blinds fold.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1892,13 +1892,13 @@
                     {
                       "id": "step-01-06-pre",
                       "street": "preflop",
-                      "prompt": "Folds to you on the button with A9s. Blinds 1/2. Action?",
-                      "accessibilityText": "Choose a button open with ace-nine suited.",
+                      "prompt": "Button with A9s. Folds to you. Blinds 1/2.",
+                      "accessibilityText": "Open to 6 from the button with ace-nine suited.",
                       "choices": [
                         {
                           "id": "open-6",
-                          "label": "Open to 6",
-                          "accessibilityText": "Open to 6",
+                          "label": "Raise to 6",
+                          "accessibilityText": "Raise to 6",
                           "action": "RAISE",
                           "amountBb": 3
                         },
@@ -1919,23 +1919,23 @@
                     {
                       "id": "step-01-06-flop",
                       "street": "flop",
-                      "prompt": "Blinds fold. Pot is yours. What happened?",
-                      "accessibilityText": "Recognize winning when everyone folds.",
+                      "prompt": "Blinds fold. What happened?",
+                      "accessibilityText": "You won — everyone folded.",
                       "choices": [
                         {
                           "id": "won-folds",
-                          "label": "You won — everyone folded",
-                          "accessibilityText": "You won — everyone folded"
+                          "label": "Won pot",
+                          "accessibilityText": "Won pot"
                         },
                         {
                           "id": "must-deal",
-                          "label": "You must still see a flop",
-                          "accessibilityText": "You must still see a flop"
+                          "label": "Must flop",
+                          "accessibilityText": "Must flop"
                         },
                         {
                           "id": "show-anyway",
-                          "label": "Show your cards to claim the pot",
-                          "accessibilityText": "Show your cards to claim the pot"
+                          "label": "Show cards",
+                          "accessibilityText": "Show cards"
                         }
                       ]
                     }
@@ -1947,7 +1947,7 @@
                   "stage": "scaffolded",
                   "renderer": "authored_multi_step_hand",
                   "estimatedSeconds": 70,
-                  "accessibilityText": "Continue a called open through a flop decision.",
+                  "accessibilityText": "BB calls your open — confirm the flop, then bet top pair.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1961,31 +1961,31 @@
                     {
                       "id": "step-01-06-bb-defend",
                       "street": "preflop",
-                      "prompt": "You open BTN to 6. BB calls. Flop coming. Ready?",
-                      "accessibilityText": "Confirm the hand continues to the flop.",
+                      "prompt": "You open BTN to 6. BB calls. Next?",
+                      "accessibilityText": "Yes — watch the flop next.",
                       "choices": [
                         {
                           "id": "ready-flop",
-                          "label": "Yes — watch the flop next",
-                          "accessibilityText": "Yes — watch the flop next"
+                          "label": "See flop",
+                          "accessibilityText": "See flop"
                         },
                         {
                           "id": "already-won",
-                          "label": "Hand is already over",
-                          "accessibilityText": "Hand is already over"
+                          "label": "Already over",
+                          "accessibilityText": "Already over"
                         }
                       ]
                     },
                     {
                       "id": "step-01-06-flop-cbet",
                       "street": "flop",
-                      "prompt": "Flop A72 rainbow. BB checks. You hold A9s. Action?",
-                      "accessibilityText": "Choose a bet with top pair on the flop.",
+                      "prompt": "Flop A72 rainbow. BB checks. You hold A9s.",
+                      "accessibilityText": "Bet 6 into 13 with top pair.",
                       "choices": [
                         {
                           "id": "cbet",
-                          "label": "Bet 6 into 13",
-                          "accessibilityText": "Bet 6 into 13",
+                          "label": "Bet 6",
+                          "accessibilityText": "Bet 6",
                           "action": "BET",
                           "amountBb": 3
                         },
@@ -2011,7 +2011,7 @@
                   "stage": "unguided",
                   "renderer": "full_table_hand_lab",
                   "estimatedSeconds": 90,
-                  "accessibilityText": "Play a short scripted live cash hand as the big blind.",
+                  "accessibilityText": "Big blind vs button open — call, fold, or jam.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2021,7 +2021,7 @@
                   "objectives": [
                     "Finish without freezing on basic decisions"
                   ],
-                  "prompt": "Defend or fold this big-blind hand.",
+                  "prompt": "BTN opens to 6. You hold A7o in the big blind.",
                   "choices": [
                     {
                       "id": "fold-bb",
@@ -2031,8 +2031,8 @@
                     },
                     {
                       "id": "call-bb",
-                      "label": "Call 4 more",
-                      "accessibilityText": "Call 4 more",
+                      "label": "Call 4",
+                      "accessibilityText": "Call 4",
                       "action": "CALL"
                     },
                     {
@@ -2050,7 +2050,7 @@
                   "stage": "checkpoint",
                   "renderer": "authored_multi_step_hand",
                   "estimatedSeconds": 70,
-                  "accessibilityText": "Finish a short hand from open to fold-win.",
+                  "accessibilityText": "Button with KQo — open, then take the blinds when they fold.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2065,8 +2065,8 @@
                     {
                       "id": "step-01-06-cp-open",
                       "street": "preflop",
-                      "prompt": "CO folds. You are on the button with KQo. Action?",
-                      "accessibilityText": "Open king-queen offsuit on the button.",
+                      "prompt": "Button with KQo. CO folds. Blinds 1/2.",
+                      "accessibilityText": "Open to 6 with king-queen offsuit on the button.",
                       "choices": [
                         {
                           "id": "open-kq",
@@ -2093,17 +2093,17 @@
                       "id": "step-01-06-cp-end",
                       "street": "preflop",
                       "prompt": "Both blinds fold. Result?",
-                      "accessibilityText": "Confirm the hand ends when blinds fold.",
+                      "accessibilityText": "You win the blinds.",
                       "choices": [
                         {
                           "id": "take-down",
-                          "label": "You win the blinds",
-                          "accessibilityText": "You win the blinds"
+                          "label": "Win blinds",
+                          "accessibilityText": "Win blinds"
                         },
                         {
                           "id": "force-flop",
-                          "label": "Still deal a flop",
-                          "accessibilityText": "Still deal a flop"
+                          "label": "Force flop",
+                          "accessibilityText": "Force flop"
                         }
                       ]
                     }

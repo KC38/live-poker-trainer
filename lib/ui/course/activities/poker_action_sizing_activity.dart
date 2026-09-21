@@ -35,7 +35,9 @@ class PokerActionSizingActivity extends StatelessWidget {
         final locked = controller.submitting || controller.lastResult != null;
         final coach =
             activity.primaryCoachLine?.text ??
-            (spot?.identifyUnavailable == true
+            (activity.id == 'act-01-06-01-unguided-lab'
+                ? 'Big blind vs a button open — tap Fold, Call, or Jam.'
+                : spot?.identifyUnavailable == true
                 ? 'A bet is out — tap the action you cannot take.'
                 : spot?.stackLabel != null
                 ? 'Short stack — tap what you can put in.'

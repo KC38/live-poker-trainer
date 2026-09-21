@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
+import 'package:live_poker_trainer/ui/course/activities/authored_multi_step_activity.dart';
 import 'package:live_poker_trainer/ui/course/activities/coach_dialogue_activity.dart';
 import 'package:live_poker_trainer/ui/course/activities/numeric_pot_price_activity.dart';
 import 'package:live_poker_trainer/ui/course/activities/order_sequence_activity.dart';
@@ -741,6 +742,65 @@ void main() {
       CoachDialogueVisualKind.winningPaths,
     );
     expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-01-06-01-explain-run',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText: 'One short hand. Blinds post, you act, we reach an ending.',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.toyHandRun,
+    );
+    expect(
+      resolveToyHandStepSpot(
+        activityId: 'act-01-06-01-guided-steps',
+        stepId: 'step-01-06-pre',
+      )?.openPot,
+      isTrue,
+    );
+    expect(
+      resolveToyHandStepSpot(
+        activityId: 'act-01-06-01-scaffolded-multi',
+        stepId: 'step-01-06-flop-cbet',
+      )?.boardCodes,
+      ['As', '7c', '2d'],
+    );
+    expect(
+      resolveLessonActionSpot(
+        CourseActivity(
+          id: 'act-01-06-01-unguided-lab',
+          order: 4,
+          stage: ActivityStage.unguided,
+          renderer: ActivityRenderer.fullTableHandLab,
+          estimatedSeconds: 90,
+          accessibilityText: 'bb',
+          acceptedGrades: const [SoftGrade.recommended],
+          choices: const [
+            CourseChoice(id: 'fold-bb', label: 'Fold', action: 'FOLD'),
+          ],
+        ),
+      )?.facingBet,
+      isTrue,
+    );
+    expect(
+      isLessonActionTableActivity(
+        CourseActivity(
+          id: 'act-01-06-01-guided-steps',
+          order: 2,
+          stage: ActivityStage.guided,
+          renderer: ActivityRenderer.authoredMultiStepHand,
+          estimatedSeconds: 70,
+          accessibilityText: 'guided',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ),
+      isTrue,
+    );
+    expect(
       resolveSelectIdentifyPresentation(
         CourseActivity(
           id: 'act-01-05-01-checkpoint-side',
@@ -1075,6 +1135,46 @@ void main() {
     await tester.tap(find.text('Bets matched').first);
     await tester.pump();
     expect(controller.draft.choiceId, 'matched');
+    controller.dispose();
+  });
+
+  testWidgets('toy hand guided step opens on action dock', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-01-06-01-guided-steps',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 70,
+      accessibilityText: 'guided',
+      acceptedGrades: const [SoftGrade.recommended],
+      handSteps: const [
+        CourseHandStep(
+          id: 'step-01-06-pre',
+          street: 'preflop',
+          prompt: 'Button with A9s. Folds to you.',
+          choices: [
+            CourseChoice(id: 'open-6', label: 'Raise to 6', action: 'RAISE'),
+            CourseChoice(id: 'limp-a9', label: 'Limp', action: 'CALL'),
+            CourseChoice(id: 'fold-a9', label: 'Fold', action: 'FOLD'),
+          ],
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        AuthoredMultiStepActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.textContaining('Preflop · Button'), findsOneWidget);
+    expect(find.text('RAISE TO 6'), findsOneWidget);
+    await tester.tap(find.text('RAISE TO 6'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'open-6');
     controller.dispose();
   });
 

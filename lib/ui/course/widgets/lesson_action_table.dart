@@ -118,6 +118,77 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         facingBet: false,
         openPot: true,
       );
+    case 'act-01-06-01-unguided-lab':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', '7d'],
+        potLabel: 'Pot 3 → 9',
+        villainLine: 'BTN opens to 6',
+        streetLabel: 'Preflop · Big blind',
+        facingBet: true,
+      );
+  }
+  return null;
+}
+
+/// Mini-table spot for one authored multi-step hand decision.
+LessonActionSpot? resolveToyHandStepSpot({
+  required String activityId,
+  required String stepId,
+}) {
+  if (!activityId.startsWith('act-01-06-01-')) return null;
+  switch (stepId) {
+    case 'step-01-06-pre':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', '9h'],
+        potLabel: 'Pot 3',
+        villainLine: 'Folds to you',
+        streetLabel: 'Preflop · Button',
+        facingBet: false,
+        openPot: true,
+      );
+    case 'step-01-06-flop':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', '9h'],
+        potLabel: 'Pot 9',
+        villainLine: 'Blinds fold',
+        streetLabel: 'Hand over',
+        facingBet: false,
+      );
+    case 'step-01-06-bb-defend':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', '9h'],
+        potLabel: 'Pot 13',
+        villainLine: 'BB calls your open',
+        streetLabel: 'Preflop · Heading to flop',
+        facingBet: false,
+      );
+    case 'step-01-06-flop-cbet':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', '9h'],
+        boardCodes: ['As', '7c', '2d'],
+        potLabel: 'Pot 13',
+        villainLine: 'BB checks',
+        streetLabel: 'Flop · A72 rainbow',
+        facingBet: false,
+        openPot: true,
+      );
+    case 'step-01-06-cp-open':
+      return const LessonActionSpot(
+        heroCodes: ['Kh', 'Qd'],
+        potLabel: 'Pot 3',
+        villainLine: 'CO folds',
+        streetLabel: 'Preflop · Button',
+        facingBet: false,
+        openPot: true,
+      );
+    case 'step-01-06-cp-end':
+      return const LessonActionSpot(
+        heroCodes: ['Kh', 'Qd'],
+        potLabel: 'Pot 9',
+        villainLine: 'Both blinds fold',
+        streetLabel: 'Hand over',
+        facingBet: false,
+      );
   }
   return null;
 }
@@ -125,6 +196,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
 /// Whether this activity should render the mini-table action dock.
 bool isLessonActionTableActivity(CourseActivity activity) {
   final id = activity.id;
+  if (id.startsWith('act-01-06-01-') &&
+      (activity.renderer == ActivityRenderer.authoredMultiStepHand ||
+          activity.renderer == ActivityRenderer.fullTableHandLab)) {
+    return true;
+  }
   return (id.startsWith('act-01-03-01-') || id.startsWith('act-01-03-02-')) &&
       activity.renderer == ActivityRenderer.pokerActionSizing;
 }

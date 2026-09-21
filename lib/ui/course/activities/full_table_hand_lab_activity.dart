@@ -2,11 +2,10 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/activities/poker_action_sizing_activity.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 /// Minimal hand-lab shell: felt framing + authored decision choices.
@@ -31,57 +30,27 @@ class FullTableHandLabActivity extends StatelessWidget {
     if (activity.choices.isEmpty) {
       return UnsupportedHandLabNotice(activity: activity);
     }
+    // Toy-hand / action lessons: reuse the mini-table dock (no nested felt box).
+    if (isLessonActionTableActivity(activity) &&
+        resolveLessonActionSpot(activity) != null) {
+      return PokerActionSizingActivity(
+        activity: activity,
+        controller: controller,
+        showGuidance: showGuidance,
+      );
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [AppColors.feltLight, AppColors.feltDark],
-            ),
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: AppColors.feltBorder),
+        if (showGuidance)
+          const RexCoachLine(
+            text: 'Hand lab — tap the action you would take live.',
           ),
-          child: Column(
-            children: [
-              Text(
-                'Hand lab',
-                style: GoogleFonts.manrope(
-                  color: AppColors.gold,
-                  fontWeight: FontWeight.w800,
-                  fontSize: 12,
-                  letterSpacing: 1,
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                activity.prompt ?? activity.accessibilityText,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.manrope(
-                  color: AppColors.cream,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              if (activity.handLabSpecId != null) ...[
-                const SizedBox(height: 6),
-                Text(
-                  activity.handLabSpecId!,
-                  style: GoogleFonts.jetBrainsMono(
-                    color: AppColors.slate,
-                    fontSize: 11,
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
         PokerActionSizingActivity(
           activity: activity,
           controller: controller,
-          showGuidance: showGuidance,
+          showGuidance: false,
         ),
       ],
     );
