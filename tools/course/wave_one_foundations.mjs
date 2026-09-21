@@ -39,7 +39,7 @@ export function choice(id, label, grade, feedback, extra = {}) {
 
 export function selectAct({
   id, order, stage, prompt, a11y, objectives, choices,
-  lifeLoss = false, hint,
+  lifeLoss = false, hint, playerTypeRefs = [],
 }) {
   const act = {
     id, order, stage, renderer: "select_identify",
@@ -51,6 +51,7 @@ export function selectAct({
     prompt,
     choices,
   };
+  if (playerTypeRefs.length) act.playerTypeRefs = playerTypeRefs;
   if (hint) {
     act.coachMedia = [{id: `${id}-hint`, kind: "hint", text: hint}];
   }
@@ -101,7 +102,8 @@ export function numericAct({
 }
 
 export function actionAct({
-  id, order, stage, prompt, a11y, objectives, choices, lifeLoss = false, hint,
+  id, order, stage, prompt, a11y, objectives, choices,
+  lifeLoss = false, hint, playerTypeRefs = [],
 }) {
   const act = {
     id, order, stage, renderer: "poker_action_sizing",
@@ -113,6 +115,7 @@ export function actionAct({
     prompt,
     choices,
   };
+  if (playerTypeRefs.length) act.playerTypeRefs = playerTypeRefs;
   if (hint) {
     act.coachMedia = [{id: `${id}-hint`, kind: "hint", text: hint}];
   }
@@ -121,8 +124,9 @@ export function actionAct({
 
 export function multiStepAct({
   id, order, stage, a11y, objectives, steps, lifeLoss = false,
+  playerTypeRefs = [],
 }) {
-  return {
+  const act = {
     id, order, stage, renderer: "authored_multi_step_hand",
     estimatedSeconds: 70,
     accessibilityText: a11y,
@@ -131,12 +135,15 @@ export function multiStepAct({
     objectives,
     handSteps: steps,
   };
+  if (playerTypeRefs.length) act.playerTypeRefs = playerTypeRefs;
+  return act;
 }
 
 export function handLabAct({
   id, order, stage, prompt, a11y, objectives, choices, lab, lifeLoss = true,
+  playerTypeRefs = [],
 }) {
-  return {
+  const act = {
     id, order, stage, renderer: "full_table_hand_lab",
     estimatedSeconds: 90,
     accessibilityText: a11y,
@@ -147,6 +154,8 @@ export function handLabAct({
     choices,
     handLabSpec: lab,
   };
+  if (playerTypeRefs.length) act.playerTypeRefs = playerTypeRefs;
+  return act;
 }
 
 export function lesson({

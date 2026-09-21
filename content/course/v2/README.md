@@ -3,8 +3,9 @@
 Canonical live-cash No-Limit Hold'em course source for Flutter and Cloud
 Functions. Plan 02 defines the contract and pipeline. Plan 07 authors
 Sections 1–2 (Never Played; Rules Known / Home Games). Plan 08 authors
-Sections 3–4 (First Casino Sessions; Regular Live Cash Player). Later
-sections remain stubs until wave three.
+Sections 3–4 (First Casino Sessions; Regular Live Cash Player). Plan 09
+authors Sections 5–7 (Winning 1/2; Advanced Live Cash; Full-Hand
+Integration), including TAG/LAG graduation.
 
 ## Layout
 
@@ -43,7 +44,8 @@ node tools/course/build_seed_course.mjs
 
 Section 1–2 authoring lives in `tools/course/wave_one_foundations.mjs`.
 Section 3–4 authoring lives in `tools/course/wave_two_live_competence.mjs`.
-Both are composed by `build_seed_course.mjs`.
+Section 5–7 authoring lives in `tools/course/wave_three_advanced_play.mjs`.
+All are composed by `build_seed_course.mjs`.
 
 ## Scope
 
