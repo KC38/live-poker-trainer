@@ -99,7 +99,7 @@ scaffolding over repeated attempts, and keeps reading short.
 | [05](05-lesson-first-onboarding-and-account-linking.md) | Anonymous lesson-first onboarding/linking | 01–04 | Done (PR #176; deploy verified from `3adb18e`) |
 | [06](06-home-course-map-and-rex-coach.md) | Home path and coach | 01–05 | Done (PR #180; deploy from `5fe26c4`) |
 | [07](07-course-wave-one-foundations.md) | Sections 1–2 | 02, 04 | Done (PR #174; deploy from `ecf3ba9`) |
-| [08](08-course-wave-two-live-competence.md) | Sections 3–4 and player types | 07 | |
+| [08](08-course-wave-two-live-competence.md) | Sections 3–4 and player types | 07 | Done |
 | [09](09-course-wave-three-advanced-play.md) | Sections 5–7 and integrated play | 08 | |
 | [10](10-live-training-course-bridge.md) | Coached warm-up and hand labs | 03, 04, 07–09 | |
 | [11](11-profile-migration-observability-rollout.md) | Profile, cleanup, rollout | 01–10 | |

@@ -1,5 +1,20 @@
 # Plan 08 — Course Wave Two: Live Competence and Player Types
 
+**Status: Done**
+
+- Merged: https://github.com/KC38/live-poker-trainer/pull/181
+  (`9abd823`) on `main`
+- Cloud Functions deploy: completed from `origin/main` at `9abd823`
+  (course bank regenerated with Sections 3–4 content)
+- CI: `course-contract` passed on PR #181
+  (https://github.com/KC38/live-poker-trainer/actions/runs/35584946789)
+- Content: Section 3 (First Casino) — 8 units including jump test;
+  Section 4 (Regular Live) — 10 units including Calling Station / Nit /
+  Maniac observe→label→adjust lessons and Section 4 jump test
+- Authoring source: `tools/course/wave_two_live_competence.mjs`
+- Entitlement: Section 4 jump grants `liveTraining` with source
+  `section4_jump` (unit + emulator coverage)
+
 ## Objective
 
 Author Sections 3–4 for first-casino and regular 1/2 players. Establish sound
