@@ -34,7 +34,7 @@ void main() {
     expect(lessonIds.toSet(), hasLength(lessonIds.length));
     expect(activityIds.toSet(), hasLength(activityIds.length));
     expect(lessonIds.first, 'lesson-01-01-01-your-two-cards');
-    expect(lessonIds.last, 'lesson-07-01-01-plan-stub');
+    expect(lessonIds.last, 'lesson-07-12-01-five-type-final');
     expect(activityIds, contains('act-01-06-01-unguided-lab'));
     expect(activityIds, contains('act-02-07-01-unguided-lab'));
     expect(activityIds, contains('act-01-01-01-explain-hole-cards'));

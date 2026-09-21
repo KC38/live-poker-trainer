@@ -21,7 +21,7 @@ describe("course catalog bank", () => {
     expect(lessonIdsInOrder()[0]).toBe(
       "lesson-01-01-01-your-two-cards",
     );
-    expect(lessonIdsInOrder().at(-1)).toBe("lesson-07-01-01-plan-stub");
+    expect(lessonIdsInOrder().at(-1)).toBe("lesson-07-12-01-five-type-final");
     expect(activityIdsInOrder()).toContain("act-01-06-01-unguided-lab");
     expect(courseBank.handLabsById["lab-01-06-01-bb-defend"]).toBeTruthy();
     expect(courseBank.handLabsById["lab-02-07-01-full-ring-btn"]).toBeTruthy();
@@ -30,7 +30,16 @@ describe("course catalog bank", () => {
     expect(courseBank.sections[1].units).toHaveLength(7);
     expect(courseBank.sections[2].units).toHaveLength(8);
     expect(courseBank.sections[3].units).toHaveLength(10);
+    expect(courseBank.sections[4].units).toHaveLength(9);
+    expect(courseBank.sections[5].units).toHaveLength(13);
+    expect(courseBank.sections[6].units).toHaveLength(12);
     expect(courseBank.handLabsById["lab-04-10-01-btn-vs-nit"]).toBeTruthy();
+    expect(
+      courseBank.playerTypes.find((p) => p.id === "tag")?.introducedByLessonId,
+    ).toBe("lesson-06-11-02-meet-tag");
+    expect(
+      courseBank.playerTypes.find((p) => p.id === "lag")?.introducedByLessonId,
+    ).toBe("lesson-06-12-02-meet-lag");
   });
 
   it("matches the generated client catalog checksum and id order", () => {

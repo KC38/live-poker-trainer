@@ -143,6 +143,52 @@ test("wave two sections expose postflop units, types, and jump tests", () => {
   assert.ok(jump.activities.every((a) => a.stage === "jump_test"));
 });
 
+test("wave three sections expose advanced units, TAG/LAG, and capstones", () => {
+  const course = loadCourseJson(resolve(ROOT, "content/course/v2/course.json"));
+  const {errors, clientCatalog} = validateAndGenerate(course);
+  assert.equal(errors.length, 0, errors.join("\n"));
+  const sec5 = clientCatalog.sections[4];
+  const sec6 = clientCatalog.sections[5];
+  const sec7 = clientCatalog.sections[6];
+  assert.equal(sec5.id, "sec-05-winning-12");
+  assert.equal(sec6.id, "sec-06-advanced-live");
+  assert.equal(sec7.id, "sec-07-full-hand-integration");
+  assert.equal(sec5.units.length, 9);
+  assert.equal(sec6.units.length, 13);
+  assert.equal(sec7.units.length, 12);
+  const sec5Blob = JSON.stringify(sec5);
+  for (const label of ["TAG", "LAG"]) {
+    assert.equal(sec5Blob.includes(label), false, `sec5 leaked ${label}`);
+  }
+  for (const id of [
+    "lesson-06-11-02-meet-tag",
+    "lesson-06-12-02-meet-lag",
+    "lesson-07-10-01-capstone-srp",
+    "lesson-07-10-02-capstone-3bet",
+    "lesson-07-10-03-capstone-multiway-deep",
+    "lesson-07-12-01-five-type-final",
+  ]) {
+    assert.ok(
+      clientCatalog.sections
+        .flatMap((s) => s.units.flatMap((u) => u.lessons))
+        .some((l) => l.id === id),
+      id,
+    );
+  }
+  const tag = course.playerTypes.find((p) => p.id === "tag");
+  const lag = course.playerTypes.find((p) => p.id === "lag");
+  assert.equal(tag?.introducedByLessonId, "lesson-06-11-02-meet-tag");
+  assert.equal(lag?.introducedByLessonId, "lesson-06-12-02-meet-lag");
+  const finalLesson = course.sections[6].units
+    .flatMap((u) => u.lessons)
+    .find((l) => l.id === "lesson-07-12-01-five-type-final");
+  assert.ok(finalLesson);
+  assert.deepEqual(
+    [...finalLesson.playerTypeRefs].sort(),
+    ["calling_station", "lag", "maniac", "nit", "tag"],
+  );
+});
+
 test("invalid fixtures each fail validation", () => {
   const failures = runInvalidFixtureSuite();
   assert.deepEqual(failures, []);
