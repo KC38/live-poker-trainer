@@ -93,7 +93,7 @@ scaffolding over repeated attempts, and keeps reading short.
 | Plan | Scope | Depends on | Status |
 |---|---|---|---|
 | [01](01-three-tab-shell-and-live-hub.md) | Three-tab shell and Live hub | — | Done (PR #164 / #165; deploy from `db50d28`) |
-| [02](02-course-contract-and-content-pipeline.md) | Course schema and validator | — | |
+| [02](02-course-contract-and-content-pipeline.md) | Course schema and validator | — | Done (PR #168; deploy from `9e3c93e`) |
 | [03](03-course-state-and-gamification-backend.md) | Attempts, grading, XP, streak, lives | 02 | |
 | [04](04-interactive-lesson-runtime.md) | Guided-to-unguided activity engine | 02, 03 | |
 | [05](05-lesson-first-onboarding-and-account-linking.md) | Anonymous lesson-first onboarding/linking | 01–04 | |
