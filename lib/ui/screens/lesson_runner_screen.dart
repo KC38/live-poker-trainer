@@ -419,11 +419,13 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     if (attempt == null || catalog == null || _completing) return;
     setState(() => _completing = true);
     try {
-      final complete = await _service.completeLesson(
-        attemptId: attempt.attemptId,
-        idempotencyKey: CourseService.newRequestKey('complete'),
-        catalogVersion: catalog.catalogVersion,
-      );
+      final complete = await _service
+          .completeLesson(
+            attemptId: attempt.attemptId,
+            idempotencyKey: CourseService.newRequestKey('complete'),
+            catalogVersion: catalog.catalogVersion,
+          )
+          .timeout(const Duration(seconds: 45));
       if (!mounted) return;
       unawaited(ref.read(soundServiceProvider).win());
       unawaited(

@@ -131,11 +131,11 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
 
     return MaterialApp(
       key: ValueKey(
-        '${rootNavigatorKeyFor(
+        rootNavigatorKeyFor(
           uid: session?.uid,
           anonymous: session?.isAnonymous == true,
           resetForAuthGate: destination == AppRootDestination.auth,
-        )}-${destination.name}',
+        ),
       ),
       navigatorKey: _rootNavigatorKey,
       title: 'Exploitative Poker Lab',
