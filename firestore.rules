@@ -236,7 +236,9 @@ service cloud.firestore {
     }
 
     match /appConfig/{docId} {
-      allow read: if signedIn() && docId == 'featureFlags';
+      // Rollout switches only. Signed-out clients must read this to show
+      // guest entry; writes stay Admin SDK only.
+      allow read: if docId == 'featureFlags';
       allow write: if false;
     }
 
