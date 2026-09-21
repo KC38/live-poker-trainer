@@ -95,12 +95,13 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         startRequestId: _startRequestId,
       );
       final activities = catalog.activitiesForLesson(widget.lessonId);
-      final current = activities.firstWhere(
-        (a) => a.id == started.resume.activityId,
-        orElse: () => activities.first,
-      );
       _activityController?.dispose();
-      _activityController = LessonActivityController(activity: current);
+      _activityController = LessonActivityController(
+        activity: activities.firstWhere(
+          (a) => a.id == started.resume.activityId,
+          orElse: () => activities.first,
+        ),
+      );
       if (!mounted) return;
       setState(() {
         _lesson = lesson;
@@ -108,6 +109,10 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         _attempt = started.attempt;
         _bootstrapping = false;
       });
+      if (started.attempt.isReadyToComplete(activities.length)) {
+        await _completeLesson();
+        return;
+      }
     } catch (error) {
       if (!mounted) return;
       setState(() {
