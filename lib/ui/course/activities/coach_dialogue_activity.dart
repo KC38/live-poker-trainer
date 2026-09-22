@@ -179,6 +179,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.multiStreetPlan
                     ? null
                     : onFeltAcknowledge,
+            onSprRatioAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.sprRatio
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -305,6 +309,9 @@ enum CoachDialogueVisualKind {
 
   /// Flop choice must answer turn and river plans.
   multiStreetPlan,
+
+  /// SPR = stack/pot; low commits, high maneuvers.
+  sprRatio,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -381,6 +388,8 @@ class CoachDialogueVisual {
       'Tap 3-Bet, Ranges, and Squeeze.',
     CoachDialogueVisualKind.multiStreetPlan =>
       'Tap Flop, Turn, and River.',
+    CoachDialogueVisualKind.sprRatio =>
+      'Tap SPR, Low, and High.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -414,7 +423,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.commonLeaks ||
       kind == CoachDialogueVisualKind.rangeUpdate ||
       kind == CoachDialogueVisualKind.threeBetSqueeze ||
-      kind == CoachDialogueVisualKind.multiStreetPlan;
+      kind == CoachDialogueVisualKind.multiStreetPlan ||
+      kind == CoachDialogueVisualKind.sprRatio;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -477,6 +487,8 @@ class CoachDialogueVisual {
       '3-bet tiles: 3-bet, ranges, squeeze',
     CoachDialogueVisualKind.multiStreetPlan =>
       'Multi-street tiles: flop, turn, river',
+    CoachDialogueVisualKind.sprRatio =>
+      'SPR tiles: ratio, low commit, high maneuver',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -571,6 +583,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-04-03-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.multiStreetPlan,
+      );
+    case 'act-04-05-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.sprRatio,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -841,6 +857,18 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.multiStreetPlan,
     );
   }
+  // Phrase-safe SPR — require ratio framing; bare "effective stack" stays BB-only.
+  if (blob.contains('stack-to-pot') ||
+      blob.contains('spr =') ||
+      blob.contains('low spr') ||
+      blob.contains('high spr') ||
+      (RegExp(r'\bspr\b').hasMatch(blob) &&
+          blob.contains('commit') &&
+          blob.contains('maneuver'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.sprRatio,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -892,6 +920,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onRangeUpdateAcknowledge,
     this.onThreeBetSqueezeAcknowledge,
     this.onMultiStreetPlanAcknowledge,
+    this.onSprRatioAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -924,6 +953,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onRangeUpdateAcknowledge;
   final VoidCallback? onThreeBetSqueezeAcknowledge;
   final VoidCallback? onMultiStreetPlanAcknowledge;
+  final VoidCallback? onSprRatioAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1075,6 +1105,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onMultiStreetPlanAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onMultiStreetPlanAcknowledge,
+        ),
+        CoachDialogueVisualKind.sprRatio => SprRatioDemo(
+          interactive: onSprRatioAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onSprRatioAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
