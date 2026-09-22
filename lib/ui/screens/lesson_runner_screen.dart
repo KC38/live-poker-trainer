@@ -69,6 +69,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
   /// chrome (no blank dock / full-screen spinner flash).
   bool _advancingActivity = false;
   int _acceptedStreak = 0;
+  /// Inline catch-up notice under the progress header (never a felt SnackBar).
+  String? _resumeNotice;
+  Timer? _resumeNoticeTimer;
   late final String _startRequestId;
 
   CourseService get _service =>
@@ -84,6 +87,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
 
   @override
   void dispose() {
+    _resumeNoticeTimer?.cancel();
     _activityController?.removeListener(_onActivityChanged);
     _activityController?.dispose();
     super.dispose();
@@ -445,21 +449,15 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     }
   }
 
-  /// Floating top snack — never covers the felt / sticky Continue dock.
+  /// Inline banner under the progress header — never covers suit/order taps.
   void _showNonBlockingNotice(String notice) {
-    final messenger = ScaffoldMessenger.of(context);
-    final height = MediaQuery.sizeOf(context).height;
-    messenger.clearSnackBars();
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(notice),
-        behavior: SnackBarBehavior.floating,
-        // Pin near the top so felt taps stay reachable.
-        margin: EdgeInsets.fromLTRB(16, 8, 16, height * 0.72),
-        dismissDirection: DismissDirection.up,
-        duration: const Duration(seconds: 3),
-      ),
-    );
+    ScaffoldMessenger.of(context).clearSnackBars();
+    _resumeNoticeTimer?.cancel();
+    setState(() => _resumeNotice = notice);
+    _resumeNoticeTimer = Timer(const Duration(seconds: 2), () {
+      if (!mounted) return;
+      setState(() => _resumeNotice = null);
+    });
   }
 
   Future<void> _continueAfterFeedback() async {
@@ -735,6 +733,16 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                           );
                         },
               ),
+              if (_resumeNotice != null) ...[
+                const SizedBox(height: 6),
+                _ResumeCatchUpBanner(
+                  text: _resumeNotice!,
+                  onDismiss: () {
+                    _resumeNoticeTimer?.cancel();
+                    setState(() => _resumeNotice = null);
+                  },
+                ),
+              ],
               const SizedBox(height: 4),
               Expanded(
                 child: SingleChildScrollView(
@@ -954,6 +962,55 @@ String _stageWire(ActivityStage stage) {
     ActivityStage.checkpoint => 'checkpoint',
     ActivityStage.jumpTest => 'jump_test',
   };
+}
+
+/// Inline catch-up chrome under [LessonProgressHeader] — keeps felt taps free.
+class _ResumeCatchUpBanner extends StatelessWidget {
+  const _ResumeCatchUpBanner({required this.text, required this.onDismiss});
+
+  final String text;
+  final VoidCallback onDismiss;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.slateDark.withValues(alpha: 0.95),
+      borderRadius: BorderRadius.circular(10),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 8, 4, 8),
+        child: Row(
+          children: [
+            Icon(
+              Icons.bookmark_added_outlined,
+              size: 16,
+              color: AppColors.gold,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                text,
+                style: GoogleFonts.manrope(
+                  color: AppColors.cream,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  height: 1.25,
+                ),
+              ),
+            ),
+            IconButton(
+              onPressed: onDismiss,
+              icon: const Icon(Icons.close, size: 16),
+              color: AppColors.slate,
+              visualDensity: VisualDensity.compact,
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+              tooltip: 'Dismiss',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 /// Sticky Continue / Try again actions so feedback CTAs never sit under the fold.
