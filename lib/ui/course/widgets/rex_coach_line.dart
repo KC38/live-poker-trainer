@@ -75,39 +75,40 @@ class RexCoachLine extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 44,
-            height: 44,
+            width: 36,
+            height: 36,
             alignment: Alignment.center,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: AppColors.bgElevated,
               border: Border.all(
                 color: AppColors.gold.withValues(alpha: 0.55),
-                width: 1.4,
+                width: 1.2,
               ),
             ),
             child: Text(
               'Rex',
               style: GoogleFonts.manrope(
                 color: AppColors.gold,
-                fontSize: 11,
+                fontSize: 10,
                 fontWeight: FontWeight.w900,
-                letterSpacing: 0.4,
+                letterSpacing: 0.3,
+                height: 1,
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Expanded(
             child: Container(
               width: double.infinity,
-              padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
               decoration: BoxDecoration(
                 color: AppColors.bgElevated.withValues(alpha: 0.85),
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(6),
-                  topRight: Radius.circular(16),
-                  bottomLeft: Radius.circular(16),
-                  bottomRight: Radius.circular(16),
+                  topLeft: Radius.circular(5),
+                  topRight: Radius.circular(14),
+                  bottomLeft: Radius.circular(14),
+                  bottomRight: Radius.circular(14),
                 ),
                 border: Border.all(
                   color:
@@ -120,8 +121,8 @@ class RexCoachLine extends StatelessWidget {
                 text,
                 style: GoogleFonts.manrope(
                   color: AppColors.cream,
-                  fontSize: 16,
-                  height: 1.35,
+                  fontSize: 14.5,
+                  height: 1.25,
                   fontWeight: FontWeight.w600,
                 ),
               ),
