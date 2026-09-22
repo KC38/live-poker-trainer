@@ -47,6 +47,8 @@ class OrderSequenceActivity extends StatelessWidget {
             activity.primaryCoachLine?.text ??
             (_rankMode
                 ? 'Tap ranks from lowest to highest.'
+                : activity.id == 'act-01-06-02-jump-ranks'
+                ? 'Tap strongest hand first, then weaker.'
                 : _handMode
                 ? 'Tap each hand into the order asked.'
                 : isStreetSequenceActivity(activity)

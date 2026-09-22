@@ -126,6 +126,16 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         streetLabel: 'Preflop · Big blind',
         facingBet: true,
       );
+    case 'act-01-06-02-jump-legal':
+      return const LessonActionSpot(
+        heroCodes: ['Qh', 'Jd'],
+        boardCodes: ['Td', '8s', '2c'],
+        potLabel: 'Pot 12',
+        villainLine: 'Villain bets 8',
+        streetLabel: 'Flop',
+        facingBet: true,
+        identifyUnavailable: true,
+      );
   }
   return null;
 }
@@ -135,7 +145,7 @@ LessonActionSpot? resolveToyHandStepSpot({
   required String activityId,
   required String stepId,
 }) {
-  if (!activityId.startsWith('act-01-06-01-')) return null;
+  if (!activityId.startsWith('act-01-06-0')) return null;
   switch (stepId) {
     case 'step-01-06-pre':
       return const LessonActionSpot(
@@ -189,6 +199,23 @@ LessonActionSpot? resolveToyHandStepSpot({
         streetLabel: 'Hand over',
         facingBet: false,
       );
+    case 'j-hand-open':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', 'Th'],
+        potLabel: 'Pot 3',
+        villainLine: 'Folds to you',
+        streetLabel: 'Preflop · Button',
+        facingBet: false,
+        openPot: true,
+      );
+    case 'j-hand-end':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', 'Th'],
+        potLabel: 'Pot 9',
+        villainLine: 'Blinds fold',
+        streetLabel: 'Hand over',
+        facingBet: false,
+      );
   }
   return null;
 }
@@ -199,6 +226,14 @@ bool isLessonActionTableActivity(CourseActivity activity) {
   if (id.startsWith('act-01-06-01-') &&
       (activity.renderer == ActivityRenderer.authoredMultiStepHand ||
           activity.renderer == ActivityRenderer.fullTableHandLab)) {
+    return true;
+  }
+  if (id == 'act-01-06-02-jump-hand' &&
+      activity.renderer == ActivityRenderer.authoredMultiStepHand) {
+    return true;
+  }
+  if (id == 'act-01-06-02-jump-legal' &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
   return (id.startsWith('act-01-03-01-') || id.startsWith('act-01-03-02-')) &&

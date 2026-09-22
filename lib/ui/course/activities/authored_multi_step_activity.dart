@@ -31,6 +31,8 @@ class AuthoredMultiStepActivity extends StatelessWidget {
         'Called open — confirm the flop, then act.',
       'act-01-06-01-checkpoint-finish' =>
         'Finish a short button hand without freezing.',
+      'act-01-06-02-jump-hand' =>
+        'Jump check — open the button, then take the blinds.',
       _ => 'Play the street — tap your action on the dock.',
     };
   }
