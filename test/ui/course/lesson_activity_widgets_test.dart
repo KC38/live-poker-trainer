@@ -1787,6 +1787,52 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('sizing-language explain taps Value Pressure Size instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-04-01-explain',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'Size is language. Value looks like value; pressure looks like pressure.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'Size is language. Value looks like value; pressure looks like pressure.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(SizingLanguageDemo), findsOneWidget);
+    expect(find.text('Tap Value, Pressure, and Size.'), findsOneWidget);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    for (final title in ['VALUE', 'PRESSURE', 'SIZE']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
   testWidgets(
     'multiway explain taps Stronger Fewer Nuts instead of Continue',
     (tester) async {
