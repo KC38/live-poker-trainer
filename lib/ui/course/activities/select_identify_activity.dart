@@ -163,8 +163,9 @@ class SelectIdentifyActivity extends StatelessWidget {
         activity.stage == ActivityStage.guided &&
         index == 0 &&
         controller.draft.choiceId == null;
-    final onPressed =
-        locked ? null : () => controller.selectChoice(choice.id);
+    final onPressed = locked
+        ? null
+        : () => controller.selectChoice(choice.id, autoSubmit: true);
 
     switch (presentation) {
       case SelectIdentifyPresentation.holeCards:
