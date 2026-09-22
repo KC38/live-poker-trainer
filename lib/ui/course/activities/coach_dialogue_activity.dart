@@ -199,6 +199,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.vsStation
                     ? null
                     : onFeltAcknowledge,
+            onTightSeatsAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.tightSeats
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -340,6 +344,9 @@ enum CoachDialogueVisualKind {
 
   /// Versus stations: thicker value, fewer bluffs, cite calling.
   vsStation,
+
+  /// Tight seats rarely enter; when they do, they mean it.
+  tightSeats,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -426,6 +433,8 @@ class CoachDialogueVisual {
       'Tap Station, High, and Low.',
     CoachDialogueVisualKind.vsStation =>
       'Tap Value, Bluffs, and Cite.',
+    CoachDialogueVisualKind.tightSeats =>
+      'Tap Rare, Enter, and Mean It.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -464,7 +473,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.sprDepth ||
       kind == CoachDialogueVisualKind.playerObserve ||
       kind == CoachDialogueVisualKind.callingStation ||
-      kind == CoachDialogueVisualKind.vsStation;
+      kind == CoachDialogueVisualKind.vsStation ||
+      kind == CoachDialogueVisualKind.tightSeats;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -537,6 +547,8 @@ class CoachDialogueVisual {
       'Station tiles: model, high participation, low folding',
     CoachDialogueVisualKind.vsStation =>
       'Vs-station tiles: thicker value, fewer bluffs, cite calling',
+    CoachDialogueVisualKind.tightSeats =>
+      'Tight-seat tiles: rare, enter, mean it',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -651,6 +663,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-04-06-03-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.vsStation,
+      );
+    case 'act-04-07-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.tightSeats,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -960,6 +976,15 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.vsStation,
     );
   }
+  // Phrase-safe tight seats — require rare-entry framing, not bare "enter".
+  if (blob.contains('almost never enter') ||
+      blob.contains('when they do, they mean it') ||
+      (blob.contains('almost never') && blob.contains('mean it')) ||
+      (blob.contains('note both') && blob.contains('never enter'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.tightSeats,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -1016,6 +1041,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onPlayerObserveAcknowledge,
     this.onCallingStationAcknowledge,
     this.onVsStationAcknowledge,
+    this.onTightSeatsAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1053,6 +1079,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onPlayerObserveAcknowledge;
   final VoidCallback? onCallingStationAcknowledge;
   final VoidCallback? onVsStationAcknowledge;
+  final VoidCallback? onTightSeatsAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1229,6 +1256,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onVsStationAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onVsStationAcknowledge,
+        ),
+        CoachDialogueVisualKind.tightSeats => TightSeatsDemo(
+          interactive: onTightSeatsAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onTightSeatsAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
