@@ -30,11 +30,11 @@ Other agents push to `origin/main` while you work. Always:
 
 | Role | Device | UDID |
 |------|--------|------|
-| **Agent (you)** | iPhone 17 Pro | `A22BEBB0-4093-426B-A535-0C0B558CA2EF` |
-| **User (human)** | iPhone 17 | `AF6D4B36-11A4-44DB-B656-76DA4D87B020` |
+| **Agent (you)** | iPhone 17 Pro | `F1AE4938-D9BE-4EA1-8C98-58555A0DE62A` |
+| **User (human)** | iPhone 17 | `20ACECD5-FBEE-4663-9044-E11D5F0A26FC` |
 
 - Drive / OCR / agent commands **only** on the Pro UDID. Pin screenshots:
-  `xcrun simctl io A22BEBB0-4093-426B-A535-0C0B558CA2EF screenshot …`
+  `xcrun simctl io F1AE4938-D9BE-4EA1-8C98-58555A0DE62A screenshot …`
 - Do **not** send `ext.poker.agent` cmds to the user sim. Do not hot-restart
   the user sim alone for agent convenience.
 - Ship refresh script may restart **both**—that is OK.
