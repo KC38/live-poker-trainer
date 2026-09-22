@@ -219,6 +219,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.maniacModel
                     ? null
                     : onFeltAcknowledge,
+            onVsManiacAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.vsManiac
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -375,6 +379,9 @@ enum CoachDialogueVisualKind {
 
   /// Maniac: extreme entry and aggression — a model, not an insult.
   maniacModel,
+
+  /// Versus maniacs: wider value, let them hang, no ego.
+  vsManiac,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -471,6 +478,8 @@ class CoachDialogueVisual {
       'Tap Raise, Barrel, and Count.',
     CoachDialogueVisualKind.maniacModel =>
       'Tap Maniac, Entry, and Aggro.',
+    CoachDialogueVisualKind.vsManiac =>
+      'Tap Value, Hang, and Ego.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -514,7 +523,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.nitModel ||
       kind == CoachDialogueVisualKind.vsNits ||
       kind == CoachDialogueVisualKind.extremeEntry ||
-      kind == CoachDialogueVisualKind.maniacModel;
+      kind == CoachDialogueVisualKind.maniacModel ||
+      kind == CoachDialogueVisualKind.vsManiac;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -597,6 +607,8 @@ class CoachDialogueVisual {
       'Extreme-entry tiles: raise, barrel, count',
     CoachDialogueVisualKind.maniacModel =>
       'Maniac tiles: label, extreme entry, aggression',
+    CoachDialogueVisualKind.vsManiac =>
+      'Vs-maniac tiles: wider value, hang themselves, no ego',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -731,6 +743,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-04-08-02-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.maniacModel,
+      );
+    case 'act-04-08-03-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.vsManiac,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1084,6 +1100,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.maniacModel,
     );
   }
+  if (blob.contains('versus maniacs') ||
+      blob.contains('hang themselves') ||
+      blob.contains('no ego') ||
+      (blob.contains('call wider') && blob.contains('maniac'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.vsManiac,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -1145,6 +1169,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onVsNitsAcknowledge,
     this.onExtremeEntryAcknowledge,
     this.onManiacModelAcknowledge,
+    this.onVsManiacAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1187,6 +1212,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onVsNitsAcknowledge;
   final VoidCallback? onExtremeEntryAcknowledge;
   final VoidCallback? onManiacModelAcknowledge;
+  final VoidCallback? onVsManiacAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1388,6 +1414,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onManiacModelAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onManiacModelAcknowledge,
+        ),
+        CoachDialogueVisualKind.vsManiac => VsManiacDemo(
+          interactive: onVsManiacAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onVsManiacAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
