@@ -17,8 +17,10 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_pots.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_streets.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_toy_hand.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 
@@ -402,6 +404,126 @@ void main() {
     await tester.pump();
     await tester.tap(find.text('ALL-IN'));
     await tester.pump();
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
+  testWidgets('streets explain taps each street instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-04-01-explain-streets',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText: 'Four streets of a hand.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text: 'Preflop, flop, turn, river.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(StreetsTimelineDemo), findsOneWidget);
+    for (final title in ['PREFLOP', 'FLOP', 'TURN', 'RIVER']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
+  testWidgets('winning-paths explain taps each path instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-05-01-explain-win',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText: 'How a pot is won.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text: 'Fold win, showdown, side pot.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(WinningPathsDemo), findsOneWidget);
+    for (final title in ['FOLD WIN', 'SHOWDOWN', 'SIDE POT']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
+  testWidgets('toy-hand explain taps each step instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-06-01-explain-run',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText: 'One short hand.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text: 'Blinds, you act, ending.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(ToyHandRunDemo), findsOneWidget);
+    for (final title in ['BLINDS', 'YOU ACT', 'ENDING']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
     expect(feltAck, 1);
     controller.dispose();
   });

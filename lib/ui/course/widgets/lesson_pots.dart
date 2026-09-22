@@ -8,62 +8,97 @@ import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 
 /// Explain-step demo: three ways a pot is decided.
-class WinningPathsDemo extends StatelessWidget {
+class WinningPathsDemo extends StatefulWidget {
   /// Creates the demo.
-  const WinningPathsDemo({super.key});
+  const WinningPathsDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPathsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPathsTapped;
+
+  @override
+  State<WinningPathsDemo> createState() => _WinningPathsDemoState();
+}
+
+class _WinningPathsDemoState extends State<WinningPathsDemo> {
+  final Set<String> _tapped = <String>{};
+  static const _titles = ['FOLD WIN', 'SHOWDOWN', 'SIDE POT'];
+
+  void _onTap(String title) {
+    if (!widget.enabled || widget.onAllPathsTapped == null) return;
+    setState(() => _tapped.add(title));
+    if (_tapped.length >= _titles.length) {
+      widget.onAllPathsTapped!();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ExcludeSemantics(
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.feltLight, AppColors.feltDark],
-          ),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.feltBorder.withValues(alpha: 0.85),
-          ),
+    final lanes = <(String, String, Widget)>[
+      (
+        'FOLD WIN',
+        'Everyone folds — take it, no show',
+        const _ChipStack(label: 'POT', amount: '9'),
+      ),
+      (
+        'SHOWDOWN',
+        'Call to the end — best five wins',
+        const _ShowdownMini(),
+      ),
+      (
+        'SIDE POT',
+        'Short all-in — main vs unmatched chips',
+        const _SidePotMini(),
+      ),
+    ];
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
         ),
-        child: Column(
-          children: [
-            Text(
-              'How a pot is won',
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 12),
-            const _PathLane(
-              step: 1,
-              title: 'FOLD WIN',
-              detail: 'Everyone folds — take it, no show',
-              visual: _ChipStack(label: 'POT', amount: '9'),
-            ),
-            const SizedBox(height: 8),
-            const _PathLane(
-              step: 2,
-              title: 'SHOWDOWN',
-              detail: 'Call to the end — best five wins',
-              visual: _ShowdownMini(),
-            ),
-            const SizedBox(height: 8),
-            const _PathLane(
-              step: 3,
-              title: 'SIDE POT',
-              detail: 'Short all-in — main vs unmatched chips',
-              visual: _SidePotMini(),
-            ),
-          ],
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.feltBorder.withValues(alpha: 0.85),
         ),
       ),
+      child: Column(
+        children: [
+          Text(
+            'How a pot is won',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          for (var i = 0; i < lanes.length; i++) ...[
+            if (i > 0) const SizedBox(height: 8),
+            _PathLane(
+              step: i + 1,
+              title: lanes[i].$1,
+              detail: lanes[i].$2,
+              visual: lanes[i].$3,
+              selected: _tapped.contains(lanes[i].$1),
+              enabled: widget.interactive && widget.enabled,
+              onPressed:
+                  widget.interactive ? () => _onTap(lanes[i].$1) : null,
+            ),
+          ],
+        ],
+      ),
     );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
   }
 }
 
@@ -73,22 +108,33 @@ class _PathLane extends StatelessWidget {
     required this.title,
     required this.detail,
     required this.visual,
+    this.selected = false,
+    this.enabled = false,
+    this.onPressed,
   });
 
   final int step;
   final String title;
   final String detail;
   final Widget visual;
+  final bool selected;
+  final bool enabled;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final border =
+        selected ? AppColors.gold : AppColors.feltBorder.withValues(alpha: 0.7);
+    final lane = Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.bgDark.withValues(alpha: 0.35),
+        color:
+            selected
+                ? AppColors.gold.withValues(alpha: 0.18)
+                : AppColors.bgDark.withValues(alpha: 0.35),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.7)),
+        border: Border.all(color: border, width: selected ? 2 : 1),
       ),
       child: Row(
         children: [
@@ -137,6 +183,20 @@ class _PathLane extends StatelessWidget {
           const SizedBox(width: 8),
           visual,
         ],
+      ),
+    );
+    if (onPressed == null) return lane;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: title,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: enabled ? onPressed : null,
+          borderRadius: BorderRadius.circular(12),
+          child: lane,
+        ),
       ),
     );
   }
