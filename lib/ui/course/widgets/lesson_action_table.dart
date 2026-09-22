@@ -3769,6 +3769,105 @@ class _ImpliedOddsDemoState extends State<ImpliedOddsDemo> {
   }
 }
 
+/// Thin / catch / barrels tiles for thin-value explain demos.
+class ThinValueDemo extends StatefulWidget {
+  /// Creates the demo.
+  const ThinValueDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'THIN', caption: 'Needs calls', color: AppColors.gold),
+    (label: 'CATCH', caption: 'Bluff-catches', color: AppColors.cream),
+    (label: 'BARRELS', caption: 'Need wide barrels', color: AppColors.danger),
+  ];
+
+  @override
+  State<ThinValueDemo> createState() => _ThinValueDemoState();
+}
+
+class _ThinValueDemoState extends State<ThinValueDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= ThinValueDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Thin value & catches',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < ThinValueDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoActionCard(
+                    label: ThinValueDemo.points[i].label,
+                    caption: ThinValueDemo.points[i].caption,
+                    color: ThinValueDemo.points[i].color,
+                    selected: _tapped.contains(ThinValueDemo.points[i].label),
+                    enabled: widget.interactive && widget.enabled,
+                    onPressed:
+                        widget.interactive
+                            ? () => _onTap(ThinValueDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? 'Tap Thin, Catch, and Barrels'
+                : 'Thin value needs calls · catches need barrels',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
 
 
 class _DemoActionCard extends StatelessWidget {
