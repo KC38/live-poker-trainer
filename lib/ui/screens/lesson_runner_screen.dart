@@ -34,6 +34,7 @@ class LessonRunnerScreen extends ConsumerStatefulWidget {
     this.embeddedInShell = false,
     this.courseService,
     this.startRequestId,
+    this.bootstrapTimeout = const Duration(seconds: 45),
   });
 
   /// Lesson to start or resume.
@@ -47,6 +48,9 @@ class LessonRunnerScreen extends ConsumerStatefulWidget {
 
   /// Optional stable start key (tests / resume).
   final String? startRequestId;
+
+  /// Caps auth + startLesson so a hung handoff never leaves an empty spinner.
+  final Duration bootstrapTimeout;
 
   @override
   ConsumerState<LessonRunnerScreen> createState() => _LessonRunnerScreenState();
@@ -105,55 +109,16 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       _errorDetail = null;
     });
     try {
-      if (widget.courseService == null) {
-        await ref
-            .read(authControllerProvider.notifier)
-            .ensureAnonymousSession();
-      }
-      final catalog = await ref.read(courseCatalogProvider.future);
-      final lesson = catalog.lessonById(widget.lessonId);
-      if (lesson == null) {
-        throw CourseServiceException(
-          'Unknown lesson ${widget.lessonId}',
-          code: 'not-found',
-        );
-      }
-      final draft = ref.read(onboardingControllerProvider);
-      await _service.initializeProfile(
-        catalogVersion: catalog.catalogVersion,
-        experienceBand: draft.experienceBand?.wireValue,
-        dailyGoalMinutes: draft.dailyGoalMinutes,
-        recommendedLessonId: draft.recommendedLessonId ?? widget.lessonId,
-      );
-      final started = await _service.startLesson(
-        lessonId: widget.lessonId,
-        catalogVersion: catalog.catalogVersion,
-        startRequestId: _startRequestId,
-      );
-      final activities = catalog.activitiesForLesson(widget.lessonId);
-      final current = activities.firstWhere(
-        (a) => a.id == started.resume.activityId,
-        orElse: () => activities.first,
-      );
-      _bindActivityController(LessonActivityController(activity: current));
+      await _bootstrapBody().timeout(widget.bootstrapTimeout);
+    } on TimeoutException {
       if (!mounted) return;
       setState(() {
-        _lesson = lesson;
-        _activities = activities;
-        _attempt = started.attempt;
         _bootstrapping = false;
+        _error =
+            'Starting this lesson is taking too long. Check your connection '
+            'and retry.';
+        _errorDetail = 'TimeoutException after ${widget.bootstrapTimeout}';
       });
-      if (!started.duplicate) {
-        unawaited(
-          ref
-              .read(analyticsServiceProvider)
-              .logLesson(lessonId: widget.lessonId, phase: 'started'),
-        );
-      }
-      if (started.attempt.isReadyToComplete(activities.length)) {
-        await _completeLesson();
-        return;
-      }
     } catch (error) {
       if (!mounted) return;
       setState(() {
@@ -161,6 +126,55 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         _error = _friendlyStartError(error);
         _errorDetail = error.toString();
       });
+    }
+  }
+
+  Future<void> _bootstrapBody() async {
+    if (widget.courseService == null) {
+      await ref.read(authControllerProvider.notifier).ensureAnonymousSession();
+    }
+    final catalog = await ref.read(courseCatalogProvider.future);
+    final lesson = catalog.lessonById(widget.lessonId);
+    if (lesson == null) {
+      throw CourseServiceException(
+        'Unknown lesson ${widget.lessonId}',
+        code: 'not-found',
+      );
+    }
+    final draft = ref.read(onboardingControllerProvider);
+    await _service.initializeProfile(
+      catalogVersion: catalog.catalogVersion,
+      experienceBand: draft.experienceBand?.wireValue,
+      dailyGoalMinutes: draft.dailyGoalMinutes,
+      recommendedLessonId: draft.recommendedLessonId ?? widget.lessonId,
+    );
+    final started = await _service.startLesson(
+      lessonId: widget.lessonId,
+      catalogVersion: catalog.catalogVersion,
+      startRequestId: _startRequestId,
+    );
+    final activities = catalog.activitiesForLesson(widget.lessonId);
+    final current = activities.firstWhere(
+      (a) => a.id == started.resume.activityId,
+      orElse: () => activities.first,
+    );
+    _bindActivityController(LessonActivityController(activity: current));
+    if (!mounted) return;
+    setState(() {
+      _lesson = lesson;
+      _activities = activities;
+      _attempt = started.attempt;
+      _bootstrapping = false;
+    });
+    if (!started.duplicate) {
+      unawaited(
+        ref
+            .read(analyticsServiceProvider)
+            .logLesson(lessonId: widget.lessonId, phase: 'started'),
+      );
+    }
+    if (started.attempt.isReadyToComplete(activities.length)) {
+      await _completeLesson();
     }
   }
 
