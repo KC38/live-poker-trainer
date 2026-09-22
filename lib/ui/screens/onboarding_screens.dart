@@ -16,7 +16,7 @@ import 'package:live_poker_trainer/providers/onboarding_provider.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
-import 'package:live_poker_trainer/ui/screens/first_lesson_launch_screen.dart';
+import 'package:live_poker_trainer/ui/screens/lesson_runner_screen.dart';
 
 /// Signed-out value proposition with Get started / I already have an account.
 class WelcomeScreen extends ConsumerWidget {
@@ -261,15 +261,9 @@ class RexIntroScreen extends ConsumerWidget {
                     lessonId: recommendation.startLessonId,
                     jumpTestOffered: recommendation.jumpTestOffered,
                   );
-              if (!context.mounted) return;
-              Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder:
-                      (_) => RecommendedStartScreen(
-                        recommendation: recommendation,
-                      ),
-                ),
-              );
+              // AppRoot shows RecommendedStartScreen as home for this step —
+              // do not push a second copy (that stack is disposed on the
+              // welcome → guestCourse home swap).
             },
             style: _primaryButton,
             child: const Text('Continue'),
@@ -300,58 +294,67 @@ class RecommendedStartScreen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            recommendation.jumpTestOffered
-                ? 'Optional jump test'
-                : 'Recommended first lesson',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 1.0,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            lesson?.title ?? 'Your two cards',
-            style: GoogleFonts.manrope(
-              color: AppColors.cream,
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
-              height: 1.2,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            recommendation.jumpTestOffered
-                ? 'You asked for Regular. A published jump test is available — it never unlocks content by itself.'
-                : recommendation.experienceBand == ExperienceBand.regularLive
-                ? 'Regular players will get a jump test when it publishes. For now, start with the first interactive lesson.'
-                : 'A short interactive lesson. Progress is temporary until you create an account.',
-            style: GoogleFonts.manrope(
-              color: AppColors.slate,
-              fontSize: 15,
-              height: 1.45,
-            ),
-          ),
-          if (!recommendation.jumpTestOffered) ...[
-            const SizedBox(height: 22),
-            const RexCoachLine(
-              text: 'These two are yours alone. Tap them on the felt next.',
-            ),
-            const SizedBox(height: 14),
-            const LessonTableContext(
-              scene: LessonTableScene(
-                heroCodes: ['Ah', 'Kd'],
-                boardCodes: ['Qs', 'Jh', '2c'],
-                villainSeatCount: 1,
-                highlight: LessonTableHighlight.hero,
-                caption: 'You',
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    recommendation.jumpTestOffered
+                        ? 'Optional jump test'
+                        : 'Recommended first lesson',
+                    style: GoogleFonts.manrope(
+                      color: AppColors.gold,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 1.0,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    lesson?.title ?? 'Your two cards',
+                    style: GoogleFonts.manrope(
+                      color: AppColors.cream,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w800,
+                      height: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    recommendation.jumpTestOffered
+                        ? 'You asked for Regular. A published jump test is available — it never unlocks content by itself.'
+                        : recommendation.experienceBand == ExperienceBand.regularLive
+                        ? 'Regular players will get a jump test when it publishes. For now, start with the first interactive lesson.'
+                        : 'A short interactive lesson. Progress is temporary until you create an account.',
+                    style: GoogleFonts.manrope(
+                      color: AppColors.slate,
+                      fontSize: 15,
+                      height: 1.45,
+                    ),
+                  ),
+                  if (!recommendation.jumpTestOffered) ...[
+                    const SizedBox(height: 22),
+                    const RexCoachLine(
+                      text:
+                          'These two are yours alone. Tap them on the felt next.',
+                    ),
+                    const SizedBox(height: 14),
+                    const LessonTableContext(
+                      scene: LessonTableScene(
+                        heroCodes: ['Ah', 'Kd'],
+                        boardCodes: ['Qs', 'Jh', '2c'],
+                        villainSeatCount: 1,
+                        highlight: LessonTableHighlight.hero,
+                        caption: 'You',
+                      ),
+                      showSoftPulse: true,
+                      enabled: false,
+                    ),
+                  ],
+                ],
               ),
-              showSoftPulse: true,
-              enabled: false,
             ),
-          ],
-          const Spacer(),
+          ),
           FilledButton(
             onPressed: () async {
               unawaited(
@@ -378,11 +381,13 @@ class RecommendedStartScreen extends ConsumerWidget {
                   .read(onboardingControllerProvider.notifier)
                   .markEnteringFirstLesson();
               if (!context.mounted) return;
-              Navigator.of(context).push(
+              // One tap into the runner — skip the redundant launch CTA.
+              await Navigator.of(context).pushReplacement(
                 MaterialPageRoute<void>(
                   builder:
-                      (_) => FirstLessonLaunchScreen(
+                      (_) => LessonRunnerScreen(
                         lessonId: recommendation.startLessonId,
+                        embeddedInShell: false,
                       ),
                 ),
               );
@@ -408,9 +413,13 @@ class RecommendedStartScreen extends ConsumerWidget {
                     .read(onboardingControllerProvider.notifier)
                     .markEnteringFirstLesson();
                 if (!context.mounted) return;
-                Navigator.of(context).push(
+                await Navigator.of(context).pushReplacement(
                   MaterialPageRoute<void>(
-                    builder: (_) => const FirstLessonLaunchScreen(),
+                    builder:
+                        (_) => const LessonRunnerScreen(
+                          lessonId: kFirstCourseLessonId,
+                          embeddedInShell: false,
+                        ),
                   ),
                 );
               },
