@@ -615,7 +615,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
   if (activity.renderer == ActivityRenderer.coachDialogue) {
     // Interactive explains: tap the demo instead of Continue.
     return activity.id == 'act-01-01-01-explain-hole-cards' ||
-        activity.id == 'act-01-01-02-explain-suits';
+        activity.id == 'act-01-01-02-explain-suits' ||
+        activity.id == 'act-01-01-03-explain-button';
   }
   if (activity.renderer != ActivityRenderer.selectIdentify) return false;
   return activity.id.startsWith('act-01-01-01-') ||
