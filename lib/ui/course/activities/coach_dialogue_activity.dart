@@ -215,6 +215,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.extremeEntry
                     ? null
                     : onFeltAcknowledge,
+            onManiacModelAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.maniacModel
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -368,6 +372,9 @@ enum CoachDialogueVisualKind {
 
   /// Extreme entry: raise and barrel seemingly forever.
   extremeEntry,
+
+  /// Maniac: extreme entry and aggression — a model, not an insult.
+  maniacModel,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -462,6 +469,8 @@ class CoachDialogueVisual {
       'Tap Steal, Credit, and Explode.',
     CoachDialogueVisualKind.extremeEntry =>
       'Tap Raise, Barrel, and Count.',
+    CoachDialogueVisualKind.maniacModel =>
+      'Tap Maniac, Entry, and Aggro.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -504,7 +513,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.tightSeats ||
       kind == CoachDialogueVisualKind.nitModel ||
       kind == CoachDialogueVisualKind.vsNits ||
-      kind == CoachDialogueVisualKind.extremeEntry;
+      kind == CoachDialogueVisualKind.extremeEntry ||
+      kind == CoachDialogueVisualKind.maniacModel;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -585,6 +595,8 @@ class CoachDialogueVisual {
       'Vs-nit tiles: steal more, give credit, when they explode',
     CoachDialogueVisualKind.extremeEntry =>
       'Extreme-entry tiles: raise, barrel, count',
+    CoachDialogueVisualKind.maniacModel =>
+      'Maniac tiles: label, extreme entry, aggression',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -715,6 +727,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-04-08-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.extremeEntry,
+      );
+    case 'act-04-08-02-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.maniacModel,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1060,6 +1076,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.extremeEntry,
     );
   }
+  if (blob.contains('maniac means') ||
+      blob.contains('not an insult') ||
+      (blob.contains('maniac') && blob.contains('extreme entry')) ||
+      (blob.contains('maniac') && blob.contains('aggression'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.maniacModel,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -1120,6 +1144,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onNitModelAcknowledge,
     this.onVsNitsAcknowledge,
     this.onExtremeEntryAcknowledge,
+    this.onManiacModelAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1161,6 +1186,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onNitModelAcknowledge;
   final VoidCallback? onVsNitsAcknowledge;
   final VoidCallback? onExtremeEntryAcknowledge;
+  final VoidCallback? onManiacModelAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1357,6 +1383,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onExtremeEntryAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onExtremeEntryAcknowledge,
+        ),
+        CoachDialogueVisualKind.maniacModel => ManiacModelDemo(
+          interactive: onManiacModelAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onManiacModelAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
