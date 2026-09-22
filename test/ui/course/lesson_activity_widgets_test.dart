@@ -586,6 +586,52 @@ void main() {
     expect(
       resolveCoachDialogueVisual(
         CourseActivity(
+          id: 'act-02-01-02-explain-order',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'Preflop starts left of the big blind. Postflop starts left of the button.',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.actionOrder,
+    );
+    // "suited" / "Button:" / "big blinds" must not steal button/suits demos.
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-02-02-01-explain-families',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'Pairs, broadways, suited aces, connectors — trash is everything else.',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.none,
+    );
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-02-03-01-explain-open',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'Early: strong only. Button: wider. Live opens often look like 3x.',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.none,
+    );
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
           id: 'act-generic-explain',
           order: 1,
           stage: ActivityStage.explain,
@@ -597,6 +643,56 @@ void main() {
       ).kind,
       CoachDialogueVisualKind.none,
     );
+  });
+
+  testWidgets('action-order explain taps UTG HJ BTN instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-01-02-explain-order',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'Preflop starts left of the big blind. Postflop starts left of the button.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'Preflop starts left of the big blind. Postflop starts left of the button.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(ActionOrderDemo), findsOneWidget);
+    expect(find.text('Tap UTG, then HJ, then BTN.'), findsOneWidget);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    await tester.tap(find.text('UTG'));
+    await tester.pump();
+    expect(feltAck, 0);
+    await tester.tap(find.text('HJ'));
+    await tester.pump();
+    expect(feltAck, 0);
+    await tester.tap(find.text('BTN'));
+    await tester.pump();
+    expect(feltAck, 1);
+    controller.dispose();
   });
 
   testWidgets('select identify selects a choice', (tester) async {

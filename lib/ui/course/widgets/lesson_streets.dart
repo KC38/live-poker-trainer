@@ -452,3 +452,111 @@ class SeatOrderTile extends StatelessWidget {
     );
   }
 }
+
+/// Explain-step demo: tap preflop seats left-of-BB in order (UTG → HJ → BTN).
+class ActionOrderDemo extends StatefulWidget {
+  /// Creates the demo.
+  const ActionOrderDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllSeatsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllSeatsTapped;
+
+  static const seats = <({String label, String detail})>[
+    (label: 'UTG', detail: 'Left of BB'),
+    (label: 'HJ', detail: 'Next'),
+    (label: 'BTN', detail: 'Last preflop'),
+  ];
+
+  @override
+  State<ActionOrderDemo> createState() => _ActionOrderDemoState();
+}
+
+class _ActionOrderDemoState extends State<ActionOrderDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllSeatsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= ActionOrderDemo.seats.length) {
+      widget.onAllSeatsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.feltBorder.withValues(alpha: 0.85),
+        ),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Preflop order after the blinds',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            alignment: WrapAlignment.center,
+            children: [
+              for (var i = 0; i < ActionOrderDemo.seats.length; i++)
+                SeatOrderTile(
+                  label: ActionOrderDemo.seats[i].label,
+                  badge: '${i + 1}',
+                  selected: _tapped.contains(ActionOrderDemo.seats[i].label),
+                  enabled: widget.interactive && widget.enabled,
+                  onPressed:
+                      widget.interactive
+                          ? () => _onTap(ActionOrderDemo.seats[i].label)
+                          : null,
+                ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'Postflop starts left of the button',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            widget.interactive
+                ? 'Tap UTG, then HJ, then BTN'
+                : 'Left of BB preflop · left of button postflop',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
