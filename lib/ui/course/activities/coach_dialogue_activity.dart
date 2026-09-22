@@ -211,6 +211,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.vsNits
                     ? null
                     : onFeltAcknowledge,
+            onExtremeEntryAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.extremeEntry
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -361,6 +365,9 @@ enum CoachDialogueVisualKind {
 
   /// Versus nits: steal blinds more; give credit when they explode.
   vsNits,
+
+  /// Extreme entry: raise and barrel seemingly forever.
+  extremeEntry,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -453,6 +460,8 @@ class CoachDialogueVisual {
       'Tap Nit, Narrow, and Respect.',
     CoachDialogueVisualKind.vsNits =>
       'Tap Steal, Credit, and Explode.',
+    CoachDialogueVisualKind.extremeEntry =>
+      'Tap Raise, Barrel, and Count.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -494,7 +503,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.vsStation ||
       kind == CoachDialogueVisualKind.tightSeats ||
       kind == CoachDialogueVisualKind.nitModel ||
-      kind == CoachDialogueVisualKind.vsNits;
+      kind == CoachDialogueVisualKind.vsNits ||
+      kind == CoachDialogueVisualKind.extremeEntry;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -573,6 +583,8 @@ class CoachDialogueVisual {
       'Nit tiles: label, narrow entry, respect heavy action',
     CoachDialogueVisualKind.vsNits =>
       'Vs-nit tiles: steal more, give credit, when they explode',
+    CoachDialogueVisualKind.extremeEntry =>
+      'Extreme-entry tiles: raise, barrel, count',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -699,6 +711,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-04-07-03-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.vsNits,
+      );
+    case 'act-04-08-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.extremeEntry,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1036,6 +1052,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.vsNits,
     );
   }
+  if (blob.contains('raise and barrel') ||
+      blob.contains('seemingly forever') ||
+      blob.contains('count it calmly') ||
+      (blob.contains('barrel') && blob.contains('forever'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.extremeEntry,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -1095,6 +1119,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onTightSeatsAcknowledge,
     this.onNitModelAcknowledge,
     this.onVsNitsAcknowledge,
+    this.onExtremeEntryAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1135,6 +1160,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onTightSeatsAcknowledge;
   final VoidCallback? onNitModelAcknowledge;
   final VoidCallback? onVsNitsAcknowledge;
+  final VoidCallback? onExtremeEntryAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1326,6 +1352,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onVsNitsAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onVsNitsAcknowledge,
+        ),
+        CoachDialogueVisualKind.extremeEntry => ExtremeEntryDemo(
+          interactive: onExtremeEntryAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onExtremeEntryAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
