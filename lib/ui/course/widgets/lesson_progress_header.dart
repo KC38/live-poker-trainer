@@ -10,6 +10,7 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 /// Duolingo-chess density: one tight row (track + lives + optional streak +
 /// hint). Optional title sits flush underneath only when callers pass it.
 /// When [livesRemaining] drops, the heart chip pulses once (scale + opacity).
+/// When [acceptedStreak] increases, the streak chip pulses once (scale).
 class LessonProgressHeader extends StatefulWidget {
   /// Creates the header.
   const LessonProgressHeader({
@@ -26,6 +27,9 @@ class LessonProgressHeader extends StatefulWidget {
   /// Single loss pulse — short enough to feel snappy, not distracting.
   static const Duration livesLossPulseDuration = Duration(milliseconds: 200);
 
+  /// Streak gain pulse — same duration as lives loss for consistent feel.
+  static const Duration streakPulseDuration = Duration(milliseconds: 200);
+
   /// Optional secondary title. Prefer showing the activity prompt once in the
   /// activity body — leave null here to avoid duplicating the question.
   final String? title;
@@ -41,8 +45,9 @@ class LessonProgressHeader extends StatefulWidget {
 }
 
 class _LessonProgressHeaderState extends State<LessonProgressHeader>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final AnimationController _livesPulse;
+  late final AnimationController _streakPulse;
 
   @override
   void initState() {
@@ -50,6 +55,10 @@ class _LessonProgressHeaderState extends State<LessonProgressHeader>
     _livesPulse = AnimationController(
       vsync: this,
       duration: LessonProgressHeader.livesLossPulseDuration,
+    );
+    _streakPulse = AnimationController(
+      vsync: this,
+      duration: LessonProgressHeader.streakPulseDuration,
     );
   }
 
@@ -59,11 +68,15 @@ class _LessonProgressHeaderState extends State<LessonProgressHeader>
     if (widget.livesRemaining < oldWidget.livesRemaining) {
       _livesPulse.forward(from: 0);
     }
+    if (widget.acceptedStreak > oldWidget.acceptedStreak) {
+      _streakPulse.forward(from: 0);
+    }
   }
 
   @override
   void dispose() {
     _livesPulse.dispose();
+    _streakPulse.dispose();
     super.dispose();
   }
 
@@ -86,6 +99,16 @@ class _LessonProgressHeaderState extends State<LessonProgressHeader>
       return 1 - 0.35 * (t / 0.5);
     }
     return 0.65 + 0.35 * ((t - 0.5) / 0.5);
+  }
+
+  /// Scale-only swell for streak gain (mirrors lives peak timing).
+  double get _streakScale {
+    final t = _streakPulse.value;
+    if (t <= 0 || t >= 1) return 1;
+    if (t < 0.5) {
+      return 1 + 0.28 * (t / 0.5);
+    }
+    return 1.28 - 0.28 * ((t - 0.5) / 0.5);
   }
 
   @override
@@ -147,19 +170,33 @@ class _LessonProgressHeaderState extends State<LessonProgressHeader>
                 ),
                 if (showStreak) ...[
                   const SizedBox(width: 8),
-                  Icon(
-                    Icons.local_fire_department,
-                    size: 15,
-                    color: AppColors.success,
-                  ),
-                  const SizedBox(width: 2),
-                  Text(
-                    '${widget.acceptedStreak}',
-                    style: GoogleFonts.manrope(
-                      color: AppColors.success,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 13,
-                      height: 1,
+                  AnimatedBuilder(
+                    animation: _streakPulse,
+                    builder: (context, child) {
+                      return Transform.scale(
+                        scale: _streakScale,
+                        child: child,
+                      );
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.local_fire_department,
+                          size: 15,
+                          color: AppColors.success,
+                        ),
+                        const SizedBox(width: 2),
+                        Text(
+                          '${widget.acceptedStreak}',
+                          style: GoogleFonts.manrope(
+                            color: AppColors.success,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 13,
+                            height: 1,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
