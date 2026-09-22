@@ -422,6 +422,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
   // Avoid false hits on "suited", "big blind", "Button: wider", "steal blinds".
   if (blob.contains('dealer button') ||
       blob.contains('the button marks') ||
+      blob.contains('button marks the') ||
       blob.contains('button and blinds') ||
       blob.contains('who posts') ||
       (blob.contains('dealer') && blob.contains('button'))) {
@@ -436,6 +437,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       blob.contains('action order after the blinds')) {
     return const CoachDialogueVisual(
       kind: CoachDialogueVisualKind.actionOrder,
+    );
+  }
+  // Before hole-card matching — "whole edge" contains the letters "hole".
+  if (blob.contains('later seats') ||
+      blob.contains('prefer later') ||
+      blob.contains('latest seat')) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.positionLabels,
     );
   }
   if (blob.contains('suited aces') ||
@@ -455,9 +464,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.openRange,
     );
   }
-  if (blob.contains('hole') ||
+  // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
+  if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
-      blob.contains('private') ||
+      blob.contains('yours alone') ||
       blob.contains('nobody else sees')) {
     final scene = resolveLessonTableScene(activity);
     final codes =

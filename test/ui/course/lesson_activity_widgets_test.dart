@@ -598,7 +598,37 @@ void main() {
       ).kind,
       CoachDialogueVisualKind.actionOrder,
     );
-    // Families explain teaches by tapping family tiles (not suits/button demos).
+    // "whole edge" must not match substring "hole"; later-seats → position demo.
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-generic-pos-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText: 'Later seats see more. That is the whole edge.',
+          acceptedGrades: const [SoftGrade.recommended],
+          objectives: const ['Prefer later seats when choosing hands'],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.positionLabels,
+    );
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-generic-button-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText: 'Button marks the dealer. Blinds sit left of it.',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.dealerButton,
+    );
+    // Families / open-range explains teach by tapping tiles (not suits/button).
     expect(
       resolveCoachDialogueVisual(
         CourseActivity(
