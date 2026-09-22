@@ -827,6 +827,21 @@ void main() {
     expect(
       resolveCoachDialogueVisual(
         CourseActivity(
+          id: 'act-03-08-01-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'Common leaks: worship top pair, chase bad prices, call too passive, bluff crowds.',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.commonLeaks,
+    );
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
           id: 'act-generic-explain',
           order: 1,
           stage: ActivityStage.explain,
@@ -1452,6 +1467,53 @@ void main() {
     expect(isTableRegionTapActivity(activity), isTrue);
 
     for (final title in ['VALUE', 'BLUFF', 'CATCH', 'FOLD']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
+
+  testWidgets('common-leaks explain taps each leak instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-08-01-explain',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'Common leaks: worship top pair, chase bad prices, call too passive, bluff crowds.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'Common leaks: worship top pair, chase bad prices, call too passive, bluff crowds.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(CommonLeaksDemo), findsOneWidget);
+    expect(find.text('Tap each common leak once.'), findsOneWidget);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    for (final title in ['TOP PAIR', 'PRICES', 'PASSIVE', 'CROWDS']) {
       await tester.tap(find.text(title));
       await tester.pump();
     }
