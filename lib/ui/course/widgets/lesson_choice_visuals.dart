@@ -81,7 +81,8 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
       (activity.id.startsWith('act-01-01-01-') ||
           activity.id.startsWith('act-01-01-03-') ||
           activity.id.startsWith('act-01-04-01-') ||
-          activity.id.startsWith('act-01-05-01-'))) {
+          activity.id.startsWith('act-01-05-01-') ||
+          activity.id.startsWith('act-02-01-01-'))) {
     return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-01-02-01-scaffolded-spot') {

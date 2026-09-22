@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "233e3ae72616f805f84134f645a06b3ef8c5a3d06cf220b9ab03e28e5932b25a",
+  "contentChecksum": "aa19c4aaf1902f824d53b602455c54859d45cb20d8e1ba69fdcaace73bec1c7a",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -3093,7 +3093,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Identify the button as last to act postflop.",
+                  "accessibilityText": "Tap the button seat — last to act after the flop.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -3103,7 +3103,7 @@
                   "objectives": [
                     "Label EP, HJ, CO, and BTN"
                   ],
-                  "prompt": "Which seat acts last postflop?",
+                  "prompt": "Tap who acts last postflop.",
                   "choices": [
                     {
                       "id": "pos-btn",
@@ -3139,7 +3139,7 @@
                     {
                       "id": "act-02-01-01-guided-btn-hint",
                       "kind": "hint",
-                      "text": "The dealer button acts last after the flop."
+                      "text": "Look for the D chip. Button closes postflop action."
                     }
                   ]
                 },
@@ -3149,7 +3149,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Identify small blind and big blind.",
+                  "accessibilityText": "Tap the small blind or big blind seat.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -3159,12 +3159,12 @@
                   "objectives": [
                     "Label SB and BB"
                   ],
-                  "prompt": "Which seats post forced bets every hand?",
+                  "prompt": "Tap a seat that posts a forced bet every hand.",
                   "choices": [
                     {
                       "id": "sb-bb",
-                      "label": "SB and BB",
-                      "accessibilityText": "SB and BB",
+                      "label": "SB or BB",
+                      "accessibilityText": "SB or BB",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Those two post every hand."
@@ -3172,8 +3172,8 @@
                     },
                     {
                       "id": "btn-bb",
-                      "label": "BTN and BB",
-                      "accessibilityText": "BTN and BB",
+                      "label": "BTN",
+                      "accessibilityText": "BTN",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Button does not post a blind.",
@@ -3182,8 +3182,8 @@
                     },
                     {
                       "id": "ep-only",
-                      "label": "Only EP",
-                      "accessibilityText": "Only EP",
+                      "label": "EP",
+                      "accessibilityText": "EP",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Early position is voluntary action.",
@@ -3198,7 +3198,7 @@
                   "stage": "unguided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Name the cutoff seat.",
+                  "accessibilityText": "Tap the cutoff seat on the six-max table.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -3208,7 +3208,7 @@
                   "objectives": [
                     "Label EP, HJ, CO, and BTN"
                   ],
-                  "prompt": "Seat right before the button is called?",
+                  "prompt": "Tap the seat right before the button.",
                   "choices": [
                     {
                       "id": "label-co",
@@ -3247,7 +3247,7 @@
                   "stage": "checkpoint",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Prefer button over early position.",
+                  "accessibilityText": "Tap the button rather than early position.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -3257,7 +3257,7 @@
                   "objectives": [
                     "Prefer later seats when choosing hands"
                   ],
-                  "prompt": "Same hand, EP vs BTN. Where is it stronger to play?",
+                  "prompt": "Same hand — tap where it is stronger to play.",
                   "choices": [
                     {
                       "id": "prefer-btn",

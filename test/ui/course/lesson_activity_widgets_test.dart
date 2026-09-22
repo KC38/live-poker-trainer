@@ -50,8 +50,13 @@ CourseActivity _activity({
 }
 
 Widget _wrap(Widget child) {
+  final base = buildPokerTheme();
   return MaterialApp(
-    theme: buildPokerTheme(),
+    theme: base.copyWith(
+      // Flutter 3.47 + Impeller/SkSL mismatch crashes ink_sparkle in tests.
+      splashFactory: NoSplash.splashFactory,
+      highlightColor: Colors.transparent,
+    ),
     home: Scaffold(body: SingleChildScrollView(child: child)),
   );
 }
@@ -320,6 +325,58 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('Position labels guided tap selects BTN on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-02-01-01-guided-btn',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap the button seat — last to act after the flop.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap who acts last postflop.',
+      choices: const [
+        CourseChoice(id: 'pos-btn', label: 'BTN'),
+        CourseChoice(id: 'pos-bb', label: 'BB'),
+        CourseChoice(id: 'pos-ep', label: 'EP'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+
+    expect(find.text('Tap who acts last postflop.'), findsOneWidget);
+    expect(find.byType(LessonTableContext), findsOneWidget);
+    // Choice prose buttons are hidden — labels live on the felt chips.
+    expect(find.text('On the button'), findsNothing);
+
+    await tester.tap(
+      find.descendant(
+        of: find.byType(LessonTableContext),
+        matching: find.text('BTN'),
+      ),
+    );
+    await tester.pump();
+    expect(controller.draft.choiceId, 'pos-btn');
+
+    await tester.tap(
+      find.descendant(
+        of: find.byType(LessonTableContext),
+        matching: find.text('EP'),
+      ),
+    );
+    await tester.pump();
+    expect(controller.draft.choiceId, 'pos-ep');
+    controller.dispose();
+  });
+
   testWidgets('Button and blinds timing tap selects before deal', (
     tester,
   ) async {
@@ -541,7 +598,119 @@ void main() {
       blindsBigBlindSeat(buttonSeat: 5, seatCount: 6),
       1,
     );
+  });
 
+  test('table region mapping covers Position labels activities', () {
+    const btnChoices = [
+      CourseChoice(id: 'pos-btn', label: 'BTN'),
+      CourseChoice(id: 'pos-bb', label: 'BB'),
+      CourseChoice(id: 'pos-ep', label: 'EP'),
+    ];
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-02-01-01-guided-btn',
+        region: LessonTableRegion.button,
+        choices: btnChoices,
+      ),
+      'pos-btn',
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-02-01-01-guided-btn',
+        region: LessonTableRegion.earlyPosition,
+        choices: btnChoices,
+      ),
+      'pos-ep',
+    );
+
+    const blindsChoices = [
+      CourseChoice(id: 'sb-bb', label: 'SB or BB'),
+      CourseChoice(id: 'btn-bb', label: 'BTN'),
+      CourseChoice(id: 'ep-only', label: 'EP'),
+    ];
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-02-01-01-scaffolded-blinds',
+        region: LessonTableRegion.smallBlind,
+        choices: blindsChoices,
+      ),
+      'sb-bb',
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-02-01-01-scaffolded-blinds',
+        region: LessonTableRegion.bigBlind,
+        choices: blindsChoices,
+      ),
+      'sb-bb',
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-02-01-01-scaffolded-blinds',
+        region: LessonTableRegion.button,
+        choices: blindsChoices,
+      ),
+      'btn-bb',
+    );
+
+    const cutoffChoices = [
+      CourseChoice(id: 'label-co', label: 'Cutoff (CO)'),
+      CourseChoice(id: 'label-hj', label: 'Hijack (HJ)'),
+      CourseChoice(id: 'label-ep', label: 'Early position'),
+    ];
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-02-01-01-unguided-co',
+        region: LessonTableRegion.cutoff,
+        choices: cutoffChoices,
+      ),
+      'label-co',
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-02-01-01-unguided-co',
+        region: LessonTableRegion.hijack,
+        choices: cutoffChoices,
+      ),
+      'label-hj',
+    );
+
+    const edgeChoices = [
+      CourseChoice(id: 'prefer-btn', label: 'On the button'),
+      CourseChoice(id: 'prefer-ep', label: 'Under the gun'),
+      CourseChoice(id: 'same-always', label: 'Seat never matters'),
+    ];
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-02-01-01-checkpoint-edge',
+        region: LessonTableRegion.button,
+        choices: edgeChoices,
+      ),
+      'prefer-btn',
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-02-01-01-checkpoint-edge',
+        region: LessonTableRegion.seatNeverMatters,
+        choices: edgeChoices,
+      ),
+      'same-always',
+    );
+
+    expect(positionEarlySeat(buttonSeat: 3, seatCount: 6), 0);
+    expect(positionHijackSeat(buttonSeat: 3, seatCount: 6), 1);
+    expect(positionCutoffSeat(buttonSeat: 3, seatCount: 6), 2);
+    expect(
+      positionRoleForSeat(seatIndex: 3, buttonSeat: 3, seatCount: 6),
+      LessonTableRegion.button,
+    );
+    expect(
+      positionRoleForSeat(seatIndex: 2, buttonSeat: 3, seatCount: 6),
+      LessonTableRegion.cutoff,
+    );
+  });
+
+  test('street and pot mapping helpers stay covered', () {
     const streetEndChoices = [
       CourseChoice(id: 'matched', label: 'Bets matched'),
       CourseChoice(id: 'three-cards', label: 'Flop appears'),
@@ -898,7 +1067,11 @@ void main() {
       accessibilityText: 'Tap button',
       acceptedGrades: const [SoftGrade.recommended],
       prompt: 'Tap the dealer button on the table.',
-      choices: buttonChoices,
+      choices: const [
+        CourseChoice(id: 'btn-seat', label: 'The seat with the D chip'),
+        CourseChoice(id: 'bb-seat', label: 'The seat that posted 2 chips'),
+        CourseChoice(id: 'empty-seat', label: 'Any empty seat'),
+      ],
     );
     expect(
       resolveSelectIdentifyPresentation(guided),
@@ -907,6 +1080,42 @@ void main() {
     final scene = resolveLessonTableScene(guided);
     expect(scene, isNotNull);
     expect(scene!.layout, LessonTableLayout.blindsSeats);
+
+    final positionGuided = CourseActivity(
+      id: 'act-02-01-01-guided-btn',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap BTN',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap who acts last postflop.',
+      choices: const [
+        CourseChoice(id: 'pos-btn', label: 'BTN'),
+        CourseChoice(id: 'pos-bb', label: 'BB'),
+        CourseChoice(id: 'pos-ep', label: 'EP'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(positionGuided),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final positionScene = resolveLessonTableScene(positionGuided);
+    expect(positionScene?.layout, LessonTableLayout.positionLabels);
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-02-01-01-explain-pos',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText: 'Later seats',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.positionLabels,
+    );
   });
 
   test('suit tap mapping covers full / missing / extra', () {

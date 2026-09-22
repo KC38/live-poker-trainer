@@ -38,6 +38,18 @@ enum LessonTableRegion {
   /// Unlabeled / empty seat distractor.
   emptySeat,
 
+  /// Early position / UTG on a six-max position layout.
+  earlyPosition,
+
+  /// Hijack seat.
+  hijack,
+
+  /// Cutoff seat (right before the button).
+  cutoff,
+
+  /// Checkpoint distractor: seat never matters.
+  seatNeverMatters,
+
   /// Timing: blinds post before the deal.
   beforeDeal,
 
@@ -101,6 +113,9 @@ enum LessonTableLayout {
   /// Six-max seats with button / blinds chips.
   blindsSeats,
 
+  /// Six-max seats labeled EP / HJ / CO / BTN / SB / BB.
+  positionLabels,
+
   /// Hand-phase timing tiles for when blinds post.
   blindsTiming,
 
@@ -135,6 +150,7 @@ class LessonTableScene {
     this.seatCount = 6,
     this.buttonSeat = 5,
     this.numberSeats = false,
+    this.showSeatNeverMatters = false,
   });
 
   /// Face-up hero hole cards (e.g. `Ah`, `Kd`).
@@ -169,10 +185,23 @@ class LessonTableScene {
 
   /// Show absolute seat numbers (0..n-1) on the blinds layout.
   final bool numberSeats;
+
+  /// Show a "Seat never matters" distractor under position labels.
+  final bool showSeatNeverMatters;
 }
 
 /// Which region of the mini-table should read as the teaching target.
-enum LessonTableHighlight { none, hero, board, button, smallBlind, bigBlind }
+enum LessonTableHighlight {
+  none,
+  hero,
+  board,
+  button,
+  smallBlind,
+  bigBlind,
+  earlyPosition,
+  hijack,
+  cutoff,
+}
 
 final _cardToken = RegExp(r'\b([2-9TJQKA][shdc])\b', caseSensitive: false);
 
@@ -268,6 +297,40 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         seatCount: 6,
         buttonSeat: 5,
         numberSeats: true,
+      );
+    case 'act-02-01-01-explain-pos':
+    case 'act-02-01-01-guided-btn':
+      return const LessonTableScene(
+        layout: LessonTableLayout.positionLabels,
+        highlight: LessonTableHighlight.button,
+        seatCount: 6,
+        buttonSeat: 3,
+        caption: 'Six-max · tap who acts last postflop',
+      );
+    case 'act-02-01-01-scaffolded-blinds':
+      return const LessonTableScene(
+        layout: LessonTableLayout.positionLabels,
+        highlight: LessonTableHighlight.smallBlind,
+        seatCount: 6,
+        buttonSeat: 3,
+        caption: 'Tap SB or BB — both post every hand',
+      );
+    case 'act-02-01-01-unguided-co':
+      return const LessonTableScene(
+        layout: LessonTableLayout.positionLabels,
+        highlight: LessonTableHighlight.cutoff,
+        seatCount: 6,
+        buttonSeat: 3,
+        caption: 'Tap the seat right before the button',
+      );
+    case 'act-02-01-01-checkpoint-edge':
+      return const LessonTableScene(
+        layout: LessonTableLayout.positionLabels,
+        highlight: LessonTableHighlight.button,
+        seatCount: 6,
+        buttonSeat: 3,
+        showSeatNeverMatters: true,
+        caption: 'Same hand — EP vs BTN',
       );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
@@ -511,6 +574,38 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.potChipsTwelve => pick('pot-12'),
         _ => null,
       };
+    case 'act-02-01-01-guided-btn':
+      return switch (region) {
+        LessonTableRegion.button => pick('pos-btn'),
+        LessonTableRegion.bigBlind => pick('pos-bb'),
+        LessonTableRegion.earlyPosition => pick('pos-ep'),
+        _ => null,
+      };
+    case 'act-02-01-01-scaffolded-blinds':
+      return switch (region) {
+        LessonTableRegion.smallBlind || LessonTableRegion.bigBlind =>
+          pick('sb-bb'),
+        LessonTableRegion.button => pick('btn-bb'),
+        LessonTableRegion.earlyPosition ||
+        LessonTableRegion.hijack ||
+        LessonTableRegion.cutoff =>
+          pick('ep-only'),
+        _ => null,
+      };
+    case 'act-02-01-01-unguided-co':
+      return switch (region) {
+        LessonTableRegion.cutoff => pick('label-co'),
+        LessonTableRegion.hijack => pick('label-hj'),
+        LessonTableRegion.earlyPosition => pick('label-ep'),
+        _ => null,
+      };
+    case 'act-02-01-01-checkpoint-edge':
+      return switch (region) {
+        LessonTableRegion.button => pick('prefer-btn'),
+        LessonTableRegion.earlyPosition => pick('prefer-ep'),
+        LessonTableRegion.seatNeverMatters => pick('same-always'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -521,7 +616,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
   return activity.id.startsWith('act-01-01-01-') ||
       activity.id.startsWith('act-01-01-03-') ||
       activity.id.startsWith('act-01-04-01-') ||
-      activity.id.startsWith('act-01-05-01-');
+      activity.id.startsWith('act-01-05-01-') ||
+      activity.id.startsWith('act-02-01-01-');
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -532,6 +628,21 @@ int blindsSmallBlindSeat({required int buttonSeat, required int seatCount}) {
 /// Big-blind seat index clockwise from the button.
 int blindsBigBlindSeat({required int buttonSeat, required int seatCount}) {
   return (buttonSeat + 2) % seatCount;
+}
+
+/// Early-position / UTG seat index clockwise from the button (six-max).
+int positionEarlySeat({required int buttonSeat, required int seatCount}) {
+  return (buttonSeat + 3) % seatCount;
+}
+
+/// Hijack seat index clockwise from the button (six-max).
+int positionHijackSeat({required int buttonSeat, required int seatCount}) {
+  return (buttonSeat + 4) % seatCount;
+}
+
+/// Cutoff seat index clockwise from the button (six-max).
+int positionCutoffSeat({required int buttonSeat, required int seatCount}) {
+  return (buttonSeat + 5) % seatCount;
 }
 
 /// Role for a seat on a blinds teaching layout.
@@ -548,6 +659,36 @@ LessonTableRegion blindsRoleForSeat({
   if (seatIndex ==
       blindsBigBlindSeat(buttonSeat: buttonSeat, seatCount: seatCount)) {
     return LessonTableRegion.bigBlind;
+  }
+  return LessonTableRegion.emptySeat;
+}
+
+/// Role for a seat on a six-max position-labels layout.
+LessonTableRegion positionRoleForSeat({
+  required int seatIndex,
+  required int buttonSeat,
+  required int seatCount,
+}) {
+  if (seatIndex == buttonSeat) return LessonTableRegion.button;
+  if (seatIndex ==
+      blindsSmallBlindSeat(buttonSeat: buttonSeat, seatCount: seatCount)) {
+    return LessonTableRegion.smallBlind;
+  }
+  if (seatIndex ==
+      blindsBigBlindSeat(buttonSeat: buttonSeat, seatCount: seatCount)) {
+    return LessonTableRegion.bigBlind;
+  }
+  if (seatIndex ==
+      positionEarlySeat(buttonSeat: buttonSeat, seatCount: seatCount)) {
+    return LessonTableRegion.earlyPosition;
+  }
+  if (seatIndex ==
+      positionHijackSeat(buttonSeat: buttonSeat, seatCount: seatCount)) {
+    return LessonTableRegion.hijack;
+  }
+  if (seatIndex ==
+      positionCutoffSeat(buttonSeat: buttonSeat, seatCount: seatCount)) {
+    return LessonTableRegion.cutoff;
   }
   return LessonTableRegion.emptySeat;
 }
@@ -598,6 +739,7 @@ class LessonTableContext extends StatelessWidget {
   Widget build(BuildContext context) {
     return switch (scene.layout) {
       LessonTableLayout.blindsSeats => _buildBlindsSeats(),
+      LessonTableLayout.positionLabels => _buildPositionLabels(),
       LessonTableLayout.blindsTiming => _buildBlindsTiming(),
       LessonTableLayout.streetEndPhases => _buildStreetEndPhases(),
       LessonTableLayout.potFoldWinOutcomes => _buildPotFoldWinOutcomes(),
@@ -713,6 +855,120 @@ class LessonTableContext extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [for (final s in bottomRow) seatChip(s)],
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPositionLabels() {
+    final n = scene.seatCount;
+    final button = scene.buttonSeat % n;
+    final sb = blindsSmallBlindSeat(buttonSeat: button, seatCount: n);
+    final bb = blindsBigBlindSeat(buttonSeat: button, seatCount: n);
+    final ep = positionEarlySeat(buttonSeat: button, seatCount: n);
+    final hj = positionHijackSeat(buttonSeat: button, seatCount: n);
+    final co = positionCutoffSeat(buttonSeat: button, seatCount: n);
+    // Clockwise visual: late seats on the bottom rail, early seats on top.
+    final bottomRow = <int>[co, button, sb];
+    final topRow = <int>[bb, ep, hj];
+
+    LessonTableRegion roleOf(int seat) => positionRoleForSeat(
+          seatIndex: seat,
+          buttonSeat: button,
+          seatCount: n,
+        );
+
+    bool pulseRole(LessonTableRegion role) {
+      if (!showSoftPulse ||
+          selectedRegion != null ||
+          selectedSeatIndex != null) {
+        return false;
+      }
+      return switch (scene.highlight) {
+        LessonTableHighlight.button => role == LessonTableRegion.button,
+        LessonTableHighlight.smallBlind =>
+          role == LessonTableRegion.smallBlind ||
+              role == LessonTableRegion.bigBlind,
+        LessonTableHighlight.bigBlind => role == LessonTableRegion.bigBlind,
+        LessonTableHighlight.earlyPosition =>
+          role == LessonTableRegion.earlyPosition,
+        LessonTableHighlight.hijack => role == LessonTableRegion.hijack,
+        LessonTableHighlight.cutoff => role == LessonTableRegion.cutoff,
+        _ => false,
+      };
+    }
+
+    Widget seatChip(int seat) {
+      final role = roleOf(seat);
+      final selected =
+          selectedSeatIndex == seat ||
+          (selectedSeatIndex == null && selectedRegion == role);
+      return _PositionSeatChip(
+        role: role,
+        selected: selected,
+        highlighted: pulseRole(role),
+        enabled: enabled && _interactive,
+        onTap: _interactive
+            ? () => onRegionTap!(
+                  LessonTableTapTarget(role, seatIndex: seat),
+                )
+            : null,
+      );
+    }
+
+    return _feltShell(
+      semanticsLabel: _interactive
+          ? 'Interactive six-max table with position labels'
+          : 'Six-max table showing EP, HJ, CO, button, and blinds',
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [for (final s in topRow) seatChip(s)],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            scene.caption ?? 'EP · HJ · CO · BTN · SB · BB',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [for (final s in bottomRow) seatChip(s)],
+          ),
+          if (scene.showSeatNeverMatters) ...[
+            const SizedBox(height: 12),
+            _TappableRegion(
+              label: 'Seat never matters',
+              selected: selectedRegion == LessonTableRegion.seatNeverMatters,
+              highlighted: false,
+              enabled: enabled && _interactive,
+              onTap: _interactive
+                  ? () => onRegionTap!(
+                        const LessonTableTapTarget(
+                          LessonTableRegion.seatNeverMatters,
+                        ),
+                      )
+                  : null,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                child: Text(
+                  'Seat never matters',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.cream,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -1398,6 +1654,87 @@ class _TappableRegion extends StatelessWidget {
           onTap: enabled ? onTap : null,
           borderRadius: BorderRadius.circular(14),
           child: framed,
+        ),
+      ),
+    );
+  }
+}
+
+class _PositionSeatChip extends StatelessWidget {
+  const _PositionSeatChip({
+    required this.role,
+    required this.selected,
+    required this.highlighted,
+    required this.enabled,
+    required this.onTap,
+  });
+
+  final LessonTableRegion role;
+  final bool selected;
+  final bool highlighted;
+  final bool enabled;
+  final VoidCallback? onTap;
+
+  String get _code => switch (role) {
+        LessonTableRegion.button => 'BTN',
+        LessonTableRegion.smallBlind => 'SB',
+        LessonTableRegion.bigBlind => 'BB',
+        LessonTableRegion.earlyPosition => 'EP',
+        LessonTableRegion.hijack => 'HJ',
+        LessonTableRegion.cutoff => 'CO',
+        _ => '?',
+      };
+
+  String get _subtitle => switch (role) {
+        LessonTableRegion.button => 'Dealer',
+        LessonTableRegion.smallBlind => 'Posts 1',
+        LessonTableRegion.bigBlind => 'Posts 2',
+        LessonTableRegion.earlyPosition => 'UTG',
+        LessonTableRegion.hijack => 'Mid',
+        LessonTableRegion.cutoff => 'Late',
+        _ => '',
+      };
+
+  String get _a11y => switch (role) {
+        LessonTableRegion.button => 'Button seat',
+        LessonTableRegion.smallBlind => 'Small blind seat',
+        LessonTableRegion.bigBlind => 'Big blind seat',
+        LessonTableRegion.earlyPosition => 'Early position seat',
+        LessonTableRegion.hijack => 'Hijack seat',
+        LessonTableRegion.cutoff => 'Cutoff seat',
+        _ => 'Seat',
+      };
+
+  @override
+  Widget build(BuildContext context) {
+    return _TappableRegion(
+      label: _a11y,
+      selected: selected,
+      highlighted: highlighted,
+      enabled: enabled,
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 10, 10, 8),
+        child: Column(
+          children: [
+            Text(
+              _code,
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 16,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              _subtitle,
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 10,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
         ),
       ),
     );
