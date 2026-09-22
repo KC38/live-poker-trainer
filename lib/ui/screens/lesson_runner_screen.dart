@@ -228,8 +228,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
   Future<void> _submit() async {
     final controller = _activityController;
     final attempt = _attempt;
-    final catalog = ref.read(courseCatalogProvider).asData?.value;
-    if (controller == null || attempt == null || catalog == null) return;
+    // Felt-tap explains hide the Check dock — never silent-no-op while the
+    // catalog provider is mid-reload (same class of bug as #228 complete).
+    if (controller == null || attempt == null) return;
     if (!_canSubmit) return;
 
     // Local cursor drifted from the attempt snapshot (e.g. after a partial
@@ -238,6 +239,20 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       await _resyncToServerCursor();
       return;
     }
+
+    final CourseCatalog catalog;
+    try {
+      catalog = await ref.read(courseCatalogProvider.future);
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Lesson content is still loading. Try again.'),
+        ),
+      );
+      return;
+    }
+    if (!mounted) return;
 
     final key = controller.ensureIdempotencyKey(
       () => CourseService.newRequestKey('step'),
@@ -358,9 +373,15 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
 
   /// Re-reads the server resume pointer and rebinds the visible activity.
   Future<void> _resyncToServerCursor({String? notice}) async {
-    final catalog = ref.read(courseCatalogProvider).asData?.value;
     final controller = _activityController;
-    if (catalog == null || controller == null) return;
+    if (controller == null) return;
+    final CourseCatalog catalog;
+    try {
+      catalog = await ref.read(courseCatalogProvider.future);
+    } catch (_) {
+      return;
+    }
+    if (!mounted) return;
     try {
       final started = await _service.startLesson(
         lessonId: widget.lessonId,
