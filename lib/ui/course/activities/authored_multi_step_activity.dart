@@ -136,8 +136,10 @@ class AuthoredMultiStepActivity extends StatelessWidget {
                 accessibilityText: step.choices[i].accessibilityText,
                 selected: selected == step.choices[i].id,
                 enabled: !locked,
-                onPressed: () =>
-                    controller.selectChoice(step.choices[i].id),
+                onPressed: () => controller.selectChoice(
+                      step.choices[i].id,
+                      autoSubmit: true,
+                    ),
               ),
             ],
           ],

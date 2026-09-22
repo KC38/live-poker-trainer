@@ -133,9 +133,24 @@ class PokerActionSizingActivity extends StatelessWidget {
                         ].join(' '),
                     selected: selected == choice.id,
                     enabled: !locked,
-                    onPressed: () => controller.selectChoice(choice.id),
+                    onPressed: () =>
+                        controller.selectChoice(choice.id, autoSubmit: true),
                   ),
               ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              controller.submitting
+                  ? 'Checking…'
+                  : selected == null
+                  ? 'Tap your action.'
+                  : 'Checking…',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ],
         );

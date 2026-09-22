@@ -745,6 +745,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                       isTableRegionTapActivity(activity) ||
                       activity.renderer == ActivityRenderer.orderSequence ||
                       activity.renderer == ActivityRenderer.compareRank ||
+                      activity.renderer ==
+                          ActivityRenderer.pokerActionSizing ||
+                      activity.renderer ==
+                          ActivityRenderer.authoredMultiStepHand ||
+                      activity.renderer ==
+                          ActivityRenderer.playerReadClassify ||
                       isLessonActionTableActivity(activity);
                   if (autoSubmit) {
                     // Teach-by-doing: taps auto-submit — no Check dock.

@@ -114,13 +114,9 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
 
 /// True when select/identify answers auto-submit (no Check dock).
 bool isAutoSubmitSelectIdentify(CourseActivity activity) {
-  if (activity.renderer != ActivityRenderer.selectIdentify) return false;
-  final presentation = resolveSelectIdentifyPresentation(activity);
-  return presentation == SelectIdentifyPresentation.tableRegionTap ||
-      presentation == SelectIdentifyPresentation.suitTapPicker ||
-      presentation == SelectIdentifyPresentation.handCategoryTap ||
-      presentation == SelectIdentifyPresentation.showdownTap ||
-      presentation == SelectIdentifyPresentation.bestFiveCardTap;
+  // Teach-by-doing: hide Check for all single-choice identify shells.
+  return activity.renderer == ActivityRenderer.selectIdentify ||
+      activity.renderer == ActivityRenderer.playerReadClassify;
 }
 
 /// Parses suit words / glyphs from a choice label.
