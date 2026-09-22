@@ -1627,6 +1627,109 @@ class _RiverBinaryDemoState extends State<RiverBinaryDemo> {
 }
 
 
+
+/// Explain-step demo: multiway adjustments (stronger / fewer bluffs / nuts).
+class MultiwayPlanDemo extends StatefulWidget {
+  /// Creates the demo.
+  const MultiwayPlanDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'STRONGER', caption: 'Value up', color: AppColors.gold),
+    (label: 'FEWER', caption: 'Bluffs down', color: AppColors.slate),
+    (label: 'NUTS', caption: 'Not second-best', color: AppColors.cream),
+  ];
+
+  @override
+  State<MultiwayPlanDemo> createState() => _MultiwayPlanDemoState();
+}
+
+class _MultiwayPlanDemoState extends State<MultiwayPlanDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= MultiwayPlanDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Multiway adjustments',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < MultiwayPlanDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoActionCard(
+                    label: MultiwayPlanDemo.points[i].label,
+                    caption: MultiwayPlanDemo.points[i].caption,
+                    color: MultiwayPlanDemo.points[i].color,
+                    selected:
+                        _tapped.contains(MultiwayPlanDemo.points[i].label),
+                    enabled: widget.interactive && widget.enabled,
+                    onPressed:
+                        widget.interactive
+                            ? () => _onTap(MultiwayPlanDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? 'Tap Stronger, Fewer, and Nuts'
+                : 'Stronger value · fewer bluffs · chase nuts',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
+
 class _DemoActionCard extends StatelessWidget {
   const _DemoActionCard({
     required this.label,

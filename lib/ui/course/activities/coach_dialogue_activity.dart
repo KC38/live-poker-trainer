@@ -159,6 +159,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.riverBinary
                     ? null
                     : onFeltAcknowledge,
+            onMultiwayAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.multiwayPlan
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -270,6 +274,9 @@ enum CoachDialogueVisualKind {
 
   /// River binary: value, bluff, bluff-catch, or fold.
   riverBinary,
+
+  /// Multiway: stronger value, fewer bluffs, chase nuts.
+  multiwayPlan,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -336,6 +343,8 @@ class CoachDialogueVisual {
       'Tap Brick, Change, Barrel, and Delay.',
     CoachDialogueVisualKind.riverBinary =>
       'Tap Value, Bluff, Catch, and Fold.',
+    CoachDialogueVisualKind.multiwayPlan =>
+      'Tap Stronger, Fewer, and Nuts.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -364,7 +373,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.outsPrice ||
       kind == CoachDialogueVisualKind.flopLines ||
       kind == CoachDialogueVisualKind.turnStory ||
-      kind == CoachDialogueVisualKind.riverBinary;
+      kind == CoachDialogueVisualKind.riverBinary ||
+      kind == CoachDialogueVisualKind.multiwayPlan;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -417,6 +427,8 @@ class CoachDialogueVisual {
       'Turn-story tiles: brick, change, barrel, delay',
     CoachDialogueVisualKind.riverBinary =>
       'River-binary tiles: value, bluff, catch, fold',
+    CoachDialogueVisualKind.multiwayPlan =>
+      'Multiway tiles: stronger value, fewer bluffs, nuts',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -491,6 +503,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-03-06-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.riverBinary,
+      );
+    case 'act-03-07-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.multiwayPlan,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -710,6 +726,15 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.riverBinary,
     );
   }
+  // Phrase matches — avoid bare "value"/"bluff"/"best" traps.
+  if (blob.contains('more players') ||
+      blob.contains('fewer bluffs') ||
+      blob.contains('chase nuts') ||
+      (blob.contains('stronger value') && blob.contains('multiway'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.multiwayPlan,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -756,6 +781,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onFlopLinesAcknowledge,
     this.onTurnStoryAcknowledge,
     this.onRiverBinaryAcknowledge,
+    this.onMultiwayAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -783,6 +809,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onFlopLinesAcknowledge;
   final VoidCallback? onTurnStoryAcknowledge;
   final VoidCallback? onRiverBinaryAcknowledge;
+  final VoidCallback? onMultiwayAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -909,6 +936,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onRiverBinaryAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onRiverBinaryAcknowledge,
+        ),
+        CoachDialogueVisualKind.multiwayPlan => MultiwayPlanDemo(
+          interactive: onMultiwayAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onMultiwayAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },

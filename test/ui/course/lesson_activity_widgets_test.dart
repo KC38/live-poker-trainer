@@ -812,6 +812,21 @@ void main() {
     expect(
       resolveCoachDialogueVisual(
         CourseActivity(
+          id: 'act-03-07-01-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'More players: stronger value, fewer bluffs, chase nuts not second-best.',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.multiwayPlan,
+    );
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
           id: 'act-generic-explain',
           order: 1,
           stage: ActivityStage.explain,
@@ -1437,6 +1452,52 @@ void main() {
     expect(isTableRegionTapActivity(activity), isTrue);
 
     for (final title in ['VALUE', 'BLUFF', 'CATCH', 'FOLD']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
+  testWidgets(
+    'multiway explain taps Stronger Fewer Nuts instead of Continue',
+    (tester) async {
+    final activity = CourseActivity(
+      id: 'act-03-07-01-explain',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'More players: stronger value, fewer bluffs, chase nuts not second-best.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'More players: stronger value, fewer bluffs, chase nuts not second-best.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(MultiwayPlanDemo), findsOneWidget);
+    expect(find.text('Tap Stronger, Fewer, and Nuts.'), findsOneWidget);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    for (final title in ['STRONGER', 'FEWER', 'NUTS']) {
       await tester.tap(find.text(title));
       await tester.pump();
     }
