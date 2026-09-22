@@ -179,6 +179,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.multiStreetPlan
                     ? null
                     : onFeltAcknowledge,
+            onSizingLanguageAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.sizingLanguage
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -305,6 +309,9 @@ enum CoachDialogueVisualKind {
 
   /// Flop choice must answer turn and river plans.
   multiStreetPlan,
+
+  /// Size is language: value vs polar pressure.
+  sizingLanguage,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -381,6 +388,8 @@ class CoachDialogueVisual {
       'Tap 3-Bet, Ranges, and Squeeze.',
     CoachDialogueVisualKind.multiStreetPlan =>
       'Tap Flop, Turn, and River.',
+    CoachDialogueVisualKind.sizingLanguage =>
+      'Tap Value, Pressure, and Size.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -414,7 +423,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.commonLeaks ||
       kind == CoachDialogueVisualKind.rangeUpdate ||
       kind == CoachDialogueVisualKind.threeBetSqueeze ||
-      kind == CoachDialogueVisualKind.multiStreetPlan;
+      kind == CoachDialogueVisualKind.multiStreetPlan ||
+      kind == CoachDialogueVisualKind.sizingLanguage;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -477,6 +487,8 @@ class CoachDialogueVisual {
       '3-bet tiles: 3-bet, ranges, squeeze',
     CoachDialogueVisualKind.multiStreetPlan =>
       'Multi-street tiles: flop, turn, river',
+    CoachDialogueVisualKind.sizingLanguage =>
+      'Sizing tiles: value, pressure, size',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -571,6 +583,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-04-03-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.multiStreetPlan,
+      );
+    case 'act-04-04-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.sizingLanguage,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -841,6 +857,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.multiStreetPlan,
     );
   }
+  if (blob.contains('size is language') ||
+      blob.contains('value looks like value') ||
+      blob.contains('pressure looks like pressure') ||
+      (blob.contains('polar') && blob.contains('pressure'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.sizingLanguage,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -892,6 +916,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onRangeUpdateAcknowledge,
     this.onThreeBetSqueezeAcknowledge,
     this.onMultiStreetPlanAcknowledge,
+    this.onSizingLanguageAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -924,6 +949,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onRangeUpdateAcknowledge;
   final VoidCallback? onThreeBetSqueezeAcknowledge;
   final VoidCallback? onMultiStreetPlanAcknowledge;
+  final VoidCallback? onSizingLanguageAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1075,6 +1101,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onMultiStreetPlanAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onMultiStreetPlanAcknowledge,
+        ),
+        CoachDialogueVisualKind.sizingLanguage => SizingLanguageDemo(
+          interactive: onSizingLanguageAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onSizingLanguageAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
