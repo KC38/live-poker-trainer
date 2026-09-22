@@ -928,7 +928,7 @@ void main() {
           acceptedGrades: const [SoftGrade.recommended],
         ),
       ).kind,
-      CoachDialogueVisualKind.none,
+      CoachDialogueVisualKind.thinValue,
     );
     expect(
       resolveCoachDialogueVisual(
@@ -2598,6 +2598,51 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('thin-value explain taps Thin Catch Barrels instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-04-01-explain',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'Thin value needs calls. Bluff-catches need wide barrels.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'Thin value needs calls. Bluff-catches need wide barrels.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(ThinValueDemo), findsOneWidget);
+    expect(find.text('Tap Thin, Catch, and Barrels.'), findsOneWidget);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    for (final title in ['THIN', 'CATCH', 'BARRELS']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
 
   testWidgets(
     'multiway explain taps Stronger Fewer Nuts instead of Continue',
