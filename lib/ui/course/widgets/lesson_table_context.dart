@@ -1677,49 +1677,64 @@ class _TappableRegionState extends State<_TappableRegion>
 
   @override
   Widget build(BuildContext context) {
-    final border = widget.selected
+    // Keep InkWell's child tree stable across pulse ticks. Glow paints in an
+    // IgnorePointer overlay so the soft pulse never steals / cancels taps.
+    final staticBorder = widget.selected
         ? AppColors.gold
         : widget.highlighted
-        ? AppColors.gold.withValues(alpha: 0.7)
+        ? AppColors.gold.withValues(alpha: 0.55)
         : Colors.transparent;
-    final fill = widget.selected
+    final staticFill = widget.selected
         ? AppColors.gold.withValues(alpha: 0.22)
         : widget.highlighted
         ? AppColors.gold.withValues(alpha: 0.1)
         : Colors.transparent;
 
-    final framed = AnimatedBuilder(
-      animation: _pulse,
-      builder: (context, child) {
-        final glow = widget.highlighted && !widget.selected
-            ? 0.35 + (_pulse.value * 0.45)
-            : (widget.selected ? 0.85 : 0.0);
-        return AnimatedContainer(
+    final framed = Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.center,
+      children: [
+        AnimatedContainer(
           duration: const Duration(milliseconds: 180),
           curve: Curves.easeOut,
           decoration: BoxDecoration(
-            color: fill,
+            color: staticFill,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: border.withValues(
-                alpha: widget.selected ? 1 : (widget.highlighted ? glow : 0),
-              ),
+              color: staticBorder,
               width: widget.selected ? 2.4 : 1.8,
             ),
-            boxShadow: widget.highlighted && !widget.selected
-                ? [
-                  BoxShadow(
-                    color: AppColors.gold.withValues(alpha: 0.22 * glow),
-                    blurRadius: 12 + (8 * _pulse.value),
-                    spreadRadius: 0.5,
-                  ),
-                ]
-                : null,
           ),
-          child: child,
-        );
-      },
-      child: widget.child,
+          child: widget.child,
+        ),
+        if (widget.highlighted && !widget.selected)
+          Positioned.fill(
+            child: IgnorePointer(
+              child: AnimatedBuilder(
+                animation: _pulse,
+                builder: (context, _) {
+                  final glow = 0.35 + (_pulse.value * 0.45);
+                  return DecoratedBox(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: AppColors.gold.withValues(alpha: glow),
+                        width: 1.8,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.gold.withValues(alpha: 0.22 * glow),
+                          blurRadius: 12 + (8 * _pulse.value),
+                          spreadRadius: 0.5,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+      ],
     );
 
     if (widget.onTap == null) return framed;

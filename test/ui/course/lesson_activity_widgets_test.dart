@@ -211,12 +211,61 @@ void main() {
       isTrue,
     );
 
+    // Soft-pulse runs while guidance is on — taps must still land on BTN.
+    await tester.pump(const Duration(milliseconds: 450));
+    await tester.pump(const Duration(milliseconds: 450));
     await tester.tap(
       find.descendant(
         of: find.byType(LessonTableContext),
         matching: find.text('BTN'),
       ),
     );
+    await tester.pump();
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
+  testWidgets('soft-pulse glow does not block hole-card felt acknowledge', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-01-01-explain-hole-cards',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText: 'These two are yours alone.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text: 'These two are yours alone. Nobody else sees them.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(LessonTableContext), findsOneWidget);
+
+    await tester.pump(const Duration(milliseconds: 450));
+    await tester.pump(const Duration(milliseconds: 450));
+
+    final heroRail = find.byWidgetPredicate(
+      (w) => w is MiniCard && w.size == MiniCardSize.hero,
+    );
+    expect(heroRail, findsAtLeastNWidgets(2));
+    await tester.tap(heroRail.first);
     await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
