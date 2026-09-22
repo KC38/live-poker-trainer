@@ -1518,6 +1518,115 @@ class _TurnStoryDemoState extends State<TurnStoryDemo> {
 }
 
 
+/// Explain-step demo: river is binary — value, bluff, catch, or fold.
+class RiverBinaryDemo extends StatefulWidget {
+  /// Creates the demo.
+  const RiverBinaryDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'VALUE', caption: 'Get paid', color: AppColors.gold),
+    (label: 'BLUFF', caption: 'Make them fold', color: AppColors.cream),
+    (label: 'CATCH', caption: 'Bluff-catch', color: AppColors.slate),
+    (label: 'FOLD', caption: 'No mystery float', color: AppColors.danger),
+  ];
+
+  @override
+  State<RiverBinaryDemo> createState() => _RiverBinaryDemoState();
+}
+
+class _RiverBinaryDemoState extends State<RiverBinaryDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= RiverBinaryDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'River is binary',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          for (var row = 0; row < 2; row++) ...[
+            if (row > 0) const SizedBox(height: 8),
+            Row(
+              children: [
+                for (var col = 0; col < 2; col++) ...[
+                  if (col > 0) const SizedBox(width: 8),
+                  Expanded(
+                    child: _DemoActionCard(
+                      label: RiverBinaryDemo.points[row * 2 + col].label,
+                      caption: RiverBinaryDemo.points[row * 2 + col].caption,
+                      color: RiverBinaryDemo.points[row * 2 + col].color,
+                      selected: _tapped.contains(
+                        RiverBinaryDemo.points[row * 2 + col].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(
+                                RiverBinaryDemo.points[row * 2 + col].label,
+                              )
+                              : null,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ],
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? 'Tap Value, Bluff, Catch, and Fold'
+                : 'Value · bluff · bluff-catch · fold',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
+
 class _DemoActionCard extends StatelessWidget {
   const _DemoActionCard({
     required this.label,
