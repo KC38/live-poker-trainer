@@ -883,6 +883,102 @@ void main() {
       ).kind,
       CoachDialogueVisualKind.none,
     );
+    // Safer value/bluff routing — later explains must not steal river/multiway/BB demos.
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-04-08-03-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'Versus maniacs: call wider for value, let them hang themselves, no ego.',
+          objectives: const ['Widen value and bluff-catch'],
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.none,
+    );
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-05-04-01-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'Thin value needs calls. Bluff-catches need wide barrels.',
+          objectives: const ['Choose thin value versus sticky callers'],
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.none,
+    );
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-04-06-03-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'Versus stations: thicker value, fewer pure bluffs. Cite their calling.',
+          objectives: const ['Value wider versus Calling Station'],
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.none,
+    );
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-04-05-01-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'SPR = effective stack / pot. Low SPR: commit. High SPR: maneuver.',
+          objectives: const ['Estimate stack-to-pot ratio'],
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.none,
+    );
+    // Generic multiway / river copy without an authored id still resolves correctly.
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-generic-multiway-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'More players: stronger value, fewer bluffs, chase nuts not second-best.',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.multiwayPlan,
+    );
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-generic-river-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'River is binary: value, bluff, bluff-catch, or fold. No mystery floats.',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.riverBinary,
+    );
   });
 
   testWidgets('action-order explain taps UTG HJ BTN instead of Continue', (
