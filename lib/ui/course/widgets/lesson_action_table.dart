@@ -2855,6 +2855,106 @@ class _NitModelDemoState extends State<NitModelDemo> {
   }
 }
 
+/// Steal / credit / explode tiles for versus-nits explain demos.
+class VsNitsDemo extends StatefulWidget {
+  /// Creates the demo.
+  const VsNitsDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'STEAL', caption: 'Blinds more often', color: AppColors.gold),
+    (label: 'CREDIT', caption: 'When they fire', color: AppColors.cream),
+    (label: 'EXPLODE', caption: 'Believe the heat', color: AppColors.danger),
+  ];
+
+  @override
+  State<VsNitsDemo> createState() => _VsNitsDemoState();
+}
+
+class _VsNitsDemoState extends State<VsNitsDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= VsNitsDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Versus Nits',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < VsNitsDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoActionCard(
+                    label: VsNitsDemo.points[i].label,
+                    caption: VsNitsDemo.points[i].caption,
+                    color: VsNitsDemo.points[i].color,
+                    selected: _tapped.contains(VsNitsDemo.points[i].label),
+                    enabled: widget.interactive && widget.enabled,
+                    onPressed:
+                        widget.interactive
+                            ? () => _onTap(VsNitsDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? 'Tap Steal, Credit, and Explode'
+                : 'Steal more · give credit when they explode',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
 
 class _DemoActionCard extends StatelessWidget {
   const _DemoActionCard({
