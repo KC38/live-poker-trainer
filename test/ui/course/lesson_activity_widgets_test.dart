@@ -2116,7 +2116,7 @@ void main() {
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'fold-72');
-    expect(find.text('Ready — Lock in below.'), findsOneWidget);
+    expect(find.text('Checking…'), findsOneWidget);
     controller.dispose();
   });
 
@@ -2230,7 +2230,7 @@ void main() {
     await tester.tap(find.text('BET 5'));
     await tester.pump();
     expect(betController.draft.choiceId, 'bet-half');
-    expect(find.text('Ready — Lock in below.'), findsOneWidget);
+    expect(find.text('Checking…'), findsOneWidget);
     betController.dispose();
 
     final allIn = CourseActivity(

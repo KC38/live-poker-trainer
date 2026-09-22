@@ -90,13 +90,16 @@ class AuthoredMultiStepActivity extends StatelessWidget {
                 choices: step.choices,
                 selectedId: selected,
                 enabled: !locked,
-                onSelect: controller.selectChoice,
+                onSelect:
+                    (id) => controller.selectChoice(id, autoSubmit: true),
               ),
               const SizedBox(height: 10),
               Text(
-                selected == null
+                controller.submitting
+                    ? 'Checking…'
+                    : selected == null
                     ? 'Tap your action on the dock.'
-                    : 'Ready — Lock in below.',
+                    : 'Checking…',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.slate,

@@ -744,7 +744,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                   final autoSubmit = isAutoSubmitSelectIdentify(activity) ||
                       isTableRegionTapActivity(activity) ||
                       activity.renderer == ActivityRenderer.orderSequence ||
-                      activity.renderer == ActivityRenderer.compareRank;
+                      activity.renderer == ActivityRenderer.compareRank ||
+                      isLessonActionTableActivity(activity);
                   if (autoSubmit) {
                     // Teach-by-doing: taps auto-submit — no Check dock.
                     if (controller.submitting) {
