@@ -632,13 +632,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     final hint =
         activity.hintMedia.isNotEmpty ? activity.hintMedia.first : null;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final largeText = MediaQuery.textScalerOf(context).scale(1) > 1.15;
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(18, 8, 18, 18),
-          child: Column(
-            children: [
+    final largeText = MediaQuery.textScalerOf(context).scale(1) > 1.15;
+    return Padding(
+      // Tighter chrome so short explain/order steps sit up, not mid-void.
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+      child: Column(
+        children: [
               LessonProgressHeader(
                 // Prompt lives once in the activity body — avoid duplicating it.
                 progress: _progress,
@@ -665,59 +664,55 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                           );
                         },
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 8),
               Expanded(
                 child: SingleChildScrollView(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight: constraints.maxHeight * 0.35,
-                    ),
-                    child: AnimatedBuilder(
-                      animation: controller,
-                      builder: (context, _) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            activityRegistry.build(
-                              activity: activity,
-                              controller: controller,
-                              showGuidance: showGuidance,
-                              onFeltAcknowledge:
-                                  isTableRegionTapActivity(activity) &&
-                                          activity.renderer ==
-                                              ActivityRenderer.coachDialogue
-                                      ? _submit
-                                      : null,
-                            ),
-                            if (controller.hintVisible && hint != null) ...[
-                              const SizedBox(height: 14),
-                              RexCoachLine(text: hint.text, label: 'Hint'),
-                            ],
-                            if (controller.lastResult != null) ...[
-                              const SizedBox(height: 18),
-                              LessonFeedbackSheet(
-                                result: controller.lastResult!,
-                                betterChoiceLabel: _labelForChoice(
-                                  activity,
-                                  controller.lastResult!.betterChoiceId,
-                                ),
-                                // Sticky footer owns Continue / Try again so
-                                // CTAs stay reachable on short viewports.
-                                showActions: false,
-                                onContinue: _continueAfterFeedback,
-                                onRetry:
-                                    controller.lastResult!.accepted
-                                        ? null
-                                        : () {
-                                          controller.clearFeedbackForRetry();
-                                          setState(() {});
-                                        },
-                              ),
-                            ],
+                  // No artificial minHeight — short steps hug the top.
+                  child: AnimatedBuilder(
+                    animation: controller,
+                    builder: (context, _) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          activityRegistry.build(
+                            activity: activity,
+                            controller: controller,
+                            showGuidance: showGuidance,
+                            onFeltAcknowledge:
+                                isTableRegionTapActivity(activity) &&
+                                        activity.renderer ==
+                                            ActivityRenderer.coachDialogue
+                                    ? _submit
+                                    : null,
+                          ),
+                          if (controller.hintVisible && hint != null) ...[
+                            const SizedBox(height: 10),
+                            RexCoachLine(text: hint.text, label: 'Hint'),
                           ],
-                        );
-                      },
-                    ),
+                          if (controller.lastResult != null) ...[
+                            const SizedBox(height: 12),
+                            LessonFeedbackSheet(
+                              result: controller.lastResult!,
+                              betterChoiceLabel: _labelForChoice(
+                                activity,
+                                controller.lastResult!.betterChoiceId,
+                              ),
+                              // Sticky footer owns Continue / Try again so
+                              // CTAs stay reachable on short viewports.
+                              showActions: false,
+                              onContinue: _continueAfterFeedback,
+                              onRetry:
+                                  controller.lastResult!.accepted
+                                      ? null
+                                      : () {
+                                        controller.clearFeedbackForRetry();
+                                        setState(() {});
+                                      },
+                            ),
+                          ],
+                        ],
+                      );
+                    },
                   ),
                 ),
               ),
@@ -816,9 +811,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                 },
               ),
             ],
-          ),
-        );
-      },
+      ),
     );
   }
 
