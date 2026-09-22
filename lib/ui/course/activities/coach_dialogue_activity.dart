@@ -1,13 +1,15 @@
-/// Coach demonstration / dialogue activity.
-library;
-
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:live_poker_trainer/core/constants/colors.dart';
-import 'package:live_poker_trainer/models/card_model.dart';
-import 'package:live_poker_trainer/models/course/course_catalog.dart';
-import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+  // Phrase-safe guardrails — quit / guardrails, not bare "winning".
+  if (blob.contains('guardrails first') ||
+      blob.contains('knowing when to quit') ||
+      (blob.contains('guardrails') && blob.contains('quit')) ||
+      (blob.contains('winning 1/2') && blob.contains('quit'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.guardrails,
+    );
+  }
+son_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/guardrails_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -265,6 +267,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.tablesChange
                     ? null
                     : onFeltAcknowledge,
+            onGuardrailsAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.guardrails
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -454,6 +460,9 @@ enum CoachDialogueVisualKind {
 
   /// Tables change — stuck, tilted, gears; keep updating.
   tablesChange,
+
+  /// Winning includes knowing when to quit — guardrails first.
+  guardrails,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -572,6 +581,8 @@ class CoachDialogueVisual {
       'Tap Timing, Sizing, and Clues.',
     CoachDialogueVisualKind.tablesChange =>
       'Tap Stuck, Tilted, and Gears.',
+    CoachDialogueVisualKind.guardrails =>
+      'Tap Quit, Guard, and First.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -626,7 +637,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.lineStories ||
       kind == CoachDialogueVisualKind.rangeRewrite ||
       kind == CoachDialogueVisualKind.timingClues ||
-      kind == CoachDialogueVisualKind.tablesChange;
+      kind == CoachDialogueVisualKind.tablesChange ||
+      kind == CoachDialogueVisualKind.guardrails;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -731,6 +743,8 @@ class CoachDialogueVisual {
       'Timing-clues tiles: timing, sizing, clues — not mind-reading',
     CoachDialogueVisualKind.tablesChange =>
       'Tables-change tiles: stuck, tilted, shifting gears',
+    CoachDialogueVisualKind.guardrails =>
+      'Guardrails tiles: quit, guard, first',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -909,6 +923,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-05-08-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.tablesChange,
+      );
+    case 'act-05-09-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.guardrails,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1352,6 +1370,15 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.tablesChange,
     );
   }
+  // Phrase-safe guardrails — quit / guardrails, not bare "winning".
+  if (blob.contains('guardrails first') ||
+      blob.contains('knowing when to quit') ||
+      (blob.contains('guardrails') && blob.contains('quit')) ||
+      (blob.contains('winning 1/2') && blob.contains('quit'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.guardrails,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -1424,6 +1451,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onRangeRewriteAcknowledge,
     this.onTimingCluesAcknowledge,
     this.onTablesChangeAcknowledge,
+    this.onGuardrailsAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1477,6 +1505,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onRangeRewriteAcknowledge;
   final VoidCallback? onTimingCluesAcknowledge;
   final VoidCallback? onTablesChangeAcknowledge;
+  final VoidCallback? onGuardrailsAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1734,6 +1763,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onTablesChangeAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onTablesChangeAcknowledge,
+        ),
+        CoachDialogueVisualKind.guardrails => GuardrailsDemo(
+          interactive: onGuardrailsAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onGuardrailsAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
