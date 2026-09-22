@@ -4270,6 +4270,109 @@ class _TablesChangeDemoState extends State<TablesChangeDemo> {
   }
 }
 
+/// Quit / guard / stop tiles for session-guardrails explain demos.
+class SessionGuardrailsDemo extends StatefulWidget {
+  /// Creates the demo.
+  const SessionGuardrailsDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'QUIT', caption: 'Know when', color: AppColors.gold),
+    (label: 'GUARD', caption: 'Guardrails first', color: AppColors.cream),
+    (label: 'STOP', caption: 'Stop-loss set', color: AppColors.danger),
+  ];
+
+  @override
+  State<SessionGuardrailsDemo> createState() => _SessionGuardrailsDemoState();
+}
+
+class _SessionGuardrailsDemoState extends State<SessionGuardrailsDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= SessionGuardrailsDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Guardrails first',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < SessionGuardrailsDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoActionCard(
+                    label: SessionGuardrailsDemo.points[i].label,
+                    caption: SessionGuardrailsDemo.points[i].caption,
+                    color: SessionGuardrailsDemo.points[i].color,
+                    selected: _tapped.contains(
+                      SessionGuardrailsDemo.points[i].label,
+                    ),
+                    enabled: widget.interactive && widget.enabled,
+                    onPressed:
+                        widget.interactive
+                            ? () => _onTap(
+                              SessionGuardrailsDemo.points[i].label,
+                            )
+                            : null,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? 'Tap Quit, Guard, and Stop'
+                : 'Know when to quit',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
 
 class _DemoActionCard extends StatelessWidget {
   const _DemoActionCard({

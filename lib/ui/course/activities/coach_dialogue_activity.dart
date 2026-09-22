@@ -265,6 +265,11 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.tablesChange
                     ? null
                     : onFeltAcknowledge,
+            onSessionGuardrailsAcknowledge:
+                locked ||
+                        visual.kind != CoachDialogueVisualKind.sessionGuardrails
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -454,6 +459,9 @@ enum CoachDialogueVisualKind {
 
   /// Tables change — stuck, tilted, gears; keep updating.
   tablesChange,
+
+  /// Know when to quit — guardrails and stop-losses first.
+  sessionGuardrails,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -572,6 +580,8 @@ class CoachDialogueVisual {
       'Tap Timing, Sizing, and Clues.',
     CoachDialogueVisualKind.tablesChange =>
       'Tap Stuck, Tilted, and Gears.',
+    CoachDialogueVisualKind.sessionGuardrails =>
+      'Tap Quit, Guard, and Stop.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -626,7 +636,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.lineStories ||
       kind == CoachDialogueVisualKind.rangeRewrite ||
       kind == CoachDialogueVisualKind.timingClues ||
-      kind == CoachDialogueVisualKind.tablesChange;
+      kind == CoachDialogueVisualKind.tablesChange ||
+      kind == CoachDialogueVisualKind.sessionGuardrails;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -731,6 +742,8 @@ class CoachDialogueVisual {
       'Timing-clues tiles: timing, sizing, clues — not mind-reading',
     CoachDialogueVisualKind.tablesChange =>
       'Tables-change tiles: stuck, tilted, shifting gears',
+    CoachDialogueVisualKind.sessionGuardrails =>
+      'Session-guardrail tiles: quit, guardrails, stop-loss',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -909,6 +922,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-05-08-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.tablesChange,
+      );
+    case 'act-05-09-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.sessionGuardrails,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1352,6 +1369,15 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.tablesChange,
     );
   }
+  // Phrase-safe session guardrails — quit + guardrails / stop-loss framing.
+  if (blob.contains('knowing when to quit') ||
+      blob.contains('guardrails first') ||
+      (blob.contains('stop-loss') && blob.contains('session')) ||
+      (blob.contains('guardrails') && blob.contains('quit'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.sessionGuardrails,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -1424,6 +1450,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onRangeRewriteAcknowledge,
     this.onTimingCluesAcknowledge,
     this.onTablesChangeAcknowledge,
+    this.onSessionGuardrailsAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1477,6 +1504,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onRangeRewriteAcknowledge;
   final VoidCallback? onTimingCluesAcknowledge;
   final VoidCallback? onTablesChangeAcknowledge;
+  final VoidCallback? onSessionGuardrailsAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1734,6 +1762,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onTablesChangeAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onTablesChangeAcknowledge,
+        ),
+        CoachDialogueVisualKind.sessionGuardrails => SessionGuardrailsDemo(
+          interactive: onSessionGuardrailsAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onSessionGuardrailsAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
