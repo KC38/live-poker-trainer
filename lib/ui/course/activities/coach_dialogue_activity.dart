@@ -123,6 +123,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.vsOpenResponse
                     ? null
                     : onFeltAcknowledge,
+            onBbStackAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.bbStackDepth
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -207,6 +211,9 @@ enum CoachDialogueVisualKind {
 
   /// Fold / call / 3-bet responses versus an open.
   vsOpenResponse,
+
+  /// Count stacks in BB; shorter stack sets effective depth.
+  bbStackDepth,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -255,6 +262,8 @@ class CoachDialogueVisual {
       'Tap Early, Button, and Live 3x.',
     CoachDialogueVisualKind.vsOpenResponse =>
       'Tap Fold, Call, and 3-Bet.',
+    CoachDialogueVisualKind.bbStackDepth =>
+      'Tap Chips→BB, Shorter, and Depth.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -274,7 +283,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.actionOrder ||
       kind == CoachDialogueVisualKind.handFamilies ||
       kind == CoachDialogueVisualKind.openRange ||
-      kind == CoachDialogueVisualKind.vsOpenResponse;
+      kind == CoachDialogueVisualKind.vsOpenResponse ||
+      kind == CoachDialogueVisualKind.bbStackDepth;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -309,6 +319,8 @@ class CoachDialogueVisual {
       'Open-range tiles: early strong, button wider, live 3x size',
     CoachDialogueVisualKind.vsOpenResponse =>
       'Versus-open response tiles: fold, call, and 3-bet',
+    CoachDialogueVisualKind.bbStackDepth =>
+      'Stack-depth tiles: chips to BB, shorter stack, depth',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -347,6 +359,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-02-04-01-explain-vs':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.vsOpenResponse,
+      );
+    case 'act-02-05-01-explain-bb':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.bbStackDepth,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -488,6 +504,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.vsOpenResponse,
     );
   }
+  if (blob.contains('count stacks in big blinds') ||
+      blob.contains('shorter stack sets the ceiling') ||
+      blob.contains('effective stack') ||
+      (blob.contains('big blinds') && blob.contains('shorter'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.bbStackDepth,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -525,6 +549,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onHandFamiliesAcknowledge,
     this.onOpenRangeAcknowledge,
     this.onVsOpenAcknowledge,
+    this.onBbStackAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -543,6 +568,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onHandFamiliesAcknowledge;
   final VoidCallback? onOpenRangeAcknowledge;
   final VoidCallback? onVsOpenAcknowledge;
+  final VoidCallback? onBbStackAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -624,6 +650,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onVsOpenAcknowledge != null,
           enabled: enabled,
           onAllResponsesTapped: onVsOpenAcknowledge,
+        ),
+        CoachDialogueVisualKind.bbStackDepth => BbStackDepthDemo(
+          interactive: onBbStackAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onBbStackAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
