@@ -202,6 +202,21 @@ void main() {
     expect(find.text('Nice!'), findsOneWidget);
     await tester.tap(find.text('Continue'));
     await tester.pump();
+    // Mid-advance: feedback dock stays (lightweight button spinner), never a
+    // full-screen bootstrap spinner.
+    expect(find.text('Nice!'), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'Check'), findsNothing);
+    expect(find.text('Undo'), findsNothing);
+    final fullScreenSpinners = find.descendant(
+      of: find.byType(SafeArea),
+      matching: find.byWidgetPredicate(
+        (w) =>
+            w is Center &&
+            w.child is CircularProgressIndicator,
+      ),
+    );
+    expect(fullScreenSpinners, findsNothing);
+    await tester.pump();
     await tester.pump();
 
     expect(find.text('Tap your hole cards on the table.'), findsOneWidget);
