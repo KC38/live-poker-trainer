@@ -21,11 +21,20 @@ bool isSeatOrderSequenceActivity(CourseActivity activity) {
 }
 
 /// Explain-step demo: four streets progressing on a mini felt.
-class StreetsTimelineDemo extends StatelessWidget {
+class StreetsTimelineDemo extends StatefulWidget {
   /// Creates the demo.
-  const StreetsTimelineDemo({super.key});
+  const StreetsTimelineDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllStreetsTapped,
+  });
 
-  static const _streets = <({String title, String detail, List<String> board})>[
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllStreetsTapped;
+
+  static const streets = <({String title, String detail, List<String> board})>[
     (title: 'PREFLOP', detail: 'Holes only', board: <String>[]),
     (title: 'FLOP', detail: '3 cards', board: ['Qs', '7c', '2d']),
     (title: 'TURN', detail: '+1 card', board: ['Qs', '7c', '2d', 'Ah']),
@@ -33,55 +42,78 @@ class StreetsTimelineDemo extends StatelessWidget {
   ];
 
   @override
+  State<StreetsTimelineDemo> createState() => _StreetsTimelineDemoState();
+}
+
+class _StreetsTimelineDemoState extends State<StreetsTimelineDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String title) {
+    if (!widget.enabled || widget.onAllStreetsTapped == null) return;
+    setState(() => _tapped.add(title));
+    if (_tapped.length >= StreetsTimelineDemo.streets.length) {
+      widget.onAllStreetsTapped!();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ExcludeSemantics(
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.feltLight, AppColors.feltDark],
-          ),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.feltBorder.withValues(alpha: 0.85),
-          ),
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
         ),
-        child: Column(
-          children: [
-            Text(
-              'Four streets of a hand',
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 12),
-            for (var i = 0; i < _streets.length; i++) ...[
-              if (i > 0) const SizedBox(height: 8),
-              _StreetLane(
-                title: _streets[i].title,
-                detail: _streets[i].detail,
-                boardCodes: _streets[i].board,
-                step: i + 1,
-              ),
-            ],
-            const SizedBox(height: 12),
-            Text(
-              'Match bets to leave each street',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.feltBorder.withValues(alpha: 0.85),
         ),
       ),
+      child: Column(
+        children: [
+          Text(
+            'Four streets of a hand',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          for (var i = 0; i < StreetsTimelineDemo.streets.length; i++) ...[
+            if (i > 0) const SizedBox(height: 8),
+            _StreetLane(
+              title: StreetsTimelineDemo.streets[i].title,
+              detail: StreetsTimelineDemo.streets[i].detail,
+              boardCodes: StreetsTimelineDemo.streets[i].board,
+              step: i + 1,
+              selected: _tapped.contains(StreetsTimelineDemo.streets[i].title),
+              enabled: widget.interactive && widget.enabled,
+              onPressed:
+                  widget.interactive
+                      ? () => _onTap(StreetsTimelineDemo.streets[i].title)
+                      : null,
+            ),
+          ],
+          const SizedBox(height: 12),
+          Text(
+            widget.interactive
+                ? 'Tap each street from preflop to river'
+                : 'Match bets to leave each street',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
     );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
   }
 }
 
@@ -91,22 +123,33 @@ class _StreetLane extends StatelessWidget {
     required this.detail,
     required this.boardCodes,
     required this.step,
+    this.selected = false,
+    this.enabled = false,
+    this.onPressed,
   });
 
   final String title;
   final String detail;
   final List<String> boardCodes;
   final int step;
+  final bool selected;
+  final bool enabled;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final border =
+        selected ? AppColors.gold : AppColors.feltBorder.withValues(alpha: 0.7);
+    final lane = Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.bgDark.withValues(alpha: 0.35),
+        color:
+            selected
+                ? AppColors.gold.withValues(alpha: 0.18)
+                : AppColors.bgDark.withValues(alpha: 0.35),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.7)),
+        border: Border.all(color: border, width: selected ? 2 : 1),
       ),
       child: Row(
         children: [
@@ -174,6 +217,20 @@ class _StreetLane extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+    if (onPressed == null) return lane;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: title,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: enabled ? onPressed : null,
+          borderRadius: BorderRadius.circular(12),
+          child: lane,
+        ),
       ),
     );
   }

@@ -621,7 +621,10 @@ bool isTableRegionTapActivity(CourseActivity activity) {
         activity.id == 'act-01-02-01-explain-ladder' ||
         activity.id == 'act-01-02-02-explain-five' ||
         activity.id == 'act-01-03-01-explain-passive' ||
-        activity.id == 'act-01-03-02-explain-aggro';
+        activity.id == 'act-01-03-02-explain-aggro' ||
+        activity.id == 'act-01-04-01-explain-streets' ||
+        activity.id == 'act-01-05-01-explain-win' ||
+        activity.id == 'act-01-06-01-explain-run';
   }
   if (activity.renderer != ActivityRenderer.selectIdentify) return false;
   return activity.id.startsWith('act-01-01-01-') ||
