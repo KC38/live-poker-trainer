@@ -381,6 +381,8 @@ class CoachDialogueVisual {
       'Flop-label tiles: made, draw, showdown value, air',
     CoachDialogueVisualKind.outsPrice =>
       'Outs tiles: clean, dirty, and price the call',
+    CoachDialogueVisualKind.flopLines =>
+      'Flop-line tiles: value, c-bet, check, call, fold, raise',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -443,6 +445,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-03-03-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.outsPrice,
+      );
+    case 'act-03-04-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.flopLines,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -636,6 +642,16 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.outsPrice,
     );
   }
+  // Phrase matches — avoid bare "call"/"bet"/"fold"/"raise" traps
+  // (callback, between, folder, raiser).
+  if (blob.contains('flop lines') ||
+      blob.contains('check back') ||
+      blob.contains('one plan') ||
+      (blob.contains('c-bet') && blob.contains('value'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.flopLines,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -679,6 +695,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onTableReadAcknowledge,
     this.onFlopLabelAcknowledge,
     this.onOutsPriceAcknowledge,
+    this.onFlopLinesAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -703,6 +720,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onTableReadAcknowledge;
   final VoidCallback? onFlopLabelAcknowledge;
   final VoidCallback? onOutsPriceAcknowledge;
+  final VoidCallback? onFlopLinesAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -814,6 +832,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onOutsPriceAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onOutsPriceAcknowledge,
+        ),
+        CoachDialogueVisualKind.flopLines => FlopLinesDemo(
+          interactive: onFlopLinesAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onFlopLinesAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
