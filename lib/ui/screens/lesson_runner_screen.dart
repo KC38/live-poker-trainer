@@ -753,16 +753,24 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          activityRegistry.build(
-                            activity: activity,
-                            controller: controller,
-                            showGuidance: showGuidance,
-                            onFeltAcknowledge:
-                                isTableRegionTapActivity(activity) &&
-                                        activity.renderer ==
-                                            ActivityRenderer.coachDialogue
-                                    ? _submit
-                                    : null,
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 220),
+                            switchInCurve: Curves.easeOut,
+                            switchOutCurve: Curves.easeIn,
+                            child: KeyedSubtree(
+                              key: ValueKey<String>(activity.id),
+                              child: activityRegistry.build(
+                                activity: activity,
+                                controller: controller,
+                                showGuidance: showGuidance,
+                                onFeltAcknowledge:
+                                    isTableRegionTapActivity(activity) &&
+                                            activity.renderer ==
+                                                ActivityRenderer.coachDialogue
+                                        ? _submit
+                                        : null,
+                              ),
+                            ),
                           ),
                           if (controller.hintVisible && hint != null) ...[
                             const SizedBox(height: 10),
