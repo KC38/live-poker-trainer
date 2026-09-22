@@ -112,6 +112,17 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
   return SelectIdentifyPresentation.text;
 }
 
+/// True when select/identify answers auto-submit (no Check dock).
+bool isAutoSubmitSelectIdentify(CourseActivity activity) {
+  if (activity.renderer != ActivityRenderer.selectIdentify) return false;
+  final presentation = resolveSelectIdentifyPresentation(activity);
+  return presentation == SelectIdentifyPresentation.tableRegionTap ||
+      presentation == SelectIdentifyPresentation.suitTapPicker ||
+      presentation == SelectIdentifyPresentation.handCategoryTap ||
+      presentation == SelectIdentifyPresentation.showdownTap ||
+      presentation == SelectIdentifyPresentation.bestFiveCardTap;
+}
+
 /// Parses suit words / glyphs from a choice label.
 List<LessonSuitToken> parseSuitTokens(String label) {
   final parts = label

@@ -167,6 +167,58 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('position explain taps BTN on felt instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-01-01-explain-pos',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText: 'Later seats see more action.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text: 'Later seats see more action before they decide.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(LessonTableContext), findsOneWidget);
+    expect(
+      find.text('Tap the button (BTN) — the latest seat.'),
+      findsOneWidget,
+    );
+    expect(
+      resolveCoachDialogueVisual(activity).requiresFeltTap,
+      isTrue,
+    );
+
+    await tester.tap(
+      find.descendant(
+        of: find.byType(LessonTableContext),
+        matching: find.text('BTN'),
+      ),
+    );
+    await tester.pump();
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
   test('resolveCoachDialogueVisual is content-driven', () {
     expect(
       resolveCoachDialogueVisual(
@@ -1175,7 +1227,7 @@ void main() {
     );
   });
 
-  testWidgets('suit tap picker maps four suits onto Check-ready choice', (
+  testWidgets('suit tap picker auto-submits when four suits selected', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -1212,6 +1264,9 @@ void main() {
     expect(find.byType(SuitTapPicker), findsOneWidget);
     expect(find.text('Hearts, diamonds, clubs, spades'), findsNothing);
 
+    var autoSubmits = 0;
+    controller.onAutoSubmit = () => autoSubmits += 1;
+
     await tester.tap(find.text('Hearts'));
     await tester.pump();
     await tester.tap(find.text('Diamonds'));
@@ -1219,10 +1274,12 @@ void main() {
     await tester.tap(find.text('Clubs'));
     await tester.pump();
     expect(controller.draft.choiceId, 'suits-missing');
+    expect(autoSubmits, 0);
 
     await tester.tap(find.text('Spades'));
     await tester.pump();
     expect(controller.draft.choiceId, 'suits-full');
+    expect(autoSubmits, 1);
     controller.dispose();
   });
 
@@ -1280,7 +1337,7 @@ void main() {
     await tester.tap(find.text('Spades'));
     await tester.pump();
     expect(controller.draft.choiceId, 'suits-full');
-    expect(find.text('Ready — Check when it looks right.'), findsOneWidget);
+    expect(find.text('Checking…'), findsOneWidget);
     controller.dispose();
   });
 
