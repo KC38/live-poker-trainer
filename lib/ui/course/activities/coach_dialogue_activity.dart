@@ -257,8 +257,8 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.rangeRewrite
                     ? null
                     : onFeltAcknowledge,
-            onSoftEvidenceAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.softEvidence
+            onTimingCluesAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.timingClues
                     ? null
                     : onFeltAcknowledge,
           ),
@@ -561,8 +561,8 @@ class CoachDialogueVisual {
       'Tap X/R, Probe, Delay, and Donk.',
     CoachDialogueVisualKind.rangeRewrite =>
       'Tap Action, Rewrite, and Update.',
-    CoachDialogueVisualKind.softEvidence =>
-      'Tap Timing, Sizing, and Soft.',
+    CoachDialogueVisualKind.timingClues =>
+      'Tap Timing, Sizing, and Clues.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -616,7 +616,7 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.thinValue ||
       kind == CoachDialogueVisualKind.lineStories ||
       kind == CoachDialogueVisualKind.rangeRewrite ||
-      kind == CoachDialogueVisualKind.softEvidence;
+      kind == CoachDialogueVisualKind.timingClues;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
