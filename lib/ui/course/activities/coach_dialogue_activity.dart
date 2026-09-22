@@ -53,10 +53,17 @@ class CoachDialogueActivity extends StatelessWidget {
             showSoftPulse:
                 showGuidance && !locked && visual.requiresFeltTap,
             onRegionTap:
-                locked || visual.kind != CoachDialogueVisualKind.holeCards
+                locked ||
+                        (visual.kind != CoachDialogueVisualKind.holeCards &&
+                            visual.kind != CoachDialogueVisualKind.dealerButton)
                     ? null
                     : (target) {
-                      if (target.region == LessonTableRegion.hero) {
+                      if (visual.kind == CoachDialogueVisualKind.holeCards &&
+                          target.region == LessonTableRegion.hero) {
+                        onFeltAcknowledge?.call();
+                      } else if (visual.kind ==
+                              CoachDialogueVisualKind.dealerButton &&
+                          target.region == LessonTableRegion.button) {
                         onFeltAcknowledge?.call();
                       }
                     },
@@ -135,7 +142,7 @@ class CoachDialogueVisual {
     CoachDialogueVisualKind.suitsRanks =>
       'Tap each of the four suits.',
     CoachDialogueVisualKind.dealerButton =>
-      'Tap Continue when you can spot the button and blinds.',
+      'Tap the dealer button on the table.',
     CoachDialogueVisualKind.positionLabels =>
       'Tap Continue when later seats feel like the edge.',
     CoachDialogueVisualKind.handLadder =>
@@ -158,7 +165,8 @@ class CoachDialogueVisual {
   /// True when the learner should tap the demo instead of Continue.
   bool get requiresFeltTap =>
       (kind == CoachDialogueVisualKind.holeCards && useTable) ||
-      kind == CoachDialogueVisualKind.suitsRanks;
+      kind == CoachDialogueVisualKind.suitsRanks ||
+      kind == CoachDialogueVisualKind.dealerButton;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -350,7 +358,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           enabled: enabled,
           onAllSuitsTapped: onSuitAcknowledge,
         ),
-        CoachDialogueVisualKind.dealerButton => const _DealerButtonDemo(),
+        CoachDialogueVisualKind.dealerButton => _DealerButtonDemo(
+          enabled: enabled,
+          showSoftPulse: showSoftPulse,
+          onRegionTap: onRegionTap,
+        ),
         CoachDialogueVisualKind.positionLabels => const _PositionLabelsDemo(),
         CoachDialogueVisualKind.handLadder => const HandRankLadderDemo(),
         CoachDialogueVisualKind.bestFive => const BestFiveDemo(),
@@ -533,17 +545,28 @@ class _SuitsRanksDemoState extends State<_SuitsRanksDemo> {
 }
 
 class _DealerButtonDemo extends StatelessWidget {
-  const _DealerButtonDemo();
+  const _DealerButtonDemo({
+    this.enabled = false,
+    this.showSoftPulse = false,
+    this.onRegionTap,
+  });
+
+  final bool enabled;
+  final bool showSoftPulse;
+  final ValueChanged<LessonTableTapTarget>? onRegionTap;
 
   @override
   Widget build(BuildContext context) {
-    return const LessonTableContext(
-      scene: LessonTableScene(
+    return LessonTableContext(
+      scene: const LessonTableScene(
         layout: LessonTableLayout.blindsSeats,
         highlight: LessonTableHighlight.button,
         seatCount: 6,
         buttonSeat: 3,
       ),
+      enabled: enabled,
+      showSoftPulse: showSoftPulse,
+      onRegionTap: onRegionTap,
     );
   }
 }
