@@ -191,6 +191,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.playerObserve
                     ? null
                     : onFeltAcknowledge,
+            onCallingStationAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.callingStation
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -326,6 +330,9 @@ enum CoachDialogueVisualKind {
 
   /// Observe who enters, calls, folds before labeling.
   playerObserve,
+
+  /// Calling Station: high participation, low folding.
+  callingStation,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -408,6 +415,8 @@ class CoachDialogueVisual {
       'Tap SPR, Low, and High.',
     CoachDialogueVisualKind.playerObserve =>
       'Tap Enters, Calls, and Folds.',
+    CoachDialogueVisualKind.callingStation =>
+      'Tap Station, High, and Low.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -444,7 +453,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.multiStreetPlan ||
       kind == CoachDialogueVisualKind.sizingLanguage ||
       kind == CoachDialogueVisualKind.sprDepth ||
-      kind == CoachDialogueVisualKind.playerObserve;
+      kind == CoachDialogueVisualKind.playerObserve ||
+      kind == CoachDialogueVisualKind.callingStation;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -513,6 +523,8 @@ class CoachDialogueVisual {
       'SPR tiles: ratio, low commit, high maneuver',
     CoachDialogueVisualKind.playerObserve =>
       'Observe tiles: enters, calls, folds',
+    CoachDialogueVisualKind.callingStation =>
+      'Station tiles: model, high participation, low folding',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -619,6 +631,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-04-06-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.playerObserve,
+      );
+    case 'act-04-06-02-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.callingStation,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -913,6 +929,13 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.playerObserve,
     );
   }
+  if (blob.contains('calling station') ||
+      blob.contains('working model') ||
+      (blob.contains('high participation') && blob.contains('low folding'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.callingStation,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -967,6 +990,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onSizingLanguageAcknowledge,
     this.onSprAcknowledge,
     this.onPlayerObserveAcknowledge,
+    this.onCallingStationAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1002,6 +1026,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onSizingLanguageAcknowledge;
   final VoidCallback? onSprAcknowledge;
   final VoidCallback? onPlayerObserveAcknowledge;
+  final VoidCallback? onCallingStationAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1168,6 +1193,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onPlayerObserveAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onPlayerObserveAcknowledge,
+        ),
+        CoachDialogueVisualKind.callingStation => CallingStationDemo(
+          interactive: onCallingStationAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onCallingStationAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
