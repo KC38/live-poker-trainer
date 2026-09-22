@@ -78,6 +78,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.suitsRanks
                     ? null
                     : onFeltAcknowledge,
+            onLadderAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.handLadder
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance) ...[
@@ -153,7 +157,7 @@ class CoachDialogueVisual {
     CoachDialogueVisualKind.positionLabels =>
       'Tap the button (BTN) — the latest seat.',
     CoachDialogueVisualKind.handLadder =>
-      'Tap Continue when the ladder from high card to flush clicks.',
+      'Tap each rung from high card to flush.',
     CoachDialogueVisualKind.bestFive =>
       'Tap Continue when you see that only five of seven play.',
     CoachDialogueVisualKind.passiveActions =>
@@ -174,7 +178,8 @@ class CoachDialogueVisual {
       (kind == CoachDialogueVisualKind.holeCards && useTable) ||
       kind == CoachDialogueVisualKind.suitsRanks ||
       kind == CoachDialogueVisualKind.dealerButton ||
-      kind == CoachDialogueVisualKind.positionLabels;
+      kind == CoachDialogueVisualKind.positionLabels ||
+      kind == CoachDialogueVisualKind.handLadder;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -342,6 +347,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.showSoftPulse = false,
     this.onRegionTap,
     this.onSuitAcknowledge,
+    this.onLadderAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -349,6 +355,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final bool showSoftPulse;
   final ValueChanged<LessonTableTapTarget>? onRegionTap;
   final VoidCallback? onSuitAcknowledge;
+  final VoidCallback? onLadderAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -376,7 +383,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           showSoftPulse: showSoftPulse,
           onRegionTap: onRegionTap,
         ),
-        CoachDialogueVisualKind.handLadder => const HandRankLadderDemo(),
+        CoachDialogueVisualKind.handLadder => HandRankLadderDemo(
+          interactive: onLadderAcknowledge != null,
+          enabled: enabled,
+          onAllRungsTapped: onLadderAcknowledge,
+        ),
         CoachDialogueVisualKind.bestFive => const BestFiveDemo(),
         CoachDialogueVisualKind.passiveActions => const PassiveActionsDemo(),
         CoachDialogueVisualKind.aggressiveActions =>

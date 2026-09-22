@@ -219,6 +219,56 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('hand-ladder explain taps every rung instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-02-01-explain-ladder',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText: 'Pair beats high card. Flush beats a pair.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text: 'Pair beats high card. Flush beats a pair.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(HandRankLadderDemo), findsOneWidget);
+    expect(
+      find.text('Tap each rung from high card to flush.'),
+      findsOneWidget,
+    );
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+
+    await tester.tap(find.text('High card'));
+    await tester.pump();
+    expect(feltAck, 0);
+    await tester.tap(find.text('One pair'));
+    await tester.pump();
+    expect(feltAck, 0);
+    await tester.tap(find.text('Flush'));
+    await tester.pump();
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
   test('resolveCoachDialogueVisual is content-driven', () {
     expect(
       resolveCoachDialogueVisual(

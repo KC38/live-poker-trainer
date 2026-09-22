@@ -317,11 +317,25 @@ class HandExampleTile extends StatelessWidget {
 }
 
 /// Vertical ladder of example hands for the explain step.
-class HandRankLadderDemo extends StatelessWidget {
+class HandRankLadderDemo extends StatefulWidget {
   /// Creates the ladder demo.
-  const HandRankLadderDemo({super.key});
+  const HandRankLadderDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllRungsTapped,
+  });
 
-  static const _rungs = <LessonHandExample>[
+  /// When true, rungs are tappable teach-by-doing targets.
+  final bool interactive;
+
+  /// Whether taps are accepted (false while submitting / after grade).
+  final bool enabled;
+
+  /// Fires once every rung has been tapped.
+  final VoidCallback? onAllRungsTapped;
+
+  static const rungs = <LessonHandExample>[
     LessonHandExample(
       id: 'demo-high',
       title: 'High card',
@@ -340,51 +354,70 @@ class HandRankLadderDemo extends StatelessWidget {
   ];
 
   @override
+  State<HandRankLadderDemo> createState() => _HandRankLadderDemoState();
+}
+
+class _HandRankLadderDemoState extends State<HandRankLadderDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onRungTap(LessonHandExample rung) {
+    if (!widget.enabled || widget.onAllRungsTapped == null) return;
+    setState(() => _tapped.add(rung.id));
+    if (_tapped.length >= HandRankLadderDemo.rungs.length) {
+      widget.onAllRungsTapped!();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ExcludeSemantics(
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.feltLight, AppColors.feltDark],
-          ),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
         ),
-        child: Column(
-          children: [
-            Text(
-              'Weakest → strongest',
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Weakest → strongest',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-            const SizedBox(height: 12),
-            for (var i = 0; i < _rungs.length; i++) ...[
-              if (i > 0) ...[
-                const SizedBox(height: 6),
-                Icon(
-                  Icons.arrow_downward_rounded,
-                  color: AppColors.gold.withValues(alpha: 0.75),
-                  size: 18,
-                ),
-                const SizedBox(height: 6),
-              ],
-              HandExampleTile(
-                example: _rungs[i],
-                selected: false,
-                enabled: false,
-                compact: true,
+          ),
+          const SizedBox(height: 12),
+          for (var i = 0; i < HandRankLadderDemo.rungs.length; i++) ...[
+            if (i > 0) ...[
+              const SizedBox(height: 6),
+              Icon(
+                Icons.arrow_downward_rounded,
+                color: AppColors.gold.withValues(alpha: 0.75),
+                size: 18,
               ),
+              const SizedBox(height: 6),
             ],
+            HandExampleTile(
+              example: HandRankLadderDemo.rungs[i],
+              selected: _tapped.contains(HandRankLadderDemo.rungs[i].id),
+              enabled: widget.interactive && widget.enabled,
+              compact: true,
+              onPressed:
+                  widget.interactive
+                      ? () => _onRungTap(HandRankLadderDemo.rungs[i])
+                      : null,
+            ),
           ],
-        ),
+        ],
       ),
     );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
   }
 }
