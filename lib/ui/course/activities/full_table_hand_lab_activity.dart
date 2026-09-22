@@ -12,6 +12,7 @@ import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 ///
 /// Full scripted lab playback is Plan 10; here we grade the public decision
 /// through the existing course callables without starting Live Training.
+/// Choice/dock taps auto-submit via [PokerActionSizingActivity] (no Check).
 class FullTableHandLabActivity extends StatelessWidget {
   /// Creates the activity.
   const FullTableHandLabActivity({

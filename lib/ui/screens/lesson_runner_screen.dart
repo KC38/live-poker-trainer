@@ -764,6 +764,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                       activity.renderer ==
                           ActivityRenderer.pokerActionSizing ||
                       activity.renderer ==
+                          ActivityRenderer.fullTableHandLab ||
+                      activity.renderer ==
                           ActivityRenderer.authoredMultiStepHand ||
                       activity.renderer ==
                           ActivityRenderer.playerReadClassify ||
