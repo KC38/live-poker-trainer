@@ -74,11 +74,14 @@ class PokerActionSizingActivity extends StatelessWidget {
                 selectedId: selected,
                 enabled: !locked,
                 identifyUnavailable: spot.identifyUnavailable,
-                onSelect: controller.selectChoice,
+                onSelect:
+                    (id) => controller.selectChoice(id, autoSubmit: true),
               ),
               const SizedBox(height: 10),
               Text(
-                selected == null
+                controller.submitting
+                    ? 'Checking…'
+                    : selected == null
                     ? (spot.identifyUnavailable
                         ? 'Tap the illegal action.'
                         : spot.stackLabel != null
@@ -86,7 +89,7 @@ class PokerActionSizingActivity extends StatelessWidget {
                         : spot.openPot
                         ? 'Tap Bet to open the pot.'
                         : 'Tap your action on the dock.')
-                    : 'Ready — Lock in below.',
+                    : 'Checking…',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.slate,
