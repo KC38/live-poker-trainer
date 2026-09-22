@@ -2112,6 +2112,39 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('numeric keyboard Done auto-submits parsed value', (tester) async {
+    final activity = _activity(
+      renderer: ActivityRenderer.numericPotPrice,
+      numericQuestion: 'Pot size?',
+      numericUnit: 'chips',
+    );
+    final controller = LessonActivityController(activity: activity);
+    var autoSubmits = 0;
+    controller.onAutoSubmit = () => autoSubmits += 1;
+    await tester.pumpWidget(
+      _wrap(
+        NumericPotPriceActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    final field = tester.widget<TextField>(find.byType(TextField));
+    expect(field.textInputAction, TextInputAction.done);
+
+    await tester.enterText(find.byType(TextField), '12.5');
+    await tester.pump();
+    expect(controller.draft.numericValue, 12.5);
+    expect(autoSubmits, 0);
+
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pump();
+    expect(controller.draft.numericValue, 12.5);
+    expect(autoSubmits, 1);
+    controller.dispose();
+  });
+
   testWidgets('poker action sizing exposes action semantics', (tester) async {
     final activity = _activity(
       renderer: ActivityRenderer.pokerActionSizing,

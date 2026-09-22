@@ -81,6 +81,7 @@ class _NumericPotPriceActivityState extends State<NumericPotPriceActivity> {
             controller: _text,
             enabled: !locked,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            textInputAction: TextInputAction.done,
             // ignore: deprecated_member_use
             inputFormatters: [
               FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
@@ -101,6 +102,12 @@ class _NumericPotPriceActivityState extends State<NumericPotPriceActivity> {
             onChanged: (raw) {
               final parsed = double.tryParse(raw.trim());
               widget.controller.setNumericValue(parsed);
+            },
+            onSubmitted: (raw) {
+              if (locked) return;
+              final parsed = double.tryParse(raw.trim());
+              if (parsed == null) return;
+              widget.controller.setNumericValue(parsed, autoSubmit: true);
             },
           ),
         ),
