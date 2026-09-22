@@ -111,6 +111,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.actionOrder
                     ? null
                     : onFeltAcknowledge,
+            onHandFamiliesAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.handFamilies
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -186,6 +190,9 @@ enum CoachDialogueVisualKind {
 
   /// Preflop seats left-of-BB in order (UTG → HJ → BTN).
   actionOrder,
+
+  /// Starting-hand families (pairs, broadways, suited aces, connectors).
+  handFamilies,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -228,6 +235,8 @@ class CoachDialogueVisual {
       'Tap Blinds, You act, and Ending.',
     CoachDialogueVisualKind.actionOrder =>
       'Tap UTG, then HJ, then BTN.',
+    CoachDialogueVisualKind.handFamilies =>
+      'Tap each starting-hand family.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -244,7 +253,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.streetsTimeline ||
       kind == CoachDialogueVisualKind.winningPaths ||
       kind == CoachDialogueVisualKind.toyHandRun ||
-      kind == CoachDialogueVisualKind.actionOrder;
+      kind == CoachDialogueVisualKind.actionOrder ||
+      kind == CoachDialogueVisualKind.handFamilies;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -273,6 +283,8 @@ class CoachDialogueVisual {
       'Toy hand timeline: blinds, you act, ending',
     CoachDialogueVisualKind.actionOrder =>
       'Preflop action order tiles UTG, HJ, and BTN',
+    CoachDialogueVisualKind.handFamilies =>
+      'Starting-hand family tiles: pairs, broadways, suited aces, connectors',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -299,6 +311,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-02-01-02-explain-order':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.actionOrder,
+      );
+    case 'act-02-02-01-explain-families':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.handFamilies,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -406,6 +422,15 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.actionOrder,
     );
   }
+  if (blob.contains('suited aces') ||
+      blob.contains('starting-hand families') ||
+      (blob.contains('pairs') &&
+          blob.contains('broadway') &&
+          blob.contains('connector'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.handFamilies,
+    );
+  }
   if (blob.contains('hole') ||
       blob.contains('your two') ||
       blob.contains('private') ||
@@ -439,6 +464,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onPathsAcknowledge,
     this.onToyHandAcknowledge,
     this.onActionOrderAcknowledge,
+    this.onHandFamiliesAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -454,6 +480,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onPathsAcknowledge;
   final VoidCallback? onToyHandAcknowledge;
   final VoidCallback? onActionOrderAcknowledge;
+  final VoidCallback? onHandFamiliesAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -520,6 +547,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onActionOrderAcknowledge != null,
           enabled: enabled,
           onAllSeatsTapped: onActionOrderAcknowledge,
+        ),
+        CoachDialogueVisualKind.handFamilies => HandFamiliesDemo(
+          interactive: onHandFamiliesAcknowledge != null,
+          enabled: enabled,
+          onAllFamiliesTapped: onHandFamiliesAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
