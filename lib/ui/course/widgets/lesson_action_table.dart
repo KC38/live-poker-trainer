@@ -3468,6 +3468,106 @@ class _ExploitEvidenceDemoState extends State<ExploitEvidenceDemo> {
   }
 }
 
+/// Nutted / air / domination tiles for multiway-nuts explain demos.
+class MultiwayNutsDemo extends StatefulWidget {
+  /// Creates the demo.
+  const MultiwayNutsDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'NUTTED', caption: 'Hands go up', color: AppColors.gold),
+    (label: 'AIR', caption: 'Hands go down', color: AppColors.cream),
+    (label: 'DOMINATION', caption: 'Hurts more multiway', color: AppColors.danger),
+  ];
+
+  @override
+  State<MultiwayNutsDemo> createState() => _MultiwayNutsDemoState();
+}
+
+class _MultiwayNutsDemoState extends State<MultiwayNutsDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= MultiwayNutsDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Multiway nut preference',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < MultiwayNutsDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoActionCard(
+                    label: MultiwayNutsDemo.points[i].label,
+                    caption: MultiwayNutsDemo.points[i].caption,
+                    color: MultiwayNutsDemo.points[i].color,
+                    selected: _tapped.contains(MultiwayNutsDemo.points[i].label),
+                    enabled: widget.interactive && widget.enabled,
+                    onPressed:
+                        widget.interactive
+                            ? () => _onTap(MultiwayNutsDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? 'Tap Nutted, Air, and Domination'
+                : 'Nutted up · air down · domination hurts',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
 
 class _DemoActionCard extends StatelessWidget {
   const _DemoActionCard({
