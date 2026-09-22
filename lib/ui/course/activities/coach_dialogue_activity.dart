@@ -203,6 +203,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.tightSeats
                     ? null
                     : onFeltAcknowledge,
+            onNitModelAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.nitModel
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -347,6 +351,9 @@ enum CoachDialogueVisualKind {
 
   /// Tight seats rarely enter; when they do, they mean it.
   tightSeats,
+
+  /// Nit: narrow entry; respect their heavy action.
+  nitModel,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -435,6 +442,8 @@ class CoachDialogueVisual {
       'Tap Value, Bluffs, and Cite.',
     CoachDialogueVisualKind.tightSeats =>
       'Tap Rare, Enter, and Mean It.',
+    CoachDialogueVisualKind.nitModel =>
+      'Tap Nit, Narrow, and Respect.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -474,7 +483,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.playerObserve ||
       kind == CoachDialogueVisualKind.callingStation ||
       kind == CoachDialogueVisualKind.vsStation ||
-      kind == CoachDialogueVisualKind.tightSeats;
+      kind == CoachDialogueVisualKind.tightSeats ||
+      kind == CoachDialogueVisualKind.nitModel;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -549,6 +559,8 @@ class CoachDialogueVisual {
       'Vs-station tiles: thicker value, fewer bluffs, cite calling',
     CoachDialogueVisualKind.tightSeats =>
       'Tight-seat tiles: rare, enter, mean it',
+    CoachDialogueVisualKind.nitModel =>
+      'Nit tiles: label, narrow entry, respect heavy action',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -667,6 +679,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-04-07-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.tightSeats,
+      );
+    case 'act-04-07-02-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.nitModel,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -985,6 +1001,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.tightSeats,
     );
   }
+  if (blob.contains('nit means') ||
+      blob.contains('narrow entry') ||
+      blob.contains('respect for their heavy') ||
+      (blob.contains('nit') && blob.contains('heavy action'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.nitModel,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -1042,6 +1066,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onCallingStationAcknowledge,
     this.onVsStationAcknowledge,
     this.onTightSeatsAcknowledge,
+    this.onNitModelAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1080,6 +1105,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onCallingStationAcknowledge;
   final VoidCallback? onVsStationAcknowledge;
   final VoidCallback? onTightSeatsAcknowledge;
+  final VoidCallback? onNitModelAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1261,6 +1287,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onTightSeatsAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onTightSeatsAcknowledge,
+        ),
+        CoachDialogueVisualKind.nitModel => NitModelDemo(
+          interactive: onNitModelAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onNitModelAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
