@@ -71,7 +71,17 @@ class SelectIdentifyActivity extends StatelessWidget {
     }
 
     final scene = resolveLessonTableScene(activity);
-    final coachText = _coachText(presentation, scene != null);
+    final resolved = resolveLessonCoachPrompt(
+      activity: activity,
+      fallback: _coachFallback(presentation, scene != null),
+    );
+    final coachText = resolved.coach;
+    final showPrompt = resolved.showPrompt;
+    final showCoach = shouldShowLessonCoach(
+      activity: activity,
+      showGuidance: showGuidance,
+      coach: coachText,
+    );
 
     return AnimatedBuilder(
       animation: controller,
@@ -81,13 +91,12 @@ class SelectIdentifyActivity extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (activity.primaryCoachLine != null || showGuidance)
-              RexCoachLine(text: coachText),
+            if (showCoach) RexCoachLine(text: coachText),
             if (scene != null) ...[
               const SizedBox(height: 14),
               LessonTableContext(scene: scene),
             ],
-            if (activity.prompt != null) ...[
+            if (showPrompt) ...[
               const SizedBox(height: 14),
               Text(
                 activity.prompt!,
@@ -126,9 +135,7 @@ class SelectIdentifyActivity extends StatelessWidget {
     );
   }
 
-  String _coachText(SelectIdentifyPresentation presentation, bool hasScene) {
-    final authored = activity.primaryCoachLine?.text;
-    if (authored != null) return authored;
+  String _coachFallback(SelectIdentifyPresentation presentation, bool hasScene) {
     return switch (presentation) {
       SelectIdentifyPresentation.suitTapPicker =>
         'Tap every suit that belongs in a standard deck.',
@@ -313,11 +320,17 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.controller.submitting ||
             widget.controller.lastResult != null;
         final selected = widget.controller.draft.choiceId;
+        final coach = _coachText;
+        final prompt = widget.activity.prompt?.trim();
+        final showPrompt =
+            prompt != null &&
+            prompt.isNotEmpty &&
+            prompt.toLowerCase() != coach.trim().toLowerCase();
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            RexCoachLine(text: _coachText),
-            if (widget.activity.prompt != null) ...[
+            RexCoachLine(text: coach),
+            if (showPrompt) ...[
               const SizedBox(height: 14),
               Text(
                 widget.activity.prompt!,
@@ -390,11 +403,8 @@ class _HandCategoryTapActivity extends StatelessWidget {
   final LessonActivityController controller;
   final bool showGuidance;
 
-  String get _coachText {
-    final authored = activity.primaryCoachLine?.text;
-    if (authored != null) return authored;
-    return 'Board and holes are live — tap the category you made.';
-  }
+  String get _coachFallback =>
+      'Board and holes are live — tap the category you made.';
 
   @override
   Widget build(BuildContext context) {
@@ -404,11 +414,15 @@ class _HandCategoryTapActivity extends StatelessWidget {
       builder: (context, _) {
         final locked = controller.submitting || controller.lastResult != null;
         final selected = controller.draft.choiceId;
+        final resolved = resolveLessonCoachPrompt(
+          activity: activity,
+          fallback: _coachFallback,
+        );
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            RexCoachLine(text: _coachText),
-            if (activity.prompt != null) ...[
+            RexCoachLine(text: resolved.coach),
+            if (resolved.showPrompt) ...[
               const SizedBox(height: 14),
               Text(
                 activity.prompt!,
@@ -486,9 +500,7 @@ class _ShowdownTapActivity extends StatelessWidget {
   final LessonActivityController controller;
   final bool showGuidance;
 
-  String get _coachText {
-    final authored = activity.primaryCoachLine?.text;
-    if (authored != null) return authored;
+  String get _coachFallback {
     if (activity.id == 'act-01-02-02-scaffolded-kicker') {
       return 'Same pair — tap who wins on kickers.';
     }
@@ -506,11 +518,15 @@ class _ShowdownTapActivity extends StatelessWidget {
       builder: (context, _) {
         final locked = controller.submitting || controller.lastResult != null;
         final selected = controller.draft.choiceId;
+        final resolved = resolveLessonCoachPrompt(
+          activity: activity,
+          fallback: _coachFallback,
+        );
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            RexCoachLine(text: _coachText),
-            if (scene == null && activity.prompt != null) ...[
+            RexCoachLine(text: resolved.coach),
+            if (scene == null && resolved.showPrompt) ...[
               const SizedBox(height: 14),
               Text(
                 activity.prompt!,
@@ -525,8 +541,6 @@ class _ShowdownTapActivity extends StatelessWidget {
             if (scene != null) ...[
               const SizedBox(height: 12),
               LessonTableContext(scene: scene),
-            ] else if (activity.prompt != null) ...[
-              // prompt already shown above when no scene
             ],
             const SizedBox(height: 12),
             for (var i = 0; i < activity.choices.length; i++) ...[
@@ -590,11 +604,8 @@ class _BestFiveCardTapActivity extends StatelessWidget {
   final LessonActivityController controller;
   final bool showGuidance;
 
-  String get _coachText {
-    final authored = activity.primaryCoachLine?.text;
-    if (authored != null) return authored;
-    return 'Only five cards count — tap the ones that play.';
-  }
+  String get _coachFallback =>
+      'Only five cards count — tap the ones that play.';
 
   @override
   Widget build(BuildContext context) {
@@ -609,11 +620,15 @@ class _BestFiveCardTapActivity extends StatelessWidget {
       animation: controller,
       builder: (context, _) {
         final locked = controller.submitting || controller.lastResult != null;
+        final resolved = resolveLessonCoachPrompt(
+          activity: activity,
+          fallback: _coachFallback,
+        );
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            RexCoachLine(text: _coachText),
-            if (activity.prompt != null) ...[
+            RexCoachLine(text: resolved.coach),
+            if (resolved.showPrompt) ...[
               const SizedBox(height: 14),
               Text(
                 activity.prompt!,

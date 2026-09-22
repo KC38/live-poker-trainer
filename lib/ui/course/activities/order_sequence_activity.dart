@@ -57,9 +57,8 @@ class OrderSequenceActivity extends StatelessWidget {
             activity.sequenceItems
                 .where((item) => !ordered.contains(item.id))
                 .toList(growable: false);
-        final coach =
-            activity.primaryCoachLine?.text ??
-            (_rankMode
+        final fallback =
+            _rankMode
                 ? 'Tap ranks from lowest to highest.'
                 : activity.id == 'act-01-06-02-jump-ranks'
                 ? 'Tap strongest hand first, then weaker.'
@@ -69,15 +68,22 @@ class OrderSequenceActivity extends StatelessWidget {
                 ? 'Tap streets from first to last.'
                 : isSeatOrderSequenceActivity(activity)
                 ? 'Tap seats in the order they act.'
-                : 'Tap seats in the order they act.');
-        final showPrompt =
-            activity.prompt != null &&
-            activity.prompt!.trim().toLowerCase() != coach.trim().toLowerCase();
+                : 'Tap seats in the order they act.';
+        final resolved = resolveLessonCoachPrompt(
+          activity: activity,
+          fallback: fallback,
+        );
+        final coach = resolved.coach;
+        final showPrompt = resolved.showPrompt;
+        final showCoach = shouldShowLessonCoach(
+          activity: activity,
+          showGuidance: showGuidance,
+          coach: coach,
+        );
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (showGuidance || activity.primaryCoachLine != null)
-              RexCoachLine(text: coach),
+            if (showCoach) RexCoachLine(text: coach),
             if (showPrompt) ...[
               const SizedBox(height: 12),
               Text(

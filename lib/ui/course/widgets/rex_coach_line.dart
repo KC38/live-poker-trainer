@@ -6,6 +6,43 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 
+/// Resolves a single Rex instruction vs a duplicate prompt under the bubble.
+///
+/// Teach-by-doing: prefer one spoken line. Authored dialogue/demo wins; otherwise
+/// the activity [CourseActivity.prompt] becomes the Rex line so we do not repeat
+/// near-identical copy ("Tap ranks…" + "Order these ranks…").
+({String coach, bool showPrompt}) resolveLessonCoachPrompt({
+  required CourseActivity activity,
+  required String fallback,
+}) {
+  final authored = activity.primaryCoachLine?.text.trim();
+  final prompt = activity.prompt?.trim();
+  if (authored != null && authored.isNotEmpty) {
+    final show =
+        prompt != null &&
+        prompt.isNotEmpty &&
+        prompt.toLowerCase() != authored.toLowerCase();
+    return (coach: authored, showPrompt: show);
+  }
+  if (prompt != null && prompt.isNotEmpty) {
+    return (coach: prompt, showPrompt: false);
+  }
+  return (coach: fallback, showPrompt: false);
+}
+
+/// Whether Rex should render for [activity] given [showGuidance] and resolved
+/// coach copy (covers prompt-as-Rex on unguided steps).
+bool shouldShowLessonCoach({
+  required CourseActivity activity,
+  required bool showGuidance,
+  required String coach,
+}) {
+  if (coach.trim().isEmpty) return false;
+  return showGuidance ||
+      activity.primaryCoachLine != null ||
+      (activity.prompt?.trim().isNotEmpty ?? false);
+}
+
 /// One short Rex sentence with optional demonstration chrome.
 class RexCoachLine extends StatelessWidget {
   /// Creates a Rex line.
