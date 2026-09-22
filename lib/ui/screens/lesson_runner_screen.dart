@@ -664,7 +664,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                           );
                         },
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               Expanded(
                 child: SingleChildScrollView(
                   // No artificial minHeight — short steps hug the top.
