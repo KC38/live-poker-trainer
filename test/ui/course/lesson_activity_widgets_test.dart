@@ -935,6 +935,35 @@ void main() {
     expect(
       resolveCoachDialogueVisual(
         CourseActivity(
+          id: 'act-04-07-01-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'Some seats almost never enter. When they do, they mean it. Note both.',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.tightSeats,
+    );
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-generic-enter-only',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText: 'Enter the pot carefully.',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.none,
+    );
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
           id: 'act-04-05-01-explain',
           order: 1,
           stage: ActivityStage.explain,
@@ -2042,6 +2071,52 @@ void main() {
     expect(isTableRegionTapActivity(activity), isTrue);
 
     for (final title in ['VALUE', 'BLUFFS', 'CITE']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
+  testWidgets('tight-seats explain taps Rare Enter Mean It instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-07-01-explain',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'Some seats almost never enter. When they do, they mean it. Note both.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'Some seats almost never enter. When they do, they mean it. Note both.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(TightSeatsDemo), findsOneWidget);
+    expect(find.text('Tap Rare, Enter, and Mean It.'), findsOneWidget);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    for (final title in ['RARE', 'ENTER', 'MEAN IT']) {
       await tester.tap(find.text(title));
       await tester.pump();
     }
