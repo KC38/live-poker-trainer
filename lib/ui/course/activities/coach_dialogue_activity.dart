@@ -229,6 +229,10 @@ class CoachDialogueActivity extends StatelessWidget {
                             CoachDialogueVisualKind.observationCertainty
                     ? null
                     : onFeltAcknowledge,
+            onExploitEvidenceAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.exploitEvidence
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -391,6 +395,9 @@ enum CoachDialogueVisualKind {
 
   /// Observation ≠ certainty; confidence grows with samples/showdowns.
   observationCertainty,
+
+  /// Same cards, different seats — exploits need evidence.
+  exploitEvidence,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -491,6 +498,8 @@ class CoachDialogueVisual {
       'Tap Wider, Hang, and Ego.',
     CoachDialogueVisualKind.observationCertainty =>
       'Tap Observe, Samples, and Showdowns.',
+    CoachDialogueVisualKind.exploitEvidence =>
+      'Tap Cards, Seats, and Evidence.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -536,7 +545,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.extremeEntry ||
       kind == CoachDialogueVisualKind.maniacModel ||
       kind == CoachDialogueVisualKind.vsManiacs ||
-      kind == CoachDialogueVisualKind.observationCertainty;
+      kind == CoachDialogueVisualKind.observationCertainty ||
+      kind == CoachDialogueVisualKind.exploitEvidence;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -623,6 +633,8 @@ class CoachDialogueVisual {
       'Vs-maniac tiles: call wider, let them hang, no ego',
     CoachDialogueVisualKind.observationCertainty =>
       'Certainty tiles: observe, samples, showdowns',
+    CoachDialogueVisualKind.exploitEvidence =>
+      'Exploit tiles: same cards, different seats, evidence',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -765,6 +777,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-04-09-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.observationCertainty,
+      );
+    case 'act-04-10-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.exploitEvidence,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1135,6 +1151,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.observationCertainty,
     );
   }
+  if (blob.contains('same cards') ||
+      blob.contains('different seats') ||
+      blob.contains('exploits change') ||
+      (blob.contains('only with evidence') && blob.contains('seats'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.exploitEvidence,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -1198,6 +1222,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onManiacModelAcknowledge,
     this.onVsManiacsAcknowledge,
     this.onObservationCertaintyAcknowledge,
+    this.onExploitEvidenceAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1242,6 +1267,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onManiacModelAcknowledge;
   final VoidCallback? onVsManiacsAcknowledge;
   final VoidCallback? onObservationCertaintyAcknowledge;
+  final VoidCallback? onExploitEvidenceAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1455,6 +1481,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
             enabled: enabled,
             onAllPointsTapped: onObservationCertaintyAcknowledge,
           ),
+        CoachDialogueVisualKind.exploitEvidence => ExploitEvidenceDemo(
+          interactive: onExploitEvidenceAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onExploitEvidenceAcknowledge,
+        ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
     );
