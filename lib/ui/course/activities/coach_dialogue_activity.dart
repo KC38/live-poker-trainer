@@ -147,6 +147,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.outsPrice
                     ? null
                     : onFeltAcknowledge,
+            onFlopLinesAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.flopLines
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -249,6 +253,9 @@ enum CoachDialogueVisualKind {
 
   /// Clean vs dirty outs and pricing the call.
   outsPrice,
+
+  /// Flop line menu: value, c-bet, check, call, fold, raise.
+  flopLines,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -309,6 +316,8 @@ class CoachDialogueVisual {
       'Tap Made, Draw, SDV, and Air.',
     CoachDialogueVisualKind.outsPrice =>
       'Tap Clean, Dirty, and Price.',
+    CoachDialogueVisualKind.flopLines =>
+      'Tap each flop line once.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -334,7 +343,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.fullRing ||
       kind == CoachDialogueVisualKind.tableRead ||
       kind == CoachDialogueVisualKind.flopLabel ||
-      kind == CoachDialogueVisualKind.outsPrice;
+      kind == CoachDialogueVisualKind.outsPrice ||
+      kind == CoachDialogueVisualKind.flopLines;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -381,6 +391,8 @@ class CoachDialogueVisual {
       'Flop-label tiles: made, draw, showdown value, air',
     CoachDialogueVisualKind.outsPrice =>
       'Outs tiles: clean, dirty, and price the call',
+    CoachDialogueVisualKind.flopLines =>
+      'Flop-line tiles: value, c-bet, check, call, fold, raise',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -443,6 +455,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-03-03-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.outsPrice,
+      );
+    case 'act-03-04-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.flopLines,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -636,6 +652,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.outsPrice,
     );
   }
+  if (blob.contains('flop lines') ||
+      blob.contains('one plan') ||
+      blob.contains('c-bet') ||
+      (blob.contains('check back') && blob.contains('raise'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.flopLines,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -679,6 +703,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onTableReadAcknowledge,
     this.onFlopLabelAcknowledge,
     this.onOutsPriceAcknowledge,
+    this.onFlopLinesAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -703,6 +728,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onTableReadAcknowledge;
   final VoidCallback? onFlopLabelAcknowledge;
   final VoidCallback? onOutsPriceAcknowledge;
+  final VoidCallback? onFlopLinesAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -814,6 +840,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onOutsPriceAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onOutsPriceAcknowledge,
+        ),
+        CoachDialogueVisualKind.flopLines => FlopLinesDemo(
+          interactive: onFlopLinesAcknowledge != null,
+          enabled: enabled,
+          onAllLinesTapped: onFlopLinesAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
