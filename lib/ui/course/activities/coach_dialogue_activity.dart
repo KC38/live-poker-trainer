@@ -257,6 +257,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.rangeRewrite
                     ? null
                     : onFeltAcknowledge,
+            onSoftEvidenceAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.softEvidence
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -440,6 +444,9 @@ enum CoachDialogueVisualKind {
 
   /// Each action rewrites the range — keep updating.
   rangeRewrite,
+
+  /// Timing and sizing are clues — small updates only.
+  timingClues,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -554,6 +561,8 @@ class CoachDialogueVisual {
       'Tap X/R, Probe, Delay, and Donk.',
     CoachDialogueVisualKind.rangeRewrite =>
       'Tap Action, Rewrite, and Update.',
+    CoachDialogueVisualKind.softEvidence =>
+      'Tap Timing, Sizing, and Soft.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -606,7 +615,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.impliedOdds ||
       kind == CoachDialogueVisualKind.thinValue ||
       kind == CoachDialogueVisualKind.lineStories ||
-      kind == CoachDialogueVisualKind.rangeRewrite;
+      kind == CoachDialogueVisualKind.rangeRewrite ||
+      kind == CoachDialogueVisualKind.softEvidence;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -707,6 +717,8 @@ class CoachDialogueVisual {
       'Line tiles: check-raise, probe, delay, donk',
     CoachDialogueVisualKind.rangeRewrite =>
       'Range-rewrite tiles: action, rewrite, keep updating',
+    CoachDialogueVisualKind.timingClues =>
+      'Timing-clues tiles: timing, sizing, clues — not mind-reading',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -877,6 +889,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-05-06-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.rangeRewrite,
+      );
+    case 'act-05-07-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.timingClues,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1304,6 +1320,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.rangeRewrite,
     );
   }
+  // Phrase-safe timing clues — never bare "timing" / "sizing" (sizing-language).
+  if (blob.contains('timing and sizing') ||
+      blob.contains('not mind-reading') ||
+      blob.contains('small updates only')) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.timingClues,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -1374,6 +1398,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onThinValueAcknowledge,
     this.onLineStoriesAcknowledge,
     this.onRangeRewriteAcknowledge,
+    this.onTimingCluesAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1425,6 +1450,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onThinValueAcknowledge;
   final VoidCallback? onLineStoriesAcknowledge;
   final VoidCallback? onRangeRewriteAcknowledge;
+  final VoidCallback? onTimingCluesAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1672,6 +1698,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onRangeRewriteAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onRangeRewriteAcknowledge,
+        ),
+        CoachDialogueVisualKind.timingClues => TimingCluesDemo(
+          interactive: onTimingCluesAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onTimingCluesAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },

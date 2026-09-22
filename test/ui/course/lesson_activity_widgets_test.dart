@@ -2736,6 +2736,98 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('timing-clues explain taps Timing Sizing Clues instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-07-01-explain',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'Timing and sizing are clues, not mind-reading. Small updates only.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'Timing and sizing are clues, not mind-reading. Small updates only.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(TimingCluesDemo), findsOneWidget);
+    expect(find.text('Tap Timing, Sizing, and Clues.'), findsOneWidget);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    for (final title in ['TIMING', 'SIZING', 'CLUES']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
+  testWidgets('timing-clues explain taps Timing Sizing Clues instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-07-01-explain',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'Timing and sizing are clues — small updates only.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'Timing and sizing are clues — small updates only.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(TimingCluesDemo), findsOneWidget);
+    expect(find.text('Tap Timing, Sizing, and Clues.'), findsOneWidget);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    for (final title in ['TIMING', 'SIZING', 'CLUES']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
   testWidgets(
     'multiway explain taps Stronger Fewer Nuts instead of Continue',
     (tester) async {
