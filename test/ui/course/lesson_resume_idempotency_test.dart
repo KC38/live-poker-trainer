@@ -275,35 +275,93 @@ void main() {
     controller.dispose();
   });
 
-  test('attempt is ready to complete only after every activity is accepted', () {
-    const attemptOnLast = CourseAttemptSnapshot(
-      attemptId: 'att',
-      lessonId: 'l',
-      catalogVersion: '2.0.0',
-      status: 'in_progress',
-      activityIndex: 4,
-      currentActivityId: 'checkpoint',
-      livesRemaining: 3,
-      livesMax: 3,
-      acceptedCount: 4,
-      scoredCount: 4,
-      stepCount: 6,
+  test('selectChoice autoSubmit fires only when requested and unlocked', () {
+    final activity = CourseActivity(
+      id: 'a',
+      order: 1,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 30,
+      accessibilityText: 'a',
+      acceptedGrades: const [SoftGrade.recommended],
+      choices: const [CourseChoice(id: 'c1', label: 'One')],
     );
-    expect(attemptOnLast.isReadyToComplete(5), isFalse);
+    final controller = LessonActivityController(activity: activity);
+    var autoSubmits = 0;
+    controller.onAutoSubmit = () => autoSubmits += 1;
 
-    const ready = CourseAttemptSnapshot(
-      attemptId: 'att',
-      lessonId: 'l',
-      catalogVersion: '2.0.0',
-      status: 'in_progress',
-      activityIndex: 5,
-      currentActivityId: 'checkpoint',
-      livesRemaining: 3,
-      livesMax: 3,
-      acceptedCount: 5,
-      scoredCount: 4,
-      stepCount: 5,
-    );
-    expect(ready.isReadyToComplete(5), isTrue);
+    controller.selectChoice('c1');
+    expect(controller.draft.choiceId, 'c1');
+    expect(autoSubmits, 0);
+
+    controller.selectChoice('c1', autoSubmit: true);
+    expect(autoSubmits, 1);
+
+    controller.beginSubmit('k1');
+    controller.selectChoice('c2', autoSubmit: true);
+    expect(controller.draft.choiceId, 'c1');
+    expect(autoSubmits, 1);
+    controller.dispose();
   });
+
+  test('setOrderedIds autoSubmit fires when the sequence is complete', () {
+    final activity = CourseActivity(
+      id: 'seq',
+      order: 1,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.orderSequence,
+      estimatedSeconds: 30,
+      accessibilityText: 'seq',
+      acceptedGrades: const [SoftGrade.recommended],
+      sequenceItems: const [
+        CourseChoice(id: 'a', label: 'UTG'),
+        CourseChoice(id: 'b', label: 'BTN'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var autoSubmits = 0;
+    controller.onAutoSubmit = () => autoSubmits += 1;
+
+    controller.setOrderedIds(const ['a']);
+    expect(autoSubmits, 0);
+    controller.setOrderedIds(const ['a', 'b'], autoSubmit: true);
+    expect(controller.draft.orderedIds, ['a', 'b']);
+    expect(autoSubmits, 1);
+    controller.dispose();
+  });
+
+  test(
+    'attempt is ready to complete only after every activity is accepted',
+    () {
+      const attemptOnLast = CourseAttemptSnapshot(
+        attemptId: 'att',
+        lessonId: 'l',
+        catalogVersion: '2.0.0',
+        status: 'in_progress',
+        activityIndex: 4,
+        currentActivityId: 'checkpoint',
+        livesRemaining: 3,
+        livesMax: 3,
+        acceptedCount: 4,
+        scoredCount: 4,
+        stepCount: 6,
+      );
+      expect(attemptOnLast.isReadyToComplete(5), isFalse);
+
+      const ready = CourseAttemptSnapshot(
+        attemptId: 'att',
+        lessonId: 'l',
+        catalogVersion: '2.0.0',
+        status: 'in_progress',
+        activityIndex: 5,
+        currentActivityId: 'checkpoint',
+        livesRemaining: 3,
+        livesMax: 3,
+        acceptedCount: 5,
+        scoredCount: 4,
+        stepCount: 5,
+      );
+      expect(ready.isReadyToComplete(5), isTrue);
+    },
+  );
 }

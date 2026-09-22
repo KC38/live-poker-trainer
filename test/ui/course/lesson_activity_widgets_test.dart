@@ -121,10 +121,7 @@ void main() {
     );
     expect(find.byType(MiniCard), findsNWidgets(2));
     expect(find.text('Rex'), findsWidgets);
-    expect(
-      find.text('Tap your two cards on the felt.'),
-      findsOneWidget,
-    );
+    expect(find.text('Tap your two cards on the felt.'), findsOneWidget);
     controller.dispose();
   });
 
@@ -165,10 +162,7 @@ void main() {
       find.text('Tap Continue when you have looked at your two cards.'),
       findsNothing,
     );
-    expect(
-      find.text('Tap each of the four suits.'),
-      findsOneWidget,
-    );
+    expect(find.text('Tap each of the four suits.'), findsOneWidget);
     controller.dispose();
   });
 
@@ -208,10 +202,7 @@ void main() {
       find.text('Tap the button (BTN) — the latest seat.'),
       findsOneWidget,
     );
-    expect(
-      resolveCoachDialogueVisual(activity).requiresFeltTap,
-      isTrue,
-    );
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
 
     // Soft-pulse runs while guidance is on — taps must still land on BTN.
     await tester.pump(const Duration(milliseconds: 450));
@@ -305,10 +296,7 @@ void main() {
       ),
     );
     expect(find.byType(HandRankLadderDemo), findsOneWidget);
-    expect(
-      find.text('Tap each rung from high card to flush.'),
-      findsOneWidget,
-    );
+    expect(find.text('Tap each rung from high card to flush.'), findsOneWidget);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
 
     await tester.tap(find.text('High card'));
@@ -803,9 +791,15 @@ void main() {
       acceptedGrades: const [SoftGrade.recommended],
       prompt: 'Tap when the blinds go in.',
       choices: const [
-        CourseChoice(id: 'before-deal', label: 'Before any hole cards are dealt'),
+        CourseChoice(
+          id: 'before-deal',
+          label: 'Before any hole cards are dealt',
+        ),
         CourseChoice(id: 'after-flop', label: 'After the flop'),
-        CourseChoice(id: 'only-showdown', label: 'Only if the hand reaches showdown'),
+        CourseChoice(
+          id: 'only-showdown',
+          label: 'Only if the hand reaches showdown',
+        ),
       ],
     );
     final controller = LessonActivityController(activity: activity);
@@ -1003,14 +997,8 @@ void main() {
       ),
       'sb-seat1',
     );
-    expect(
-      blindsSmallBlindSeat(buttonSeat: 5, seatCount: 6),
-      0,
-    );
-    expect(
-      blindsBigBlindSeat(buttonSeat: 5, seatCount: 6),
-      1,
-    );
+    expect(blindsSmallBlindSeat(buttonSeat: 5, seatCount: 6), 0);
+    expect(blindsBigBlindSeat(buttonSeat: 5, seatCount: 6), 1);
   });
 
   test('table region mapping covers Position labels activities', () {
@@ -1331,7 +1319,8 @@ void main() {
           stage: ActivityStage.explain,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
-          accessibilityText: 'One short hand. Blinds post, you act, we reach an ending.',
+          accessibilityText:
+              'One short hand. Blinds post, you act, we reach an ending.',
           acceptedGrades: const [SoftGrade.recommended],
         ),
       ).kind,
@@ -1463,9 +1452,7 @@ void main() {
           estimatedSeconds: 40,
           accessibilityText: 'side',
           acceptedGrades: const [SoftGrade.recommended],
-          choices: const [
-            CourseChoice(id: 'side-exists', label: 'Side pot'),
-          ],
+          choices: const [CourseChoice(id: 'side-exists', label: 'Side pot')],
         ),
       ),
       SelectIdentifyPresentation.tableRegionTap,
@@ -1533,10 +1520,7 @@ void main() {
 
   test('suit tap mapping covers full / missing / extra', () {
     const choices = [
-      CourseChoice(
-        id: 'suits-full',
-        label: 'Hearts, diamonds, clubs, spades',
-      ),
+      CourseChoice(id: 'suits-full', label: 'Hearts, diamonds, clubs, spades'),
       CourseChoice(id: 'suits-missing', label: 'Hearts, diamonds, clubs'),
       CourseChoice(
         id: 'suits-extra',
@@ -1680,7 +1664,10 @@ void main() {
     );
     await tester.tap(find.text('Hearts'));
     await tester.pump();
-    expect(find.text('Keep tapping — include every real suit.'), findsOneWidget);
+    expect(
+      find.text('Keep tapping — include every real suit.'),
+      findsOneWidget,
+    );
 
     // Simulate lesson resume onto a fresh controller bind of the same step.
     controller.bindActivity(guided);
@@ -1730,11 +1717,76 @@ void main() {
     );
     expect(find.byType(HoleCardChoiceButton), findsNWidgets(3));
     expect(find.byType(MiniCard), findsAtLeastNWidgets(6));
+    var autoSubmits = 0;
+    controller.onAutoSubmit = () => autoSubmits += 1;
     await tester.tap(find.byType(HoleCardChoiceButton).first);
     await tester.pump();
     expect(controller.draft.choiceId, 'suited-ah-kh');
+    expect(autoSubmits, 1);
     controller.dispose();
   });
+
+  test('appendOrderedId auto-submits only on the last sequence tap', () {
+    final activity = _activity(
+      renderer: ActivityRenderer.orderSequence,
+      sequenceItems: const [
+        CourseChoice(id: 'a', label: 'UTG'),
+        CourseChoice(id: 'b', label: 'BTN'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var autoSubmits = 0;
+    controller.onAutoSubmit = () => autoSubmits += 1;
+
+    appendOrderedId(
+      controller: controller,
+      activity: activity,
+      ordered: const [],
+      id: 'a',
+    );
+    expect(controller.draft.orderedIds, ['a']);
+    expect(autoSubmits, 0);
+
+    appendOrderedId(
+      controller: controller,
+      activity: activity,
+      ordered: controller.draft.orderedIds,
+      id: 'b',
+    );
+    expect(controller.draft.orderedIds, ['a', 'b']);
+    expect(autoSubmits, 1);
+    controller.dispose();
+  });
+
+  test(
+    'select/identify and player-read shells auto-submit; numeric does not',
+    () {
+      expect(
+        isAutoSubmitSelectIdentify(
+          _activity(renderer: ActivityRenderer.selectIdentify),
+        ),
+        isTrue,
+      );
+      expect(
+        isAutoSubmitSelectIdentify(
+          _activity(renderer: ActivityRenderer.playerReadClassify),
+        ),
+        isTrue,
+      );
+      expect(
+        isAutoSubmitSelectIdentify(
+          _activity(renderer: ActivityRenderer.numericPotPrice),
+        ),
+        isFalse,
+      );
+      expect(
+        isAutoSubmitSelectIdentify(
+          _activity(renderer: ActivityRenderer.orderSequence),
+        ),
+        isFalse,
+      );
+    },
+  );
 
   testWidgets('order sequence supports undo', (tester) async {
     final activity = _activity(
@@ -1759,6 +1811,38 @@ void main() {
     await tester.tap(find.text('Undo last'));
     await tester.pump();
     expect(controller.draft.orderedIds, isEmpty);
+    controller.dispose();
+  });
+
+  testWidgets('order sequence auto-submits when the last item is tapped', (
+    tester,
+  ) async {
+    final activity = _activity(
+      renderer: ActivityRenderer.compareRank,
+      sequenceItems: const [
+        CourseChoice(id: 'a', label: 'UTG'),
+        CourseChoice(id: 'b', label: 'BTN'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var autoSubmits = 0;
+    controller.onAutoSubmit = () => autoSubmits += 1;
+    await tester.pumpWidget(
+      _wrap(
+        OrderSequenceActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    await tester.tap(find.text('UTG'));
+    await tester.pump();
+    expect(autoSubmits, 0);
+    await tester.tap(find.text('BTN'));
+    await tester.pump();
+    expect(controller.draft.orderedIds, ['a', 'b']);
+    expect(autoSubmits, 1);
     controller.dispose();
   });
 
@@ -2215,9 +2299,12 @@ void main() {
       ),
     );
     expect(find.text('Fold'), findsOneWidget);
+    var autoSubmits = 0;
+    controller.onAutoSubmit = () => autoSubmits += 1;
     await tester.tap(find.text('Raise'));
     await tester.pump();
     expect(controller.draft.choiceId, 'raise');
+    expect(autoSubmits, 1);
     controller.dispose();
   });
 
@@ -2501,9 +2588,12 @@ void main() {
     );
     expect(find.byType(LessonActionTable), findsOneWidget);
     expect(find.text('Pot is open to a bet'), findsOneWidget);
+    var autoSubmits = 0;
+    betController.onAutoSubmit = () => autoSubmits += 1;
     await tester.tap(find.text('BET 5'));
     await tester.pump();
     expect(betController.draft.choiceId, 'bet-half');
+    expect(autoSubmits, 1);
     expect(find.text('Checking…'), findsOneWidget);
     betController.dispose();
 
@@ -2871,9 +2961,12 @@ void main() {
     expect(find.text('Their straight'), findsOneWidget);
     expect(find.text('Chop the pot'), findsOneWidget);
 
+    var autoSubmits = 0;
+    controller.onAutoSubmit = () => autoSubmits += 1;
     await tester.tap(find.text('Your flush'));
     await tester.pump();
     expect(controller.draft.choiceId, 'you-win');
+    expect(autoSubmits, 1);
     controller.dispose();
   });
 
@@ -2995,11 +3088,14 @@ void main() {
     );
     expect(find.byType(BestFiveCardPicker), findsOneWidget);
 
+    var autoSubmits = 0;
+    controller.onAutoSubmit = () => autoSubmits += 1;
     for (final code in ['Ah', 'As', 'Kd', '9h', '7c']) {
       await tester.tap(find.byKey(ValueKey<String>('best-five-$code')));
       await tester.pump();
     }
     expect(controller.draft.choiceId, 'best-pair-k');
+    expect(autoSubmits, 1);
     controller.dispose();
   });
 
