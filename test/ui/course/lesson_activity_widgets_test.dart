@@ -7,6 +7,7 @@ import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/course/activities/authored_multi_step_activity.dart';
 import 'package:live_poker_trainer/ui/course/activities/coach_dialogue_activity.dart';
+import 'package:live_poker_trainer/ui/course/activities/full_table_hand_lab_activity.dart';
 import 'package:live_poker_trainer/ui/course/activities/numeric_pot_price_activity.dart';
 import 'package:live_poker_trainer/ui/course/activities/order_sequence_activity.dart';
 import 'package:live_poker_trainer/ui/course/activities/poker_action_sizing_activity.dart';
@@ -26,6 +27,7 @@ import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 
 CourseActivity _activity({
+  String id = 'act-test',
   required ActivityRenderer renderer,
   ActivityStage stage = ActivityStage.guided,
   List<CourseChoice> choices = const [],
@@ -34,7 +36,7 @@ CourseActivity _activity({
   String? numericUnit,
 }) {
   return CourseActivity(
-    id: 'act-test',
+    id: id,
     order: 1,
     stage: stage,
     renderer: renderer,
@@ -2216,6 +2218,36 @@ void main() {
     await tester.tap(find.text('Raise'));
     await tester.pump();
     expect(controller.draft.choiceId, 'raise');
+    controller.dispose();
+  });
+
+  testWidgets('full table hand lab choice tap auto-submits', (tester) async {
+    final activity = _activity(
+      id: 'act-01-06-01-unguided-lab',
+      renderer: ActivityRenderer.fullTableHandLab,
+      choices: const [
+        CourseChoice(id: 'fold-bb', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'call-bb', label: 'Call 2', action: 'CALL'),
+        CourseChoice(id: 'jam-bb', label: 'All-in', action: 'ALL_IN'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var autoSubmits = 0;
+    controller.onAutoSubmit = () => autoSubmits += 1;
+    await tester.pumpWidget(
+      _wrap(
+        FullTableHandLabActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byType(LessonActionDock), findsOneWidget);
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'fold-bb');
+    expect(autoSubmits, 1);
     controller.dispose();
   });
 
