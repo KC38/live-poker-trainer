@@ -107,7 +107,7 @@ class LessonActivityController extends ChangeNotifier {
     }
   }
 
-  void setNumericValue(double? value) {
+  void setNumericValue(double? value, {bool autoSubmit = false}) {
     if (_submitting || _lastResult != null) return;
     if (value == null) {
       _draft = _draft.copyWith(clearNumeric: true);
@@ -115,6 +115,9 @@ class LessonActivityController extends ChangeNotifier {
       _draft = _draft.copyWith(numericValue: value);
     }
     notifyListeners();
+    if (autoSubmit && value != null) {
+      onAutoSubmit?.call();
+    }
   }
 
   void setHandStepIndex(int index) {
