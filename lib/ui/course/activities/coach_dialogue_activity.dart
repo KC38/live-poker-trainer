@@ -26,22 +26,41 @@ class CoachDialogueActivity extends StatelessWidget {
     required this.activity,
     required this.controller,
     required this.showGuidance,
+    this.onFeltAcknowledge,
   });
 
   final CourseActivity activity;
   final LessonActivityController controller;
   final bool showGuidance;
 
+  /// Called when the learner taps the correct region on an interactive demo.
+  final VoidCallback? onFeltAcknowledge;
+
   @override
   Widget build(BuildContext context) {
     final visual = resolveCoachDialogueVisual(activity);
+    final locked =
+        controller.submitting || controller.lastResult != null;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         RexCoachLine.fromActivity(activity),
         if (visual.kind != CoachDialogueVisualKind.none) ...[
           const SizedBox(height: 20),
-          _CoachDialogueVisualPane(visual: visual),
+          _CoachDialogueVisualPane(
+            visual: visual,
+            enabled: !locked && visual.requiresFeltTap,
+            showSoftPulse:
+                showGuidance && !locked && visual.requiresFeltTap,
+            onRegionTap:
+                locked || !visual.requiresFeltTap
+                    ? null
+                    : (target) {
+                      if (target.region == LessonTableRegion.hero) {
+                        onFeltAcknowledge?.call();
+                      }
+                    },
+          ),
         ],
         if (showGuidance) ...[
           const SizedBox(height: 16),
@@ -106,7 +125,9 @@ class CoachDialogueVisual {
 
   String get continueHint => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
-      'Tap Continue when you have looked at your two cards.',
+      useTable
+          ? 'Tap your two cards on the felt.'
+          : 'Tap Continue when you have looked at your two cards.',
     CoachDialogueVisualKind.suitsRanks =>
       'Tap Continue when the four suits and ranks click.',
     CoachDialogueVisualKind.dealerButton =>
@@ -129,6 +150,10 @@ class CoachDialogueVisual {
       'Tap Continue when blinds, your act, and the ending click.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
+
+  /// True when the learner should tap the demo felt instead of Continue.
+  bool get requiresFeltTap =>
+      kind == CoachDialogueVisualKind.holeCards && useTable;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -290,16 +315,29 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
 }
 
 class _CoachDialogueVisualPane extends StatelessWidget {
-  const _CoachDialogueVisualPane({required this.visual});
+  const _CoachDialogueVisualPane({
+    required this.visual,
+    this.enabled = false,
+    this.showSoftPulse = false,
+    this.onRegionTap,
+  });
 
   final CoachDialogueVisual visual;
+  final bool enabled;
+  final bool showSoftPulse;
+  final ValueChanged<LessonTableTapTarget>? onRegionTap;
 
   @override
   Widget build(BuildContext context) {
     return Semantics(
       label: visual.semanticsLabel,
       child: switch (visual.kind) {
-        CoachDialogueVisualKind.holeCards => _HoleCardDemo(visual: visual),
+        CoachDialogueVisualKind.holeCards => _HoleCardDemo(
+          visual: visual,
+          enabled: enabled,
+          showSoftPulse: showSoftPulse,
+          onRegionTap: onRegionTap,
+        ),
         CoachDialogueVisualKind.suitsRanks => const _SuitsRanksDemo(),
         CoachDialogueVisualKind.dealerButton => const _DealerButtonDemo(),
         CoachDialogueVisualKind.positionLabels => const _PositionLabelsDemo(),
@@ -318,9 +356,17 @@ class _CoachDialogueVisualPane extends StatelessWidget {
 }
 
 class _HoleCardDemo extends StatelessWidget {
-  const _HoleCardDemo({required this.visual});
+  const _HoleCardDemo({
+    required this.visual,
+    this.enabled = false,
+    this.showSoftPulse = false,
+    this.onRegionTap,
+  });
 
   final CoachDialogueVisual visual;
+  final bool enabled;
+  final bool showSoftPulse;
+  final ValueChanged<LessonTableTapTarget>? onRegionTap;
 
   @override
   Widget build(BuildContext context) {
@@ -336,6 +382,9 @@ class _HoleCardDemo extends StatelessWidget {
           highlight: LessonTableHighlight.hero,
           caption: 'You',
         ),
+        enabled: enabled,
+        showSoftPulse: showSoftPulse,
+        onRegionTap: onRegionTap,
       );
     }
     final codes =

@@ -681,6 +681,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                               activity: activity,
                               controller: controller,
                               showGuidance: showGuidance,
+                              onFeltAcknowledge:
+                                  isTableRegionTapActivity(activity) &&
+                                          activity.renderer ==
+                                              ActivityRenderer.coachDialogue
+                                      ? _submit
+                                      : null,
                             ),
                             if (controller.hintVisible && hint != null) ...[
                               const SizedBox(height: 14),
