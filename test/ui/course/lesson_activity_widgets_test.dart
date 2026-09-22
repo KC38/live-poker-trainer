@@ -21,6 +21,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_pots.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_streets.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_toy_hand.dart';
+import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 
@@ -1707,6 +1708,87 @@ void main() {
     await tester.tap(find.text('Undo last'));
     await tester.pump();
     expect(controller.draft.orderedIds, isEmpty);
+    controller.dispose();
+  });
+
+  testWidgets('rank order shows prompt once in Rex, not duplicated below', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-01-02-scaffolded-ranks',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.orderSequence,
+      estimatedSeconds: 40,
+      accessibilityText: 'Order ranks',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Order these ranks from lowest to highest.',
+      sequenceItems: const [
+        CourseChoice(id: 'r2', label: '2'),
+        CourseChoice(id: 'rT', label: 'T'),
+        CourseChoice(id: 'rA', label: 'A'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        OrderSequenceActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Order these ranks from lowest to highest.'),
+      findsOneWidget,
+    );
+    expect(find.text('Tap ranks from lowest to highest.'), findsNothing);
+    expect(
+      find.byWidgetPredicate(
+        (w) =>
+            w is RexCoachLine &&
+            w.text == 'Order these ranks from lowest to highest.',
+      ),
+      findsOneWidget,
+    );
+    controller.dispose();
+  });
+
+  testWidgets('suit identify shows prompt once in Rex, not duplicated below', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-01-02-guided-suits',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Pick suits',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap every suit in a standard deck.',
+      choices: const [
+        CourseChoice(
+          id: 'suits-full',
+          label: 'Hearts, diamonds, clubs, spades',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Tap every suit in a standard deck.'), findsOneWidget);
+    expect(
+      find.text('Tap every suit that belongs in a standard deck.'),
+      findsNothing,
+    );
     controller.dispose();
   });
 

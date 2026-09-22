@@ -33,9 +33,8 @@ class PokerActionSizingActivity extends StatelessWidget {
       builder: (context, _) {
         final selected = controller.draft.choiceId;
         final locked = controller.submitting || controller.lastResult != null;
-        final coach =
-            activity.primaryCoachLine?.text ??
-            (activity.id == 'act-01-06-01-unguided-lab'
+        final fallback =
+            activity.id == 'act-01-06-01-unguided-lab'
                 ? 'Big blind vs a button open — tap Fold, Call, or Jam.'
                 : spot?.identifyUnavailable == true
                 ? 'A bet is out — tap the action you cannot take.'
@@ -47,14 +46,25 @@ class PokerActionSizingActivity extends StatelessWidget {
                 ? 'Read the pot and the bet — tap your action.'
                 : spot != null
                 ? 'Nothing to match — tap the free action.'
-                : 'Choose the action you would take live.');
+                : 'Choose the action you would take live.';
+        final resolved = resolveLessonCoachPrompt(
+          activity: activity,
+          fallback: fallback,
+        );
+        final coach = resolved.coach;
+        final showPrompt = resolved.showPrompt;
+        final showCoach = shouldShowLessonCoach(
+          activity: activity,
+          showGuidance: showGuidance,
+          coach: coach,
+        );
 
         if (tableMode) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              RexCoachLine(text: coach),
-              if (activity.prompt != null) ...[
+              if (showCoach) RexCoachLine(text: coach),
+              if (showPrompt) ...[
                 const SizedBox(height: 12),
                 Text(
                   activity.prompt!,
@@ -104,9 +114,8 @@ class PokerActionSizingActivity extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (showGuidance || activity.primaryCoachLine != null)
-              RexCoachLine(text: coach),
-            if (activity.prompt != null) ...[
+            if (showCoach) RexCoachLine(text: coach),
+            if (showPrompt) ...[
               const SizedBox(height: 12),
               Text(
                 activity.prompt!,
