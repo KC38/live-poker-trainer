@@ -151,6 +151,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.flopLines
                     ? null
                     : onFeltAcknowledge,
+            onTurnPlanAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.turnPlan
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -256,6 +260,9 @@ enum CoachDialogueVisualKind {
 
   /// Flop line menu: value, c-bet, check, call, fold, raise.
   flopLines,
+
+  /// Turn bricks vs changers; barrel or delay.
+  turnPlan,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -318,6 +325,8 @@ class CoachDialogueVisual {
       'Tap Clean, Dirty, and Price.',
     CoachDialogueVisualKind.flopLines =>
       'Tap each flop line once.',
+    CoachDialogueVisualKind.turnPlan =>
+      'Tap Brick, Change, Barrel, and Delay.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -344,7 +353,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.tableRead ||
       kind == CoachDialogueVisualKind.flopLabel ||
       kind == CoachDialogueVisualKind.outsPrice ||
-      kind == CoachDialogueVisualKind.flopLines;
+      kind == CoachDialogueVisualKind.flopLines ||
+      kind == CoachDialogueVisualKind.turnPlan;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -393,6 +403,8 @@ class CoachDialogueVisual {
       'Outs tiles: clean, dirty, and price the call',
     CoachDialogueVisualKind.flopLines =>
       'Flop-line tiles: value, c-bet, check, call, fold, raise',
+    CoachDialogueVisualKind.turnPlan =>
+      'Turn-plan tiles: brick, change, barrel, delay',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -459,6 +471,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-03-04-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.flopLines,
+      );
+    case 'act-03-05-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.turnPlan,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -660,6 +676,15 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.flopLines,
     );
   }
+  // Phrase matches — avoid bare "bet"/"turn"/"card" traps.
+  if (blob.contains('turn cards either brick') ||
+      blob.contains('change the story') ||
+      blob.contains('barrel or delay') ||
+      (blob.contains('brick') && blob.contains('barrel'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.turnPlan,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -704,6 +729,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onFlopLabelAcknowledge,
     this.onOutsPriceAcknowledge,
     this.onFlopLinesAcknowledge,
+    this.onTurnPlanAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -729,6 +755,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onFlopLabelAcknowledge;
   final VoidCallback? onOutsPriceAcknowledge;
   final VoidCallback? onFlopLinesAcknowledge;
+  final VoidCallback? onTurnPlanAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -845,6 +872,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onFlopLinesAcknowledge != null,
           enabled: enabled,
           onAllLinesTapped: onFlopLinesAcknowledge,
+        ),
+        CoachDialogueVisualKind.turnPlan => TurnPlanDemo(
+          interactive: onTurnPlanAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onTurnPlanAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
