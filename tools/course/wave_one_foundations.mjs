@@ -1210,19 +1210,20 @@ export function buildSectionOne() {
                 okFeedback: "Left of big blind first; button last.",
                 missFeedback: "UTG, then toward the button.",
               }),
-              selectAct({
+              actionAct({
                 id: "act-01-06-02-jump-legal", order: 3, stage: "jump_test",
-                prompt: "Facing a bet, which action is illegal?",
+                prompt: "A bet faces you. Tap the action you cannot take.",
                 a11y: "Jump test: check is illegal facing a bet.",
                 objectives: ["Confirm legal action"],
                 lifeLoss: true,
                 choices: [
                   choice("j-check", "Check", "recommended",
-                    "Check is off when a bet faces you."),
+                    "Check is off when a bet faces you.",
+                    {action: "CHECK"}),
                   choice("j-call", "Call", "clear_mistake",
-                    "Call is legal.", {betterChoiceId: "j-check"}),
+                    "Call is legal.", {action: "CALL", betterChoiceId: "j-check"}),
                   choice("j-raise", "Raise", "clear_mistake",
-                    "Raise is legal.", {betterChoiceId: "j-check"}),
+                    "Raise is legal.", {action: "RAISE", betterChoiceId: "j-check"}),
                 ],
               }),
               multiStepAct({
@@ -1235,9 +1236,9 @@ export function buildSectionOne() {
                     id: "j-hand-open",
                     street: "preflop",
                     prompt: "Button with ATs. Folds to you. Action?",
-                    accessibilityText: "Open ace-ten suited on the button.",
+                    accessibilityText: "Raise to 6 with ace-ten suited on the button.",
                     choices: [
-                      choice("j-open", "Open to 6", "recommended",
+                      choice("j-open", "Raise to 6", "recommended",
                         "Standard steal-plus open.", {action: "RAISE", amountBb: 3}),
                       choice("j-fold", "Fold", "clear_mistake",
                         "Too playable to fold.", {action: "FOLD", betterChoiceId: "j-open"}),
@@ -1246,12 +1247,12 @@ export function buildSectionOne() {
                   {
                     id: "j-hand-end",
                     street: "preflop",
-                    prompt: "Blinds fold. You win. Correct?",
+                    prompt: "Blinds fold. What happened?",
                     accessibilityText: "Confirm the pot is won.",
                     choices: [
-                      choice("j-yes", "Yes — pot is yours", "recommended",
+                      choice("j-yes", "Won pot", "recommended",
                         "Foundations check complete."),
-                      choice("j-no", "No — still need a showdown", "clear_mistake",
+                      choice("j-no", "Need showdown", "clear_mistake",
                         "No callers means no showdown.", {betterChoiceId: "j-yes"}),
                     ],
                   },

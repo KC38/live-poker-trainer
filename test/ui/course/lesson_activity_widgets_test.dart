@@ -801,6 +801,77 @@ void main() {
       isTrue,
     );
     expect(
+      isHandExampleSequenceActivity(
+        CourseActivity(
+          id: 'act-01-06-02-jump-ranks',
+          order: 1,
+          stage: ActivityStage.jumpTest,
+          renderer: ActivityRenderer.compareRank,
+          estimatedSeconds: 40,
+          accessibilityText: 'ranks',
+          acceptedGrades: const [SoftGrade.recommended],
+          sequenceItems: const [
+            CourseChoice(id: 'j-flush', label: 'Flush'),
+            CourseChoice(id: 'j-straight', label: 'Straight'),
+            CourseChoice(id: 'j-two', label: 'Two pair'),
+          ],
+        ),
+      ),
+      isTrue,
+    );
+    expect(
+      isSeatOrderSequenceActivity(
+        CourseActivity(
+          id: 'act-01-06-02-jump-order',
+          order: 2,
+          stage: ActivityStage.jumpTest,
+          renderer: ActivityRenderer.orderSequence,
+          estimatedSeconds: 40,
+          accessibilityText: 'order',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ),
+      isTrue,
+    );
+    expect(
+      resolveLessonActionSpot(
+        CourseActivity(
+          id: 'act-01-06-02-jump-legal',
+          order: 3,
+          stage: ActivityStage.jumpTest,
+          renderer: ActivityRenderer.pokerActionSizing,
+          estimatedSeconds: 40,
+          accessibilityText: 'legal',
+          acceptedGrades: const [SoftGrade.recommended],
+          choices: const [
+            CourseChoice(id: 'j-check', label: 'Check', action: 'CHECK'),
+          ],
+        ),
+      )?.identifyUnavailable,
+      isTrue,
+    );
+    expect(
+      resolveToyHandStepSpot(
+        activityId: 'act-01-06-02-jump-hand',
+        stepId: 'j-hand-open',
+      )?.heroCodes,
+      ['Ah', 'Th'],
+    );
+    expect(
+      isLessonActionTableActivity(
+        CourseActivity(
+          id: 'act-01-06-02-jump-hand',
+          order: 4,
+          stage: ActivityStage.jumpTest,
+          renderer: ActivityRenderer.authoredMultiStepHand,
+          estimatedSeconds: 70,
+          accessibilityText: 'hand',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ),
+      isTrue,
+    );
+    expect(
       resolveSelectIdentifyPresentation(
         CourseActivity(
           id: 'act-01-05-01-checkpoint-side',
@@ -1175,6 +1246,79 @@ void main() {
     await tester.tap(find.text('RAISE TO 6'));
     await tester.pump();
     expect(controller.draft.choiceId, 'open-6');
+    controller.dispose();
+  });
+
+  testWidgets('jump check legal docks illegal Check on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-01-06-02-jump-legal',
+      order: 3,
+      stage: ActivityStage.jumpTest,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 40,
+      accessibilityText: 'legal',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'A bet faces you. Tap the action you cannot take.',
+      choices: const [
+        CourseChoice(id: 'j-check', label: 'Check', action: 'CHECK'),
+        CourseChoice(id: 'j-call', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'j-raise', label: 'Raise', action: 'RAISE'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.textContaining('Villain bets 8'), findsOneWidget);
+    expect(find.text('CHECK (off)'), findsOneWidget);
+    await tester.tap(find.text('CHECK (off)'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'j-check');
+    controller.dispose();
+  });
+
+  testWidgets('jump check hand opens steal on action dock', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-01-06-02-jump-hand',
+      order: 4,
+      stage: ActivityStage.jumpTest,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 70,
+      accessibilityText: 'hand',
+      acceptedGrades: const [SoftGrade.recommended],
+      handSteps: const [
+        CourseHandStep(
+          id: 'j-hand-open',
+          street: 'preflop',
+          prompt: 'Button with ATs. Folds to you.',
+          choices: [
+            CourseChoice(id: 'j-open', label: 'Raise to 6', action: 'RAISE'),
+            CourseChoice(id: 'j-fold', label: 'Fold', action: 'FOLD'),
+          ],
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        AuthoredMultiStepActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.textContaining('Preflop · Button'), findsOneWidget);
+    expect(find.text('RAISE TO 6'), findsOneWidget);
+    await tester.tap(find.text('RAISE TO 6'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'j-open');
     controller.dispose();
   });
 

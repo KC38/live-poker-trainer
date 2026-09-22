@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "1160a6b9001a73d20db3b472e214feb86a2ef57fd0946f460ed9f3bd38e80d5f",
+  "contentChecksum": "233e3ae72616f805f84134f645a06b3ef8c5a3d06cf220b9ab03e28e5932b25a",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -2201,8 +2201,8 @@
                   "id": "act-01-06-02-jump-legal",
                   "order": 3,
                   "stage": "jump_test",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
                   "accessibilityText": "Jump test: check is illegal facing a bet.",
                   "acceptedGrades": [
                     "recommended",
@@ -2213,22 +2213,25 @@
                   "objectives": [
                     "Confirm legal action"
                   ],
-                  "prompt": "Facing a bet, which action is illegal?",
+                  "prompt": "A bet faces you. Tap the action you cannot take.",
                   "choices": [
                     {
                       "id": "j-check",
                       "label": "Check",
-                      "accessibilityText": "Check"
+                      "accessibilityText": "Check",
+                      "action": "CHECK"
                     },
                     {
                       "id": "j-call",
                       "label": "Call",
-                      "accessibilityText": "Call"
+                      "accessibilityText": "Call",
+                      "action": "CALL"
                     },
                     {
                       "id": "j-raise",
                       "label": "Raise",
-                      "accessibilityText": "Raise"
+                      "accessibilityText": "Raise",
+                      "action": "RAISE"
                     }
                   ]
                 },
@@ -2253,12 +2256,12 @@
                       "id": "j-hand-open",
                       "street": "preflop",
                       "prompt": "Button with ATs. Folds to you. Action?",
-                      "accessibilityText": "Open ace-ten suited on the button.",
+                      "accessibilityText": "Raise to 6 with ace-ten suited on the button.",
                       "choices": [
                         {
                           "id": "j-open",
-                          "label": "Open to 6",
-                          "accessibilityText": "Open to 6",
+                          "label": "Raise to 6",
+                          "accessibilityText": "Raise to 6",
                           "action": "RAISE",
                           "amountBb": 3
                         },
@@ -2273,18 +2276,18 @@
                     {
                       "id": "j-hand-end",
                       "street": "preflop",
-                      "prompt": "Blinds fold. You win. Correct?",
+                      "prompt": "Blinds fold. What happened?",
                       "accessibilityText": "Confirm the pot is won.",
                       "choices": [
                         {
                           "id": "j-yes",
-                          "label": "Yes — pot is yours",
-                          "accessibilityText": "Yes — pot is yours"
+                          "label": "Won pot",
+                          "accessibilityText": "Won pot"
                         },
                         {
                           "id": "j-no",
-                          "label": "No — still need a showdown",
-                          "accessibilityText": "No — still need a showdown"
+                          "label": "Need showdown",
+                          "accessibilityText": "Need showdown"
                         }
                       ]
                     }

@@ -16,7 +16,8 @@ bool isStreetSequenceActivity(CourseActivity activity) {
 
 /// Whether this order-sequence activity uses preflop seat tiles.
 bool isSeatOrderSequenceActivity(CourseActivity activity) {
-  return activity.id == 'act-01-04-01-scaffolded-order';
+  return activity.id == 'act-01-04-01-scaffolded-order' ||
+      activity.id == 'act-01-06-02-jump-order';
 }
 
 /// Explain-step demo: four streets progressing on a mini felt.
