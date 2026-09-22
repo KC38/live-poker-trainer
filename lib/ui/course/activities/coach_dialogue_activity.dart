@@ -147,6 +147,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.outsPrice
                     ? null
                     : onFeltAcknowledge,
+            onFlopLinesAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.flopLines
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -249,6 +253,9 @@ enum CoachDialogueVisualKind {
 
   /// Clean vs dirty outs and pricing the call.
   outsPrice,
+
+  /// Flop lines: value, c-bet, check, call, fold, raise.
+  flopLines,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -309,6 +316,8 @@ class CoachDialogueVisual {
       'Tap Made, Draw, SDV, and Air.',
     CoachDialogueVisualKind.outsPrice =>
       'Tap Clean, Dirty, and Price.',
+    CoachDialogueVisualKind.flopLines =>
+      'Tap Value, C-Bet, Check, Call, Fold, and Raise.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -334,7 +343,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.fullRing ||
       kind == CoachDialogueVisualKind.tableRead ||
       kind == CoachDialogueVisualKind.flopLabel ||
-      kind == CoachDialogueVisualKind.outsPrice;
+      kind == CoachDialogueVisualKind.outsPrice ||
+      kind == CoachDialogueVisualKind.flopLines;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
