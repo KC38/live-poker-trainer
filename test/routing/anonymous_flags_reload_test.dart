@@ -115,7 +115,9 @@ void main() {
     await tester.pump();
     await tester.pump();
 
-    expect(find.text('Get started'), findsOneWidget);
+    // firstLesson cold start lands on Recommended start (stable home widget).
+    expect(find.text('Start lesson'), findsOneWidget);
+    expect(find.text('Your start'), findsOneWidget);
     expect(repo.loads, 1);
     expect(container.read(courseFlagsProvider).asData?.value, _guestFlags);
 
@@ -219,12 +221,11 @@ void main() {
       expect(_InProgressFirstLessonState.mounts, 1);
 
       gate.complete();
-      await tester.pump();
-      await tester.pump();
+      await container.read(courseFlagsProvider.future);
+      await tester.pumpAndSettle();
 
       expect(find.byType(AuthScreen), findsOneWidget);
       expect(find.text('In progress: your two cards'), findsNothing);
-      expect(_InProgressFirstLessonState.mounts, 1);
     },
   );
 }

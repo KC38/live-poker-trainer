@@ -30,13 +30,17 @@ import 'package:live_poker_trainer/services/analytics/crashlytics_diagnostics_si
 import 'package:live_poker_trainer/services/legacy_local_data_cleanup.dart';
 import 'package:live_poker_trainer/ui/screens/app_shell.dart';
 import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
-import 'package:live_poker_trainer/ui/screens/first_lesson_launch_screen.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_runner_screen.dart';
 import 'package:live_poker_trainer/ui/screens/onboarding_screens.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
+
+/// Separate navigator when the course auth gate fails closed so the guest
+/// lesson stack cannot survive on the shared [_rootNavigatorKey].
+final GlobalKey<NavigatorState> _authGateNavigatorKey =
+    GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -127,6 +131,7 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
     // real flag denial clears that lesson. Linked accounts key on uid.
     final session = auth.asData?.value;
     final destination = _destinationFor(session, onboarding, flags, flagsReady);
+    final resetForAuthGate = destination == AppRootDestination.auth;
     _logRootScreen(analytics, _screenName(destination));
 
     return MaterialApp(
@@ -134,10 +139,11 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
         rootNavigatorKeyFor(
           uid: session?.uid,
           anonymous: session?.isAnonymous == true,
-          resetForAuthGate: destination == AppRootDestination.auth,
+          resetForAuthGate: resetForAuthGate,
         ),
       ),
-      navigatorKey: _rootNavigatorKey,
+      navigatorKey:
+          resetForAuthGate ? _authGateNavigatorKey : _rootNavigatorKey,
       title: 'Exploitative Poker Lab',
       debugShowCheckedModeBanner: false,
       theme: buildPokerTheme(),
@@ -191,8 +197,16 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
       case AppRootDestination.guestCourse:
         if (onboarding.step == OnboardingStep.firstLesson ||
             onboarding.step == OnboardingStep.recommendedStart) {
-          return FirstLessonLaunchScreen(
-            lessonId: onboarding.recommendedLessonId ?? kFirstCourseLessonId,
+          // Same widget type for both steps so markEnteringFirstLesson does not
+          // remount MaterialApp.home and dispose an in-progress LessonRunner.
+          return RecommendedStartScreen(
+            recommendation: OnboardingRecommendation(
+              experienceBand:
+                  onboarding.experienceBand ?? ExperienceBand.neverPlayed,
+              startLessonId:
+                  onboarding.recommendedLessonId ?? kFirstCourseLessonId,
+              jumpTestOffered: onboarding.jumpTestOffered,
+            ),
           );
         }
         return const ExperienceChoiceScreen();

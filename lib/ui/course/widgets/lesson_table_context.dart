@@ -2030,7 +2030,7 @@ class _FaceDownPair extends StatelessWidget {
     return Column(
       children: [
         Text(
-          'Seat',
+          'Hidden',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: 10,
