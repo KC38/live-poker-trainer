@@ -613,8 +613,9 @@ String? mapTableRegionToChoiceId({
 /// Whether this activity is answered by tapping the mini-table.
 bool isTableRegionTapActivity(CourseActivity activity) {
   if (activity.renderer == ActivityRenderer.coachDialogue) {
-    // Hole-card explain: tap your cards on the felt (not Continue).
-    return activity.id == 'act-01-01-01-explain-hole-cards';
+    // Interactive explains: tap the demo instead of Continue.
+    return activity.id == 'act-01-01-01-explain-hole-cards' ||
+        activity.id == 'act-01-01-02-explain-suits';
   }
   if (activity.renderer != ActivityRenderer.selectIdentify) return false;
   return activity.id.startsWith('act-01-01-01-') ||
