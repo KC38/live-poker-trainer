@@ -139,6 +139,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.tableRead
                     ? null
                     : onFeltAcknowledge,
+            onFlopLabelAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.flopLabel
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -235,6 +239,9 @@ enum CoachDialogueVisualKind {
 
   /// Pre-deal table read: pot, stacks, button, who acts.
   tableRead,
+
+  /// Flop hand labels: made, draw, showdown value, air.
+  flopLabel,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -291,6 +298,8 @@ class CoachDialogueVisual {
       'Tap Nine, Same, and Position.',
     CoachDialogueVisualKind.tableRead =>
       'Tap Pot, Stacks, Button, and Who Acts.',
+    CoachDialogueVisualKind.flopLabel =>
+      'Tap Made, Draw, SDV, and Air.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -314,7 +323,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.bbStackDepth ||
       kind == CoachDialogueVisualKind.tableHabits ||
       kind == CoachDialogueVisualKind.fullRing ||
-      kind == CoachDialogueVisualKind.tableRead;
+      kind == CoachDialogueVisualKind.tableRead ||
+      kind == CoachDialogueVisualKind.flopLabel;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -357,6 +367,8 @@ class CoachDialogueVisual {
       'Full-ring tiles: nine seats, same rules, position',
     CoachDialogueVisualKind.tableRead =>
       'Table-read tiles: pot, stacks, button, who acts',
+    CoachDialogueVisualKind.flopLabel =>
+      'Flop-label tiles: made, draw, showdown value, air',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -411,6 +423,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-03-01-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.tableRead,
+      );
+    case 'act-03-02-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.flopLabel,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -586,6 +602,16 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.tableRead,
     );
   }
+  if (blob.contains('flop first') ||
+      blob.contains('label before you bet') ||
+      blob.contains('showdown value') ||
+      (blob.contains('made') &&
+          blob.contains('draw') &&
+          blob.contains('air'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.flopLabel,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -627,6 +653,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onTableHabitsAcknowledge,
     this.onFullRingAcknowledge,
     this.onTableReadAcknowledge,
+    this.onFlopLabelAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -649,6 +676,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onTableHabitsAcknowledge;
   final VoidCallback? onFullRingAcknowledge;
   final VoidCallback? onTableReadAcknowledge;
+  final VoidCallback? onFlopLabelAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -750,6 +778,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onTableReadAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onTableReadAcknowledge,
+        ),
+        CoachDialogueVisualKind.flopLabel => FlopLabelDemo(
+          interactive: onFlopLabelAcknowledge != null,
+          enabled: enabled,
+          onAllLabelsTapped: onFlopLabelAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
