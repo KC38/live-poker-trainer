@@ -110,4 +110,58 @@ void main() {
     );
     expect(settledOpacity.opacity, 1);
   });
+
+  testWidgets('streak chip pulses once when acceptedStreak increases', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _wrap(
+        const LessonProgressHeader(
+          progress: 0.5,
+          livesRemaining: 3,
+          livesMax: 3,
+          acceptedStreak: 2,
+        ),
+      ),
+    );
+    expect(find.byIcon(Icons.local_fire_department), findsOneWidget);
+    expect(find.text('2'), findsOneWidget);
+
+    await tester.pumpWidget(
+      _wrap(
+        const LessonProgressHeader(
+          progress: 0.5,
+          livesRemaining: 3,
+          livesMax: 3,
+          acceptedStreak: 4,
+        ),
+      ),
+    );
+    expect(find.text('4'), findsOneWidget);
+
+    // Mid-pulse: Transform.scale animating away from identity.
+    await tester.pump(const Duration(milliseconds: 100));
+    final scales = tester
+        .widgetList<Transform>(
+          find.descendant(
+            of: find.byType(LessonProgressHeader),
+            matching: find.byType(Transform),
+          ),
+        )
+        .where((t) => t.transform.getMaxScaleOnAxis() != 1.0)
+        .toList();
+    expect(scales, isNotEmpty);
+
+    await tester.pumpAndSettle();
+    final settledScales = tester
+        .widgetList<Transform>(
+          find.descendant(
+            of: find.byType(LessonProgressHeader),
+            matching: find.byType(Transform),
+          ),
+        )
+        .map((t) => t.transform.getMaxScaleOnAxis())
+        .toList();
+    expect(settledScales.every((s) => (s - 1.0).abs() < 0.001), isTrue);
+  });
 }
