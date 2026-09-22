@@ -1,6 +1,8 @@
 /// Arrange action-order / sequence activity.
 library;
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
@@ -11,6 +13,54 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_streets.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 final _rankOnly = RegExp(r'^[2-9TJQKA]$', caseSensitive: false);
+
+/// Stable display order for the selectable palette (not the answer key).
+///
+/// Seeded by [activityId] so rebuilds keep the same order mid-answer; a new
+/// activity id yields a new shuffle. When length > 1, the result is never the
+/// authored order so teach-by-doing stays real.
+List<CourseChoice> shuffledSequencePalette({
+  required String activityId,
+  required List<CourseChoice> items,
+}) {
+  if (items.length <= 1) {
+    return List<CourseChoice>.unmodifiable(items);
+  }
+  final out = List<CourseChoice>.of(items);
+  final rng = Random(_stableSeed(activityId));
+  for (var i = out.length - 1; i > 0; i--) {
+    final j = rng.nextInt(i + 1);
+    final tmp = out[i];
+    out[i] = out[j];
+    out[j] = tmp;
+  }
+  final authoredIds = items.map((item) => item.id).toList(growable: false);
+  final shuffledIds = out.map((item) => item.id).toList(growable: false);
+  if (_sameIdOrder(authoredIds, shuffledIds)) {
+    final tmp = out[0];
+    out[0] = out[1];
+    out[1] = tmp;
+  }
+  return List<CourseChoice>.unmodifiable(out);
+}
+
+int _stableSeed(String activityId) {
+  // FNV-1a 32-bit — stable across runs (unlike [String.hashCode]).
+  var hash = 0x811c9dc5;
+  for (final unit in activityId.codeUnits) {
+    hash ^= unit;
+    hash = (hash * 0x01000193) & 0xffffffff;
+  }
+  return hash;
+}
+
+bool _sameIdOrder(List<String> a, List<String> b) {
+  if (a.length != b.length) return false;
+  for (var i = 0; i < a.length; i++) {
+    if (a[i] != b[i]) return false;
+  }
+  return true;
+}
 
 /// Appends [id] to the order draft and auto-submits when the sequence is full.
 void appendOrderedId({
@@ -54,7 +104,10 @@ class OrderSequenceActivity extends StatelessWidget {
         final ordered = controller.draft.orderedIds;
         final locked = controller.submitting || controller.lastResult != null;
         final remaining =
-            activity.sequenceItems
+            shuffledSequencePalette(
+                  activityId: activity.id,
+                  items: activity.sequenceItems,
+                )
                 .where((item) => !ordered.contains(item.id))
                 .toList(growable: false);
         final fallback =
