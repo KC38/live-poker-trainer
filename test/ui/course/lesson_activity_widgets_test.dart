@@ -2556,6 +2556,7 @@ void main() {
         ),
       ),
     );
+    await tester.pumpAndSettle();
     expect(find.text('Life −1'), findsNothing);
     expect(find.text('Think again'), findsOneWidget);
   });
@@ -2576,6 +2577,7 @@ void main() {
         ),
       ),
     );
+    await tester.pumpAndSettle();
     expect(find.text('Life −1'), findsOneWidget);
   });
 
@@ -2594,6 +2596,7 @@ void main() {
         ),
       ),
     );
+    await tester.pumpAndSettle();
     expect(find.text('Playable'), findsOneWidget);
     expect(find.text('Life −1'), findsNothing);
   });
@@ -2616,6 +2619,7 @@ void main() {
         ),
       ),
     );
+    await tester.pumpAndSettle();
     expect(find.text('Preferred: Hole cards'), findsOneWidget);
     expect(find.widgetWithText(FilledButton, 'Got it'), findsNothing);
     expect(find.widgetWithText(OutlinedButton, 'Try again'), findsNothing);
