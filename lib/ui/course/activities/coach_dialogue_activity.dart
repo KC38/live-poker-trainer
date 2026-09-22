@@ -131,6 +131,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.tableHabits
                     ? null
                     : onFeltAcknowledge,
+            onFullRingAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.fullRing
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -221,6 +225,9 @@ enum CoachDialogueVisualKind {
 
   /// Live-table habits: watch, say, cover, wait.
   tableHabits,
+
+  /// Nine-max table: same rules; position still matters.
+  fullRing,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -273,6 +280,8 @@ class CoachDialogueVisual {
       'Tap Chips→BB, Shorter, and Depth.',
     CoachDialogueVisualKind.tableHabits =>
       'Tap Watch, Say, Cover, and Wait.',
+    CoachDialogueVisualKind.fullRing =>
+      'Tap Nine, Same, and Position.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -294,7 +303,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.openRange ||
       kind == CoachDialogueVisualKind.vsOpenResponse ||
       kind == CoachDialogueVisualKind.bbStackDepth ||
-      kind == CoachDialogueVisualKind.tableHabits;
+      kind == CoachDialogueVisualKind.tableHabits ||
+      kind == CoachDialogueVisualKind.fullRing;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -333,6 +343,8 @@ class CoachDialogueVisual {
       'Stack-depth tiles: chips to BB, shorter stack, depth',
     CoachDialogueVisualKind.tableHabits =>
       'Live-table habit tiles: watch, say, cover, wait',
+    CoachDialogueVisualKind.fullRing =>
+      'Full-ring tiles: nine seats, same rules, position',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -379,6 +391,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-02-06-01-explain-habits':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.tableHabits,
+      );
+    case 'act-02-07-01-explain-full':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.fullRing,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -536,6 +552,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.tableHabits,
     );
   }
+  if (blob.contains('nine seats') ||
+      blob.contains('full ring') ||
+      blob.contains('full-ring') ||
+      (blob.contains('same rules') && blob.contains('position'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.fullRing,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -575,6 +599,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onVsOpenAcknowledge,
     this.onBbStackAcknowledge,
     this.onTableHabitsAcknowledge,
+    this.onFullRingAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -595,6 +620,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onVsOpenAcknowledge;
   final VoidCallback? onBbStackAcknowledge;
   final VoidCallback? onTableHabitsAcknowledge;
+  final VoidCallback? onFullRingAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -686,6 +712,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onTableHabitsAcknowledge != null,
           enabled: enabled,
           onAllHabitsTapped: onTableHabitsAcknowledge,
+        ),
+        CoachDialogueVisualKind.fullRing => FullRingDemo(
+          interactive: onFullRingAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onFullRingAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
