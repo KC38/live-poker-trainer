@@ -2715,6 +2715,66 @@ void main() {
     expect(find.widgetWithText(OutlinedButton, 'Try again'), findsNothing);
   });
 
+  testWidgets('rejected feedback shakes horizontally; accepted does not', (
+    tester,
+  ) async {
+    Offset? dxOfTitle(String title) {
+      final text = find.text(title);
+      if (text.evaluate().isEmpty) return null;
+      final transforms = tester.widgetList<Transform>(
+        find.ancestor(of: text, matching: find.byType(Transform)),
+      );
+      for (final t in transforms) {
+        final m = t.transform;
+        final dx = m.storage[12];
+        if (dx.abs() > 0.01) return Offset(dx, m.storage[13]);
+      }
+      return Offset.zero;
+    }
+
+    await tester.pumpWidget(
+      _wrap(
+        LessonFeedbackSheet(
+          result: _result(
+            grade: SoftGrade.questionable,
+            accepted: false,
+            lifeLost: false,
+          ),
+          onContinue: () {},
+          onRetry: () {},
+        ),
+      ),
+    );
+    await tester.pump(
+      LessonFeedbackSheet.rejectShakeDuration * 0.25,
+    );
+    final rejectDx = dxOfTitle('Think again');
+    expect(rejectDx, isNotNull);
+    expect(rejectDx!.dx.abs(), greaterThan(0.5));
+
+    await tester.pumpAndSettle();
+
+    await tester.pumpWidget(
+      _wrap(
+        LessonFeedbackSheet(
+          result: _result(
+            grade: SoftGrade.recommended,
+            accepted: true,
+            lifeLost: false,
+          ),
+          onContinue: () {},
+        ),
+      ),
+    );
+    await tester.pump(
+      LessonFeedbackSheet.rejectShakeDuration * 0.25,
+    );
+    final acceptDx = dxOfTitle('Nice!');
+    expect(acceptDx, isNotNull);
+    expect(acceptDx!.dx.abs(), lessThan(0.01));
+    await tester.pumpAndSettle();
+  });
+
   test('hand ranks presentations resolve to visual modes', () {
     final ladder = CourseActivity(
       id: 'act-01-02-01-guided-ladder',
