@@ -752,6 +752,21 @@ void main() {
     expect(
       resolveCoachDialogueVisual(
         CourseActivity(
+          id: 'act-03-03-01-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'Clean outs help. Dirty outs improve you into second-best. Price the call.',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.outsPrice,
+    );
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
           id: 'act-generic-explain',
           order: 1,
           stage: ActivityStage.explain,
@@ -1186,6 +1201,53 @@ void main() {
     expect(isTableRegionTapActivity(activity), isTrue);
 
     for (final title in ['MADE', 'DRAW', 'SDV', 'AIR']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
+
+  testWidgets('outs-price explain taps Clean Dirty Price instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-03-01-explain',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'Clean outs help. Dirty outs improve you into second-best. Price the call.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'Clean outs help. Dirty outs improve you into second-best. Price the call.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(OutsPriceDemo), findsOneWidget);
+    expect(find.text('Tap Clean, Dirty, and Price.'), findsOneWidget);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    for (final title in ['CLEAN', 'DIRTY', 'PRICE']) {
       await tester.tap(find.text(title));
       await tester.pump();
     }
