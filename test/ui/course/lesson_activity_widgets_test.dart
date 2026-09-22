@@ -2691,6 +2691,51 @@ void main() {
   });
 
   testWidgets(
+    'action-rewrites explain taps Action Rewrite Update instead of Continue',
+    (tester) async {
+    final activity = CourseActivity(
+      id: 'act-05-06-01-explain',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'Each action rewrites the range. Keep updating.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text: 'Each action rewrites the range. Keep updating.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(ActionRewritesDemo), findsOneWidget);
+    expect(find.text('Tap Action, Rewrite, and Update.'), findsOneWidget);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    for (final title in ['ACTION', 'REWRITE', 'UPDATE']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
+  testWidgets(
     'multiway explain taps Stronger Fewer Nuts instead of Continue',
     (tester) async {
     final activity = CourseActivity(

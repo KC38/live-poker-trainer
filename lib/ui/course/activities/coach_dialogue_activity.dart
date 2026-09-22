@@ -253,6 +253,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.lineStories
                     ? null
                     : onFeltAcknowledge,
+            onActionRewritesAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.actionRewrites
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -433,6 +437,9 @@ enum CoachDialogueVisualKind {
 
   /// Lines mean ranges: check-raise, probe, delay, donk.
   lineStories,
+
+  /// Each action rewrites the range — keep updating.
+  actionRewrites,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -545,6 +552,8 @@ class CoachDialogueVisual {
       'Tap Thin, Catch, and Barrels.',
     CoachDialogueVisualKind.lineStories =>
       'Tap X/R, Probe, Delay, and Donk.',
+    CoachDialogueVisualKind.actionRewrites =>
+      'Tap Action, Rewrite, and Update.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -596,7 +605,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.deepStacks ||
       kind == CoachDialogueVisualKind.impliedOdds ||
       kind == CoachDialogueVisualKind.thinValue ||
-      kind == CoachDialogueVisualKind.lineStories;
+      kind == CoachDialogueVisualKind.lineStories ||
+      kind == CoachDialogueVisualKind.actionRewrites;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -695,6 +705,8 @@ class CoachDialogueVisual {
       'Thin-value tiles: thin value, bluff-catch, wide barrels',
     CoachDialogueVisualKind.lineStories =>
       'Line tiles: check-raise, probe, delay, donk',
+    CoachDialogueVisualKind.actionRewrites =>
+      'Action-rewrites tiles: action, rewrite, keep updating',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -861,6 +873,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-05-05-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.lineStories,
+      );
+    case 'act-05-06-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.actionRewrites,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1280,6 +1296,15 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.lineStories,
     );
   }
+  // Phrase-safe continuous updates — require rewrite framing, not bare "range".
+  if (blob.contains('rewrites the range') ||
+      blob.contains('each action rewrites') ||
+      blob.contains('keep updating') ||
+      (blob.contains('rewrites') && blob.contains('updating'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.actionRewrites,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -1349,6 +1374,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onImpliedOddsAcknowledge,
     this.onThinValueAcknowledge,
     this.onLineStoriesAcknowledge,
+    this.onActionRewritesAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1399,6 +1425,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onImpliedOddsAcknowledge;
   final VoidCallback? onThinValueAcknowledge;
   final VoidCallback? onLineStoriesAcknowledge;
+  final VoidCallback? onActionRewritesAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1641,6 +1668,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onLineStoriesAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onLineStoriesAcknowledge,
+        ),
+        CoachDialogueVisualKind.actionRewrites => ActionRewritesDemo(
+          interactive: onActionRewritesAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onActionRewritesAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },

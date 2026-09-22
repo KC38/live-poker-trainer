@@ -3970,6 +3970,106 @@ class _LineStoriesDemoState extends State<LineStoriesDemo> {
   }
 }
 
+/// Action / rewrite / update tiles for continuous range-update explain demos.
+class ActionRewritesDemo extends StatefulWidget {
+  /// Creates the demo.
+  const ActionRewritesDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'ACTION', caption: 'Each street move', color: AppColors.gold),
+    (label: 'REWRITE', caption: 'Range reshapes', color: AppColors.cream),
+    (label: 'UPDATE', caption: 'Keep revising', color: AppColors.danger),
+  ];
+
+  @override
+  State<ActionRewritesDemo> createState() => _ActionRewritesDemoState();
+}
+
+class _ActionRewritesDemoState extends State<ActionRewritesDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= ActionRewritesDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Keep Updating',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < ActionRewritesDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoActionCard(
+                    label: ActionRewritesDemo.points[i].label,
+                    caption: ActionRewritesDemo.points[i].caption,
+                    color: ActionRewritesDemo.points[i].color,
+                    selected:
+                        _tapped.contains(ActionRewritesDemo.points[i].label),
+                    enabled: widget.interactive && widget.enabled,
+                    onPressed:
+                        widget.interactive
+                            ? () => _onTap(ActionRewritesDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? 'Tap Action, Rewrite, and Update'
+                : 'Each action rewrites the range',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
 
 class _DemoActionCard extends StatelessWidget {
   const _DemoActionCard({
