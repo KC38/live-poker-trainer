@@ -1,6 +1,7 @@
 /// Lesson runner submit gating, soft-grade retry, and bootstrap errors.
 library;
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -267,6 +268,32 @@ void main() {
     expect(find.text('Retry'), findsOneWidget);
   });
 
+  testWidgets('hung startLesson surfaces retry instead of empty spinner', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _app(
+        LessonRunnerScreen(
+          lessonId: kFirstCourseLessonId,
+          courseService: _HungStartCourseService(catalog),
+          startRequestId: 'start_hang',
+          bootstrapTimeout: const Duration(milliseconds: 80),
+        ),
+        catalog: catalog,
+      ),
+    );
+    await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    await tester.pump(const Duration(milliseconds: 100));
+    await tester.pump();
+    expect(find.text('Could not start the lesson'), findsOneWidget);
+    expect(find.text('Retry'), findsOneWidget);
+    expect(
+      find.textContaining('taking too long'),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('stale activity submit resyncs to server resume cursor', (
     tester,
   ) async {
@@ -380,5 +407,31 @@ class _StaleThenResumeCourseService extends CourseService {
       'Stale activity. Resume the lesson and retry.',
       code: 'aborted',
     );
+  }
+}
+
+/// Never completes startLesson — used to assert bootstrap timeout → Retry.
+class _HungStartCourseService extends CourseService {
+  _HungStartCourseService(this.catalog) : super();
+
+  final CourseCatalog catalog;
+
+  @override
+  Future<void> initializeProfile({
+    required String catalogVersion,
+    String timezone = 'UTC',
+    String? experienceBand,
+    int? dailyGoalMinutes,
+    String? recommendedLessonId,
+  }) async {}
+
+  @override
+  Future<StartCourseLessonResult> startLesson({
+    required String lessonId,
+    required String catalogVersion,
+    required String startRequestId,
+    String timezone = 'UTC',
+  }) {
+    return Completer<StartCourseLessonResult>().future;
   }
 }

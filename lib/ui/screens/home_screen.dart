@@ -303,15 +303,16 @@ class _HomeBody extends StatelessWidget {
                 RexCoachCard(
                   line: snapshot.rexLine!,
                   onContinue:
-                      snapshot.nextLessonId == null ||
-                              (!snapshot.startsEnabled &&
-                                  snapshot.resume == null)
-                          ? null
-                          : () {
-                            final next = snapshot.nextNode;
-                            if (next == null) return;
-                            onNodeTap(next);
-                          },
+                      snapshot.resume != null
+                          ? onResume
+                          : (snapshot.nextLessonId == null ||
+                                  !snapshot.startsEnabled
+                              ? null
+                              : () {
+                                final next = snapshot.nextNode;
+                                if (next == null) return;
+                                onNodeTap(next);
+                              }),
                   continueLabel: snapshot.resume != null ? 'Resume' : 'Start',
                 ),
               ],
