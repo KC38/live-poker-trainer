@@ -175,6 +175,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.threeBetSqueeze
                     ? null
                     : onFeltAcknowledge,
+            onMultiStreetPlanAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.multiStreetPlan
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -298,6 +302,9 @@ enum CoachDialogueVisualKind {
 
   /// 3-bets define ranges; squeezes punish multiway flats.
   threeBetSqueeze,
+
+  /// Flop choice must answer turn and river plans.
+  multiStreetPlan,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -372,6 +379,8 @@ class CoachDialogueVisual {
       'Tap One Hand, Range, and Update.',
     CoachDialogueVisualKind.threeBetSqueeze =>
       'Tap 3-Bet, Ranges, and Squeeze.',
+    CoachDialogueVisualKind.multiStreetPlan =>
+      'Tap Flop, Turn, and River.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -404,7 +413,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.multiwayPlan ||
       kind == CoachDialogueVisualKind.commonLeaks ||
       kind == CoachDialogueVisualKind.rangeUpdate ||
-      kind == CoachDialogueVisualKind.threeBetSqueeze;
+      kind == CoachDialogueVisualKind.threeBetSqueeze ||
+      kind == CoachDialogueVisualKind.multiStreetPlan;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -465,6 +475,8 @@ class CoachDialogueVisual {
       'Range tiles: one hand, range, update',
     CoachDialogueVisualKind.threeBetSqueeze =>
       '3-bet tiles: 3-bet, ranges, squeeze',
+    CoachDialogueVisualKind.multiStreetPlan =>
+      'Multi-street tiles: flop, turn, river',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -555,6 +567,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-04-02-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.threeBetSqueeze,
+      );
+    case 'act-04-03-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.multiStreetPlan,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -817,6 +833,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.threeBetSqueeze,
     );
   }
+  if (blob.contains('turn and river') ||
+      blob.contains('multi-street plan') ||
+      blob.contains('what do i do on turn') ||
+      (blob.contains('flop choice') && blob.contains('river'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.multiStreetPlan,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -867,6 +891,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onCommonLeaksAcknowledge,
     this.onRangeUpdateAcknowledge,
     this.onThreeBetSqueezeAcknowledge,
+    this.onMultiStreetPlanAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -898,6 +923,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onCommonLeaksAcknowledge;
   final VoidCallback? onRangeUpdateAcknowledge;
   final VoidCallback? onThreeBetSqueezeAcknowledge;
+  final VoidCallback? onMultiStreetPlanAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1044,6 +1070,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onThreeBetSqueezeAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onThreeBetSqueezeAcknowledge,
+        ),
+        CoachDialogueVisualKind.multiStreetPlan => MultiStreetPlanDemo(
+          interactive: onMultiStreetPlanAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onMultiStreetPlanAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
