@@ -964,6 +964,22 @@ void main() {
       ).kind,
       CoachDialogueVisualKind.playerObserve,
     );
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-04-06-02-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'Calling Station is a working model: high participation, low folding.',
+          objectives: const ['Introduce Calling Station'],
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.callingStation,
+    );
     // Generic multiway / river copy without an authored id still resolves correctly.
     expect(
       resolveCoachDialogueVisual(
@@ -1934,6 +1950,52 @@ void main() {
     expect(isTableRegionTapActivity(activity), isTrue);
 
     for (final title in ['ENTERS', 'CALLS', 'FOLDS']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
+  testWidgets('calling-station explain taps Station High Low instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-06-02-explain',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'Calling Station is a working model: high participation, low folding.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'Calling Station is a working model: high participation, low folding.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(CallingStationDemo), findsOneWidget);
+    expect(find.text('Tap Station, High, and Low.'), findsOneWidget);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    for (final title in ['STATION', 'HIGH', 'LOW']) {
       await tester.tap(find.text(title));
       await tester.pump();
     }

@@ -2449,6 +2449,108 @@ class _PlayerObserveDemoState extends State<PlayerObserveDemo> {
   }
 }
 
+/// Station / high / low tiles for Calling Station explain demos.
+class CallingStationDemo extends StatefulWidget {
+  /// Creates the demo.
+  const CallingStationDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'STATION', caption: 'Working model', color: AppColors.gold),
+    (label: 'HIGH', caption: 'Plays many pots', color: AppColors.cream),
+    (label: 'LOW', caption: 'Rarely folds', color: AppColors.danger),
+  ];
+
+  @override
+  State<CallingStationDemo> createState() => _CallingStationDemoState();
+}
+
+class _CallingStationDemoState extends State<CallingStationDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= CallingStationDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Calling Station',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < CallingStationDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoActionCard(
+                    label: CallingStationDemo.points[i].label,
+                    caption: CallingStationDemo.points[i].caption,
+                    color: CallingStationDemo.points[i].color,
+                    selected: _tapped.contains(
+                      CallingStationDemo.points[i].label,
+                    ),
+                    enabled: widget.interactive && widget.enabled,
+                    onPressed:
+                        widget.interactive
+                            ? () => _onTap(CallingStationDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? 'Tap Station, High, and Low'
+                : 'High participation · low folding',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
 
 class _DemoActionCard extends StatelessWidget {
   const _DemoActionCard({
