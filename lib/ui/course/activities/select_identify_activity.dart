@@ -278,6 +278,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         'When do those forced bets go in?',
       'act-01-01-03-checkpoint-layout' =>
         'Button is marked. Tap the small blind seat.',
+      'act-02-01-01-guided-btn' =>
+        'Postflop closes on the button. Tap BTN.',
+      'act-02-01-01-scaffolded-blinds' =>
+        'Forced bets live left of the button. Tap SB or BB.',
+      'act-02-01-01-unguided-co' =>
+        'Right before the dealer chip is the cutoff.',
+      'act-02-01-01-checkpoint-edge' =>
+        'Same cards — later seats play stronger.',
       'act-01-04-01-unguided-end' =>
         'Betting is live. Tap when this street is done.',
       'act-01-04-01-checkpoint-postflop' =>

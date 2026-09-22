@@ -66,6 +66,9 @@ enum CoachDialogueVisualKind {
   /// Dealer button chip.
   dealerButton,
 
+  /// Six-max EP / HJ / CO / BTN / SB / BB labels.
+  positionLabels,
+
   /// Weakest-to-strongest made-hand ladder.
   handLadder,
 
@@ -108,6 +111,8 @@ class CoachDialogueVisual {
       'Tap Continue when the four suits and ranks click.',
     CoachDialogueVisualKind.dealerButton =>
       'Tap Continue when you can spot the button and blinds.',
+    CoachDialogueVisualKind.positionLabels =>
+      'Tap Continue when later seats feel like the edge.',
     CoachDialogueVisualKind.handLadder =>
       'Tap Continue when the ladder from high card to flush clicks.',
     CoachDialogueVisualKind.bestFive =>
@@ -134,6 +139,8 @@ class CoachDialogueVisual {
       'Demonstration suits hearts diamonds clubs spades, ranks deuce through ace',
     CoachDialogueVisualKind.dealerButton =>
       'Poker table showing dealer button and blinds',
+    CoachDialogueVisualKind.positionLabels =>
+      'Six-max table showing EP, HJ, CO, button, and blinds',
     CoachDialogueVisualKind.handLadder =>
       'Hand rank ladder from high card to flush',
     CoachDialogueVisualKind.bestFive =>
@@ -166,6 +173,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-01-01-03-explain-button':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.dealerButton,
+      );
+    case 'act-02-01-01-explain-pos':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.positionLabels,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -291,6 +302,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
         CoachDialogueVisualKind.holeCards => _HoleCardDemo(visual: visual),
         CoachDialogueVisualKind.suitsRanks => const _SuitsRanksDemo(),
         CoachDialogueVisualKind.dealerButton => const _DealerButtonDemo(),
+        CoachDialogueVisualKind.positionLabels => const _PositionLabelsDemo(),
         CoachDialogueVisualKind.handLadder => const HandRankLadderDemo(),
         CoachDialogueVisualKind.bestFive => const BestFiveDemo(),
         CoachDialogueVisualKind.passiveActions => const PassiveActionsDemo(),
@@ -418,6 +430,23 @@ class _DealerButtonDemo extends StatelessWidget {
         highlight: LessonTableHighlight.button,
         seatCount: 6,
         buttonSeat: 3,
+      ),
+    );
+  }
+}
+
+class _PositionLabelsDemo extends StatelessWidget {
+  const _PositionLabelsDemo();
+
+  @override
+  Widget build(BuildContext context) {
+    return const LessonTableContext(
+      scene: LessonTableScene(
+        layout: LessonTableLayout.positionLabels,
+        highlight: LessonTableHighlight.button,
+        seatCount: 6,
+        buttonSeat: 3,
+        caption: 'Later seats see more action',
       ),
     );
   }

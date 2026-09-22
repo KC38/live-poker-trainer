@@ -1306,10 +1306,10 @@ export function buildSectionTwo() {
                 {objectives: ["Prefer later seats when choosing hands"]}),
               selectAct({
                 id: "act-02-01-01-guided-btn", order: 2, stage: "guided",
-                prompt: "Which seat acts last postflop?",
-                a11y: "Identify the button as last to act postflop.",
+                prompt: "Tap who acts last postflop.",
+                a11y: "Tap the button seat — last to act after the flop.",
                 objectives: ["Label EP, HJ, CO, and BTN"],
-                hint: "The dealer button acts last after the flop.",
+                hint: "Look for the D chip. Button closes postflop action.",
                 choices: [
                   choice("pos-btn", "BTN", "recommended",
                     "Button is last to act postflop."),
@@ -1322,22 +1322,22 @@ export function buildSectionTwo() {
               }),
               selectAct({
                 id: "act-02-01-01-scaffolded-blinds", order: 3, stage: "scaffolded",
-                prompt: "Which seats post forced bets every hand?",
-                a11y: "Identify small blind and big blind.",
+                prompt: "Tap a seat that posts a forced bet every hand.",
+                a11y: "Tap the small blind or big blind seat.",
                 objectives: ["Label SB and BB"],
                 choices: [
-                  choice("sb-bb", "SB and BB", "recommended",
+                  choice("sb-bb", "SB or BB", "recommended",
                     "Those two post every hand."),
-                  choice("btn-bb", "BTN and BB", "clear_mistake",
+                  choice("btn-bb", "BTN", "clear_mistake",
                     "Button does not post a blind.", {betterChoiceId: "sb-bb"}),
-                  choice("ep-only", "Only EP", "clear_mistake",
+                  choice("ep-only", "EP", "clear_mistake",
                     "Early position is voluntary action.", {betterChoiceId: "sb-bb"}),
                 ],
               }),
               selectAct({
                 id: "act-02-01-01-unguided-co", order: 4, stage: "unguided",
-                prompt: "Seat right before the button is called?",
-                a11y: "Name the cutoff seat.",
+                prompt: "Tap the seat right before the button.",
+                a11y: "Tap the cutoff seat on the six-max table.",
                 objectives: ["Label EP, HJ, CO, and BTN"],
                 lifeLoss: true,
                 choices: [
@@ -1352,8 +1352,8 @@ export function buildSectionTwo() {
               }),
               selectAct({
                 id: "act-02-01-01-checkpoint-edge", order: 5, stage: "checkpoint",
-                prompt: "Same hand, EP vs BTN. Where is it stronger to play?",
-                a11y: "Prefer button over early position.",
+                prompt: "Same hand — tap where it is stronger to play.",
+                a11y: "Tap the button rather than early position.",
                 objectives: ["Prefer later seats when choosing hands"],
                 lifeLoss: true,
                 choices: [
