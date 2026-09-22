@@ -183,6 +183,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.sizingLanguage
                     ? null
                     : onFeltAcknowledge,
+            onSprAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.sprDepth
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -312,6 +316,9 @@ enum CoachDialogueVisualKind {
 
   /// Size is language: value vs polar pressure.
   sizingLanguage,
+
+  /// SPR = stack/pot; low commit, high maneuver.
+  sprDepth,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -390,6 +397,8 @@ class CoachDialogueVisual {
       'Tap Flop, Turn, and River.',
     CoachDialogueVisualKind.sizingLanguage =>
       'Tap Value, Pressure, and Size.',
+    CoachDialogueVisualKind.sprDepth =>
+      'Tap SPR, Low, and High.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -424,7 +433,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.rangeUpdate ||
       kind == CoachDialogueVisualKind.threeBetSqueeze ||
       kind == CoachDialogueVisualKind.multiStreetPlan ||
-      kind == CoachDialogueVisualKind.sizingLanguage;
+      kind == CoachDialogueVisualKind.sizingLanguage ||
+      kind == CoachDialogueVisualKind.sprDepth;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -489,6 +499,8 @@ class CoachDialogueVisual {
       'Multi-street tiles: flop, turn, river',
     CoachDialogueVisualKind.sizingLanguage =>
       'Sizing tiles: value, pressure, size',
+    CoachDialogueVisualKind.sprDepth =>
+      'SPR tiles: ratio, low commit, high maneuver',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -587,6 +599,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-04-04-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.sizingLanguage,
+      );
+    case 'act-04-05-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.sprDepth,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -865,6 +881,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.sizingLanguage,
     );
   }
+  if (blob.contains('spr') ||
+      blob.contains('stack-to-pot') ||
+      blob.contains('stack to pot') ||
+      (blob.contains('effective stack') && blob.contains('pot'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.sprDepth,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -917,6 +941,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onThreeBetSqueezeAcknowledge,
     this.onMultiStreetPlanAcknowledge,
     this.onSizingLanguageAcknowledge,
+    this.onSprAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -950,6 +975,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onThreeBetSqueezeAcknowledge;
   final VoidCallback? onMultiStreetPlanAcknowledge;
   final VoidCallback? onSizingLanguageAcknowledge;
+  final VoidCallback? onSprAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1106,6 +1132,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onSizingLanguageAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onSizingLanguageAcknowledge,
+        ),
+        CoachDialogueVisualKind.sprDepth => SprDepthDemo(
+          interactive: onSprAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onSprAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
