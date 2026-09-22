@@ -241,6 +241,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.deepStacks
                     ? null
                     : onFeltAcknowledge,
+            onImpliedOddsAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.impliedOdds
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -412,6 +416,9 @@ enum CoachDialogueVisualKind {
 
   /// Deep stacks: more room to realize — and to lose a stack.
   deepStacks,
+
+  /// Implied odds: future money; reverse when second-best.
+  impliedOdds,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -518,6 +525,8 @@ class CoachDialogueVisual {
       'Tap Nutted, Air, and Domination.',
     CoachDialogueVisualKind.deepStacks =>
       'Tap Deep, Realize, and Stack.',
+    CoachDialogueVisualKind.impliedOdds =>
+      'Tap Implied, Reverse, and Second.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -566,7 +575,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.observationCertainty ||
       kind == CoachDialogueVisualKind.exploitEvidence ||
       kind == CoachDialogueVisualKind.multiwayNuts ||
-      kind == CoachDialogueVisualKind.deepStacks;
+      kind == CoachDialogueVisualKind.deepStacks ||
+      kind == CoachDialogueVisualKind.impliedOdds;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -659,6 +669,8 @@ class CoachDialogueVisual {
       'Multiway-nuts tiles: nutted up, air down, domination',
     CoachDialogueVisualKind.deepStacks =>
       'Deep-stack tiles: depth, realize, lose a stack',
+    CoachDialogueVisualKind.impliedOdds =>
+      'Implied-odds tiles: implied, reverse, second-best',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -813,6 +825,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-05-02-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.deepStacks,
+      );
+    case 'act-05-03-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.impliedOdds,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1207,7 +1223,16 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.deepStacks,
     );
   }
-  // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
+  // Phrase-safe implied odds — require implied/reverse framing, not bare "second-best".
+  if (blob.contains('implied odds') ||
+      blob.contains('reverse implied') ||
+      blob.contains('future money') ||
+      (blob.contains('implied') && blob.contains('second-best'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.impliedOdds,
+    );
+  }
+    // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
       blob.contains('yours alone') ||
@@ -1273,6 +1298,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onExploitEvidenceAcknowledge,
     this.onMultiwayNutsAcknowledge,
     this.onDeepStacksAcknowledge,
+    this.onImpliedOddsAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1320,6 +1346,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onExploitEvidenceAcknowledge;
   final VoidCallback? onMultiwayNutsAcknowledge;
   final VoidCallback? onDeepStacksAcknowledge;
+  final VoidCallback? onImpliedOddsAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1547,6 +1574,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onDeepStacksAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onDeepStacksAcknowledge,
+        ),
+        CoachDialogueVisualKind.impliedOdds => ImpliedOddsDemo(
+          interactive: onImpliedOddsAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onImpliedOddsAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },

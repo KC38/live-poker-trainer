@@ -3669,6 +3669,108 @@ class _DeepStacksDemoState extends State<DeepStacksDemo> {
 }
 
 
+/// Implied / reverse / second tiles for implied-odds explain demos.
+class ImpliedOddsDemo extends StatefulWidget {
+  /// Creates the demo.
+  const ImpliedOddsDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'IMPLIED', caption: 'Future money', color: AppColors.gold),
+    (label: 'REVERSE', caption: 'Future losses', color: AppColors.cream),
+    (label: 'SECOND', caption: 'Second-best sting', color: AppColors.danger),
+  ];
+
+  @override
+  State<ImpliedOddsDemo> createState() => _ImpliedOddsDemoState();
+}
+
+class _ImpliedOddsDemoState extends State<ImpliedOddsDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= ImpliedOddsDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Implied Odds',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < ImpliedOddsDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoActionCard(
+                    label: ImpliedOddsDemo.points[i].label,
+                    caption: ImpliedOddsDemo.points[i].caption,
+                    color: ImpliedOddsDemo.points[i].color,
+                    selected: _tapped.contains(ImpliedOddsDemo.points[i].label),
+                    enabled: widget.interactive && widget.enabled,
+                    onPressed:
+                        widget.interactive
+                            ? () => _onTap(ImpliedOddsDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? 'Tap Implied, Reverse, and Second'
+                : 'Future money · reverse when second-best',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
+
+
 class _DemoActionCard extends StatelessWidget {
   const _DemoActionCard({
     required this.label,
