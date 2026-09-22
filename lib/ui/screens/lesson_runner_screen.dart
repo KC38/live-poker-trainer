@@ -65,6 +65,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
   String? _errorDetail;
   bool _bootstrapping = true;
   bool _completing = false;
+  /// True while Continue is swapping to the next activity — keeps feedback
+  /// chrome (no blank dock / full-screen spinner flash).
+  bool _advancingActivity = false;
   int _acceptedStreak = 0;
   late final String _startRequestId;
 
@@ -419,9 +422,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         _bootstrapping = false;
       });
       if (notice != null && mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(notice)));
+        _showNonBlockingNotice(notice);
       }
     } catch (error) {
       if (!mounted) return;
@@ -444,11 +445,34 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     }
   }
 
+  /// Floating top snack — never covers the felt / sticky Continue dock.
+  void _showNonBlockingNotice(String notice) {
+    final messenger = ScaffoldMessenger.of(context);
+    final height = MediaQuery.sizeOf(context).height;
+    messenger.clearSnackBars();
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(notice),
+        behavior: SnackBarBehavior.floating,
+        // Pin near the top so felt taps stay reachable.
+        margin: EdgeInsets.fromLTRB(16, 8, 16, height * 0.72),
+        dismissDirection: DismissDirection.up,
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
+
   Future<void> _continueAfterFeedback() async {
     final controller = _activityController;
     final result = controller?.lastResult;
     final attempt = _attempt;
-    if (controller == null || result == null || attempt == null) return;
+    if (controller == null ||
+        result == null ||
+        attempt == null ||
+        _advancingActivity ||
+        _completing) {
+      return;
+    }
 
     if (!result.accepted) {
       controller.clearFeedbackForRetry();
@@ -484,22 +508,34 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         return _activities[(idx + 1).clamp(0, _activities.length - 1)];
       },
     );
-    controller.bindActivity(next);
-    setState(() {
-      _attempt = CourseAttemptSnapshot(
-        attemptId: attempt.attemptId,
-        lessonId: attempt.lessonId,
-        catalogVersion: attempt.catalogVersion,
-        status: attempt.status,
-        activityIndex: result.resume.activityIndex,
-        currentActivityId: next.id,
-        livesRemaining: result.livesRemaining,
-        livesMax: attempt.livesMax,
-        acceptedCount: attempt.acceptedCount,
-        scoredCount: attempt.scoredCount,
-        stepCount: attempt.stepCount,
-        jumpTestPassed: attempt.jumpTestPassed,
-      );
+
+    // Keep current activity + feedback dock painted for one frame while
+    // Continue shows a lightweight spinner — never blank the body with a
+    // full-screen loader.
+    setState(() => _advancingActivity = true);
+    final resume = result.resume;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final live = _activityController;
+      if (live == null) return;
+      live.bindActivity(next);
+      setState(() {
+        _advancingActivity = false;
+        _attempt = CourseAttemptSnapshot(
+          attemptId: attempt.attemptId,
+          lessonId: attempt.lessonId,
+          catalogVersion: attempt.catalogVersion,
+          status: attempt.status,
+          activityIndex: resume.activityIndex,
+          currentActivityId: next.id,
+          livesRemaining: result.livesRemaining,
+          livesMax: attempt.livesMax,
+          acceptedCount: attempt.acceptedCount,
+          scoredCount: attempt.scoredCount,
+          stepCount: attempt.stepCount,
+          jumpTestPassed: attempt.jumpTestPassed,
+        );
+      });
     });
   }
 
@@ -759,7 +795,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                   if (result != null) {
                     return _FeedbackFooter(
                       result: result,
-                      completing: _completing,
+                      completing: _completing || _advancingActivity,
                       onContinue: _continueAfterFeedback,
                       onRetry:
                           result.accepted
@@ -770,22 +806,26 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                               },
                     );
                   }
+                  // Prefer live controller activity so advance never uses a
+                  // stale auto-submit / Undo decision for one frame.
+                  final liveActivity = controller.activity;
                   final canSubmit = _canSubmit && !_completing;
-                  final autoSubmit = isAutoSubmitSelectIdentify(activity) ||
-                      isTableRegionTapActivity(activity) ||
-                      activity.renderer == ActivityRenderer.orderSequence ||
-                      activity.renderer == ActivityRenderer.compareRank ||
-                      activity.renderer ==
+                  final autoSubmit =
+                      isAutoSubmitSelectIdentify(liveActivity) ||
+                      isTableRegionTapActivity(liveActivity) ||
+                      liveActivity.renderer == ActivityRenderer.orderSequence ||
+                      liveActivity.renderer == ActivityRenderer.compareRank ||
+                      liveActivity.renderer ==
                           ActivityRenderer.pokerActionSizing ||
-                      activity.renderer ==
+                      liveActivity.renderer ==
                           ActivityRenderer.fullTableHandLab ||
-                      activity.renderer ==
+                      liveActivity.renderer ==
                           ActivityRenderer.authoredMultiStepHand ||
-                      activity.renderer ==
+                      liveActivity.renderer ==
                           ActivityRenderer.playerReadClassify ||
-                      isLessonActionTableActivity(activity);
+                      isLessonActionTableActivity(liveActivity);
                   if (autoSubmit) {
-                    // Teach-by-doing: taps auto-submit — no Check dock.
+                    // Teach-by-doing: taps auto-submit — no Check / Undo dock.
                     if (controller.submitting) {
                       return const Padding(
                         padding: EdgeInsets.symmetric(vertical: 10),
@@ -833,10 +873,10 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                           child: Text(
                             controller.submitting
                                 ? 'Checking…'
-                                : activity.renderer ==
+                                : liveActivity.renderer ==
                                     ActivityRenderer.coachDialogue
                                 ? 'Continue'
-                                : isLessonActionTableActivity(activity)
+                                : isLessonActionTableActivity(liveActivity)
                                 // Avoid colliding with dock CHECK / CHECK (off).
                                 ? 'Lock in'
                                 : 'Check',
