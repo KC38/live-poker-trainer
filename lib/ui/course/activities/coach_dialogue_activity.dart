@@ -717,8 +717,8 @@ class CoachDialogueVisual {
       'Line tiles: check-raise, probe, delay, donk',
     CoachDialogueVisualKind.rangeRewrite =>
       'Range-rewrite tiles: action, rewrite, keep updating',
-    CoachDialogueVisualKind.timingClues =>
-      'Timing-clues tiles: timing, sizing, clues — not mind-reading',
+    CoachDialogueVisualKind.softEvidence =>
+      'Soft-evidence tiles: timing, sizing, small updates',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
