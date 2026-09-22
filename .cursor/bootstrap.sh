@@ -39,9 +39,11 @@ fi
 #    when available. A placeholder still compiles and boots.
 FB_OUT="lib/firebase_options.dart"
 if [[ ! -f "$FB_OUT" ]]; then
-  WEB_KEY="${FIREBASE_WEB_API_KEY:-AIzaSyDEMO-PLACEHOLDER-live-poker-web}"
-  ANDROID_KEY="${FIREBASE_ANDROID_API_KEY:-${FIREBASE_WEB_API_KEY:-AIzaSyDEMO-PLACEHOLDER-live-poker-android}}"
-  IOS_KEY="${FIREBASE_IOS_API_KEY:-${FIREBASE_WEB_API_KEY:-AIzaSyDEMO-PLACEHOLDER-live-poker-ios}}"
+  # Firebase Installations requires API keys to be exactly 39 characters.
+  # Keep placeholders length-valid so a secrets-less checkout can still boot.
+  WEB_KEY="${FIREBASE_WEB_API_KEY:-AIzaSyDEMO-PLACEHOLDER-live-poker-web00}"
+  ANDROID_KEY="${FIREBASE_ANDROID_API_KEY:-${FIREBASE_WEB_API_KEY:-AIzaSyDEMO-PLACEHOLDER-live-poker-and00}}"
+  IOS_KEY="${FIREBASE_IOS_API_KEY:-${FIREBASE_WEB_API_KEY:-AIzaSyDEMO-PLACEHOLDER-live-poker-ios00}}"
   sed -e "s|__WEB_API_KEY__|${WEB_KEY}|" \
       -e "s|__ANDROID_API_KEY__|${ANDROID_KEY}|" \
       -e "s|__IOS_API_KEY__|${IOS_KEY}|" \
