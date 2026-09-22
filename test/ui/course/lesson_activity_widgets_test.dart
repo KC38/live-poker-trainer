@@ -1755,6 +1755,84 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('rank order palette is shuffled, not authored ascending', (
+    tester,
+  ) async {
+    const items = [
+      CourseChoice(id: 'r2', label: '2'),
+      CourseChoice(id: 'rT', label: 'T'),
+      CourseChoice(id: 'rA', label: 'A'),
+    ];
+    final activity = CourseActivity(
+      id: 'act-01-01-02-scaffolded-ranks',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.orderSequence,
+      estimatedSeconds: 40,
+      accessibilityText: 'Order ranks',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Order these ranks from lowest to highest.',
+      sequenceItems: items,
+    );
+    final expectedPalette =
+        shuffledSequencePalette(
+          activityId: activity.id,
+          items: items,
+        ).map((item) => item.label.toUpperCase()).toList(growable: false);
+    expect(expectedPalette, isNot(['2', 'T', 'A']));
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        OrderSequenceActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+
+    List<String> paletteByPosition() {
+      final entries = <({String label, Offset pos})>[];
+      for (final label in ['2', 'T', 'A']) {
+        entries.add((
+          label: label,
+          pos: tester.getTopLeft(find.text(label)),
+        ));
+      }
+      entries.sort((a, b) {
+        final dy = a.pos.dy.compareTo(b.pos.dy);
+        if (dy != 0) return dy;
+        return a.pos.dx.compareTo(b.pos.dx);
+      });
+      return entries.map((e) => e.label).toList(growable: false);
+    }
+
+    final first = paletteByPosition();
+    expect(first, expectedPalette);
+    expect(first, isNot(['2', 'T', 'A']));
+
+    await tester.pumpWidget(
+      _wrap(
+        OrderSequenceActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(paletteByPosition(), first);
+
+    await tester.tap(find.text('2'));
+    await tester.pump();
+    await tester.tap(find.text('T'));
+    await tester.pump();
+    await tester.tap(find.text('A'));
+    await tester.pump();
+    expect(controller.draft.orderedIds, ['r2', 'rT', 'rA']);
+    controller.dispose();
+  });
+
   testWidgets('suit identify shows prompt once in Rex, not duplicated below', (
     tester,
   ) async {
