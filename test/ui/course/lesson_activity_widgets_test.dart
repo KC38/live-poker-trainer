@@ -842,6 +842,21 @@ void main() {
     expect(
       resolveCoachDialogueVisual(
         CourseActivity(
+          id: 'act-04-01-01-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'You never know one hand. You know a range — then update it.',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.rangeUpdate,
+    );
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
           id: 'act-generic-explain',
           order: 1,
           stage: ActivityStage.explain,
@@ -1514,6 +1529,53 @@ void main() {
     expect(isTableRegionTapActivity(activity), isTrue);
 
     for (final title in ['TOP PAIR', 'PRICES', 'PASSIVE', 'CROWDS']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
+
+  testWidgets('range-update explain taps One Hand Range Update instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-01-01-explain',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'You never know one hand. You know a range — then update it.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'You never know one hand. You know a range — then update it.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(RangeUpdateDemo), findsOneWidget);
+    expect(find.text('Tap One Hand, Range, and Update.'), findsOneWidget);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    for (final title in ['ONE HAND', 'RANGE', 'UPDATE']) {
       await tester.tap(find.text(title));
       await tester.pump();
     }
