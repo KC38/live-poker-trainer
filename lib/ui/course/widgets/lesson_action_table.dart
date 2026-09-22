@@ -979,6 +979,115 @@ class _FullRingDemoState extends State<FullRingDemo> {
 }
 
 
+/// Explain-step demo: read pot, stacks, button, and who acts before cards.
+class TableReadDemo extends StatefulWidget {
+  /// Creates the demo.
+  const TableReadDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'POT', caption: 'Size the prize', color: AppColors.gold),
+    (label: 'STACKS', caption: 'Depth in BB', color: AppColors.cream),
+    (label: 'BUTTON', caption: 'Who has position', color: AppColors.slate),
+    (label: 'WHO ACTS', caption: 'Words count live', color: AppColors.danger),
+  ];
+
+  @override
+  State<TableReadDemo> createState() => _TableReadDemoState();
+}
+
+class _TableReadDemoState extends State<TableReadDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= TableReadDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Read the table before cards',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          for (var row = 0; row < 2; row++) ...[
+            if (row > 0) const SizedBox(height: 8),
+            Row(
+              children: [
+                for (var col = 0; col < 2; col++) ...[
+                  if (col > 0) const SizedBox(width: 8),
+                  Expanded(
+                    child: _DemoActionCard(
+                      label: TableReadDemo.points[row * 2 + col].label,
+                      caption: TableReadDemo.points[row * 2 + col].caption,
+                      color: TableReadDemo.points[row * 2 + col].color,
+                      selected: _tapped.contains(
+                        TableReadDemo.points[row * 2 + col].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(
+                                TableReadDemo.points[row * 2 + col].label,
+                              )
+                              : null,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ],
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? 'Tap Pot, Stacks, Button, and Who Acts'
+                : 'Pot · stacks · button · who acts',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
+
 class _DemoActionCard extends StatelessWidget {
   const _DemoActionCard({
     required this.label,
