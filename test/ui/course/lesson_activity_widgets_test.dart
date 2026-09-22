@@ -115,7 +115,7 @@ void main() {
       ),
     );
     expect(find.byType(MiniCard), findsNWidgets(2));
-    expect(find.textContaining('REX'), findsWidgets);
+    expect(find.text('Rex'), findsWidgets);
     expect(
       find.text('Tap Continue when you have looked at your two cards.'),
       findsOneWidget,

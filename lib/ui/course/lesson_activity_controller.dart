@@ -55,6 +55,10 @@ class LessonActivityController extends ChangeNotifier {
   String? _pendingIdempotencyKey;
   int _bindGeneration = 0;
 
+  /// Invoked when an activity selects an answer that should submit immediately
+  /// (e.g. tapping a table region — teach-by-doing, no separate Check).
+  VoidCallback? onAutoSubmit;
+
   CourseActivity get activity => _activity;
   ActivityDraft get draft => _draft;
   SubmitCourseStepResult? get lastResult => _lastResult;
@@ -85,10 +89,13 @@ class LessonActivityController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void selectChoice(String choiceId) {
+  void selectChoice(String choiceId, {bool autoSubmit = false}) {
     if (_submitting || _lastResult != null) return;
     _draft = _draft.copyWith(choiceId: choiceId);
     notifyListeners();
+    if (autoSubmit) {
+      onAutoSubmit?.call();
+    }
   }
 
   void setOrderedIds(List<String> ids) {

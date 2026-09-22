@@ -13,6 +13,8 @@ import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/course_catalog_provider.dart';
 import 'package:live_poker_trainer/providers/course_flags_provider.dart';
 import 'package:live_poker_trainer/providers/onboarding_provider.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
+import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/screens/first_lesson_launch_screen.dart';
 
@@ -331,6 +333,24 @@ class RecommendedStartScreen extends ConsumerWidget {
               height: 1.45,
             ),
           ),
+          if (!recommendation.jumpTestOffered) ...[
+            const SizedBox(height: 22),
+            const RexCoachLine(
+              text: 'These two are yours alone. Tap them on the felt next.',
+            ),
+            const SizedBox(height: 14),
+            const LessonTableContext(
+              scene: LessonTableScene(
+                heroCodes: ['Ah', 'Kd'],
+                boardCodes: ['Qs', 'Jh', '2c'],
+                villainSeatCount: 1,
+                highlight: LessonTableHighlight.hero,
+                caption: 'You',
+              ),
+              showSoftPulse: true,
+              enabled: false,
+            ),
+          ],
           const Spacer(),
           FilledButton(
             onPressed: () async {

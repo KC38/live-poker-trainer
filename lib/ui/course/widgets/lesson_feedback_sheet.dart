@@ -39,11 +39,11 @@ class LessonFeedbackSheet extends StatelessWidget {
 
   String get _title {
     return switch (result.grade) {
-      SoftGrade.recommended => 'Solid',
-      SoftGrade.strong => 'Strong',
+      SoftGrade.recommended => 'Nice!',
+      SoftGrade.strong => 'Strong!',
       SoftGrade.reasonable => 'Playable',
       SoftGrade.questionable => 'Think again',
-      SoftGrade.clearMistake => 'Not that line',
+      SoftGrade.clearMistake => 'Not quite',
     };
   }
 

@@ -20,6 +20,7 @@ import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_progress_header.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_result_screen.dart';
 
@@ -56,6 +57,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
   CourseLesson? _lesson;
   List<CourseActivity> _activities = const [];
   String? _error;
+  String? _errorDetail;
   bool _bootstrapping = true;
   bool _completing = false;
   int _acceptedStreak = 0;
@@ -85,8 +87,13 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
 
   void _bindActivityController(LessonActivityController next) {
     _activityController?.removeListener(_onActivityChanged);
+    _activityController?.onAutoSubmit = null;
     _activityController?.dispose();
     _activityController = next;
+    _activityController!.onAutoSubmit = () {
+      if (!mounted) return;
+      unawaited(_submit());
+    };
     _activityController!.addListener(_onActivityChanged);
   }
 
@@ -94,6 +101,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     setState(() {
       _bootstrapping = true;
       _error = null;
+      _errorDetail = null;
     });
     try {
       if (widget.courseService == null) {
@@ -149,9 +157,39 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       if (!mounted) return;
       setState(() {
         _bootstrapping = false;
-        _error = error.toString();
+        _error = _friendlyStartError(error);
+        _errorDetail = error.toString();
       });
     }
+  }
+
+  /// Short learner-facing copy for bootstrap failures (keeps raw detail aside).
+  static String _friendlyStartError(Object error) {
+    final raw = error.toString();
+    final lower = raw.toLowerCase();
+    if (lower.contains('api_key_invalid') ||
+        lower.contains('api key not valid') ||
+        lower.contains('api-key-not-valid')) {
+      return 'Could not reach the course service. Firebase is misconfigured '
+          'on this build (invalid API key).';
+    }
+    if (lower.contains('network') ||
+        lower.contains('socket') ||
+        lower.contains('unavailable')) {
+      return 'Network issue starting the lesson. Check your connection and retry.';
+    }
+    if (lower.contains('permission-denied') || lower.contains('unauthenticated')) {
+      return 'Sign-in failed before the lesson could start. Retry in a moment.';
+    }
+    // Prefer short CourseServiceException messages when present.
+    final match = RegExp(r'CourseServiceException:\s*(.+)').firstMatch(raw);
+    if (match != null) {
+      return match.group(1)!.trim();
+    }
+    if (raw.length <= 160 && !raw.contains('UserInfo=')) {
+      return raw;
+    }
+    return 'Something went wrong starting this lesson. Retry, or come back shortly.';
   }
 
   double get _progress {
@@ -505,26 +543,82 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       );
     }
     if (_error != null) {
+      final detail = _errorDetail;
       return Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              'Could not start the lesson',
-              style: GoogleFonts.manrope(
-                color: AppColors.cream,
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      'Could not start the lesson',
+                      style: GoogleFonts.manrope(
+                        color: AppColors.cream,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      _error!,
+                      style: GoogleFonts.manrope(
+                        color: AppColors.slate,
+                        height: 1.4,
+                        fontSize: 15,
+                      ),
+                    ),
+                    if (detail != null &&
+                        detail.isNotEmpty &&
+                        detail != _error) ...[
+                      const SizedBox(height: 16),
+                      Theme(
+                        data: Theme.of(context).copyWith(
+                          dividerColor: Colors.transparent,
+                        ),
+                        child: ExpansionTile(
+                          tilePadding: EdgeInsets.zero,
+                          childrenPadding: const EdgeInsets.only(bottom: 8),
+                          title: Text(
+                            'Technical details',
+                            style: GoogleFonts.manrope(
+                              color: AppColors.goldMuted,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          children: [
+                            SelectableText(
+                              detail,
+                              style: GoogleFonts.manrope(
+                                color: AppColors.slate.withValues(alpha: 0.85),
+                                fontSize: 12,
+                                height: 1.35,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 12),
-            Text(
-              _error!,
-              style: GoogleFonts.manrope(color: AppColors.slate, height: 1.4),
+            FilledButton(
+              onPressed: () {
+                setState(() {
+                  _bootstrapping = true;
+                  _error = null;
+                  _errorDetail = null;
+                });
+                _bootstrap();
+              },
+              child: const Text('Retry'),
             ),
-            const SizedBox(height: 20),
-            FilledButton(onPressed: _bootstrap, child: const Text('Retry')),
           ],
         ),
       );
@@ -640,6 +734,26 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                     );
                   }
                   final canSubmit = _canSubmit && !_completing;
+                  final tableTap = isTableRegionTapActivity(activity);
+                  if (tableTap) {
+                    // Teach-by-doing: region taps auto-submit — no Check dock.
+                    if (controller.submitting) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: Center(
+                          child: SizedBox(
+                            width: 22,
+                            height: 22,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.4,
+                              color: AppColors.gold,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                    return const SizedBox(height: 8);
+                  }
                   return Row(
                     children: [
                       if (controller.draft.hasAnswer)
@@ -693,6 +807,10 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
 
   String? _labelForChoice(CourseActivity activity, String? choiceId) {
     if (choiceId == null) return null;
+    if (isTableRegionTapActivity(activity)) {
+      final short = _tableChoiceShortLabel(choiceId);
+      if (short != null) return short;
+    }
     for (final choice in activity.choices) {
       if (choice.id == choiceId) return choice.label;
     }
@@ -703,6 +821,31 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     }
     return choiceId;
   }
+}
+
+String? _tableChoiceShortLabel(String choiceId) {
+  return switch (choiceId) {
+    'choice-hero-holes' ||
+    'choice-only-you' ||
+    'choice-checkpoint-holes' ||
+    'choice-hero-again' => 'your hole cards',
+    'choice-board' ||
+    'choice-flop' ||
+    'choice-checkpoint-board' => 'the board',
+    'choice-villain' ||
+    'choice-whole-table' ||
+    'choice-checkpoint-all' => 'other seats',
+    'choice-dealer-only' => 'the dealer',
+    'choice-muck' => 'the muck',
+    'btn-seat' => 'the button',
+    'bb-seat' || 'bb-two' => 'the big blind',
+    'sb-one' || 'sb-seat0' || 'sb-seat1' || 'sb-seat4' => 'the small blind',
+    'empty-seat' => 'an empty seat',
+    'before-deal' => 'before the deal',
+    'after-flop' => 'after the flop',
+    'only-showdown' => 'at showdown',
+    _ => null,
+  };
 }
 
 String _gradeWire(SoftGrade grade) {
@@ -743,29 +886,52 @@ class _FeedbackFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final largeText = MediaQuery.textScalerOf(context).scale(1) > 1.15;
-    return Row(
+    final accepted = result.accepted;
+    final accent =
+        accepted
+            ? AppColors.success
+            : result.grade == SoftGrade.questionable
+            ? AppColors.warning
+            : AppColors.danger;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (onRetry != null && !result.accepted) ...[
-          Expanded(
-            child: OutlinedButton(
-              onPressed: completing ? null : onRetry,
-              child: const Text('Try again'),
-            ),
-          ),
-          const SizedBox(width: 10),
-        ],
-        Expanded(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: largeText ? 52 : 48),
-            child: FilledButton(
-              onPressed: completing ? null : onContinue,
-              style: FilledButton.styleFrom(
-                backgroundColor: AppColors.gold,
-                foregroundColor: AppColors.bgDark,
+        Row(
+          children: [
+            if (onRetry != null && !accepted) ...[
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: completing ? null : onRetry,
+                  child: const Text('Try again'),
+                ),
               ),
-              child: Text(result.accepted ? 'Continue' : 'Got it'),
+              const SizedBox(width: 10),
+            ],
+            Expanded(
+              flex: onRetry != null && !accepted ? 1 : 1,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: largeText ? 54 : 52),
+                child: FilledButton(
+                  onPressed: completing ? null : onContinue,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: accent,
+                    foregroundColor: AppColors.bgDark,
+                    disabledBackgroundColor: AppColors.slateDark,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  child: Text(
+                    accepted ? 'Continue' : 'Got it',
+                    style: GoogleFonts.manrope(
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.4,
+                    ),
+                  ),
+                ),
+              ),
             ),
-          ),
+          ],
         ),
       ],
     );

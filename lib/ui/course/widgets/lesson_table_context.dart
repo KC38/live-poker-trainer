@@ -1599,7 +1599,7 @@ class LessonTableContext extends StatelessWidget {
   }
 }
 
-class _TappableRegion extends StatelessWidget {
+class _TappableRegion extends StatefulWidget {
   const _TappableRegion({
     required this.label,
     required this.child,
@@ -1617,41 +1617,107 @@ class _TappableRegion extends StatelessWidget {
   final VoidCallback? onTap;
 
   @override
-  Widget build(BuildContext context) {
-    final border =
-        selected
-            ? AppColors.gold
-            : highlighted
-            ? AppColors.gold.withValues(alpha: 0.55)
-            : Colors.transparent;
-    final fill =
-        selected
-            ? AppColors.gold.withValues(alpha: 0.2)
-            : highlighted
-            ? AppColors.gold.withValues(alpha: 0.12)
-            : Colors.transparent;
+  State<_TappableRegion> createState() => _TappableRegionState();
+}
 
-    final framed = AnimatedContainer(
-      duration: const Duration(milliseconds: 180),
-      curve: Curves.easeOut,
-      decoration: BoxDecoration(
-        color: fill,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: border, width: selected ? 2.2 : 1.4),
-      ),
-      child: child,
+class _TappableRegionState extends State<_TappableRegion>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    );
+    _syncPulse();
+  }
+
+  @override
+  void didUpdateWidget(covariant _TappableRegion oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.highlighted != widget.highlighted ||
+        oldWidget.selected != widget.selected) {
+      _syncPulse();
+    }
+  }
+
+  void _syncPulse() {
+    final shouldPulse = widget.highlighted && !widget.selected;
+    if (shouldPulse) {
+      if (!_pulse.isAnimating) {
+        _pulse.repeat(reverse: true);
+      }
+    } else {
+      _pulse.stop();
+      _pulse.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final border = widget.selected
+        ? AppColors.gold
+        : widget.highlighted
+        ? AppColors.gold.withValues(alpha: 0.7)
+        : Colors.transparent;
+    final fill = widget.selected
+        ? AppColors.gold.withValues(alpha: 0.22)
+        : widget.highlighted
+        ? AppColors.gold.withValues(alpha: 0.1)
+        : Colors.transparent;
+
+    final framed = AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final glow = widget.highlighted && !widget.selected
+            ? 0.35 + (_pulse.value * 0.45)
+            : (widget.selected ? 0.85 : 0.0);
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOut,
+          decoration: BoxDecoration(
+            color: fill,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: border.withValues(
+                alpha: widget.selected ? 1 : (widget.highlighted ? glow : 0),
+              ),
+              width: widget.selected ? 2.4 : 1.8,
+            ),
+            boxShadow: widget.highlighted && !widget.selected
+                ? [
+                  BoxShadow(
+                    color: AppColors.gold.withValues(alpha: 0.22 * glow),
+                    blurRadius: 12 + (8 * _pulse.value),
+                    spreadRadius: 0.5,
+                  ),
+                ]
+                : null,
+          ),
+          child: child,
+        );
+      },
+      child: widget.child,
     );
 
-    if (onTap == null) return framed;
+    if (widget.onTap == null) return framed;
 
     return Semantics(
       button: true,
-      selected: selected,
-      label: label,
+      selected: widget.selected,
+      label: widget.label,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: enabled ? onTap : null,
+          onTap: widget.enabled ? widget.onTap : null,
           borderRadius: BorderRadius.circular(14),
           child: framed,
         ),

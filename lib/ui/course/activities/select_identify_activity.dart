@@ -354,15 +354,19 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                             _selectedRegion = target.region;
                             _selectedSeatIndex = target.seatIndex;
                           });
-                          widget.controller.selectChoice(mapped);
+                          widget.controller.selectChoice(mapped, autoSubmit: true);
                         },
               ),
             ],
             const SizedBox(height: 12),
             Text(
               selected == null
-                  ? 'Tap a region on the table.'
-                  : 'Ready — Check when it looks right.',
+                  ? (widget.controller.submitting
+                      ? 'Checking…'
+                      : 'Tap the answer on the table.')
+                  : (widget.controller.submitting
+                      ? 'Checking…'
+                      : 'Got it — checking your tap.'),
               textAlign: TextAlign.center,
               style: GoogleFonts.manrope(
                 color: AppColors.slate,
