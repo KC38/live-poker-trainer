@@ -1,13 +1,12 @@
-  // Phrase-safe guardrails — quit / guardrails, not bare "winning".
-  if (blob.contains('guardrails first') ||
-      blob.contains('knowing when to quit') ||
-      (blob.contains('guardrails') && blob.contains('quit')) ||
-      (blob.contains('winning 1/2') && blob.contains('quit'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.guardrails,
-    );
-  }
-son_activity_controller.dart';
+/// Coach demonstration / dialogue activity.
+library;
+
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/models/card_model.dart';
+import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/guardrails_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
