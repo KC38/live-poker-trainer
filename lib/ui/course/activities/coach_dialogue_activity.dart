@@ -245,6 +245,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.impliedOdds
                     ? null
                     : onFeltAcknowledge,
+            onThinValueAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.thinValue
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -419,6 +423,9 @@ enum CoachDialogueVisualKind {
 
   /// Implied odds: future money; reverse when second-best.
   impliedOdds,
+
+  /// Thin value needs calls; bluff-catches need wide barrels.
+  thinValue,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -527,6 +534,8 @@ class CoachDialogueVisual {
       'Tap Deep, Realize, and Stack.',
     CoachDialogueVisualKind.impliedOdds =>
       'Tap Implied, Reverse, and Second.',
+    CoachDialogueVisualKind.thinValue =>
+      'Tap Thin, Catch, and Barrels.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -576,7 +585,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.exploitEvidence ||
       kind == CoachDialogueVisualKind.multiwayNuts ||
       kind == CoachDialogueVisualKind.deepStacks ||
-      kind == CoachDialogueVisualKind.impliedOdds;
+      kind == CoachDialogueVisualKind.impliedOdds ||
+      kind == CoachDialogueVisualKind.thinValue;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -671,6 +681,8 @@ class CoachDialogueVisual {
       'Deep-stack tiles: depth, realize, lose a stack',
     CoachDialogueVisualKind.impliedOdds =>
       'Implied-odds tiles: implied, reverse, second-best',
+    CoachDialogueVisualKind.thinValue =>
+      'Thin-value tiles: thin value, bluff-catch, wide barrels',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -829,6 +841,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-05-03-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.impliedOdds,
+      );
+    case 'act-05-04-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.thinValue,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1232,7 +1248,15 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.impliedOdds,
     );
   }
-    // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
+  if (blob.contains('thin value') ||
+      blob.contains('bluff-catches need') ||
+      blob.contains('wide barrels') ||
+      (blob.contains('sticky callers') && blob.contains('value'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.thinValue,
+    );
+  }
+  // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
       blob.contains('yours alone') ||
@@ -1299,6 +1323,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onMultiwayNutsAcknowledge,
     this.onDeepStacksAcknowledge,
     this.onImpliedOddsAcknowledge,
+    this.onThinValueAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1347,6 +1372,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onMultiwayNutsAcknowledge;
   final VoidCallback? onDeepStacksAcknowledge;
   final VoidCallback? onImpliedOddsAcknowledge;
+  final VoidCallback? onThinValueAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1579,6 +1605,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onImpliedOddsAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onImpliedOddsAcknowledge,
+        ),
+        CoachDialogueVisualKind.thinValue => ThinValueDemo(
+          interactive: onThinValueAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onThinValueAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
