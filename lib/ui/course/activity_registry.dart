@@ -40,6 +40,7 @@ class ActivityRegistry {
     required CourseActivity activity,
     required LessonActivityController controller,
     required bool showGuidance,
+    VoidCallback? onFeltAcknowledge,
   }) {
     try {
       return switch (activity.renderer) {
@@ -47,6 +48,7 @@ class ActivityRegistry {
           activity: activity,
           controller: controller,
           showGuidance: showGuidance,
+          onFeltAcknowledge: onFeltAcknowledge,
         ),
         ActivityRenderer.selectIdentify => SelectIdentifyActivity(
           activity: activity,
