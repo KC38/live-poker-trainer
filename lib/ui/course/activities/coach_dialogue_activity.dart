@@ -249,6 +249,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.thinValue
                     ? null
                     : onFeltAcknowledge,
+            onLineStoriesAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.lineStories
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -426,6 +430,9 @@ enum CoachDialogueVisualKind {
 
   /// Thin value needs calls; bluff-catches need wide barrels.
   thinValue,
+
+  /// Lines mean ranges: check-raise, probe, delay, donk.
+  lineStories,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -536,6 +543,8 @@ class CoachDialogueVisual {
       'Tap Implied, Reverse, and Second.',
     CoachDialogueVisualKind.thinValue =>
       'Tap Thin, Catch, and Barrels.',
+    CoachDialogueVisualKind.lineStories =>
+      'Tap X/R, Probe, Delay, and Donk.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -586,7 +595,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.multiwayNuts ||
       kind == CoachDialogueVisualKind.deepStacks ||
       kind == CoachDialogueVisualKind.impliedOdds ||
-      kind == CoachDialogueVisualKind.thinValue;
+      kind == CoachDialogueVisualKind.thinValue ||
+      kind == CoachDialogueVisualKind.lineStories;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -683,6 +693,8 @@ class CoachDialogueVisual {
       'Implied-odds tiles: implied, reverse, second-best',
     CoachDialogueVisualKind.thinValue =>
       'Thin-value tiles: thin value, bluff-catch, wide barrels',
+    CoachDialogueVisualKind.lineStories =>
+      'Line tiles: check-raise, probe, delay, donk',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -845,6 +857,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-05-04-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.thinValue,
+      );
+    case 'act-05-05-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.lineStories,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1256,6 +1272,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.thinValue,
     );
   }
+  if (blob.contains('lines mean ranges') ||
+      blob.contains('check-raise, probe') ||
+      blob.contains('updates the story') ||
+      (blob.contains('donk') && blob.contains('probe') && blob.contains('delay'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.lineStories,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -1324,6 +1348,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onDeepStacksAcknowledge,
     this.onImpliedOddsAcknowledge,
     this.onThinValueAcknowledge,
+    this.onLineStoriesAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1373,6 +1398,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onDeepStacksAcknowledge;
   final VoidCallback? onImpliedOddsAcknowledge;
   final VoidCallback? onThinValueAcknowledge;
+  final VoidCallback? onLineStoriesAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1610,6 +1636,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onThinValueAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onThinValueAcknowledge,
+        ),
+        CoachDialogueVisualKind.lineStories => LineStoriesDemo(
+          interactive: onLineStoriesAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onLineStoriesAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
