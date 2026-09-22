@@ -769,6 +769,115 @@ class _BbStackDepthDemoState extends State<BbStackDepthDemo> {
 }
 
 
+/// Explain-step demo: live-table habits (watch, say, cover, wait).
+class TableHabitsDemo extends StatefulWidget {
+  /// Creates the demo.
+  const TableHabitsDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllHabitsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllHabitsTapped;
+
+  static const habits = <({String label, String caption, Color color})>[
+    (label: 'WATCH', caption: 'Follow the action', color: AppColors.cream),
+    (label: 'SAY', caption: 'Announce clearly', color: AppColors.gold),
+    (label: 'COVER', caption: 'Protect hole cards', color: AppColors.slate),
+    (label: 'WAIT', caption: 'Act in turn', color: AppColors.danger),
+  ];
+
+  @override
+  State<TableHabitsDemo> createState() => _TableHabitsDemoState();
+}
+
+class _TableHabitsDemoState extends State<TableHabitsDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllHabitsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= TableHabitsDemo.habits.length) {
+      widget.onAllHabitsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Live-table habits',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          for (var row = 0; row < 2; row++) ...[
+            if (row > 0) const SizedBox(height: 8),
+            Row(
+              children: [
+                for (var col = 0; col < 2; col++) ...[
+                  if (col > 0) const SizedBox(width: 8),
+                  Expanded(
+                    child: _DemoActionCard(
+                      label: TableHabitsDemo.habits[row * 2 + col].label,
+                      caption: TableHabitsDemo.habits[row * 2 + col].caption,
+                      color: TableHabitsDemo.habits[row * 2 + col].color,
+                      selected: _tapped.contains(
+                        TableHabitsDemo.habits[row * 2 + col].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(
+                                TableHabitsDemo.habits[row * 2 + col].label,
+                              )
+                              : null,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ],
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? 'Tap Watch, Say, Cover, and Wait'
+                : 'Watch · say · cover · wait your turn',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
+
 class _DemoActionCard extends StatelessWidget {
   const _DemoActionCard({
     required this.label,
