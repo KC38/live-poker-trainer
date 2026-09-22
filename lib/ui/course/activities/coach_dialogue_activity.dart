@@ -86,6 +86,15 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.bestFive
                     ? null
                     : onFeltAcknowledge,
+            onPassiveAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.passiveActions
+                    ? null
+                    : onFeltAcknowledge,
+            onAggressiveAcknowledge:
+                locked ||
+                        visual.kind != CoachDialogueVisualKind.aggressiveActions
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance) ...[
@@ -165,9 +174,9 @@ class CoachDialogueVisual {
     CoachDialogueVisualKind.bestFive =>
       'Tap each gold card — only five of seven play.',
     CoachDialogueVisualKind.passiveActions =>
-      'Tap Continue when Fold, Check, and Call click.',
+      'Tap Fold, Check, and Call.',
     CoachDialogueVisualKind.aggressiveActions =>
-      'Tap Continue when Bet, Raise, and All-in click.',
+      'Tap Bet, Raise, and All-in.',
     CoachDialogueVisualKind.streetsTimeline =>
       'Tap Continue when the four streets click.',
     CoachDialogueVisualKind.winningPaths =>
@@ -184,7 +193,9 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.dealerButton ||
       kind == CoachDialogueVisualKind.positionLabels ||
       kind == CoachDialogueVisualKind.handLadder ||
-      kind == CoachDialogueVisualKind.bestFive;
+      kind == CoachDialogueVisualKind.bestFive ||
+      kind == CoachDialogueVisualKind.passiveActions ||
+      kind == CoachDialogueVisualKind.aggressiveActions;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -354,6 +365,8 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onSuitAcknowledge,
     this.onLadderAcknowledge,
     this.onBestFiveAcknowledge,
+    this.onPassiveAcknowledge,
+    this.onAggressiveAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -363,6 +376,8 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onSuitAcknowledge;
   final VoidCallback? onLadderAcknowledge;
   final VoidCallback? onBestFiveAcknowledge;
+  final VoidCallback? onPassiveAcknowledge;
+  final VoidCallback? onAggressiveAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -400,9 +415,16 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           enabled: enabled,
           onAllPlayingTapped: onBestFiveAcknowledge,
         ),
-        CoachDialogueVisualKind.passiveActions => const PassiveActionsDemo(),
-        CoachDialogueVisualKind.aggressiveActions =>
-          const AggressiveActionsDemo(),
+        CoachDialogueVisualKind.passiveActions => PassiveActionsDemo(
+          interactive: onPassiveAcknowledge != null,
+          enabled: enabled,
+          onAllActionsTapped: onPassiveAcknowledge,
+        ),
+        CoachDialogueVisualKind.aggressiveActions => AggressiveActionsDemo(
+          interactive: onAggressiveAcknowledge != null,
+          enabled: enabled,
+          onAllActionsTapped: onAggressiveAcknowledge,
+        ),
         CoachDialogueVisualKind.streetsTimeline => const StreetsTimelineDemo(),
         CoachDialogueVisualKind.winningPaths => const WinningPathsDemo(),
         CoachDialogueVisualKind.toyHandRun => const ToyHandRunDemo(),

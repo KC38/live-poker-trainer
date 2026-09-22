@@ -241,174 +241,226 @@ bool isLessonActionTableActivity(CourseActivity activity) {
 }
 
 /// Explain-step demo: Fold / Check / Call meanings on a mini felt.
-class PassiveActionsDemo extends StatelessWidget {
+class PassiveActionsDemo extends StatefulWidget {
   /// Creates the demo.
-  const PassiveActionsDemo({super.key});
+  const PassiveActionsDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllActionsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllActionsTapped;
+
+  static const actions = <(String, String, Color)>[
+    ('FOLD', 'Give up', AppColors.danger),
+    ('CHECK', 'Pass free', AppColors.surfaceMuted),
+    ('CALL', 'Match bet', AppColors.surfaceMuted),
+  ];
+
+  @override
+  State<PassiveActionsDemo> createState() => _PassiveActionsDemoState();
+}
+
+class _PassiveActionsDemoState extends State<PassiveActionsDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllActionsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= PassiveActionsDemo.actions.length) {
+      widget.onAllActionsTapped!();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ExcludeSemantics(
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.feltLight, AppColors.feltDark],
-          ),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.feltBorder.withValues(alpha: 0.85),
-          ),
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
         ),
-        child: Column(
-          children: [
-            Text(
-              'Your three passive buttons',
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.feltBorder.withValues(alpha: 0.85),
+        ),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Your three passive buttons',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 14),
+          Row(
+            children: [
+              for (var i = 0; i < PassiveActionsDemo.actions.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoActionCard(
+                    label: PassiveActionsDemo.actions[i].$1,
+                    caption: PassiveActionsDemo.actions[i].$2,
+                    color: PassiveActionsDemo.actions[i].$3,
+                    selected: _tapped.contains(PassiveActionsDemo.actions[i].$1),
+                    enabled: widget.interactive && widget.enabled,
+                    onPressed:
+                        widget.interactive
+                            ? () => _onTap(PassiveActionsDemo.actions[i].$1)
+                            : null,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 14),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            decoration: BoxDecoration(
+              color: AppColors.feltDark.withValues(alpha: 0.65),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: AppColors.gold.withValues(alpha: 0.45),
+              ),
+            ),
+            child: Text(
+              widget.interactive
+                  ? 'Tap Fold, Check, and Call'
+                  : 'Pot chips sit in the middle',
               style: GoogleFonts.manrope(
-                color: AppColors.slate,
+                color: AppColors.gold,
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(height: 14),
-            Row(
-              children: const [
-                Expanded(
-                  child: _DemoActionCard(
-                    label: 'FOLD',
-                    caption: 'Give up',
-                    color: AppColors.danger,
-                  ),
-                ),
-                SizedBox(width: 8),
-                Expanded(
-                  child: _DemoActionCard(
-                    label: 'CHECK',
-                    caption: 'Pass free',
-                    color: AppColors.surfaceMuted,
-                  ),
-                ),
-                SizedBox(width: 8),
-                Expanded(
-                  child: _DemoActionCard(
-                    label: 'CALL',
-                    caption: 'Match bet',
-                    color: AppColors.surfaceMuted,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 14),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.feltDark.withValues(alpha: 0.65),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: AppColors.gold.withValues(alpha: 0.45),
-                ),
-              ),
-              child: Text(
-                'Pot chips sit in the middle',
-                style: GoogleFonts.manrope(
-                  color: AppColors.gold,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
   }
 }
 
 /// Explain-step demo: Bet / Raise / All-in meanings on a mini felt.
-class AggressiveActionsDemo extends StatelessWidget {
+class AggressiveActionsDemo extends StatefulWidget {
   /// Creates the demo.
-  const AggressiveActionsDemo({super.key});
+  const AggressiveActionsDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllActionsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllActionsTapped;
+
+  static const actions = <(String, String, Color)>[
+    ('BET', 'Open pot', AppColors.gold),
+    ('RAISE', 'Reopen bet', AppColors.gold),
+    ('ALL-IN', 'Stack-capped', AppColors.danger),
+  ];
+
+  @override
+  State<AggressiveActionsDemo> createState() => _AggressiveActionsDemoState();
+}
+
+class _AggressiveActionsDemoState extends State<AggressiveActionsDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllActionsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= AggressiveActionsDemo.actions.length) {
+      widget.onAllActionsTapped!();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ExcludeSemantics(
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.feltLight, AppColors.feltDark],
-          ),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.feltBorder.withValues(alpha: 0.85),
-          ),
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
         ),
-        child: Column(
-          children: [
-            Text(
-              'Your three aggressive buttons',
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.feltBorder.withValues(alpha: 0.85),
+        ),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Your three aggressive buttons',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 14),
+          Row(
+            children: [
+              for (var i = 0; i < AggressiveActionsDemo.actions.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoActionCard(
+                    label: AggressiveActionsDemo.actions[i].$1,
+                    caption: AggressiveActionsDemo.actions[i].$2,
+                    color: AggressiveActionsDemo.actions[i].$3,
+                    selected:
+                        _tapped.contains(AggressiveActionsDemo.actions[i].$1),
+                    enabled: widget.interactive && widget.enabled,
+                    onPressed:
+                        widget.interactive
+                            ? () =>
+                                _onTap(AggressiveActionsDemo.actions[i].$1)
+                            : null,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 14),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            decoration: BoxDecoration(
+              color: AppColors.feltDark.withValues(alpha: 0.65),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: AppColors.gold.withValues(alpha: 0.45),
+              ),
+            ),
+            child: Text(
+              widget.interactive
+                  ? 'Tap Bet, Raise, and All-in'
+                  : 'All-in never exceeds your stack',
               style: GoogleFonts.manrope(
-                color: AppColors.slate,
+                color: AppColors.gold,
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(height: 14),
-            Row(
-              children: const [
-                Expanded(
-                  child: _DemoActionCard(
-                    label: 'BET',
-                    caption: 'Open pot',
-                    color: AppColors.gold,
-                  ),
-                ),
-                SizedBox(width: 8),
-                Expanded(
-                  child: _DemoActionCard(
-                    label: 'RAISE',
-                    caption: 'Reopen bet',
-                    color: AppColors.gold,
-                  ),
-                ),
-                SizedBox(width: 8),
-                Expanded(
-                  child: _DemoActionCard(
-                    label: 'ALL-IN',
-                    caption: 'Stack-capped',
-                    color: AppColors.danger,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 14),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.feltDark.withValues(alpha: 0.65),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: AppColors.gold.withValues(alpha: 0.45),
-                ),
-              ),
-              child: Text(
-                'All-in never exceeds your stack',
-                style: GoogleFonts.manrope(
-                  color: AppColors.gold,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
   }
 }
 
@@ -417,20 +469,32 @@ class _DemoActionCard extends StatelessWidget {
     required this.label,
     required this.caption,
     required this.color,
+    this.selected = false,
+    this.enabled = false,
+    this.onPressed,
   });
 
   final String label;
   final String caption;
   final Color color;
+  final bool selected;
+  final bool enabled;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final borderColor =
+        selected ? AppColors.gold : color.withValues(alpha: 0.9);
+    final child = AnimatedContainer(
+      duration: const Duration(milliseconds: 140),
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.35),
+        color:
+            selected
+                ? AppColors.gold.withValues(alpha: 0.28)
+                : color.withValues(alpha: 0.35),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: 0.9)),
+        border: Border.all(color: borderColor, width: selected ? 2 : 1),
       ),
       child: Column(
         children: [
@@ -453,6 +517,20 @@ class _DemoActionCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+    if (onPressed == null) return child;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: enabled ? onPressed : null,
+          borderRadius: BorderRadius.circular(12),
+          child: child,
+        ),
       ),
     );
   }
