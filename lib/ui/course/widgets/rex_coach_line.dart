@@ -34,43 +34,63 @@ class RexCoachLine extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       label: '$label says: $text',
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-        decoration: BoxDecoration(
-          color: AppColors.bgElevated.withValues(alpha: 0.72),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color:
-                emphasize
-                    ? AppColors.gold.withValues(alpha: 0.55)
-                    : AppColors.slateDark,
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label.toUpperCase(),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.bgElevated,
+              border: Border.all(
+                color: AppColors.gold.withValues(alpha: 0.55),
+                width: 1.4,
+              ),
+            ),
+            child: Text(
+              'Rex',
               style: GoogleFonts.manrope(
                 color: AppColors.gold,
                 fontSize: 11,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 1.1,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 0.4,
               ),
             ),
-            const SizedBox(height: 6),
-            Text(
-              text,
-              style: GoogleFonts.manrope(
-                color: AppColors.cream,
-                fontSize: 16,
-                height: 1.35,
-                fontWeight: FontWeight.w600,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+              decoration: BoxDecoration(
+                color: AppColors.bgElevated.withValues(alpha: 0.85),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(6),
+                  topRight: Radius.circular(16),
+                  bottomLeft: Radius.circular(16),
+                  bottomRight: Radius.circular(16),
+                ),
+                border: Border.all(
+                  color:
+                      emphasize
+                          ? AppColors.gold.withValues(alpha: 0.55)
+                          : AppColors.slateDark,
+                ),
+              ),
+              child: Text(
+                text,
+                style: GoogleFonts.manrope(
+                  color: AppColors.cream,
+                  fontSize: 16,
+                  height: 1.35,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
