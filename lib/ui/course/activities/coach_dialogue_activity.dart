@@ -207,6 +207,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.nitModel
                     ? null
                     : onFeltAcknowledge,
+            onVsNitsAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.vsNits
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -354,6 +358,9 @@ enum CoachDialogueVisualKind {
 
   /// Nit: narrow entry; respect their heavy action.
   nitModel,
+
+  /// Versus nits: steal blinds more; give credit when they explode.
+  vsNits,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -444,6 +451,8 @@ class CoachDialogueVisual {
       'Tap Rare, Enter, and Mean It.',
     CoachDialogueVisualKind.nitModel =>
       'Tap Nit, Narrow, and Respect.',
+    CoachDialogueVisualKind.vsNits =>
+      'Tap Steal, Credit, and Explode.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -484,7 +493,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.callingStation ||
       kind == CoachDialogueVisualKind.vsStation ||
       kind == CoachDialogueVisualKind.tightSeats ||
-      kind == CoachDialogueVisualKind.nitModel;
+      kind == CoachDialogueVisualKind.nitModel ||
+      kind == CoachDialogueVisualKind.vsNits;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -561,6 +571,8 @@ class CoachDialogueVisual {
       'Tight-seat tiles: rare, enter, mean it',
     CoachDialogueVisualKind.nitModel =>
       'Nit tiles: label, narrow entry, respect heavy action',
+    CoachDialogueVisualKind.vsNits =>
+      'Vs-nit tiles: steal more, give credit, when they explode',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -683,6 +695,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-04-07-02-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.nitModel,
+      );
+    case 'act-04-07-03-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.vsNits,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1009,6 +1025,17 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.nitModel,
     );
   }
+  // Phrase-safe vs nits — require versus/steal+explode framing, not bare "nit".
+  if (blob.contains('versus nits') ||
+      blob.contains('give credit when they explode') ||
+      (blob.contains('steal blinds more') && blob.contains('nit')) ||
+      (blob.contains('steal') &&
+          blob.contains('explode') &&
+          blob.contains('nit'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.vsNits,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -1067,6 +1094,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onVsStationAcknowledge,
     this.onTightSeatsAcknowledge,
     this.onNitModelAcknowledge,
+    this.onVsNitsAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1106,6 +1134,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onVsStationAcknowledge;
   final VoidCallback? onTightSeatsAcknowledge;
   final VoidCallback? onNitModelAcknowledge;
+  final VoidCallback? onVsNitsAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1292,6 +1321,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onNitModelAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onNitModelAcknowledge,
+        ),
+        CoachDialogueVisualKind.vsNits => VsNitsDemo(
+          interactive: onVsNitsAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onVsNitsAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
