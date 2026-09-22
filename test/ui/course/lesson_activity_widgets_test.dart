@@ -319,6 +319,93 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('passive explain taps Fold Check Call instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-03-01-explain-passive',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText: 'Fold, check, and call.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text: 'Fold gives up. Check passes free. Call matches.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(PassiveActionsDemo), findsOneWidget);
+    expect(find.text('Tap Fold, Check, and Call.'), findsOneWidget);
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(feltAck, 0);
+    await tester.tap(find.text('CHECK'));
+    await tester.pump();
+    await tester.tap(find.text('CALL'));
+    await tester.pump();
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
+  testWidgets('aggressive explain taps Bet Raise All-in instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-03-02-explain-aggro',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText: 'Bet, raise, and all-in.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text: 'Bet opens. Raise reopens. All-in commits.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(AggressiveActionsDemo), findsOneWidget);
+    expect(find.text('Tap Bet, Raise, and All-in.'), findsOneWidget);
+    await tester.tap(find.text('BET'));
+    await tester.pump();
+    await tester.tap(find.text('RAISE'));
+    await tester.pump();
+    await tester.tap(find.text('ALL-IN'));
+    await tester.pump();
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
   test('resolveCoachDialogueVisual is content-driven', () {
     expect(
       resolveCoachDialogueVisual(
