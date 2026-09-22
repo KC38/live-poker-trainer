@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 
@@ -94,6 +95,7 @@ class LessonActivityController extends ChangeNotifier {
     _draft = _draft.copyWith(choiceId: choiceId);
     notifyListeners();
     if (autoSubmit) {
+      _selectionHaptic();
       onAutoSubmit?.call();
     }
   }
@@ -103,6 +105,7 @@ class LessonActivityController extends ChangeNotifier {
     _draft = _draft.copyWith(orderedIds: List.unmodifiable(ids));
     notifyListeners();
     if (autoSubmit) {
+      _selectionHaptic();
       onAutoSubmit?.call();
     }
   }
@@ -116,6 +119,7 @@ class LessonActivityController extends ChangeNotifier {
     }
     notifyListeners();
     if (autoSubmit && value != null) {
+      _selectionHaptic();
       onAutoSubmit?.call();
     }
   }
@@ -163,7 +167,20 @@ class LessonActivityController extends ChangeNotifier {
     _lastResult = result;
     _submitting = false;
     // Keep the same idempotency key so retries cannot double-submit.
+    if (result.accepted) {
+      _acceptedHaptic();
+    }
     notifyListeners();
+  }
+
+  /// Subtle tick on felt-tap / choice auto-submit (not mid-build taps).
+  void _selectionHaptic() {
+    HapticFeedback.selectionClick();
+  }
+
+  /// Light confirmation when an accepted grade lands — never on mistakes.
+  void _acceptedHaptic() {
+    HapticFeedback.lightImpact();
   }
 
   void failSubmit() {
