@@ -2644,6 +2644,52 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('line-stories explain taps X/R Probe Delay Donk instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-05-01-explain',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'Lines mean ranges. Check-raise, probe, delay, donk — each updates the story.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'Lines mean ranges. Check-raise, probe, delay, donk — each updates the story.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(LineStoriesDemo), findsOneWidget);
+    expect(find.text('Tap X/R, Probe, Delay, and Donk.'), findsOneWidget);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    for (final title in ['X/R', 'PROBE', 'DELAY', 'DONK']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
   testWidgets(
     'multiway explain taps Stronger Fewer Nuts instead of Continue',
     (tester) async {
