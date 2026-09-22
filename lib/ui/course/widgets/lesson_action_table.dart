@@ -4070,6 +4070,106 @@ class _RangeRewriteDemoState extends State<RangeRewriteDemo> {
   }
 }
 
+/// Timing / sizing / clues tiles for timing-clues explain demos.
+class TimingCluesDemo extends StatefulWidget {
+  /// Creates the demo.
+  const TimingCluesDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'TIMING', caption: 'Soft evidence', color: AppColors.gold),
+    (label: 'SIZING', caption: 'Soft evidence', color: AppColors.cream),
+    (label: 'CLUES', caption: 'Not mind-reading', color: AppColors.danger),
+  ];
+
+  @override
+  State<TimingCluesDemo> createState() => _TimingCluesDemoState();
+}
+
+class _TimingCluesDemoState extends State<TimingCluesDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= TimingCluesDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Clues, not mind-reading',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < TimingCluesDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoActionCard(
+                    label: TimingCluesDemo.points[i].label,
+                    caption: TimingCluesDemo.points[i].caption,
+                    color: TimingCluesDemo.points[i].color,
+                    selected: _tapped.contains(TimingCluesDemo.points[i].label),
+                    enabled: widget.interactive && widget.enabled,
+                    onPressed:
+                        widget.interactive
+                            ? () => _onTap(TimingCluesDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? 'Tap Timing, Sizing, and Clues'
+                : 'Small updates only',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
 
 class _DemoActionCard extends StatelessWidget {
   const _DemoActionCard({
