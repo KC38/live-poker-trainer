@@ -233,6 +233,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.exploitEvidence
                     ? null
                     : onFeltAcknowledge,
+            onMultiwayNutsAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.multiwayNuts
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -398,6 +402,9 @@ enum CoachDialogueVisualKind {
 
   /// Same cards, different seats — exploits need evidence.
   exploitEvidence,
+
+  /// Multiway: nutted up, air down; domination hurts more.
+  multiwayNuts,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -500,6 +507,8 @@ class CoachDialogueVisual {
       'Tap Observe, Samples, and Showdowns.',
     CoachDialogueVisualKind.exploitEvidence =>
       'Tap Cards, Seats, and Evidence.',
+    CoachDialogueVisualKind.multiwayNuts =>
+      'Tap Nutted, Air, and Domination.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -546,7 +555,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.maniacModel ||
       kind == CoachDialogueVisualKind.vsManiacs ||
       kind == CoachDialogueVisualKind.observationCertainty ||
-      kind == CoachDialogueVisualKind.exploitEvidence;
+      kind == CoachDialogueVisualKind.exploitEvidence ||
+      kind == CoachDialogueVisualKind.multiwayNuts;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -635,6 +645,8 @@ class CoachDialogueVisual {
       'Certainty tiles: observe, samples, showdowns',
     CoachDialogueVisualKind.exploitEvidence =>
       'Exploit tiles: same cards, different seats, evidence',
+    CoachDialogueVisualKind.multiwayNuts =>
+      'Multiway-nuts tiles: nutted up, air down, domination',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -781,6 +793,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-04-10-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.exploitEvidence,
+      );
+    case 'act-05-01-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.multiwayNuts,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1159,6 +1175,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.exploitEvidence,
     );
   }
+  if (blob.contains('nutted hands') ||
+      blob.contains('air down') ||
+      blob.contains('domination hurts') ||
+      (blob.contains('nut potential') && blob.contains('multiway'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.multiwayNuts,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -1223,6 +1247,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onVsManiacsAcknowledge,
     this.onObservationCertaintyAcknowledge,
     this.onExploitEvidenceAcknowledge,
+    this.onMultiwayNutsAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1268,6 +1293,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onVsManiacsAcknowledge;
   final VoidCallback? onObservationCertaintyAcknowledge;
   final VoidCallback? onExploitEvidenceAcknowledge;
+  final VoidCallback? onMultiwayNutsAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1485,6 +1511,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onExploitEvidenceAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onExploitEvidenceAcknowledge,
+        ),
+        CoachDialogueVisualKind.multiwayNuts => MultiwayNutsDemo(
+          interactive: onMultiwayNutsAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onMultiwayNutsAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },

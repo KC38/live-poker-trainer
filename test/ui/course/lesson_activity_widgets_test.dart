@@ -2460,6 +2460,52 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('multiway-nuts explain taps Nutted Air Domination instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-01-01-explain',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'Multiway: nutted hands up, air down. Domination hurts more.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'Multiway: nutted hands up, air down. Domination hurts more.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(MultiwayNutsDemo), findsOneWidget);
+    expect(find.text('Tap Nutted, Air, and Domination.'), findsOneWidget);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    for (final title in ['NUTTED', 'AIR', 'DOMINATION']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
   testWidgets(
     'multiway explain taps Stronger Fewer Nuts instead of Continue',
     (tester) async {
