@@ -192,7 +192,7 @@ class SuitGlyphRow extends StatelessWidget {
   const SuitGlyphRow({
     super.key,
     required this.tokens,
-    this.glyphSize = 28,
+    this.glyphSize = 24,
   });
 
   final List<LessonSuitToken> tokens;
@@ -201,8 +201,8 @@ class SuitGlyphRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 10,
-      runSpacing: 6,
+      spacing: 8,
+      runSpacing: 4,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         for (final token in tokens)
@@ -247,16 +247,16 @@ class SuitTapTile extends StatelessWidget {
             selected
                 ? token.color.withValues(alpha: 0.22)
                 : AppColors.surfaceMuted.withValues(alpha: 0.7),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
         child: InkWell(
           onTap: enabled ? onPressed : null,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(14),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 160),
-            width: 72,
-            height: 88,
+            width: 64,
+            height: 76,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(14),
               border: Border.all(
                 color: selected ? AppColors.gold : AppColors.slateDark,
                 width: selected ? 2.5 : 1,
@@ -269,17 +269,17 @@ class SuitTapTile extends StatelessWidget {
                   token.glyph,
                   style: TextStyle(
                     color: token.color,
-                    fontSize: 34,
+                    fontSize: 28,
                     fontWeight: FontWeight.w800,
                     height: 1,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 6),
                 Text(
                   token.label,
                   style: GoogleFonts.manrope(
                     color: AppColors.cream,
-                    fontSize: 11,
+                    fontSize: 10,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -343,23 +343,23 @@ class HoleCardChoiceButton extends StatelessWidget {
                   : highlighted
                   ? AppColors.gold.withValues(alpha: 0.08)
                   : AppColors.surfaceMuted.withValues(alpha: 0.65),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           child: InkWell(
             onTap: enabled ? onPressed : null,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(10),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 160),
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: border, width: selected ? 2 : 1),
               ),
               child: Row(
                 children: [
                   for (var i = 0; i < cards.length; i++) ...[
-                    if (i > 0) const SizedBox(width: 8),
-                    MiniCard(card: cards[i], size: MiniCardSize.hero, scale: 0.85),
+                    if (i > 0) const SizedBox(width: 6),
+                    MiniCard(card: cards[i], size: MiniCardSize.hero, scale: 0.78),
                   ],
                   if (cards.isEmpty)
                     Text(
