@@ -119,6 +119,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.openRange
                     ? null
                     : onFeltAcknowledge,
+            onVsOpenAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.vsOpenResponse
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -200,6 +204,9 @@ enum CoachDialogueVisualKind {
 
   /// Early vs button open ranges and live ~3x sizing.
   openRange,
+
+  /// Fold / call / 3-bet responses versus an open.
+  vsOpenResponse,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -246,6 +253,8 @@ class CoachDialogueVisual {
       'Tap each starting-hand family.',
     CoachDialogueVisualKind.openRange =>
       'Tap Early, Button, and Live 3x.',
+    CoachDialogueVisualKind.vsOpenResponse =>
+      'Tap Fold, Call, and 3-Bet.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -264,7 +273,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.toyHandRun ||
       kind == CoachDialogueVisualKind.actionOrder ||
       kind == CoachDialogueVisualKind.handFamilies ||
-      kind == CoachDialogueVisualKind.openRange;
+      kind == CoachDialogueVisualKind.openRange ||
+      kind == CoachDialogueVisualKind.vsOpenResponse;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -297,6 +307,8 @@ class CoachDialogueVisual {
       'Starting-hand family tiles: pairs, broadways, suited aces, connectors',
     CoachDialogueVisualKind.openRange =>
       'Open-range tiles: early strong, button wider, live 3x size',
+    CoachDialogueVisualKind.vsOpenResponse =>
+      'Versus-open response tiles: fold, call, and 3-bet',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -331,6 +343,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-02-03-01-explain-open':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.openRange,
+      );
+    case 'act-02-04-01-explain-vs':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.vsOpenResponse,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -464,6 +480,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.openRange,
     );
   }
+  if (blob.contains('weak hands fold') ||
+      blob.contains('playable hands call') ||
+      blob.contains('strong hands make it more') ||
+      (blob.contains('versus an open') || blob.contains('facing an open'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.vsOpenResponse,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -500,6 +524,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onActionOrderAcknowledge,
     this.onHandFamiliesAcknowledge,
     this.onOpenRangeAcknowledge,
+    this.onVsOpenAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -517,6 +542,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onActionOrderAcknowledge;
   final VoidCallback? onHandFamiliesAcknowledge;
   final VoidCallback? onOpenRangeAcknowledge;
+  final VoidCallback? onVsOpenAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -593,6 +619,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onOpenRangeAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onOpenRangeAcknowledge,
+        ),
+        CoachDialogueVisualKind.vsOpenResponse => VsOpenResponseDemo(
+          interactive: onVsOpenAcknowledge != null,
+          enabled: enabled,
+          onAllResponsesTapped: onVsOpenAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
