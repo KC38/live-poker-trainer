@@ -62,6 +62,49 @@ bool _sameIdOrder(List<String> a, List<String> b) {
   return true;
 }
 
+/// Whether this activity asks for strongest → weakest (vs low → high).
+bool ordersStrongestFirst(CourseActivity activity) {
+  if (activity.id == 'act-01-06-02-jump-ranks') return true;
+  final prompt = (activity.prompt ?? '').toLowerCase();
+  final a11y = activity.accessibilityText.toLowerCase();
+  return prompt.contains('strongest to weakest') ||
+      prompt.contains('strongest first') ||
+      a11y.contains('strongest to weakest') ||
+      a11y.contains('strongest first');
+}
+
+/// Empty tray hint for compare/order builders.
+String emptyOrderTrayHint({
+  required CourseActivity activity,
+  required bool rankMode,
+}) {
+  if (ordersStrongestFirst(activity)) return 'Tap strongest first';
+  if (rankMode || isHandExampleSequenceActivity(activity)) {
+    return 'Tap lowest first';
+  }
+  if (isStreetSequenceActivity(activity)) {
+    return 'Tap streets below first → last';
+  }
+  if (isSeatOrderSequenceActivity(activity)) {
+    return 'Tap seats below first → last';
+  }
+  return 'Tap lowest first';
+}
+
+/// Mid-build status under the order tray (Checking… once complete/submitting).
+String orderSequenceStatusLine({
+  required CourseActivity activity,
+  required bool submitting,
+  required bool complete,
+  required bool rankMode,
+}) {
+  if (submitting || complete) return 'Checking…';
+  if (rankMode) return 'Tap low → high';
+  if (ordersStrongestFirst(activity)) return 'Tap strong → weak';
+  if (isHandExampleSequenceActivity(activity)) return 'Tap low → high';
+  return 'Tap next';
+}
+
 /// Appends [id] to the order draft and auto-submits when the sequence is full.
 void appendOrderedId({
   required LessonActivityController controller,
@@ -69,6 +112,9 @@ void appendOrderedId({
   required List<String> ordered,
   required String id,
 }) {
+  // Ignore re-taps while Checking… / graded, and ignore already-placed ids.
+  if (controller.submitting || controller.lastResult != null) return;
+  if (ordered.contains(id)) return;
   final next = [...ordered, id];
   final complete =
       activity.sequenceItems.isNotEmpty &&
@@ -110,13 +156,14 @@ class OrderSequenceActivity extends StatelessWidget {
                 )
                 .where((item) => !ordered.contains(item.id))
                 .toList(growable: false);
+        final strongestFirst = ordersStrongestFirst(activity);
         final fallback =
             _rankMode
                 ? 'Tap ranks from lowest to highest.'
-                : activity.id == 'act-01-06-02-jump-ranks'
+                : strongestFirst
                 ? 'Tap strongest hand first, then weaker.'
                 : _handMode
-                ? 'Tap each hand into the order asked.'
+                ? 'Tap hands from lowest to highest.'
                 : isStreetSequenceActivity(activity)
                 ? 'Tap streets from first to last.'
                 : isSeatOrderSequenceActivity(activity)
@@ -132,6 +179,16 @@ class OrderSequenceActivity extends StatelessWidget {
           activity: activity,
           showGuidance: showGuidance,
           coach: coach,
+        );
+        final statusLine = orderSequenceStatusLine(
+          activity: activity,
+          submitting: controller.submitting,
+          complete: remaining.isEmpty && ordered.isNotEmpty,
+          rankMode: _rankMode,
+        );
+        final trayHint = emptyOrderTrayHint(
+          activity: activity,
+          rankMode: _rankMode,
         );
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -175,7 +232,7 @@ class OrderSequenceActivity extends StatelessWidget {
                   ),
                   child: ordered.isEmpty
                       ? Text(
-                          'Tap hands below in the order asked',
+                          trayHint,
                           style: GoogleFonts.manrope(
                             color: AppColors.slate,
                             fontSize: 13,
@@ -209,7 +266,7 @@ class OrderSequenceActivity extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                remaining.isEmpty ? 'All hands placed' : 'Tap next',
+                statusLine,
                 style: GoogleFonts.manrope(
                   color: AppColors.slate,
                   fontSize: 12,
@@ -288,9 +345,7 @@ class OrderSequenceActivity extends StatelessWidget {
                         children: [
                           if (ordered.isEmpty)
                             Text(
-                              isStreetSequenceActivity(activity)
-                                  ? 'Tap streets below first → last'
-                                  : 'Tap seats below first → last',
+                              trayHint,
                               style: GoogleFonts.manrope(
                                 color: AppColors.slate,
                                 fontSize: 13,
@@ -318,11 +373,7 @@ class OrderSequenceActivity extends StatelessWidget {
                     ),
                     const SizedBox(height: 14),
                     Text(
-                      controller.submitting
-                          ? 'Checking…'
-                          : remaining.isEmpty
-                          ? 'Checking…'
-                          : 'Tap next',
+                      statusLine,
                       textAlign: TextAlign.center,
                       style: GoogleFonts.manrope(
                         color: AppColors.slate,
@@ -369,31 +420,72 @@ class OrderSequenceActivity extends StatelessWidget {
                 ),
               ),
             ] else ...[
+              Text(
+                ordered.isEmpty ? 'Your order (empty)' : 'Your order',
+                style: GoogleFonts.manrope(
+                  color: AppColors.slate,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 8),
               Semantics(
                 label:
                     'Current order: ${ordered.isEmpty ? 'empty' : ordered.join(', ')}',
-                child: Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    for (var i = 0; i < ordered.length; i++)
-                      if (_rankMode)
-                        _RankTile(
-                          label: _labelFor(ordered[i]),
-                          badge: '${i + 1}',
-                          selected: true,
-                        )
-                      else
-                        Chip(
-                          label: Text('${i + 1}. ${_labelFor(ordered[i])}'),
-                          backgroundColor: AppColors.gold.withValues(
-                            alpha: 0.2,
+                child: Container(
+                  width: double.infinity,
+                  constraints: const BoxConstraints(minHeight: 56),
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: AppColors.feltDark.withValues(alpha: 0.55),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: AppColors.feltBorder.withValues(alpha: 0.8),
+                    ),
+                  ),
+                  child: ordered.isEmpty
+                      ? Text(
+                          trayHint,
+                          style: GoogleFonts.manrope(
+                            color: AppColors.slate,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
                           ),
+                        )
+                      : Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            for (var i = 0; i < ordered.length; i++)
+                              if (_rankMode)
+                                _RankTile(
+                                  label: _labelFor(ordered[i]),
+                                  badge: '${i + 1}',
+                                  selected: true,
+                                )
+                              else
+                                Chip(
+                                  label: Text(
+                                    '${i + 1}. ${_labelFor(ordered[i])}',
+                                  ),
+                                  backgroundColor: AppColors.gold.withValues(
+                                    alpha: 0.2,
+                                  ),
+                                ),
+                          ],
                         ),
-                  ],
                 ),
               ),
               const SizedBox(height: 12),
+              Text(
+                statusLine,
+                style: GoogleFonts.manrope(
+                  color: AppColors.slate,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
