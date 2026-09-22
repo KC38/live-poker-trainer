@@ -2828,6 +2828,52 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('table-dynamics explain taps Stuck Tilted Gears instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-08-01-explain',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'Tables change. Stuck, tilted, tired, or shifting gears — update.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'Tables change. Stuck, tilted, tired, or shifting gears — update.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(TableDynamicsDemo), findsOneWidget);
+    expect(find.text('Tap Stuck, Tilted, and Gears.'), findsOneWidget);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    for (final title in ['STUCK', 'TILTED', 'GEARS']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
   testWidgets(
     'multiway explain taps Stronger Fewer Nuts instead of Continue',
     (tester) async {

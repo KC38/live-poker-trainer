@@ -257,8 +257,12 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.rangeRewrite
                     ? null
                     : onFeltAcknowledge,
-            onSoftEvidenceAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.softEvidence
+            onTimingCluesAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.timingClues
+                    ? null
+                    : onFeltAcknowledge,
+            onTableDynamicsAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.tableDynamics
                     ? null
                     : onFeltAcknowledge,
           ),
@@ -447,6 +451,9 @@ enum CoachDialogueVisualKind {
 
   /// Timing and sizing are clues — small updates only.
   timingClues,
+
+  /// Tables change: stuck, tilted, gears — update.
+  tableDynamics,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -561,8 +568,10 @@ class CoachDialogueVisual {
       'Tap X/R, Probe, Delay, and Donk.',
     CoachDialogueVisualKind.rangeRewrite =>
       'Tap Action, Rewrite, and Update.',
-    CoachDialogueVisualKind.softEvidence =>
-      'Tap Timing, Sizing, and Soft.',
+    CoachDialogueVisualKind.timingClues =>
+      'Tap Timing, Sizing, and Clues.',
+    CoachDialogueVisualKind.tableDynamics =>
+      'Tap Stuck, Tilted, and Gears.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -616,7 +625,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.thinValue ||
       kind == CoachDialogueVisualKind.lineStories ||
       kind == CoachDialogueVisualKind.rangeRewrite ||
-      kind == CoachDialogueVisualKind.softEvidence;
+      kind == CoachDialogueVisualKind.timingClues ||
+      kind == CoachDialogueVisualKind.tableDynamics;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -719,6 +729,8 @@ class CoachDialogueVisual {
       'Range-rewrite tiles: action, rewrite, keep updating',
     CoachDialogueVisualKind.timingClues =>
       'Timing-clues tiles: timing, sizing, clues — not mind-reading',
+    CoachDialogueVisualKind.tableDynamics =>
+      'Table-dynamics tiles: stuck, tilted, shifting gears',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -893,6 +905,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-05-07-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.timingClues,
+      );
+    case 'act-05-08-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.tableDynamics,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1328,6 +1344,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.timingClues,
     );
   }
+  // Phrase-safe table dynamics — require stuck/tilted/gears framing.
+  if (blob.contains('tables change') ||
+      blob.contains('shifting gears') ||
+      (blob.contains('stuck') && blob.contains('tilted'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.tableDynamics,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -1399,6 +1423,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onLineStoriesAcknowledge,
     this.onRangeRewriteAcknowledge,
     this.onTimingCluesAcknowledge,
+    this.onTableDynamicsAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1451,6 +1476,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onLineStoriesAcknowledge;
   final VoidCallback? onRangeRewriteAcknowledge;
   final VoidCallback? onTimingCluesAcknowledge;
+  final VoidCallback? onTableDynamicsAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1703,6 +1729,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onTimingCluesAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onTimingCluesAcknowledge,
+        ),
+        CoachDialogueVisualKind.tableDynamics => TableDynamicsDemo(
+          interactive: onTableDynamicsAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onTableDynamicsAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },

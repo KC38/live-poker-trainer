@@ -4170,6 +4170,106 @@ class _TimingCluesDemoState extends State<TimingCluesDemo> {
   }
 }
 
+/// Stuck / tilted / gears tiles for table-dynamics explain demos.
+class TableDynamicsDemo extends StatefulWidget {
+  /// Creates the demo.
+  const TableDynamicsDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'STUCK', caption: 'Lost and steaming', color: AppColors.gold),
+    (label: 'TILTED', caption: 'Emotions running', color: AppColors.cream),
+    (label: 'GEARS', caption: 'Lines shift — update', color: AppColors.danger),
+  ];
+
+  @override
+  State<TableDynamicsDemo> createState() => _TableDynamicsDemoState();
+}
+
+class _TableDynamicsDemoState extends State<TableDynamicsDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= TableDynamicsDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Tables keep changing',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < TableDynamicsDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoActionCard(
+                    label: TableDynamicsDemo.points[i].label,
+                    caption: TableDynamicsDemo.points[i].caption,
+                    color: TableDynamicsDemo.points[i].color,
+                    selected:
+                        _tapped.contains(TableDynamicsDemo.points[i].label),
+                    enabled: widget.interactive && widget.enabled,
+                    onPressed:
+                        widget.interactive
+                            ? () => _onTap(TableDynamicsDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? 'Tap Stuck, Tilted, and Gears'
+                : 'Update when the table shifts',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
 
 class _DemoActionCard extends StatelessWidget {
   const _DemoActionCard({
