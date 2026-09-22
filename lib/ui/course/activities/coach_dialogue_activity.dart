@@ -109,11 +109,35 @@ class CoachDialogueActivity extends StatelessWidget {
                     : onFeltAcknowledge,
           ),
         ],
-        if (showGuidance) ...[
-          const SizedBox(height: 16),
-          RexCoachLine(text: visual.continueHint, label: 'Rex'),
+        if (showGuidance && visual.requiresFeltTap) ...[
+          const SizedBox(height: 14),
+          _TapHint(text: visual.continueHint),
         ],
       ],
+    );
+  }
+}
+
+/// Compact gold instruction under an interactive demo (not a second Rex bubble).
+class _TapHint extends StatelessWidget {
+  const _TapHint({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: text,
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: GoogleFonts.manrope(
+          color: AppColors.gold,
+          fontSize: 14,
+          fontWeight: FontWeight.w700,
+          height: 1.35,
+        ),
+      ),
     );
   }
 }
