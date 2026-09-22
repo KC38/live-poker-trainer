@@ -107,6 +107,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.toyHandRun
                     ? null
                     : onFeltAcknowledge,
+            onActionOrderAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.actionOrder
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -179,6 +183,9 @@ enum CoachDialogueVisualKind {
 
   /// Blinds → you act → ending toy hand.
   toyHandRun,
+
+  /// Preflop seats left-of-BB in order (UTG → HJ → BTN).
+  actionOrder,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -219,6 +226,8 @@ class CoachDialogueVisual {
       'Tap Fold win, Showdown, and Side pot.',
     CoachDialogueVisualKind.toyHandRun =>
       'Tap Blinds, You act, and Ending.',
+    CoachDialogueVisualKind.actionOrder =>
+      'Tap UTG, then HJ, then BTN.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -234,7 +243,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.aggressiveActions ||
       kind == CoachDialogueVisualKind.streetsTimeline ||
       kind == CoachDialogueVisualKind.winningPaths ||
-      kind == CoachDialogueVisualKind.toyHandRun;
+      kind == CoachDialogueVisualKind.toyHandRun ||
+      kind == CoachDialogueVisualKind.actionOrder;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -261,6 +271,8 @@ class CoachDialogueVisual {
       'Fold-win, showdown, and side-pot paths',
     CoachDialogueVisualKind.toyHandRun =>
       'Toy hand timeline: blinds, you act, ending',
+    CoachDialogueVisualKind.actionOrder =>
+      'Preflop action order tiles UTG, HJ, and BTN',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -283,6 +295,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-02-01-01-explain-pos':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.positionLabels,
+      );
+    case 'act-02-01-02-explain-order':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.actionOrder,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -364,17 +380,30 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       blob.contains('remember the ladder')) {
     return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
   }
-  if (blob.contains('suit') ||
+  if (blob.contains('four suits') ||
       blob.contains('deuce') ||
       blob.contains('ace is high') ||
+      (blob.contains('hearts') && blob.contains('spades')) ||
       (blob.contains('rank') && blob.contains('thirteen'))) {
     return const CoachDialogueVisual(kind: CoachDialogueVisualKind.suitsRanks);
   }
-  if (blob.contains('button') ||
-      blob.contains('dealer') ||
-      blob.contains('blind')) {
+  // Avoid false hits on "suited", "big blind", "Button: wider", "steal blinds".
+  if (blob.contains('dealer button') ||
+      blob.contains('the button marks') ||
+      blob.contains('button and blinds') ||
+      blob.contains('who posts') ||
+      (blob.contains('dealer') && blob.contains('button'))) {
     return const CoachDialogueVisual(
       kind: CoachDialogueVisualKind.dealerButton,
+    );
+  }
+  if (blob.contains('preflop starts left') ||
+      blob.contains('postflop starts left') ||
+      blob.contains('left of the big blind') ||
+      blob.contains('left of the button') ||
+      blob.contains('action order after the blinds')) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.actionOrder,
     );
   }
   if (blob.contains('hole') ||
@@ -409,6 +438,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onStreetsAcknowledge,
     this.onPathsAcknowledge,
     this.onToyHandAcknowledge,
+    this.onActionOrderAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -423,6 +453,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onStreetsAcknowledge;
   final VoidCallback? onPathsAcknowledge;
   final VoidCallback? onToyHandAcknowledge;
+  final VoidCallback? onActionOrderAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -484,6 +515,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onToyHandAcknowledge != null,
           enabled: enabled,
           onAllStepsTapped: onToyHandAcknowledge,
+        ),
+        CoachDialogueVisualKind.actionOrder => ActionOrderDemo(
+          interactive: onActionOrderAcknowledge != null,
+          enabled: enabled,
+          onAllSeatsTapped: onActionOrderAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
