@@ -155,6 +155,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.turnStory
                     ? null
                     : onFeltAcknowledge,
+            onRiverBinaryAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.riverBinary
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -263,6 +267,9 @@ enum CoachDialogueVisualKind {
 
   /// Turn brick vs change; barrel or delay with intent.
   turnStory,
+
+  /// River binary: value, bluff, bluff-catch, or fold.
+  riverBinary,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -327,6 +334,8 @@ class CoachDialogueVisual {
       'Tap each flop line once.',
     CoachDialogueVisualKind.turnStory =>
       'Tap Brick, Change, Barrel, and Delay.',
+    CoachDialogueVisualKind.riverBinary =>
+      'Tap Value, Bluff, Catch, and Fold.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -354,7 +363,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.flopLabel ||
       kind == CoachDialogueVisualKind.outsPrice ||
       kind == CoachDialogueVisualKind.flopLines ||
-      kind == CoachDialogueVisualKind.turnStory;
+      kind == CoachDialogueVisualKind.turnStory ||
+      kind == CoachDialogueVisualKind.riverBinary;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -405,6 +415,8 @@ class CoachDialogueVisual {
       'Flop-line tiles: value, c-bet, check, call, fold, raise',
     CoachDialogueVisualKind.turnStory =>
       'Turn-story tiles: brick, change, barrel, delay',
+    CoachDialogueVisualKind.riverBinary =>
+      'River-binary tiles: value, bluff, catch, fold',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -475,6 +487,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-03-05-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.turnStory,
+      );
+    case 'act-03-06-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.riverBinary,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -684,6 +700,16 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.turnStory,
     );
   }
+  if (blob.contains('river is binary') ||
+      blob.contains('bluff-catch') ||
+      blob.contains('no mystery floats') ||
+      (blob.contains('bluff') &&
+          blob.contains('fold') &&
+          blob.contains('value'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.riverBinary,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -729,6 +755,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onOutsPriceAcknowledge,
     this.onFlopLinesAcknowledge,
     this.onTurnStoryAcknowledge,
+    this.onRiverBinaryAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -755,6 +782,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onOutsPriceAcknowledge;
   final VoidCallback? onFlopLinesAcknowledge;
   final VoidCallback? onTurnStoryAcknowledge;
+  final VoidCallback? onRiverBinaryAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -876,6 +904,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onTurnStoryAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onTurnStoryAcknowledge,
+        ),
+        CoachDialogueVisualKind.riverBinary => RiverBinaryDemo(
+          interactive: onRiverBinaryAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onRiverBinaryAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
