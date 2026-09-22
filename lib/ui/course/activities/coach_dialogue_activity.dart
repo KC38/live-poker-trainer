@@ -115,6 +115,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.handFamilies
                     ? null
                     : onFeltAcknowledge,
+            onOpenRangeAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.openRange
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -193,6 +197,9 @@ enum CoachDialogueVisualKind {
 
   /// Starting-hand families (pairs, broadways, suited aces, connectors).
   handFamilies,
+
+  /// Early vs button open ranges and live ~3x sizing.
+  openRange,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -237,6 +244,8 @@ class CoachDialogueVisual {
       'Tap UTG, then HJ, then BTN.',
     CoachDialogueVisualKind.handFamilies =>
       'Tap each starting-hand family.',
+    CoachDialogueVisualKind.openRange =>
+      'Tap Early, Button, and Live 3x.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -254,7 +263,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.winningPaths ||
       kind == CoachDialogueVisualKind.toyHandRun ||
       kind == CoachDialogueVisualKind.actionOrder ||
-      kind == CoachDialogueVisualKind.handFamilies;
+      kind == CoachDialogueVisualKind.handFamilies ||
+      kind == CoachDialogueVisualKind.openRange;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -285,6 +295,8 @@ class CoachDialogueVisual {
       'Preflop action order tiles UTG, HJ, and BTN',
     CoachDialogueVisualKind.handFamilies =>
       'Starting-hand family tiles: pairs, broadways, suited aces, connectors',
+    CoachDialogueVisualKind.openRange =>
+      'Open-range tiles: early strong, button wider, live 3x size',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -315,6 +327,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-02-02-01-explain-families':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.handFamilies,
+      );
+    case 'act-02-03-01-explain-open':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.openRange,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -431,6 +447,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.handFamilies,
     );
   }
+  if (blob.contains('early: strong') ||
+      blob.contains('button: wider') ||
+      blob.contains('live opens often') ||
+      (blob.contains('strong only') && blob.contains('wider'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.openRange,
+    );
+  }
   if (blob.contains('hole') ||
       blob.contains('your two') ||
       blob.contains('private') ||
@@ -465,6 +489,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onToyHandAcknowledge,
     this.onActionOrderAcknowledge,
     this.onHandFamiliesAcknowledge,
+    this.onOpenRangeAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -481,6 +506,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onToyHandAcknowledge;
   final VoidCallback? onActionOrderAcknowledge;
   final VoidCallback? onHandFamiliesAcknowledge;
+  final VoidCallback? onOpenRangeAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -552,6 +578,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onHandFamiliesAcknowledge != null,
           enabled: enabled,
           onAllFamiliesTapped: onHandFamiliesAcknowledge,
+        ),
+        CoachDialogueVisualKind.openRange => OpenRangeDemo(
+          interactive: onOpenRangeAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onOpenRangeAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },

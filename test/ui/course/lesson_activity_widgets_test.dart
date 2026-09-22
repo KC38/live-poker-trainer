@@ -627,7 +627,7 @@ void main() {
           acceptedGrades: const [SoftGrade.recommended],
         ),
       ).kind,
-      CoachDialogueVisualKind.none,
+      CoachDialogueVisualKind.openRange,
     );
     expect(
       resolveCoachDialogueVisual(
@@ -735,6 +735,53 @@ void main() {
     expect(isTableRegionTapActivity(activity), isTrue);
 
     for (final title in ['Pairs', 'Broadways', 'Suited aces', 'Connectors']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
+
+  testWidgets('open-range explain taps Early Button Live 3x instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-03-01-explain-open',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'Early: strong only. Button: wider. Live opens often look like 3x.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'Early: strong only. Button: wider. Live opens often look like 3x.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(OpenRangeDemo), findsOneWidget);
+    expect(find.text('Tap Early, Button, and Live 3x.'), findsOneWidget);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    for (final title in ['EARLY', 'BUTTON', 'LIVE 3x']) {
       await tester.tap(find.text(title));
       await tester.pump();
     }
