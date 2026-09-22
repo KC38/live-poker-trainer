@@ -2735,6 +2735,8 @@ void main() {
         ),
       ),
     );
+    expect(find.text('Tap lowest first'), findsOneWidget);
+    expect(find.text('Tap low → high'), findsOneWidget);
     expect(find.byType(HandExampleTile), findsNWidgets(3));
     expect(find.byType(ActionChip), findsNothing);
 
@@ -2745,6 +2747,56 @@ void main() {
     await tester.tap(find.text('Flush'));
     await tester.pump();
     expect(controller.draft.orderedIds, ['hr-high', 'hr-pair', 'hr-flush']);
+    expect(find.text('Checking…'), findsOneWidget);
+    // Mid-submit: ignore re-taps / duplicate appends.
+    appendOrderedId(
+      controller: controller,
+      activity: activity,
+      ordered: controller.draft.orderedIds,
+      id: 'hr-high',
+    );
+    expect(controller.draft.orderedIds, ['hr-high', 'hr-pair', 'hr-flush']);
+    controller.dispose();
+  });
+
+  testWidgets('rank order tray shows Tap lowest first and Checking…', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-01-02-scaffolded-ranks',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.orderSequence,
+      estimatedSeconds: 40,
+      accessibilityText: 'Order ranks',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Order these ranks from lowest to highest.',
+      sequenceItems: const [
+        CourseChoice(id: 'r2', label: '2'),
+        CourseChoice(id: 'r3', label: '3'),
+        CourseChoice(id: 'r4', label: '4'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        OrderSequenceActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Tap lowest first'), findsOneWidget);
+    expect(find.text('Tap low → high'), findsOneWidget);
+    await tester.tap(find.text('2'));
+    await tester.pump();
+    await tester.tap(find.text('3'));
+    await tester.pump();
+    await tester.tap(find.text('4'));
+    await tester.pump();
+    expect(controller.draft.orderedIds, ['r2', 'r3', 'r4']);
+    expect(find.text('Checking…'), findsOneWidget);
     controller.dispose();
   });
 
