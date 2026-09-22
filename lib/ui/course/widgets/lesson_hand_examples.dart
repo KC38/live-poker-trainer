@@ -421,3 +421,114 @@ class _HandRankLadderDemoState extends State<HandRankLadderDemo> {
     return ExcludeSemantics(child: child);
   }
 }
+
+/// Explain-step demo: tap starting-hand family tiles (pairs → connectors).
+class HandFamiliesDemo extends StatefulWidget {
+  /// Creates the demo.
+  const HandFamiliesDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllFamiliesTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllFamiliesTapped;
+
+  static const families = <LessonHandExample>[
+    LessonHandExample(
+      id: 'fam-pairs',
+      title: 'Pairs',
+      codes: ['8h', '8c'],
+    ),
+    LessonHandExample(
+      id: 'fam-broadway',
+      title: 'Broadways',
+      codes: ['As', 'Kd'],
+    ),
+    LessonHandExample(
+      id: 'fam-suited-aces',
+      title: 'Suited aces',
+      codes: ['Ah', '9h'],
+    ),
+    LessonHandExample(
+      id: 'fam-connectors',
+      title: 'Connectors',
+      codes: ['7h', '6h'],
+    ),
+  ];
+
+  @override
+  State<HandFamiliesDemo> createState() => _HandFamiliesDemoState();
+}
+
+class _HandFamiliesDemoState extends State<HandFamiliesDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(LessonHandExample family) {
+    if (!widget.enabled || widget.onAllFamiliesTapped == null) return;
+    setState(() => _tapped.add(family.id));
+    if (_tapped.length >= HandFamiliesDemo.families.length) {
+      widget.onAllFamiliesTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Starting-hand families',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          for (var i = 0; i < HandFamiliesDemo.families.length; i++) ...[
+            if (i > 0) const SizedBox(height: 8),
+            HandExampleTile(
+              example: HandFamiliesDemo.families[i],
+              selected: _tapped.contains(HandFamiliesDemo.families[i].id),
+              enabled: widget.interactive && widget.enabled,
+              compact: true,
+              onPressed:
+                  widget.interactive
+                      ? () => _onTap(HandFamiliesDemo.families[i])
+                      : null,
+            ),
+          ],
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? 'Tap each family — trash is everything else'
+                : 'Pairs · broadways · suited aces · connectors',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+

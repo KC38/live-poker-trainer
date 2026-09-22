@@ -598,7 +598,7 @@ void main() {
       ).kind,
       CoachDialogueVisualKind.actionOrder,
     );
-    // "suited" / "Button:" / "big blinds" must not steal button/suits demos.
+    // Families explain teaches by tapping family tiles (not suits/button demos).
     expect(
       resolveCoachDialogueVisual(
         CourseActivity(
@@ -612,7 +612,7 @@ void main() {
           acceptedGrades: const [SoftGrade.recommended],
         ),
       ).kind,
-      CoachDialogueVisualKind.none,
+      CoachDialogueVisualKind.handFamilies,
     );
     expect(
       resolveCoachDialogueVisual(
@@ -691,6 +691,53 @@ void main() {
     expect(feltAck, 0);
     await tester.tap(find.text('BTN'));
     await tester.pump();
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
+
+  testWidgets('hand-families explain taps each family instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-02-01-explain-families',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'Pairs, broadways, suited aces, connectors — trash is everything else.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'Pairs, broadways, suited aces, connectors — trash is everything else.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(HandFamiliesDemo), findsOneWidget);
+    expect(find.text('Tap each starting-hand family.'), findsOneWidget);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    for (final title in ['Pairs', 'Broadways', 'Suited aces', 'Connectors']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
     expect(feltAck, 1);
     controller.dispose();
   });
