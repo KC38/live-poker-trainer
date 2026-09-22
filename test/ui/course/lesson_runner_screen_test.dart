@@ -159,7 +159,7 @@ void main() {
     service = _ScriptedCourseService(catalog);
   });
 
-  testWidgets('explain continue then table tap auto-submits', (
+  testWidgets('explain felt tap then table tap auto-submits', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 1200);
@@ -178,12 +178,24 @@ void main() {
     );
     await tester.pump();
     await tester.pump();
-    for (var i = 0; i < 40 && find.text('Continue').evaluate().isEmpty; i++) {
+    for (
+      var i = 0;
+      i < 40 &&
+          find.text('Tap your two cards on the felt.').evaluate().isEmpty;
+      i++
+    ) {
       await tester.pump(const Duration(milliseconds: 50));
     }
 
-    expect(find.text('Continue'), findsOneWidget);
-    await tester.tap(find.text('Continue'));
+    expect(find.text('Tap your two cards on the felt.'), findsOneWidget);
+    // Explain is teach-by-doing — no Continue dock.
+    expect(find.widgetWithText(FilledButton, 'Continue'), findsNothing);
+
+    final heroRail = find.byWidgetPredicate(
+      (w) => w is MiniCard && w.size == MiniCardSize.hero,
+    );
+    expect(heroRail, findsAtLeastNWidgets(2));
+    await tester.tap(heroRail.first);
     await tester.pump();
     await tester.pump();
     expect(find.text('Nice!'), findsOneWidget);
@@ -213,9 +225,6 @@ void main() {
     expect(find.widgetWithText(FilledButton, 'Check'), findsNothing);
 
     // Advance with the recommended hole-card tap (hero size).
-    final heroRail = find.byWidgetPredicate(
-      (w) => w is MiniCard && w.size == MiniCardSize.hero,
-    );
     await tester.tap(heroRail.first);
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 50));
@@ -278,12 +287,20 @@ void main() {
     );
     await tester.pump();
     await tester.pump();
-    for (var i = 0; i < 40 && find.text('Continue').evaluate().isEmpty; i++) {
+    for (
+      var i = 0;
+      i < 40 &&
+          find.text('Tap your two cards on the felt.').evaluate().isEmpty;
+      i++
+    ) {
       await tester.pump(const Duration(milliseconds: 50));
     }
 
-    expect(find.text('Continue'), findsOneWidget);
-    await tester.tap(find.text('Continue'));
+    expect(find.text('Tap your two cards on the felt.'), findsOneWidget);
+    final heroRail = find.byWidgetPredicate(
+      (w) => w is MiniCard && w.size == MiniCardSize.hero,
+    );
+    await tester.tap(heroRail.first);
     await tester.pump();
     await tester.pump();
     expect(find.text('Caught up to your saved progress.'), findsOneWidget);
@@ -295,7 +312,7 @@ void main() {
   });
 }
 
-/// First explain Continue is rejected as stale; resume points at guided.
+/// First explain felt-tap is rejected as stale; resume points at guided.
 class _StaleThenResumeCourseService extends CourseService {
   _StaleThenResumeCourseService(this.catalog) : super();
 
