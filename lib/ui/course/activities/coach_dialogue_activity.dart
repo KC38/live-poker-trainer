@@ -237,6 +237,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.multiwayNuts
                     ? null
                     : onFeltAcknowledge,
+            onDeepStacksAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.deepStacks
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -405,6 +409,9 @@ enum CoachDialogueVisualKind {
 
   /// Multiway: nutted up, air down; domination hurts more.
   multiwayNuts,
+
+  /// Deep stacks: more room to realize — and to lose a stack.
+  deepStacks,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -509,6 +516,8 @@ class CoachDialogueVisual {
       'Tap Cards, Seats, and Evidence.',
     CoachDialogueVisualKind.multiwayNuts =>
       'Tap Nutted, Air, and Domination.',
+    CoachDialogueVisualKind.deepStacks =>
+      'Tap Deep, Realize, and Stack.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -556,7 +565,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.vsManiacs ||
       kind == CoachDialogueVisualKind.observationCertainty ||
       kind == CoachDialogueVisualKind.exploitEvidence ||
-      kind == CoachDialogueVisualKind.multiwayNuts;
+      kind == CoachDialogueVisualKind.multiwayNuts ||
+      kind == CoachDialogueVisualKind.deepStacks;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -647,6 +657,8 @@ class CoachDialogueVisual {
       'Exploit tiles: same cards, different seats, evidence',
     CoachDialogueVisualKind.multiwayNuts =>
       'Multiway-nuts tiles: nutted up, air down, domination',
+    CoachDialogueVisualKind.deepStacks =>
+      'Deep-stack tiles: depth, realize, lose a stack',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -797,6 +809,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-05-01-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.multiwayNuts,
+      );
+    case 'act-05-02-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.deepStacks,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1183,6 +1199,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.multiwayNuts,
     );
   }
+  if (blob.contains('more room to realize') ||
+      blob.contains('lose a stack') ||
+      blob.contains('speculative implied') ||
+      (blob.contains('deep') && blob.contains('realize'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.deepStacks,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -1248,6 +1272,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onObservationCertaintyAcknowledge,
     this.onExploitEvidenceAcknowledge,
     this.onMultiwayNutsAcknowledge,
+    this.onDeepStacksAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1294,6 +1319,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onObservationCertaintyAcknowledge;
   final VoidCallback? onExploitEvidenceAcknowledge;
   final VoidCallback? onMultiwayNutsAcknowledge;
+  final VoidCallback? onDeepStacksAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1516,6 +1542,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onMultiwayNutsAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onMultiwayNutsAcknowledge,
+        ),
+        CoachDialogueVisualKind.deepStacks => DeepStacksDemo(
+          interactive: onDeepStacksAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onDeepStacksAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
