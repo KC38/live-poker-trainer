@@ -171,6 +171,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.rangeUpdate
                     ? null
                     : onFeltAcknowledge,
+            onThreeBetSqueezeAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.threeBetSqueeze
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -291,6 +295,9 @@ enum CoachDialogueVisualKind {
 
   /// Ranges not one hand — then update with each action.
   rangeUpdate,
+
+  /// 3-bets define ranges; squeezes punish multiway flats.
+  threeBetSqueeze,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -363,6 +370,8 @@ class CoachDialogueVisual {
       'Tap each common leak once.',
     CoachDialogueVisualKind.rangeUpdate =>
       'Tap One Hand, Range, and Update.',
+    CoachDialogueVisualKind.threeBetSqueeze =>
+      'Tap 3-Bet, Ranges, and Squeeze.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -394,7 +403,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.riverBinary ||
       kind == CoachDialogueVisualKind.multiwayPlan ||
       kind == CoachDialogueVisualKind.commonLeaks ||
-      kind == CoachDialogueVisualKind.rangeUpdate;
+      kind == CoachDialogueVisualKind.rangeUpdate ||
+      kind == CoachDialogueVisualKind.threeBetSqueeze;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -453,6 +463,8 @@ class CoachDialogueVisual {
       'Leak tiles: top pair, bad prices, passive, crowds',
     CoachDialogueVisualKind.rangeUpdate =>
       'Range tiles: one hand, range, update',
+    CoachDialogueVisualKind.threeBetSqueeze =>
+      '3-bet tiles: 3-bet, ranges, squeeze',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -539,6 +551,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-04-01-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.rangeUpdate,
+      );
+    case 'act-04-02-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.threeBetSqueeze,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -784,6 +800,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.rangeUpdate,
     );
   }
+  if (blob.contains('3-bets define') ||
+      blob.contains('squeezes punish') ||
+      blob.contains('multiway limps') ||
+      (blob.contains('squeeze') && blob.contains('flatting'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.threeBetSqueeze,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -833,6 +857,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onMultiwayAcknowledge,
     this.onCommonLeaksAcknowledge,
     this.onRangeUpdateAcknowledge,
+    this.onThreeBetSqueezeAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -863,6 +888,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onMultiwayAcknowledge;
   final VoidCallback? onCommonLeaksAcknowledge;
   final VoidCallback? onRangeUpdateAcknowledge;
+  final VoidCallback? onThreeBetSqueezeAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1004,6 +1030,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onRangeUpdateAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onRangeUpdateAcknowledge,
+        ),
+        CoachDialogueVisualKind.threeBetSqueeze => ThreeBetSqueezeDemo(
+          interactive: onThreeBetSqueezeAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onThreeBetSqueezeAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
