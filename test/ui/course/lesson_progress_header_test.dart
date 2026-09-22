@@ -63,4 +63,51 @@ void main() {
     expect(find.byIcon(Icons.local_fire_department), findsNothing);
     expect(find.text('3'), findsOneWidget);
   });
+
+  testWidgets('lives chip pulses once when livesRemaining decreases', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _wrap(
+        const LessonProgressHeader(
+          progress: 0.5,
+          livesRemaining: 3,
+          livesMax: 3,
+          acceptedStreak: 0,
+        ),
+      ),
+    );
+    expect(find.text('3'), findsOneWidget);
+
+    await tester.pumpWidget(
+      _wrap(
+        const LessonProgressHeader(
+          progress: 0.5,
+          livesRemaining: 2,
+          livesMax: 3,
+          acceptedStreak: 0,
+        ),
+      ),
+    );
+    expect(find.text('2'), findsOneWidget);
+
+    // Mid-pulse: scale/opacity animating away from identity.
+    await tester.pump(const Duration(milliseconds: 100));
+    final midOpacity = tester.widget<Opacity>(
+      find.descendant(
+        of: find.byType(LessonProgressHeader),
+        matching: find.byType(Opacity),
+      ),
+    );
+    expect(midOpacity.opacity, lessThan(1));
+
+    await tester.pumpAndSettle();
+    final settledOpacity = tester.widget<Opacity>(
+      find.descendant(
+        of: find.byType(LessonProgressHeader),
+        matching: find.byType(Opacity),
+      ),
+    );
+    expect(settledOpacity.opacity, 1);
+  });
 }
