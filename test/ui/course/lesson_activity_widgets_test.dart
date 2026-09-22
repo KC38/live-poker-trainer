@@ -2406,6 +2406,29 @@ void main() {
     expect(find.text('Life −1'), findsNothing);
   });
 
+  testWidgets('preferred recovery renders as a gold callout chip', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _wrap(
+        LessonFeedbackSheet(
+          result: _result(
+            grade: SoftGrade.questionable,
+            accepted: false,
+            lifeLost: false,
+          ),
+          betterChoiceLabel: 'Hole cards',
+          showActions: false,
+          onContinue: () {},
+          onRetry: () {},
+        ),
+      ),
+    );
+    expect(find.text('Preferred: Hole cards'), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'Got it'), findsNothing);
+    expect(find.widgetWithText(OutlinedButton, 'Try again'), findsNothing);
+  });
+
   test('hand ranks presentations resolve to visual modes', () {
     final ladder = CourseActivity(
       id: 'act-01-02-01-guided-ladder',

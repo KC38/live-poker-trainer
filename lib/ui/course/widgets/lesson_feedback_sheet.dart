@@ -51,12 +51,14 @@ class LessonFeedbackSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     // Reasonable/questionable must never look like a life-loss event.
     final showLifeLoss = result.lifeLost;
+    // Sticky footer owns CTAs — tighten bottom padding so sheet + dock hug.
+    final bottomPad = showActions ? 14.0 : 10.0;
     return Semantics(
       liveRegion: true,
       label: '$_title. ${result.feedback}',
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+        padding: EdgeInsets.fromLTRB(16, 12, 16, bottomPad),
         decoration: BoxDecoration(
           color: AppColors.bgElevated,
           borderRadius: BorderRadius.circular(16),
@@ -97,24 +99,40 @@ class LessonFeedbackSheet extends StatelessWidget {
                   ),
               ],
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             Text(
               result.feedback,
               style: GoogleFonts.manrope(
                 color: AppColors.cream,
                 fontSize: 15,
-                height: 1.4,
+                height: 1.35,
                 fontWeight: FontWeight.w500,
               ),
             ),
             if (betterChoiceLabel != null) ...[
-              const SizedBox(height: 8),
-              Text(
-                'Preferred: $betterChoiceLabel',
-                style: GoogleFonts.manrope(
-                  color: AppColors.slate,
-                  fontSize: 13,
-                  height: 1.35,
+              const SizedBox(height: 10),
+              // Preferred recovery as a scannable chip (not flat slate prose).
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.gold.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: AppColors.gold.withValues(alpha: 0.4),
+                  ),
+                ),
+                child: Text(
+                  'Preferred: $betterChoiceLabel',
+                  style: GoogleFonts.manrope(
+                    color: AppColors.cream,
+                    fontSize: 13,
+                    height: 1.3,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ],
