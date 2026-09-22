@@ -696,10 +696,12 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.vsOpenResponse,
     );
   }
+  // Avoid bare "effective stack" — SPR / rewrite explains are not BB-count demos.
   if (blob.contains('count stacks in big blinds') ||
       blob.contains('shorter stack sets the ceiling') ||
-      blob.contains('effective stack') ||
-      (blob.contains('big blinds') && blob.contains('shorter'))) {
+      (blob.contains('big blinds') &&
+          blob.contains('shorter') &&
+          (blob.contains('ceiling') || blob.contains('count stacks')))) {
     return const CoachDialogueVisual(
       kind: CoachDialogueVisualKind.bbStackDepth,
     );
@@ -764,21 +766,28 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.turnStory,
     );
   }
+  // River binary — require river framing. Bare "bluff-catch" / value+bluff+fold
+  // steals maniac, LAG, thin-value, and station explains onto river tiles.
   if (blob.contains('river is binary') ||
-      blob.contains('bluff-catch') ||
       blob.contains('no mystery floats') ||
-      (blob.contains('bluff') &&
-          blob.contains('fold') &&
-          blob.contains('value'))) {
+      (blob.contains('river') &&
+          (blob.contains('bluff-catch') ||
+              (blob.contains('bluff') &&
+                  blob.contains('fold') &&
+                  blob.contains('value'))))) {
     return const CoachDialogueVisual(
       kind: CoachDialogueVisualKind.riverBinary,
     );
   }
-  // Phrase matches — avoid bare "value"/"bluff"/"best" traps.
-  if (blob.contains('more players') ||
-      blob.contains('fewer bluffs') ||
-      blob.contains('chase nuts') ||
-      (blob.contains('stronger value') && blob.contains('multiway'))) {
+  // Multiway — keep "fewer bluffs" tied to multiway / more-players framing.
+  if (blob.contains('chase nuts') ||
+      (blob.contains('stronger value') && blob.contains('multiway')) ||
+      (blob.contains('more players') &&
+          (blob.contains('bluff') ||
+              blob.contains('value') ||
+              blob.contains('nuts'))) ||
+      (blob.contains('fewer bluffs') &&
+          (blob.contains('multiway') || blob.contains('more players')))) {
     return const CoachDialogueVisual(
       kind: CoachDialogueVisualKind.multiwayPlan,
     );
