@@ -82,6 +82,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.handLadder
                     ? null
                     : onFeltAcknowledge,
+            onBestFiveAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.bestFive
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance) ...[
@@ -159,7 +163,7 @@ class CoachDialogueVisual {
     CoachDialogueVisualKind.handLadder =>
       'Tap each rung from high card to flush.',
     CoachDialogueVisualKind.bestFive =>
-      'Tap Continue when you see that only five of seven play.',
+      'Tap each gold card — only five of seven play.',
     CoachDialogueVisualKind.passiveActions =>
       'Tap Continue when Fold, Check, and Call click.',
     CoachDialogueVisualKind.aggressiveActions =>
@@ -179,7 +183,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.suitsRanks ||
       kind == CoachDialogueVisualKind.dealerButton ||
       kind == CoachDialogueVisualKind.positionLabels ||
-      kind == CoachDialogueVisualKind.handLadder;
+      kind == CoachDialogueVisualKind.handLadder ||
+      kind == CoachDialogueVisualKind.bestFive;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -348,6 +353,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onRegionTap,
     this.onSuitAcknowledge,
     this.onLadderAcknowledge,
+    this.onBestFiveAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -356,6 +362,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final ValueChanged<LessonTableTapTarget>? onRegionTap;
   final VoidCallback? onSuitAcknowledge;
   final VoidCallback? onLadderAcknowledge;
+  final VoidCallback? onBestFiveAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -388,7 +395,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           enabled: enabled,
           onAllRungsTapped: onLadderAcknowledge,
         ),
-        CoachDialogueVisualKind.bestFive => const BestFiveDemo(),
+        CoachDialogueVisualKind.bestFive => BestFiveDemo(
+          interactive: onBestFiveAcknowledge != null,
+          enabled: enabled,
+          onAllPlayingTapped: onBestFiveAcknowledge,
+        ),
         CoachDialogueVisualKind.passiveActions => const PassiveActionsDemo(),
         CoachDialogueVisualKind.aggressiveActions =>
           const AggressiveActionsDemo(),

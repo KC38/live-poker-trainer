@@ -92,84 +92,141 @@ bool bestFiveSelectionIsReady({
 }
 
 /// Explain-step demo: seven cards with five highlighted as "these play".
-class BestFiveDemo extends StatelessWidget {
+class BestFiveDemo extends StatefulWidget {
   /// Creates the demo.
-  const BestFiveDemo({super.key});
+  const BestFiveDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPlayingTapped,
+  });
 
-  static const _hero = ['Ah', 'Kd'];
-  static const _board = ['As', '7c', '2d', '9h', '3s'];
-  static const _playing = {'Ah', 'As', 'Kd', '9h', '7c'};
+  /// When true, the five playing cards are teach-by-doing tap targets.
+  final bool interactive;
+
+  /// Whether taps are accepted.
+  final bool enabled;
+
+  /// Fires once every playing card has been tapped.
+  final VoidCallback? onAllPlayingTapped;
+
+  static const hero = ['Ah', 'Kd'];
+  static const board = ['As', '7c', '2d', '9h', '3s'];
+  static const playing = {'Ah', 'As', 'Kd', '9h', '7c'};
+
+  @override
+  State<BestFiveDemo> createState() => _BestFiveDemoState();
+}
+
+class _BestFiveDemoState extends State<BestFiveDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onCardTap(String code) {
+    if (!widget.enabled || widget.onAllPlayingTapped == null) return;
+    if (!BestFiveDemo.playing.contains(code)) return;
+    setState(() => _tapped.add(code));
+    if (_tapped.containsAll(BestFiveDemo.playing)) {
+      widget.onAllPlayingTapped!();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ExcludeSemantics(
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.feltLight, AppColors.feltDark],
-          ),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.feltBorder.withValues(alpha: 0.85),
-          ),
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
         ),
-        child: Column(
-          children: [
-            Text(
-              'Seven available · five play',
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'You',
-              style: GoogleFonts.manrope(
-                color: AppColors.cream,
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 6),
-            _DemoRow(codes: _hero, playing: _playing),
-            const SizedBox(height: 12),
-            Text(
-              'Board',
-              style: GoogleFonts.manrope(
-                color: AppColors.cream,
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 6),
-            _DemoRow(codes: _board, playing: _playing),
-            const SizedBox(height: 12),
-            Text(
-              'Gold = the five that count',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.feltBorder.withValues(alpha: 0.85),
         ),
       ),
+      child: Column(
+        children: [
+          Text(
+            'Seven available · five play',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'You',
+            style: GoogleFonts.manrope(
+              color: AppColors.cream,
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 6),
+          _DemoRow(
+            codes: BestFiveDemo.hero,
+            playing: BestFiveDemo.playing,
+            tapped: _tapped,
+            interactive: widget.interactive,
+            enabled: widget.enabled,
+            onCardTap: _onCardTap,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Board',
+            style: GoogleFonts.manrope(
+              color: AppColors.cream,
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 6),
+          _DemoRow(
+            codes: BestFiveDemo.board,
+            playing: BestFiveDemo.playing,
+            tapped: _tapped,
+            interactive: widget.interactive,
+            enabled: widget.enabled,
+            onCardTap: _onCardTap,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            widget.interactive
+                ? 'Tap each gold card — those five count'
+                : 'Gold = the five that count',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
     );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
   }
 }
 
 class _DemoRow extends StatelessWidget {
-  const _DemoRow({required this.codes, required this.playing});
+  const _DemoRow({
+    required this.codes,
+    required this.playing,
+    required this.tapped,
+    required this.interactive,
+    required this.enabled,
+    required this.onCardTap,
+  });
 
   final List<String> codes;
   final Set<String> playing;
+  final Set<String> tapped;
+  final bool interactive;
+  final bool enabled;
+  final ValueChanged<String> onCardTap;
 
   @override
   Widget build(BuildContext context) {
@@ -181,9 +238,13 @@ class _DemoRow extends StatelessWidget {
         for (final code in codes)
           SelectableBestFiveCard(
             code: code,
-            selected: playing.contains(code),
-            enabled: false,
+            selected: interactive ? tapped.contains(code) : playing.contains(code),
+            enabled: interactive && enabled && playing.contains(code),
             dimmed: !playing.contains(code),
+            onPressed:
+                interactive && playing.contains(code)
+                    ? () => onCardTap(code)
+                    : null,
           ),
       ],
     );

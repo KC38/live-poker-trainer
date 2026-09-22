@@ -269,6 +269,56 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('best-five explain taps each gold card instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-02-02-explain-five',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText: 'Only five of seven cards play.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text: 'You use five cards. Two are leftovers.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(BestFiveDemo), findsOneWidget);
+    expect(
+      find.text('Tap each gold card — only five of seven play.'),
+      findsOneWidget,
+    );
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+
+    final playing = find.byWidgetPredicate(
+      (w) => w is SelectableBestFiveCard && w.enabled,
+    );
+    expect(playing, findsNWidgets(5));
+    for (final el in playing.evaluate()) {
+      await tester.tap(find.byWidget(el.widget));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
   test('resolveCoachDialogueVisual is content-driven', () {
     expect(
       resolveCoachDialogueVisual(
