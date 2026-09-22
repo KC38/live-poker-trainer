@@ -2369,6 +2369,52 @@ void main() {
   });
 
   testWidgets(
+    'observation-certainty explain taps Observe Samples Showdowns instead of Continue',
+    (tester) async {
+    final activity = CourseActivity(
+      id: 'act-04-09-01-explain',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'Observation ≠ certainty. Confidence grows with samples and showdowns.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'Observation ≠ certainty. Confidence grows with samples and showdowns.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(ObservationCertaintyDemo), findsOneWidget);
+    expect(find.text('Tap Observe, Samples, and Showdowns.'), findsOneWidget);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    for (final title in ['OBSERVE', 'SAMPLES', 'SHOWDOWNS']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
+  testWidgets(
     'multiway explain taps Stronger Fewer Nuts instead of Continue',
     (tester) async {
     final activity = CourseActivity(

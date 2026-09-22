@@ -223,6 +223,12 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.vsManiacs
                     ? null
                     : onFeltAcknowledge,
+            onObservationCertaintyAcknowledge:
+                locked ||
+                        visual.kind !=
+                            CoachDialogueVisualKind.observationCertainty
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -382,6 +388,9 @@ enum CoachDialogueVisualKind {
 
   /// Versus maniacs: call wider for value; let them hang; no ego.
   vsManiacs,
+
+  /// Observation ≠ certainty; confidence grows with samples/showdowns.
+  observationCertainty,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -480,6 +489,8 @@ class CoachDialogueVisual {
       'Tap Maniac, Entry, and Aggro.',
     CoachDialogueVisualKind.vsManiacs =>
       'Tap Wider, Hang, and Ego.',
+    CoachDialogueVisualKind.observationCertainty =>
+      'Tap Observe, Samples, and Showdowns.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -524,7 +535,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.vsNits ||
       kind == CoachDialogueVisualKind.extremeEntry ||
       kind == CoachDialogueVisualKind.maniacModel ||
-      kind == CoachDialogueVisualKind.vsManiacs;
+      kind == CoachDialogueVisualKind.vsManiacs ||
+      kind == CoachDialogueVisualKind.observationCertainty;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -609,6 +621,8 @@ class CoachDialogueVisual {
       'Maniac tiles: label, extreme entry, aggression',
     CoachDialogueVisualKind.vsManiacs =>
       'Vs-maniac tiles: call wider, let them hang, no ego',
+    CoachDialogueVisualKind.observationCertainty =>
+      'Certainty tiles: observe, samples, showdowns',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -747,6 +761,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-04-08-03-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.vsManiacs,
+      );
+    case 'act-04-09-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.observationCertainty,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1109,6 +1127,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.vsManiacs,
     );
   }
+  if (blob.contains('observation') ||
+      blob.contains('certainty') ||
+      blob.contains('samples and showdowns') ||
+      (blob.contains('confidence grows') && blob.contains('samples'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.observationCertainty,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -1171,6 +1197,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onExtremeEntryAcknowledge,
     this.onManiacModelAcknowledge,
     this.onVsManiacsAcknowledge,
+    this.onObservationCertaintyAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1214,6 +1241,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onExtremeEntryAcknowledge;
   final VoidCallback? onManiacModelAcknowledge;
   final VoidCallback? onVsManiacsAcknowledge;
+  final VoidCallback? onObservationCertaintyAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1421,6 +1449,12 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           enabled: enabled,
           onAllPointsTapped: onVsManiacsAcknowledge,
         ),
+        CoachDialogueVisualKind.observationCertainty =>
+          ObservationCertaintyDemo(
+            interactive: onObservationCertaintyAcknowledge != null,
+            enabled: enabled,
+            onAllPointsTapped: onObservationCertaintyAcknowledge,
+          ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
     );
