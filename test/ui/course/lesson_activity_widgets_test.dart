@@ -161,7 +161,7 @@ void main() {
       findsNothing,
     );
     expect(
-      find.text('Tap Continue when the four suits and ranks click.'),
+      find.text('Tap each of the four suits.'),
       findsOneWidget,
     );
     controller.dispose();

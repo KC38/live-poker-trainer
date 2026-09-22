@@ -53,13 +53,17 @@ class CoachDialogueActivity extends StatelessWidget {
             showSoftPulse:
                 showGuidance && !locked && visual.requiresFeltTap,
             onRegionTap:
-                locked || !visual.requiresFeltTap
+                locked || visual.kind != CoachDialogueVisualKind.holeCards
                     ? null
                     : (target) {
                       if (target.region == LessonTableRegion.hero) {
                         onFeltAcknowledge?.call();
                       }
                     },
+            onSuitAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.suitsRanks
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance) ...[
@@ -129,7 +133,7 @@ class CoachDialogueVisual {
           ? 'Tap your two cards on the felt.'
           : 'Tap Continue when you have looked at your two cards.',
     CoachDialogueVisualKind.suitsRanks =>
-      'Tap Continue when the four suits and ranks click.',
+      'Tap each of the four suits.',
     CoachDialogueVisualKind.dealerButton =>
       'Tap Continue when you can spot the button and blinds.',
     CoachDialogueVisualKind.positionLabels =>
@@ -151,9 +155,10 @@ class CoachDialogueVisual {
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
-  /// True when the learner should tap the demo felt instead of Continue.
+  /// True when the learner should tap the demo instead of Continue.
   bool get requiresFeltTap =>
-      kind == CoachDialogueVisualKind.holeCards && useTable;
+      (kind == CoachDialogueVisualKind.holeCards && useTable) ||
+      kind == CoachDialogueVisualKind.suitsRanks;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -320,12 +325,14 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.enabled = false,
     this.showSoftPulse = false,
     this.onRegionTap,
+    this.onSuitAcknowledge,
   });
 
   final CoachDialogueVisual visual;
   final bool enabled;
   final bool showSoftPulse;
   final ValueChanged<LessonTableTapTarget>? onRegionTap;
+  final VoidCallback? onSuitAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -338,7 +345,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           showSoftPulse: showSoftPulse,
           onRegionTap: onRegionTap,
         ),
-        CoachDialogueVisualKind.suitsRanks => const _SuitsRanksDemo(),
+        CoachDialogueVisualKind.suitsRanks => _SuitsRanksDemo(
+          interactive: onSuitAcknowledge != null,
+          enabled: enabled,
+          onAllSuitsTapped: onSuitAcknowledge,
+        ),
         CoachDialogueVisualKind.dealerButton => const _DealerButtonDemo(),
         CoachDialogueVisualKind.positionLabels => const _PositionLabelsDemo(),
         CoachDialogueVisualKind.handLadder => const HandRankLadderDemo(),
@@ -403,9 +414,22 @@ class _HoleCardDemo extends StatelessWidget {
   }
 }
 
-class _SuitsRanksDemo extends StatelessWidget {
-  const _SuitsRanksDemo();
+class _SuitsRanksDemo extends StatefulWidget {
+  const _SuitsRanksDemo({
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllSuitsTapped,
+  });
 
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllSuitsTapped;
+
+  @override
+  State<_SuitsRanksDemo> createState() => _SuitsRanksDemoState();
+}
+
+class _SuitsRanksDemoState extends State<_SuitsRanksDemo> {
   static const _suits = <LessonSuitToken>[
     LessonSuitToken.hearts,
     LessonSuitToken.diamonds,
@@ -413,7 +437,31 @@ class _SuitsRanksDemo extends StatelessWidget {
     LessonSuitToken.spades,
   ];
 
-  static const _ranks = <String>['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'];
+  static const _ranks = <String>[
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    'T',
+    'J',
+    'Q',
+    'K',
+    'A',
+  ];
+
+  final Set<LessonSuitToken> _tapped = <LessonSuitToken>{};
+
+  void _onSuitTap(LessonSuitToken token) {
+    if (!widget.enabled || widget.onAllSuitsTapped == null) return;
+    setState(() => _tapped.add(token));
+    if (_tapped.length >= _suits.length) {
+      widget.onAllSuitsTapped!();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -426,7 +474,23 @@ class _SuitsRanksDemo extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const SuitGlyphRow(tokens: _suits, glyphSize: 34),
+          if (widget.interactive)
+            Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              alignment: WrapAlignment.center,
+              children: [
+                for (final token in _suits)
+                  SuitTapTile(
+                    token: token,
+                    selected: _tapped.contains(token),
+                    enabled: widget.enabled,
+                    onPressed: () => _onSuitTap(token),
+                  ),
+              ],
+            )
+          else
+            const SuitGlyphRow(tokens: _suits, glyphSize: 34),
           const SizedBox(height: 14),
           Text(
             'Thirteen ranks — ace high',
