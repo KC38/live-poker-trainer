@@ -98,10 +98,13 @@ class LessonActivityController extends ChangeNotifier {
     }
   }
 
-  void setOrderedIds(List<String> ids) {
+  void setOrderedIds(List<String> ids, {bool autoSubmit = false}) {
     if (_submitting || _lastResult != null) return;
     _draft = _draft.copyWith(orderedIds: List.unmodifiable(ids));
     notifyListeners();
+    if (autoSubmit) {
+      onAutoSubmit?.call();
+    }
   }
 
   void setNumericValue(double? value) {

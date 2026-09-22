@@ -12,6 +12,20 @@ import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 final _rankOnly = RegExp(r'^[2-9TJQKA]$', caseSensitive: false);
 
+/// Appends [id] to the order draft and auto-submits when the sequence is full.
+void appendOrderedId({
+  required LessonActivityController controller,
+  required CourseActivity activity,
+  required List<String> ordered,
+  required String id,
+}) {
+  final next = [...ordered, id];
+  final complete =
+      activity.sequenceItems.isNotEmpty &&
+      next.length == activity.sequenceItems.length;
+  controller.setOrderedIds(next, autoSubmit: complete);
+}
+
 /// Drag-free tap-to-order sequence builder with undo.
 class OrderSequenceActivity extends StatelessWidget {
   /// Creates the activity.
@@ -163,10 +177,12 @@ class OrderSequenceActivity extends StatelessWidget {
                       onPressed:
                           locked
                               ? null
-                              : () => controller.setOrderedIds([
-                                ...ordered,
-                                item.id,
-                              ]),
+                              : () => appendOrderedId(
+                                controller: controller,
+                                activity: activity,
+                                ordered: ordered,
+                                id: item.id,
+                              ),
                     ),
                 ],
               ),
@@ -243,7 +259,11 @@ class OrderSequenceActivity extends StatelessWidget {
                     ),
                     const SizedBox(height: 14),
                     Text(
-                      remaining.isEmpty ? 'Ready — Check below.' : 'Tap next',
+                      controller.submitting
+                          ? 'Checking…'
+                          : remaining.isEmpty
+                          ? 'Checking…'
+                          : 'Tap next',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.manrope(
                         color: AppColors.slate,
@@ -257,7 +277,12 @@ class OrderSequenceActivity extends StatelessWidget {
                         items: remaining,
                         locked: locked,
                         onPick:
-                            (id) => controller.setOrderedIds([...ordered, id]),
+                            (id) => appendOrderedId(
+                              controller: controller,
+                              activity: activity,
+                              ordered: ordered,
+                              id: id,
+                            ),
                       )
                     else
                       Wrap(
@@ -272,10 +297,12 @@ class OrderSequenceActivity extends StatelessWidget {
                               onPressed:
                                   locked
                                       ? null
-                                      : () => controller.setOrderedIds([
-                                        ...ordered,
-                                        item.id,
-                                      ]),
+                                      : () => appendOrderedId(
+                                        controller: controller,
+                                        activity: activity,
+                                        ordered: ordered,
+                                        id: item.id,
+                                      ),
                             ),
                         ],
                       ),
@@ -319,20 +346,24 @@ class OrderSequenceActivity extends StatelessWidget {
                         onPressed:
                             locked
                                 ? null
-                                : () => controller.setOrderedIds([
-                                  ...ordered,
-                                  item.id,
-                                ]),
+                                : () => appendOrderedId(
+                                  controller: controller,
+                                  activity: activity,
+                                  ordered: ordered,
+                                  id: item.id,
+                                ),
                       )
                     else
                       ActionChip(
                         onPressed:
                             locked
                                 ? null
-                                : () => controller.setOrderedIds([
-                                  ...ordered,
-                                  item.id,
-                                ]),
+                                : () => appendOrderedId(
+                                  controller: controller,
+                                  activity: activity,
+                                  ordered: ordered,
+                                  id: item.id,
+                                ),
                         label: Text(item.label),
                       ),
                 ],
