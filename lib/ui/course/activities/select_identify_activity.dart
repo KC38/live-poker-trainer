@@ -442,16 +442,23 @@ class _HandCategoryTapActivity extends StatelessWidget {
                     enabled: !locked,
                     compact: true,
                     onPressed:
-                        locked ? null : () => controller.selectChoice(choice.id),
+                        locked
+                            ? null
+                            : () => controller.selectChoice(
+                              choice.id,
+                              autoSubmit: true,
+                            ),
                   );
                 },
               ),
             ],
             const SizedBox(height: 12),
             Text(
-              selected == null
+              controller.submitting
+                  ? 'Checking…'
+                  : selected == null
                   ? 'Tap the hand category you made.'
-                  : 'Ready — Check when it looks right.',
+                  : 'Checking…',
               textAlign: TextAlign.center,
               style: GoogleFonts.manrope(
                 color: AppColors.slate,
@@ -541,16 +548,21 @@ class _ShowdownTapActivity extends StatelessWidget {
                     onPressed:
                         locked
                             ? null
-                            : () => controller.selectChoice(choice.id),
+                            : () => controller.selectChoice(
+                              choice.id,
+                              autoSubmit: true,
+                            ),
                   );
                 },
               ),
             ],
             const SizedBox(height: 10),
             Text(
-              selected == null
+              controller.submitting
+                  ? 'Checking…'
+                  : selected == null
                   ? 'Tap the result that wins the pot.'
-                  : 'Ready — Check when it looks right.',
+                  : 'Checking…',
               textAlign: TextAlign.center,
               style: GoogleFonts.manrope(
                 color: AppColors.slate,

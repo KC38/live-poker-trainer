@@ -429,7 +429,7 @@ class _BestFiveCardPickerState extends State<BestFiveCardPicker> {
       choices: widget.activity.choices,
     );
     if (mapped != null) {
-      widget.controller.selectChoice(mapped);
+      widget.controller.selectChoice(mapped, autoSubmit: true);
     } else if (widget.controller.draft.choiceId != null) {
       widget.controller.undoDraft();
     }
@@ -498,14 +498,16 @@ class _BestFiveCardPickerState extends State<BestFiveCardPicker> {
         ),
         const SizedBox(height: 12),
         Text(
-          _selected.length == 5
+          widget.controller.submitting
+              ? 'Checking…'
+              : _selected.length == 5
               ? (mapBestFiveSelectionToChoiceId(
                       selected: _selected,
                       spot: spot,
                       choices: widget.activity.choices,
                     ) !=
                     null
-                  ? 'Ready — Check when it looks right.'
+                  ? 'Checking…'
                   : 'Five tapped — try a stronger five.')
               : '${_selected.length}/5 selected — ${spot.hint}',
           textAlign: TextAlign.center,
