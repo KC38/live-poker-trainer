@@ -948,6 +948,22 @@ void main() {
       ).kind,
       CoachDialogueVisualKind.sprDepth,
     );
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-04-06-01-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'Before labels: who enters pots, who calls, who folds. Count samples.',
+          objectives: const ['Tag high participation'],
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.playerObserve,
+    );
     // Generic multiway / river copy without an authored id still resolves correctly.
     expect(
       resolveCoachDialogueVisual(
@@ -1872,6 +1888,52 @@ void main() {
     expect(isTableRegionTapActivity(activity), isTrue);
 
     for (final title in ['SPR', 'LOW', 'HIGH']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
+  testWidgets('player-observe explain taps Enters Calls Folds instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-06-01-explain',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'Before labels: who enters pots, who calls, who folds. Count samples.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'Before labels: who enters pots, who calls, who folds. Count samples.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(PlayerObserveDemo), findsOneWidget);
+    expect(find.text('Tap Enters, Calls, and Folds.'), findsOneWidget);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    for (final title in ['ENTERS', 'CALLS', 'FOLDS']) {
       await tester.tap(find.text(title));
       await tester.pump();
     }
