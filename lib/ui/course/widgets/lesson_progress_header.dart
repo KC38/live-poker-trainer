@@ -9,7 +9,8 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 ///
 /// Duolingo-chess density: one tight row (track + lives + optional streak +
 /// hint). Optional title sits flush underneath only when callers pass it.
-class LessonProgressHeader extends StatelessWidget {
+/// When [livesRemaining] drops, the heart chip pulses once (scale + opacity).
+class LessonProgressHeader extends StatefulWidget {
   /// Creates the header.
   const LessonProgressHeader({
     super.key,
@@ -22,6 +23,9 @@ class LessonProgressHeader extends StatelessWidget {
     this.hintEnabled = false,
   });
 
+  /// Single loss pulse — short enough to feel snappy, not distracting.
+  static const Duration livesLossPulseDuration = Duration(milliseconds: 200);
+
   /// Optional secondary title. Prefer showing the activity prompt once in the
   /// activity body — leave null here to avoid duplicating the question.
   final String? title;
@@ -33,17 +37,69 @@ class LessonProgressHeader extends StatelessWidget {
   final bool hintEnabled;
 
   @override
+  State<LessonProgressHeader> createState() => _LessonProgressHeaderState();
+}
+
+class _LessonProgressHeaderState extends State<LessonProgressHeader>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _livesPulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _livesPulse = AnimationController(
+      vsync: this,
+      duration: LessonProgressHeader.livesLossPulseDuration,
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant LessonProgressHeader oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.livesRemaining < oldWidget.livesRemaining) {
+      _livesPulse.forward(from: 0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _livesPulse.dispose();
+    super.dispose();
+  }
+
+  /// Peak mid-pulse (scale up + slight fade), settle at identity.
+  double get _livesScale {
+    final t = _livesPulse.value;
+    if (t <= 0 || t >= 1) return 1;
+    // 0→0.5 swell to 1.28, 0.5→1 settle back to 1.
+    if (t < 0.5) {
+      return 1 + 0.28 * (t / 0.5);
+    }
+    return 1.28 - 0.28 * ((t - 0.5) / 0.5);
+  }
+
+  double get _livesOpacity {
+    final t = _livesPulse.value;
+    if (t <= 0 || t >= 1) return 1;
+    // Dip slightly at peak, restore by end.
+    if (t < 0.5) {
+      return 1 - 0.35 * (t / 0.5);
+    }
+    return 0.65 + 0.35 * ((t - 0.5) / 0.5);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final hasTitle = title != null && title!.trim().isNotEmpty;
-    final showStreak = acceptedStreak >= 2;
+    final hasTitle = widget.title != null && widget.title!.trim().isNotEmpty;
+    final showStreak = widget.acceptedStreak >= 2;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Semantics(
           label:
-              'Lesson progress ${(progress * 100).round()} percent. '
-              '$livesRemaining of $livesMax lives. '
-              'Accepted streak $acceptedStreak.',
+              'Lesson progress ${(widget.progress * 100).round()} percent. '
+              '${widget.livesRemaining} of ${widget.livesMax} lives. '
+              'Accepted streak ${widget.acceptedStreak}.',
           child: SizedBox(
             height: 28,
             child: Row(
@@ -53,7 +109,7 @@ class LessonProgressHeader extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(999),
                     child: LinearProgressIndicator(
-                      value: progress.clamp(0.0, 1.0),
+                      value: widget.progress.clamp(0.0, 1.0),
                       minHeight: 8,
                       backgroundColor: AppColors.slateDark,
                       color: AppColors.success,
@@ -61,15 +117,32 @@ class LessonProgressHeader extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Icon(Icons.favorite, size: 16, color: AppColors.danger),
-                const SizedBox(width: 3),
-                Text(
-                  '$livesRemaining',
-                  style: GoogleFonts.manrope(
-                    color: AppColors.cream,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 14,
-                    height: 1,
+                AnimatedBuilder(
+                  animation: _livesPulse,
+                  builder: (context, child) {
+                    return Opacity(
+                      opacity: _livesOpacity,
+                      child: Transform.scale(
+                        scale: _livesScale,
+                        child: child,
+                      ),
+                    );
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.favorite, size: 16, color: AppColors.danger),
+                      const SizedBox(width: 3),
+                      Text(
+                        '${widget.livesRemaining}',
+                        style: GoogleFonts.manrope(
+                          color: AppColors.cream,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 14,
+                          height: 1,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 if (showStreak) ...[
@@ -81,7 +154,7 @@ class LessonProgressHeader extends StatelessWidget {
                   ),
                   const SizedBox(width: 2),
                   Text(
-                    '$acceptedStreak',
+                    '${widget.acceptedStreak}',
                     style: GoogleFonts.manrope(
                       color: AppColors.success,
                       fontWeight: FontWeight.w800,
@@ -90,14 +163,14 @@ class LessonProgressHeader extends StatelessWidget {
                     ),
                   ),
                 ],
-                if (onHint != null) ...[
+                if (widget.onHint != null) ...[
                   const SizedBox(width: 2),
                   SizedBox(
                     width: 28,
                     height: 28,
                     child: IconButton(
                       tooltip: 'Hint',
-                      onPressed: hintEnabled ? onHint : null,
+                      onPressed: widget.hintEnabled ? widget.onHint : null,
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints.tightFor(
                         width: 28,
@@ -108,7 +181,7 @@ class LessonProgressHeader extends StatelessWidget {
                         Icons.lightbulb_outline,
                         size: 18,
                         color:
-                            hintEnabled
+                            widget.hintEnabled
                                 ? AppColors.gold
                                 : AppColors.slateDark,
                       ),
@@ -122,7 +195,7 @@ class LessonProgressHeader extends StatelessWidget {
         if (hasTitle) ...[
           const SizedBox(height: 6),
           Text(
-            title!,
+            widget.title!,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: GoogleFonts.manrope(
