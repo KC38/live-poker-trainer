@@ -2347,6 +2347,108 @@ class _SprDepthDemoState extends State<SprDepthDemo> {
   }
 }
 
+/// Enters / calls / folds tiles for player-observe explain demos.
+class PlayerObserveDemo extends StatefulWidget {
+  /// Creates the demo.
+  const PlayerObserveDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'ENTERS', caption: 'Who plays pots', color: AppColors.gold),
+    (label: 'CALLS', caption: 'Who sticks around', color: AppColors.cream),
+    (label: 'FOLDS', caption: 'Who gives up', color: AppColors.danger),
+  ];
+
+  @override
+  State<PlayerObserveDemo> createState() => _PlayerObserveDemoState();
+}
+
+class _PlayerObserveDemoState extends State<PlayerObserveDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= PlayerObserveDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Watch before you label',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < PlayerObserveDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoActionCard(
+                    label: PlayerObserveDemo.points[i].label,
+                    caption: PlayerObserveDemo.points[i].caption,
+                    color: PlayerObserveDemo.points[i].color,
+                    selected: _tapped.contains(
+                      PlayerObserveDemo.points[i].label,
+                    ),
+                    enabled: widget.interactive && widget.enabled,
+                    onPressed:
+                        widget.interactive
+                            ? () => _onTap(PlayerObserveDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? 'Tap Enters, Calls, and Folds'
+                : 'Count samples before you tag',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
 
 class _DemoActionCard extends StatelessWidget {
   const _DemoActionCard({
