@@ -18,6 +18,7 @@ import 'package:live_poker_trainer/services/firestore/course_service.dart';
 import 'package:live_poker_trainer/ui/course/activity_registry.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_progress_header.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
@@ -740,9 +741,10 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                     );
                   }
                   final canSubmit = _canSubmit && !_completing;
-                  final tableTap = isTableRegionTapActivity(activity);
-                  if (tableTap) {
-                    // Teach-by-doing: region taps auto-submit — no Check dock.
+                  final autoSubmit = isAutoSubmitSelectIdentify(activity) ||
+                      isTableRegionTapActivity(activity);
+                  if (autoSubmit) {
+                    // Teach-by-doing: taps auto-submit — no Check dock.
                     if (controller.submitting) {
                       return const Padding(
                         padding: EdgeInsets.symmetric(vertical: 10),

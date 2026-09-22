@@ -55,7 +55,10 @@ class CoachDialogueActivity extends StatelessWidget {
             onRegionTap:
                 locked ||
                         (visual.kind != CoachDialogueVisualKind.holeCards &&
-                            visual.kind != CoachDialogueVisualKind.dealerButton)
+                            visual.kind !=
+                                CoachDialogueVisualKind.dealerButton &&
+                            visual.kind !=
+                                CoachDialogueVisualKind.positionLabels)
                     ? null
                     : (target) {
                       if (visual.kind == CoachDialogueVisualKind.holeCards &&
@@ -63,6 +66,10 @@ class CoachDialogueActivity extends StatelessWidget {
                         onFeltAcknowledge?.call();
                       } else if (visual.kind ==
                               CoachDialogueVisualKind.dealerButton &&
+                          target.region == LessonTableRegion.button) {
+                        onFeltAcknowledge?.call();
+                      } else if (visual.kind ==
+                              CoachDialogueVisualKind.positionLabels &&
                           target.region == LessonTableRegion.button) {
                         onFeltAcknowledge?.call();
                       }
@@ -144,7 +151,7 @@ class CoachDialogueVisual {
     CoachDialogueVisualKind.dealerButton =>
       'Tap the dealer button on the table.',
     CoachDialogueVisualKind.positionLabels =>
-      'Tap Continue when later seats feel like the edge.',
+      'Tap the button (BTN) — the latest seat.',
     CoachDialogueVisualKind.handLadder =>
       'Tap Continue when the ladder from high card to flush clicks.',
     CoachDialogueVisualKind.bestFive =>
@@ -166,7 +173,8 @@ class CoachDialogueVisual {
   bool get requiresFeltTap =>
       (kind == CoachDialogueVisualKind.holeCards && useTable) ||
       kind == CoachDialogueVisualKind.suitsRanks ||
-      kind == CoachDialogueVisualKind.dealerButton;
+      kind == CoachDialogueVisualKind.dealerButton ||
+      kind == CoachDialogueVisualKind.positionLabels;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -363,7 +371,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           showSoftPulse: showSoftPulse,
           onRegionTap: onRegionTap,
         ),
-        CoachDialogueVisualKind.positionLabels => const _PositionLabelsDemo(),
+        CoachDialogueVisualKind.positionLabels => _PositionLabelsDemo(
+          enabled: enabled,
+          showSoftPulse: showSoftPulse,
+          onRegionTap: onRegionTap,
+        ),
         CoachDialogueVisualKind.handLadder => const HandRankLadderDemo(),
         CoachDialogueVisualKind.bestFive => const BestFiveDemo(),
         CoachDialogueVisualKind.passiveActions => const PassiveActionsDemo(),
@@ -572,18 +584,29 @@ class _DealerButtonDemo extends StatelessWidget {
 }
 
 class _PositionLabelsDemo extends StatelessWidget {
-  const _PositionLabelsDemo();
+  const _PositionLabelsDemo({
+    this.enabled = false,
+    this.showSoftPulse = false,
+    this.onRegionTap,
+  });
+
+  final bool enabled;
+  final bool showSoftPulse;
+  final ValueChanged<LessonTableTapTarget>? onRegionTap;
 
   @override
   Widget build(BuildContext context) {
-    return const LessonTableContext(
-      scene: LessonTableScene(
+    return LessonTableContext(
+      scene: const LessonTableScene(
         layout: LessonTableLayout.positionLabels,
         highlight: LessonTableHighlight.button,
         seatCount: 6,
         buttonSeat: 3,
         caption: 'Later seats see more action',
       ),
+      enabled: enabled,
+      showSoftPulse: showSoftPulse,
+      onRegionTap: onRegionTap,
     );
   }
 }

@@ -746,22 +746,33 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
       selected: _selected,
       choices: widget.activity.choices,
     );
-    if (mapped != null) {
-      widget.controller.selectChoice(mapped);
+    if (mapped == null) {
+      if (widget.controller.draft.choiceId != null) {
+        widget.controller.undoDraft();
+      }
       return;
     }
-    if (widget.controller.draft.choiceId != null) {
-      widget.controller.undoDraft();
-    }
+    // Auto-submit only once all four real suits are in — never on a
+    // partial "missing" set that still needs another tap.
+    final hasAllReal = _selected.containsAll(const {
+      LessonSuitToken.hearts,
+      LessonSuitToken.diamonds,
+      LessonSuitToken.clubs,
+      LessonSuitToken.spades,
+    });
+    widget.controller.selectChoice(mapped, autoSubmit: hasAllReal);
   }
 
   String _statusLine() {
+    if (widget.controller.submitting) return 'Checking…';
     if (_selected.isEmpty) return 'Tap suits to build your answer.';
-    final mapped = mapSuitTapSelectionToChoiceId(
-      selected: _selected,
-      choices: widget.activity.choices,
-    );
-    if (mapped != null) return 'Ready — Check when it looks right.';
+    final hasAllReal = _selected.containsAll(const {
+      LessonSuitToken.hearts,
+      LessonSuitToken.diamonds,
+      LessonSuitToken.clubs,
+      LessonSuitToken.spades,
+    });
+    if (hasAllReal) return 'Checking…';
     return 'Keep tapping — include every real suit.';
   }
 
