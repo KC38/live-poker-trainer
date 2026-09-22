@@ -1298,6 +1298,117 @@ class _OutsPriceDemoState extends State<OutsPriceDemo> {
 }
 
 
+/// Explain-step demo: flop line menu (value through raise) — one plan.
+class FlopLinesDemo extends StatefulWidget {
+  /// Creates the demo.
+  const FlopLinesDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllLinesTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllLinesTapped;
+
+  static const lines = <({String label, String caption, Color color})>[
+    (label: 'VALUE', caption: 'Get paid', color: AppColors.gold),
+    (label: 'C-BET', caption: 'Continue story', color: AppColors.cream),
+    (label: 'CHECK', caption: 'Check back', color: AppColors.slate),
+    (label: 'CALL', caption: 'Realize equity', color: AppColors.cream),
+    (label: 'FOLD', caption: 'Give up', color: AppColors.danger),
+    (label: 'RAISE', caption: 'Apply pressure', color: AppColors.gold),
+  ];
+
+  @override
+  State<FlopLinesDemo> createState() => _FlopLinesDemoState();
+}
+
+class _FlopLinesDemoState extends State<FlopLinesDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllLinesTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= FlopLinesDemo.lines.length) {
+      widget.onAllLinesTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Flop lines — pick one plan',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          for (var row = 0; row < 2; row++) ...[
+            if (row > 0) const SizedBox(height: 8),
+            Row(
+              children: [
+                for (var col = 0; col < 3; col++) ...[
+                  if (col > 0) const SizedBox(width: 8),
+                  Expanded(
+                    child: _DemoActionCard(
+                      label: FlopLinesDemo.lines[row * 3 + col].label,
+                      caption: FlopLinesDemo.lines[row * 3 + col].caption,
+                      color: FlopLinesDemo.lines[row * 3 + col].color,
+                      selected: _tapped.contains(
+                        FlopLinesDemo.lines[row * 3 + col].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(
+                                FlopLinesDemo.lines[row * 3 + col].label,
+                              )
+                              : null,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ],
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? 'Tap each flop line once'
+                : 'Value · c-bet · check · call · fold · raise',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
+
 class _DemoActionCard extends StatelessWidget {
   const _DemoActionCard({
     required this.label,
