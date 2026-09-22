@@ -253,6 +253,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.lineStories
                     ? null
                     : onFeltAcknowledge,
+            onRangeRewriteAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.rangeRewrite
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -433,6 +437,9 @@ enum CoachDialogueVisualKind {
 
   /// Lines mean ranges: check-raise, probe, delay, donk.
   lineStories,
+
+  /// Each action rewrites the range — keep updating.
+  rangeRewrite,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -545,6 +552,8 @@ class CoachDialogueVisual {
       'Tap Thin, Catch, and Barrels.',
     CoachDialogueVisualKind.lineStories =>
       'Tap X/R, Probe, Delay, and Donk.',
+    CoachDialogueVisualKind.rangeRewrite =>
+      'Tap Action, Rewrite, and Update.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -596,7 +605,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.deepStacks ||
       kind == CoachDialogueVisualKind.impliedOdds ||
       kind == CoachDialogueVisualKind.thinValue ||
-      kind == CoachDialogueVisualKind.lineStories;
+      kind == CoachDialogueVisualKind.lineStories ||
+      kind == CoachDialogueVisualKind.rangeRewrite;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -695,6 +705,8 @@ class CoachDialogueVisual {
       'Thin-value tiles: thin value, bluff-catch, wide barrels',
     CoachDialogueVisualKind.lineStories =>
       'Line tiles: check-raise, probe, delay, donk',
+    CoachDialogueVisualKind.rangeRewrite =>
+      'Range-rewrite tiles: action, rewrite, keep updating',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -861,6 +873,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-05-05-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.lineStories,
+      );
+    case 'act-05-06-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.rangeRewrite,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1280,6 +1296,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.lineStories,
     );
   }
+  if (blob.contains('rewrites the range') ||
+      blob.contains('keep updating') ||
+      blob.contains('after each street') ||
+      (blob.contains('each action') && blob.contains('range'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.rangeRewrite,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -1349,6 +1373,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onImpliedOddsAcknowledge,
     this.onThinValueAcknowledge,
     this.onLineStoriesAcknowledge,
+    this.onRangeRewriteAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1399,6 +1424,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onImpliedOddsAcknowledge;
   final VoidCallback? onThinValueAcknowledge;
   final VoidCallback? onLineStoriesAcknowledge;
+  final VoidCallback? onRangeRewriteAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1641,6 +1667,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onLineStoriesAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onLineStoriesAcknowledge,
+        ),
+        CoachDialogueVisualKind.rangeRewrite => RangeRewriteDemo(
+          interactive: onRangeRewriteAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onRangeRewriteAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
