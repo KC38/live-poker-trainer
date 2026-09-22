@@ -769,14 +769,14 @@ class LessonTableContext extends StatelessWidget {
       label: semanticsLabel,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
+        padding: const EdgeInsets.fromLTRB(10, 10, 10, 8),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [AppColors.feltLight, AppColors.feltDark],
           ),
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: AppColors.feltBorder.withValues(alpha: 0.85),
           ),
@@ -851,7 +851,7 @@ class LessonTableContext extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [for (final s in topRow) seatChip(s)],
             ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           Text(
             scene.caption ??
                 (scene.numberSeats
@@ -864,7 +864,7 @@ class LessonTableContext extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [for (final s in bottomRow) seatChip(s)],
@@ -940,7 +940,7 @@ class LessonTableContext extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [for (final s in topRow) seatChip(s)],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 6),
           Text(
             scene.caption ?? 'EP · HJ · CO · BTN · SB · BB',
             textAlign: TextAlign.center,
@@ -950,13 +950,13 @@ class LessonTableContext extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 6),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [for (final s in bottomRow) seatChip(s)],
           ),
           if (scene.showSeatNeverMatters) ...[
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
             _TappableRegion(
               label: 'Seat never matters',
               selected: selectedRegion == LessonTableRegion.seatNeverMatters,
@@ -970,7 +970,7 @@ class LessonTableContext extends StatelessWidget {
                       )
                   : null,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                 child: Text(
                   'Seat never matters',
                   textAlign: TextAlign.center,
@@ -1006,11 +1006,11 @@ class LessonTableContext extends StatelessWidget {
                   ? () => onRegionTap!(LessonTableTapTarget(region))
                   : null,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
+            padding: const EdgeInsets.fromLTRB(6, 8, 6, 8),
             child: Column(
               children: [
                 visual,
-                const SizedBox(height: 8),
+                const SizedBox(height: 6),
                 Text(
                   title,
                   textAlign: TextAlign.center,
@@ -1020,7 +1020,7 @@ class LessonTableContext extends StatelessWidget {
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 2),
                 Text(
                   detail,
                   textAlign: TextAlign.center,
@@ -1051,7 +1051,7 @@ class LessonTableContext extends StatelessWidget {
             detail: 'Blinds in',
             visual: const _BlindChipStack(amount: 2),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 6),
           phase(
             region: LessonTableRegion.afterFlop,
             title: 'After flop',
@@ -1069,7 +1069,7 @@ class LessonTableContext extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 6),
           phase(
             region: LessonTableRegion.showdown,
             title: 'Showdown',
@@ -1106,11 +1106,11 @@ class LessonTableContext extends StatelessWidget {
                   ? () => onRegionTap!(LessonTableTapTarget(region))
                   : null,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
+            padding: const EdgeInsets.fromLTRB(6, 8, 6, 8),
             child: Column(
               children: [
                 visual,
-                const SizedBox(height: 8),
+                const SizedBox(height: 6),
                 Text(
                   title,
                   textAlign: TextAlign.center,
@@ -1120,7 +1120,7 @@ class LessonTableContext extends StatelessWidget {
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 2),
                 Text(
                   detail,
                   textAlign: TextAlign.center,
@@ -1151,7 +1151,7 @@ class LessonTableContext extends StatelessWidget {
             detail: 'Action equal',
             visual: const _BlindChipStack(amount: 3),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 6),
           phase(
             region: LessonTableRegion.streetFlopDealt,
             title: 'Flop appears',
@@ -1169,7 +1169,7 @@ class LessonTableContext extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 6),
           phase(
             region: LessonTableRegion.streetSomeoneFolds,
             title: 'Someone folds',
@@ -1177,7 +1177,7 @@ class LessonTableContext extends StatelessWidget {
             visual: const Icon(
               Icons.person_off_outlined,
               color: AppColors.slate,
-              size: 28,
+              size: 24,
             ),
           ),
         ],
@@ -1198,7 +1198,7 @@ class LessonTableContext extends StatelessWidget {
           visual: const Icon(
             Icons.savings_outlined,
             color: AppColors.gold,
-            size: 28,
+            size: 24,
           ),
         ),
         (
@@ -1225,7 +1225,7 @@ class LessonTableContext extends StatelessWidget {
           visual: const Icon(
             Icons.visibility_outlined,
             color: AppColors.slate,
-            size: 28,
+            size: 24,
           ),
         ),
       ],
@@ -1262,7 +1262,7 @@ class LessonTableContext extends StatelessWidget {
           visual: const Icon(
             Icons.gavel_outlined,
             color: AppColors.slate,
-            size: 28,
+            size: 24,
           ),
         ),
         (
@@ -1272,7 +1272,7 @@ class LessonTableContext extends StatelessWidget {
           visual: const Icon(
             Icons.call_split,
             color: AppColors.slate,
-            size: 28,
+            size: 24,
           ),
         ),
       ],
@@ -1305,7 +1305,7 @@ class LessonTableContext extends StatelessWidget {
           visual: const Icon(
             Icons.all_inclusive,
             color: AppColors.slate,
-            size: 28,
+            size: 24,
           ),
         ),
         (
@@ -1315,7 +1315,7 @@ class LessonTableContext extends StatelessWidget {
           visual: const Icon(
             Icons.block,
             color: AppColors.slate,
-            size: 28,
+            size: 24,
           ),
         ),
       ],
@@ -1381,11 +1381,11 @@ class LessonTableContext extends StatelessWidget {
                   ? () => onRegionTap!(LessonTableTapTarget(region))
                   : null,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(6, 10, 6, 10),
+            padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
             child: Column(
               children: [
                 visual,
-                const SizedBox(height: 8),
+                const SizedBox(height: 6),
                 Text(
                   title,
                   textAlign: TextAlign.center,
@@ -1395,7 +1395,7 @@ class LessonTableContext extends StatelessWidget {
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 2),
                 Text(
                   detail,
                   textAlign: TextAlign.center,
@@ -1425,12 +1425,12 @@ class LessonTableContext extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 6),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               for (var i = 0; i < phases.length; i++) ...[
-                if (i > 0) const SizedBox(width: 8),
+                if (i > 0) const SizedBox(width: 6),
                 phase(
                   region: phases[i].region,
                   title: phases[i].title,
@@ -1501,7 +1501,7 @@ class LessonTableContext extends StatelessWidget {
                   ),
               ],
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 8),
           ],
           if (board.isNotEmpty) ...[
             _TappableRegion(
@@ -1517,22 +1517,22 @@ class LessonTableContext extends StatelessWidget {
                       : null,
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 8,
+                  horizontal: 8,
+                  vertical: 6,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     for (var i = 0; i < board.length; i++) ...[
-                      if (i > 0) const SizedBox(width: 6),
+                      if (i > 0) const SizedBox(width: 4),
                       MiniCard(card: board[i], size: MiniCardSize.small),
                     ],
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 8),
           ],
           _TappableRegion(
             label: 'Your hole cards ${hero.map((c) => c.display).join(' ')}',
@@ -1546,7 +1546,7 @@ class LessonTableContext extends StatelessWidget {
                     )
                     : null,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
               child: Column(
                 children: [
                   Text(
@@ -1558,13 +1558,13 @@ class LessonTableContext extends StatelessWidget {
                       letterSpacing: 0.8,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       for (var i = 0; i < hero.length; i++) ...[
-                        if (i > 0) const SizedBox(width: 8),
+                        if (i > 0) const SizedBox(width: 6),
                         MiniCard(card: hero[i], size: MiniCardSize.hero),
                       ],
                     ],
@@ -1574,7 +1574,7 @@ class LessonTableContext extends StatelessWidget {
             ),
           ),
           if (scene.showMuck) ...[
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
             _TappableRegion(
               label: 'Muck pile',
               selected: selectedRegion == LessonTableRegion.muck,
@@ -1699,7 +1699,7 @@ class _TappableRegionState extends State<_TappableRegion>
           curve: Curves.easeOut,
           decoration: BoxDecoration(
             color: fill,
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: border.withValues(
                 alpha: widget.selected ? 1 : (widget.highlighted ? glow : 0),
@@ -1732,7 +1732,7 @@ class _TappableRegionState extends State<_TappableRegion>
         color: Colors.transparent,
         child: InkWell(
           onTap: widget.enabled ? widget.onTap : null,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(12),
           child: framed,
         ),
       ),
@@ -1794,18 +1794,18 @@ class _PositionSeatChip extends StatelessWidget {
       enabled: enabled,
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 10, 10, 8),
+        padding: const EdgeInsets.fromLTRB(8, 6, 8, 6),
         child: Column(
           children: [
             Text(
               _code,
               style: GoogleFonts.manrope(
                 color: AppColors.gold,
-                fontSize: 16,
+                fontSize: 15,
                 fontWeight: FontWeight.w800,
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 2),
             Text(
               _subtitle,
               style: GoogleFonts.manrope(
@@ -1869,7 +1869,7 @@ class _BlindsSeatChip extends StatelessWidget {
       enabled: enabled,
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+        padding: const EdgeInsets.fromLTRB(6, 6, 6, 6),
         child: Column(
           children: [
             Text(
@@ -1880,7 +1880,7 @@ class _BlindsSeatChip extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
             switch (role) {
               LessonTableRegion.button => const _DealerChipBadge(),
               LessonTableRegion.smallBlind => const _BlindChipStack(amount: 1),
@@ -1916,8 +1916,8 @@ class _DealerChipBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 36,
-      height: 36,
+      width: 32,
+      height: 32,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -1944,8 +1944,8 @@ class _BlindChipStack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 36,
-      width: 40,
+      height: 32,
+      width: 36,
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -2013,8 +2013,8 @@ class _EmptySeatMark extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 36,
-      height: 36,
+      width: 32,
+      height: 32,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -2093,7 +2093,7 @@ class _MuckPile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
