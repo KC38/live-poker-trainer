@@ -880,6 +880,9 @@ String _stageWire(ActivityStage stage) {
 }
 
 /// Sticky Continue / Try again actions so feedback CTAs never sit under the fold.
+///
+/// Grade color lives on [LessonFeedbackSheet]; the dock always uses gold so the
+/// next-step affordance reads as brand Continue (not a second grade badge).
 class _FeedbackFooter extends StatelessWidget {
   const _FeedbackFooter({
     required this.result,
@@ -897,16 +900,18 @@ class _FeedbackFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     final largeText = MediaQuery.textScalerOf(context).scale(1) > 1.15;
     final accepted = result.accepted;
-    final accent =
-        accepted
-            ? AppColors.success
-            : result.grade == SoftGrade.questionable
-            ? AppColors.warning
-            : AppColors.danger;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Row(
+    final continueLabel = accepted ? 'Continue' : 'Got it';
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: AppColors.slateDark.withValues(alpha: 0.85),
+          ),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: Row(
           children: [
             if (onRetry != null && !accepted) ...[
               Expanded(
@@ -918,42 +923,45 @@ class _FeedbackFooter extends StatelessWidget {
               const SizedBox(width: 10),
             ],
             Expanded(
-              flex: onRetry != null && !accepted ? 1 : 1,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: largeText ? 54 : 52),
-                child: FilledButton(
-                  onPressed: completing ? null : onContinue,
-                  style: FilledButton.styleFrom(
-                    backgroundColor: accent,
-                    foregroundColor: AppColors.bgDark,
-                    disabledBackgroundColor: AppColors.slateDark,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+              child: Semantics(
+                button: true,
+                label: continueLabel,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: largeText ? 54 : 52),
+                  child: FilledButton(
+                    onPressed: completing ? null : onContinue,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: AppColors.gold,
+                      foregroundColor: AppColors.bgDark,
+                      disabledBackgroundColor: AppColors.slateDark,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
+                    child:
+                        completing
+                            ? const SizedBox(
+                              width: 22,
+                              height: 22,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.4,
+                                color: AppColors.bgDark,
+                              ),
+                            )
+                            : Text(
+                              continueLabel,
+                              style: GoogleFonts.manrope(
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 0.4,
+                              ),
+                            ),
                   ),
-                  child:
-                      completing
-                          ? const SizedBox(
-                            width: 22,
-                            height: 22,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2.4,
-                              color: AppColors.bgDark,
-                            ),
-                          )
-                          : Text(
-                            accepted ? 'Continue' : 'Got it',
-                            style: GoogleFonts.manrope(
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0.4,
-                            ),
-                          ),
                 ),
               ),
             ),
           ],
         ),
-      ],
+      ),
     );
   }
 }
