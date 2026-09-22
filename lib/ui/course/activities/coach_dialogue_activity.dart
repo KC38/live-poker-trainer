@@ -46,7 +46,7 @@ class CoachDialogueActivity extends StatelessWidget {
       children: [
         RexCoachLine.fromActivity(activity),
         if (visual.kind != CoachDialogueVisualKind.none) ...[
-          const SizedBox(height: 20),
+          const SizedBox(height: 12),
           _CoachDialogueVisualPane(
             visual: visual,
             enabled: !locked && visual.requiresFeltTap,
@@ -110,7 +110,7 @@ class CoachDialogueActivity extends StatelessWidget {
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
-          const SizedBox(height: 14),
+          const SizedBox(height: 10),
           _TapHint(text: visual.continueHint),
         ],
       ],

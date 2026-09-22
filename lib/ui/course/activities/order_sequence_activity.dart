@@ -95,7 +95,7 @@ class OrderSequenceActivity extends StatelessWidget {
                 ),
               ),
             ],
-            const SizedBox(height: 14),
+            const SizedBox(height: 10),
             if (_handMode) ...[
               Text(
                 ordered.isEmpty ? 'Your order (empty)' : 'Your order',
