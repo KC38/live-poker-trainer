@@ -469,10 +469,10 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
 
   Future<void> _completeLesson() async {
     final attempt = _attempt;
-    final catalog = ref.read(courseCatalogProvider).asData?.value;
-    if (attempt == null || catalog == null || _completing) return;
+    if (attempt == null || _completing) return;
     setState(() => _completing = true);
     try {
+      final catalog = await ref.read(courseCatalogProvider.future);
       final complete = await _service
           .completeLesson(
             attemptId: attempt.attemptId,
@@ -927,13 +927,23 @@ class _FeedbackFooter extends StatelessWidget {
                       borderRadius: BorderRadius.circular(14),
                     ),
                   ),
-                  child: Text(
-                    accepted ? 'Continue' : 'Got it',
-                    style: GoogleFonts.manrope(
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.4,
-                    ),
-                  ),
+                  child:
+                      completing
+                          ? const SizedBox(
+                            width: 22,
+                            height: 22,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.4,
+                              color: AppColors.bgDark,
+                            ),
+                          )
+                          : Text(
+                            accepted ? 'Continue' : 'Got it',
+                            style: GoogleFonts.manrope(
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 0.4,
+                            ),
+                          ),
                 ),
               ),
             ),
