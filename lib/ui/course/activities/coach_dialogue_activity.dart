@@ -167,6 +167,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.commonLeaks
                     ? null
                     : onFeltAcknowledge,
+            onRangeUpdateAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.rangeUpdate
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -284,6 +288,9 @@ enum CoachDialogueVisualKind {
 
   /// Common live leaks: top pair, prices, passive, crowds.
   commonLeaks,
+
+  /// Ranges not one hand — then update with each action.
+  rangeUpdate,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -354,6 +361,8 @@ class CoachDialogueVisual {
       'Tap Stronger, Fewer, and Nuts.',
     CoachDialogueVisualKind.commonLeaks =>
       'Tap each common leak once.',
+    CoachDialogueVisualKind.rangeUpdate =>
+      'Tap One Hand, Range, and Update.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -384,7 +393,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.turnStory ||
       kind == CoachDialogueVisualKind.riverBinary ||
       kind == CoachDialogueVisualKind.multiwayPlan ||
-      kind == CoachDialogueVisualKind.commonLeaks;
+      kind == CoachDialogueVisualKind.commonLeaks ||
+      kind == CoachDialogueVisualKind.rangeUpdate;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -441,6 +451,8 @@ class CoachDialogueVisual {
       'Multiway tiles: stronger value, fewer bluffs, nuts',
     CoachDialogueVisualKind.commonLeaks =>
       'Leak tiles: top pair, bad prices, passive, crowds',
+    CoachDialogueVisualKind.rangeUpdate =>
+      'Range tiles: one hand, range, update',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -523,6 +535,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-03-08-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.commonLeaks,
+      );
+    case 'act-04-01-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.rangeUpdate,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -760,6 +776,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.commonLeaks,
     );
   }
+  if (blob.contains('never know one hand') ||
+      blob.contains('know a range') ||
+      blob.contains('then update it') ||
+      (blob.contains('one hand') && blob.contains('range'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.rangeUpdate,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -808,6 +832,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onRiverBinaryAcknowledge,
     this.onMultiwayAcknowledge,
     this.onCommonLeaksAcknowledge,
+    this.onRangeUpdateAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -837,6 +862,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onRiverBinaryAcknowledge;
   final VoidCallback? onMultiwayAcknowledge;
   final VoidCallback? onCommonLeaksAcknowledge;
+  final VoidCallback? onRangeUpdateAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -973,6 +999,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onCommonLeaksAcknowledge != null,
           enabled: enabled,
           onAllLeaksTapped: onCommonLeaksAcknowledge,
+        ),
+        CoachDialogueVisualKind.rangeUpdate => RangeUpdateDemo(
+          interactive: onRangeUpdateAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onRangeUpdateAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },

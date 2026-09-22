@@ -1839,6 +1839,107 @@ class _CommonLeaksDemoState extends State<CommonLeaksDemo> {
 }
 
 
+/// Explain-step demo: think in ranges, then update — not one hand.
+class RangeUpdateDemo extends StatefulWidget {
+  /// Creates the demo.
+  const RangeUpdateDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'ONE HAND', caption: 'You never know it', color: AppColors.danger),
+    (label: 'RANGE', caption: 'What they can have', color: AppColors.gold),
+    (label: 'UPDATE', caption: 'Each action revises', color: AppColors.cream),
+  ];
+
+  @override
+  State<RangeUpdateDemo> createState() => _RangeUpdateDemoState();
+}
+
+class _RangeUpdateDemoState extends State<RangeUpdateDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= RangeUpdateDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Ranges, not one hand',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < RangeUpdateDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoActionCard(
+                    label: RangeUpdateDemo.points[i].label,
+                    caption: RangeUpdateDemo.points[i].caption,
+                    color: RangeUpdateDemo.points[i].color,
+                    selected: _tapped.contains(RangeUpdateDemo.points[i].label),
+                    enabled: widget.interactive && widget.enabled,
+                    onPressed:
+                        widget.interactive
+                            ? () => _onTap(RangeUpdateDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? 'Tap One Hand, Range, and Update'
+                : 'Never one hand · know a range · then update',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
+
 class _DemoActionCard extends StatelessWidget {
   const _DemoActionCard({
     required this.label,
