@@ -722,6 +722,21 @@ void main() {
     expect(
       resolveCoachDialogueVisual(
         CourseActivity(
+          id: 'act-03-01-01-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'Before cards, read pot, stacks, button, and who acts. Words count live.',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.tableRead,
+    );
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
           id: 'act-generic-explain',
           order: 1,
           stage: ActivityStage.explain,
@@ -1059,6 +1074,56 @@ void main() {
     expect(isTableRegionTapActivity(activity), isTrue);
 
     for (final title in ['NINE', 'SAME', 'POSITION']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
+
+  testWidgets('table-read explain taps Pot Stacks Button Who Acts instead of Continue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-01-01-explain',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'Before cards, read pot, stacks, button, and who acts. Words count live.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'Before cards, read pot, stacks, button, and who acts. Words count live.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(TableReadDemo), findsOneWidget);
+    expect(
+      find.text('Tap Pot, Stacks, Button, and Who Acts.'),
+      findsOneWidget,
+    );
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    for (final title in ['POT', 'STACKS', 'BUTTON', 'WHO ACTS']) {
       await tester.tap(find.text(title));
       await tester.pump();
     }
