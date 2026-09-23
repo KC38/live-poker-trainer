@@ -9,6 +9,7 @@ import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/guardrails_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/range_advantage_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -270,6 +271,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.guardrails
                     ? null
                     : onFeltAcknowledge,
+            onRangeAdvantageAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.rangeAdvantage
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -462,6 +467,9 @@ enum CoachDialogueVisualKind {
 
   /// Winning includes knowing when to quit — guardrails first.
   guardrails,
+
+  /// Range advantage vs nut advantage — strong hands overall vs the nuts.
+  rangeAdvantage,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -582,6 +590,8 @@ class CoachDialogueVisual {
       'Tap Stuck, Tilted, and Gears.',
     CoachDialogueVisualKind.guardrails =>
       'Tap Quit, Guard, and First.',
+    CoachDialogueVisualKind.rangeAdvantage =>
+      'Tap Range, Nut, and Advantage.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -637,7 +647,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.rangeRewrite ||
       kind == CoachDialogueVisualKind.timingClues ||
       kind == CoachDialogueVisualKind.tablesChange ||
-      kind == CoachDialogueVisualKind.guardrails;
+      kind == CoachDialogueVisualKind.guardrails ||
+      kind == CoachDialogueVisualKind.rangeAdvantage;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -744,6 +755,8 @@ class CoachDialogueVisual {
       'Tables-change tiles: stuck, tilted, shifting gears',
     CoachDialogueVisualKind.guardrails =>
       'Guardrails tiles: quit, guard, first',
+    CoachDialogueVisualKind.rangeAdvantage =>
+      'Range-advantage tiles: range, nut, advantage',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -926,6 +939,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-05-09-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.guardrails,
+      );
+    case 'act-06-01-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.rangeAdvantage,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1378,6 +1395,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.guardrails,
     );
   }
+  // Phrase-safe range/nut advantage — never bare "range" alone.
+  if (blob.contains('range advantage') ||
+      blob.contains('nut advantage') ||
+      (blob.contains('strong hands overall') && blob.contains('nuts'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.rangeAdvantage,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -1451,6 +1476,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onTimingCluesAcknowledge,
     this.onTablesChangeAcknowledge,
     this.onGuardrailsAcknowledge,
+    this.onRangeAdvantageAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1505,6 +1531,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onTimingCluesAcknowledge;
   final VoidCallback? onTablesChangeAcknowledge;
   final VoidCallback? onGuardrailsAcknowledge;
+  final VoidCallback? onRangeAdvantageAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1767,6 +1794,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onGuardrailsAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onGuardrailsAcknowledge,
+        ),
+        CoachDialogueVisualKind.rangeAdvantage => RangeAdvantageDemo(
+          interactive: onRangeAdvantageAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onRangeAdvantageAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
