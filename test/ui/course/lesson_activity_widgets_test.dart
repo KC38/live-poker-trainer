@@ -3283,6 +3283,8 @@ void main() {
     );
     expect(find.byType(RangeAdvantageDemo), findsOneWidget);
     expect(find.text('Tap Range, Nut, and Advantage.'), findsOneWidget);
+    expect(find.text('Tap Range, Nut, and Advantage'), findsNothing);
+    expect(find.text('More strong hands overall'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
@@ -11161,6 +11163,149 @@ void main() {
     await tester.tap(find.text('Honor stop'));
     await tester.pump();
     expect(controller.draft.choiceId, 'stop');
+    controller.dispose();
+  });
+
+  testWidgets('s6 range-nut guided taps Preflop raiser on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-01-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Preflop raiser.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'PFR on A-high dry flop. Who often has range advantage?',
+      choices: const [
+        CourseChoice(id: 'pfr', label: 'Preflop raiser'),
+        CourseChoice(id: 'caller', label: 'Flatting BB'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('A-high dry flop — tap Preflop raiser.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Preflop raiser'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'pfr');
+    controller.dispose();
+  });
+
+  testWidgets('s6 range-nut scaffolded taps Wide caller on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-01-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Often the wider caller has more trips/fulls.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Paired board. Caller defends wide. Who may have nut advantage?',
+      choices: const [
+        CourseChoice(id: 'caller-nuts', label: 'Wide caller'),
+        CourseChoice(id: 'pfr-always', label: 'PFR always'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Paired board — tap Wide caller.'), findsOneWidget);
+    await tester.tap(find.text('Wide caller'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'caller-nuts');
+    controller.dispose();
+  });
+
+  testWidgets('s6 range-nut unguided docks C-bet on K72r', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-01-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'C-bet with advantage.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'You are PFR on K72r. Action with range+nut lean?',
+      choices: const [
+        CourseChoice(id: 'cbet', label: 'C-bet 6', action: 'BET', amountBb: 6),
+        CourseChoice(id: 'check', label: 'Check', action: 'CHECK'),
+        CourseChoice(id: 'jam', label: 'Jam', action: 'RAISE', amountBb: 200),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('PFR on K72r — tap C-bet 6.'), findsOneWidget);
+    expect(find.text('C-BET 6'), findsOneWidget);
+    await tester.tap(find.text('C-BET 6'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'cbet');
+    controller.dispose();
+  });
+
+  testWidgets('s6 range-nut checkpoint taps Apply pressure on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-01-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Apply pressure selectively.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Advantage is a reason to?',
+      choices: const [
+        CourseChoice(id: 'press', label: 'Apply pressure'),
+        CourseChoice(id: 'random', label: 'Bet any two'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Advantage — tap Apply pressure.'), findsOneWidget);
+    await tester.tap(find.text('Apply pressure'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'press');
     controller.dispose();
   });
 

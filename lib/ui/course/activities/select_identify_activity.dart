@@ -448,6 +448,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Instant shove — tap Soft evidence.',
       'act-05-09-02-cp-stop' =>
           'Hit stop-loss — tap Honor stop.',
+      'act-06-01-01-guided' =>
+          'A-high dry flop — tap Preflop raiser.',
+      'act-06-01-01-scaffolded' =>
+          'Paired board — tap Wide caller.',
+      'act-06-01-01-checkpoint' =>
+          'Advantage — tap Apply pressure.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -525,7 +531,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-05-09-01-checkpoint' ||
             widget.activity.id == 'act-05-09-02-cp-multi' ||
             widget.activity.id == 'act-05-09-02-cp-tell' ||
-            widget.activity.id == 'act-05-09-02-cp-stop';
+            widget.activity.id == 'act-05-09-02-cp-stop' ||
+            widget.activity.id == 'act-06-01-01-guided' ||
+            widget.activity.id == 'act-06-01-01-scaffolded' ||
+            widget.activity.id == 'act-06-01-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

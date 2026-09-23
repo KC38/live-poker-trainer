@@ -508,6 +508,24 @@ enum LessonTableRegion {
 
   /// S5 exit stop: chase after stop-loss (mistake).
   s5CpChase,
+
+  /// Range/nut guided: preflop raiser (correct).
+  rangeAdvPfr,
+
+  /// Range/nut guided: flatting BB (mistake).
+  rangeAdvCaller,
+
+  /// Range/nut scaffolded: wide caller nuts (correct).
+  rangeAdvWideCaller,
+
+  /// Range/nut scaffolded: PFR always nuts (mistake).
+  rangeAdvPfrAlways,
+
+  /// Range/nut checkpoint: apply pressure (correct).
+  rangeAdvPress,
+
+  /// Range/nut checkpoint: bet any two (mistake).
+  rangeAdvBetAnyTwo,
 }
 
 /// How the mini-table is arranged.
@@ -718,6 +736,15 @@ enum LessonTableLayout {
 
   /// S5 exit: honor stop vs chase.
   s5CpStopOutcomes,
+
+  /// Range/nut guided: PFR vs flatting BB.
+  rangeAdvPfrOutcomes,
+
+  /// Range/nut scaffolded: wide caller vs PFR always.
+  rangeAdvNutsOutcomes,
+
+  /// Range/nut checkpoint: apply pressure vs bet any two.
+  rangeAdvPressOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1479,6 +1506,21 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.s5CpStopOutcomes,
         caption: 'Hit stop-loss — do?',
       );
+    case 'act-06-01-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.rangeAdvPfrOutcomes,
+        caption: 'A-high dry flop — range advantage?',
+      );
+    case 'act-06-01-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.rangeAdvNutsOutcomes,
+        caption: 'Paired board — nut advantage?',
+      );
+    case 'act-06-01-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.rangeAdvPressOutcomes,
+        caption: 'Advantage is a reason to?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -2190,6 +2232,24 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.s5CpChase => pick('chase'),
         _ => null,
       };
+    case 'act-06-01-01-guided':
+      return switch (region) {
+        LessonTableRegion.rangeAdvPfr => pick('pfr'),
+        LessonTableRegion.rangeAdvCaller => pick('caller'),
+        _ => null,
+      };
+    case 'act-06-01-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.rangeAdvWideCaller => pick('caller-nuts'),
+        LessonTableRegion.rangeAdvPfrAlways => pick('pfr-always'),
+        _ => null,
+      };
+    case 'act-06-01-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.rangeAdvPress => pick('press'),
+        LessonTableRegion.rangeAdvBetAnyTwo => pick('random'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -2326,7 +2386,10 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-05-09-01-checkpoint' ||
       activity.id == 'act-05-09-02-cp-multi' ||
       activity.id == 'act-05-09-02-cp-tell' ||
-      activity.id == 'act-05-09-02-cp-stop';
+      activity.id == 'act-05-09-02-cp-stop' ||
+      activity.id == 'act-06-01-01-guided' ||
+      activity.id == 'act-06-01-01-scaffolded' ||
+      activity.id == 'act-06-01-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -2570,6 +2633,10 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.s5CpMultiOutcomes => _buildS5CpMultiOutcomes(),
       LessonTableLayout.s5CpTellOutcomes => _buildS5CpTellOutcomes(),
       LessonTableLayout.s5CpStopOutcomes => _buildS5CpStopOutcomes(),
+      LessonTableLayout.rangeAdvPfrOutcomes => _buildRangeAdvPfrOutcomes(),
+      LessonTableLayout.rangeAdvNutsOutcomes => _buildRangeAdvNutsOutcomes(),
+      LessonTableLayout.rangeAdvPressOutcomes =>
+          _buildRangeAdvPressOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -5202,6 +5269,99 @@ class LessonTableContext extends StatelessWidget {
           visual: const Icon(
             Icons.replay,
             color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRangeAdvPfrOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive range advantage — tap PFR vs flatting BB',
+      semanticsStatic: 'Range advantage PFR outcomes',
+      caption: scene.caption ?? 'A-high dry flop — range advantage?',
+      phases: [
+        (
+          region: LessonTableRegion.rangeAdvPfr,
+          title: 'Preflop raiser',
+          detail: 'Owns strong hands',
+          visual: const Icon(
+            Icons.north_east,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.rangeAdvCaller,
+          title: 'Flatting BB',
+          detail: 'Usually not',
+          visual: const Icon(
+            Icons.south_west,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRangeAdvNutsOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive nut advantage — tap wide caller vs PFR always',
+      semanticsStatic: 'Nut advantage outcomes',
+      caption: scene.caption ?? 'Paired board — nut advantage?',
+      phases: [
+        (
+          region: LessonTableRegion.rangeAdvWideCaller,
+          title: 'Wide caller',
+          detail: 'More trips / fulls',
+          visual: const Icon(
+            Icons.workspace_premium_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.rangeAdvPfrAlways,
+          title: 'PFR always',
+          detail: 'Paired boards flip',
+          visual: const Icon(
+            Icons.lock_outline,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRangeAdvPressOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive range advantage — tap apply pressure vs bet any two',
+      semanticsStatic: 'Range advantage pressure outcomes',
+      caption: scene.caption ?? 'Advantage is a reason to?',
+      phases: [
+        (
+          region: LessonTableRegion.rangeAdvPress,
+          title: 'Apply pressure',
+          detail: 'With a turn plan',
+          visual: const Icon(
+            Icons.bolt,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.rangeAdvBetAnyTwo,
+          title: 'Bet any two',
+          detail: 'Still need a plan',
+          visual: const Icon(
+            Icons.casino_outlined,
+            color: AppColors.slate,
             size: 24,
           ),
         ),

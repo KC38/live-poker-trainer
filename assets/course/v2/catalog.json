@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "8b7378c3c0eafcc6fb6edc4ced0377d1c205a69a1c69f5665f862cbda2bedad8",
+  "contentChecksum": "f482b5a7ad75b0fde503068f0a817d511dfa9bb6f3e70ca197a6da3cce6e30b1",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -11101,13 +11101,13 @@
                   "choices": [
                     {
                       "id": "pfr",
-                      "label": "The preflop raiser",
-                      "accessibilityText": "The preflop raiser"
+                      "label": "Preflop raiser",
+                      "accessibilityText": "Preflop raiser"
                     },
                     {
                       "id": "caller",
-                      "label": "The flatting BB always",
-                      "accessibilityText": "The flatting BB always"
+                      "label": "Flatting BB",
+                      "accessibilityText": "Flatting BB"
                     }
                   ]
                 },
@@ -11131,13 +11131,13 @@
                   "choices": [
                     {
                       "id": "caller-nuts",
-                      "label": "The wide caller can hold more trips/fulls",
-                      "accessibilityText": "The wide caller can hold more trips/fulls"
+                      "label": "Wide caller",
+                      "accessibilityText": "Wide caller"
                     },
                     {
                       "id": "pfr-always",
-                      "label": "PFR always owns the nuts",
-                      "accessibilityText": "PFR always owns the nuts"
+                      "label": "PFR always",
+                      "accessibilityText": "PFR always"
                     }
                   ]
                 },
@@ -11161,20 +11161,21 @@
                   "choices": [
                     {
                       "id": "cbet",
-                      "label": "C-bet",
-                      "accessibilityText": "C-bet",
+                      "label": "C-bet 6",
+                      "accessibilityText": "C-bet 6",
                       "action": "BET",
                       "amountBb": 6
                     },
                     {
                       "id": "check",
-                      "label": "Auto-check",
-                      "accessibilityText": "Auto-check"
+                      "label": "Check",
+                      "accessibilityText": "Check",
+                      "action": "CHECK"
                     },
                     {
                       "id": "jam",
-                      "label": "Jam 200bb",
-                      "accessibilityText": "Jam 200bb",
+                      "label": "Jam",
+                      "accessibilityText": "Jam",
                       "action": "RAISE",
                       "amountBb": 200
                     }
@@ -11200,13 +11201,13 @@
                   "choices": [
                     {
                       "id": "press",
-                      "label": "Apply pressure with a turn plan",
-                      "accessibilityText": "Apply pressure with a turn plan"
+                      "label": "Apply pressure",
+                      "accessibilityText": "Apply pressure"
                     },
                     {
                       "id": "random",
-                      "label": "Bet any two blindly",
-                      "accessibilityText": "Bet any two blindly"
+                      "label": "Bet any two",
+                      "accessibilityText": "Bet any two"
                     }
                   ]
                 }

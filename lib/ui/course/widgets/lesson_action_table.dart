@@ -777,6 +777,17 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         facingBet: true,
         feltStatusLine: 'Wide barrels — call the catch',
       );
+    case 'act-06-01-01-unguided':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', 'Kd'],
+        boardCodes: ['Kc', '7s', '2d'],
+        potLabel: 'Pot 12',
+        villainLine: 'BB called pre · checks',
+        streetLabel: 'Flop · K72r · PFR',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Range + nut lean — c-bet',
+      );
   }
   return null;
 }
@@ -1011,6 +1022,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-05-09-02-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-06-01-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
