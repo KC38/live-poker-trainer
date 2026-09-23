@@ -1221,16 +1221,17 @@ export function buildSectionSix() {
               dialogue("act-06-08-01-explain", 1,
                 "Mixing is frequency with a purpose — not coin-flip theater.",
                 {objectives: ["Mix strong hands sometimes"]}),
-              selectAct({
+              actionAct({
                 id: "act-06-08-01-guided", order: 2, stage: "guided",
-                prompt: "Why check a set sometimes?",
-                a11y: "Protect checking range / induce.",
+                prompt: "You flop a set. Sometimes?",
+                a11y: "Check — protect checking range / induce.",
                 objectives: ["Mix strong hands sometimes"],
                 choices: [
-                  choice("protect", "Protect checks and induce bluffs", "recommended",
-                    "Purposeful mix."),
-                  choice("coin", "Because a coin said so", "clear_mistake",
-                    "Need a reason.", {betterChoiceId: "protect"})
+                  choice("protect", "Check", "recommended",
+                    "Purposeful mix.",
+                    {action: "CHECK"}),
+                  choice("coin", "Always bet", "clear_mistake",
+                    "Need a reason.", {action: "BET", betterChoiceId: "protect"})
                 ],
               }),
               selectAct({
@@ -1240,9 +1241,9 @@ export function buildSectionSix() {
                 objectives: ["Let types reduce mixing needs"],
                 playerTypeRefs: ["calling_station"],
                 choices: [
-                  choice("less", "Less bluffing — value heavier", "recommended",
+                  choice("less", "Less bluff", "recommended",
                     "Exploit reduces mix need.", {reversalRead: "Versus nit: more bluff mix."}),
-                  choice("same", "Same mix as versus unknowns always", "clear_mistake",
+                  choice("same", "Same mix", "clear_mistake",
                     "Ignore type.", {betterChoiceId: "less"})
                 ],
               }),
@@ -1252,9 +1253,9 @@ export function buildSectionSix() {
                 a11y: "No.",
                 objectives: ["Avoid pure randomness"], lifeLoss: true,
                 choices: [
-                  choice("no", "No — mix only with a strategic reason", "recommended",
+                  choice("no", "Need a reason", "recommended",
                     "Frequency ≠ chaos."),
-                  choice("yes", "Yes — always randomize", "clear_mistake",
+                  choice("yes", "Always random", "clear_mistake",
                     "Wrong.", {betterChoiceId: "no"})
                 ],
               }),
@@ -1264,9 +1265,9 @@ export function buildSectionSix() {
                 a11y: "Frequency with purpose.",
                 objectives: ["Avoid pure randomness"], lifeLoss: true,
                 choices: [
-                  choice("freq", "Frequency with purpose", "recommended",
+                  choice("freq", "Purpose freq", "recommended",
                     "Course standard."),
-                  choice("chaos", "Chaos as a lifestyle", "clear_mistake",
+                  choice("chaos", "Chaos", "clear_mistake",
                     "No.", {betterChoiceId: "freq"})
                 ],
               }),

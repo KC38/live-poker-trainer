@@ -831,6 +831,17 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         facingBet: true,
         feltStatusLine: 'Clear trash — fold',
       );
+    case 'act-06-08-01-guided':
+      return const LessonActionSpot(
+        heroCodes: ['7h', '7d'],
+        boardCodes: ['7c', 'Kd', '2s'],
+        potLabel: 'Pot 12',
+        villainLine: 'Checked to you',
+        streetLabel: 'Flop · set of sevens',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Mix strong — check sometimes',
+      );
   }
   return null;
 }
@@ -1085,6 +1096,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-06-07-01-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-06-08-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }

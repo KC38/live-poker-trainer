@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "c28534f7e406afa761e0f23bc99686bb0b73b553d6b327db8061aea772c9f862",
+  "contentChecksum": "5c65f0bbd4b59dd91678dcea22dc386b5366e99056326a8f6a1884ac37355d36",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -12348,9 +12348,9 @@
                   "id": "act-06-08-01-guided",
                   "order": 2,
                   "stage": "guided",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
-                  "accessibilityText": "Protect checking range / induce.",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Check — protect checking range / induce.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -12360,17 +12360,19 @@
                   "objectives": [
                     "Mix strong hands sometimes"
                   ],
-                  "prompt": "Why check a set sometimes?",
+                  "prompt": "You flop a set. Sometimes?",
                   "choices": [
                     {
                       "id": "protect",
-                      "label": "Protect checks and induce bluffs",
-                      "accessibilityText": "Protect checks and induce bluffs"
+                      "label": "Check",
+                      "accessibilityText": "Check",
+                      "action": "CHECK"
                     },
                     {
                       "id": "coin",
-                      "label": "Because a coin said so",
-                      "accessibilityText": "Because a coin said so"
+                      "label": "Always bet",
+                      "accessibilityText": "Always bet",
+                      "action": "BET"
                     }
                   ]
                 },
@@ -12394,13 +12396,13 @@
                   "choices": [
                     {
                       "id": "less",
-                      "label": "Less bluffing — value heavier",
-                      "accessibilityText": "Less bluffing — value heavier"
+                      "label": "Less bluff",
+                      "accessibilityText": "Less bluff"
                     },
                     {
                       "id": "same",
-                      "label": "Same mix as versus unknowns always",
-                      "accessibilityText": "Same mix as versus unknowns always"
+                      "label": "Same mix",
+                      "accessibilityText": "Same mix"
                     }
                   ],
                   "playerTypeRefs": [
@@ -12427,13 +12429,13 @@
                   "choices": [
                     {
                       "id": "no",
-                      "label": "No — mix only with a strategic reason",
-                      "accessibilityText": "No — mix only with a strategic reason"
+                      "label": "Need a reason",
+                      "accessibilityText": "Need a reason"
                     },
                     {
                       "id": "yes",
-                      "label": "Yes — always randomize",
-                      "accessibilityText": "Yes — always randomize"
+                      "label": "Always random",
+                      "accessibilityText": "Always random"
                     }
                   ]
                 },
@@ -12457,13 +12459,13 @@
                   "choices": [
                     {
                       "id": "freq",
-                      "label": "Frequency with purpose",
-                      "accessibilityText": "Frequency with purpose"
+                      "label": "Purpose freq",
+                      "accessibilityText": "Purpose freq"
                     },
                     {
                       "id": "chaos",
-                      "label": "Chaos as a lifestyle",
-                      "accessibilityText": "Chaos as a lifestyle"
+                      "label": "Chaos",
+                      "accessibilityText": "Chaos"
                     }
                   ]
                 }
