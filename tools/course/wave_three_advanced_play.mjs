@@ -1292,9 +1292,9 @@ export function buildSectionSix() {
                 a11y: "Often committed-ish — careful.",
                 objectives: ["Tighten 4-bet pots appropriately"],
                 choices: [
-                  choice("careful", "High commitment — fewer heroics with weak kickers", "recommended",
+                  choice("careful", "High commit", "recommended",
                     "SPR is low."),
-                  choice("deep", "Play as if 300bb deep", "clear_mistake",
+                  choice("deep", "300bb deep", "clear_mistake",
                     "Wrong depth.", {betterChoiceId: "careful"})
                 ],
               }),
@@ -1304,10 +1304,10 @@ export function buildSectionSix() {
                 a11y: "Small c-bet or give-up — not auto-jam.",
                 objectives: ["Plan 3-bet pots by SPR"],
                 choices: [
-                  choice("small", "Small c-bet or disciplined give-up", "recommended",
+                  choice("small", "Small c-bet", "recommended",
                     "Deep 3-bet pots need a plan.", {action: "BET", amountBb: 8}),
-                  choice("jam", "Jam all three streets forever", "clear_mistake",
-                    "Too automatic.", {action: "RAISE", amountBb: 180, betterChoiceId: "small"})
+                  choice("jam", "Jam forever", "clear_mistake",
+                    "Too automatic.", {action: "ALL_IN", amountBb: 180, betterChoiceId: "small"})
                 ],
               }),
               selectAct({
@@ -1316,9 +1316,9 @@ export function buildSectionSix() {
                 a11y: "Avoid.",
                 objectives: ["Avoid ego 4-bets"], lifeLoss: true,
                 choices: [
-                  choice("avoid", "Avoid ego 4-bets", "recommended",
+                  choice("avoid", "Avoid ego", "recommended",
                     "Need blockers and folds."),
-                  choice("ego", "4-bet any two for style", "clear_mistake",
+                  choice("ego", "Ego 4-bet", "clear_mistake",
                     "Leak.", {betterChoiceId: "avoid"})
                 ],
               }),
@@ -1328,9 +1328,9 @@ export function buildSectionSix() {
                 a11y: "SPR and commitment thresholds.",
                 objectives: ["Plan 3-bet pots by SPR"], lifeLoss: true,
                 choices: [
-                  choice("spr", "SPR and when you are committed", "recommended",
+                  choice("spr", "SPR / commit", "recommended",
                     "Core."),
-                  choice("suits", "Only the suit of the felt", "clear_mistake",
+                  choice("suits", "Felt suits", "clear_mistake",
                     "Irrelevant.", {betterChoiceId: "spr"})
                 ],
               }),

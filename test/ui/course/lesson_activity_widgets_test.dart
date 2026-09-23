@@ -3734,7 +3734,13 @@ void main() {
         ),
       );
       expect(find.byType(ThreeBetFourBetSprDemo), findsOneWidget);
+      // Rex cue below the felt — not a second footer inside the demo.
       expect(find.text('Tap 3-Bet, 4-Bet, and Depth.'), findsOneWidget);
+      expect(find.text('Tap 3-Bet, 4-Bet, and Depth'), findsNothing);
+      expect(
+        find.text('Raised pots shrink ranges — depth decides commitment'),
+        findsNothing,
+      );
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
@@ -12373,6 +12379,164 @@ void main() {
     await tester.tap(find.text('Purpose freq'));
     await tester.pump();
     expect(controller.draft.choiceId, 'freq');
+    controller.dispose();
+  });
+
+  testWidgets('s6 3bet4bet guided taps High commit on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-09-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Often committed-ish — careful.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: '100bb 4-bet pot. Flop top pair. Default mindset?',
+      choices: const [
+        CourseChoice(id: 'careful', label: 'High commit'),
+        CourseChoice(id: 'deep', label: '300bb deep'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('100bb 4-bet pot · top pair — tap High commit.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('High commit'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'careful');
+    controller.dispose();
+  });
+
+  testWidgets('s6 3bet4bet scaffolded docks Small c-bet on miss', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-09-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Small c-bet or give-up — not auto-jam.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'BTN opens, you 3-bet AQo BB, depth 180bb. Flop misses. Action?',
+      choices: const [
+        CourseChoice(
+          id: 'small',
+          label: 'Small c-bet',
+          action: 'BET',
+          amountBb: 8,
+        ),
+        CourseChoice(
+          id: 'jam',
+          label: 'Jam forever',
+          action: 'ALL_IN',
+          amountBb: 180,
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Deep 3-bet miss — tap Small c-bet.'), findsOneWidget);
+    expect(find.text('SMALL C-BET'), findsOneWidget);
+    expect(find.text('JAM FOREVER'), findsOneWidget);
+    await tester.tap(find.text('SMALL C-BET'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'small');
+    controller.dispose();
+  });
+
+  testWidgets('s6 3bet4bet unguided taps Avoid ego on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-09-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Avoid.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Light 4-bet bluff with no blockers for ego?',
+      choices: const [
+        CourseChoice(id: 'avoid', label: 'Avoid ego'),
+        CourseChoice(id: 'ego', label: 'Ego 4-bet'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Light 4-bet for ego — tap Avoid ego.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Avoid ego'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'avoid');
+    controller.dispose();
+  });
+
+  testWidgets('s6 3bet4bet checkpoint taps SPR / commit on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-09-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'SPR and commitment thresholds.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Depth change in 3-bet pots mainly changes?',
+      choices: const [
+        CourseChoice(id: 'spr', label: 'SPR / commit'),
+        CourseChoice(id: 'suits', label: 'Felt suits'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Depth change in 3-bet pots — tap SPR / commit.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('SPR / commit'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'spr');
     controller.dispose();
   });
 

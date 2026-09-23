@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "5c65f0bbd4b59dd91678dcea22dc386b5366e99056326a8f6a1884ac37355d36",
+  "contentChecksum": "442786bfc66f8eb5382960d5ab7ab090f4187a436c0df9125ab593f9fddcab36",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -15905,8 +15905,8 @@
                   "choices": [
                     {
                       "id": "careful",
-                      "label": "High commitment — fewer heroics with weak kickers",
-                      "accessibilityText": "High commitment — fewer heroics with weak kickers",
+                      "label": "High commit",
+                      "accessibilityText": "High commit",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "SPR is low."
@@ -15914,8 +15914,8 @@
                     },
                     {
                       "id": "deep",
-                      "label": "Play as if 300bb deep",
-                      "accessibilityText": "Play as if 300bb deep",
+                      "label": "300bb deep",
+                      "accessibilityText": "300bb deep",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Wrong depth.",
@@ -15944,8 +15944,8 @@
                   "choices": [
                     {
                       "id": "small",
-                      "label": "Small c-bet or disciplined give-up",
-                      "accessibilityText": "Small c-bet or disciplined give-up",
+                      "label": "Small c-bet",
+                      "accessibilityText": "Small c-bet",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Deep 3-bet pots need a plan."
@@ -15955,14 +15955,14 @@
                     },
                     {
                       "id": "jam",
-                      "label": "Jam all three streets forever",
-                      "accessibilityText": "Jam all three streets forever",
+                      "label": "Jam forever",
+                      "accessibilityText": "Jam forever",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Too automatic.",
                         "betterChoiceId": "small"
                       },
-                      "action": "RAISE",
+                      "action": "ALL_IN",
                       "amountBb": 180
                     }
                   ]
@@ -15987,8 +15987,8 @@
                   "choices": [
                     {
                       "id": "avoid",
-                      "label": "Avoid ego 4-bets",
-                      "accessibilityText": "Avoid ego 4-bets",
+                      "label": "Avoid ego",
+                      "accessibilityText": "Avoid ego",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Need blockers and folds."
@@ -15996,8 +15996,8 @@
                     },
                     {
                       "id": "ego",
-                      "label": "4-bet any two for style",
-                      "accessibilityText": "4-bet any two for style",
+                      "label": "Ego 4-bet",
+                      "accessibilityText": "Ego 4-bet",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Leak.",
@@ -16026,8 +16026,8 @@
                   "choices": [
                     {
                       "id": "spr",
-                      "label": "SPR and when you are committed",
-                      "accessibilityText": "SPR and when you are committed",
+                      "label": "SPR / commit",
+                      "accessibilityText": "SPR / commit",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Core."
@@ -16035,8 +16035,8 @@
                     },
                     {
                       "id": "suits",
-                      "label": "Only the suit of the felt",
-                      "accessibilityText": "Only the suit of the felt",
+                      "label": "Felt suits",
+                      "accessibilityText": "Felt suits",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Irrelevant.",

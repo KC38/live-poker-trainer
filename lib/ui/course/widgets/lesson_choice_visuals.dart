@@ -354,6 +354,12 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Mixed strategy: tap mix-reason reads on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-06-09-01-guided' ||
+      activity.id == 'act-06-09-01-unguided' ||
+      activity.id == 'act-06-09-01-checkpoint') {
+    // 3-bet / 4-bet by depth: tap commitment / ego / SPR reads on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

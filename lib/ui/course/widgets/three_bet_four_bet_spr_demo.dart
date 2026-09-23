@@ -83,18 +83,19 @@ class _ThreeBetFourBetSprDemoState extends State<ThreeBetFourBetSprDemo> {
               ],
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap 3-Bet, 4-Bet, and Depth'
-                : 'Raised pots shrink ranges — depth decides commitment',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues 3-Bet / 4-Bet / Depth — no dupe footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Raised pots shrink ranges — depth decides commitment',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );
