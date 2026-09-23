@@ -9417,6 +9417,43 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 meet nit guided taps Nit on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-04-07-02-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.playerReadClassify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Nit.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Seat plays ~8% of hands and 3-bets rarely but large. Label?',
+      choices: const [
+        CourseChoice(id: 'pt-nit', label: 'Nit'),
+        CourseChoice(id: 'pt-station-n', label: 'Calling Station'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Rare entry, large 3-bets — tap the working label.'),
+      findsOneWidget,
+    );
+    expect(find.text('Nit'), findsOneWidget);
+    await tester.tap(find.text('Nit'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'pt-nit');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {

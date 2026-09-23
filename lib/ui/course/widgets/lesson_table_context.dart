@@ -226,6 +226,24 @@ enum LessonTableRegion {
 
   /// Station evidence bundle distractor.
   observeStationBundle,
+
+  /// Nit label for narrow + large 3-bet evidence.
+  meetNitLabel,
+
+  /// Calling Station distractor on narrow evidence.
+  meetNitStationDistractor,
+
+  /// Nit label for fold-forever then check-raise.
+  meetNitLabel2,
+
+  /// Maniac distractor for nit evidence.
+  meetNitManiacDistractor,
+
+  /// Nit as working model (correct).
+  meetNitWorkingModel,
+
+  /// Nit as insult (mistake).
+  meetNitInsult,
 }
 
 /// How the mini-table is arranged.
@@ -307,6 +325,15 @@ enum LessonTableLayout {
 
   /// Observe narrow checkpoint: nit vs station bundle.
   observeNarrowBundleOutcomes,
+
+  /// Meet Nit: Nit vs Calling Station.
+  meetNitVsStationOutcomes,
+
+  /// Meet Nit: Nit vs Maniac.
+  meetNitVsManiacOutcomes,
+
+  /// Meet Nit: working model vs insult.
+  meetNitModelOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -821,6 +848,21 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.observeNarrowBundleOutcomes,
         caption: 'Bundle the pre-label notes',
       );
+    case 'act-04-07-02-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.meetNitVsStationOutcomes,
+        caption: '~8% hands · rare but large 3-bets',
+      );
+    case 'act-04-07-02-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.meetNitVsManiacOutcomes,
+        caption: 'Folds forever · then check-raises a barrel',
+      );
+    case 'act-04-07-02-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.meetNitModelOutcomes,
+        caption: 'How to treat the Nit label',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -1247,6 +1289,24 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.observeStationBundle => pick('bundle-station'),
         _ => null,
       };
+    case 'act-04-07-02-guided':
+      return switch (region) {
+        LessonTableRegion.meetNitLabel => pick('pt-nit'),
+        LessonTableRegion.meetNitStationDistractor => pick('pt-station-n'),
+        _ => null,
+      };
+    case 'act-04-07-02-unguided':
+      return switch (region) {
+        LessonTableRegion.meetNitLabel2 => pick('nit2'),
+        LessonTableRegion.meetNitManiacDistractor => pick('maniac-n'),
+        _ => null,
+      };
+    case 'act-04-07-02-checkpoint':
+      return switch (region) {
+        LessonTableRegion.meetNitWorkingModel => pick('model-n'),
+        LessonTableRegion.meetNitInsult => pick('insult-n'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -1342,7 +1402,10 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-04-06-02-unguided' ||
       activity.id == 'act-04-06-02-checkpoint' ||
       activity.id == 'act-04-06-03-checkpoint' ||
-      activity.id.startsWith('act-04-07-01-');
+      activity.id.startsWith('act-04-07-01-') ||
+      activity.id == 'act-04-07-02-guided' ||
+      activity.id == 'act-04-07-02-unguided' ||
+      activity.id == 'act-04-07-02-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -1499,6 +1562,11 @@ class LessonTableContext extends StatelessWidget {
           _buildObserveNarrowSampleOutcomes(),
       LessonTableLayout.observeNarrowBundleOutcomes =>
           _buildObserveNarrowBundleOutcomes(),
+      LessonTableLayout.meetNitVsStationOutcomes =>
+          _buildMeetNitVsStationOutcomes(),
+      LessonTableLayout.meetNitVsManiacOutcomes =>
+          _buildMeetNitVsManiacOutcomes(),
+      LessonTableLayout.meetNitModelOutcomes => _buildMeetNitModelOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -2660,6 +2728,97 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Wrong note',
           visual: const Icon(
             Icons.call_received,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMeetNitVsStationOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive: 'Interactive player type — tap Nit or Calling Station',
+      semanticsStatic: 'Nit vs Calling Station outcomes',
+      caption: scene.caption ?? '~8% hands · rare but large 3-bets',
+      phases: [
+        (
+          region: LessonTableRegion.meetNitLabel,
+          title: 'Nit',
+          detail: 'Rare + strong',
+          visual: const Icon(
+            Icons.lock_outline,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.meetNitStationDistractor,
+          title: 'Station',
+          detail: 'Calls wide',
+          visual: const Icon(
+            Icons.people_outline,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMeetNitVsManiacOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive: 'Interactive player type — tap Nit or Maniac',
+      semanticsStatic: 'Nit vs Maniac outcomes',
+      caption: scene.caption ?? 'Folds forever · then check-raises a barrel',
+      phases: [
+        (
+          region: LessonTableRegion.meetNitLabel2,
+          title: 'Nit',
+          detail: 'Narrow range',
+          visual: const Icon(
+            Icons.lock_outline,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.meetNitManiacDistractor,
+          title: 'Maniac',
+          detail: 'Always in',
+          visual: const Icon(
+            Icons.local_fire_department_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMeetNitModelOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive label model — tap working model or insult',
+      semanticsStatic: 'Nit model outcomes',
+      caption: scene.caption ?? 'How to treat the Nit label',
+      phases: [
+        (
+          region: LessonTableRegion.meetNitWorkingModel,
+          title: 'Working model',
+          detail: 'Sample limits',
+          visual: const Icon(
+            Icons.science_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.meetNitInsult,
+          title: 'An insult',
+          detail: 'Not technical',
+          visual: const Icon(
+            Icons.mood_bad_outlined,
             color: AppColors.slate,
             size: 24,
           ),

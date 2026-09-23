@@ -354,6 +354,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Only two folds — tap whether to label.',
       'act-04-07-01-checkpoint' =>
           'Before you label — tap the evidence bundle.',
+      'act-04-07-02-guided' =>
+          'Rare entry, large 3-bets — tap the working label.',
+      'act-04-07-02-unguided' =>
+          'Folds forever, then explodes — tap the label.',
+      'act-04-07-02-checkpoint' =>
+          'Treat Nit as a working model — tap it.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -390,7 +396,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-04-06-02-unguided' ||
             widget.activity.id == 'act-04-06-02-checkpoint' ||
             widget.activity.id == 'act-04-06-03-checkpoint' ||
-            widget.activity.id.startsWith('act-04-07-01-');
+            widget.activity.id.startsWith('act-04-07-01-') ||
+            widget.activity.id == 'act-04-07-02-guided' ||
+            widget.activity.id == 'act-04-07-02-unguided' ||
+            widget.activity.id == 'act-04-07-02-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&
