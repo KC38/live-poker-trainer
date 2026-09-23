@@ -352,6 +352,12 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Deep 3-bet miss — tap Small c-bet.',
     'act-06-10-01-guided' =>
       'TPWK vs triple barrels — tap Fold.',
+    'act-06-11-03-guided' =>
+      'TAG check-raises second pair — tap Fold.',
+    'act-06-11-03-scaffolded' =>
+      'BTN vs TAG BB with K9o — tap Tighter fold.',
+    'act-06-11-03-unguided' =>
+      'River thin vs TAG who rarely calls — tap Check.',
     _ => null,
   };
 }
