@@ -571,6 +571,37 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         facingBet: true,
         feltStatusLine: 'No maniac read — fold more',
       );
+    case 'act-04-10-01-guided':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', 'Td'],
+        boardCodes: ['Qc', 'Ts', '3h', '2d', '7c'],
+        potLabel: 'Pot 28',
+        villainLine: 'Calling Station · checked to you',
+        streetLabel: 'River · second pair',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Stations call thin value',
+      );
+    case 'act-04-10-01-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', 'Td'],
+        boardCodes: ['Qc', 'Ts', '3h', '2d', '7c'],
+        potLabel: 'Pot 36',
+        villainLine: 'Nit just check-raised',
+        streetLabel: 'River · second pair',
+        facingBet: true,
+        feltStatusLine: 'Nit heat is usually strong',
+      );
+    case 'act-04-10-01-unguided':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', 'Td'],
+        boardCodes: ['Qc', 'Ts', '3h', '2d', '7c'],
+        potLabel: 'Pot 42',
+        villainLine: 'Maniac barrels river',
+        streetLabel: 'River · second pair',
+        facingBet: true,
+        feltStatusLine: 'Maniac bets too wide',
+      );
   }
   return null;
 }
@@ -764,6 +795,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-04-08-03-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-04-10-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
@@ -3999,18 +4034,19 @@ class _ExploitEvidenceDemoState extends State<ExploitEvidenceDemo> {
               ],
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap Cards, Seats, and Evidence'
-                : 'Same cards · different seats · evidence',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues the three taps — no duplicate footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Same cards · different seats · evidence',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );
