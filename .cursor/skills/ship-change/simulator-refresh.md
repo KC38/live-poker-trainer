@@ -2,6 +2,10 @@
 
 Used after `main` is updated with a shipped change.
 
+**First-time / no GUI window:** Xcode 27+ uses **Device Hub**, not
+`Simulator.app`. See [docs/agent-ios-simulator.md](../../../docs/agent-ios-simulator.md)
+for boot, `open -a DeviceHub`, tmux `flutter run`, and Podfile sync.
+
 ## Prefer the script
 
 ```bash
