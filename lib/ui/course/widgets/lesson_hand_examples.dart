@@ -516,7 +516,7 @@ class _HandFamiliesDemoState extends State<HandFamiliesDemo> {
           const SizedBox(height: 10),
           Text(
             widget.interactive
-                ? 'Tap each family — trash is everything else'
+                ? 'Tap each starting-hand family'
                 : 'Pairs · broadways · suited aces · connectors',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
