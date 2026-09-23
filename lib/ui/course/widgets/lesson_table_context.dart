@@ -949,6 +949,30 @@ enum LessonTableRegion {
 
   /// Pot-type checkpoint: nothing material (mistake).
   potTypeNothing,
+
+  /// HU vs multiway guided: usually no naked air (correct).
+  huMwUsuallyNo,
+
+  /// HU vs multiway guided: always yes (mistake).
+  huMwAlwaysYes,
+
+  /// HU vs multiway scaffolded: higher HU steal (correct).
+  huMwHigherHu,
+
+  /// HU vs multiway scaffolded: identical always (mistake).
+  huMwIdentical,
+
+  /// HU vs multiway unguided: thicker value (correct).
+  huMwThickerValue,
+
+  /// HU vs multiway unguided: ultra-slow (questionable).
+  huMwUltraSlow,
+
+  /// HU vs multiway checkpoint: first-class input (correct).
+  huMwFirstClass,
+
+  /// HU vs multiway checkpoint: noise (mistake).
+  huMwNoise,
 }
 
 /// How the mini-table is arranged.
@@ -1387,6 +1411,18 @@ enum LessonTableLayout {
 
   /// Pot-type checkpoint: ranges and SPR vs nothing.
   potTypeCheckpointOutcomes,
+
+  /// HU vs multiway guided: usually no vs always yes.
+  huMwGuidedOutcomes,
+
+  /// HU vs multiway scaffolded: higher HU vs identical.
+  huMwScaffoldedOutcomes,
+
+  /// HU vs multiway unguided: thicker value vs ultra-slow.
+  huMwUnguidedOutcomes,
+
+  /// HU vs multiway checkpoint: first-class input vs noise.
+  huMwCheckpointOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -2498,6 +2534,26 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         layout: LessonTableLayout.potTypeCheckpointOutcomes,
         caption: 'Pot type changes?',
+      );
+    case 'act-07-05-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.huMwGuidedOutcomes,
+        caption: 'Four-way river — naked air bluff?',
+      );
+    case 'act-07-05-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.huMwScaffoldedOutcomes,
+        caption: 'HU vs nit BB — steal frequency?',
+      );
+    case 'act-07-05-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.huMwUnguidedOutcomes,
+        caption: 'Multiway top set — line lean?',
+      );
+    case 'act-07-05-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.huMwCheckpointOutcomes,
+        caption: 'Player count is?',
       );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
@@ -3645,6 +3701,30 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.potTypeNothing => pick('nothing'),
         _ => null,
       };
+    case 'act-07-05-01-guided':
+      return switch (region) {
+        LessonTableRegion.huMwUsuallyNo => pick('no'),
+        LessonTableRegion.huMwAlwaysYes => pick('yes'),
+        _ => null,
+      };
+    case 'act-07-05-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.huMwHigherHu => pick('higher'),
+        LessonTableRegion.huMwIdentical => pick('same'),
+        _ => null,
+      };
+    case 'act-07-05-01-unguided':
+      return switch (region) {
+        LessonTableRegion.huMwThickerValue => pick('thick'),
+        LessonTableRegion.huMwUltraSlow => pick('slow'),
+        _ => null,
+      };
+    case 'act-07-05-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.huMwFirstClass => pick('input'),
+        LessonTableRegion.huMwNoise => pick('ignore'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -3724,7 +3804,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
         activity.id == 'act-07-01-01-explain' ||
         activity.id == 'act-07-02-01-explain' ||
         activity.id == 'act-07-03-01-explain' ||
-        activity.id == 'act-07-04-01-explain';
+        activity.id == 'act-07-04-01-explain' ||
+        activity.id == 'act-07-05-01-explain';
   }
   if (activity.renderer != ActivityRenderer.selectIdentify &&
       activity.renderer != ActivityRenderer.playerReadClassify) {
@@ -3862,7 +3943,11 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-07-04-01-guided' ||
       activity.id == 'act-07-04-01-scaffolded' ||
       activity.id == 'act-07-04-01-unguided' ||
-      activity.id == 'act-07-04-01-checkpoint';
+      activity.id == 'act-07-04-01-checkpoint' ||
+      activity.id == 'act-07-05-01-guided' ||
+      activity.id == 'act-07-05-01-scaffolded' ||
+      activity.id == 'act-07-05-01-unguided' ||
+      activity.id == 'act-07-05-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -4216,6 +4301,12 @@ class LessonTableContext extends StatelessWidget {
           _buildPotTypeUnguidedOutcomes(),
       LessonTableLayout.potTypeCheckpointOutcomes =>
           _buildPotTypeCheckpointOutcomes(),
+      LessonTableLayout.huMwGuidedOutcomes => _buildHuMwGuidedOutcomes(),
+      LessonTableLayout.huMwScaffoldedOutcomes =>
+          _buildHuMwScaffoldedOutcomes(),
+      LessonTableLayout.huMwUnguidedOutcomes => _buildHuMwUnguidedOutcomes(),
+      LessonTableLayout.huMwCheckpointOutcomes =>
+          _buildHuMwCheckpointOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -9125,6 +9216,130 @@ class LessonTableContext extends StatelessWidget {
           detail: 'It matters',
           visual: const Icon(
             Icons.do_not_disturb_alt,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHuMwGuidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive HU vs multiway — tap Usually no or Always yes',
+      semanticsStatic: 'HU vs multiway guided outcomes',
+      caption: scene.caption ?? 'Four-way river — naked air bluff?',
+      phases: [
+        (
+          region: LessonTableRegion.huMwUsuallyNo,
+          title: 'Usually no',
+          detail: 'Someone calls',
+          visual: const Icon(
+            Icons.block,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.huMwAlwaysYes,
+          title: 'Always yes',
+          detail: 'Leak',
+          visual: const Icon(
+            Icons.air,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHuMwScaffoldedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive HU vs multiway — tap Higher HU or Identical',
+      semanticsStatic: 'HU vs multiway scaffolded outcomes',
+      caption: scene.caption ?? 'HU vs nit BB — steal frequency?',
+      phases: [
+        (
+          region: LessonTableRegion.huMwHigherHu,
+          title: 'Higher HU',
+          detail: 'Exploit the nit',
+          visual: const Icon(
+            Icons.trending_up,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.huMwIdentical,
+          title: 'Identical',
+          detail: 'Always same',
+          visual: const Icon(
+            Icons.drag_handle,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHuMwUnguidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive HU vs multiway — tap Thicker value or Ultra-slow',
+      semanticsStatic: 'HU vs multiway unguided outcomes',
+      caption: scene.caption ?? 'Multiway top set — line lean?',
+      phases: [
+        (
+          region: LessonTableRegion.huMwThickerValue,
+          title: 'Thicker value',
+          detail: 'And protection',
+          visual: const Icon(
+            Icons.workspace_premium_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.huMwUltraSlow,
+          title: 'Ultra-slow',
+          detail: 'Free cards risk',
+          visual: const Icon(
+            Icons.hourglass_empty,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHuMwCheckpointOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive HU vs multiway — tap First-class input or Noise',
+      semanticsStatic: 'HU vs multiway checkpoint outcomes',
+      caption: scene.caption ?? 'Player count is?',
+      phases: [
+        (
+          region: LessonTableRegion.huMwFirstClass,
+          title: 'First-class input',
+          detail: 'Plan with it',
+          visual: const Icon(
+            Icons.groups_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.huMwNoise,
+          title: 'Noise',
+          detail: 'It matters',
+          visual: const Icon(
+            Icons.hearing_disabled,
             color: AppColors.slate,
             size: 24,
           ),

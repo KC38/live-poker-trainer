@@ -31,6 +31,7 @@ import 'package:live_poker_trainer/ui/course/widgets/preflop_flop_plan_demo.dart
 import 'package:live_poker_trainer/ui/course/widgets/turn_map_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/river_composition_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/pot_type_plans_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/hu_vs_multiway_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
@@ -15753,6 +15754,213 @@ void main() {
     await tester.tap(find.text('Ranges and SPR'));
     await tester.pump();
     expect(controller.draft.choiceId, 'both');
+    controller.dispose();
+  });
+
+  testWidgets(
+    's7 hu multiway explain taps Fewer Thicker Widen instead of Continue',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-07-05-01-explain',
+        order: 1,
+        stage: ActivityStage.explain,
+        renderer: ActivityRenderer.coachDialogue,
+        estimatedSeconds: 30,
+        accessibilityText: 'More players: fewer bluffs, thicker value.',
+        acceptedGrades: const [SoftGrade.recommended],
+        objectives: const ['Bluff less multiway'],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'm',
+            kind: 'dialogue',
+            text: 'More players: fewer bluffs, thicker value.',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      var feltAck = 0;
+      await tester.pumpWidget(
+        _wrap(
+          CoachDialogueActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+            onFeltAcknowledge: () => feltAck += 1,
+          ),
+        ),
+      );
+      expect(find.byType(HuVsMultiwayDemo), findsOneWidget);
+      expect(find.text('Tap Fewer, Thicker, and Widen.'), findsOneWidget);
+      expect(find.text('Tap Fewer, Thicker, and Widen'), findsNothing);
+      expect(
+        find.text('More players: fewer bluffs, thicker value'),
+        findsNothing,
+      );
+      expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+      expect(isTableRegionTapActivity(activity), isTrue);
+
+      for (final title in ['FEWER', 'THICKER', 'WIDEN']) {
+        await tester.tap(find.text(title));
+        await tester.pump();
+      }
+      expect(feltAck, 1);
+      controller.dispose();
+    },
+  );
+
+  testWidgets('s7 hu multiway guided taps Usually no on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-05-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Usually no.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Four-way river. Naked air bluff?',
+      choices: const [
+        CourseChoice(id: 'no', label: 'Usually no'),
+        CourseChoice(id: 'yes', label: 'Always yes'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Four-way river — tap Usually no.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Usually no'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'no');
+    controller.dispose();
+  });
+
+  testWidgets('s7 hu multiway scaffolded taps Higher HU on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-05-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Higher HU.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'HU vs nit BB. Steal frequency vs multiway limped?',
+      choices: const [
+        CourseChoice(id: 'higher', label: 'Higher heads-up versus the nit'),
+        CourseChoice(id: 'same', label: 'Identical always'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('HU vs nit — tap Higher HU.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Higher HU'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'higher');
+    controller.dispose();
+  });
+
+  testWidgets('s7 hu multiway unguided taps Thicker value on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-05-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Thicker value / protection.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Multiway top set. Line lean?',
+      choices: const [
+        CourseChoice(id: 'thick', label: 'Thicker value and protection'),
+        CourseChoice(id: 'slow', label: 'Ultra-slow every time'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Multiway top set — tap Thicker value.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Thicker value'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'thick');
+    controller.dispose();
+  });
+
+  testWidgets('s7 hu multiway checkpoint taps First-class input on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-05-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'A first-class input.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Player count is?',
+      choices: const [
+        CourseChoice(id: 'input', label: 'A first-class planning input'),
+        CourseChoice(id: 'ignore', label: 'Noise'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Player count — tap First-class input.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('First-class input'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'input');
     controller.dispose();
   });
 }

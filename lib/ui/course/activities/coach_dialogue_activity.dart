@@ -27,6 +27,7 @@ import 'package:live_poker_trainer/ui/course/widgets/preflop_flop_plan_demo.dart
 import 'package:live_poker_trainer/ui/course/widgets/turn_map_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/river_composition_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/pot_type_plans_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/hu_vs_multiway_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -375,6 +376,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.potTypePlans
                     ? null
                     : onFeltAcknowledge,
+            onHuVsMultiwayAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.huVsMultiway
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance &&
@@ -648,6 +653,9 @@ enum CoachDialogueVisualKind {
 
   /// Change plans by pot type: limped, SRP, and 3-/4-bet pots.
   potTypePlans,
+
+  /// Switch gears: bluff less multiway, value thicker, widen selected HU bluffs.
+  huVsMultiway,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -808,6 +816,8 @@ class CoachDialogueVisual {
       'Tap Value, Bluff, and Check.',
     CoachDialogueVisualKind.potTypePlans =>
       'Tap Limped, SRP, and 3-4bet.',
+    CoachDialogueVisualKind.huVsMultiway =>
+      'Tap Fewer, Thicker, and Widen.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -883,7 +893,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.preflopFlopPlan ||
       kind == CoachDialogueVisualKind.turnMap ||
       kind == CoachDialogueVisualKind.riverComposition ||
-      kind == CoachDialogueVisualKind.potTypePlans;
+      kind == CoachDialogueVisualKind.potTypePlans ||
+      kind == CoachDialogueVisualKind.huVsMultiway;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -1030,6 +1041,8 @@ class CoachDialogueVisual {
       'River composition tiles: value, bluff, check',
     CoachDialogueVisualKind.potTypePlans =>
       'Pot-type plan tiles: limped, SRP, 3-4bet',
+    CoachDialogueVisualKind.huVsMultiway =>
+      'HU vs multiway tiles: fewer bluffs, thicker value, widen HU',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -1297,6 +1310,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.potTypePlans,
       );
+    case 'act-07-05-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.huVsMultiway,
+      );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
     case 'act-01-02-02-explain-five':
@@ -1535,6 +1552,27 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
                   blob.contains('value'))))) {
     return const CoachDialogueVisual(
       kind: CoachDialogueVisualKind.riverBinary,
+    );
+  }
+  // HU-vs-multiway (S7) — require player-count / HU framing so we do not steal
+  // vs-station "thicker value" copy.
+  if ((blob.contains('thicker value') &&
+          (blob.contains('more players') ||
+              blob.contains('multiway') ||
+              blob.contains('heads-up') ||
+              blob.contains('player count'))) ||
+      blob.contains('widen selected hu') ||
+      blob.contains('widen selected heads-up') ||
+      blob.contains('switch gears between hu') ||
+      blob.contains('heads-up versus multiway') ||
+      blob.contains('hu versus multiway') ||
+      (blob.contains('fewer bluffs') &&
+          blob.contains('thicker') &&
+          (blob.contains('more players') || blob.contains('multiway'))) ||
+      (blob.contains('player count') &&
+          (blob.contains('first-class') || blob.contains('planning')))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.huVsMultiway,
     );
   }
   // Multiway — keep "fewer bluffs" tied to multiway / more-players framing.
@@ -2005,6 +2043,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onTurnMapAcknowledge,
     this.onRiverCompositionAcknowledge,
     this.onPotTypePlansAcknowledge,
+    this.onHuVsMultiwayAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -2079,6 +2118,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onTurnMapAcknowledge;
   final VoidCallback? onRiverCompositionAcknowledge;
   final VoidCallback? onPotTypePlansAcknowledge;
+  final VoidCallback? onHuVsMultiwayAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -2441,6 +2481,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onPotTypePlansAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onPotTypePlansAcknowledge,
+        ),
+        CoachDialogueVisualKind.huVsMultiway => HuVsMultiwayDemo(
+          interactive: onHuVsMultiwayAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onHuVsMultiwayAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },

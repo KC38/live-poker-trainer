@@ -592,6 +592,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           '4-bet 100bb — tap Higher commitment.',
       'act-07-04-01-checkpoint' =>
           'Pot type — tap Ranges and SPR.',
+      'act-07-05-01-guided' =>
+          'Four-way river — tap Usually no.',
+      'act-07-05-01-scaffolded' =>
+          'HU vs nit — tap Higher HU.',
+      'act-07-05-01-unguided' =>
+          'Multiway top set — tap Thicker value.',
+      'act-07-05-01-checkpoint' =>
+          'Player count — tap First-class input.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -741,7 +749,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-07-04-01-guided' ||
             widget.activity.id == 'act-07-04-01-scaffolded' ||
             widget.activity.id == 'act-07-04-01-unguided' ||
-            widget.activity.id == 'act-07-04-01-checkpoint';
+            widget.activity.id == 'act-07-04-01-checkpoint' ||
+            widget.activity.id == 'act-07-05-01-guided' ||
+            widget.activity.id == 'act-07-05-01-scaffolded' ||
+            widget.activity.id == 'act-07-05-01-unguided' ||
+            widget.activity.id == 'act-07-05-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&
