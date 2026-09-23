@@ -922,23 +922,28 @@ class _SoftPulseTargetState extends State<_SoftPulseTarget>
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.active) return widget.child;
+    if (!widget.active) {
+      return SizedBox(width: double.infinity, child: widget.child);
+    }
     return AnimatedBuilder(
       animation: _pulse,
       builder: (context, child) {
         final glow = 0.25 + (_pulse.value * 0.4);
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.gold.withValues(alpha: glow * 0.55),
-                blurRadius: 10 + (8 * _pulse.value),
-                spreadRadius: 0.5,
-              ),
-            ],
+        return SizedBox(
+          width: double.infinity,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.gold.withValues(alpha: glow * 0.55),
+                  blurRadius: 10 + (8 * _pulse.value),
+                  spreadRadius: 0.5,
+                ),
+              ],
+            ),
+            child: child,
           ),
-          child: child,
         );
       },
       child: widget.child,
