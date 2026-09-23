@@ -2589,9 +2589,10 @@ export function buildSectionSeven() {
                     prompt: "Called. Turn 2d. Action?",
                     accessibilityText: "Many continue with delayed pressure or give-up.",
                     choices: [
-                      choice("barrel", "Barrel many blanks", "recommended",
-                        "Map continue.", {action: "BET", amountBb: 14}),
-                      choice("check-t", "Check/give-up sometimes", "strong",
+                      // Short dock labels — Rex carries the full teach line.
+                      choice("barrel", "Barrel blanks", "recommended",
+                        "Map continue on many blanks.", {action: "BET", amountBb: 14}),
+                      choice("check-t", "Give up", "strong",
                         "Also fine with a plan.", {action: "CHECK"}),
                       choice("min", "Bet 1bb", "clear_mistake",
                         "Not a story.", {action: "BET", amountBb: 1, betterChoiceId: "barrel"}),
@@ -2602,9 +2603,9 @@ export function buildSectionSeven() {
                     prompt: "Called again. River 9c. Ace-high. Action?",
                     accessibilityText: "Give up without blockers sometimes; bluff only with a story.",
                     choices: [
-                      choice("check-r", "Check / give up", "recommended",
+                      choice("check-r", "Check", "recommended",
                         "No strong story.", {action: "CHECK"}),
-                      choice("bluff", "Bluff large with no blockers", "questionable",
+                      choice("bluff", "Bluff large", "questionable",
                         "Needs a better blocker story.", {action: "BET", amountBb: 40}),
                       choice("tiny", "Bet 1bb", "clear_mistake",
                         "Not polar language.", {action: "BET", amountBb: 1, betterChoiceId: "check-r"}),

@@ -40,7 +40,7 @@ class AuthoredMultiStepActivity extends StatelessWidget {
       ('act-07-10-01-hand', 'step-flop') =>
         'BTN SRP on K72r — tap Bet.',
       ('act-07-10-01-hand', 'step-turn') =>
-        'Called · paired turn — tap Barrel many blanks.',
+        'Called · paired blank — tap Barrel blanks.',
       ('act-07-10-01-hand', 'step-river') =>
         'Ace-high on 9c — tap Check.',
       ('act-07-10-02-hand', 'step-3b-flop') =>
