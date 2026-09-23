@@ -112,6 +112,15 @@ enum LessonTableRegion {
 
   /// Live habit distractor: leave cards uncovered / flash them.
   habitLeaveBare,
+
+  /// Effective stack: shorter stack rules (correct).
+  effectiveStackShort,
+
+  /// Effective stack distractor: hero's larger stack.
+  effectiveStackHero,
+
+  /// Effective stack distractor: sum of stacks.
+  effectiveStackSum,
 }
 
 /// How the mini-table is arranged.
@@ -145,6 +154,9 @@ enum LessonTableLayout {
 
   /// Live-habit tiles: cover+wait / act early / leave bare.
   habitCoverOutcomes,
+
+  /// Effective-stack tiles: shorter / hero / sum.
+  effectiveStackOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -367,6 +379,11 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         villainSeatCount: 0,
         highlight: LessonTableHighlight.hero,
         caption: 'Your holes',
+      );
+    case 'act-02-07-02-jump-stack':
+      return const LessonTableScene(
+        layout: LessonTableLayout.effectiveStackOutcomes,
+        caption: 'You 120bb · Villain 55bb',
       );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
@@ -683,6 +700,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.smallBlind => pick('j2-sb'),
         _ => null,
       };
+    case 'act-02-07-02-jump-stack':
+      return switch (region) {
+        LessonTableRegion.effectiveStackShort => pick('j2-55'),
+        LessonTableRegion.effectiveStackHero => pick('j2-120'),
+        LessonTableRegion.effectiveStackSum => pick('j2-175'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -762,7 +786,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id.startsWith('act-01-05-01-') ||
       activity.id.startsWith('act-02-01-01-') ||
       activity.id == 'act-02-07-01-checkpoint-habit' ||
-      activity.id == 'act-02-07-02-jump-pos';
+      activity.id == 'act-02-07-02-jump-pos' ||
+      activity.id == 'act-02-07-02-jump-stack';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -892,6 +917,8 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.potSideOutcomes => _buildPotSideOutcomes(),
       LessonTableLayout.potOpenSizeOutcomes => _buildPotOpenSizeOutcomes(),
       LessonTableLayout.habitCoverOutcomes => _buildHabitCoverOutcomes(),
+      LessonTableLayout.effectiveStackOutcomes =>
+        _buildEffectiveStackOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -1540,6 +1567,35 @@ class LessonTableContext extends StatelessWidget {
             color: AppColors.slate,
             size: 24,
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEffectiveStackOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive effective stack — tap the shorter stack',
+      semanticsStatic: 'Effective stack outcomes',
+      caption: scene.caption ?? 'You 120bb · Villain 55bb',
+      phases: [
+        (
+          region: LessonTableRegion.effectiveStackShort,
+          title: '55bb',
+          detail: 'Shorter',
+          visual: const _PotChipDot(label: '55', gold: true),
+        ),
+        (
+          region: LessonTableRegion.effectiveStackHero,
+          title: '120bb',
+          detail: 'Your stack',
+          visual: const _PotChipDot(label: '120', gold: false),
+        ),
+        (
+          region: LessonTableRegion.effectiveStackSum,
+          title: '175bb',
+          detail: 'Added up',
+          visual: const _PotChipDot(label: '175', gold: false),
         ),
       ],
     );

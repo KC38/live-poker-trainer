@@ -320,6 +320,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Cards uncovered and action left — tap the safe habit.',
       'act-02-07-02-jump-pos' =>
           'Tap the seat right before the button.',
+      'act-02-07-02-jump-stack' =>
+          'Effective stack is the shorter one — tap it.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -343,7 +345,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id.startsWith('act-01-05-01-') ||
             widget.activity.id.startsWith('act-02-01-01-') ||
             widget.activity.id == 'act-02-07-01-checkpoint-habit' ||
-            widget.activity.id == 'act-02-07-02-jump-pos';
+            widget.activity.id == 'act-02-07-02-jump-pos' ||
+            widget.activity.id == 'act-02-07-02-jump-stack';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

@@ -104,6 +104,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Jump: tap the seat before the button on the position felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-02-07-02-jump-stack') {
+    // Jump: tap the effective (shorter) stack on the felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {
     return SelectIdentifyPresentation.showdownTap;
