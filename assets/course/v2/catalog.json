@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "ad9afe9011b0fd07075a9929c7ebf9d565ce97df6591846a6580d689b4b9824a",
+  "contentChecksum": "1d64069f3beb8632589971141fd23dd354d0739896e6dd753612b8a89493a58c",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -6702,18 +6702,18 @@
                   "choices": [
                     {
                       "id": "soft",
-                      "label": "Both can be accepted with soft grades",
-                      "accessibilityText": "Both can be accepted with soft grades"
+                      "label": "Nearby sizes both soft-grade",
+                      "accessibilityText": "Nearby sizes both soft-grade"
                     },
                     {
                       "id": "one-only",
-                      "label": "Only one chip count is ever correct",
-                      "accessibilityText": "Only one chip count is ever correct"
+                      "label": "Only one chip count is correct",
+                      "accessibilityText": "Only one chip count is correct"
                     },
                     {
                       "id": "random-size",
-                      "label": "Any size including 1 chip is fine",
-                      "accessibilityText": "Any size including 1 chip is fine"
+                      "label": "Even 1-chip bets are fine",
+                      "accessibilityText": "Even 1-chip bets are fine"
                     }
                   ]
                 },
@@ -6721,8 +6721,8 @@
                   "id": "act-04-04-01-checkpoint",
                   "order": 5,
                   "stage": "checkpoint",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
                   "accessibilityText": "One-chip value bets are clear mistakes.",
                   "acceptedGrades": [
                     "recommended",
@@ -6737,18 +6737,24 @@
                   "choices": [
                     {
                       "id": "bad-1",
-                      "label": "Bet 1 chip",
-                      "accessibilityText": "Bet 1 chip"
+                      "label": "Bet 1",
+                      "accessibilityText": "Bet 1",
+                      "action": "BET",
+                      "amountBb": 0.5
                     },
                     {
                       "id": "good-15",
                       "label": "Bet 15",
-                      "accessibilityText": "Bet 15"
+                      "accessibilityText": "Bet 15",
+                      "action": "BET",
+                      "amountBb": 7.5
                     },
                     {
                       "id": "good-20",
                       "label": "Bet 20",
-                      "accessibilityText": "Bet 20"
+                      "accessibilityText": "Bet 20",
+                      "action": "BET",
+                      "amountBb": 10
                     }
                   ]
                 }

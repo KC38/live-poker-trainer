@@ -422,6 +422,28 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'Pick a value size',
       );
+    case 'act-04-04-01-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['9h', '8h'],
+        boardCodes: ['Kd', '7c', '2s', '3d', 'Ah'],
+        potLabel: 'Pot 40',
+        villainLine: 'Checked to you',
+        streetLabel: 'River · scare Ace · missed draw',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Sell polar pressure',
+      );
+    case 'act-04-04-01-checkpoint':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', 'Ad'],
+        boardCodes: ['Kc', '9s', '3h'],
+        potLabel: 'Pot 30',
+        villainLine: 'Checked to you',
+        streetLabel: 'Flop · strong value',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Tap the worst value size',
+      );
   }
   return null;
 }

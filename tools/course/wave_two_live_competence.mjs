@@ -1011,26 +1011,28 @@ export function buildSectionFour() {
                 a11y: "Nearby sizes earn soft grades.",
                 objectives: ["Avoid tiny or nonsensical sizes"], lifeLoss: true,
                 choices: [
-                  choice("soft", "Both can be accepted with soft grades", "recommended",
+                  choice("soft", "Nearby sizes both soft-grade", "recommended",
                     "Live sizing has a band, not one chip exactness."),
-                  choice("one-only", "Only one chip count is ever correct", "clear_mistake",
+                  choice("one-only", "Only one chip count is correct", "clear_mistake",
                     "That overfits.", {betterChoiceId: "soft"}),
-                  choice("random-size", "Any size including 1 chip is fine", "clear_mistake",
+                  choice("random-size", "Even 1-chip bets are fine", "clear_mistake",
                     "Nonsensical sizes still fail.", {betterChoiceId: "soft"})
                 ],
               }),
-              selectAct({
+              actionAct({
                 id: "act-04-04-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Pot 30. You want value with a strong hand. Worst size?",
                 a11y: "One-chip value bets are clear mistakes.",
                 objectives: ["Avoid tiny or nonsensical sizes"], lifeLoss: true,
                 choices: [
-                  choice("bad-1", "Bet 1 chip", "recommended",
-                    "Tiny bets do not look like value."),
+                  choice("bad-1", "Bet 1", "recommended",
+                    "Tiny bets do not look like value.", {action: "BET", amountBb: 0.5}),
                   choice("good-15", "Bet 15", "clear_mistake",
-                    "Half pot is fine value — not the worst size.", {betterChoiceId: "bad-1"}),
+                    "Half pot is fine value — not the worst size.",
+                    {action: "BET", amountBb: 7.5, betterChoiceId: "bad-1"}),
                   choice("good-20", "Bet 20", "clear_mistake",
-                    "A real value size, not the worst.", {betterChoiceId: "bad-1"})
+                    "A real value size, not the worst.",
+                    {action: "BET", amountBb: 10, betterChoiceId: "bad-1"})
                 ],
               }),
             ],

@@ -8689,8 +8689,8 @@
                   "choices": [
                     {
                       "id": "soft",
-                      "label": "Both can be accepted with soft grades",
-                      "accessibilityText": "Both can be accepted with soft grades",
+                      "label": "Nearby sizes both soft-grade",
+                      "accessibilityText": "Nearby sizes both soft-grade",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Live sizing has a band, not one chip exactness."
@@ -8698,8 +8698,8 @@
                     },
                     {
                       "id": "one-only",
-                      "label": "Only one chip count is ever correct",
-                      "accessibilityText": "Only one chip count is ever correct",
+                      "label": "Only one chip count is correct",
+                      "accessibilityText": "Only one chip count is correct",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "That overfits.",
@@ -8708,8 +8708,8 @@
                     },
                     {
                       "id": "random-size",
-                      "label": "Any size including 1 chip is fine",
-                      "accessibilityText": "Any size including 1 chip is fine",
+                      "label": "Even 1-chip bets are fine",
+                      "accessibilityText": "Even 1-chip bets are fine",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Nonsensical sizes still fail.",
@@ -8722,8 +8722,8 @@
                   "id": "act-04-04-01-checkpoint",
                   "order": 5,
                   "stage": "checkpoint",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
                   "accessibilityText": "One-chip value bets are clear mistakes.",
                   "acceptedGrades": [
                     "recommended",
@@ -8738,12 +8738,14 @@
                   "choices": [
                     {
                       "id": "bad-1",
-                      "label": "Bet 1 chip",
-                      "accessibilityText": "Bet 1 chip",
+                      "label": "Bet 1",
+                      "accessibilityText": "Bet 1",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Tiny bets do not look like value."
-                      }
+                      },
+                      "action": "BET",
+                      "amountBb": 0.5
                     },
                     {
                       "id": "good-15",
@@ -8753,7 +8755,9 @@
                         "grade": "clear_mistake",
                         "feedback": "Half pot is fine value — not the worst size.",
                         "betterChoiceId": "bad-1"
-                      }
+                      },
+                      "action": "BET",
+                      "amountBb": 7.5
                     },
                     {
                       "id": "good-20",
@@ -8763,7 +8767,9 @@
                         "grade": "clear_mistake",
                         "feedback": "A real value size, not the worst.",
                         "betterChoiceId": "bad-1"
-                      }
+                      },
+                      "action": "BET",
+                      "amountBb": 10
                     }
                   ]
                 }

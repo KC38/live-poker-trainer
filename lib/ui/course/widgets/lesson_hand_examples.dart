@@ -539,6 +539,24 @@ LessonHandExample? resolveHandExample({
         title: 'Only this street, always',
         codes: [],
       );
+    case 'soft':
+      return const LessonHandExample(
+        id: 'soft',
+        title: 'Nearby sizes both soft-grade',
+        codes: [],
+      );
+    case 'one-only':
+      return const LessonHandExample(
+        id: 'one-only',
+        title: 'Only one chip count is correct',
+        codes: [],
+      );
+    case 'random-size':
+      return const LessonHandExample(
+        id: 'random-size',
+        title: 'Even 1-chip bets are fine',
+        codes: [],
+      );
     case 'split':
       return const LessonHandExample(
         id: 'split',
