@@ -17,6 +17,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/guardrails_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/range_advantage_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/equity_realize_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/capped_uncapped_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
@@ -2963,6 +2964,53 @@ void main() {
       expect(isTableRegionTapActivity(activity), isTrue);
 
       for (final title in ['EQUITY', 'CASH', 'POS']) {
+        await tester.tap(find.text(title));
+        await tester.pump();
+      }
+      expect(feltAck, 1);
+      controller.dispose();
+    },
+  );
+
+
+  testWidgets(
+    'capped-uncapped explain taps Capped Uncapped Nuts instead of Continue',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-06-03-01-explain',
+        order: 1,
+        stage: ActivityStage.explain,
+        renderer: ActivityRenderer.coachDialogue,
+        estimatedSeconds: 30,
+        accessibilityText:
+            'Capped = nuts unlikely. Uncapped = nuts still live.',
+        acceptedGrades: const [SoftGrade.recommended],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'm',
+            kind: 'dialogue',
+            text: 'Capped = nuts unlikely. Uncapped = nuts still live.',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      var feltAck = 0;
+      await tester.pumpWidget(
+        _wrap(
+          CoachDialogueActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+            onFeltAcknowledge: () => feltAck += 1,
+          ),
+        ),
+      );
+      expect(find.byType(CappedUncappedDemo), findsOneWidget);
+      expect(find.text('Tap Capped, Uncapped, and Nuts.'), findsOneWidget);
+      expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+      expect(isTableRegionTapActivity(activity), isTrue);
+
+      for (final title in ['CAPPED', 'UNCAPPED', 'NUTS']) {
         await tester.tap(find.text(title));
         await tester.pump();
       }
