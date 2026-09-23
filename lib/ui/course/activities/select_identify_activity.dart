@@ -467,6 +467,8 @@ class _HandCategoryTapActivity extends StatelessWidget {
           'King-high board. Tap how many clean outs you have.',
         'act-03-03-01-unguided' =>
           'Getting 3:1 with real outs — tap what you do.',
+        'act-03-03-01-checkpoint' =>
+          'Nut flush draw, deep and sticky — tap the edge.',
         _ => 'Look at the board and your holes — tap what you made.',
       };
 
@@ -553,6 +555,8 @@ class _HandCategoryTapActivity extends StatelessWidget {
                         ? 'Tap your clean-out count.'
                         : activity.id == 'act-03-03-01-unguided'
                         ? 'Tap Call, Fold, or Raise.'
+                        : activity.id == 'act-03-03-01-checkpoint'
+                        ? 'Tap the implied-odds edge.'
                         : 'Tap the hand category you made.';
                   }
                   return 'Checking…';

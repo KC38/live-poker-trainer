@@ -6394,6 +6394,76 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s3 outs checkpoint taps implied odds on NFD felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-03-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Deep stacks add implied odds versus sticky players.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          '200bb deep. Nut flush draw, pot-sized bet from a sticky caller. Edge?',
+      choices: const [
+        CourseChoice(
+          id: 'implied-yes',
+          label: 'Implied odds improve — they pay when you hit',
+        ),
+        CourseChoice(
+          id: 'implied-no',
+          label: 'Depth never changes draw price',
+        ),
+        CourseChoice(
+          id: 'fold-nfd',
+          label: 'Fold nut flush draws to any bet',
+        ),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.handCategoryTap,
+    );
+    expect(
+      resolveLessonTableScene(activity)?.caption,
+      '200bb · pot bet · sticky caller',
+    );
+    expect(resolveLessonTableScene(activity)?.heroCodes, ['Ah', 'Qh']);
+    expect(resolveLessonTableScene(activity)?.boardCodes, ['Kh', '7h', '2c']);
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Nut flush draw, deep and sticky — tap the edge.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        '200bb deep. Nut flush draw, pot-sized bet from a sticky caller. Edge?',
+      ),
+      findsNothing,
+    );
+    expect(
+      find.text('Implied odds improve — they pay when you hit'),
+      findsNothing,
+    );
+    expect(find.text('Implied — they pay when you hit'), findsOneWidget);
+    await tester.tap(find.text('Implied — they pay when you hit'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'implied-yes');
+    controller.dispose();
+  });
+
   testWidgets('numeric entry updates draft', (tester) async {
     final activity = _activity(
       renderer: ActivityRenderer.numericPotPrice,

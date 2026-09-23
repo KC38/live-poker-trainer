@@ -145,6 +145,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Outs: tap Call / Fold / Raise category tiles (choice ids native).
     return SelectIdentifyPresentation.handCategoryTap;
   }
+  if (activity.id == 'act-03-03-01-checkpoint') {
+    // Outs: deep NFD spot — tap the implied-odds edge on category tiles.
+    return SelectIdentifyPresentation.handCategoryTap;
+  }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {
     return SelectIdentifyPresentation.showdownTap;

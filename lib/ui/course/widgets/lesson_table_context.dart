@@ -518,6 +518,14 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.none,
         caption: 'Pot 20 · bet 10 · ~8 clean outs',
       );
+    case 'act-03-03-01-checkpoint':
+      return const LessonTableScene(
+        heroCodes: ['Ah', 'Qh'],
+        boardCodes: ['Kh', '7h', '2c'],
+        villainSeatCount: 1,
+        highlight: LessonTableHighlight.none,
+        caption: '200bb · pot bet · sticky caller',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
