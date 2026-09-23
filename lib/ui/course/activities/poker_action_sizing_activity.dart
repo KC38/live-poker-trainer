@@ -94,6 +94,12 @@ class PokerActionSizingActivity extends StatelessWidget {
                 identifyUnavailable: spot.identifyUnavailable,
                 facingBet: spot.facingBet,
                 heroStackAmount: spot.heroStackAmount,
+                pulseChoiceId: _guidedPulseChoiceId(
+                  activity: activity,
+                  showGuidance: showGuidance,
+                  selected: selected,
+                  locked: locked,
+                ),
                 onSelect:
                     (id) => controller.selectChoice(id, autoSubmit: true),
               ),
@@ -198,6 +204,25 @@ class PokerActionSizingActivity extends StatelessWidget {
   }
 }
 
+/// Soft-pulse the authored recommended dock choice on guided open/fold.
+String? _guidedPulseChoiceId({
+  required CourseActivity activity,
+  required bool showGuidance,
+  required String? selected,
+  required bool locked,
+}) {
+  if (!showGuidance ||
+      locked ||
+      selected != null ||
+      activity.stage != ActivityStage.guided) {
+    return null;
+  }
+  return switch (activity.id) {
+    'act-02-03-01-guided-utg' => 'fold',
+    _ => null,
+  };
+}
+
 /// Felt-first Rex lines for action spots (felt already shows cards/context).
 String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
   return switch (activity.id) {
@@ -220,6 +245,14 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // Jump: name the spot, not the answer.
     'act-02-07-02-jump-open' =>
       'Trash UTG — tap Fold or Open.',
+    'act-02-03-01-guided-utg' =>
+      'Trash UTG — tap Fold.',
+    'act-02-03-01-scaffolded-qq' =>
+      'Premium pair UTG — tap Open to 6.',
+    'act-02-03-01-unguided-btn' =>
+      'Folds to you on the button — tap Fold, Open, or Limp.',
+    'act-02-03-01-checkpoint-hj' =>
+      'Hijack first in — tap your action.',
     'act-02-07-02-jump-vs' =>
       'Aces in the big blind vs an open — tap your action.',
     'act-03-04-01-guided' =>
