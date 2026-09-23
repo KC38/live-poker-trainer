@@ -859,6 +859,30 @@ enum LessonTableRegion {
 
   /// S6 section checkpoint: Nit distractor on LAG evidence.
   s6CpNit,
+
+  /// Preflop→flop guided: plan is sick (correct).
+  preflopFlopPlanSick,
+
+  /// Preflop→flop guided: still jam every street (mistake).
+  preflopFlopStillJam,
+
+  /// Preflop→flop scaffolded: value continues (correct).
+  preflopFlopValueContinues,
+
+  /// Preflop→flop scaffolded: auto-fold top two (mistake).
+  preflopFlopAutoFold,
+
+  /// Preflop→flop unguided: name the thesis (correct).
+  preflopFlopNameThesis,
+
+  /// Preflop→flop unguided: wing it (mistake).
+  preflopFlopWingIt,
+
+  /// Preflop→flop checkpoint: abandon quickly (correct).
+  preflopFlopAbandon,
+
+  /// Preflop→flop checkpoint: force the old line (mistake).
+  preflopFlopForce,
 }
 
 /// How the mini-table is arranged.
@@ -1252,6 +1276,18 @@ enum LessonTableLayout {
 
   /// Adjust vs Nit: cite strong range vs fear.
   nitRespectCiteOutcomes,
+
+  /// Preflop→flop guided: plan is sick vs still jam.
+  preflopFlopGuidedOutcomes,
+
+  /// Preflop→flop scaffolded: value continues vs auto-fold.
+  preflopFlopScaffoldedOutcomes,
+
+  /// Preflop→flop unguided: name thesis vs wing it.
+  preflopFlopUnguidedOutcomes,
+
+  /// Preflop→flop checkpoint: abandon vs force.
+  preflopFlopCheckpointOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -2288,6 +2324,26 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         layout: LessonTableLayout.s6CpLagOutcomes,
         caption: 'Wide entry, sustained pressure. Label?',
+      );
+    case 'act-07-01-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.preflopFlopGuidedOutcomes,
+        caption: 'AQo 3-bet · flop 872tt — update?',
+      );
+    case 'act-07-01-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.preflopFlopScaffoldedOutcomes,
+        caption: 'BTN steal KTo · flop KT2r — update?',
+      );
+    case 'act-07-01-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.preflopFlopUnguidedOutcomes,
+        caption: 'Best habit before acting the flop?',
+      );
+    case 'act-07-01-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.preflopFlopCheckpointOutcomes,
+        caption: 'Dead plan response?',
       );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
@@ -3345,6 +3401,30 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.s6CpNit => pick('nit'),
         _ => null,
       };
+    case 'act-07-01-01-guided':
+      return switch (region) {
+        LessonTableRegion.preflopFlopPlanSick => pick('dead'),
+        LessonTableRegion.preflopFlopStillJam => pick('jam'),
+        _ => null,
+      };
+    case 'act-07-01-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.preflopFlopValueContinues => pick('value'),
+        LessonTableRegion.preflopFlopAutoFold => pick('fold'),
+        _ => null,
+      };
+    case 'act-07-01-01-unguided':
+      return switch (region) {
+        LessonTableRegion.preflopFlopNameThesis => pick('thesis'),
+        LessonTableRegion.preflopFlopWingIt => pick('vibes'),
+        _ => null,
+      };
+    case 'act-07-01-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.preflopFlopAbandon => pick('abandon'),
+        LessonTableRegion.preflopFlopForce => pick('force'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -3420,7 +3500,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
         activity.id == 'act-06-12-01-explain' ||
         activity.id == 'act-06-12-02-explain' ||
         activity.id == 'act-06-12-03-explain' ||
-        activity.id == 'act-06-13-01-explain';
+        activity.id == 'act-06-13-01-explain' ||
+        activity.id == 'act-07-01-01-explain';
   }
   if (activity.renderer != ActivityRenderer.selectIdentify &&
       activity.renderer != ActivityRenderer.playerReadClassify) {
@@ -3543,7 +3624,11 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-06-13-02-cp-cap' ||
       activity.id == 'act-06-13-02-cp-polar' ||
       activity.id == 'act-06-13-02-cp-tag' ||
-      activity.id == 'act-06-13-02-cp-lag';
+      activity.id == 'act-06-13-02-cp-lag' ||
+      activity.id == 'act-07-01-01-guided' ||
+      activity.id == 'act-07-01-01-scaffolded' ||
+      activity.id == 'act-07-01-01-unguided' ||
+      activity.id == 'act-07-01-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -3867,6 +3952,14 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.s6CpPolarOutcomes => _buildS6CpPolarOutcomes(),
       LessonTableLayout.s6CpTagOutcomes => _buildS6CpTagOutcomes(),
       LessonTableLayout.s6CpLagOutcomes => _buildS6CpLagOutcomes(),
+      LessonTableLayout.preflopFlopGuidedOutcomes =>
+          _buildPreflopFlopGuidedOutcomes(),
+      LessonTableLayout.preflopFlopScaffoldedOutcomes =>
+          _buildPreflopFlopScaffoldedOutcomes(),
+      LessonTableLayout.preflopFlopUnguidedOutcomes =>
+          _buildPreflopFlopUnguidedOutcomes(),
+      LessonTableLayout.preflopFlopCheckpointOutcomes =>
+          _buildPreflopFlopCheckpointOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -8312,6 +8405,130 @@ class LessonTableContext extends StatelessWidget {
           visual: const Icon(
             Icons.lock_outlined,
             color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPreflopFlopGuidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive preflop-to-flop — tap Plan is sick or Still jam',
+      semanticsStatic: 'Preflop-to-flop guided outcomes',
+      caption: scene.caption ?? 'AQo 3-bet · flop 872tt — update?',
+      phases: [
+        (
+          region: LessonTableRegion.preflopFlopPlanSick,
+          title: 'Plan is sick',
+          detail: 'Give up more',
+          visual: const Icon(
+            Icons.heart_broken_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.preflopFlopStillJam,
+          title: 'Still jam',
+          detail: 'Every street',
+          visual: const Icon(
+            Icons.bolt_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPreflopFlopScaffoldedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive preflop-to-flop — tap Value continues or Auto-fold',
+      semanticsStatic: 'Preflop-to-flop scaffolded outcomes',
+      caption: scene.caption ?? 'BTN steal KTo · flop KT2r — update?',
+      phases: [
+        (
+          region: LessonTableRegion.preflopFlopValueContinues,
+          title: 'Value continues',
+          detail: 'Thesis improved',
+          visual: const Icon(
+            Icons.trending_up,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.preflopFlopAutoFold,
+          title: 'Auto-fold',
+          detail: 'Top two',
+          visual: const Icon(
+            Icons.do_not_disturb_on_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPreflopFlopUnguidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive preflop-to-flop — tap Name the thesis or Wing it',
+      semanticsStatic: 'Preflop-to-flop unguided outcomes',
+      caption: scene.caption ?? 'Best habit before acting the flop?',
+      phases: [
+        (
+          region: LessonTableRegion.preflopFlopNameThesis,
+          title: 'Name the thesis',
+          detail: 'Before flop act',
+          visual: const Icon(
+            Icons.edit_note_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.preflopFlopWingIt,
+          title: 'Wing it',
+          detail: 'Every street',
+          visual: const Icon(
+            Icons.casino_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPreflopFlopCheckpointOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive preflop-to-flop — tap Abandon quickly or Force the old line',
+      semanticsStatic: 'Preflop-to-flop checkpoint outcomes',
+      caption: scene.caption ?? 'Dead plan response?',
+      phases: [
+        (
+          region: LessonTableRegion.preflopFlopAbandon,
+          title: 'Abandon quickly',
+          detail: 'Sunk cost dies',
+          visual: const Icon(
+            Icons.exit_to_app,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.preflopFlopForce,
+          title: 'Force the old line',
+          detail: 'Leak',
+          visual: const Icon(
+            Icons.push_pin_outlined,
+            color: AppColors.danger,
             size: 24,
           ),
         ),

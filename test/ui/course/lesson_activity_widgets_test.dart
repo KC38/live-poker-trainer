@@ -27,6 +27,7 @@ import 'package:live_poker_trainer/ui/course/widgets/three_bet_four_bet_spr_demo
 import 'package:live_poker_trainer/ui/course/widgets/hard_fold_cooler_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/selective_aggression_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/tag_model_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/preflop_flop_plan_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
@@ -14888,6 +14889,216 @@ void main() {
     await tester.pump();
     expect(find.text('Checking…'), findsNothing);
     expect(find.text('Tap the answer on the table.'), findsNothing);
+    controller.dispose();
+  });
+
+  testWidgets(
+    's7 preflop flop explain taps Reason Confirm Cancel instead of Continue',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-07-01-01-explain',
+        order: 1,
+        stage: ActivityStage.explain,
+        renderer: ActivityRenderer.coachDialogue,
+        estimatedSeconds: 30,
+        accessibilityText: 'Enter with a reason. Flop confirms or cancels.',
+        acceptedGrades: const [SoftGrade.recommended],
+        objectives: const ['State a preflop thesis'],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'm',
+            kind: 'dialogue',
+            text: 'Enter with a reason. Flop confirms or cancels.',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      var feltAck = 0;
+      await tester.pumpWidget(
+        _wrap(
+          CoachDialogueActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+            onFeltAcknowledge: () => feltAck += 1,
+          ),
+        ),
+      );
+      expect(find.byType(PreflopFlopPlanDemo), findsOneWidget);
+      expect(find.text('Tap Reason, Confirm, and Cancel.'), findsOneWidget);
+      expect(find.text('Tap Reason, Confirm, and Cancel'), findsNothing);
+      expect(
+        find.text('Reason in · flop confirms or cancels'),
+        findsNothing,
+      );
+      expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+      expect(isTableRegionTapActivity(activity), isTrue);
+
+      for (final title in ['REASON', 'CONFIRM', 'CANCEL']) {
+        await tester.tap(find.text(title));
+        await tester.pump();
+      }
+      expect(feltAck, 1);
+      controller.dispose();
+    },
+  );
+
+  testWidgets('s7 preflop flop guided taps Plan is sick on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-01-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Give up more — plan dead.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'You 3-bet AQo for value. Flop 872tt. Update?',
+      choices: const [
+        CourseChoice(id: 'dead', label: 'Plan is sick — give up more'),
+        CourseChoice(id: 'jam', label: 'Still jam every street'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('AQo 3-bet · 872tt — tap Plan is sick.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Plan is sick'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'dead');
+    controller.dispose();
+  });
+
+  testWidgets('s7 preflop flop scaffolded taps Value continues on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-01-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Value continues.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'BTN steal with KTo. Flop KT2r. Update?',
+      choices: const [
+        CourseChoice(id: 'value', label: 'Value plan continues'),
+        CourseChoice(id: 'fold', label: 'Auto-fold top two'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('BTN steal KTo · KT2r — tap Value continues.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Value continues'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'value');
+    controller.dispose();
+  });
+
+  testWidgets('s7 preflop flop unguided taps Name the thesis on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-01-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Write the thesis before flop.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Best habit?',
+      choices: const [
+        CourseChoice(
+          id: 'thesis',
+          label: 'Name the preflop reason before acting flop',
+        ),
+        CourseChoice(id: 'vibes', label: 'Wing it every street'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Best habit — tap Name the thesis.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Name the thesis'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'thesis');
+    controller.dispose();
+  });
+
+  testWidgets('s7 preflop flop checkpoint taps Abandon quickly on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-01-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Abandon quickly.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Dead plan response?',
+      choices: const [
+        CourseChoice(id: 'abandon', label: 'Abandon quickly'),
+        CourseChoice(id: 'force', label: 'Force the old line'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Dead plan — tap Abandon quickly.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Abandon quickly'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'abandon');
     controller.dispose();
   });
 }
