@@ -388,6 +388,16 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
   }
 
+  // Hole-card choice quizzes already render MiniCards as answers. Never invent
+  // a felt from prompt keywords ("suited hole cards") — that defaulted to Ah/Kd
+  // and spoiled or confused the puzzle.
+  final allHoleCardChoices =
+      activity.choices.isNotEmpty &&
+      activity.choices.every(
+        (c) => _cardToken.allMatches(c.label).length >= 2,
+      );
+  if (allHoleCardChoices) return null;
+
   final hero = <String>[];
   final board = <String>[];
   for (final choice in activity.choices) {
