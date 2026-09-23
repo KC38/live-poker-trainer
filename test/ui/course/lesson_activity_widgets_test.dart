@@ -26,6 +26,7 @@ import 'package:live_poker_trainer/ui/course/widgets/mixed_strategy_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/three_bet_four_bet_spr_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/hard_fold_cooler_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/selective_aggression_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/tag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
@@ -3456,6 +3457,52 @@ void main() {
     },
   );
 
+  testWidgets(
+    'TAG explain taps Tight Aggro Model instead of Continue',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-06-11-02-explain',
+        order: 1,
+        stage: ActivityStage.explain,
+        renderer: ActivityRenderer.coachDialogue,
+        estimatedSeconds: 30,
+        accessibilityText:
+            'TAG: tight in, aggressive after — a working model.',
+        acceptedGrades: const [SoftGrade.recommended],
+        objectives: const ['Introduce TAG'],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'm',
+            kind: 'dialogue',
+            text: 'TAG: tight in, aggressive after — a working model.',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      var feltAck = 0;
+      await tester.pumpWidget(
+        _wrap(
+          CoachDialogueActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+            onFeltAcknowledge: () => feltAck += 1,
+          ),
+        ),
+      );
+      expect(find.byType(TagModelDemo), findsOneWidget);
+      expect(find.text('Tap Tight, Aggro, and Model.'), findsOneWidget);
+      expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+      expect(isTableRegionTapActivity(activity), isTrue);
+
+      for (final title in ['TIGHT', 'AGGRO', 'MODEL']) {
+        await tester.tap(find.text(title));
+        await tester.pump();
+      }
+      expect(feltAck, 1);
+      controller.dispose();
+    },
+  );
 
   testWidgets('select identify selects a choice', (tester) async {
     final activity = _activity(
