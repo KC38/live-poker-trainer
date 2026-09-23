@@ -653,6 +653,38 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.none,
         caption: 'Stacks vs pot — decide before you jam',
       );
+    case 'act-04-06-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.positionLabels,
+        seatCount: 6,
+        buttonSeat: 3,
+        highlight: LessonTableHighlight.none,
+        caption: 'Seat calls 7 of 9 preflops',
+      );
+    case 'act-04-06-01-scaffolded':
+      return const LessonTableScene(
+        heroCodes: ['Qh', '9d'],
+        boardCodes: ['Kc', '9s', '3h', '2d', '7c'],
+        villainSeatCount: 1,
+        highlight: LessonTableHighlight.none,
+        caption: 'Called three streets · second pair ×2',
+      );
+    case 'act-04-06-01-unguided':
+      return const LessonTableScene(
+        heroCodes: ['Jh', 'Td'],
+        boardCodes: ['As', '7c', '2d', '9h', '3s'],
+        villainSeatCount: 1,
+        highlight: LessonTableHighlight.none,
+        caption: 'One dramatic river call',
+      );
+    case 'act-04-06-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.positionLabels,
+        seatCount: 6,
+        buttonSeat: 3,
+        highlight: LessonTableHighlight.none,
+        caption: 'Bundle the evidence before labeling',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,

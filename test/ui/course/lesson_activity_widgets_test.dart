@@ -9006,6 +9006,49 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 observe sticky guided taps high participation on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-06-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'High participation noted.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Seat calls preflop seven of nine hands. Observation?',
+      choices: const [
+        CourseChoice(id: 'high-part', label: 'High participation'),
+        CourseChoice(id: 'low-part', label: 'Low participation'),
+        CourseChoice(id: 'label-now', label: 'Label archetype now'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.handCategoryTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Seat calls 7 of 9 preflops — tap the observation.'),
+      findsOneWidget,
+    );
+    expect(find.text('High participation'), findsOneWidget);
+    await tester.tap(find.text('High participation'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'high-part');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {

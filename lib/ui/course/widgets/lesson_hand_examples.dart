@@ -575,6 +575,60 @@ LessonHandExample? resolveHandExample({
         title: 'Only at showdown',
         codes: [],
       );
+    case 'high-part':
+      return const LessonHandExample(
+        id: 'high-part',
+        title: 'High participation',
+        codes: [],
+      );
+    case 'low-part':
+      return const LessonHandExample(
+        id: 'low-part',
+        title: 'Low participation',
+        codes: [],
+      );
+    case 'label-now':
+      return const LessonHandExample(
+        id: 'label-now',
+        title: 'Label archetype now',
+        codes: [],
+      );
+    case 'sticky':
+      return const LessonHandExample(
+        id: 'sticky',
+        title: 'Sticky calls — low folding',
+        codes: [],
+      );
+    case 'folds-alot':
+      return const LessonHandExample(
+        id: 'folds-alot',
+        title: 'They fold too much',
+        codes: [],
+      );
+    case 'low-conf':
+      return const LessonHandExample(
+        id: 'low-conf',
+        title: 'Low confidence — need samples',
+        codes: [],
+      );
+    case 'sure':
+      return const LessonHandExample(
+        id: 'sure',
+        title: 'Certain forever',
+        codes: [],
+      );
+    case 'bundle':
+      return const LessonHandExample(
+        id: 'bundle',
+        title: 'Many hands · rarely folds',
+        codes: [],
+      );
+    case 'insult':
+      return const LessonHandExample(
+        id: 'insult',
+        title: 'They are a bad person',
+        codes: [],
+      );
     case 'split':
       return const LessonHandExample(
         id: 'split',
