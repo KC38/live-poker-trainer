@@ -1260,6 +1260,7 @@ LessonActionSpot? resolveToyHandStepSpot({
         streetLabel: 'Preflop · Button',
         facingBet: false,
         openPot: true,
+        feltStatusLine: 'First in — open the pot',
       );
     case 'step-01-06-flop':
       return const LessonActionSpot(
@@ -1268,6 +1269,7 @@ LessonActionSpot? resolveToyHandStepSpot({
         villainLine: 'Blinds fold',
         streetLabel: 'Hand over',
         facingBet: false,
+        feltStatusLine: 'Uncontested — stack the chips',
       );
     case 'step-01-06-bb-defend':
       return const LessonActionSpot(
@@ -1276,6 +1278,7 @@ LessonActionSpot? resolveToyHandStepSpot({
         villainLine: 'BB calls your open',
         streetLabel: 'Preflop · Heading to flop',
         facingBet: false,
+        feltStatusLine: 'Call keeps the hand alive',
       );
     case 'step-01-06-flop-cbet':
       return const LessonActionSpot(
@@ -1295,6 +1298,7 @@ LessonActionSpot? resolveToyHandStepSpot({
         streetLabel: 'Preflop · Button',
         facingBet: false,
         openPot: true,
+        feltStatusLine: 'First in — open the pot',
       );
     case 'step-01-06-cp-end':
       return const LessonActionSpot(
@@ -1303,6 +1307,7 @@ LessonActionSpot? resolveToyHandStepSpot({
         villainLine: 'Both blinds fold',
         streetLabel: 'Hand over',
         facingBet: false,
+        feltStatusLine: 'Uncontested — stack the chips',
       );
     case 'j-hand-open':
       return const LessonActionSpot(
@@ -1312,6 +1317,7 @@ LessonActionSpot? resolveToyHandStepSpot({
         streetLabel: 'Preflop · Button',
         facingBet: false,
         openPot: true,
+        feltStatusLine: 'First in — open the pot',
       );
     case 'j-hand-end':
       return const LessonActionSpot(
@@ -1320,6 +1326,7 @@ LessonActionSpot? resolveToyHandStepSpot({
         villainLine: 'Blinds fold',
         streetLabel: 'Hand over',
         facingBet: false,
+        feltStatusLine: 'Uncontested — stack the chips',
       );
   }
   return null;
@@ -6124,6 +6131,17 @@ class LessonActionTable extends StatelessWidget {
               spot.streetLabel?.toLowerCase().contains('preflop') == true
                   ? 'First in — open the pot'
                   : 'Pot is open to a bet',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ] else if (spot.streetLabel?.toLowerCase().contains('hand over') ==
+              true) ...[
+            const SizedBox(height: 8),
+            Text(
+              'Uncontested — stack the chips',
               style: GoogleFonts.manrope(
                 color: AppColors.gold,
                 fontSize: 11,
