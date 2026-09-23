@@ -400,6 +400,17 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'Flush card — shut down',
       );
+    case 'act-04-03-01-unguided':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', 'Td'],
+        boardCodes: ['Qc', '9s', '3h'],
+        potLabel: 'Pot 24 · 3-way',
+        villainLine: 'Two callers · deep stacks',
+        streetLabel: 'Flop · medium strength',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Keep the pot controlled',
+      );
   }
   return null;
 }
@@ -569,6 +580,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id == 'act-04-03-01-scaffolded' &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id == 'act-04-03-01-unguided' &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }

@@ -8429,8 +8429,8 @@
                   "choices": [
                     {
                       "id": "small-pot",
-                      "label": "Keep the pot controlled",
-                      "accessibilityText": "Keep the pot controlled",
+                      "label": "Keep pot small",
+                      "accessibilityText": "Keep pot small",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Medium hands hate gigantic multiway pots."
@@ -8439,8 +8439,8 @@
                     },
                     {
                       "id": "jam-med",
-                      "label": "Force stacks in now",
-                      "accessibilityText": "Force stacks in now",
+                      "label": "Jam stacks in",
+                      "accessibilityText": "Jam stacks in",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Over-commitment with medium strength.",
@@ -8470,8 +8470,8 @@
                   "choices": [
                     {
                       "id": "branches",
-                      "label": "State value/bluff intent and branches",
-                      "accessibilityText": "State value/bluff intent and branches",
+                      "label": "Brick → barrel · flush → abort",
+                      "accessibilityText": "Brick → barrel · flush → abort",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "If X card, continue; if Y card, shut down."
@@ -8489,8 +8489,8 @@
                     },
                     {
                       "id": "one-street",
-                      "label": "Only think one street ahead always",
-                      "accessibilityText": "Only think one street ahead always",
+                      "label": "Only this street, always",
+                      "accessibilityText": "Only this street, always",
                       "grading": {
                         "grade": "questionable",
                         "feedback": "One street is incomplete for live depth."

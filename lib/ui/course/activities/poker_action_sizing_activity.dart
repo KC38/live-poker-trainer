@@ -262,6 +262,8 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'KK vs a live open to 6 — tap a 3-bet size.',
     'act-04-03-01-scaffolded' =>
       'Air vs a flush turn — tap Check to shut down.',
+    'act-04-03-01-unguided' =>
+      'Medium hand multiway and deep — tap Check to keep it small.',
     _ => null,
   };
 }

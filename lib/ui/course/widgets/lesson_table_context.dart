@@ -629,6 +629,14 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.none,
         caption: 'UTG open · two callers · you BB with AKo',
       );
+    case 'act-04-03-01-checkpoint':
+      return const LessonTableScene(
+        heroCodes: ['Ah', 'Kd'],
+        boardCodes: ['As', '7c', '2d'],
+        villainSeatCount: 1,
+        highlight: LessonTableHighlight.none,
+        caption: 'Flop plan ready — name the turn branches',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,

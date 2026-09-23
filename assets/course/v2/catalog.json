@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "e066a7b513f83ef7a90bb40a5a21831a24edf8ab2a10bd5cdef1718e0fda8a78",
+  "contentChecksum": "ad9afe9011b0fd07075a9929c7ebf9d565ce97df6591846a6580d689b4b9824a",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -6494,14 +6494,14 @@
                   "choices": [
                     {
                       "id": "small-pot",
-                      "label": "Keep the pot controlled",
-                      "accessibilityText": "Keep the pot controlled",
+                      "label": "Keep pot small",
+                      "accessibilityText": "Keep pot small",
                       "action": "CHECK"
                     },
                     {
                       "id": "jam-med",
-                      "label": "Force stacks in now",
-                      "accessibilityText": "Force stacks in now",
+                      "label": "Jam stacks in",
+                      "accessibilityText": "Jam stacks in",
                       "action": "ALL_IN"
                     }
                   ]
@@ -6526,8 +6526,8 @@
                   "choices": [
                     {
                       "id": "branches",
-                      "label": "State value/bluff intent and branches",
-                      "accessibilityText": "State value/bluff intent and branches"
+                      "label": "Brick → barrel · flush → abort",
+                      "accessibilityText": "Brick → barrel · flush → abort"
                     },
                     {
                       "id": "vibes",
@@ -6536,8 +6536,8 @@
                     },
                     {
                       "id": "one-street",
-                      "label": "Only think one street ahead always",
-                      "accessibilityText": "Only think one street ahead always"
+                      "label": "Only this street, always",
+                      "accessibilityText": "Only this street, always"
                     }
                   ]
                 }

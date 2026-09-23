@@ -938,10 +938,11 @@ export function buildSectionFour() {
                 objectives: ["Keep pot size matched to hand strength"],
                 lifeLoss: true,
                 choices: [
-                  choice("small-pot", "Keep the pot controlled", "recommended",
+                  choice("small-pot", "Keep pot small", "recommended",
                     "Medium hands hate gigantic multiway pots.", {action: "CHECK"}),
-                  choice("jam-med", "Force stacks in now", "clear_mistake",
-                    "Over-commitment with medium strength.", {action: "ALL_IN", betterChoiceId: "small-pot"})
+                  choice("jam-med", "Jam stacks in", "clear_mistake",
+                    "Over-commitment with medium strength.",
+                    {action: "ALL_IN", betterChoiceId: "small-pot"})
                 ],
               }),
               selectAct({
@@ -951,11 +952,11 @@ export function buildSectionFour() {
                 objectives: ["Build a multi-street plan"],
                 lifeLoss: true,
                 choices: [
-                  choice("branches", "State value/bluff intent and branches", "recommended",
+                  choice("branches", "Brick → barrel · flush → abort", "recommended",
                     "If X card, continue; if Y card, shut down."),
                   choice("vibes", "Wait for vibes each street", "clear_mistake",
                     "Author a plan first.", {betterChoiceId: "branches"}),
-                  choice("one-street", "Only think one street ahead always", "questionable",
+                  choice("one-street", "Only this street, always", "questionable",
                     "One street is incomplete for live depth.")
                 ],
               }),
