@@ -6596,6 +6596,53 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s2 bb convert guided shows chips felt and convert coach', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-05-01-guided-convert',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.numericPotPrice,
+      estimatedSeconds: 40,
+      accessibilityText: 'Convert 200 chips at 1/2 into big blinds.',
+      acceptedGrades: const [SoftGrade.recommended],
+      numericQuestion: 'Blinds 1/2. You have 200 chips. How many big blinds?',
+      numericUnit: 'bb',
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        NumericPotPriceActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('200 chips at 1/2 — type the stack in big blinds.'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('Stack depth · convert'), findsOneWidget);
+    expect(find.text('200 chips'), findsOneWidget);
+    expect(find.text('Blinds 1/2'), findsOneWidget);
+    expect(find.text('200 ÷ 2 = ? bb'), findsOneWidget);
+    expect(find.text('Type big blinds, then Check.'), findsOneWidget);
+    expect(
+      find.text('Type the amount in chips — match the bet to call.'),
+      findsNothing,
+    );
+    expect(
+      find.text('Blinds 1/2. You have 200 chips. How many big blinds?'),
+      findsNothing,
+    );
+    await tester.enterText(find.byType(TextField), '100');
+    await tester.pump();
+    expect(controller.draft.numericValue, 100);
+    controller.dispose();
+  });
+
   testWidgets('numeric keyboard Done auto-submits parsed value', (tester) async {
     final activity = _activity(
       renderer: ActivityRenderer.numericPotPrice,
