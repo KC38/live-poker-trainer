@@ -926,7 +926,7 @@ class CoachDialogueVisual {
     CoachDialogueVisualKind.capstoneLimped =>
       'Tap Nuts, Value, and Thin.',
     CoachDialogueVisualKind.capstone4bet =>
-      'Tap SPR, Commit, and Fold.',
+      'Tap SPR, Commit, and No Hero.',
     CoachDialogueVisualKind.liveWarmupPrep =>
       'Tap Checklist, Defaults, and One hand.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
