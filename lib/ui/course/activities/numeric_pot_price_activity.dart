@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 /// Numeric pot/price/outs entry with unit label.
@@ -51,30 +52,61 @@ class _NumericPotPriceActivityState extends State<NumericPotPriceActivity> {
     return value.toString();
   }
 
+  String _coachFor(CourseActivity activity) {
+    return switch (activity.id) {
+      'act-04-05-01-guided' =>
+        'Effective 80 into pot 20 — type the SPR.',
+      _ => 'Type the amount in chips — match the bet to call.',
+    };
+  }
+
+  LessonActionSpot? _spotFor(CourseActivity activity) {
+    return switch (activity.id) {
+      'act-04-05-01-guided' => const LessonActionSpot(
+        heroCodes: ['Ah', 'Kd'],
+        potLabel: 'Pot 20bb',
+        stackLabel: 'Stack 80bb',
+        villainLine: 'Effective stack vs pot',
+        streetLabel: 'Preflop · SPR check',
+        facingBet: false,
+        feltStatusLine: 'SPR = stack ÷ pot',
+      ),
+      _ => null,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final locked =
         widget.controller.submitting || widget.controller.lastResult != null;
     final unit = widget.activity.numericUnit ?? 'chips';
+    final spot = _spotFor(widget.activity);
+    final coach = _coachFor(widget.activity);
+    final showCoach = widget.showGuidance && !locked;
+    final question =
+        widget.activity.numericQuestion ??
+        widget.activity.prompt ??
+        'Enter the amount';
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (widget.showGuidance)
-          const RexCoachLine(
-            text: 'Type the amount in chips — match the bet to call.',
+        if (showCoach) RexCoachLine(text: coach),
+        if (spot != null) ...[
+          const SizedBox(height: 12),
+          LessonActionTable(spot: spot),
+        ] else ...[
+          const SizedBox(height: 12),
+          Text(
+            question,
+            style: GoogleFonts.manrope(
+              color: AppColors.cream,
+              fontSize: 17,
+              fontWeight: FontWeight.w700,
+              height: 1.35,
+            ),
           ),
-        const SizedBox(height: 12),
-        Text(
-          widget.activity.numericQuestion ??
-              widget.activity.prompt ??
-              'Enter the amount',
-          style: GoogleFonts.manrope(
-            color: AppColors.cream,
-            fontSize: 17,
-            fontWeight: FontWeight.w700,
-            height: 1.35,
-          ),
-        ),
+        ],
         const SizedBox(height: 14),
         Semantics(
           textField: true,
@@ -113,6 +145,19 @@ class _NumericPotPriceActivityState extends State<NumericPotPriceActivity> {
             },
           ),
         ),
+        if (spot != null && !locked)
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Text(
+              'Type SPR, then Check.',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
       ],
     );
   }

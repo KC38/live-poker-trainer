@@ -6486,6 +6486,50 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 spr guided shows stack/pot felt and SPR coach', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-04-05-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.numericPotPrice,
+      estimatedSeconds: 40,
+      accessibilityText: 'SPR is 4.',
+      acceptedGrades: const [SoftGrade.recommended],
+      numericQuestion: 'Effective stack 80bb, pot 20bb. SPR?',
+      numericUnit: 'ratio',
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        NumericPotPriceActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Effective 80 into pot 20 — type the SPR.'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('Preflop · SPR check'), findsOneWidget);
+    expect(find.text('Stack 80bb'), findsOneWidget);
+    expect(find.text('Pot 20bb'), findsOneWidget);
+    expect(find.text('SPR = stack ÷ pot'), findsOneWidget);
+    expect(
+      find.text('Type the amount in chips — match the bet to call.'),
+      findsNothing,
+    );
+    expect(
+      find.text('Effective stack 80bb, pot 20bb. SPR?'),
+      findsNothing,
+    );
+    await tester.enterText(find.byType(TextField), '4');
+    await tester.pump();
+    expect(controller.draft.numericValue, 4);
+    controller.dispose();
+  });
+
   testWidgets('numeric keyboard Done auto-submits parsed value', (tester) async {
     final activity = _activity(
       renderer: ActivityRenderer.numericPotPrice,
