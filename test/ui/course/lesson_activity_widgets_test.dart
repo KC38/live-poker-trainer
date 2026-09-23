@@ -14833,7 +14833,9 @@ void main() {
       find.text('Only five cards count — tap the ones that play.'),
       findsOneWidget,
     );
+    expect(find.text('0/5 selected'), findsOneWidget);
     expect(find.textContaining('You hold Ah'), findsNothing);
+    expect(find.text('BOARD · shared'), findsOneWidget);
 
     var autoSubmits = 0;
     controller.onAutoSubmit = () => autoSubmits += 1;
