@@ -71,7 +71,9 @@ class _PolarMergedDemoState extends State<PolarMergedDemo> {
                     label: PolarMergedDemo.points[i].label,
                     caption: PolarMergedDemo.points[i].caption,
                     color: PolarMergedDemo.points[i].color,
-                    selected: _tapped.contains(PolarMergedDemo.points[i].label),
+                    selected: _tapped.contains(
+                      PolarMergedDemo.points[i].label,
+                    ),
                     enabled: widget.interactive && widget.enabled,
                     onPressed: widget.interactive
                         ? () => _onTap(PolarMergedDemo.points[i].label)
@@ -81,18 +83,19 @@ class _PolarMergedDemoState extends State<PolarMergedDemo> {
               ],
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap Polar, Merged, and Size'
-                : 'Nuts/air vs medium-strong',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues Polar / Merged / Size — no dupe footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Nuts/air vs medium-strong',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );
@@ -155,7 +158,19 @@ class _PolarTile extends StatelessWidget {
         ],
       ),
     );
-    if (!enabled || onPressed == null) return child;
-    return GestureDetector(onTap: onPressed, child: child);
+    if (onPressed == null) return child;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: enabled ? onPressed : null,
+          borderRadius: BorderRadius.circular(12),
+          child: child,
+        ),
+      ),
+    );
   }
 }

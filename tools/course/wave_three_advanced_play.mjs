@@ -964,9 +964,9 @@ export function buildSectionSix() {
                 a11y: "Polarized.",
                 objectives: ["Recognize polarized sizing"],
                 choices: [
-                  choice("polar", "Polarized — value or bluff", "recommended",
+                  choice("polar", "Polarized", "recommended",
                     "Overbets punish medium."),
-                  choice("merged", "Merged thin value only", "clear_mistake",
+                  choice("merged", "Merged", "clear_mistake",
                     "Thin value prefers smaller.", {betterChoiceId: "polar"})
                 ],
               }),
@@ -977,12 +977,12 @@ export function buildSectionSix() {
                 objectives: ["Use merged sizes for thin value"],
                 playerTypeRefs: ["calling_station"],
                 choices: [
-                  choice("mid", "Medium merged value bet", "recommended",
+                  choice("mid", "Bet medium", "recommended",
                     "Get called by worse.", {action: "BET", amountBb: 8}),
-                  choice("ob", "Huge polar overbet", "questionable",
-                    "Can fold out worse."),
-                  choice("check", "Check always", "questionable",
-                    "Misses value.")
+                  choice("ob", "Huge overbet", "questionable",
+                    "Can fold out worse.", {action: "BET", amountBb: 30}),
+                  choice("check", "Check", "questionable",
+                    "Misses value.", {action: "CHECK"})
                 ],
               }),
               selectAct({
@@ -991,9 +991,9 @@ export function buildSectionSix() {
                 a11y: "Tiny bets as pure polar bluffs without a story.",
                 objectives: ["Avoid mismatched shapes"], lifeLoss: true,
                 choices: [
-                  choice("mismatch", "Tiny \"polar\" bluffs that never get folds", "recommended",
+                  choice("mismatch", "Tiny bluffs", "recommended",
                     "Shape must match goal."),
-                  choice("ok", "Any size is always fine", "clear_mistake",
+                  choice("ok", "Any size", "clear_mistake",
                     "Sizes communicate.", {betterChoiceId: "mismatch"})
                 ],
               }),
@@ -1003,9 +1003,9 @@ export function buildSectionSix() {
                 a11y: "Get called by worse / fold out some better sometimes.",
                 objectives: ["Use merged sizes for thin value"], lifeLoss: true,
                 choices: [
-                  choice("thin", "Extract from worse medium hands", "recommended",
+                  choice("thin", "Thin value", "recommended",
                     "Classic thin value."),
-                  choice("only-nuts", "Only ever bet nuts", "clear_mistake",
+                  choice("only-nuts", "Only nuts", "clear_mistake",
                     "Too polar.", {betterChoiceId: "thin"})
                 ],
               }),
