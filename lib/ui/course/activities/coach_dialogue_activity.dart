@@ -17,6 +17,7 @@ import 'package:live_poker_trainer/ui/course/widgets/overbet_geometry_demo.dart'
 import 'package:live_poker_trainer/ui/course/widgets/blockers_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/defend_enough_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/mixed_strategy_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/three_bet_four_bet_spr_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/hard_fold_cooler_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
@@ -311,6 +312,11 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.mixedStrategy
                     ? null
                     : onFeltAcknowledge,
+            onThreeBetFourBetSprAcknowledge:
+                locked ||
+                        visual.kind != CoachDialogueVisualKind.threeBetFourBetSpr
+                    ? null
+                    : onFeltAcknowledge,
             onHardFoldCoolerAcknowledge:
                 locked || visual.kind != CoachDialogueVisualKind.hardFoldCooler
                     ? null
@@ -532,6 +538,9 @@ enum CoachDialogueVisualKind {
   /// Mixing is frequency with a purpose — not coin-flip theater.
   mixedStrategy,
 
+  /// 3-bet/4-bet pots shrink ranges and SPR — depth decides commitment.
+  threeBetFourBetSpr,
+
   /// Hard folds save buy-ins; coolers happen; ego call-downs are mistakes.
   hardFoldCooler,
 }
@@ -670,6 +679,8 @@ class CoachDialogueVisual {
       'Tap Defend, Bluff, and Enough.',
     CoachDialogueVisualKind.mixedStrategy =>
       'Tap Mix, Purpose, and Strong.',
+    CoachDialogueVisualKind.threeBetFourBetSpr =>
+      'Tap 3-Bet, 4-Bet, and Depth.',
     CoachDialogueVisualKind.hardFoldCooler =>
       'Tap Hard, Cooler, and Ego.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
@@ -736,6 +747,7 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.blockers ||
       kind == CoachDialogueVisualKind.defendEnough ||
       kind == CoachDialogueVisualKind.mixedStrategy ||
+      kind == CoachDialogueVisualKind.threeBetFourBetSpr ||
       kind == CoachDialogueVisualKind.hardFoldCooler;
 
   String get semanticsLabel => switch (kind) {
@@ -859,6 +871,8 @@ class CoachDialogueVisual {
       'Defend-enough tiles: defend, bluff, enough',
     CoachDialogueVisualKind.mixedStrategy =>
       'Mixed-strategy tiles: mix, purpose, strong',
+    CoachDialogueVisualKind.threeBetFourBetSpr =>
+      '3-bet/4-bet SPR tiles: 3-bet, 4-bet, depth',
     CoachDialogueVisualKind.hardFoldCooler =>
       'Hard-fold/cooler tiles: hard, cooler, ego',
     CoachDialogueVisualKind.none => 'Coach dialogue',
@@ -1075,6 +1089,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-06-08-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.mixedStrategy,
+      );
+    case 'act-06-09-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.threeBetFourBetSpr,
       );
     case 'act-06-10-01-explain':
       return const CoachDialogueVisual(
@@ -1355,6 +1373,15 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       (blob.contains('polar') && blob.contains('pressure'))) {
     return const CoachDialogueVisual(
       kind: CoachDialogueVisualKind.sizingLanguage,
+    );
+  }
+  // Phrase-safe 3-bet/4-bet SPR — before bare "spr" / stack-to-pot.
+  if (blob.contains('3-bet and 4-bet') ||
+      blob.contains('depth decides commitment') ||
+      (blob.contains('4-bet pots') && blob.contains('spr')) ||
+      (blob.contains('shrink ranges') && blob.contains('spr'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.threeBetFourBetSpr,
     );
   }
   if (blob.contains('spr') ||
@@ -1647,6 +1674,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onBlockersAcknowledge,
     this.onDefendEnoughAcknowledge,
     this.onMixedStrategyAcknowledge,
+    this.onThreeBetFourBetSprAcknowledge,
     this.onHardFoldCoolerAcknowledge,
   });
 
@@ -1710,6 +1738,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onBlockersAcknowledge;
   final VoidCallback? onDefendEnoughAcknowledge;
   final VoidCallback? onMixedStrategyAcknowledge;
+  final VoidCallback? onThreeBetFourBetSprAcknowledge;
   final VoidCallback? onHardFoldCoolerAcknowledge;
 
   @override
@@ -2013,6 +2042,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onMixedStrategyAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onMixedStrategyAcknowledge,
+        ),
+        CoachDialogueVisualKind.threeBetFourBetSpr => ThreeBetFourBetSprDemo(
+          interactive: onThreeBetFourBetSprAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onThreeBetFourBetSprAcknowledge,
         ),
         CoachDialogueVisualKind.hardFoldCooler => HardFoldCoolerDemo(
           interactive: onHardFoldCoolerAcknowledge != null,
