@@ -3895,7 +3895,13 @@ void main() {
         ),
       );
       expect(find.byType(TagModelDemo), findsOneWidget);
+      // Rex cue below the felt — not a second footer inside the demo.
       expect(find.text('Tap Tight, Aggro, and Model.'), findsOneWidget);
+      expect(find.text('Tap Tight, Aggro, and Model'), findsNothing);
+      expect(
+        find.text('Tight in, aggressive after — a working model'),
+        findsNothing,
+      );
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
@@ -12861,6 +12867,158 @@ void main() {
     await tester.tap(find.text('Tight · plan · give'));
     await tester.pump();
     expect(controller.draft.choiceId, 'bundle');
+    controller.dispose();
+  });
+
+  testWidgets('s6 meet tag guided taps TAG on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-11-02-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.playerReadClassify,
+      estimatedSeconds: 40,
+      accessibilityText: 'TAG.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Folds most, 3-bets strong, barrels with a plan. Label?',
+      choices: const [
+        CourseChoice(id: 'tag', label: 'TAG'),
+        CourseChoice(id: 'station', label: 'Station'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Folds most, 3-bets strong — tap TAG.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('TAG'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'tag');
+    controller.dispose();
+  });
+
+  testWidgets('s6 meet tag scaffolded taps Selective vs extreme on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-11-02-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Entry width and discipline.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'TAG versus Maniac difference?',
+      choices: const [
+        CourseChoice(id: 'diff', label: 'Selective vs extreme'),
+        CourseChoice(id: 'same', label: 'Identical'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('TAG versus Maniac — tap Selective vs extreme.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Selective vs extreme'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'diff');
+    controller.dispose();
+  });
+
+  testWidgets('s6 meet tag unguided taps TAG on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-11-02-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.playerReadClassify,
+      estimatedSeconds: 45,
+      accessibilityText: 'TAG.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Seat opens tight, folds to 3-bets, c-bets selectively. Label?',
+      choices: const [
+        CourseChoice(id: 'tag2', label: 'TAG'),
+        CourseChoice(id: 'mania2', label: 'Maniac'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Opens tight, selective c-bets — tap TAG.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('TAG'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'tag2');
+    controller.dispose();
+  });
+
+  testWidgets('s6 meet tag checkpoint taps Working model on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-11-02-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Working model.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'TAG is?',
+      choices: const [
+        CourseChoice(id: 'model', label: 'Working model'),
+        CourseChoice(id: 'soul', label: 'Insult'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('TAG is a working model — tap Working model.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Working model'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'model');
     controller.dispose();
   });
 

@@ -730,6 +730,30 @@ enum LessonTableRegion {
 
   /// Observe selective checkpoint: good haircut (mistake).
   selectiveHaircut,
+
+  /// Meet TAG label (correct for selective + disciplined evidence).
+  meetTagLabel,
+
+  /// Calling Station distractor on TAG evidence.
+  meetTagStationDistractor,
+
+  /// Meet TAG scaffolded: selective vs extreme (correct).
+  meetTagSelectiveDiff,
+
+  /// Meet TAG scaffolded: identical labels (mistake).
+  meetTagIdentical,
+
+  /// Meet TAG label for tight opens / selective c-bets.
+  meetTagLabel2,
+
+  /// Maniac distractor on TAG evidence.
+  meetTagManiacDistractor,
+
+  /// Meet TAG checkpoint: working model (correct).
+  meetTagWorkingModel,
+
+  /// Meet TAG checkpoint: insult (mistake).
+  meetTagInsult,
 }
 
 /// How the mini-table is arranged.
@@ -1048,6 +1072,18 @@ enum LessonTableLayout {
 
   /// Observe selective checkpoint: tight · plan · give vs good haircut.
   selectiveBundleOutcomes,
+
+  /// Meet TAG: TAG vs Station label tiles.
+  meetTagVsStationOutcomes,
+
+  /// Meet TAG: selective vs extreme difference.
+  meetTagDiffOutcomes,
+
+  /// Meet TAG: TAG vs Maniac label tiles.
+  meetTagVsManiacOutcomes,
+
+  /// Meet TAG: working model vs insult.
+  meetTagModelOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1991,6 +2027,26 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.selectiveBundleOutcomes,
         caption: 'Best pre-label note bundle?',
       );
+    case 'act-06-11-02-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.meetTagVsStationOutcomes,
+        caption: 'Folds most · 3-bets strong · barrels with a plan',
+      );
+    case 'act-06-11-02-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.meetTagDiffOutcomes,
+        caption: 'TAG versus Maniac difference?',
+      );
+    case 'act-06-11-02-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.meetTagVsManiacOutcomes,
+        caption: 'Opens tight · folds to 3-bets · selective c-bets',
+      );
+    case 'act-06-11-02-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.meetTagModelOutcomes,
+        caption: 'How to treat the TAG label',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -2920,6 +2976,30 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.selectiveHaircut => pick('vibe'),
         _ => null,
       };
+    case 'act-06-11-02-guided':
+      return switch (region) {
+        LessonTableRegion.meetTagLabel => pick('tag'),
+        LessonTableRegion.meetTagStationDistractor => pick('station'),
+        _ => null,
+      };
+    case 'act-06-11-02-scaffolded':
+      return switch (region) {
+        LessonTableRegion.meetTagSelectiveDiff => pick('diff'),
+        LessonTableRegion.meetTagIdentical => pick('same'),
+        _ => null,
+      };
+    case 'act-06-11-02-unguided':
+      return switch (region) {
+        LessonTableRegion.meetTagLabel2 => pick('tag2'),
+        LessonTableRegion.meetTagManiacDistractor => pick('mania2'),
+        _ => null,
+      };
+    case 'act-06-11-02-checkpoint':
+      return switch (region) {
+        LessonTableRegion.meetTagWorkingModel => pick('model'),
+        LessonTableRegion.meetTagInsult => pick('soul'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -3092,7 +3172,11 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-06-11-01-guided' ||
       activity.id == 'act-06-11-01-scaffolded' ||
       activity.id == 'act-06-11-01-unguided' ||
-      activity.id == 'act-06-11-01-checkpoint';
+      activity.id == 'act-06-11-01-checkpoint' ||
+      activity.id == 'act-06-11-02-guided' ||
+      activity.id == 'act-06-11-02-scaffolded' ||
+      activity.id == 'act-06-11-02-unguided' ||
+      activity.id == 'act-06-11-02-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -3385,6 +3469,12 @@ class LessonTableContext extends StatelessWidget {
           _buildSelectiveSampleOutcomes(),
       LessonTableLayout.selectiveBundleOutcomes =>
           _buildSelectiveBundleOutcomes(),
+      LessonTableLayout.meetTagVsStationOutcomes =>
+          _buildMeetTagVsStationOutcomes(),
+      LessonTableLayout.meetTagDiffOutcomes => _buildMeetTagDiffOutcomes(),
+      LessonTableLayout.meetTagVsManiacOutcomes =>
+          _buildMeetTagVsManiacOutcomes(),
+      LessonTableLayout.meetTagModelOutcomes => _buildMeetTagModelOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -7168,6 +7258,130 @@ class LessonTableContext extends StatelessWidget {
           visual: const Icon(
             Icons.content_cut,
             color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMeetTagVsStationOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive: 'Interactive player type — tap TAG or Station',
+      semanticsStatic: 'TAG vs Station outcomes',
+      caption: scene.caption ??
+          'Folds most · 3-bets strong · barrels with a plan',
+      phases: [
+        (
+          region: LessonTableRegion.meetTagLabel,
+          title: 'TAG',
+          detail: 'Selective + plan',
+          visual: const Icon(
+            Icons.gps_fixed,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.meetTagStationDistractor,
+          title: 'Station',
+          detail: 'Calls wide',
+          visual: const Icon(
+            Icons.people_outline,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMeetTagDiffOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive TAG vs Maniac — tap selective vs extreme or identical',
+      semanticsStatic: 'TAG difference outcomes',
+      caption: scene.caption ?? 'TAG versus Maniac difference?',
+      phases: [
+        (
+          region: LessonTableRegion.meetTagSelectiveDiff,
+          title: 'Selective vs extreme',
+          detail: 'Discipline',
+          visual: const Icon(
+            Icons.compare_arrows,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.meetTagIdentical,
+          title: 'Identical',
+          detail: 'Wrong',
+          visual: const Icon(
+            Icons.merge_type,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMeetTagVsManiacOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive: 'Interactive player type — tap TAG or Maniac',
+      semanticsStatic: 'TAG vs Maniac outcomes',
+      caption: scene.caption ??
+          'Opens tight · folds to 3-bets · selective c-bets',
+      phases: [
+        (
+          region: LessonTableRegion.meetTagLabel2,
+          title: 'TAG',
+          detail: 'Tight + selective',
+          visual: const Icon(
+            Icons.gps_fixed,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.meetTagManiacDistractor,
+          title: 'Maniac',
+          detail: 'Too wide',
+          visual: const Icon(
+            Icons.local_fire_department_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMeetTagModelOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive label model — tap working model or insult',
+      semanticsStatic: 'TAG model outcomes',
+      caption: scene.caption ?? 'How to treat the TAG label',
+      phases: [
+        (
+          region: LessonTableRegion.meetTagWorkingModel,
+          title: 'Working model',
+          detail: 'From frequencies',
+          visual: const Icon(
+            Icons.science_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.meetTagInsult,
+          title: 'Insult',
+          detail: 'Not technical',
+          visual: const Icon(
+            Icons.mood_bad_outlined,
+            color: AppColors.slate,
             size: 24,
           ),
         ),

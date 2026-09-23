@@ -373,6 +373,13 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Observe selective aggression: tap evidence notes on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-06-11-02-guided' ||
+      activity.id == 'act-06-11-02-scaffolded' ||
+      activity.id == 'act-06-11-02-unguided' ||
+      activity.id == 'act-06-11-02-checkpoint') {
+    // Meet TAG: tap labels / model on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

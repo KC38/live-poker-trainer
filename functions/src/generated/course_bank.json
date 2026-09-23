@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "de2045e2ed25a84a771549e9fdd1c4f6880f722310f55733835e34a4c5ab9922",
+  "contentChecksum": "32e237a6e4b77d21a781e1b79becde0a9bf95ae93fd5d99d2a6292bdd53f8c4c",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -16567,8 +16567,8 @@
                     },
                     {
                       "id": "station",
-                      "label": "Calling Station",
-                      "accessibilityText": "Calling Station",
+                      "label": "Station",
+                      "accessibilityText": "Station",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Stations call; this seat raises selectively.",
@@ -16600,8 +16600,8 @@
                   "choices": [
                     {
                       "id": "diff",
-                      "label": "TAG is selective; maniac is extreme and sticky",
-                      "accessibilityText": "TAG is selective; maniac is extreme and sticky",
+                      "label": "Selective vs extreme",
+                      "accessibilityText": "Selective vs extreme",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Discipline matters."
@@ -16609,8 +16609,8 @@
                     },
                     {
                       "id": "same",
-                      "label": "Identical labels",
-                      "accessibilityText": "Identical labels",
+                      "label": "Identical",
+                      "accessibilityText": "Identical",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "No.",
@@ -16682,8 +16682,8 @@
                   "choices": [
                     {
                       "id": "model",
-                      "label": "A working model from frequencies",
-                      "accessibilityText": "A working model from frequencies",
+                      "label": "Working model",
+                      "accessibilityText": "Working model",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Update with evidence."
@@ -16691,8 +16691,8 @@
                     },
                     {
                       "id": "soul",
-                      "label": "A personality insult",
-                      "accessibilityText": "A personality insult",
+                      "label": "Insult",
+                      "accessibilityText": "Insult",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "No judgments.",
