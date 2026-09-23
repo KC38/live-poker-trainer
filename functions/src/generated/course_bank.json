@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "93771579b82e6f8dbcef6f60671d956d8832447eec22dcdb80681f7c5c87e950",
+  "contentChecksum": "513841b3650d8b047bf4d6b705171a317a740d5902284e96c828834af0b819db",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -8966,8 +8966,7 @@
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Commitment is an SPR decision."
-                      },
-                      "action": "CHECK"
+                      }
                     },
                     {
                       "id": "never",
@@ -8988,8 +8987,7 @@
                         "grade": "clear_mistake",
                         "feedback": "Decide earlier.",
                         "betterChoiceId": "before"
-                      },
-                      "action": "CALL"
+                      }
                     }
                   ]
                 }
@@ -9511,8 +9509,8 @@
                     },
                     {
                       "id": "check-val",
-                      "label": "Check",
-                      "accessibilityText": "Check",
+                      "label": "Check behind",
+                      "accessibilityText": "Check behind",
                       "grading": {
                         "grade": "reasonable",
                         "feedback": "Okay; you leave value behind versus a station."
@@ -9521,15 +9519,16 @@
                     },
                     {
                       "id": "bluff-air",
-                      "label": "Check then bluff-raise later without a hand",
-                      "accessibilityText": "Check then bluff-raise later without a hand",
+                      "label": "Bluff-raise later with air",
+                      "accessibilityText": "Bluff-raise later with air",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "They do not fold.",
                         "betterChoiceId": "thin-val",
                         "reversalRead": "Bluffs need folders; stations are not folders."
                       },
-                      "action": "CHECK"
+                      "action": "RAISE",
+                      "amountBb": 20
                     }
                   ]
                 },
@@ -9597,8 +9596,8 @@
                   "choices": [
                     {
                       "id": "baseline-check",
-                      "label": "Prefer check / stronger value only",
-                      "accessibilityText": "Prefer check / stronger value only",
+                      "label": "Keep it cautious",
+                      "accessibilityText": "Keep it cautious",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Without sticky evidence, do not auto-thin-value.",
@@ -9608,8 +9607,8 @@
                     },
                     {
                       "id": "auto-thin",
-                      "label": "Always thin-value every stranger",
-                      "accessibilityText": "Always thin-value every stranger",
+                      "label": "Always thin-value strangers",
+                      "accessibilityText": "Always thin-value strangers",
                       "grading": {
                         "grade": "questionable",
                         "feedback": "Needs the calling tendency."
@@ -9639,8 +9638,8 @@
                   "choices": [
                     {
                       "id": "cite-fold",
-                      "label": "They fold too rarely to pressure",
-                      "accessibilityText": "They fold too rarely to pressure",
+                      "label": "They fold too rarely",
+                      "accessibilityText": "They fold too rarely",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Exploit cites the specific tendency.",
@@ -9649,8 +9648,8 @@
                     },
                     {
                       "id": "cite-mean",
-                      "label": "Because the label sounds mean",
-                      "accessibilityText": "Because the label sounds mean",
+                      "label": "The label sounds mean",
+                      "accessibilityText": "The label sounds mean",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Cite behavior, not vibe.",

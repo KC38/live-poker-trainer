@@ -1253,10 +1253,10 @@ export function buildSectionFour() {
                 choices: [
                   choice("thin-val", "Bet thin value", "recommended",
                     "They call too wide — value thinner.", {action: "BET", amountBb: 8, reversalRead: "If they suddenly fold rivers, stop thinning value."}),
-                  choice("check-val", "Check", "reasonable",
+                  choice("check-val", "Check behind", "reasonable",
                     "Okay; you leave value behind versus a station.", {action: "CHECK"}),
-                  choice("bluff-air", "Check then bluff-raise later without a hand", "clear_mistake",
-                    "They do not fold.", {action: "CHECK", betterChoiceId: "thin-val", reversalRead: "Bluffs need folders; stations are not folders."})
+                  choice("bluff-air", "Bluff-raise later with air", "clear_mistake",
+                    "They do not fold.", {action: "RAISE", amountBb: 20, betterChoiceId: "thin-val", reversalRead: "Bluffs need folders; stations are not folders."})
                 ],
               }),
               actionAct({
@@ -1278,9 +1278,9 @@ export function buildSectionFour() {
                 objectives: ["Cite the sticky-call tendency"],
                 lifeLoss: true,
                 choices: [
-                  choice("baseline-check", "Prefer check / stronger value only", "recommended",
+                  choice("baseline-check", "Keep it cautious", "recommended",
                     "Without sticky evidence, do not auto-thin-value.", {action: "CHECK", reversalRead: "With sticky-call samples, thin value becomes recommended."}),
-                  choice("auto-thin", "Always thin-value every stranger", "questionable",
+                  choice("auto-thin", "Always thin-value strangers", "questionable",
                     "Needs the calling tendency.", {action: "BET", amountBb: 8})
                 ],
               }),
@@ -1292,9 +1292,9 @@ export function buildSectionFour() {
                 lifeLoss: true,
                 playerTypeRefs: ["calling_station"],
                 choices: [
-                  choice("cite-fold", "They fold too rarely to pressure", "recommended",
+                  choice("cite-fold", "They fold too rarely", "recommended",
                     "Exploit cites the specific tendency.", {reversalRead: "If fold frequency rises, re-open bluffs."}),
-                  choice("cite-mean", "Because the label sounds mean", "clear_mistake",
+                  choice("cite-mean", "The label sounds mean", "clear_mistake",
                     "Cite behavior, not vibe.", {betterChoiceId: "cite-fold"})
                 ],
               }),

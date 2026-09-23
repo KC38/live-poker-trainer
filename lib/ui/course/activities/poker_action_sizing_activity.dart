@@ -276,6 +276,12 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Second pair multiway at SPR 20 — tap Keep pot small.',
     'act-04-05-01-checkpoint' =>
       'About to put the rest in — tap Weigh SPR first.',
+    'act-04-06-03-guided' =>
+      'Sticky seat, second pair river — tap Bet thin value.',
+    'act-04-06-03-scaffolded' =>
+      'Missed draw vs the same station — tap Give up.',
+    'act-04-06-03-unguided' =>
+      'Same hand, unknown seat — tap Keep it cautious.',
     _ => null,
   };
 }

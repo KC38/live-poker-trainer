@@ -200,6 +200,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Meet Calling Station: remaining steps tap answers on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-04-06-03-checkpoint') {
+    // Adjust vs Station: cite fold tendency on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.
