@@ -189,7 +189,8 @@ class _LessonResultScreenState extends State<LessonResultScreen>
                     icon: Icons.workspace_premium_outlined,
                     iconColor: AppColors.success,
                     label: 'Mastery',
-                    value: '${(result.mastery * 100).round()}%',
+                    value:
+                        '${(result.mastery * 100).clamp(0, 100).round()}%',
                   ),
                   _StatCard(
                     icon: Icons.local_fire_department_rounded,
@@ -201,7 +202,8 @@ class _LessonResultScreenState extends State<LessonResultScreen>
                     icon: Icons.check_circle_outline,
                     iconColor: AppColors.gold,
                     label: 'Accepted accuracy',
-                    value: '${(result.acceptedAccuracy * 100).round()}%',
+                    value:
+                        '${(result.acceptedAccuracy * 100).clamp(0, 100).round()}%',
                   ),
                   const Spacer(),
                   FilledButton(
