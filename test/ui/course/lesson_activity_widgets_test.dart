@@ -38,6 +38,7 @@ import 'package:live_poker_trainer/ui/course/widgets/type_board_line_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/leak_review_book_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/capstone_srp_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/capstone_3bet_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/capstone_multiway_deep_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
@@ -17388,4 +17389,297 @@ void main() {
     expect(controller.draft.choiceId, 'fold');
     controller.dispose();
   });
+
+  testWidgets(
+    's7 capstone mw deep explain taps Nuts Deep No-bluff instead of Continue',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-07-10-03-explain',
+        order: 1,
+        stage: ActivityStage.explain,
+        renderer: ActivityRenderer.coachDialogue,
+        estimatedSeconds: 30,
+        accessibilityText: 'Capstone multiway deep. No hints.',
+        acceptedGrades: const [SoftGrade.recommended],
+        objectives: const ['Prefer nut potential multiway'],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'm',
+            kind: 'dialogue',
+            text: 'Capstone multiway deep. No hints.',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      var feltAck = 0;
+      await tester.pumpWidget(
+        _wrap(
+          CoachDialogueActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+            onFeltAcknowledge: () => feltAck += 1,
+          ),
+        ),
+      );
+      expect(find.byType(CapstoneMultiwayDeepDemo), findsOneWidget);
+      expect(find.text('Tap Nuts, Deep, and No-bluff.'), findsOneWidget);
+      expect(
+        find.text('Deep multiway — chase nuts, skip light bluffs'),
+        findsNothing,
+      );
+      expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+      expect(isTableRegionTapActivity(activity), isTrue);
+
+      for (final title in ['NUTS', 'DEEP', 'NO-BLUFF']) {
+        await tester.tap(find.text(title));
+        await tester.pump();
+      }
+      expect(feltAck, 1);
+      controller.dispose();
+    },
+  );
+
+  testWidgets('s7 capstone mw deep hand docks Call on flop felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-07-10-03-hand',
+      order: 2,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 70,
+      accessibilityText: 'Four-way, 200bb, you hold AhQh.',
+      acceptedGrades: const [SoftGrade.recommended],
+      handSteps: const [
+        CourseHandStep(
+          id: 'step-mw-flop',
+          street: 'flop',
+          prompt: 'Flop Jh 8h 2c. Bet into you. Action?',
+          choices: [
+            CourseChoice(id: 'call', label: 'Call', action: 'CALL'),
+            CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+            CourseChoice(
+              id: 'bluffjam',
+              label: 'Bluff-jam off',
+              action: 'RAISE',
+              amountBb: 80,
+            ),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-mw-turn',
+          street: 'turn',
+          prompt: 'Turn 3d. Checked to you. Action?',
+          choices: [
+            CourseChoice(
+              id: 'bet',
+              label: 'Bet semi-bluff',
+              action: 'BET',
+              amountBb: 18,
+            ),
+            CourseChoice(id: 'check', label: 'Check', action: 'CHECK'),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-mw-river',
+          street: 'river',
+          prompt: 'River 9c misses. Two players behind. Action?',
+          choices: [
+            CourseChoice(
+              id: 'check',
+              label: 'Check / give up',
+              action: 'CHECK',
+            ),
+            CourseChoice(
+              id: 'bluff',
+              label: 'Blast bluff both',
+              action: 'BET',
+              amountBb: 60,
+            ),
+          ],
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        AuthoredMultiStepActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Deep multiway · flush draw — tap Call.'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('Flop · Jh8h2c · AQs'), findsOneWidget);
+    expect(find.text('CALL'), findsOneWidget);
+    expect(find.text('Flop Jh 8h 2c. Bet into you. Action?'), findsNothing);
+    await tester.tap(find.text('CALL'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'call');
+    controller.dispose();
+  });
+
+  testWidgets('s7 capstone mw deep hand docks Bet semi-bluff on turn felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-10-03-hand',
+      order: 2,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 70,
+      accessibilityText: 'Four-way, 200bb, you hold AhQh.',
+      acceptedGrades: const [SoftGrade.recommended],
+      handSteps: const [
+        CourseHandStep(
+          id: 'step-mw-flop',
+          street: 'flop',
+          prompt: 'Flop Jh 8h 2c. Bet into you. Action?',
+          choices: [
+            CourseChoice(id: 'call', label: 'Call', action: 'CALL'),
+            CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-mw-turn',
+          street: 'turn',
+          prompt: 'Turn 3d. Checked to you. Action?',
+          choices: [
+            CourseChoice(
+              id: 'bet',
+              label: 'Bet semi-bluff',
+              action: 'BET',
+              amountBb: 18,
+            ),
+            CourseChoice(id: 'check', label: 'Check', action: 'CHECK'),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-mw-river',
+          street: 'river',
+          prompt: 'River 9c misses. Two players behind. Action?',
+          choices: [
+            CourseChoice(
+              id: 'check',
+              label: 'Check / give up',
+              action: 'CHECK',
+            ),
+            CourseChoice(
+              id: 'bluff',
+              label: 'Blast bluff both',
+              action: 'BET',
+            ),
+          ],
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    controller.setHandStepIndex(1);
+    await tester.pumpWidget(
+      _wrap(
+        AuthoredMultiStepActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Turn checked · nut draw — tap Bet semi-bluff.'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('Turn · Jh8h2c3d · AQs'), findsOneWidget);
+    expect(find.text('BET SEMI-BLUFF'), findsOneWidget);
+    expect(find.text('Turn 3d. Checked to you. Action?'), findsNothing);
+    await tester.tap(find.text('BET SEMI-BLUFF'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'bet');
+    controller.dispose();
+  });
+
+  testWidgets('s7 capstone mw deep hand docks Check on river felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-10-03-hand',
+      order: 2,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 70,
+      accessibilityText: 'Four-way, 200bb, you hold AhQh.',
+      acceptedGrades: const [SoftGrade.recommended],
+      handSteps: const [
+        CourseHandStep(
+          id: 'step-mw-flop',
+          street: 'flop',
+          prompt: 'Flop Jh 8h 2c. Bet into you. Action?',
+          choices: [
+            CourseChoice(id: 'call', label: 'Call', action: 'CALL'),
+            CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-mw-turn',
+          street: 'turn',
+          prompt: 'Turn 3d. Checked to you. Action?',
+          choices: [
+            CourseChoice(
+              id: 'bet',
+              label: 'Bet semi-bluff',
+              action: 'BET',
+            ),
+            CourseChoice(id: 'check', label: 'Check', action: 'CHECK'),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-mw-river',
+          street: 'river',
+          prompt: 'River 9c misses. Two players behind. Action?',
+          choices: [
+            CourseChoice(
+              id: 'check',
+              label: 'Check / give up',
+              action: 'CHECK',
+            ),
+            CourseChoice(
+              id: 'bluff',
+              label: 'Blast bluff both',
+              action: 'BET',
+              amountBb: 60,
+            ),
+          ],
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    controller.setHandStepIndex(2);
+    await tester.pumpWidget(
+      _wrap(
+        AuthoredMultiStepActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Missed river · two behind — tap Check.'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('River · miss · ace-high'), findsOneWidget);
+    expect(find.text('CHECK'), findsOneWidget);
+    expect(
+      find.text('River 9c misses. Two players behind. Action?'),
+      findsNothing,
+    );
+    await tester.tap(find.text('CHECK'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'check');
+    controller.dispose();
+  });
+
 }

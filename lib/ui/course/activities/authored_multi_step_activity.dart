@@ -49,6 +49,12 @@ class AuthoredMultiStepActivity extends StatelessWidget {
         'Called · blank turn — tap Continue value.',
       ('act-07-10-02-hand', 'step-3b-river') =>
         'TAG check-raises huge — tap Fold.',
+      ('act-07-10-03-hand', 'step-mw-flop') =>
+        'Deep multiway · flush draw — tap Call.',
+      ('act-07-10-03-hand', 'step-mw-turn') =>
+        'Turn checked · nut draw — tap Bet semi-bluff.',
+      ('act-07-10-03-hand', 'step-mw-river') =>
+        'Missed river · two behind — tap Check.',
       _ => 'Play the street — tap your action on the dock.',
     };
   }
