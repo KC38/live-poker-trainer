@@ -9115,8 +9115,9 @@ void main() {
     );
     expect(
       resolveSelectIdentifyPresentation(activity),
-      SelectIdentifyPresentation.handCategoryTap,
+      SelectIdentifyPresentation.tableRegionTap,
     );
+    expect(isTableRegionTapActivity(activity), isTrue);
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
       _wrap(
@@ -9131,8 +9132,9 @@ void main() {
       find.text('Seat calls 7 of 9 preflops — tap the observation.'),
       findsOneWidget,
     );
-    expect(find.text('High participation'), findsOneWidget);
-    await tester.tap(find.text('High participation'));
+    expect(find.text('High part.'), findsOneWidget);
+    expect(find.text('7 of 9'), findsWidgets);
+    await tester.tap(find.text('High part.'));
     await tester.pump();
     expect(controller.draft.choiceId, 'high-part');
     controller.dispose();
