@@ -298,6 +298,30 @@ enum LessonTableRegion {
 
   /// Call wider to prove bravery (mistake).
   citeManiacBrave,
+
+  /// One observation — low certainty (correct).
+  confidenceOneNote,
+
+  /// Type proven forever from one hand (mistake).
+  confidenceProvenForever,
+
+  /// Confidence rises but stays revisable (correct).
+  confidenceRiseRevisable,
+
+  /// Stay at zero forever (mistake).
+  confidenceStayZero,
+
+  /// Update/retire the station model (correct).
+  confidenceUpdateModel,
+
+  /// Keep the old label forever (mistake).
+  confidenceFreezeModel,
+
+  /// Show sample/confidence limits (correct).
+  confidenceShowLimits,
+
+  /// Destiny and aura (mistake).
+  confidenceDestinyAura,
 }
 
 /// How the mini-table is arranged.
@@ -403,6 +427,18 @@ enum LessonTableLayout {
 
   /// Adjust vs Maniac: cite wide betting range.
   maniacCallCiteOutcomes,
+
+  /// Confidence: one note vs proven forever.
+  confidenceOneNoteOutcomes,
+
+  /// Confidence: rise revisable vs stay zero.
+  confidenceRiseOutcomes,
+
+  /// Confidence: update model vs freeze.
+  confidenceUpdateOutcomes,
+
+  /// Confidence checkpoint: limits vs destiny.
+  confidenceLimitsOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -989,6 +1025,26 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.maniacCallCiteOutcomes,
         caption: 'Why call wider versus a Maniac?',
       );
+    case 'act-04-09-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.confidenceOneNoteOutcomes,
+        caption: 'One huge bluff so far',
+      );
+    case 'act-04-09-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.confidenceRiseOutcomes,
+        caption: '30 hands of sticky calls',
+      );
+    case 'act-04-09-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.confidenceUpdateOutcomes,
+        caption: "Former station starts folding streets",
+      );
+    case 'act-04-09-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.confidenceLimitsOutcomes,
+        caption: 'What belongs beside a type label?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -1487,6 +1543,30 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.citeManiacBrave => pick('cite-brave'),
         _ => null,
       };
+    case 'act-04-09-01-guided':
+      return switch (region) {
+        LessonTableRegion.confidenceOneNote => pick('one-note'),
+        LessonTableRegion.confidenceProvenForever => pick('proven'),
+        _ => null,
+      };
+    case 'act-04-09-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.confidenceRiseRevisable => pick('rise'),
+        LessonTableRegion.confidenceStayZero => pick('zero'),
+        _ => null,
+      };
+    case 'act-04-09-01-unguided':
+      return switch (region) {
+        LessonTableRegion.confidenceUpdateModel => pick('update'),
+        LessonTableRegion.confidenceFreezeModel => pick('freeze'),
+        _ => null,
+      };
+    case 'act-04-09-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.confidenceShowLimits => pick('limits'),
+        LessonTableRegion.confidenceDestinyAura => pick('destiny'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -1591,7 +1671,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-04-08-02-guided' ||
       activity.id == 'act-04-08-02-unguided' ||
       activity.id == 'act-04-08-02-checkpoint' ||
-      activity.id == 'act-04-08-03-checkpoint';
+      activity.id == 'act-04-08-03-checkpoint' ||
+      activity.id.startsWith('act-04-09-01-');
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -1771,6 +1852,14 @@ class LessonTableContext extends StatelessWidget {
           _buildMeetManiacMixOutcomes(),
       LessonTableLayout.maniacCallCiteOutcomes =>
           _buildManiacCallCiteOutcomes(),
+      LessonTableLayout.confidenceOneNoteOutcomes =>
+          _buildConfidenceOneNoteOutcomes(),
+      LessonTableLayout.confidenceRiseOutcomes =>
+          _buildConfidenceRiseOutcomes(),
+      LessonTableLayout.confidenceUpdateOutcomes =>
+          _buildConfidenceUpdateOutcomes(),
+      LessonTableLayout.confidenceLimitsOutcomes =>
+          _buildConfidenceLimitsOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -3300,6 +3389,122 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Ego cite',
           visual: const Icon(
             Icons.sentiment_very_dissatisfied_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildConfidenceOneNoteOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive confidence — tap one note or proven forever',
+      semanticsStatic: 'Confidence one-note outcomes',
+      caption: scene.caption ?? 'One huge bluff so far',
+      phases: [
+        (
+          region: LessonTableRegion.confidenceOneNote,
+          title: 'One note',
+          detail: 'Low certainty',
+          visual: const _PotChipDot(label: '1', gold: true),
+        ),
+        (
+          region: LessonTableRegion.confidenceProvenForever,
+          title: 'Proven',
+          detail: 'Forever type',
+          visual: const Icon(
+            Icons.verified_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildConfidenceRiseOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive confidence — tap rise or stay zero',
+      semanticsStatic: 'Confidence rise outcomes',
+      caption: scene.caption ?? '30 hands of sticky calls',
+      phases: [
+        (
+          region: LessonTableRegion.confidenceRiseRevisable,
+          title: 'Rise',
+          detail: 'Still revisable',
+          visual: const Icon(
+            Icons.trending_up,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.confidenceStayZero,
+          title: 'Stay zero',
+          detail: 'Ignore samples',
+          visual: const _PotChipDot(label: '0', gold: false),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildConfidenceUpdateOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive model — tap update or freeze forever',
+      semanticsStatic: 'Confidence update outcomes',
+      caption: scene.caption ?? "Former station starts folding streets",
+      phases: [
+        (
+          region: LessonTableRegion.confidenceUpdateModel,
+          title: 'Update',
+          detail: 'Evidence flipped',
+          visual: const Icon(
+            Icons.sync_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.confidenceFreezeModel,
+          title: 'Freeze',
+          detail: 'Old label forever',
+          visual: const Icon(
+            Icons.lock_outline,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildConfidenceLimitsOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive label UI — tap limits or destiny',
+      semanticsStatic: 'Confidence limits outcomes',
+      caption: scene.caption ?? 'What belongs beside a type label?',
+      phases: [
+        (
+          region: LessonTableRegion.confidenceShowLimits,
+          title: 'Limits',
+          detail: 'Samples · confidence',
+          visual: const Icon(
+            Icons.rule_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.confidenceDestinyAura,
+          title: 'Destiny',
+          detail: 'Aura story',
+          visual: const Icon(
+            Icons.auto_awesome_outlined,
             color: AppColors.slate,
             size: 24,
           ),

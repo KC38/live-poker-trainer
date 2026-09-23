@@ -378,6 +378,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Legal mix now — tap the introduced types.',
       'act-04-08-03-checkpoint' =>
           'Maniac barrels — tap why you call wider.',
+      'act-04-09-01-guided' =>
+          'One huge bluff — tap what you know.',
+      'act-04-09-01-scaffolded' =>
+          '30 sticky hands — tap how confidence moves.',
+      'act-04-09-01-unguided' =>
+          'Station starts folding — tap the next step.',
+      'act-04-09-01-checkpoint' =>
+          'Beside a type label — tap what belongs.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -423,7 +431,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-04-08-02-guided' ||
             widget.activity.id == 'act-04-08-02-unguided' ||
             widget.activity.id == 'act-04-08-02-checkpoint' ||
-            widget.activity.id == 'act-04-08-03-checkpoint';
+            widget.activity.id == 'act-04-08-03-checkpoint' ||
+            widget.activity.id.startsWith('act-04-09-01-');
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&
