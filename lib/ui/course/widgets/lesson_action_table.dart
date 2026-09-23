@@ -161,6 +161,23 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         streetLabel: 'Preflop · Button · 9-max',
         facingBet: true,
       );
+    case 'act-02-07-02-jump-open':
+      return const LessonActionSpot(
+        heroCodes: ['7h', '2d'],
+        potLabel: 'Pot 3',
+        villainLine: 'Folds to you',
+        streetLabel: 'Preflop · UTG · 9-max',
+        facingBet: false,
+        openPot: true,
+      );
+    case 'act-02-07-02-jump-vs':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', 'Ad'],
+        potLabel: 'Pot 3 → 9',
+        villainLine: 'Open to 6',
+        streetLabel: 'Preflop · Big blind · 9-max',
+        facingBet: true,
+      );
   }
   return null;
 }
@@ -264,6 +281,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
   if (id.startsWith('act-02-07-01-') &&
       (activity.renderer == ActivityRenderer.pokerActionSizing ||
           activity.renderer == ActivityRenderer.fullTableHandLab)) {
+    return true;
+  }
+  if (id.startsWith('act-02-07-02-jump-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
   return (id.startsWith('act-01-03-01-') || id.startsWith('act-01-03-02-')) &&
