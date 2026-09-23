@@ -1289,6 +1289,7 @@ LessonActionSpot? resolveToyHandStepSpot({
         streetLabel: 'Flop · A72 rainbow',
         facingBet: false,
         openPot: true,
+        feltStatusLine: 'Top pair — bet for value',
       );
     case 'step-01-06-cp-open':
       return const LessonActionSpot(
@@ -6218,6 +6219,7 @@ class LessonActionDock extends StatelessWidget {
     this.identifyUnavailable = false,
     this.facingBet = false,
     this.heroStackAmount,
+    this.pulseChoiceId,
   });
 
   final List<CourseChoice> choices;
@@ -6233,6 +6235,9 @@ class LessonActionDock extends StatelessWidget {
 
   /// Hero chips remaining; Call amounts above this get (off) chrome.
   final int? heroStackAmount;
+
+  /// Soft-pulse this choice id (guided teach-by-doing cue). Null = no pulse.
+  final String? pulseChoiceId;
 
   static bool _isCheck(CourseChoice c) {
     final action = (c.action ?? c.label).toUpperCase();
@@ -6299,12 +6304,19 @@ class LessonActionDock extends StatelessWidget {
                         _callExceedsStack(choice, heroStackAmount) ||
                         (_isBet(choice) && facingBet) ||
                         (_isRaise(choice) && !facingBet && hasBetChoice));
-                return _DockButton(
-                  choice: choice,
-                  selected: selectedId == choice.id,
-                  enabled: enabled,
-                  unavailableLook: unavailableLook,
-                  onPressed: () => onSelect(choice.id),
+                return _DemoSoftPulse(
+                  active:
+                      enabled &&
+                      pulseChoiceId != null &&
+                      choice.id == pulseChoiceId &&
+                      selectedId == null,
+                  child: _DockButton(
+                    choice: choice,
+                    selected: selectedId == choice.id,
+                    enabled: enabled,
+                    unavailableLook: unavailableLook,
+                    onPressed: () => onSelect(choice.id),
+                  ),
                 );
               },
             ),

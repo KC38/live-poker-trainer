@@ -83,6 +83,21 @@ class AuthoredMultiStepActivity extends StatelessWidget {
     };
   }
 
+  /// Guided/scaffolded soft-pulse target — teaches by doing, not by spoiling
+  /// checkpoint/unguided grades.
+  String? _pulseChoiceIdFor(CourseHandStep step) {
+    if (!showGuidance) return null;
+    return switch ((activity.id, step.id)) {
+      ('act-01-06-01-guided-steps', 'step-01-06-pre') => 'open-6',
+      ('act-01-06-01-guided-steps', 'step-01-06-flop') => 'won-folds',
+      ('act-01-06-01-scaffolded-multi', 'step-01-06-bb-defend') => 'ready-flop',
+      ('act-01-06-01-scaffolded-multi', 'step-01-06-flop-cbet') => 'cbet',
+      ('act-01-06-02-jump-hand', 'j-hand-open') => 'j-open',
+      ('act-01-06-02-jump-hand', 'j-hand-end') => 'j-yes',
+      _ => null,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -130,6 +145,10 @@ class AuthoredMultiStepActivity extends StatelessWidget {
                 enabled: !locked,
                 facingBet: spot.facingBet,
                 heroStackAmount: spot.heroStackAmount,
+                pulseChoiceId:
+                    locked || selected != null
+                        ? null
+                        : _pulseChoiceIdFor(step),
                 onSelect:
                     (id) => controller.selectChoice(id, autoSubmit: true),
               ),

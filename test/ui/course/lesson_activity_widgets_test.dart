@@ -4741,6 +4741,13 @@ void main() {
       ['As', '7c', '2d'],
     );
     expect(
+      resolveToyHandStepSpot(
+        activityId: 'act-01-06-01-scaffolded-multi',
+        stepId: 'step-01-06-flop-cbet',
+      )?.feltStatusLine,
+      'Top pair — bet for value',
+    );
+    expect(
       resolveLessonActionSpot(
         CourseActivity(
           id: 'act-01-06-01-unguided-lab',
