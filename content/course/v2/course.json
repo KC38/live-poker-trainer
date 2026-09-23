@@ -1151,7 +1151,7 @@
                   "objectives": [
                     "Use kickers when categories tie"
                   ],
-                  "prompt": "Board Kh Kd 7c 3s 2d. You AQ; they AJ. Tap who wins.",
+                  "prompt": "Same pair — tap who wins on kickers.",
                   "choices": [
                     {
                       "id": "you-kicker",
@@ -1200,7 +1200,7 @@
                   "objectives": [
                     "Spot board-tied pots"
                   ],
-                  "prompt": "Board Ac Kc Qc Jc Tc. Both checked down. Tap the result.",
+                  "prompt": "Both checked down on a broadway club board. Tap the result.",
                   "choices": [
                     {
                       "id": "chop-broadway",

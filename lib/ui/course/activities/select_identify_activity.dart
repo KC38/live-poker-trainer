@@ -536,10 +536,14 @@ class _ShowdownTapActivity extends StatelessWidget {
       builder: (context, _) {
         final locked = controller.submitting || controller.lastResult != null;
         final selected = controller.draft.choiceId;
-        final resolved = resolveLessonCoachPrompt(
-          activity: activity,
-          fallback: _coachFallback,
-        );
+        // Felt already shows the cards — never dump board/hole codes into Rex.
+        final resolved =
+            scene != null
+                ? (coach: _coachFallback, showPrompt: false)
+                : resolveLessonCoachPrompt(
+                  activity: activity,
+                  fallback: _coachFallback,
+                );
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

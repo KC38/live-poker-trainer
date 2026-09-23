@@ -596,7 +596,7 @@ export function buildSectionOne() {
               }),
               selectAct({
                 id: "act-01-02-02-scaffolded-kicker", order: 3, stage: "scaffolded",
-                prompt: "Board Kh Kd 7c 3s 2d. You AQ; they AJ. Tap who wins.",
+                prompt: "Same pair — tap who wins on kickers.",
                 a11y: "Tap the winner of the king-pair kicker battle.",
                 objectives: ["Use kickers when categories tie"],
                 choices: [
@@ -610,7 +610,7 @@ export function buildSectionOne() {
               }),
               selectAct({
                 id: "act-01-02-02-unguided-board", order: 4, stage: "unguided",
-                prompt: "Board Ac Kc Qc Jc Tc. Both checked down. Tap the result.",
+                prompt: "Both checked down on a broadway club board. Tap the result.",
                 a11y: "Tap chop when the board plays for everyone.",
                 objectives: ["Spot board-tied pots"],
                 lifeLoss: true,

@@ -141,6 +141,7 @@ class LessonTableScene {
   const LessonTableScene({
     this.heroCodes = const <String>[],
     this.boardCodes = const <String>[],
+    this.villainCodes = const <String>[],
     this.villainSeatCount = 1,
     this.highlight = LessonTableHighlight.none,
     this.caption,
@@ -160,7 +161,11 @@ class LessonTableScene {
   /// Optional community cards in the middle.
   final List<String> boardCodes;
 
+  /// Optional face-up villain hole cards (kicker / showdown spots).
+  final List<String> villainCodes;
+
   /// How many other seats show face-down hole cards.
+  /// Ignored when [villainCodes] is non-empty (those seats are face-up).
   final int villainSeatCount;
 
   /// Soft emphasis for guided teaching (pulse only — never a spoiler label).
@@ -390,7 +395,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         heroCodes: ['Ah', 'Qd'],
         boardCodes: ['Kh', 'Kd', '7c', '3s', '2d'],
-        villainSeatCount: 1,
+        villainCodes: ['As', 'Jd'],
+        villainSeatCount: 0,
         highlight: LessonTableHighlight.none,
         caption: 'You (AQ)',
       );
@@ -1519,6 +1525,9 @@ class LessonTableContext extends StatelessWidget {
     final board = scene.boardCodes
         .map(CardModel.fromCode)
         .toList(growable: false);
+    final villainFaceUp = scene.villainCodes
+        .map(CardModel.fromCode)
+        .toList(growable: false);
     final pulseHero =
         showSoftPulse &&
         selectedRegion == null &&
@@ -1527,18 +1536,23 @@ class LessonTableContext extends StatelessWidget {
         showSoftPulse &&
         selectedRegion == null &&
         scene.highlight == LessonTableHighlight.board;
+    final showVillainRail =
+        villainFaceUp.isNotEmpty ||
+        scene.villainSeatCount > 0 ||
+        scene.showDealerChip;
 
     return _feltShell(
-      semanticsLabel: _semanticsLabel(hero, board),
+      semanticsLabel: _semanticsLabel(hero, board, villainFaceUp),
       child: Column(
         children: [
-          if (scene.villainSeatCount > 0 || scene.showDealerChip) ...[
+          if (showVillainRail) ...[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                for (var i = 0; i < scene.villainSeatCount; i++)
+                if (villainFaceUp.isNotEmpty)
                   _TappableRegion(
-                    label: 'Them — other seat face-down cards',
+                    label:
+                        'Them ${villainFaceUp.map((c) => c.display).join(' ')}',
                     selected: selectedRegion == LessonTableRegion.villain,
                     enabled: enabled && _interactive,
                     onTap:
@@ -1549,8 +1563,55 @@ class LessonTableContext extends StatelessWidget {
                               ),
                             )
                             : null,
-                    child: const _FaceDownPair(),
-                  ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 6,
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            'Them',
+                            style: GoogleFonts.manrope(
+                              color: AppColors.slate,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 0.8,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              for (var i = 0; i < villainFaceUp.length; i++) ...[
+                                if (i > 0) const SizedBox(width: 6),
+                                MiniCard(
+                                  card: villainFaceUp[i],
+                                  size: MiniCardSize.small,
+                                ),
+                              ],
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                else
+                  for (var i = 0; i < scene.villainSeatCount; i++)
+                    _TappableRegion(
+                      label: 'Them — other seat face-down cards',
+                      selected: selectedRegion == LessonTableRegion.villain,
+                      enabled: enabled && _interactive,
+                      onTap:
+                          _interactive
+                              ? () => onRegionTap!(
+                                const LessonTableTapTarget(
+                                  LessonTableRegion.villain,
+                                ),
+                              )
+                              : null,
+                      child: const _FaceDownPair(),
+                    ),
                 if (scene.showDealerChip)
                   _TappableRegion(
                     label: 'Dealer',
@@ -1673,7 +1734,11 @@ class LessonTableContext extends StatelessWidget {
     );
   }
 
-  String _semanticsLabel(List<CardModel> hero, List<CardModel> board) {
+  String _semanticsLabel(
+    List<CardModel> hero,
+    List<CardModel> board,
+    List<CardModel> villainFaceUp,
+  ) {
     if (_interactive) {
       return 'Interactive poker table';
     }
@@ -1682,7 +1747,11 @@ class LessonTableContext extends StatelessWidget {
     if (board.isNotEmpty) {
       parts.add('Board ${board.map((c) => c.display).join(' ')}');
     }
-    if (scene.villainSeatCount > 0) {
+    if (villainFaceUp.isNotEmpty) {
+      parts.add(
+        'Them ${villainFaceUp.map((c) => c.display).join(' ')}',
+      );
+    } else if (scene.villainSeatCount > 0) {
       parts.add(
         '${scene.villainSeatCount} other '
         '${scene.villainSeatCount == 1 ? 'seat has' : 'seats have'} '

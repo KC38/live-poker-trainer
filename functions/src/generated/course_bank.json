@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "1ce7424cdf3013a09479887b42578601b2da2ba143c874851ea97b3f87ed91e7",
+  "contentChecksum": "c66fe0ee6d0b7f667d55595e6463b9c7aaa82a40e8f0e21801c2e4f91001af5d",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -1152,7 +1152,7 @@
                   "objectives": [
                     "Use kickers when categories tie"
                   ],
-                  "prompt": "Board Kh Kd 7c 3s 2d. You AQ; they AJ. Tap who wins.",
+                  "prompt": "Same pair — tap who wins on kickers.",
                   "choices": [
                     {
                       "id": "you-kicker",
@@ -1201,7 +1201,7 @@
                   "objectives": [
                     "Spot board-tied pots"
                   ],
-                  "prompt": "Board Ac Kc Qc Jc Tc. Both checked down. Tap the result.",
+                  "prompt": "Both checked down on a broadway club board. Tap the result.",
                   "choices": [
                     {
                       "id": "chop-broadway",

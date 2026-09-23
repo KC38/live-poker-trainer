@@ -6148,6 +6148,14 @@ void main() {
       SelectIdentifyPresentation.showdownTap,
     );
     expect(find.text('You — kings, Q kicker'), findsOneWidget);
+    expect(
+      find.text('Same pair — tap who wins on kickers.'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('Board Kh'), findsNothing);
+    final scene = resolveLessonTableScene(activity);
+    expect(scene?.villainCodes, ['As', 'Jd']);
+    expect(find.text('Them'), findsOneWidget);
     await tester.tap(find.text('You — kings, Q kicker'));
     await tester.pump();
     expect(controller.draft.choiceId, 'you-kicker');
