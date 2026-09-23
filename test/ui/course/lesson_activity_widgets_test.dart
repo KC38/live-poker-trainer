@@ -9376,6 +9376,47 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 observe narrow guided taps Narrow on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-04-07-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Narrow entry.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Seat folded 20 of 22 hands. Observation?',
+      choices: const [
+        CourseChoice(id: 'narrow', label: 'Narrow entry — plays few hands'),
+        CourseChoice(id: 'wide', label: 'Wide entry'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Folded 20 of 22 — tap the observation.'),
+      findsOneWidget,
+    );
+    expect(find.text('Narrow'), findsOneWidget);
+    await tester.tap(find.text('Narrow'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'narrow');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {
