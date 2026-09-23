@@ -430,6 +430,33 @@ enum LessonTableRegion {
 
   /// Line-reading checkpoint: always bluff (mistake).
   lineReadAlwaysBluff,
+
+  /// Timing guided: soft evidence (correct).
+  timingSoftEvidence,
+
+  /// Timing guided: proven nuts (mistake).
+  timingProvenNuts,
+
+  /// Timing guided: proven bluff (mistake).
+  timingProvenBluff,
+
+  /// Timing scaffolded: weaker / blocking (correct).
+  timingWeakerBlocking,
+
+  /// Timing scaffolded: solver known (mistake).
+  timingSolverKnown,
+
+  /// Timing unguided: reject magic tells (correct).
+  timingRejectMagic,
+
+  /// Timing unguided: trust the book (mistake).
+  timingTrustBook,
+
+  /// Timing checkpoint: tiny update (correct).
+  timingTinyUpdate,
+
+  /// Timing checkpoint: only evidence (mistake).
+  timingOnlyEvidence,
 }
 
 /// How the mini-table is arranged.
@@ -598,6 +625,18 @@ enum LessonTableLayout {
 
   /// Line-reading checkpoint: uncapped vs always bluff.
   lineReadUncappedOutcomes,
+
+  /// Timing guided: soft evidence vs proven nuts/bluff.
+  timingSoftEvidenceOutcomes,
+
+  /// Timing scaffolded: weaker/blocking vs solver known.
+  timingSizingWeakOutcomes,
+
+  /// Timing unguided: reject magic vs trust book.
+  timingRejectMagicOutcomes,
+
+  /// Timing checkpoint: tiny update vs only evidence.
+  timingTinyUpdateOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1289,6 +1328,26 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.lineReadUncappedOutcomes,
         caption: 'XR / bet / shove usually means?',
       );
+    case 'act-05-07-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.timingSoftEvidenceOutcomes,
+        caption: 'Instant river shove — framing?',
+      );
+    case 'act-05-07-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.timingSizingWeakOutcomes,
+        caption: 'Tiny flop bet into huge pot?',
+      );
+    case 'act-05-07-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.timingRejectMagicOutcomes,
+        caption: 'Look-left means bluff?',
+      );
+    case 'act-05-07-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.timingTinyUpdateOutcomes,
+        caption: 'Best use of live timing?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -1915,6 +1974,31 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.lineReadAlwaysBluff => pick('bluff'),
         _ => null,
       };
+    case 'act-05-07-01-guided':
+      return switch (region) {
+        LessonTableRegion.timingSoftEvidence => pick('soft'),
+        LessonTableRegion.timingProvenNuts => pick('nuts'),
+        LessonTableRegion.timingProvenBluff => pick('air'),
+        _ => null,
+      };
+    case 'act-05-07-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.timingWeakerBlocking => pick('weakish'),
+        LessonTableRegion.timingSolverKnown => pick('solver'),
+        _ => null,
+      };
+    case 'act-05-07-01-unguided':
+      return switch (region) {
+        LessonTableRegion.timingRejectMagic => pick('reject'),
+        LessonTableRegion.timingTrustBook => pick('trust'),
+        _ => null,
+      };
+    case 'act-05-07-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.timingTinyUpdate => pick('tiny'),
+        LessonTableRegion.timingOnlyEvidence => pick('only'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -2037,7 +2121,11 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-05-05-01-checkpoint' ||
       activity.id == 'act-05-06-01-guided' ||
       activity.id == 'act-05-06-01-unguided' ||
-      activity.id == 'act-05-06-01-checkpoint';
+      activity.id == 'act-05-06-01-checkpoint' ||
+      activity.id == 'act-05-07-01-guided' ||
+      activity.id == 'act-05-07-01-scaffolded' ||
+      activity.id == 'act-05-07-01-unguided' ||
+      activity.id == 'act-05-07-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -2256,6 +2344,14 @@ class LessonTableContext extends StatelessWidget {
           _buildLineReadRebuildOutcomes(),
       LessonTableLayout.lineReadUncappedOutcomes =>
           _buildLineReadUncappedOutcomes(),
+      LessonTableLayout.timingSoftEvidenceOutcomes =>
+          _buildTimingSoftEvidenceOutcomes(),
+      LessonTableLayout.timingSizingWeakOutcomes =>
+          _buildTimingSizingWeakOutcomes(),
+      LessonTableLayout.timingRejectMagicOutcomes =>
+          _buildTimingRejectMagicOutcomes(),
+      LessonTableLayout.timingTinyUpdateOutcomes =>
+          _buildTimingTinyUpdateOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -4443,6 +4539,140 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Too absolute',
           visual: const Icon(
             Icons.air,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTimingSoftEvidenceOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive timing evidence — tap soft evidence, proven nuts, or proven bluff',
+      semanticsStatic: 'Timing soft evidence outcomes',
+      caption: scene.caption ?? 'Instant river shove — framing?',
+      phases: [
+        (
+          region: LessonTableRegion.timingSoftEvidence,
+          title: 'Soft evidence',
+          detail: 'Slight bump',
+          visual: const Icon(
+            Icons.tune,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.timingProvenNuts,
+          title: 'Proven nuts',
+          detail: 'Overclaim',
+          visual: const Icon(
+            Icons.workspace_premium_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.timingProvenBluff,
+          title: 'Proven bluff',
+          detail: 'Overclaim',
+          visual: const Icon(
+            Icons.air,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTimingSizingWeakOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive timing sizing — tap weaker/blocking vs solver known',
+      semanticsStatic: 'Timing sizing weak outcomes',
+      caption: scene.caption ?? 'Tiny flop bet into huge pot?',
+      phases: [
+        (
+          region: LessonTableRegion.timingWeakerBlocking,
+          title: 'Weaker / blocking',
+          detail: 'Not proof',
+          visual: const Icon(
+            Icons.compress,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.timingSolverKnown,
+          title: 'Solver known',
+          detail: 'Fabricated',
+          visual: const Icon(
+            Icons.precision_manufacturing_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTimingRejectMagicOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive timing tells — tap reject magic vs trust book',
+      semanticsStatic: 'Timing reject magic outcomes',
+      caption: scene.caption ?? 'Look-left means bluff?',
+      phases: [
+        (
+          region: LessonTableRegion.timingRejectMagic,
+          title: 'Reject',
+          detail: 'No magic tells',
+          visual: const Icon(
+            Icons.block,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.timingTrustBook,
+          title: 'Trust book',
+          detail: 'Out of scope',
+          visual: const Icon(
+            Icons.menu_book_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTimingTinyUpdateOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive timing use — tap tiny update vs only evidence',
+      semanticsStatic: 'Timing tiny update outcomes',
+      caption: scene.caption ?? 'Best use of live timing?',
+      phases: [
+        (
+          region: LessonTableRegion.timingTinyUpdate,
+          title: 'Tiny update',
+          detail: 'Beside stronger',
+          visual: const Icon(
+            Icons.stacked_line_chart,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.timingOnlyEvidence,
+          title: 'Only evidence',
+          detail: 'Too weak',
+          visual: const Icon(
+            Icons.filter_1_outlined,
             color: AppColors.slate,
             size: 24,
           ),
