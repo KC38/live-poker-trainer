@@ -3256,12 +3256,9 @@ bool isTableRegionTapActivity(CourseActivity activity) {
         activity.id == 'act-06-10-01-explain' ||
         activity.id == 'act-06-11-01-explain' ||
         activity.id == 'act-06-11-02-explain' ||
-<<<<<<< HEAD
         activity.id == 'act-06-11-03-explain' ||
-        activity.id == 'act-06-12-01-explain';
-=======
+        activity.id == 'act-06-12-01-explain' ||
         activity.id == 'act-06-12-02-explain';
->>>>>>> 356eca2 (Teach Meet the LAG on felt tiles.)
   }
   if (activity.renderer != ActivityRenderer.selectIdentify &&
       activity.renderer != ActivityRenderer.playerReadClassify) {
