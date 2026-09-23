@@ -14876,7 +14876,9 @@ void main() {
       resolveSelectIdentifyPresentation(activity),
       SelectIdentifyPresentation.showdownTap,
     );
-    expect(find.text('You — kings, Q kicker'), findsOneWidget);
+    // Felt teaches You vs Them — queen-kicker tile is hidden.
+    expect(find.text('You — kings, Q kicker'), findsNothing);
+    expect(find.textContaining('Chop'), findsOneWidget);
     expect(
       find.text('Same pair — tap who wins on kickers.'),
       findsOneWidget,
@@ -14885,9 +14887,13 @@ void main() {
     final scene = resolveLessonTableScene(activity);
     expect(scene?.villainCodes, ['As', 'Jd']);
     expect(find.text('Them'), findsOneWidget);
-    await tester.tap(find.text('You — kings, Q kicker'));
+    expect(find.text('Tap You or Them on the felt.'), findsOneWidget);
+    var autoSubmits = 0;
+    controller.onAutoSubmit = () => autoSubmits += 1;
+    await tester.tap(find.text('You (AQ)'));
     await tester.pump();
     expect(controller.draft.choiceId, 'you-kicker');
+    expect(autoSubmits, 1);
     controller.dispose();
   });
 
