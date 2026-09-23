@@ -510,6 +510,36 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'No sticky read — stay cautious',
       );
+    case 'act-04-07-03-guided':
+      return const LessonActionSpot(
+        heroCodes: ['Kh', '9d'],
+        potLabel: 'Pot 1.5',
+        villainLine: 'Nit in BB · folds often',
+        streetLabel: 'Preflop · Button',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Steal wider vs nits',
+      );
+    case 'act-04-07-03-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', '9d'],
+        boardCodes: ['Qc', '9s', '3h'],
+        potLabel: 'Pot 12',
+        villainLine: 'Nit check-raises your c-bet',
+        streetLabel: 'Flop · middle pair',
+        facingBet: true,
+        feltStatusLine: 'Nit heat is usually strong',
+      );
+    case 'act-04-07-03-unguided':
+      return const LessonActionSpot(
+        heroCodes: ['Kh', '9d'],
+        potLabel: 'Pot 1.5',
+        villainLine: 'Unknown BB · no samples',
+        streetLabel: 'Preflop · Button',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'No nit read — stay tighter',
+      );
   }
   return null;
 }
@@ -695,6 +725,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-04-06-03-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-04-07-03-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
@@ -3412,18 +3446,19 @@ class _VsNitsDemoState extends State<VsNitsDemo> {
               ],
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap Steal, Credit, and Explode'
-                : 'Steal more · give credit when they explode',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues the three taps — no duplicate footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Steal more · give credit when they explode',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );

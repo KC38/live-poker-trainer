@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "513841b3650d8b047bf4d6b705171a317a740d5902284e96c828834af0b819db",
+  "contentChecksum": "184ed650293f25c0ed21812ca1de3ecbac099b16e2a266eaf581e2b16c53da86",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -7932,14 +7932,14 @@
                   "choices": [
                     {
                       "id": "tighter",
-                      "label": "Tighter — need a better hand or read",
-                      "accessibilityText": "Tighter — need a better hand or read",
+                      "label": "Tighter baseline",
+                      "accessibilityText": "Tighter baseline",
                       "action": "FOLD"
                     },
                     {
                       "id": "same-always",
-                      "label": "Always steal K9o versus anyone",
-                      "accessibilityText": "Always steal K9o versus anyone",
+                      "label": "Always steal K9o",
+                      "accessibilityText": "Always steal K9o",
                       "action": "RAISE",
                       "amountBb": 3
                     }
@@ -7965,13 +7965,13 @@
                   "choices": [
                     {
                       "id": "cite-strong",
-                      "label": "Their range is strong when they raise",
-                      "accessibilityText": "Their range is strong when they raise"
+                      "label": "Range is strong when they raise",
+                      "accessibilityText": "Range is strong when they raise"
                     },
                     {
                       "id": "cite-fear",
-                      "label": "Because nits are scary people",
-                      "accessibilityText": "Because nits are scary people"
+                      "label": "Nits are scary people",
+                      "accessibilityText": "Nits are scary people"
                     }
                   ],
                   "playerTypeRefs": [
