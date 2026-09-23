@@ -181,6 +181,70 @@ describe("anonymous progress transfer", () => {
     expect(destAgain.data()?.lifetimeXp).toBe(45);
   });
 
+  test("copies an open attempt so the linked account can resume", async () => {
+    await db.doc("users/anon-1/course/main").set({
+      catalogVersion: "2.0.0",
+      lifetimeXp: 20,
+      completedLessonIds: ["lesson-01-01-01-your-two-cards"],
+      masteryByLessonId: {},
+      currentStreak: 1,
+      longestStreak: 1,
+      acceptedAnswers: 4,
+      totalScoredAnswers: 4,
+      resume: {
+        attemptId: "attempt-open",
+        lessonId: "lesson-01-01-02-suits-and-ranks",
+        activityId: "act-01-01-02-guided-suits",
+        activityIndex: 2,
+      },
+    });
+    await db.doc("users/anon-1/courseAttempts/attempt-open").set({
+      attemptId: "attempt-open",
+      uid: "anon-1",
+      lessonId: "lesson-01-01-02-suits-and-ranks",
+      status: "in_progress",
+      activityIndex: 2,
+      currentActivityId: "act-01-01-02-guided-suits",
+      livesRemaining: 2,
+      livesMax: 3,
+      catalogVersion: "2.0.0",
+    });
+
+    const issued = await issueAnonymousProgressTransferForUser({
+      uid: "anon-1",
+      isAnonymous: true,
+      db,
+      nowMs: 3_000_000,
+    });
+    await redeemAnonymousProgressTransferForUser({
+      uid: "dest-1",
+      isAnonymous: false,
+      raw: {receiptId: issued.receiptId, nonce: issued.nonce},
+      db,
+      nowMs: 3_000_100,
+    });
+
+    const destProfile = await db.doc("users/dest-1/course/main").get();
+    expect(destProfile.data()?.resume).toMatchObject({
+      attemptId: "attempt-open",
+      lessonId: "lesson-01-01-02-suits-and-ranks",
+      activityIndex: 2,
+    });
+    const destAttempt =
+      await db.doc("users/dest-1/courseAttempts/attempt-open").get();
+    expect(destAttempt.exists).toBe(true);
+    expect(destAttempt.data()).toMatchObject({
+      uid: "dest-1",
+      status: "in_progress",
+      activityIndex: 2,
+      currentActivityId: "act-01-01-02-guided-suits",
+      livesRemaining: 2,
+    });
+    const sourceAttempt =
+      await db.doc("users/anon-1/courseAttempts/attempt-open").get();
+    expect(sourceAttempt.data()?.uid).toBe("anon-1");
+  });
+
   test("cleanup deletes expired receipts and tombstones", async () => {
     const nowMs = 5_000_000;
     await db.doc("courseTransferReceipts/r1").set({
