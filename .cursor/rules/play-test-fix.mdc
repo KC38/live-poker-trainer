@@ -12,3 +12,6 @@ When the user asks to keep playing, testing, and fixing live (or invokes
 Ship every product fix via `.cursor/skills/ship-change/SKILL.md`. Stay synced
 with `origin/main`. Drive only the agent iPhone 17 Pro UDID; leave the user’s
 iPhone 17 instance alone (notify them if you relaunch it).
+
+For launching the app / Device Hub (Xcode 27+), see
+`docs/agent-ios-simulator.md`.

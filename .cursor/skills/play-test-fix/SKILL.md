@@ -43,6 +43,10 @@ Other agents push to `origin/main` while you work. Always:
 - When you (re)launch the **user** iPhone 17 instance, **tell the user** it
   is ready for them.
 
+**Boot / GUI / Xcode 27 Device Hub:** follow
+[docs/agent-ios-simulator.md](../../../docs/agent-ios-simulator.md) before
+assuming `Simulator.app` exists (it does not on Xcode 27+).
+
 ## How to drive the agent app
 
 - Rediscover Dart VM URI from `/tmp/flutter-live-poker-trainer.run.log`
