@@ -167,6 +167,60 @@ LessonHandExample? resolveHandExample({
         title: 'Air',
         codes: [],
       );
+    case 'nfd':
+      return const LessonHandExample(
+        id: 'nfd',
+        title: 'Draw — nut flush',
+        codes: [],
+      );
+    case 'made-aj':
+      return const LessonHandExample(
+        id: 'made-aj',
+        title: 'Made — top pair',
+        codes: [],
+      );
+    case 'sdv':
+      return const LessonHandExample(
+        id: 'sdv',
+        title: 'Showdown value',
+        codes: [],
+      );
+    case 'air':
+      return const LessonHandExample(
+        id: 'air',
+        title: 'Air',
+        codes: [],
+      );
+    case 'sdv-54':
+      return const LessonHandExample(
+        id: 'sdv-54',
+        title: 'Showdown value',
+        codes: [],
+      );
+    case 'made-54':
+      return const LessonHandExample(
+        id: 'made-54',
+        title: 'Made hand',
+        codes: [],
+      );
+    case 'oesd':
+      return const LessonHandExample(
+        id: 'oesd',
+        title: 'Draw — open-ender',
+        codes: [],
+      );
+    case 'made-jt':
+      return const LessonHandExample(
+        id: 'made-jt',
+        title: 'Made — top pair',
+        codes: [],
+      );
+    case 'air-j8':
+      return const LessonHandExample(
+        id: 'air-j8',
+        title: 'Pure air',
+        codes: [],
+      );
     case 'split':
       return const LessonHandExample(
         id: 'split',

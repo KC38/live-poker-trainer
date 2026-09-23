@@ -449,6 +449,30 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.none,
         caption: 'Flop · your holes',
       );
+    case 'act-03-02-01-scaffolded':
+      return const LessonTableScene(
+        heroCodes: ['Ah', '9h'],
+        boardCodes: ['Jh', '8h', '3c'],
+        villainSeatCount: 0,
+        highlight: LessonTableHighlight.none,
+        caption: 'Flop · nut flush draw',
+      );
+    case 'act-03-02-01-unguided':
+      return const LessonTableScene(
+        heroCodes: ['5h', '4h'],
+        boardCodes: ['Qc', '7d', '2s'],
+        villainSeatCount: 2,
+        highlight: LessonTableHighlight.none,
+        caption: 'Flop · multiway',
+      );
+    case 'act-03-02-01-checkpoint':
+      return const LessonTableScene(
+        heroCodes: ['Js', '8d'],
+        boardCodes: ['Ts', '9s', '4d'],
+        villainSeatCount: 0,
+        highlight: LessonTableHighlight.none,
+        caption: 'Flop · open-ender',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,

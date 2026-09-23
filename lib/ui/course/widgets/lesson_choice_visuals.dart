@@ -128,6 +128,11 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Flop class: see board + holes, tap Made / Draw / Air.
     return SelectIdentifyPresentation.handCategoryTap;
   }
+  if (activity.id.startsWith('act-03-02-01-') &&
+      activity.renderer == ActivityRenderer.selectIdentify) {
+    // Flop class scaffolded / unguided / checkpoint: same teach-by-doing.
+    return SelectIdentifyPresentation.handCategoryTap;
+  }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {
     return SelectIdentifyPresentation.showdownTap;

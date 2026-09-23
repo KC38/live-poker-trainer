@@ -452,6 +452,12 @@ class _HandCategoryTapActivity extends StatelessWidget {
           'Look at your holes — tap the family they belong to.',
         'act-03-02-01-guided' =>
           'Board pairs your king — tap the flop class.',
+        'act-03-02-01-scaffolded' =>
+          'Two hearts on board with the nut heart — tap the class.',
+        'act-03-02-01-unguided' =>
+          'No pair, almost no draw multiway — tap the class.',
+        'act-03-02-01-checkpoint' =>
+          'Eight or queen completes — tap the class.',
         _ => 'Look at the board and your holes — tap what you made.',
       };
 
@@ -532,8 +538,8 @@ class _HandCategoryTapActivity extends StatelessWidget {
                   if (selected == null) {
                     return activity.id == 'act-02-07-02-jump-family'
                         ? 'Tap the starting-hand family.'
-                        : activity.id == 'act-03-02-01-guided'
-                        ? 'Tap Made, Draw, or Air.'
+                        : activity.id.startsWith('act-03-02-01-')
+                        ? 'Tap the flop class.'
                         : 'Tap the hand category you made.';
                   }
                   return 'Checking…';
