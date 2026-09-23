@@ -361,6 +361,13 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         buttonSeat: 3,
         caption: 'Six-max · before the button',
       );
+    case 'act-02-07-02-jump-family':
+      return const LessonTableScene(
+        heroCodes: ['Ah', '5h'],
+        villainSeatCount: 0,
+        highlight: LessonTableHighlight.hero,
+        caption: 'Your holes',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,

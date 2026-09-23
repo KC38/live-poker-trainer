@@ -131,6 +131,24 @@ LessonHandExample? resolveHandExample({
         title: 'Higher hole card',
         codes: ['2h', '2d'],
       );
+    case 'j2-sa':
+      return const LessonHandExample(
+        id: 'j2-sa',
+        title: 'Suited ace',
+        codes: ['Ah', '9h'],
+      );
+    case 'j2-pair':
+      return const LessonHandExample(
+        id: 'j2-pair',
+        title: 'Pocket pair',
+        codes: ['8h', '8c'],
+      );
+    case 'j2-trash':
+      return const LessonHandExample(
+        id: 'j2-trash',
+        title: 'Offsuit trash',
+        codes: ['7c', '2d'],
+      );
     case 'split':
       return const LessonHandExample(
         id: 'split',
