@@ -332,6 +332,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Shorter stack caps the matchup — tap what matters with the pot.',
       'act-03-03-01-scaffolded' =>
           'Pot 20, bet 10 — tap how many chips to call.',
+      'act-03-03-01-unguided' =>
+          'Getting 3:1 with real outs — tap what you do.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -361,7 +363,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-03-01-01-scaffolded' ||
             widget.activity.id == 'act-03-01-01-unguided' ||
             widget.activity.id == 'act-03-01-01-checkpoint' ||
-            widget.activity.id == 'act-03-03-01-scaffolded';
+            widget.activity.id == 'act-03-03-01-scaffolded' ||
+            widget.activity.id == 'act-03-03-01-unguided';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

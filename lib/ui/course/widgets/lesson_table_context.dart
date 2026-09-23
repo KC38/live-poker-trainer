@@ -137,6 +137,15 @@ enum LessonTableRegion {
   /// Call-price distractor: pot after calling.
   callChipsThirty,
 
+  /// Draw-price: call is priced in (correct).
+  drawPriceCall,
+
+  /// Draw-price distractor: fold without a made hand.
+  drawPriceFold,
+
+  /// Draw-price distractor: auto-raise every draw.
+  drawPriceRaise,
+
   /// Verbal action: raise stands (binding).
   verbalRaiseStands,
 
@@ -196,6 +205,9 @@ enum LessonTableLayout {
 
   /// Call-price tiles after a bet (10 / 20 / 30).
   callPriceOutcomes,
+
+  /// Draw call/fold/raise tiles when priced in.
+  drawPriceOutcomes,
 
   /// Verbal declaration tiles: raise stands / takeback / dealer.
   verbalBindingOutcomes,
@@ -497,6 +509,11 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         layout: LessonTableLayout.callPriceOutcomes,
         caption: 'Pot 20 · villain bets 10',
+      );
+    case 'act-03-03-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.drawPriceOutcomes,
+        caption: 'Pot 20 · bet 10 · ~8 clean outs',
       );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
@@ -834,6 +851,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.callChipsThirty => pick('call-30'),
         _ => null,
       };
+    case 'act-03-03-01-unguided':
+      return switch (region) {
+        LessonTableRegion.drawPriceCall => pick('call-draw'),
+        LessonTableRegion.drawPriceFold => pick('fold-draw'),
+        LessonTableRegion.drawPriceRaise => pick('raise-auto'),
+        _ => null,
+      };
     case 'act-03-01-01-scaffolded':
       // Preflop open: UTG is left of the BB (earlyPosition on the felt).
       return switch (region) {
@@ -941,7 +965,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-01-01-scaffolded' ||
       activity.id == 'act-03-01-01-unguided' ||
       activity.id == 'act-03-01-01-checkpoint' ||
-      activity.id == 'act-03-03-01-scaffolded';
+      activity.id == 'act-03-03-01-scaffolded' ||
+      activity.id == 'act-03-03-01-unguided';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -1075,6 +1100,7 @@ class LessonTableContext extends StatelessWidget {
         _buildEffectiveStackOutcomes(),
       LessonTableLayout.potMultiwayOutcomes => _buildPotMultiwayOutcomes(),
       LessonTableLayout.callPriceOutcomes => _buildCallPriceOutcomes(),
+      LessonTableLayout.drawPriceOutcomes => _buildDrawPriceOutcomes(),
       LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
       LessonTableLayout.tableReadMattersOutcomes =>
           _buildTableReadMattersOutcomes(),
@@ -1830,6 +1856,47 @@ class LessonTableContext extends StatelessWidget {
           title: '30 chips',
           detail: 'After you call',
           visual: const _PotChipDot(label: '30', gold: false),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDrawPriceOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive draw price — tap call, fold, or raise',
+      semanticsStatic: 'Draw price outcomes',
+      caption: scene.caption ?? 'Pot 20 · bet 10 · outs',
+      phases: [
+        (
+          region: LessonTableRegion.drawPriceCall,
+          title: 'Call',
+          detail: 'Priced in',
+          visual: const Icon(
+            Icons.check_circle_outline,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.drawPriceFold,
+          title: 'Fold',
+          detail: 'No made hand',
+          visual: const Icon(
+            Icons.cancel_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.drawPriceRaise,
+          title: 'Raise',
+          detail: 'Every draw',
+          visual: const Icon(
+            Icons.north_east,
+            color: AppColors.slate,
+            size: 24,
+          ),
         ),
       ],
     );

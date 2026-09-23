@@ -6330,6 +6330,77 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s3 outs unguided taps Call when priced in on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-03-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText:
+          'Nine-outish equity is close; with implied odds deep, call is fine.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'Pot 20, bet 10 (call 10 into 30). You have ~8 clean outs on the turn. Call?',
+      choices: const [
+        CourseChoice(
+          id: 'call-draw',
+          label: 'Call — price is acceptable with outs',
+        ),
+        CourseChoice(
+          id: 'fold-draw',
+          label: 'Fold always without a made hand',
+        ),
+        CourseChoice(id: 'raise-auto', label: 'Raise every draw'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.drawPriceOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.drawPriceCall,
+        choices: activity.choices,
+      ),
+      'call-draw',
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Getting 3:1 with real outs — tap what you do.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Pot 20, bet 10 (call 10 into 30). You have ~8 clean outs on the turn. Call?',
+      ),
+      findsNothing,
+    );
+    expect(
+      find.text('Call — price is acceptable with outs'),
+      findsNothing,
+    );
+    expect(find.text('Call'), findsOneWidget);
+    await tester.tap(find.text('Call'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'call-draw');
+    controller.dispose();
+  });
+
   testWidgets('numeric entry updates draft', (tester) async {
     final activity = _activity(
       renderer: ActivityRenderer.numericPotPrice,
