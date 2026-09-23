@@ -258,6 +258,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Deep stacks: tap theses on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-05-03-01-checkpoint') {
+    // Implied odds: tap when IO rise on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

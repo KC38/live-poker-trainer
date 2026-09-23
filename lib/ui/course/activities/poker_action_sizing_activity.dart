@@ -312,6 +312,12 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Top set wet multiway — tap Bet solid value.',
     'act-05-02-01-scaffolded' =>
       'Deep TPWK faces huge check-raise — tap Fold.',
+    'act-05-03-01-guided' =>
+      'Deep gutshot vs Station — tap Call.',
+    'act-05-03-01-scaffolded' =>
+      'KJo vs Nit check-raise — tap Fold.',
+    'act-05-03-01-unguided' =>
+      'Non-nut FD four-way — tap Fold.',
     _ => null,
   };
 }

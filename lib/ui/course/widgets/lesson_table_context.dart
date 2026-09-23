@@ -382,6 +382,12 @@ enum LessonTableRegion {
 
   /// Deep checkpoint: automatic light stacks (mistake).
   deepRewardsSpew,
+
+  /// Implied-odds checkpoint: deep + paying (correct).
+  ioDepthPay,
+
+  /// Implied-odds checkpoint: short stacks always (mistake).
+  ioShortAlways,
 }
 
 /// How the mini-table is arranged.
@@ -526,6 +532,9 @@ enum LessonTableLayout {
 
   /// Deep checkpoint: depth rewards.
   deepRewardsOutcomes,
+
+  /// Implied-odds checkpoint: when IO rise.
+  impliedOddsRiseOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1177,6 +1186,11 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.deepRewardsOutcomes,
         caption: '150–300bb cash play rewards?',
       );
+    case 'act-05-03-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.impliedOddsRiseOutcomes,
+        caption: 'When do implied odds rise most?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -1755,6 +1769,12 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.deepRewardsSpew => pick('spew'),
         _ => null,
       };
+    case 'act-05-03-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.ioDepthPay => pick('depth-pay'),
+        LessonTableRegion.ioShortAlways => pick('short'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -1869,7 +1889,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-05-01-01-checkpoint' ||
       activity.id == 'act-05-02-01-guided' ||
       activity.id == 'act-05-02-01-unguided' ||
-      activity.id == 'act-05-02-01-checkpoint';
+      activity.id == 'act-05-02-01-checkpoint' ||
+      activity.id == 'act-05-03-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -2074,6 +2095,8 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.deepPlanOutcomes => _buildDeepPlanOutcomes(),
       LessonTableLayout.deepRewardsOutcomes =>
           _buildDeepRewardsOutcomes(),
+      LessonTableLayout.impliedOddsRiseOutcomes =>
+          _buildImpliedOddsRiseOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -4013,6 +4036,37 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Automatic',
           visual: const Icon(
             Icons.dangerous_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildImpliedOddsRiseOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive implied odds — tap when implied odds rise most',
+      semanticsStatic: 'Implied odds rise outcomes',
+      caption: scene.caption ?? 'When do implied odds rise most?',
+      phases: [
+        (
+          region: LessonTableRegion.ioDepthPay,
+          title: 'Depth + pay',
+          detail: 'They call off',
+          visual: const Icon(
+            Icons.trending_up,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.ioShortAlways,
+          title: 'Short always',
+          detail: 'Cuts future',
+          visual: const Icon(
+            Icons.trending_down,
             color: AppColors.slate,
             size: 24,
           ),

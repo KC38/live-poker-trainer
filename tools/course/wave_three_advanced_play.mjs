@@ -193,42 +193,45 @@ export function buildSectionFive() {
               dialogue("act-05-03-01-explain", 1,
                 "Implied odds: future money. Reverse implied: future losses when second-best.",
                 {objectives: ["Estimate implied odds from depth and tendencies"]}),
-              selectAct({
+              actionAct({
                 id: "act-05-03-01-guided", order: 2, stage: "guided",
-                prompt: "Deep vs Calling Station. Gutshot with overs. Call a small bet?",
-                a11y: "Station pays — implied odds improve.",
+                prompt: "Deep vs Calling Station. Gutshot with overs facing a small bet. Action?",
+                a11y: "Station pays — implied odds improve. Call.",
                 objectives: ["Estimate implied odds from depth and tendencies"],
                 playerTypeRefs: ["calling_station"],
                 choices: [
-                  choice("call-io", "Call — they pay off when you hit", "recommended",
-                    "Sticky callers raise implied odds.", {reversalRead: "Versus a nit, implied odds shrink."}),
-                  choice("fold-io", "Always fold gutshots", "clear_mistake",
-                    "Ignore tendency and depth.", {betterChoiceId: "call-io"})
+                  choice("call-io", "Call", "recommended",
+                    "Sticky callers raise implied odds.",
+                    {action: "CALL", reversalRead: "Versus a nit, implied odds shrink."}),
+                  choice("fold-io", "Fold", "clear_mistake",
+                    "Ignore tendency and depth.", {action: "FOLD", betterChoiceId: "call-io"})
                 ],
               }),
-              selectAct({
+              actionAct({
                 id: "act-05-03-01-scaffolded", order: 3, stage: "scaffolded",
-                prompt: "You hold KJo on A-high wet board vs nit who check-raises large. Risk?",
-                a11y: "Reverse implied odds — dominated often.",
+                prompt: "KJo on A-high wet board. Nit check-raises large. Action?",
+                a11y: "Reverse implied odds — fold dominated broadway.",
                 objectives: ["Spot reverse implied odds traps"],
                 playerTypeRefs: ["nit"],
                 choices: [
-                  choice("rio", "Reverse implied odds — often second-best", "recommended",
-                    "Nit heat + broadway underpairs to ace."),
-                  choice("free", "Free implied odds to stack them", "clear_mistake",
-                    "Wrong direction.", {betterChoiceId: "rio"})
+                  choice("rio", "Fold", "recommended",
+                    "Nit heat + broadway underpairs to ace — reverse implied.",
+                    {action: "FOLD"}),
+                  choice("free", "Call", "clear_mistake",
+                    "Wrong direction — often second-best.",
+                    {action: "CALL", betterChoiceId: "rio"})
                 ],
               }),
-              selectAct({
+              actionAct({
                 id: "act-05-03-01-unguided", order: 4, stage: "unguided",
-                prompt: "Four-way. You have 7h6h on Kh 9h 2c facing a bet. Best frame?",
-                a11y: "Non-nut flush draw — reverse implied risk.",
+                prompt: "Four-way. 7h6h on Kh 9h 2c facing a bet. Action?",
+                a11y: "Non-nut flush draw — fold the domination leak.",
                 objectives: ["Skip dominated draws multiway"], lifeLoss: true,
                 choices: [
-                  choice("nonut", "Non-nut draw — price carefully or fold", "recommended",
-                    "Dominated flush draws leak multiway."),
-                  choice("auto", "Always call any flush draw", "clear_mistake",
-                    "Ignore domination.", {betterChoiceId: "nonut"})
+                  choice("nonut", "Fold", "recommended",
+                    "Dominated flush draws leak multiway.", {action: "FOLD"}),
+                  choice("auto", "Call", "clear_mistake",
+                    "Ignore domination.", {action: "CALL", betterChoiceId: "nonut"})
                 ],
               }),
               selectAct({
