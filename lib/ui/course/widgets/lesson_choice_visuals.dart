@@ -112,6 +112,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Table-read: tap the multiway pot total on the felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-03-01-01-scaffolded') {
+    // Table-read: tap UTG (left of BB) on the nine-handed felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {
     return SelectIdentifyPresentation.showdownTap;
