@@ -1829,16 +1829,73 @@ void main() {
       ),
     );
     expect(find.byType(VsOpenResponseDemo), findsOneWidget);
-    expect(find.text('Tap Fold, Call, and 3-Bet'), findsOneWidget);
+    expect(find.text('Tap FOLD next'), findsOneWidget);
+    expect(find.text('Tap Fold, Call, and 3-Bet'), findsNothing);
     expect(find.text('Tap Fold, Call, and 3-Bet.'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['FOLD', 'CALL', '3-BET']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(find.text('Tap CALL next'), findsOneWidget);
+    await tester.tap(find.text('CALL'));
+    await tester.pump();
+    expect(find.text('Tap 3-BET next'), findsOneWidget);
+    await tester.tap(find.text('3-BET'));
+    await tester.pump();
     expect(feltAck, 1);
+    controller.dispose();
+  });
+
+  testWidgets('vs-open guided docks Fold on BB felt — no text prompt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-04-01-guided-fold',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Fold jack-three offsuit versus an open.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'UTG opens to 6. You have J3o in the big blind. Action?',
+      choices: const [
+        CourseChoice(id: 'fold-j3', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'call-j3', label: 'Call', action: 'CALL'),
+        CourseChoice(id: '3bet-j3', label: '3-bet to 18', action: 'RAISE'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    expect(
+      resolveLessonActionSpot(activity)?.heroCodes,
+      ['Jh', '3d'],
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byType(LessonActionTable), findsOneWidget);
+    expect(find.byType(LessonActionDock), findsOneWidget);
+    expect(
+      find.text('Junk in the big blind vs an open — tap Fold.'),
+      findsOneWidget,
+    );
+    expect(find.text('Facing an open — junk folds'), findsOneWidget);
+    expect(
+      find.text('UTG opens to 6. You have J3o in the big blind. Action?'),
+      findsNothing,
+    );
+    expect(find.text('FOLD'), findsOneWidget);
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'fold-j3');
     controller.dispose();
   });
 

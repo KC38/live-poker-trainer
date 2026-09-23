@@ -226,6 +226,42 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'First in — mid-late open',
       );
+    case 'act-02-04-01-guided-fold':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', '3d'],
+        potLabel: 'Pot 3 → 9',
+        villainLine: 'UTG opens to 6',
+        streetLabel: 'Preflop · Big blind · 1/2',
+        facingBet: true,
+        feltStatusLine: 'Facing an open — junk folds',
+      );
+    case 'act-02-04-01-scaffolded-call':
+      return const LessonActionSpot(
+        heroCodes: ['8h', '7h'],
+        potLabel: 'Pot 3 → 9',
+        villainLine: 'CO opens to 6',
+        streetLabel: 'Preflop · Button · 1/2',
+        facingBet: true,
+        feltStatusLine: 'Suited connector in position',
+      );
+    case 'act-02-04-01-unguided-3bet':
+      return const LessonActionSpot(
+        heroCodes: ['Kh', 'Kd'],
+        potLabel: 'Pot 3 → 9',
+        villainLine: 'BTN opens to 6',
+        streetLabel: 'Preflop · Small blind · 1/2',
+        facingBet: true,
+        feltStatusLine: 'Premium vs a button open',
+      );
+    case 'act-02-04-01-checkpoint-aq':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', 'Qh'],
+        potLabel: 'Pot 3 → 9',
+        villainLine: 'HJ opens to 6',
+        streetLabel: 'Preflop · Cutoff · 1/2',
+        facingBet: true,
+        feltStatusLine: 'Strong suited broadway',
+      );
     case 'act-02-07-02-jump-vs':
       return const LessonActionSpot(
         heroCodes: ['Ah', 'Ad'],
@@ -1423,6 +1459,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
+  if (id.startsWith('act-02-04-01-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
   if (id.startsWith('act-02-07-02-jump-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
@@ -2020,8 +2060,16 @@ class _VsOpenResponseDemoState extends State<VsOpenResponseDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextResponse {
+    for (final response in VsOpenResponseDemo.responses) {
+      if (!_tapped.contains(response.label)) return response;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextResponse;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -2050,18 +2098,27 @@ class _VsOpenResponseDemoState extends State<VsOpenResponseDemo> {
               for (var i = 0; i < VsOpenResponseDemo.responses.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: VsOpenResponseDemo.responses[i].label,
-                    caption: VsOpenResponseDemo.responses[i].caption,
-                    color: VsOpenResponseDemo.responses[i].color,
-                    selected:
-                        _tapped.contains(VsOpenResponseDemo.responses[i].label),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () =>
-                                _onTap(VsOpenResponseDemo.responses[i].label)
-                            : null,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == VsOpenResponseDemo.responses[i].label,
+                    child: _DemoActionCard(
+                      label: VsOpenResponseDemo.responses[i].label,
+                      caption: VsOpenResponseDemo.responses[i].caption,
+                      color: VsOpenResponseDemo.responses[i].color,
+                      selected:
+                          _tapped.contains(
+                            VsOpenResponseDemo.responses[i].label,
+                          ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(
+                                VsOpenResponseDemo.responses[i].label,
+                              )
+                              : null,
+                    ),
                   ),
                 ),
               ],
@@ -2070,7 +2127,9 @@ class _VsOpenResponseDemoState extends State<VsOpenResponseDemo> {
           const SizedBox(height: 10),
           Text(
             widget.interactive
-                ? 'Tap Fold, Call, and 3-Bet'
+                ? (next == null
+                    ? 'Weak fold · playable call · strong 3-bet'
+                    : 'Tap ${next.label} next')
                 : 'Weak fold · playable call · strong 3-bet',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
