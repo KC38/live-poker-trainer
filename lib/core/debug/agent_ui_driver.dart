@@ -159,6 +159,12 @@ final class AgentUiDriver {
       if (_isShortLessonCta(needleLower) && lower != needleLower) {
         return;
       }
+      // Felt seat captions: allow "You (AQ)" / "Your hole cards …" but never
+      // mid-sentence "…where you left off…".
+      if (_isShortSeatLabel(needleLower) &&
+          !_seatLabelMatches(needleLower, lower)) {
+        return;
+      }
       // Avoid "continue on home" stealing a plain "continue" tap when an
       // exact Continue dock exists — handled by exact sort, but also skip
       // home-nav labels when the needle is a short CTA word.
@@ -347,12 +353,27 @@ bool _isShortLessonCta(String needleLower) {
     'undo last',
     'hint',
     'back',
-    // Felt seat captions — must not fuzzy-match Rex / resume copy
-    // (e.g. You → "…where you left off…").
-    'you',
-    'them',
   };
   return ctas.contains(needleLower);
+}
+
+/// Felt seat needles that must not fuzzy-match mid-sentence copy.
+bool _isShortSeatLabel(String needleLower) {
+  return needleLower == 'you' || needleLower == 'them';
+}
+
+/// Whether [lower] is an allowable label for a You/Them seat tap.
+bool _seatLabelMatches(String needleLower, String lower) {
+  if (lower == needleLower) return true;
+  if (needleLower == 'you') {
+    return lower.startsWith('you ') ||
+        lower.startsWith('you(') ||
+        lower.startsWith('your hole');
+  }
+  if (needleLower == 'them') {
+    return lower.startsWith('them ') || lower.startsWith('them—');
+  }
+  return false;
 }
 
 class _TapCandidate {
