@@ -8844,6 +8844,48 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 sizing guided docks value sizes on dry top-pair felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-04-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Half to two-thirds pot is fine value.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Dry board, top pair, heads-up. Choose a value size into 20.',
+      choices: const [
+        CourseChoice(id: 'half', label: 'Bet 10', action: 'BET'),
+        CourseChoice(id: 'two-third', label: 'Bet 14', action: 'BET'),
+        CourseChoice(id: 'pot', label: 'Bet 20', action: 'BET'),
+        CourseChoice(id: 'one-chip', label: 'Bet 1', action: 'BET'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Dry board, top pair — tap a value size into 20.'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('Flop · dry · top pair'), findsOneWidget);
+    expect(find.text('BET 10'), findsOneWidget);
+    await tester.tap(find.text('BET 10'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'half');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {

@@ -411,6 +411,17 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'Keep the pot controlled',
       );
+    case 'act-04-04-01-guided':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', 'Kd'],
+        boardCodes: ['As', '7c', '2d'],
+        potLabel: 'Pot 20',
+        villainLine: 'Checked to you',
+        streetLabel: 'Flop · dry · top pair',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Pick a value size',
+      );
   }
   return null;
 }
@@ -584,6 +595,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id == 'act-04-03-01-unguided' &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-04-04-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
@@ -2587,18 +2602,19 @@ class _SizingLanguageDemoState extends State<SizingLanguageDemo> {
               ],
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap Value, Pressure, and Size'
-                : 'Value looks like value · pressure looks like pressure',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues the three taps — no duplicate footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Value looks like value · pressure looks like pressure',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );
