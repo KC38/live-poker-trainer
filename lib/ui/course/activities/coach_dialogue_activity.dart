@@ -16,6 +16,7 @@ import 'package:live_poker_trainer/ui/course/widgets/polar_merged_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/overbet_geometry_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/blockers_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/defend_enough_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/mix_with_reason_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -305,6 +306,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.defendEnough
                     ? null
                     : onFeltAcknowledge,
+            onMixWithReasonAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.mixWithReason
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -518,6 +523,9 @@ enum CoachDialogueVisualKind {
 
   /// Defend enough that over-bluffing fails — no fake percentages.
   defendEnough,
+
+  /// Mixing is frequency with a purpose — not coin-flip theater.
+  mixWithReason,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -652,6 +660,8 @@ class CoachDialogueVisual {
       'Tap Block, Use, and No EV.',
     CoachDialogueVisualKind.defendEnough =>
       'Tap Defend, Bluff, and Enough.',
+    CoachDialogueVisualKind.mixWithReason =>
+      'Tap Mix, Purpose, and No Coin.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -714,7 +724,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.polarMerged ||
       kind == CoachDialogueVisualKind.overbetGeometry ||
       kind == CoachDialogueVisualKind.blockers ||
-      kind == CoachDialogueVisualKind.defendEnough;
+      kind == CoachDialogueVisualKind.defendEnough ||
+      kind == CoachDialogueVisualKind.mixWithReason;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -835,6 +846,8 @@ class CoachDialogueVisual {
       'Blocker tiles: block, use, no EV',
     CoachDialogueVisualKind.defendEnough =>
       'Defend-enough tiles: defend, bluff, enough',
+    CoachDialogueVisualKind.mixWithReason =>
+      'Mix-with-reason tiles: mix, purpose, no coin',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -1045,6 +1058,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-06-07-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.defendEnough,
+      );
+    case 'act-06-08-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.mixWithReason,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1514,6 +1531,15 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.equityRealize,
     );
   }
+  // Phrase-safe mix-with-reason — avoid bare "mix" / "frequency" alone.
+  if (blob.contains('coin-flip') ||
+      blob.contains('frequency with a purpose') ||
+      blob.contains('mix with a reason') ||
+      (blob.contains('mixing') && blob.contains('purpose'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.mixWithReason,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -1594,6 +1620,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onOverbetGeometryAcknowledge,
     this.onBlockersAcknowledge,
     this.onDefendEnoughAcknowledge,
+    this.onMixWithReasonAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1655,6 +1682,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onOverbetGeometryAcknowledge;
   final VoidCallback? onBlockersAcknowledge;
   final VoidCallback? onDefendEnoughAcknowledge;
+  final VoidCallback? onMixWithReasonAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1952,6 +1980,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onDefendEnoughAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onDefendEnoughAcknowledge,
+        ),
+        CoachDialogueVisualKind.mixWithReason => MixWithReasonDemo(
+          interactive: onMixWithReasonAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onMixWithReasonAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
