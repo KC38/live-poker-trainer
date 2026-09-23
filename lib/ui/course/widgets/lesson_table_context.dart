@@ -622,6 +622,13 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.none,
         caption: 'Same board · different villain lines',
       );
+    case 'act-04-02-01-unguided':
+      return const LessonTableScene(
+        heroCodes: ['Ah', 'Kd'],
+        villainSeatCount: 2,
+        highlight: LessonTableHighlight.none,
+        caption: 'UTG open · two callers · you BB with AKo',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,

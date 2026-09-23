@@ -503,6 +503,24 @@ LessonHandExample? resolveHandExample({
         title: 'Pick randomly',
         codes: [],
       );
+    case 'squeeze':
+      return const LessonHandExample(
+        id: 'squeeze',
+        title: '3-bet / squeeze for value',
+        codes: [],
+      );
+    case 'limp-more':
+      return const LessonHandExample(
+        id: 'limp-more',
+        title: 'Limp behind',
+        codes: [],
+      );
+    case 'fold-ak':
+      return const LessonHandExample(
+        id: 'fold-ak',
+        title: 'Fold AK',
+        codes: [],
+      );
     case 'split':
       return const LessonHandExample(
         id: 'split',

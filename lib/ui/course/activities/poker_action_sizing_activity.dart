@@ -252,6 +252,12 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Air four-way on a wet flop — tap Fold.',
     'act-03-08-02-jump-river' =>
       'Top two on a brick river — tap a value bet.',
+    'act-04-02-01-guided' =>
+      'Queens on the button vs a CO open — tap a 3-bet.',
+    'act-04-02-01-scaffolded' =>
+      '72o faces a BB 3-bet — tap Fold.',
+    'act-04-02-01-checkpoint' =>
+      'KK vs a live open to 6 — tap a 3-bet size.',
     _ => null,
   };
 }

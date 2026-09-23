@@ -353,6 +353,33 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'Brick river — get paid',
       );
+    case 'act-04-02-01-guided':
+      return const LessonActionSpot(
+        heroCodes: ['Qh', 'Qd'],
+        potLabel: 'Pot 3 → 9',
+        villainLine: 'CO opens to 6',
+        streetLabel: 'Preflop · Button · QQ',
+        facingBet: true,
+        feltStatusLine: 'Queens — 3-bet value',
+      );
+    case 'act-04-02-01-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['7h', '2d'],
+        potLabel: 'Pot 3 → 9 → 29',
+        villainLine: 'BB 3-bets to 20',
+        streetLabel: 'Preflop · BTN · 72o',
+        facingBet: true,
+        feltStatusLine: 'Trash vs 3-bet — fold',
+      );
+    case 'act-04-02-01-checkpoint':
+      return const LessonActionSpot(
+        heroCodes: ['Kh', 'Kd'],
+        potLabel: 'Pot 3 → 9',
+        villainLine: 'Open to 6',
+        streetLabel: 'Preflop · Value 3-bet · KK',
+        facingBet: true,
+        feltStatusLine: 'Pick a live 3-bet size',
+      );
   }
   return null;
 }
@@ -483,6 +510,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-03-08-02-jump-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-04-02-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
@@ -2303,18 +2334,19 @@ class _ThreeBetSqueezeDemoState extends State<ThreeBetSqueezeDemo> {
               ],
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap 3-Bet, Ranges, and Squeeze'
-                : '3-bets define ranges · squeezes punish flats',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues the three taps — no duplicate footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              '3-bets define ranges · squeezes punish flats',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );
