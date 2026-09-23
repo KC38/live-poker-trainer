@@ -1518,7 +1518,8 @@ void main() {
       ),
     );
     expect(find.byType(HandFamiliesDemo), findsOneWidget);
-    expect(find.text('Tap each starting-hand family'), findsOneWidget);
+    expect(find.text('Tap Pairs next'), findsOneWidget);
+    expect(find.text('Tap each starting-hand family'), findsNothing);
     expect(find.text('Tap each starting-hand family.'), findsNothing);
     expect(
       find.text('Tap each family — trash is everything else'),
@@ -1527,10 +1528,17 @@ void main() {
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['Pairs', 'Broadways', 'Suited aces', 'Connectors']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('Pairs'));
+    await tester.pump();
+    expect(find.text('Tap Broadways next'), findsOneWidget);
+    await tester.tap(find.text('Broadways'));
+    await tester.pump();
+    expect(find.text('Tap Suited aces next'), findsOneWidget);
+    await tester.tap(find.text('Suited aces'));
+    await tester.pump();
+    expect(find.text('Tap Connectors next'), findsOneWidget);
+    await tester.tap(find.text('Connectors'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
