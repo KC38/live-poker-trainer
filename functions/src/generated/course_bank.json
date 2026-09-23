@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "e164fa75b77c8648b838502572671a33862a5c618d33e662e58de258e90fa7eb",
+  "contentChecksum": "ac7fb165525aa9e6b0dae077718cf41ecff6c1e59aeb8101d333f7829025cc20",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -2809,7 +2809,7 @@
                   "stage": "jump_test",
                   "renderer": "compare_rank",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Jump test: order straight, two pair, and flush.",
+                  "accessibilityText": "Jump test: tap strongest hand first, then weaker.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2819,7 +2819,7 @@
                   "objectives": [
                     "Confirm hand ranking"
                   ],
-                  "prompt": "Strongest to weakest: straight, two pair, flush.",
+                  "prompt": "Tap strongest hand first, then weaker.",
                   "sequenceItems": [
                     {
                       "id": "j-flush",

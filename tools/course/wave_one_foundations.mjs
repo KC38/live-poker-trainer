@@ -1192,8 +1192,8 @@ export function buildSectionOne() {
               sequenceAct({
                 id: "act-01-06-02-jump-ranks", order: 1, stage: "jump_test",
                 renderer: "compare_rank",
-                prompt: "Strongest to weakest: straight, two pair, flush.",
-                a11y: "Jump test: order straight, two pair, and flush.",
+                prompt: "Tap strongest hand first, then weaker.",
+                a11y: "Jump test: tap strongest hand first, then weaker.",
                 objectives: ["Confirm hand ranking"],
                 lifeLoss: true,
                 items: [
