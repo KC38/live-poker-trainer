@@ -610,6 +610,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Stack depth — tap Every hand.',
       'act-07-07-01-checkpoint' =>
           'No type evidence — tap Baseline.',
+      'act-07-08-01-checkpoint' =>
+          'Integrated decision — tap All four.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -768,7 +770,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-07-06-01-scaffolded' ||
             widget.activity.id == 'act-07-06-01-unguided' ||
             widget.activity.id == 'act-07-06-01-checkpoint' ||
-            widget.activity.id == 'act-07-07-01-checkpoint';
+            widget.activity.id == 'act-07-07-01-checkpoint' ||
+            widget.activity.id == 'act-07-08-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&
