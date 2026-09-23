@@ -15258,8 +15258,8 @@
                   "choices": [
                     {
                       "id": "as",
-                      "label": "Ace of the flush suit",
-                      "accessibilityText": "Ace of the flush suit",
+                      "label": "Ace blocker",
+                      "accessibilityText": "Ace blocker",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Blocks nut flushes that call."
@@ -15267,8 +15267,8 @@
                     },
                     {
                       "id": "off",
-                      "label": "Offsuit undercards with no blockers",
-                      "accessibilityText": "Offsuit undercards with no blockers",
+                      "label": "No blockers",
+                      "accessibilityText": "No blockers",
                       "grading": {
                         "grade": "questionable",
                         "feedback": "Worse bluff candidate."
@@ -15276,8 +15276,8 @@
                     },
                     {
                       "id": "ev",
-                      "label": "Whatever has +0.37bb in a sim you invented",
-                      "accessibilityText": "Whatever has +0.37bb in a sim you invented",
+                      "label": "Fake +EV",
+                      "accessibilityText": "Fake +EV",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "No fabricated EV.",
@@ -15306,8 +15306,8 @@
                   "choices": [
                     {
                       "id": "unblock",
-                      "label": "Hands that unblock their bluffs",
-                      "accessibilityText": "Hands that unblock their bluffs",
+                      "label": "Unblock bluffs",
+                      "accessibilityText": "Unblock bluffs",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "You want them to have air."
@@ -15315,8 +15315,8 @@
                     },
                     {
                       "id": "block-nuts",
-                      "label": "Block their air and unblock nuts",
-                      "accessibilityText": "Block their air and unblock nuts",
+                      "label": "Block their air",
+                      "accessibilityText": "Block their air",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Opposite.",
@@ -15345,8 +15345,8 @@
                   "choices": [
                     {
                       "id": "tweak",
-                      "label": "A tweak on top of line/type evidence",
-                      "accessibilityText": "A tweak on top of line/type evidence",
+                      "label": "Tweak evidence",
+                      "accessibilityText": "Tweak evidence",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Not a magic wand."
@@ -15354,8 +15354,8 @@
                     },
                     {
                       "id": "replace",
-                      "label": "All other poker reasoning",
-                      "accessibilityText": "All other poker reasoning",
+                      "label": "Replace all reasoning",
+                      "accessibilityText": "Replace all reasoning",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Too narrow.",
@@ -15384,8 +15384,8 @@
                   "choices": [
                     {
                       "id": "no",
-                      "label": "No fabricated solver EV",
-                      "accessibilityText": "No fabricated solver EV",
+                      "label": "No fake EV",
+                      "accessibilityText": "No fake EV",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Qualitative and decision-linked only."
@@ -15393,8 +15393,8 @@
                     },
                     {
                       "id": "fake",
-                      "label": "Invent precise EVs freely",
-                      "accessibilityText": "Invent precise EVs freely",
+                      "label": "Invent EVs",
+                      "accessibilityText": "Invent EVs",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Forbidden.",

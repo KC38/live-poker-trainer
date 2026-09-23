@@ -604,6 +604,33 @@ enum LessonTableRegion {
 
   /// Overbet checkpoint: look flashy (mistake).
   overbetLookFlashy,
+
+  /// Blockers guided: ace of the flush suit (correct).
+  blockersAce,
+
+  /// Blockers guided: no blockers (questionable).
+  blockersNone,
+
+  /// Blockers guided: fake +EV (mistake).
+  blockersFakeEv,
+
+  /// Blockers scaffolded: unblock bluffs (correct).
+  blockersUnblock,
+
+  /// Blockers scaffolded: block their air (mistake).
+  blockersBlockAir,
+
+  /// Blockers unguided: tweak evidence (correct).
+  blockersTweak,
+
+  /// Blockers unguided: replace all reasoning (mistake).
+  blockersReplace,
+
+  /// Blockers checkpoint: no fake EV (correct).
+  blockersNoFakeEv,
+
+  /// Blockers checkpoint: invent EVs (mistake).
+  blockersInventEv,
 }
 
 /// How the mini-table is arranged.
@@ -862,6 +889,18 @@ enum LessonTableLayout {
 
   /// Overbet checkpoint: multi-street plan vs look flashy.
   overbetPlanOutcomes,
+
+  /// Blockers guided: Ace blocker vs no blockers vs fake +EV.
+  blockersGuidedOutcomes,
+
+  /// Blockers scaffolded: unblock bluffs vs block their air.
+  blockersUnblockOutcomes,
+
+  /// Blockers unguided: tweak evidence vs replace all reasoning.
+  blockersTweakOutcomes,
+
+  /// Blockers checkpoint: no fake EV vs invent EVs.
+  blockersEvOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1703,6 +1742,27 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.overbetPlanOutcomes,
         caption: 'Geometric sizing primarily helps?',
       );
+    case 'act-06-06-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.blockersGuidedOutcomes,
+        caption: 'River bluff on flush board — better blocker?',
+        boardCodes: ['Kh', '9h', '4h', '2c', '7h'],
+      );
+    case 'act-06-06-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.blockersUnblockOutcomes,
+        caption: 'Bluff-catching a river bomb — prefer?',
+      );
+    case 'act-06-06-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.blockersTweakOutcomes,
+        caption: 'Blockers replace?',
+      );
+    case 'act-06-06-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.blockersEvOutcomes,
+        caption: 'Course stance on solver EV quotes?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -2510,6 +2570,31 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.overbetLookFlashy => pick('style'),
         _ => null,
       };
+    case 'act-06-06-01-guided':
+      return switch (region) {
+        LessonTableRegion.blockersAce => pick('as'),
+        LessonTableRegion.blockersNone => pick('off'),
+        LessonTableRegion.blockersFakeEv => pick('ev'),
+        _ => null,
+      };
+    case 'act-06-06-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.blockersUnblock => pick('unblock'),
+        LessonTableRegion.blockersBlockAir => pick('block-nuts'),
+        _ => null,
+      };
+    case 'act-06-06-01-unguided':
+      return switch (region) {
+        LessonTableRegion.blockersTweak => pick('tweak'),
+        LessonTableRegion.blockersReplace => pick('replace'),
+        _ => null,
+      };
+    case 'act-06-06-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.blockersNoFakeEv => pick('no'),
+        LessonTableRegion.blockersInventEv => pick('fake'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -2662,7 +2747,11 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-06-04-01-checkpoint' ||
       activity.id == 'act-06-05-01-guided' ||
       activity.id == 'act-06-05-01-unguided' ||
-      activity.id == 'act-06-05-01-checkpoint';
+      activity.id == 'act-06-05-01-checkpoint' ||
+      activity.id == 'act-06-06-01-guided' ||
+      activity.id == 'act-06-06-01-scaffolded' ||
+      activity.id == 'act-06-06-01-unguided' ||
+      activity.id == 'act-06-06-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -2926,6 +3015,11 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.overbetGuidedOutcomes => _buildOverbetGuidedOutcomes(),
       LessonTableLayout.overbetAvoidOutcomes => _buildOverbetAvoidOutcomes(),
       LessonTableLayout.overbetPlanOutcomes => _buildOverbetPlanOutcomes(),
+      LessonTableLayout.blockersGuidedOutcomes => _buildBlockersGuidedOutcomes(),
+      LessonTableLayout.blockersUnblockOutcomes =>
+          _buildBlockersUnblockOutcomes(),
+      LessonTableLayout.blockersTweakOutcomes => _buildBlockersTweakOutcomes(),
+      LessonTableLayout.blockersEvOutcomes => _buildBlockersEvOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -6054,6 +6148,148 @@ class LessonTableContext extends StatelessWidget {
           visual: const Icon(
             Icons.auto_awesome,
             color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBlockersGuidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive blockers — tap Ace blocker, no blockers, or fake +EV',
+      semanticsStatic: 'Blockers guided outcomes',
+      caption: scene.caption ?? 'River bluff on flush board — better blocker?',
+      phases: [
+        (
+          region: LessonTableRegion.blockersAce,
+          title: 'Ace blocker',
+          detail: 'Blocks nut flush',
+          visual: MiniCard(
+            card: CardModel.fromCode('Ah'),
+            size: MiniCardSize.tiny,
+          ),
+        ),
+        (
+          region: LessonTableRegion.blockersNone,
+          title: 'No blockers',
+          detail: 'Worse bluff',
+          visual: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              MiniCard(
+                card: CardModel.fromCode('7c'),
+                size: MiniCardSize.tiny,
+              ),
+              const SizedBox(width: 2),
+              MiniCard(
+                card: CardModel.fromCode('2d'),
+                size: MiniCardSize.tiny,
+              ),
+            ],
+          ),
+        ),
+        (
+          region: LessonTableRegion.blockersFakeEv,
+          title: 'Fake +EV',
+          detail: 'No decimals',
+          visual: const Icon(
+            Icons.calculate_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBlockersUnblockOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive bluff-catch blockers — tap unblock bluffs vs block their air',
+      semanticsStatic: 'Blockers unblock outcomes',
+      caption: scene.caption ?? 'Bluff-catching a river bomb — prefer?',
+      phases: [
+        (
+          region: LessonTableRegion.blockersUnblock,
+          title: 'Unblock bluffs',
+          detail: 'Keep their air',
+          visual: const Icon(
+            Icons.lock_open_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.blockersBlockAir,
+          title: 'Block their air',
+          detail: 'Opposite',
+          visual: const Icon(
+            Icons.lock_outline,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBlockersTweakOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive blocker role — tap tweak evidence vs replace all reasoning',
+      semanticsStatic: 'Blockers tweak outcomes',
+      caption: scene.caption ?? 'Blockers replace?',
+      phases: [
+        (
+          region: LessonTableRegion.blockersTweak,
+          title: 'Tweak evidence',
+          detail: 'Not a wand',
+          visual: const Icon(
+            Icons.tune,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.blockersReplace,
+          title: 'Replace all reasoning',
+          detail: 'Too narrow',
+          visual: const Icon(
+            Icons.auto_fix_high,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBlockersEvOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive solver EV stance — tap no fake EV vs invent EVs',
+      semanticsStatic: 'Blockers EV outcomes',
+      caption: scene.caption ?? 'Course stance on solver EV quotes?',
+      phases: [
+        (
+          region: LessonTableRegion.blockersNoFakeEv,
+          title: 'No fake EV',
+          detail: 'Decision-linked',
+          visual: const Icon(
+            Icons.verified_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.blockersInventEv,
+          title: 'Invent EVs',
+          detail: 'Forbidden',
+          visual: const Icon(
+            Icons.sentiment_very_dissatisfied_outlined,
+            color: AppColors.danger,
             size: 24,
           ),
         ),

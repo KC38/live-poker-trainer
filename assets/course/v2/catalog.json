@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "1a8a853b8387684b3e0c9ffc6f6c59e468f79a1f0b086c9115605c88313ac7f2",
+  "contentChecksum": "a5995d091455e20da7fd59f4669ddf31ce2de628d1192f55f4517b610c5d7c39",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -12009,18 +12009,18 @@
                   "choices": [
                     {
                       "id": "as",
-                      "label": "Ace of the flush suit",
-                      "accessibilityText": "Ace of the flush suit"
+                      "label": "Ace blocker",
+                      "accessibilityText": "Ace blocker"
                     },
                     {
                       "id": "off",
-                      "label": "Offsuit undercards with no blockers",
-                      "accessibilityText": "Offsuit undercards with no blockers"
+                      "label": "No blockers",
+                      "accessibilityText": "No blockers"
                     },
                     {
                       "id": "ev",
-                      "label": "Whatever has +0.37bb in a sim you invented",
-                      "accessibilityText": "Whatever has +0.37bb in a sim you invented"
+                      "label": "Fake +EV",
+                      "accessibilityText": "Fake +EV"
                     }
                   ]
                 },
@@ -12044,13 +12044,13 @@
                   "choices": [
                     {
                       "id": "unblock",
-                      "label": "Hands that unblock their bluffs",
-                      "accessibilityText": "Hands that unblock their bluffs"
+                      "label": "Unblock bluffs",
+                      "accessibilityText": "Unblock bluffs"
                     },
                     {
                       "id": "block-nuts",
-                      "label": "Block their air and unblock nuts",
-                      "accessibilityText": "Block their air and unblock nuts"
+                      "label": "Block their air",
+                      "accessibilityText": "Block their air"
                     }
                   ]
                 },
@@ -12074,13 +12074,13 @@
                   "choices": [
                     {
                       "id": "tweak",
-                      "label": "A tweak on top of line/type evidence",
-                      "accessibilityText": "A tweak on top of line/type evidence"
+                      "label": "Tweak evidence",
+                      "accessibilityText": "Tweak evidence"
                     },
                     {
                       "id": "replace",
-                      "label": "All other poker reasoning",
-                      "accessibilityText": "All other poker reasoning"
+                      "label": "Replace all reasoning",
+                      "accessibilityText": "Replace all reasoning"
                     }
                   ]
                 },
@@ -12104,13 +12104,13 @@
                   "choices": [
                     {
                       "id": "no",
-                      "label": "No fabricated solver EV",
-                      "accessibilityText": "No fabricated solver EV"
+                      "label": "No fake EV",
+                      "accessibilityText": "No fake EV"
                     },
                     {
                       "id": "fake",
-                      "label": "Invent precise EVs freely",
-                      "accessibilityText": "Invent precise EVs freely"
+                      "label": "Invent EVs",
+                      "accessibilityText": "Invent EVs"
                     }
                   ]
                 }
