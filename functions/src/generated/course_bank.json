@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "c66fe0ee6d0b7f667d55595e6463b9c7aaa82a40e8f0e21801c2e4f91001af5d",
+  "contentChecksum": "68e73f4caf9811cdc37c88193e486aa9b52da8981f48488052bcab4b53d255a2",
   "playerTypes": [
     {
       "id": "calling_station",
