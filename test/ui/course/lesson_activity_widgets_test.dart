@@ -30,6 +30,7 @@ import 'package:live_poker_trainer/ui/course/widgets/tag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/preflop_flop_plan_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/turn_map_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/river_composition_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/pot_type_plans_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
@@ -15539,6 +15540,219 @@ void main() {
     await tester.tap(find.text('Value needs calls'));
     await tester.pump();
     expect(controller.draft.choiceId, 'rule');
+    controller.dispose();
+  });
+
+  testWidgets(
+    's7 pot type explain taps Limped SRP 3-4bet instead of Continue',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-07-04-01-explain',
+        order: 1,
+        stage: ActivityStage.explain,
+        renderer: ActivityRenderer.coachDialogue,
+        estimatedSeconds: 30,
+        accessibilityText: 'Pot type sets ranges and SPR. Plan accordingly.',
+        acceptedGrades: const [SoftGrade.recommended],
+        objectives: const ['Plan single-raised pots'],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'm',
+            kind: 'dialogue',
+            text: 'Pot type sets ranges and SPR. Plan accordingly.',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      var feltAck = 0;
+      await tester.pumpWidget(
+        _wrap(
+          CoachDialogueActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+            onFeltAcknowledge: () => feltAck += 1,
+          ),
+        ),
+      );
+      expect(find.byType(PotTypePlansDemo), findsOneWidget);
+      expect(find.text('Tap Limped, SRP, and 3-4bet.'), findsOneWidget);
+      expect(find.text('Tap Limped, SRP, and 3-4bet'), findsNothing);
+      expect(
+        find.text('Pot type sets ranges and SPR — plan accordingly'),
+        findsNothing,
+      );
+      expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+      expect(isTableRegionTapActivity(activity), isTrue);
+
+      for (final title in ['LIMPED', 'SRP', '3-4BET']) {
+        await tester.tap(find.text(title));
+        await tester.pump();
+      }
+      expect(feltAck, 1);
+      controller.dispose();
+    },
+  );
+
+  testWidgets('s7 pot type guided taps Nut potential on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-04-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Nut potential / stronger made hands.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Multiway limped pot. Priority?',
+      choices: const [
+        CourseChoice(
+          id: 'nuts',
+          label: 'Nut potential and strong made hands',
+        ),
+        CourseChoice(id: 'air', label: 'Pure air stabs always'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Multiway limped — tap Nut potential.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Nut potential'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'nuts');
+    controller.dispose();
+  });
+
+  testWidgets('s7 pot type scaffolded taps C-bet maps on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-04-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'C-bets with turn maps.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Heads-up SRP IP. Default weapon?',
+      choices: const [
+        CourseChoice(id: 'cb', label: 'C-bets with turn maps'),
+        CourseChoice(id: 'check', label: 'Never bet'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('HU SRP IP — tap C-bet maps.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('C-bet maps'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'cb');
+    controller.dispose();
+  });
+
+  testWidgets('s7 pot type unguided taps Higher commitment on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-04-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'High commitment — tighter.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: '4-bet pot 100bb. Mindset?',
+      choices: const [
+        CourseChoice(
+          id: 'commit',
+          label: 'Higher commitment — fewer spewy bluffs',
+        ),
+        CourseChoice(id: 'deep', label: 'Play like 300bb deep'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('4-bet 100bb — tap Higher commitment.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Higher commitment'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'commit');
+    controller.dispose();
+  });
+
+  testWidgets('s7 pot type checkpoint taps Ranges and SPR on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-04-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Ranges and SPR.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Pot type changes?',
+      choices: const [
+        CourseChoice(id: 'both', label: 'Ranges and SPR'),
+        CourseChoice(id: 'nothing', label: 'Nothing material'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Pot type — tap Ranges and SPR.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Ranges and SPR'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'both');
     controller.dispose();
   });
 }

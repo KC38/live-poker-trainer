@@ -925,6 +925,30 @@ enum LessonTableRegion {
 
   /// River composition checkpoint: bet every river (mistake).
   riverCompStyle,
+
+  /// Pot-type guided: nut potential (correct).
+  potTypeNutPotential,
+
+  /// Pot-type guided: pure air stabs (mistake).
+  potTypePureAir,
+
+  /// Pot-type scaffolded: c-bet maps (correct).
+  potTypeCbetMaps,
+
+  /// Pot-type scaffolded: never bet (mistake).
+  potTypeNeverBet,
+
+  /// Pot-type unguided: higher commitment (correct).
+  potTypeHigherCommit,
+
+  /// Pot-type unguided: play like 300bb deep (mistake).
+  potTypeDeepLike300,
+
+  /// Pot-type checkpoint: ranges and SPR (correct).
+  potTypeRangesSpr,
+
+  /// Pot-type checkpoint: nothing material (mistake).
+  potTypeNothing,
 }
 
 /// How the mini-table is arranged.
@@ -1351,6 +1375,18 @@ enum LessonTableLayout {
 
   /// River composition checkpoint: rule vs style.
   riverCompCheckpointOutcomes,
+
+  /// Pot-type guided: nut potential vs pure air.
+  potTypeGuidedOutcomes,
+
+  /// Pot-type scaffolded: c-bet maps vs never bet.
+  potTypeScaffoldedOutcomes,
+
+  /// Pot-type unguided: higher commitment vs 300bb deep.
+  potTypeUnguidedOutcomes,
+
+  /// Pot-type checkpoint: ranges and SPR vs nothing.
+  potTypeCheckpointOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -2442,6 +2478,26 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         layout: LessonTableLayout.riverCompCheckpointOutcomes,
         caption: 'River composition rule?',
+      );
+    case 'act-07-04-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.potTypeGuidedOutcomes,
+        caption: 'Multiway limped pot — priority?',
+      );
+    case 'act-07-04-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.potTypeScaffoldedOutcomes,
+        caption: 'HU SRP IP — default weapon?',
+      );
+    case 'act-07-04-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.potTypeUnguidedOutcomes,
+        caption: '4-bet pot 100bb — mindset?',
+      );
+    case 'act-07-04-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.potTypeCheckpointOutcomes,
+        caption: 'Pot type changes?',
       );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
@@ -3565,6 +3621,30 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.riverCompStyle => pick('random'),
         _ => null,
       };
+    case 'act-07-04-01-guided':
+      return switch (region) {
+        LessonTableRegion.potTypeNutPotential => pick('nuts'),
+        LessonTableRegion.potTypePureAir => pick('air'),
+        _ => null,
+      };
+    case 'act-07-04-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.potTypeCbetMaps => pick('cb'),
+        LessonTableRegion.potTypeNeverBet => pick('check'),
+        _ => null,
+      };
+    case 'act-07-04-01-unguided':
+      return switch (region) {
+        LessonTableRegion.potTypeHigherCommit => pick('commit'),
+        LessonTableRegion.potTypeDeepLike300 => pick('deep'),
+        _ => null,
+      };
+    case 'act-07-04-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.potTypeRangesSpr => pick('both'),
+        LessonTableRegion.potTypeNothing => pick('nothing'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -3643,7 +3723,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
         activity.id == 'act-06-13-01-explain' ||
         activity.id == 'act-07-01-01-explain' ||
         activity.id == 'act-07-02-01-explain' ||
-        activity.id == 'act-07-03-01-explain';
+        activity.id == 'act-07-03-01-explain' ||
+        activity.id == 'act-07-04-01-explain';
   }
   if (activity.renderer != ActivityRenderer.selectIdentify &&
       activity.renderer != ActivityRenderer.playerReadClassify) {
@@ -3777,7 +3858,11 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-07-02-01-checkpoint' ||
       activity.id == 'act-07-03-01-scaffolded' ||
       activity.id == 'act-07-03-01-unguided' ||
-      activity.id == 'act-07-03-01-checkpoint';
+      activity.id == 'act-07-03-01-checkpoint' ||
+      activity.id == 'act-07-04-01-guided' ||
+      activity.id == 'act-07-04-01-scaffolded' ||
+      activity.id == 'act-07-04-01-unguided' ||
+      activity.id == 'act-07-04-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -4123,6 +4208,14 @@ class LessonTableContext extends StatelessWidget {
           _buildRiverCompUnguidedOutcomes(),
       LessonTableLayout.riverCompCheckpointOutcomes =>
           _buildRiverCompCheckpointOutcomes(),
+      LessonTableLayout.potTypeGuidedOutcomes =>
+          _buildPotTypeGuidedOutcomes(),
+      LessonTableLayout.potTypeScaffoldedOutcomes =>
+          _buildPotTypeScaffoldedOutcomes(),
+      LessonTableLayout.potTypeUnguidedOutcomes =>
+          _buildPotTypeUnguidedOutcomes(),
+      LessonTableLayout.potTypeCheckpointOutcomes =>
+          _buildPotTypeCheckpointOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -8908,6 +9001,130 @@ class LessonTableContext extends StatelessWidget {
           detail: 'For style',
           visual: const Icon(
             Icons.style_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPotTypeGuidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive pot type — tap Nut potential or Pure air',
+      semanticsStatic: 'Pot-type guided outcomes',
+      caption: scene.caption ?? 'Multiway limped pot — priority?',
+      phases: [
+        (
+          region: LessonTableRegion.potTypeNutPotential,
+          title: 'Nut potential',
+          detail: 'Strong made hands',
+          visual: const Icon(
+            Icons.workspace_premium_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.potTypePureAir,
+          title: 'Pure air',
+          detail: 'Always stab',
+          visual: const Icon(
+            Icons.air,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPotTypeScaffoldedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive pot type — tap C-bet maps or Never bet',
+      semanticsStatic: 'Pot-type scaffolded outcomes',
+      caption: scene.caption ?? 'HU SRP IP — default weapon?',
+      phases: [
+        (
+          region: LessonTableRegion.potTypeCbetMaps,
+          title: 'C-bet maps',
+          detail: 'With turn plans',
+          visual: const Icon(
+            Icons.map_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.potTypeNeverBet,
+          title: 'Never bet',
+          detail: 'Too passive',
+          visual: const Icon(
+            Icons.block,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPotTypeUnguidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive pot type — tap Higher commitment or 300bb deep',
+      semanticsStatic: 'Pot-type unguided outcomes',
+      caption: scene.caption ?? '4-bet pot 100bb — mindset?',
+      phases: [
+        (
+          region: LessonTableRegion.potTypeHigherCommit,
+          title: 'Higher commitment',
+          detail: 'Fewer spewy bluffs',
+          visual: const Icon(
+            Icons.lock_outline,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.potTypeDeepLike300,
+          title: '300bb deep',
+          detail: 'Wrong depth',
+          visual: const Icon(
+            Icons.swap_vert,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPotTypeCheckpointOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive pot type — tap Ranges and SPR or Nothing material',
+      semanticsStatic: 'Pot-type checkpoint outcomes',
+      caption: scene.caption ?? 'Pot type changes?',
+      phases: [
+        (
+          region: LessonTableRegion.potTypeRangesSpr,
+          title: 'Ranges and SPR',
+          detail: 'Both matter',
+          visual: const Icon(
+            Icons.tune,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.potTypeNothing,
+          title: 'Nothing material',
+          detail: 'It matters',
+          visual: const Icon(
+            Icons.do_not_disturb_alt,
             color: AppColors.slate,
             size: 24,
           ),
