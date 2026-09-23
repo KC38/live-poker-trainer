@@ -894,6 +894,27 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'Thin value needs their calls',
       );
+    case 'act-06-12-03-guided':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', 'Td'],
+        boardCodes: ['Qc', '9s', '3h', '2d', '7c'],
+        potLabel: 'Pot 42',
+        villainLine: 'LAG barrels river',
+        streetLabel: 'River · second pair good kicker',
+        facingBet: true,
+        feltStatusLine: 'LAG pressure is wide',
+      );
+    case 'act-06-12-03-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['As', 'Ad'],
+        boardCodes: ['Ac', '7s', '2h'],
+        potLabel: 'Pot 14',
+        villainLine: 'LAG in pot · wide range',
+        streetLabel: 'Flop · top set',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Trap more vs LAG pressure',
+      );
   }
   return null;
 }
@@ -1164,6 +1185,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-06-11-03-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-06-12-03-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
@@ -4293,6 +4318,107 @@ class _VsTagsDemoState extends State<VsTagsDemo> {
             const SizedBox(height: 10),
             Text(
               'Respect heat · steal less · no light XR',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
+/// Versus LAG: trap more, call wider, invent fewer fancy bluffs.
+class VsLagsDemo extends StatefulWidget {
+  /// Creates the demo.
+  const VsLagsDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'CALL', caption: 'Call wider', color: AppColors.gold),
+    (label: 'TRAP', caption: 'Trap more', color: AppColors.cream),
+    (label: 'FANCY LESS', caption: 'Invent less', color: AppColors.danger),
+  ];
+
+  @override
+  State<VsLagsDemo> createState() => _VsLagsDemoState();
+}
+
+class _VsLagsDemoState extends State<VsLagsDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= VsLagsDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Versus LAGs',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < VsLagsDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoActionCard(
+                    label: VsLagsDemo.points[i].label,
+                    caption: VsLagsDemo.points[i].caption,
+                    color: VsLagsDemo.points[i].color,
+                    selected: _tapped.contains(VsLagsDemo.points[i].label),
+                    enabled: widget.interactive && widget.enabled,
+                    onPressed:
+                        widget.interactive
+                            ? () => _onTap(VsLagsDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          // Interactive: Rex already cues Call / Trap / Fancy less.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Trap more · call wider · fancy less',
               style: GoogleFonts.manrope(
                 color: AppColors.gold,
                 fontSize: 12,

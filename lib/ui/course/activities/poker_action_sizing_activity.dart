@@ -358,6 +358,10 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'BTN vs TAG BB with K9o — tap Tighter fold.',
     'act-06-11-03-unguided' =>
       'River thin vs TAG who rarely calls — tap Check.',
+    'act-06-12-03-guided' =>
+      'LAG barrels river · second pair — tap Call.',
+    'act-06-12-03-scaffolded' =>
+      'Top set vs LAG — tap Trap / induce.',
     _ => null,
   };
 }

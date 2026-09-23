@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "a3de2b629cd2e14dd3d5294c47a3e5a0f618976044db0b44087d878c947adb71",
+  "contentChecksum": "afda1c9f0967a527ed3a4742cc0e497abe2609b78aaa98ad93c3b9701b250b3d",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -13840,14 +13840,16 @@
                   "choices": [
                     {
                       "id": "trap",
-                      "label": "Check/call some streets to let them barrel",
-                      "accessibilityText": "Check/call some streets to let them barrel",
+                      "label": "Trap / induce",
+                      "accessibilityText": "Trap / induce",
                       "action": "CHECK"
                     },
                     {
                       "id": "repel",
-                      "label": "Bet-bet-jam every time only",
-                      "accessibilityText": "Bet-bet-jam every time only"
+                      "label": "Bet-bet-jam only",
+                      "accessibilityText": "Bet-bet-jam only",
+                      "action": "BET",
+                      "amountBb": 12
                     }
                   ],
                   "playerTypeRefs": [
@@ -13874,13 +13876,13 @@
                   "choices": [
                     {
                       "id": "avoid",
-                      "label": "Usually avoid — they continue too often",
-                      "accessibilityText": "Usually avoid — they continue too often"
+                      "label": "Usually avoid",
+                      "accessibilityText": "Usually avoid"
                     },
                     {
                       "id": "more",
-                      "label": "Bluff more than versus stations",
-                      "accessibilityText": "Bluff more than versus stations"
+                      "label": "Bluff more",
+                      "accessibilityText": "Bluff more"
                     }
                   ],
                   "playerTypeRefs": [
@@ -13907,13 +13909,13 @@
                   "choices": [
                     {
                       "id": "cite",
-                      "label": "Wide entry and sustained pressure",
-                      "accessibilityText": "Wide entry and sustained pressure"
+                      "label": "Wide + pressure",
+                      "accessibilityText": "Wide + pressure"
                     },
                     {
                       "id": "mood",
-                      "label": "Mood only",
-                      "accessibilityText": "Mood only"
+                      "label": "Vibes",
+                      "accessibilityText": "Vibes"
                     }
                   ],
                   "playerTypeRefs": [

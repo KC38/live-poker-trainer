@@ -811,6 +811,18 @@ enum LessonTableRegion {
 
   /// Meet LAG checkpoint: destiny (mistake).
   meetLagDestiny,
+
+  /// Adjust vs LAG unguided: usually avoid fancy bluffs (correct).
+  citeLagAvoid,
+
+  /// Adjust vs LAG unguided: bluff more (mistake).
+  citeLagBluffMore,
+
+  /// Adjust vs LAG checkpoint: wide + pressure cite (correct).
+  citeLagWidePressure,
+
+  /// Adjust vs LAG checkpoint: vibes (mistake).
+  citeLagVibes,
 }
 
 /// How the mini-table is arranged.
@@ -1168,6 +1180,12 @@ enum LessonTableLayout {
 
   /// Meet LAG: sample limits vs destiny.
   meetLagLimitsOutcomes,
+
+  /// Adjust vs LAG: usually avoid vs bluff more.
+  lagAdjustAvoidOutcomes,
+
+  /// Adjust vs LAG: wide + pressure cite vs vibes.
+  lagAdjustCiteOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -2177,6 +2195,16 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.meetLagLimitsOutcomes,
         caption: 'Show beside the LAG label',
       );
+    case 'act-06-12-03-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.lagAdjustAvoidOutcomes,
+        caption: 'Inventing triple-barrel bluffs into a LAG?',
+      );
+    case 'act-06-12-03-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.lagAdjustCiteOutcomes,
+        caption: 'LAG exploit cites?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -3185,6 +3213,18 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.meetLagDestiny => pick('destiny'),
         _ => null,
       };
+    case 'act-06-12-03-unguided':
+      return switch (region) {
+        LessonTableRegion.citeLagAvoid => pick('avoid'),
+        LessonTableRegion.citeLagBluffMore => pick('more'),
+        _ => null,
+      };
+    case 'act-06-12-03-checkpoint':
+      return switch (region) {
+        LessonTableRegion.citeLagWidePressure => pick('cite'),
+        LessonTableRegion.citeLagVibes => pick('mood'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -3258,7 +3298,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
         activity.id == 'act-06-11-02-explain' ||
         activity.id == 'act-06-11-03-explain' ||
         activity.id == 'act-06-12-01-explain' ||
-        activity.id == 'act-06-12-02-explain';
+        activity.id == 'act-06-12-02-explain' ||
+        activity.id == 'act-06-12-03-explain';
   }
   if (activity.renderer != ActivityRenderer.selectIdentify &&
       activity.renderer != ActivityRenderer.playerReadClassify) {
@@ -3373,7 +3414,9 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-06-12-02-guided' ||
       activity.id == 'act-06-12-02-scaffolded' ||
       activity.id == 'act-06-12-02-unguided' ||
-      activity.id == 'act-06-12-02-checkpoint';
+      activity.id == 'act-06-12-02-checkpoint' ||
+      activity.id == 'act-06-12-03-unguided' ||
+      activity.id == 'act-06-12-03-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -3686,6 +3729,10 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.meetLagDiffOutcomes => _buildMeetLagDiffOutcomes(),
       LessonTableLayout.meetLagVsNitOutcomes => _buildMeetLagVsNitOutcomes(),
       LessonTableLayout.meetLagLimitsOutcomes => _buildMeetLagLimitsOutcomes(),
+      LessonTableLayout.lagAdjustAvoidOutcomes =>
+          _buildLagAdjustAvoidOutcomes(),
+      LessonTableLayout.lagAdjustCiteOutcomes =>
+          _buildLagAdjustCiteOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -7882,6 +7929,69 @@ class LessonTableContext extends StatelessWidget {
           detail: 'No',
           visual: const Icon(
             Icons.auto_awesome_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLagAdjustAvoidOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive LAG adjust — tap usually avoid or bluff more',
+      semanticsStatic: 'LAG adjust avoid outcomes',
+      caption:
+          scene.caption ?? 'Inventing triple-barrel bluffs into a LAG?',
+      phases: [
+        (
+          region: LessonTableRegion.citeLagAvoid,
+          title: 'Usually avoid',
+          detail: 'Fancy less',
+          visual: const Icon(
+            Icons.block,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.citeLagBluffMore,
+          title: 'Bluff more',
+          detail: 'Wrong direction',
+          visual: const Icon(
+            Icons.local_fire_department_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLagAdjustCiteOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive LAG cite — tap wide + pressure or vibes',
+      semanticsStatic: 'LAG adjust cite outcomes',
+      caption: scene.caption ?? 'LAG exploit cites?',
+      phases: [
+        (
+          region: LessonTableRegion.citeLagWidePressure,
+          title: 'Wide + pressure',
+          detail: 'Cite the tendency',
+          visual: const Icon(
+            Icons.gps_fixed,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.citeLagVibes,
+          title: 'Vibes',
+          detail: 'Not a cite',
+          visual: const Icon(
+            Icons.sentiment_very_dissatisfied_outlined,
             color: AppColors.slate,
             size: 24,
           ),

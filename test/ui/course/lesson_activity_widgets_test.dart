@@ -13197,6 +13197,185 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s6 adjust lag explain resolves vsLags visual', (tester) async {
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-06-12-03-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText: 'Versus LAG: trap more, call wider, fancy less.',
+          objectives: const ['Widen bluff-catches versus LAG'],
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.vsLags,
+    );
+  });
+
+  testWidgets('s6 adjust lag guided docks Call on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-12-03-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Call.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'LAG barrels river. You have second pair good kicker. Action?',
+      choices: const [
+        CourseChoice(id: 'call', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'fold', label: 'Fold always', action: 'FOLD'),
+        CourseChoice(id: 'raise', label: 'Bluff-raise light', action: 'RAISE'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('LAG barrels river · second pair — tap Call.'),
+      findsOneWidget,
+    );
+    expect(find.text('CALL'), findsOneWidget);
+    await tester.tap(find.text('CALL'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'call');
+    controller.dispose();
+  });
+
+  testWidgets('s6 adjust lag scaffolded docks Trap on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-12-03-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Trap / let them bluff sometimes.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'You flop top set vs LAG. Line?',
+      choices: const [
+        CourseChoice(id: 'trap', label: 'Trap / induce', action: 'CHECK'),
+        CourseChoice(id: 'repel', label: 'Bet-bet-jam only', action: 'BET'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Top set vs LAG — tap Trap / induce.'),
+      findsOneWidget,
+    );
+    expect(find.text('TRAP / INDUCE'), findsOneWidget);
+    await tester.tap(find.text('TRAP / INDUCE'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'trap');
+    controller.dispose();
+  });
+
+  testWidgets('s6 adjust lag unguided taps Usually avoid on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-12-03-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Usually bad.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Inventing triple-barrel bluffs into a LAG?',
+      choices: const [
+        CourseChoice(id: 'avoid', label: 'Usually avoid'),
+        CourseChoice(id: 'more', label: 'Bluff more'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Inventing triple-barrel bluffs into a LAG — tap Usually avoid.',
+      ),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Usually avoid'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'avoid');
+    controller.dispose();
+  });
+
+  testWidgets('s6 adjust lag checkpoint taps Wide + pressure on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-12-03-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Wide entry and sustained pressure.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'LAG exploit cites?',
+      choices: const [
+        CourseChoice(id: 'cite', label: 'Wide + pressure'),
+        CourseChoice(id: 'mood', label: 'Vibes'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('LAG exploit cites — tap Wide + pressure.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Wide + pressure'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'cite');
+    controller.dispose();
+  });
+
 
   testWidgets('s6 lag observe explain resolves widePressure visual', (tester) async {
     expect(
