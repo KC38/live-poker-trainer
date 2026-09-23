@@ -590,7 +590,7 @@ class CoachDialogueVisual {
     CoachDialogueVisualKind.handLadder =>
       'Tap each rung from high card to flush.',
     CoachDialogueVisualKind.bestFive =>
-      'Tap each gold card — only five of seven play.',
+      'Tap each highlighted card — only five of seven play.',
     CoachDialogueVisualKind.passiveActions =>
       'Tap Fold, Check, and Call.',
     CoachDialogueVisualKind.aggressiveActions =>
