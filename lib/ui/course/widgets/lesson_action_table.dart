@@ -1557,6 +1557,23 @@ class _PassiveActionsDemoState extends State<PassiveActionsDemo> {
     }
   }
 
+  String get _statusCue {
+    final remaining = PassiveActionsDemo.actions
+        .where((a) => !_tapped.contains(a.$1))
+        .map((a) => a.$1[0] + a.$1.substring(1).toLowerCase())
+        .toList();
+    if (remaining.isEmpty || !widget.interactive) {
+      return 'Fold · Check · Call — your three passives';
+    }
+    if (remaining.length == 3) {
+      return 'Tap Fold, Check, and Call';
+    }
+    if (remaining.length == 1) {
+      return 'Tap ${remaining.first}';
+    }
+    return 'Tap ${remaining.join(' and ')}';
+  }
+
   @override
   Widget build(BuildContext context) {
     final child = Container(
@@ -1589,16 +1606,27 @@ class _PassiveActionsDemoState extends State<PassiveActionsDemo> {
               for (var i = 0; i < PassiveActionsDemo.actions.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: PassiveActionsDemo.actions[i].$1,
-                    caption: PassiveActionsDemo.actions[i].$2,
-                    color: PassiveActionsDemo.actions[i].$3,
-                    selected: _tapped.contains(PassiveActionsDemo.actions[i].$1),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(PassiveActionsDemo.actions[i].$1)
-                            : null,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        !_tapped.contains(PassiveActionsDemo.actions[i].$1) &&
+                        // Pulse only the next untapped button in order.
+                        PassiveActionsDemo.actions
+                                .take(i)
+                                .every((a) => _tapped.contains(a.$1)),
+                    child: _DemoActionCard(
+                      label: PassiveActionsDemo.actions[i].$1,
+                      caption: PassiveActionsDemo.actions[i].$2,
+                      color: PassiveActionsDemo.actions[i].$3,
+                      selected:
+                          _tapped.contains(PassiveActionsDemo.actions[i].$1),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(PassiveActionsDemo.actions[i].$1)
+                              : null,
+                    ),
                   ),
                 ),
               ],
@@ -1615,9 +1643,8 @@ class _PassiveActionsDemoState extends State<PassiveActionsDemo> {
               ),
             ),
             child: Text(
-              widget.interactive
-                  ? 'Tap Fold, Check, and Call'
-                  : 'Pot chips sit in the middle',
+              _statusCue,
+              textAlign: TextAlign.center,
               style: GoogleFonts.manrope(
                 color: AppColors.gold,
                 fontSize: 12,
@@ -1668,6 +1695,27 @@ class _AggressiveActionsDemoState extends State<AggressiveActionsDemo> {
     }
   }
 
+  String get _statusCue {
+    final remaining = AggressiveActionsDemo.actions
+        .where((a) => !_tapped.contains(a.$1))
+        .map((a) {
+          final raw = a.$1;
+          if (raw == 'ALL-IN') return 'All-in';
+          return raw[0] + raw.substring(1).toLowerCase();
+        })
+        .toList();
+    if (remaining.isEmpty || !widget.interactive) {
+      return 'Bet · Raise · All-in — your three aggressives';
+    }
+    if (remaining.length == 3) {
+      return 'Tap Bet, Raise, and All-in';
+    }
+    if (remaining.length == 1) {
+      return 'Tap ${remaining.first}';
+    }
+    return 'Tap ${remaining.join(' and ')}';
+  }
+
   @override
   Widget build(BuildContext context) {
     final child = Container(
@@ -1700,18 +1748,30 @@ class _AggressiveActionsDemoState extends State<AggressiveActionsDemo> {
               for (var i = 0; i < AggressiveActionsDemo.actions.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: AggressiveActionsDemo.actions[i].$1,
-                    caption: AggressiveActionsDemo.actions[i].$2,
-                    color: AggressiveActionsDemo.actions[i].$3,
-                    selected:
-                        _tapped.contains(AggressiveActionsDemo.actions[i].$1),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () =>
-                                _onTap(AggressiveActionsDemo.actions[i].$1)
-                            : null,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        !_tapped.contains(
+                          AggressiveActionsDemo.actions[i].$1,
+                        ) &&
+                        AggressiveActionsDemo.actions
+                            .take(i)
+                            .every((a) => _tapped.contains(a.$1)),
+                    child: _DemoActionCard(
+                      label: AggressiveActionsDemo.actions[i].$1,
+                      caption: AggressiveActionsDemo.actions[i].$2,
+                      color: AggressiveActionsDemo.actions[i].$3,
+                      selected: _tapped.contains(
+                        AggressiveActionsDemo.actions[i].$1,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () =>
+                                  _onTap(AggressiveActionsDemo.actions[i].$1)
+                              : null,
+                    ),
                   ),
                 ),
               ],
@@ -1728,9 +1788,8 @@ class _AggressiveActionsDemoState extends State<AggressiveActionsDemo> {
               ),
             ),
             child: Text(
-              widget.interactive
-                  ? 'Tap Bet, Raise, and All-in'
-                  : 'All-in never exceeds your stack',
+              _statusCue,
+              textAlign: TextAlign.center,
               style: GoogleFonts.manrope(
                 color: AppColors.gold,
                 fontSize: 12,
@@ -5784,6 +5843,75 @@ class _TablesChangeDemoState extends State<TablesChangeDemo> {
 }
 
 
+class _DemoSoftPulse extends StatefulWidget {
+  const _DemoSoftPulse({required this.active, required this.child});
+
+  final bool active;
+  final Widget child;
+
+  @override
+  State<_DemoSoftPulse> createState() => _DemoSoftPulseState();
+}
+
+class _DemoSoftPulseState extends State<_DemoSoftPulse>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+    if (widget.active) {
+      _pulse.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _DemoSoftPulse oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.active && !_pulse.isAnimating) {
+      _pulse.repeat(reverse: true);
+    } else if (!widget.active && _pulse.isAnimating) {
+      _pulse.stop();
+      _pulse.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.active) return widget.child;
+    return AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final glow = 0.22 + (_pulse.value * 0.38);
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.gold.withValues(alpha: glow * 0.55),
+                blurRadius: 10 + (_pulse.value * 6),
+                spreadRadius: 0.4,
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
+      child: widget.child,
+    );
+  }
+}
+
 class _DemoActionCard extends StatelessWidget {
   const _DemoActionCard({
     required this.label,
@@ -6071,6 +6199,8 @@ class LessonActionDock extends StatelessWidget {
   final bool identifyUnavailable;
 
   /// When true, Check/Bet are illegal live — show (off) chrome for those.
+  /// Ignored for [identifyUnavailable] quizzes so the illegal action is not
+  /// spoiled before the learner taps.
   final bool facingBet;
 
   static bool _isCheck(CourseChoice c) {
@@ -6113,12 +6243,16 @@ class LessonActionDock extends StatelessWidget {
                 // Live dock chrome: Check/Bet off vs a bet; Call off with
                 // nothing to match (except limps); Raise off only when the
                 // open action is Bet (postflop), not a preflop open-raise.
+                // Identify-unavailable quizzes keep every button looking live
+                // so the learner must reason which action is illegal.
                 final unavailableLook =
-                    (_isCheck(choice) &&
-                        (facingBet || identifyUnavailable)) ||
-                    (_isCall(choice) && !facingBet && !_isLimp(choice)) ||
-                    (_isBet(choice) && facingBet) ||
-                    (_isRaise(choice) && !facingBet && hasBetChoice);
+                    !identifyUnavailable &&
+                    ((_isCheck(choice) && facingBet) ||
+                        (_isCall(choice) &&
+                            !facingBet &&
+                            !_isLimp(choice)) ||
+                        (_isBet(choice) && facingBet) ||
+                        (_isRaise(choice) && !facingBet && hasBetChoice));
                 return _DockButton(
                   choice: choice,
                   selected: selectedId == choice.id,

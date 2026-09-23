@@ -5583,7 +5583,9 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('jump check legal docks illegal Check on felt', (tester) async {
+  testWidgets('jump check legal docks Check live so identify is not spoiled', (
+    tester,
+  ) async {
     final activity = CourseActivity(
       id: 'act-01-06-02-jump-legal',
       order: 3,
@@ -5610,8 +5612,9 @@ void main() {
       ),
     );
     expect(find.textContaining('Villain bets 8'), findsOneWidget);
-    expect(find.text('CHECK (off)'), findsOneWidget);
-    await tester.tap(find.text('CHECK (off)'));
+    expect(find.text('CHECK (off)'), findsNothing);
+    expect(find.text('CHECK'), findsOneWidget);
+    await tester.tap(find.text('CHECK'));
     await tester.pump();
     expect(controller.draft.choiceId, 'j-check');
     controller.dispose();
@@ -6975,7 +6978,9 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('checkpoint marks Check as off and selectable', (tester) async {
+  testWidgets('checkpoint keeps Check live so identify is not spoiled', (
+    tester,
+  ) async {
     final activity = CourseActivity(
       id: 'act-01-03-01-checkpoint-legal',
       order: 5,
@@ -7001,8 +7006,11 @@ void main() {
         ),
       ),
     );
-    expect(find.text('CHECK (off)'), findsOneWidget);
-    await tester.tap(find.text('CHECK (off)'));
+    expect(find.text('CHECK (off)'), findsNothing);
+    expect(find.text('CHECK'), findsOneWidget);
+    expect(find.text('CALL'), findsOneWidget);
+    expect(find.text('FOLD'), findsOneWidget);
+    await tester.tap(find.text('CHECK'));
     await tester.pump();
     expect(controller.draft.choiceId, 'check-illegal');
     controller.dispose();
