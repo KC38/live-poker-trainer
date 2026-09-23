@@ -469,6 +469,10 @@ class _HandCategoryTapActivity extends StatelessWidget {
           'Getting 3:1 with real outs — tap what you do.',
         'act-03-03-01-checkpoint' =>
           'Nut flush draw, deep and sticky — tap the edge.',
+        'act-03-05-01-guided' =>
+          'Dry ace flop, blank three — tap brick or scare.',
+        'act-03-05-01-checkpoint' =>
+          'Air bluff meets a draw-completing queen — tap the plan.',
         _ => 'Look at the board and your holes — tap what you made.',
       };
 
@@ -557,6 +561,10 @@ class _HandCategoryTapActivity extends StatelessWidget {
                         ? 'Tap Call, Fold, or Raise.'
                         : activity.id == 'act-03-03-01-checkpoint'
                         ? 'Tap the implied-odds edge.'
+                        : activity.id == 'act-03-05-01-guided'
+                        ? 'Tap brick or scare.'
+                        : activity.id == 'act-03-05-01-checkpoint'
+                        ? 'Tap your turn plan.'
                         : 'Tap the hand category you made.';
                   }
                   return 'Checking…';

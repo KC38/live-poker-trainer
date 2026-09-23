@@ -526,6 +526,22 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.none,
         caption: '200bb · pot bet · sticky caller',
       );
+    case 'act-03-05-01-guided':
+      return const LessonTableScene(
+        heroCodes: ['Ah', 'Kd'],
+        boardCodes: ['As', '7d', '2c', '3h'],
+        villainSeatCount: 0,
+        highlight: LessonTableHighlight.none,
+        caption: 'Missed c-bet · turn blank?',
+      );
+    case 'act-03-05-01-checkpoint':
+      return const LessonTableScene(
+        heroCodes: ['Jh', '9d'],
+        boardCodes: ['Kc', '8d', '3s', 'Qh'],
+        villainSeatCount: 0,
+        highlight: LessonTableHighlight.none,
+        caption: 'Air bluff · turn completes draws',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,

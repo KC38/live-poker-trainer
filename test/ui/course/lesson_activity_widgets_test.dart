@@ -7531,6 +7531,224 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s3 turn guided taps Brick on flop+turn felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-03-05-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'A blank three is a brick on this dry ace board.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Flop As 7d 2c. Turn 3h. For a missed c-bettor, is this a brick?',
+      choices: const [
+        CourseChoice(
+          id: 'brick',
+          label: 'Brick — rarely helps the caller',
+        ),
+        CourseChoice(id: 'scare', label: 'Major scare card'),
+        CourseChoice(
+          id: 'always-change',
+          label: 'Every turn changes everything',
+        ),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.handCategoryTap,
+    );
+    expect(
+      resolveLessonTableScene(activity)?.boardCodes,
+      ['As', '7d', '2c', '3h'],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Dry ace flop, blank three — tap brick or scare.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Flop As 7d 2c. Turn 3h. For a missed c-bettor, is this a brick?',
+      ),
+      findsNothing,
+    );
+    expect(find.text('Brick — rarely helps'), findsOneWidget);
+    await tester.tap(find.text('Brick — rarely helps'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'brick');
+    controller.dispose();
+  });
+
+  testWidgets('s3 turn scaffolded docks barrel on brick-turn felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-05-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Second barrel value with top pair top kicker.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'You c-bet A-high flop with AK. Brick turn. Villain called flop. Action?',
+      choices: const [
+        CourseChoice(
+          id: 'barrel',
+          label: 'Bet again for value',
+          action: 'BET',
+        ),
+        CourseChoice(id: 'check-ak', label: 'Check', action: 'CHECK'),
+        CourseChoice(
+          id: 'fold-ak',
+          label: 'Fold to a future bet preemptively',
+          action: 'FOLD',
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byType(LessonActionTable), findsOneWidget);
+    expect(
+      find.text('TPTK on a brick turn after a call — tap a barrel.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'You c-bet A-high flop with AK. Brick turn. Villain called flop. Action?',
+      ),
+      findsNothing,
+    );
+    expect(find.text('BET AGAIN FOR VALUE'), findsOneWidget);
+    await tester.tap(find.text('BET AGAIN FOR VALUE'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'barrel');
+    controller.dispose();
+  });
+
+  testWidgets('s3 turn unguided docks delayed value on flush felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-05-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Delayed value bet when the draw comes in.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'You checked back flop with a flush draw. Turn completes your flush. Checked to you. Action?',
+      choices: const [
+        CourseChoice(
+          id: 'delay-bet',
+          label: 'Bet for value now',
+          action: 'BET',
+        ),
+        CourseChoice(
+          id: 'delay-check',
+          label: 'Check again always',
+          action: 'CHECK',
+        ),
+        CourseChoice(id: 'delay-fold', label: 'Fold the nuts', action: 'FOLD'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Flush comes in; checked to you — tap delayed value.'),
+      findsOneWidget,
+    );
+    expect(find.text('BET FOR VALUE NOW'), findsOneWidget);
+    await tester.tap(find.text('BET FOR VALUE NOW'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'delay-bet');
+    controller.dispose();
+  });
+
+  testWidgets('s3 turn checkpoint taps give-up on scare-card felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-05-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Scare cards often end unsupported barrels.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'You bluffed flop on Kc 8d 3s. Turn Qh completes front-door draws. Plan?',
+      choices: const [
+        CourseChoice(
+          id: 'give-up',
+          label: 'Often give up — changing card hurts air',
+        ),
+        CourseChoice(id: 'auto-jam', label: 'Always jam larger'),
+        CourseChoice(
+          id: 'ignore',
+          label: 'Treat every turn like a brick',
+        ),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.handCategoryTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Air bluff meets a draw-completing queen — tap the plan.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'You bluffed flop on Kc 8d 3s. Turn Qh completes front-door draws. Plan?',
+      ),
+      findsNothing,
+    );
+    expect(find.text('Give up — card hurts air'), findsOneWidget);
+    await tester.tap(find.text('Give up — card hurts air'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'give-up');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {

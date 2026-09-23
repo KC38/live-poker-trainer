@@ -149,6 +149,11 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Outs: deep NFD spot — tap the implied-odds edge on category tiles.
     return SelectIdentifyPresentation.handCategoryTap;
   }
+  if (activity.id == 'act-03-05-01-guided' ||
+      activity.id == 'act-03-05-01-checkpoint') {
+    // Turn: see flop+turn board, tap brick / scare / plan tiles.
+    return SelectIdentifyPresentation.handCategoryTap;
+  }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {
     return SelectIdentifyPresentation.showdownTap;
