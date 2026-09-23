@@ -353,6 +353,14 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         showSeatNeverMatters: true,
         caption: 'Same hand — EP vs BTN',
       );
+    case 'act-02-07-02-jump-pos':
+      return const LessonTableScene(
+        layout: LessonTableLayout.positionLabels,
+        highlight: LessonTableHighlight.cutoff,
+        seatCount: 6,
+        buttonSeat: 3,
+        caption: 'Six-max · before the button',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -661,6 +669,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.habitLeaveBare => pick('leave-cards'),
         _ => null,
       };
+    case 'act-02-07-02-jump-pos':
+      return switch (region) {
+        LessonTableRegion.cutoff => pick('j2-co'),
+        LessonTableRegion.hijack => pick('j2-hj'),
+        LessonTableRegion.smallBlind => pick('j2-sb'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -739,7 +754,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id.startsWith('act-01-04-01-') ||
       activity.id.startsWith('act-01-05-01-') ||
       activity.id.startsWith('act-02-01-01-') ||
-      activity.id == 'act-02-07-01-checkpoint-habit';
+      activity.id == 'act-02-07-01-checkpoint-habit' ||
+      activity.id == 'act-02-07-02-jump-pos';
 }
 
 /// Small-blind seat index clockwise from the button.
