@@ -370,6 +370,12 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Same hand · Nit check-raises — tap Fold.',
     'act-06-13-01-unguided' =>
       'Same hand · LAG barrels — tap Call.',
+    'act-07-07-01-guided' =>
+      'Flop top pair · Station check — tap Bet for value.',
+    'act-07-07-01-scaffolded' =>
+      'Same top pair · TAG check-raises — tap Fold.',
+    'act-07-07-01-unguided' =>
+      'Same top pair · LAG barrels — tap Call.',
     _ => null,
   };
 }

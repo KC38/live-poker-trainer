@@ -29,6 +29,7 @@ import 'package:live_poker_trainer/ui/course/widgets/river_composition_demo.dart
 import 'package:live_poker_trainer/ui/course/widgets/pot_type_plans_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/hu_vs_multiway_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/stack_depth_plans_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/same_cards_types_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -385,6 +386,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.stackDepthPlans
                     ? null
                     : onFeltAcknowledge,
+            onSameCardsTypesAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.sameCardsTypes
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance &&
@@ -664,6 +669,9 @@ enum CoachDialogueVisualKind {
 
   /// Rewrite plans by stack depth: short commit, deep implied, effective each hand.
   stackDepthPlans,
+
+  /// Replay same holdings across five type models; cite tendency or keep baseline.
+  sameCardsTypes,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -828,6 +836,8 @@ class CoachDialogueVisual {
       'Tap Fewer, Thicker, and Widen.',
     CoachDialogueVisualKind.stackDepthPlans =>
       'Tap Short, Deep, and Effective.',
+    CoachDialogueVisualKind.sameCardsTypes =>
+      'Tap Cards, Models, and Cite.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -905,7 +915,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.riverComposition ||
       kind == CoachDialogueVisualKind.potTypePlans ||
       kind == CoachDialogueVisualKind.huVsMultiway ||
-      kind == CoachDialogueVisualKind.stackDepthPlans;
+      kind == CoachDialogueVisualKind.stackDepthPlans ||
+      kind == CoachDialogueVisualKind.sameCardsTypes;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -1056,6 +1067,8 @@ class CoachDialogueVisual {
       'HU vs multiway tiles: fewer bluffs, thicker value, widen HU',
     CoachDialogueVisualKind.stackDepthPlans =>
       'Stack-depth plan tiles: short commit, deep implied, effective',
+    CoachDialogueVisualKind.sameCardsTypes =>
+      'Same-cards tiles: same holdings, five models, cite tendency',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -1330,6 +1343,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-07-06-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.stackDepthPlans,
+      );
+    case 'act-07-07-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.sameCardsTypes,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1748,6 +1765,20 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.observationCertainty,
     );
   }
+  // Phrase-safe same-cards types — cite tendency across five models.
+  // Before exploitEvidence so "Same cards. Five models. Cite the tendency."
+  // is not stolen by the mix-five Cards/Seats/Evidence demo.
+  if (blob.contains('cite the tendency') ||
+      blob.contains('same cards. five models') ||
+      blob.contains('change lines by type') ||
+      blob.contains('recommendations diverge') ||
+      (blob.contains('same cards') &&
+          blob.contains('five models') &&
+          blob.contains('cite'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.sameCardsTypes,
+    );
+  }
   if (blob.contains('same cards') ||
       blob.contains('different seats') ||
       blob.contains('exploits change') ||
@@ -2079,6 +2110,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onPotTypePlansAcknowledge,
     this.onHuVsMultiwayAcknowledge,
     this.onStackDepthPlansAcknowledge,
+    this.onSameCardsTypesAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -2155,6 +2187,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onPotTypePlansAcknowledge;
   final VoidCallback? onHuVsMultiwayAcknowledge;
   final VoidCallback? onStackDepthPlansAcknowledge;
+  final VoidCallback? onSameCardsTypesAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -2527,6 +2560,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onStackDepthPlansAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onStackDepthPlansAcknowledge,
+        ),
+        CoachDialogueVisualKind.sameCardsTypes => SameCardsTypesDemo(
+          interactive: onSameCardsTypesAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onSameCardsTypesAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
