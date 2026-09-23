@@ -329,6 +329,42 @@ LessonHandExample? resolveHandExample({
         title: 'Pure bluff with one pair',
         codes: [],
       );
+    case 'sc':
+      return const LessonHandExample(
+        id: 'sc',
+        title: 'Suited connector · IP',
+        codes: ['7h', '6h'],
+      );
+    case 'kto':
+      return const LessonHandExample(
+        id: 'kto',
+        title: 'KTo · out of position',
+        codes: ['Kd', 'Tc'],
+      );
+    case 'q6o':
+      return const LessonHandExample(
+        id: 'q6o',
+        title: 'Q6o · any seat',
+        codes: ['Qh', '6d'],
+      );
+    case 'obs-many':
+      return const LessonHandExample(
+        id: 'obs-many',
+        title: 'Note — they play many',
+        codes: [],
+      );
+    case 'obs-ignore':
+      return const LessonHandExample(
+        id: 'obs-ignore',
+        title: 'Ignore seat history',
+        codes: [],
+      );
+    case 'obs-label':
+      return const LessonHandExample(
+        id: 'obs-label',
+        title: 'Insult their personality',
+        codes: [],
+      );
     case 'split':
       return const LessonHandExample(
         id: 'split',

@@ -238,6 +238,10 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'You missed; river completes the flush — tap the bluff.',
     'act-03-06-01-unguided' =>
       'Weak top pair faces a quiet-line jam — tap Fold or Call.',
+    'act-03-07-01-guided' =>
+      'Second pair four ways — tap Check or Bet.',
+    'act-03-07-01-scaffolded' =>
+      'Missed on a wet board with a crowd — tap Check.',
     _ => null,
   };
 }

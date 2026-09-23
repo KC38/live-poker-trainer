@@ -550,6 +550,18 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.none,
         caption: 'Medium one pair · big river bet',
       );
+    case 'act-03-07-01-unguided':
+      return const LessonTableScene(
+        villainSeatCount: 2,
+        highlight: LessonTableHighlight.none,
+        caption: 'Multiway · deep · pick the speculative',
+      );
+    case 'act-03-07-01-checkpoint':
+      return const LessonTableScene(
+        villainSeatCount: 0,
+        highlight: LessonTableHighlight.none,
+        caption: 'Seat enters 8 of last 10 pots',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
