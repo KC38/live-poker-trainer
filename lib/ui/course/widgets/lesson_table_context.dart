@@ -292,6 +292,12 @@ enum LessonTableRegion {
 
   /// Mix an unlabeled loose seat too early (mistake).
   meetManiacMixEarly,
+
+  /// Call wider vs maniac because betting range is wide (correct).
+  citeManiacWideBet,
+
+  /// Call wider to prove bravery (mistake).
+  citeManiacBrave,
 }
 
 /// How the mini-table is arranged.
@@ -394,6 +400,9 @@ enum LessonTableLayout {
 
   /// Meet Maniac checkpoint: mix three introduced types.
   meetManiacMixOutcomes,
+
+  /// Adjust vs Maniac: cite wide betting range.
+  maniacCallCiteOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -975,6 +984,11 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.meetManiacMixOutcomes,
         caption: 'Which types are legal to mix now?',
       );
+    case 'act-04-08-03-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.maniacCallCiteOutcomes,
+        caption: 'Why call wider versus a Maniac?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -1467,6 +1481,12 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.meetManiacMixEarly => pick('early'),
         _ => null,
       };
+    case 'act-04-08-03-checkpoint':
+      return switch (region) {
+        LessonTableRegion.citeManiacWideBet => pick('cite-wide'),
+        LessonTableRegion.citeManiacBrave => pick('cite-brave'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -1570,7 +1590,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id.startsWith('act-04-08-01-') ||
       activity.id == 'act-04-08-02-guided' ||
       activity.id == 'act-04-08-02-unguided' ||
-      activity.id == 'act-04-08-02-checkpoint';
+      activity.id == 'act-04-08-02-checkpoint' ||
+      activity.id == 'act-04-08-03-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -1748,6 +1769,8 @@ class LessonTableContext extends StatelessWidget {
           _buildMeetManiacVsStationOutcomes(),
       LessonTableLayout.meetManiacMixOutcomes =>
           _buildMeetManiacMixOutcomes(),
+      LessonTableLayout.maniacCallCiteOutcomes =>
+          _buildManiacCallCiteOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -3246,6 +3269,37 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Too early',
           visual: const Icon(
             Icons.person_outline,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildManiacCallCiteOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive maniac cite — tap why you call wider',
+      semanticsStatic: 'Maniac call cite outcomes',
+      caption: scene.caption ?? 'Why call wider versus a Maniac?',
+      phases: [
+        (
+          region: LessonTableRegion.citeManiacWideBet,
+          title: 'Wide bets',
+          detail: 'Too many hands',
+          visual: const Icon(
+            Icons.expand_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.citeManiacBrave,
+          title: 'Prove brave',
+          detail: 'Ego cite',
+          visual: const Icon(
+            Icons.sentiment_very_dissatisfied_outlined,
             color: AppColors.slate,
             size: 24,
           ),
