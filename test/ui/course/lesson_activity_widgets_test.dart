@@ -1499,7 +1499,9 @@ void main() {
       ),
     );
     expect(find.byType(HandFamiliesDemo), findsOneWidget);
-    expect(find.text('Tap each starting-hand family.'), findsOneWidget);
+    expect(find.text('Tap each starting-hand family'), findsOneWidget);
+    expect(find.text('Tap each starting-hand family.'), findsNothing);
+    expect(find.textContaining('trash is everything else'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
