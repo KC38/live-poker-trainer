@@ -487,6 +487,14 @@ class _HandCategoryTapActivity extends StatelessWidget {
           'Qd9d3c with JdTd — tap the flop class.',
         'act-03-08-02-jump-leak' =>
           'Gutshot vs a 2x pot bet — tap the fix.',
+        'act-04-01-01-guided' =>
+          'UTG opens at 1/2 — tap the range shape.',
+        'act-04-01-01-scaffolded' =>
+          'BTN open, BB 3-bet, BTN calls — tap who is stronger.',
+        'act-04-01-01-unguided' =>
+          'They bet twice — you pinned Exactly AK. Tap the problem.',
+        'act-04-01-01-checkpoint' =>
+          'Same board, different villain lines — tap what changes.',
         _ => 'Look at the board and your holes — tap what you made.',
       };
 
@@ -593,6 +601,8 @@ class _HandCategoryTapActivity extends StatelessWidget {
                         ? 'Tap the flop class.'
                         : activity.id == 'act-03-08-02-jump-leak'
                         ? 'Tap the price fix.'
+                        : activity.id.startsWith('act-04-01-01-')
+                        ? 'Tap the range answer.'
                         : 'Tap the hand category you made.';
                   }
                   return 'Checking…';

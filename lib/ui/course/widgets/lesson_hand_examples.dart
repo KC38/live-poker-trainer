@@ -431,6 +431,78 @@ LessonHandExample? resolveHandExample({
         title: 'Call any draw',
         codes: [],
       );
+    case 'strong-narrow':
+      return const LessonHandExample(
+        id: 'strong-narrow',
+        title: 'Stronger, narrower range',
+        codes: [],
+      );
+    case 'any-two':
+      return const LessonHandExample(
+        id: 'any-two',
+        title: 'Any two cards',
+        codes: [],
+      );
+    case 'exact-ak':
+      return const LessonHandExample(
+        id: 'exact-ak',
+        title: 'Exactly Ace-King',
+        codes: [],
+      );
+    case 'bb-stronger':
+      return const LessonHandExample(
+        id: 'bb-stronger',
+        title: 'BB 3-bet is stronger',
+        codes: [],
+      );
+    case 'btn-stronger':
+      return const LessonHandExample(
+        id: 'btn-stronger',
+        title: 'BTN call is stronger',
+        codes: [],
+      );
+    case 'equal':
+      return const LessonHandExample(
+        id: 'equal',
+        title: 'Identical ranges',
+        codes: [],
+      );
+    case 'too-exact':
+      return const LessonHandExample(
+        id: 'too-exact',
+        title: 'Too exact — keep a range',
+        codes: [],
+      );
+    case 'fine-exact':
+      return const LessonHandExample(
+        id: 'fine-exact',
+        title: 'Exact hands are knowable',
+        codes: [],
+      );
+    case 'ignore-action':
+      return const LessonHandExample(
+        id: 'ignore-action',
+        title: 'Ignore the betting pattern',
+        codes: [],
+      );
+    case 'read-drives':
+      return const LessonHandExample(
+        id: 'read-drives',
+        title: 'Advice follows the range',
+        codes: [],
+      );
+    case 'always-same':
+      return const LessonHandExample(
+        id: 'always-same',
+        title: 'Always the same forever',
+        codes: [],
+      );
+    case 'random':
+      return const LessonHandExample(
+        id: 'random',
+        title: 'Pick randomly',
+        codes: [],
+      );
     case 'split':
       return const LessonHandExample(
         id: 'split',

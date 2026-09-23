@@ -590,6 +590,38 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.none,
         caption: 'Gutshot · pot 10 · bet 20',
       );
+    case 'act-04-01-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.positionLabels,
+        highlight: LessonTableHighlight.earlyPosition,
+        seatCount: 9,
+        buttonSeat: 7,
+        caption: '1/2 · UTG opens',
+      );
+    case 'act-04-01-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.positionLabels,
+        highlight: LessonTableHighlight.none,
+        seatCount: 6,
+        buttonSeat: 3,
+        caption: 'BTN open · BB 3-bet · BTN calls',
+      );
+    case 'act-04-01-01-unguided':
+      return const LessonTableScene(
+        heroCodes: ['Ah', 'Kd'],
+        boardCodes: ['As', '7c', '2d', 'Kh'],
+        villainSeatCount: 1,
+        highlight: LessonTableHighlight.none,
+        caption: 'Villain bet flop + turn',
+      );
+    case 'act-04-01-01-checkpoint':
+      return const LessonTableScene(
+        heroCodes: ['Qh', 'Qd'],
+        boardCodes: ['Qc', '7s', '2d'],
+        villainSeatCount: 1,
+        highlight: LessonTableHighlight.none,
+        caption: 'Same board · different villain lines',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
