@@ -940,6 +940,14 @@ class _HandCategoryTapActivity extends StatelessWidget {
   String get _coachFallback => switch (activity.id) {
         'act-02-07-02-jump-family' =>
           'Look at your holes — tap the family they belong to.',
+        'act-02-02-01-guided-pair' =>
+          'Matching ranks in the hole — tap the family.',
+        'act-02-02-01-scaffolded-broadway' =>
+          'Both cards ten-or-better — tap the family.',
+        'act-02-02-01-unguided-sc' =>
+          'Look at your holes — tap the family.',
+        'act-02-02-01-checkpoint-trash' =>
+          'Early seat with junk — tap the family.',
         'act-03-02-01-guided' =>
           'Board pairs your king — tap the flop class.',
         'act-03-02-01-scaffolded' =>
@@ -1047,18 +1055,28 @@ class _HandCategoryTapActivity extends StatelessWidget {
                         title: choice.label,
                         codes: const [],
                       );
-                  return HandExampleTile(
-                    example: example,
-                    selected: selected == choice.id,
-                    enabled: !locked,
-                    compact: true,
-                    onPressed:
-                        locked
-                            ? null
-                            : () => controller.selectChoice(
-                              choice.id,
-                              autoSubmit: true,
-                            ),
+                  final pulseNext =
+                      showGuidance &&
+                      activity.stage == ActivityStage.guided &&
+                      i == 0 &&
+                      selected == null &&
+                      !locked &&
+                      activity.id.startsWith('act-02-02-01-');
+                  return _FamilySoftPulse(
+                    active: pulseNext,
+                    child: HandExampleTile(
+                      example: example,
+                      selected: selected == choice.id,
+                      enabled: !locked,
+                      compact: true,
+                      onPressed:
+                          locked
+                              ? null
+                              : () => controller.selectChoice(
+                                choice.id,
+                                autoSubmit: true,
+                              ),
+                    ),
                   );
                 },
               ),
@@ -1070,7 +1088,8 @@ class _HandCategoryTapActivity extends StatelessWidget {
                   if (controller.lastResult != null) return '';
                   if (controller.submitting) return 'Checking…';
                   if (selected == null) {
-                    return activity.id == 'act-02-07-02-jump-family'
+                    return activity.id == 'act-02-07-02-jump-family' ||
+                            activity.id.startsWith('act-02-02-01-')
                         ? 'Tap the starting-hand family.'
                         : activity.id.startsWith('act-03-02-01-')
                         ? 'Tap the flop class.'
@@ -1125,6 +1144,76 @@ class _HandCategoryTapActivity extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+/// Soft gold pulse on the next guided family tile.
+class _FamilySoftPulse extends StatefulWidget {
+  const _FamilySoftPulse({required this.active, required this.child});
+
+  final bool active;
+  final Widget child;
+
+  @override
+  State<_FamilySoftPulse> createState() => _FamilySoftPulseState();
+}
+
+class _FamilySoftPulseState extends State<_FamilySoftPulse>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+    if (widget.active) {
+      _pulse.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _FamilySoftPulse oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.active && !_pulse.isAnimating) {
+      _pulse.repeat(reverse: true);
+    } else if (!widget.active && _pulse.isAnimating) {
+      _pulse.stop();
+      _pulse.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.active) return widget.child;
+    return AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final glow = 0.22 + (_pulse.value * 0.38);
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.gold.withValues(alpha: glow * 0.55),
+                blurRadius: 10 + (_pulse.value * 6),
+                spreadRadius: 0.4,
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
+      child: widget.child,
     );
   }
 }

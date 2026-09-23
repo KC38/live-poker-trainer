@@ -1923,6 +1923,34 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.hero,
         caption: 'Your holes',
       );
+    case 'act-02-02-01-guided-pair':
+      return const LessonTableScene(
+        heroCodes: ['8h', '8c'],
+        villainSeatCount: 0,
+        highlight: LessonTableHighlight.hero,
+        caption: 'Your holes',
+      );
+    case 'act-02-02-01-scaffolded-broadway':
+      return const LessonTableScene(
+        heroCodes: ['As', 'Kd'],
+        villainSeatCount: 0,
+        highlight: LessonTableHighlight.hero,
+        caption: 'Your holes',
+      );
+    case 'act-02-02-01-unguided-sc':
+      return const LessonTableScene(
+        heroCodes: ['7h', '6h'],
+        villainSeatCount: 0,
+        highlight: LessonTableHighlight.hero,
+        caption: 'Your holes',
+      );
+    case 'act-02-02-01-checkpoint-trash':
+      return const LessonTableScene(
+        heroCodes: ['7c', '2d'],
+        villainSeatCount: 0,
+        highlight: LessonTableHighlight.hero,
+        caption: 'Your holes · early position',
+      );
     case 'act-02-07-02-jump-stack':
       return const LessonTableScene(
         layout: LessonTableLayout.effectiveStackOutcomes,
