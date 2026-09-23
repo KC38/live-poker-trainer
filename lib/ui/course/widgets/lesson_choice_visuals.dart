@@ -113,6 +113,11 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Jump: tap the effective (shorter) stack on the felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-02-05-01-scaffolded-eff' ||
+      activity.id == 'act-02-05-01-unguided-depth') {
+    // Effective stacks: tap shorter stack / shove-depth tiles on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id == 'act-03-01-01-guided') {
     // Table-read: tap the multiway pot total on the felt.
     return SelectIdentifyPresentation.tableRegionTap;
