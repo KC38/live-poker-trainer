@@ -54,6 +54,10 @@ class _NumericPotPriceActivityState extends State<NumericPotPriceActivity> {
 
   String _coachFor(CourseActivity activity) {
     return switch (activity.id) {
+      'act-02-05-01-guided-convert' =>
+        '200 chips at 1/2 — type the stack in big blinds.',
+      'act-02-05-01-checkpoint-200' =>
+        '1000 chips at 2/5 — type the buy-in in big blinds.',
       'act-04-05-01-guided' =>
         'Effective 80 into pot 20 — type the SPR.',
       'act-04-10-02-jump-spr' =>
@@ -64,6 +68,24 @@ class _NumericPotPriceActivityState extends State<NumericPotPriceActivity> {
 
   LessonActionSpot? _spotFor(CourseActivity activity) {
     return switch (activity.id) {
+      'act-02-05-01-guided-convert' => const LessonActionSpot(
+        heroCodes: ['Ah', 'Kd'],
+        potLabel: 'Blinds 1/2',
+        stackLabel: '200 chips',
+        villainLine: 'Big blinds = chips ÷ BB',
+        streetLabel: 'Stack depth · convert',
+        facingBet: false,
+        feltStatusLine: '200 ÷ 2 = ? bb',
+      ),
+      'act-02-05-01-checkpoint-200' => const LessonActionSpot(
+        heroCodes: ['Ah', 'Kd'],
+        potLabel: 'Blinds 2/5',
+        stackLabel: '1000 chips',
+        villainLine: 'Big blinds = chips ÷ BB',
+        streetLabel: 'Buy-in · convert',
+        facingBet: false,
+        feltStatusLine: '1000 ÷ 5 = ? bb',
+      ),
       'act-04-05-01-guided' => const LessonActionSpot(
         heroCodes: ['Ah', 'Kd'],
         potLabel: 'Pot 20bb',
@@ -83,6 +105,16 @@ class _NumericPotPriceActivityState extends State<NumericPotPriceActivity> {
         feltStatusLine: 'SPR = 60 ÷ 15',
       ),
       _ => null,
+    };
+  }
+
+  String _entryHintFor(CourseActivity activity) {
+    return switch (activity.id) {
+      'act-02-05-01-guided-convert' || 'act-02-05-01-checkpoint-200' =>
+        'Type big blinds, then Check.',
+      'act-04-05-01-guided' || 'act-04-10-02-jump-spr' =>
+        'Type SPR, then Check.',
+      _ => 'Type the amount, then Check.',
     };
   }
 
@@ -160,7 +192,7 @@ class _NumericPotPriceActivityState extends State<NumericPotPriceActivity> {
           Padding(
             padding: const EdgeInsets.only(top: 10),
             child: Text(
-              'Type SPR, then Check.',
+              _entryHintFor(widget.activity),
               textAlign: TextAlign.center,
               style: GoogleFonts.manrope(
                 color: AppColors.slate,
