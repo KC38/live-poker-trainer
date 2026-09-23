@@ -104,6 +104,26 @@ String emptyOrderTrayHint({
   return 'Tap lowest first';
 }
 
+/// Role caption for a numbered order slot (empty or filled).
+String orderSlotRoleLabel({
+  required int index,
+  required int total,
+  required bool strongestFirst,
+  required bool lowToHigh,
+}) {
+  if (total <= 1) return '';
+  if (strongestFirst) {
+    if (index == 0) return 'Strongest';
+    if (index == total - 1) return 'Weakest';
+    return '';
+  }
+  if (lowToHigh) {
+    if (index == 0) return 'Lowest';
+    if (index == total - 1) return 'Highest';
+  }
+  return '';
+}
+
 /// Mid-build status under the order tray (Checking… once complete/submitting).
 String orderSequenceStatusLine({
   required CourseActivity activity,
@@ -233,67 +253,9 @@ class OrderSequenceActivity extends StatelessWidget {
             ],
             const SizedBox(height: 10),
             if (_handMode) ...[
-              Text(
-                ordered.isEmpty ? 'Your order (empty)' : 'Your order',
-                style: GoogleFonts.manrope(
-                  color: AppColors.slate,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Semantics(
-                label:
-                    'Current order: ${ordered.isEmpty ? 'empty' : ordered.join(', ')}',
-                child: Container(
-                  width: double.infinity,
-                  constraints: const BoxConstraints(minHeight: 56),
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: AppColors.feltDark.withValues(alpha: 0.55),
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(
-                      color: AppColors.feltBorder.withValues(alpha: 0.8),
-                    ),
-                  ),
-                  child: ordered.isEmpty
-                      ? Text(
-                          trayHint,
-                          style: GoogleFonts.manrope(
-                            color: AppColors.slate,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        )
-                      : Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: [
-                            for (var i = 0; i < ordered.length; i++)
-                              HandExampleTile(
-                                example:
-                                    resolveHandExample(
-                                      id: ordered[i],
-                                      label: _labelFor(ordered[i]),
-                                    ) ??
-                                    LessonHandExample(
-                                      id: ordered[i],
-                                      title: _labelFor(ordered[i]),
-                                      codes: const [],
-                                    ),
-                                badge: '${i + 1}',
-                                selected: true,
-                                enabled: false,
-                                compact: true,
-                              ),
-                          ],
-                        ),
-                ),
-              ),
-              if (statusLine.isNotEmpty) ...[
-                const SizedBox(height: 12),
+              if (!showCoach) ...[
                 Text(
-                  statusLine,
+                  ordered.isEmpty ? 'Build your order' : 'Your order',
                   style: GoogleFonts.manrope(
                     color: AppColors.slate,
                     fontSize: 12,
@@ -302,34 +264,74 @@ class OrderSequenceActivity extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
               ],
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  for (final item in remaining)
-                    HandExampleTile(
-                      example:
-                          resolveHandExample(id: item.id, label: item.label) ??
-                          LessonHandExample(
-                            id: item.id,
-                            title: item.label,
-                            codes: const [],
-                          ),
-                      selected: false,
-                      enabled: !locked,
-                      compact: true,
-                      onPressed:
-                          locked
-                              ? null
-                              : () => appendOrderedId(
-                                controller: controller,
-                                activity: activity,
-                                ordered: ordered,
-                                id: item.id,
-                              ),
-                    ),
-                ],
+              Semantics(
+                label:
+                    'Current order: ${ordered.isEmpty ? 'empty' : ordered.join(', ')}',
+                child: _HandOrderSlotColumn(
+                  ordered: ordered,
+                  total: activity.sequenceItems.length,
+                  strongestFirst: strongestFirst,
+                  labelFor: _labelFor,
+                  locked: locked,
+                ),
               ),
+              if (statusLine.isNotEmpty) ...[
+                const SizedBox(height: 10),
+                Text(
+                  statusLine,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.slate,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+              if (remaining.isNotEmpty) ...[
+                const SizedBox(height: 14),
+                Text(
+                  'Tap to place',
+                  style: GoogleFonts.manrope(
+                    color: AppColors.slate,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (var i = 0; i < remaining.length; i++)
+                      _SoftPulseTarget(
+                        active: !locked && i == 0 && ordered.isEmpty,
+                        child: HandExampleTile(
+                          example:
+                              resolveHandExample(
+                                id: remaining[i].id,
+                                label: remaining[i].label,
+                              ) ??
+                              LessonHandExample(
+                                id: remaining[i].id,
+                                title: remaining[i].label,
+                                codes: const [],
+                              ),
+                          selected: false,
+                          enabled: !locked,
+                          compact: true,
+                          onPressed:
+                              locked
+                                  ? null
+                                  : () => appendOrderedId(
+                                    controller: controller,
+                                    activity: activity,
+                                    ordered: ordered,
+                                    id: remaining[i].id,
+                                  ),
+                        ),
+                      ),
+                  ],
+                ),
+              ],
             ] else if (isStreetSequenceActivity(activity) ||
                 isSeatOrderSequenceActivity(activity)) ...[
               Container(
@@ -450,66 +452,9 @@ class OrderSequenceActivity extends StatelessWidget {
                 ),
               ),
             ] else ...[
-              Text(
-                ordered.isEmpty ? 'Your order (empty)' : 'Your order',
-                style: GoogleFonts.manrope(
-                  color: AppColors.slate,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Semantics(
-                label:
-                    'Current order: ${ordered.isEmpty ? 'empty' : ordered.join(', ')}',
-                child: Container(
-                  width: double.infinity,
-                  constraints: const BoxConstraints(minHeight: 56),
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: AppColors.feltDark.withValues(alpha: 0.55),
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(
-                      color: AppColors.feltBorder.withValues(alpha: 0.8),
-                    ),
-                  ),
-                  child: ordered.isEmpty
-                      ? Text(
-                          trayHint,
-                          style: GoogleFonts.manrope(
-                            color: AppColors.slate,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        )
-                      : Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: [
-                            for (var i = 0; i < ordered.length; i++)
-                              if (_rankMode)
-                                _RankTile(
-                                  label: _labelFor(ordered[i]),
-                                  badge: '${i + 1}',
-                                  selected: true,
-                                )
-                              else
-                                Chip(
-                                  label: Text(
-                                    '${i + 1}. ${_labelFor(ordered[i])}',
-                                  ),
-                                  backgroundColor: AppColors.gold.withValues(
-                                    alpha: 0.2,
-                                  ),
-                                ),
-                          ],
-                        ),
-                ),
-              ),
-              if (statusLine.isNotEmpty) ...[
-                const SizedBox(height: 12),
+              if (!showCoach) ...[
                 Text(
-                  statusLine,
+                  ordered.isEmpty ? 'Build your order' : 'Your order',
                   style: GoogleFonts.manrope(
                     color: AppColors.slate,
                     fontSize: 12,
@@ -518,39 +463,78 @@ class OrderSequenceActivity extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
               ],
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  for (final item in remaining)
-                    if (_rankMode)
-                      _RankTile(
-                        label: item.label,
-                        onPressed:
-                            locked
-                                ? null
-                                : () => appendOrderedId(
-                                  controller: controller,
-                                  activity: activity,
-                                  ordered: ordered,
-                                  id: item.id,
-                                ),
-                      )
-                    else
-                      ActionChip(
-                        onPressed:
-                            locked
-                                ? null
-                                : () => appendOrderedId(
-                                  controller: controller,
-                                  activity: activity,
-                                  ordered: ordered,
-                                  id: item.id,
-                                ),
-                        label: Text(item.label),
-                      ),
-                ],
+              Semantics(
+                label:
+                    'Current order: ${ordered.isEmpty ? 'empty' : ordered.join(', ')}',
+                child: _RankChipOrderSlots(
+                  ordered: ordered,
+                  total: activity.sequenceItems.length,
+                  strongestFirst: strongestFirst,
+                  rankMode: _rankMode,
+                  labelFor: _labelFor,
+                  locked: locked,
+                  emptyHint: trayHint,
+                ),
               ),
+              if (statusLine.isNotEmpty) ...[
+                const SizedBox(height: 10),
+                Text(
+                  statusLine,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.slate,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+              if (remaining.isNotEmpty) ...[
+                const SizedBox(height: 14),
+                Text(
+                  'Tap to place',
+                  style: GoogleFonts.manrope(
+                    color: AppColors.slate,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (var i = 0; i < remaining.length; i++)
+                      if (_rankMode)
+                        _SoftPulseTarget(
+                          active: !locked && i == 0 && ordered.isEmpty,
+                          child: _RankTile(
+                            label: remaining[i].label,
+                            onPressed:
+                                locked
+                                    ? null
+                                    : () => appendOrderedId(
+                                      controller: controller,
+                                      activity: activity,
+                                      ordered: ordered,
+                                      id: remaining[i].id,
+                                    ),
+                          ),
+                        )
+                      else
+                        ActionChip(
+                          onPressed:
+                              locked
+                                  ? null
+                                  : () => appendOrderedId(
+                                    controller: controller,
+                                    activity: activity,
+                                    ordered: ordered,
+                                    id: remaining[i].id,
+                                  ),
+                          label: Text(remaining[i].label),
+                        ),
+                  ],
+                ),
+              ],
             ],
             if (ordered.isNotEmpty && !locked) ...[
               const SizedBox(height: 8),
@@ -622,6 +606,336 @@ class _StreetTileGrid extends StatelessWidget {
         if (top.isNotEmpty) row(top),
         if (bottom.isNotEmpty) ...[const SizedBox(height: 8), row(bottom)],
       ],
+    );
+  }
+}
+
+/// Vertical numbered destinations for hand-example order builders.
+class _HandOrderSlotColumn extends StatelessWidget {
+  const _HandOrderSlotColumn({
+    required this.ordered,
+    required this.total,
+    required this.strongestFirst,
+    required this.labelFor,
+    required this.locked,
+  });
+
+  final List<String> ordered;
+  final int total;
+  final bool strongestFirst;
+  final String Function(String id) labelFor;
+  final bool locked;
+
+  @override
+  Widget build(BuildContext context) {
+    final nextIndex = ordered.length;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (var i = 0; i < total; i++) ...[
+          if (i > 0) const SizedBox(height: 8),
+          if (i < ordered.length)
+            HandExampleTile(
+              example:
+                  resolveHandExample(
+                    id: ordered[i],
+                    label: labelFor(ordered[i]),
+                  ) ??
+                  LessonHandExample(
+                    id: ordered[i],
+                    title: labelFor(ordered[i]),
+                    codes: const [],
+                  ),
+              badge: '${i + 1}',
+              selected: true,
+              enabled: false,
+              compact: true,
+            )
+          else
+            _GhostOrderSlot(
+              index: i,
+              total: total,
+              role: orderSlotRoleLabel(
+                index: i,
+                total: total,
+                strongestFirst: strongestFirst,
+                lowToHigh: !strongestFirst,
+              ),
+              isNext: !locked && i == nextIndex,
+              tall: true,
+            ),
+        ],
+      ],
+    );
+  }
+}
+
+/// Horizontal numbered destinations for rank / chip order builders.
+class _RankChipOrderSlots extends StatelessWidget {
+  const _RankChipOrderSlots({
+    required this.ordered,
+    required this.total,
+    required this.strongestFirst,
+    required this.rankMode,
+    required this.labelFor,
+    required this.locked,
+    required this.emptyHint,
+  });
+
+  final List<String> ordered;
+  final int total;
+  final bool strongestFirst;
+  final bool rankMode;
+  final String Function(String id) labelFor;
+  final bool locked;
+  final String emptyHint;
+
+  @override
+  Widget build(BuildContext context) {
+    final nextIndex = ordered.length;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: AppColors.feltDark.withValues(alpha: 0.55),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: AppColors.feltBorder.withValues(alpha: 0.8),
+        ),
+      ),
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          for (var i = 0; i < total; i++)
+            if (i < ordered.length)
+              if (rankMode)
+                _RankTile(
+                  label: labelFor(ordered[i]),
+                  badge: '${i + 1}',
+                  selected: true,
+                )
+              else
+                Chip(
+                  label: Text('${i + 1}. ${labelFor(ordered[i])}'),
+                  backgroundColor: AppColors.gold.withValues(alpha: 0.2),
+                )
+            else
+              _GhostOrderSlot(
+                index: i,
+                total: total,
+                role: orderSlotRoleLabel(
+                  index: i,
+                  total: total,
+                  strongestFirst: strongestFirst,
+                  lowToHigh: rankMode || !strongestFirst,
+                ),
+                isNext: !locked && i == nextIndex,
+                tall: rankMode,
+                fallbackHint: i == 0 && ordered.isEmpty ? emptyHint : null,
+              ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Empty numbered destination with optional soft pulse on the next slot.
+class _GhostOrderSlot extends StatefulWidget {
+  const _GhostOrderSlot({
+    required this.index,
+    required this.total,
+    required this.role,
+    required this.isNext,
+    this.tall = false,
+    this.fallbackHint,
+  });
+
+  final int index;
+  final int total;
+  final String role;
+  final bool isNext;
+  final bool tall;
+  final String? fallbackHint;
+
+  @override
+  State<_GhostOrderSlot> createState() => _GhostOrderSlotState();
+}
+
+class _GhostOrderSlotState extends State<_GhostOrderSlot>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1100),
+    );
+    if (widget.isNext) {
+      _pulse.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _GhostOrderSlot oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isNext && !_pulse.isAnimating) {
+      _pulse.repeat(reverse: true);
+    } else if (!widget.isNext && _pulse.isAnimating) {
+      _pulse.stop();
+      _pulse.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final caption =
+        widget.role.isNotEmpty
+            ? '${widget.index + 1} · ${widget.role}'
+            : '${widget.index + 1}';
+    final body = AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final glow = widget.isNext ? 0.45 + (_pulse.value * 0.45) : 0.55;
+        return Container(
+          width: widget.tall ? double.infinity : null,
+          constraints: BoxConstraints(
+            minHeight: widget.tall ? 64 : 44,
+            minWidth: widget.tall ? 0 : 56,
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            color: AppColors.feltDark.withValues(alpha: 0.4),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: AppColors.gold.withValues(alpha: glow * 0.85),
+              width: widget.isNext ? 1.8 : 1.2,
+            ),
+            boxShadow:
+                widget.isNext
+                    ? [
+                      BoxShadow(
+                        color: AppColors.gold.withValues(
+                          alpha: 0.12 + (_pulse.value * 0.16),
+                        ),
+                        blurRadius: 10 + (6 * _pulse.value),
+                        spreadRadius: 0.5,
+                      ),
+                    ]
+                    : null,
+          ),
+          child: child,
+        );
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            caption,
+            style: GoogleFonts.manrope(
+              color: widget.isNext ? AppColors.goldBright : AppColors.slate,
+              fontSize: 13,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          if (widget.fallbackHint != null && widget.role.isEmpty) ...[
+            const SizedBox(height: 2),
+            Text(
+              widget.fallbackHint!,
+              style: GoogleFonts.manrope(
+                color: AppColors.slate.withValues(alpha: 0.85),
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+    return Semantics(
+      label: 'Order slot ${widget.index + 1} of ${widget.total}'
+          '${widget.role.isNotEmpty ? ', ${widget.role}' : ''}'
+          '${widget.isNext ? ', next' : ', empty'}',
+      child: body,
+    );
+  }
+}
+
+/// Soft gold pulse around the first palette tile on an empty board.
+class _SoftPulseTarget extends StatefulWidget {
+  const _SoftPulseTarget({required this.active, required this.child});
+
+  final bool active;
+  final Widget child;
+
+  @override
+  State<_SoftPulseTarget> createState() => _SoftPulseTargetState();
+}
+
+class _SoftPulseTargetState extends State<_SoftPulseTarget>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+    if (widget.active) {
+      _pulse.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _SoftPulseTarget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.active && !_pulse.isAnimating) {
+      _pulse.repeat(reverse: true);
+    } else if (!widget.active && _pulse.isAnimating) {
+      _pulse.stop();
+      _pulse.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.active) return widget.child;
+    return AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final glow = 0.25 + (_pulse.value * 0.4);
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.gold.withValues(alpha: glow * 0.55),
+                blurRadius: 10 + (8 * _pulse.value),
+                spreadRadius: 0.5,
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
+      child: widget.child,
     );
   }
 }

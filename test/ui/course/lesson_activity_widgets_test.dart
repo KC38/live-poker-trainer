@@ -5484,9 +5484,14 @@ void main() {
     );
     expect(find.text('Tap strongest hand first, then weaker.'), findsOneWidget);
     expect(find.textContaining('straight, two pair, flush'), findsNothing);
-    expect(find.text('Build order here'), findsOneWidget);
+    // Numbered destination slots teach order — not an empty tray blob.
+    expect(find.text('1 · Strongest'), findsOneWidget);
+    expect(find.text('3 · Weakest'), findsOneWidget);
+    expect(find.text('Build order here'), findsNothing);
+    expect(find.text('Your order (empty)'), findsNothing);
     expect(find.text('Tap strongest first'), findsNothing);
     expect(find.text('Tap strong → weak'), findsNothing);
+    expect(find.text('Tap to place'), findsOneWidget);
     expect(find.text('Flush'), findsOneWidget);
     expect(find.text('Straight'), findsOneWidget);
     expect(find.text('Two pair'), findsOneWidget);
