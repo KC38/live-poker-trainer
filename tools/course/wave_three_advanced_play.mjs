@@ -1617,11 +1617,11 @@ export function buildSectionSix() {
                 a11y: "Wide + sustained but not mindless.",
                 objectives: ["Note wide entry"],
                 choices: [
-                  choice("wide", "Wide entry with sustained pressure", "recommended",
+                  choice("wide", "Wide + pressure", "recommended",
                     "That is the evidence bundle."),
                   choice("nit", "Nit", "clear_mistake",
                     "Opposite entry.", {betterChoiceId: "wide"}),
-                  choice("label", "Name an archetype immediately", "clear_mistake",
+                  choice("label", "Label now", "clear_mistake",
                     "Observe first — need samples.", {betterChoiceId: "wide"})
                 ],
               }),
@@ -1631,9 +1631,9 @@ export function buildSectionSix() {
                 a11y: "This seat still folds sometimes; maniac rarely.",
                 objectives: ["Separate planned pressure from maniac samples"],
                 choices: [
-                  choice("sep", "Still makes some folds; maniac rarely does", "recommended",
+                  choice("sep", "Some folds", "recommended",
                     "Discipline vs chaos."),
-                  choice("same", "No difference ever", "clear_mistake",
+                  choice("same", "No difference", "clear_mistake",
                     "There is.", {betterChoiceId: "sep"})
                 ],
               }),
@@ -1643,9 +1643,9 @@ export function buildSectionSix() {
                 a11y: "No.",
                 objectives: ["Note sustained pressure"], lifeLoss: true,
                 choices: [
-                  choice("wait", "Wait for more samples", "recommended",
+                  choice("wait", "Keep sampling", "recommended",
                     "One hand is a note."),
-                  choice("now", "Lock a type label immediately", "clear_mistake",
+                  choice("now", "Label now", "clear_mistake",
                     "Too soon.", {betterChoiceId: "wait"})
                 ],
               }),
@@ -1655,9 +1655,9 @@ export function buildSectionSix() {
                 a11y: "Wide + pressure + some discipline.",
                 objectives: ["Separate planned pressure from maniac samples"], lifeLoss: true,
                 choices: [
-                  choice("bundle", "Wide entry, sustained barrels, occasional folds", "recommended",
+                  choice("bundle", "Wide · barrels · folds", "recommended",
                     "Bundle ready."),
-                  choice("soul", "They seem loud", "clear_mistake",
+                  choice("soul", "Seem loud", "clear_mistake",
                     "Not enough.", {betterChoiceId: "bundle"})
                 ],
               }),

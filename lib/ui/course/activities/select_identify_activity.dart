@@ -530,6 +530,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'TAG is a working model — tap Working model.',
       'act-06-11-03-checkpoint' =>
           'Versus TAG — tap Selective + disciplined.',
+      'act-06-12-01-guided' =>
+          'Wide opens + barrels, some folds — tap Wide + pressure.',
+      'act-06-12-01-scaffolded' =>
+          'Difference vs maniac — tap Some folds.',
+      'act-06-12-01-unguided' =>
+          'One wide open — tap Keep sampling.',
+      'act-06-12-01-checkpoint' =>
+          'Best pre-label notes — tap Wide · barrels · folds.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -648,7 +656,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-06-11-02-scaffolded' ||
             widget.activity.id == 'act-06-11-02-unguided' ||
             widget.activity.id == 'act-06-11-02-checkpoint' ||
-            widget.activity.id == 'act-06-11-03-checkpoint';
+            widget.activity.id == 'act-06-11-03-checkpoint' ||
+            widget.activity.id == 'act-06-12-01-guided' ||
+            widget.activity.id == 'act-06-12-01-scaffolded' ||
+            widget.activity.id == 'act-06-12-01-unguided' ||
+            widget.activity.id == 'act-06-12-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

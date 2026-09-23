@@ -21,6 +21,7 @@ import 'package:live_poker_trainer/ui/course/widgets/three_bet_four_bet_spr_demo
 import 'package:live_poker_trainer/ui/course/widgets/hard_fold_cooler_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/selective_aggression_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/tag_model_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/wide_pressure_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -341,6 +342,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.tagModel
                     ? null
                     : onFeltAcknowledge,
+            onWidePressureAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.widePressure
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance &&
@@ -593,6 +598,9 @@ enum CoachDialogueVisualKind {
 
   /// TAG: tight in, aggressive after — a working model.
   tagModel,
+
+  /// Wide sustained pressure: wide entry, planned barrels — count samples.
+  widePressure,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -739,6 +747,8 @@ class CoachDialogueVisual {
       'Tap Tight, Barrel, and Sample.',
     CoachDialogueVisualKind.tagModel =>
       'Tap Tight, Aggro, and Model.',
+    CoachDialogueVisualKind.widePressure =>
+      'Tap Wide, Pressure, and Sample.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -807,7 +817,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.threeBetFourBetSpr ||
       kind == CoachDialogueVisualKind.hardFoldCooler ||
       kind == CoachDialogueVisualKind.selectiveAggression ||
-      kind == CoachDialogueVisualKind.tagModel;
+      kind == CoachDialogueVisualKind.tagModel ||
+      kind == CoachDialogueVisualKind.widePressure;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -940,6 +951,8 @@ class CoachDialogueVisual {
       'Selective-aggression tiles: tight, barrel, sample',
     CoachDialogueVisualKind.tagModel =>
       'TAG tiles: tight, aggro, model',
+    CoachDialogueVisualKind.widePressure =>
+      'Wide-pressure tiles: wide entry, planned barrels, count samples',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -1174,6 +1187,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-06-11-03-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.vsTags,
+      );
+    case 'act-06-12-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.widePressure,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1690,6 +1707,16 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.vsTags,
     );
   }
+  // Phrase-safe wide pressure — before bare "wide" / "barrel" alone.
+  if (blob.contains('wide entry plus pressure') ||
+      blob.contains('pressure that still has a plan') ||
+      blob.contains('wide sustained') ||
+      (blob.contains('before labels') && blob.contains('wide entry')) ||
+      (blob.contains('wide entry') && blob.contains('count samples'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.widePressure,
+    );
+  }
   // Phrase-safe hard folds / coolers — avoid bare "cooler" / "ego" alone.
   if (blob.contains('hard folds save buy-ins') ||
       blob.contains('coolers happen') ||
@@ -1786,6 +1813,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onHardFoldCoolerAcknowledge,
     this.onSelectiveAggressionAcknowledge,
     this.onTagModelAcknowledge,
+    this.onWidePressureAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1853,6 +1881,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onHardFoldCoolerAcknowledge;
   final VoidCallback? onSelectiveAggressionAcknowledge;
   final VoidCallback? onTagModelAcknowledge;
+  final VoidCallback? onWidePressureAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -2180,6 +2209,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onTagModelAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onTagModelAcknowledge,
+        ),
+        CoachDialogueVisualKind.widePressure => WidePressureDemo(
+          interactive: onWidePressureAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onWidePressureAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },

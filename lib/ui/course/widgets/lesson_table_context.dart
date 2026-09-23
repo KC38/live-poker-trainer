@@ -760,6 +760,33 @@ enum LessonTableRegion {
 
   /// Adjust vs TAG checkpoint: vibes (mistake).
   citeTagVibes,
+
+  /// LAG observe guided: wide + pressure (correct).
+  lagObserveWidePressure,
+
+  /// LAG observe guided: nit distractor.
+  lagObserveNitDistractor,
+
+  /// LAG observe guided: label now (mistake).
+  lagObserveLabelNow,
+
+  /// LAG observe scaffolded: some folds vs maniac (correct).
+  lagObserveSomeFolds,
+
+  /// LAG observe scaffolded: no difference (mistake).
+  lagObserveNoDiff,
+
+  /// LAG observe unguided: keep sampling (correct).
+  lagObserveKeepSampling,
+
+  /// LAG observe unguided: label now (mistake).
+  lagObserveLockNow,
+
+  /// LAG observe checkpoint: evidence bundle (correct).
+  lagObserveBundle,
+
+  /// LAG observe checkpoint: seem loud (mistake).
+  lagObserveSeemLoud,
 }
 
 /// How the mini-table is arranged.
@@ -1093,6 +1120,18 @@ enum LessonTableLayout {
 
   /// Adjust vs TAG: selective cite vs vibes.
   tagRespectCiteOutcomes,
+
+  /// LAG observe: wide + pressure vs nit vs label now.
+  lagObserveGuidedOutcomes,
+
+  /// LAG observe: some folds vs no difference.
+  lagObserveDiscOutcomes,
+
+  /// LAG observe: keep sampling vs label now.
+  lagObserveSampleOutcomes,
+
+  /// LAG observe: wide · barrels · folds vs seem loud.
+  lagObserveBundleOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -2061,6 +2100,27 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.tagRespectCiteOutcomes,
         caption: 'Versus TAG, cite which tendency?',
       );
+    case 'act-06-12-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.lagObserveGuidedOutcomes,
+        caption:
+            'Seat opens many hands and barrels often but folds some turn raises. Note?',
+      );
+    case 'act-06-12-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.lagObserveDiscOutcomes,
+        caption: 'Difference brewing vs maniac?',
+      );
+    case 'act-06-12-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.lagObserveSampleOutcomes,
+        caption: 'Label after one wide open?',
+      );
+    case 'act-06-12-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.lagObserveBundleOutcomes,
+        caption: 'Best pre-label note bundle?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -3020,6 +3080,31 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.citeTagVibes => pick('vague'),
         _ => null,
       };
+    case 'act-06-12-01-guided':
+      return switch (region) {
+        LessonTableRegion.lagObserveWidePressure => pick('wide'),
+        LessonTableRegion.lagObserveNitDistractor => pick('nit'),
+        LessonTableRegion.lagObserveLabelNow => pick('label'),
+        _ => null,
+      };
+    case 'act-06-12-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.lagObserveSomeFolds => pick('sep'),
+        LessonTableRegion.lagObserveNoDiff => pick('same'),
+        _ => null,
+      };
+    case 'act-06-12-01-unguided':
+      return switch (region) {
+        LessonTableRegion.lagObserveKeepSampling => pick('wait'),
+        LessonTableRegion.lagObserveLockNow => pick('now'),
+        _ => null,
+      };
+    case 'act-06-12-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.lagObserveBundle => pick('bundle'),
+        LessonTableRegion.lagObserveSeemLoud => pick('soul'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -3197,7 +3282,11 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-06-11-02-scaffolded' ||
       activity.id == 'act-06-11-02-unguided' ||
       activity.id == 'act-06-11-02-checkpoint' ||
-      activity.id == 'act-06-11-03-checkpoint';
+      activity.id == 'act-06-11-03-checkpoint' ||
+      activity.id == 'act-06-12-01-guided' ||
+      activity.id == 'act-06-12-01-scaffolded' ||
+      activity.id == 'act-06-12-01-unguided' ||
+      activity.id == 'act-06-12-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -3498,6 +3587,14 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.meetTagModelOutcomes => _buildMeetTagModelOutcomes(),
       LessonTableLayout.tagRespectCiteOutcomes =>
           _buildTagRespectCiteOutcomes(),
+      LessonTableLayout.lagObserveGuidedOutcomes =>
+          _buildLagObserveGuidedOutcomes(),
+      LessonTableLayout.lagObserveDiscOutcomes =>
+          _buildLagObserveDiscOutcomes(),
+      LessonTableLayout.lagObserveSampleOutcomes =>
+          _buildLagObserveSampleOutcomes(),
+      LessonTableLayout.lagObserveBundleOutcomes =>
+          _buildLagObserveBundleOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -7436,6 +7533,141 @@ class LessonTableContext extends StatelessWidget {
           visual: const Icon(
             Icons.sentiment_very_dissatisfied_outlined,
             color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLagObserveGuidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive LAG observe — tap wide + pressure, nit, or label now',
+      semanticsStatic: 'LAG observe guided outcomes',
+      caption: scene.caption ??
+          'Seat opens many hands and barrels often but folds some turn raises. Note?',
+      phases: [
+        (
+          region: LessonTableRegion.lagObserveWidePressure,
+          title: 'Wide + pressure',
+          detail: 'Evidence',
+          visual: const Icon(
+            Icons.visibility_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.lagObserveNitDistractor,
+          title: 'Nit',
+          detail: 'Opposite',
+          visual: const Icon(
+            Icons.lock_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.lagObserveLabelNow,
+          title: 'Label now',
+          detail: 'Too soon',
+          visual: const Icon(
+            Icons.sell_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLagObserveDiscOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive LAG vs maniac — tap some folds or no difference',
+      semanticsStatic: 'LAG observe discipline outcomes',
+      caption: scene.caption ?? 'Difference brewing vs maniac?',
+      phases: [
+        (
+          region: LessonTableRegion.lagObserveSomeFolds,
+          title: 'Some folds',
+          detail: 'Not mindless',
+          visual: const Icon(
+            Icons.rule_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.lagObserveNoDiff,
+          title: 'No difference',
+          detail: 'Wrong',
+          visual: const Icon(
+            Icons.merge_type,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLagObserveSampleOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive sample confidence — tap keep sampling or label now',
+      semanticsStatic: 'LAG observe sample outcomes',
+      caption: scene.caption ?? 'Label after one wide open?',
+      phases: [
+        (
+          region: LessonTableRegion.lagObserveKeepSampling,
+          title: 'Keep sampling',
+          detail: 'One hand is a note',
+          visual: const Icon(
+            Icons.science_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.lagObserveLockNow,
+          title: 'Label now',
+          detail: 'Too soon',
+          visual: const Icon(
+            Icons.verified_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLagObserveBundleOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive pre-label bundle — tap wide · barrels · folds or seem loud',
+      semanticsStatic: 'LAG observe bundle outcomes',
+      caption: scene.caption ?? 'Best pre-label note bundle?',
+      phases: [
+        (
+          region: LessonTableRegion.lagObserveBundle,
+          title: 'Wide · barrels · folds',
+          detail: 'Evidence',
+          visual: const Icon(
+            Icons.inventory_2_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.lagObserveSeemLoud,
+          title: 'Seem loud',
+          detail: 'Not evidence',
+          visual: const Icon(
+            Icons.volume_up_outlined,
+            color: AppColors.danger,
             size: 24,
           ),
         ),

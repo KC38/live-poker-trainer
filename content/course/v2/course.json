@@ -17002,8 +17002,8 @@
                   "choices": [
                     {
                       "id": "wide",
-                      "label": "Wide entry with sustained pressure",
-                      "accessibilityText": "Wide entry with sustained pressure",
+                      "label": "Wide + pressure",
+                      "accessibilityText": "Wide + pressure",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "That is the evidence bundle."
@@ -17021,8 +17021,8 @@
                     },
                     {
                       "id": "label",
-                      "label": "Name an archetype immediately",
-                      "accessibilityText": "Name an archetype immediately",
+                      "label": "Label now",
+                      "accessibilityText": "Label now",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Observe first — need samples.",
@@ -17051,8 +17051,8 @@
                   "choices": [
                     {
                       "id": "sep",
-                      "label": "Still makes some folds; maniac rarely does",
-                      "accessibilityText": "Still makes some folds; maniac rarely does",
+                      "label": "Some folds",
+                      "accessibilityText": "Some folds",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Discipline vs chaos."
@@ -17060,8 +17060,8 @@
                     },
                     {
                       "id": "same",
-                      "label": "No difference ever",
-                      "accessibilityText": "No difference ever",
+                      "label": "No difference",
+                      "accessibilityText": "No difference",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "There is.",
@@ -17090,8 +17090,8 @@
                   "choices": [
                     {
                       "id": "wait",
-                      "label": "Wait for more samples",
-                      "accessibilityText": "Wait for more samples",
+                      "label": "Keep sampling",
+                      "accessibilityText": "Keep sampling",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "One hand is a note."
@@ -17099,8 +17099,8 @@
                     },
                     {
                       "id": "now",
-                      "label": "Lock a type label immediately",
-                      "accessibilityText": "Lock a type label immediately",
+                      "label": "Label now",
+                      "accessibilityText": "Label now",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Too soon.",
@@ -17129,8 +17129,8 @@
                   "choices": [
                     {
                       "id": "bundle",
-                      "label": "Wide entry, sustained barrels, occasional folds",
-                      "accessibilityText": "Wide entry, sustained barrels, occasional folds",
+                      "label": "Wide · barrels · folds",
+                      "accessibilityText": "Wide · barrels · folds",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Bundle ready."
@@ -17138,8 +17138,8 @@
                     },
                     {
                       "id": "soul",
-                      "label": "They seem loud",
-                      "accessibilityText": "They seem loud",
+                      "label": "Seem loud",
+                      "accessibilityText": "Seem loud",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Not enough.",

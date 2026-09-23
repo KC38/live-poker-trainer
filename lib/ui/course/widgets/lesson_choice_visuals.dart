@@ -384,6 +384,13 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Adjust vs TAG: cite selective tendency on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-06-12-01-guided' ||
+      activity.id == 'act-06-12-01-scaffolded' ||
+      activity.id == 'act-06-12-01-unguided' ||
+      activity.id == 'act-06-12-01-checkpoint') {
+    // Observe wide pressure: tap notes on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.
