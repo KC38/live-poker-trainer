@@ -359,6 +359,7 @@ class SeatOrderTile extends StatelessWidget {
     this.badge,
     this.selected = false,
     this.enabled = true,
+    this.emphasizeDealer = true,
     this.onPressed,
   });
 
@@ -366,6 +367,10 @@ class SeatOrderTile extends StatelessWidget {
   final String? badge;
   final bool selected;
   final bool enabled;
+
+  /// Gold dealer-chip chrome on BTN. Turn off in order quizzes so BTN is not
+  /// mistaken for the next tap target.
+  final bool emphasizeDealer;
   final VoidCallback? onPressed;
 
   String get _caption {
@@ -389,7 +394,7 @@ class SeatOrderTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isBtn = label.toUpperCase() == 'BTN';
+    final isBtn = emphasizeDealer && label.toUpperCase() == 'BTN';
     return Semantics(
       button: true,
       selected: selected,
@@ -518,8 +523,15 @@ class _ActionOrderDemoState extends State<ActionOrderDemo> {
     }
   }
 
+  String? get _nextCorrect {
+    final nextIndex = _ordered.length;
+    if (nextIndex >= _correct.length) return null;
+    return _correct[nextIndex];
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextCorrect;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -551,21 +563,28 @@ class _ActionOrderDemoState extends State<ActionOrderDemo> {
             alignment: WrapAlignment.center,
             children: [
               for (final seat in _palette)
-                SeatOrderTile(
-                  label: seat.label,
-                  badge:
-                      _ordered.contains(seat.label)
-                          ? '${_ordered.indexOf(seat.label) + 1}'
-                          : null,
-                  selected: _ordered.contains(seat.label),
-                  enabled:
+                _SoftPulseTarget(
+                  active:
                       widget.interactive &&
                       widget.enabled &&
-                      !_ordered.contains(seat.label),
-                  onPressed:
-                      widget.interactive
-                          ? () => _onTap(seat.label)
-                          : null,
+                      next == seat.label,
+                  child: SeatOrderTile(
+                    label: seat.label,
+                    badge:
+                        _ordered.contains(seat.label)
+                            ? '${_ordered.indexOf(seat.label) + 1}'
+                            : null,
+                    selected: _ordered.contains(seat.label),
+                    emphasizeDealer: false,
+                    enabled:
+                        widget.interactive &&
+                        widget.enabled &&
+                        !_ordered.contains(seat.label),
+                    onPressed:
+                        widget.interactive
+                            ? () => _onTap(seat.label)
+                            : null,
+                  ),
                 ),
             ],
           ),
@@ -581,7 +600,7 @@ class _ActionOrderDemoState extends State<ActionOrderDemo> {
           const SizedBox(height: 8),
           Text(
             widget.interactive
-                ? 'Tap each seat in preflop order'
+                ? (next == null ? 'UTG → HJ → BTN' : 'Tap $next next')
                 : 'Left of BB preflop · left of button postflop',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
@@ -594,5 +613,75 @@ class _ActionOrderDemoState extends State<ActionOrderDemo> {
     );
     if (widget.interactive) return child;
     return ExcludeSemantics(child: child);
+  }
+}
+
+/// Soft gold pulse around the next correct seat in [ActionOrderDemo].
+class _SoftPulseTarget extends StatefulWidget {
+  const _SoftPulseTarget({required this.active, required this.child});
+
+  final bool active;
+  final Widget child;
+
+  @override
+  State<_SoftPulseTarget> createState() => _SoftPulseTargetState();
+}
+
+class _SoftPulseTargetState extends State<_SoftPulseTarget>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+    if (widget.active) {
+      _pulse.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _SoftPulseTarget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.active && !_pulse.isAnimating) {
+      _pulse.repeat(reverse: true);
+    } else if (!widget.active && _pulse.isAnimating) {
+      _pulse.stop();
+      _pulse.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.active) return widget.child;
+    return AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final glow = 0.22 + (_pulse.value * 0.38);
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.gold.withValues(alpha: glow * 0.55),
+                blurRadius: 10 + (_pulse.value * 6),
+                spreadRadius: 0.4,
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
+      child: widget.child,
+    );
   }
 }
