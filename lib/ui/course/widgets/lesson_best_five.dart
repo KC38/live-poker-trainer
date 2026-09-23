@@ -510,25 +510,34 @@ class _BestFiveCardPickerState extends State<BestFiveCardPicker> {
           ],
         ),
         const SizedBox(height: 12),
-        Text(
-          widget.controller.submitting
-              ? 'Checking…'
-              : _selected.length == 5
-              ? (mapBestFiveSelectionToChoiceId(
-                      selected: _selected,
-                      spot: spot,
-                      choices: widget.activity.choices,
-                    ) !=
-                    null
-                  ? 'Checking…'
-                  : 'Five tapped — try a stronger five.')
-              : '${_selected.length}/5 selected — ${spot.hint}',
-          textAlign: TextAlign.center,
-          style: GoogleFonts.manrope(
-            color: AppColors.slate,
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-          ),
+        Builder(
+          builder: (context) {
+            final status = () {
+              if (widget.controller.lastResult != null) return '';
+              if (widget.controller.submitting) return 'Checking…';
+              if (_selected.length == 5) {
+                return mapBestFiveSelectionToChoiceId(
+                          selected: _selected,
+                          spot: spot,
+                          choices: widget.activity.choices,
+                        ) !=
+                        null
+                    ? 'Checking…'
+                    : 'Five tapped — try a stronger five.';
+              }
+              return '${_selected.length}/5 selected — ${spot.hint}';
+            }();
+            if (status.isEmpty) return const SizedBox.shrink();
+            return Text(
+              status,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            );
+          },
         ),
       ],
     );

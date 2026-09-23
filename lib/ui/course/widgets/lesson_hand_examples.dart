@@ -127,8 +127,9 @@ LessonHandExample? resolveHandExample({
     case 'high-card-wins':
       return const LessonHandExample(
         id: 'high-card-wins',
+        // Match the board-chop spot's holes — never invent an Ace.
         title: 'Higher hole card',
-        codes: ['Ah', '2d'],
+        codes: ['2h', '2d'],
       );
     case 'split':
       return const LessonHandExample(

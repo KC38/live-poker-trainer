@@ -610,7 +610,7 @@ export function buildSectionOne() {
               }),
               selectAct({
                 id: "act-01-02-02-unguided-board", order: 4, stage: "unguided",
-                prompt: "Both checked down on a broadway club board. Tap the result.",
+                prompt: "Both checked down — tap who takes the pot.",
                 a11y: "Tap chop when the board plays for everyone.",
                 objectives: ["Spot board-tied pots"],
                 lifeLoss: true,

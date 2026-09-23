@@ -404,6 +404,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         heroCodes: ['2h', '2d'],
         boardCodes: ['Ac', 'Kc', 'Qc', 'Jc', 'Tc'],
+        // Face-down villain: learner must see the board, not invent kickers.
         villainSeatCount: 1,
         highlight: LessonTableHighlight.board,
         caption: 'You',
@@ -550,6 +551,14 @@ String? mapTableRegionToChoiceId({
         0 => pick('sb-seat0'),
         4 => pick('sb-seat4'),
         1 => pick('sb-seat1'),
+        _ => null,
+      };
+    case 'act-01-02-02-unguided-board':
+      // Broadway board plays for everyone — tap the shared cards to chop.
+      return switch (region) {
+        LessonTableRegion.board => pick('chop-broadway'),
+        LessonTableRegion.hero => pick('high-card-wins'),
+        LessonTableRegion.villain => pick('button-wins'),
         _ => null,
       };
     case 'act-01-04-01-unguided-end':
