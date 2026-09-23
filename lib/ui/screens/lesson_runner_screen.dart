@@ -281,6 +281,14 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     controller.beginSubmit(key);
     setState(() {});
 
+    assert(() {
+      debugPrint(
+        'LessonRunner: submit activity=${controller.activity.id} '
+        'choiceId=${controller.draft.choiceId}',
+      );
+      return true;
+    }());
+
     try {
       final result = await _service.submitStep(
         attemptId: attempt.attemptId,

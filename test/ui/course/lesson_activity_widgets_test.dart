@@ -6356,19 +6356,12 @@ void main() {
         CourseChoice(id: 'raise-auto', label: 'Raise every draw'),
       ],
     );
-    expect(isTableRegionTapActivity(activity), isTrue);
     expect(
-      resolveLessonTableScene(activity)?.layout,
-      LessonTableLayout.drawPriceOutcomes,
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.handCategoryTap,
     );
-    expect(
-      mapTableRegionToChoiceId(
-        activityId: activity.id,
-        region: LessonTableRegion.drawPriceCall,
-        choices: activity.choices,
-      ),
-      'call-draw',
-    );
+    expect(resolveLessonTableScene(activity)?.caption,
+        'Pot 20 · bet 10 · ~8 clean outs');
 
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
@@ -6394,8 +6387,8 @@ void main() {
       find.text('Call — price is acceptable with outs'),
       findsNothing,
     );
-    expect(find.text('Call'), findsOneWidget);
-    await tester.tap(find.text('Call'));
+    expect(find.text('Call — priced in'), findsOneWidget);
+    await tester.tap(find.text('Call — priced in'));
     await tester.pump();
     expect(controller.draft.choiceId, 'call-draw');
     controller.dispose();

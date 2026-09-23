@@ -239,6 +239,24 @@ LessonHandExample? resolveHandExample({
         title: '0 — never improve',
         codes: [],
       );
+    case 'call-draw':
+      return const LessonHandExample(
+        id: 'call-draw',
+        title: 'Call — priced in',
+        codes: [],
+      );
+    case 'fold-draw':
+      return const LessonHandExample(
+        id: 'fold-draw',
+        title: 'Fold — no made hand',
+        codes: [],
+      );
+    case 'raise-auto':
+      return const LessonHandExample(
+        id: 'raise-auto',
+        title: 'Raise every draw',
+        codes: [],
+      );
     case 'split':
       return const LessonHandExample(
         id: 'split',
