@@ -184,6 +184,48 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         streetLabel: 'Preflop · Big blind · 9-max',
         facingBet: true,
       );
+    case 'act-03-04-01-guided':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', 'Kd'],
+        boardCodes: ['As', '7c', '2d'],
+        potLabel: 'Pot 10',
+        villainLine: 'Checked to you',
+        streetLabel: 'Flop · Heads-up · TPTK',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Checked to you — value bet',
+      );
+    case 'act-03-04-01-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['Kh', 'Qd'],
+        boardCodes: ['As', '7d', '2c'],
+        potLabel: 'Pot 13',
+        villainLine: 'BB checks',
+        streetLabel: 'Flop · BTN aggressor',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Dry ace — you opened',
+      );
+    case 'act-03-04-01-unguided':
+      return const LessonActionSpot(
+        heroCodes: ['7h', '7d'],
+        boardCodes: ['7c', 'Kd', '2s'],
+        potLabel: 'Pot 24',
+        villainLine: 'Villain bets 12',
+        streetLabel: 'Flop · Multiway · Set',
+        facingBet: true,
+        feltStatusLine: 'Set multiway — build the pot',
+      );
+    case 'act-03-04-01-checkpoint':
+      return const LessonActionSpot(
+        heroCodes: ['5h', '2d'],
+        boardCodes: ['Ah', '7c', '2s'],
+        potLabel: 'Pot 30',
+        villainLine: 'Bet · raise ahead',
+        streetLabel: 'Flop · Multiway · Bottom pair',
+        facingBet: true,
+        feltStatusLine: 'Heat multiway — weak one pair',
+      );
   }
   return null;
 }
@@ -290,6 +332,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-02-07-02-jump-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-03-04-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
@@ -1445,18 +1491,20 @@ class _FlopLinesDemoState extends State<FlopLinesDemo> {
               ],
             ),
           ],
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap each flop line once'
-                : 'Value · c-bet · check · call · fold · raise',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex / coach status already says tap each once —
+          // avoid a duplicate cue under the grid.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Value · c-bet · check · call · fold · raise',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );

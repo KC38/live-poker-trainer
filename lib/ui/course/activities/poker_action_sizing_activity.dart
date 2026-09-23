@@ -219,6 +219,15 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Trash UTG — tap Fold or Open.',
     'act-02-07-02-jump-vs' =>
       'Aces in the big blind vs an open — tap your action.',
+    'act-03-04-01-guided' =>
+      'Top pair top kicker checked to you — tap a value bet.',
+    'act-03-04-01-scaffolded' =>
+      'You opened; dry ace flops — tap a small c-bet.',
+    // Unguided / checkpoint: name the spot, not the answer.
+    'act-03-04-01-unguided' =>
+      'Set multiway vs a bet — tap Raise, Call, or Fold.',
+    'act-03-04-01-checkpoint' =>
+      'Bottom pair vs bet and raise multiway — tap your action.',
     _ => null,
   };
 }

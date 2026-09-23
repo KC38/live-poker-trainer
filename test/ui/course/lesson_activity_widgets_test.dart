@@ -7272,6 +7272,265 @@ void main() {
     controller.dispose();
   });
 
+  test('s3 flop-line action spots resolve mini-table dock mode', () {
+    final guided = CourseActivity(
+      id: 'act-03-04-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Bet for value with TPTK.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Heads-up. You hold top pair top kicker. Checked to you. Action?',
+      choices: const [
+        CourseChoice(id: 'bet-tp', label: 'Bet half pot', action: 'BET'),
+        CourseChoice(id: 'check-tp', label: 'Check back', action: 'CHECK'),
+        CourseChoice(id: 'fold-tp', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    expect(isLessonActionTableActivity(guided), isTrue);
+    final guidedSpot = resolveLessonActionSpot(guided)!;
+    expect(guidedSpot.openPot, isTrue);
+    expect(guidedSpot.facingBet, isFalse);
+    expect(guidedSpot.heroCodes, ['Ah', 'Kd']);
+    expect(guidedSpot.boardCodes, ['As', '7c', '2d']);
+
+    final scaffolded = CourseActivity(
+      id: 'act-03-04-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'High-card air can c-bet a dry ace-high board selectively.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'You opened BTN, BB called. Flop As 7d 2c. You have KQo. Action?',
+      choices: const [
+        CourseChoice(id: 'cbet', label: 'C-bet small', action: 'BET'),
+        CourseChoice(id: 'check-kq', label: 'Check back', action: 'CHECK'),
+        CourseChoice(id: 'jam-kq', label: 'Jam all-in', action: 'ALL_IN'),
+      ],
+    );
+    expect(isLessonActionTableActivity(scaffolded), isTrue);
+    expect(resolveLessonActionSpot(scaffolded)?.heroCodes, ['Kh', 'Qd']);
+
+    final unguided = CourseActivity(
+      id: 'act-03-04-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Raise a set for value multiway.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Multiway pot. Villain bets half pot. You flopped a set. Action?',
+      choices: const [
+        CourseChoice(id: 'raise-set', label: 'Raise', action: 'RAISE'),
+        CourseChoice(id: 'call-set', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'fold-set', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    expect(isLessonActionTableActivity(unguided), isTrue);
+    expect(resolveLessonActionSpot(unguided)?.facingBet, isTrue);
+
+    final checkpoint = CourseActivity(
+      id: 'act-03-04-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Fold weak one-pair multiway to heat.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Three players. Flop bets and a raise ahead. You have bottom pair. Action?',
+      choices: const [
+        CourseChoice(id: 'fold-bp', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'call-bp', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'raise-bp', label: 'Raise', action: 'RAISE'),
+      ],
+    );
+    expect(isLessonActionTableActivity(checkpoint), isTrue);
+    expect(resolveLessonActionSpot(checkpoint)?.facingBet, isTrue);
+  });
+
+  testWidgets('s3 flop-line guided docks Bet half pot on TPTK felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-04-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Bet for value with TPTK.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Heads-up. You hold top pair top kicker. Checked to you. Action?',
+      choices: const [
+        CourseChoice(id: 'bet-tp', label: 'Bet half pot', action: 'BET'),
+        CourseChoice(id: 'check-tp', label: 'Check back', action: 'CHECK'),
+        CourseChoice(id: 'fold-tp', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byType(LessonActionTable), findsOneWidget);
+    expect(find.byType(LessonActionDock), findsOneWidget);
+    expect(
+      find.text('Top pair top kicker checked to you — tap a value bet.'),
+      findsOneWidget,
+    );
+    expect(find.text('Checked to you — value bet'), findsOneWidget);
+    expect(
+      find.text('Heads-up. You hold top pair top kicker. Checked to you. Action?'),
+      findsNothing,
+    );
+    expect(find.text('BET HALF POT'), findsOneWidget);
+    await tester.tap(find.text('BET HALF POT'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'bet-tp');
+    controller.dispose();
+  });
+
+  testWidgets('s3 flop-line scaffolded docks C-bet on dry ace felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-04-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'High-card air can c-bet a dry ace-high board selectively.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'You opened BTN, BB called. Flop As 7d 2c. You have KQo. Action?',
+      choices: const [
+        CourseChoice(id: 'cbet', label: 'C-bet small', action: 'BET'),
+        CourseChoice(id: 'check-kq', label: 'Check back', action: 'CHECK'),
+        CourseChoice(id: 'jam-kq', label: 'Jam all-in', action: 'ALL_IN'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byType(LessonActionTable), findsOneWidget);
+    expect(
+      find.text('You opened; dry ace flops — tap a small c-bet.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('You opened BTN, BB called. Flop As 7d 2c. You have KQo. Action?'),
+      findsNothing,
+    );
+    expect(find.text('C-BET SMALL'), findsOneWidget);
+    await tester.tap(find.text('C-BET SMALL'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'cbet');
+    controller.dispose();
+  });
+
+  testWidgets('s3 flop-line unguided docks Raise on set multiway felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-04-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Raise a set for value multiway.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Multiway pot. Villain bets half pot. You flopped a set. Action?',
+      choices: const [
+        CourseChoice(id: 'raise-set', label: 'Raise', action: 'RAISE'),
+        CourseChoice(id: 'call-set', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'fold-set', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byType(LessonActionTable), findsOneWidget);
+    expect(
+      find.text('Set multiway vs a bet — tap Raise, Call, or Fold.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Multiway pot. Villain bets half pot. You flopped a set. Action?'),
+      findsNothing,
+    );
+    expect(find.text('RAISE'), findsOneWidget);
+    await tester.tap(find.text('RAISE'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'raise-set');
+    controller.dispose();
+  });
+
+  testWidgets('s3 flop-line checkpoint docks Fold on bottom-pair heat felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-04-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Fold weak one-pair multiway to heat.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'Three players. Flop bets and a raise ahead. You have bottom pair. Action?',
+      choices: const [
+        CourseChoice(id: 'fold-bp', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'call-bp', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'raise-bp', label: 'Raise', action: 'RAISE'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byType(LessonActionTable), findsOneWidget);
+    expect(
+      find.text('Bottom pair vs bet and raise multiway — tap your action.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Three players. Flop bets and a raise ahead. You have bottom pair. Action?',
+      ),
+      findsNothing,
+    );
+    expect(find.text('FOLD'), findsOneWidget);
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'fold-bp');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {
