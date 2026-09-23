@@ -63,7 +63,8 @@ class AuthoredMultiStepActivity extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              RexCoachLine(text: _coachText),
+              // Nice! owns the line — hide stale Rex; felt already shows cards.
+              if (!locked) RexCoachLine(text: _coachText),
               const SizedBox(height: 10),
               Text(
                 'Street ${index + 1} of ${steps.length}',
@@ -71,16 +72,6 @@ class AuthoredMultiStepActivity extends StatelessWidget {
                   color: AppColors.slate,
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                step.prompt,
-                style: GoogleFonts.manrope(
-                  color: AppColors.cream,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w700,
-                  height: 1.3,
                 ),
               ),
               const SizedBox(height: 14),
@@ -124,7 +115,7 @@ class AuthoredMultiStepActivity extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (showGuidance)
+            if (!locked && showGuidance)
               RexCoachLine(
                 text: 'Street ${index + 1} of ${steps.length}: ${step.street}',
               ),

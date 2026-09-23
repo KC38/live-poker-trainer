@@ -94,6 +94,28 @@ class _ToyHandRunDemoState extends State<ToyHandRunDemo> {
                   widget.interactive ? () => _onTap(lanes[i].$1) : null,
             ),
           ],
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            decoration: BoxDecoration(
+              color: AppColors.feltDark.withValues(alpha: 0.65),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: AppColors.gold.withValues(alpha: 0.45),
+              ),
+            ),
+            child: Text(
+              widget.interactive
+                  ? 'Tap Blinds, You act, and Ending'
+                  : 'Blinds post, you act, then finish',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
         ],
       ),
     );

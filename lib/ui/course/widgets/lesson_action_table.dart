@@ -4568,8 +4568,14 @@ class LessonActionDock extends StatelessWidget {
     return action.startsWith('RAISE');
   }
 
+  static bool _isLimp(CourseChoice c) {
+    final label = c.label.trim().toUpperCase();
+    return label.startsWith('LIMP') || c.id.contains('limp');
+  }
+
   @override
   Widget build(BuildContext context) {
+    final hasBetChoice = choices.any(_isBet);
     return Row(
       children: [
         for (var i = 0; i < choices.length; i++) ...[
@@ -4578,14 +4584,15 @@ class LessonActionDock extends StatelessWidget {
             child: Builder(
               builder: (context) {
                 final choice = choices[i];
-                // Live dock chrome: Check/Bet off vs a bet; Call/Raise off
-                // when the pot is open. Checkpoint also marks Check.
+                // Live dock chrome: Check/Bet off vs a bet; Call off with
+                // nothing to match (except limps); Raise off only when the
+                // open action is Bet (postflop), not a preflop open-raise.
                 final unavailableLook =
                     (_isCheck(choice) &&
                         (facingBet || identifyUnavailable)) ||
-                    (_isCall(choice) && !facingBet) ||
+                    (_isCall(choice) && !facingBet && !_isLimp(choice)) ||
                     (_isBet(choice) && facingBet) ||
-                    (_isRaise(choice) && !facingBet);
+                    (_isRaise(choice) && !facingBet && hasBetChoice);
                 return _DockButton(
                   choice: choice,
                   selected: selectedId == choice.id,
