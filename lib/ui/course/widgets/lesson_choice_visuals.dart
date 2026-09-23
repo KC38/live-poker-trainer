@@ -100,6 +100,11 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Live habit: tap Cover+wait / Act early / Leave bare on the felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id.startsWith('act-02-06-01-') &&
+      activity.renderer == ActivityRenderer.selectIdentify) {
+    // Live table habits: watch / say / protect / OOT on felt tiles.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id == 'act-02-07-02-jump-pos') {
     // Jump: tap the seat before the button on the position felt.
     return SelectIdentifyPresentation.tableRegionTap;

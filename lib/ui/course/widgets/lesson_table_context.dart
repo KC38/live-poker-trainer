@@ -113,6 +113,42 @@ enum LessonTableRegion {
   /// Live habit distractor: leave cards uncovered / flash them.
   habitLeaveBare,
 
+  /// Live habits guided: watch the action first (correct).
+  habitWatchAction,
+
+  /// Live habits guided distractor: stare at phone.
+  habitWatchPhone,
+
+  /// Live habits guided distractor: decide before they act.
+  habitDecideEarly,
+
+  /// Live habits verbal: say raise and put chips out (correct).
+  habitSayRaise,
+
+  /// Live habits verbal distractor: silent chip toss.
+  habitSilentToss,
+
+  /// Live habits verbal distractor: tap table then shove.
+  habitTapShove,
+
+  /// Live habits protect: chip or hand on cards (correct).
+  habitChipProtect,
+
+  /// Live habits protect distractor: spread cards face-up.
+  habitSpreadFlash,
+
+  /// Live habits protect distractor: leave cards loose near muck.
+  habitLeaveLoose,
+
+  /// Live habits OOT: you acted out of turn (correct read).
+  habitOotProblem,
+
+  /// Live habits OOT distractor: faster play is fine.
+  habitOotFasterFine,
+
+  /// Live habits OOT distractor: blame the dealer.
+  habitOotDealerFault,
+
   /// Effective stack: shorter stack rules (correct).
   effectiveStackShort,
 
@@ -1133,6 +1169,18 @@ enum LessonTableLayout {
   /// Live-habit tiles: cover+wait / act early / leave bare.
   habitCoverOutcomes,
 
+  /// Live habits guided: watch / phone / decide early.
+  habitWatchOutcomes,
+
+  /// Live habits verbal: say raise / silent toss / tap shove.
+  habitVerbalOutcomes,
+
+  /// Live habits protect: chip on cards / spread / leave loose.
+  habitProtectOutcomes,
+
+  /// Live habits OOT: out of turn / faster fine / dealer fault.
+  habitOotOutcomes,
+
   /// Effective-stack tiles: shorter / hero / sum.
   effectiveStackOutcomes,
 
@@ -1840,6 +1888,33 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         layout: LessonTableLayout.effectiveStackOutcomes,
         caption: 'You 120bb · Villain 55bb',
+      );
+    case 'act-02-06-01-guided-follow':
+      return const LessonTableScene(
+        layout: LessonTableLayout.habitWatchOutcomes,
+        heroCodes: ['Ah', 'Kd'],
+        villainSeatCount: 1,
+        caption: 'Two seats still to act · you are next',
+      );
+    case 'act-02-06-01-scaffolded-verbal':
+      return const LessonTableScene(
+        layout: LessonTableLayout.habitVerbalOutcomes,
+        heroCodes: ['Ah', 'Kd'],
+        caption: 'You want to raise · live table',
+      );
+    case 'act-02-06-01-unguided-protect':
+      return const LessonTableScene(
+        layout: LessonTableLayout.habitProtectOutcomes,
+        heroCodes: ['Ah', 'Kd'],
+        showMuck: true,
+        caption: 'Your cards sit near the muck',
+      );
+    case 'act-02-06-01-checkpoint-oot':
+      return const LessonTableScene(
+        layout: LessonTableLayout.habitOotOutcomes,
+        heroCodes: ['Ah', 'Kd'],
+        villainSeatCount: 1,
+        caption: 'Action two seats left · you tossed a raise',
       );
     case 'act-03-01-01-guided':
       return const LessonTableScene(
@@ -3157,6 +3232,34 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.habitLeaveBare => pick('leave-cards'),
         _ => null,
       };
+    case 'act-02-06-01-guided-follow':
+      return switch (region) {
+        LessonTableRegion.habitWatchAction => pick('watch'),
+        LessonTableRegion.habitWatchPhone => pick('look-away'),
+        LessonTableRegion.habitDecideEarly => pick('decide-now'),
+        _ => null,
+      };
+    case 'act-02-06-01-scaffolded-verbal':
+      return switch (region) {
+        LessonTableRegion.habitSayRaise => pick('say-raise'),
+        LessonTableRegion.habitSilentToss => pick('silent-toss'),
+        LessonTableRegion.habitTapShove => pick('tap-table'),
+        _ => null,
+      };
+    case 'act-02-06-01-unguided-protect':
+      return switch (region) {
+        LessonTableRegion.habitChipProtect => pick('chip-on-cards'),
+        LessonTableRegion.habitSpreadFlash => pick('spread-out'),
+        LessonTableRegion.habitLeaveLoose => pick('leave-loose'),
+        _ => null,
+      };
+    case 'act-02-06-01-checkpoint-oot':
+      return switch (region) {
+        LessonTableRegion.habitOotProblem => pick('oot-bad'),
+        LessonTableRegion.habitOotFasterFine => pick('oot-fine'),
+        LessonTableRegion.habitOotDealerFault => pick('oot-dealer'),
+        _ => null,
+      };
     case 'act-02-07-02-jump-pos':
       return switch (region) {
         LessonTableRegion.cutoff => pick('j2-co'),
@@ -4246,6 +4349,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id.startsWith('act-01-04-01-') ||
       activity.id.startsWith('act-01-05-01-') ||
       activity.id.startsWith('act-02-01-01-') ||
+      activity.id.startsWith('act-02-06-01-') ||
       activity.id == 'act-02-07-01-checkpoint-habit' ||
       activity.id == 'act-02-07-02-jump-pos' ||
       activity.id == 'act-02-07-02-jump-stack' ||
@@ -4528,6 +4632,10 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.potSideOutcomes => _buildPotSideOutcomes(),
       LessonTableLayout.potOpenSizeOutcomes => _buildPotOpenSizeOutcomes(),
       LessonTableLayout.habitCoverOutcomes => _buildHabitCoverOutcomes(),
+      LessonTableLayout.habitWatchOutcomes => _buildHabitWatchOutcomes(),
+      LessonTableLayout.habitVerbalOutcomes => _buildHabitVerbalOutcomes(),
+      LessonTableLayout.habitProtectOutcomes => _buildHabitProtectOutcomes(),
+      LessonTableLayout.habitOotOutcomes => _buildHabitOotOutcomes(),
       LessonTableLayout.effectiveStackOutcomes =>
         _buildEffectiveStackOutcomes(),
       LessonTableLayout.potMultiwayOutcomes => _buildPotMultiwayOutcomes(),
@@ -5460,6 +5568,191 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Flash',
           visual: const Icon(
             Icons.visibility_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHabitWatchOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive live habit — tap watch, phone, or decide early',
+      semanticsStatic: 'Live habit watch outcomes',
+      caption: scene.caption ?? 'Two seats still to act',
+      phases: [
+        (
+          region: LessonTableRegion.habitWatchAction,
+          title: 'Watch first',
+          detail: 'Then decide',
+          visual: const Icon(
+            Icons.visibility_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.habitWatchPhone,
+          title: 'Phone zone',
+          detail: 'Look away',
+          visual: const Icon(
+            Icons.phone_iphone,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.habitDecideEarly,
+          title: 'Decide now',
+          detail: 'Before them',
+          visual: const Icon(
+            Icons.flash_on_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHabitVerbalOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive live habit — tap how you announce a raise',
+      semanticsStatic: 'Live habit verbal outcomes',
+      caption: scene.caption ?? 'You want to raise',
+      phases: [
+        (
+          region: LessonTableRegion.habitSayRaise,
+          title: 'Say raise',
+          detail: 'Clear + chips',
+          visual: const Icon(
+            Icons.record_voice_over_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.habitSilentToss,
+          title: 'Silent toss',
+          detail: 'No words',
+          visual: const Icon(
+            Icons.volume_off_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.habitTapShove,
+          title: 'Tap + shove',
+          detail: 'Ambiguous',
+          visual: const Icon(
+            Icons.touch_app_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHabitProtectOutcomes() {
+    final hero = scene.heroCodes.isEmpty
+        ? const ['Ah', 'Kd']
+        : scene.heroCodes.take(2).toList(growable: false);
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive live habit — tap how you protect hole cards',
+      semanticsStatic: 'Live habit protect outcomes',
+      caption: scene.caption ?? 'Cards near the muck',
+      phases: [
+        (
+          region: LessonTableRegion.habitChipProtect,
+          title: 'Chip on cards',
+          detail: 'Protected',
+          visual: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (var i = 0; i < hero.length; i++) ...[
+                    if (i > 0) const SizedBox(width: 2),
+                    MiniCard(
+                      card: CardModel.fromCode(hero[i]),
+                      size: MiniCardSize.tiny,
+                    ),
+                  ],
+                ],
+              ),
+              const SizedBox(height: 4),
+              const Icon(
+                Icons.monetization_on_outlined,
+                color: AppColors.gold,
+                size: 18,
+              ),
+            ],
+          ),
+        ),
+        (
+          region: LessonTableRegion.habitSpreadFlash,
+          title: 'Spread open',
+          detail: 'Camera bait',
+          visual: const Icon(
+            Icons.visibility_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.habitLeaveLoose,
+          title: 'Leave loose',
+          detail: 'Near muck',
+          visual: const Icon(
+            Icons.delete_outline,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHabitOotOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive live habit — tap what went wrong out of turn',
+      semanticsStatic: 'Live habit out-of-turn outcomes',
+      caption: scene.caption ?? 'Action still left · you tossed a raise',
+      phases: [
+        (
+          region: LessonTableRegion.habitOotProblem,
+          title: 'Out of turn',
+          detail: 'Your mistake',
+          visual: const Icon(
+            Icons.warning_amber_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.habitOotFasterFine,
+          title: 'Speed is fine',
+          detail: 'Always reward',
+          visual: const Icon(
+            Icons.speed,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.habitOotDealerFault,
+          title: 'Dealer fault',
+          detail: 'Blame them',
+          visual: const Icon(
+            Icons.gavel_outlined,
             color: AppColors.slate,
             size: 24,
           ),
