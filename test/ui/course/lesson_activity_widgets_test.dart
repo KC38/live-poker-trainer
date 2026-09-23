@@ -9582,6 +9582,45 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 same-hand station docks Bet value on river felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-10-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Thin value versus station.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'River, second pair. Versus Calling Station. Action?',
+      choices: const [
+        CourseChoice(id: 'st-val', label: 'Bet value', action: 'BET'),
+        CourseChoice(id: 'st-bluff', label: 'Huge bluff', action: 'BET'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Station checked · second pair — tap Bet value.'),
+      findsOneWidget,
+    );
+    expect(find.text('BET VALUE'), findsOneWidget);
+    await tester.tap(find.text('BET VALUE'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'st-val');
+    controller.dispose();
+  });
+
   testWidgets('s4 meet nit guided taps Nit on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-04-07-02-guided',
