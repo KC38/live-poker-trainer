@@ -303,7 +303,12 @@ class OrderSequenceActivity extends StatelessWidget {
                     for (var i = 0; i < remaining.length; i++) ...[
                       if (i > 0) const SizedBox(height: 8),
                       _SoftPulseTarget(
-                        active: !locked && i == 0 && ordered.isEmpty,
+                        active:
+                            showGuidance &&
+                            !locked &&
+                            ordered.length < activity.sequenceItems.length &&
+                            remaining[i].id ==
+                                activity.sequenceItems[ordered.length].id,
                         child: HandExampleTile(
                           example:
                               resolveHandExample(
@@ -435,18 +440,30 @@ class OrderSequenceActivity extends StatelessWidget {
                         alignment: WrapAlignment.center,
                         children: [
                           for (final item in remaining)
-                            SeatOrderTile(
-                              label: item.label,
-                              enabled: !locked,
-                              onPressed:
-                                  locked
-                                      ? null
-                                      : () => appendOrderedId(
-                                        controller: controller,
-                                        activity: activity,
-                                        ordered: ordered,
-                                        id: item.id,
-                                      ),
+                            _SoftPulseTarget(
+                              active:
+                                  showGuidance &&
+                                  !locked &&
+                                  ordered.length <
+                                      activity.sequenceItems.length &&
+                                  item.id ==
+                                      activity
+                                          .sequenceItems[ordered.length]
+                                          .id,
+                              child: SeatOrderTile(
+                                label: item.label,
+                                emphasizeDealer: false,
+                                enabled: !locked,
+                                onPressed:
+                                    locked
+                                        ? null
+                                        : () => appendOrderedId(
+                                          controller: controller,
+                                          activity: activity,
+                                          ordered: ordered,
+                                          id: item.id,
+                                        ),
+                              ),
                             ),
                         ],
                       ),
@@ -507,7 +524,13 @@ class OrderSequenceActivity extends StatelessWidget {
                     for (var i = 0; i < remaining.length; i++)
                       if (_rankMode)
                         _SoftPulseTarget(
-                          active: !locked && i == 0 && ordered.isEmpty,
+                          active:
+                              showGuidance &&
+                              !locked &&
+                              ordered.length <
+                                  activity.sequenceItems.length &&
+                              remaining[i].id ==
+                                  activity.sequenceItems[ordered.length].id,
                           child: _RankTile(
                             label: remaining[i].label,
                             onPressed:
@@ -923,27 +946,24 @@ class _SoftPulseTargetState extends State<_SoftPulseTarget>
   @override
   Widget build(BuildContext context) {
     if (!widget.active) {
-      return SizedBox(width: double.infinity, child: widget.child);
+      return widget.child;
     }
     return AnimatedBuilder(
       animation: _pulse,
       builder: (context, child) {
         final glow = 0.25 + (_pulse.value * 0.4);
-        return SizedBox(
-          width: double.infinity,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.gold.withValues(alpha: glow * 0.55),
-                  blurRadius: 10 + (8 * _pulse.value),
-                  spreadRadius: 0.5,
-                ),
-              ],
-            ),
-            child: child,
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.gold.withValues(alpha: glow * 0.55),
+                blurRadius: 10 + (8 * _pulse.value),
+                spreadRadius: 0.5,
+              ),
+            ],
           ),
+          child: child,
         );
       },
       child: widget.child,
