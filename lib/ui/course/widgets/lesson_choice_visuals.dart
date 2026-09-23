@@ -178,10 +178,6 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Ranges: tap range descriptions on seat/action felt.
     return SelectIdentifyPresentation.handCategoryTap;
   }
-  if (activity.id == 'act-04-02-01-unguided') {
-    // 3-bet: squeeze recognition on multiway open felt.
-    return SelectIdentifyPresentation.handCategoryTap;
-  }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {
     return SelectIdentifyPresentation.showdownTap;

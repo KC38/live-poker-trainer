@@ -371,6 +371,15 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         facingBet: true,
         feltStatusLine: 'Trash vs 3-bet — fold',
       );
+    case 'act-04-02-01-unguided':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', 'Kd'],
+        potLabel: 'Pot 3 → 9 → 21',
+        villainLine: 'UTG opens · 2 callers',
+        streetLabel: 'Preflop · BB · AKo',
+        facingBet: true,
+        feltStatusLine: 'Multiway — squeeze AK',
+      );
     case 'act-04-02-01-checkpoint':
       return const LessonActionSpot(
         heroCodes: ['Kh', 'Kd'],

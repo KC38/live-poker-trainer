@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "7473e29f7f059154555a0a91ab8ecf4d15a9374d931e913df5ecdf2db785a540",
+  "contentChecksum": "ca5bb60eb5636ce6657c53e0d5defff0922faffc72c65289df7987414e67cbfb",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -6237,8 +6237,8 @@
                   "id": "act-04-02-01-unguided",
                   "order": 4,
                   "stage": "unguided",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
                   "accessibilityText": "Squeeze with strong hands multiway.",
                   "acceptedGrades": [
                     "recommended",
@@ -6249,22 +6249,26 @@
                   "objectives": [
                     "Recognize squeeze spots multiway"
                   ],
-                  "prompt": "UTG opens, two callers. You have AKo in the big blind. Idea?",
+                  "prompt": "UTG opens, two callers. You have AKo in the big blind. Action?",
                   "choices": [
                     {
                       "id": "squeeze",
-                      "label": "3-bet / squeeze for value",
-                      "accessibilityText": "3-bet / squeeze for value"
+                      "label": "Squeeze to ~20",
+                      "accessibilityText": "Squeeze to ~20",
+                      "action": "RAISE",
+                      "amountBb": 10
                     },
                     {
                       "id": "limp-more",
                       "label": "Limp behind",
-                      "accessibilityText": "Limp behind"
+                      "accessibilityText": "Limp behind",
+                      "action": "CALL"
                     },
                     {
                       "id": "fold-ak",
-                      "label": "Fold AK",
-                      "accessibilityText": "Fold AK"
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
                     }
                   ]
                 },

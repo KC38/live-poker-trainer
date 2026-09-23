@@ -8111,8 +8111,8 @@
                   "id": "act-04-02-01-unguided",
                   "order": 4,
                   "stage": "unguided",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
                   "accessibilityText": "Squeeze with strong hands multiway.",
                   "acceptedGrades": [
                     "recommended",
@@ -8123,16 +8123,18 @@
                   "objectives": [
                     "Recognize squeeze spots multiway"
                   ],
-                  "prompt": "UTG opens, two callers. You have AKo in the big blind. Idea?",
+                  "prompt": "UTG opens, two callers. You have AKo in the big blind. Action?",
                   "choices": [
                     {
                       "id": "squeeze",
-                      "label": "3-bet / squeeze for value",
-                      "accessibilityText": "3-bet / squeeze for value",
+                      "label": "Squeeze to ~20",
+                      "accessibilityText": "Squeeze to ~20",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Punish the multiway flat with a strong hand."
-                      }
+                      },
+                      "action": "RAISE",
+                      "amountBb": 10
                     },
                     {
                       "id": "limp-more",
@@ -8142,17 +8144,19 @@
                         "grade": "clear_mistake",
                         "feedback": "You already posted; raise or fold — do not limp.",
                         "betterChoiceId": "squeeze"
-                      }
+                      },
+                      "action": "CALL"
                     },
                     {
                       "id": "fold-ak",
-                      "label": "Fold AK",
-                      "accessibilityText": "Fold AK",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Too strong.",
                         "betterChoiceId": "squeeze"
-                      }
+                      },
+                      "action": "FOLD"
                     }
                   ]
                 },

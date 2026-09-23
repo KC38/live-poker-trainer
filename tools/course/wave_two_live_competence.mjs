@@ -839,18 +839,20 @@ export function buildSectionFour() {
                     "Not with 72o.", {action: "RAISE", amountBb: 50, betterChoiceId: "fold-72"})
                 ],
               }),
-              selectAct({
+              actionAct({
                 id: "act-04-02-01-unguided", order: 4, stage: "unguided",
-                prompt: "UTG opens, two callers. You have AKo in the big blind. Idea?",
+                prompt: "UTG opens, two callers. You have AKo in the big blind. Action?",
                 a11y: "Squeeze with strong hands multiway.",
                 objectives: ["Recognize squeeze spots multiway"], lifeLoss: true,
                 choices: [
-                  choice("squeeze", "3-bet / squeeze for value", "recommended",
-                    "Punish the multiway flat with a strong hand."),
+                  choice("squeeze", "Squeeze to ~20", "recommended",
+                    "Punish the multiway flat with a strong hand.",
+                    {action: "RAISE", amountBb: 10}),
                   choice("limp-more", "Limp behind", "clear_mistake",
-                    "You already posted; raise or fold — do not limp.", {betterChoiceId: "squeeze"}),
-                  choice("fold-ak", "Fold AK", "clear_mistake",
-                    "Too strong.", {betterChoiceId: "squeeze"})
+                    "You already posted; raise or fold — do not limp.",
+                    {action: "CALL", betterChoiceId: "squeeze"}),
+                  choice("fold-ak", "Fold", "clear_mistake",
+                    "Too strong.", {action: "FOLD", betterChoiceId: "squeeze"})
                 ],
               }),
               actionAct({
