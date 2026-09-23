@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 
-/// SPR / Continue / Close tiles for capstone 3-bet-pot explain demos.
+/// SPR / Turn / Close tiles for capstone 3-bet-pot explain demos.
 class Capstone3betDemo extends StatefulWidget {
   /// Creates the demo.
   const Capstone3betDemo({
@@ -18,7 +18,7 @@ class Capstone3betDemo extends StatefulWidget {
 
   static const points = <({String label, String caption, Color color})>[
     (label: 'SPR', caption: 'Plan by depth', color: AppColors.gold),
-    (label: 'CONTINUE', caption: 'Or kill turn', color: AppColors.cream),
+    (label: 'TURN', caption: 'Continue or kill', color: AppColors.cream),
     (label: 'CLOSE', caption: 'No ego river', color: AppColors.danger),
   ];
 
