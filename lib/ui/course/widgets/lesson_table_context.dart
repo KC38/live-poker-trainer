@@ -1184,6 +1184,12 @@ enum LessonTableLayout {
   /// Effective-stack tiles: shorter / hero / sum.
   effectiveStackOutcomes,
 
+  /// Effective stack 150 vs 60: 60bb / 150bb / 210bb sum.
+  effectiveStack150Outcomes,
+
+  /// Stack-depth shove map: 50bb / 100bb / 200bb.
+  stackDepthOutcomes,
+
   /// Multiway pot tiles after open + callers (21 / 18 / 12).
   potMultiwayOutcomes,
 
@@ -1888,6 +1894,16 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         layout: LessonTableLayout.effectiveStackOutcomes,
         caption: 'You 120bb · Villain 55bb',
+      );
+    case 'act-02-05-01-scaffolded-eff':
+      return const LessonTableScene(
+        layout: LessonTableLayout.effectiveStack150Outcomes,
+        caption: 'You 150bb · Villain 60bb',
+      );
+    case 'act-02-05-01-unguided-depth':
+      return const LessonTableScene(
+        layout: LessonTableLayout.stackDepthOutcomes,
+        caption: 'Which depth plays like a shove game?',
       );
     case 'act-02-06-01-guided-follow':
       return const LessonTableScene(
@@ -3274,6 +3290,20 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.effectiveStackSum => pick('j2-175'),
         _ => null,
       };
+    case 'act-02-05-01-scaffolded-eff':
+      return switch (region) {
+        LessonTableRegion.effectiveStackShort => pick('eff-60'),
+        LessonTableRegion.effectiveStackHero => pick('eff-150'),
+        LessonTableRegion.effectiveStackSum => pick('eff-210'),
+        _ => null,
+      };
+    case 'act-02-05-01-unguided-depth':
+      return switch (region) {
+        LessonTableRegion.effectiveStackShort => pick('depth-50'),
+        LessonTableRegion.effectiveStackHero => pick('depth-100'),
+        LessonTableRegion.effectiveStackSum => pick('depth-200'),
+        _ => null,
+      };
     case 'act-03-01-01-guided':
       return switch (region) {
         LessonTableRegion.potChipsTwentyOne => pick('pot-21'),
@@ -4349,6 +4379,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id.startsWith('act-01-04-01-') ||
       activity.id.startsWith('act-01-05-01-') ||
       activity.id.startsWith('act-02-01-01-') ||
+      activity.id == 'act-02-05-01-scaffolded-eff' ||
+      activity.id == 'act-02-05-01-unguided-depth' ||
       activity.id.startsWith('act-02-06-01-') ||
       activity.id == 'act-02-07-01-checkpoint-habit' ||
       activity.id == 'act-02-07-02-jump-pos' ||
@@ -4638,6 +4670,9 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.habitOotOutcomes => _buildHabitOotOutcomes(),
       LessonTableLayout.effectiveStackOutcomes =>
         _buildEffectiveStackOutcomes(),
+      LessonTableLayout.effectiveStack150Outcomes =>
+        _buildEffectiveStack150Outcomes(),
+      LessonTableLayout.stackDepthOutcomes => _buildStackDepthOutcomes(),
       LessonTableLayout.potMultiwayOutcomes => _buildPotMultiwayOutcomes(),
       LessonTableLayout.callPriceOutcomes => _buildCallPriceOutcomes(),
       LessonTableLayout.drawPriceOutcomes => _buildDrawPriceOutcomes(),
@@ -5785,6 +5820,64 @@ class LessonTableContext extends StatelessWidget {
           title: '175bb',
           detail: 'Added up',
           visual: const _PotChipDot(label: '175', gold: false),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEffectiveStack150Outcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive effective stack — tap the shorter stack',
+      semanticsStatic: 'Effective stack 150 vs 60 outcomes',
+      caption: scene.caption ?? 'You 150bb · Villain 60bb',
+      phases: [
+        (
+          region: LessonTableRegion.effectiveStackShort,
+          title: '60bb',
+          detail: 'Shorter',
+          visual: const _PotChipDot(label: '60', gold: true),
+        ),
+        (
+          region: LessonTableRegion.effectiveStackHero,
+          title: '150bb',
+          detail: 'Your stack',
+          visual: const _PotChipDot(label: '150', gold: false),
+        ),
+        (
+          region: LessonTableRegion.effectiveStackSum,
+          title: '210bb',
+          detail: 'Added up',
+          visual: const _PotChipDot(label: '210', gold: false),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStackDepthOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive stack depth — tap the short-stack shove depth',
+      semanticsStatic: 'Stack depth shove outcomes',
+      caption: scene.caption ?? 'Which depth plays like a shove game?',
+      phases: [
+        (
+          region: LessonTableRegion.effectiveStackShort,
+          title: '50bb',
+          detail: 'Shove game',
+          visual: const _PotChipDot(label: '50', gold: true),
+        ),
+        (
+          region: LessonTableRegion.effectiveStackHero,
+          title: '100bb',
+          detail: 'Standard',
+          visual: const _PotChipDot(label: '100', gold: false),
+        ),
+        (
+          region: LessonTableRegion.effectiveStackSum,
+          title: '200bb',
+          detail: 'Deep',
+          visual: const _PotChipDot(label: '200', gold: false),
         ),
       ],
     );
