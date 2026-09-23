@@ -306,6 +306,10 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'CO opens · KK on BTN — tap 3-bet to 18.',
     'act-04-10-02-jump-size' =>
       'Top pair into pot 20 — tap Bet 10.',
+    'act-05-01-01-scaffolded' =>
+      '76s in SB multiway — tap Fold.',
+    'act-05-01-01-unguided' =>
+      'Top set wet multiway — tap Bet solid value.',
     _ => null,
   };
 }

@@ -632,6 +632,26 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'Value language — half pot',
       );
+    case 'act-05-01-01-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['7h', '6h'],
+        potLabel: 'Pot 7.5',
+        villainLine: 'BTN open · BB + MP call',
+        streetLabel: 'Preflop · SB · 76s',
+        facingBet: true,
+        feltStatusLine: 'OOP multiway — fold medium connectors',
+      );
+    case 'act-05-01-01-unguided':
+      return const LessonActionSpot(
+        heroCodes: ['9h', '9d'],
+        boardCodes: ['9s', '8c', '7h'],
+        potLabel: 'Pot 24',
+        villainLine: 'Three callers · wet board',
+        streetLabel: 'Flop · top set',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Multiway sets — bet thick',
+      );
   }
   return null;
 }
@@ -834,6 +854,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-04-10-02-jump-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-05-01-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
@@ -4170,18 +4194,19 @@ class _MultiwayNutsDemoState extends State<MultiwayNutsDemo> {
               ],
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap Nutted, Air, and Domination'
-                : 'Nutted up · air down · domination hurts',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues the three taps — no duplicate footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Nutted up · air down · domination hurts',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );
