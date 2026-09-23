@@ -116,6 +116,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Table-read: tap UTG (left of BB) on the nine-handed felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-03-01-01-unguided') {
+    // Table-read: tap whether the verbal raise stands.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {
     return SelectIdentifyPresentation.showdownTap;

@@ -5979,6 +5979,78 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s3 table-read unguided taps Raise stands on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-01-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Verbal raise binds at a live table.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'You say "raise" then try to take it back to a call. Result?',
+      choices: const [
+        CourseChoice(
+          id: 'bound',
+          label: 'The raise stands — verbal is binding',
+        ),
+        CourseChoice(
+          id: 'takeback',
+          label: 'You can switch to a call freely',
+        ),
+        CourseChoice(
+          id: 'dealer-choice',
+          label: 'Only the dealer decides after cards move',
+        ),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.verbalBindingOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.verbalRaiseStands,
+        choices: activity.choices,
+      ),
+      'bound',
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('You said raise. Tap what counts at a live table.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'You say "raise" then try to take it back to a call. Result?',
+      ),
+      findsNothing,
+    );
+    expect(
+      find.text('The raise stands — verbal is binding'),
+      findsNothing,
+    );
+    expect(find.text('Raise stands'), findsOneWidget);
+    await tester.tap(find.text('Raise stands'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'bound');
+    controller.dispose();
+  });
+
   testWidgets('numeric entry updates draft', (tester) async {
     final activity = _activity(
       renderer: ActivityRenderer.numericPotPrice,
