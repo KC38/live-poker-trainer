@@ -471,6 +471,13 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Leak review / default book: specific note, written range, schedule, baseline.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-07-11-01-guided' ||
+      activity.id == 'act-07-11-01-scaffolded' ||
+      activity.id == 'act-07-11-01-unguided' ||
+      activity.id == 'act-07-11-01-checkpoint') {
+    // Live warm-up prep: checklist / defaults / scope / one hand on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

@@ -1033,6 +1033,30 @@ enum LessonTableRegion {
 
   /// Leak-review checkpoint: replace all thinking forever (mistake).
   leakReviewReplaceAll,
+
+  /// Live warm-up guided: full checklist (correct).
+  liveWarmupFullList,
+
+  /// Live warm-up guided: invent random plan (mistake).
+  liveWarmupRandomPlan,
+
+  /// Live warm-up scaffolded: defaults + exploits (correct).
+  liveWarmupDefaults,
+
+  /// Live warm-up scaffolded: forget the course (mistake).
+  liveWarmupForget,
+
+  /// Live warm-up unguided: live cash NLH only (correct).
+  liveWarmupCashScope,
+
+  /// Live warm-up unguided: other betting games (mistake).
+  liveWarmupOtherGames,
+
+  /// Live warm-up checkpoint: one coached hand (correct).
+  liveWarmupOneHand,
+
+  /// Live warm-up checkpoint: mash buttons (mistake).
+  liveWarmupMash,
 }
 
 /// How the mini-table is arranged.
@@ -1513,6 +1537,18 @@ enum LessonTableLayout {
 
   /// Leak-review checkpoint: baseline vs replace all thinking.
   leakReviewCheckpointOutcomes,
+
+  /// Live warm-up guided: full checklist vs random plan.
+  liveWarmupGuidedOutcomes,
+
+  /// Live warm-up scaffolded: defaults + exploits vs forget.
+  liveWarmupScaffoldedOutcomes,
+
+  /// Live warm-up unguided: live cash NLH vs other games.
+  liveWarmupUnguidedOutcomes,
+
+  /// Live warm-up checkpoint: one hand vs mash buttons.
+  liveWarmupCheckpointOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -2694,6 +2730,26 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         layout: LessonTableLayout.leakReviewCheckpointOutcomes,
         caption: 'Default book purpose?',
+      );
+    case 'act-07-11-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.liveWarmupGuidedOutcomes,
+        caption: 'Warm-up checklist must include?',
+      );
+    case 'act-07-11-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.liveWarmupScaffoldedOutcomes,
+        caption: 'Carry into Live?',
+      );
+    case 'act-07-11-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.liveWarmupUnguidedOutcomes,
+        caption: 'Scope reminder?',
+      );
+    case 'act-07-11-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.liveWarmupCheckpointOutcomes,
+        caption: 'Warm-up goal?',
       );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
@@ -3925,6 +3981,30 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.leakReviewReplaceAll => pick('replace'),
         _ => null,
       };
+    case 'act-07-11-01-guided':
+      return switch (region) {
+        LessonTableRegion.liveWarmupFullList => pick('list'),
+        LessonTableRegion.liveWarmupRandomPlan => pick('hud'),
+        _ => null,
+      };
+    case 'act-07-11-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.liveWarmupDefaults => pick('defaults'),
+        LessonTableRegion.liveWarmupForget => pick('blank'),
+        _ => null,
+      };
+    case 'act-07-11-01-unguided':
+      return switch (region) {
+        LessonTableRegion.liveWarmupCashScope => pick('scope'),
+        LessonTableRegion.liveWarmupOtherGames => pick('tourney'),
+        _ => null,
+      };
+    case 'act-07-11-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.liveWarmupOneHand => pick('one'),
+        LessonTableRegion.liveWarmupMash => pick('grind'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -4014,7 +4094,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
         activity.id == 'act-07-10-02-explain' ||
         activity.id == 'act-07-10-03-explain' ||
         activity.id == 'act-07-10-04-explain' ||
-        activity.id == 'act-07-10-05-explain';
+        activity.id == 'act-07-10-05-explain' ||
+        activity.id == 'act-07-11-01-explain';
   }
   if (activity.renderer != ActivityRenderer.selectIdentify &&
       activity.renderer != ActivityRenderer.playerReadClassify) {
@@ -4166,7 +4247,11 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-07-09-01-guided' ||
       activity.id == 'act-07-09-01-scaffolded' ||
       activity.id == 'act-07-09-01-unguided' ||
-      activity.id == 'act-07-09-01-checkpoint';
+      activity.id == 'act-07-09-01-checkpoint' ||
+      activity.id == 'act-07-11-01-guided' ||
+      activity.id == 'act-07-11-01-scaffolded' ||
+      activity.id == 'act-07-11-01-unguided' ||
+      activity.id == 'act-07-11-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -4546,6 +4631,14 @@ class LessonTableContext extends StatelessWidget {
           _buildLeakReviewUnguidedOutcomes(),
       LessonTableLayout.leakReviewCheckpointOutcomes =>
           _buildLeakReviewCheckpointOutcomes(),
+      LessonTableLayout.liveWarmupGuidedOutcomes =>
+          _buildLiveWarmupGuidedOutcomes(),
+      LessonTableLayout.liveWarmupScaffoldedOutcomes =>
+          _buildLiveWarmupScaffoldedOutcomes(),
+      LessonTableLayout.liveWarmupUnguidedOutcomes =>
+          _buildLiveWarmupUnguidedOutcomes(),
+      LessonTableLayout.liveWarmupCheckpointOutcomes =>
+          _buildLiveWarmupCheckpointOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -9890,6 +9983,131 @@ class LessonTableContext extends StatelessWidget {
           visual: const Icon(
             Icons.auto_fix_off,
             color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+
+  Widget _buildLiveWarmupGuidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive live warm-up — tap Full list or Random plan',
+      semanticsStatic: 'Live warm-up guided outcomes',
+      caption: scene.caption ?? 'Warm-up checklist must include?',
+      phases: [
+        (
+          region: LessonTableRegion.liveWarmupFullList,
+          title: 'Full list',
+          detail: 'Stacks · pot · types · map',
+          visual: const Icon(
+            Icons.checklist,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.liveWarmupRandomPlan,
+          title: 'Random plan',
+          detail: 'Ignore stacks',
+          visual: const Icon(
+            Icons.casino_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLiveWarmupScaffoldedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive live warm-up — tap Defaults + exploits or Forget',
+      semanticsStatic: 'Live warm-up scaffolded outcomes',
+      caption: scene.caption ?? 'Carry into Live?',
+      phases: [
+        (
+          region: LessonTableRegion.liveWarmupDefaults,
+          title: 'Defaults + exploits',
+          detail: 'Course carry-over',
+          visual: const Icon(
+            Icons.school_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.liveWarmupForget,
+          title: 'Forget',
+          detail: 'Blank slate',
+          visual: const Icon(
+            Icons.delete_outline,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLiveWarmupUnguidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive live warm-up — tap Live cash NLH or Other games',
+      semanticsStatic: 'Live warm-up unguided outcomes',
+      caption: scene.caption ?? 'Scope reminder?',
+      phases: [
+        (
+          region: LessonTableRegion.liveWarmupCashScope,
+          title: 'Live cash NLH',
+          detail: 'This product scope',
+          visual: const Icon(
+            Icons.payments_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.liveWarmupOtherGames,
+          title: 'Other games',
+          detail: 'Out of scope',
+          visual: const Icon(
+            Icons.block,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLiveWarmupCheckpointOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive live warm-up — tap One hand or Mash buttons',
+      semanticsStatic: 'Live warm-up checkpoint outcomes',
+      caption: scene.caption ?? 'Warm-up goal?',
+      phases: [
+        (
+          region: LessonTableRegion.liveWarmupOneHand,
+          title: 'One hand',
+          detail: 'Load · then execute',
+          visual: const Icon(
+            Icons.play_circle_outline,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.liveWarmupMash,
+          title: 'Mash buttons',
+          detail: 'Skip checklist',
+          visual: const Icon(
+            Icons.touch_app_outlined,
+            color: AppColors.danger,
             size: 24,
           ),
         ),

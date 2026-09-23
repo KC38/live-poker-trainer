@@ -620,6 +620,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Review the book — tap On a schedule.',
       'act-07-09-01-checkpoint' =>
           'Default book purpose — tap Baseline.',
+      'act-07-11-01-guided' =>
+          'Warm-up checklist — tap Full list.',
+      'act-07-11-01-scaffolded' =>
+          'Carry into Live — tap Defaults + exploits.',
+      'act-07-11-01-unguided' =>
+          'Scope reminder — tap Live cash NLH.',
+      'act-07-11-01-checkpoint' =>
+          'Warm-up goal — tap One hand.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -783,7 +791,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-07-09-01-guided' ||
             widget.activity.id == 'act-07-09-01-scaffolded' ||
             widget.activity.id == 'act-07-09-01-unguided' ||
-            widget.activity.id == 'act-07-09-01-checkpoint';
+            widget.activity.id == 'act-07-09-01-checkpoint' ||
+            widget.activity.id == 'act-07-11-01-guided' ||
+            widget.activity.id == 'act-07-11-01-scaffolded' ||
+            widget.activity.id == 'act-07-11-01-unguided' ||
+            widget.activity.id == 'act-07-11-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&
