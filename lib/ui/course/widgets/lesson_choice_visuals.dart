@@ -391,6 +391,13 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Observe wide pressure: tap notes on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-06-12-02-guided' ||
+      activity.id == 'act-06-12-02-scaffolded' ||
+      activity.id == 'act-06-12-02-unguided' ||
+      activity.id == 'act-06-12-02-checkpoint') {
+    // Meet LAG: tap labels / limits on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

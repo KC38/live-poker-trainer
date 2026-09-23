@@ -17262,8 +17262,8 @@
                   "choices": [
                     {
                       "id": "diff",
-                      "label": "LAG applies pressure; stations call passively",
-                      "accessibilityText": "LAG applies pressure; stations call passively",
+                      "label": "Pressure vs passive",
+                      "accessibilityText": "Pressure vs passive",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Different exploits."
@@ -17271,8 +17271,8 @@
                     },
                     {
                       "id": "same",
-                      "label": "Same exploit always",
-                      "accessibilityText": "Same exploit always",
+                      "label": "Same exploit",
+                      "accessibilityText": "Same exploit",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "No.",
@@ -17344,8 +17344,8 @@
                   "choices": [
                     {
                       "id": "limits",
-                      "label": "Sample and confidence limits",
-                      "accessibilityText": "Sample and confidence limits",
+                      "label": "Sample limits",
+                      "accessibilityText": "Sample limits",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Always."

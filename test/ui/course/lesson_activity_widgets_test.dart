@@ -27,6 +27,7 @@ import 'package:live_poker_trainer/ui/course/widgets/three_bet_four_bet_spr_demo
 import 'package:live_poker_trainer/ui/course/widgets/hard_fold_cooler_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/selective_aggression_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/tag_model_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
@@ -13360,6 +13361,210 @@ void main() {
     await tester.tap(find.text('Wide · barrels · folds'));
     await tester.pump();
     expect(controller.draft.choiceId, 'bundle');
+    controller.dispose();
+  });
+
+  testWidgets(
+    's6 meet lag explain taps Wide Pressure Model instead of Continue',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-06-12-02-explain',
+        order: 1,
+        stage: ActivityStage.explain,
+        renderer: ActivityRenderer.coachDialogue,
+        estimatedSeconds: 30,
+        accessibilityText:
+            'LAG: wide in, pressure on — still a working model.',
+        acceptedGrades: const [SoftGrade.recommended],
+        objectives: const ['Introduce LAG'],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'm',
+            kind: 'dialogue',
+            text: 'LAG: wide in, pressure on — still a working model.',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      var feltAck = 0;
+      await tester.pumpWidget(
+        _wrap(
+          CoachDialogueActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+            onFeltAcknowledge: () => feltAck += 1,
+          ),
+        ),
+      );
+      expect(find.byType(LagModelDemo), findsOneWidget);
+      expect(find.text('Tap Wide, Pressure, and Model.'), findsOneWidget);
+      expect(find.text('Tap Wide, Pressure, and Model'), findsNothing);
+      expect(
+        find.text('Wide in, pressure on — a working model'),
+        findsNothing,
+      );
+      expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+      expect(isTableRegionTapActivity(activity), isTrue);
+
+      for (final title in ['WIDE', 'PRESSURE', 'MODEL']) {
+        await tester.tap(find.text(title));
+        await tester.pump();
+      }
+      expect(feltAck, 1);
+      controller.dispose();
+    },
+  );
+
+  testWidgets('s6 meet lag guided taps LAG on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-12-02-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.playerReadClassify,
+      estimatedSeconds: 40,
+      accessibilityText: 'LAG.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Opens wide, barrels often, folds some raises. Label?',
+      choices: const [
+        CourseChoice(id: 'lag', label: 'LAG'),
+        CourseChoice(id: 'tag', label: 'TAG'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Opens wide, barrels often — tap LAG.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('LAG'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'lag');
+    controller.dispose();
+  });
+
+  testWidgets('s6 meet lag scaffolded taps Pressure vs passive on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-12-02-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'LAG raises; station calls.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'LAG vs Calling Station?',
+      choices: const [
+        CourseChoice(id: 'diff', label: 'Pressure vs passive'),
+        CourseChoice(id: 'same', label: 'Same exploit'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('LAG vs Station — tap Pressure vs passive.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Pressure vs passive'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'diff');
+    controller.dispose();
+  });
+
+  testWidgets('s6 meet lag unguided taps LAG on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-12-02-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.playerReadClassify,
+      estimatedSeconds: 45,
+      accessibilityText: 'LAG.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Wide opens, 3-bets light, keeps barreling. Label?',
+      choices: const [
+        CourseChoice(id: 'lag2', label: 'LAG'),
+        CourseChoice(id: 'nit2', label: 'Nit'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Wide opens, keeps barreling — tap LAG.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('LAG'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'lag2');
+    controller.dispose();
+  });
+
+  testWidgets('s6 meet lag checkpoint taps Sample limits on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-12-02-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Sample/confidence limits.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Show beside LAG label?',
+      choices: const [
+        CourseChoice(id: 'limits', label: 'Sample limits'),
+        CourseChoice(id: 'destiny', label: 'Destiny'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Beside LAG label — tap Sample limits.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Sample limits'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'limits');
     controller.dispose();
   });
 
