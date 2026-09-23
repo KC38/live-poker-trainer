@@ -2182,8 +2182,16 @@ class _BbStackDepthDemoState extends State<BbStackDepthDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in BbStackDepthDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -2212,16 +2220,24 @@ class _BbStackDepthDemoState extends State<BbStackDepthDemo> {
               for (var i = 0; i < BbStackDepthDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: BbStackDepthDemo.points[i].label,
-                    caption: BbStackDepthDemo.points[i].caption,
-                    color: BbStackDepthDemo.points[i].color,
-                    selected: _tapped.contains(BbStackDepthDemo.points[i].label),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(BbStackDepthDemo.points[i].label)
-                            : null,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == BbStackDepthDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: BbStackDepthDemo.points[i].label,
+                      caption: BbStackDepthDemo.points[i].caption,
+                      color: BbStackDepthDemo.points[i].color,
+                      selected:
+                          _tapped.contains(BbStackDepthDemo.points[i].label),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () =>
+                                  _onTap(BbStackDepthDemo.points[i].label)
+                              : null,
+                    ),
                   ),
                 ),
               ],
@@ -2230,7 +2246,9 @@ class _BbStackDepthDemoState extends State<BbStackDepthDemo> {
           const SizedBox(height: 10),
           Text(
             widget.interactive
-                ? 'Tap Chips→BB, Shorter, and Depth'
+                ? (next == null
+                    ? 'Count in BB · shorter stack caps the pot'
+                    : 'Tap ${next.label} next')
                 : 'Count in BB · shorter stack caps the pot',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
