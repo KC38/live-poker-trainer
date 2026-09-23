@@ -499,8 +499,6 @@ class _HandCategoryTapActivity extends StatelessWidget {
           'You have a flop plan — tap the turn branches.',
         'act-04-04-01-unguided' =>
           'Two value sizes both get calls — tap the grading idea.',
-        'act-04-05-01-checkpoint' =>
-          'Before you jam the rest — tap when SPR matters.',
         'act-04-06-01-guided' =>
           'Seat calls 7 of 9 preflops — tap the observation.',
         'act-04-06-01-scaffolded' =>
@@ -621,8 +619,6 @@ class _HandCategoryTapActivity extends StatelessWidget {
                         ? 'Tap the branching plan.'
                         : activity.id == 'act-04-04-01-unguided'
                         ? 'Tap the soft-grade idea.'
-                        : activity.id == 'act-04-05-01-checkpoint'
-                        ? 'Tap when SPR matters.'
                         : activity.id.startsWith('act-04-06-01-')
                         ? 'Tap the observation note.'
                         : 'Tap the hand category you made.';

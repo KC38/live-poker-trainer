@@ -466,6 +466,17 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'High SPR — keep it small',
       );
+    case 'act-04-05-01-checkpoint':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', 'Kd'],
+        boardCodes: ['Qs', '7c', '2d', '9h'],
+        potLabel: 'Pot 40 · SPR ~1.4',
+        stackLabel: 'Stacks left 55',
+        villainLine: 'Opponent jams all-in',
+        streetLabel: 'Turn · commitment spot',
+        facingBet: true,
+        feltStatusLine: 'Weigh SPR before you put it in',
+      );
   }
   return null;
 }
