@@ -16566,8 +16566,8 @@
                     },
                     {
                       "id": "station",
-                      "label": "Calling Station",
-                      "accessibilityText": "Calling Station",
+                      "label": "Station",
+                      "accessibilityText": "Station",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Stations call; this seat raises selectively.",
@@ -16599,8 +16599,8 @@
                   "choices": [
                     {
                       "id": "diff",
-                      "label": "TAG is selective; maniac is extreme and sticky",
-                      "accessibilityText": "TAG is selective; maniac is extreme and sticky",
+                      "label": "Selective vs extreme",
+                      "accessibilityText": "Selective vs extreme",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Discipline matters."
@@ -16608,8 +16608,8 @@
                     },
                     {
                       "id": "same",
-                      "label": "Identical labels",
-                      "accessibilityText": "Identical labels",
+                      "label": "Identical",
+                      "accessibilityText": "Identical",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "No.",
@@ -16681,8 +16681,8 @@
                   "choices": [
                     {
                       "id": "model",
-                      "label": "A working model from frequencies",
-                      "accessibilityText": "A working model from frequencies",
+                      "label": "Working model",
+                      "accessibilityText": "Working model",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Update with evidence."
@@ -16690,8 +16690,8 @@
                     },
                     {
                       "id": "soul",
-                      "label": "A personality insult",
-                      "accessibilityText": "A personality insult",
+                      "label": "Insult",
+                      "accessibilityText": "Insult",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "No judgments.",

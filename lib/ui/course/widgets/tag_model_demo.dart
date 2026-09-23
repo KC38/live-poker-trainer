@@ -81,18 +81,19 @@ class _TagModelDemoState extends State<TagModelDemo> {
               ],
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap Tight, Aggro, and Model'
-                : 'Tight in, aggressive after — a working model',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues Tight / Aggro / Model — no dupe footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Tight in, aggressive after — a working model',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );

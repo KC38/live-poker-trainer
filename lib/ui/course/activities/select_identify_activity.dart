@@ -520,6 +520,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Two hands of tightness — tap Keep sampling.',
       'act-06-11-01-checkpoint' =>
           'Best pre-label note bundle — tap Tight · plan · give.',
+      'act-06-11-02-guided' =>
+          'Folds most, 3-bets strong — tap TAG.',
+      'act-06-11-02-scaffolded' =>
+          'TAG versus Maniac — tap Selective vs extreme.',
+      'act-06-11-02-unguided' =>
+          'Opens tight, selective c-bets — tap TAG.',
+      'act-06-11-02-checkpoint' =>
+          'TAG is a working model — tap Working model.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -633,7 +641,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-06-11-01-guided' ||
             widget.activity.id == 'act-06-11-01-scaffolded' ||
             widget.activity.id == 'act-06-11-01-unguided' ||
-            widget.activity.id == 'act-06-11-01-checkpoint';
+            widget.activity.id == 'act-06-11-01-checkpoint' ||
+            widget.activity.id == 'act-06-11-02-guided' ||
+            widget.activity.id == 'act-06-11-02-scaffolded' ||
+            widget.activity.id == 'act-06-11-02-unguided' ||
+            widget.activity.id == 'act-06-11-02-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

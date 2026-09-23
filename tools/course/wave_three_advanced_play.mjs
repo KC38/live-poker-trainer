@@ -1488,7 +1488,7 @@ export function buildSectionSix() {
                 choices: [
                   choice("tag", "TAG", "recommended",
                     "Selective + disciplined.", {reversalRead: "If entry widens and barrels never stop, consider maniac."}),
-                  choice("station", "Calling Station", "clear_mistake",
+                  choice("station", "Station", "clear_mistake",
                     "Stations call; this seat raises selectively.", {betterChoiceId: "tag"})
                 ],
               }),
@@ -1498,9 +1498,9 @@ export function buildSectionSix() {
                 a11y: "Entry width and discipline.",
                 objectives: ["Introduce TAG"],
                 choices: [
-                  choice("diff", "TAG is selective; maniac is extreme and sticky", "recommended",
+                  choice("diff", "Selective vs extreme", "recommended",
                     "Discipline matters."),
-                  choice("same", "Identical labels", "clear_mistake",
+                  choice("same", "Identical", "clear_mistake",
                     "No.", {betterChoiceId: "diff"})
                 ],
               }),
@@ -1524,9 +1524,9 @@ export function buildSectionSix() {
                 a11y: "Working model.",
                 objectives: ["Introduce TAG"], lifeLoss: true,
                 choices: [
-                  choice("model", "A working model from frequencies", "recommended",
+                  choice("model", "Working model", "recommended",
                     "Update with evidence."),
-                  choice("soul", "A personality insult", "clear_mistake",
+                  choice("soul", "Insult", "clear_mistake",
                     "No judgments.", {betterChoiceId: "model"})
                 ],
               }),
