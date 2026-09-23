@@ -15149,8 +15149,8 @@ void main() {
         ),
       );
       expect(find.byType(TurnMapDemo), findsOneWidget);
-      expect(find.text('Tap Continue, Give-up, and Map.'), findsOneWidget);
-      expect(find.text('Tap Continue, Give-up, and Map'), findsNothing);
+      expect(find.text('Tap Barrel, Give-up, and Map.'), findsNothing);
+      expect(find.text('Tap Barrel, Give-up, and Map'), findsNothing);
       expect(
         find.text('List continue and give-up cards before you bet'),
         findsNothing,
@@ -15158,7 +15158,7 @@ void main() {
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['CONTINUE', 'GIVE-UP', 'MAP']) {
+      for (final title in ['BARREL', 'GIVE-UP', 'MAP']) {
         await tester.tap(find.text(title));
         await tester.pump();
       }
