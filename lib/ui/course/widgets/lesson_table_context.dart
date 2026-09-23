@@ -127,6 +127,15 @@ enum LessonTableRegion {
 
   /// Multiway pot distractor: dropped a blind.
   potChipsEighteen,
+
+  /// Verbal action: raise stands (binding).
+  verbalRaiseStands,
+
+  /// Verbal action distractor: take it back to a call.
+  verbalTakeback,
+
+  /// Verbal action distractor: only dealer decides later.
+  verbalDealerChoice,
 }
 
 /// How the mini-table is arranged.
@@ -166,6 +175,9 @@ enum LessonTableLayout {
 
   /// Multiway pot tiles after open + callers (21 / 18 / 12).
   potMultiwayOutcomes,
+
+  /// Verbal declaration tiles: raise stands / takeback / dealer.
+  verbalBindingOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -406,6 +418,11 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         seatCount: 9,
         buttonSeat: 7,
         caption: 'Nine-handed · button seat 7 · tap who opens',
+      );
+    case 'act-03-01-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.verbalBindingOutcomes,
+        caption: 'You said "raise" · live table',
       );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
@@ -744,6 +761,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.smallBlind => pick('sb-first'),
         _ => null,
       };
+    case 'act-03-01-01-unguided':
+      return switch (region) {
+        LessonTableRegion.verbalRaiseStands => pick('bound'),
+        LessonTableRegion.verbalTakeback => pick('takeback'),
+        LessonTableRegion.verbalDealerChoice => pick('dealer-choice'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -826,7 +850,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-02-07-02-jump-pos' ||
       activity.id == 'act-02-07-02-jump-stack' ||
       activity.id == 'act-03-01-01-guided' ||
-      activity.id == 'act-03-01-01-scaffolded';
+      activity.id == 'act-03-01-01-scaffolded' ||
+      activity.id == 'act-03-01-01-unguided';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -959,6 +984,7 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.effectiveStackOutcomes =>
         _buildEffectiveStackOutcomes(),
       LessonTableLayout.potMultiwayOutcomes => _buildPotMultiwayOutcomes(),
+      LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -1683,6 +1709,47 @@ class LessonTableContext extends StatelessWidget {
           title: '12 chips',
           detail: 'Open only',
           visual: const _PotChipDot(label: '12', gold: false),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildVerbalBindingOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive verbal action — tap whether the raise stands',
+      semanticsStatic: 'Verbal declaration outcomes',
+      caption: scene.caption ?? 'You said "raise"',
+      phases: [
+        (
+          region: LessonTableRegion.verbalRaiseStands,
+          title: 'Raise stands',
+          detail: 'Binding',
+          visual: const Icon(
+            Icons.record_voice_over_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.verbalTakeback,
+          title: 'Take back',
+          detail: 'Call instead',
+          visual: const Icon(
+            Icons.undo,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.verbalDealerChoice,
+          title: 'Dealer picks',
+          detail: 'After cards',
+          visual: const Icon(
+            Icons.gavel_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
         ),
       ],
     );
