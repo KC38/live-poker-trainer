@@ -552,6 +552,16 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'LAG exploit cites — tap Wide + pressure.',
       'act-06-13-01-checkpoint' =>
           'Selective entry + disciplined barrels — tap TAG — respect.',
+      'act-06-13-02-cp-adv' =>
+          'PFR on dry A-high — tap Range advantage.',
+      'act-06-13-02-cp-cap' =>
+          'Check-back turn — tap More capped.',
+      'act-06-13-02-cp-polar' =>
+          'River overbet shape — tap Polarized.',
+      'act-06-13-02-cp-tag' =>
+          'Tight entry, planned barrels — tap TAG.',
+      'act-06-13-02-cp-lag' =>
+          'Wide entry, sustained pressure — tap LAG.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -681,7 +691,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-06-12-02-checkpoint' ||
             widget.activity.id == 'act-06-12-03-unguided' ||
             widget.activity.id == 'act-06-12-03-checkpoint' ||
-            widget.activity.id == 'act-06-13-01-checkpoint';
+            widget.activity.id == 'act-06-13-01-checkpoint' ||
+            widget.activity.id == 'act-06-13-02-cp-adv' ||
+            widget.activity.id == 'act-06-13-02-cp-cap' ||
+            widget.activity.id == 'act-06-13-02-cp-polar' ||
+            widget.activity.id == 'act-06-13-02-cp-tag' ||
+            widget.activity.id == 'act-06-13-02-cp-lag';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

@@ -407,6 +407,14 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Mix five types: TAG respect vs Station bluff on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-06-13-02-cp-adv' ||
+      activity.id == 'act-06-13-02-cp-cap' ||
+      activity.id == 'act-06-13-02-cp-polar' ||
+      activity.id == 'act-06-13-02-cp-tag' ||
+      activity.id == 'act-06-13-02-cp-lag') {
+    // Section 6 exit: tap advantage / caps / polar / TAG / LAG on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

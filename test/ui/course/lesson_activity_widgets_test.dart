@@ -13565,6 +13565,194 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s6 section checkpoint taps Range advantage on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-13-02-cp-adv',
+      order: 1,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Range advantage.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'PFR on dry A-high often has?',
+      choices: const [
+        CourseChoice(id: 'ra', label: 'Range advantage'),
+        CourseChoice(id: 'none', label: 'No concept applies'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('PFR on dry A-high — tap Range advantage.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Range advantage'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'ra');
+    controller.dispose();
+  });
+
+  testWidgets('s6 section checkpoint taps More capped on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-13-02-cp-cap',
+      order: 2,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Capped.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Check-back turn often makes river range?',
+      choices: const [
+        CourseChoice(id: 'cap', label: 'More capped'),
+        CourseChoice(id: 'uncap', label: 'More uncapped nuts'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Check-back turn — tap More capped.'), findsOneWidget);
+    await tester.tap(find.text('More capped'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'cap');
+    controller.dispose();
+  });
+
+  testWidgets('s6 section checkpoint taps Polarized on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-13-02-cp-polar',
+      order: 3,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Polar.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'River overbet shape?',
+      choices: const [
+        CourseChoice(id: 'polar', label: 'Polarized'),
+        CourseChoice(id: 'merged', label: 'Always merged thin value'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('River overbet shape — tap Polarized.'), findsOneWidget);
+    await tester.tap(find.text('Polarized'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'polar');
+    controller.dispose();
+  });
+
+  testWidgets('s6 section checkpoint taps TAG on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-13-02-cp-tag',
+      order: 4,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.playerReadClassify,
+      estimatedSeconds: 40,
+      accessibilityText: 'TAG.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tight entry, planned barrels. Label?',
+      choices: const [
+        CourseChoice(id: 'tag', label: 'TAG'),
+        CourseChoice(id: 'lag', label: 'LAG'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Tight entry, planned barrels — tap TAG.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('TAG'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'tag');
+    controller.dispose();
+  });
+
+  testWidgets('s6 section checkpoint taps LAG on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-13-02-cp-lag',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.playerReadClassify,
+      estimatedSeconds: 40,
+      accessibilityText: 'LAG.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Wide entry, sustained pressure, some folds. Label?',
+      choices: const [
+        CourseChoice(id: 'lag', label: 'LAG'),
+        CourseChoice(id: 'nit', label: 'Nit'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Wide entry, sustained pressure — tap LAG.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('LAG'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'lag');
+    controller.dispose();
+  });
+
   testWidgets('s6 lag observe explain resolves widePressure visual', (tester) async {
     expect(
       resolveCoachDialogueVisual(
