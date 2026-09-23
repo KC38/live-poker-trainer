@@ -2158,14 +2158,23 @@ void main() {
       ),
     );
     expect(find.byType(FlopLabelDemo), findsOneWidget);
-    expect(find.text('Tap Made, Draw, SDV, and Air.'), findsOneWidget);
+    expect(find.text('Tap MADE next'), findsOneWidget);
+    expect(find.text('Tap Made, Draw, SDV, and Air'), findsNothing);
+    expect(find.text('Tap Made, Draw, SDV, and Air.'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['MADE', 'DRAW', 'SDV', 'AIR']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('MADE'));
+    await tester.pump();
+    expect(find.text('Tap DRAW next'), findsOneWidget);
+    await tester.tap(find.text('DRAW'));
+    await tester.pump();
+    expect(find.text('Tap SDV next'), findsOneWidget);
+    await tester.tap(find.text('SDV'));
+    await tester.pump();
+    expect(find.text('Tap AIR next'), findsOneWidget);
+    await tester.tap(find.text('AIR'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
@@ -2205,14 +2214,20 @@ void main() {
       ),
     );
     expect(find.byType(OutsPriceDemo), findsOneWidget);
-    expect(find.text('Tap Clean, Dirty, and Price.'), findsOneWidget);
+    expect(find.text('Tap CLEAN next'), findsOneWidget);
+    expect(find.text('Tap Clean, Dirty, and Price'), findsNothing);
+    expect(find.text('Tap Clean, Dirty, and Price.'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['CLEAN', 'DIRTY', 'PRICE']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('CLEAN'));
+    await tester.pump();
+    expect(find.text('Tap DIRTY next'), findsOneWidget);
+    await tester.tap(find.text('DIRTY'));
+    await tester.pump();
+    expect(find.text('Tap PRICE next'), findsOneWidget);
+    await tester.tap(find.text('PRICE'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });

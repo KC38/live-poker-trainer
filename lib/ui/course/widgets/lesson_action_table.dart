@@ -2673,8 +2673,16 @@ class _FlopLabelDemoState extends State<FlopLabelDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextLabel {
+    for (final label in FlopLabelDemo.labels) {
+      if (!_tapped.contains(label.label)) return label;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextLabel;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -2705,20 +2713,27 @@ class _FlopLabelDemoState extends State<FlopLabelDemo> {
                 for (var col = 0; col < 2; col++) ...[
                   if (col > 0) const SizedBox(width: 8),
                   Expanded(
-                    child: _DemoActionCard(
-                      label: FlopLabelDemo.labels[row * 2 + col].label,
-                      caption: FlopLabelDemo.labels[row * 2 + col].caption,
-                      color: FlopLabelDemo.labels[row * 2 + col].color,
-                      selected: _tapped.contains(
-                        FlopLabelDemo.labels[row * 2 + col].label,
+                    child: _DemoSoftPulse(
+                      active:
+                          widget.interactive &&
+                          widget.enabled &&
+                          next?.label ==
+                              FlopLabelDemo.labels[row * 2 + col].label,
+                      child: _DemoActionCard(
+                        label: FlopLabelDemo.labels[row * 2 + col].label,
+                        caption: FlopLabelDemo.labels[row * 2 + col].caption,
+                        color: FlopLabelDemo.labels[row * 2 + col].color,
+                        selected: _tapped.contains(
+                          FlopLabelDemo.labels[row * 2 + col].label,
+                        ),
+                        enabled: widget.interactive && widget.enabled,
+                        onPressed:
+                            widget.interactive
+                                ? () => _onTap(
+                                  FlopLabelDemo.labels[row * 2 + col].label,
+                                )
+                                : null,
                       ),
-                      enabled: widget.interactive && widget.enabled,
-                      onPressed:
-                          widget.interactive
-                              ? () => _onTap(
-                                FlopLabelDemo.labels[row * 2 + col].label,
-                              )
-                              : null,
                     ),
                   ),
                 ],
@@ -2728,7 +2743,9 @@ class _FlopLabelDemoState extends State<FlopLabelDemo> {
           const SizedBox(height: 10),
           Text(
             widget.interactive
-                ? 'Tap Made, Draw, SDV, and Air'
+                ? (next == null
+                    ? 'Made · draw · showdown value · air'
+                    : 'Tap ${next.label} next')
                 : 'Made · draw · showdown value · air',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
@@ -2781,8 +2798,16 @@ class _OutsPriceDemoState extends State<OutsPriceDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in OutsPriceDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -2811,16 +2836,23 @@ class _OutsPriceDemoState extends State<OutsPriceDemo> {
               for (var i = 0; i < OutsPriceDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: OutsPriceDemo.points[i].label,
-                    caption: OutsPriceDemo.points[i].caption,
-                    color: OutsPriceDemo.points[i].color,
-                    selected: _tapped.contains(OutsPriceDemo.points[i].label),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(OutsPriceDemo.points[i].label)
-                            : null,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == OutsPriceDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: OutsPriceDemo.points[i].label,
+                      caption: OutsPriceDemo.points[i].caption,
+                      color: OutsPriceDemo.points[i].color,
+                      selected:
+                          _tapped.contains(OutsPriceDemo.points[i].label),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(OutsPriceDemo.points[i].label)
+                              : null,
+                    ),
                   ),
                 ),
               ],
@@ -2829,7 +2861,9 @@ class _OutsPriceDemoState extends State<OutsPriceDemo> {
           const SizedBox(height: 10),
           Text(
             widget.interactive
-                ? 'Tap Clean, Dirty, and Price'
+                ? (next == null
+                    ? 'Clean outs · dirty outs · price the call'
+                    : 'Tap ${next.label} next')
                 : 'Clean outs · dirty outs · price the call',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
