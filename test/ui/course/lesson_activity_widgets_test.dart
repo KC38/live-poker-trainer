@@ -1679,15 +1679,20 @@ void main() {
       ),
     );
     expect(find.byType(OpenRangeDemo), findsOneWidget);
-    expect(find.text('Tap Early, Button, and Live 3x'), findsOneWidget);
+    expect(find.text('Tap EARLY next'), findsOneWidget);
+    expect(find.text('Tap Early, Button, and Live 3x'), findsNothing);
     expect(find.text('Tap Early, Button, and Live 3x.'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['EARLY', 'BUTTON', 'LIVE 3x']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('EARLY'));
+    await tester.pump();
+    expect(find.text('Tap BUTTON next'), findsOneWidget);
+    await tester.tap(find.text('BUTTON'));
+    await tester.pump();
+    expect(find.text('Tap LIVE 3x next'), findsOneWidget);
+    await tester.tap(find.text('LIVE 3x'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
