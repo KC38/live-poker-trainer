@@ -521,7 +521,7 @@ export function buildSectionFive() {
         "Tilt, stuck, tired, and gear changes.", [
           lesson({
             id: L050801, order: 1,
-            title: "Adjust to live table dynamics",
+            title: "Live table dynamics",
             summary: "Spot tilted, stuck, tired, or gear-shifting opponents and update plans.",
             objectives: ["Identify tilted or stuck opponents", "Recognize gear changes mid-session", "Avoid chasing emotional pots"],
             prereq: L050701, remediation: L050701, minutes: 8, band: 4,
@@ -535,9 +535,9 @@ export function buildSectionFive() {
                 a11y: "Stuck/tilted — widen value, choose spots.",
                 objectives: ["Identify tilted or stuck opponents"],
                 choices: [
-                  choice("stuck", "Stuck/tilted — widen value carefully", "recommended",
+                  choice("stuck", "Stuck / tilted", "recommended",
                     "Do not ego-war; pick +EV spots."),
-                  choice("ignore", "Ignore dynamics entirely", "clear_mistake",
+                  choice("ignore", "Ignore dynamics", "clear_mistake",
                     "Dynamics are evidence.", {betterChoiceId: "stuck"})
                 ],
               }),
@@ -547,22 +547,22 @@ export function buildSectionFive() {
                 a11y: "Possible gear change — sample again.",
                 objectives: ["Recognize gear changes mid-session"],
                 choices: [
-                  choice("gear", "Possible gear change — gather new samples", "recommended",
+                  choice("gear", "Gear change", "recommended",
                     "Do not cling to the old model."),
-                  choice("same", "Old label forever", "clear_mistake",
+                  choice("same", "Old label", "clear_mistake",
                     "Evidence flipped.", {betterChoiceId: "gear"})
                 ],
               }),
-              selectAct({
+              actionAct({
                 id: "act-05-08-01-unguided", order: 4, stage: "unguided",
                 prompt: "You are steaming after a cooler. Best action?",
                 a11y: "Reset or step away — bankroll guardrail.",
                 objectives: ["Avoid chasing emotional pots"], lifeLoss: true,
                 choices: [
-                  choice("reset", "Reset or step away before next hand", "recommended",
-                    "Session discipline beats revenge poker."),
-                  choice("revenge", "Force a bluff to get even", "clear_mistake",
-                    "Emotional leak.", {betterChoiceId: "reset"})
+                  choice("reset", "Fold", "recommended",
+                    "Session discipline beats revenge poker.", {action: "FOLD"}),
+                  choice("revenge", "All-in", "clear_mistake",
+                    "Emotional leak.", {action: "ALL_IN", betterChoiceId: "reset"})
                 ],
               }),
               selectAct({
@@ -571,9 +571,9 @@ export function buildSectionFive() {
                 a11y: "Temporary working models with samples.",
                 objectives: ["Recognize gear changes mid-session"], lifeLoss: true,
                 choices: [
-                  choice("temp", "Temporary models with fresh samples", "recommended",
+                  choice("temp", "Fresh samples", "recommended",
                     "Update as the table shifts."),
-                  choice("perm", "Permanent seat identities", "clear_mistake",
+                  choice("perm", "Permanent seats", "clear_mistake",
                     "Too rigid.", {betterChoiceId: "temp"})
                 ],
               }),

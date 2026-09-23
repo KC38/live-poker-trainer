@@ -428,6 +428,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Look-left tell — tap Reject.',
       'act-05-07-01-checkpoint' =>
           'Best use of timing — tap Tiny update.',
+      'act-05-08-01-guided' =>
+          'Lost two buy-ins — tap Stuck / tilted.',
+      'act-05-08-01-scaffolded' =>
+          'Flats junk / donks — tap Gear change.',
+      'act-05-08-01-checkpoint' =>
+          'Dynamic reads — tap Fresh samples.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -495,7 +501,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-05-07-01-guided' ||
             widget.activity.id == 'act-05-07-01-scaffolded' ||
             widget.activity.id == 'act-05-07-01-unguided' ||
-            widget.activity.id == 'act-05-07-01-checkpoint';
+            widget.activity.id == 'act-05-07-01-checkpoint' ||
+            widget.activity.id == 'act-05-08-01-guided' ||
+            widget.activity.id == 'act-05-08-01-scaffolded' ||
+            widget.activity.id == 'act-05-08-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

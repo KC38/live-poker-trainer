@@ -10629,6 +10629,164 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s5 table-dynamics guided taps Stuck / tilted on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-08-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Stuck/tilted — widen value, choose spots.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Villain lost two buy-ins, now open-raises every hand. Note?',
+      choices: const [
+        CourseChoice(id: 'stuck', label: 'Stuck / tilted'),
+        CourseChoice(id: 'ignore', label: 'Ignore dynamics'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Lost two buy-ins — tap Stuck / tilted.'),
+      findsOneWidget,
+    );
+    expect(find.text('Stuck / tilted'), findsWidgets);
+    await tester.tap(find.text('Stuck / tilted').first);
+    await tester.pump();
+    expect(controller.draft.choiceId, 'stuck');
+    controller.dispose();
+  });
+
+  testWidgets('s5 dynamics scaffolded taps Gear change on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-08-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Possible gear change — sample again.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'Solid selective player suddenly flats junk and donks rivers. Best read?',
+      choices: const [
+        CourseChoice(id: 'gear', label: 'Gear change'),
+        CourseChoice(id: 'same', label: 'Old label'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Flats junk / donks — tap Gear change.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Gear change'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'gear');
+    controller.dispose();
+  });
+
+  testWidgets('s5 table-dynamics unguided docks Fold on steaming felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-08-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Reset or step away — bankroll guardrail.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'You are steaming after a cooler. Best action?',
+      choices: const [
+        CourseChoice(id: 'reset', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'revenge', label: 'All-in', action: 'ALL_IN'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Steaming after cooler — tap Fold.'),
+      findsOneWidget,
+    );
+    expect(find.text('FOLD'), findsOneWidget);
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'reset');
+    controller.dispose();
+  });
+
+  testWidgets('s5 dynamics checkpoint taps Fresh samples on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-08-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Temporary working models with samples.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Dynamic reads should be?',
+      choices: const [
+        CourseChoice(id: 'temp', label: 'Fresh samples'),
+        CourseChoice(id: 'perm', label: 'Permanent seats'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Dynamic reads — tap Fresh samples.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Fresh samples'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'temp');
+    controller.dispose();
+  });
+
   testWidgets('s4 meet nit guided taps Nit on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-04-07-02-guided',

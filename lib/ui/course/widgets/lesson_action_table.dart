@@ -745,6 +745,17 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         facingBet: true,
         feltStatusLine: 'Re-price — fold the bomb',
       );
+    case 'act-05-08-01-unguided':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', 'Td'],
+        boardCodes: ['Kc', '9s', '4h', '2d', '7c'],
+        potLabel: 'Pot 6',
+        villainLine: 'Just stacked you · next hand',
+        streetLabel: 'Next hand · steaming',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Steaming — fold and reset',
+      );
   }
   return null;
 }
@@ -971,6 +982,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-05-06-01-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-05-08-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
@@ -5016,18 +5031,19 @@ class _TablesChangeDemoState extends State<TablesChangeDemo> {
               ],
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap Stuck, Tilted, and Gears'
-                : 'Update when the table shifts',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues the three taps — no duplicate footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Update when the table shifts',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );

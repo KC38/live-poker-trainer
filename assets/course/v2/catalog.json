@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "4c9ef3e5a582f6478dac6aa9783c9b46d17bb1509fcae81f7f7cca5b2957baa7",
+  "contentChecksum": "0a2a27321584fe03713c32353e3a14eba4580eaf914e767ef85b1b211c3acdbb",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -10495,7 +10495,7 @@
             {
               "id": "lesson-05-08-01-table-dynamics",
               "order": 1,
-              "title": "Adjust to live table dynamics",
+              "title": "Live table dynamics",
               "summary": "Spot tilted, stuck, tired, or gear-shifting opponents and update plans.",
               "objectives": [
                 "Identify tilted or stuck opponents",
@@ -10555,13 +10555,13 @@
                   "choices": [
                     {
                       "id": "stuck",
-                      "label": "Stuck/tilted — widen value carefully",
-                      "accessibilityText": "Stuck/tilted — widen value carefully"
+                      "label": "Stuck / tilted",
+                      "accessibilityText": "Stuck / tilted"
                     },
                     {
                       "id": "ignore",
-                      "label": "Ignore dynamics entirely",
-                      "accessibilityText": "Ignore dynamics entirely"
+                      "label": "Ignore dynamics",
+                      "accessibilityText": "Ignore dynamics"
                     }
                   ]
                 },
@@ -10585,13 +10585,13 @@
                   "choices": [
                     {
                       "id": "gear",
-                      "label": "Possible gear change — gather new samples",
-                      "accessibilityText": "Possible gear change — gather new samples"
+                      "label": "Gear change",
+                      "accessibilityText": "Gear change"
                     },
                     {
                       "id": "same",
-                      "label": "Old label forever",
-                      "accessibilityText": "Old label forever"
+                      "label": "Old label",
+                      "accessibilityText": "Old label"
                     }
                   ]
                 },
@@ -10599,8 +10599,8 @@
                   "id": "act-05-08-01-unguided",
                   "order": 4,
                   "stage": "unguided",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
                   "accessibilityText": "Reset or step away — bankroll guardrail.",
                   "acceptedGrades": [
                     "recommended",
@@ -10615,13 +10615,15 @@
                   "choices": [
                     {
                       "id": "reset",
-                      "label": "Reset or step away before next hand",
-                      "accessibilityText": "Reset or step away before next hand"
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
                     },
                     {
                       "id": "revenge",
-                      "label": "Force a bluff to get even",
-                      "accessibilityText": "Force a bluff to get even"
+                      "label": "All-in",
+                      "accessibilityText": "All-in",
+                      "action": "ALL_IN"
                     }
                   ]
                 },
@@ -10645,13 +10647,13 @@
                   "choices": [
                     {
                       "id": "temp",
-                      "label": "Temporary models with fresh samples",
-                      "accessibilityText": "Temporary models with fresh samples"
+                      "label": "Fresh samples",
+                      "accessibilityText": "Fresh samples"
                     },
                     {
                       "id": "perm",
-                      "label": "Permanent seat identities",
-                      "accessibilityText": "Permanent seat identities"
+                      "label": "Permanent seats",
+                      "accessibilityText": "Permanent seats"
                     }
                   ]
                 }

@@ -13433,7 +13433,7 @@
             {
               "id": "lesson-05-08-01-table-dynamics",
               "order": 1,
-              "title": "Adjust to live table dynamics",
+              "title": "Live table dynamics",
               "summary": "Spot tilted, stuck, tired, or gear-shifting opponents and update plans.",
               "objectives": [
                 "Identify tilted or stuck opponents",
@@ -13493,8 +13493,8 @@
                   "choices": [
                     {
                       "id": "stuck",
-                      "label": "Stuck/tilted — widen value carefully",
-                      "accessibilityText": "Stuck/tilted — widen value carefully",
+                      "label": "Stuck / tilted",
+                      "accessibilityText": "Stuck / tilted",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Do not ego-war; pick +EV spots."
@@ -13502,8 +13502,8 @@
                     },
                     {
                       "id": "ignore",
-                      "label": "Ignore dynamics entirely",
-                      "accessibilityText": "Ignore dynamics entirely",
+                      "label": "Ignore dynamics",
+                      "accessibilityText": "Ignore dynamics",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Dynamics are evidence.",
@@ -13532,8 +13532,8 @@
                   "choices": [
                     {
                       "id": "gear",
-                      "label": "Possible gear change — gather new samples",
-                      "accessibilityText": "Possible gear change — gather new samples",
+                      "label": "Gear change",
+                      "accessibilityText": "Gear change",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Do not cling to the old model."
@@ -13541,8 +13541,8 @@
                     },
                     {
                       "id": "same",
-                      "label": "Old label forever",
-                      "accessibilityText": "Old label forever",
+                      "label": "Old label",
+                      "accessibilityText": "Old label",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Evidence flipped.",
@@ -13555,8 +13555,8 @@
                   "id": "act-05-08-01-unguided",
                   "order": 4,
                   "stage": "unguided",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
                   "accessibilityText": "Reset or step away — bankroll guardrail.",
                   "acceptedGrades": [
                     "recommended",
@@ -13571,22 +13571,24 @@
                   "choices": [
                     {
                       "id": "reset",
-                      "label": "Reset or step away before next hand",
-                      "accessibilityText": "Reset or step away before next hand",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Session discipline beats revenge poker."
-                      }
+                      },
+                      "action": "FOLD"
                     },
                     {
                       "id": "revenge",
-                      "label": "Force a bluff to get even",
-                      "accessibilityText": "Force a bluff to get even",
+                      "label": "All-in",
+                      "accessibilityText": "All-in",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Emotional leak.",
                         "betterChoiceId": "reset"
-                      }
+                      },
+                      "action": "ALL_IN"
                     }
                   ]
                 },
@@ -13610,8 +13612,8 @@
                   "choices": [
                     {
                       "id": "temp",
-                      "label": "Temporary models with fresh samples",
-                      "accessibilityText": "Temporary models with fresh samples",
+                      "label": "Fresh samples",
+                      "accessibilityText": "Fresh samples",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Update as the table shifts."
@@ -13619,8 +13621,8 @@
                     },
                     {
                       "id": "perm",
-                      "label": "Permanent seat identities",
-                      "accessibilityText": "Permanent seat identities",
+                      "label": "Permanent seats",
+                      "accessibilityText": "Permanent seats",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Too rigid.",

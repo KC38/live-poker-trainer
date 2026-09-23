@@ -330,6 +330,8 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'PFR checks · middle pair BB — tap Probe small.',
     'act-05-06-01-scaffolded' =>
       'Draw faces bomb — tap Fold.',
+    'act-05-08-01-unguided' =>
+      'Steaming after cooler — tap Fold.',
     _ => null,
   };
 }
