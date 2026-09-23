@@ -142,8 +142,8 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-03-03-01-unguided') {
-    // Outs: tap Call / Fold / Raise when priced in.
-    return SelectIdentifyPresentation.tableRegionTap;
+    // Outs: tap Call / Fold / Raise category tiles (choice ids native).
+    return SelectIdentifyPresentation.handCategoryTap;
   }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {

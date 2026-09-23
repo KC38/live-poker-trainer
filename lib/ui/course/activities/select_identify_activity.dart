@@ -363,8 +363,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-03-01-01-scaffolded' ||
             widget.activity.id == 'act-03-01-01-unguided' ||
             widget.activity.id == 'act-03-01-01-checkpoint' ||
-            widget.activity.id == 'act-03-03-01-scaffolded' ||
-            widget.activity.id == 'act-03-03-01-unguided';
+            widget.activity.id == 'act-03-03-01-scaffolded';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&
@@ -466,6 +465,8 @@ class _HandCategoryTapActivity extends StatelessWidget {
           'Eight or queen completes — tap the class.',
         'act-03-03-01-guided' =>
           'King-high board. Tap how many clean outs you have.',
+        'act-03-03-01-unguided' =>
+          'Getting 3:1 with real outs — tap what you do.',
         _ => 'Look at the board and your holes — tap what you made.',
       };
 
@@ -550,6 +551,8 @@ class _HandCategoryTapActivity extends StatelessWidget {
                         ? 'Tap the flop class.'
                         : activity.id == 'act-03-03-01-guided'
                         ? 'Tap your clean-out count.'
+                        : activity.id == 'act-03-03-01-unguided'
+                        ? 'Tap Call, Fold, or Raise.'
                         : 'Tap the hand category you made.';
                   }
                   return 'Checking…';

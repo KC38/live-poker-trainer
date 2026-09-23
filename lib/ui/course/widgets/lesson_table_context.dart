@@ -512,7 +512,10 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-03-03-01-unguided':
       return const LessonTableScene(
-        layout: LessonTableLayout.drawPriceOutcomes,
+        heroCodes: ['Ah', 'Qh'],
+        boardCodes: ['Kc', '8h', '2d'],
+        villainSeatCount: 0,
+        highlight: LessonTableHighlight.none,
         caption: 'Pot 20 · bet 10 · ~8 clean outs',
       );
     case 'act-01-04-01-unguided-end':
@@ -965,8 +968,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-01-01-scaffolded' ||
       activity.id == 'act-03-01-01-unguided' ||
       activity.id == 'act-03-01-01-checkpoint' ||
-      activity.id == 'act-03-03-01-scaffolded' ||
-      activity.id == 'act-03-03-01-unguided';
+      activity.id == 'act-03-03-01-scaffolded';
 }
 
 /// Small-blind seat index clockwise from the button.

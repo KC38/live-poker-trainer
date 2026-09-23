@@ -92,6 +92,13 @@ class LessonActivityController extends ChangeNotifier {
 
   void selectChoice(String choiceId, {bool autoSubmit = false}) {
     if (_submitting || _lastResult != null) return;
+    assert(() {
+      debugPrint(
+        'LessonActivityController: selectChoice '
+        'activity=${_activity.id} choiceId=$choiceId autoSubmit=$autoSubmit',
+      );
+      return true;
+    }());
     _draft = _draft.copyWith(choiceId: choiceId);
     notifyListeners();
     if (autoSubmit) {
