@@ -980,8 +980,16 @@ class _HandFamiliesDemoState extends State<HandFamiliesDemo> {
     }
   }
 
+  LessonHandExample? get _nextFamily {
+    for (final family in HandFamiliesDemo.families) {
+      if (!_tapped.contains(family.id)) return family;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextFamily;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -1007,21 +1015,29 @@ class _HandFamiliesDemoState extends State<HandFamiliesDemo> {
           const SizedBox(height: 12),
           for (var i = 0; i < HandFamiliesDemo.families.length; i++) ...[
             if (i > 0) const SizedBox(height: 8),
-            HandExampleTile(
-              example: HandFamiliesDemo.families[i],
-              selected: _tapped.contains(HandFamiliesDemo.families[i].id),
-              enabled: widget.interactive && widget.enabled,
-              compact: true,
-              onPressed:
-                  widget.interactive
-                      ? () => _onTap(HandFamiliesDemo.families[i])
-                      : null,
+            _SoftPulseTarget(
+              active:
+                  widget.interactive &&
+                  widget.enabled &&
+                  next?.id == HandFamiliesDemo.families[i].id,
+              child: HandExampleTile(
+                example: HandFamiliesDemo.families[i],
+                selected: _tapped.contains(HandFamiliesDemo.families[i].id),
+                enabled: widget.interactive && widget.enabled,
+                compact: true,
+                onPressed:
+                    widget.interactive
+                        ? () => _onTap(HandFamiliesDemo.families[i])
+                        : null,
+              ),
             ),
           ],
           const SizedBox(height: 10),
           Text(
             widget.interactive
-                ? 'Tap each starting-hand family'
+                ? (next == null
+                    ? 'Pairs · broadways · suited aces · connectors'
+                    : 'Tap ${next.title} next')
                 : 'Pairs · broadways · suited aces · connectors',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
@@ -1035,6 +1051,76 @@ class _HandFamiliesDemoState extends State<HandFamiliesDemo> {
     );
     if (widget.interactive) return child;
     return ExcludeSemantics(child: child);
+  }
+}
+
+/// Soft gold pulse around the next family tile.
+class _SoftPulseTarget extends StatefulWidget {
+  const _SoftPulseTarget({required this.active, required this.child});
+
+  final bool active;
+  final Widget child;
+
+  @override
+  State<_SoftPulseTarget> createState() => _SoftPulseTargetState();
+}
+
+class _SoftPulseTargetState extends State<_SoftPulseTarget>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+    if (widget.active) {
+      _pulse.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _SoftPulseTarget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.active && !_pulse.isAnimating) {
+      _pulse.repeat(reverse: true);
+    } else if (!widget.active && _pulse.isAnimating) {
+      _pulse.stop();
+      _pulse.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.active) return widget.child;
+    return AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final glow = 0.22 + (_pulse.value * 0.38);
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.gold.withValues(alpha: glow * 0.55),
+                blurRadius: 10 + (_pulse.value * 6),
+                spreadRadius: 0.4,
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
+      child: widget.child,
+    );
   }
 }
 
