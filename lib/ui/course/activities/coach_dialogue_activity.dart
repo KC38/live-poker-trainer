@@ -14,6 +14,7 @@ import 'package:live_poker_trainer/ui/course/widgets/equity_realize_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/capped_uncapped_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/polar_merged_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/overbet_geometry_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/blockers_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -295,6 +296,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.overbetGeometry
                     ? null
                     : onFeltAcknowledge,
+            onBlockersAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.blockers
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -502,6 +507,9 @@ enum CoachDialogueVisualKind {
 
   /// Overbets need a polar story; geometry links street sizes.
   overbetGeometry,
+
+  /// Blockers remove hands — use them; do not invent EV decimals.
+  blockers,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -632,6 +640,8 @@ class CoachDialogueVisual {
       'Tap Polar, Merged, and Size.',
     CoachDialogueVisualKind.overbetGeometry =>
       'Tap Overbet, Polar, and Geo.',
+    CoachDialogueVisualKind.blockers =>
+      'Tap Block, Use, and No EV.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -692,7 +702,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.equityRealize ||
       kind == CoachDialogueVisualKind.cappedUncapped ||
       kind == CoachDialogueVisualKind.polarMerged ||
-      kind == CoachDialogueVisualKind.overbetGeometry;
+      kind == CoachDialogueVisualKind.overbetGeometry ||
+      kind == CoachDialogueVisualKind.blockers;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -809,6 +820,8 @@ class CoachDialogueVisual {
       'Polar/merged tiles: polar, merged, size',
     CoachDialogueVisualKind.overbetGeometry =>
       'Overbet/geometry tiles: overbet, polar, geo',
+    CoachDialogueVisualKind.blockers =>
+      'Blocker tiles: block, use, no EV',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -1011,6 +1024,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-06-05-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.overbetGeometry,
+      );
+    case 'act-06-06-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.blockers,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1558,6 +1575,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onCappedUncappedAcknowledge,
     this.onPolarMergedAcknowledge,
     this.onOverbetGeometryAcknowledge,
+    this.onBlockersAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1617,6 +1635,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onCappedUncappedAcknowledge;
   final VoidCallback? onPolarMergedAcknowledge;
   final VoidCallback? onOverbetGeometryAcknowledge;
+  final VoidCallback? onBlockersAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1904,6 +1923,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onOverbetGeometryAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onOverbetGeometryAcknowledge,
+        ),
+        CoachDialogueVisualKind.blockers => BlockersDemo(
+          interactive: onBlockersAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onBlockersAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
