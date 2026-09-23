@@ -67,6 +67,7 @@ void main() {
       'act-03-06-01-unguided': (HandClass.topPair, 'Weak TPTK'),
       'act-03-08-01-guided': (HandClass.topPair, 'Weak TPTK'),
       'act-03-08-01-unguided': (HandClass.air, 'Air'),
+      'act-03-08-02-jump-river': (HandClass.strongMade, 'Top two'),
     };
 
     for (final entry in expected.entries) {
@@ -121,6 +122,7 @@ void main() {
       'act-03-02-01-scaffolded': (HandClass.strongDraw, 'nut flush draw'),
       'act-03-02-01-checkpoint': (HandClass.strongDraw, 'open-ender'),
       'act-03-06-01-checkpoint': (HandClass.topPair, 'Medium one pair'),
+      'act-03-08-02-jump-class': (HandClass.strongDraw, 'class?'),
     };
 
     for (final entry in expected.entries) {
@@ -158,6 +160,19 @@ void main() {
         openEnder.boardCodes.map(_code).toList(growable: false),
       ),
       DrawOuts.strong,
+    );
+    final combo = resolveLessonTableScene(
+      _activity('act-03-08-02-jump-class', ActivityRenderer.selectIdentify),
+    )!;
+    expect(combo.heroCodes, ['Jd', 'Td']);
+    expect(combo.boardCodes, ['Qd', '9d', '3c']);
+    expect(
+      HandClassifier.drawOuts(
+        _code(combo.heroCodes[0]),
+        _code(combo.heroCodes[1]),
+        combo.boardCodes.map(_code).toList(growable: false),
+      ),
+      DrawOuts.combo,
     );
   });
 }
