@@ -149,6 +149,15 @@ enum LessonTableRegion {
   /// Live habits OOT distractor: blame the dealer.
   habitOotDealerFault,
 
+  /// Acting order wait: sit and wait (correct).
+  actingWaitTurn,
+
+  /// Acting order wait distractor: open early to save time.
+  actingOpenEarly,
+
+  /// Acting order wait distractor: flash cards while waiting.
+  actingFlashCards,
+
   /// Effective stack: shorter stack rules (correct).
   effectiveStackShort,
 
@@ -1181,6 +1190,9 @@ enum LessonTableLayout {
   /// Live habits OOT: out of turn / faster fine / dealer fault.
   habitOotOutcomes,
 
+  /// Acting order wait: wait / open early / flash cards.
+  actingWaitOutcomes,
+
   /// Effective-stack tiles: shorter / hero / sum.
   effectiveStackOutcomes,
 
@@ -1874,6 +1886,21 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         buttonSeat: 3,
         showSeatNeverMatters: true,
         caption: 'Same hand — EP vs BTN',
+      );
+    case 'act-02-01-02-unguided-wait':
+      return const LessonTableScene(
+        layout: LessonTableLayout.actingWaitOutcomes,
+        heroCodes: ['Ah', 'Kd'],
+        villainSeatCount: 1,
+        caption: 'Action on UTG · you are on the button',
+      );
+    case 'act-02-01-02-checkpoint-full':
+      return const LessonTableScene(
+        layout: LessonTableLayout.positionLabels,
+        highlight: LessonTableHighlight.button,
+        seatCount: 6,
+        buttonSeat: 3,
+        caption: 'Six-max flop · everyone in · who acts last?',
       );
     case 'act-02-07-02-jump-pos':
       return const LessonTableScene(
@@ -3241,6 +3268,20 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.seatNeverMatters => pick('same-always'),
         _ => null,
       };
+    case 'act-02-01-02-unguided-wait':
+      return switch (region) {
+        LessonTableRegion.actingWaitTurn => pick('wait'),
+        LessonTableRegion.actingOpenEarly => pick('open-early'),
+        LessonTableRegion.actingFlashCards => pick('flash-cards'),
+        _ => null,
+      };
+    case 'act-02-01-02-checkpoint-full':
+      return switch (region) {
+        LessonTableRegion.button => pick('last-btn'),
+        LessonTableRegion.bigBlind => pick('last-bb'),
+        LessonTableRegion.earlyPosition => pick('last-utg'),
+        _ => null,
+      };
     case 'act-02-07-01-checkpoint-habit':
       return switch (region) {
         LessonTableRegion.habitCoverWait => pick('cover-wait'),
@@ -4379,6 +4420,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id.startsWith('act-01-04-01-') ||
       activity.id.startsWith('act-01-05-01-') ||
       activity.id.startsWith('act-02-01-01-') ||
+      activity.id == 'act-02-01-02-unguided-wait' ||
+      activity.id == 'act-02-01-02-checkpoint-full' ||
       activity.id == 'act-02-05-01-scaffolded-eff' ||
       activity.id == 'act-02-05-01-unguided-depth' ||
       activity.id.startsWith('act-02-06-01-') ||
@@ -4668,6 +4711,7 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.habitVerbalOutcomes => _buildHabitVerbalOutcomes(),
       LessonTableLayout.habitProtectOutcomes => _buildHabitProtectOutcomes(),
       LessonTableLayout.habitOotOutcomes => _buildHabitOotOutcomes(),
+      LessonTableLayout.actingWaitOutcomes => _buildActingWaitOutcomes(),
       LessonTableLayout.effectiveStackOutcomes =>
         _buildEffectiveStackOutcomes(),
       LessonTableLayout.effectiveStack150Outcomes =>
@@ -5788,6 +5832,47 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Blame them',
           visual: const Icon(
             Icons.gavel_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActingWaitOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive acting order — tap wait, open early, or flash cards',
+      semanticsStatic: 'Acting order wait outcomes',
+      caption: scene.caption ?? 'Action on UTG · you are on the button',
+      phases: [
+        (
+          region: LessonTableRegion.actingWaitTurn,
+          title: 'Wait',
+          detail: 'Your turn later',
+          visual: const Icon(
+            Icons.hourglass_empty,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.actingOpenEarly,
+          title: 'Open now',
+          detail: 'Save time',
+          visual: const Icon(
+            Icons.flash_on_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.actingFlashCards,
+          title: 'Flash cards',
+          detail: 'While waiting',
+          visual: const Icon(
+            Icons.visibility_outlined,
             color: AppColors.slate,
             size: 24,
           ),

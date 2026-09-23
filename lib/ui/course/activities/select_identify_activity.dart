@@ -302,6 +302,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         'Tap the seat right before the button.',
       'act-02-01-01-checkpoint-edge' =>
         'Same cards — later seats play stronger.',
+      'act-02-01-02-unguided-wait' =>
+          'Action is on UTG — you are on the button. Tap what you do.',
+      'act-02-01-02-checkpoint-full' =>
+          'Six-max flop, everyone in — tap who acts last.',
       'act-01-04-01-unguided-end' =>
         'Betting is live. Tap when this street is done.',
       'act-01-04-01-checkpoint-postflop' =>
@@ -676,6 +680,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id.startsWith('act-01-04-01-') ||
             widget.activity.id.startsWith('act-01-05-01-') ||
             widget.activity.id.startsWith('act-02-01-01-') ||
+            widget.activity.id == 'act-02-01-02-unguided-wait' ||
+            widget.activity.id == 'act-02-01-02-checkpoint-full' ||
             widget.activity.id.startsWith('act-02-06-01-') ||
             widget.activity.id == 'act-02-07-01-checkpoint-habit' ||
             widget.activity.id == 'act-02-07-02-jump-pos' ||
