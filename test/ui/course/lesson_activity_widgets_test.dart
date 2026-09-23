@@ -6167,6 +6167,60 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s3 flop-class scaffolded taps nut flush draw on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-02-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Nut flush draw with overcard equity.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Board Jh 8h 3c. You hold Ah 9h. Class?',
+      choices: const [
+        CourseChoice(id: 'nfd', label: 'Strong draw — nut flush draw'),
+        CourseChoice(id: 'made-aj', label: 'Made top pair'),
+        CourseChoice(id: 'sdv', label: 'Strong showdown value already'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.handCategoryTap,
+    );
+    expect(resolveLessonTableScene(activity)?.heroCodes, ['Ah', '9h']);
+    expect(
+      resolveLessonTableScene(activity)?.boardCodes,
+      ['Jh', '8h', '3c'],
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Two hearts on board with the nut heart — tap the class.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Board Jh 8h 3c. You hold Ah 9h. Class?'),
+      findsNothing,
+    );
+    expect(find.text('Strong draw — nut flush draw'), findsNothing);
+    expect(find.text('Draw — nut flush'), findsOneWidget);
+    await tester.tap(find.text('Draw — nut flush'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'nfd');
+    controller.dispose();
+  });
+
   testWidgets('numeric entry updates draft', (tester) async {
     final activity = _activity(
       renderer: ActivityRenderer.numericPotPrice,
