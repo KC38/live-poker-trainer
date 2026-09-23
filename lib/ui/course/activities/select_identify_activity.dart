@@ -420,6 +420,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Best habit — tap Rebuild.',
       'act-05-06-01-checkpoint' =>
           'XR / bet / shove — tap Uncapped.',
+      'act-05-07-01-guided' =>
+          'Instant shove — tap Soft evidence.',
+      'act-05-07-01-scaffolded' =>
+          'Tiny flop bet — tap Weaker / blocking.',
+      'act-05-07-01-unguided' =>
+          'Look-left tell — tap Reject.',
+      'act-05-07-01-checkpoint' =>
+          'Best use of timing — tap Tiny update.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -483,7 +491,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-05-05-01-checkpoint' ||
             widget.activity.id == 'act-05-06-01-guided' ||
             widget.activity.id == 'act-05-06-01-unguided' ||
-            widget.activity.id == 'act-05-06-01-checkpoint';
+            widget.activity.id == 'act-05-06-01-checkpoint' ||
+            widget.activity.id == 'act-05-07-01-guided' ||
+            widget.activity.id == 'act-05-07-01-scaffolded' ||
+            widget.activity.id == 'act-05-07-01-unguided' ||
+            widget.activity.id == 'act-05-07-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

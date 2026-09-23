@@ -13214,7 +13214,7 @@
             {
               "id": "lesson-05-07-01-timing-sizing-evidence",
               "order": 1,
-              "title": "Treat timing and sizing as soft evidence",
+              "title": "Soft timing evidence",
               "summary": "Live timing and sizing update confidence slightly; they never prove a hand.",
               "objectives": [
                 "Treat timing as soft evidence only",
@@ -13274,8 +13274,8 @@
                   "choices": [
                     {
                       "id": "soft",
-                      "label": "Soft evidence — bump confidence slightly either way",
-                      "accessibilityText": "Soft evidence — bump confidence slightly either way",
+                      "label": "Soft evidence",
+                      "accessibilityText": "Soft evidence",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Never a magic tell."
@@ -13283,8 +13283,8 @@
                     },
                     {
                       "id": "nuts",
-                      "label": "Proven nuts forever",
-                      "accessibilityText": "Proven nuts forever",
+                      "label": "Proven nuts",
+                      "accessibilityText": "Proven nuts",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Overclaim.",
@@ -13293,8 +13293,8 @@
                     },
                     {
                       "id": "air",
-                      "label": "Proven bluff forever",
-                      "accessibilityText": "Proven bluff forever",
+                      "label": "Proven bluff",
+                      "accessibilityText": "Proven bluff",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Also overclaim.",
@@ -13323,8 +13323,8 @@
                   "choices": [
                     {
                       "id": "weakish",
-                      "label": "Often weaker / blocking — still not proof",
-                      "accessibilityText": "Often weaker / blocking — still not proof",
+                      "label": "Weaker / blocking",
+                      "accessibilityText": "Weaker / blocking",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Sizing is language with error bars."
@@ -13332,8 +13332,8 @@
                     },
                     {
                       "id": "solver",
-                      "label": "Exact solver frequency known",
-                      "accessibilityText": "Exact solver frequency known",
+                      "label": "Solver known",
+                      "accessibilityText": "Solver known",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "No fabricated EV claims.",
@@ -13362,8 +13362,8 @@
                   "choices": [
                     {
                       "id": "reject",
-                      "label": "Reject — no magic tells in this course",
-                      "accessibilityText": "Reject — no magic tells in this course",
+                      "label": "Reject magic tells",
+                      "accessibilityText": "Reject magic tells",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Stay with frequencies and lines."
@@ -13371,8 +13371,8 @@
                     },
                     {
                       "id": "trust",
-                      "label": "Trust the tell book",
-                      "accessibilityText": "Trust the tell book",
+                      "label": "Trust the book",
+                      "accessibilityText": "Trust the book",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Out of scope.",
@@ -13401,8 +13401,8 @@
                   "choices": [
                     {
                       "id": "tiny",
-                      "label": "Tiny update beside line/sizing/type evidence",
-                      "accessibilityText": "Tiny update beside line/sizing/type evidence",
+                      "label": "Tiny update beside stronger reads",
+                      "accessibilityText": "Tiny update beside stronger reads",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Hierarchy of evidence."
@@ -13410,8 +13410,8 @@
                     },
                     {
                       "id": "only",
-                      "label": "Only evidence you need",
-                      "accessibilityText": "Only evidence you need",
+                      "label": "Only evidence",
+                      "accessibilityText": "Only evidence",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Too weak alone.",

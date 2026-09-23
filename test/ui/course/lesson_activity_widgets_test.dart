@@ -10474,6 +10474,161 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s5 timing guided taps Soft evidence on shove felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-07-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Soft evidence — not proof.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Instant river shove after you bet. Correct framing?',
+      choices: const [
+        CourseChoice(id: 'soft', label: 'Soft evidence'),
+        CourseChoice(id: 'nuts', label: 'Proven nuts'),
+        CourseChoice(id: 'air', label: 'Proven bluff'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Instant shove — tap Soft evidence.'),
+      findsOneWidget,
+    );
+    expect(find.text('Soft evidence'), findsWidgets);
+    await tester.tap(find.text('Soft evidence').first);
+    await tester.pump();
+    expect(controller.draft.choiceId, 'soft');
+    controller.dispose();
+  });
+
+  testWidgets('s5 timing scaffolded taps Weaker / blocking on sizing felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-07-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Weak or blocking — not solver gospel.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tiny flop bet into a huge pot often says?',
+      choices: const [
+        CourseChoice(id: 'weakish', label: 'Weaker / blocking'),
+        CourseChoice(id: 'solver', label: 'Solver known'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Tiny flop bet — tap Weaker / blocking.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Weaker / blocking'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'weakish');
+    controller.dispose();
+  });
+
+  testWidgets('s5 timing unguided taps Reject on magic-tell felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-07-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Reject magic tells.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Coach says "look left means bluff." Response?',
+      choices: const [
+        CourseChoice(id: 'reject', label: 'Reject magic tells'),
+        CourseChoice(id: 'trust', label: 'Trust the book'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Look-left tell — tap Reject.'), findsOneWidget);
+    await tester.tap(find.text('Reject'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'reject');
+    controller.dispose();
+  });
+
+  testWidgets('s5 timing checkpoint taps Tiny update on evidence felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-07-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText:
+          'Tiny confidence update alongside stronger evidence.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Best use of live timing?',
+      choices: const [
+        CourseChoice(id: 'tiny', label: 'Tiny update beside stronger reads'),
+        CourseChoice(id: 'only', label: 'Only evidence'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Best use of timing — tap Tiny update.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Tiny update'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'tiny');
+    controller.dispose();
+  });
+
   testWidgets('s4 meet nit guided taps Nit on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-04-07-02-guided',

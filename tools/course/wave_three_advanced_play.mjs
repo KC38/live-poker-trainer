@@ -456,7 +456,7 @@ export function buildSectionFive() {
         "Use timing/sizing as soft evidence — never magic tells.", [
           lesson({
             id: L050701, order: 1,
-            title: "Treat timing and sizing as soft evidence",
+            title: "Soft timing evidence",
             summary: "Live timing and sizing update confidence slightly; they never prove a hand.",
             objectives: ["Treat timing as soft evidence only", "Read sizing as range language", "Reject magic-tell claims"],
             prereq: L050601, remediation: L050601, minutes: 8, band: 4,
@@ -470,11 +470,11 @@ export function buildSectionFive() {
                 a11y: "Soft evidence — not proof.",
                 objectives: ["Treat timing as soft evidence only"],
                 choices: [
-                  choice("soft", "Soft evidence — bump confidence slightly either way", "recommended",
+                  choice("soft", "Soft evidence", "recommended",
                     "Never a magic tell."),
-                  choice("nuts", "Proven nuts forever", "clear_mistake",
+                  choice("nuts", "Proven nuts", "clear_mistake",
                     "Overclaim.", {betterChoiceId: "soft"}),
-                  choice("air", "Proven bluff forever", "clear_mistake",
+                  choice("air", "Proven bluff", "clear_mistake",
                     "Also overclaim.", {betterChoiceId: "soft"})
                 ],
               }),
@@ -484,9 +484,9 @@ export function buildSectionFive() {
                 a11y: "Weak or blocking — not solver gospel.",
                 objectives: ["Read sizing as range language"],
                 choices: [
-                  choice("weakish", "Often weaker / blocking — still not proof", "recommended",
+                  choice("weakish", "Weaker / blocking", "recommended",
                     "Sizing is language with error bars."),
-                  choice("solver", "Exact solver frequency known", "clear_mistake",
+                  choice("solver", "Solver known", "clear_mistake",
                     "No fabricated EV claims.", {betterChoiceId: "weakish"})
                 ],
               }),
@@ -496,9 +496,9 @@ export function buildSectionFive() {
                 a11y: "Reject magic tells.",
                 objectives: ["Reject magic-tell claims"], lifeLoss: true,
                 choices: [
-                  choice("reject", "Reject — no magic tells in this course", "recommended",
+                  choice("reject", "Reject magic tells", "recommended",
                     "Stay with frequencies and lines."),
-                  choice("trust", "Trust the tell book", "clear_mistake",
+                  choice("trust", "Trust the book", "clear_mistake",
                     "Out of scope.", {betterChoiceId: "reject"})
                 ],
               }),
@@ -508,9 +508,9 @@ export function buildSectionFive() {
                 a11y: "Tiny confidence update alongside stronger evidence.",
                 objectives: ["Treat timing as soft evidence only"], lifeLoss: true,
                 choices: [
-                  choice("tiny", "Tiny update beside line/sizing/type evidence", "recommended",
+                  choice("tiny", "Tiny update beside stronger reads", "recommended",
                     "Hierarchy of evidence."),
-                  choice("only", "Only evidence you need", "clear_mistake",
+                  choice("only", "Only evidence", "clear_mistake",
                     "Too weak alone.", {betterChoiceId: "tiny"})
                 ],
               }),
