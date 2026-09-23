@@ -8125,6 +8125,186 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s3 leak guided docks Fold on weak TPTK heat felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-08-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText:
+          'Fold or play cautious — do not stack with weak top pair.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'Multiway raise-reraise pot. You have top pair weak kicker. Action?',
+      choices: const [
+        CourseChoice(
+          id: 'careful',
+          label: 'Fold or keep the pot small',
+          action: 'FOLD',
+        ),
+        CourseChoice(id: 'stack', label: 'Jam for stacks', action: 'ALL_IN'),
+        CourseChoice(
+          id: 'call-down',
+          label: 'Silent call-down forever',
+          action: 'CALL',
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Weak top pair in a raise-reraise pot — tap Fold.'),
+      findsOneWidget,
+    );
+    expect(find.text('FOLD'), findsOneWidget);
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'careful');
+    controller.dispose();
+  });
+
+  testWidgets('s3 leak scaffolded docks Fold on gutshot overbet felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-08-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Fold a gutshot to an oversized bet.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Gutshot only. Pot 12, bet 18. Action?',
+      choices: const [
+        CourseChoice(id: 'fold-gut', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'call-gut', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'raise-gut', label: 'Bluff-raise', action: 'RAISE'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Gutshot vs an overbet — tap Fold.'), findsOneWidget);
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'fold-gut');
+    controller.dispose();
+  });
+
+  testWidgets('s3 leak unguided docks Fold on multiway air felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-08-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText:
+          'Fold air multiway; do not float or bluff the crowd.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'Four players. You have no pair, no draw. Someone bets. Action?',
+      choices: const [
+        CourseChoice(id: 'fold-air', label: 'Fold', action: 'FOLD'),
+        CourseChoice(
+          id: 'float-air',
+          label: 'Call to keep them honest',
+          action: 'CALL',
+        ),
+        CourseChoice(
+          id: 'bluff-crowd',
+          label: 'Raise as a bluff',
+          action: 'RAISE',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Air multiway vs a bet — tap Fold.'), findsOneWidget);
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'fold-air');
+    controller.dispose();
+  });
+
+  testWidgets('s3 leak checkpoint taps seat-frequency note tile', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-08-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText:
+          'Track raise-versus-call and participation without labels.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Seat A raises often; Seat B almost never enters. Best notes?',
+      choices: const [
+        CourseChoice(
+          id: 'notes',
+          label: 'A raises a lot; B plays few hands',
+        ),
+        CourseChoice(id: 'guess', label: 'Invent life stories for both'),
+        CourseChoice(
+          id: 'same',
+          label: 'Treat every seat identically forever',
+        ),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.handCategoryTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Two seats, different frequencies — tap the note.'),
+      findsOneWidget,
+    );
+    expect(find.text('A raises a lot · B plays few'), findsOneWidget);
+    await tester.tap(find.text('A raises a lot · B plays few'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'notes');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {

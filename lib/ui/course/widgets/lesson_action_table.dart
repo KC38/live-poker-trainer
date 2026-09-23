@@ -302,6 +302,36 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'Crowd left — no bluff',
       );
+    case 'act-03-08-01-guided':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', '4d'],
+        boardCodes: ['As', '9c', '7d'],
+        potLabel: 'Pot 40',
+        villainLine: 'Raise · reraise multiway',
+        streetLabel: 'Flop · Weak TPTK · Heat',
+        facingBet: true,
+        feltStatusLine: 'Weak kicker — do not stack',
+      );
+    case 'act-03-08-01-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', 'Td'],
+        boardCodes: ['As', '7c', '2d'],
+        potLabel: 'Pot 12',
+        villainLine: 'Bets 18',
+        streetLabel: 'Flop · Gutshot only',
+        facingBet: true,
+        feltStatusLine: 'Four outs · terrible price',
+      );
+    case 'act-03-08-01-unguided':
+      return const LessonActionSpot(
+        heroCodes: ['9h', '8d'],
+        boardCodes: ['Kc', '7s', '2d'],
+        potLabel: 'Pot 24',
+        villainLine: 'Someone bets · 4-way',
+        streetLabel: 'Flop · Air · Crowd',
+        facingBet: true,
+        feltStatusLine: 'No pair, no draw — fold',
+      );
   }
   return null;
 }
@@ -424,6 +454,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-03-07-01-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-03-08-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
@@ -2014,18 +2048,19 @@ class _CommonLeaksDemoState extends State<CommonLeaksDemo> {
               ],
             ),
           ],
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap each common leak once'
-                : 'Top pair · bad prices · passive calls · bluff crowds',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues tap-each — no duplicate footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Top pair · bad prices · passive calls · bluff crowds',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );

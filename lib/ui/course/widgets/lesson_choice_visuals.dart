@@ -163,6 +163,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Multiway: tap the speculative hand / observation tile.
     return SelectIdentifyPresentation.handCategoryTap;
   }
+  if (activity.id == 'act-03-08-01-checkpoint') {
+    // Leak repair: tap the seat-note tile.
+    return SelectIdentifyPresentation.handCategoryTap;
+  }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {
     return SelectIdentifyPresentation.showdownTap;
