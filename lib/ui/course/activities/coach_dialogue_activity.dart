@@ -455,6 +455,7 @@ class CoachDialogueActivity extends StatelessWidget {
             visual.kind != CoachDialogueVisualKind.tableRead &&
             visual.kind != CoachDialogueVisualKind.flopLabel &&
             visual.kind != CoachDialogueVisualKind.outsPrice &&
+            visual.kind != CoachDialogueVisualKind.flopLines &&
             visual.kind != CoachDialogueVisualKind.leakReviewBook &&
             visual.kind != CoachDialogueVisualKind.capstoneSrp &&
             visual.kind != CoachDialogueVisualKind.capstone3bet &&
@@ -810,7 +811,7 @@ class CoachDialogueVisual {
     CoachDialogueVisualKind.outsPrice =>
       'Tap Clean, Dirty, and Price.',
     CoachDialogueVisualKind.flopLines =>
-      'Tap each flop line once.',
+      'Tap Value, C-bet, Check, Call, Fold, and Raise.',
     CoachDialogueVisualKind.turnStory =>
       'Tap Brick, Change, Barrel, and Delay.',
     CoachDialogueVisualKind.riverBinary =>

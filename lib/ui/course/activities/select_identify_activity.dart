@@ -1061,7 +1061,9 @@ class _HandCategoryTapActivity extends StatelessWidget {
                       i == 0 &&
                       selected == null &&
                       !locked &&
-                      activity.id.startsWith('act-02-02-01-');
+                      (activity.id.startsWith('act-02-02-01-') ||
+                          activity.id == 'act-03-02-01-guided' ||
+                          activity.id == 'act-03-03-01-guided');
                   return _FamilySoftPulse(
                     active: pulseNext,
                     child: HandExampleTile(
