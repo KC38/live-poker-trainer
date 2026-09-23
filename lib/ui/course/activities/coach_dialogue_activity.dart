@@ -246,6 +246,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.vsTags
                     ? null
                     : onFeltAcknowledge,
+            onVsLagsAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.vsLags
+                    ? null
+                    : onFeltAcknowledge,
             onObservationCertaintyAcknowledge:
                 locked ||
                         visual.kind !=
@@ -535,6 +539,9 @@ enum CoachDialogueVisualKind {
   /// Versus TAGs: respect raises; steal less; no light rebluffs.
   vsTags,
 
+  /// Versus LAGs: trap more; call wider; fancy less.
+  vsLags,
+
   /// Observation ≠ certainty; confidence grows with samples/showdowns.
   observationCertainty,
 
@@ -709,6 +716,8 @@ class CoachDialogueVisual {
       'Tap Wider, Hang, and Ego.',
     CoachDialogueVisualKind.vsTags =>
       'Tap Credit, Tighter, and No light.',
+    CoachDialogueVisualKind.vsLags =>
+      'Tap Call, Trap, and Fancy less.',
     CoachDialogueVisualKind.observationCertainty =>
       'Tap Observe, Samples, and Showdowns.',
     CoachDialogueVisualKind.exploitEvidence =>
@@ -805,6 +814,7 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.maniacModel ||
       kind == CoachDialogueVisualKind.vsManiacs ||
       kind == CoachDialogueVisualKind.vsTags ||
+      kind == CoachDialogueVisualKind.vsLags ||
       kind == CoachDialogueVisualKind.observationCertainty ||
       kind == CoachDialogueVisualKind.exploitEvidence ||
       kind == CoachDialogueVisualKind.multiwayNuts ||
@@ -916,6 +926,8 @@ class CoachDialogueVisual {
       'Vs-maniac tiles: call wider, let them hang, no ego',
     CoachDialogueVisualKind.vsTags =>
       'Vs-TAG tiles: respect heat, steal less, no light XR',
+    CoachDialogueVisualKind.vsLags =>
+      'Vs-LAG tiles: trap more, call wider, fancy less',
     CoachDialogueVisualKind.observationCertainty =>
       'Certainty tiles: observe, samples, showdowns',
     CoachDialogueVisualKind.exploitEvidence =>
@@ -1208,6 +1220,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-06-12-02-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.lagModel,
+      );
+    case 'act-06-12-03-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.vsLags,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1747,6 +1763,16 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.lagModel,
     );
   }
+  // Phrase-safe vs LAG — require versus/trap/fancy framing.
+  if (blob.contains('versus lag') ||
+      blob.contains('versus lags') ||
+      blob.contains('trap more, call wider') ||
+      (blob.contains('trap more') && blob.contains('fancy less')) ||
+      (blob.contains('call wider') && blob.contains('lag'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.vsLags,
+    );
+  }
   // Phrase-safe hard folds / coolers — avoid bare "cooler" / "ego" alone.
   if (blob.contains('hard folds save buy-ins') ||
       blob.contains('coolers happen') ||
@@ -1820,6 +1846,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onManiacModelAcknowledge,
     this.onVsManiacsAcknowledge,
     this.onVsTagsAcknowledge,
+    this.onVsLagsAcknowledge,
     this.onObservationCertaintyAcknowledge,
     this.onExploitEvidenceAcknowledge,
     this.onMultiwayNutsAcknowledge,
@@ -1889,6 +1916,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onManiacModelAcknowledge;
   final VoidCallback? onVsManiacsAcknowledge;
   final VoidCallback? onVsTagsAcknowledge;
+  final VoidCallback? onVsLagsAcknowledge;
   final VoidCallback? onObservationCertaintyAcknowledge;
   final VoidCallback? onExploitEvidenceAcknowledge;
   final VoidCallback? onMultiwayNutsAcknowledge;
@@ -2125,6 +2153,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onVsTagsAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onVsTagsAcknowledge,
+        ),
+        CoachDialogueVisualKind.vsLags => VsLagsDemo(
+          interactive: onVsLagsAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onVsLagsAcknowledge,
         ),
         CoachDialogueVisualKind.observationCertainty =>
           ObservationCertaintyDemo(

@@ -1761,10 +1761,10 @@ export function buildSectionSix() {
                 objectives: ["Trap strong hands more"],
                 playerTypeRefs: ["lag"],
                 choices: [
-                  choice("trap", "Check/call some streets to let them barrel", "recommended",
+                  choice("trap", "Trap / induce", "recommended",
                     "Induce.", {action: "CHECK", reversalRead: "Multiway: bet for protection."}),
-                  choice("repel", "Bet-bet-jam every time only", "questionable",
-                    "Also fine; trapping is available.")
+                  choice("repel", "Bet-bet-jam only", "questionable",
+                    "Also fine; trapping is available.", {action: "BET", amountBb: 12})
                 ],
               }),
               selectAct({
@@ -1774,9 +1774,9 @@ export function buildSectionSix() {
                 objectives: ["Avoid fancy bluffs into pressure"], lifeLoss: true,
                 playerTypeRefs: ["lag"],
                 choices: [
-                  choice("avoid", "Usually avoid — they continue too often", "recommended",
+                  choice("avoid", "Usually avoid", "recommended",
                     "Fancy less."),
-                  choice("more", "Bluff more than versus stations", "clear_mistake",
+                  choice("more", "Bluff more", "clear_mistake",
                     "Wrong direction.", {betterChoiceId: "avoid"})
                 ],
               }),
@@ -1787,9 +1787,9 @@ export function buildSectionSix() {
                 objectives: ["Widen bluff-catches versus LAG"], lifeLoss: true,
                 playerTypeRefs: ["lag"],
                 choices: [
-                  choice("cite", "Wide entry and sustained pressure", "recommended",
+                  choice("cite", "Wide + pressure", "recommended",
                     "Cite the tendency."),
-                  choice("mood", "Mood only", "clear_mistake",
+                  choice("mood", "Vibes", "clear_mistake",
                     "Cite evidence.", {betterChoiceId: "cite"})
                 ],
               }),
