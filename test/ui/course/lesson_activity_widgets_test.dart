@@ -7945,6 +7945,186 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s3 multiway guided docks Check on second-pair felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-07-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Often check second pair multiway.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'Four players to the flop. You have second pair. Checked to you. Action?',
+      choices: const [
+        CourseChoice(id: 'check-2p', label: 'Check', action: 'CHECK'),
+        CourseChoice(
+          id: 'bet-2p',
+          label: 'Bet large for value',
+          action: 'BET',
+        ),
+        CourseChoice(id: 'jam-2p', label: 'Jam', action: 'ALL_IN'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byType(LessonActionTable), findsOneWidget);
+    expect(
+      find.text('Second pair four ways — tap Check or Bet.'),
+      findsOneWidget,
+    );
+    expect(find.text('CHECK'), findsOneWidget);
+    await tester.tap(find.text('CHECK'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'check-2p');
+    controller.dispose();
+  });
+
+  testWidgets('s3 multiway scaffolded docks Check vs crowd on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-07-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Do not bluff into a crowd.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'Three callers behind. You missed entirely on a wet board. Action?',
+      choices: const [
+        CourseChoice(
+          id: 'mw-check',
+          label: 'Check or give up',
+          action: 'CHECK',
+        ),
+        CourseChoice(id: 'mw-bluff', label: 'Bluff large', action: 'BET'),
+        CourseChoice(id: 'mw-min', label: 'Min-bluff', action: 'BET'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Missed on a wet board with a crowd — tap Check.'),
+      findsOneWidget,
+    );
+    // Authored multi-word CHECK stays short chrome.
+    expect(find.text('CHECK'), findsOneWidget);
+    await tester.tap(find.text('CHECK'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'mw-check');
+    controller.dispose();
+  });
+
+  testWidgets('s3 multiway unguided taps suited connector tile', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-03-07-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText:
+          'Suited connectors with nut potential beat dominated offsuit trash.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Multiway. Choose the better speculative hand deep.',
+      choices: const [
+        CourseChoice(id: 'sc', label: 'Suited connector in position'),
+        CourseChoice(id: 'kto', label: 'KTo out of position'),
+        CourseChoice(id: 'q6o', label: 'Q6o any seat'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.handCategoryTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Deep multiway — tap the better speculative hand.'),
+      findsOneWidget,
+    );
+    expect(find.text('Suited connector · IP'), findsOneWidget);
+    await tester.tap(find.text('Suited connector · IP'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'sc');
+    controller.dispose();
+  });
+
+  testWidgets('s3 multiway checkpoint taps note-participation tile', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-07-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText:
+          'Tag high participation without naming an archetype yet.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'One seat has entered eight of the last ten pots with calls. Observation?',
+      choices: const [
+        CourseChoice(
+          id: 'obs-many',
+          label: 'They play many hands — note it',
+        ),
+        CourseChoice(id: 'obs-ignore', label: 'Ignore seat history'),
+        CourseChoice(
+          id: 'obs-label',
+          label: 'Immediately insult their personality',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Seat enters most pots — tap what you note.'),
+      findsOneWidget,
+    );
+    expect(find.text('Note — they play many'), findsOneWidget);
+    await tester.tap(find.text('Note — they play many'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'obs-many');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {

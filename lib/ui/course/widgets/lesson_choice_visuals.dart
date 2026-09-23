@@ -158,6 +158,11 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // River: see medium one-pair spot, tap the job (catch vs value vs air).
     return SelectIdentifyPresentation.handCategoryTap;
   }
+  if (activity.id == 'act-03-07-01-unguided' ||
+      activity.id == 'act-03-07-01-checkpoint') {
+    // Multiway: tap the speculative hand / observation tile.
+    return SelectIdentifyPresentation.handCategoryTap;
+  }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {
     return SelectIdentifyPresentation.showdownTap;

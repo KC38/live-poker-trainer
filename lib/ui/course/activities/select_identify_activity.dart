@@ -475,6 +475,10 @@ class _HandCategoryTapActivity extends StatelessWidget {
           'Air bluff meets a draw-completing queen — tap the plan.',
         'act-03-06-01-checkpoint' =>
           'Medium one pair faces a big bet — tap the river job.',
+        'act-03-07-01-unguided' =>
+          'Deep multiway — tap the better speculative hand.',
+        'act-03-07-01-checkpoint' =>
+          'Seat enters most pots — tap what you note.',
         _ => 'Look at the board and your holes — tap what you made.',
       };
 
@@ -569,6 +573,10 @@ class _HandCategoryTapActivity extends StatelessWidget {
                         ? 'Tap your turn plan.'
                         : activity.id == 'act-03-06-01-checkpoint'
                         ? 'Tap the river job.'
+                        : activity.id == 'act-03-07-01-unguided'
+                        ? 'Tap the speculative hand.'
+                        : activity.id == 'act-03-07-01-checkpoint'
+                        ? 'Tap what you observe.'
                         : 'Tap the hand category you made.';
                   }
                   return 'Checking…';

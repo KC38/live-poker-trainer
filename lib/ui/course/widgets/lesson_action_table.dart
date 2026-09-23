@@ -280,6 +280,28 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         facingBet: true,
         feltStatusLine: 'Huge jam — weak kicker',
       );
+    case 'act-03-07-01-guided':
+      return const LessonActionSpot(
+        heroCodes: ['Kh', '9d'],
+        boardCodes: ['Kc', '7s', '2d'],
+        potLabel: 'Pot 16',
+        villainLine: 'Checked to you · 4-way',
+        streetLabel: 'Flop · Multiway · Second pair',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Four ways — not auto-value',
+      );
+    case 'act-03-07-01-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', 'Td'],
+        boardCodes: ['Ah', 'Kh', '9h'],
+        potLabel: 'Pot 22',
+        villainLine: 'Three callers behind',
+        streetLabel: 'Flop · Wet · Missed',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Crowd left — no bluff',
+      );
   }
   return null;
 }
@@ -398,6 +420,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-03-06-01-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-03-07-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
@@ -1878,18 +1904,19 @@ class _MultiwayPlanDemoState extends State<MultiwayPlanDemo> {
               ],
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap Stronger, Fewer, and Nuts'
-                : 'Stronger value · fewer bluffs · chase nuts',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues the three taps — no duplicate footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Stronger value · fewer bluffs · chase nuts',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );
