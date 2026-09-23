@@ -295,11 +295,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-01-01-03-checkpoint-layout' =>
         'Button is marked. Tap the small blind seat.',
       'act-02-01-01-guided-btn' =>
-        'Postflop closes on the button. Tap BTN.',
+        'Tap who acts last postflop.',
       'act-02-01-01-scaffolded-blinds' =>
-        'Forced bets live left of the button. Tap SB or BB.',
+        'Tap a seat that posts a forced bet every hand.',
       'act-02-01-01-unguided-co' =>
-        'Right before the dealer chip is the cutoff.',
+        'Tap the seat right before the button.',
       'act-02-01-01-checkpoint-edge' =>
         'Same cards — later seats play stronger.',
       'act-01-04-01-unguided-end' =>
@@ -333,10 +333,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         final coach = _coachText;
         final prompt = widget.activity.prompt?.trim();
         // Felt + Rex already teach — skip near-duplicate prompt dumps on
-        // street / pot felt quizzes (and hide Rex under Nice!).
+        // street / pot / position felt quizzes (and hide Rex under Nice!).
         final feltFirstSelect =
             widget.activity.id.startsWith('act-01-04-01-') ||
-            widget.activity.id.startsWith('act-01-05-01-');
+            widget.activity.id.startsWith('act-01-05-01-') ||
+            widget.activity.id.startsWith('act-02-01-01-');
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&
