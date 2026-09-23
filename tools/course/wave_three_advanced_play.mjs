@@ -771,9 +771,9 @@ export function buildSectionSix() {
                 a11y: "Preflop raiser.",
                 objectives: ["Identify range advantage"],
                 choices: [
-                  choice("pfr", "The preflop raiser", "recommended",
+                  choice("pfr", "Preflop raiser", "recommended",
                     "Aces and big pairs sit more in the PFR range."),
-                  choice("caller", "The flatting BB always", "clear_mistake",
+                  choice("caller", "Flatting BB", "clear_mistake",
                     "Usually not.", {betterChoiceId: "pfr"})
                 ],
               }),
@@ -783,9 +783,9 @@ export function buildSectionSix() {
                 a11y: "Often the wider caller has more trips/fulls.",
                 objectives: ["Identify nut advantage"],
                 choices: [
-                  choice("caller-nuts", "The wide caller can hold more trips/fulls", "recommended",
+                  choice("caller-nuts", "Wide caller", "recommended",
                     "Nut advantage can flip even if PFR has range advantage."),
-                  choice("pfr-always", "PFR always owns the nuts", "clear_mistake",
+                  choice("pfr-always", "PFR always", "clear_mistake",
                     "Not on paired boards.", {betterChoiceId: "caller-nuts"})
                 ],
               }),
@@ -795,11 +795,11 @@ export function buildSectionSix() {
                 a11y: "C-bet with advantage.",
                 objectives: ["Choose pressure when you own both"], lifeLoss: true,
                 choices: [
-                  choice("cbet", "C-bet", "recommended",
+                  choice("cbet", "C-bet 6", "recommended",
                     "Advantage boards support betting.", {action: "BET", amountBb: 6}),
-                  choice("check", "Auto-check", "questionable",
-                    "Misses pressure."),
-                  choice("jam", "Jam 200bb", "clear_mistake",
+                  choice("check", "Check", "questionable",
+                    "Misses pressure.", {action: "CHECK"}),
+                  choice("jam", "Jam", "clear_mistake",
                     "Too much.", {action: "RAISE", amountBb: 200, betterChoiceId: "cbet"})
                 ],
               }),
@@ -809,9 +809,9 @@ export function buildSectionSix() {
                 a11y: "Apply pressure selectively.",
                 objectives: ["Choose pressure when you own both"], lifeLoss: true,
                 choices: [
-                  choice("press", "Apply pressure with a turn plan", "recommended",
+                  choice("press", "Apply pressure", "recommended",
                     "Not random aggression."),
-                  choice("random", "Bet any two blindly", "clear_mistake",
+                  choice("random", "Bet any two", "clear_mistake",
                     "Still need a plan.", {betterChoiceId: "press"})
                 ],
               }),
