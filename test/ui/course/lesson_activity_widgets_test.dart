@@ -4004,6 +4004,10 @@ void main() {
     );
 
     expect(find.text('Tap who acts last postflop.'), findsOneWidget);
+    expect(find.text('Postflop closes on the button. Tap BTN.'), findsNothing);
+    expect(find.text('Tap on the felt.'), findsOneWidget);
+    expect(find.text('Tap the answer on the table.'), findsNothing);
+    expect(find.text('Six-max · postflop'), findsOneWidget);
     expect(find.byType(LessonTableContext), findsOneWidget);
     // Choice prose buttons are hidden — labels live on the felt chips.
     expect(find.text('On the button'), findsNothing);

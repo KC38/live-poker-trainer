@@ -314,7 +314,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.button,
         seatCount: 6,
         buttonSeat: 3,
-        caption: 'Six-max · tap who acts last postflop',
+        caption: 'Six-max · postflop',
       );
     case 'act-02-01-01-scaffolded-blinds':
       return const LessonTableScene(
@@ -322,7 +322,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.smallBlind,
         seatCount: 6,
         buttonSeat: 3,
-        caption: 'Tap SB or BB — both post every hand',
+        caption: 'Six-max · forced bets',
       );
     case 'act-02-01-01-unguided-co':
       return const LessonTableScene(
@@ -330,7 +330,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.cutoff,
         seatCount: 6,
         buttonSeat: 3,
-        caption: 'Tap the seat right before the button',
+        caption: 'Six-max · before the button',
       );
     case 'act-02-01-01-checkpoint-edge':
       return const LessonTableScene(
