@@ -90,6 +90,7 @@ class PokerActionSizingActivity extends StatelessWidget {
                 selectedId: selected,
                 enabled: !locked,
                 identifyUnavailable: spot.identifyUnavailable,
+                facingBet: spot.facingBet,
                 onSelect:
                     (id) => controller.selectChoice(id, autoSubmit: true),
               ),

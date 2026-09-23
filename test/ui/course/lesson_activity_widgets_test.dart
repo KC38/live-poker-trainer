@@ -5474,6 +5474,7 @@ void main() {
       ),
     );
     expect(find.text('CHECK'), findsOneWidget);
+    expect(find.text('CALL (off)'), findsOneWidget);
     expect(find.text('CHECK FREE'), findsNothing);
     final handle = tester.ensureSemantics();
     expect(find.bySemanticsLabel('Check free'), findsOneWidget);
@@ -5481,6 +5482,43 @@ void main() {
     await tester.pump();
     expect(controller.draft.choiceId, 'check-free');
     handle.dispose();
+    controller.dispose();
+  });
+
+  testWidgets('facing-bet dock marks Check off on unguided call', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-03-01-unguided-call',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Tap Call',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'A bet is out — tap Call to continue.',
+      choices: const [
+        CourseChoice(id: 'call-5', label: 'Call 5', action: 'CALL'),
+        CourseChoice(id: 'check-5', label: 'Check', action: 'CHECK'),
+        CourseChoice(id: 'fold-strong', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(find.text('CHECK (off)'), findsOneWidget);
+    expect(find.text('CALL 5'), findsOneWidget);
+    expect(find.text('A bet is out — tap Call to continue.'), findsOneWidget);
+    await tester.tap(find.text('CALL 5'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'call-5');
     controller.dispose();
   });
 

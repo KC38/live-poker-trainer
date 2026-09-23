@@ -90,22 +90,32 @@ class AuthoredMultiStepActivity extends StatelessWidget {
                 choices: step.choices,
                 selectedId: selected,
                 enabled: !locked,
+                facingBet: spot.facingBet,
                 onSelect:
                     (id) => controller.selectChoice(id, autoSubmit: true),
               ),
-              const SizedBox(height: 10),
-              Text(
-                controller.submitting
-                    ? 'Checking…'
-                    : selected == null
-                    ? 'Tap your action on the dock.'
-                    : 'Checking…',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.manrope(
-                  color: AppColors.slate,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                ),
+              Builder(
+                builder: (context) {
+                  final status = () {
+                    if (controller.lastResult != null) return '';
+                    if (controller.submitting) return 'Checking…';
+                    if (selected == null) return 'Tap your action on the dock.';
+                    return 'Checking…';
+                  }();
+                  if (status.isEmpty) return const SizedBox.shrink();
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(
+                      status,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.manrope(
+                        color: AppColors.slate,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           );
