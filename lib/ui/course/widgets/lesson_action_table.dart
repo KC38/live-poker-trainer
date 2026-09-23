@@ -42,6 +42,15 @@ class LessonActionSpot {
 
   /// Optional override for the gold status line under the holes.
   final String? feltStatusLine;
+
+  /// Chip stack parsed from [stackLabel] (e.g. "Stack 12" → 12).
+  int? get heroStackAmount {
+    final raw = stackLabel;
+    if (raw == null || raw.isEmpty) return null;
+    final match = RegExp(r'(\d+)').firstMatch(raw);
+    if (match == null) return null;
+    return int.tryParse(match.group(1)!);
+  }
 }
 
 /// Resolves a teaching spot for Section 1 action lessons.
@@ -6190,6 +6199,7 @@ class LessonActionDock extends StatelessWidget {
     required this.onSelect,
     this.identifyUnavailable = false,
     this.facingBet = false,
+    this.heroStackAmount,
   });
 
   final List<CourseChoice> choices;
@@ -6202,6 +6212,9 @@ class LessonActionDock extends StatelessWidget {
   /// Ignored for [identifyUnavailable] quizzes so the illegal action is not
   /// spoiled before the learner taps.
   final bool facingBet;
+
+  /// Hero chips remaining; Call amounts above this get (off) chrome.
+  final int? heroStackAmount;
 
   static bool _isCheck(CourseChoice c) {
     final action = (c.action ?? c.label).toUpperCase();
@@ -6229,6 +6242,18 @@ class LessonActionDock extends StatelessWidget {
     return label.startsWith('LIMP') || c.id.contains('limp');
   }
 
+  static int? _chipAmountFromChoice(CourseChoice c) {
+    final match = RegExp(r'(\d+)').firstMatch(c.label);
+    if (match == null) return null;
+    return int.tryParse(match.group(1)!);
+  }
+
+  static bool _callExceedsStack(CourseChoice c, int? stack) {
+    if (stack == null || !_isCall(c) || _isLimp(c)) return false;
+    final amount = _chipAmountFromChoice(c);
+    return amount != null && amount > stack;
+  }
+
   @override
   Widget build(BuildContext context) {
     final hasBetChoice = choices.any(_isBet);
@@ -6245,12 +6270,15 @@ class LessonActionDock extends StatelessWidget {
                 // open action is Bet (postflop), not a preflop open-raise.
                 // Identify-unavailable quizzes keep every button looking live
                 // so the learner must reason which action is illegal.
+                // Short-stack Call amounts above remaining chips look off —
+                // All-in is the live way to put the stack in.
                 final unavailableLook =
                     !identifyUnavailable &&
                     ((_isCheck(choice) && facingBet) ||
                         (_isCall(choice) &&
                             !facingBet &&
                             !_isLimp(choice)) ||
+                        _callExceedsStack(choice, heroStackAmount) ||
                         (_isBet(choice) && facingBet) ||
                         (_isRaise(choice) && !facingBet && hasBetChoice));
                 return _DockButton(

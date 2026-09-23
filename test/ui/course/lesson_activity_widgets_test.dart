@@ -7117,6 +7117,9 @@ void main() {
     );
     expect(find.text('Stack 12'), findsOneWidget);
     expect(find.text('ALL-IN 12'), findsOneWidget);
+    // Call 20 exceeds the 12-chip stack — live dock marks it off.
+    expect(find.text('CALL (off)'), findsOneWidget);
+    expect(find.text('CALL 20'), findsNothing);
     await tester.tap(find.text('ALL-IN 12'));
     await tester.pump();
     expect(allInController.draft.choiceId, 'shove-12');
