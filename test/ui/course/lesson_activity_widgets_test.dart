@@ -1987,15 +1987,23 @@ void main() {
       ),
     );
     expect(find.byType(TableHabitsDemo), findsOneWidget);
-    expect(find.text('Tap Watch, Say, Cover, and Wait'), findsOneWidget);
+    expect(find.text('Tap WATCH next'), findsOneWidget);
+    expect(find.text('Tap Watch, Say, Cover, and Wait'), findsNothing);
     expect(find.text('Tap Watch, Say, Cover, and Wait.'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['WATCH', 'SAY', 'COVER', 'WAIT']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('WATCH'));
+    await tester.pump();
+    expect(find.text('Tap SAY next'), findsOneWidget);
+    await tester.tap(find.text('SAY'));
+    await tester.pump();
+    expect(find.text('Tap COVER next'), findsOneWidget);
+    await tester.tap(find.text('COVER'));
+    await tester.pump();
+    expect(find.text('Tap WAIT next'), findsOneWidget);
+    await tester.tap(find.text('WAIT'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });

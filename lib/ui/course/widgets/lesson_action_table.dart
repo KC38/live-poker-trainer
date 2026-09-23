@@ -2302,8 +2302,16 @@ class _TableHabitsDemoState extends State<TableHabitsDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextHabit {
+    for (final habit in TableHabitsDemo.habits) {
+      if (!_tapped.contains(habit.label)) return habit;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextHabit;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -2334,20 +2342,28 @@ class _TableHabitsDemoState extends State<TableHabitsDemo> {
                 for (var col = 0; col < 2; col++) ...[
                   if (col > 0) const SizedBox(width: 8),
                   Expanded(
-                    child: _DemoActionCard(
-                      label: TableHabitsDemo.habits[row * 2 + col].label,
-                      caption: TableHabitsDemo.habits[row * 2 + col].caption,
-                      color: TableHabitsDemo.habits[row * 2 + col].color,
-                      selected: _tapped.contains(
-                        TableHabitsDemo.habits[row * 2 + col].label,
+                    child: _DemoSoftPulse(
+                      active:
+                          widget.interactive &&
+                          widget.enabled &&
+                          next?.label ==
+                              TableHabitsDemo.habits[row * 2 + col].label,
+                      child: _DemoActionCard(
+                        label: TableHabitsDemo.habits[row * 2 + col].label,
+                        caption:
+                            TableHabitsDemo.habits[row * 2 + col].caption,
+                        color: TableHabitsDemo.habits[row * 2 + col].color,
+                        selected: _tapped.contains(
+                          TableHabitsDemo.habits[row * 2 + col].label,
+                        ),
+                        enabled: widget.interactive && widget.enabled,
+                        onPressed:
+                            widget.interactive
+                                ? () => _onTap(
+                                  TableHabitsDemo.habits[row * 2 + col].label,
+                                )
+                                : null,
                       ),
-                      enabled: widget.interactive && widget.enabled,
-                      onPressed:
-                          widget.interactive
-                              ? () => _onTap(
-                                TableHabitsDemo.habits[row * 2 + col].label,
-                              )
-                              : null,
                     ),
                   ),
                 ],
@@ -2357,7 +2373,9 @@ class _TableHabitsDemoState extends State<TableHabitsDemo> {
           const SizedBox(height: 10),
           Text(
             widget.interactive
-                ? 'Tap Watch, Say, Cover, and Wait'
+                ? (next == null
+                    ? 'Watch · say · cover · wait your turn'
+                    : 'Tap ${next.label} next')
                 : 'Watch · say · cover · wait your turn',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
