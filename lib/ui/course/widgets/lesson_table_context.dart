@@ -394,6 +394,24 @@ enum LessonTableRegion {
 
   /// Thin-value checkpoint: flip a coin (mistake).
   thinValueFlipCoin,
+
+  /// Lines guided: Nit XR value-heavy (correct).
+  linesNitValueHeavy,
+
+  /// Lines guided: always a bluff (mistake).
+  linesNitAlwaysBluff,
+
+  /// Lines unguided: polarized donk (correct).
+  linesDonkPolar,
+
+  /// Lines unguided: always medium pairs (mistake).
+  linesDonkMerged,
+
+  /// Lines checkpoint: delayed after weakness (correct).
+  linesDelayAfterWeak,
+
+  /// Lines checkpoint: delay every hand (mistake).
+  linesDelayAlways,
 }
 
 /// How the mini-table is arranged.
@@ -544,6 +562,15 @@ enum LessonTableLayout {
 
   /// Thin-value checkpoint: read-driven line vs coin flip.
   thinValueReadOutcomes,
+
+  /// Lines guided: Nit XR read.
+  linesNitXrOutcomes,
+
+  /// Lines unguided: donk meaning.
+  linesDonkPolarOutcomes,
+
+  /// Lines checkpoint: delayed c-bet timing.
+  linesDelayOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1205,6 +1232,21 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.thinValueReadOutcomes,
         caption: 'Same hand, different types — what changes?',
       );
+    case 'act-05-05-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.linesNitXrOutcomes,
+        caption: 'Nit check-raises flop — default read?',
+      );
+    case 'act-05-05-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.linesDonkPolarOutcomes,
+        caption: 'Large BB donk on dry ace — meaning?',
+      );
+    case 'act-05-05-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.linesDelayOutcomes,
+        caption: 'Delayed c-bet is best when?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -1795,6 +1837,24 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.thinValueFlipCoin => pick('random'),
         _ => null,
       };
+    case 'act-05-05-01-guided':
+      return switch (region) {
+        LessonTableRegion.linesNitValueHeavy => pick('strong'),
+        LessonTableRegion.linesNitAlwaysBluff => pick('air'),
+        _ => null,
+      };
+    case 'act-05-05-01-unguided':
+      return switch (region) {
+        LessonTableRegion.linesDonkPolar => pick('polar'),
+        LessonTableRegion.linesDonkMerged => pick('merged'),
+        _ => null,
+      };
+    case 'act-05-05-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.linesDelayAfterWeak => pick('delay'),
+        LessonTableRegion.linesDelayAlways => pick('always'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -1911,7 +1971,10 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-05-02-01-unguided' ||
       activity.id == 'act-05-02-01-checkpoint' ||
       activity.id == 'act-05-03-01-checkpoint' ||
-      activity.id == 'act-05-04-01-checkpoint';
+      activity.id == 'act-05-04-01-checkpoint' ||
+      activity.id == 'act-05-05-01-guided' ||
+      activity.id == 'act-05-05-01-unguided' ||
+      activity.id == 'act-05-05-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -2120,6 +2183,10 @@ class LessonTableContext extends StatelessWidget {
           _buildImpliedOddsRiseOutcomes(),
       LessonTableLayout.thinValueReadOutcomes =>
           _buildThinValueReadOutcomes(),
+      LessonTableLayout.linesNitXrOutcomes => _buildLinesNitXrOutcomes(),
+      LessonTableLayout.linesDonkPolarOutcomes =>
+          _buildLinesDonkPolarOutcomes(),
+      LessonTableLayout.linesDelayOutcomes => _buildLinesDelayOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -4121,6 +4188,99 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Not strategy',
           visual: const Icon(
             Icons.casino_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLinesNitXrOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive lines — tap Nit check-raise default read',
+      semanticsStatic: 'Lines Nit XR outcomes',
+      caption: scene.caption ?? 'Nit check-raises flop — default read?',
+      phases: [
+        (
+          region: LessonTableRegion.linesNitValueHeavy,
+          title: 'Value-heavy',
+          detail: 'Respect',
+          visual: const Icon(
+            Icons.shield_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.linesNitAlwaysBluff,
+          title: 'Always bluff',
+          detail: 'Wrong type',
+          visual: const Icon(
+            Icons.air,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLinesDonkPolarOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive lines — tap what a large donk means',
+      semanticsStatic: 'Lines donk polar outcomes',
+      caption: scene.caption ?? 'Large BB donk on dry ace — meaning?',
+      phases: [
+        (
+          region: LessonTableRegion.linesDonkPolar,
+          title: 'Polarized',
+          detail: 'Ace or air',
+          visual: const Icon(
+            Icons.compare_arrows,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.linesDonkMerged,
+          title: 'Medium pairs',
+          detail: 'Less common',
+          visual: const Icon(
+            Icons.linear_scale,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLinesDelayOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive lines — tap when delayed c-bet is best',
+      semanticsStatic: 'Lines delay outcomes',
+      caption: scene.caption ?? 'Delayed c-bet is best when?',
+      phases: [
+        (
+          region: LessonTableRegion.linesDelayAfterWeak,
+          title: 'After weakness',
+          detail: 'Flop check caps them',
+          visual: const Icon(
+            Icons.schedule,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.linesDelayAlways,
+          title: 'Every hand',
+          detail: 'Need a reason',
+          visual: const Icon(
+            Icons.all_inclusive,
             color: AppColors.slate,
             size: 24,
           ),

@@ -266,6 +266,12 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Thin value: tap what changes with the type on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-05-05-01-guided' ||
+      activity.id == 'act-05-05-01-unguided' ||
+      activity.id == 'act-05-05-01-checkpoint') {
+    // Advanced lines: tap reads on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

@@ -327,7 +327,7 @@ export function buildSectionFive() {
         "Interpret and choose advanced flop/turn lines.", [
           lesson({
             id: L050501, order: 1,
-            title: "Read and choose advanced flop lines",
+            title: "Advanced flop lines",
             summary: "Interpret check-raises, probes, delayed c-bets, and donk bets in live cash.",
             objectives: ["Interpret check-raises by strength and type", "Use probes and delayed c-bets with a plan", "Treat donks as polarized information"],
             prereq: L050401, remediation: L050401, minutes: 9, band: 4,
@@ -348,18 +348,18 @@ export function buildSectionFive() {
                     "Wrong type.", {betterChoiceId: "strong"})
                 ],
               }),
-              selectAct({
+              actionAct({
                 id: "act-05-05-01-scaffolded", order: 3, stage: "scaffolded",
-                prompt: "Preflop raiser checks flop. You are BB with middle pair. Probe?",
+                prompt: "Preflop raiser checks flop. You are BB with middle pair. Action?",
                 a11y: "Small probe can be reasonable.",
                 objectives: ["Use probes and delayed c-bets with a plan"],
                 choices: [
-                  choice("probe", "Small probe bet with a turn plan", "recommended",
-                    "Test capped ranges; prepare to give up."),
-                  choice("huge", "Pot-size probe every time", "questionable",
-                    "Too large without equity."),
-                  choice("never", "Never bet when they check", "clear_mistake",
-                    "Misses value and folds.", {betterChoiceId: "probe"})
+                  choice("probe", "Probe small", "recommended",
+                    "Test capped ranges; prepare to give up.", {action: "BET", amountBb: 4}),
+                  choice("huge", "Pot-size probe", "questionable",
+                    "Too large without equity.", {action: "BET", amountBb: 12}),
+                  choice("never", "Check back", "clear_mistake",
+                    "Misses value and folds.", {action: "CHECK", betterChoiceId: "probe"})
                 ],
               }),
               selectAct({

@@ -724,6 +724,17 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'Nit overfolds — check back',
       );
+    case 'act-05-05-01-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['9h', '8d'],
+        boardCodes: ['Kc', '9s', '3h'],
+        potLabel: 'Pot 14',
+        villainLine: 'PFR checks flop',
+        streetLabel: 'Flop · middle pair · BB',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Capped range — probe small',
+      );
   }
   return null;
 }
@@ -942,6 +953,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-05-04-01-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-05-05-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
@@ -4684,18 +4699,19 @@ class _LineStoriesDemoState extends State<LineStoriesDemo> {
               ],
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap X/R, Probe, Delay, and Donk'
-                : 'Each line updates the story',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues the four taps — no duplicate footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Each line updates the story',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );

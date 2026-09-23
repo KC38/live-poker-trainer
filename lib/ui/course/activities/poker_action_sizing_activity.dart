@@ -326,6 +326,8 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Maniac barrels second pair — tap Call.',
     'act-05-04-01-unguided' =>
       'Nit checked · second pair — tap Check.',
+    'act-05-05-01-scaffolded' =>
+      'PFR checks · middle pair BB — tap Probe small.',
     _ => null,
   };
 }
