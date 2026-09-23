@@ -850,11 +850,72 @@ void main() {
       ),
     );
     expect(find.byType(ToyHandRunDemo), findsOneWidget);
+    // Felt embeds the tap hint — no duplicate gold line under the demo.
+    expect(find.text('Tap Blinds, You act, and Ending'), findsOneWidget);
+    expect(find.text('Tap Blinds, You act, and Ending.'), findsNothing);
     for (final title in ['BLINDS', 'YOU ACT', 'ENDING']) {
       await tester.tap(find.text(title));
       await tester.pump();
     }
     expect(feltAck, 1);
+    controller.dispose();
+  });
+
+  testWidgets('toy-hand explain hides outer tap hint under Nice!', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-06-01-explain-run',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText: 'One short hand.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text: 'One short hand. Blinds post, you act, we reach an ending.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () {},
+        ),
+      ),
+    );
+    expect(find.text('Tap Blinds, You act, and Ending'), findsOneWidget);
+    controller.finishSubmit(
+      SubmitCourseStepResult(
+        attemptId: 'a1',
+        activityId: activity.id,
+        grade: SoftGrade.recommended,
+        feedback:
+            'One short hand. Blinds post, you act, we reach an ending.',
+        accepted: true,
+        lifeLost: false,
+        livesRemaining: 3,
+        xpAwarded: 10,
+        remediationRequired: false,
+        resume: const CourseResumePointer(
+          attemptId: 'a1',
+          lessonId: 'lesson-01-06-01-guided-complete-hand',
+          activityId: 'act-01-06-01-explain-run',
+          activityIndex: 0,
+        ),
+        duplicate: false,
+      ),
+    );
+    await tester.pump();
+    expect(find.text('Tap Blinds, You act, and Ending'), findsNothing);
+    expect(find.text('Blinds post, you act, then finish'), findsOneWidget);
     controller.dispose();
   });
 
@@ -5359,6 +5420,12 @@ void main() {
       ),
     );
     expect(find.textContaining('Preflop · Button'), findsOneWidget);
+    expect(
+      find.text('Button toy hand — open, then see if it ends.'),
+      findsOneWidget,
+    );
+    // Felt already shows holes / villain — no A9s prompt dump.
+    expect(find.text('Button with A9s. Folds to you.'), findsNothing);
     expect(find.text('RAISE TO 6'), findsOneWidget);
     await tester.tap(find.text('RAISE TO 6'));
     await tester.pump();
