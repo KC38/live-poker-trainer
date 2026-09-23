@@ -195,8 +195,8 @@ class _BestFiveDemoState extends State<BestFiveDemo> {
           const SizedBox(height: 12),
           Text(
             widget.interactive
-                ? 'Tap each gold card — those five count'
-                : 'Gold = the five that count',
+                ? 'Tap each highlighted card — those five count'
+                : 'Highlighted = the five that count',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
               fontSize: 12,
@@ -239,6 +239,10 @@ class _DemoRow extends StatelessWidget {
           SelectableBestFiveCard(
             code: code,
             selected: interactive ? tapped.contains(code) : playing.contains(code),
+            highlighted:
+                interactive &&
+                playing.contains(code) &&
+                !tapped.contains(code),
             enabled: interactive && enabled && playing.contains(code),
             dimmed: !playing.contains(code),
             onPressed:
@@ -259,6 +263,7 @@ class SelectableBestFiveCard extends StatelessWidget {
     required this.code,
     required this.selected,
     required this.enabled,
+    this.highlighted = false,
     this.dimmed = false,
     this.onPressed,
   });
@@ -266,6 +271,7 @@ class SelectableBestFiveCard extends StatelessWidget {
   final String code;
   final bool selected;
   final bool enabled;
+  final bool highlighted;
   final bool dimmed;
   final VoidCallback? onPressed;
 
@@ -280,6 +286,8 @@ class SelectableBestFiveCard extends StatelessWidget {
     final border =
         selected
             ? AppColors.gold
+            : highlighted
+            ? AppColors.gold.withValues(alpha: 0.75)
             : AppColors.slateDark.withValues(alpha: 0.7);
     final child = AnimatedOpacity(
       duration: const Duration(milliseconds: 140),
@@ -289,10 +297,15 @@ class SelectableBestFiveCard extends StatelessWidget {
         padding: const EdgeInsets.all(3),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: border, width: selected ? 2.4 : 1),
+          border: Border.all(
+            color: border,
+            width: selected ? 2.4 : highlighted ? 2 : 1,
+          ),
           color:
               selected
                   ? AppColors.gold.withValues(alpha: 0.18)
+                  : highlighted
+                  ? AppColors.gold.withValues(alpha: 0.1)
                   : Colors.transparent,
         ),
         child:

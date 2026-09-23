@@ -324,7 +324,7 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('best-five explain taps each gold card instead of Continue', (
+  testWidgets('best-five explain taps each highlighted card instead of Continue', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -357,7 +357,11 @@ void main() {
     );
     expect(find.byType(BestFiveDemo), findsOneWidget);
     expect(
-      find.text('Tap each gold card — only five of seven play.'),
+      find.text('Tap each highlighted card — only five of seven play.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Tap each highlighted card — those five count'),
       findsOneWidget,
     );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
@@ -366,6 +370,12 @@ void main() {
       (w) => w is SelectableBestFiveCard && w.enabled,
     );
     expect(playing, findsNWidgets(5));
+    expect(
+      find.byWidgetPredicate(
+        (w) => w is SelectableBestFiveCard && w.highlighted && w.enabled,
+      ),
+      findsNWidgets(5),
+    );
     for (final el in playing.evaluate()) {
       await tester.tap(find.byWidget(el.widget));
       await tester.pump();
