@@ -60,7 +60,9 @@ class _NumericPotPriceActivityState extends State<NumericPotPriceActivity> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (widget.showGuidance)
-          const RexCoachLine(text: 'Enter the number. Rounding is server-side.'),
+          const RexCoachLine(
+            text: 'Type the amount in chips — match the bet to call.',
+          ),
         const SizedBox(height: 12),
         Text(
           widget.activity.numericQuestion ??

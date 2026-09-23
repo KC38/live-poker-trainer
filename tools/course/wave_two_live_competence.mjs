@@ -205,14 +205,20 @@ export function buildSectionThree() {
                     "An ace pairs you ahead of one pair of kings often.", {betterChoiceId: "outs-3"})
                 ],
               }),
-              numericAct({
+              selectAct({
                 id: "act-03-03-01-scaffolded", order: 3, stage: "scaffolded",
-                question: "Pot is 20. Villain bets 10. How many chips to call?",
+                prompt: "Pot is 20. Villain bets 10. How many chips to call?",
                 a11y: "Calling price is the bet size: 10.",
                 objectives: ["Compare pot odds to draw equity"],
-                unit: "chips", min: 10, max: 10,
-                okFeedback: "You must call 10 into a 30 pot after calling.",
-                missFeedback: "The call equals the bet — 10.",
+                choices: [
+                  choice("call-10", "10", "recommended",
+                    "You must call 10 into a 30 pot after calling."),
+                  choice("call-20", "20", "clear_mistake",
+                    "That is the pot, not the call.", {betterChoiceId: "call-10"}),
+                  choice("call-30", "30", "clear_mistake",
+                    "That is the pot after you call — you only put in 10.",
+                    {betterChoiceId: "call-10"})
+                ],
               }),
               selectAct({
                 id: "act-03-03-01-unguided", order: 4, stage: "unguided",

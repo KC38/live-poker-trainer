@@ -6275,6 +6275,61 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s3 outs scaffolded taps 10-chip call on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-03-03-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Calling price is the bet size: 10.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Pot is 20. Villain bets 10. How many chips to call?',
+      choices: const [
+        CourseChoice(id: 'call-10', label: '10'),
+        CourseChoice(id: 'call-20', label: '20'),
+        CourseChoice(id: 'call-30', label: '30'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.callPriceOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.callChipsTen,
+        choices: activity.choices,
+      ),
+      'call-10',
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Pot 20, bet 10 — tap how many chips to call.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Pot is 20. Villain bets 10. How many chips to call?'),
+      findsNothing,
+    );
+    expect(find.text('10 chips'), findsOneWidget);
+    await tester.tap(find.text('10 chips'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'call-10');
+    controller.dispose();
+  });
+
   testWidgets('numeric entry updates draft', (tester) async {
     final activity = _activity(
       renderer: ActivityRenderer.numericPotPrice,
