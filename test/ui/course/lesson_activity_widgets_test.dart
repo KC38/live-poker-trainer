@@ -9743,6 +9743,48 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s5 deep guided taps Implied on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-05-02-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Implied odds versus stacks that pay sets.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: '200bb effective. Best reason to call a raise with 55 BTN?',
+      choices: const [
+        CourseChoice(id: 'impl', label: 'Implied odds if they pay sets'),
+        CourseChoice(id: 'spr-low', label: 'SPR is already low'),
+        CourseChoice(id: 'bluff', label: 'You will bluff every flop'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('200bb with 55 — tap why you call.'),
+      findsOneWidget,
+    );
+    expect(find.text('Implied'), findsOneWidget);
+    await tester.tap(find.text('Implied'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'impl');
+    controller.dispose();
+  });
+
   testWidgets('s4 meet nit guided taps Nit on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-04-07-02-guided',

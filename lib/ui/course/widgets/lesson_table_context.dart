@@ -361,6 +361,27 @@ enum LessonTableRegion {
 
   /// Multiway checkpoint: any two (mistake).
   multiwayAnyTwo,
+
+  /// Deep: implied odds for sets (correct).
+  deepImpliedOdds,
+
+  /// Deep: SPR already low (mistake).
+  deepSprLow,
+
+  /// Deep: bluff every flop (mistake).
+  deepBluffEvery,
+
+  /// Deep unguided: map turn/river plans (correct).
+  deepMapPlans,
+
+  /// Deep unguided: jam any pair now (mistake).
+  deepJamNow,
+
+  /// Deep checkpoint: position/implied/folds (correct).
+  deepRewardsPos,
+
+  /// Deep checkpoint: automatic light stacks (mistake).
+  deepRewardsSpew,
 }
 
 /// How the mini-table is arranged.
@@ -496,6 +517,15 @@ enum LessonTableLayout {
 
   /// Multiway checkpoint: nut potential vs any two.
   multiwayPriorityOutcomes,
+
+  /// Deep guided: implied odds vs wrong theses.
+  deepImpliedOutcomes,
+
+  /// Deep unguided: map plans vs jam now.
+  deepPlanOutcomes,
+
+  /// Deep checkpoint: depth rewards.
+  deepRewardsOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1132,6 +1162,21 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.multiwayPriorityOutcomes,
         caption: 'Multiway construction priority',
       );
+    case 'act-05-02-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.deepImpliedOutcomes,
+        caption: '200bb · why call a raise with 55?',
+      );
+    case 'act-05-02-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.deepPlanOutcomes,
+        caption: 'SPR ~12 on the flop',
+      );
+    case 'act-05-02-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.deepRewardsOutcomes,
+        caption: '150–300bb cash play rewards?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -1691,6 +1736,25 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.multiwayAnyTwo => pick('any-two'),
         _ => null,
       };
+    case 'act-05-02-01-guided':
+      return switch (region) {
+        LessonTableRegion.deepImpliedOdds => pick('impl'),
+        LessonTableRegion.deepSprLow => pick('spr-low'),
+        LessonTableRegion.deepBluffEvery => pick('bluff'),
+        _ => null,
+      };
+    case 'act-05-02-01-unguided':
+      return switch (region) {
+        LessonTableRegion.deepMapPlans => pick('plan'),
+        LessonTableRegion.deepJamNow => pick('jamnow'),
+        _ => null,
+      };
+    case 'act-05-02-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.deepRewardsPos => pick('pos'),
+        LessonTableRegion.deepRewardsSpew => pick('spew'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -1802,7 +1866,10 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-04-10-02-jump-nit' ||
       activity.id == 'act-04-10-02-jump-maniac' ||
       activity.id == 'act-05-01-01-guided' ||
-      activity.id == 'act-05-01-01-checkpoint';
+      activity.id == 'act-05-01-01-checkpoint' ||
+      activity.id == 'act-05-02-01-guided' ||
+      activity.id == 'act-05-02-01-unguided' ||
+      activity.id == 'act-05-02-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -2002,6 +2069,11 @@ class LessonTableContext extends StatelessWidget {
           _buildMultiwayContinueOutcomes(),
       LessonTableLayout.multiwayPriorityOutcomes =>
           _buildMultiwayPriorityOutcomes(),
+      LessonTableLayout.deepImpliedOutcomes =>
+          _buildDeepImpliedOutcomes(),
+      LessonTableLayout.deepPlanOutcomes => _buildDeepPlanOutcomes(),
+      LessonTableLayout.deepRewardsOutcomes =>
+          _buildDeepRewardsOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -3842,6 +3914,105 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Crowds punish',
           visual: const Icon(
             Icons.all_inclusive,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDeepImpliedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive deep stacks — tap why you call with 55',
+      semanticsStatic: 'Deep implied outcomes',
+      caption: scene.caption ?? '200bb · why call a raise with 55?',
+      phases: [
+        (
+          region: LessonTableRegion.deepImpliedOdds,
+          title: 'Implied',
+          detail: 'They pay sets',
+          visual: const Icon(
+            Icons.trending_up,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.deepSprLow,
+          title: 'Low SPR',
+          detail: 'Wrong thesis',
+          visual: const _PotChipDot(label: '1', gold: false),
+        ),
+        (
+          region: LessonTableRegion.deepBluffEvery,
+          title: 'Bluff all',
+          detail: 'Not the thesis',
+          visual: const Icon(
+            Icons.whatshot_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDeepPlanOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive deep stacks — tap map plans or jam now',
+      semanticsStatic: 'Deep plan outcomes',
+      caption: scene.caption ?? 'SPR ~12 on the flop',
+      phases: [
+        (
+          region: LessonTableRegion.deepMapPlans,
+          title: 'Map streets',
+          detail: 'Before commit',
+          visual: const Icon(
+            Icons.map_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.deepJamNow,
+          title: 'Jam now',
+          detail: 'Too early',
+          visual: const Icon(
+            Icons.flash_on,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDeepRewardsOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive deep stacks — tap what depth rewards',
+      semanticsStatic: 'Deep rewards outcomes',
+      caption: scene.caption ?? '150–300bb cash play rewards?',
+      phases: [
+        (
+          region: LessonTableRegion.deepRewardsPos,
+          title: 'Skill edges',
+          detail: 'Pos · odds · folds',
+          visual: const Icon(
+            Icons.psychology_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.deepRewardsSpew,
+          title: 'Light stacks',
+          detail: 'Automatic',
+          visual: const Icon(
+            Icons.dangerous_outlined,
             color: AppColors.slate,
             size: 24,
           ),
