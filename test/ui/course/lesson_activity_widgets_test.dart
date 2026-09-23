@@ -10787,6 +10787,195 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s5 discipline guided taps Stop / move down on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-09-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Leave or move down — do not reload emotionally.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'You hit a planned stop-loss. Next step?',
+      choices: const [
+        CourseChoice(id: 'stop', label: 'Stop / move down'),
+        CourseChoice(id: 'reload', label: 'Reload / chase'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Hit stop-loss — tap Stop / move down.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Stop / move down'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'stop');
+    controller.dispose();
+  });
+
+  testWidgets('s5 discipline scaffolded taps Decline on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-09-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Decline if outside bankroll plan.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Bankroll 40 buy-ins for 1/2. Spot opens at 2/5. Action?',
+      choices: const [
+        CourseChoice(id: 'decline', label: 'Decline'),
+        CourseChoice(id: 'jump', label: 'Jump up'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('2/5 opens — tap Decline.'), findsOneWidget);
+    await tester.tap(find.text('Decline'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'decline');
+    controller.dispose();
+  });
+
+  testWidgets('s5 discipline unguided taps Cash out on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-09-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Cash out while ahead of fatigue.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tired, winning small, table getting wild. Best?',
+      choices: const [
+        CourseChoice(id: 'cash', label: 'Cash out'),
+        CourseChoice(id: 'punish', label: 'Stay forever'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Tired and up small — tap Cash out.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Cash out'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'cash');
+    controller.dispose();
+  });
+
+  testWidgets('s5 discipline checkpoint taps Your edge on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-09-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Winning strategy — not soft extra credit.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Session discipline is part of?',
+      choices: const [
+        CourseChoice(id: 'edge', label: 'Your edge'),
+        CourseChoice(id: 'soft', label: 'Soft skills only'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Session discipline — tap Your edge.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Your edge'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'edge');
+    controller.dispose();
+  });
+
+  testWidgets('s5 guardrails explain hides interactive footer dupe', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-09-01-explain',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'Winning 1/2 includes knowing when to quit. Guardrails first.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'Winning 1/2 includes knowing when to quit. Guardrails first.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () {},
+        ),
+      ),
+    );
+    expect(find.byType(GuardrailsDemo), findsOneWidget);
+    // Rex cue below the felt — not a second footer inside the demo.
+    expect(find.text('Tap Quit, Guard, and First.'), findsOneWidget);
+    expect(find.text('Tap Quit, Guard, and First'), findsNothing);
+    expect(find.text('Know when to quit'), findsNothing);
+    controller.dispose();
+  });
+
   testWidgets('s4 meet nit guided taps Nit on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-04-07-02-guided',

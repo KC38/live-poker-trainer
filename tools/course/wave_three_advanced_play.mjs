@@ -598,9 +598,9 @@ export function buildSectionFive() {
                 a11y: "Leave or move down — do not reload emotionally.",
                 objectives: ["Set session stop-losses"],
                 choices: [
-                  choice("stop", "Stop or move down per plan", "recommended",
+                  choice("stop", "Stop / move down", "recommended",
                     "Plans beat feelings."),
-                  choice("reload", "Reload and chase", "clear_mistake",
+                  choice("reload", "Reload / chase", "clear_mistake",
                     "Bankroll leak.", {betterChoiceId: "stop"})
                 ],
               }),
@@ -610,9 +610,9 @@ export function buildSectionFive() {
                 a11y: "Decline if outside bankroll plan.",
                 objectives: ["Respect bankroll for stakes"],
                 choices: [
-                  choice("decline", "Decline — outside the plan", "recommended",
+                  choice("decline", "Decline", "recommended",
                     "Stakes follow bankroll."),
-                  choice("jump", "Jump up on vibe", "clear_mistake",
+                  choice("jump", "Jump up", "clear_mistake",
                     "Risk of ruin.", {betterChoiceId: "decline"})
                 ],
               }),
@@ -622,9 +622,9 @@ export function buildSectionFive() {
                 a11y: "Cash out while ahead of fatigue.",
                 objectives: ["End sessions before leaks spiral"], lifeLoss: true,
                 choices: [
-                  choice("cash", "Cash out — fatigue is a leak", "recommended",
+                  choice("cash", "Cash out", "recommended",
                     "Protect the win."),
-                  choice("punish", "Stay to punish the table forever", "questionable",
+                  choice("punish", "Stay forever", "questionable",
                     "Only if sharp and planned.")
                 ],
               }),
@@ -634,9 +634,9 @@ export function buildSectionFive() {
                 a11y: "Winning strategy — not soft extra credit.",
                 objectives: ["End sessions before leaks spiral"], lifeLoss: true,
                 choices: [
-                  choice("edge", "Your edge — same as technical skill", "recommended",
+                  choice("edge", "Your edge", "recommended",
                     "Bankroll and fatigue matter."),
-                  choice("soft", "Optional soft skills only", "clear_mistake",
+                  choice("soft", "Soft skills only", "clear_mistake",
                     "It is core.", {betterChoiceId: "edge"})
                 ],
               }),

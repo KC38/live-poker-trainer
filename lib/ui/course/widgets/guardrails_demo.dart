@@ -81,18 +81,19 @@ class _GuardrailsDemoState extends State<GuardrailsDemo> {
               ],
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap Quit, Guard, and First'
-                : 'Know when to quit',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues Quit / Guard / First — no dupe footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Know when to quit',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );
@@ -155,7 +156,19 @@ class _GuardrailsTile extends StatelessWidget {
         ],
       ),
     );
-    if (!enabled || onPressed == null) return child;
-    return GestureDetector(onTap: onPressed, child: child);
+    if (onPressed == null) return child;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: enabled ? onPressed : null,
+          borderRadius: BorderRadius.circular(12),
+          child: child,
+        ),
+      ),
+    );
   }
 }
