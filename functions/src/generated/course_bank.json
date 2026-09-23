@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "afda1c9f0967a527ed3a4742cc0e497abe2609b78aaa98ad93c3b9701b250b3d",
+  "contentChecksum": "9965a9eeb9d18eb107a1b0a57fe92521d297366ce006b69bd770c8e1d6505975",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -20127,19 +20127,19 @@
                       "choices": [
                         {
                           "id": "barrel",
-                          "label": "Barrel many blanks",
-                          "accessibilityText": "Barrel many blanks",
+                          "label": "Barrel blanks",
+                          "accessibilityText": "Barrel blanks",
                           "grading": {
                             "grade": "recommended",
-                            "feedback": "Map continue."
+                            "feedback": "Map continue on many blanks."
                           },
                           "action": "BET",
                           "amountBb": 14
                         },
                         {
                           "id": "check-t",
-                          "label": "Check/give-up sometimes",
-                          "accessibilityText": "Check/give-up sometimes",
+                          "label": "Give up",
+                          "accessibilityText": "Give up",
                           "grading": {
                             "grade": "strong",
                             "feedback": "Also fine with a plan."
@@ -20168,8 +20168,8 @@
                       "choices": [
                         {
                           "id": "check-r",
-                          "label": "Check / give up",
-                          "accessibilityText": "Check / give up",
+                          "label": "Check",
+                          "accessibilityText": "Check",
                           "grading": {
                             "grade": "recommended",
                             "feedback": "No strong story."
@@ -20178,8 +20178,8 @@
                         },
                         {
                           "id": "bluff",
-                          "label": "Bluff large with no blockers",
-                          "accessibilityText": "Bluff large with no blockers",
+                          "label": "Bluff large",
+                          "accessibilityText": "Bluff large",
                           "grading": {
                             "grade": "questionable",
                             "feedback": "Needs a better blocker story."
@@ -30440,7 +30440,7 @@
           "choiceGrading": {
             "barrel": {
               "grade": "recommended",
-              "feedback": "Map continue."
+              "feedback": "Map continue on many blanks."
             },
             "check-t": {
               "grade": "strong",

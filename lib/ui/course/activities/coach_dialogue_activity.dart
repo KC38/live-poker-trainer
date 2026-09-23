@@ -437,7 +437,8 @@ class CoachDialogueActivity extends StatelessWidget {
         if (showGuidance &&
             !locked &&
             visual.requiresFeltTap &&
-            // These demos embed their own tap hint on the felt / chrome.
+            // These demos embed their own tap hint on the felt / chrome —
+            // or Rex already names the tiles (no duplicate gold footer).
             visual.kind != CoachDialogueVisualKind.bestFive &&
             visual.kind != CoachDialogueVisualKind.passiveActions &&
             visual.kind != CoachDialogueVisualKind.aggressiveActions &&
@@ -453,7 +454,15 @@ class CoachDialogueActivity extends StatelessWidget {
             visual.kind != CoachDialogueVisualKind.fullRing &&
             visual.kind != CoachDialogueVisualKind.tableRead &&
             visual.kind != CoachDialogueVisualKind.flopLabel &&
-            visual.kind != CoachDialogueVisualKind.outsPrice) ...[
+            visual.kind != CoachDialogueVisualKind.outsPrice &&
+            visual.kind != CoachDialogueVisualKind.leakReviewBook &&
+            visual.kind != CoachDialogueVisualKind.capstoneSrp &&
+            visual.kind != CoachDialogueVisualKind.capstone3bet &&
+            visual.kind !=
+                CoachDialogueVisualKind.capstoneMultiwayDeep &&
+            visual.kind != CoachDialogueVisualKind.capstoneLimped &&
+            visual.kind != CoachDialogueVisualKind.capstone4bet &&
+            visual.kind != CoachDialogueVisualKind.liveWarmupPrep) ...[
           const SizedBox(height: 10),
           _TapHint(text: visual.continueHint),
         ],

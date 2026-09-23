@@ -16638,7 +16638,7 @@ void main() {
         ),
       );
       expect(find.byType(LeakReviewBookDemo), findsOneWidget);
-      expect(find.text('Tap Leak, Book, and Review.'), findsOneWidget);
+      expect(find.text('Tap Leak, Book, and Review.'), findsNothing);
       expect(find.text('Tap Leak, Book, and Review'), findsNothing);
       expect(
         find.text('Defaults beat vibes — write and review'),
@@ -16849,7 +16849,7 @@ void main() {
         ),
       );
       expect(find.byType(CapstoneSrpDemo), findsOneWidget);
-      expect(find.text('Tap Plan, Update, and Finish.'), findsOneWidget);
+      expect(find.text('Tap Plan, Update, and Finish.'), findsNothing);
       expect(find.text('Tap Plan, Update, and Finish'), findsNothing);
       expect(
         find.text('No hints — trust your map across three streets'),
@@ -16899,13 +16899,13 @@ void main() {
           choices: [
             CourseChoice(
               id: 'barrel',
-              label: 'Barrel many blanks',
+              label: 'Barrel blanks',
               action: 'BET',
               amountBb: 14,
             ),
             CourseChoice(
               id: 'check-t',
-              label: 'Check/give-up sometimes',
+              label: 'Give up',
               action: 'CHECK',
             ),
             CourseChoice(id: 'min', label: 'Bet 1bb', action: 'BET', amountBb: 1),
@@ -16918,12 +16918,12 @@ void main() {
           choices: [
             CourseChoice(
               id: 'check-r',
-              label: 'Check / give up',
+              label: 'Check',
               action: 'CHECK',
             ),
             CourseChoice(
               id: 'bluff',
-              label: 'Bluff large with no blockers',
+              label: 'Bluff large',
               action: 'BET',
               amountBb: 40,
             ),
@@ -16982,13 +16982,13 @@ void main() {
           choices: [
             CourseChoice(
               id: 'barrel',
-              label: 'Barrel many blanks',
+              label: 'Barrel blanks',
               action: 'BET',
               amountBb: 14,
             ),
             CourseChoice(
               id: 'check-t',
-              label: 'Check/give-up sometimes',
+              label: 'Give up',
               action: 'CHECK',
             ),
             CourseChoice(id: 'min', label: 'Bet 1bb', action: 'BET', amountBb: 1),
@@ -16999,10 +16999,10 @@ void main() {
           street: 'river',
           prompt: 'Called again. River 9c. Ace-high. Action?',
           choices: [
-            CourseChoice(id: 'check-r', label: 'Check / give up', action: 'CHECK'),
+            CourseChoice(id: 'check-r', label: 'Check', action: 'CHECK'),
             CourseChoice(
               id: 'bluff',
-              label: 'Bluff large with no blockers',
+              label: 'Bluff large',
               action: 'BET',
             ),
           ],
@@ -17022,13 +17022,13 @@ void main() {
       ),
     );
     expect(
-      find.text('Called · paired turn — tap Barrel many blanks.'),
+      find.text('Called · paired blank — tap Barrel blanks.'),
       findsOneWidget,
     );
     expect(find.textContaining('Turn · K722 · AQ'), findsOneWidget);
-    expect(find.text('BARREL MANY BLANKS'), findsOneWidget);
+    expect(find.text('BARREL BLANKS'), findsOneWidget);
     expect(find.text('Called. Turn 2d. Action?'), findsNothing);
-    await tester.tap(find.text('BARREL MANY BLANKS'));
+    await tester.tap(find.text('BARREL BLANKS'));
     await tester.pump();
     expect(controller.draft.choiceId, 'barrel');
     controller.dispose();
@@ -17060,12 +17060,12 @@ void main() {
           choices: [
             CourseChoice(
               id: 'barrel',
-              label: 'Barrel many blanks',
+              label: 'Barrel blanks',
               action: 'BET',
             ),
             CourseChoice(
               id: 'check-t',
-              label: 'Check/give-up sometimes',
+              label: 'Give up',
               action: 'CHECK',
             ),
           ],
@@ -17077,12 +17077,12 @@ void main() {
           choices: [
             CourseChoice(
               id: 'check-r',
-              label: 'Check / give up',
+              label: 'Check',
               action: 'CHECK',
             ),
             CourseChoice(
               id: 'bluff',
-              label: 'Bluff large with no blockers',
+              label: 'Bluff large',
               action: 'BET',
               amountBb: 40,
             ),
@@ -17149,7 +17149,7 @@ void main() {
         ),
       );
       expect(find.byType(Capstone3betDemo), findsOneWidget);
-      expect(find.text('Tap SPR, Continue, and Close.'), findsOneWidget);
+      expect(find.text('Tap SPR, Continue, and Close.'), findsNothing);
       expect(find.text('Tap SPR, Continue, and Close'), findsNothing);
       expect(
         find.text('Short prompts — plan by SPR, then close clean'),
@@ -17426,7 +17426,7 @@ void main() {
         ),
       );
       expect(find.byType(CapstoneMultiwayDeepDemo), findsOneWidget);
-      expect(find.text('Tap Nuts, Deep, and No-bluff.'), findsOneWidget);
+      expect(find.text('Tap Nuts, Deep, and No-bluff.'), findsNothing);
       expect(
         find.text('Deep multiway — chase nuts, skip light bluffs'),
         findsNothing,
@@ -17489,7 +17489,7 @@ void main() {
           choices: [
             CourseChoice(
               id: 'check',
-              label: 'Check / give up',
+              label: 'Check',
               action: 'CHECK',
             ),
             CourseChoice(
@@ -17568,7 +17568,7 @@ void main() {
           choices: [
             CourseChoice(
               id: 'check',
-              label: 'Check / give up',
+              label: 'Check',
               action: 'CHECK',
             ),
             CourseChoice(
@@ -17645,7 +17645,7 @@ void main() {
           choices: [
             CourseChoice(
               id: 'check',
-              label: 'Check / give up',
+              label: 'Check',
               action: 'CHECK',
             ),
             CourseChoice(
@@ -17719,7 +17719,7 @@ void main() {
         ),
       );
       expect(find.byType(CapstoneLimpedDemo), findsOneWidget);
-      expect(find.text('Tap Nuts, Value, and Thin.'), findsOneWidget);
+      expect(find.text('Tap Nuts, Value, and Thin.'), findsNothing);
       expect(
         find.text('Limped multiway — value thick, bluffs thin'),
         findsNothing,
@@ -18013,7 +18013,7 @@ void main() {
         ),
       );
       expect(find.byType(Capstone4betDemo), findsOneWidget);
-      expect(find.text('Tap SPR, Commit, and Fold.'), findsOneWidget);
+      expect(find.text('Tap SPR, Commit, and Fold.'), findsNothing);
       expect(
         find.text('Short SPR — commit clean, fold ego'),
         findsNothing,
@@ -18295,7 +18295,7 @@ void main() {
       expect(find.byType(LiveWarmupPrepDemo), findsOneWidget);
       expect(
         find.text('Tap Checklist, Defaults, and One hand.'),
-        findsOneWidget,
+        findsNothing,
       );
       expect(
         find.text('Short checklist, then one coached hand'),
