@@ -1459,9 +1459,9 @@ export function buildSectionFour() {
                 objectives: ["Cite narrow-entry tendency"],
                 lifeLoss: true,
                 choices: [
-                  choice("tighter", "Tighter — need a better hand or read", "recommended",
+                  choice("tighter", "Tighter baseline", "recommended",
                     "Steal width cites their overfolding.", {action: "FOLD", reversalRead: "With nit evidence, K9o becomes a steal."}),
-                  choice("same-always", "Always steal K9o versus anyone", "questionable",
+                  choice("same-always", "Always steal K9o", "questionable",
                     "Read-dependent.", {action: "RAISE", amountBb: 3})
                 ],
               }),
@@ -1473,9 +1473,9 @@ export function buildSectionFour() {
                 lifeLoss: true,
                 playerTypeRefs: ["nit"],
                 choices: [
-                  choice("cite-strong", "Their range is strong when they raise", "recommended",
+                  choice("cite-strong", "Range is strong when they raise", "recommended",
                     "Cite narrow entry plus aggression.", {reversalRead: "Shown bluffs reduce that respect."}),
-                  choice("cite-fear", "Because nits are scary people", "clear_mistake",
+                  choice("cite-fear", "Nits are scary people", "clear_mistake",
                     "Cite range, not fear.", {betterChoiceId: "cite-strong"})
                 ],
               }),

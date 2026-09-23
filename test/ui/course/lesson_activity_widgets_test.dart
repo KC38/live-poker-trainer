@@ -9454,6 +9454,43 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 adjust nit guided docks steal on button felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-04-07-03-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Open wider steal versus nit big blind.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Nit in BB. You have K9o on BTN. Action?',
+      choices: const [
+        CourseChoice(id: 'steal', label: 'Open / steal', action: 'RAISE'),
+        CourseChoice(id: 'fold-k9', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Nit in the BB — tap Open / steal with K9o.'),
+      findsOneWidget,
+    );
+    expect(find.text('OPEN / STEAL'), findsOneWidget);
+    await tester.tap(find.text('OPEN / STEAL'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'steal');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {

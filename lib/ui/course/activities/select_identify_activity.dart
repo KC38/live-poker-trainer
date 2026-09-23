@@ -360,6 +360,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Folds forever, then explodes — tap the label.',
       'act-04-07-02-checkpoint' =>
           'Treat Nit as a working model — tap it.',
+      'act-04-07-03-checkpoint' =>
+          'Nit check-raises — tap why you respect it.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -399,7 +401,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id.startsWith('act-04-07-01-') ||
             widget.activity.id == 'act-04-07-02-guided' ||
             widget.activity.id == 'act-04-07-02-unguided' ||
-            widget.activity.id == 'act-04-07-02-checkpoint';
+            widget.activity.id == 'act-04-07-02-checkpoint' ||
+            widget.activity.id == 'act-04-07-03-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

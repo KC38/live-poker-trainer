@@ -244,6 +244,12 @@ enum LessonTableRegion {
 
   /// Nit as insult (mistake).
   meetNitInsult,
+
+  /// Respect nit check-raise because range is strong.
+  citeNitStrongRange,
+
+  /// Respect because fear (mistake).
+  citeNitFear,
 }
 
 /// How the mini-table is arranged.
@@ -334,6 +340,9 @@ enum LessonTableLayout {
 
   /// Meet Nit: working model vs insult.
   meetNitModelOutcomes,
+
+  /// Adjust vs Nit: cite strong range vs fear.
+  nitRespectCiteOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -863,6 +872,11 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.meetNitModelOutcomes,
         caption: 'How to treat the Nit label',
       );
+    case 'act-04-07-03-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.nitRespectCiteOutcomes,
+        caption: 'Why respect a Nit check-raise?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -1307,6 +1321,12 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.meetNitInsult => pick('insult-n'),
         _ => null,
       };
+    case 'act-04-07-03-checkpoint':
+      return switch (region) {
+        LessonTableRegion.citeNitStrongRange => pick('cite-strong'),
+        LessonTableRegion.citeNitFear => pick('cite-fear'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -1405,7 +1425,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id.startsWith('act-04-07-01-') ||
       activity.id == 'act-04-07-02-guided' ||
       activity.id == 'act-04-07-02-unguided' ||
-      activity.id == 'act-04-07-02-checkpoint';
+      activity.id == 'act-04-07-02-checkpoint' ||
+      activity.id == 'act-04-07-03-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -1567,6 +1588,8 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.meetNitVsManiacOutcomes =>
           _buildMeetNitVsManiacOutcomes(),
       LessonTableLayout.meetNitModelOutcomes => _buildMeetNitModelOutcomes(),
+      LessonTableLayout.nitRespectCiteOutcomes =>
+          _buildNitRespectCiteOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -2819,6 +2842,37 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Not technical',
           visual: const Icon(
             Icons.mood_bad_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNitRespectCiteOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive nit respect — tap why you respect the check-raise',
+      semanticsStatic: 'Nit respect cite outcomes',
+      caption: scene.caption ?? 'Why respect a Nit check-raise?',
+      phases: [
+        (
+          region: LessonTableRegion.citeNitStrongRange,
+          title: 'Strong range',
+          detail: 'When they raise',
+          visual: const Icon(
+            Icons.shield_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.citeNitFear,
+          title: 'Scary vibe',
+          detail: 'Not a cite',
+          visual: const Icon(
+            Icons.sentiment_very_dissatisfied_outlined,
             color: AppColors.slate,
             size: 24,
           ),

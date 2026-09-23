@@ -282,6 +282,12 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Missed draw vs the same station — tap Give up.',
     'act-04-06-03-unguided' =>
       'Same hand, unknown seat — tap Keep it cautious.',
+    'act-04-07-03-guided' =>
+      'Nit in the BB — tap Open / steal with K9o.',
+    'act-04-07-03-scaffolded' =>
+      'Nit check-raises middle pair — tap Fold.',
+    'act-04-07-03-unguided' =>
+      'Unknown BB with K9o — tap Tighter.',
     _ => null,
   };
 }
