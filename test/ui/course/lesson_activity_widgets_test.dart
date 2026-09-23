@@ -1441,10 +1441,17 @@ void main() {
       ),
     );
     expect(find.byType(ActionOrderDemo), findsOneWidget);
-    expect(find.text('Tap UTG, then HJ, then BTN.'), findsOneWidget);
+    expect(find.text('Tap each seat in preflop order'), findsOneWidget);
+    expect(find.text('Tap UTG, then HJ, then BTN.'), findsNothing);
+    expect(find.text('Tap UTG, then HJ, then BTN'), findsNothing);
+    expect(find.text('First'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
+    // Wrong first seat is ignored — teach-by-doing requires order.
+    await tester.tap(find.text('BTN'));
+    await tester.pump();
+    expect(feltAck, 0);
     await tester.tap(find.text('UTG'));
     await tester.pump();
     expect(feltAck, 0);
@@ -4678,6 +4685,20 @@ void main() {
           renderer: ActivityRenderer.orderSequence,
           estimatedSeconds: 40,
           accessibilityText: 'order',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ),
+      isTrue,
+    );
+    expect(
+      isSeatOrderSequenceActivity(
+        CourseActivity(
+          id: 'act-02-01-02-guided-pre',
+          order: 2,
+          stage: ActivityStage.guided,
+          renderer: ActivityRenderer.orderSequence,
+          estimatedSeconds: 40,
+          accessibilityText: 'preflop order',
           acceptedGrades: const [SoftGrade.recommended],
         ),
       ),

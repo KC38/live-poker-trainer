@@ -348,7 +348,8 @@ class CoachDialogueActivity extends StatelessWidget {
             visual.kind != CoachDialogueVisualKind.aggressiveActions &&
             visual.kind != CoachDialogueVisualKind.streetsTimeline &&
             visual.kind != CoachDialogueVisualKind.winningPaths &&
-            visual.kind != CoachDialogueVisualKind.toyHandRun) ...[
+            visual.kind != CoachDialogueVisualKind.toyHandRun &&
+            visual.kind != CoachDialogueVisualKind.actionOrder) ...[
           const SizedBox(height: 10),
           _TapHint(text: visual.continueHint),
         ],
@@ -617,7 +618,7 @@ class CoachDialogueVisual {
     CoachDialogueVisualKind.toyHandRun =>
       'Tap Blinds, You act, and Ending.',
     CoachDialogueVisualKind.actionOrder =>
-      'Tap UTG, then HJ, then BTN.',
+      'Tap each seat in preflop order.',
     CoachDialogueVisualKind.handFamilies =>
       'Tap each starting-hand family.',
     CoachDialogueVisualKind.openRange =>
