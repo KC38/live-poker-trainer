@@ -434,6 +434,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Flats junk / donks — tap Gear change.',
       'act-05-08-01-checkpoint' =>
           'Dynamic reads — tap Fresh samples.',
+      'act-05-09-01-guided' =>
+          'Hit stop-loss — tap Stop / move down.',
+      'act-05-09-01-scaffolded' =>
+          '2/5 opens — tap Decline.',
+      'act-05-09-01-unguided' =>
+          'Tired and up small — tap Cash out.',
+      'act-05-09-01-checkpoint' =>
+          'Session discipline — tap Your edge.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -504,7 +512,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-05-07-01-checkpoint' ||
             widget.activity.id == 'act-05-08-01-guided' ||
             widget.activity.id == 'act-05-08-01-scaffolded' ||
-            widget.activity.id == 'act-05-08-01-checkpoint';
+            widget.activity.id == 'act-05-08-01-checkpoint' ||
+            widget.activity.id == 'act-05-09-01-guided' ||
+            widget.activity.id == 'act-05-09-01-scaffolded' ||
+            widget.activity.id == 'act-05-09-01-unguided' ||
+            widget.activity.id == 'act-05-09-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

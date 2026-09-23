@@ -475,6 +475,30 @@ enum LessonTableRegion {
 
   /// Table dynamics checkpoint: permanent seats (mistake).
   dynamicsPermanentSeats,
+
+  /// Session discipline guided: stop / move down (correct).
+  disciplineStop,
+
+  /// Session discipline guided: reload / chase (mistake).
+  disciplineReload,
+
+  /// Session discipline scaffolded: decline stakes (correct).
+  disciplineDecline,
+
+  /// Session discipline scaffolded: jump up (mistake).
+  disciplineJump,
+
+  /// Session discipline unguided: cash out (correct).
+  disciplineCashOut,
+
+  /// Session discipline unguided: stay forever (mistake).
+  disciplineStay,
+
+  /// Session discipline checkpoint: your edge (correct).
+  disciplineEdge,
+
+  /// Session discipline checkpoint: soft skills only (mistake).
+  disciplineSoftOnly,
 }
 
 /// How the mini-table is arranged.
@@ -664,6 +688,18 @@ enum LessonTableLayout {
 
   /// Table dynamics checkpoint: fresh samples vs permanent seats.
   dynamicsFreshOutcomes,
+
+  /// Session discipline guided: stop vs reload.
+  disciplineStopOutcomes,
+
+  /// Session discipline scaffolded: decline vs jump.
+  disciplineStakesOutcomes,
+
+  /// Session discipline unguided: cash out vs stay.
+  disciplineCashOutOutcomes,
+
+  /// Session discipline checkpoint: edge vs soft skills.
+  disciplineEdgeOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1390,6 +1426,26 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.dynamicsFreshOutcomes,
         caption: 'Dynamic reads should be?',
       );
+    case 'act-05-09-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.disciplineStopOutcomes,
+        caption: 'Hit planned stop-loss — next?',
+      );
+    case 'act-05-09-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.disciplineStakesOutcomes,
+        caption: '40 BI for 1/2 — 2/5 opens?',
+      );
+    case 'act-05-09-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.disciplineCashOutOutcomes,
+        caption: 'Tired, up small, table wild?',
+      );
+    case 'act-05-09-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.disciplineEdgeOutcomes,
+        caption: 'Session discipline is part of?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -2059,6 +2115,30 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.dynamicsPermanentSeats => pick('perm'),
         _ => null,
       };
+    case 'act-05-09-01-guided':
+      return switch (region) {
+        LessonTableRegion.disciplineStop => pick('stop'),
+        LessonTableRegion.disciplineReload => pick('reload'),
+        _ => null,
+      };
+    case 'act-05-09-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.disciplineDecline => pick('decline'),
+        LessonTableRegion.disciplineJump => pick('jump'),
+        _ => null,
+      };
+    case 'act-05-09-01-unguided':
+      return switch (region) {
+        LessonTableRegion.disciplineCashOut => pick('cash'),
+        LessonTableRegion.disciplineStay => pick('punish'),
+        _ => null,
+      };
+    case 'act-05-09-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.disciplineEdge => pick('edge'),
+        LessonTableRegion.disciplineSoftOnly => pick('soft'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -2188,7 +2268,11 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-05-07-01-checkpoint' ||
       activity.id == 'act-05-08-01-guided' ||
       activity.id == 'act-05-08-01-scaffolded' ||
-      activity.id == 'act-05-08-01-checkpoint';
+      activity.id == 'act-05-08-01-checkpoint' ||
+      activity.id == 'act-05-09-01-guided' ||
+      activity.id == 'act-05-09-01-scaffolded' ||
+      activity.id == 'act-05-09-01-unguided' ||
+      activity.id == 'act-05-09-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -2421,6 +2505,14 @@ class LessonTableContext extends StatelessWidget {
           _buildDynamicsGearOutcomes(),
       LessonTableLayout.dynamicsFreshOutcomes =>
           _buildDynamicsFreshOutcomes(),
+      LessonTableLayout.disciplineStopOutcomes =>
+          _buildDisciplineStopOutcomes(),
+      LessonTableLayout.disciplineStakesOutcomes =>
+          _buildDisciplineStakesOutcomes(),
+      LessonTableLayout.disciplineCashOutOutcomes =>
+          _buildDisciplineCashOutOutcomes(),
+      LessonTableLayout.disciplineEdgeOutcomes =>
+          _buildDisciplineEdgeOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -4835,6 +4927,130 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Too rigid',
           visual: const Icon(
             Icons.push_pin_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDisciplineStopOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive session guardrails — tap stop vs reload',
+      semanticsStatic: 'Session discipline stop outcomes',
+      caption: scene.caption ?? 'Hit planned stop-loss — next?',
+      phases: [
+        (
+          region: LessonTableRegion.disciplineStop,
+          title: 'Stop / move down',
+          detail: 'Plans beat feelings',
+          visual: const Icon(
+            Icons.front_hand_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.disciplineReload,
+          title: 'Reload / chase',
+          detail: 'Bankroll leak',
+          visual: const Icon(
+            Icons.replay,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDisciplineStakesOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive session guardrails — tap decline vs jump',
+      semanticsStatic: 'Session discipline stakes outcomes',
+      caption: scene.caption ?? '40 BI for 1/2 — 2/5 opens?',
+      phases: [
+        (
+          region: LessonTableRegion.disciplineDecline,
+          title: 'Decline',
+          detail: 'Outside the plan',
+          visual: const Icon(
+            Icons.block,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.disciplineJump,
+          title: 'Jump up',
+          detail: 'Risk of ruin',
+          visual: const Icon(
+            Icons.trending_up,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDisciplineCashOutOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive session guardrails — tap cash out vs stay',
+      semanticsStatic: 'Session discipline cash-out outcomes',
+      caption: scene.caption ?? 'Tired, up small, table wild?',
+      phases: [
+        (
+          region: LessonTableRegion.disciplineCashOut,
+          title: 'Cash out',
+          detail: 'Fatigue is a leak',
+          visual: const Icon(
+            Icons.logout,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.disciplineStay,
+          title: 'Stay forever',
+          detail: 'Only if sharp',
+          visual: const Icon(
+            Icons.nightlight_round,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDisciplineEdgeOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive session guardrails — tap your edge vs soft skills',
+      semanticsStatic: 'Session discipline edge outcomes',
+      caption: scene.caption ?? 'Session discipline is part of?',
+      phases: [
+        (
+          region: LessonTableRegion.disciplineEdge,
+          title: 'Your edge',
+          detail: 'Same as technical skill',
+          visual: const Icon(
+            Icons.emoji_events_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.disciplineSoftOnly,
+          title: 'Soft skills only',
+          detail: 'Not optional',
+          visual: const Icon(
+            Icons.spa_outlined,
             color: AppColors.slate,
             size: 24,
           ),

@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "0a2a27321584fe03713c32353e3a14eba4580eaf914e767ef85b1b211c3acdbb",
+  "contentChecksum": "95fd52eaa1e5b3316abc46131272fb3d8b1b2900f1bc8c681d90aacd50d37bcf",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -13705,8 +13705,8 @@
                   "choices": [
                     {
                       "id": "stop",
-                      "label": "Stop or move down per plan",
-                      "accessibilityText": "Stop or move down per plan",
+                      "label": "Stop / move down",
+                      "accessibilityText": "Stop / move down",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Plans beat feelings."
@@ -13714,8 +13714,8 @@
                     },
                     {
                       "id": "reload",
-                      "label": "Reload and chase",
-                      "accessibilityText": "Reload and chase",
+                      "label": "Reload / chase",
+                      "accessibilityText": "Reload / chase",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Bankroll leak.",
@@ -13744,8 +13744,8 @@
                   "choices": [
                     {
                       "id": "decline",
-                      "label": "Decline — outside the plan",
-                      "accessibilityText": "Decline — outside the plan",
+                      "label": "Decline",
+                      "accessibilityText": "Decline",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Stakes follow bankroll."
@@ -13753,8 +13753,8 @@
                     },
                     {
                       "id": "jump",
-                      "label": "Jump up on vibe",
-                      "accessibilityText": "Jump up on vibe",
+                      "label": "Jump up",
+                      "accessibilityText": "Jump up",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Risk of ruin.",
@@ -13783,8 +13783,8 @@
                   "choices": [
                     {
                       "id": "cash",
-                      "label": "Cash out — fatigue is a leak",
-                      "accessibilityText": "Cash out — fatigue is a leak",
+                      "label": "Cash out",
+                      "accessibilityText": "Cash out",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Protect the win."
@@ -13792,8 +13792,8 @@
                     },
                     {
                       "id": "punish",
-                      "label": "Stay to punish the table forever",
-                      "accessibilityText": "Stay to punish the table forever",
+                      "label": "Stay forever",
+                      "accessibilityText": "Stay forever",
                       "grading": {
                         "grade": "questionable",
                         "feedback": "Only if sharp and planned."
@@ -13821,8 +13821,8 @@
                   "choices": [
                     {
                       "id": "edge",
-                      "label": "Your edge — same as technical skill",
-                      "accessibilityText": "Your edge — same as technical skill",
+                      "label": "Your edge",
+                      "accessibilityText": "Your edge",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Bankroll and fatigue matter."
@@ -13830,8 +13830,8 @@
                     },
                     {
                       "id": "soft",
-                      "label": "Optional soft skills only",
-                      "accessibilityText": "Optional soft skills only",
+                      "label": "Soft skills only",
+                      "accessibilityText": "Soft skills only",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "It is core.",
