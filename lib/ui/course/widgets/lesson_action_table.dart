@@ -1065,6 +1065,43 @@ LessonActionSpot? resolveToyHandStepSpot({
     }
     return null;
   }
+  if (activityId == 'act-07-10-02-hand') {
+    switch (stepId) {
+      case 'step-3b-flop':
+        return const LessonActionSpot(
+          heroCodes: ['Ah', 'Qd'],
+          boardCodes: ['Qs', '8h', '3d'],
+          potLabel: 'Pot 22',
+          villainLine: 'TAG called your 3-bet',
+          streetLabel: 'Flop · Q83tt · AQ',
+          facingBet: false,
+          openPot: true,
+          feltStatusLine: '3-bet flop — value with TPTK',
+        );
+      case 'step-3b-turn':
+        return const LessonActionSpot(
+          heroCodes: ['Ah', 'Qd'],
+          boardCodes: ['Qs', '8h', '3d', '2d'],
+          potLabel: 'Pot 42',
+          villainLine: 'Called flop c-bet',
+          streetLabel: 'Turn · Q832 · AQ',
+          facingBet: false,
+          openPot: true,
+          feltStatusLine: 'Blank — continue value or kill',
+        );
+      case 'step-3b-river':
+        return const LessonActionSpot(
+          heroCodes: ['Ah', 'Qd'],
+          boardCodes: ['Qs', '8h', '3d', '2d', '7c'],
+          potLabel: 'Pot 86',
+          villainLine: 'TAG check-raises huge',
+          streetLabel: 'River · Q8327 · TPTK',
+          facingBet: true,
+          feltStatusLine: 'Huge raise — close without ego',
+        );
+    }
+    return null;
+  }
   if (activityId == 'act-04-03-01-guided') {
     switch (stepId) {
       case 'step-flop-tp':
@@ -1184,6 +1221,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id == 'act-07-10-01-hand' &&
+      activity.renderer == ActivityRenderer.authoredMultiStepHand) {
+    return true;
+  }
+  if (id == 'act-07-10-02-hand' &&
       activity.renderer == ActivityRenderer.authoredMultiStepHand) {
     return true;
   }

@@ -43,6 +43,12 @@ class AuthoredMultiStepActivity extends StatelessWidget {
         'Called · paired turn — tap Barrel many blanks.',
       ('act-07-10-01-hand', 'step-river') =>
         'Ace-high on 9c — tap Check.',
+      ('act-07-10-02-hand', 'step-3b-flop') =>
+        '3-bet pot · Q83tt — tap C-bet value.',
+      ('act-07-10-02-hand', 'step-3b-turn') =>
+        'Called · blank turn — tap Continue value.',
+      ('act-07-10-02-hand', 'step-3b-river') =>
+        'TAG check-raises huge — tap Fold.',
       _ => 'Play the street — tap your action on the dock.',
     };
   }
