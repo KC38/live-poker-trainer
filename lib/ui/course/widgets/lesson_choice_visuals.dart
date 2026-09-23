@@ -456,6 +456,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Stack-depth plans: tap short commit / deep implied / effective tiles on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-07-07-01-checkpoint') {
+    // Same cards, different types: baseline vs guess/overfit on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

@@ -33,6 +33,7 @@ import 'package:live_poker_trainer/ui/course/widgets/river_composition_demo.dart
 import 'package:live_poker_trainer/ui/course/widgets/pot_type_plans_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/hu_vs_multiway_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/stack_depth_plans_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/same_cards_types_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
@@ -16172,6 +16173,212 @@ void main() {
     await tester.tap(find.text('Every hand'));
     await tester.pump();
     expect(controller.draft.choiceId, 'every');
+    controller.dispose();
+  });
+
+  testWidgets(
+    's7 same cards explain taps Cards Models Cite instead of Continue',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-07-07-01-explain',
+        order: 1,
+        stage: ActivityStage.explain,
+        renderer: ActivityRenderer.coachDialogue,
+        estimatedSeconds: 30,
+        accessibilityText: 'Same cards. Five models. Cite the tendency.',
+        acceptedGrades: const [SoftGrade.recommended],
+        objectives: const ['Change lines by type with citations'],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'm',
+            kind: 'dialogue',
+            text: 'Same cards. Five models. Cite the tendency.',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      var feltAck = 0;
+      await tester.pumpWidget(
+        _wrap(
+          CoachDialogueActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+            onFeltAcknowledge: () => feltAck += 1,
+          ),
+        ),
+      );
+      expect(find.byType(SameCardsTypesDemo), findsOneWidget);
+      expect(find.text('Tap Cards, Models, and Cite.'), findsOneWidget);
+      expect(find.text('Tap Cards, Models, and Cite'), findsNothing);
+      expect(
+        find.text('Change lines only when the tendency justifies it'),
+        findsNothing,
+      );
+      expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+      expect(isTableRegionTapActivity(activity), isTrue);
+
+      for (final title in ['CARDS', 'MODELS', 'CITE']) {
+        await tester.tap(find.text(title));
+        await tester.pump();
+      }
+      expect(feltAck, 1);
+      controller.dispose();
+    },
+  );
+
+  testWidgets('s7 same cards guided docks Bet for value on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-07-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Bet value.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Flop top pair. Station check. Action?',
+      choices: const [
+        CourseChoice(id: 'bet', label: 'Bet for value', action: 'BET'),
+        CourseChoice(id: 'check', label: 'Check always', action: 'CHECK'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Flop top pair · Station check — tap Bet for value.'),
+      findsOneWidget,
+    );
+    expect(find.text('BET FOR VALUE'), findsOneWidget);
+    await tester.tap(find.text('BET FOR VALUE'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'bet');
+    controller.dispose();
+  });
+
+  testWidgets('s7 same cards scaffolded docks Fold on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-07-07-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Fold/more careful.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Same top pair. TAG check-raises. Action?',
+      choices: const [
+        CourseChoice(id: 'fold', label: 'Fold more often', action: 'FOLD'),
+        CourseChoice(id: 'bluff', label: 'Rebluff light', action: 'RAISE'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Same top pair · TAG check-raises — tap Fold.'),
+      findsOneWidget,
+    );
+    expect(find.text('FOLD'), findsOneWidget);
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'fold');
+    controller.dispose();
+  });
+
+  testWidgets('s7 same cards unguided docks Call on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-07-07-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Call.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Same top pair. LAG barrels turn. Action?',
+      choices: const [
+        CourseChoice(id: 'call', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'fold', label: 'Auto-fold', action: 'FOLD'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Same top pair · LAG barrels — tap Call.'),
+      findsOneWidget,
+    );
+    expect(find.text('CALL'), findsOneWidget);
+    await tester.tap(find.text('CALL'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'call');
+    controller.dispose();
+  });
+
+  testWidgets('s7 same cards checkpoint taps Baseline on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-07-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Baseline strategy.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'No type evidence yet. Default?',
+      choices: const [
+        CourseChoice(id: 'base', label: 'Baseline strategy'),
+        CourseChoice(id: 'guess', label: 'Guess a type and overfit'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('No type evidence — tap Baseline.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Baseline'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'base');
     controller.dispose();
   });
 }

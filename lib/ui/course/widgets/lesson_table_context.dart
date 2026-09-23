@@ -997,6 +997,12 @@ enum LessonTableRegion {
 
   /// Stack-depth checkpoint: once per lifetime (mistake).
   stackDepthOnceLifetime,
+
+  /// Same-cards checkpoint: baseline strategy (correct).
+  sameCardsBaseline,
+
+  /// Same-cards checkpoint: guess a type and overfit (mistake).
+  sameCardsGuess,
 }
 
 /// How the mini-table is arranged.
@@ -1459,6 +1465,9 @@ enum LessonTableLayout {
 
   /// Stack-depth checkpoint: every hand vs once per lifetime.
   stackDepthCheckpointOutcomes,
+
+  /// Same-cards checkpoint: baseline vs guess/overfit.
+  sameCardsCheckpointOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -2610,6 +2619,11 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         layout: LessonTableLayout.stackDepthCheckpointOutcomes,
         caption: 'Stack depth is?',
+      );
+    case 'act-07-07-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.sameCardsCheckpointOutcomes,
+        caption: 'No type evidence yet. Default?',
       );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
@@ -3805,6 +3819,12 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.stackDepthOnceLifetime => pick('once'),
         _ => null,
       };
+    case 'act-07-07-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.sameCardsBaseline => pick('base'),
+        LessonTableRegion.sameCardsGuess => pick('guess'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -3886,7 +3906,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
         activity.id == 'act-07-03-01-explain' ||
         activity.id == 'act-07-04-01-explain' ||
         activity.id == 'act-07-05-01-explain' ||
-        activity.id == 'act-07-06-01-explain';
+        activity.id == 'act-07-06-01-explain' ||
+        activity.id == 'act-07-07-01-explain';
   }
   if (activity.renderer != ActivityRenderer.selectIdentify &&
       activity.renderer != ActivityRenderer.playerReadClassify) {
@@ -4032,7 +4053,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-07-06-01-guided' ||
       activity.id == 'act-07-06-01-scaffolded' ||
       activity.id == 'act-07-06-01-unguided' ||
-      activity.id == 'act-07-06-01-checkpoint';
+      activity.id == 'act-07-06-01-checkpoint' ||
+      activity.id == 'act-07-07-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -4400,6 +4422,8 @@ class LessonTableContext extends StatelessWidget {
           _buildStackDepthUnguidedOutcomes(),
       LessonTableLayout.stackDepthCheckpointOutcomes =>
           _buildStackDepthCheckpointOutcomes(),
+      LessonTableLayout.sameCardsCheckpointOutcomes =>
+          _buildSameCardsCheckpointOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -9557,6 +9581,37 @@ class LessonTableContext extends StatelessWidget {
           detail: 'No',
           visual: const Icon(
             Icons.event_busy,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSameCardsCheckpointOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive same-cards types — tap Baseline or Guess type',
+      semanticsStatic: 'Same-cards checkpoint outcomes',
+      caption: scene.caption ?? 'No type evidence yet. Default?',
+      phases: [
+        (
+          region: LessonTableRegion.sameCardsBaseline,
+          title: 'Baseline',
+          detail: 'Exploit needs evidence',
+          visual: const Icon(
+            Icons.balance,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.sameCardsGuess,
+          title: 'Guess type',
+          detail: 'Overfit',
+          visual: const Icon(
+            Icons.casino_outlined,
             color: AppColors.slate,
             size: 24,
           ),
