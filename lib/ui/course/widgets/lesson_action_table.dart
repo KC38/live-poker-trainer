@@ -1027,6 +1027,44 @@ LessonActionSpot? resolveToyHandStepSpot({
   required String activityId,
   required String stepId,
 }) {
+  if (activityId == 'act-07-10-01-hand') {
+    switch (stepId) {
+      case 'step-flop':
+        return const LessonActionSpot(
+          heroCodes: ['Ah', 'Qd'],
+          boardCodes: ['Kc', '7s', '2h'],
+          potLabel: 'Pot 6.5',
+          villainLine: 'BB called BTN open',
+          streetLabel: 'Flop · K72r · AQ',
+          facingBet: false,
+          openPot: true,
+          feltStatusLine: 'SRP flop — start the map',
+        );
+      case 'step-turn':
+        return const LessonActionSpot(
+          heroCodes: ['Ah', 'Qd'],
+          boardCodes: ['Kc', '7s', '2h', '2d'],
+          potLabel: 'Pot 18.5',
+          villainLine: 'Called flop c-bet',
+          streetLabel: 'Turn · K722 · AQ',
+          facingBet: false,
+          openPot: true,
+          feltStatusLine: 'Paired blank — update the map',
+        );
+      case 'step-river':
+        return const LessonActionSpot(
+          heroCodes: ['Ah', 'Qd'],
+          boardCodes: ['Kc', '7s', '2h', '2d', '9c'],
+          potLabel: 'Pot 46.5',
+          villainLine: 'Called turn barrel',
+          streetLabel: 'River · K7229 · ace-high',
+          facingBet: false,
+          openPot: true,
+          feltStatusLine: 'No story — finish clean',
+        );
+    }
+    return null;
+  }
   if (activityId == 'act-04-03-01-guided') {
     switch (stepId) {
       case 'step-flop-tp':
@@ -1142,6 +1180,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id == 'act-04-03-01-guided' &&
+      activity.renderer == ActivityRenderer.authoredMultiStepHand) {
+    return true;
+  }
+  if (id == 'act-07-10-01-hand' &&
       activity.renderer == ActivityRenderer.authoredMultiStepHand) {
     return true;
   }

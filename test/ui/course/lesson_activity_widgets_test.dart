@@ -36,6 +36,7 @@ import 'package:live_poker_trainer/ui/course/widgets/stack_depth_plans_demo.dart
 import 'package:live_poker_trainer/ui/course/widgets/same_cards_types_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/type_board_line_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/leak_review_book_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/capstone_srp_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
@@ -16807,6 +16808,306 @@ void main() {
     await tester.tap(find.text('Baseline'));
     await tester.pump();
     expect(controller.draft.choiceId, 'base');
+    controller.dispose();
+  });
+
+  testWidgets(
+    's7 capstone srp explain taps Plan Update Finish instead of Continue',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-07-10-01-explain',
+        order: 1,
+        stage: ActivityStage.explain,
+        renderer: ActivityRenderer.coachDialogue,
+        estimatedSeconds: 30,
+        accessibilityText: 'Capstone SRP. No hints. Trust your map.',
+        acceptedGrades: const [SoftGrade.recommended],
+        objectives: const ['Execute a full SRP plan'],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'm',
+            kind: 'dialogue',
+            text: 'Capstone SRP. No hints. Trust your map.',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      var feltAck = 0;
+      await tester.pumpWidget(
+        _wrap(
+          CoachDialogueActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+            onFeltAcknowledge: () => feltAck += 1,
+          ),
+        ),
+      );
+      expect(find.byType(CapstoneSrpDemo), findsOneWidget);
+      expect(find.text('Tap Plan, Update, and Finish.'), findsOneWidget);
+      expect(find.text('Tap Plan, Update, and Finish'), findsNothing);
+      expect(
+        find.text('No hints — trust your map across three streets'),
+        findsNothing,
+      );
+      expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+      expect(isTableRegionTapActivity(activity), isTrue);
+
+      for (final title in ['PLAN', 'UPDATE', 'FINISH']) {
+        await tester.tap(find.text(title));
+        await tester.pump();
+      }
+      expect(feltAck, 1);
+      controller.dispose();
+    },
+  );
+
+  testWidgets('s7 capstone srp hand docks C-bet on flop felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-07-10-01-hand',
+      order: 2,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 70,
+      accessibilityText: 'BTN open, BB call. Play three streets.',
+      acceptedGrades: const [SoftGrade.recommended],
+      handSteps: const [
+        CourseHandStep(
+          id: 'step-flop',
+          street: 'flop',
+          prompt: 'BTN, SRP, board K72r, you have AQ. Action?',
+          choices: [
+            CourseChoice(id: 'cb', label: 'C-bet', action: 'BET', amountBb: 6),
+            CourseChoice(id: 'check', label: 'Check', action: 'CHECK'),
+            CourseChoice(
+              id: 'jam',
+              label: 'Jam 150bb',
+              action: 'RAISE',
+              amountBb: 150,
+            ),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-turn',
+          street: 'turn',
+          prompt: 'Called. Turn 2d. Action?',
+          choices: [
+            CourseChoice(
+              id: 'barrel',
+              label: 'Barrel many blanks',
+              action: 'BET',
+              amountBb: 14,
+            ),
+            CourseChoice(
+              id: 'check-t',
+              label: 'Check/give-up sometimes',
+              action: 'CHECK',
+            ),
+            CourseChoice(id: 'min', label: 'Bet 1bb', action: 'BET', amountBb: 1),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-river',
+          street: 'river',
+          prompt: 'Called again. River 9c. Ace-high. Action?',
+          choices: [
+            CourseChoice(
+              id: 'check-r',
+              label: 'Check / give up',
+              action: 'CHECK',
+            ),
+            CourseChoice(
+              id: 'bluff',
+              label: 'Bluff large with no blockers',
+              action: 'BET',
+              amountBb: 40,
+            ),
+            CourseChoice(id: 'tiny', label: 'Bet 1bb', action: 'BET', amountBb: 1),
+          ],
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        AuthoredMultiStepActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('BTN SRP on K72r — tap Bet.'), findsOneWidget);
+    expect(find.textContaining('Flop · K72r · AQ'), findsOneWidget);
+    expect(find.text('BET'), findsOneWidget);
+    expect(
+      find.text('BTN, SRP, board K72r, you have AQ. Action?'),
+      findsNothing,
+    );
+    await tester.tap(find.text('BET'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'cb');
+    controller.dispose();
+  });
+
+  testWidgets('s7 srp hand docks Barrel on turn felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-07-10-01-hand',
+      order: 2,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 70,
+      accessibilityText: 'BTN open, BB call. Play three streets.',
+      acceptedGrades: const [SoftGrade.recommended],
+      handSteps: const [
+        CourseHandStep(
+          id: 'step-flop',
+          street: 'flop',
+          prompt: 'BTN, SRP, board K72r, you have AQ. Action?',
+          choices: [
+            CourseChoice(id: 'cb', label: 'C-bet', action: 'BET'),
+            CourseChoice(id: 'check', label: 'Check', action: 'CHECK'),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-turn',
+          street: 'turn',
+          prompt: 'Called. Turn 2d. Action?',
+          choices: [
+            CourseChoice(
+              id: 'barrel',
+              label: 'Barrel many blanks',
+              action: 'BET',
+              amountBb: 14,
+            ),
+            CourseChoice(
+              id: 'check-t',
+              label: 'Check/give-up sometimes',
+              action: 'CHECK',
+            ),
+            CourseChoice(id: 'min', label: 'Bet 1bb', action: 'BET', amountBb: 1),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-river',
+          street: 'river',
+          prompt: 'Called again. River 9c. Ace-high. Action?',
+          choices: [
+            CourseChoice(id: 'check-r', label: 'Check / give up', action: 'CHECK'),
+            CourseChoice(
+              id: 'bluff',
+              label: 'Bluff large with no blockers',
+              action: 'BET',
+            ),
+          ],
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    controller.setHandStepIndex(1);
+    await tester.pumpWidget(
+      _wrap(
+        AuthoredMultiStepActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Called · paired turn — tap Barrel many blanks.'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('Turn · K722 · AQ'), findsOneWidget);
+    expect(find.text('BARREL MANY BLANKS'), findsOneWidget);
+    expect(find.text('Called. Turn 2d. Action?'), findsNothing);
+    await tester.tap(find.text('BARREL MANY BLANKS'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'barrel');
+    controller.dispose();
+  });
+
+  testWidgets('s7 srp hand docks Check on river felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-07-10-01-hand',
+      order: 2,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 70,
+      accessibilityText: 'BTN open, BB call. Play three streets.',
+      acceptedGrades: const [SoftGrade.recommended],
+      handSteps: const [
+        CourseHandStep(
+          id: 'step-flop',
+          street: 'flop',
+          prompt: 'BTN, SRP, board K72r, you have AQ. Action?',
+          choices: [
+            CourseChoice(id: 'cb', label: 'C-bet', action: 'BET'),
+            CourseChoice(id: 'check', label: 'Check', action: 'CHECK'),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-turn',
+          street: 'turn',
+          prompt: 'Called. Turn 2d. Action?',
+          choices: [
+            CourseChoice(
+              id: 'barrel',
+              label: 'Barrel many blanks',
+              action: 'BET',
+            ),
+            CourseChoice(
+              id: 'check-t',
+              label: 'Check/give-up sometimes',
+              action: 'CHECK',
+            ),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-river',
+          street: 'river',
+          prompt: 'Called again. River 9c. Ace-high. Action?',
+          choices: [
+            CourseChoice(
+              id: 'check-r',
+              label: 'Check / give up',
+              action: 'CHECK',
+            ),
+            CourseChoice(
+              id: 'bluff',
+              label: 'Bluff large with no blockers',
+              action: 'BET',
+              amountBb: 40,
+            ),
+            CourseChoice(id: 'tiny', label: 'Bet 1bb', action: 'BET', amountBb: 1),
+          ],
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    controller.setHandStepIndex(2);
+    await tester.pumpWidget(
+      _wrap(
+        AuthoredMultiStepActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Ace-high on 9c — tap Check.'), findsOneWidget);
+    expect(find.textContaining('River · K7229 · ace-high'), findsOneWidget);
+    expect(find.text('CHECK'), findsOneWidget);
+    expect(
+      find.text('Called again. River 9c. Ace-high. Action?'),
+      findsNothing,
+    );
+    await tester.tap(find.text('CHECK'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'check-r');
     controller.dispose();
   });
 }

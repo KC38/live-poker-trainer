@@ -4009,7 +4009,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
         activity.id == 'act-07-06-01-explain' ||
         activity.id == 'act-07-07-01-explain' ||
         activity.id == 'act-07-08-01-explain' ||
-        activity.id == 'act-07-09-01-explain';
+        activity.id == 'act-07-09-01-explain' ||
+        activity.id == 'act-07-10-01-explain';
   }
   if (activity.renderer != ActivityRenderer.selectIdentify &&
       activity.renderer != ActivityRenderer.playerReadClassify) {
