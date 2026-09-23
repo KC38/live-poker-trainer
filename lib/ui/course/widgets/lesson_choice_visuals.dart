@@ -429,6 +429,12 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Map turn barrels before flop bet: tap continue / give-up tiles on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-07-03-01-scaffolded' ||
+      activity.id == 'act-07-03-01-unguided' ||
+      activity.id == 'act-07-03-01-checkpoint') {
+    // River composition: tap value / bluff / check story tiles on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

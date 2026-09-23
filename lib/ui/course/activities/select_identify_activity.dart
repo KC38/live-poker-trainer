@@ -578,6 +578,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'No turn idea — tap Map first.',
       'act-07-02-01-checkpoint' =>
           'Turn map — tap Continue/kill list.',
+      'act-07-03-01-scaffolded' =>
+          'Nut flush blocker — tap Blocks strong calls.',
+      'act-07-03-01-unguided' =>
+          'No story — tap Check.',
+      'act-07-03-01-checkpoint' =>
+          'River rule — tap Value needs calls.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -720,7 +726,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-07-02-01-guided' ||
             widget.activity.id == 'act-07-02-01-scaffolded' ||
             widget.activity.id == 'act-07-02-01-unguided' ||
-            widget.activity.id == 'act-07-02-01-checkpoint';
+            widget.activity.id == 'act-07-02-01-checkpoint' ||
+            widget.activity.id == 'act-07-03-01-scaffolded' ||
+            widget.activity.id == 'act-07-03-01-unguided' ||
+            widget.activity.id == 'act-07-03-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

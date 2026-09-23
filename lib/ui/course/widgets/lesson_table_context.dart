@@ -907,6 +907,24 @@ enum LessonTableRegion {
 
   /// Turn-map checkpoint: invent later (mistake).
   turnMapInventLater,
+
+  /// River composition scaffolded: blocks strong calls (correct).
+  riverCompBlocks,
+
+  /// River composition scaffolded: fake EV sheet (mistake).
+  riverCompFakeEv,
+
+  /// River composition unguided: check (correct).
+  riverCompCheck,
+
+  /// River composition unguided: blast off (mistake).
+  riverCompBlast,
+
+  /// River composition checkpoint: value needs calls (correct).
+  riverCompRule,
+
+  /// River composition checkpoint: bet every river (mistake).
+  riverCompStyle,
 }
 
 /// How the mini-table is arranged.
@@ -1324,6 +1342,15 @@ enum LessonTableLayout {
 
   /// Turn-map checkpoint: continue/kill list vs invent later.
   turnMapCheckpointOutcomes,
+
+  /// River composition scaffolded: blocks vs fake EV.
+  riverCompScaffoldedOutcomes,
+
+  /// River composition unguided: check vs blast.
+  riverCompUnguidedOutcomes,
+
+  /// River composition checkpoint: rule vs style.
+  riverCompCheckpointOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -2400,6 +2427,21 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         layout: LessonTableLayout.turnMapCheckpointOutcomes,
         caption: 'Turn map is?',
+      );
+    case 'act-07-03-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.riverCompScaffoldedOutcomes,
+        caption: 'Nut flush blocker — why bluff?',
+      );
+    case 'act-07-03-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.riverCompUnguidedOutcomes,
+        caption: 'No value, no blockers, no fold equity?',
+      );
+    case 'act-07-03-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.riverCompCheckpointOutcomes,
+        caption: 'River composition rule?',
       );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
@@ -3505,6 +3547,24 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.turnMapInventLater => pick('later'),
         _ => null,
       };
+    case 'act-07-03-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.riverCompBlocks => pick('block'),
+        LessonTableRegion.riverCompFakeEv => pick('ev'),
+        _ => null,
+      };
+    case 'act-07-03-01-unguided':
+      return switch (region) {
+        LessonTableRegion.riverCompCheck => pick('check'),
+        LessonTableRegion.riverCompBlast => pick('spew'),
+        _ => null,
+      };
+    case 'act-07-03-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.riverCompRule => pick('rule'),
+        LessonTableRegion.riverCompStyle => pick('random'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -3582,7 +3642,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
         activity.id == 'act-06-12-03-explain' ||
         activity.id == 'act-06-13-01-explain' ||
         activity.id == 'act-07-01-01-explain' ||
-        activity.id == 'act-07-02-01-explain';
+        activity.id == 'act-07-02-01-explain' ||
+        activity.id == 'act-07-03-01-explain';
   }
   if (activity.renderer != ActivityRenderer.selectIdentify &&
       activity.renderer != ActivityRenderer.playerReadClassify) {
@@ -3713,7 +3774,10 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-07-02-01-guided' ||
       activity.id == 'act-07-02-01-scaffolded' ||
       activity.id == 'act-07-02-01-unguided' ||
-      activity.id == 'act-07-02-01-checkpoint';
+      activity.id == 'act-07-02-01-checkpoint' ||
+      activity.id == 'act-07-03-01-scaffolded' ||
+      activity.id == 'act-07-03-01-unguided' ||
+      activity.id == 'act-07-03-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -4053,6 +4117,12 @@ class LessonTableContext extends StatelessWidget {
           _buildTurnMapUnguidedOutcomes(),
       LessonTableLayout.turnMapCheckpointOutcomes =>
           _buildTurnMapCheckpointOutcomes(),
+      LessonTableLayout.riverCompScaffoldedOutcomes =>
+          _buildRiverCompScaffoldedOutcomes(),
+      LessonTableLayout.riverCompUnguidedOutcomes =>
+          _buildRiverCompUnguidedOutcomes(),
+      LessonTableLayout.riverCompCheckpointOutcomes =>
+          _buildRiverCompCheckpointOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -8746,6 +8816,99 @@ class LessonTableContext extends StatelessWidget {
           visual: const Icon(
             Icons.hourglass_empty,
             color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRiverCompScaffoldedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive river composition — tap Blocks strong calls or Fake EV',
+      semanticsStatic: 'River composition scaffolded outcomes',
+      caption: scene.caption ?? 'Nut flush blocker — why bluff?',
+      phases: [
+        (
+          region: LessonTableRegion.riverCompBlocks,
+          title: 'Blocks strong calls',
+          detail: 'Nut flush blocker',
+          visual: const Icon(
+            Icons.block,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.riverCompFakeEv,
+          title: 'Fake EV',
+          detail: 'Sheet said +0.02',
+          visual: const Icon(
+            Icons.calculate_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRiverCompUnguidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive river composition — tap Check or Blast off',
+      semanticsStatic: 'River composition unguided outcomes',
+      caption: scene.caption ?? 'No value, no blockers, no fold equity?',
+      phases: [
+        (
+          region: LessonTableRegion.riverCompCheck,
+          title: 'Check',
+          detail: 'No story',
+          visual: const Icon(
+            Icons.pause_circle_outline,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.riverCompBlast,
+          title: 'Blast off',
+          detail: 'Spew',
+          visual: const Icon(
+            Icons.local_fire_department_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRiverCompCheckpointOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive river composition — tap Value needs calls or Bet every river',
+      semanticsStatic: 'River composition checkpoint outcomes',
+      caption: scene.caption ?? 'River composition rule?',
+      phases: [
+        (
+          region: LessonTableRegion.riverCompRule,
+          title: 'Value needs calls',
+          detail: 'Bluffs need folds',
+          visual: const Icon(
+            Icons.balance_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.riverCompStyle,
+          title: 'Bet every river',
+          detail: 'For style',
+          visual: const Icon(
+            Icons.style_outlined,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
