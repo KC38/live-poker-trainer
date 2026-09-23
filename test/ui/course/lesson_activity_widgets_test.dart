@@ -1742,7 +1742,9 @@ void main() {
       ),
     );
     expect(find.byType(FullRingDemo), findsOneWidget);
-    expect(find.text('Tap Nine, Same, and Position.'), findsOneWidget);
+    // Felt embeds the tap cue — no duplicate outer _TapHint with trailing period.
+    expect(find.text('Tap Nine, Same, and Position'), findsOneWidget);
+    expect(find.text('Tap Nine, Same, and Position.'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
@@ -1790,8 +1792,12 @@ void main() {
     );
     expect(find.byType(TableReadDemo), findsOneWidget);
     expect(
-      find.text('Tap Pot, Stacks, Button, and Who Acts.'),
+      find.text('Tap Pot, Stacks, Button, and Who Acts'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Tap Pot, Stacks, Button, and Who Acts.'),
+      findsNothing,
     );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);

@@ -354,7 +354,9 @@ class CoachDialogueActivity extends StatelessWidget {
             visual.kind != CoachDialogueVisualKind.openRange &&
             visual.kind != CoachDialogueVisualKind.vsOpenResponse &&
             visual.kind != CoachDialogueVisualKind.bbStackDepth &&
-            visual.kind != CoachDialogueVisualKind.tableHabits) ...[
+            visual.kind != CoachDialogueVisualKind.tableHabits &&
+            visual.kind != CoachDialogueVisualKind.fullRing &&
+            visual.kind != CoachDialogueVisualKind.tableRead) ...[
           const SizedBox(height: 10),
           _TapHint(text: visual.continueHint),
         ],
