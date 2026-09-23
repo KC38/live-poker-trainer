@@ -73,6 +73,14 @@ bool ordersStrongestFirst(CourseActivity activity) {
       a11y.contains('strongest first');
 }
 
+/// Whether Rex already owns the tap-order instruction for [activity].
+bool coachOwnsOrderHint(CourseActivity activity) {
+  return isStreetSequenceActivity(activity) ||
+      isSeatOrderSequenceActivity(activity) ||
+      ordersStrongestFirst(activity) ||
+      isHandExampleSequenceActivity(activity);
+}
+
 /// Empty tray hint for compare/order builders.
 String emptyOrderTrayHint({
   required CourseActivity activity,
@@ -80,9 +88,7 @@ String emptyOrderTrayHint({
   bool coachAlreadyGuides = false,
 }) {
   // Rex / prompt already says tap order — keep the tray quiet.
-  if (coachAlreadyGuides &&
-      (isStreetSequenceActivity(activity) ||
-          isSeatOrderSequenceActivity(activity))) {
+  if (coachAlreadyGuides && coachOwnsOrderHint(activity)) {
     return 'Build order here';
   }
   if (ordersStrongestFirst(activity)) return 'Tap strongest first';
@@ -110,10 +116,8 @@ String orderSequenceStatusLine({
   // Nice! owns the next beat — never leave Checking… under feedback.
   if (graded) return '';
   if (submitting || complete) return 'Checking…';
-  // Rex already coaches street/seat order — skip a third tap line.
-  if (coachAlreadyGuides &&
-      (isStreetSequenceActivity(activity) ||
-          isSeatOrderSequenceActivity(activity))) {
+  // Rex already coaches tap order — skip a third status line.
+  if (coachAlreadyGuides && coachOwnsOrderHint(activity)) {
     return '';
   }
   if (rankMode) return 'Tap low → high';

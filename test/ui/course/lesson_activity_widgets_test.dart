@@ -5348,6 +5348,45 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('jump ranks keeps Rex felt-first and quiets tray/status', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-06-02-jump-ranks',
+      order: 1,
+      stage: ActivityStage.jumpTest,
+      renderer: ActivityRenderer.compareRank,
+      estimatedSeconds: 40,
+      accessibilityText: 'Jump test: tap strongest hand first, then weaker.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap strongest hand first, then weaker.',
+      sequenceItems: const [
+        CourseChoice(id: 'j-flush', label: 'Flush'),
+        CourseChoice(id: 'j-straight', label: 'Straight'),
+        CourseChoice(id: 'j-two', label: 'Two pair'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        OrderSequenceActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Tap strongest hand first, then weaker.'), findsOneWidget);
+    expect(find.textContaining('straight, two pair, flush'), findsNothing);
+    expect(find.text('Build order here'), findsOneWidget);
+    expect(find.text('Tap strongest first'), findsNothing);
+    expect(find.text('Tap strong → weak'), findsNothing);
+    expect(find.text('Flush'), findsOneWidget);
+    expect(find.text('Straight'), findsOneWidget);
+    expect(find.text('Two pair'), findsOneWidget);
+    controller.dispose();
+  });
+
   testWidgets('streets unguided end taps bets matched on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-01-04-01-unguided-end',

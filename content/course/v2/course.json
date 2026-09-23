@@ -2808,7 +2808,7 @@
                   "stage": "jump_test",
                   "renderer": "compare_rank",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Jump test: order straight, two pair, and flush.",
+                  "accessibilityText": "Jump test: tap strongest hand first, then weaker.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2818,7 +2818,7 @@
                   "objectives": [
                     "Confirm hand ranking"
                   ],
-                  "prompt": "Strongest to weakest: straight, two pair, flush.",
+                  "prompt": "Tap strongest hand first, then weaker.",
                   "sequenceItems": [
                     {
                       "id": "j-flush",
