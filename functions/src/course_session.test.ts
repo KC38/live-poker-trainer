@@ -528,4 +528,34 @@ describe("multi-step activity advance", () => {
       }),
     ).toBe(false);
   });
+
+  it("advances on last street when choiceId also appears earlier", () => {
+    const dupCheckHand = {
+      ...guided,
+      handSteps: [
+        {
+          id: "step-a",
+          street: "flop",
+          choices: [{id: "bet", label: "Bet"}],
+        },
+        {
+          id: "step-b",
+          street: "turn",
+          choices: [{id: "check", label: "Check"}],
+        },
+        {
+          id: "step-c",
+          street: "river",
+          choices: [{id: "check", label: "Check"}],
+        },
+      ],
+    } as typeof guided;
+    expect(
+      shouldAdvanceActivityAfterSubmit({
+        activity: dupCheckHand,
+        choiceId: "check",
+        accepted: true,
+      }),
+    ).toBe(true);
+  });
 });

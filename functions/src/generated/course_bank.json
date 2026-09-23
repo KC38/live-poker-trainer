@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "9965a9eeb9d18eb107a1b0a57fe92521d297366ce006b69bd770c8e1d6505975",
+  "contentChecksum": "9c6d4ea58fe14d0d7c3911a272c77d52bb2067b6911c1ea0080060c3b56d50f6",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -20516,9 +20516,9 @@
                       "accessibilityText": "Do not bluff the crowd light.",
                       "choices": [
                         {
-                          "id": "check",
-                          "label": "Check / give up",
-                          "accessibilityText": "Check / give up",
+                          "id": "check-r",
+                          "label": "Check",
+                          "accessibilityText": "Check",
                           "grading": {
                             "grade": "recommended",
                             "feedback": "Multiway missed draw — no crowd bluff."
@@ -20532,7 +20532,7 @@
                           "grading": {
                             "grade": "clear_mistake",
                             "feedback": "Crowds call.",
-                            "betterChoiceId": "check"
+                            "betterChoiceId": "check-r"
                           },
                           "action": "BET",
                           "amountBb": 60
@@ -30594,14 +30594,14 @@
         {
           "id": "step-mw-river",
           "choiceGrading": {
-            "check": {
+            "check-r": {
               "grade": "recommended",
               "feedback": "Multiway missed draw — no crowd bluff."
             },
             "bluff": {
               "grade": "clear_mistake",
               "feedback": "Crowds call.",
-              "betterChoiceId": "check"
+              "betterChoiceId": "check-r"
             }
           }
         }
