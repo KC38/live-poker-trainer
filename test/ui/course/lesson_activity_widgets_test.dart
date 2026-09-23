@@ -18013,7 +18013,7 @@ void main() {
         ),
       );
       expect(find.byType(Capstone4betDemo), findsOneWidget);
-      expect(find.text('Tap SPR, Commit, and Fold.'), findsNothing);
+      expect(find.text('Tap SPR, Commit, and No Hero.'), findsNothing);
       expect(
         find.text('Short SPR — commit clean, fold ego'),
         findsNothing,
@@ -18021,7 +18021,7 @@ void main() {
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['SPR', 'COMMIT', 'FOLD']) {
+      for (final title in ['SPR', 'COMMIT', 'NO HERO']) {
         await tester.tap(find.text(title));
         await tester.pump();
       }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 
-/// SPR / Commit / Fold tiles for capstone 4-bet-pot explain demos.
+/// SPR / Commit / No-hero tiles for capstone 4-bet-pot explain demos.
 class Capstone4betDemo extends StatefulWidget {
   /// Creates the demo.
   const Capstone4betDemo({
@@ -19,7 +19,7 @@ class Capstone4betDemo extends StatefulWidget {
   static const points = <({String label, String caption, Color color})>[
     (label: 'SPR', caption: 'Short stack', color: AppColors.gold),
     (label: 'COMMIT', caption: 'Continue plan', color: AppColors.cream),
-    (label: 'FOLD', caption: 'No hero call', color: AppColors.danger),
+    (label: 'NO HERO', caption: 'No hero call', color: AppColors.danger),
   ];
 
   @override
