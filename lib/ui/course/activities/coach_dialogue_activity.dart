@@ -335,7 +335,10 @@ class CoachDialogueActivity extends StatelessWidget {
                     : onFeltAcknowledge,
           ),
         ],
-        if (showGuidance && visual.requiresFeltTap) ...[
+        if (showGuidance &&
+            visual.requiresFeltTap &&
+            // BestFiveDemo embeds its own tap hint on the felt.
+            visual.kind != CoachDialogueVisualKind.bestFive) ...[
           const SizedBox(height: 10),
           _TapHint(text: visual.continueHint),
         ],

@@ -357,12 +357,13 @@ void main() {
     );
     expect(find.byType(BestFiveDemo), findsOneWidget);
     expect(
-      find.text('Tap each highlighted card — only five of seven play.'),
-      findsOneWidget,
-    );
-    expect(
       find.text('Tap each highlighted card — those five count'),
       findsOneWidget,
+    );
+    // No duplicate gold hint under the felt (demo embeds the instruction).
+    expect(
+      find.text('Tap each highlighted card — only five of seven play.'),
+      findsNothing,
     );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
 
