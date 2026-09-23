@@ -5701,6 +5701,59 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('section jump pos taps CO seat on position felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-02-07-02-jump-pos',
+      order: 1,
+      stage: ActivityStage.jumpTest,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 35,
+      accessibilityText: 'Jump test: cutoff label.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Seat right before the button?',
+      choices: const [
+        CourseChoice(id: 'j2-co', label: 'Cutoff'),
+        CourseChoice(id: 'j2-hj', label: 'Hijack'),
+        CourseChoice(id: 'j2-sb', label: 'Small blind'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.positionLabels,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.cutoff,
+        choices: activity.choices,
+      ),
+      'j2-co',
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Tap the seat right before the button.'),
+      findsOneWidget,
+    );
+    expect(find.text('Seat right before the button?'), findsNothing);
+    expect(find.text('Cutoff'), findsNothing);
+    expect(find.text('CO'), findsOneWidget);
+    await tester.tap(find.text('CO'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'j2-co');
+    controller.dispose();
+  });
+
   testWidgets('numeric entry updates draft', (tester) async {
     final activity = _activity(
       renderer: ActivityRenderer.numericPotPrice,

@@ -318,6 +318,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Both checked down — tap who takes the pot.',
       'act-02-07-01-checkpoint-habit' =>
           'Cards uncovered and action left — tap the safe habit.',
+      'act-02-07-02-jump-pos' =>
+          'Tap the seat right before the button.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -340,7 +342,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id.startsWith('act-01-04-01-') ||
             widget.activity.id.startsWith('act-01-05-01-') ||
             widget.activity.id.startsWith('act-02-01-01-') ||
-            widget.activity.id == 'act-02-07-01-checkpoint-habit';
+            widget.activity.id == 'act-02-07-01-checkpoint-habit' ||
+            widget.activity.id == 'act-02-07-02-jump-pos';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&
