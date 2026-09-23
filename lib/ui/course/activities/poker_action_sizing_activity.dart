@@ -300,6 +300,8 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Nit check-raises second pair — tap Fold.',
     'act-04-10-01-unguided' =>
       'Maniac barrels second pair — tap Call.',
+    'act-04-10-01-checkpoint' =>
+      'BTN vs Nit BB with KTo — tap Open to 6.',
     _ => null,
   };
 }
