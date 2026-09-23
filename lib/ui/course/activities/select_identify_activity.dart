@@ -495,8 +495,6 @@ class _HandCategoryTapActivity extends StatelessWidget {
           'They bet twice — you pinned Exactly AK. Tap the problem.',
         'act-04-01-01-checkpoint' =>
           'Same board, different villain lines — tap what changes.',
-        'act-04-02-01-unguided' =>
-          'UTG open, two callers, AKo in BB — tap the idea.',
         _ => 'Look at the board and your holes — tap what you made.',
       };
 
@@ -605,8 +603,6 @@ class _HandCategoryTapActivity extends StatelessWidget {
                         ? 'Tap the price fix.'
                         : activity.id.startsWith('act-04-01-01-')
                         ? 'Tap the range answer.'
-                        : activity.id == 'act-04-02-01-unguided'
-                        ? 'Tap the squeeze idea.'
                         : 'Tap the hand category you made.';
                   }
                   return 'Checking…';

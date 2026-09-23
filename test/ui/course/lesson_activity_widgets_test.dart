@@ -8610,40 +8610,45 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('s4 3bet unguided taps squeeze tile on multiway felt', (
+  testWidgets('s4 3bet unguided docks squeeze on multiway AKo felt', (
     tester,
   ) async {
     final activity = CourseActivity(
       id: 'act-04-02-01-unguided',
       order: 4,
       stage: ActivityStage.unguided,
-      renderer: ActivityRenderer.selectIdentify,
+      renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 40,
       accessibilityText: 'Squeeze with strong hands multiway.',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'UTG opens, two callers. You have AKo in the big blind. Idea?',
+      prompt: 'UTG opens, two callers. You have AKo in the big blind. Action?',
       choices: const [
-        CourseChoice(id: 'squeeze', label: '3-bet / squeeze for value'),
-        CourseChoice(id: 'limp-more', label: 'Limp behind'),
-        CourseChoice(id: 'fold-ak', label: 'Fold AK'),
+        CourseChoice(
+          id: 'squeeze',
+          label: 'Squeeze to ~20',
+          action: 'RAISE',
+        ),
+        CourseChoice(id: 'limp-more', label: 'Limp behind', action: 'CALL'),
+        CourseChoice(id: 'fold-ak', label: 'Fold', action: 'FOLD'),
       ],
     );
-    expect(
-      resolveSelectIdentifyPresentation(activity),
-      SelectIdentifyPresentation.handCategoryTap,
-    );
+    expect(isLessonActionTableActivity(activity), isTrue);
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
       _wrap(
-        SelectIdentifyActivity(
+        PokerActionSizingActivity(
           activity: activity,
           controller: controller,
           showGuidance: true,
         ),
       ),
     );
-    expect(find.text('3-bet / squeeze for value'), findsOneWidget);
-    await tester.tap(find.text('3-bet / squeeze for value'));
+    expect(
+      find.text('UTG open, two callers, AKo in BB — tap a squeeze.'),
+      findsOneWidget,
+    );
+    expect(find.text('SQUEEZE TO ~20'), findsOneWidget);
+    await tester.tap(find.text('SQUEEZE TO ~20'));
     await tester.pump();
     expect(controller.draft.choiceId, 'squeeze');
     controller.dispose();
