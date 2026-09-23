@@ -5623,6 +5623,84 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('baseline habit checkpoint taps Cover + wait on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-07-01-checkpoint-habit',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Protect cards and wait for action on a full ring.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Full ring. Action two seats left. Your cards are uncovered. Fix?',
+      choices: const [
+        CourseChoice(
+          id: 'cover-wait',
+          label: 'Cover your cards and wait your turn',
+        ),
+        CourseChoice(
+          id: 'act-now',
+          label: 'Announce fold immediately to speed up',
+        ),
+        CourseChoice(
+          id: 'leave-cards',
+          label: 'Leave cards bare so the table can see you are folding',
+        ),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.habitCoverOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.habitCoverWait,
+        choices: activity.choices,
+      ),
+      'cover-wait',
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Cards uncovered and action left — tap the safe habit.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Full ring. Action two seats left. Your cards are uncovered. Fix?',
+      ),
+      findsNothing,
+    );
+    expect(
+      find.text('Cover your cards and wait your turn'),
+      findsNothing,
+    );
+    expect(find.text('Cover + wait'), findsOneWidget);
+    expect(find.text('Act early'), findsOneWidget);
+    expect(find.text('Leave bare'), findsOneWidget);
+    await tester.tap(find.text('Cover + wait'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'cover-wait');
+    controller.dispose();
+  });
+
   testWidgets('numeric entry updates draft', (tester) async {
     final activity = _activity(
       renderer: ActivityRenderer.numericPotPrice,

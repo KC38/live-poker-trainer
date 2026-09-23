@@ -103,6 +103,15 @@ enum LessonTableRegion {
 
   /// Open-pot size distractor: too large.
   potChipsTwelve,
+
+  /// Live habit: cover cards and wait your turn.
+  habitCoverWait,
+
+  /// Live habit distractor: announce / act early out of turn.
+  habitActEarly,
+
+  /// Live habit distractor: leave cards uncovered / flash them.
+  habitLeaveBare,
 }
 
 /// How the mini-table is arranged.
@@ -133,6 +142,9 @@ enum LessonTableLayout {
 
   /// Open-to-6 pot size tiles (7 / 9 / 12 chips).
   potOpenSizeOutcomes,
+
+  /// Live-habit tiles: cover+wait / act early / leave bare.
+  habitCoverOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -409,6 +421,13 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.board,
         caption: 'You',
       );
+    case 'act-02-07-01-checkpoint-habit':
+      return const LessonTableScene(
+        layout: LessonTableLayout.habitCoverOutcomes,
+        heroCodes: ['Ah', 'Kd'],
+        villainSeatCount: 1,
+        caption: 'Full ring · action two seats left',
+      );
   }
 
   // Hole-card choice quizzes already render MiniCards as answers. Never invent
@@ -635,6 +654,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.seatNeverMatters => pick('same-always'),
         _ => null,
       };
+    case 'act-02-07-01-checkpoint-habit':
+      return switch (region) {
+        LessonTableRegion.habitCoverWait => pick('cover-wait'),
+        LessonTableRegion.habitActEarly => pick('act-now'),
+        LessonTableRegion.habitLeaveBare => pick('leave-cards'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -712,7 +738,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id.startsWith('act-01-01-03-') ||
       activity.id.startsWith('act-01-04-01-') ||
       activity.id.startsWith('act-01-05-01-') ||
-      activity.id.startsWith('act-02-01-01-');
+      activity.id.startsWith('act-02-01-01-') ||
+      activity.id == 'act-02-07-01-checkpoint-habit';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -841,6 +868,7 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.potShowdownOutcomes => _buildPotShowdownOutcomes(),
       LessonTableLayout.potSideOutcomes => _buildPotSideOutcomes(),
       LessonTableLayout.potOpenSizeOutcomes => _buildPotOpenSizeOutcomes(),
+      LessonTableLayout.habitCoverOutcomes => _buildHabitCoverOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -1427,6 +1455,68 @@ class LessonTableContext extends StatelessWidget {
           title: '12 chips',
           detail: 'Too big',
           visual: const _PotChipDot(label: '12', gold: false),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHabitCoverOutcomes() {
+    final hero = scene.heroCodes.isEmpty
+        ? const ['Ah', 'Kd']
+        : scene.heroCodes.take(2).toList(growable: false);
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive live habit — tap cover and wait, act early, or leave bare',
+      semanticsStatic: 'Live habit outcomes',
+      caption: scene.caption ?? 'Full ring · action still left',
+      phases: [
+        (
+          region: LessonTableRegion.habitCoverWait,
+          title: 'Cover + wait',
+          detail: 'Safe',
+          visual: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (var i = 0; i < hero.length; i++) ...[
+                    if (i > 0) const SizedBox(width: 2),
+                    MiniCard(
+                      card: CardModel.fromCode(hero[i]),
+                      size: MiniCardSize.tiny,
+                    ),
+                  ],
+                ],
+              ),
+              const SizedBox(height: 4),
+              const Icon(
+                Icons.back_hand_outlined,
+                color: AppColors.gold,
+                size: 18,
+              ),
+            ],
+          ),
+        ),
+        (
+          region: LessonTableRegion.habitActEarly,
+          title: 'Act early',
+          detail: 'OOT',
+          visual: const Icon(
+            Icons.campaign_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.habitLeaveBare,
+          title: 'Leave bare',
+          detail: 'Flash',
+          visual: const Icon(
+            Icons.visibility_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
         ),
       ],
     );

@@ -92,6 +92,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Board-plays chop: tap the felt (board / you / them), not text tiles.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-02-07-01-checkpoint-habit') {
+    // Live habit: tap Cover+wait / Act early / Leave bare on the felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {
     return SelectIdentifyPresentation.showdownTap;

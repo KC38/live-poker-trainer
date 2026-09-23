@@ -316,6 +316,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'You are short all-in. Tap what is true.',
       'act-01-02-02-unguided-board' =>
           'Both checked down — tap who takes the pot.',
+      'act-02-07-01-checkpoint-habit' =>
+          'Cards uncovered and action left — tap the safe habit.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -337,7 +339,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         final feltFirstSelect =
             widget.activity.id.startsWith('act-01-04-01-') ||
             widget.activity.id.startsWith('act-01-05-01-') ||
-            widget.activity.id.startsWith('act-02-01-01-');
+            widget.activity.id.startsWith('act-02-01-01-') ||
+            widget.activity.id == 'act-02-07-01-checkpoint-habit';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&
