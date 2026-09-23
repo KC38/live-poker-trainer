@@ -754,6 +754,12 @@ enum LessonTableRegion {
 
   /// Meet TAG checkpoint: insult (mistake).
   meetTagInsult,
+
+  /// Adjust vs TAG checkpoint: selective + disciplined cite (correct).
+  citeTagSelective,
+
+  /// Adjust vs TAG checkpoint: vibes (mistake).
+  citeTagVibes,
 }
 
 /// How the mini-table is arranged.
@@ -1084,6 +1090,9 @@ enum LessonTableLayout {
 
   /// Meet TAG: working model vs insult.
   meetTagModelOutcomes,
+
+  /// Adjust vs TAG: selective cite vs vibes.
+  tagRespectCiteOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -2047,6 +2056,11 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.meetTagModelOutcomes,
         caption: 'How to treat the TAG label',
       );
+    case 'act-06-11-03-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.tagRespectCiteOutcomes,
+        caption: 'Versus TAG, cite which tendency?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -3000,6 +3014,12 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.meetTagInsult => pick('soul'),
         _ => null,
       };
+    case 'act-06-11-03-checkpoint':
+      return switch (region) {
+        LessonTableRegion.citeTagSelective => pick('cite'),
+        LessonTableRegion.citeTagVibes => pick('vague'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -3176,7 +3196,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-06-11-02-guided' ||
       activity.id == 'act-06-11-02-scaffolded' ||
       activity.id == 'act-06-11-02-unguided' ||
-      activity.id == 'act-06-11-02-checkpoint';
+      activity.id == 'act-06-11-02-checkpoint' ||
+      activity.id == 'act-06-11-03-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -3475,6 +3496,8 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.meetTagVsManiacOutcomes =>
           _buildMeetTagVsManiacOutcomes(),
       LessonTableLayout.meetTagModelOutcomes => _buildMeetTagModelOutcomes(),
+      LessonTableLayout.tagRespectCiteOutcomes =>
+          _buildTagRespectCiteOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -7381,6 +7404,37 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Not technical',
           visual: const Icon(
             Icons.mood_bad_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTagRespectCiteOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive TAG cite — tap selective cite or vibes',
+      semanticsStatic: 'TAG respect cite outcomes',
+      caption: scene.caption ?? 'Versus TAG, cite which tendency?',
+      phases: [
+        (
+          region: LessonTableRegion.citeTagSelective,
+          title: 'Selective + disciplined',
+          detail: 'Cite the tendency',
+          visual: const Icon(
+            Icons.gps_fixed,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.citeTagVibes,
+          title: 'Vibes',
+          detail: 'Not a cite',
+          visual: const Icon(
+            Icons.sentiment_very_dissatisfied_outlined,
             color: AppColors.slate,
             size: 24,
           ),

@@ -1563,7 +1563,7 @@ export function buildSectionSix() {
                 objectives: ["Respect TAG aggression"],
                 playerTypeRefs: ["tag"],
                 choices: [
-                  choice("fold-k9", "Fold more than versus a nit", "recommended",
+                  choice("fold-k9", "Tighter fold", "recommended",
                     "TAG defends better than nits.", {action: "FOLD", reversalRead: "Versus nit BB: steal wider."}),
                   choice("open-wide", "Open any two", "clear_mistake",
                     "Too wide.", {action: "RAISE", amountBb: 3, betterChoiceId: "fold-k9"})
@@ -1577,9 +1577,9 @@ export function buildSectionSix() {
                 lifeLoss: true,
                 playerTypeRefs: ["tag"],
                 choices: [
-                  choice("check", "Check back more", "recommended",
+                  choice("check", "Check back", "recommended",
                     "They fold worse.", {action: "CHECK", reversalRead: "Station: bet thin."}),
-                  choice("bet", "Always bet thin", "questionable",
+                  choice("bet", "Bet thin always", "questionable",
                     "Needs call-down evidence.", {action: "BET", amountBb: 8})
                 ],
               }),
@@ -1590,9 +1590,9 @@ export function buildSectionSix() {
                 objectives: ["Respect TAG aggression"], lifeLoss: true,
                 playerTypeRefs: ["tag"],
                 choices: [
-                  choice("cite", "Selective aggression and disciplined folds", "recommended",
+                  choice("cite", "Selective + disciplined", "recommended",
                     "Advice must cite the tendency."),
-                  choice("vague", "Because vibes", "clear_mistake",
+                  choice("vague", "Vibes", "clear_mistake",
                     "Cite evidence.", {betterChoiceId: "cite"})
                 ],
               }),

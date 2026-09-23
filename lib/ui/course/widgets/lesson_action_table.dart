@@ -863,6 +863,37 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         facingBet: true,
         feltStatusLine: 'No maniac read — hard fold',
       );
+    case 'act-06-11-03-guided':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', '9d'],
+        boardCodes: ['Qc', '9s', '3h'],
+        potLabel: 'Pot 14',
+        villainLine: 'TAG check-raises your c-bet',
+        streetLabel: 'Flop · second pair',
+        facingBet: true,
+        feltStatusLine: 'TAG heat is usually strong',
+      );
+    case 'act-06-11-03-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['Kh', '9d'],
+        potLabel: 'Pot 1.5',
+        villainLine: 'TAG in BB · defends well',
+        streetLabel: 'Preflop · Button',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Steal tighter than vs nits',
+      );
+    case 'act-06-11-03-unguided':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', 'Td'],
+        boardCodes: ['Qc', 'Ts', '3h', '2d', '7c'],
+        potLabel: 'Pot 28',
+        villainLine: 'TAG · rarely calls light',
+        streetLabel: 'River · second pair',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Thin value needs their calls',
+      );
   }
   return null;
 }
@@ -1129,6 +1160,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-06-10-01-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-06-11-03-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
@@ -4157,6 +4192,107 @@ class _VsManiacsDemoState extends State<VsManiacsDemo> {
             const SizedBox(height: 10),
             Text(
               'Call wider · let them hang · no ego',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
+/// Versus TAG: respect heat, steal less than vs nits, no light rebluffs.
+class VsTagsDemo extends StatefulWidget {
+  /// Creates the demo.
+  const VsTagsDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'CREDIT', caption: 'Respect raises', color: AppColors.gold),
+    (label: 'TIGHTER', caption: 'Steal less vs TAG', color: AppColors.cream),
+    (label: 'NO LIGHT', caption: 'Skip rebluff XR', color: AppColors.danger),
+  ];
+
+  @override
+  State<VsTagsDemo> createState() => _VsTagsDemoState();
+}
+
+class _VsTagsDemoState extends State<VsTagsDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= VsTagsDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Versus TAGs',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < VsTagsDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoActionCard(
+                    label: VsTagsDemo.points[i].label,
+                    caption: VsTagsDemo.points[i].caption,
+                    color: VsTagsDemo.points[i].color,
+                    selected: _tapped.contains(VsTagsDemo.points[i].label),
+                    enabled: widget.interactive && widget.enabled,
+                    onPressed:
+                        widget.interactive
+                            ? () => _onTap(VsTagsDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          // Interactive: Rex already cues Credit / Tighter / No light.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Respect heat · steal less · no light XR',
               style: GoogleFonts.manrope(
                 color: AppColors.gold,
                 fontSize: 12,

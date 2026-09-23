@@ -16816,8 +16816,8 @@
                   "choices": [
                     {
                       "id": "fold-k9",
-                      "label": "Fold more than versus a nit",
-                      "accessibilityText": "Fold more than versus a nit",
+                      "label": "Tighter fold",
+                      "accessibilityText": "Tighter fold",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "TAG defends better than nits.",
@@ -16862,8 +16862,8 @@
                   "choices": [
                     {
                       "id": "check",
-                      "label": "Check back more",
-                      "accessibilityText": "Check back more",
+                      "label": "Check back",
+                      "accessibilityText": "Check back",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "They fold worse.",
@@ -16873,8 +16873,8 @@
                     },
                     {
                       "id": "bet",
-                      "label": "Always bet thin",
-                      "accessibilityText": "Always bet thin",
+                      "label": "Bet thin always",
+                      "accessibilityText": "Bet thin always",
                       "grading": {
                         "grade": "questionable",
                         "feedback": "Needs call-down evidence."
@@ -16907,8 +16907,8 @@
                   "choices": [
                     {
                       "id": "cite",
-                      "label": "Selective aggression and disciplined folds",
-                      "accessibilityText": "Selective aggression and disciplined folds",
+                      "label": "Selective + disciplined",
+                      "accessibilityText": "Selective + disciplined",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Advice must cite the tendency."
@@ -16916,8 +16916,8 @@
                     },
                     {
                       "id": "vague",
-                      "label": "Because vibes",
-                      "accessibilityText": "Because vibes",
+                      "label": "Vibes",
+                      "accessibilityText": "Vibes",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Cite evidence.",

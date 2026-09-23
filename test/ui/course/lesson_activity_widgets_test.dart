@@ -13022,6 +13022,180 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s6 adjust tag explain resolves vsTags visual', (tester) async {
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-06-11-03-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'Versus TAG: respect raises; do not invent light bluff-raises.',
+          objectives: const ['Respect TAG aggression'],
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.vsTags,
+    );
+  });
+
+  testWidgets('s6 adjust tag guided docks Fold on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-11-03-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Fold often.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'TAG check-raises flop. You have second pair. Action?',
+      choices: const [
+        CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'raise', label: 'Rebluff light', action: 'RAISE'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('TAG check-raises second pair — tap Fold.'),
+      findsOneWidget,
+    );
+    expect(find.text('FOLD'), findsOneWidget);
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'fold');
+    controller.dispose();
+  });
+
+  testWidgets('s6 adjust tag scaffolded docks Tighter fold on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-11-03-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Tighter than vs nit.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Steal BTN vs TAG BB with K9o. Action?',
+      choices: const [
+        CourseChoice(id: 'fold-k9', label: 'Tighter fold', action: 'FOLD'),
+        CourseChoice(id: 'open-wide', label: 'Open any two', action: 'RAISE'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('BTN vs TAG BB with K9o — tap Tighter fold.'),
+      findsOneWidget,
+    );
+    expect(find.text('TIGHTER FOLD'), findsOneWidget);
+    await tester.tap(find.text('TIGHTER FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'fold-k9');
+    controller.dispose();
+  });
+
+  testWidgets('s6 adjust tag unguided docks Check on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-11-03-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Check more.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'River thin value vs TAG who rarely calls light. Action?',
+      choices: const [
+        CourseChoice(id: 'check', label: 'Check back', action: 'CHECK'),
+        CourseChoice(id: 'bet', label: 'Bet thin always', action: 'BET'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('River thin vs TAG who rarely calls — tap Check.'),
+      findsOneWidget,
+    );
+    expect(find.text('CHECK'), findsOneWidget);
+    await tester.tap(find.text('CHECK'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'check');
+    controller.dispose();
+  });
+
+  testWidgets('s6 adjust tag checkpoint taps Selective + disciplined on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-11-03-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Selective aggression / tighter call-downs.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Versus TAG, cite which tendency?',
+      choices: const [
+        CourseChoice(id: 'cite', label: 'Selective + disciplined'),
+        CourseChoice(id: 'vague', label: 'Vibes'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Versus TAG — tap Selective + disciplined.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Selective + disciplined'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'cite');
+    controller.dispose();
+  });
+
   testWidgets('s4 meet nit guided taps Nit on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-04-07-02-guided',
