@@ -23,6 +23,7 @@ import 'package:live_poker_trainer/ui/course/widgets/selective_aggression_demo.d
 import 'package:live_poker_trainer/ui/course/widgets/tag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/wide_pressure_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/preflop_flop_plan_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -355,6 +356,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.widePressure
                     ? null
                     : onFeltAcknowledge,
+            onPreflopFlopPlanAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.preflopFlopPlan
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance &&
@@ -616,6 +621,9 @@ enum CoachDialogueVisualKind {
 
   /// Wide sustained pressure: wide entry, planned barrels — count samples.
   widePressure,
+
+  /// Enter with a reason; flop confirms or cancels the preflop plan.
+  preflopFlopPlan,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -768,6 +776,8 @@ class CoachDialogueVisual {
       'Tap Wide, Pressure, and Model.',
     CoachDialogueVisualKind.widePressure =>
       'Tap Wide, Pressure, and Sample.',
+    CoachDialogueVisualKind.preflopFlopPlan =>
+      'Tap Reason, Confirm, and Cancel.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -839,7 +849,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.selectiveAggression ||
       kind == CoachDialogueVisualKind.tagModel ||
       kind == CoachDialogueVisualKind.lagModel ||
-      kind == CoachDialogueVisualKind.widePressure;
+      kind == CoachDialogueVisualKind.widePressure ||
+      kind == CoachDialogueVisualKind.preflopFlopPlan;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -978,6 +989,8 @@ class CoachDialogueVisual {
       'LAG tiles: wide, pressure, model',
     CoachDialogueVisualKind.widePressure =>
       'Wide-pressure tiles: wide entry, planned barrels, count samples',
+    CoachDialogueVisualKind.preflopFlopPlan =>
+      'Preflop-to-flop tiles: reason, confirm, cancel',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -1228,6 +1241,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-06-13-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.exploitEvidence,
+      );
+    case 'act-07-01-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.preflopFlopPlan,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1767,6 +1784,18 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.lagModel,
     );
   }
+  // Phrase-safe preflop→flop plan — reason / confirm / cancel framing.
+  if (blob.contains('enter with a reason') ||
+      blob.contains('flop confirms or cancels') ||
+      blob.contains('confirms or cancels') ||
+      (blob.contains('preflop') &&
+          blob.contains('flop') &&
+          (blob.contains('reason') || blob.contains('cancels'))) ||
+      (blob.contains('carry a preflop') && blob.contains('flop'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.preflopFlopPlan,
+    );
+  }
   // Phrase-safe vs LAG — require versus/trap/fancy framing.
   if (blob.contains('versus lag') ||
       blob.contains('versus lags') ||
@@ -1876,6 +1905,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onTagModelAcknowledge,
     this.onLagModelAcknowledge,
     this.onWidePressureAcknowledge,
+    this.onPreflopFlopPlanAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1946,6 +1976,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onTagModelAcknowledge;
   final VoidCallback? onLagModelAcknowledge;
   final VoidCallback? onWidePressureAcknowledge;
+  final VoidCallback? onPreflopFlopPlanAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -2288,6 +2319,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onWidePressureAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onWidePressureAcknowledge,
+        ),
+        CoachDialogueVisualKind.preflopFlopPlan => PreflopFlopPlanDemo(
+          interactive: onPreflopFlopPlanAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onPreflopFlopPlanAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },

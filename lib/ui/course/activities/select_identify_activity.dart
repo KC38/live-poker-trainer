@@ -562,6 +562,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Tight entry, planned barrels — tap TAG.',
       'act-06-13-02-cp-lag' =>
           'Wide entry, sustained pressure — tap LAG.',
+      'act-07-01-01-guided' =>
+          'AQo 3-bet · 872tt — tap Plan is sick.',
+      'act-07-01-01-scaffolded' =>
+          'BTN steal KTo · KT2r — tap Value continues.',
+      'act-07-01-01-unguided' =>
+          'Best habit — tap Name the thesis.',
+      'act-07-01-01-checkpoint' =>
+          'Dead plan — tap Abandon quickly.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -696,7 +704,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-06-13-02-cp-cap' ||
             widget.activity.id == 'act-06-13-02-cp-polar' ||
             widget.activity.id == 'act-06-13-02-cp-tag' ||
-            widget.activity.id == 'act-06-13-02-cp-lag';
+            widget.activity.id == 'act-06-13-02-cp-lag' ||
+            widget.activity.id == 'act-07-01-01-guided' ||
+            widget.activity.id == 'act-07-01-01-scaffolded' ||
+            widget.activity.id == 'act-07-01-01-unguided' ||
+            widget.activity.id == 'act-07-01-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

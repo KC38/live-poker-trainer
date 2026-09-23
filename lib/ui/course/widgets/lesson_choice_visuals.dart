@@ -415,6 +415,13 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Section 6 exit: tap advantage / caps / polar / TAG / LAG on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-07-01-01-guided' ||
+      activity.id == 'act-07-01-01-scaffolded' ||
+      activity.id == 'act-07-01-01-unguided' ||
+      activity.id == 'act-07-01-01-checkpoint') {
+    // Carry preflop plan onto flop: tap update / habit tiles on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.
