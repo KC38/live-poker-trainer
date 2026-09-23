@@ -1097,11 +1097,11 @@ export function buildSectionSix() {
                 a11y: "Ace of the suit.",
                 objectives: ["Choose bluffs that block call-downs"],
                 choices: [
-                  choice("as", "Ace of the flush suit", "recommended",
+                  choice("as", "Ace blocker", "recommended",
                     "Blocks nut flushes that call."),
-                  choice("off", "Offsuit undercards with no blockers", "questionable",
+                  choice("off", "No blockers", "questionable",
                     "Worse bluff candidate."),
-                  choice("ev", "Whatever has +0.37bb in a sim you invented", "clear_mistake",
+                  choice("ev", "Fake +EV", "clear_mistake",
                     "No fabricated EV.", {betterChoiceId: "as"})
                 ],
               }),
@@ -1111,9 +1111,9 @@ export function buildSectionSix() {
                 a11y: "Unblock bluffs — no flush blockers.",
                 objectives: ["Prefer call-downs that unblock bluffs"],
                 choices: [
-                  choice("unblock", "Hands that unblock their bluffs", "recommended",
+                  choice("unblock", "Unblock bluffs", "recommended",
                     "You want them to have air."),
-                  choice("block-nuts", "Block their air and unblock nuts", "clear_mistake",
+                  choice("block-nuts", "Block their air", "clear_mistake",
                     "Opposite.", {betterChoiceId: "unblock"})
                 ],
               }),
@@ -1123,9 +1123,9 @@ export function buildSectionSix() {
                 a11y: "Nothing — they tweak choices.",
                 objectives: ["Avoid fabricated EV claims"], lifeLoss: true,
                 choices: [
-                  choice("tweak", "A tweak on top of line/type evidence", "recommended",
+                  choice("tweak", "Tweak evidence", "recommended",
                     "Not a magic wand."),
-                  choice("replace", "All other poker reasoning", "clear_mistake",
+                  choice("replace", "Replace all reasoning", "clear_mistake",
                     "Too narrow.", {betterChoiceId: "tweak"})
                 ],
               }),
@@ -1135,9 +1135,9 @@ export function buildSectionSix() {
                 a11y: "No fabricated EV.",
                 objectives: ["Avoid fabricated EV claims"], lifeLoss: true,
                 choices: [
-                  choice("no", "No fabricated solver EV", "recommended",
+                  choice("no", "No fake EV", "recommended",
                     "Qualitative and decision-linked only."),
-                  choice("fake", "Invent precise EVs freely", "clear_mistake",
+                  choice("fake", "Invent EVs", "clear_mistake",
                     "Forbidden.", {betterChoiceId: "no"})
                 ],
               }),

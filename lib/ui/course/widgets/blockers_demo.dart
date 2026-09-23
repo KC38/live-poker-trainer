@@ -71,7 +71,9 @@ class _BlockersDemoState extends State<BlockersDemo> {
                     label: BlockersDemo.points[i].label,
                     caption: BlockersDemo.points[i].caption,
                     color: BlockersDemo.points[i].color,
-                    selected: _tapped.contains(BlockersDemo.points[i].label),
+                    selected: _tapped.contains(
+                      BlockersDemo.points[i].label,
+                    ),
                     enabled: widget.interactive && widget.enabled,
                     onPressed: widget.interactive
                         ? () => _onTap(BlockersDemo.points[i].label)
@@ -81,18 +83,19 @@ class _BlockersDemoState extends State<BlockersDemo> {
               ],
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap Block, Use, and No EV'
-                : 'Remove hands — skip EV decimals',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues Block / Use / No EV — no dupe footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Remove hands — skip EV decimals',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );
@@ -155,7 +158,19 @@ class _BlockerTile extends StatelessWidget {
         ],
       ),
     );
-    if (!enabled || onPressed == null) return child;
-    return GestureDetector(onTap: onPressed, child: child);
+    if (onPressed == null) return child;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: enabled ? onPressed : null,
+          borderRadius: BorderRadius.circular(12),
+          child: child,
+        ),
+      ),
+    );
   }
 }

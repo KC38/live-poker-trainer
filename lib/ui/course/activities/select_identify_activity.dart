@@ -480,6 +480,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Random 3x pot medium — tap Avoid.',
       'act-06-05-01-checkpoint' =>
           'Geometric sizing helps — tap Multi-street plan.',
+      'act-06-06-01-guided' =>
+          'Flush-board river bluff — tap Ace blocker.',
+      'act-06-06-01-scaffolded' =>
+          'Bluff-catch flush bomb — tap Unblock bluffs.',
+      'act-06-06-01-unguided' =>
+          'Blockers replace — tap Tweak evidence.',
+      'act-06-06-01-checkpoint' =>
+          'Solver EV quotes — tap No fake EV.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -573,7 +581,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-06-04-01-checkpoint' ||
             widget.activity.id == 'act-06-05-01-guided' ||
             widget.activity.id == 'act-06-05-01-unguided' ||
-            widget.activity.id == 'act-06-05-01-checkpoint';
+            widget.activity.id == 'act-06-05-01-checkpoint' ||
+            widget.activity.id == 'act-06-06-01-guided' ||
+            widget.activity.id == 'act-06-06-01-scaffolded' ||
+            widget.activity.id == 'act-06-06-01-unguided' ||
+            widget.activity.id == 'act-06-06-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

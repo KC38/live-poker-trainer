@@ -3533,7 +3533,10 @@ void main() {
         ),
       );
       expect(find.byType(BlockersDemo), findsOneWidget);
+      // Rex cue below the felt — not a second footer inside the demo.
       expect(find.text('Tap Block, Use, and No EV.'), findsOneWidget);
+      expect(find.text('Tap Block, Use, and No EV'), findsNothing);
+      expect(find.text('Remove hands — skip EV decimals'), findsNothing);
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
@@ -11919,6 +11922,157 @@ void main() {
     await tester.tap(find.text('Multi-street plan'));
     await tester.pump();
     expect(controller.draft.choiceId, 'multi');
+    controller.dispose();
+  });
+
+  testWidgets('s6 blockers guided taps Ace blocker on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-06-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Ace of the suit.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'River bluff on completed flush board. Better blocker?',
+      choices: const [
+        CourseChoice(id: 'as', label: 'Ace blocker'),
+        CourseChoice(id: 'off', label: 'No blockers'),
+        CourseChoice(id: 'ev', label: 'Fake +EV'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Flush-board river bluff — tap Ace blocker.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Ace blocker'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'as');
+    controller.dispose();
+  });
+
+  testWidgets('s6 blockers scaffolded taps Unblock bluffs on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-06-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Unblock bluffs — no flush blockers.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Bluff-catching a river bomb on flush board. Prefer?',
+      choices: const [
+        CourseChoice(id: 'unblock', label: 'Unblock bluffs'),
+        CourseChoice(id: 'block-nuts', label: 'Block their air'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Bluff-catch flush bomb — tap Unblock bluffs.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Unblock bluffs'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'unblock');
+    controller.dispose();
+  });
+
+  testWidgets('s6 blockers unguided taps Tweak evidence on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-06-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Nothing — they tweak choices.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Blockers replace?',
+      choices: const [
+        CourseChoice(id: 'tweak', label: 'Tweak evidence'),
+        CourseChoice(id: 'replace', label: 'Replace all reasoning'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Blockers replace — tap Tweak evidence.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Tweak evidence'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'tweak');
+    controller.dispose();
+  });
+
+  testWidgets('s6 blockers checkpoint taps No fake EV on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-06-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'No fabricated EV.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Course stance on solver EV quotes?',
+      choices: const [
+        CourseChoice(id: 'no', label: 'No fake EV'),
+        CourseChoice(id: 'fake', label: 'Invent EVs'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Solver EV quotes — tap No fake EV.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('No fake EV'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'no');
     controller.dispose();
   });
 
