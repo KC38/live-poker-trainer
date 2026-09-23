@@ -226,6 +226,28 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         facingBet: true,
         feltStatusLine: 'Heat multiway — weak one pair',
       );
+    case 'act-03-05-01-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', 'Kd'],
+        boardCodes: ['As', '7d', '2c', '3h'],
+        potLabel: 'Pot 20',
+        villainLine: 'Called flop c-bet',
+        streetLabel: 'Turn · Brick · TPTK',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Brick turn — still ahead',
+      );
+    case 'act-03-05-01-unguided':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', '9h'],
+        boardCodes: ['Kh', '7h', '2c', '3h'],
+        potLabel: 'Pot 18',
+        villainLine: 'Checked to you',
+        streetLabel: 'Turn · Flush completes',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Draw hit — delayed value',
+      );
   }
   return null;
 }
@@ -336,6 +358,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-03-04-01-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-03-05-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
@@ -1602,18 +1628,19 @@ class _TurnStoryDemoState extends State<TurnStoryDemo> {
               ],
             ),
           ],
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap Brick, Change, Barrel, and Delay'
-                : 'Brick · change · barrel · delay with intent',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues the four taps — no duplicate footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Brick · change · barrel · delay with intent',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );

@@ -228,6 +228,10 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Set multiway vs a bet — tap Raise, Call, or Fold.',
     'act-03-04-01-checkpoint' =>
       'Bottom pair vs bet and raise multiway — tap your action.',
+    'act-03-05-01-scaffolded' =>
+      'TPTK on a brick turn after a call — tap a barrel.',
+    'act-03-05-01-unguided' =>
+      'Flush comes in; checked to you — tap delayed value.',
     _ => null,
   };
 }

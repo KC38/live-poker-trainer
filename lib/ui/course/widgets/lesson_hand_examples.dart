@@ -275,6 +275,42 @@ LessonHandExample? resolveHandExample({
         title: 'Fold every nut draw',
         codes: [],
       );
+    case 'brick':
+      return const LessonHandExample(
+        id: 'brick',
+        title: 'Brick — rarely helps',
+        codes: [],
+      );
+    case 'scare':
+      return const LessonHandExample(
+        id: 'scare',
+        title: 'Major scare card',
+        codes: [],
+      );
+    case 'always-change':
+      return const LessonHandExample(
+        id: 'always-change',
+        title: 'Every turn changes all',
+        codes: [],
+      );
+    case 'give-up':
+      return const LessonHandExample(
+        id: 'give-up',
+        title: 'Give up — card hurts air',
+        codes: [],
+      );
+    case 'auto-jam':
+      return const LessonHandExample(
+        id: 'auto-jam',
+        title: 'Always jam larger',
+        codes: [],
+      );
+    case 'ignore':
+      return const LessonHandExample(
+        id: 'ignore',
+        title: 'Treat every turn as brick',
+        codes: [],
+      );
     case 'split':
       return const LessonHandExample(
         id: 'split',
