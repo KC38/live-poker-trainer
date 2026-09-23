@@ -9050,6 +9050,51 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 spr checkpoint docks Weigh SPR first on jam felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-05-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Check SPR before committing the rest.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'About to put stacks in. First?',
+      choices: const [
+        CourseChoice(id: 'before', label: 'Weigh SPR first'),
+        CourseChoice(
+          id: 'never',
+          label: 'Jam on cards alone',
+          action: 'ALL_IN',
+        ),
+        CourseChoice(id: 'showdown-only', label: 'Wait for showdown'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('About to put the rest in — tap Weigh SPR first.'),
+      findsOneWidget,
+    );
+    expect(find.text('WEIGH SPR FIRST'), findsOneWidget);
+    expect(find.textContaining('Opponent jams'), findsOneWidget);
+    await tester.tap(find.text('WEIGH SPR FIRST'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'before');
+    controller.dispose();
+  });
+
   testWidgets('s4 observe sticky guided taps high participation on felt', (
     tester,
   ) async {

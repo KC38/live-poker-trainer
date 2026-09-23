@@ -274,6 +274,8 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Top set at SPR ~1 — tap Commit for stacks.',
     'act-04-05-01-unguided' =>
       'Second pair multiway at SPR 20 — tap Keep pot small.',
+    'act-04-05-01-checkpoint' =>
+      'About to put the rest in — tap Weigh SPR first.',
     _ => null,
   };
 }

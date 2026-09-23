@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "a3af2b4625d391071ee2facf73ddbd569b23d2165f6012e1bae887712eac9919",
+  "contentChecksum": "93771579b82e6f8dbcef6f60671d956d8832447eec22dcdb80681f7c5c87e950",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -6901,9 +6901,9 @@
                   "id": "act-04-05-01-checkpoint",
                   "order": 5,
                   "stage": "checkpoint",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Before committing chips relative to pot.",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Check SPR before committing the rest.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -6913,22 +6913,25 @@
                   "objectives": [
                     "Estimate stack-to-pot ratio"
                   ],
-                  "prompt": "When does SPR matter most?",
+                  "prompt": "About to put stacks in. First?",
                   "choices": [
                     {
                       "id": "before",
-                      "label": "Before you put the rest in",
-                      "accessibilityText": "Before you put the rest in"
+                      "label": "Weigh SPR first",
+                      "accessibilityText": "Weigh SPR first",
+                      "action": "CHECK"
                     },
                     {
                       "id": "never",
-                      "label": "Never — only hole cards matter",
-                      "accessibilityText": "Never — only hole cards matter"
+                      "label": "Jam on cards alone",
+                      "accessibilityText": "Jam on cards alone",
+                      "action": "ALL_IN"
                     },
                     {
                       "id": "showdown-only",
-                      "label": "Only at showdown",
-                      "accessibilityText": "Only at showdown"
+                      "label": "Wait for showdown",
+                      "accessibilityText": "Wait for showdown",
+                      "action": "CALL"
                     }
                   ]
                 }

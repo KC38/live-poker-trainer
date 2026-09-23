@@ -1085,18 +1085,19 @@ export function buildSectionFour() {
                     "Over-commitment.", {action: "ALL_IN", betterChoiceId: "flexible"})
                 ],
               }),
-              selectAct({
+              actionAct({
                 id: "act-04-05-01-checkpoint", order: 5, stage: "checkpoint",
-                prompt: "When does SPR matter most?",
-                a11y: "Before committing chips relative to pot.",
+                prompt: "About to put stacks in. First?",
+                a11y: "Check SPR before committing the rest.",
                 objectives: ["Estimate stack-to-pot ratio"],
                 lifeLoss: true,
                 choices: [
-                  choice("before", "Before you put the rest in", "recommended",
+                  choice("before", "Weigh SPR first", "recommended",
                     "Commitment is an SPR decision."),
-                  choice("never", "Never — only hole cards matter", "clear_mistake",
-                    "Depth changes correct plays.", {betterChoiceId: "before"}),
-                  choice("showdown-only", "Only at showdown", "clear_mistake",
+                  choice("never", "Jam on cards alone", "clear_mistake",
+                    "Depth changes correct plays.",
+                    {action: "ALL_IN", betterChoiceId: "before"}),
+                  choice("showdown-only", "Wait for showdown", "clear_mistake",
                     "Decide earlier.", {betterChoiceId: "before"})
                 ],
               }),

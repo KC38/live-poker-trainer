@@ -186,10 +186,6 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Sizing: nearby soft grades vs exactness / junk sizes.
     return SelectIdentifyPresentation.handCategoryTap;
   }
-  if (activity.id == 'act-04-05-01-checkpoint') {
-    // SPR: when commitment decisions matter.
-    return SelectIdentifyPresentation.handCategoryTap;
-  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.
