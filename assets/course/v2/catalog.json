@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "d8f180bc3ce6d9361049b3ef811489575ab2953c7d8c5d3017cd002cb8a8cdb1",
+  "contentChecksum": "87003e4e3e716b5dca7f2e8f42ad24a1edd23fb3deb3064b6dc1cb563e0041a9",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -10142,7 +10142,7 @@
             {
               "id": "lesson-05-06-01-line-reading",
               "order": 1,
-              "title": "Update the story street by street",
+              "title": "Street-by-street updates",
               "summary": "Rebuild villain's range after each action; do not freeze on flop reads.",
               "objectives": [
                 "Update ranges after each street",
@@ -10202,13 +10202,13 @@
                   "choices": [
                     {
                       "id": "capped",
-                      "label": "More capped — fewer nuts",
-                      "accessibilityText": "More capped — fewer nuts"
+                      "label": "Capped — fewer nuts",
+                      "accessibilityText": "Capped — fewer nuts"
                     },
                     {
                       "id": "nutted",
-                      "label": "Still full of nuts",
-                      "accessibilityText": "Still full of nuts"
+                      "label": "Still nuts",
+                      "accessibilityText": "Still nuts"
                     }
                   ]
                 },
@@ -10216,8 +10216,8 @@
                   "id": "act-05-06-01-scaffolded",
                   "order": 3,
                   "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
                   "accessibilityText": "Re-price; folding draws is allowed.",
                   "acceptedGrades": [
                     "recommended",
@@ -10228,17 +10228,19 @@
                   "objectives": [
                     "Abandon stale flop stories"
                   ],
-                  "prompt": "You called flop as a draw. Turn bricks and villain bombs. Update?",
+                  "prompt": "You called flop as a draw. Turn bricks and villain bombs. Action?",
                   "choices": [
                     {
                       "id": "repr",
-                      "label": "Re-price equity versus the new sizing",
-                      "accessibilityText": "Re-price equity versus the new sizing"
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
                     },
                     {
                       "id": "auto",
-                      "label": "Always call because flop was correct",
-                      "accessibilityText": "Always call because flop was correct"
+                      "label": "Call",
+                      "accessibilityText": "Call",
+                      "action": "CALL"
                     }
                   ]
                 },
@@ -10262,13 +10264,13 @@
                   "choices": [
                     {
                       "id": "update",
-                      "label": "Rebuild the range after every action",
-                      "accessibilityText": "Rebuild the range after every action"
+                      "label": "Rebuild after every action",
+                      "accessibilityText": "Rebuild after every action"
                     },
                     {
                       "id": "freeze",
-                      "label": "Lock the flop read forever",
-                      "accessibilityText": "Lock the flop read forever"
+                      "label": "Lock flop forever",
+                      "accessibilityText": "Lock flop forever"
                     }
                   ]
                 },
@@ -10292,13 +10294,13 @@
                   "choices": [
                     {
                       "id": "uncap",
-                      "label": "Uncapped pressure — strong unless type says otherwise",
-                      "accessibilityText": "Uncapped pressure — strong unless type says otherwise"
+                      "label": "Uncapped — respect unless type says otherwise",
+                      "accessibilityText": "Uncapped — respect unless type says otherwise"
                     },
                     {
                       "id": "bluff",
-                      "label": "Always pure bluff",
-                      "accessibilityText": "Always pure bluff"
+                      "label": "Always bluff",
+                      "accessibilityText": "Always bluff"
                     }
                   ]
                 }
