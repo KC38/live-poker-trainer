@@ -260,6 +260,8 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'UTG open, two callers, AKo in BB — tap a squeeze.',
     'act-04-02-01-checkpoint' =>
       'KK vs a live open to 6 — tap a 3-bet size.',
+    'act-04-03-01-scaffolded' =>
+      'Air vs a flush turn — tap Check to shut down.',
     _ => null,
   };
 }

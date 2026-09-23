@@ -8713,6 +8713,48 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 plan scaffolded docks Check on flush-turn air felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-03-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Abort unsupported barrels on changing boards.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'You bluffed flop. Turn puts four to a flush; you have no heart. Action?',
+      choices: const [
+        CourseChoice(id: 'abort', label: 'Check', action: 'CHECK'),
+        CourseChoice(id: 'bigger', label: 'Bet bigger', action: 'BET'),
+        CourseChoice(id: 'ignore-board', label: 'Bet as if dry', action: 'BET'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Air vs a flush turn — tap Check to shut down.'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('Turn · four hearts · air'), findsOneWidget);
+    expect(find.text('CHECK'), findsOneWidget);
+    await tester.tap(find.text('CHECK'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'abort');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {

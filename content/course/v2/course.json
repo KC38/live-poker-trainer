@@ -8359,8 +8359,8 @@
                   "id": "act-04-03-01-scaffolded",
                   "order": 3,
                   "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
                   "accessibilityText": "Abort unsupported barrels on changing boards.",
                   "acceptedGrades": [
                     "recommended",
@@ -8371,36 +8371,41 @@
                   "objectives": [
                     "Abort plans when the board changes"
                   ],
-                  "prompt": "You bluffed flop. Turn puts four to a flush; you have no heart. Plan?",
+                  "prompt": "You bluffed flop. Turn puts four to a flush; you have no heart. Action?",
                   "choices": [
                     {
                       "id": "abort",
-                      "label": "Often shut down",
-                      "accessibilityText": "Often shut down",
+                      "label": "Check",
+                      "accessibilityText": "Check",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "The story got worse for air."
-                      }
+                      },
+                      "action": "CHECK"
                     },
                     {
                       "id": "bigger",
-                      "label": "Bet bigger automatically",
-                      "accessibilityText": "Bet bigger automatically",
+                      "label": "Bet bigger",
+                      "accessibilityText": "Bet bigger",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Do not auto-escalate.",
                         "betterChoiceId": "abort"
-                      }
+                      },
+                      "action": "BET",
+                      "amountBb": 16
                     },
                     {
                       "id": "ignore-board",
-                      "label": "Ignore the flush card",
-                      "accessibilityText": "Ignore the flush card",
+                      "label": "Bet as if dry",
+                      "accessibilityText": "Bet as if dry",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Board texture is the plan update.",
                         "betterChoiceId": "abort"
-                      }
+                      },
+                      "action": "BET",
+                      "amountBb": 8
                     }
                   ]
                 },
