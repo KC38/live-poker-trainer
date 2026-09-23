@@ -14692,13 +14692,20 @@ void main() {
         ),
       ),
     );
-    expect(find.text('Your flush'), findsOneWidget);
-    expect(find.text('Their straight'), findsOneWidget);
+    // Felt teaches You vs Them — docks only keep Chop.
+    expect(find.byType(LessonTableContext), findsOneWidget);
+    expect(find.text('Your flush'), findsNothing);
+    expect(find.text('Their straight'), findsNothing);
     expect(find.text('Chop the pot'), findsOneWidget);
+    expect(find.text('Tap You or Them on the felt.'), findsOneWidget);
+    expect(
+      find.text('Showdown — tap who wins on the felt.'),
+      findsOneWidget,
+    );
 
     var autoSubmits = 0;
     controller.onAutoSubmit = () => autoSubmits += 1;
-    await tester.tap(find.text('Your flush'));
+    await tester.tap(find.text('You').first);
     await tester.pump();
     expect(controller.draft.choiceId, 'you-win');
     expect(autoSubmits, 1);
