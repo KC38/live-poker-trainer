@@ -51,13 +51,17 @@ class CoachDialogueActivity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final visual = resolveCoachDialogueVisual(activity);
-    final locked =
-        controller.submitting || controller.lastResult != null;
-    return Column(
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, _) {
+        final visual = resolveCoachDialogueVisual(activity);
+        final locked =
+            controller.submitting || controller.lastResult != null;
+        return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        RexCoachLine.fromActivity(activity),
+        // Nice! owns the teaching line — hide stale Rex above feedback.
+        if (!locked) RexCoachLine.fromActivity(activity),
         if (visual.kind != CoachDialogueVisualKind.none) ...[
           const SizedBox(height: 12),
           _CoachDialogueVisualPane(
@@ -345,6 +349,8 @@ class CoachDialogueActivity extends StatelessWidget {
           _TapHint(text: visual.continueHint),
         ],
       ],
+    );
+      },
     );
   }
 }

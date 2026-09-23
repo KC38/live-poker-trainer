@@ -476,6 +476,129 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('aggressive explain hides Rex once Nice feedback lands', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-03-02-explain-aggro',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText: 'Bet, raise, and all-in.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text: 'Bet opens the betting. Raise reopens it. All-in is just size-capped.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Bet opens the betting. Raise reopens it. All-in is just size-capped.',
+      ),
+      findsOneWidget,
+    );
+    controller.finishSubmit(
+      SubmitCourseStepResult(
+        attemptId: 'a1',
+        activityId: activity.id,
+        grade: SoftGrade.recommended,
+        feedback:
+            'Bet opens the betting. Raise reopens it. All-in is just size-capped.',
+        accepted: true,
+        lifeLost: false,
+        livesRemaining: 3,
+        xpAwarded: 10,
+        remediationRequired: false,
+        resume: CourseResumePointer(
+          attemptId: 'a1',
+          lessonId: 'lesson-01-03-02-bet-raise-allin',
+          activityId: activity.id,
+          activityIndex: 0,
+        ),
+        duplicate: false,
+      ),
+    );
+    await tester.pump();
+    // Feedback sheet is owned by the runner — activity itself must drop Rex.
+    expect(
+      find.text(
+        'Bet opens the betting. Raise reopens it. All-in is just size-capped.',
+      ),
+      findsNothing,
+    );
+    controller.dispose();
+  });
+
+  testWidgets('open-pot dock status stays generic under Rex coach', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-03-02-guided-bet',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Tap Bet',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap a value size.',
+      choices: const [
+        CourseChoice(id: 'bet-half', label: 'Bet 5', action: 'BET'),
+        CourseChoice(id: 'check-value', label: 'Check', action: 'CHECK'),
+        CourseChoice(id: 'raise-no-bet', label: 'Raise', action: 'RAISE'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('The pot is open — tap a bet size.'), findsOneWidget);
+    expect(find.text('Tap your action on the dock.'), findsOneWidget);
+    expect(find.text('Tap Bet to open the pot.'), findsNothing);
+    controller.finishSubmit(
+      SubmitCourseStepResult(
+        attemptId: 'a1',
+        activityId: activity.id,
+        grade: SoftGrade.recommended,
+        feedback: 'A half-pot bet asks for value.',
+        accepted: true,
+        lifeLost: false,
+        livesRemaining: 3,
+        xpAwarded: 10,
+        remediationRequired: false,
+        resume: CourseResumePointer(
+          attemptId: 'a1',
+          lessonId: 'lesson-01-03-02-bet-raise-allin',
+          activityId: activity.id,
+          activityIndex: 1,
+        ),
+        duplicate: false,
+      ),
+    );
+    await tester.pump();
+    expect(find.text('The pot is open — tap a bet size.'), findsNothing);
+    controller.dispose();
+  });
+
   testWidgets('streets explain taps each street instead of Continue', (
     tester,
   ) async {

@@ -59,11 +59,13 @@ class PokerActionSizingActivity extends StatelessWidget {
                 );
         final coach = resolved.coach;
         final showPrompt = resolved.showPrompt;
-        final showCoach = shouldShowLessonCoach(
-          activity: activity,
-          showGuidance: showGuidance,
-          coach: coach,
-        );
+        final showCoach =
+            !locked &&
+            shouldShowLessonCoach(
+              activity: activity,
+              showGuidance: showGuidance,
+              coach: coach,
+            );
 
         if (tableMode) {
           return Column(
@@ -100,12 +102,12 @@ class PokerActionSizingActivity extends StatelessWidget {
                     if (controller.lastResult != null) return '';
                     if (controller.submitting) return 'Checking…';
                     if (selected == null) {
+                      // Felt + Rex already name open pots — avoid a third
+                      // "tap Bet" line under the dock.
                       return spot.identifyUnavailable
                           ? 'Tap the illegal action.'
                           : spot.stackLabel != null
                           ? 'Tap All-in, Call, or Fold on the dock.'
-                          : spot.openPot
-                          ? 'Tap Bet to open the pot.'
                           : 'Tap your action on the dock.';
                     }
                     return 'Checking…';
