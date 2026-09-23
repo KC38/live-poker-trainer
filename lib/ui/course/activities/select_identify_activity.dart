@@ -315,7 +315,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-01-05-01-scaffolded-showdown' =>
           'River is called. Tap what happens next.',
       'act-01-05-01-unguided-pot' =>
-          'Open to 6 at 1/2. Tap the pot before blinds act.',
+          'Blinds plus the open — tap the chip total.',
       'act-01-05-01-checkpoint-side' =>
           'You are short all-in. Tap what is true.',
       'act-01-02-02-unguided-board' =>
