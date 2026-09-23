@@ -463,7 +463,8 @@ class CoachDialogueActivity extends StatelessWidget {
             visual.kind != CoachDialogueVisualKind.capstoneLimped &&
             visual.kind != CoachDialogueVisualKind.capstone4bet &&
             visual.kind != CoachDialogueVisualKind.liveWarmupPrep &&
-            visual.kind != CoachDialogueVisualKind.turnMap) ...[
+            visual.kind != CoachDialogueVisualKind.turnMap &&
+            visual.kind != CoachDialogueVisualKind.riverComposition) ...[
           const SizedBox(height: 10),
           _TapHint(text: visual.continueHint),
         ],
@@ -905,7 +906,7 @@ class CoachDialogueVisual {
     CoachDialogueVisualKind.turnMap =>
       'Tap Barrel, Give-up, and Map.',
     CoachDialogueVisualKind.riverComposition =>
-      'Tap Value, Bluff, and Check.',
+      'Tap Value, Bluff, and Hold.',
     CoachDialogueVisualKind.potTypePlans =>
       'Tap Limped, SRP, and 3-4bet.',
     CoachDialogueVisualKind.huVsMultiway =>
