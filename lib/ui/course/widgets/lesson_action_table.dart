@@ -138,6 +138,7 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         villainLine: 'BTN opens to 6',
         streetLabel: 'Preflop · Big blind',
         facingBet: true,
+        feltStatusLine: '4 more chips to call the open',
       );
     case 'act-01-06-02-jump-legal':
       return const LessonActionSpot(

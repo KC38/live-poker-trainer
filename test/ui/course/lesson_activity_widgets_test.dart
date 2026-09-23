@@ -4765,6 +4765,23 @@ void main() {
       isTrue,
     );
     expect(
+      resolveLessonActionSpot(
+        CourseActivity(
+          id: 'act-01-06-01-unguided-lab',
+          order: 4,
+          stage: ActivityStage.unguided,
+          renderer: ActivityRenderer.fullTableHandLab,
+          estimatedSeconds: 90,
+          accessibilityText: 'bb',
+          acceptedGrades: const [SoftGrade.recommended],
+          choices: const [
+            CourseChoice(id: 'fold-bb', label: 'Fold', action: 'FOLD'),
+          ],
+        ),
+      )?.feltStatusLine,
+      '4 more chips to call the open',
+    );
+    expect(
       isLessonActionTableActivity(
         CourseActivity(
           id: 'act-01-06-01-guided-steps',
