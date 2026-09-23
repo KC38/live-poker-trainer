@@ -670,7 +670,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
         activity.id == 'act-06-03-01-explain' ||
         activity.id == 'act-06-04-01-explain' ||
         activity.id == 'act-06-05-01-explain' ||
-        activity.id == 'act-06-06-01-explain';
+        activity.id == 'act-06-06-01-explain' ||
+        activity.id == 'act-06-07-01-explain';
   }
   if (activity.renderer != ActivityRenderer.selectIdentify) return false;
   return activity.id.startsWith('act-01-01-01-') ||
