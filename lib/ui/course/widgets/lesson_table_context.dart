@@ -473,6 +473,14 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.none,
         caption: 'Flop · open-ender',
       );
+    case 'act-03-03-01-guided':
+      return const LessonTableScene(
+        heroCodes: ['Ah', 'Qh'],
+        boardCodes: ['Kc', '8h', '2d'],
+        villainSeatCount: 0,
+        highlight: LessonTableHighlight.none,
+        caption: 'Flop · clean outs?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,

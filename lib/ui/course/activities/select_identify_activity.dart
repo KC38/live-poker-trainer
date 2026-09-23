@@ -458,6 +458,8 @@ class _HandCategoryTapActivity extends StatelessWidget {
           'No pair, almost no draw multiway — tap the class.',
         'act-03-02-01-checkpoint' =>
           'Eight or queen completes — tap the class.',
+        'act-03-03-01-guided' =>
+          'King-high board. Tap how many clean outs you have.',
         _ => 'Look at the board and your holes — tap what you made.',
       };
 
@@ -540,6 +542,8 @@ class _HandCategoryTapActivity extends StatelessWidget {
                         ? 'Tap the starting-hand family.'
                         : activity.id.startsWith('act-03-02-01-')
                         ? 'Tap the flop class.'
+                        : activity.id == 'act-03-03-01-guided'
+                        ? 'Tap your clean-out count.'
                         : 'Tap the hand category you made.';
                   }
                   return 'Checking…';

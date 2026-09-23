@@ -221,6 +221,24 @@ LessonHandExample? resolveHandExample({
         title: 'Pure air',
         codes: [],
       );
+    case 'outs-3':
+      return const LessonHandExample(
+        id: 'outs-3',
+        title: '3 — the aces',
+        codes: [],
+      );
+    case 'outs-6':
+      return const LessonHandExample(
+        id: 'outs-6',
+        title: '6 — aces + queens',
+        codes: [],
+      );
+    case 'outs-0':
+      return const LessonHandExample(
+        id: 'outs-0',
+        title: '0 — never improve',
+        codes: [],
+      );
     case 'split':
       return const LessonHandExample(
         id: 'split',
