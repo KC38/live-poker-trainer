@@ -9541,6 +9541,47 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 confidence guided taps One note on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-04-09-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'One observation, low certainty.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'You saw one huge bluff. What do you know?',
+      choices: const [
+        CourseChoice(id: 'one-note', label: 'One note — low certainty'),
+        CourseChoice(id: 'proven', label: 'Type proven forever'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('One huge bluff — tap what you know.'),
+      findsOneWidget,
+    );
+    expect(find.text('One note'), findsOneWidget);
+    await tester.tap(find.text('One note'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'one-note');
+    controller.dispose();
+  });
+
   testWidgets('s4 meet nit guided taps Nit on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-04-07-02-guided',

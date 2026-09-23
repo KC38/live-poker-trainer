@@ -234,6 +234,12 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Adjust vs Maniac: cite wide betting on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id.startsWith('act-04-09-01-') &&
+      (activity.renderer == ActivityRenderer.selectIdentify ||
+          activity.renderer == ActivityRenderer.playerReadClassify)) {
+    // Confidence and samples: tap notes on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.
