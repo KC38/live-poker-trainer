@@ -264,6 +264,28 @@ export async function redeemAnonymousProgressTransferForUser(options: {
 
     const sourceProfile = sourceProfileSnap.data() ?? {};
     const destProfile = destProfileSnap.data() ?? {};
+    // Read the open attempt before any writes. Profile merge keeps the guest
+    // resume pointer, but that doc lives under the anonymous uid.
+    const sourceResume = sourceProfile.resume ?? null;
+    const destinationResume = destProfile.resume ?? null;
+    const sourceAttemptId = destinationResume == null &&
+      sourceResume &&
+      typeof sourceResume === "object" ?
+      optionalString((sourceResume as DocumentData).attemptId) :
+      undefined;
+    const sourceAttemptSnap = sourceAttemptId ?
+      await tx.get(
+        db.collection("users").doc(sourceUid)
+          .collection("courseAttempts").doc(sourceAttemptId),
+      ) :
+      null;
+    const copiedAttempt = inProgressAttemptForDestination({
+      destinationResume,
+      sourceResume,
+      sourceAttempt: sourceAttemptSnap?.data(),
+      sourceUid,
+      destinationUid: destUid,
+    });
     const merged = mergeCourseProfiles(sourceProfile, destProfile, catalogVersion);
     const entitlement = mergeLiveEntitlement({
       source: sourceEntitlementSnap.data(),
@@ -283,6 +305,19 @@ export async function redeemAnonymousProgressTransferForUser(options: {
 
     if (entitlement.writeDestination) {
       tx.set(destEntitlementDoc, entitlement.destinationDoc, {merge: true});
+    }
+
+    if (copiedAttempt) {
+      const attemptId = String(copiedAttempt.attemptId);
+      tx.set(
+        db.collection("users").doc(destUid)
+          .collection("courseAttempts").doc(attemptId),
+        {
+          ...copiedAttempt,
+          updatedAt: FieldValue.serverTimestamp(),
+          updatedAtMs: nowMs,
+        },
+      );
     }
 
     const tombstoneExpireAt = new Date(nowMs + TOMBSTONE_RECOVERY_MS);
@@ -367,6 +402,51 @@ function readMergedResultFromReceipt(
     transferredXp: Number(receipt.transferredXp ?? 0),
     liveTrainingTransferred: receipt.liveTrainingTransferred === true,
     duplicate: true,
+  };
+}
+
+/**
+ * Attempt payload to store on the linked account, or null when nothing open
+ * should move.
+ *
+ * Redeem keeps the guest resume when the destination has no pointer of its
+ * own. That pointer names `courseAttempts/{attemptId}` under the anonymous
+ * uid. Leaving it there makes the next lesson start miss the attempt and
+ * restart the lesson at the first activity.
+ */
+export function inProgressAttemptForDestination(options: {
+  destinationResume: unknown;
+  sourceResume: unknown;
+  sourceAttempt: DocumentData | undefined;
+  sourceUid: string;
+  destinationUid: string;
+}): DocumentData | null {
+  if (options.destinationResume != null) return null;
+  if (!options.sourceResume || typeof options.sourceResume !== "object") {
+    return null;
+  }
+  if (!options.sourceAttempt) return null;
+
+  const resume = options.sourceResume as DocumentData;
+  const attemptId = optionalString(resume.attemptId);
+  const lessonId = optionalString(resume.lessonId);
+  if (!attemptId || !lessonId) return null;
+
+  const data = options.sourceAttempt;
+  const storedAttemptId = optionalString(data.attemptId);
+  if (storedAttemptId && storedAttemptId !== attemptId) return null;
+  if (String(data.lessonId ?? "") !== lessonId) return null;
+  const status = String(data.status ?? "");
+  if (status !== "in_progress" && status !== "remediation") return null;
+  const attemptUid = optionalString(data.uid);
+  if (attemptUid && attemptUid !== options.sourceUid) return null;
+
+  return {
+    ...data,
+    attemptId,
+    uid: options.destinationUid,
+    lessonId,
+    status,
   };
 }
 

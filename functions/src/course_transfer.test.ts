@@ -4,6 +4,7 @@
 
 import {describe, expect, it} from "vitest";
 import {
+  inProgressAttemptForDestination,
   mergeCourseProfiles,
   mergeLiveEntitlement,
   TRANSFER_RECEIPT_TTL_MS,
@@ -64,6 +65,94 @@ describe("mergeCourseProfiles", () => {
     expect(merged.mergedLessonCount).toBe(0);
     expect(merged.transferredXp).toBe(0);
     expect(merged.profile.lifetimeXp).toBe(100);
+  });
+});
+
+describe("inProgressAttemptForDestination", () => {
+  const sourceAttempt = {
+    attemptId: "attempt-1",
+    uid: "anon-1",
+    lessonId: "lesson-b",
+    status: "in_progress",
+    activityIndex: 3,
+    currentActivityId: "act-b-4",
+    livesRemaining: 2,
+  };
+
+  it("copies an open guest attempt onto the destination uid", () => {
+    const copied = inProgressAttemptForDestination({
+      destinationResume: null,
+      sourceResume: {
+        attemptId: "attempt-1",
+        lessonId: "lesson-b",
+        activityId: "act-b-4",
+        activityIndex: 3,
+      },
+      sourceAttempt,
+      sourceUid: "anon-1",
+      destinationUid: "dest-1",
+    });
+    expect(copied).toMatchObject({
+      attemptId: "attempt-1",
+      uid: "dest-1",
+      lessonId: "lesson-b",
+      status: "in_progress",
+      activityIndex: 3,
+      currentActivityId: "act-b-4",
+      livesRemaining: 2,
+    });
+  });
+
+  it("copies a remediation attempt so lives stay exhausted", () => {
+    const copied = inProgressAttemptForDestination({
+      destinationResume: null,
+      sourceResume: {attemptId: "attempt-1", lessonId: "lesson-b"},
+      sourceAttempt: {...sourceAttempt, status: "remediation", livesRemaining: 0},
+      sourceUid: "anon-1",
+      destinationUid: "dest-1",
+    });
+    expect(copied?.status).toBe("remediation");
+    expect(copied?.livesRemaining).toBe(0);
+    expect(copied?.uid).toBe("dest-1");
+  });
+
+  it("leaves a destination resume in place", () => {
+    const copied = inProgressAttemptForDestination({
+      destinationResume: {attemptId: "dest-attempt", lessonId: "lesson-a"},
+      sourceResume: {attemptId: "attempt-1", lessonId: "lesson-b"},
+      sourceAttempt,
+      sourceUid: "anon-1",
+      destinationUid: "dest-1",
+    });
+    expect(copied).toBeNull();
+  });
+
+  it("does not revive a completed attempt", () => {
+    const copied = inProgressAttemptForDestination({
+      destinationResume: null,
+      sourceResume: {attemptId: "attempt-1", lessonId: "lesson-b"},
+      sourceAttempt: {...sourceAttempt, status: "completed"},
+      sourceUid: "anon-1",
+      destinationUid: "dest-1",
+    });
+    expect(copied).toBeNull();
+  });
+
+  it("rejects an attempt that belongs to another uid or lesson", () => {
+    expect(inProgressAttemptForDestination({
+      destinationResume: null,
+      sourceResume: {attemptId: "attempt-1", lessonId: "lesson-b"},
+      sourceAttempt: {...sourceAttempt, uid: "someone-else"},
+      sourceUid: "anon-1",
+      destinationUid: "dest-1",
+    })).toBeNull();
+    expect(inProgressAttemptForDestination({
+      destinationResume: null,
+      sourceResume: {attemptId: "attempt-1", lessonId: "lesson-b"},
+      sourceAttempt: {...sourceAttempt, lessonId: "lesson-other"},
+      sourceUid: "anon-1",
+      destinationUid: "dest-1",
+    })).toBeNull();
   });
 });
 
