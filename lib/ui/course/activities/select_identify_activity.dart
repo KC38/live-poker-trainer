@@ -415,7 +415,7 @@ class _HandCategoryTapActivity extends StatelessWidget {
   final bool showGuidance;
 
   String get _coachFallback =>
-      'Board and holes are live — tap the category you made.';
+      'Look at the board and your holes — tap what you made.';
 
   @override
   Widget build(BuildContext context) {
@@ -425,10 +425,17 @@ class _HandCategoryTapActivity extends StatelessWidget {
       builder: (context, _) {
         final locked = controller.submitting || controller.lastResult != null;
         final selected = controller.draft.choiceId;
-        final resolved = resolveLessonCoachPrompt(
-          activity: activity,
-          fallback: _coachFallback,
-        );
+        // Felt already shows the cards — never dump board/hole codes into Rex.
+        final resolved =
+            scene != null
+                ? (
+                  coach: _coachFallback,
+                  showPrompt: false,
+                )
+                : resolveLessonCoachPrompt(
+                  activity: activity,
+                  fallback: _coachFallback,
+                );
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

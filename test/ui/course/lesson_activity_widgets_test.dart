@@ -5921,6 +5921,11 @@ void main() {
     );
     expect(find.byType(HandExampleTile), findsNWidgets(3));
     expect(find.byType(LessonTableContext), findsOneWidget);
+    expect(
+      find.textContaining('Look at the board and your holes'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('Board Kc'), findsNothing);
 
     await tester.tap(find.text('Flush'));
     await tester.pump();
