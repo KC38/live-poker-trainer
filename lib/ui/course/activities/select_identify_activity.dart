@@ -1259,11 +1259,10 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
               Builder(
                 builder: (context) {
                   final choice = widget.activity.choices[i];
-                  // Felt already teaches You vs Them — keep Chop as the dock,
-                  // and keep all docks when there is no interactive felt.
+                  // Felt already teaches You vs Them — keep chop docks only.
                   if (feltInteractive &&
-                      choice.id != 'split' &&
-                      choice.id != 'chop-broadway') {
+                      !choice.id.contains('chop') &&
+                      choice.id != 'split') {
                     return const SizedBox.shrink();
                   }
                   final example =

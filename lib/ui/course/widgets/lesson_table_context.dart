@@ -3212,6 +3212,14 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.board => pick('split'),
         _ => null,
       };
+    case 'act-01-02-02-scaffolded-kicker':
+      // Same kings — tap You (queen kicker) vs Them (jack).
+      return switch (region) {
+        LessonTableRegion.hero => pick('you-kicker'),
+        LessonTableRegion.villain => pick('they-kicker'),
+        LessonTableRegion.board => pick('chop-kicker'),
+        _ => null,
+      };
     case 'act-01-04-01-unguided-end':
       return switch (region) {
         LessonTableRegion.streetActionMatched => pick('matched'),
