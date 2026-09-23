@@ -154,6 +154,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Turn: see flop+turn board, tap brick / scare / plan tiles.
     return SelectIdentifyPresentation.handCategoryTap;
   }
+  if (activity.id == 'act-03-06-01-checkpoint') {
+    // River: see medium one-pair spot, tap the job (catch vs value vs air).
+    return SelectIdentifyPresentation.handCategoryTap;
+  }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {
     return SelectIdentifyPresentation.showdownTap;

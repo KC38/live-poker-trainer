@@ -542,6 +542,14 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.none,
         caption: 'Air bluff · turn completes draws',
       );
+    case 'act-03-06-01-checkpoint':
+      return const LessonTableScene(
+        heroCodes: ['Ah', '9d'],
+        boardCodes: ['As', '7c', '2d', 'Kh', '3s'],
+        villainSeatCount: 1,
+        highlight: LessonTableHighlight.none,
+        caption: 'Medium one pair · big river bet',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,

@@ -473,6 +473,8 @@ class _HandCategoryTapActivity extends StatelessWidget {
           'Dry ace flop, blank three — tap brick or scare.',
         'act-03-05-01-checkpoint' =>
           'Air bluff meets a draw-completing queen — tap the plan.',
+        'act-03-06-01-checkpoint' =>
+          'Medium one pair faces a big bet — tap the river job.',
         _ => 'Look at the board and your holes — tap what you made.',
       };
 
@@ -565,6 +567,8 @@ class _HandCategoryTapActivity extends StatelessWidget {
                         ? 'Tap brick or scare.'
                         : activity.id == 'act-03-05-01-checkpoint'
                         ? 'Tap your turn plan.'
+                        : activity.id == 'act-03-06-01-checkpoint'
+                        ? 'Tap the river job.'
                         : 'Tap the hand category you made.';
                   }
                   return 'Checking…';

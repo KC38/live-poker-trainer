@@ -311,6 +311,24 @@ LessonHandExample? resolveHandExample({
         title: 'Treat every turn as brick',
         codes: [],
       );
+    case 'role-catch':
+      return const LessonHandExample(
+        id: 'role-catch',
+        title: 'Bluff-catch or fold',
+        codes: [],
+      );
+    case 'role-value':
+      return const LessonHandExample(
+        id: 'role-value',
+        title: 'Always thin-value shove',
+        codes: [],
+      );
+    case 'role-air':
+      return const LessonHandExample(
+        id: 'role-air',
+        title: 'Pure bluff with one pair',
+        codes: [],
+      );
     case 'split':
       return const LessonHandExample(
         id: 'split',
