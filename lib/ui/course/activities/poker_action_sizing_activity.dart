@@ -288,6 +288,12 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Nit check-raises middle pair — tap Fold.',
     'act-04-07-03-unguided' =>
       'Unknown BB with K9o — tap Tighter.',
+    'act-04-08-03-guided' =>
+      'Maniac barrels river — tap Call with top pair.',
+    'act-04-08-03-scaffolded' =>
+      'Maniac checks · top two — tap Bet value.',
+    'act-04-08-03-unguided' =>
+      'Unknown river bet · weak kicker — tap Fold more.',
     _ => null,
   };
 }

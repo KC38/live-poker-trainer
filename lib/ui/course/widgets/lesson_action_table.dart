@@ -540,6 +540,37 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'No nit read — stay tighter',
       );
+    case 'act-04-08-03-guided':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', '9d'],
+        boardCodes: ['As', '7c', '2d', 'Th', '3c'],
+        potLabel: 'Pot 42',
+        villainLine: 'Maniac barrels river',
+        streetLabel: 'River · top pair weak kicker',
+        facingBet: true,
+        feltStatusLine: 'Maniac bets too wide',
+      );
+    case 'act-04-08-03-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', 'Kd'],
+        boardCodes: ['As', 'Kc', '2d', '9h', '3c'],
+        potLabel: 'Pot 28',
+        villainLine: 'Maniac checks to you',
+        streetLabel: 'River · top two',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'They call light — bet value',
+      );
+    case 'act-04-08-03-unguided':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', '9d'],
+        boardCodes: ['As', '7c', '2d', 'Th', '3c'],
+        potLabel: 'Pot 42',
+        villainLine: 'Unknown · no maniac samples',
+        streetLabel: 'River · top pair weak kicker',
+        facingBet: true,
+        feltStatusLine: 'No maniac read — fold more',
+      );
   }
   return null;
 }
@@ -729,6 +760,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-04-07-03-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-04-08-03-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }

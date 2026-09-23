@@ -9499,6 +9499,48 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 adjust maniac guided docks Call on river felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-04-08-03-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Wider bluff-catch versus maniac.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Maniac barrels river. You have top pair weakish kicker. Action?',
+      choices: const [
+        CourseChoice(id: 'call-wider', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'fold-tp', label: 'Fold top pair always', action: 'FOLD'),
+        CourseChoice(
+          id: 'punish-jam',
+          label: 'Jam to punish ego-to-ego',
+          action: 'RAISE',
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Maniac barrels river — tap Call with top pair.'),
+      findsOneWidget,
+    );
+    expect(find.text('CALL'), findsOneWidget);
+    await tester.tap(find.text('CALL'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'call-wider');
+    controller.dispose();
+  });
+
   testWidgets('s4 meet nit guided taps Nit on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-04-07-02-guided',
