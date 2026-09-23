@@ -713,6 +713,7 @@ class HandExampleTile extends StatelessWidget {
     this.badge,
     this.onPressed,
     this.compact = false,
+    this.expand = false,
   });
 
   final LessonHandExample example;
@@ -721,6 +722,9 @@ class HandExampleTile extends StatelessWidget {
   final String? badge;
   final VoidCallback? onPressed;
   final bool compact;
+
+  /// Stretch to parent width (full-bleed palette / order slots).
+  final bool expand;
 
   @override
   Widget build(BuildContext context) {
@@ -738,6 +742,7 @@ class HandExampleTile extends StatelessWidget {
             : AppColors.slateDark.withValues(alpha: 0.85);
     final child = AnimatedContainer(
       duration: const Duration(milliseconds: 160),
+      width: expand ? double.infinity : null,
       padding: EdgeInsets.fromLTRB(
         compact ? 8 : 10,
         compact ? 8 : 10,
@@ -754,9 +759,11 @@ class HandExampleTile extends StatelessWidget {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment:
+            expand ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: [
           Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
             children: [
               if (badge != null) ...[
                 Text(
@@ -782,7 +789,7 @@ class HandExampleTile extends StatelessWidget {
           if (cards.isNotEmpty) ...[
             const SizedBox(height: 8),
             Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
               children: [
                 for (var i = 0; i < cards.length; i++) ...[
                   if (i > 0) SizedBox(width: compact ? 2 : 3),
