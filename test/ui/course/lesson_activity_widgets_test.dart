@@ -6528,6 +6528,90 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('section jump open docks Fold on felt for UTG trash', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-07-02-jump-open',
+      order: 3,
+      stage: ActivityStage.jumpTest,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 40,
+      accessibilityText: 'Jump test: fold trash early.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'UTG with 72o. Action?',
+      choices: const [
+        CourseChoice(id: 'j2-fold', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'j2-open', label: 'Open to 6', action: 'RAISE'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    expect(resolveLessonActionSpot(activity)?.heroCodes, ['7h', '2d']);
+    expect(resolveLessonActionSpot(activity)?.openPot, isTrue);
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byType(LessonActionTable), findsOneWidget);
+    expect(find.text('Trash UTG — tap Fold or Open.'), findsOneWidget);
+    expect(find.text('UTG with 72o. Action?'), findsNothing);
+    expect(find.text('OPEN TO 6'), findsOneWidget);
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'j2-fold');
+    controller.dispose();
+  });
+
+  testWidgets('section jump vs docks 3-bet for AA in BB', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-02-07-02-jump-vs',
+      order: 4,
+      stage: ActivityStage.jumpTest,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 40,
+      accessibilityText: 'Jump test: value 3-bet aces.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Open to 6. You have AA in the big blind. Action?',
+      choices: const [
+        CourseChoice(id: 'j2-3bet', label: '3-bet to 18', action: 'RAISE'),
+        CourseChoice(id: 'j2-call', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'j2-fold-aa', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    expect(resolveLessonActionSpot(activity)?.heroCodes, ['Ah', 'Ad']);
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Aces in the big blind vs an open — tap your action.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Open to 6. You have AA in the big blind. Action?'),
+      findsNothing,
+    );
+    await tester.tap(find.text('3-BET TO 18'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'j2-3bet');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {
