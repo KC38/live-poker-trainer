@@ -31,9 +31,8 @@ class FullTableHandLabActivity extends StatelessWidget {
     if (activity.choices.isEmpty) {
       return UnsupportedHandLabNotice(activity: activity);
     }
-    // Toy-hand / action lessons: reuse the mini-table dock (no nested felt box).
-    if (isLessonActionTableActivity(activity) &&
-        resolveLessonActionSpot(activity) != null) {
+    // Felt dock when we authored a LessonActionSpot (incl. hand-lab steal spots).
+    if (resolveLessonActionSpot(activity) != null) {
       return PokerActionSizingActivity(
         activity: activity,
         controller: controller,

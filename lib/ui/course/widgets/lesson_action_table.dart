@@ -602,6 +602,16 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         facingBet: true,
         feltStatusLine: 'Maniac bets too wide',
       );
+    case 'act-04-10-01-checkpoint':
+      return const LessonActionSpot(
+        heroCodes: ['Kh', 'Td'],
+        potLabel: 'Pot 1.5',
+        villainLine: 'Nit in BB · folds often',
+        streetLabel: 'Preflop · Button · 200bb',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Deep BTN vs nit — steal wider',
+      );
   }
   return null;
 }
@@ -799,7 +809,8 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-04-10-01-') &&
-      activity.renderer == ActivityRenderer.pokerActionSizing) {
+      (activity.renderer == ActivityRenderer.pokerActionSizing ||
+          activity.renderer == ActivityRenderer.fullTableHandLab)) {
     return true;
   }
   return (id.startsWith('act-01-03-01-') || id.startsWith('act-01-03-02-')) &&

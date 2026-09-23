@@ -9621,6 +9621,45 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 same-hand lab docks Open to 6 on BTN felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-04-10-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.fullTableHandLab,
+      estimatedSeconds: 70,
+      accessibilityText: 'Button vs nit BB steal; deep stack.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Full ring. Type × position × stack decide the line.',
+      choices: const [
+        CourseChoice(id: 'lab-steal', label: 'Open to 6', action: 'RAISE'),
+        CourseChoice(id: 'lab-fold', label: 'Fold KTo', action: 'FOLD'),
+        CourseChoice(id: 'lab-limp', label: 'Limp', action: 'CALL'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    expect(resolveLessonActionSpot(activity), isNotNull);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        FullTableHandLabActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('BTN vs Nit BB with KTo — tap Open to 6.'),
+      findsOneWidget,
+    );
+    expect(find.text('OPEN TO 6'), findsOneWidget);
+    await tester.tap(find.text('OPEN TO 6'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'lab-steal');
+    controller.dispose();
+  });
+
   testWidgets('s4 meet nit guided taps Nit on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-04-07-02-guided',
