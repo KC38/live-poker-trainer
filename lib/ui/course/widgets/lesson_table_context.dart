@@ -685,6 +685,24 @@ enum LessonTableRegion {
 
   /// 3-bet/4-bet checkpoint: felt suits (mistake).
   threeBetFeltSuits,
+
+  /// Hard folds scaffolded: cooler (correct).
+  hardFoldCoolerOk,
+
+  /// Hard folds scaffolded: fold KK (mistake).
+  hardFoldFoldKk,
+
+  /// Hard folds unguided: ego call (correct recognition).
+  hardFoldEgoCall,
+
+  /// Hard folds unguided: sound play (mistake).
+  hardFoldSoundPlay,
+
+  /// Hard folds checkpoint: cooler / mistake? (correct).
+  hardFoldAskReview,
+
+  /// Hard folds checkpoint: tilt harder (mistake).
+  hardFoldTiltHarder,
 }
 
 /// How the mini-table is arranged.
@@ -982,6 +1000,15 @@ enum LessonTableLayout {
 
   /// 3-bet/4-bet checkpoint: SPR / commit vs felt suits.
   threeBetSprOutcomes,
+
+  /// Hard folds scaffolded: cooler vs fold KK.
+  hardFoldCoolerOutcomes,
+
+  /// Hard folds unguided: ego call vs sound play.
+  hardFoldEgoOutcomes,
+
+  /// Hard folds checkpoint: cooler / mistake? vs tilt harder.
+  hardFoldReviewOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1889,6 +1916,21 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.threeBetSprOutcomes,
         caption: 'Depth change in 3-bet pots mainly changes?',
       );
+    case 'act-06-10-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.hardFoldCoolerOutcomes,
+        caption: 'KK loses to AA all-in pre. Review label?',
+      );
+    case 'act-06-10-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.hardFoldEgoOutcomes,
+        caption: 'Calling because you are "due"?',
+      );
+    case 'act-06-10-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.hardFoldReviewOutcomes,
+        caption: 'Review question after a big loss?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -2775,6 +2817,24 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.threeBetFeltSuits => pick('suits'),
         _ => null,
       };
+    case 'act-06-10-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.hardFoldCoolerOk => pick('cooler'),
+        LessonTableRegion.hardFoldFoldKk => pick('mistake'),
+        _ => null,
+      };
+    case 'act-06-10-01-unguided':
+      return switch (region) {
+        LessonTableRegion.hardFoldEgoCall => pick('ego'),
+        LessonTableRegion.hardFoldSoundPlay => pick('ok'),
+        _ => null,
+      };
+    case 'act-06-10-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.hardFoldAskReview => pick('ask'),
+        LessonTableRegion.hardFoldTiltHarder => pick('rtilt'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -2940,7 +3000,10 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-06-08-01-checkpoint' ||
       activity.id == 'act-06-09-01-guided' ||
       activity.id == 'act-06-09-01-unguided' ||
-      activity.id == 'act-06-09-01-checkpoint';
+      activity.id == 'act-06-09-01-checkpoint' ||
+      activity.id == 'act-06-10-01-scaffolded' ||
+      activity.id == 'act-06-10-01-unguided' ||
+      activity.id == 'act-06-10-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -3220,6 +3283,11 @@ class LessonTableContext extends StatelessWidget {
           _buildThreeBetCommitOutcomes(),
       LessonTableLayout.threeBetEgoOutcomes => _buildThreeBetEgoOutcomes(),
       LessonTableLayout.threeBetSprOutcomes => _buildThreeBetSprOutcomes(),
+      LessonTableLayout.hardFoldCoolerOutcomes =>
+          _buildHardFoldCoolerOutcomes(),
+      LessonTableLayout.hardFoldEgoOutcomes => _buildHardFoldEgoOutcomes(),
+      LessonTableLayout.hardFoldReviewOutcomes =>
+          _buildHardFoldReviewOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -6772,6 +6840,100 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Irrelevant',
           visual: const Icon(
             Icons.palette_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHardFoldCoolerOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive cooler review — tap cooler vs fold KK',
+      semanticsStatic: 'Hard-fold cooler outcomes',
+      caption:
+          scene.caption ?? 'KK loses to AA all-in pre. Review label?',
+      phases: [
+        (
+          region: LessonTableRegion.hardFoldCoolerOk,
+          title: 'Cooler',
+          detail: 'Not a leak',
+          visual: const Icon(
+            Icons.ac_unit,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.hardFoldFoldKk,
+          title: 'Fold KK',
+          detail: 'Wrong review',
+          visual: const Icon(
+            Icons.warning_amber_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHardFoldEgoOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive due call — tap ego call vs sound play',
+      semanticsStatic: 'Hard-fold ego outcomes',
+      caption: scene.caption ?? 'Calling because you are "due"?',
+      phases: [
+        (
+          region: LessonTableRegion.hardFoldEgoCall,
+          title: 'Ego call',
+          detail: 'Due ≠ reason',
+          visual: const Icon(
+            Icons.psychology_alt_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.hardFoldSoundPlay,
+          title: 'Sound play',
+          detail: 'Not sound',
+          visual: const Icon(
+            Icons.check_circle_outline,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHardFoldReviewOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive big-loss review — tap cooler / mistake? vs tilt harder',
+      semanticsStatic: 'Hard-fold review outcomes',
+      caption: scene.caption ?? 'Review question after a big loss?',
+      phases: [
+        (
+          region: LessonTableRegion.hardFoldAskReview,
+          title: 'Cooler / mistake?',
+          detail: 'Honest review',
+          visual: const Icon(
+            Icons.help_outline,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.hardFoldTiltHarder,
+          title: 'Tilt harder',
+          detail: 'No',
+          visual: const Icon(
+            Icons.whatshot_outlined,
             color: AppColors.danger,
             size: 24,
           ),

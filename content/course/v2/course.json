@@ -16137,8 +16137,8 @@
                     },
                     {
                       "id": "raise",
-                      "label": "Hero-raise light",
-                      "accessibilityText": "Hero-raise light",
+                      "label": "Hero raise",
+                      "accessibilityText": "Hero raise",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Ego.",
@@ -16169,8 +16169,8 @@
                   "choices": [
                     {
                       "id": "cooler",
-                      "label": "Cooler — standard stack-off",
-                      "accessibilityText": "Cooler — standard stack-off",
+                      "label": "Cooler",
+                      "accessibilityText": "Cooler",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Not a skill leak."
@@ -16178,8 +16178,8 @@
                     },
                     {
                       "id": "mistake",
-                      "label": "Mistake — you should fold KK pre",
-                      "accessibilityText": "Mistake — you should fold KK pre",
+                      "label": "Fold KK",
+                      "accessibilityText": "Fold KK",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Wrong.",
@@ -16208,8 +16208,8 @@
                   "choices": [
                     {
                       "id": "ego",
-                      "label": "Mistake — ego call-down",
-                      "accessibilityText": "Mistake — ego call-down",
+                      "label": "Ego call",
+                      "accessibilityText": "Ego call",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Due is not a reason."
@@ -16217,8 +16217,8 @@
                     },
                     {
                       "id": "ok",
-                      "label": "Sound strategy",
-                      "accessibilityText": "Sound strategy",
+                      "label": "Sound play",
+                      "accessibilityText": "Sound play",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "No.",
@@ -16247,8 +16247,8 @@
                   "choices": [
                     {
                       "id": "ask",
-                      "label": "Was this a cooler or a mistake?",
-                      "accessibilityText": "Was this a cooler or a mistake?",
+                      "label": "Cooler / mistake?",
+                      "accessibilityText": "Cooler / mistake?",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Honest review."
@@ -16256,8 +16256,8 @@
                     },
                     {
                       "id": "rtilt",
-                      "label": "Only tilt harder",
-                      "accessibilityText": "Only tilt harder",
+                      "label": "Tilt harder",
+                      "accessibilityText": "Tilt harder",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "No.",

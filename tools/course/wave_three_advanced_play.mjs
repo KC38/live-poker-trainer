@@ -1359,7 +1359,7 @@ export function buildSectionSix() {
                     "Difficult but correct without a maniac read.", {action: "FOLD", reversalRead: "Maniac barrels: call wider."}),
                   choice("call", "Call it off", "questionable",
                     "Needs a wider read."),
-                  choice("raise", "Hero-raise light", "clear_mistake",
+                  choice("raise", "Hero raise", "clear_mistake",
                     "Ego.", {action: "RAISE", amountBb: 40, betterChoiceId: "fold"})
                 ],
               }),
@@ -1369,9 +1369,9 @@ export function buildSectionSix() {
                 a11y: "Cooler.",
                 objectives: ["Separate coolers from mistakes"],
                 choices: [
-                  choice("cooler", "Cooler — standard stack-off", "recommended",
+                  choice("cooler", "Cooler", "recommended",
                     "Not a skill leak."),
-                  choice("mistake", "Mistake — you should fold KK pre", "clear_mistake",
+                  choice("mistake", "Fold KK", "clear_mistake",
                     "Wrong.", {betterChoiceId: "cooler"})
                 ],
               }),
@@ -1381,9 +1381,9 @@ export function buildSectionSix() {
                 a11y: "Mistake.",
                 objectives: ["Avoid ego call-downs"], lifeLoss: true,
                 choices: [
-                  choice("ego", "Mistake — ego call-down", "recommended",
+                  choice("ego", "Ego call", "recommended",
                     "Due is not a reason."),
-                  choice("ok", "Sound strategy", "clear_mistake",
+                  choice("ok", "Sound play", "clear_mistake",
                     "No.", {betterChoiceId: "ego"})
                 ],
               }),
@@ -1393,9 +1393,9 @@ export function buildSectionSix() {
                 a11y: "Cooler or mistake?",
                 objectives: ["Separate coolers from mistakes"], lifeLoss: true,
                 choices: [
-                  choice("ask", "Was this a cooler or a mistake?", "recommended",
+                  choice("ask", "Cooler / mistake?", "recommended",
                     "Honest review."),
-                  choice("rtilt", "Only tilt harder", "clear_mistake",
+                  choice("rtilt", "Tilt harder", "clear_mistake",
                     "No.", {betterChoiceId: "ask"})
                 ],
               }),
