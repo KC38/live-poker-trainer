@@ -501,6 +501,14 @@ class _HandCategoryTapActivity extends StatelessWidget {
           'Two value sizes both get calls — tap the grading idea.',
         'act-04-05-01-checkpoint' =>
           'Before you jam the rest — tap when SPR matters.',
+        'act-04-06-01-guided' =>
+          'Seat calls 7 of 9 preflops — tap the observation.',
+        'act-04-06-01-scaffolded' =>
+          'Second pair called three streets twice — tap the note.',
+        'act-04-06-01-unguided' =>
+          'One dramatic call — tap how confident the label is.',
+        'act-04-06-01-checkpoint' =>
+          'Before you label — tap the evidence bundle.',
         _ => 'Look at the board and your holes — tap what you made.',
       };
 
@@ -615,6 +623,8 @@ class _HandCategoryTapActivity extends StatelessWidget {
                         ? 'Tap the soft-grade idea.'
                         : activity.id == 'act-04-05-01-checkpoint'
                         ? 'Tap when SPR matters.'
+                        : activity.id.startsWith('act-04-06-01-')
+                        ? 'Tap the observation note.'
                         : 'Tap the hand category you made.';
                   }
                   return 'Checking…';

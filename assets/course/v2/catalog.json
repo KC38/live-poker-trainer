@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "97033385cd1a55fce47cad8040a4e476aaa86f8afaddf4a3a893a37c4a44de76",
+  "contentChecksum": "a3af2b4625d391071ee2facf73ddbd569b23d2165f6012e1bae887712eac9919",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -7015,8 +7015,8 @@
                     },
                     {
                       "id": "label-now",
-                      "label": "Name an archetype immediately",
-                      "accessibilityText": "Name an archetype immediately"
+                      "label": "Label archetype now",
+                      "accessibilityText": "Label archetype now"
                     }
                   ]
                 },
@@ -7040,8 +7040,8 @@
                   "choices": [
                     {
                       "id": "sticky",
-                      "label": "Low folding — sticky calls",
-                      "accessibilityText": "Low folding — sticky calls"
+                      "label": "Sticky calls — low folding",
+                      "accessibilityText": "Sticky calls — low folding"
                     },
                     {
                       "id": "folds-alot",
@@ -7070,8 +7070,8 @@
                   "choices": [
                     {
                       "id": "low-conf",
-                      "label": "Low confidence — need more samples",
-                      "accessibilityText": "Low confidence — need more samples"
+                      "label": "Low confidence — need samples",
+                      "accessibilityText": "Low confidence — need samples"
                     },
                     {
                       "id": "sure",
@@ -7100,8 +7100,8 @@
                   "choices": [
                     {
                       "id": "bundle",
-                      "label": "Plays many hands; rarely folds to pressure",
-                      "accessibilityText": "Plays many hands; rarely folds to pressure"
+                      "label": "Many hands · rarely folds",
+                      "accessibilityText": "Many hands · rarely folds"
                     },
                     {
                       "id": "insult",

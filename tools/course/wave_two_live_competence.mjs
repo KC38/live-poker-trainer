@@ -1125,7 +1125,7 @@ export function buildSectionFour() {
                     "They play many hands."),
                   choice("low-part", "Low participation", "clear_mistake",
                     "Seven of nine is high.", {betterChoiceId: "high-part"}),
-                  choice("label-now", "Name an archetype immediately", "clear_mistake",
+                  choice("label-now", "Label archetype now", "clear_mistake",
                     "Observe first.", {betterChoiceId: "high-part"})
                 ],
               }),
@@ -1135,7 +1135,7 @@ export function buildSectionFour() {
                 a11y: "Low folding / sticky calls.",
                 objectives: ["Tag low folding to bets"],
                 choices: [
-                  choice("sticky", "Low folding — sticky calls", "recommended",
+                  choice("sticky", "Sticky calls — low folding", "recommended",
                     "They continue without strong hands."),
                   choice("folds-alot", "They fold too much", "clear_mistake",
                     "Opposite evidence.", {betterChoiceId: "sticky"})
@@ -1147,7 +1147,7 @@ export function buildSectionFour() {
                 a11y: "One hand is low confidence.",
                 objectives: ["Separate observation from certainty"], lifeLoss: true,
                 choices: [
-                  choice("low-conf", "Low confidence — need more samples", "recommended",
+                  choice("low-conf", "Low confidence — need samples", "recommended",
                     "One hand is a note, not a verdict."),
                   choice("sure", "Certain forever", "clear_mistake",
                     "Samples build confidence.", {betterChoiceId: "low-conf"})
@@ -1159,7 +1159,7 @@ export function buildSectionFour() {
                 a11y: "High participation plus low folding.",
                 objectives: ["Separate observation from certainty"], lifeLoss: true,
                 choices: [
-                  choice("bundle", "Plays many hands; rarely folds to pressure", "recommended",
+                  choice("bundle", "Many hands · rarely folds", "recommended",
                     "That is the evidence bundle."),
                   choice("insult", "They are a bad person", "clear_mistake",
                     "Behavior, not judgment.", {betterChoiceId: "bundle"})
