@@ -361,7 +361,7 @@ export function buildSectionOne() {
               }),
               selectAct({
                 id: "act-01-01-02-unguided-suited", order: 4, stage: "unguided",
-                prompt: "Which hole cards are suited?",
+                prompt: "Tap the suited hole cards.",
                 a11y: "Tap the hole-card pair that shares a suit.",
                 objectives: ["Spot pairs and suited cards"],
                 lifeLoss: true,
@@ -406,7 +406,11 @@ export function buildSectionOne() {
             activities: [
               dialogue("act-01-01-03-explain-button", 1,
                 "Button marks the dealer. Blinds sit left of it.",
-                {objectives: ["Locate the dealer button"]}),
+                {
+                  objectives: ["Locate the dealer button"],
+                  accessibilityText:
+                    "You found the button. Blinds always sit left of it.",
+                }),
               selectAct({
                 id: "act-01-01-03-guided-button", order: 2, stage: "guided",
                 prompt: "Tap the dealer button on the table.",

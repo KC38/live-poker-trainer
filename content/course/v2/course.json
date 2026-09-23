@@ -458,7 +458,7 @@
                   "objectives": [
                     "Spot pairs and suited cards"
                   ],
-                  "prompt": "Which hole cards are suited?",
+                  "prompt": "Tap the suited hole cards.",
                   "choices": [
                     {
                       "id": "suited-ah-kh",
@@ -568,7 +568,7 @@
                   "stage": "explain",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Button marks the dealer. Blinds sit left of it.",
+                  "accessibilityText": "You found the button. Blinds always sit left of it.",
                   "acceptedGrades": [
                     "recommended"
                   ],

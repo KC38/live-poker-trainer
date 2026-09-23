@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "57038d39e1047393786dc8dd51282da6dedfc25e2258ae495025dc6347c82c99",
+  "contentChecksum": "90025f56005a86689b9e400b877aa88ad68ac172aa41ff740266051e5dcacc6a",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -374,7 +374,7 @@
                   "objectives": [
                     "Spot pairs and suited cards"
                   ],
-                  "prompt": "Which hole cards are suited?",
+                  "prompt": "Tap the suited hole cards.",
                   "choices": [
                     {
                       "id": "suited-ah-kh",
@@ -457,7 +457,7 @@
                   "stage": "explain",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Button marks the dealer. Blinds sit left of it.",
+                  "accessibilityText": "You found the button. Blinds always sit left of it.",
                   "acceptedGrades": [
                     "recommended"
                   ],
