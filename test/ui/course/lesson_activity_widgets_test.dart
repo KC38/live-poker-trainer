@@ -22,7 +22,7 @@ import 'package:live_poker_trainer/ui/course/widgets/polar_merged_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/overbet_geometry_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/blockers_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/defend_enough_demo.dart';
-import 'package:live_poker_trainer/ui/course/widgets/mix_with_reason_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/mixed_strategy_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
@@ -3264,7 +3264,7 @@ void main() {
 
 
   testWidgets(
-    'mix-with-reason explain taps Mix Purpose No Coin instead of Continue',
+    'mix-strategy explain taps Mix Purpose Strong instead of Continue',
     (tester) async {
       final activity = CourseActivity(
         id: 'act-06-08-01-explain',
@@ -3296,12 +3296,12 @@ void main() {
           ),
         ),
       );
-      expect(find.byType(MixWithReasonDemo), findsOneWidget);
-      expect(find.text('Tap Mix, Purpose, and No Coin.'), findsOneWidget);
+      expect(find.byType(MixedStrategyDemo), findsOneWidget);
+      expect(find.text('Tap Mix, Purpose, and Strong.'), findsOneWidget);
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['MIX', 'PURPOSE', 'NO COIN']) {
+      for (final title in ['MIX', 'PURPOSE', 'STRONG']) {
         await tester.tap(find.text(title));
         await tester.pump();
       }
