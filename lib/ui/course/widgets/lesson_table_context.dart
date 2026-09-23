@@ -5610,7 +5610,8 @@ class LessonTableContext extends StatelessWidget {
           region: LessonTableRegion.potChipsNine,
           title: '9 chips',
           detail: '1+2+6',
-          visual: const _PotChipDot(label: '9', gold: true),
+          // Keep all chips neutral until the learner taps — gold would spoil.
+          visual: const _PotChipDot(label: '9', gold: false),
         ),
         (
           region: LessonTableRegion.potChipsTwelve,
