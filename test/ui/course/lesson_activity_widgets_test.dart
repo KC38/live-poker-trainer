@@ -6562,6 +6562,8 @@ void main() {
     expect(find.byType(LessonActionTable), findsOneWidget);
     expect(find.text('Trash UTG — tap Fold or Open.'), findsOneWidget);
     expect(find.text('UTG with 72o. Action?'), findsNothing);
+    expect(find.text('First in — trash folds'), findsOneWidget);
+    expect(find.text('First in — open the pot'), findsNothing);
     expect(find.text('OPEN TO 6'), findsOneWidget);
     await tester.tap(find.text('FOLD'));
     await tester.pump();

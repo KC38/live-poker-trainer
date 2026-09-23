@@ -21,6 +21,7 @@ class LessonActionSpot {
     this.facingBet = false,
     this.identifyUnavailable = false,
     this.openPot = false,
+    this.feltStatusLine,
   });
 
   final List<String> heroCodes;
@@ -38,6 +39,9 @@ class LessonActionSpot {
 
   /// Unchecked pot — betting (not raising) is the open action.
   final bool openPot;
+
+  /// Optional override for the gold status line under the holes.
+  final String? feltStatusLine;
 }
 
 /// Resolves a teaching spot for Section 1 action lessons.
@@ -169,6 +173,8 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         streetLabel: 'Preflop · UTG · 9-max',
         facingBet: false,
         openPot: true,
+        // Correct action is Fold — do not imply "open the pot".
+        feltStatusLine: 'First in — trash folds',
       );
     case 'act-02-07-02-jump-vs':
       return const LessonActionSpot(
@@ -4498,7 +4504,17 @@ class LessonActionTable extends StatelessWidget {
               ],
             ],
           ),
-          if (spot.facingBet) ...[
+          if (spot.feltStatusLine != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              spot.feltStatusLine!,
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ] else if (spot.facingBet) ...[
             const SizedBox(height: 8),
             Text(
               'A bet faces you',
