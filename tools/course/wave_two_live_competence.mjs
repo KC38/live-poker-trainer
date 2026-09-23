@@ -917,18 +917,18 @@ export function buildSectionFour() {
                   },
                 ],
               }),
-              selectAct({
+              actionAct({
                 id: "act-04-03-01-scaffolded", order: 3, stage: "scaffolded",
-                prompt: "You bluffed flop. Turn puts four to a flush; you have no heart. Plan?",
+                prompt: "You bluffed flop. Turn puts four to a flush; you have no heart. Action?",
                 a11y: "Abort unsupported barrels on changing boards.",
                 objectives: ["Abort plans when the board changes"],
                 choices: [
-                  choice("abort", "Often shut down", "recommended",
-                    "The story got worse for air."),
-                  choice("bigger", "Bet bigger automatically", "clear_mistake",
-                    "Do not auto-escalate.", {betterChoiceId: "abort"}),
-                  choice("ignore-board", "Ignore the flush card", "clear_mistake",
-                    "Board texture is the plan update.", {betterChoiceId: "abort"})
+                  choice("abort", "Check", "recommended",
+                    "The story got worse for air.", {action: "CHECK"}),
+                  choice("bigger", "Bet bigger", "clear_mistake",
+                    "Do not auto-escalate.", {action: "BET", amountBb: 16, betterChoiceId: "abort"}),
+                  choice("ignore-board", "Bet as if dry", "clear_mistake",
+                    "Board texture is the plan update.", {action: "BET", amountBb: 8, betterChoiceId: "abort"})
                 ],
               }),
               actionAct({

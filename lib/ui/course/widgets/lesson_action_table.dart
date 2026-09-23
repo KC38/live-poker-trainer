@@ -389,6 +389,17 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         facingBet: true,
         feltStatusLine: 'Pick a live 3-bet size',
       );
+    case 'act-04-03-01-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['Qd', '9c'],
+        boardCodes: ['Kh', '7h', '2c', '3h'],
+        potLabel: 'Pot 18',
+        villainLine: 'Called your flop bluff',
+        streetLabel: 'Turn · four hearts · air',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Flush card — shut down',
+      );
   }
   return null;
 }
@@ -554,6 +565,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-04-02-01-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id == 'act-04-03-01-scaffolded' &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
