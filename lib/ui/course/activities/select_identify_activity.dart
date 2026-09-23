@@ -336,6 +336,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Getting 3:1 with real outs — tap what you do.',
       'act-04-06-01-guided' =>
           'Seat calls 7 of 9 preflops — tap the observation.',
+      'act-04-06-02-guided' =>
+          'Sticky second pair calls — tap the working label.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -366,7 +368,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-03-01-01-unguided' ||
             widget.activity.id == 'act-03-01-01-checkpoint' ||
             widget.activity.id == 'act-03-03-01-scaffolded' ||
-            widget.activity.id == 'act-04-06-01-guided';
+            widget.activity.id == 'act-04-06-01-guided' ||
+            widget.activity.id == 'act-04-06-02-guided';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&
