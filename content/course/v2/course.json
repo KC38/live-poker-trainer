@@ -12776,7 +12776,7 @@
             {
               "id": "lesson-05-05-01-lines-and-probes",
               "order": 1,
-              "title": "Read and choose advanced flop lines",
+              "title": "Advanced flop lines",
               "summary": "Interpret check-raises, probes, delayed c-bets, and donk bets in live cash.",
               "objectives": [
                 "Interpret check-raises by strength and type",
@@ -12863,8 +12863,8 @@
                   "id": "act-05-05-01-scaffolded",
                   "order": 3,
                   "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
                   "accessibilityText": "Small probe can be reasonable.",
                   "acceptedGrades": [
                     "recommended",
@@ -12875,35 +12875,40 @@
                   "objectives": [
                     "Use probes and delayed c-bets with a plan"
                   ],
-                  "prompt": "Preflop raiser checks flop. You are BB with middle pair. Probe?",
+                  "prompt": "Preflop raiser checks flop. You are BB with middle pair. Action?",
                   "choices": [
                     {
                       "id": "probe",
-                      "label": "Small probe bet with a turn plan",
-                      "accessibilityText": "Small probe bet with a turn plan",
+                      "label": "Probe small",
+                      "accessibilityText": "Probe small",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Test capped ranges; prepare to give up."
-                      }
+                      },
+                      "action": "BET",
+                      "amountBb": 4
                     },
                     {
                       "id": "huge",
-                      "label": "Pot-size probe every time",
-                      "accessibilityText": "Pot-size probe every time",
+                      "label": "Pot-size probe",
+                      "accessibilityText": "Pot-size probe",
                       "grading": {
                         "grade": "questionable",
                         "feedback": "Too large without equity."
-                      }
+                      },
+                      "action": "BET",
+                      "amountBb": 12
                     },
                     {
                       "id": "never",
-                      "label": "Never bet when they check",
-                      "accessibilityText": "Never bet when they check",
+                      "label": "Check back",
+                      "accessibilityText": "Check back",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Misses value and folds.",
                         "betterChoiceId": "probe"
-                      }
+                      },
+                      "action": "CHECK"
                     }
                   ]
                 },

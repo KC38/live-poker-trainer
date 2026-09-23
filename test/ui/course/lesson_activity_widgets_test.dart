@@ -10141,6 +10141,180 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s5 lines guided taps Value-heavy on Nit XR felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-05-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Strong value-heavy.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Nit check-raises flop. Default read?',
+      choices: const [
+        CourseChoice(id: 'strong', label: 'Value-heavy — respect'),
+        CourseChoice(id: 'air', label: 'Always a bluff'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Nit check-raises — tap the default read.'),
+      findsOneWidget,
+    );
+    expect(find.text('Value-heavy'), findsOneWidget);
+    await tester.tap(find.text('Value-heavy'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'strong');
+    controller.dispose();
+  });
+
+  testWidgets('s5 lines scaffolded docks Probe small on BB felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-05-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Small probe can be reasonable.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'Preflop raiser checks flop. You are BB with middle pair. Action?',
+      choices: const [
+        CourseChoice(
+          id: 'probe',
+          label: 'Probe small',
+          action: 'BET',
+          amountBb: 4,
+        ),
+        CourseChoice(
+          id: 'huge',
+          label: 'Pot-size probe',
+          action: 'BET',
+          amountBb: 12,
+        ),
+        CourseChoice(id: 'never', label: 'Check back', action: 'CHECK'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('PFR checks · middle pair BB — tap Probe small.'),
+      findsOneWidget,
+    );
+    expect(find.text('PROBE SMALL'), findsOneWidget);
+    await tester.tap(find.text('PROBE SMALL'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'probe');
+    controller.dispose();
+  });
+
+  testWidgets('s5 lines unguided taps Polarized on donk felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-05-05-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Often polarized — ace or air.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'BB donks large on A-high dry flop into PFR. Meaning?',
+      choices: const [
+        CourseChoice(
+          id: 'polar',
+          label: 'Often polarized — strong or bluff',
+        ),
+        CourseChoice(id: 'merged', label: 'Always medium pairs'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Large BB donk on dry ace — tap the meaning.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Polarized'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'polar');
+    controller.dispose();
+  });
+
+  testWidgets('s5 lines checkpoint taps After weakness on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-05-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText:
+          'Flop check then turn barrel after they show weakness.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Delayed c-bet is best when?',
+      choices: const [
+        CourseChoice(
+          id: 'delay',
+          label: 'After flop check takes away their range strength',
+        ),
+        CourseChoice(id: 'always', label: 'Every hand regardless'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Delayed c-bet — tap when it is best.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('After weakness'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'delay');
+    controller.dispose();
+  });
+
   testWidgets('s4 meet nit guided taps Nit on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-04-07-02-guided',
