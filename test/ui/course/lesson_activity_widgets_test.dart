@@ -15,6 +15,7 @@ import 'package:live_poker_trainer/ui/course/activities/select_identify_activity
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/guardrails_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/range_advantage_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
@@ -2869,6 +2870,52 @@ void main() {
     expect(isTableRegionTapActivity(activity), isTrue);
 
     for (final title in ['QUIT', 'GUARD', 'FIRST']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
+  testWidgets(
+    'range-advantage explain taps Range Nut Advantage instead of Continue',
+    (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-01-01-explain',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'Range advantage: more strong hands overall. Nut advantage: more of the nuts.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'Range advantage: more strong hands overall. Nut advantage: more of the nuts.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(RangeAdvantageDemo), findsOneWidget);
+    expect(find.text('Tap Range, Nut, and Advantage.'), findsOneWidget);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    for (final title in ['RANGE', 'NUT', 'ADVANTAGE']) {
       await tester.tap(find.text(title));
       await tester.pump();
     }
