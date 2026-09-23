@@ -257,20 +257,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.hero,
         caption: 'You',
       );
-    case 'act-01-01-02-unguided-suited':
-      return const LessonTableScene(
-        heroCodes: ['Ah', 'Kh'],
-        villainSeatCount: 0,
-        highlight: LessonTableHighlight.hero,
-        caption: 'You',
-      );
-    case 'act-01-01-02-checkpoint-pair':
-      return const LessonTableScene(
-        heroCodes: ['9h', '9d'],
-        villainSeatCount: 1,
-        highlight: LessonTableHighlight.hero,
-        caption: 'You',
-      );
+    // Suited / pair identify steps: choices are the visual. Do not put the
+    // recommended hand on the felt above the options (spoils the puzzle).
     case 'act-01-01-03-explain-button':
     case 'act-01-01-03-guided-button':
       return const LessonTableScene(
