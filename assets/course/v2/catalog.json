@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "95f5688b34340261f32db11d15112901b9f6acd0aaf6689ddb57dd36bbc98404",
+  "contentChecksum": "a3de2b629cd2e14dd3d5294c47a3e5a0f618976044db0b44087d878c947adb71",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -13655,13 +13655,13 @@
                   "choices": [
                     {
                       "id": "diff",
-                      "label": "LAG applies pressure; stations call passively",
-                      "accessibilityText": "LAG applies pressure; stations call passively"
+                      "label": "Pressure vs passive",
+                      "accessibilityText": "Pressure vs passive"
                     },
                     {
                       "id": "same",
-                      "label": "Same exploit always",
-                      "accessibilityText": "Same exploit always"
+                      "label": "Same exploit",
+                      "accessibilityText": "Same exploit"
                     }
                   ]
                 },
@@ -13718,8 +13718,8 @@
                   "choices": [
                     {
                       "id": "limits",
-                      "label": "Sample and confidence limits",
-                      "accessibilityText": "Sample and confidence limits"
+                      "label": "Sample limits",
+                      "accessibilityText": "Sample limits"
                     },
                     {
                       "id": "destiny",

@@ -1694,9 +1694,9 @@ export function buildSectionSix() {
                 a11y: "LAG raises; station calls.",
                 objectives: ["Introduce LAG"],
                 choices: [
-                  choice("diff", "LAG applies pressure; stations call passively", "recommended",
+                  choice("diff", "Pressure vs passive", "recommended",
                     "Different exploits."),
-                  choice("same", "Same exploit always", "clear_mistake",
+                  choice("same", "Same exploit", "clear_mistake",
                     "No.", {betterChoiceId: "diff"})
                 ],
               }),
@@ -1720,7 +1720,7 @@ export function buildSectionSix() {
                 a11y: "Sample/confidence limits.",
                 objectives: ["Introduce LAG"], lifeLoss: true,
                 choices: [
-                  choice("limits", "Sample and confidence limits", "recommended",
+                  choice("limits", "Sample limits", "recommended",
                     "Always."),
                   choice("destiny", "Destiny", "clear_mistake",
                     "No.", {betterChoiceId: "limits"})

@@ -538,6 +538,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'One wide open — tap Keep sampling.',
       'act-06-12-01-checkpoint' =>
           'Best pre-label notes — tap Wide · barrels · folds.',
+      'act-06-12-02-guided' =>
+          'Opens wide, barrels often — tap LAG.',
+      'act-06-12-02-scaffolded' =>
+          'LAG vs Station — tap Pressure vs passive.',
+      'act-06-12-02-unguided' =>
+          'Wide opens, keeps barreling — tap LAG.',
+      'act-06-12-02-checkpoint' =>
+          'Beside LAG label — tap Sample limits.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -660,7 +668,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-06-12-01-guided' ||
             widget.activity.id == 'act-06-12-01-scaffolded' ||
             widget.activity.id == 'act-06-12-01-unguided' ||
-            widget.activity.id == 'act-06-12-01-checkpoint';
+            widget.activity.id == 'act-06-12-01-checkpoint' ||
+            widget.activity.id == 'act-06-12-02-guided' ||
+            widget.activity.id == 'act-06-12-02-scaffolded' ||
+            widget.activity.id == 'act-06-12-02-unguided' ||
+            widget.activity.id == 'act-06-12-02-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

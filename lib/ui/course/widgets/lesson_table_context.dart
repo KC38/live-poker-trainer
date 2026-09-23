@@ -787,6 +787,30 @@ enum LessonTableRegion {
 
   /// LAG observe checkpoint: seem loud (mistake).
   lagObserveSeemLoud,
+
+  /// Meet LAG label (correct for wide + pressure evidence).
+  meetLagLabel,
+
+  /// TAG distractor on LAG evidence.
+  meetLagTagDistractor,
+
+  /// Meet LAG scaffolded: pressure vs passive (correct).
+  meetLagPressureDiff,
+
+  /// Meet LAG scaffolded: same exploit (mistake).
+  meetLagSameExploit,
+
+  /// Meet LAG label for wide opens / sustained barrels.
+  meetLagLabel2,
+
+  /// Nit distractor on LAG evidence.
+  meetLagNitDistractor,
+
+  /// Meet LAG checkpoint: sample limits (correct).
+  meetLagSampleLimits,
+
+  /// Meet LAG checkpoint: destiny (mistake).
+  meetLagDestiny,
 }
 
 /// How the mini-table is arranged.
@@ -1132,6 +1156,18 @@ enum LessonTableLayout {
 
   /// LAG observe: wide · barrels · folds vs seem loud.
   lagObserveBundleOutcomes,
+
+  /// Meet LAG: LAG vs TAG label tiles.
+  meetLagVsTagOutcomes,
+
+  /// Meet LAG: pressure vs passive difference.
+  meetLagDiffOutcomes,
+
+  /// Meet LAG: LAG vs Nit label tiles.
+  meetLagVsNitOutcomes,
+
+  /// Meet LAG: sample limits vs destiny.
+  meetLagLimitsOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -2121,6 +2157,26 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.lagObserveBundleOutcomes,
         caption: 'Best pre-label note bundle?',
       );
+    case 'act-06-12-02-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.meetLagVsTagOutcomes,
+        caption: 'Opens wide · barrels often · folds some raises',
+      );
+    case 'act-06-12-02-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.meetLagDiffOutcomes,
+        caption: 'LAG versus Calling Station?',
+      );
+    case 'act-06-12-02-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.meetLagVsNitOutcomes,
+        caption: 'Wide opens · 3-bets light · keeps barreling',
+      );
+    case 'act-06-12-02-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.meetLagLimitsOutcomes,
+        caption: 'Show beside the LAG label',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -3105,6 +3161,30 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.lagObserveSeemLoud => pick('soul'),
         _ => null,
       };
+    case 'act-06-12-02-guided':
+      return switch (region) {
+        LessonTableRegion.meetLagLabel => pick('lag'),
+        LessonTableRegion.meetLagTagDistractor => pick('tag'),
+        _ => null,
+      };
+    case 'act-06-12-02-scaffolded':
+      return switch (region) {
+        LessonTableRegion.meetLagPressureDiff => pick('diff'),
+        LessonTableRegion.meetLagSameExploit => pick('same'),
+        _ => null,
+      };
+    case 'act-06-12-02-unguided':
+      return switch (region) {
+        LessonTableRegion.meetLagLabel2 => pick('lag2'),
+        LessonTableRegion.meetLagNitDistractor => pick('nit2'),
+        _ => null,
+      };
+    case 'act-06-12-02-checkpoint':
+      return switch (region) {
+        LessonTableRegion.meetLagSampleLimits => pick('limits'),
+        LessonTableRegion.meetLagDestiny => pick('destiny'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -3176,8 +3256,12 @@ bool isTableRegionTapActivity(CourseActivity activity) {
         activity.id == 'act-06-10-01-explain' ||
         activity.id == 'act-06-11-01-explain' ||
         activity.id == 'act-06-11-02-explain' ||
+<<<<<<< HEAD
         activity.id == 'act-06-11-03-explain' ||
         activity.id == 'act-06-12-01-explain';
+=======
+        activity.id == 'act-06-12-02-explain';
+>>>>>>> 356eca2 (Teach Meet the LAG on felt tiles.)
   }
   if (activity.renderer != ActivityRenderer.selectIdentify &&
       activity.renderer != ActivityRenderer.playerReadClassify) {
@@ -3288,7 +3372,11 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-06-12-01-guided' ||
       activity.id == 'act-06-12-01-scaffolded' ||
       activity.id == 'act-06-12-01-unguided' ||
-      activity.id == 'act-06-12-01-checkpoint';
+      activity.id == 'act-06-12-01-checkpoint' ||
+      activity.id == 'act-06-12-02-guided' ||
+      activity.id == 'act-06-12-02-scaffolded' ||
+      activity.id == 'act-06-12-02-unguided' ||
+      activity.id == 'act-06-12-02-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -3597,6 +3685,10 @@ class LessonTableContext extends StatelessWidget {
           _buildLagObserveSampleOutcomes(),
       LessonTableLayout.lagObserveBundleOutcomes =>
           _buildLagObserveBundleOutcomes(),
+      LessonTableLayout.meetLagVsTagOutcomes => _buildMeetLagVsTagOutcomes(),
+      LessonTableLayout.meetLagDiffOutcomes => _buildMeetLagDiffOutcomes(),
+      LessonTableLayout.meetLagVsNitOutcomes => _buildMeetLagVsNitOutcomes(),
+      LessonTableLayout.meetLagLimitsOutcomes => _buildMeetLagLimitsOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -7670,6 +7762,130 @@ class LessonTableContext extends StatelessWidget {
           visual: const Icon(
             Icons.volume_up_outlined,
             color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMeetLagVsTagOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive: 'Interactive player type — tap LAG or TAG',
+      semanticsStatic: 'LAG vs TAG outcomes',
+      caption: scene.caption ??
+          'Opens wide · barrels often · folds some raises',
+      phases: [
+        (
+          region: LessonTableRegion.meetLagLabel,
+          title: 'LAG',
+          detail: 'Wide + pressure',
+          visual: const Icon(
+            Icons.local_fire_department_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.meetLagTagDistractor,
+          title: 'TAG',
+          detail: 'Selective',
+          visual: const Icon(
+            Icons.gps_fixed,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMeetLagDiffOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive LAG vs Station — tap pressure vs passive or same exploit',
+      semanticsStatic: 'LAG difference outcomes',
+      caption: scene.caption ?? 'LAG versus Calling Station?',
+      phases: [
+        (
+          region: LessonTableRegion.meetLagPressureDiff,
+          title: 'Pressure vs passive',
+          detail: 'Different exploits',
+          visual: const Icon(
+            Icons.compare_arrows,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.meetLagSameExploit,
+          title: 'Same exploit',
+          detail: 'Wrong',
+          visual: const Icon(
+            Icons.merge_type,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMeetLagVsNitOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive: 'Interactive player type — tap LAG or Nit',
+      semanticsStatic: 'LAG vs Nit outcomes',
+      caption: scene.caption ??
+          'Wide opens · 3-bets light · keeps barreling',
+      phases: [
+        (
+          region: LessonTableRegion.meetLagLabel2,
+          title: 'LAG',
+          detail: 'Wide + barrels',
+          visual: const Icon(
+            Icons.local_fire_department_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.meetLagNitDistractor,
+          title: 'Nit',
+          detail: 'Opposite',
+          visual: const Icon(
+            Icons.lock_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMeetLagLimitsOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive label limits — tap sample limits or destiny',
+      semanticsStatic: 'LAG limits outcomes',
+      caption: scene.caption ?? 'Show beside the LAG label',
+      phases: [
+        (
+          region: LessonTableRegion.meetLagSampleLimits,
+          title: 'Sample limits',
+          detail: 'Always',
+          visual: const Icon(
+            Icons.science_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.meetLagDestiny,
+          title: 'Destiny',
+          detail: 'No',
+          visual: const Icon(
+            Icons.auto_awesome_outlined,
+            color: AppColors.slate,
             size: 24,
           ),
         ),

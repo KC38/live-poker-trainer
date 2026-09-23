@@ -21,6 +21,7 @@ import 'package:live_poker_trainer/ui/course/widgets/three_bet_four_bet_spr_demo
 import 'package:live_poker_trainer/ui/course/widgets/hard_fold_cooler_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/selective_aggression_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/tag_model_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/wide_pressure_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
@@ -342,6 +343,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.tagModel
                     ? null
                     : onFeltAcknowledge,
+            onLagModelAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.lagModel
+                    ? null
+                    : onFeltAcknowledge,
             onWidePressureAcknowledge:
                 locked || visual.kind != CoachDialogueVisualKind.widePressure
                     ? null
@@ -599,6 +604,9 @@ enum CoachDialogueVisualKind {
   /// TAG: tight in, aggressive after — a working model.
   tagModel,
 
+  /// LAG: wide in, pressure on — a working model.
+  lagModel,
+
   /// Wide sustained pressure: wide entry, planned barrels — count samples.
   widePressure,
 }
@@ -747,6 +755,8 @@ class CoachDialogueVisual {
       'Tap Tight, Barrel, and Sample.',
     CoachDialogueVisualKind.tagModel =>
       'Tap Tight, Aggro, and Model.',
+    CoachDialogueVisualKind.lagModel =>
+      'Tap Wide, Pressure, and Model.',
     CoachDialogueVisualKind.widePressure =>
       'Tap Wide, Pressure, and Sample.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
@@ -818,6 +828,7 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.hardFoldCooler ||
       kind == CoachDialogueVisualKind.selectiveAggression ||
       kind == CoachDialogueVisualKind.tagModel ||
+      kind == CoachDialogueVisualKind.lagModel ||
       kind == CoachDialogueVisualKind.widePressure;
 
   String get semanticsLabel => switch (kind) {
@@ -951,6 +962,8 @@ class CoachDialogueVisual {
       'Selective-aggression tiles: tight, barrel, sample',
     CoachDialogueVisualKind.tagModel =>
       'TAG tiles: tight, aggro, model',
+    CoachDialogueVisualKind.lagModel =>
+      'LAG tiles: wide, pressure, model',
     CoachDialogueVisualKind.widePressure =>
       'Wide-pressure tiles: wide entry, planned barrels, count samples',
     CoachDialogueVisualKind.none => 'Coach dialogue',
@@ -1191,6 +1204,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-06-12-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.widePressure,
+      );
+    case 'act-06-12-02-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.lagModel,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1690,8 +1707,9 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
   // Phrase-safe TAG model — avoid bare "tag" / "tight" alone.
   if (blob.contains('tight in') ||
       blob.contains('aggressive after') ||
-      blob.contains('working model') ||
       blob.contains('introduce tag') ||
+      (blob.contains('working model') &&
+          (blob.contains('tag') || blob.contains('tight in'))) ||
       (blob.contains('tag:') && blob.contains('tight in'))) {
     return const CoachDialogueVisual(
       kind: CoachDialogueVisualKind.tagModel,
@@ -1715,6 +1733,17 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       (blob.contains('wide entry') && blob.contains('count samples'))) {
     return const CoachDialogueVisual(
       kind: CoachDialogueVisualKind.widePressure,
+    );
+  }
+  // Phrase-safe LAG model — lag framing so we don't steal tagModel/widePressure.
+  if (blob.contains('meet the lag') ||
+      (blob.contains('wide in') && blob.contains('pressure on')) ||
+      blob.contains('introduce lag') ||
+      (blob.contains('working model') &&
+          (blob.contains('lag') || blob.contains('wide in'))) ||
+      (blob.contains('lag:') && blob.contains('wide in'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.lagModel,
     );
   }
   // Phrase-safe hard folds / coolers — avoid bare "cooler" / "ego" alone.
@@ -1813,6 +1842,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onHardFoldCoolerAcknowledge,
     this.onSelectiveAggressionAcknowledge,
     this.onTagModelAcknowledge,
+    this.onLagModelAcknowledge,
     this.onWidePressureAcknowledge,
   });
 
@@ -1881,6 +1911,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onHardFoldCoolerAcknowledge;
   final VoidCallback? onSelectiveAggressionAcknowledge;
   final VoidCallback? onTagModelAcknowledge;
+  final VoidCallback? onLagModelAcknowledge;
   final VoidCallback? onWidePressureAcknowledge;
 
   @override
@@ -2209,6 +2240,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onTagModelAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onTagModelAcknowledge,
+        ),
+        CoachDialogueVisualKind.lagModel => LagModelDemo(
+          interactive: onLagModelAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onLagModelAcknowledge,
         ),
         CoachDialogueVisualKind.widePressure => WidePressureDemo(
           interactive: onWidePressureAcknowledge != null,
