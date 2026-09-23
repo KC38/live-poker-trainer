@@ -117,6 +117,7 @@ class AuthoredMultiStepActivity extends StatelessWidget {
                 selectedId: selected,
                 enabled: !locked,
                 facingBet: spot.facingBet,
+                heroStackAmount: spot.heroStackAmount,
                 onSelect:
                     (id) => controller.selectChoice(id, autoSubmit: true),
               ),
