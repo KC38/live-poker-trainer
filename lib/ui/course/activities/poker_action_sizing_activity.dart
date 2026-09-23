@@ -33,8 +33,10 @@ class PokerActionSizingActivity extends StatelessWidget {
       builder: (context, _) {
         final selected = controller.draft.choiceId;
         final locked = controller.submitting || controller.lastResult != null;
+        final feltFirstCoach = _feltFirstCoach(activity, spot);
         final fallback =
-            activity.id == 'act-01-06-01-unguided-lab'
+            feltFirstCoach ??
+            (activity.id == 'act-01-06-01-unguided-lab'
                 ? 'Big blind vs a button open — tap Fold, Call, or Jam.'
                 : spot?.identifyUnavailable == true
                 ? 'A bet is out — tap the action you cannot take.'
@@ -46,11 +48,15 @@ class PokerActionSizingActivity extends StatelessWidget {
                 ? 'Read the pot and the bet — tap your action.'
                 : spot != null
                 ? 'Nothing to match — tap the free action.'
-                : 'Choose the action you would take live.';
-        final resolved = resolveLessonCoachPrompt(
-          activity: activity,
-          fallback: fallback,
-        );
+                : 'Choose the action you would take live.');
+        // Felt already shows holes / villain line — never dump "72o" prompts.
+        final resolved =
+            tableMode
+                ? (coach: fallback, showPrompt: false)
+                : resolveLessonCoachPrompt(
+                  activity: activity,
+                  fallback: fallback,
+                );
         final coach = resolved.coach;
         final showPrompt = resolved.showPrompt;
         final showCoach = shouldShowLessonCoach(
@@ -87,25 +93,36 @@ class PokerActionSizingActivity extends StatelessWidget {
                 onSelect:
                     (id) => controller.selectChoice(id, autoSubmit: true),
               ),
-              const SizedBox(height: 10),
-              Text(
-                controller.submitting
-                    ? 'Checking…'
-                    : selected == null
-                    ? (spot.identifyUnavailable
-                        ? 'Tap the illegal action.'
-                        : spot.stackLabel != null
-                        ? 'Tap All-in, Call, or Fold on the dock.'
-                        : spot.openPot
-                        ? 'Tap Bet to open the pot.'
-                        : 'Tap your action on the dock.')
-                    : 'Checking…',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.manrope(
-                  color: AppColors.slate,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                ),
+              Builder(
+                builder: (context) {
+                  final status = () {
+                    if (controller.lastResult != null) return '';
+                    if (controller.submitting) return 'Checking…';
+                    if (selected == null) {
+                      return spot.identifyUnavailable
+                          ? 'Tap the illegal action.'
+                          : spot.stackLabel != null
+                          ? 'Tap All-in, Call, or Fold on the dock.'
+                          : spot.openPot
+                          ? 'Tap Bet to open the pot.'
+                          : 'Tap your action on the dock.';
+                    }
+                    return 'Checking…';
+                  }();
+                  if (status.isEmpty) return const SizedBox.shrink();
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(
+                      status,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.manrope(
+                        color: AppColors.slate,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           );
@@ -148,24 +165,47 @@ class PokerActionSizingActivity extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 10),
-            Text(
-              controller.submitting
-                  ? 'Checking…'
-                  : selected == null
-                  ? 'Tap your action.'
-                  : 'Checking…',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-              ),
+            Builder(
+              builder: (context) {
+                final status = () {
+                  if (controller.lastResult != null) return '';
+                  if (controller.submitting) return 'Checking…';
+                  if (selected == null) return 'Tap your action.';
+                  return 'Checking…';
+                }();
+                if (status.isEmpty) return const SizedBox.shrink();
+                return Text(
+                  status,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.slate,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                );
+              },
             ),
           ],
         );
       },
     );
   }
+}
+
+/// Felt-first Rex lines for Section 1 action spots (felt already shows cards).
+String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
+  return switch (activity.id) {
+    'act-01-03-01-guided-fold' => 'Worst hand vs a raise — tap Fold.',
+    'act-01-03-01-scaffolded-check' => 'Nothing faces you — tap Check.',
+    'act-01-03-01-unguided-call' => 'A bet is out — tap Call to continue.',
+    'act-01-03-01-checkpoint-legal' =>
+      'A bet is out — tap the action you cannot take.',
+    'act-01-03-02-guided-bet' => 'The pot is open — tap a bet size.',
+    'act-01-03-02-scaffolded-raise' => 'They bet — tap a raise size.',
+    'act-01-03-02-unguided-allin' => 'Short vs a big bet — tap All-in.',
+    'act-01-03-02-checkpoint-names' => 'The pot is open — tap Bet.',
+    _ => null,
+  };
 }
 
 class _ActionPill extends StatelessWidget {

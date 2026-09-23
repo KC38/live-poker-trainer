@@ -5422,10 +5422,21 @@ void main() {
     );
     expect(find.byType(LessonActionTable), findsOneWidget);
     expect(find.byType(LessonActionDock), findsOneWidget);
+    expect(find.text('Worst hand vs a raise — tap Fold.'), findsOneWidget);
+    expect(find.textContaining('72o'), findsNothing);
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'fold-72');
     expect(find.text('Checking…'), findsOneWidget);
+    controller.finishSubmit(
+      _result(
+        grade: SoftGrade.recommended,
+        accepted: true,
+        lifeLost: false,
+      ),
+    );
+    await tester.pump();
+    expect(find.text('Checking…'), findsNothing);
     controller.dispose();
   });
 
