@@ -332,6 +332,10 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Draw faces bomb — tap Fold.',
     'act-05-08-01-unguided' =>
       'Steaming after cooler — tap Fold.',
+    'act-05-09-02-cp-value' =>
+      'Station · second pair river — tap Bet thin value.',
+    'act-05-09-02-cp-catch' =>
+      'Maniac river barrel — tap Call.',
     _ => null,
   };
 }

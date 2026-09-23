@@ -10976,6 +10976,194 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s5 exit multi taps Nut potential on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-05-09-02-cp-multi',
+      order: 1,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Nut potential.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Four-way pot priority?',
+      choices: const [
+        CourseChoice(id: 'nut', label: 'Nut potential'),
+        CourseChoice(id: 'bluff', label: 'Bluff more'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Four-way pot — tap Nut potential.'), findsOneWidget);
+    await tester.tap(find.text('Nut potential'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'nut');
+    controller.dispose();
+  });
+
+  testWidgets('s5 exit value docks Bet thin value on station river', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-09-02-cp-value',
+      order: 2,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Thin value.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'River second pair vs Calling Station. Action?',
+      choices: const [
+        CourseChoice(
+          id: 'bet',
+          label: 'Bet thin value',
+          action: 'BET',
+          amountBb: 8,
+        ),
+        CourseChoice(
+          id: 'bluff',
+          label: 'Huge bluff',
+          action: 'BET',
+          amountBb: 40,
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Station · second pair river — tap Bet thin value.'),
+      findsOneWidget,
+    );
+    expect(find.text('BET THIN VALUE'), findsOneWidget);
+    await tester.tap(find.text('BET THIN VALUE'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'bet');
+    controller.dispose();
+  });
+
+  testWidgets('s5 exit catch docks Call vs maniac barrel', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-05-09-02-cp-catch',
+      order: 3,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Call.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Maniac river barrel. Second pair. Action?',
+      choices: const [
+        CourseChoice(id: 'call', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Maniac river barrel — tap Call.'),
+      findsOneWidget,
+    );
+    expect(find.text('CALL'), findsOneWidget);
+    await tester.tap(find.text('CALL'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'call');
+    controller.dispose();
+  });
+
+  testWidgets('s5 exit tell taps Soft evidence on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-05-09-02-cp-tell',
+      order: 4,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Nothing absolute.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Instant shove proves?',
+      choices: const [
+        CourseChoice(id: 'soft', label: 'Soft evidence'),
+        CourseChoice(id: 'nuts', label: 'Absolute nuts'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Instant shove — tap Soft evidence.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Soft evidence'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'soft');
+    controller.dispose();
+  });
+
+  testWidgets('s5 exit stop taps Honor stop on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-05-09-02-cp-stop',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Stop.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Hit stop-loss. Do?',
+      choices: const [
+        CourseChoice(id: 'stop', label: 'Honor stop'),
+        CourseChoice(id: 'chase', label: 'Chase'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Hit stop-loss — tap Honor stop.'), findsOneWidget);
+    await tester.tap(find.text('Honor stop'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'stop');
+    controller.dispose();
+  });
+
   testWidgets('s4 meet nit guided taps Nit on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-04-07-02-guided',

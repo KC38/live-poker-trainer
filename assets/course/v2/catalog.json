@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "95fd52eaa1e5b3316abc46131272fb3d8b1b2900f1bc8c681d90aacd50d37bcf",
+  "contentChecksum": "8b7378c3c0eafcc6fb6edc4ced0377d1c205a69a1c69f5665f862cbda2bedad8",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -10877,13 +10877,13 @@
                   "choices": [
                     {
                       "id": "nut",
-                      "label": "Nut potential over weak bluffs",
-                      "accessibilityText": "Nut potential over weak bluffs"
+                      "label": "Nut potential",
+                      "accessibilityText": "Nut potential"
                     },
                     {
                       "id": "bluff",
-                      "label": "Bluff more multiway",
-                      "accessibilityText": "Bluff more multiway"
+                      "label": "Bluff more",
+                      "accessibilityText": "Bluff more"
                     }
                   ]
                 },
@@ -10950,8 +10950,8 @@
                     },
                     {
                       "id": "fold",
-                      "label": "Fold always",
-                      "accessibilityText": "Fold always",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
                       "action": "FOLD"
                     }
                   ],
@@ -10979,8 +10979,8 @@
                   "choices": [
                     {
                       "id": "soft",
-                      "label": "Nothing absolute — soft evidence only",
-                      "accessibilityText": "Nothing absolute — soft evidence only"
+                      "label": "Soft evidence",
+                      "accessibilityText": "Soft evidence"
                     },
                     {
                       "id": "nuts",
@@ -11009,8 +11009,8 @@
                   "choices": [
                     {
                       "id": "stop",
-                      "label": "Honor the stop-loss",
-                      "accessibilityText": "Honor the stop-loss"
+                      "label": "Honor stop",
+                      "accessibilityText": "Honor stop"
                     },
                     {
                       "id": "chase",

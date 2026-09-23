@@ -756,6 +756,27 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'Steaming — fold and reset',
       );
+    case 'act-05-09-02-cp-value':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', '9d'],
+        boardCodes: ['Kc', '9s', '4h', '2d', '7c'],
+        potLabel: 'Pot 32',
+        villainLine: 'Calling Station checked twice',
+        streetLabel: 'River · second pair',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Station pays — bet thin value',
+      );
+    case 'act-05-09-02-cp-catch':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', '9d'],
+        boardCodes: ['Kc', '9s', '4h', '2d', '7c'],
+        potLabel: 'Pot 48',
+        villainLine: 'Maniac barrels river',
+        streetLabel: 'River · second pair',
+        facingBet: true,
+        feltStatusLine: 'Wide barrels — call the catch',
+      );
   }
   return null;
 }
@@ -986,6 +1007,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-05-08-01-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-05-09-02-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }

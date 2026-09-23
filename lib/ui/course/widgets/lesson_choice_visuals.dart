@@ -298,6 +298,12 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Session discipline: tap stop / stakes / cash-out / edge on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-05-09-02-cp-multi' ||
+      activity.id == 'act-05-09-02-cp-tell' ||
+      activity.id == 'act-05-09-02-cp-stop') {
+    // Section 5 exit: tap multiway / tell / stop reads on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.
