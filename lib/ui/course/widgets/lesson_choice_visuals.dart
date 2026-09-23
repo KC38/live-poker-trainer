@@ -478,6 +478,16 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Live warm-up prep: checklist / defaults / scope / one hand on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-07-12-01-cs' ||
+      activity.id == 'act-07-12-01-nit' ||
+      activity.id == 'act-07-12-01-maniac' ||
+      activity.id == 'act-07-12-01-tag' ||
+      activity.id == 'act-07-12-01-lag' ||
+      activity.id == 'act-07-12-01-uncertain' ||
+      activity.id == 'act-07-12-01-retire') {
+    // Section 7 five-type final: identify + adjust / certainty / retire on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.
