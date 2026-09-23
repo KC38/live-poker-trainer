@@ -1200,7 +1200,7 @@
                   "objectives": [
                     "Spot board-tied pots"
                   ],
-                  "prompt": "Both checked down on a broadway club board. Tap the result.",
+                  "prompt": "Both checked down — tap who takes the pot.",
                   "choices": [
                     {
                       "id": "chop-broadway",

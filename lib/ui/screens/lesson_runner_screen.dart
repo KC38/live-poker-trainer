@@ -947,6 +947,9 @@ String? _tableChoiceShortLabel(String choiceId) {
     'before-deal' => 'before the deal',
     'after-flop' => 'after the flop',
     'only-showdown' => 'at showdown',
+    'chop-broadway' => 'chop — board plays',
+    'button-wins' => 'button wins',
+    'high-card-wins' => 'higher hole card',
     _ => null,
   };
 }

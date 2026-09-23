@@ -6161,4 +6161,78 @@ void main() {
     expect(controller.draft.choiceId, 'you-kicker');
     controller.dispose();
   });
+
+  testWidgets('board chop taps the felt board, not choice tiles', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-02-02-unguided-board',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap chop when the board plays',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Both checked down — tap who takes the pot.',
+      choices: const [
+        CourseChoice(id: 'chop-broadway', label: 'Chop — both play the board'),
+        CourseChoice(id: 'button-wins', label: 'Button wins automatically'),
+        CourseChoice(id: 'high-card-wins', label: 'Higher hole card wins'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final scene = resolveLessonTableScene(activity);
+    expect(scene?.boardCodes, ['Ac', 'Kc', 'Qc', 'Jc', 'Tc']);
+    expect(scene?.heroCodes, ['2h', '2d']);
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.board,
+        choices: activity.choices,
+      ),
+      'chop-broadway',
+    );
+    expect(resolveHandExample(id: 'high-card-wins')?.codes, ['2h', '2d']);
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(
+      find.text('Both checked down — tap who takes the pot.'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('broadway clubs'), findsNothing);
+    expect(find.text('Chop — board plays'), findsNothing);
+    expect(find.text('Tap the answer on the table.'), findsOneWidget);
+
+    final boardCards = find.byWidgetPredicate(
+      (w) => w is MiniCard && w.size == MiniCardSize.small,
+    );
+    expect(boardCards, findsAtLeastNWidgets(5));
+    await tester.tap(boardCards.first);
+    await tester.pump();
+    expect(controller.draft.choiceId, 'chop-broadway');
+
+    controller.finishSubmit(
+      _result(
+        grade: SoftGrade.recommended,
+        accepted: true,
+        lifeLost: false,
+      ),
+    );
+    await tester.pump();
+    expect(find.text('Checking…'), findsNothing);
+    expect(find.text('Tap the answer on the table.'), findsNothing);
+    controller.dispose();
+  });
 }

@@ -314,6 +314,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Open to 6 at 1/2. Tap the pot before blinds act.',
       'act-01-05-01-checkpoint-side' =>
           'You are short all-in. Tap what is true.',
+      'act-01-02-02-unguided-board' =>
+          'Both checked down — tap who takes the pot.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -486,18 +488,27 @@ class _HandCategoryTapActivity extends StatelessWidget {
               ),
             ],
             const SizedBox(height: 12),
-            Text(
-              controller.submitting
-                  ? 'Checking…'
-                  : selected == null
-                  ? 'Tap the hand category you made.'
-                  : 'Checking…',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-              ),
+            Builder(
+              builder: (context) {
+                final status = () {
+                  if (controller.lastResult != null) return '';
+                  if (controller.submitting) return 'Checking…';
+                  if (selected == null) {
+                    return 'Tap the hand category you made.';
+                  }
+                  return 'Checking…';
+                }();
+                if (status.isEmpty) return const SizedBox.shrink();
+                return Text(
+                  status,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.slate,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                );
+              },
             ),
           ],
         );
@@ -523,7 +534,7 @@ class _ShowdownTapActivity extends StatelessWidget {
       return 'Same pair — tap who wins on kickers.';
     }
     if (activity.id == 'act-01-02-02-unguided-board') {
-      return 'Board is broadway clubs — tap the showdown result.';
+      return 'Both checked down — tap who takes the pot.';
     }
     return 'Look at both hands — tap who wins.';
   }
@@ -594,18 +605,27 @@ class _ShowdownTapActivity extends StatelessWidget {
               ),
             ],
             const SizedBox(height: 10),
-            Text(
-              controller.submitting
-                  ? 'Checking…'
-                  : selected == null
-                  ? 'Tap the result that wins the pot.'
-                  : 'Checking…',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-              ),
+            Builder(
+              builder: (context) {
+                final status = () {
+                  if (controller.lastResult != null) return '';
+                  if (controller.submitting) return 'Checking…';
+                  if (selected == null) {
+                    return 'Tap the result that wins the pot.';
+                  }
+                  return 'Checking…';
+                }();
+                if (status.isEmpty) return const SizedBox.shrink();
+                return Text(
+                  status,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.slate,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                );
+              },
             ),
           ],
         );

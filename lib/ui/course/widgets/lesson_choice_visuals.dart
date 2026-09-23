@@ -88,9 +88,12 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
   if (activity.id == 'act-01-02-01-scaffolded-spot') {
     return SelectIdentifyPresentation.handCategoryTap;
   }
+  if (activity.id == 'act-01-02-02-unguided-board') {
+    // Board-plays chop: tap the felt (board / you / them), not text tiles.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
-      activity.id == 'act-01-02-02-scaffolded-kicker' ||
-      activity.id == 'act-01-02-02-unguided-board') {
+      activity.id == 'act-01-02-02-scaffolded-kicker') {
     return SelectIdentifyPresentation.showdownTap;
   }
   if (activity.id == 'act-01-02-02-guided-seven' ||
