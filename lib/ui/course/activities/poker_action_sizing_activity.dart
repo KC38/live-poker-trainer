@@ -264,6 +264,8 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Air vs a flush turn — tap Check to shut down.',
     'act-04-03-01-unguided' =>
       'Medium hand multiway and deep — tap Keep pot small.',
+    'act-04-04-01-guided' =>
+      'Dry board, top pair — tap a value size into 20.',
     _ => null,
   };
 }
