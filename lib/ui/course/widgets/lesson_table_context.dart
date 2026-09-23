@@ -128,6 +128,15 @@ enum LessonTableRegion {
   /// Multiway pot distractor: dropped a blind.
   potChipsEighteen,
 
+  /// Call-price: correct call amount (matches the bet).
+  callChipsTen,
+
+  /// Call-price distractor: the pre-call pot.
+  callChipsTwenty,
+
+  /// Call-price distractor: pot after calling.
+  callChipsThirty,
+
   /// Verbal action: raise stands (binding).
   verbalRaiseStands,
 
@@ -184,6 +193,9 @@ enum LessonTableLayout {
 
   /// Multiway pot tiles after open + callers (21 / 18 / 12).
   potMultiwayOutcomes,
+
+  /// Call-price tiles after a bet (10 / 20 / 30).
+  callPriceOutcomes,
 
   /// Verbal declaration tiles: raise stands / takeback / dealer.
   verbalBindingOutcomes,
@@ -480,6 +492,11 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         villainSeatCount: 0,
         highlight: LessonTableHighlight.none,
         caption: 'Flop · clean outs?',
+      );
+    case 'act-03-03-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.callPriceOutcomes,
+        caption: 'Pot 20 · villain bets 10',
       );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
@@ -810,6 +827,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.potChipsTwelve => pick('pot-12'),
         _ => null,
       };
+    case 'act-03-03-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.callChipsTen => pick('call-10'),
+        LessonTableRegion.callChipsTwenty => pick('call-20'),
+        LessonTableRegion.callChipsThirty => pick('call-30'),
+        _ => null,
+      };
     case 'act-03-01-01-scaffolded':
       // Preflop open: UTG is left of the BB (earlyPosition on the felt).
       return switch (region) {
@@ -916,7 +940,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-01-01-guided' ||
       activity.id == 'act-03-01-01-scaffolded' ||
       activity.id == 'act-03-01-01-unguided' ||
-      activity.id == 'act-03-01-01-checkpoint';
+      activity.id == 'act-03-01-01-checkpoint' ||
+      activity.id == 'act-03-03-01-scaffolded';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -1049,6 +1074,7 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.effectiveStackOutcomes =>
         _buildEffectiveStackOutcomes(),
       LessonTableLayout.potMultiwayOutcomes => _buildPotMultiwayOutcomes(),
+      LessonTableLayout.callPriceOutcomes => _buildCallPriceOutcomes(),
       LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
       LessonTableLayout.tableReadMattersOutcomes =>
           _buildTableReadMattersOutcomes(),
@@ -1776,6 +1802,34 @@ class LessonTableContext extends StatelessWidget {
           title: '12 chips',
           detail: 'Open only',
           visual: const _PotChipDot(label: '12', gold: false),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCallPriceOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive: 'Interactive call price — tap chips to call',
+      semanticsStatic: 'Call price outcomes',
+      caption: scene.caption ?? 'Pot 20 · villain bets 10',
+      phases: [
+        (
+          region: LessonTableRegion.callChipsTwenty,
+          title: '20 chips',
+          detail: 'The pot',
+          visual: const _PotChipDot(label: '20', gold: false),
+        ),
+        (
+          region: LessonTableRegion.callChipsTen,
+          title: '10 chips',
+          detail: 'Match the bet',
+          visual: const _PotChipDot(label: '10', gold: true),
+        ),
+        (
+          region: LessonTableRegion.callChipsThirty,
+          title: '30 chips',
+          detail: 'After you call',
+          visual: const _PotChipDot(label: '30', gold: false),
         ),
       ],
     );

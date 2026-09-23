@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "ac7fb165525aa9e6b0dae077718cf41ecff6c1e59aeb8101d333f7829025cc20",
+  "contentChecksum": "7473e29f7f059154555a0a91ab8ecf4d15a9374d931e913df5ecdf2db785a540",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -4582,7 +4582,7 @@
                   "id": "act-03-03-01-scaffolded",
                   "order": 3,
                   "stage": "scaffolded",
-                  "renderer": "numeric_pot_price",
+                  "renderer": "select_identify",
                   "estimatedSeconds": 40,
                   "accessibilityText": "Calling price is the bet size: 10.",
                   "acceptedGrades": [
@@ -4594,10 +4594,24 @@
                   "objectives": [
                     "Compare pot odds to draw equity"
                   ],
-                  "numericPrompt": {
-                    "question": "Pot is 20. Villain bets 10. How many chips to call?",
-                    "unit": "chips"
-                  }
+                  "prompt": "Pot is 20. Villain bets 10. How many chips to call?",
+                  "choices": [
+                    {
+                      "id": "call-10",
+                      "label": "10",
+                      "accessibilityText": "10"
+                    },
+                    {
+                      "id": "call-20",
+                      "label": "20",
+                      "accessibilityText": "20"
+                    },
+                    {
+                      "id": "call-30",
+                      "label": "30",
+                      "accessibilityText": "30"
+                    }
+                  ]
                 },
                 {
                   "id": "act-03-03-01-unguided",

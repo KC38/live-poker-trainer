@@ -6006,7 +6006,7 @@
                   "id": "act-03-03-01-scaffolded",
                   "order": 3,
                   "stage": "scaffolded",
-                  "renderer": "numeric_pot_price",
+                  "renderer": "select_identify",
                   "estimatedSeconds": 40,
                   "accessibilityText": "Calling price is the bet size: 10.",
                   "acceptedGrades": [
@@ -6018,20 +6018,38 @@
                   "objectives": [
                     "Compare pot odds to draw equity"
                   ],
-                  "numericPrompt": {
-                    "question": "Pot is 20. Villain bets 10. How many chips to call?",
-                    "unit": "chips",
-                    "acceptedMin": 10,
-                    "acceptedMax": 10,
-                    "grading": {
-                      "grade": "recommended",
-                      "feedback": "You must call 10 into a 30 pot after calling."
+                  "prompt": "Pot is 20. Villain bets 10. How many chips to call?",
+                  "choices": [
+                    {
+                      "id": "call-10",
+                      "label": "10",
+                      "accessibilityText": "10",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "You must call 10 into a 30 pot after calling."
+                      }
                     },
-                    "missGrading": {
-                      "grade": "clear_mistake",
-                      "feedback": "The call equals the bet — 10."
+                    {
+                      "id": "call-20",
+                      "label": "20",
+                      "accessibilityText": "20",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "That is the pot, not the call.",
+                        "betterChoiceId": "call-10"
+                      }
+                    },
+                    {
+                      "id": "call-30",
+                      "label": "30",
+                      "accessibilityText": "30",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "That is the pot after you call — you only put in 10.",
+                        "betterChoiceId": "call-10"
+                      }
                     }
-                  }
+                  ]
                 },
                 {
                   "id": "act-03-03-01-unguided",
