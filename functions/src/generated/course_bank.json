@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "b82f92ab0b0f2e737ea649c1c34c9743dd94c4980027e65bcb79b11acb982f55",
+  "contentChecksum": "8839d244e49c63bacb28840f05823ad6c6061bef3b6013daf35091b7b0c520e6",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -12286,7 +12286,7 @@
             {
               "id": "lesson-05-03-01-implied-odds",
               "order": 1,
-              "title": "Price draws with implied and reverse implied odds",
+              "title": "Implied and reverse odds",
               "summary": "Estimate future payoffs and domination risk, not only pot odds.",
               "objectives": [
                 "Estimate implied odds from depth and tendencies",

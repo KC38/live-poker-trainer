@@ -12285,7 +12285,7 @@
             {
               "id": "lesson-05-03-01-implied-odds",
               "order": 1,
-              "title": "Price draws with implied and reverse implied odds",
+              "title": "Implied and reverse odds",
               "summary": "Estimate future payoffs and domination risk, not only pot odds.",
               "objectives": [
                 "Estimate implied odds from depth and tendencies",

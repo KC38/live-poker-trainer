@@ -102,6 +102,8 @@ class PokerActionSizingActivity extends StatelessWidget {
                     if (controller.lastResult != null) return '';
                     if (controller.submitting) return 'Checking…';
                     if (selected == null) {
+                      // Rex already cues the dock — no third "tap…" line.
+                      if (showCoach) return '';
                       // Felt + Rex already name open pots — avoid a third
                       // "tap Bet" line under the dock.
                       return spot.identifyUnavailable

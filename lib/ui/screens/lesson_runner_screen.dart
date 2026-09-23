@@ -607,7 +607,13 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         backgroundColor: AppColors.bgDark,
         title: Text(
           _lesson?.title ?? 'Lesson',
-          style: GoogleFonts.manrope(fontWeight: FontWeight.w700),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: GoogleFonts.manrope(
+            fontWeight: FontWeight.w700,
+            fontSize: 16,
+            height: 1.15,
+          ),
         ),
       ),
       body: SafeArea(child: body),

@@ -9819,6 +9819,7 @@ void main() {
       find.text('Deep gutshot vs Station — tap Call.'),
       findsOneWidget,
     );
+    expect(find.text('Tap your action on the dock.'), findsNothing);
     expect(find.text('CALL'), findsOneWidget);
     await tester.tap(find.text('CALL'));
     await tester.pump();
