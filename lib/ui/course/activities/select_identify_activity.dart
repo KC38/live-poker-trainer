@@ -479,6 +479,8 @@ class _HandCategoryTapActivity extends StatelessWidget {
           'Deep multiway — tap the better speculative hand.',
         'act-03-07-01-checkpoint' =>
           'Seat enters most pots — tap what you note.',
+        'act-03-08-01-checkpoint' =>
+          'Two seats, different frequencies — tap the note.',
         _ => 'Look at the board and your holes — tap what you made.',
       };
 
@@ -577,6 +579,8 @@ class _HandCategoryTapActivity extends StatelessWidget {
                         ? 'Tap the speculative hand.'
                         : activity.id == 'act-03-07-01-checkpoint'
                         ? 'Tap what you observe.'
+                        : activity.id == 'act-03-08-01-checkpoint'
+                        ? 'Tap the seat note.'
                         : 'Tap the hand category you made.';
                   }
                   return 'Checking…';

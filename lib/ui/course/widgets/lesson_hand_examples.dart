@@ -365,6 +365,24 @@ LessonHandExample? resolveHandExample({
         title: 'Insult their personality',
         codes: [],
       );
+    case 'notes':
+      return const LessonHandExample(
+        id: 'notes',
+        title: 'A raises a lot · B plays few',
+        codes: [],
+      );
+    case 'guess':
+      return const LessonHandExample(
+        id: 'guess',
+        title: 'Invent life stories',
+        codes: [],
+      );
+    case 'same':
+      return const LessonHandExample(
+        id: 'same',
+        title: 'Treat every seat the same',
+        codes: [],
+      );
     case 'split':
       return const LessonHandExample(
         id: 'split',

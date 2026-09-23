@@ -242,6 +242,12 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Second pair four ways — tap Check or Bet.',
     'act-03-07-01-scaffolded' =>
       'Missed on a wet board with a crowd — tap Check.',
+    'act-03-08-01-guided' =>
+      'Weak top pair in a raise-reraise pot — tap Fold.',
+    'act-03-08-01-scaffolded' =>
+      'Gutshot vs an overbet — tap Fold.',
+    'act-03-08-01-unguided' =>
+      'Air multiway vs a bet — tap Fold.',
     _ => null,
   };
 }

@@ -562,6 +562,12 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.none,
         caption: 'Seat enters 8 of last 10 pots',
       );
+    case 'act-03-08-01-checkpoint':
+      return const LessonTableScene(
+        villainSeatCount: 2,
+        highlight: LessonTableHighlight.none,
+        caption: 'Seat A raises a lot · Seat B rarely enters',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
