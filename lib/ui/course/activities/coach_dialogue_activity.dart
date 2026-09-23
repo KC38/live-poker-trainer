@@ -17,6 +17,7 @@ import 'package:live_poker_trainer/ui/course/widgets/overbet_geometry_demo.dart'
 import 'package:live_poker_trainer/ui/course/widgets/blockers_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/defend_enough_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/mix_with_reason_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/hard_fold_cooler_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -310,6 +311,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.mixWithReason
                     ? null
                     : onFeltAcknowledge,
+            onHardFoldCoolerAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.hardFoldCooler
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -526,6 +531,9 @@ enum CoachDialogueVisualKind {
 
   /// Mixing is frequency with a purpose — not coin-flip theater.
   mixWithReason,
+
+  /// Hard folds save buy-ins; coolers happen; ego call-downs are mistakes.
+  hardFoldCooler,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -662,6 +670,8 @@ class CoachDialogueVisual {
       'Tap Defend, Bluff, and Enough.',
     CoachDialogueVisualKind.mixWithReason =>
       'Tap Mix, Purpose, and No Coin.',
+    CoachDialogueVisualKind.hardFoldCooler =>
+      'Tap Hard, Cooler, and Ego.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -725,7 +735,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.overbetGeometry ||
       kind == CoachDialogueVisualKind.blockers ||
       kind == CoachDialogueVisualKind.defendEnough ||
-      kind == CoachDialogueVisualKind.mixWithReason;
+      kind == CoachDialogueVisualKind.mixWithReason ||
+      kind == CoachDialogueVisualKind.hardFoldCooler;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -848,6 +859,8 @@ class CoachDialogueVisual {
       'Defend-enough tiles: defend, bluff, enough',
     CoachDialogueVisualKind.mixWithReason =>
       'Mix-with-reason tiles: mix, purpose, no coin',
+    CoachDialogueVisualKind.hardFoldCooler =>
+      'Hard-fold/cooler tiles: hard, cooler, ego',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -1062,6 +1075,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-06-08-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.mixWithReason,
+      );
+    case 'act-06-10-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.hardFoldCooler,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1540,6 +1557,16 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.mixWithReason,
     );
   }
+  // Phrase-safe hard folds / coolers — avoid bare "cooler" / "ego" alone.
+  if (blob.contains('hard folds save buy-ins') ||
+      blob.contains('coolers happen') ||
+      blob.contains('ego call-downs') ||
+      (blob.contains('coolers') && blob.contains('ego call-downs')) ||
+      (blob.contains('hard folds') && blob.contains('save buy-ins'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.hardFoldCooler,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -1621,6 +1648,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onBlockersAcknowledge,
     this.onDefendEnoughAcknowledge,
     this.onMixWithReasonAcknowledge,
+    this.onHardFoldCoolerAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1683,6 +1711,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onBlockersAcknowledge;
   final VoidCallback? onDefendEnoughAcknowledge;
   final VoidCallback? onMixWithReasonAcknowledge;
+  final VoidCallback? onHardFoldCoolerAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1985,6 +2014,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onMixWithReasonAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onMixWithReasonAcknowledge,
+        ),
+        CoachDialogueVisualKind.hardFoldCooler => HardFoldCoolerDemo(
+          interactive: onHardFoldCoolerAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onHardFoldCoolerAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
