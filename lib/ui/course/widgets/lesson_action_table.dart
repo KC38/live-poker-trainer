@@ -4544,7 +4544,7 @@ class LessonActionDock extends StatelessWidget {
   final ValueChanged<String> onSelect;
   final bool identifyUnavailable;
 
-  /// When true, Check is illegal live — show CHECK (off) chrome.
+  /// When true, Check/Bet are illegal live — show (off) chrome for those.
   final bool facingBet;
 
   static bool _isCheck(CourseChoice c) {
@@ -4557,6 +4557,17 @@ class LessonActionDock extends StatelessWidget {
     return action.startsWith('CALL') || c.id.contains('call');
   }
 
+  static bool _isBet(CourseChoice c) {
+    final action = (c.action ?? c.label).toUpperCase();
+    // Action only — ids like raise-no-bet contain "bet".
+    return action.startsWith('BET');
+  }
+
+  static bool _isRaise(CourseChoice c) {
+    final action = (c.action ?? c.label).toUpperCase();
+    return action.startsWith('RAISE');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -4567,12 +4578,14 @@ class LessonActionDock extends StatelessWidget {
             child: Builder(
               builder: (context) {
                 final choice = choices[i];
-                // Live dock: Check is off vs a bet; Call is off with nothing
-                // to match. Checkpoint (identifyUnavailable) also marks Check.
+                // Live dock chrome: Check/Bet off vs a bet; Call/Raise off
+                // when the pot is open. Checkpoint also marks Check.
                 final unavailableLook =
                     (_isCheck(choice) &&
                         (facingBet || identifyUnavailable)) ||
-                    (_isCall(choice) && !facingBet);
+                    (_isCall(choice) && !facingBet) ||
+                    (_isBet(choice) && facingBet) ||
+                    (_isRaise(choice) && !facingBet);
                 return _DockButton(
                   choice: choice,
                   selected: selectedId == choice.id,
@@ -4644,7 +4657,12 @@ class _DockButton extends StatelessWidget {
         authoredWords.first != 'FOLD';
     final short =
         unavailableLook
-            ? (action.startsWith('CALL') ? 'CALL (off)' : 'CHECK (off)')
+            ? switch (action.split(' ').first) {
+              'CALL' => 'CALL (off)',
+              'BET' => 'BET (off)',
+              'RAISE' => 'RAISE (off)',
+              _ => 'CHECK (off)',
+            }
             : preferAuthoredLabel
             ? authored
             : action.startsWith('ALL')
