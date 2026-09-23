@@ -23,16 +23,20 @@ class AuthoredMultiStepActivity extends StatelessWidget {
   final LessonActivityController controller;
   final bool showGuidance;
 
-  String get _coachText {
-    return switch (activity.id) {
-      'act-01-06-01-guided-steps' =>
+  String _coachTextFor(CourseHandStep step) {
+    return switch ((activity.id, step.id)) {
+      ('act-01-06-01-guided-steps', _) =>
         'Button toy hand — open, then see if it ends.',
-      'act-01-06-01-scaffolded-multi' =>
+      ('act-01-06-01-scaffolded-multi', _) =>
         'Called open — confirm the flop, then act.',
-      'act-01-06-01-checkpoint-finish' =>
+      ('act-01-06-01-checkpoint-finish', _) =>
         'Finish a short button hand without freezing.',
-      'act-01-06-02-jump-hand' =>
+      ('act-01-06-02-jump-hand', _) =>
         'Jump check — open the button, then take the blinds.',
+      ('act-04-03-01-guided', 'step-flop-tp') =>
+        'TPTK on a dry flop — tap Bet to start the plan.',
+      ('act-04-03-01-guided', 'step-turn-tp') =>
+        'Brick turn after a call — tap Bet again for value.',
       _ => 'Play the street — tap your action on the dock.',
     };
   }
@@ -58,13 +62,14 @@ class AuthoredMultiStepActivity extends StatelessWidget {
           stepId: step.id,
         );
         final tableMode = isLessonActionTableActivity(activity) && spot != null;
+        final coachText = _coachTextFor(step);
 
         if (tableMode) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Nice! owns the line — hide stale Rex; felt already shows cards.
-              if (!locked) RexCoachLine(text: _coachText),
+              if (!locked) RexCoachLine(text: coachText),
               const SizedBox(height: 10),
               Text(
                 'Street ${index + 1} of ${steps.length}',

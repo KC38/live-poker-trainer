@@ -8654,6 +8654,65 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 plan guided docks TPTK value bet on flop felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-03-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 70,
+      accessibilityText: 'Plan top pair across flop and turn.',
+      acceptedGrades: const [SoftGrade.recommended],
+      handSteps: const [
+        CourseHandStep(
+          id: 'step-flop-tp',
+          street: 'flop',
+          prompt: 'Heads-up with TPTK on a dry flop. Checked to you.',
+          choices: [
+            CourseChoice(id: 'flop-bet', label: 'Bet', action: 'BET'),
+            CourseChoice(id: 'flop-check', label: 'Check', action: 'CHECK'),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-turn-tp',
+          street: 'turn',
+          prompt: 'Brick turn. Villain calls flop. Continue?',
+          choices: [
+            CourseChoice(id: 'turn-bet', label: 'Bet again', action: 'BET'),
+            CourseChoice(id: 'turn-check', label: 'Check', action: 'CHECK'),
+          ],
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        AuthoredMultiStepActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('TPTK on a dry flop — tap Bet to start the plan.'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('Flop · A72 rainbow · TPTK'), findsOneWidget);
+    expect(find.text('BET'), findsOneWidget);
+    expect(
+      find.text('Heads-up with TPTK on a dry flop. Checked to you.'),
+      findsNothing,
+    );
+    await tester.tap(find.text('BET'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'flop-bet');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {
