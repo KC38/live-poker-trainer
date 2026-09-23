@@ -253,7 +253,7 @@ export function buildSectionFive() {
         "Extract thin value; catch when aggression is wide.", [
           lesson({
             id: L050401, order: 1,
-            title: "Bet thin for value; catch wide aggression",
+            title: "Thin value and bluff-catches",
             summary: "Widen value versus sticky callers; widen catches versus maniacs.",
             objectives: ["Choose thin value versus sticky callers", "Widen bluff-catches versus over-aggression", "Skip thin value versus overfolders"],
             prereq: L050301, remediation: L050301, minutes: 9, band: 4,
@@ -272,7 +272,7 @@ export function buildSectionFive() {
                   choice("tv", "Bet thin value", "recommended",
                     "They call worse.", {action: "BET", amountBb: 7, reversalRead: "Versus a nit check, prefer check-back."}),
                   choice("check", "Check always", "questionable",
-                    "Misses value versus stations."),
+                    "Misses value versus stations.", {action: "CHECK"}),
                   choice("overbet", "Overbet bluff", "clear_mistake",
                     "They do not fold.", {action: "BET", amountBb: 40, betterChoiceId: "tv"})
                 ],
@@ -287,7 +287,7 @@ export function buildSectionFive() {
                   choice("call-m", "Call", "recommended",
                     "Wide barrels justify the catch.", {action: "CALL", reversalRead: "Nit barrel: fold more."}),
                   choice("fold-m", "Fold", "questionable",
-                    "Too tight versus maniac."),
+                    "Too tight versus maniac.", {action: "FOLD"}),
                   choice("raise-m", "Hero-raise for ego", "clear_mistake",
                     "No ego.", {action: "RAISE", amountBb: 50, betterChoiceId: "call-m"})
                 ],
@@ -303,7 +303,7 @@ export function buildSectionFive() {
                   choice("check-nit", "Check back", "recommended",
                     "Nits fold worse; thin value fails.", {action: "CHECK", reversalRead: "Station: bet thin."}),
                   choice("bet-nit", "Bet thin", "questionable",
-                    "They fold too much."),
+                    "They fold too much.", {action: "BET", amountBb: 7}),
                   choice("jam-nit", "Overbet", "clear_mistake",
                     "No.", {action: "BET", amountBb: 60, betterChoiceId: "check-nit"})
                 ],

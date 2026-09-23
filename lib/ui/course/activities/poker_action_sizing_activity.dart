@@ -320,6 +320,12 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'KJo vs Nit check-raise — tap Fold.',
     'act-05-03-01-unguided' =>
       'Non-nut FD four-way — tap Fold.',
+    'act-05-04-01-guided' =>
+      'Station checked · second pair — tap Bet thin value.',
+    'act-05-04-01-scaffolded' =>
+      'Maniac barrels second pair — tap Call.',
+    'act-05-04-01-unguided' =>
+      'Nit checked · second pair — tap Check.',
     _ => null,
   };
 }

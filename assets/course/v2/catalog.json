@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "8839d244e49c63bacb28840f05823ad6c6061bef3b6013daf35091b7b0c520e6",
+  "contentChecksum": "7fa80ad0dec711c371dd5f83cd5ccf30f7f21cf7c635fa808a12a3eab802a2d0",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -9741,7 +9741,7 @@
             {
               "id": "lesson-05-04-01-thin-value-bluffcatch",
               "order": 1,
-              "title": "Bet thin for value; catch wide aggression",
+              "title": "Thin value and bluff-catches",
               "summary": "Widen value versus sticky callers; widen catches versus maniacs.",
               "objectives": [
                 "Choose thin value versus sticky callers",
@@ -9813,7 +9813,8 @@
                     {
                       "id": "check",
                       "label": "Check always",
-                      "accessibilityText": "Check always"
+                      "accessibilityText": "Check always",
+                      "action": "CHECK"
                     },
                     {
                       "id": "overbet",
@@ -9854,7 +9855,8 @@
                     {
                       "id": "fold-m",
                       "label": "Fold",
-                      "accessibilityText": "Fold"
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
                     },
                     {
                       "id": "raise-m",
@@ -9895,7 +9897,9 @@
                     {
                       "id": "bet-nit",
                       "label": "Bet thin",
-                      "accessibilityText": "Bet thin"
+                      "accessibilityText": "Bet thin",
+                      "action": "BET",
+                      "amountBb": 7
                     },
                     {
                       "id": "jam-nit",
