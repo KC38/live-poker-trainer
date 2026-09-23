@@ -15373,8 +15373,8 @@ void main() {
         ),
       );
       expect(find.byType(RiverCompositionDemo), findsOneWidget);
-      expect(find.text('Tap Value, Bluff, and Check.'), findsOneWidget);
-      expect(find.text('Tap Value, Bluff, and Check'), findsNothing);
+      expect(find.text('Tap Value, Bluff, and Hold.'), findsNothing);
+      expect(find.text('Tap Value, Bluff, and Hold'), findsNothing);
       expect(
         find.text('Value needs calls · bluffs need folds · check trash'),
         findsNothing,
@@ -15382,7 +15382,7 @@ void main() {
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['VALUE', 'BLUFF', 'CHECK']) {
+      for (final title in ['VALUE', 'BLUFF', 'HOLD']) {
         await tester.tap(find.text(title));
         await tester.pump();
       }

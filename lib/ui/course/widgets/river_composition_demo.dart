@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 
-/// Value / Bluff / Check tiles for river composition explain demos.
+/// Value / Bluff / Hold tiles for river composition explain demos.
 class RiverCompositionDemo extends StatefulWidget {
   /// Creates the demo.
   const RiverCompositionDemo({
@@ -19,7 +19,7 @@ class RiverCompositionDemo extends StatefulWidget {
   static const points = <({String label, String caption, Color color})>[
     (label: 'VALUE', caption: 'They call worse', color: AppColors.gold),
     (label: 'BLUFF', caption: 'They fold better', color: AppColors.cream),
-    (label: 'CHECK', caption: 'No story', color: AppColors.danger),
+    (label: 'HOLD', caption: 'No story', color: AppColors.danger),
   ];
 
   @override
