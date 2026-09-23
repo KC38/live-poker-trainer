@@ -631,6 +631,24 @@ enum LessonTableRegion {
 
   /// Blockers checkpoint: invent EVs (mistake).
   blockersInventEv,
+
+  /// Min-defense guided: strong catchers (correct).
+  defendStrongCatchers,
+
+  /// Min-defense guided: any two for % (mistake).
+  defendAnyTwoPct,
+
+  /// Min-defense unguided: intuition (correct).
+  defendIntuition,
+
+  /// Min-defense unguided: exact percents (mistake).
+  defendExactPercents,
+
+  /// Min-defense checkpoint: punish over-bluffs (correct).
+  defendPunishOverbluffs,
+
+  /// Min-defense checkpoint: never fold (mistake).
+  defendNeverFold,
 }
 
 /// How the mini-table is arranged.
@@ -901,6 +919,15 @@ enum LessonTableLayout {
 
   /// Blockers checkpoint: no fake EV vs invent EVs.
   blockersEvOutcomes,
+
+  /// Min-defense guided: strong catchers vs any two for %.
+  defendGuidedOutcomes,
+
+  /// Min-defense unguided: intuition vs exact percents.
+  defendIntuitionOutcomes,
+
+  /// Min-defense checkpoint: punish over-bluffs vs never fold.
+  defendPunishOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1763,6 +1790,21 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.blockersEvOutcomes,
         caption: 'Course stance on solver EV quotes?',
       );
+    case 'act-06-07-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.defendGuidedOutcomes,
+        caption: 'Facing a river bet. Best continue?',
+      );
+    case 'act-06-07-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.defendIntuitionOutcomes,
+        caption: 'MDF numbers in this course?',
+      );
+    case 'act-06-07-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.defendPunishOutcomes,
+        caption: 'Minimum defense goal?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -2595,6 +2637,24 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.blockersInventEv => pick('fake'),
         _ => null,
       };
+    case 'act-06-07-01-guided':
+      return switch (region) {
+        LessonTableRegion.defendStrongCatchers => pick('strong'),
+        LessonTableRegion.defendAnyTwoPct => pick('any'),
+        _ => null,
+      };
+    case 'act-06-07-01-unguided':
+      return switch (region) {
+        LessonTableRegion.defendIntuition => pick('int'),
+        LessonTableRegion.defendExactPercents => pick('pct'),
+        _ => null,
+      };
+    case 'act-06-07-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.defendPunishOverbluffs => pick('punish'),
+        LessonTableRegion.defendNeverFold => pick('call-all'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -2751,7 +2811,10 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-06-06-01-guided' ||
       activity.id == 'act-06-06-01-scaffolded' ||
       activity.id == 'act-06-06-01-unguided' ||
-      activity.id == 'act-06-06-01-checkpoint';
+      activity.id == 'act-06-06-01-checkpoint' ||
+      activity.id == 'act-06-07-01-guided' ||
+      activity.id == 'act-06-07-01-unguided' ||
+      activity.id == 'act-06-07-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -3020,6 +3083,10 @@ class LessonTableContext extends StatelessWidget {
           _buildBlockersUnblockOutcomes(),
       LessonTableLayout.blockersTweakOutcomes => _buildBlockersTweakOutcomes(),
       LessonTableLayout.blockersEvOutcomes => _buildBlockersEvOutcomes(),
+      LessonTableLayout.defendGuidedOutcomes => _buildDefendGuidedOutcomes(),
+      LessonTableLayout.defendIntuitionOutcomes =>
+          _buildDefendIntuitionOutcomes(),
+      LessonTableLayout.defendPunishOutcomes => _buildDefendPunishOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -6289,6 +6356,99 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Forbidden',
           visual: const Icon(
             Icons.sentiment_very_dissatisfied_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDefendGuidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive min-defense continues — tap strong catchers vs any two for %',
+      semanticsStatic: 'Defend guided outcomes',
+      caption: scene.caption ?? 'Facing a river bet. Best continue?',
+      phases: [
+        (
+          region: LessonTableRegion.defendStrongCatchers,
+          title: 'Strong catchers',
+          detail: 'Quality over quota',
+          visual: const Icon(
+            Icons.shield_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.defendAnyTwoPct,
+          title: 'Any two for %',
+          detail: 'Frequency theater',
+          visual: const Icon(
+            Icons.percent,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDefendIntuitionOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive MDF stance — tap intuition vs exact percents',
+      semanticsStatic: 'Defend intuition outcomes',
+      caption: scene.caption ?? 'MDF numbers in this course?',
+      phases: [
+        (
+          region: LessonTableRegion.defendIntuition,
+          title: 'Intuition',
+          detail: 'Decision-linked',
+          visual: const Icon(
+            Icons.psychology_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.defendExactPercents,
+          title: 'Exact percents',
+          detail: 'Not our method',
+          visual: const Icon(
+            Icons.calculate_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDefendPunishOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive min-defense goal — tap punish over-bluffs vs never fold',
+      semanticsStatic: 'Defend punish outcomes',
+      caption: scene.caption ?? 'Minimum defense goal?',
+      phases: [
+        (
+          region: LessonTableRegion.defendPunishOverbluffs,
+          title: 'Punish over-bluffs',
+          detail: 'Sensible continues',
+          visual: const Icon(
+            Icons.gavel_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.defendNeverFold,
+          title: 'Never fold',
+          detail: 'Too wide',
+          visual: const Icon(
+            Icons.all_inclusive,
             color: AppColors.danger,
             size: 24,
           ),

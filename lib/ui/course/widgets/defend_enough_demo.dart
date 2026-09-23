@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 
-/// Block / remove / EV tiles for blocker explain demos.
+/// Defend / Bluff / Enough tiles for minimum-defense explain demos.
 class DefendEnoughDemo extends StatefulWidget {
   /// Creates the demo.
   const DefendEnoughDemo({
@@ -67,11 +67,13 @@ class _DefendEnoughDemoState extends State<DefendEnoughDemo> {
               for (var i = 0; i < DefendEnoughDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _BlockerTile(
+                  child: _DefendTile(
                     label: DefendEnoughDemo.points[i].label,
                     caption: DefendEnoughDemo.points[i].caption,
                     color: DefendEnoughDemo.points[i].color,
-                    selected: _tapped.contains(DefendEnoughDemo.points[i].label),
+                    selected: _tapped.contains(
+                      DefendEnoughDemo.points[i].label,
+                    ),
                     enabled: widget.interactive && widget.enabled,
                     onPressed: widget.interactive
                         ? () => _onTap(DefendEnoughDemo.points[i].label)
@@ -81,18 +83,19 @@ class _DefendEnoughDemoState extends State<DefendEnoughDemo> {
               ],
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap Defend, Bluff, and Enough'
-                : 'Remove hands — skip EV decimals',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues Defend / Bluff / Enough — no dupe footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Defend better hands — skip fake %',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );
@@ -101,8 +104,8 @@ class _DefendEnoughDemoState extends State<DefendEnoughDemo> {
   }
 }
 
-class _BlockerTile extends StatelessWidget {
-  const _BlockerTile({
+class _DefendTile extends StatelessWidget {
+  const _DefendTile({
     required this.label,
     required this.caption,
     required this.color,
@@ -155,7 +158,19 @@ class _BlockerTile extends StatelessWidget {
         ],
       ),
     );
-    if (!enabled || onPressed == null) return child;
-    return GestureDetector(onTap: onPressed, child: child);
+    if (onPressed == null) return child;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: enabled ? onPressed : null,
+          borderRadius: BorderRadius.circular(12),
+          child: child,
+        ),
+      ),
+    );
   }
 }

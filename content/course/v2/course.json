@@ -15476,8 +15476,8 @@
                   "choices": [
                     {
                       "id": "strong",
-                      "label": "Better showdown + blocker hands",
-                      "accessibilityText": "Better showdown + blocker hands",
+                      "label": "Strong catchers",
+                      "accessibilityText": "Strong catchers",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Quality over quota."
@@ -15485,8 +15485,8 @@
                     },
                     {
                       "id": "any",
-                      "label": "Any two to hit a magic percent",
-                      "accessibilityText": "Any two to hit a magic percent",
+                      "label": "Any two for %",
+                      "accessibilityText": "Any two for %",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "No frequency theater.",
@@ -15499,8 +15499,8 @@
                   "id": "act-06-07-01-scaffolded",
                   "order": 3,
                   "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
                   "accessibilityText": "Fold.",
                   "acceptedGrades": [
                     "recommended",
@@ -15520,17 +15520,19 @@
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Clear trash exits."
-                      }
+                      },
+                      "action": "FOLD"
                     },
                     {
                       "id": "call-mdf",
-                      "label": "Call to satisfy a memorized MDF number",
-                      "accessibilityText": "Call to satisfy a memorized MDF number",
+                      "label": "Call for MDF",
+                      "accessibilityText": "Call for MDF",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Theater.",
                         "betterChoiceId": "fold"
-                      }
+                      },
+                      "action": "CALL"
                     }
                   ]
                 },
@@ -15554,8 +15556,8 @@
                   "choices": [
                     {
                       "id": "int",
-                      "label": "Intuition — defend better hands, fold trash",
-                      "accessibilityText": "Intuition — defend better hands, fold trash",
+                      "label": "Intuition",
+                      "accessibilityText": "Intuition",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Decision-linked."
@@ -15563,8 +15565,8 @@
                     },
                     {
                       "id": "pct",
-                      "label": "Memorize exact percents as truth",
-                      "accessibilityText": "Memorize exact percents as truth",
+                      "label": "Exact percents",
+                      "accessibilityText": "Exact percents",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Not our method.",
@@ -15593,8 +15595,8 @@
                   "choices": [
                     {
                       "id": "punish",
-                      "label": "Make over-bluffing unprofitable with good continues",
-                      "accessibilityText": "Make over-bluffing unprofitable with good continues",
+                      "label": "Punish over-bluffs",
+                      "accessibilityText": "Punish over-bluffs",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "That's the idea."
