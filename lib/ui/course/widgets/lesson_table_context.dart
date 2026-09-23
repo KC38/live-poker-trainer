@@ -1009,6 +1009,30 @@ enum LessonTableRegion {
 
   /// Type-board-line checkpoint: hole-card beauty alone (mistake).
   typeBoardCardsOnly,
+
+  /// Leak-review guided: specific actionable note (correct).
+  leakReviewSpecific,
+
+  /// Leak-review guided: vague "I am bad" (mistake).
+  leakReviewVague,
+
+  /// Leak-review scaffolded: written range family (correct).
+  leakReviewWrittenRange,
+
+  /// Leak-review scaffolded: whatever mood says (mistake).
+  leakReviewMood,
+
+  /// Leak-review unguided: after sessions on a schedule (correct).
+  leakReviewOnSchedule,
+
+  /// Leak-review unguided: never — memory is enough (mistake).
+  leakReviewNever,
+
+  /// Leak-review checkpoint: baseline before exploits (correct).
+  leakReviewBaseline,
+
+  /// Leak-review checkpoint: replace all thinking forever (mistake).
+  leakReviewReplaceAll,
 }
 
 /// How the mini-table is arranged.
@@ -1477,6 +1501,18 @@ enum LessonTableLayout {
 
   /// Type-board-line checkpoint: all four vs hole cards only.
   typeBoardCheckpointOutcomes,
+
+  /// Leak-review guided: specific note vs vague.
+  leakReviewGuidedOutcomes,
+
+  /// Leak-review scaffolded: written range vs mood.
+  leakReviewScaffoldedOutcomes,
+
+  /// Leak-review unguided: on a schedule vs never.
+  leakReviewUnguidedOutcomes,
+
+  /// Leak-review checkpoint: baseline vs replace all thinking.
+  leakReviewCheckpointOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -2638,6 +2674,26 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         layout: LessonTableLayout.typeBoardCheckpointOutcomes,
         caption: 'Integrated decision uses?',
+      );
+    case 'act-07-09-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.leakReviewGuidedOutcomes,
+        caption: 'Best leak note?',
+      );
+    case 'act-07-09-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.leakReviewScaffoldedOutcomes,
+        caption: 'Default BTN vs unknown BB open?',
+      );
+    case 'act-07-09-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.leakReviewUnguidedOutcomes,
+        caption: 'When to review the book?',
+      );
+    case 'act-07-09-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.leakReviewCheckpointOutcomes,
+        caption: 'Default book purpose?',
       );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
@@ -3845,6 +3901,30 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.typeBoardCardsOnly => pick('one'),
         _ => null,
       };
+    case 'act-07-09-01-guided':
+      return switch (region) {
+        LessonTableRegion.leakReviewSpecific => pick('spec'),
+        LessonTableRegion.leakReviewVague => pick('vague'),
+        _ => null,
+      };
+    case 'act-07-09-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.leakReviewWrittenRange => pick('book'),
+        LessonTableRegion.leakReviewMood => pick('mood'),
+        _ => null,
+      };
+    case 'act-07-09-01-unguided':
+      return switch (region) {
+        LessonTableRegion.leakReviewOnSchedule => pick('sched'),
+        LessonTableRegion.leakReviewNever => pick('never'),
+        _ => null,
+      };
+    case 'act-07-09-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.leakReviewBaseline => pick('base'),
+        LessonTableRegion.leakReviewReplaceAll => pick('replace'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -3928,7 +4008,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
         activity.id == 'act-07-05-01-explain' ||
         activity.id == 'act-07-06-01-explain' ||
         activity.id == 'act-07-07-01-explain' ||
-        activity.id == 'act-07-08-01-explain';
+        activity.id == 'act-07-08-01-explain' ||
+        activity.id == 'act-07-09-01-explain';
   }
   if (activity.renderer != ActivityRenderer.selectIdentify &&
       activity.renderer != ActivityRenderer.playerReadClassify) {
@@ -4076,7 +4157,11 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-07-06-01-unguided' ||
       activity.id == 'act-07-06-01-checkpoint' ||
       activity.id == 'act-07-07-01-checkpoint' ||
-      activity.id == 'act-07-08-01-checkpoint';
+      activity.id == 'act-07-08-01-checkpoint' ||
+      activity.id == 'act-07-09-01-guided' ||
+      activity.id == 'act-07-09-01-scaffolded' ||
+      activity.id == 'act-07-09-01-unguided' ||
+      activity.id == 'act-07-09-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -4448,6 +4533,14 @@ class LessonTableContext extends StatelessWidget {
           _buildSameCardsCheckpointOutcomes(),
       LessonTableLayout.typeBoardCheckpointOutcomes =>
           _buildTypeBoardCheckpointOutcomes(),
+      LessonTableLayout.leakReviewGuidedOutcomes =>
+          _buildLeakReviewGuidedOutcomes(),
+      LessonTableLayout.leakReviewScaffoldedOutcomes =>
+          _buildLeakReviewScaffoldedOutcomes(),
+      LessonTableLayout.leakReviewUnguidedOutcomes =>
+          _buildLeakReviewUnguidedOutcomes(),
+      LessonTableLayout.leakReviewCheckpointOutcomes =>
+          _buildLeakReviewCheckpointOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -9667,6 +9760,130 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Hole beauty alone',
           visual: const Icon(
             Icons.style_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLeakReviewGuidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive leak review — tap Specific note or Vague',
+      semanticsStatic: 'Leak-review guided outcomes',
+      caption: scene.caption ?? 'Best leak note?',
+      phases: [
+        (
+          region: LessonTableRegion.leakReviewSpecific,
+          title: 'Specific note',
+          detail: 'Actionable fix',
+          visual: const Icon(
+            Icons.edit_note,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.leakReviewVague,
+          title: 'Vague',
+          detail: 'Not useful',
+          visual: const Icon(
+            Icons.help_outline,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLeakReviewScaffoldedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive leak review — tap Written range or Mood says',
+      semanticsStatic: 'Leak-review scaffolded outcomes',
+      caption: scene.caption ?? 'Default BTN vs unknown BB open?',
+      phases: [
+        (
+          region: LessonTableRegion.leakReviewWrittenRange,
+          title: 'Written range',
+          detail: 'From your book',
+          visual: const Icon(
+            Icons.menu_book_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.leakReviewMood,
+          title: 'Mood says',
+          detail: 'No default',
+          visual: const Icon(
+            Icons.mood,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLeakReviewUnguidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive leak review — tap On a schedule or Never',
+      semanticsStatic: 'Leak-review unguided outcomes',
+      caption: scene.caption ?? 'When to review the book?',
+      phases: [
+        (
+          region: LessonTableRegion.leakReviewOnSchedule,
+          title: 'On a schedule',
+          detail: 'After sessions',
+          visual: const Icon(
+            Icons.event_repeat,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.leakReviewNever,
+          title: 'Never',
+          detail: 'Leaks return',
+          visual: const Icon(
+            Icons.block,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLeakReviewCheckpointOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive leak review — tap Baseline or Replace all',
+      semanticsStatic: 'Leak-review checkpoint outcomes',
+      caption: scene.caption ?? 'Default book purpose?',
+      phases: [
+        (
+          region: LessonTableRegion.leakReviewBaseline,
+          title: 'Baseline',
+          detail: 'Before exploits',
+          visual: const Icon(
+            Icons.foundation,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.leakReviewReplaceAll,
+          title: 'Replace all',
+          detail: 'Still update',
+          visual: const Icon(
+            Icons.auto_fix_off,
             color: AppColors.slate,
             size: 24,
           ),

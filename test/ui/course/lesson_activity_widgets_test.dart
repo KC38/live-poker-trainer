@@ -35,6 +35,7 @@ import 'package:live_poker_trainer/ui/course/widgets/hu_vs_multiway_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/stack_depth_plans_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/same_cards_types_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/type_board_line_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/leak_review_book_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
@@ -16595,6 +16596,217 @@ void main() {
     await tester.tap(find.text('All four'));
     await tester.pump();
     expect(controller.draft.choiceId, 'four');
+    controller.dispose();
+  });
+
+  testWidgets(
+    's7 leak explain taps Leak Book Review instead of Continue',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-07-09-01-explain',
+        order: 1,
+        stage: ActivityStage.explain,
+        renderer: ActivityRenderer.coachDialogue,
+        estimatedSeconds: 30,
+        accessibilityText: 'Defaults beat vibes. Write the book; review leaks.',
+        acceptedGrades: const [SoftGrade.recommended],
+        objectives: const ['Write default lines for common spots'],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'm',
+            kind: 'dialogue',
+            text: 'Defaults beat vibes. Write the book; review leaks.',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      var feltAck = 0;
+      await tester.pumpWidget(
+        _wrap(
+          CoachDialogueActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+            onFeltAcknowledge: () => feltAck += 1,
+          ),
+        ),
+      );
+      expect(find.byType(LeakReviewBookDemo), findsOneWidget);
+      expect(find.text('Tap Leak, Book, and Review.'), findsOneWidget);
+      expect(find.text('Tap Leak, Book, and Review'), findsNothing);
+      expect(
+        find.text('Defaults beat vibes — write and review'),
+        findsNothing,
+      );
+      expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+      expect(isTableRegionTapActivity(activity), isTrue);
+
+      for (final title in ['LEAK', 'BOOK', 'REVIEW']) {
+        await tester.tap(find.text(title));
+        await tester.pump();
+      }
+      expect(feltAck, 1);
+      controller.dispose();
+    },
+  );
+
+  testWidgets('s7 leak guided taps Specific note on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-07-09-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Specific and actionable.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Best leak note?',
+      choices: const [
+        CourseChoice(
+          id: 'spec',
+          label: 'I overcall river vs unknowns — fold more second pair',
+        ),
+        CourseChoice(id: 'vague', label: 'I am bad'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Best leak note — tap Specific note.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Specific note'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'spec');
+    controller.dispose();
+  });
+
+  testWidgets('s7 leak scaffolded taps Written range on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-09-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'A written range family.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Default BTN vs unknown BB open?',
+      choices: const [
+        CourseChoice(
+          id: 'book',
+          label: 'A written range family from your book',
+        ),
+        CourseChoice(id: 'mood', label: 'Whatever mood says'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('BTN vs unknown BB — tap Written range.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Written range'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'book');
+    controller.dispose();
+  });
+
+  testWidgets('s7 leak unguided taps On a schedule on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-07-09-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'After sessions / on a schedule.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'When to review the book?',
+      choices: const [
+        CourseChoice(id: 'sched', label: 'After sessions on a schedule'),
+        CourseChoice(id: 'never', label: 'Never — memory is enough'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Review the book — tap On a schedule.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('On a schedule'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'sched');
+    controller.dispose();
+  });
+
+  testWidgets('s7 leak checkpoint taps Baseline on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-07-09-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Baseline before exploits.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Default book purpose?',
+      choices: const [
+        CourseChoice(id: 'base', label: 'Baseline before exploits'),
+        CourseChoice(id: 'replace', label: 'Replace all thinking forever'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Default book purpose — tap Baseline.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Baseline'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'base');
     controller.dispose();
   });
 }

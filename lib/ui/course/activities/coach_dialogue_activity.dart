@@ -31,6 +31,7 @@ import 'package:live_poker_trainer/ui/course/widgets/hu_vs_multiway_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/stack_depth_plans_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/same_cards_types_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/type_board_line_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/leak_review_book_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -395,6 +396,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.typeBoardLine
                     ? null
                     : onFeltAcknowledge,
+            onLeakReviewBookAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.leakReviewBook
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance &&
@@ -680,6 +685,9 @@ enum CoachDialogueVisualKind {
 
   /// Integrate type, board texture, line history, and sizing into one action.
   typeBoardLine,
+
+  /// Personal leak notes, written default book, and scheduled review habits.
+  leakReviewBook,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -848,6 +856,8 @@ class CoachDialogueVisual {
       'Tap Cards, Models, and Cite.',
     CoachDialogueVisualKind.typeBoardLine =>
       'Tap Type, Board, Line, and Size.',
+    CoachDialogueVisualKind.leakReviewBook =>
+      'Tap Leak, Book, and Review.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -927,7 +937,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.huVsMultiway ||
       kind == CoachDialogueVisualKind.stackDepthPlans ||
       kind == CoachDialogueVisualKind.sameCardsTypes ||
-      kind == CoachDialogueVisualKind.typeBoardLine;
+      kind == CoachDialogueVisualKind.typeBoardLine ||
+      kind == CoachDialogueVisualKind.leakReviewBook;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -1082,6 +1093,8 @@ class CoachDialogueVisual {
       'Same-cards tiles: same holdings, five models, cite tendency',
     CoachDialogueVisualKind.typeBoardLine =>
       'Type-board-line tiles: type, board, line, size — one action',
+    CoachDialogueVisualKind.leakReviewBook =>
+      'Leak-review tiles: specific leak, written book, scheduled review',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -1364,6 +1377,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-07-08-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.typeBoardLine,
+      );
+    case 'act-07-09-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.leakReviewBook,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1809,6 +1826,21 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.typeBoardLine,
     );
   }
+  // Phrase-safe leak review / default book — before commonLeaks so "review leaks"
+  // with "defaults" / "write the book" is not stolen by the common-leaks demo.
+  if (blob.contains('defaults beat vibes') ||
+      blob.contains('write the book') ||
+      blob.contains('write your default') ||
+      blob.contains('personal leak') ||
+      (blob.contains('review leaks') &&
+          (blob.contains('book') || blob.contains('default'))) ||
+      (blob.contains('default') &&
+          blob.contains('book') &&
+          blob.contains('leak'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.leakReviewBook,
+    );
+  }
   if (blob.contains('same cards') ||
       blob.contains('different seats') ||
       blob.contains('exploits change') ||
@@ -2142,6 +2174,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onStackDepthPlansAcknowledge,
     this.onSameCardsTypesAcknowledge,
     this.onTypeBoardLineAcknowledge,
+    this.onLeakReviewBookAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -2220,6 +2253,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onStackDepthPlansAcknowledge;
   final VoidCallback? onSameCardsTypesAcknowledge;
   final VoidCallback? onTypeBoardLineAcknowledge;
+  final VoidCallback? onLeakReviewBookAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -2602,6 +2636,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onTypeBoardLineAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onTypeBoardLineAcknowledge,
+        ),
+        CoachDialogueVisualKind.leakReviewBook => LeakReviewBookDemo(
+          interactive: onLeakReviewBookAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onLeakReviewBookAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },

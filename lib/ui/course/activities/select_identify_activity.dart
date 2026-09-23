@@ -612,6 +612,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'No type evidence — tap Baseline.',
       'act-07-08-01-checkpoint' =>
           'Integrated decision — tap All four.',
+      'act-07-09-01-guided' =>
+          'Best leak note — tap Specific note.',
+      'act-07-09-01-scaffolded' =>
+          'BTN vs unknown BB — tap Written range.',
+      'act-07-09-01-unguided' =>
+          'Review the book — tap On a schedule.',
+      'act-07-09-01-checkpoint' =>
+          'Default book purpose — tap Baseline.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -771,7 +779,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-07-06-01-unguided' ||
             widget.activity.id == 'act-07-06-01-checkpoint' ||
             widget.activity.id == 'act-07-07-01-checkpoint' ||
-            widget.activity.id == 'act-07-08-01-checkpoint';
+            widget.activity.id == 'act-07-08-01-checkpoint' ||
+            widget.activity.id == 'act-07-09-01-guided' ||
+            widget.activity.id == 'act-07-09-01-scaffolded' ||
+            widget.activity.id == 'act-07-09-01-unguided' ||
+            widget.activity.id == 'act-07-09-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&
