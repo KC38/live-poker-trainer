@@ -372,18 +372,21 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                         },
               ),
             ],
-            const SizedBox(height: 12),
-            Text(
-              widget.controller.submitting
-                  ? 'Checking…'
-                  : 'Tap the answer on the table.',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
+            if (widget.controller.submitting ||
+                widget.controller.lastResult == null) ...[
+              const SizedBox(height: 12),
+              Text(
+                widget.controller.submitting
+                    ? 'Checking…'
+                    : 'Tap the answer on the table.',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.manrope(
+                  color: AppColors.slate,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
+            ],
           ],
         );
       },

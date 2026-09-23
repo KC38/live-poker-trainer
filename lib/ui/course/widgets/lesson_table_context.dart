@@ -1523,7 +1523,7 @@ class LessonTableContext extends StatelessWidget {
               children: [
                 for (var i = 0; i < scene.villainSeatCount; i++)
                   _TappableRegion(
-                    label: 'Other seat face-down cards',
+                    label: 'Them — other seat face-down cards',
                     selected: selectedRegion == LessonTableRegion.villain,
                     enabled: enabled && _interactive,
                     onTap:
@@ -1584,7 +1584,20 @@ class LessonTableContext extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 8),
+            // Teach vocabulary at the moment of use (Duolingo-style label).
+            Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: Text(
+                'BOARD · shared',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.manrope(
+                  color: AppColors.cream.withValues(alpha: 0.7),
+                  fontSize: 10,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.7,
+                ),
+              ),
+            ),
           ],
           _TappableRegion(
             label: 'Your hole cards ${hero.map((c) => c.display).join(' ')}',
@@ -2111,11 +2124,12 @@ class _FaceDownPair extends StatelessWidget {
     return Column(
       children: [
         Text(
-          'Hidden',
+          'Them',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: 10,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.6,
           ),
         ),
         const SizedBox(height: 4),
