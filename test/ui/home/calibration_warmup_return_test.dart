@@ -255,7 +255,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 500));
 
     expect(find.byType(LessonResultScreen), findsOneWidget);
-    expect(find.text('Lesson complete'), findsOneWidget);
+    expect(find.text('LESSON COMPLETE'), findsOneWidget);
     expect(find.byType(LessonRunnerScreen), findsNothing);
     expect(find.text('Warm-up checklist must include?'), findsNothing);
     expect(harness.course.completeCalls, 1);
@@ -263,7 +263,7 @@ void main() {
     expect(harness.course.lastSessionId, 'sess-calibration-1');
 
     await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(FilledButton, 'Done'));
+    await tester.tap(find.widgetWithText(FilledButton, 'CONTINUE'));
     await tester.pumpAndSettle();
 
     expect(find.byType(LessonResultScreen), findsNothing);
@@ -286,7 +286,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
 
-    expect(find.text('Lesson complete'), findsOneWidget);
+    expect(find.text('LESSON COMPLETE'), findsOneWidget);
     expect(find.byType(LessonRunnerScreen), findsNothing);
     expect(harness.course.completeCalls, 1);
   });
