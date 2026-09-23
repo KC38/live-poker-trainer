@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "a5995d091455e20da7fd59f4669ddf31ce2de628d1192f55f4517b610c5d7c39",
+  "contentChecksum": "c28534f7e406afa761e0f23bc99686bb0b73b553d6b327db8061aea772c9f862",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -12187,13 +12187,13 @@
                   "choices": [
                     {
                       "id": "strong",
-                      "label": "Better showdown + blocker hands",
-                      "accessibilityText": "Better showdown + blocker hands"
+                      "label": "Strong catchers",
+                      "accessibilityText": "Strong catchers"
                     },
                     {
                       "id": "any",
-                      "label": "Any two to hit a magic percent",
-                      "accessibilityText": "Any two to hit a magic percent"
+                      "label": "Any two for %",
+                      "accessibilityText": "Any two for %"
                     }
                   ]
                 },
@@ -12201,8 +12201,8 @@
                   "id": "act-06-07-01-scaffolded",
                   "order": 3,
                   "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
                   "accessibilityText": "Fold.",
                   "acceptedGrades": [
                     "recommended",
@@ -12218,12 +12218,14 @@
                     {
                       "id": "fold",
                       "label": "Fold",
-                      "accessibilityText": "Fold"
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
                     },
                     {
                       "id": "call-mdf",
-                      "label": "Call to satisfy a memorized MDF number",
-                      "accessibilityText": "Call to satisfy a memorized MDF number"
+                      "label": "Call for MDF",
+                      "accessibilityText": "Call for MDF",
+                      "action": "CALL"
                     }
                   ]
                 },
@@ -12247,13 +12249,13 @@
                   "choices": [
                     {
                       "id": "int",
-                      "label": "Intuition — defend better hands, fold trash",
-                      "accessibilityText": "Intuition — defend better hands, fold trash"
+                      "label": "Intuition",
+                      "accessibilityText": "Intuition"
                     },
                     {
                       "id": "pct",
-                      "label": "Memorize exact percents as truth",
-                      "accessibilityText": "Memorize exact percents as truth"
+                      "label": "Exact percents",
+                      "accessibilityText": "Exact percents"
                     }
                   ]
                 },
@@ -12277,8 +12279,8 @@
                   "choices": [
                     {
                       "id": "punish",
-                      "label": "Make over-bluffing unprofitable with good continues",
-                      "accessibilityText": "Make over-bluffing unprofitable with good continues"
+                      "label": "Punish over-bluffs",
+                      "accessibilityText": "Punish over-bluffs"
                     },
                     {
                       "id": "call-all",

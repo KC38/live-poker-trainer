@@ -342,6 +342,12 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Blockers / unblockers: tap blocker reads on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-06-07-01-guided' ||
+      activity.id == 'act-06-07-01-unguided' ||
+      activity.id == 'act-06-07-01-checkpoint') {
+    // Min-defense: tap continue / MDF stance reads on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

@@ -1162,22 +1162,23 @@ export function buildSectionSix() {
                 a11y: "Top pair / strong blockers.",
                 objectives: ["Continue with stronger catchers"],
                 choices: [
-                  choice("strong", "Better showdown + blocker hands", "recommended",
+                  choice("strong", "Strong catchers", "recommended",
                     "Quality over quota."),
-                  choice("any", "Any two to hit a magic percent", "clear_mistake",
+                  choice("any", "Any two for %", "clear_mistake",
                     "No frequency theater.", {betterChoiceId: "strong"})
                 ],
               }),
-              selectAct({
+              actionAct({
                 id: "act-06-07-01-scaffolded", order: 3, stage: "scaffolded",
                 prompt: "Third pair no blockers on scary river. Default?",
                 a11y: "Fold.",
                 objectives: ["Fold dominated trash"],
                 choices: [
                   choice("fold", "Fold", "recommended",
-                    "Clear trash exits."),
-                  choice("call-mdf", "Call to satisfy a memorized MDF number", "clear_mistake",
-                    "Theater.", {betterChoiceId: "fold"})
+                    "Clear trash exits.",
+                    {action: "FOLD"}),
+                  choice("call-mdf", "Call for MDF", "clear_mistake",
+                    "Theater.", {action: "CALL", betterChoiceId: "fold"})
                 ],
               }),
               selectAct({
@@ -1186,9 +1187,9 @@ export function buildSectionSix() {
                 a11y: "Intuition only — no fake precision.",
                 objectives: ["Ignore fake MDF percentages"], lifeLoss: true,
                 choices: [
-                  choice("int", "Intuition — defend better hands, fold trash", "recommended",
+                  choice("int", "Intuition", "recommended",
                     "Decision-linked."),
-                  choice("pct", "Memorize exact percents as truth", "clear_mistake",
+                  choice("pct", "Exact percents", "clear_mistake",
                     "Not our method.", {betterChoiceId: "int"})
                 ],
               }),
@@ -1198,7 +1199,7 @@ export function buildSectionSix() {
                 a11y: "Punish over-bluffing with sensible continues.",
                 objectives: ["Continue with stronger catchers"], lifeLoss: true,
                 choices: [
-                  choice("punish", "Make over-bluffing unprofitable with good continues", "recommended",
+                  choice("punish", "Punish over-bluffs", "recommended",
                     "That's the idea."),
                   choice("call-all", "Never fold", "clear_mistake",
                     "Too wide.", {betterChoiceId: "punish"})

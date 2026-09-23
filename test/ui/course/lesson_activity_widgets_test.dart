@@ -3629,7 +3629,10 @@ void main() {
         ),
       );
       expect(find.byType(DefendEnoughDemo), findsOneWidget);
+      // Rex cue below the felt — not a second footer inside the demo.
       expect(find.text('Tap Defend, Bluff, and Enough.'), findsOneWidget);
+      expect(find.text('Tap Defend, Bluff, and Enough'), findsNothing);
+      expect(find.text('Defend better hands — skip fake %'), findsNothing);
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
@@ -12073,6 +12076,154 @@ void main() {
     await tester.tap(find.text('No fake EV'));
     await tester.pump();
     expect(controller.draft.choiceId, 'no');
+    controller.dispose();
+  });
+
+  testWidgets('s6 defend guided taps Strong catchers on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-07-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Top pair / strong blockers.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Facing a river bet. Best continue?',
+      choices: const [
+        CourseChoice(id: 'strong', label: 'Strong catchers'),
+        CourseChoice(id: 'any', label: 'Any two for %'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Facing a river bet — tap Strong catchers.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Strong catchers'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'strong');
+    controller.dispose();
+  });
+
+  testWidgets('s6 defend scaffolded docks Fold on scary river', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-07-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Fold.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Third pair no blockers on scary river. Default?',
+      choices: const [
+        CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'call-mdf', label: 'Call for MDF', action: 'CALL'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Third pair scary river — tap Fold.'),
+      findsOneWidget,
+    );
+    expect(find.text('FOLD'), findsOneWidget);
+    expect(find.text('CALL FOR MDF'), findsOneWidget);
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'fold');
+    controller.dispose();
+  });
+
+  testWidgets('s6 defend unguided taps Intuition on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-07-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Intuition only — no fake precision.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'MDF numbers in this course?',
+      choices: const [
+        CourseChoice(id: 'int', label: 'Intuition'),
+        CourseChoice(id: 'pct', label: 'Exact percents'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('MDF numbers — tap Intuition.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Intuition'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'int');
+    controller.dispose();
+  });
+
+  testWidgets('s6 defend checkpoint taps Punish over-bluffs on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-07-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Punish over-bluffing with sensible continues.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Minimum defense goal?',
+      choices: const [
+        CourseChoice(id: 'punish', label: 'Punish over-bluffs'),
+        CourseChoice(id: 'call-all', label: 'Never fold'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Minimum defense goal — tap Punish over-bluffs.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Punish over-bluffs'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'punish');
     controller.dispose();
   });
 

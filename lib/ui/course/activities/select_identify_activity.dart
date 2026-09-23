@@ -488,6 +488,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Blockers replace — tap Tweak evidence.',
       'act-06-06-01-checkpoint' =>
           'Solver EV quotes — tap No fake EV.',
+      'act-06-07-01-guided' =>
+          'Facing a river bet — tap Strong catchers.',
+      'act-06-07-01-unguided' =>
+          'MDF numbers — tap Intuition.',
+      'act-06-07-01-checkpoint' =>
+          'Minimum defense goal — tap Punish over-bluffs.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -585,7 +591,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-06-06-01-guided' ||
             widget.activity.id == 'act-06-06-01-scaffolded' ||
             widget.activity.id == 'act-06-06-01-unguided' ||
-            widget.activity.id == 'act-06-06-01-checkpoint';
+            widget.activity.id == 'act-06-06-01-checkpoint' ||
+            widget.activity.id == 'act-06-07-01-guided' ||
+            widget.activity.id == 'act-06-07-01-unguided' ||
+            widget.activity.id == 'act-06-07-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&
