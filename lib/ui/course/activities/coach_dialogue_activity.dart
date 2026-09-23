@@ -10,6 +10,7 @@ import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/guardrails_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/range_advantage_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/equity_realize_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -275,6 +276,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.rangeAdvantage
                     ? null
                     : onFeltAcknowledge,
+            onEquityRealizeAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.equityRealize
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -470,6 +475,9 @@ enum CoachDialogueVisualKind {
 
   /// Range advantage vs nut advantage — strong hands overall vs the nuts.
   rangeAdvantage,
+
+  /// Chart equity is not cash — position decides realization.
+  equityRealize,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -592,6 +600,8 @@ class CoachDialogueVisual {
       'Tap Quit, Guard, and First.',
     CoachDialogueVisualKind.rangeAdvantage =>
       'Tap Range, Nut, and Advantage.',
+    CoachDialogueVisualKind.equityRealize =>
+      'Tap Equity, Cash, and Pos.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -648,7 +658,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.timingClues ||
       kind == CoachDialogueVisualKind.tablesChange ||
       kind == CoachDialogueVisualKind.guardrails ||
-      kind == CoachDialogueVisualKind.rangeAdvantage;
+      kind == CoachDialogueVisualKind.rangeAdvantage ||
+      kind == CoachDialogueVisualKind.equityRealize;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -757,6 +768,8 @@ class CoachDialogueVisual {
       'Guardrails tiles: quit, guard, first',
     CoachDialogueVisualKind.rangeAdvantage =>
       'Range-advantage tiles: range, nut, advantage',
+    CoachDialogueVisualKind.equityRealize =>
+      'Equity-realize tiles: equity, cash, position',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -943,6 +956,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-06-01-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.rangeAdvantage,
+      );
+    case 'act-06-02-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.equityRealize,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1403,6 +1420,15 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.rangeAdvantage,
     );
   }
+  // Phrase-safe equity realize — chart equity vs cash / position.
+  if (blob.contains('equity on a chart') ||
+      blob.contains('not cash') ||
+      (blob.contains('position decides') && blob.contains('realization')) ||
+      (blob.contains('equity') && blob.contains('realization'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.equityRealize,
+    );
+  }
   // Word-boundary on "hole" so "whole" / "wholesale" do not steal this demo.
   if (RegExp(r'\bhole\b').hasMatch(blob) ||
       blob.contains('your two') ||
@@ -1477,6 +1503,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onTablesChangeAcknowledge,
     this.onGuardrailsAcknowledge,
     this.onRangeAdvantageAcknowledge,
+    this.onEquityRealizeAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1532,6 +1559,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onTablesChangeAcknowledge;
   final VoidCallback? onGuardrailsAcknowledge;
   final VoidCallback? onRangeAdvantageAcknowledge;
+  final VoidCallback? onEquityRealizeAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1799,6 +1827,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onRangeAdvantageAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onRangeAdvantageAcknowledge,
+        ),
+        CoachDialogueVisualKind.equityRealize => EquityRealizeDemo(
+          interactive: onEquityRealizeAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onEquityRealizeAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
