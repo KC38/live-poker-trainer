@@ -4691,6 +4691,20 @@ void main() {
       isTrue,
     );
     expect(
+      isSeatOrderSequenceActivity(
+        CourseActivity(
+          id: 'act-02-01-02-guided-pre',
+          order: 2,
+          stage: ActivityStage.guided,
+          renderer: ActivityRenderer.orderSequence,
+          estimatedSeconds: 40,
+          accessibilityText: 'preflop order',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ),
+      isTrue,
+    );
+    expect(
       resolveLessonActionSpot(
         CourseActivity(
           id: 'act-01-06-02-jump-legal',
