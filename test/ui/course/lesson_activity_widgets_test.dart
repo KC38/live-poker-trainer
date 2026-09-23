@@ -9785,6 +9785,169 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s5 implied-odds guided docks Call on Station felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-03-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Station pays — implied odds improve. Call.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'Deep vs Calling Station. Gutshot with overs facing a small bet. Action?',
+      choices: const [
+        CourseChoice(id: 'call-io', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'fold-io', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    expect(resolveLessonActionSpot(activity)?.heroCodes, ['Jh', '9d']);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Deep gutshot vs Station — tap Call.'),
+      findsOneWidget,
+    );
+    expect(find.text('CALL'), findsOneWidget);
+    await tester.tap(find.text('CALL'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'call-io');
+    controller.dispose();
+  });
+
+  testWidgets('s5 implied-odds scaffolded docks Fold on Nit RIO felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-03-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Reverse implied odds — fold dominated broadway.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'KJo on A-high wet board. Nit check-raises large. Action?',
+      choices: const [
+        CourseChoice(id: 'rio', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'free', label: 'Call', action: 'CALL'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('KJo vs Nit check-raise — tap Fold.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'rio');
+    controller.dispose();
+  });
+
+  testWidgets('s5 implied-odds unguided docks Fold on non-nut FD felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-03-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Non-nut flush draw — fold the domination leak.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Four-way. 7h6h on Kh 9h 2c facing a bet. Action?',
+      choices: const [
+        CourseChoice(id: 'nonut', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'auto', label: 'Call', action: 'CALL'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Non-nut FD four-way — tap Fold.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'nonut');
+    controller.dispose();
+  });
+
+  testWidgets('s5 implied-odds checkpoint taps Depth + pay on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-03-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Depth plus paying tendencies.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Implied odds rise most when?',
+      choices: const [
+        CourseChoice(
+          id: 'depth-pay',
+          label: 'Deep stacks and opponents who pay',
+        ),
+        CourseChoice(id: 'short', label: 'Short stacks always'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Implied odds — tap when they rise most.'),
+      findsOneWidget,
+    );
+    expect(find.text('Depth + pay'), findsOneWidget);
+    await tester.tap(find.text('Depth + pay'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'depth-pay');
+    controller.dispose();
+  });
+
   testWidgets('s4 meet nit guided taps Nit on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-04-07-02-guided',

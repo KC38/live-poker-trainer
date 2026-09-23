@@ -662,6 +662,36 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         facingBet: true,
         feltStatusLine: 'Deep + wet + heat — fold light TP',
       );
+    case 'act-05-03-01-guided':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', '9d'],
+        boardCodes: ['Kc', '7s', '2h'],
+        potLabel: 'Pot 28',
+        villainLine: 'Calling Station bets 6',
+        streetLabel: 'Flop · gutshot + overs · 200bb',
+        facingBet: true,
+        feltStatusLine: 'Station pays — call for implied',
+      );
+    case 'act-05-03-01-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['Kh', 'Jd'],
+        boardCodes: ['As', 'Th', '8h'],
+        potLabel: 'Pot 36',
+        villainLine: 'Nit check-raises huge',
+        streetLabel: 'Flop · KJo · A-high wet',
+        facingBet: true,
+        feltStatusLine: 'Reverse implied — fold second-best',
+      );
+    case 'act-05-03-01-unguided':
+      return const LessonActionSpot(
+        heroCodes: ['7h', '6h'],
+        boardCodes: ['Kh', '9h', '2c'],
+        potLabel: 'Pot 44',
+        villainLine: 'Four-way · bet into you',
+        streetLabel: 'Flop · non-nut FD multiway',
+        facingBet: true,
+        feltStatusLine: 'Dominated draw — fold the leak',
+      );
   }
   return null;
 }
@@ -872,6 +902,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-05-02-01-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-05-03-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
@@ -4411,18 +4445,19 @@ class _ImpliedOddsDemoState extends State<ImpliedOddsDemo> {
               ],
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap Implied, Reverse, and Second'
-                : 'Future money · reverse when second-best',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues the three taps — no duplicate footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Future money · reverse when second-best',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );

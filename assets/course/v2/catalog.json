@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "184ed650293f25c0ed21812ca1de3ecbac099b16e2a266eaf581e2b16c53da86",
+  "contentChecksum": "b82f92ab0b0f2e737ea649c1c34c9743dd94c4980027e65bcb79b11acb982f55",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -9600,9 +9600,9 @@
                   "id": "act-05-03-01-guided",
                   "order": 2,
                   "stage": "guided",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
-                  "accessibilityText": "Station pays — implied odds improve.",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Station pays — implied odds improve. Call.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -9612,17 +9612,19 @@
                   "objectives": [
                     "Estimate implied odds from depth and tendencies"
                   ],
-                  "prompt": "Deep vs Calling Station. Gutshot with overs. Call a small bet?",
+                  "prompt": "Deep vs Calling Station. Gutshot with overs facing a small bet. Action?",
                   "choices": [
                     {
                       "id": "call-io",
-                      "label": "Call — they pay off when you hit",
-                      "accessibilityText": "Call — they pay off when you hit"
+                      "label": "Call",
+                      "accessibilityText": "Call",
+                      "action": "CALL"
                     },
                     {
                       "id": "fold-io",
-                      "label": "Always fold gutshots",
-                      "accessibilityText": "Always fold gutshots"
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
                     }
                   ],
                   "playerTypeRefs": [
@@ -9633,9 +9635,9 @@
                   "id": "act-05-03-01-scaffolded",
                   "order": 3,
                   "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
-                  "accessibilityText": "Reverse implied odds — dominated often.",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Reverse implied odds — fold dominated broadway.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -9645,17 +9647,19 @@
                   "objectives": [
                     "Spot reverse implied odds traps"
                   ],
-                  "prompt": "You hold KJo on A-high wet board vs nit who check-raises large. Risk?",
+                  "prompt": "KJo on A-high wet board. Nit check-raises large. Action?",
                   "choices": [
                     {
                       "id": "rio",
-                      "label": "Reverse implied odds — often second-best",
-                      "accessibilityText": "Reverse implied odds — often second-best"
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
                     },
                     {
                       "id": "free",
-                      "label": "Free implied odds to stack them",
-                      "accessibilityText": "Free implied odds to stack them"
+                      "label": "Call",
+                      "accessibilityText": "Call",
+                      "action": "CALL"
                     }
                   ],
                   "playerTypeRefs": [
@@ -9666,9 +9670,9 @@
                   "id": "act-05-03-01-unguided",
                   "order": 4,
                   "stage": "unguided",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
-                  "accessibilityText": "Non-nut flush draw — reverse implied risk.",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Non-nut flush draw — fold the domination leak.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -9678,17 +9682,19 @@
                   "objectives": [
                     "Skip dominated draws multiway"
                   ],
-                  "prompt": "Four-way. You have 7h6h on Kh 9h 2c facing a bet. Best frame?",
+                  "prompt": "Four-way. 7h6h on Kh 9h 2c facing a bet. Action?",
                   "choices": [
                     {
                       "id": "nonut",
-                      "label": "Non-nut draw — price carefully or fold",
-                      "accessibilityText": "Non-nut draw — price carefully or fold"
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
                     },
                     {
                       "id": "auto",
-                      "label": "Always call any flush draw",
-                      "accessibilityText": "Always call any flush draw"
+                      "label": "Call",
+                      "accessibilityText": "Call",
+                      "action": "CALL"
                     }
                   ]
                 },
