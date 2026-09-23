@@ -2919,8 +2919,16 @@ class _FlopLinesDemoState extends State<FlopLinesDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextLine {
+    for (final line in FlopLinesDemo.lines) {
+      if (!_tapped.contains(line.label)) return line;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextLine;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -2951,40 +2959,47 @@ class _FlopLinesDemoState extends State<FlopLinesDemo> {
                 for (var col = 0; col < 3; col++) ...[
                   if (col > 0) const SizedBox(width: 8),
                   Expanded(
-                    child: _DemoActionCard(
-                      label: FlopLinesDemo.lines[row * 3 + col].label,
-                      caption: FlopLinesDemo.lines[row * 3 + col].caption,
-                      color: FlopLinesDemo.lines[row * 3 + col].color,
-                      selected: _tapped.contains(
-                        FlopLinesDemo.lines[row * 3 + col].label,
+                    child: _DemoSoftPulse(
+                      active:
+                          widget.interactive &&
+                          widget.enabled &&
+                          next?.label ==
+                              FlopLinesDemo.lines[row * 3 + col].label,
+                      child: _DemoActionCard(
+                        label: FlopLinesDemo.lines[row * 3 + col].label,
+                        caption: FlopLinesDemo.lines[row * 3 + col].caption,
+                        color: FlopLinesDemo.lines[row * 3 + col].color,
+                        selected: _tapped.contains(
+                          FlopLinesDemo.lines[row * 3 + col].label,
+                        ),
+                        enabled: widget.interactive && widget.enabled,
+                        onPressed:
+                            widget.interactive
+                                ? () => _onTap(
+                                  FlopLinesDemo.lines[row * 3 + col].label,
+                                )
+                                : null,
                       ),
-                      enabled: widget.interactive && widget.enabled,
-                      onPressed:
-                          widget.interactive
-                              ? () => _onTap(
-                                FlopLinesDemo.lines[row * 3 + col].label,
-                              )
-                              : null,
                     ),
                   ),
                 ],
               ],
             ),
           ],
-          // Interactive: Rex / coach status already says tap each once —
-          // avoid a duplicate cue under the grid.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Value · c-bet · check · call · fold · raise',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Value · c-bet · check · call · fold · raise'
+                    : 'Tap ${next.label} next')
+                : 'Value · c-bet · check · call · fold · raise',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );

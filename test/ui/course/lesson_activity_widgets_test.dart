@@ -2267,14 +2267,29 @@ void main() {
       ),
     );
     expect(find.byType(FlopLinesDemo), findsOneWidget);
-    expect(find.text('Tap each flop line once.'), findsOneWidget);
+    expect(find.text('Tap VALUE next'), findsOneWidget);
+    expect(find.text('Tap each flop line once.'), findsNothing);
+    expect(find.text('Tap each flop line once'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['VALUE', 'C-BET', 'CHECK', 'CALL', 'FOLD', 'RAISE']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('VALUE'));
+    await tester.pump();
+    expect(find.text('Tap C-BET next'), findsOneWidget);
+    await tester.tap(find.text('C-BET'));
+    await tester.pump();
+    expect(find.text('Tap CHECK next'), findsOneWidget);
+    await tester.tap(find.text('CHECK'));
+    await tester.pump();
+    expect(find.text('Tap CALL next'), findsOneWidget);
+    await tester.tap(find.text('CALL'));
+    await tester.pump();
+    expect(find.text('Tap FOLD next'), findsOneWidget);
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(find.text('Tap RAISE next'), findsOneWidget);
+    await tester.tap(find.text('RAISE'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
