@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "68e73f4caf9811cdc37c88193e486aa9b52da8981f48488052bcab4b53d255a2",
+  "contentChecksum": "e164fa75b77c8648b838502572671a33862a5c618d33e662e58de258e90fa7eb",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -1071,7 +1071,7 @@
                   "objectives": [
                     "Fold to give up the hand"
                   ],
-                  "prompt": "UTG opens to 6. You hold 72o on the button. Tap your action.",
+                  "prompt": "Worst hand vs a raise — tap Fold.",
                   "choices": [
                     {
                       "id": "fold-72",
@@ -1117,7 +1117,7 @@
                   "objectives": [
                     "Check when no bet faces you"
                   ],
-                  "prompt": "Flop checked to you. Nobody bet. Tap the free action.",
+                  "prompt": "Nothing faces you — tap Check.",
                   "choices": [
                     {
                       "id": "check-free",
@@ -1155,7 +1155,7 @@
                   "objectives": [
                     "Call to match the current bet"
                   ],
-                  "prompt": "Villain bets 5 into 10. You want to continue. Tap your action.",
+                  "prompt": "A bet is out — tap Call to continue.",
                   "choices": [
                     {
                       "id": "call-5",

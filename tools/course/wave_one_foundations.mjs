@@ -666,7 +666,7 @@ export function buildSectionOne() {
                 {objectives: ["Fold to give up the hand"]}),
               actionAct({
                 id: "act-01-03-01-guided-fold", order: 2, stage: "guided",
-                prompt: "UTG opens to 6. You hold 72o on the button. Tap your action.",
+                prompt: "Worst hand vs a raise — tap Fold.",
                 a11y: "Tap Fold with seven-two offsuit versus an open.",
                 objectives: ["Fold to give up the hand"],
                 hint: "Trash hands fold to raises.",
@@ -682,7 +682,7 @@ export function buildSectionOne() {
               }),
               actionAct({
                 id: "act-01-03-01-scaffolded-check", order: 3, stage: "scaffolded",
-                prompt: "Flop checked to you. Nobody bet. Tap the free action.",
+                prompt: "Nothing faces you — tap Check.",
                 a11y: "Tap Check when the action is free.",
                 objectives: ["Check when no bet faces you"],
                 choices: [
@@ -697,7 +697,7 @@ export function buildSectionOne() {
               }),
               actionAct({
                 id: "act-01-03-01-unguided-call", order: 4, stage: "unguided",
-                prompt: "Villain bets 5 into 10. You want to continue. Tap your action.",
+                prompt: "A bet is out — tap Call to continue.",
                 a11y: "Tap Call to match a half-pot bet.",
                 objectives: ["Call to match the current bet"],
                 lifeLoss: true,

@@ -1352,7 +1352,7 @@
                   "objectives": [
                     "Fold to give up the hand"
                   ],
-                  "prompt": "UTG opens to 6. You hold 72o on the button. Tap your action.",
+                  "prompt": "Worst hand vs a raise — tap Fold.",
                   "choices": [
                     {
                       "id": "fold-72",
@@ -1412,7 +1412,7 @@
                   "objectives": [
                     "Check when no bet faces you"
                   ],
-                  "prompt": "Flop checked to you. Nobody bet. Tap the free action.",
+                  "prompt": "Nothing faces you — tap Check.",
                   "choices": [
                     {
                       "id": "check-free",
@@ -1464,7 +1464,7 @@
                   "objectives": [
                     "Call to match the current bet"
                   ],
-                  "prompt": "Villain bets 5 into 10. You want to continue. Tap your action.",
+                  "prompt": "A bet is out — tap Call to continue.",
                   "choices": [
                     {
                       "id": "call-5",
