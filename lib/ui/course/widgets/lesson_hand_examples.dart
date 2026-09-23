@@ -383,6 +383,54 @@ LessonHandExample? resolveHandExample({
         title: 'Treat every seat the same',
         codes: [],
       );
+    case 'j3-track':
+      return const LessonHandExample(
+        id: 'j3-track',
+        title: 'Pot + effective 40bb',
+        codes: [],
+      );
+    case 'j3-ignore':
+      return const LessonHandExample(
+        id: 'j3-ignore',
+        title: 'Only hole cards',
+        codes: [],
+      );
+    case 'j3-chat':
+      return const LessonHandExample(
+        id: 'j3-chat',
+        title: 'Only table talk',
+        codes: [],
+      );
+    case 'j3-draw':
+      return const LessonHandExample(
+        id: 'j3-draw',
+        title: 'Draw — OESD + flush',
+        codes: [],
+      );
+    case 'j3-made':
+      return const LessonHandExample(
+        id: 'j3-made',
+        title: 'Made two pair',
+        codes: [],
+      );
+    case 'j3-air':
+      return const LessonHandExample(
+        id: 'j3-air',
+        title: 'Air',
+        codes: [],
+      );
+    case 'j3-foldprice':
+      return const LessonHandExample(
+        id: 'j3-foldprice',
+        title: 'Fold — price is wrong',
+        codes: [],
+      );
+    case 'j3-callprice':
+      return const LessonHandExample(
+        id: 'j3-callprice',
+        title: 'Call any draw',
+        codes: [],
+      );
     case 'split':
       return const LessonHandExample(
         id: 'split',

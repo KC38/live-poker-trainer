@@ -481,6 +481,12 @@ class _HandCategoryTapActivity extends StatelessWidget {
           'Seat enters most pots — tap what you note.',
         'act-03-08-01-checkpoint' =>
           'Two seats, different frequencies — tap the note.',
+        'act-03-08-02-jump-table' =>
+          'Pot 16, shorter 40bb — tap what you track first.',
+        'act-03-08-02-jump-class' =>
+          'Qd9d3c with JdTd — tap the flop class.',
+        'act-03-08-02-jump-leak' =>
+          'Gutshot vs a 2x pot bet — tap the fix.',
         _ => 'Look at the board and your holes — tap what you made.',
       };
 
@@ -581,6 +587,12 @@ class _HandCategoryTapActivity extends StatelessWidget {
                         ? 'Tap what you observe.'
                         : activity.id == 'act-03-08-01-checkpoint'
                         ? 'Tap the seat note.'
+                        : activity.id == 'act-03-08-02-jump-table'
+                        ? 'Tap what you track first.'
+                        : activity.id == 'act-03-08-02-jump-class'
+                        ? 'Tap the flop class.'
+                        : activity.id == 'act-03-08-02-jump-leak'
+                        ? 'Tap the price fix.'
                         : 'Tap the hand category you made.';
                   }
                   return 'Checking…';
