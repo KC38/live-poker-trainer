@@ -823,6 +823,12 @@ enum LessonTableRegion {
 
   /// Adjust vs LAG checkpoint: vibes (mistake).
   citeLagVibes,
+
+  /// Mix five types: TAG — respect the raise (correct).
+  mixFiveTagRespect,
+
+  /// Mix five types: Calling Station — bluff more (mistake).
+  mixFiveStationBluff,
 }
 
 /// How the mini-table is arranged.
@@ -1186,6 +1192,9 @@ enum LessonTableLayout {
 
   /// Adjust vs LAG: wide + pressure cite vs vibes.
   lagAdjustCiteOutcomes,
+
+  /// Mix five types checkpoint: TAG respect vs Station bluff.
+  mixFiveTagRespectOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -2204,6 +2213,11 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         layout: LessonTableLayout.lagAdjustCiteOutcomes,
         caption: 'LAG exploit cites?',
+      );
+    case 'act-06-13-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.mixFiveTagRespectOutcomes,
+        caption: 'Selective entry + disciplined barrels. Label + line?',
       );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
@@ -3225,6 +3239,12 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.citeLagVibes => pick('mood'),
         _ => null,
       };
+    case 'act-06-13-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.mixFiveTagRespect => pick('tag'),
+        LessonTableRegion.mixFiveStationBluff => pick('wrong'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -3299,7 +3319,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
         activity.id == 'act-06-11-03-explain' ||
         activity.id == 'act-06-12-01-explain' ||
         activity.id == 'act-06-12-02-explain' ||
-        activity.id == 'act-06-12-03-explain';
+        activity.id == 'act-06-12-03-explain' ||
+        activity.id == 'act-06-13-01-explain';
   }
   if (activity.renderer != ActivityRenderer.selectIdentify &&
       activity.renderer != ActivityRenderer.playerReadClassify) {
@@ -3416,7 +3437,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-06-12-02-unguided' ||
       activity.id == 'act-06-12-02-checkpoint' ||
       activity.id == 'act-06-12-03-unguided' ||
-      activity.id == 'act-06-12-03-checkpoint';
+      activity.id == 'act-06-12-03-checkpoint' ||
+      activity.id == 'act-06-13-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -3733,6 +3755,8 @@ class LessonTableContext extends StatelessWidget {
           _buildLagAdjustAvoidOutcomes(),
       LessonTableLayout.lagAdjustCiteOutcomes =>
           _buildLagAdjustCiteOutcomes(),
+      LessonTableLayout.mixFiveTagRespectOutcomes =>
+          _buildMixFiveTagRespectOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -7992,6 +8016,38 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Not a cite',
           visual: const Icon(
             Icons.sentiment_very_dissatisfied_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMixFiveTagRespectOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive five-type mix — tap TAG respect or Station bluff',
+      semanticsStatic: 'Mix five types TAG respect outcomes',
+      caption: scene.caption ??
+          'Selective entry + disciplined barrels. Label + line?',
+      phases: [
+        (
+          region: LessonTableRegion.mixFiveTagRespect,
+          title: 'TAG — respect',
+          detail: 'Cite selective',
+          visual: const Icon(
+            Icons.gps_fixed,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.mixFiveStationBluff,
+          title: 'Station — bluff',
+          detail: 'Wrong model',
+          visual: const Icon(
+            Icons.people_outline,
             color: AppColors.slate,
             size: 24,
           ),

@@ -1225,6 +1225,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.vsLags,
       );
+    case 'act-06-13-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.exploitEvidence,
+      );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
     case 'act-01-02-02-explain-five':

@@ -403,6 +403,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Adjust vs LAG: avoid fancy / cite pressure on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-06-13-01-checkpoint') {
+    // Mix five types: TAG respect vs Station bluff on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

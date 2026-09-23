@@ -915,6 +915,37 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'Trap more vs LAG pressure',
       );
+    case 'act-06-13-01-guided':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', 'Td'],
+        boardCodes: ['Qc', 'Ts', '3h', '2d', '7c'],
+        potLabel: 'Pot 28',
+        villainLine: 'Calling Station · checked to you',
+        streetLabel: 'River · second pair',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Same cards — Station calls thin',
+      );
+    case 'act-06-13-01-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', 'Td'],
+        boardCodes: ['Qc', 'Ts', '3h', '2d', '7c'],
+        potLabel: 'Pot 36',
+        villainLine: 'Nit just check-raised',
+        streetLabel: 'River · second pair',
+        facingBet: true,
+        feltStatusLine: 'Same cards — Nit heat is strong',
+      );
+    case 'act-06-13-01-unguided':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', 'Td'],
+        boardCodes: ['Qc', 'Ts', '3h', '2d', '7c'],
+        potLabel: 'Pot 42',
+        villainLine: 'LAG barrels river',
+        streetLabel: 'River · second pair',
+        facingBet: true,
+        feltStatusLine: 'Same cards — LAG pressure is wide',
+      );
   }
   return null;
 }
@@ -1189,6 +1220,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-06-12-03-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-06-13-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }

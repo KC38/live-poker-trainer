@@ -13376,6 +13376,194 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s6 mix five explain resolves exploitEvidence visual', (
+    tester,
+  ) async {
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-06-13-01-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'Five models. Same cards. Change only with evidence.',
+          objectives: const ['Adjust across all five types'],
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.exploitEvidence,
+    );
+    expect(
+      isTableRegionTapActivity(
+        CourseActivity(
+          id: 'act-06-13-01-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'Five models. Same cards. Change only with evidence.',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ),
+      isTrue,
+    );
+  });
+
+  testWidgets('s6 mix five guided docks Bet thin value on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-13-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Thin value.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'River second pair. Versus Calling Station?',
+      choices: const [
+        CourseChoice(id: 'cs', label: 'Bet thin value', action: 'BET'),
+        CourseChoice(id: 'cs-bluff', label: 'Huge bluff', action: 'BET'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('River second pair vs Calling Station — tap Bet thin value.'),
+      findsOneWidget,
+    );
+    expect(find.text('BET THIN VALUE'), findsOneWidget);
+    await tester.tap(find.text('BET THIN VALUE'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'cs');
+    controller.dispose();
+  });
+
+  testWidgets('s6 mix five scaffolded docks Fold on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-13-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Fold.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Same hand. Versus Nit who check-raised. Action?',
+      choices: const [
+        CourseChoice(id: 'nit', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'nit-call', label: 'Call light', action: 'CALL'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Same hand · Nit check-raises — tap Fold.'),
+      findsOneWidget,
+    );
+    expect(find.text('FOLD'), findsOneWidget);
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'nit');
+    controller.dispose();
+  });
+
+  testWidgets('s6 mix five unguided docks Call on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-13-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Call.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Same hand. LAG barrels. Action?',
+      choices: const [
+        CourseChoice(id: 'lag', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'lag-fold', label: 'Auto-fold', action: 'FOLD'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Same hand · LAG barrels — tap Call.'),
+      findsOneWidget,
+    );
+    expect(find.text('CALL'), findsOneWidget);
+    await tester.tap(find.text('CALL'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'lag');
+    controller.dispose();
+  });
+
+  testWidgets('s6 mix five checkpoint taps TAG — respect on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-13-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.playerReadClassify,
+      estimatedSeconds: 45,
+      accessibilityText: 'TAG — respect.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Selective entry + disciplined barrels. Label + line vs their raise?',
+      choices: const [
+        CourseChoice(id: 'tag', label: 'TAG — respect the raise'),
+        CourseChoice(id: 'wrong', label: 'Calling Station — bluff more'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Selective entry + disciplined barrels — tap TAG — respect.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('TAG — respect'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'tag');
+    controller.dispose();
+  });
 
   testWidgets('s6 lag observe explain resolves widePressure visual', (tester) async {
     expect(
