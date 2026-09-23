@@ -5861,6 +5861,61 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s3 table-read guided taps 21-chip pot on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-03-01-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Add blinds plus three contributions to size the pot.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Blinds 1/2. UTG opens to 6, BTN calls, BB calls. Pot now?',
+      choices: const [
+        CourseChoice(id: 'pot-21', label: '21'),
+        CourseChoice(id: 'pot-18', label: '18'),
+        CourseChoice(id: 'pot-12', label: '12'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.potMultiwayOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.potChipsTwentyOne,
+        choices: activity.choices,
+      ),
+      'pot-21',
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Blinds plus three 6s — tap the pot total.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Blinds 1/2. UTG opens to 6, BTN calls, BB calls. Pot now?'),
+      findsNothing,
+    );
+    expect(find.text('21 chips'), findsOneWidget);
+    await tester.tap(find.text('21 chips'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'pot-21');
+    controller.dispose();
+  });
+
   testWidgets('numeric entry updates draft', (tester) async {
     final activity = _activity(
       renderer: ActivityRenderer.numericPotPrice,
