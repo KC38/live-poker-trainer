@@ -523,7 +523,11 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       final live = _activityController;
-      if (live == null) return;
+      if (live == null) {
+        // Never leave Continue spinning if the controller was cleared.
+        setState(() => _advancingActivity = false);
+        return;
+      }
       live.bindActivity(next);
       setState(() {
         _advancingActivity = false;
@@ -550,14 +554,14 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     if (attempt == null || _completing) return;
     setState(() => _completing = true);
     try {
-      final catalog = await ref.read(courseCatalogProvider.future);
-      final complete = await _service
-          .completeLesson(
-            attemptId: attempt.attemptId,
-            idempotencyKey: CourseService.newRequestKey('complete'),
-            catalogVersion: catalog.catalogVersion,
-          )
-          .timeout(const Duration(seconds: 45));
+      final complete = await () async {
+        final catalog = await ref.read(courseCatalogProvider.future);
+        return _service.completeLesson(
+          attemptId: attempt.attemptId,
+          idempotencyKey: CourseService.newRequestKey('complete'),
+          catalogVersion: catalog.catalogVersion,
+        );
+      }().timeout(const Duration(seconds: 45));
       if (!mounted) return;
       unawaited(ref.read(soundServiceProvider).win());
       unawaited(
@@ -575,10 +579,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
               result: complete,
             );
         // AppRoot switches home to SaveProgressScreen via pendingSaveProgress.
-        // Do not push a second SaveProgress route — it would stick on the
-        // navigator after Continue learning clears the flag.
-        return;
+        // Wait briefly for that rebuild; if this route is still mounted, fall
+        // through to LessonResultScreen so Continue never spins forever.
+        await Future<void>.delayed(const Duration(milliseconds: 400));
+        if (!mounted) return;
       }
+      if (!mounted) return;
       await Navigator.of(context).pushReplacement(
         MaterialPageRoute<void>(
           builder:

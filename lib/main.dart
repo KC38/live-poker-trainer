@@ -282,13 +282,16 @@ class _AgentUiBootstrapState extends ConsumerState<_AgentUiBootstrap> {
           debugPrint('AgentUiDriver: no navigator for openLesson');
           return;
         }
-        await nav.push(
+        // Replace any in-flight lesson so Continue/complete spinners cannot
+        // stack under a second runner.
+        await nav.pushAndRemoveUntil(
           MaterialPageRoute<void>(
             builder: (_) => LessonRunnerScreen(
               lessonId: lessonId,
               embeddedInShell: true,
             ),
           ),
+          (route) => route.isFirst,
         );
       },
     );
