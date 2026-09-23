@@ -323,7 +323,7 @@
                   "stage": "explain",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Four suits, thirteen ranks. Ace is high here.",
+                  "accessibilityText": "You found all four suits. Ace is still the high card.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -496,7 +496,7 @@
                   "stage": "checkpoint",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Classify the pocket nines shown on the table.",
+                  "accessibilityText": "Tap the pocket nines among the hole-card options.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -506,34 +506,34 @@
                   "objectives": [
                     "Spot pairs and suited cards"
                   ],
-                  "prompt": "Look at your two cards. What do you have?",
+                  "prompt": "Tap the pocket pair.",
                   "choices": [
                     {
                       "id": "pocket-pair",
-                      "label": "A pocket pair",
-                      "accessibilityText": "A pocket pair",
+                      "label": "9h 9d",
+                      "accessibilityText": "9h 9d",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Two nines in the hole. Pair."
+                        "feedback": "Matching ranks — that is a pocket pair."
                       }
                     },
                     {
                       "id": "suited-nine",
-                      "label": "Suited nines",
-                      "accessibilityText": "Suited nines",
+                      "label": "Ah Kh",
+                      "accessibilityText": "Ah Kh",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Different suits. Still a pair.",
+                        "feedback": "Suited, but not a pair. Matching ranks make a pair.",
                         "betterChoiceId": "pocket-pair"
                       }
                     },
                     {
                       "id": "two-high",
-                      "label": "Two high cards",
-                      "accessibilityText": "Two high cards",
+                      "label": "Ah Kd",
+                      "accessibilityText": "Ah Kd",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Matching ranks make a pair first.",
+                        "feedback": "High cards, not a pair. Matching ranks make a pair.",
                         "betterChoiceId": "pocket-pair"
                       }
                     }

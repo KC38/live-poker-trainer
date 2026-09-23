@@ -2192,7 +2192,8 @@ class _SuitsRanksDemo extends StatefulWidget {
   State<_SuitsRanksDemo> createState() => _SuitsRanksDemoState();
 }
 
-class _SuitsRanksDemoState extends State<_SuitsRanksDemo> {
+class _SuitsRanksDemoState extends State<_SuitsRanksDemo>
+    with SingleTickerProviderStateMixin {
   static const _suits = <LessonSuitToken>[
     LessonSuitToken.hearts,
     LessonSuitToken.diamonds,
@@ -2217,17 +2218,36 @@ class _SuitsRanksDemoState extends State<_SuitsRanksDemo> {
   ];
 
   final Set<LessonSuitToken> _tapped = <LessonSuitToken>{};
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
 
   void _onSuitTap(LessonSuitToken token) {
     if (!widget.enabled || widget.onAllSuitsTapped == null) return;
     setState(() => _tapped.add(token));
     if (_tapped.length >= _suits.length) {
+      _pulse.stop();
       widget.onAllSuitsTapped!();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final remaining = _suits.length - _tapped.length;
+    final ranksReady = remaining <= 0;
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 16, 14, 16),
       decoration: BoxDecoration(
@@ -2237,57 +2257,105 @@ class _SuitsRanksDemoState extends State<_SuitsRanksDemo> {
       ),
       child: Column(
         children: [
-          if (widget.interactive)
+          if (widget.interactive) ...[
             Wrap(
               spacing: 10,
               runSpacing: 10,
               alignment: WrapAlignment.center,
               children: [
                 for (final token in _suits)
-                  SuitTapTile(
-                    token: token,
-                    selected: _tapped.contains(token),
-                    enabled: widget.enabled,
-                    onPressed: () => _onSuitTap(token),
-                  ),
-              ],
-            )
-          else
-            const SuitGlyphRow(tokens: _suits, glyphSize: 34),
-          const SizedBox(height: 14),
-          Text(
-            'Thirteen ranks — ace high',
-            style: GoogleFonts.manrope(
-              color: AppColors.cream,
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Wrap(
-            spacing: 6,
-            runSpacing: 6,
-            alignment: WrapAlignment.center,
-            children: [
-              for (final rank in _ranks)
-                Container(
-                  width: 28,
-                  height: 34,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: AppColors.cream,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Text(
-                    rank,
-                    style: GoogleFonts.manrope(
-                      color: AppColors.bgDark,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w800,
+                  AnimatedBuilder(
+                    animation: _pulse,
+                    builder: (context, child) {
+                      final needsPulse =
+                          widget.enabled &&
+                          !_tapped.contains(token) &&
+                          remaining > 0;
+                      final glow = needsPulse ? 0.35 + (_pulse.value * 0.45) : 0.0;
+                      return DecoratedBox(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow:
+                              glow > 0
+                                  ? [
+                                    BoxShadow(
+                                      color: AppColors.gold.withValues(
+                                        alpha: 0.22 * glow,
+                                      ),
+                                      blurRadius: 10 + (6 * _pulse.value),
+                                    ),
+                                  ]
+                                  : null,
+                        ),
+                        child: child,
+                      );
+                    },
+                    child: SuitTapTile(
+                      token: token,
+                      selected: _tapped.contains(token),
+                      enabled: widget.enabled,
+                      onPressed: () => _onSuitTap(token),
                     ),
                   ),
+              ],
+            ),
+            if (widget.enabled && remaining > 0) ...[
+              const SizedBox(height: 10),
+              Text(
+                '${_tapped.length} of ${_suits.length} suits',
+                style: GoogleFonts.manrope(
+                  color: AppColors.goldMuted,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
                 ),
+              ),
             ],
+          ] else
+            const SuitGlyphRow(tokens: _suits, glyphSize: 34),
+          const SizedBox(height: 14),
+          AnimatedOpacity(
+            duration: const Duration(milliseconds: 220),
+            opacity: widget.interactive && !ranksReady ? 0.42 : 1,
+            child: Column(
+              children: [
+                Text(
+                  'Thirteen ranks — ace high',
+                  style: GoogleFonts.manrope(
+                    color: AppColors.cream,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    for (final rank in _ranks)
+                      Container(
+                        width: 28,
+                        height: 34,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: AppColors.cream.withValues(
+                            alpha: widget.interactive && !ranksReady ? 0.55 : 1,
+                          ),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          rank,
+                          style: GoogleFonts.manrope(
+                            color: AppColors.bgDark,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),

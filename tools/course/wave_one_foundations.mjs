@@ -325,7 +325,11 @@ export function buildSectionOne() {
             activities: [
               dialogue("act-01-01-02-explain-suits", 1,
                 "Four suits, thirteen ranks. Ace is high here.",
-                {objectives: ["Name the four suits"]}),
+                {
+                  objectives: ["Name the four suits"],
+                  accessibilityText:
+                    "You found all four suits. Ace is still the high card.",
+                }),
               selectAct({
                 id: "act-01-01-02-guided-suits", order: 2, stage: "guided",
                 prompt: "Tap every suit in a standard deck.",
@@ -372,17 +376,19 @@ export function buildSectionOne() {
               }),
               selectAct({
                 id: "act-01-01-02-checkpoint-pair", order: 5, stage: "checkpoint",
-                prompt: "Look at your two cards. What do you have?",
-                a11y: "Classify the pocket nines shown on the table.",
+                prompt: "Tap the pocket pair.",
+                a11y: "Tap the pocket nines among the hole-card options.",
                 objectives: ["Spot pairs and suited cards"],
                 lifeLoss: true,
                 choices: [
-                  choice("pocket-pair", "A pocket pair", "recommended",
-                    "Two nines in the hole. Pair."),
-                  choice("suited-nine", "Suited nines", "clear_mistake",
-                    "Different suits. Still a pair.", {betterChoiceId: "pocket-pair"}),
-                  choice("two-high", "Two high cards", "clear_mistake",
-                    "Matching ranks make a pair first.", {betterChoiceId: "pocket-pair"}),
+                  choice("pocket-pair", "9h 9d", "recommended",
+                    "Matching ranks — that is a pocket pair."),
+                  choice("suited-nine", "Ah Kh", "clear_mistake",
+                    "Suited, but not a pair. Matching ranks make a pair.",
+                    {betterChoiceId: "pocket-pair"}),
+                  choice("two-high", "Ah Kd", "clear_mistake",
+                    "High cards, not a pair. Matching ranks make a pair.",
+                    {betterChoiceId: "pocket-pair"}),
                 ],
               }),
             ],
