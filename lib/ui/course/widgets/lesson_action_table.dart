@@ -1177,6 +1177,43 @@ LessonActionSpot? resolveToyHandStepSpot({
     }
     return null;
   }
+  if (activityId == 'act-07-10-05-hand') {
+    switch (stepId) {
+      case 'step-4b-flop':
+        return const LessonActionSpot(
+          heroCodes: ['Kh', 'Kd'],
+          boardCodes: ['Qs', '8h', '3d'],
+          potLabel: 'Pot 40',
+          villainLine: 'Called your 4-bet',
+          streetLabel: 'Flop · Q83r · KK',
+          facingBet: false,
+          openPot: true,
+          feltStatusLine: 'Short SPR — start commit',
+        );
+      case 'step-4b-turn':
+        return const LessonActionSpot(
+          heroCodes: ['Kh', 'Kd'],
+          boardCodes: ['Qs', '8h', '3d', '2d'],
+          potLabel: 'Pot 64',
+          villainLine: 'Called flop c-bet',
+          streetLabel: 'Turn · Q832 · KK',
+          facingBet: false,
+          openPot: true,
+          feltStatusLine: 'Blank — continue / commit',
+        );
+      case 'step-4b-river':
+        return const LessonActionSpot(
+          heroCodes: ['Kh', 'Kd'],
+          boardCodes: ['Qs', '8h', '3d', '2d', 'Ad'],
+          potLabel: 'Pot 120',
+          villainLine: 'Opponent jams',
+          streetLabel: 'River · Q832A · KK',
+          facingBet: true,
+          feltStatusLine: 'Ace jam — fold ego',
+        );
+    }
+    return null;
+  }
   if (activityId == 'act-04-03-01-guided') {
     switch (stepId) {
       case 'step-flop-tp':
@@ -1308,6 +1345,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id == 'act-07-10-04-hand' &&
+      activity.renderer == ActivityRenderer.authoredMultiStepHand) {
+    return true;
+  }
+  if (id == 'act-07-10-05-hand' &&
       activity.renderer == ActivityRenderer.authoredMultiStepHand) {
     return true;
   }

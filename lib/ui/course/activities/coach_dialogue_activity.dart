@@ -36,6 +36,7 @@ import 'package:live_poker_trainer/ui/course/widgets/capstone_srp_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/capstone_3bet_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/capstone_multiway_deep_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/capstone_limped_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/capstone_4bet_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -422,6 +423,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.capstoneLimped
                     ? null
                     : onFeltAcknowledge,
+            onCapstone4betAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.capstone4bet
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance &&
@@ -722,6 +727,9 @@ enum CoachDialogueVisualKind {
 
   /// Capstone limped pot: nut potential, value thick, thin river carefully.
   capstoneLimped,
+
+  /// Capstone 4-bet pot: short SPR commit, no ego, fold hero calls.
+  capstone4bet,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -900,6 +908,8 @@ class CoachDialogueVisual {
       'Tap Nuts, Deep, and No-bluff.',
     CoachDialogueVisualKind.capstoneLimped =>
       'Tap Nuts, Value, and Thin.',
+    CoachDialogueVisualKind.capstone4bet =>
+      'Tap SPR, Commit, and Fold.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -984,7 +994,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.capstoneSrp ||
       kind == CoachDialogueVisualKind.capstone3bet ||
       kind == CoachDialogueVisualKind.capstoneMultiwayDeep ||
-      kind == CoachDialogueVisualKind.capstoneLimped;
+      kind == CoachDialogueVisualKind.capstoneLimped ||
+      kind == CoachDialogueVisualKind.capstone4bet;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -1149,6 +1160,8 @@ class CoachDialogueVisual {
       'Capstone multiway-deep tiles: nuts, deep implied, no light bluffs',
     CoachDialogueVisualKind.capstoneLimped =>
       'Capstone limped tiles: nuts, value thick, thin river carefully',
+    CoachDialogueVisualKind.capstone4bet =>
+      'Capstone 4-bet tiles: short SPR, commit, fold ego',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -1451,6 +1464,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-07-10-04-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.capstoneLimped,
+      );
+    case 'act-07-10-05-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.capstone4bet,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1928,6 +1945,16 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.capstoneLimped,
     );
   }
+  // Capstone 4-bet — short SPR, commit, no hero calls.
+  if (blob.contains('capstone 4-bet') ||
+      blob.contains('capstone 4bet') ||
+      (blob.contains('4-bet') &&
+          blob.contains('short spr') &&
+          blob.contains('no hints'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.capstone4bet,
+    );
+  }
   // Phrase-safe leak review / default book — before commonLeaks so "review leaks"
   // with "defaults" / "write the book" is not stolen by the common-leaks demo.
   if (blob.contains('defaults beat vibes') ||
@@ -2281,6 +2308,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onCapstone3betAcknowledge,
     this.onCapstoneMultiwayDeepAcknowledge,
     this.onCapstoneLimpedAcknowledge,
+    this.onCapstone4betAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -2364,6 +2392,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onCapstone3betAcknowledge;
   final VoidCallback? onCapstoneMultiwayDeepAcknowledge;
   final VoidCallback? onCapstoneLimpedAcknowledge;
+  final VoidCallback? onCapstone4betAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -2772,6 +2801,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onCapstoneLimpedAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onCapstoneLimpedAcknowledge,
+        ),
+        CoachDialogueVisualKind.capstone4bet => Capstone4betDemo(
+          interactive: onCapstone4betAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onCapstone4betAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
