@@ -8886,6 +8886,87 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 sizing scaffolded docks pressure size on scare river', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-04-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Larger polar sizes sell the story.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'Missed draw, credible river scare card. Choose pressure size into 40.',
+      choices: const [
+        CourseChoice(id: 'big', label: 'Bet 30-40', action: 'BET'),
+        CourseChoice(id: 'tiny-bluff', label: 'Bet 2', action: 'BET'),
+        CourseChoice(id: 'check-bluff', label: 'Check and hope', action: 'CHECK'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Missed draw on a scare river — tap a pressure size.'),
+      findsOneWidget,
+    );
+    expect(find.text('BET 30-40'), findsOneWidget);
+    await tester.tap(find.text('BET 30-40'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'big');
+    controller.dispose();
+  });
+
+  testWidgets('s4 sizing checkpoint docks worst value size on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-04-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 40,
+      accessibilityText: 'One-chip value bets are clear mistakes.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Pot 30. You want value with a strong hand. Worst size?',
+      choices: const [
+        CourseChoice(id: 'bad-1', label: 'Bet 1', action: 'BET'),
+        CourseChoice(id: 'good-15', label: 'Bet 15', action: 'BET'),
+        CourseChoice(id: 'good-20', label: 'Bet 20', action: 'BET'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Strong hand for value into 30 — tap the worst size.'),
+      findsOneWidget,
+    );
+    expect(find.text('BET 1'), findsOneWidget);
+    await tester.tap(find.text('BET 1'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'bad-1');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {

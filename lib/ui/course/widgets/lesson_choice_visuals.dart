@@ -182,6 +182,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Multi-street plan: tap the branching plan on felt.
     return SelectIdentifyPresentation.handCategoryTap;
   }
+  if (activity.id == 'act-04-04-01-unguided') {
+    // Sizing: nearby soft grades vs exactness / junk sizes.
+    return SelectIdentifyPresentation.handCategoryTap;
+  }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {
     return SelectIdentifyPresentation.showdownTap;

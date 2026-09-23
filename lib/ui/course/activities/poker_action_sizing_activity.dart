@@ -266,6 +266,10 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Medium hand multiway and deep — tap Keep pot small.',
     'act-04-04-01-guided' =>
       'Dry board, top pair — tap a value size into 20.',
+    'act-04-04-01-scaffolded' =>
+      'Missed draw on a scare river — tap a pressure size.',
+    'act-04-04-01-checkpoint' =>
+      'Strong hand for value into 30 — tap the worst size.',
     _ => null,
   };
 }
