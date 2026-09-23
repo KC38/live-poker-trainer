@@ -141,6 +141,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Outs: tap chips to call on the felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-03-03-01-unguided') {
+    // Outs: tap Call / Fold / Raise when priced in.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {
     return SelectIdentifyPresentation.showdownTap;
