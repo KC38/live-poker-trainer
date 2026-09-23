@@ -362,6 +362,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Treat Nit as a working model — tap it.',
       'act-04-07-03-checkpoint' =>
           'Nit check-raises — tap why you respect it.',
+      'act-04-08-01-guided' =>
+          'Raises 12 of 15 — tap the observation.',
+      'act-04-08-01-scaffolded' =>
+          'Barrels three streets light — tap the note.',
+      'act-04-08-01-unguided' =>
+          'Wild aggression — tap the note style.',
+      'act-04-08-01-checkpoint' =>
+          'Before you label — tap the evidence bundle.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -402,12 +410,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-04-07-02-guided' ||
             widget.activity.id == 'act-04-07-02-unguided' ||
             widget.activity.id == 'act-04-07-02-checkpoint' ||
-            widget.activity.id == 'act-04-07-03-checkpoint';
+            widget.activity.id == 'act-04-07-03-checkpoint' ||
+            widget.activity.id.startsWith('act-04-08-01-');
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&
-            prompt.isNotEmpty &&
-            prompt.toLowerCase() != coach.trim().toLowerCase();
+            prompt.isNotEmpty &&            prompt.toLowerCase() != coach.trim().toLowerCase();
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

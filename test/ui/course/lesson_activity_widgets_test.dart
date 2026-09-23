@@ -9417,6 +9417,47 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 observe wild guided taps Extreme on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-04-08-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Extreme entry/aggression.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Seat raises or 3-bets twelve of fifteen pots. Observation?',
+      choices: const [
+        CourseChoice(id: 'extreme', label: 'Extreme entry and aggression'),
+        CourseChoice(id: 'nit-like', label: 'Narrow and timid'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Raises 12 of 15 — tap the observation.'),
+      findsOneWidget,
+    );
+    expect(find.text('Extreme'), findsOneWidget);
+    await tester.tap(find.text('Extreme'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'extreme');
+    controller.dispose();
+  });
+
   testWidgets('s4 meet nit guided taps Nit on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-04-07-02-guided',

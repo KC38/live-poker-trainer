@@ -250,6 +250,30 @@ enum LessonTableRegion {
 
   /// Respect because fear (mistake).
   citeNitFear,
+
+  /// Observe wild: extreme entry / aggression (correct).
+  observeExtremeEntry,
+
+  /// Observe wild distractor: narrow and timid.
+  observeNarrowTimid,
+
+  /// Observe wild: continues pressure too wide (correct).
+  observeWidePressure,
+
+  /// Observe wild distractor: never bets.
+  observeNeverBets,
+
+  /// Observe wild: calm frequency notes (correct).
+  observeCalmNotes,
+
+  /// Observe wild distractor: revenge / ego notes.
+  observeEgoNotes,
+
+  /// Observe wild checkpoint: enters + barrels (correct).
+  observeManiacBundle,
+
+  /// Observe wild checkpoint distractor: almost never plays.
+  observeWildNitBundle,
 }
 
 /// How the mini-table is arranged.
@@ -331,6 +355,18 @@ enum LessonTableLayout {
 
   /// Observe narrow checkpoint: nit vs station bundle.
   observeNarrowBundleOutcomes,
+
+  /// Observe wild: extreme vs timid entry.
+  observeWildEntryOutcomes,
+
+  /// Observe wild: wide pressure vs never bets.
+  observeWildPressureOutcomes,
+
+  /// Observe wild: calm notes vs ego.
+  observeWildNotesOutcomes,
+
+  /// Observe wild checkpoint: maniac vs nit bundle.
+  observeWildBundleOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -877,6 +913,26 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.nitRespectCiteOutcomes,
         caption: 'Why respect a Nit check-raise?',
       );
+    case 'act-04-08-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.observeWildEntryOutcomes,
+        caption: 'Raises or 3-bets 12 of 15 pots',
+      );
+    case 'act-04-08-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.observeWildPressureOutcomes,
+        caption: 'Bets flop · turn · river · weak shows',
+      );
+    case 'act-04-08-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.observeWildNotesOutcomes,
+        caption: 'Best note style vs wild aggression',
+      );
+    case 'act-04-08-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.observeWildBundleOutcomes,
+        caption: 'Bundle the pre-label notes',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -1327,6 +1383,30 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.citeNitFear => pick('cite-fear'),
         _ => null,
       };
+    case 'act-04-08-01-guided':
+      return switch (region) {
+        LessonTableRegion.observeExtremeEntry => pick('extreme'),
+        LessonTableRegion.observeNarrowTimid => pick('nit-like'),
+        _ => null,
+      };
+    case 'act-04-08-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.observeWidePressure => pick('pressure'),
+        LessonTableRegion.observeNeverBets => pick('passive-m'),
+        _ => null,
+      };
+    case 'act-04-08-01-unguided':
+      return switch (region) {
+        LessonTableRegion.observeCalmNotes => pick('calm'),
+        LessonTableRegion.observeEgoNotes => pick('ego'),
+        _ => null,
+      };
+    case 'act-04-08-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.observeManiacBundle => pick('bundle-m'),
+        LessonTableRegion.observeWildNitBundle => pick('bundle-n'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -1426,7 +1506,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-04-07-02-guided' ||
       activity.id == 'act-04-07-02-unguided' ||
       activity.id == 'act-04-07-02-checkpoint' ||
-      activity.id == 'act-04-07-03-checkpoint';
+      activity.id == 'act-04-07-03-checkpoint' ||
+      activity.id.startsWith('act-04-08-01-');
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -1590,6 +1671,14 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.meetNitModelOutcomes => _buildMeetNitModelOutcomes(),
       LessonTableLayout.nitRespectCiteOutcomes =>
           _buildNitRespectCiteOutcomes(),
+      LessonTableLayout.observeWildEntryOutcomes =>
+          _buildObserveWildEntryOutcomes(),
+      LessonTableLayout.observeWildPressureOutcomes =>
+          _buildObserveWildPressureOutcomes(),
+      LessonTableLayout.observeWildNotesOutcomes =>
+          _buildObserveWildNotesOutcomes(),
+      LessonTableLayout.observeWildBundleOutcomes =>
+          _buildObserveWildBundleOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -2873,6 +2962,129 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Not a cite',
           visual: const Icon(
             Icons.sentiment_very_dissatisfied_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildObserveWildEntryOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive observe — tap extreme entry or timid',
+      semanticsStatic: 'Wild entry outcomes',
+      caption: scene.caption ?? 'Raises or 3-bets 12 of 15 pots',
+      phases: [
+        (
+          region: LessonTableRegion.observeExtremeEntry,
+          title: 'Extreme',
+          detail: '12 of 15 pots',
+          visual: const Icon(
+            Icons.local_fire_department_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.observeNarrowTimid,
+          title: 'Timid',
+          detail: 'Few pots',
+          visual: const Icon(
+            Icons.lock_outline,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildObserveWildPressureOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive observe — tap wide pressure or never bets',
+      semanticsStatic: 'Wild pressure outcomes',
+      caption: scene.caption ?? 'Bets flop · turn · river · weak shows',
+      phases: [
+        (
+          region: LessonTableRegion.observeWidePressure,
+          title: 'Wide heat',
+          detail: 'Barrels light',
+          visual: const Icon(
+            Icons.whatshot_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.observeNeverBets,
+          title: 'Never bets',
+          detail: 'Wrong note',
+          visual: const Icon(
+            Icons.pan_tool_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildObserveWildNotesOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive observe — tap calm notes or ego notes',
+      semanticsStatic: 'Wild notes outcomes',
+      caption: scene.caption ?? 'Best note style vs wild aggression',
+      phases: [
+        (
+          region: LessonTableRegion.observeCalmNotes,
+          title: 'Frequencies',
+          detail: 'No ego story',
+          visual: const Icon(
+            Icons.edit_note_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.observeEgoNotes,
+          title: 'Revenge',
+          detail: 'Burns stacks',
+          visual: const Icon(
+            Icons.sentiment_very_dissatisfied_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildObserveWildBundleOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive: 'Interactive observe — tap the evidence bundle',
+      semanticsStatic: 'Wild bundle outcomes',
+      caption: scene.caption ?? 'Bundle the pre-label notes',
+      phases: [
+        (
+          region: LessonTableRegion.observeManiacBundle,
+          title: 'Enter + barrel',
+          detail: 'Pre-label',
+          visual: const Icon(
+            Icons.inventory_2_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.observeWildNitBundle,
+          title: 'Never plays',
+          detail: 'Nit note',
+          visual: const Icon(
+            Icons.lock_outline,
             color: AppColors.slate,
             size: 24,
           ),
