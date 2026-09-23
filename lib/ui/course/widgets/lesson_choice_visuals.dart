@@ -285,6 +285,12 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Timing / sizing evidence: tap soft-evidence reads on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-05-08-01-guided' ||
+      activity.id == 'act-05-08-01-scaffolded' ||
+      activity.id == 'act-05-08-01-checkpoint') {
+    // Table dynamics: tap stuck / gear / sample reads on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

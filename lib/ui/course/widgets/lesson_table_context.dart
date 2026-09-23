@@ -457,6 +457,24 @@ enum LessonTableRegion {
 
   /// Timing checkpoint: only evidence (mistake).
   timingOnlyEvidence,
+
+  /// Table dynamics guided: stuck / tilted (correct).
+  dynamicsStuckTilted,
+
+  /// Table dynamics guided: ignore dynamics (mistake).
+  dynamicsIgnore,
+
+  /// Table dynamics scaffolded: gear change (correct).
+  dynamicsGearChange,
+
+  /// Table dynamics scaffolded: old label (mistake).
+  dynamicsOldLabel,
+
+  /// Table dynamics checkpoint: fresh samples (correct).
+  dynamicsFreshSamples,
+
+  /// Table dynamics checkpoint: permanent seats (mistake).
+  dynamicsPermanentSeats,
 }
 
 /// How the mini-table is arranged.
@@ -637,6 +655,15 @@ enum LessonTableLayout {
 
   /// Timing checkpoint: tiny update vs only evidence.
   timingTinyUpdateOutcomes,
+
+  /// Table dynamics guided: stuck/tilted vs ignore.
+  dynamicsStuckOutcomes,
+
+  /// Table dynamics scaffolded: gear change vs old label.
+  dynamicsGearOutcomes,
+
+  /// Table dynamics checkpoint: fresh samples vs permanent seats.
+  dynamicsFreshOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1348,6 +1375,21 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.timingTinyUpdateOutcomes,
         caption: 'Best use of live timing?',
       );
+    case 'act-05-08-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.dynamicsStuckOutcomes,
+        caption: 'Lost two buy-ins — note?',
+      );
+    case 'act-05-08-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.dynamicsGearOutcomes,
+        caption: 'Solid player flats junk / donks?',
+      );
+    case 'act-05-08-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.dynamicsFreshOutcomes,
+        caption: 'Dynamic reads should be?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -1999,6 +2041,24 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.timingOnlyEvidence => pick('only'),
         _ => null,
       };
+    case 'act-05-08-01-guided':
+      return switch (region) {
+        LessonTableRegion.dynamicsStuckTilted => pick('stuck'),
+        LessonTableRegion.dynamicsIgnore => pick('ignore'),
+        _ => null,
+      };
+    case 'act-05-08-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.dynamicsGearChange => pick('gear'),
+        LessonTableRegion.dynamicsOldLabel => pick('same'),
+        _ => null,
+      };
+    case 'act-05-08-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.dynamicsFreshSamples => pick('temp'),
+        LessonTableRegion.dynamicsPermanentSeats => pick('perm'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -2125,7 +2185,10 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-05-07-01-guided' ||
       activity.id == 'act-05-07-01-scaffolded' ||
       activity.id == 'act-05-07-01-unguided' ||
-      activity.id == 'act-05-07-01-checkpoint';
+      activity.id == 'act-05-07-01-checkpoint' ||
+      activity.id == 'act-05-08-01-guided' ||
+      activity.id == 'act-05-08-01-scaffolded' ||
+      activity.id == 'act-05-08-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -2352,6 +2415,12 @@ class LessonTableContext extends StatelessWidget {
           _buildTimingRejectMagicOutcomes(),
       LessonTableLayout.timingTinyUpdateOutcomes =>
           _buildTimingTinyUpdateOutcomes(),
+      LessonTableLayout.dynamicsStuckOutcomes =>
+          _buildDynamicsStuckOutcomes(),
+      LessonTableLayout.dynamicsGearOutcomes =>
+          _buildDynamicsGearOutcomes(),
+      LessonTableLayout.dynamicsFreshOutcomes =>
+          _buildDynamicsFreshOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -4673,6 +4742,99 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Too weak',
           visual: const Icon(
             Icons.filter_1_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDynamicsStuckOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive table dynamics — tap stuck/tilted vs ignore',
+      semanticsStatic: 'Table dynamics stuck outcomes',
+      caption: scene.caption ?? 'Lost two buy-ins — note?',
+      phases: [
+        (
+          region: LessonTableRegion.dynamicsStuckTilted,
+          title: 'Stuck / tilted',
+          detail: 'Widen value',
+          visual: const Icon(
+            Icons.local_fire_department_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.dynamicsIgnore,
+          title: 'Ignore',
+          detail: 'Miss evidence',
+          visual: const Icon(
+            Icons.visibility_off_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDynamicsGearOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive table dynamics — tap gear change vs old label',
+      semanticsStatic: 'Table dynamics gear outcomes',
+      caption: scene.caption ?? 'Solid player flats junk / donks?',
+      phases: [
+        (
+          region: LessonTableRegion.dynamicsGearChange,
+          title: 'Gear change',
+          detail: 'Resample',
+          visual: const Icon(
+            Icons.settings_suggest_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.dynamicsOldLabel,
+          title: 'Old label',
+          detail: 'Stale model',
+          visual: const Icon(
+            Icons.lock_outline,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDynamicsFreshOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive table dynamics — tap fresh samples vs permanent seats',
+      semanticsStatic: 'Table dynamics fresh outcomes',
+      caption: scene.caption ?? 'Dynamic reads should be?',
+      phases: [
+        (
+          region: LessonTableRegion.dynamicsFreshSamples,
+          title: 'Fresh samples',
+          detail: 'Update often',
+          visual: const Icon(
+            Icons.refresh,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.dynamicsPermanentSeats,
+          title: 'Permanent seats',
+          detail: 'Too rigid',
+          visual: const Icon(
+            Icons.push_pin_outlined,
             color: AppColors.slate,
             size: 24,
           ),
