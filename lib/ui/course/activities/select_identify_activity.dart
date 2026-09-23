@@ -454,6 +454,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Paired board — tap Wide caller.',
       'act-06-01-01-checkpoint' =>
           'Advantage — tap Apply pressure.',
+      'act-06-02-01-guided' =>
+          'Same draw — tap In position.',
+      'act-06-02-01-scaffolded' =>
+          'Weak SDV OOP — tap Discount / fold.',
+      'act-06-02-01-unguided' =>
+          'Nut draw XR — tap Fold equity.',
+      'act-06-02-01-checkpoint' =>
+          'Realization rises with — tap Position + initiative.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -534,7 +542,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-05-09-02-cp-stop' ||
             widget.activity.id == 'act-06-01-01-guided' ||
             widget.activity.id == 'act-06-01-01-scaffolded' ||
-            widget.activity.id == 'act-06-01-01-checkpoint';
+            widget.activity.id == 'act-06-01-01-checkpoint' ||
+            widget.activity.id == 'act-06-02-01-guided' ||
+            widget.activity.id == 'act-06-02-01-scaffolded' ||
+            widget.activity.id == 'act-06-02-01-unguided' ||
+            widget.activity.id == 'act-06-02-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

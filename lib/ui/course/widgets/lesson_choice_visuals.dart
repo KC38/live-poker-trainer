@@ -310,6 +310,13 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Range / nut advantage: tap who owns the edge on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-06-02-01-guided' ||
+      activity.id == 'act-06-02-01-scaffolded' ||
+      activity.id == 'act-06-02-01-unguided' ||
+      activity.id == 'act-06-02-01-checkpoint') {
+    // Equity realization: tap IP / discount / fold equity / levers on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.
