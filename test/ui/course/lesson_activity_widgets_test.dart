@@ -6190,6 +6190,27 @@ void main() {
     expect(vsSpot.facingBet, isTrue);
     expect(vsSpot.heroCodes, ['2h', '2d']);
     expect(vsSpot.villainLine, 'UTG opens to 6');
+
+    final lab = CourseActivity(
+      id: 'act-02-07-01-unguided-lab',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.fullTableHandLab,
+      estimatedSeconds: 70,
+      accessibilityText: 'Full-ring hand lab: button versus cutoff open',
+      acceptedGrades: const [SoftGrade.recommended, SoftGrade.reasonable],
+      prompt: 'Full ring. Decide versus a cutoff open.',
+      choices: const [
+        CourseChoice(id: 'lab-fold', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'lab-call', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'lab-3bet', label: '3-bet to 18', action: 'RAISE'),
+      ],
+    );
+    expect(isLessonActionTableActivity(lab), isTrue);
+    final labSpot = resolveLessonActionSpot(lab)!;
+    expect(labSpot.facingBet, isTrue);
+    expect(labSpot.heroCodes, ['Kh', 'Qd']);
+    expect(labSpot.villainLine, 'CO opens to 6');
   });
 
   testWidgets('baseline guided EP docks Open to 6 on felt — no text prompt', (
@@ -6277,6 +6298,50 @@ void main() {
     await tester.tap(find.text('CALL'));
     await tester.pump();
     expect(controller.draft.choiceId, 'call-22');
+    controller.dispose();
+  });
+
+  testWidgets('baseline unguided lab docks KQo vs CO on felt — no text Q&A', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-07-01-unguided-lab',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.fullTableHandLab,
+      estimatedSeconds: 70,
+      accessibilityText: 'Full-ring hand lab: button versus cutoff open',
+      acceptedGrades: const [SoftGrade.recommended, SoftGrade.reasonable],
+      prompt: 'Full ring. Decide versus a cutoff open.',
+      choices: const [
+        CourseChoice(id: 'lab-fold', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'lab-call', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'lab-3bet', label: '3-bet to 18', action: 'RAISE'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        FullTableHandLabActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byType(LessonActionTable), findsOneWidget);
+    expect(find.byType(LessonActionDock), findsOneWidget);
+    expect(
+      find.text('CO open faces you on the button — tap Fold, Call, or 3-bet.'),
+      findsOneWidget,
+    );
+    expect(find.text('Full ring. Decide versus a cutoff open.'), findsNothing);
+    expect(find.text('Hand lab — tap the action you would take live.'), findsNothing);
+    expect(find.text('A bet faces you'), findsOneWidget);
+    expect(find.text('3-BET TO 18'), findsOneWidget);
+    await tester.tap(find.text('3-BET TO 18'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'lab-3bet');
     controller.dispose();
   });
 

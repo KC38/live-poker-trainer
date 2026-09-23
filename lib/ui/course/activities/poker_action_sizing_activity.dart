@@ -211,6 +211,9 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Suited broadway UTG — tap Open to 6.',
     'act-02-07-01-scaffolded-vs' =>
       'Pair on the button vs a small open — tap Call.',
+    // Unguided: name the spot, not the answer.
+    'act-02-07-01-unguided-lab' =>
+      'CO open faces you on the button — tap Fold, Call, or 3-bet.',
     _ => null,
   };
 }
