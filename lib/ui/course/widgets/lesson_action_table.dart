@@ -915,6 +915,17 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'Trap more vs LAG pressure',
       );
+    case 'act-07-03-01-guided':
+      return const LessonActionSpot(
+        heroCodes: ['As', 'Ad'],
+        boardCodes: ['Ac', '9s', '4h', '2d', '7c'],
+        potLabel: 'Pot 48',
+        villainLine: 'Calling Station · checked to you',
+        streetLabel: 'River · top set',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Station pays thick value',
+      );
     case 'act-06-13-01-guided':
       return const LessonActionSpot(
         heroCodes: ['Jh', 'Td'],
@@ -1220,6 +1231,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-06-12-03-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-07-03-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }

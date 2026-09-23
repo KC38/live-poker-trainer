@@ -25,6 +25,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/wide_pressure_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/preflop_flop_plan_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/turn_map_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/river_composition_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -365,6 +366,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.turnMap
                     ? null
                     : onFeltAcknowledge,
+            onRiverCompositionAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.riverComposition
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance &&
@@ -632,6 +637,9 @@ enum CoachDialogueVisualKind {
 
   /// List continue and give-up turn cards before you bet the flop.
   turnMap,
+
+  /// Compose river value, bluffs with blockers, and check trash without a story.
+  riverComposition,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -788,6 +796,8 @@ class CoachDialogueVisual {
       'Tap Reason, Confirm, and Cancel.',
     CoachDialogueVisualKind.turnMap =>
       'Tap Continue, Give-up, and Map.',
+    CoachDialogueVisualKind.riverComposition =>
+      'Tap Value, Bluff, and Check.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -861,7 +871,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.lagModel ||
       kind == CoachDialogueVisualKind.widePressure ||
       kind == CoachDialogueVisualKind.preflopFlopPlan ||
-      kind == CoachDialogueVisualKind.turnMap;
+      kind == CoachDialogueVisualKind.turnMap ||
+      kind == CoachDialogueVisualKind.riverComposition;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -1004,6 +1015,8 @@ class CoachDialogueVisual {
       'Preflop-to-flop tiles: reason, confirm, cancel',
     CoachDialogueVisualKind.turnMap =>
       'Flop-to-turn map tiles: continue, give-up, map',
+    CoachDialogueVisualKind.riverComposition =>
+      'River composition tiles: value, bluff, check',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -1263,6 +1276,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.turnMap,
       );
+    case 'act-07-03-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.riverComposition,
+      );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
     case 'act-01-02-02-explain-five':
@@ -1471,6 +1488,23 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       (blob.contains('brick') && blob.contains('barrel'))) {
     return const CoachDialogueVisual(
       kind: CoachDialogueVisualKind.turnStory,
+    );
+  }
+  // Phrase-safe river composition — value / bluff / check framing.
+  // Must run before riverBinary (which also matches river+value+bluff+fold).
+  if (blob.contains('value if they call worse') ||
+      blob.contains('bluff if they fold better') ||
+      blob.contains('compose river value') ||
+      (blob.contains('river') &&
+          blob.contains('value') &&
+          blob.contains('bluff') &&
+          (blob.contains('call worse') ||
+              blob.contains('fold better') ||
+              blob.contains('blockers') ||
+              blob.contains('check trash'))) ||
+      (blob.contains('value needs calls') && blob.contains('bluffs need folds'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.riverComposition,
     );
   }
   // River binary — require river framing. Bare "bluff-catch" / value+bluff+fold
@@ -1936,6 +1970,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onWidePressureAcknowledge,
     this.onPreflopFlopPlanAcknowledge,
     this.onTurnMapAcknowledge,
+    this.onRiverCompositionAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -2008,6 +2043,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onWidePressureAcknowledge;
   final VoidCallback? onPreflopFlopPlanAcknowledge;
   final VoidCallback? onTurnMapAcknowledge;
+  final VoidCallback? onRiverCompositionAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -2360,6 +2396,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onTurnMapAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onTurnMapAcknowledge,
+        ),
+        CoachDialogueVisualKind.riverComposition => RiverCompositionDemo(
+          interactive: onRiverCompositionAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onRiverCompositionAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },

@@ -29,6 +29,7 @@ import 'package:live_poker_trainer/ui/course/widgets/selective_aggression_demo.d
 import 'package:live_poker_trainer/ui/course/widgets/tag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/preflop_flop_plan_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/turn_map_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/river_composition_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
@@ -15323,6 +15324,221 @@ void main() {
     await tester.tap(find.text('Continue/kill list'));
     await tester.pump();
     expect(controller.draft.choiceId, 'list');
+    controller.dispose();
+  });
+
+  testWidgets(
+    's7 river composition explain taps Value Bluff Check instead of Continue',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-07-03-01-explain',
+        order: 1,
+        stage: ActivityStage.explain,
+        renderer: ActivityRenderer.coachDialogue,
+        estimatedSeconds: 30,
+        accessibilityText:
+            'River: value if they call worse; bluff if they fold better.',
+        acceptedGrades: const [SoftGrade.recommended],
+        objectives: const ['Choose river value candidates'],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'm',
+            kind: 'dialogue',
+            text: 'River: value if they call worse; bluff if they fold better.',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      var feltAck = 0;
+      await tester.pumpWidget(
+        _wrap(
+          CoachDialogueActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+            onFeltAcknowledge: () => feltAck += 1,
+          ),
+        ),
+      );
+      expect(find.byType(RiverCompositionDemo), findsOneWidget);
+      expect(find.text('Tap Value, Bluff, and Check.'), findsOneWidget);
+      expect(find.text('Tap Value, Bluff, and Check'), findsNothing);
+      expect(
+        find.text('Value needs calls · bluffs need folds · check trash'),
+        findsNothing,
+      );
+      expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+      expect(isTableRegionTapActivity(activity), isTrue);
+
+      for (final title in ['VALUE', 'BLUFF', 'CHECK']) {
+        await tester.tap(find.text(title));
+        await tester.pump();
+      }
+      expect(feltAck, 1);
+      controller.dispose();
+    },
+  );
+
+  testWidgets('s7 river composition guided docks Value bet on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-03-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Value bet.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Thick value vs station. Size?',
+      choices: const [
+        CourseChoice(id: 'val', label: 'Value bet', action: 'BET'),
+        CourseChoice(id: 'check', label: 'Check to be fancy'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Thick value vs station — tap Value bet.'),
+      findsOneWidget,
+    );
+    expect(find.text('VALUE BET'), findsOneWidget);
+    await tester.tap(find.text('VALUE BET'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'val');
+    controller.dispose();
+  });
+
+  testWidgets('s7 river composition scaffolded taps Blocks strong calls on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-03-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Blocks their calling flushes.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Bluff river with nut flush blocker. Why?',
+      choices: const [
+        CourseChoice(id: 'block', label: 'Blocks strong calls'),
+        CourseChoice(
+          id: 'ev',
+          label: 'Because a fake EV sheet said +0.02',
+        ),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Nut flush blocker — tap Blocks strong calls.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Blocks strong calls'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'block');
+    controller.dispose();
+  });
+
+  testWidgets('s7 river composition unguided taps Check on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-03-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Check.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'No value, no blockers, no fold equity. River?',
+      choices: const [
+        CourseChoice(id: 'check', label: 'Check'),
+        CourseChoice(id: 'spew', label: 'Blast off'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('No story — tap Check.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Check'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'check');
+    controller.dispose();
+  });
+
+  testWidgets('s7 river composition checkpoint taps Value needs calls on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-03-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Value needs calls; bluffs need folds.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'River composition rule?',
+      choices: const [
+        CourseChoice(
+          id: 'rule',
+          label: 'Value needs calls; bluffs need folds',
+        ),
+        CourseChoice(id: 'random', label: 'Bet every river for style'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('River rule — tap Value needs calls.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Value needs calls'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'rule');
     controller.dispose();
   });
 }
