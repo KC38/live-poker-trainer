@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "6aa4c6008d42bb11256bc35cfc83730da49f3265bc94f4e60a4add7d9e02af2b",
+  "contentChecksum": "95f5688b34340261f32db11d15112901b9f6acd0aaf6689ddb57dd36bbc98404",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -13446,8 +13446,8 @@
                   "choices": [
                     {
                       "id": "wide",
-                      "label": "Wide entry with sustained pressure",
-                      "accessibilityText": "Wide entry with sustained pressure"
+                      "label": "Wide + pressure",
+                      "accessibilityText": "Wide + pressure"
                     },
                     {
                       "id": "nit",
@@ -13456,8 +13456,8 @@
                     },
                     {
                       "id": "label",
-                      "label": "Name an archetype immediately",
-                      "accessibilityText": "Name an archetype immediately"
+                      "label": "Label now",
+                      "accessibilityText": "Label now"
                     }
                   ]
                 },
@@ -13481,13 +13481,13 @@
                   "choices": [
                     {
                       "id": "sep",
-                      "label": "Still makes some folds; maniac rarely does",
-                      "accessibilityText": "Still makes some folds; maniac rarely does"
+                      "label": "Some folds",
+                      "accessibilityText": "Some folds"
                     },
                     {
                       "id": "same",
-                      "label": "No difference ever",
-                      "accessibilityText": "No difference ever"
+                      "label": "No difference",
+                      "accessibilityText": "No difference"
                     }
                   ]
                 },
@@ -13511,13 +13511,13 @@
                   "choices": [
                     {
                       "id": "wait",
-                      "label": "Wait for more samples",
-                      "accessibilityText": "Wait for more samples"
+                      "label": "Keep sampling",
+                      "accessibilityText": "Keep sampling"
                     },
                     {
                       "id": "now",
-                      "label": "Lock a type label immediately",
-                      "accessibilityText": "Lock a type label immediately"
+                      "label": "Label now",
+                      "accessibilityText": "Label now"
                     }
                   ]
                 },
@@ -13541,13 +13541,13 @@
                   "choices": [
                     {
                       "id": "bundle",
-                      "label": "Wide entry, sustained barrels, occasional folds",
-                      "accessibilityText": "Wide entry, sustained barrels, occasional folds"
+                      "label": "Wide · barrels · folds",
+                      "accessibilityText": "Wide · barrels · folds"
                     },
                     {
                       "id": "soul",
-                      "label": "They seem loud",
-                      "accessibilityText": "They seem loud"
+                      "label": "Seem loud",
+                      "accessibilityText": "Seem loud"
                     }
                   ]
                 }

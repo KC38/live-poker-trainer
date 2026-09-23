@@ -13196,6 +13196,173 @@ void main() {
     controller.dispose();
   });
 
+
+  testWidgets('s6 lag observe explain resolves widePressure visual', (tester) async {
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-06-12-01-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'Before labels: wide entry plus pressure that still has a plan. Count samples.',
+          objectives: const ['Note wide entry'],
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.widePressure,
+    );
+  });
+
+  testWidgets('s6 lag observe guided taps Wide + pressure on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-12-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Wide + sustained but not mindless.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Seat opens many hands and barrels often but folds some turn raises. Note?',
+      choices: const [
+        CourseChoice(id: 'wide', label: 'Wide + pressure'),
+        CourseChoice(id: 'nit', label: 'Nit'),
+        CourseChoice(id: 'label', label: 'Label now'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Wide opens + barrels, some folds — tap Wide + pressure.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Wide + pressure'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'wide');
+    controller.dispose();
+  });
+
+  testWidgets('s6 lag observe scaffolded taps Some folds on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-12-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'This seat still folds sometimes; maniac rarely.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Difference brewing vs maniac?',
+      choices: const [
+        CourseChoice(id: 'sep', label: 'Some folds'),
+        CourseChoice(id: 'same', label: 'No difference'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Difference vs maniac — tap Some folds.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Some folds'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'sep');
+    controller.dispose();
+  });
+
+  testWidgets('s6 lag observe unguided taps Keep sampling on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-12-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'No.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Label after one wide open?',
+      choices: const [
+        CourseChoice(id: 'wait', label: 'Keep sampling'),
+        CourseChoice(id: 'now', label: 'Label now'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('One wide open — tap Keep sampling.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Keep sampling'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'wait');
+    controller.dispose();
+  });
+
+  testWidgets('s6 lag observe checkpoint taps Wide · barrels · folds on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-12-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Wide + pressure + some discipline.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Best pre-label note bundle?',
+      choices: const [
+        CourseChoice(id: 'bundle', label: 'Wide · barrels · folds'),
+        CourseChoice(id: 'soul', label: 'Seem loud'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Best pre-label notes — tap Wide · barrels · folds.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Wide · barrels · folds'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'bundle');
+    controller.dispose();
+  });
+
   testWidgets('s4 meet nit guided taps Nit on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-04-07-02-guided',
