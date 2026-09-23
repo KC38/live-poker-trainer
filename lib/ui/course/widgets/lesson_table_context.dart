@@ -4367,8 +4367,8 @@ class LessonTableContext extends StatelessWidget {
       phases: [
         (
           region: LessonTableRegion.lineReadCapped,
-          title: 'Capped',
-          detail: 'Fewer nuts',
+          title: 'Fewer nuts',
+          detail: 'Check-back caps',
           visual: const Icon(
             Icons.vertical_align_bottom,
             color: AppColors.gold,
