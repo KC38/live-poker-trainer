@@ -4941,6 +4941,26 @@ void main() {
     final positionScene = resolveLessonTableScene(positionGuided);
     expect(positionScene?.layout, LessonTableLayout.positionLabels);
     expect(
+      resolveLessonTableScene(
+        CourseActivity(
+          id: 'act-02-01-01-scaffolded-blinds',
+          order: 3,
+          stage: ActivityStage.scaffolded,
+          renderer: ActivityRenderer.selectIdentify,
+          estimatedSeconds: 40,
+          accessibilityText: 'forced',
+          acceptedGrades: const [SoftGrade.recommended],
+          prompt: 'Tap a seat that posts a forced bet every hand.',
+          choices: const [
+            CourseChoice(id: 'sb-bb', label: 'SB or BB'),
+            CourseChoice(id: 'btn-bb', label: 'BTN'),
+            CourseChoice(id: 'ep-only', label: 'EP'),
+          ],
+        ),
+      )?.quietBlindPostCaptions,
+      isTrue,
+    );
+    expect(
       resolveCoachDialogueVisual(
         CourseActivity(
           id: 'act-02-01-01-explain-pos',

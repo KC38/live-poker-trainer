@@ -1698,6 +1698,7 @@ class LessonTableScene {
     this.numberSeats = false,
     this.showSeatNeverMatters = false,
     this.showRoleLabels = true,
+    this.quietBlindPostCaptions = false,
   });
 
   /// Face-up hero hole cards (e.g. `Ah`, `Kd`).
@@ -1743,6 +1744,10 @@ class LessonTableScene {
   /// When false, identify steps hide "Button" / "SB" word labels so the
   /// chip visuals teach (Duolingo-style — no answer printed on the piece).
   final bool showRoleLabels;
+
+  /// Hide "Posts 1/2" under SB/BB when the quiz asks who posts — otherwise the
+  /// subtitle prints the answer on the tile.
+  final bool quietBlindPostCaptions;
 }
 
 /// Which region of the mini-table should read as the teaching target.
@@ -1869,6 +1874,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         seatCount: 6,
         buttonSeat: 3,
         caption: 'Six-max · forced bets',
+        quietBlindPostCaptions: true,
       );
     case 'act-02-01-01-unguided-co':
       return const LessonTableScene(
@@ -5189,6 +5195,7 @@ class LessonTableContext extends StatelessWidget {
         role: role,
         selected: selected,
         highlighted: pulseRole(role),
+        quietBlindPostCaptions: scene.quietBlindPostCaptions,
         enabled: enabled && _interactive,
         onTap: _interactive
             ? () => onRegionTap!(
@@ -11429,6 +11436,7 @@ class _PositionSeatChip extends StatelessWidget {
     required this.highlighted,
     required this.enabled,
     required this.onTap,
+    this.quietBlindPostCaptions = false,
   });
 
   final LessonTableRegion role;
@@ -11436,6 +11444,7 @@ class _PositionSeatChip extends StatelessWidget {
   final bool highlighted;
   final bool enabled;
   final VoidCallback? onTap;
+  final bool quietBlindPostCaptions;
 
   String get _code => switch (role) {
         LessonTableRegion.button => 'BTN',
@@ -11449,8 +11458,10 @@ class _PositionSeatChip extends StatelessWidget {
 
   String get _subtitle => switch (role) {
         LessonTableRegion.button => 'Dealer',
-        LessonTableRegion.smallBlind => 'Posts 1',
-        LessonTableRegion.bigBlind => 'Posts 2',
+        LessonTableRegion.smallBlind =>
+          quietBlindPostCaptions ? 'After BTN' : 'Posts 1',
+        LessonTableRegion.bigBlind =>
+          quietBlindPostCaptions ? 'After SB' : 'Posts 2',
         LessonTableRegion.earlyPosition => 'UTG',
         LessonTableRegion.hijack => 'Mid',
         LessonTableRegion.cutoff => 'Late',
