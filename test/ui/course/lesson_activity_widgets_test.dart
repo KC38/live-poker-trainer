@@ -5754,6 +5754,58 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('section jump family taps Suited ace with holes on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-07-02-jump-family',
+      order: 2,
+      stage: ActivityStage.jumpTest,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 35,
+      accessibilityText: 'Jump test: suited ace family.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Ah 5h belongs to which family?',
+      choices: const [
+        CourseChoice(id: 'j2-sa', label: 'Suited ace'),
+        CourseChoice(id: 'j2-pair', label: 'Pocket pair'),
+        CourseChoice(id: 'j2-trash', label: 'Offsuit trash'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.handCategoryTap,
+    );
+    expect(resolveLessonTableScene(activity)?.heroCodes, ['Ah', '5h']);
+    expect(
+      resolveHandExample(id: 'j2-sa', label: 'Suited ace')?.codes,
+      ['Ah', '9h'],
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Look at your holes — tap the family they belong to.'),
+      findsOneWidget,
+    );
+    expect(find.text('Ah 5h belongs to which family?'), findsNothing);
+    expect(find.text('Suited ace'), findsOneWidget);
+    expect(find.text('Pocket pair'), findsOneWidget);
+    expect(find.text('Offsuit trash'), findsOneWidget);
+    await tester.tap(find.text('Suited ace'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'j2-sa');
+    controller.dispose();
+  });
+
   testWidgets('numeric entry updates draft', (tester) async {
     final activity = _activity(
       renderer: ActivityRenderer.numericPotPrice,

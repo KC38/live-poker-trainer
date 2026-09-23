@@ -432,8 +432,11 @@ class _HandCategoryTapActivity extends StatelessWidget {
   final LessonActivityController controller;
   final bool showGuidance;
 
-  String get _coachFallback =>
-      'Look at the board and your holes — tap what you made.';
+  String get _coachFallback => switch (activity.id) {
+        'act-02-07-02-jump-family' =>
+          'Look at your holes — tap the family they belong to.',
+        _ => 'Look at the board and your holes — tap what you made.',
+      };
 
   @override
   Widget build(BuildContext context) {
@@ -510,7 +513,9 @@ class _HandCategoryTapActivity extends StatelessWidget {
                   if (controller.lastResult != null) return '';
                   if (controller.submitting) return 'Checking…';
                   if (selected == null) {
-                    return 'Tap the hand category you made.';
+                    return activity.id == 'act-02-07-02-jump-family'
+                        ? 'Tap the starting-hand family.'
+                        : 'Tap the hand category you made.';
                   }
                   return 'Checking…';
                 }();

@@ -88,6 +88,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
   if (activity.id == 'act-01-02-01-scaffolded-spot') {
     return SelectIdentifyPresentation.handCategoryTap;
   }
+  if (activity.id == 'act-02-07-02-jump-family') {
+    // Jump: see Ah5h on felt, tap the starting-hand family tile.
+    return SelectIdentifyPresentation.handCategoryTap;
+  }
   if (activity.id == 'act-01-02-02-unguided-board') {
     // Board-plays chop: tap the felt (board / you / them), not text tiles.
     return SelectIdentifyPresentation.tableRegionTap;
