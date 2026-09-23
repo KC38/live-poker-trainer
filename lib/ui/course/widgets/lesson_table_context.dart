@@ -883,6 +883,30 @@ enum LessonTableRegion {
 
   /// Preflop→flop checkpoint: force the old line (mistake).
   preflopFlopForce,
+
+  /// Turn-map guided: aces & blanks continue (correct).
+  turnMapAcesBlanks,
+
+  /// Turn-map guided: any card always (mistake).
+  turnMapAnyCard,
+
+  /// Turn-map scaffolded: give up (correct).
+  turnMapGiveUp,
+
+  /// Turn-map scaffolded: hero-call sunk cost (mistake).
+  turnMapHeroCall,
+
+  /// Turn-map unguided: map first (correct).
+  turnMapMapFirst,
+
+  /// Turn-map unguided: yolo barrels (mistake).
+  turnMapYolo,
+
+  /// Turn-map checkpoint: continue/kill list (correct).
+  turnMapContinueKill,
+
+  /// Turn-map checkpoint: invent later (mistake).
+  turnMapInventLater,
 }
 
 /// How the mini-table is arranged.
@@ -1288,6 +1312,18 @@ enum LessonTableLayout {
 
   /// Preflop→flop checkpoint: abandon vs force.
   preflopFlopCheckpointOutcomes,
+
+  /// Turn-map guided: aces & blanks vs any card.
+  turnMapGuidedOutcomes,
+
+  /// Turn-map scaffolded: give up vs hero-call.
+  turnMapScaffoldedOutcomes,
+
+  /// Turn-map unguided: map first vs yolo.
+  turnMapUnguidedOutcomes,
+
+  /// Turn-map checkpoint: continue/kill list vs invent later.
+  turnMapCheckpointOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -2344,6 +2380,26 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         layout: LessonTableLayout.preflopFlopCheckpointOutcomes,
         caption: 'Dead plan response?',
+      );
+    case 'act-07-02-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.turnMapGuidedOutcomes,
+        caption: 'AK c-bet · Q72r — good turn continue?',
+      );
+    case 'act-07-02-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.turnMapScaffoldedOutcomes,
+        caption: 'Gutshot · brick raise — map says?',
+      );
+    case 'act-07-02-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.turnMapUnguidedOutcomes,
+        caption: 'Bet flop with no turn idea?',
+      );
+    case 'act-07-02-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.turnMapCheckpointOutcomes,
+        caption: 'Turn map is?',
       );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
@@ -3425,6 +3481,30 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.preflopFlopForce => pick('force'),
         _ => null,
       };
+    case 'act-07-02-01-guided':
+      return switch (region) {
+        LessonTableRegion.turnMapAcesBlanks => pick('ok'),
+        LessonTableRegion.turnMapAnyCard => pick('any'),
+        _ => null,
+      };
+    case 'act-07-02-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.turnMapGiveUp => pick('give'),
+        LessonTableRegion.turnMapHeroCall => pick('hero'),
+        _ => null,
+      };
+    case 'act-07-02-01-unguided':
+      return switch (region) {
+        LessonTableRegion.turnMapMapFirst => pick('avoid'),
+        LessonTableRegion.turnMapYolo => pick('yolo'),
+        _ => null,
+      };
+    case 'act-07-02-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.turnMapContinueKill => pick('list'),
+        LessonTableRegion.turnMapInventLater => pick('later'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -3501,7 +3581,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
         activity.id == 'act-06-12-02-explain' ||
         activity.id == 'act-06-12-03-explain' ||
         activity.id == 'act-06-13-01-explain' ||
-        activity.id == 'act-07-01-01-explain';
+        activity.id == 'act-07-01-01-explain' ||
+        activity.id == 'act-07-02-01-explain';
   }
   if (activity.renderer != ActivityRenderer.selectIdentify &&
       activity.renderer != ActivityRenderer.playerReadClassify) {
@@ -3628,7 +3709,11 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-07-01-01-guided' ||
       activity.id == 'act-07-01-01-scaffolded' ||
       activity.id == 'act-07-01-01-unguided' ||
-      activity.id == 'act-07-01-01-checkpoint';
+      activity.id == 'act-07-01-01-checkpoint' ||
+      activity.id == 'act-07-02-01-guided' ||
+      activity.id == 'act-07-02-01-scaffolded' ||
+      activity.id == 'act-07-02-01-unguided' ||
+      activity.id == 'act-07-02-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -3960,6 +4045,14 @@ class LessonTableContext extends StatelessWidget {
           _buildPreflopFlopUnguidedOutcomes(),
       LessonTableLayout.preflopFlopCheckpointOutcomes =>
           _buildPreflopFlopCheckpointOutcomes(),
+      LessonTableLayout.turnMapGuidedOutcomes =>
+          _buildTurnMapGuidedOutcomes(),
+      LessonTableLayout.turnMapScaffoldedOutcomes =>
+          _buildTurnMapScaffoldedOutcomes(),
+      LessonTableLayout.turnMapUnguidedOutcomes =>
+          _buildTurnMapUnguidedOutcomes(),
+      LessonTableLayout.turnMapCheckpointOutcomes =>
+          _buildTurnMapCheckpointOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -8528,6 +8621,130 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Leak',
           visual: const Icon(
             Icons.push_pin_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTurnMapGuidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive turn map — tap Aces & blanks or Any card',
+      semanticsStatic: 'Turn-map guided outcomes',
+      caption: scene.caption ?? 'AK c-bet · Q72r — good turn continue?',
+      phases: [
+        (
+          region: LessonTableRegion.turnMapAcesBlanks,
+          title: 'Aces & blanks',
+          detail: 'With a plan',
+          visual: const Icon(
+            Icons.map_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.turnMapAnyCard,
+          title: 'Any card',
+          detail: 'Always barrel',
+          visual: const Icon(
+            Icons.all_inclusive,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTurnMapScaffoldedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive turn map — tap Give up or Hero-call',
+      semanticsStatic: 'Turn-map scaffolded outcomes',
+      caption: scene.caption ?? 'Gutshot · brick raise — map says?',
+      phases: [
+        (
+          region: LessonTableRegion.turnMapGiveUp,
+          title: 'Give up',
+          detail: 'Map kill',
+          visual: const Icon(
+            Icons.stop_circle_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.turnMapHeroCall,
+          title: 'Hero-call',
+          detail: 'Sunk cost',
+          visual: const Icon(
+            Icons.psychology_alt_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTurnMapUnguidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive turn map — tap Map first or Yolo barrels',
+      semanticsStatic: 'Turn-map unguided outcomes',
+      caption: scene.caption ?? 'Bet flop with no turn idea?',
+      phases: [
+        (
+          region: LessonTableRegion.turnMapMapFirst,
+          title: 'Map first',
+          detail: 'Then bet flop',
+          visual: const Icon(
+            Icons.checklist_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.turnMapYolo,
+          title: 'Yolo barrels',
+          detail: 'No map',
+          visual: const Icon(
+            Icons.casino_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTurnMapCheckpointOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive turn map — tap Continue/kill list or Invent later',
+      semanticsStatic: 'Turn-map checkpoint outcomes',
+      caption: scene.caption ?? 'Turn map is?',
+      phases: [
+        (
+          region: LessonTableRegion.turnMapContinueKill,
+          title: 'Continue/kill list',
+          detail: 'Made on flop',
+          visual: const Icon(
+            Icons.list_alt_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.turnMapInventLater,
+          title: 'Invent later',
+          detail: 'Too late',
+          visual: const Icon(
+            Icons.hourglass_empty,
             color: AppColors.danger,
             size: 24,
           ),

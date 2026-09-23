@@ -570,6 +570,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Best habit — tap Name the thesis.',
       'act-07-01-01-checkpoint' =>
           'Dead plan — tap Abandon quickly.',
+      'act-07-02-01-guided' =>
+          'AK c-bet · Q72r — tap Aces & blanks.',
+      'act-07-02-01-scaffolded' =>
+          'Gutshot · brick raise — tap Give up.',
+      'act-07-02-01-unguided' =>
+          'No turn idea — tap Map first.',
+      'act-07-02-01-checkpoint' =>
+          'Turn map — tap Continue/kill list.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -708,7 +716,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-07-01-01-guided' ||
             widget.activity.id == 'act-07-01-01-scaffolded' ||
             widget.activity.id == 'act-07-01-01-unguided' ||
-            widget.activity.id == 'act-07-01-01-checkpoint';
+            widget.activity.id == 'act-07-01-01-checkpoint' ||
+            widget.activity.id == 'act-07-02-01-guided' ||
+            widget.activity.id == 'act-07-02-01-scaffolded' ||
+            widget.activity.id == 'act-07-02-01-unguided' ||
+            widget.activity.id == 'act-07-02-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

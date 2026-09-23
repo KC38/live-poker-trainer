@@ -422,6 +422,13 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Carry preflop plan onto flop: tap update / habit tiles on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-07-02-01-guided' ||
+      activity.id == 'act-07-02-01-scaffolded' ||
+      activity.id == 'act-07-02-01-unguided' ||
+      activity.id == 'act-07-02-01-checkpoint') {
+    // Map turn barrels before flop bet: tap continue / give-up tiles on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.
