@@ -414,6 +414,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Large BB donk on dry ace — tap the meaning.',
       'act-05-05-01-checkpoint' =>
           'Delayed c-bet — tap when it is best.',
+      'act-05-06-01-guided' =>
+          'Bet flop, check turn — tap Capped.',
+      'act-05-06-01-unguided' =>
+          'Best habit — tap Rebuild.',
+      'act-05-06-01-checkpoint' =>
+          'XR / bet / shove — tap Uncapped.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -474,7 +480,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-05-04-01-checkpoint' ||
             widget.activity.id == 'act-05-05-01-guided' ||
             widget.activity.id == 'act-05-05-01-unguided' ||
-            widget.activity.id == 'act-05-05-01-checkpoint';
+            widget.activity.id == 'act-05-05-01-checkpoint' ||
+            widget.activity.id == 'act-05-06-01-guided' ||
+            widget.activity.id == 'act-05-06-01-unguided' ||
+            widget.activity.id == 'act-05-06-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

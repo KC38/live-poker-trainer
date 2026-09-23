@@ -393,7 +393,7 @@ export function buildSectionFive() {
         "Update ranges street by street.", [
           lesson({
             id: L050601, order: 1,
-            title: "Update the story street by street",
+            title: "Street-by-street updates",
             summary: "Rebuild villain's range after each action; do not freeze on flop reads.",
             objectives: ["Update ranges after each street", "Notice capped versus uncapped lines", "Abandon stale flop stories"],
             prereq: L050501, remediation: L050501, minutes: 8, band: 4,
@@ -407,22 +407,22 @@ export function buildSectionFive() {
                 a11y: "Often capped / weakened.",
                 objectives: ["Notice capped versus uncapped lines"],
                 choices: [
-                  choice("capped", "More capped — fewer nuts", "recommended",
+                  choice("capped", "Capped — fewer nuts", "recommended",
                     "Check-back turn removes many strong hands."),
-                  choice("nutted", "Still full of nuts", "clear_mistake",
+                  choice("nutted", "Still nuts", "clear_mistake",
                     "Nuts usually keep betting.", {betterChoiceId: "capped"})
                 ],
               }),
-              selectAct({
+              actionAct({
                 id: "act-05-06-01-scaffolded", order: 3, stage: "scaffolded",
-                prompt: "You called flop as a draw. Turn bricks and villain bombs. Update?",
+                prompt: "You called flop as a draw. Turn bricks and villain bombs. Action?",
                 a11y: "Re-price; folding draws is allowed.",
                 objectives: ["Abandon stale flop stories"],
                 choices: [
-                  choice("repr", "Re-price equity versus the new sizing", "recommended",
-                    "Flop call does not obligate turn call."),
-                  choice("auto", "Always call because flop was correct", "clear_mistake",
-                    "Sunk cost.", {betterChoiceId: "repr"})
+                  choice("repr", "Fold", "recommended",
+                    "Flop call does not obligate turn call.", {action: "FOLD"}),
+                  choice("auto", "Call", "clear_mistake",
+                    "Sunk cost.", {action: "CALL", betterChoiceId: "repr"})
                 ],
               }),
               selectAct({
@@ -431,9 +431,9 @@ export function buildSectionFive() {
                 a11y: "Street-by-street updates.",
                 objectives: ["Update ranges after each street"], lifeLoss: true,
                 choices: [
-                  choice("update", "Rebuild the range after every action", "recommended",
+                  choice("update", "Rebuild after every action", "recommended",
                     "Stories go stale fast."),
-                  choice("freeze", "Lock the flop read forever", "clear_mistake",
+                  choice("freeze", "Lock flop forever", "clear_mistake",
                     "Misses turn/river info.", {betterChoiceId: "update"})
                 ],
               }),
@@ -443,9 +443,9 @@ export function buildSectionFive() {
                 a11y: "Strong uncapped pressure — respect without a read.",
                 objectives: ["Notice capped versus uncapped lines"], lifeLoss: true,
                 choices: [
-                  choice("uncap", "Uncapped pressure — strong unless type says otherwise", "recommended",
+                  choice("uncap", "Uncapped — respect unless type says otherwise", "recommended",
                     "Baseline respect; exploit only with evidence."),
-                  choice("bluff", "Always pure bluff", "clear_mistake",
+                  choice("bluff", "Always bluff", "clear_mistake",
                     "Too absolute.", {betterChoiceId: "uncap"})
                 ],
               }),

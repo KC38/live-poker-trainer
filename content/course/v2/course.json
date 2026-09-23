@@ -13003,7 +13003,7 @@
             {
               "id": "lesson-05-06-01-line-reading",
               "order": 1,
-              "title": "Update the story street by street",
+              "title": "Street-by-street updates",
               "summary": "Rebuild villain's range after each action; do not freeze on flop reads.",
               "objectives": [
                 "Update ranges after each street",
@@ -13063,8 +13063,8 @@
                   "choices": [
                     {
                       "id": "capped",
-                      "label": "More capped — fewer nuts",
-                      "accessibilityText": "More capped — fewer nuts",
+                      "label": "Capped — fewer nuts",
+                      "accessibilityText": "Capped — fewer nuts",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Check-back turn removes many strong hands."
@@ -13072,8 +13072,8 @@
                     },
                     {
                       "id": "nutted",
-                      "label": "Still full of nuts",
-                      "accessibilityText": "Still full of nuts",
+                      "label": "Still nuts",
+                      "accessibilityText": "Still nuts",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Nuts usually keep betting.",
@@ -13086,8 +13086,8 @@
                   "id": "act-05-06-01-scaffolded",
                   "order": 3,
                   "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
                   "accessibilityText": "Re-price; folding draws is allowed.",
                   "acceptedGrades": [
                     "recommended",
@@ -13098,26 +13098,28 @@
                   "objectives": [
                     "Abandon stale flop stories"
                   ],
-                  "prompt": "You called flop as a draw. Turn bricks and villain bombs. Update?",
+                  "prompt": "You called flop as a draw. Turn bricks and villain bombs. Action?",
                   "choices": [
                     {
                       "id": "repr",
-                      "label": "Re-price equity versus the new sizing",
-                      "accessibilityText": "Re-price equity versus the new sizing",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Flop call does not obligate turn call."
-                      }
+                      },
+                      "action": "FOLD"
                     },
                     {
                       "id": "auto",
-                      "label": "Always call because flop was correct",
-                      "accessibilityText": "Always call because flop was correct",
+                      "label": "Call",
+                      "accessibilityText": "Call",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Sunk cost.",
                         "betterChoiceId": "repr"
-                      }
+                      },
+                      "action": "CALL"
                     }
                   ]
                 },
@@ -13141,8 +13143,8 @@
                   "choices": [
                     {
                       "id": "update",
-                      "label": "Rebuild the range after every action",
-                      "accessibilityText": "Rebuild the range after every action",
+                      "label": "Rebuild after every action",
+                      "accessibilityText": "Rebuild after every action",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Stories go stale fast."
@@ -13150,8 +13152,8 @@
                     },
                     {
                       "id": "freeze",
-                      "label": "Lock the flop read forever",
-                      "accessibilityText": "Lock the flop read forever",
+                      "label": "Lock flop forever",
+                      "accessibilityText": "Lock flop forever",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Misses turn/river info.",
@@ -13180,8 +13182,8 @@
                   "choices": [
                     {
                       "id": "uncap",
-                      "label": "Uncapped pressure — strong unless type says otherwise",
-                      "accessibilityText": "Uncapped pressure — strong unless type says otherwise",
+                      "label": "Uncapped — respect unless type says otherwise",
+                      "accessibilityText": "Uncapped — respect unless type says otherwise",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Baseline respect; exploit only with evidence."
@@ -13189,8 +13191,8 @@
                     },
                     {
                       "id": "bluff",
-                      "label": "Always pure bluff",
-                      "accessibilityText": "Always pure bluff",
+                      "label": "Always bluff",
+                      "accessibilityText": "Always bluff",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Too absolute.",

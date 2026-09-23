@@ -735,6 +735,16 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'Capped range — probe small',
       );
+    case 'act-05-06-01-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['7h', '6h'],
+        boardCodes: ['Kh', '9h', '2c', '3d'],
+        potLabel: 'Pot 40',
+        villainLine: 'Bombs turn after flop call',
+        streetLabel: 'Turn · flush draw · brick',
+        facingBet: true,
+        feltStatusLine: 'Re-price — fold the bomb',
+      );
   }
   return null;
 }
@@ -957,6 +967,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-05-05-01-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-05-06-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
@@ -4800,18 +4814,19 @@ class _RangeRewriteDemoState extends State<RangeRewriteDemo> {
               ],
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap Action, Rewrite, and Update'
-                : 'Each action rewrites the range',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues the three taps — no duplicate footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Each action rewrites the range',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );

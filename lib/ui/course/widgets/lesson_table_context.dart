@@ -412,6 +412,24 @@ enum LessonTableRegion {
 
   /// Lines checkpoint: delay every hand (mistake).
   linesDelayAlways,
+
+  /// Line-reading guided: bet flop / check turn → capped (correct).
+  lineReadCapped,
+
+  /// Line-reading guided: still full of nuts (mistake).
+  lineReadStillNuts,
+
+  /// Line-reading unguided: rebuild after every action (correct).
+  lineReadRebuild,
+
+  /// Line-reading unguided: lock flop forever (mistake).
+  lineReadLockFlop,
+
+  /// Line-reading checkpoint: uncapped pressure (correct).
+  lineReadUncapped,
+
+  /// Line-reading checkpoint: always bluff (mistake).
+  lineReadAlwaysBluff,
 }
 
 /// How the mini-table is arranged.
@@ -571,6 +589,15 @@ enum LessonTableLayout {
 
   /// Lines checkpoint: delayed c-bet timing.
   linesDelayOutcomes,
+
+  /// Line-reading guided: capped vs still nuts.
+  lineReadCappedOutcomes,
+
+  /// Line-reading unguided: rebuild vs lock flop.
+  lineReadRebuildOutcomes,
+
+  /// Line-reading checkpoint: uncapped vs always bluff.
+  lineReadUncappedOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1247,6 +1274,21 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.linesDelayOutcomes,
         caption: 'Delayed c-bet is best when?',
       );
+    case 'act-05-06-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.lineReadCappedOutcomes,
+        caption: 'Bet flop, check turn — range now?',
+      );
+    case 'act-05-06-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.lineReadRebuildOutcomes,
+        caption: 'Best line-reading habit?',
+      );
+    case 'act-05-06-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.lineReadUncappedOutcomes,
+        caption: 'XR / bet / shove usually means?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -1855,6 +1897,24 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.linesDelayAlways => pick('always'),
         _ => null,
       };
+    case 'act-05-06-01-guided':
+      return switch (region) {
+        LessonTableRegion.lineReadCapped => pick('capped'),
+        LessonTableRegion.lineReadStillNuts => pick('nutted'),
+        _ => null,
+      };
+    case 'act-05-06-01-unguided':
+      return switch (region) {
+        LessonTableRegion.lineReadRebuild => pick('update'),
+        LessonTableRegion.lineReadLockFlop => pick('freeze'),
+        _ => null,
+      };
+    case 'act-05-06-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.lineReadUncapped => pick('uncap'),
+        LessonTableRegion.lineReadAlwaysBluff => pick('bluff'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -1974,7 +2034,10 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-05-04-01-checkpoint' ||
       activity.id == 'act-05-05-01-guided' ||
       activity.id == 'act-05-05-01-unguided' ||
-      activity.id == 'act-05-05-01-checkpoint';
+      activity.id == 'act-05-05-01-checkpoint' ||
+      activity.id == 'act-05-06-01-guided' ||
+      activity.id == 'act-05-06-01-unguided' ||
+      activity.id == 'act-05-06-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -2187,6 +2250,12 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.linesDonkPolarOutcomes =>
           _buildLinesDonkPolarOutcomes(),
       LessonTableLayout.linesDelayOutcomes => _buildLinesDelayOutcomes(),
+      LessonTableLayout.lineReadCappedOutcomes =>
+          _buildLineReadCappedOutcomes(),
+      LessonTableLayout.lineReadRebuildOutcomes =>
+          _buildLineReadRebuildOutcomes(),
+      LessonTableLayout.lineReadUncappedOutcomes =>
+          _buildLineReadUncappedOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -4281,6 +4350,99 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Need a reason',
           visual: const Icon(
             Icons.all_inclusive,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLineReadCappedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive line reading — tap capped vs still nuts',
+      semanticsStatic: 'Line reading capped outcomes',
+      caption: scene.caption ?? 'Bet flop, check turn — range now?',
+      phases: [
+        (
+          region: LessonTableRegion.lineReadCapped,
+          title: 'Capped',
+          detail: 'Fewer nuts',
+          visual: const Icon(
+            Icons.vertical_align_bottom,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.lineReadStillNuts,
+          title: 'Still nuts',
+          detail: 'Wrong story',
+          visual: const Icon(
+            Icons.workspace_premium_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLineReadRebuildOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive line reading — tap rebuild vs lock flop',
+      semanticsStatic: 'Line reading rebuild outcomes',
+      caption: scene.caption ?? 'Best line-reading habit?',
+      phases: [
+        (
+          region: LessonTableRegion.lineReadRebuild,
+          title: 'Rebuild',
+          detail: 'Every action',
+          visual: const Icon(
+            Icons.refresh,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.lineReadLockFlop,
+          title: 'Lock flop',
+          detail: 'Stale story',
+          visual: const Icon(
+            Icons.lock_outline,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLineReadUncappedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive line reading — tap uncapped vs always bluff',
+      semanticsStatic: 'Line reading uncapped outcomes',
+      caption: scene.caption ?? 'XR / bet / shove usually means?',
+      phases: [
+        (
+          region: LessonTableRegion.lineReadUncapped,
+          title: 'Uncapped',
+          detail: 'Respect',
+          visual: const Icon(
+            Icons.trending_up,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.lineReadAlwaysBluff,
+          title: 'Always bluff',
+          detail: 'Too absolute',
+          visual: const Icon(
+            Icons.air,
             color: AppColors.slate,
             size: 24,
           ),

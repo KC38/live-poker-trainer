@@ -10315,6 +10315,165 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s5 line-reading guided taps Capped on bet-check felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-06-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Often capped / weakened.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Villain bets flop, checks turn. Range now?',
+      choices: const [
+        CourseChoice(id: 'capped', label: 'Capped — fewer nuts'),
+        CourseChoice(id: 'nutted', label: 'Still nuts'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Bet flop, check turn — tap Capped.'),
+      findsOneWidget,
+    );
+    expect(find.text('Capped'), findsOneWidget);
+    await tester.tap(find.text('Capped'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'capped');
+    controller.dispose();
+  });
+
+  testWidgets('s5 line-reading scaffolded docks Fold on draw-bomb felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-06-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Re-price; folding draws is allowed.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'You called flop as a draw. Turn bricks and villain bombs. Action?',
+      choices: const [
+        CourseChoice(id: 'repr', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'auto', label: 'Call', action: 'CALL'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Draw faces bomb — tap Fold.'),
+      findsOneWidget,
+    );
+    expect(find.text('FOLD'), findsOneWidget);
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'repr');
+    controller.dispose();
+  });
+
+  testWidgets('s5 line-reading unguided taps Rebuild on habit felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-06-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Street-by-street updates.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Best line-reading habit?',
+      choices: const [
+        CourseChoice(id: 'update', label: 'Rebuild after every action'),
+        CourseChoice(id: 'freeze', label: 'Lock flop forever'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Best habit — tap Rebuild.'), findsOneWidget);
+    await tester.tap(find.text('Rebuild'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'update');
+    controller.dispose();
+  });
+
+  testWidgets('s5 line-reading checkpoint taps Uncapped on XR line felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-06-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText:
+          'Strong uncapped pressure — respect without a read.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Check-raise flop, bet turn, shove river usually means?',
+      choices: const [
+        CourseChoice(
+          id: 'uncap',
+          label: 'Uncapped — respect unless type says otherwise',
+        ),
+        CourseChoice(id: 'bluff', label: 'Always bluff'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('XR / bet / shove — tap Uncapped.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Uncapped'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'uncap');
+    controller.dispose();
+  });
+
   testWidgets('s4 meet nit guided taps Nit on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-04-07-02-guided',
