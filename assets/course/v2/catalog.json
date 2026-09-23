@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "90025f56005a86689b9e400b877aa88ad68ac172aa41ff740266051e5dcacc6a",
+  "contentChecksum": "8168bf37c5d0585681868e2ba41defdc0c0651d29cb5e01d21c4fbd1b70a341e",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -722,7 +722,7 @@
                   "objectives": [
                     "Recognize pairs, straights, and flushes"
                   ],
-                  "prompt": "Board Kc 9c 4c 7c 2s. You hold Ac 3d. Tap what you made.",
+                  "prompt": "Look at the board and your holes — tap what you made.",
                   "choices": [
                     {
                       "id": "cat-flush",

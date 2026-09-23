@@ -517,7 +517,7 @@ export function buildSectionOne() {
               }),
               selectAct({
                 id: "act-01-02-01-scaffolded-spot", order: 3, stage: "scaffolded",
-                prompt: "Board Kc 9c 4c 7c 2s. You hold Ac 3d. Tap what you made.",
+                prompt: "Look at the board and your holes — tap what you made.",
                 a11y: "Tap the hand category with ace-high clubs.",
                 objectives: ["Recognize pairs, straights, and flushes"],
                 choices: [
