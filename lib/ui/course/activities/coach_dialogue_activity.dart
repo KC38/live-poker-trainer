@@ -462,7 +462,8 @@ class CoachDialogueActivity extends StatelessWidget {
                 CoachDialogueVisualKind.capstoneMultiwayDeep &&
             visual.kind != CoachDialogueVisualKind.capstoneLimped &&
             visual.kind != CoachDialogueVisualKind.capstone4bet &&
-            visual.kind != CoachDialogueVisualKind.liveWarmupPrep) ...[
+            visual.kind != CoachDialogueVisualKind.liveWarmupPrep &&
+            visual.kind != CoachDialogueVisualKind.turnMap) ...[
           const SizedBox(height: 10),
           _TapHint(text: visual.continueHint),
         ],
@@ -902,7 +903,7 @@ class CoachDialogueVisual {
     CoachDialogueVisualKind.preflopFlopPlan =>
       'Tap Reason, Confirm, and Cancel.',
     CoachDialogueVisualKind.turnMap =>
-      'Tap Continue, Give-up, and Map.',
+      'Tap Barrel, Give-up, and Map.',
     CoachDialogueVisualKind.riverComposition =>
       'Tap Value, Bluff, and Check.',
     CoachDialogueVisualKind.potTypePlans =>

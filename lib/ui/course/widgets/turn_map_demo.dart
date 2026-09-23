@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 
-/// Continue / Give-up / Map tiles for flop→turn map explain demos.
+/// Barrel / Give-up / Map tiles for flop→turn map explain demos.
 class TurnMapDemo extends StatefulWidget {
   /// Creates the demo.
   const TurnMapDemo({
@@ -17,7 +17,7 @@ class TurnMapDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'CONTINUE', caption: 'Cards to barrel', color: AppColors.gold),
+    (label: 'BARREL', caption: 'Cards to continue', color: AppColors.gold),
     (label: 'GIVE-UP', caption: 'Cards to kill', color: AppColors.danger),
     (label: 'MAP', caption: 'Before flop bet', color: AppColors.cream),
   ];
