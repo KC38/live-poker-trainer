@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "8168bf37c5d0585681868e2ba41defdc0c0651d29cb5e01d21c4fbd1b70a341e",
+  "contentChecksum": "1ce7424cdf3013a09479887b42578601b2da2ba143c874851ea97b3f87ed91e7",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -870,7 +870,7 @@
                   "objectives": [
                     "Build the best five-card hand from seven"
                   ],
-                  "prompt": "You hold Ah Kd. Board As 7c 2d 9h 3s. Tap your best five.",
+                  "prompt": "Tap the five cards that make your best hand.",
                   "choices": [
                     {
                       "id": "best-pair-k",
@@ -983,7 +983,7 @@
                     "Build the best five-card hand from seven",
                     "Use kickers when categories tie"
                   ],
-                  "prompt": "You hold 8h 8d. Board 8c Kd Ks 2h 2c. Tap your best five.",
+                  "prompt": "Tap the five cards for your strongest hand.",
                   "choices": [
                     {
                       "id": "fh-eights",

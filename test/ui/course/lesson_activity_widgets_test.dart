@@ -6100,6 +6100,11 @@ void main() {
       ),
     );
     expect(find.byType(BestFiveCardPicker), findsOneWidget);
+    expect(
+      find.text('Only five cards count — tap the ones that play.'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('You hold Ah'), findsNothing);
 
     var autoSubmits = 0;
     controller.onAutoSubmit = () => autoSubmits += 1;
