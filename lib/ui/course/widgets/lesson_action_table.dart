@@ -282,7 +282,7 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
       );
     case 'act-03-07-01-guided':
       return const LessonActionSpot(
-        heroCodes: ['Kh', '9d'],
+        heroCodes: ['7h', '9d'],
         boardCodes: ['Kc', '7s', '2d'],
         potLabel: 'Pot 16',
         villainLine: 'Checked to you · 4-way',
