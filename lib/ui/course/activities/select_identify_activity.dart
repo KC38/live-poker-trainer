@@ -332,14 +332,19 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         final selected = widget.controller.draft.choiceId;
         final coach = _coachText;
         final prompt = widget.activity.prompt?.trim();
+        // Felt + Rex already teach — skip near-duplicate prompt dumps on
+        // street-end / postflop felt quizzes (and hide Rex under Nice!).
+        final feltFirstStreets =
+            widget.activity.id.startsWith('act-01-04-01-');
         final showPrompt =
+            !feltFirstStreets &&
             prompt != null &&
             prompt.isNotEmpty &&
             prompt.toLowerCase() != coach.trim().toLowerCase();
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            RexCoachLine(text: coach),
+            if (!locked) RexCoachLine(text: coach),
             if (showPrompt) ...[
               const SizedBox(height: 14),
               Text(
@@ -382,12 +387,15 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                         },
               ),
             ],
-            if (widget.controller.submitting ||
-                widget.controller.lastResult == null) ...[
+            if (!locked &&
+                (widget.controller.submitting ||
+                    widget.controller.lastResult == null)) ...[
               const SizedBox(height: 12),
               Text(
                 widget.controller.submitting
                     ? 'Checking…'
+                    : feltFirstStreets
+                    ? 'Tap on the felt.'
                     : 'Tap the answer on the table.',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(

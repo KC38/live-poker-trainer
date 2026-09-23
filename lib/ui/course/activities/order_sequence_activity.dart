@@ -77,7 +77,14 @@ bool ordersStrongestFirst(CourseActivity activity) {
 String emptyOrderTrayHint({
   required CourseActivity activity,
   required bool rankMode,
+  bool coachAlreadyGuides = false,
 }) {
+  // Rex / prompt already says tap order — keep the tray quiet.
+  if (coachAlreadyGuides &&
+      (isStreetSequenceActivity(activity) ||
+          isSeatOrderSequenceActivity(activity))) {
+    return 'Build order here';
+  }
   if (ordersStrongestFirst(activity)) return 'Tap strongest first';
   if (rankMode || isHandExampleSequenceActivity(activity)) {
     return 'Tap lowest first';
@@ -97,8 +104,18 @@ String orderSequenceStatusLine({
   required bool submitting,
   required bool complete,
   required bool rankMode,
+  bool graded = false,
+  bool coachAlreadyGuides = false,
 }) {
+  // Nice! owns the next beat — never leave Checking… under feedback.
+  if (graded) return '';
   if (submitting || complete) return 'Checking…';
+  // Rex already coaches street/seat order — skip a third tap line.
+  if (coachAlreadyGuides &&
+      (isStreetSequenceActivity(activity) ||
+          isSeatOrderSequenceActivity(activity))) {
+    return '';
+  }
   if (rankMode) return 'Tap low → high';
   if (ordersStrongestFirst(activity)) return 'Tap strong → weak';
   if (isHandExampleSequenceActivity(activity)) return 'Tap low → high';
@@ -175,20 +192,25 @@ class OrderSequenceActivity extends StatelessWidget {
         );
         final coach = resolved.coach;
         final showPrompt = resolved.showPrompt;
-        final showCoach = shouldShowLessonCoach(
-          activity: activity,
-          showGuidance: showGuidance,
-          coach: coach,
-        );
+        final showCoach =
+            !locked &&
+            shouldShowLessonCoach(
+              activity: activity,
+              showGuidance: showGuidance,
+              coach: coach,
+            );
         final statusLine = orderSequenceStatusLine(
           activity: activity,
           submitting: controller.submitting,
           complete: remaining.isEmpty && ordered.isNotEmpty,
           rankMode: _rankMode,
+          graded: controller.lastResult != null,
+          coachAlreadyGuides: showCoach,
         );
         final trayHint = emptyOrderTrayHint(
           activity: activity,
           rankMode: _rankMode,
+          coachAlreadyGuides: showCoach,
         );
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -264,16 +286,18 @@ class OrderSequenceActivity extends StatelessWidget {
                         ),
                 ),
               ),
-              const SizedBox(height: 12),
-              Text(
-                statusLine,
-                style: GoogleFonts.manrope(
-                  color: AppColors.slate,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
+              if (statusLine.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                Text(
+                  statusLine,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.slate,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
+                const SizedBox(height: 8),
+              ],
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
@@ -372,16 +396,18 @@ class OrderSequenceActivity extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 14),
-                    Text(
-                      statusLine,
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.manrope(
-                        color: AppColors.slate,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
+                    if (statusLine.isNotEmpty) ...[
+                      Text(
+                        statusLine,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.manrope(
+                          color: AppColors.slate,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
+                      const SizedBox(height: 8),
+                    ],
                     if (isStreetSequenceActivity(activity))
                       _StreetTileGrid(
                         items: remaining,
@@ -476,16 +502,18 @@ class OrderSequenceActivity extends StatelessWidget {
                         ),
                 ),
               ),
-              const SizedBox(height: 12),
-              Text(
-                statusLine,
-                style: GoogleFonts.manrope(
-                  color: AppColors.slate,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
+              if (statusLine.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                Text(
+                  statusLine,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.slate,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
+                const SizedBox(height: 8),
+              ],
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
