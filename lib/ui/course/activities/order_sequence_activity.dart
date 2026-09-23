@@ -253,7 +253,7 @@ class OrderSequenceActivity extends StatelessWidget {
             ],
             const SizedBox(height: 10),
             if (_handMode) ...[
-              if (!showCoach) ...[
+              if (!showCoach && !locked) ...[
                 Text(
                   ordered.isEmpty ? 'Build your order' : 'Your order',
                   style: GoogleFonts.manrope(
@@ -297,11 +297,11 @@ class OrderSequenceActivity extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    for (var i = 0; i < remaining.length; i++)
+                    for (var i = 0; i < remaining.length; i++) ...[
+                      if (i > 0) const SizedBox(height: 8),
                       _SoftPulseTarget(
                         active: !locked && i == 0 && ordered.isEmpty,
                         child: HandExampleTile(
@@ -317,7 +317,8 @@ class OrderSequenceActivity extends StatelessWidget {
                               ),
                           selected: false,
                           enabled: !locked,
-                          compact: true,
+                          compact: false,
+                          expand: true,
                           onPressed:
                               locked
                                   ? null
@@ -329,6 +330,7 @@ class OrderSequenceActivity extends StatelessWidget {
                                   ),
                         ),
                       ),
+                    ],
                   ],
                 ),
               ],
@@ -452,7 +454,7 @@ class OrderSequenceActivity extends StatelessWidget {
                 ),
               ),
             ] else ...[
-              if (!showCoach) ...[
+              if (!showCoach && !locked) ...[
                 Text(
                   ordered.isEmpty ? 'Build your order' : 'Your order',
                   style: GoogleFonts.manrope(
@@ -650,6 +652,7 @@ class _HandOrderSlotColumn extends StatelessWidget {
               selected: true,
               enabled: false,
               compact: true,
+              expand: true,
             )
           else
             _GhostOrderSlot(
@@ -808,10 +811,13 @@ class _GhostOrderSlotState extends State<_GhostOrderSlot>
         return Container(
           width: widget.tall ? double.infinity : null,
           constraints: BoxConstraints(
-            minHeight: widget.tall ? 64 : 44,
+            minHeight: widget.tall ? 44 : 40,
             minWidth: widget.tall ? 0 : 56,
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          padding: EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: widget.tall ? 8 : 10,
+          ),
           decoration: BoxDecoration(
             color: AppColors.feltDark.withValues(alpha: 0.4),
             borderRadius: BorderRadius.circular(14),
