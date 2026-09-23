@@ -1102,6 +1102,43 @@ LessonActionSpot? resolveToyHandStepSpot({
     }
     return null;
   }
+  if (activityId == 'act-07-10-03-hand') {
+    switch (stepId) {
+      case 'step-mw-flop':
+        return const LessonActionSpot(
+          heroCodes: ['Ah', 'Qh'],
+          boardCodes: ['Jh', '8h', '2c'],
+          potLabel: 'Pot 28',
+          villainLine: 'Four-way · bet into you',
+          streetLabel: 'Flop · Jh8h2c · AQs',
+          facingBet: true,
+          feltStatusLine: 'Nut flush draw — call deep',
+        );
+      case 'step-mw-turn':
+        return const LessonActionSpot(
+          heroCodes: ['Ah', 'Qh'],
+          boardCodes: ['Jh', '8h', '2c', '3d'],
+          potLabel: 'Pot 48',
+          villainLine: 'Checked to you · two behind',
+          streetLabel: 'Turn · Jh8h2c3d · AQs',
+          facingBet: false,
+          openPot: true,
+          feltStatusLine: 'Still drawing — semi-bluff ok',
+        );
+      case 'step-mw-river':
+        return const LessonActionSpot(
+          heroCodes: ['Ah', 'Qh'],
+          boardCodes: ['Jh', '8h', '2c', '3d', '9c'],
+          potLabel: 'Pot 84',
+          villainLine: 'Two players behind',
+          streetLabel: 'River · miss · ace-high',
+          facingBet: false,
+          openPot: true,
+          feltStatusLine: 'Missed — no light multiway bluff',
+        );
+    }
+    return null;
+  }
   if (activityId == 'act-04-03-01-guided') {
     switch (stepId) {
       case 'step-flop-tp':
@@ -1225,6 +1262,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id == 'act-07-10-02-hand' &&
+      activity.renderer == ActivityRenderer.authoredMultiStepHand) {
+    return true;
+  }
+  if (id == 'act-07-10-03-hand' &&
       activity.renderer == ActivityRenderer.authoredMultiStepHand) {
     return true;
   }
