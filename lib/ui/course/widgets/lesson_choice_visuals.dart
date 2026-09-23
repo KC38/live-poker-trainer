@@ -358,8 +358,8 @@ class HoleCardChoiceButton extends StatelessWidget {
               child: Row(
                 children: [
                   for (var i = 0; i < cards.length; i++) ...[
-                    if (i > 0) const SizedBox(width: 6),
-                    MiniCard(card: cards[i], size: MiniCardSize.hero, scale: 0.78),
+                    if (i > 0) const SizedBox(width: 8),
+                    MiniCard(card: cards[i], size: MiniCardSize.hero),
                   ],
                   if (cards.isEmpty)
                     Text(

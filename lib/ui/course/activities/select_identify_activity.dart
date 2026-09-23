@@ -118,6 +118,14 @@ class SelectIdentifyActivity extends StatelessWidget {
                 controller: controller,
                 locked: locked,
               )
+            else if (presentation == SelectIdentifyPresentation.holeCards)
+              _HoleCardFeltTray(
+                activity: activity,
+                selectedId: selected,
+                locked: locked,
+                showGuidance: showGuidance,
+                onSelect: (id) => controller.selectChoice(id, autoSubmit: true),
+              )
             else
               for (var i = 0; i < activity.choices.length; i++) ...[
                 if (i > 0) const SizedBox(height: 10),
@@ -857,6 +865,71 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
           ],
         );
       },
+    );
+  }
+}
+
+/// Felt tray of hole-card choices — teach-by-tapping card faces, not prose.
+class _HoleCardFeltTray extends StatelessWidget {
+  const _HoleCardFeltTray({
+    required this.activity,
+    required this.selectedId,
+    required this.locked,
+    required this.showGuidance,
+    required this.onSelect,
+  });
+
+  final CourseActivity activity;
+  final String? selectedId;
+  final bool locked;
+  final bool showGuidance;
+  final ValueChanged<String> onSelect;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.55)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'TAP A HAND',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.manrope(
+              color: AppColors.cream.withValues(alpha: 0.72),
+              fontSize: 10,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 1.0,
+            ),
+          ),
+          const SizedBox(height: 12),
+          for (var i = 0; i < activity.choices.length; i++) ...[
+            if (i > 0) const SizedBox(height: 10),
+            HoleCardChoiceButton(
+              codes: parseCardCodes(activity.choices[i].label),
+              accessibilityText: activity.choices[i].accessibilityText,
+              selected: selectedId == activity.choices[i].id,
+              highlighted:
+                  showGuidance &&
+                  activity.stage == ActivityStage.guided &&
+                  i == 0 &&
+                  selectedId == null,
+              enabled: !locked,
+              onPressed:
+                  locked ? null : () => onSelect(activity.choices[i].id),
+            ),
+          ],
+        ],
+      ),
     );
   }
 }

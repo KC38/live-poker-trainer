@@ -3772,13 +3772,38 @@ void main() {
       stage: ActivityStage.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
-      accessibilityText: 'Classify pocket nines',
+      accessibilityText: 'Tap the pocket nines among the hole-card options.',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Look at your two cards. What do you have?',
+      prompt: 'Tap the pocket pair.',
+      choices: const [
+        CourseChoice(id: 'pocket-pair', label: '9h 9d'),
+        CourseChoice(id: 'suited-nine', label: 'Ah Kh'),
+        CourseChoice(id: 'two-high', label: 'Ah Kd'),
+      ],
     );
-    final checkpointScene = resolveLessonTableScene(checkpoint);
-    expect(checkpointScene, isNotNull);
-    expect(checkpointScene!.heroCodes, ['9h', '9d']);
+    // Choices are the visual — no invented felt (would spoil the puzzle).
+    expect(resolveLessonTableScene(checkpoint), isNull);
+    expect(
+      resolveSelectIdentifyPresentation(checkpoint),
+      SelectIdentifyPresentation.holeCards,
+    );
+
+    final suited = CourseActivity(
+      id: 'act-01-01-02-unguided-suited',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap the hole-card pair that shares a suit.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap the suited hole cards.',
+      choices: const [
+        CourseChoice(id: 'suited-ah-kh', label: 'Ah Kh'),
+        CourseChoice(id: 'offsuit-ah-kd', label: 'Ah Kd'),
+        CourseChoice(id: 'pair-77', label: '7c 7d'),
+      ],
+    );
+    expect(resolveLessonTableScene(suited), isNull);
   });
 
   test('table region mapping covers Your two cards activities', () {
