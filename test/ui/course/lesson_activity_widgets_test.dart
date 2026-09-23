@@ -4578,7 +4578,26 @@ void main() {
           ],
         ),
       )?.caption,
-      'Postflop · tap who acts first',
+      isNull,
+    );
+    expect(
+      resolveLessonTableScene(
+        CourseActivity(
+          id: 'act-01-04-01-checkpoint-postflop',
+          order: 5,
+          stage: ActivityStage.checkpoint,
+          renderer: ActivityRenderer.selectIdentify,
+          estimatedSeconds: 40,
+          accessibilityText: 'postflop',
+          acceptedGrades: const [SoftGrade.recommended],
+          choices: const [
+            CourseChoice(id: 'sb-first', label: 'SB'),
+            CourseChoice(id: 'btn-first', label: 'BTN'),
+            CourseChoice(id: 'bb-first-always', label: 'BB'),
+          ],
+        ),
+      )?.highlight,
+      LessonTableHighlight.none,
     );
 
     const foldWinChoices = [
