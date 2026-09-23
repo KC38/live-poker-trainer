@@ -318,6 +318,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Both checked down — tap who takes the pot.',
       'act-02-07-01-checkpoint-habit' =>
           'Cards uncovered and action left — tap the safe habit.',
+      'act-02-06-01-guided-follow' =>
+          'Two seats act before you — tap what you do first.',
+      'act-02-06-01-scaffolded-verbal' =>
+          'You want to raise — tap the clearest live announce.',
+      'act-02-06-01-unguided-protect' =>
+          'Cards near the muck — tap how you protect them.',
+      'act-02-06-01-checkpoint-oot' =>
+          'You raised early — tap what went wrong.',
       'act-02-07-02-jump-pos' =>
           'Tap the seat right before the button.',
       'act-02-07-02-jump-stack' =>
@@ -664,6 +672,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id.startsWith('act-01-04-01-') ||
             widget.activity.id.startsWith('act-01-05-01-') ||
             widget.activity.id.startsWith('act-02-01-01-') ||
+            widget.activity.id.startsWith('act-02-06-01-') ||
             widget.activity.id == 'act-02-07-01-checkpoint-habit' ||
             widget.activity.id == 'act-02-07-02-jump-pos' ||
             widget.activity.id == 'act-02-07-02-jump-stack' ||
