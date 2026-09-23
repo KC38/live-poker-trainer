@@ -795,6 +795,7 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
   }
 
   String _statusLine() {
+    if (widget.controller.lastResult != null) return '';
     if (widget.controller.submitting) return 'Checking…';
     if (_selected.isEmpty) return 'Tap suits to build your answer.';
     final hasAllReal = _selected.containsAll(const {
@@ -804,49 +805,58 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
       LessonSuitToken.spades,
     });
     if (hasAllReal) return 'Checking…';
-    return 'Keep tapping — include every real suit.';
+    final realCount = _selected.where((t) => t.isReal).length;
+    return '$realCount of 4 real suits — skip decoys.';
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-          padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-          decoration: BoxDecoration(
-            color: AppColors.feltLight.withValues(alpha: 0.88),
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(
-              color: AppColors.feltBorder.withValues(alpha: 0.55),
-            ),
-          ),
-          child: Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            alignment: WrapAlignment.center,
-            children: [
-              for (final token in _palette)
-                SuitTapTile(
-                  token: token,
-                  selected: _selected.contains(token),
-                  enabled: !widget.locked,
-                  onPressed: () => _toggle(token),
+    return AnimatedBuilder(
+      animation: widget.controller,
+      builder: (context, _) {
+        final status = _statusLine();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+              decoration: BoxDecoration(
+                color: AppColors.feltLight.withValues(alpha: 0.88),
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(
+                  color: AppColors.feltBorder.withValues(alpha: 0.55),
                 ),
+              ),
+              child: Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                alignment: WrapAlignment.center,
+                children: [
+                  for (final token in _palette)
+                    SuitTapTile(
+                      token: token,
+                      selected: _selected.contains(token),
+                      enabled: !widget.locked,
+                      onPressed: () => _toggle(token),
+                    ),
+                ],
+              ),
+            ),
+            if (status.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              Text(
+                status,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.manrope(
+                  color: AppColors.slate,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ],
-          ),
-        ),
-        const SizedBox(height: 12),
-        Text(
-          _statusLine(),
-          textAlign: TextAlign.center,
-          style: GoogleFonts.manrope(
-            color: AppColors.slate,
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 }
