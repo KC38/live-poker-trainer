@@ -124,6 +124,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Table-read: tap effective stack + pot on the felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-03-02-01-guided') {
+    // Flop class: see board + holes, tap Made / Draw / Air.
+    return SelectIdentifyPresentation.handCategoryTap;
+  }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {
     return SelectIdentifyPresentation.showdownTap;

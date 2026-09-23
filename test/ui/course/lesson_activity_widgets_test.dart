@@ -6113,6 +6113,60 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s3 flop-class guided taps Made with board and holes on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-02-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Top pair is a made hand.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Board Ks 9d 2c. You hold Kh Qh. Class?',
+      choices: const [
+        CourseChoice(id: 'made-tp', label: 'Made hand — top pair'),
+        CourseChoice(id: 'draw-tp', label: 'Draw only'),
+        CourseChoice(id: 'air-tp', label: 'Air'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.handCategoryTap,
+    );
+    expect(resolveLessonTableScene(activity)?.heroCodes, ['Kh', 'Qh']);
+    expect(
+      resolveLessonTableScene(activity)?.boardCodes,
+      ['Ks', '9d', '2c'],
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Board pairs your king — tap the flop class.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Board Ks 9d 2c. You hold Kh Qh. Class?'),
+      findsNothing,
+    );
+    expect(find.text('Made hand — top pair'), findsNothing);
+    expect(find.text('Made — top pair'), findsOneWidget);
+    await tester.tap(find.text('Made — top pair'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'made-tp');
+    controller.dispose();
+  });
+
   testWidgets('numeric entry updates draft', (tester) async {
     final activity = _activity(
       renderer: ActivityRenderer.numericPotPrice,

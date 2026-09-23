@@ -441,6 +441,14 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.tableReadMattersOutcomes,
         caption: 'Hero 140bb · Villain 55bb · pot 18',
       );
+    case 'act-03-02-01-guided':
+      return const LessonTableScene(
+        heroCodes: ['Kh', 'Qh'],
+        boardCodes: ['Ks', '9d', '2c'],
+        villainSeatCount: 0,
+        highlight: LessonTableHighlight.none,
+        caption: 'Flop · your holes',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,

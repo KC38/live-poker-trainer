@@ -149,6 +149,24 @@ LessonHandExample? resolveHandExample({
         title: 'Offsuit trash',
         codes: ['7c', '2d'],
       );
+    case 'made-tp':
+      return const LessonHandExample(
+        id: 'made-tp',
+        title: 'Made — top pair',
+        codes: [],
+      );
+    case 'draw-tp':
+      return const LessonHandExample(
+        id: 'draw-tp',
+        title: 'Draw only',
+        codes: [],
+      );
+    case 'air-tp':
+      return const LessonHandExample(
+        id: 'air-tp',
+        title: 'Air',
+        codes: [],
+      );
     case 'split':
       return const LessonHandExample(
         id: 'split',
