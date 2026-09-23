@@ -270,6 +270,10 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Missed draw on a scare river — tap a pressure size.',
     'act-04-04-01-checkpoint' =>
       'Strong hand for value into 30 — tap the worst size.',
+    'act-04-05-01-scaffolded' =>
+      'Top set at SPR ~1 — tap Commit for stacks.',
+    'act-04-05-01-unguided' =>
+      'Second pair multiway at SPR 20 — tap Keep pot small.',
     _ => null,
   };
 }

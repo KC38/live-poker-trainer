@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "1d64069f3beb8632589971141fd23dd354d0739896e6dd753612b8a89493a58c",
+  "contentChecksum": "97033385cd1a55fce47cad8040a4e476aaa86f8afaddf4a3a893a37c4a44de76",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -8878,8 +8878,8 @@
                   "choices": [
                     {
                       "id": "commit",
-                      "label": "Commit / raise for stacks",
-                      "accessibilityText": "Commit / raise for stacks",
+                      "label": "Commit for stacks",
+                      "accessibilityText": "Commit for stacks",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Low SPR + monster = get it in."
@@ -8889,8 +8889,8 @@
                     },
                     {
                       "id": "tiny",
-                      "label": "Min-check forever",
-                      "accessibilityText": "Min-check forever",
+                      "label": "Check forever",
+                      "accessibilityText": "Check forever",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "You are missing value and risking free cards.",
@@ -8920,8 +8920,8 @@
                   "choices": [
                     {
                       "id": "flexible",
-                      "label": "Control pot size",
-                      "accessibilityText": "Control pot size",
+                      "label": "Keep pot small",
+                      "accessibilityText": "Keep pot small",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Deep SPR punishes medium-strength stacks-in."
@@ -8980,8 +8980,8 @@
                     },
                     {
                       "id": "showdown-only",
-                      "label": "Only at showdown arithmetic",
-                      "accessibilityText": "Only at showdown arithmetic",
+                      "label": "Only at showdown",
+                      "accessibilityText": "Only at showdown",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Decide earlier.",

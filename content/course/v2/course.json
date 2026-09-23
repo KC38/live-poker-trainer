@@ -8877,8 +8877,8 @@
                   "choices": [
                     {
                       "id": "commit",
-                      "label": "Commit / raise for stacks",
-                      "accessibilityText": "Commit / raise for stacks",
+                      "label": "Commit for stacks",
+                      "accessibilityText": "Commit for stacks",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Low SPR + monster = get it in."
@@ -8888,8 +8888,8 @@
                     },
                     {
                       "id": "tiny",
-                      "label": "Min-check forever",
-                      "accessibilityText": "Min-check forever",
+                      "label": "Check forever",
+                      "accessibilityText": "Check forever",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "You are missing value and risking free cards.",
@@ -8919,8 +8919,8 @@
                   "choices": [
                     {
                       "id": "flexible",
-                      "label": "Control pot size",
-                      "accessibilityText": "Control pot size",
+                      "label": "Keep pot small",
+                      "accessibilityText": "Keep pot small",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Deep SPR punishes medium-strength stacks-in."
@@ -8979,8 +8979,8 @@
                     },
                     {
                       "id": "showdown-only",
-                      "label": "Only at showdown arithmetic",
-                      "accessibilityText": "Only at showdown arithmetic",
+                      "label": "Only at showdown",
+                      "accessibilityText": "Only at showdown",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Decide earlier.",

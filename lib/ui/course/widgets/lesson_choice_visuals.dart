@@ -186,6 +186,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Sizing: nearby soft grades vs exactness / junk sizes.
     return SelectIdentifyPresentation.handCategoryTap;
   }
+  if (activity.id == 'act-04-05-01-checkpoint') {
+    // SPR: when commitment decisions matter.
+    return SelectIdentifyPresentation.handCategoryTap;
+  }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {
     return SelectIdentifyPresentation.showdownTap;

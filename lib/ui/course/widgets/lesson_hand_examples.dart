@@ -557,6 +557,24 @@ LessonHandExample? resolveHandExample({
         title: 'Even 1-chip bets are fine',
         codes: [],
       );
+    case 'before':
+      return const LessonHandExample(
+        id: 'before',
+        title: 'Before you put the rest in',
+        codes: [],
+      );
+    case 'never':
+      return const LessonHandExample(
+        id: 'never',
+        title: 'Never — only hole cards matter',
+        codes: [],
+      );
+    case 'showdown-only':
+      return const LessonHandExample(
+        id: 'showdown-only',
+        title: 'Only at showdown',
+        codes: [],
+      );
     case 'split':
       return const LessonHandExample(
         id: 'split',
