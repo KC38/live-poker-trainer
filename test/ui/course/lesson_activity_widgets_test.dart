@@ -5589,6 +5589,8 @@ void main() {
     );
     expect(find.byType(LessonActionTable), findsOneWidget);
     expect(find.text('Pot is open to a bet'), findsOneWidget);
+    expect(find.text('RAISE (off)'), findsOneWidget);
+    expect(find.text('CALL (off)'), findsNothing);
     var autoSubmits = 0;
     betController.onAutoSubmit = () => autoSubmits += 1;
     await tester.tap(find.text('BET 5'));
@@ -5597,6 +5599,39 @@ void main() {
     expect(autoSubmits, 1);
     expect(find.text('Checking…'), findsOneWidget);
     betController.dispose();
+
+    final raise = CourseActivity(
+      id: 'act-01-03-02-scaffolded-raise',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Tap Raise',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap how you charge.',
+      choices: const [
+        CourseChoice(id: 'raise-15', label: 'Raise to 15', action: 'RAISE'),
+        CourseChoice(id: 'call-flat', label: 'Call 5', action: 'CALL'),
+        CourseChoice(id: 'bet-again', label: 'Bet 5', action: 'BET'),
+      ],
+    );
+    final raiseController = LessonActivityController(activity: raise);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: raise,
+          controller: raiseController,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Villain bets 5'), findsOneWidget);
+    expect(find.text('BET (off)'), findsOneWidget);
+    expect(find.text('CHECK (off)'), findsNothing);
+    await tester.tap(find.text('RAISE TO 15'));
+    await tester.pump();
+    expect(raiseController.draft.choiceId, 'raise-15');
+    raiseController.dispose();
 
     final allIn = CourseActivity(
       id: 'act-01-03-02-unguided-allin',
@@ -5629,6 +5664,41 @@ void main() {
     await tester.pump();
     expect(allInController.draft.choiceId, 'shove-12');
     allInController.dispose();
+  });
+
+  testWidgets('open-pot checkpoint marks Raise and Call off', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-01-03-02-checkpoint-names',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Tap Bet',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Pot is unchecked. Tap the first chips into the pot.',
+      choices: const [
+        CourseChoice(id: 'named-bet', label: 'Bet 4', action: 'BET'),
+        CourseChoice(id: 'named-raise', label: 'Raise', action: 'RAISE'),
+        CourseChoice(id: 'named-call', label: 'Call', action: 'CALL'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('BET 4'), findsOneWidget);
+    expect(find.text('RAISE (off)'), findsOneWidget);
+    expect(find.text('CALL (off)'), findsOneWidget);
+    await tester.tap(find.text('RAISE (off)'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'named-raise');
+    controller.dispose();
   });
 
   testWidgets('feedback sheet never shows life loss for questionable', (
