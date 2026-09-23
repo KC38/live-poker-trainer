@@ -388,6 +388,12 @@ enum LessonTableRegion {
 
   /// Implied-odds checkpoint: short stacks always (mistake).
   ioShortAlways,
+
+  /// Thin-value checkpoint: change the line when the read justifies it (correct).
+  thinValueReadLine,
+
+  /// Thin-value checkpoint: flip a coin (mistake).
+  thinValueFlipCoin,
 }
 
 /// How the mini-table is arranged.
@@ -535,6 +541,9 @@ enum LessonTableLayout {
 
   /// Implied-odds checkpoint: when IO rise.
   impliedOddsRiseOutcomes,
+
+  /// Thin-value checkpoint: read-driven line vs coin flip.
+  thinValueReadOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1191,6 +1200,11 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.impliedOddsRiseOutcomes,
         caption: 'When do implied odds rise most?',
       );
+    case 'act-05-04-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.thinValueReadOutcomes,
+        caption: 'Same hand, different types — what changes?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -1775,6 +1789,12 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.ioShortAlways => pick('short'),
         _ => null,
       };
+    case 'act-05-04-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.thinValueReadLine => pick('read'),
+        LessonTableRegion.thinValueFlipCoin => pick('random'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -1890,7 +1910,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-05-02-01-guided' ||
       activity.id == 'act-05-02-01-unguided' ||
       activity.id == 'act-05-02-01-checkpoint' ||
-      activity.id == 'act-05-03-01-checkpoint';
+      activity.id == 'act-05-03-01-checkpoint' ||
+      activity.id == 'act-05-04-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -2097,6 +2118,8 @@ class LessonTableContext extends StatelessWidget {
           _buildDeepRewardsOutcomes(),
       LessonTableLayout.impliedOddsRiseOutcomes =>
           _buildImpliedOddsRiseOutcomes(),
+      LessonTableLayout.thinValueReadOutcomes =>
+          _buildThinValueReadOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -4067,6 +4090,37 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Cuts future',
           visual: const Icon(
             Icons.trending_down,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildThinValueReadOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive thin value — tap what must change with the type',
+      semanticsStatic: 'Thin value read outcomes',
+      caption: scene.caption ?? 'Same hand, different types — what changes?',
+      phases: [
+        (
+          region: LessonTableRegion.thinValueReadLine,
+          title: 'The line',
+          detail: 'When the read fits',
+          visual: const Icon(
+            Icons.alt_route,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.thinValueFlipCoin,
+          title: 'Coin flip',
+          detail: 'Not strategy',
+          visual: const Icon(
+            Icons.casino_outlined,
             color: AppColors.slate,
             size: 24,
           ),

@@ -406,6 +406,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Deep cash play — tap what it rewards.',
       'act-05-03-01-checkpoint' =>
           'Implied odds — tap when they rise most.',
+      'act-05-04-01-checkpoint' =>
+          'Same hand, new type — tap what must change.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -462,7 +464,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-05-02-01-guided' ||
             widget.activity.id == 'act-05-02-01-unguided' ||
             widget.activity.id == 'act-05-02-01-checkpoint' ||
-            widget.activity.id == 'act-05-03-01-checkpoint';
+            widget.activity.id == 'act-05-03-01-checkpoint' ||
+            widget.activity.id == 'act-05-04-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

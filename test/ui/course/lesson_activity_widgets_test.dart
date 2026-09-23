@@ -9949,6 +9949,198 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s5 thin-value guided docks Bet thin value on Station felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-04-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Thin value bet.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'River second pair. Calling Station checked twice. Action?',
+      choices: const [
+        CourseChoice(
+          id: 'tv',
+          label: 'Bet thin value',
+          action: 'BET',
+          amountBb: 7,
+        ),
+        CourseChoice(id: 'check', label: 'Check always', action: 'CHECK'),
+        CourseChoice(
+          id: 'overbet',
+          label: 'Overbet bluff',
+          action: 'BET',
+          amountBb: 40,
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    expect(resolveLessonActionSpot(activity)?.heroCodes, ['Jh', '9d']);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Station checked · second pair — tap Bet thin value.'),
+      findsOneWidget,
+    );
+    expect(find.text('Tap your action on the dock.'), findsNothing);
+    expect(find.text('BET THIN VALUE'), findsOneWidget);
+    await tester.tap(find.text('BET THIN VALUE'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'tv');
+    controller.dispose();
+  });
+
+  testWidgets('s5 thin-value scaffolded docks Call on Maniac felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-04-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Call wider.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Maniac barrels river. You have second pair. Action?',
+      choices: const [
+        CourseChoice(id: 'call-m', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'fold-m', label: 'Fold', action: 'FOLD'),
+        CourseChoice(
+          id: 'raise-m',
+          label: 'Hero-raise for ego',
+          action: 'RAISE',
+          amountBb: 50,
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Maniac barrels second pair — tap Call.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('CALL'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'call-m');
+    controller.dispose();
+  });
+
+  testWidgets('s5 thin-value unguided docks Check back on Nit felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-04-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Check back — thin value dies.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Same second pair river. Nit checked to you. Action?',
+      choices: const [
+        CourseChoice(id: 'check-nit', label: 'Check back', action: 'CHECK'),
+        CourseChoice(
+          id: 'bet-nit',
+          label: 'Bet thin',
+          action: 'BET',
+          amountBb: 7,
+        ),
+        CourseChoice(
+          id: 'jam-nit',
+          label: 'Overbet',
+          action: 'BET',
+          amountBb: 60,
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Nit checked · second pair — tap Check.'),
+      findsOneWidget,
+    );
+    expect(find.text('CHECK'), findsOneWidget);
+    await tester.tap(find.text('CHECK'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'check-nit');
+    controller.dispose();
+  });
+
+  testWidgets('s5 thin-value checkpoint taps The line on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-04-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'The recommendation only when the read justifies it.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Same hand, different types — what must change?',
+      choices: const [
+        CourseChoice(
+          id: 'read',
+          label: 'The line — only when the authored read justifies it',
+        ),
+        CourseChoice(id: 'random', label: 'Flip a coin every time'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Same hand, new type — tap what must change.'),
+      findsOneWidget,
+    );
+    expect(find.text('The line'), findsOneWidget);
+    await tester.tap(find.text('The line'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'read');
+    controller.dispose();
+  });
+
   testWidgets('s4 meet nit guided taps Nit on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-04-07-02-guided',

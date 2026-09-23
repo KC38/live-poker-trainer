@@ -692,6 +692,38 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         facingBet: true,
         feltStatusLine: 'Dominated draw — fold the leak',
       );
+    case 'act-05-04-01-guided':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', '9d'],
+        boardCodes: ['Kc', '9s', '4h', '2d', '7c'],
+        potLabel: 'Pot 32',
+        villainLine: 'Calling Station checked twice',
+        streetLabel: 'River · second pair',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Station pays — bet thin value',
+      );
+    case 'act-05-04-01-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', '9d'],
+        boardCodes: ['Kc', '9s', '4h', '2d', '7c'],
+        potLabel: 'Pot 48',
+        villainLine: 'Maniac barrels river',
+        streetLabel: 'River · second pair',
+        facingBet: true,
+        feltStatusLine: 'Wide barrels — call the catch',
+      );
+    case 'act-05-04-01-unguided':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', '9d'],
+        boardCodes: ['Kc', '9s', '4h', '2d', '7c'],
+        potLabel: 'Pot 32',
+        villainLine: 'Nit checked to you',
+        streetLabel: 'River · second pair',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Nit overfolds — check back',
+      );
   }
   return null;
 }
@@ -906,6 +938,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-05-03-01-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-05-04-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
@@ -4546,18 +4582,19 @@ class _ThinValueDemoState extends State<ThinValueDemo> {
               ],
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap Thin, Catch, and Barrels'
-                : 'Thin value needs calls · catches need barrels',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues the three taps — no duplicate footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Thin value needs calls · catches need barrels',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );
