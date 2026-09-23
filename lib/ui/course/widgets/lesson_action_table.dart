@@ -652,6 +652,16 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'Multiway sets — bet thick',
       );
+    case 'act-05-02-01-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', '9d'],
+        boardCodes: ['As', '8h', '7h'],
+        potLabel: 'Pot 40',
+        villainLine: 'Huge check-raise · wet flop',
+        streetLabel: 'Flop · top pair weak · 250bb',
+        facingBet: true,
+        feltStatusLine: 'Deep + wet + heat — fold light TP',
+      );
   }
   return null;
 }
@@ -858,6 +868,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-05-01-01-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-05-02-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
@@ -4295,18 +4309,19 @@ class _DeepStacksDemoState extends State<DeepStacksDemo> {
               ],
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap Deep, Realize, and Stack'
-                : 'More room to realize · and to lose',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues the three taps — no duplicate footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'More room to realize · and to lose',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );
