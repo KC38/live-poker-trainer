@@ -526,6 +526,30 @@ enum LessonTableRegion {
 
   /// Range/nut checkpoint: bet any two (mistake).
   rangeAdvBetAnyTwo,
+
+  /// Equity realize guided: in position (correct).
+  eqRealizeIp,
+
+  /// Equity realize guided: out of position (mistake).
+  eqRealizeOop,
+
+  /// Equity realize scaffolded: discount / fold (correct).
+  eqRealizeDiscount,
+
+  /// Equity realize scaffolded: hero-call (mistake).
+  eqRealizeHero,
+
+  /// Equity realize unguided: fold equity (correct).
+  eqRealizeFoldEq,
+
+  /// Equity realize unguided: fancy play (mistake).
+  eqRealizeFancy,
+
+  /// Equity realize checkpoint: position + initiative (correct).
+  eqRealizePosInit,
+
+  /// Equity realize checkpoint: hope alone (mistake).
+  eqRealizeHope,
 }
 
 /// How the mini-table is arranged.
@@ -745,6 +769,18 @@ enum LessonTableLayout {
 
   /// Range/nut checkpoint: apply pressure vs bet any two.
   rangeAdvPressOutcomes,
+
+  /// Equity realize guided: IP vs OOP.
+  eqRealizeIpOutcomes,
+
+  /// Equity realize scaffolded: discount vs hero-call.
+  eqRealizeDiscountOutcomes,
+
+  /// Equity realize unguided: fold equity vs fancy play.
+  eqRealizeAggressionOutcomes,
+
+  /// Equity realize checkpoint: position+initiative vs hope.
+  eqRealizePosOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1521,6 +1557,26 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.rangeAdvPressOutcomes,
         caption: 'Advantage is a reason to?',
       );
+    case 'act-06-02-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.eqRealizeIpOutcomes,
+        caption: 'Same draw OOP vs IP — better where?',
+      );
+    case 'act-06-02-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.eqRealizeDiscountOutcomes,
+        caption: 'Weak SDV OOP vs dual barrels?',
+      );
+    case 'act-06-02-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.eqRealizeAggressionOutcomes,
+        caption: 'Semi-bluff XR purpose?',
+      );
+    case 'act-06-02-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.eqRealizePosOutcomes,
+        caption: 'Equity realization rises with?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -2250,6 +2306,30 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.rangeAdvBetAnyTwo => pick('random'),
         _ => null,
       };
+    case 'act-06-02-01-guided':
+      return switch (region) {
+        LessonTableRegion.eqRealizeIp => pick('ip'),
+        LessonTableRegion.eqRealizeOop => pick('oop'),
+        _ => null,
+      };
+    case 'act-06-02-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.eqRealizeDiscount => pick('discount'),
+        LessonTableRegion.eqRealizeHero => pick('hero'),
+        _ => null,
+      };
+    case 'act-06-02-01-unguided':
+      return switch (region) {
+        LessonTableRegion.eqRealizeFoldEq => pick('realize'),
+        LessonTableRegion.eqRealizeFancy => pick('fancy'),
+        _ => null,
+      };
+    case 'act-06-02-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.eqRealizePosInit => pick('pos'),
+        LessonTableRegion.eqRealizeHope => pick('hope'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -2389,7 +2469,11 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-05-09-02-cp-stop' ||
       activity.id == 'act-06-01-01-guided' ||
       activity.id == 'act-06-01-01-scaffolded' ||
-      activity.id == 'act-06-01-01-checkpoint';
+      activity.id == 'act-06-01-01-checkpoint' ||
+      activity.id == 'act-06-02-01-guided' ||
+      activity.id == 'act-06-02-01-scaffolded' ||
+      activity.id == 'act-06-02-01-unguided' ||
+      activity.id == 'act-06-02-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -2637,6 +2721,12 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.rangeAdvNutsOutcomes => _buildRangeAdvNutsOutcomes(),
       LessonTableLayout.rangeAdvPressOutcomes =>
           _buildRangeAdvPressOutcomes(),
+      LessonTableLayout.eqRealizeIpOutcomes => _buildEqRealizeIpOutcomes(),
+      LessonTableLayout.eqRealizeDiscountOutcomes =>
+          _buildEqRealizeDiscountOutcomes(),
+      LessonTableLayout.eqRealizeAggressionOutcomes =>
+          _buildEqRealizeAggressionOutcomes(),
+      LessonTableLayout.eqRealizePosOutcomes => _buildEqRealizePosOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -5361,6 +5451,130 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Still need a plan',
           visual: const Icon(
             Icons.casino_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEqRealizeIpOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive equity realization — tap in position vs out of position',
+      semanticsStatic: 'Equity realization IP outcomes',
+      caption: scene.caption ?? 'Same draw OOP vs IP — better where?',
+      phases: [
+        (
+          region: LessonTableRegion.eqRealizeIp,
+          title: 'In position',
+          detail: 'Realize better',
+          visual: const Icon(
+            Icons.chair_alt,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.eqRealizeOop,
+          title: 'Out of position',
+          detail: 'Realizes worse',
+          visual: const Icon(
+            Icons.event_seat_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEqRealizeDiscountOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive equity realization — tap discount vs hero-call',
+      semanticsStatic: 'Equity realization discount outcomes',
+      caption: scene.caption ?? 'Weak SDV OOP vs dual barrels?',
+      phases: [
+        (
+          region: LessonTableRegion.eqRealizeDiscount,
+          title: 'Discount / fold',
+          detail: 'OOP one-pair dies',
+          visual: const Icon(
+            Icons.trending_down,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.eqRealizeHero,
+          title: 'Hero-call',
+          detail: 'Over-realize fantasy',
+          visual: const Icon(
+            Icons.volunteer_activism_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEqRealizeAggressionOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive equity realization — tap fold equity vs fancy play',
+      semanticsStatic: 'Equity realization aggression outcomes',
+      caption: scene.caption ?? 'Semi-bluff XR purpose?',
+      phases: [
+        (
+          region: LessonTableRegion.eqRealizeFoldEq,
+          title: 'Fold equity',
+          detail: 'Deny cheap cards',
+          visual: const Icon(
+            Icons.flash_on,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.eqRealizeFancy,
+          title: 'Fancy play',
+          detail: 'Need a reason',
+          visual: const Icon(
+            Icons.auto_awesome_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEqRealizePosOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive equity realization — tap position+initiative vs hope',
+      semanticsStatic: 'Equity realization position outcomes',
+      caption: scene.caption ?? 'Equity realization rises with?',
+      phases: [
+        (
+          region: LessonTableRegion.eqRealizePosInit,
+          title: 'Position + initiative',
+          detail: 'Core levers',
+          visual: const Icon(
+            Icons.insights,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.eqRealizeHope,
+          title: 'Hope alone',
+          detail: 'Not a plan',
+          visual: const Icon(
+            Icons.help_outline,
             color: AppColors.slate,
             size: 24,
           ),

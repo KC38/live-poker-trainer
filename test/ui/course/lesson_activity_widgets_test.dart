@@ -3330,7 +3330,10 @@ void main() {
         ),
       );
       expect(find.byType(EquityRealizeDemo), findsOneWidget);
+      // Rex cue below the felt — not a second footer inside the demo.
       expect(find.text('Tap Equity, Cash, and Pos.'), findsOneWidget);
+      expect(find.text('Tap Equity, Cash, and Pos'), findsNothing);
+      expect(find.text('Position decides realization'), findsNothing);
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
@@ -11306,6 +11309,148 @@ void main() {
     await tester.tap(find.text('Apply pressure'));
     await tester.pump();
     expect(controller.draft.choiceId, 'press');
+    controller.dispose();
+  });
+
+  testWidgets('s6 equity guided taps In position on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-02-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'In position.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Same draw OOP vs IP. Where does it realize better?',
+      choices: const [
+        CourseChoice(id: 'ip', label: 'In position'),
+        CourseChoice(id: 'oop', label: 'Out of position'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Same draw — tap In position.'), findsOneWidget);
+    await tester.tap(find.text('In position'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'ip');
+    controller.dispose();
+  });
+
+  testWidgets('s6 equity scaffolded taps Discount / fold on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-02-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Discount and fold more.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Weak showdown value OOP facing dual barrels. Default?',
+      choices: const [
+        CourseChoice(id: 'discount', label: 'Discount / fold'),
+        CourseChoice(id: 'hero', label: 'Hero-call'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Weak SDV OOP — tap Discount / fold.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Discount / fold'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'discount');
+    controller.dispose();
+  });
+
+  testWidgets('s6 equity unguided taps Fold equity on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-02-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Realize equity via fold equity + outs.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Semi-bluff check-raise with nut draw IP-denied. Purpose?',
+      choices: const [
+        CourseChoice(id: 'realize', label: 'Fold equity'),
+        CourseChoice(id: 'fancy', label: 'Fancy play'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Nut draw XR — tap Fold equity.'), findsOneWidget);
+    await tester.tap(find.text('Fold equity'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'realize');
+    controller.dispose();
+  });
+
+  testWidgets('s6 equity checkpoint taps Position + initiative on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-02-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Position and initiative.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Equity realization rises with?',
+      choices: const [
+        CourseChoice(id: 'pos', label: 'Position + initiative'),
+        CourseChoice(id: 'hope', label: 'Hope alone'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Realization rises with — tap Position + initiative.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Position + initiative'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'pos');
     controller.dispose();
   });
 

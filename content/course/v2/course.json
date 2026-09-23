@@ -14388,8 +14388,8 @@
                     },
                     {
                       "id": "oop",
-                      "label": "Out of position always",
-                      "accessibilityText": "Out of position always",
+                      "label": "Out of position",
+                      "accessibilityText": "Out of position",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "OOP realizes worse.",
@@ -14418,8 +14418,8 @@
                   "choices": [
                     {
                       "id": "discount",
-                      "label": "Discount realization — fold more",
-                      "accessibilityText": "Discount realization — fold more",
+                      "label": "Discount / fold",
+                      "accessibilityText": "Discount / fold",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "OOP one-pair dies to pressure."
@@ -14427,8 +14427,8 @@
                     },
                     {
                       "id": "hero",
-                      "label": "Hero-call every street",
-                      "accessibilityText": "Hero-call every street",
+                      "label": "Hero-call",
+                      "accessibilityText": "Hero-call",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Over-realize fantasy.",
@@ -14457,8 +14457,8 @@
                   "choices": [
                     {
                       "id": "realize",
-                      "label": "Create fold equity and deny their cheap cards",
-                      "accessibilityText": "Create fold equity and deny their cheap cards",
+                      "label": "Fold equity",
+                      "accessibilityText": "Fold equity",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Aggression can realize equity."
@@ -14466,8 +14466,8 @@
                     },
                     {
                       "id": "fancy",
-                      "label": "Fancy play for its own sake",
-                      "accessibilityText": "Fancy play for its own sake",
+                      "label": "Fancy play",
+                      "accessibilityText": "Fancy play",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Need a reason.",
@@ -14496,8 +14496,8 @@
                   "choices": [
                     {
                       "id": "pos",
-                      "label": "Position and initiative",
-                      "accessibilityText": "Position and initiative",
+                      "label": "Position + initiative",
+                      "accessibilityText": "Position + initiative",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Core levers."

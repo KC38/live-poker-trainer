@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "f482b5a7ad75b0fde503068f0a817d511dfa9bb6f3e70ca197a6da3cce6e30b1",
+  "contentChecksum": "8fc01c82d8e268e4a599586f81b17b50206301514a0fffc26c94bdd6a2f6d356",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -11289,8 +11289,8 @@
                     },
                     {
                       "id": "oop",
-                      "label": "Out of position always",
-                      "accessibilityText": "Out of position always"
+                      "label": "Out of position",
+                      "accessibilityText": "Out of position"
                     }
                   ]
                 },
@@ -11314,13 +11314,13 @@
                   "choices": [
                     {
                       "id": "discount",
-                      "label": "Discount realization — fold more",
-                      "accessibilityText": "Discount realization — fold more"
+                      "label": "Discount / fold",
+                      "accessibilityText": "Discount / fold"
                     },
                     {
                       "id": "hero",
-                      "label": "Hero-call every street",
-                      "accessibilityText": "Hero-call every street"
+                      "label": "Hero-call",
+                      "accessibilityText": "Hero-call"
                     }
                   ]
                 },
@@ -11344,13 +11344,13 @@
                   "choices": [
                     {
                       "id": "realize",
-                      "label": "Create fold equity and deny their cheap cards",
-                      "accessibilityText": "Create fold equity and deny their cheap cards"
+                      "label": "Fold equity",
+                      "accessibilityText": "Fold equity"
                     },
                     {
                       "id": "fancy",
-                      "label": "Fancy play for its own sake",
-                      "accessibilityText": "Fancy play for its own sake"
+                      "label": "Fancy play",
+                      "accessibilityText": "Fancy play"
                     }
                   ]
                 },
@@ -11374,8 +11374,8 @@
                   "choices": [
                     {
                       "id": "pos",
-                      "label": "Position and initiative",
-                      "accessibilityText": "Position and initiative"
+                      "label": "Position + initiative",
+                      "accessibilityText": "Position + initiative"
                     },
                     {
                       "id": "hope",

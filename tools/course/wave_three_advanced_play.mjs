@@ -838,7 +838,7 @@ export function buildSectionSix() {
                 choices: [
                   choice("ip", "In position", "recommended",
                     "IP sees cheap cards and controls size."),
-                  choice("oop", "Out of position always", "clear_mistake",
+                  choice("oop", "Out of position", "clear_mistake",
                     "OOP realizes worse.", {betterChoiceId: "ip"})
                 ],
               }),
@@ -848,9 +848,9 @@ export function buildSectionSix() {
                 a11y: "Discount and fold more.",
                 objectives: ["Discount OOP equity"],
                 choices: [
-                  choice("discount", "Discount realization — fold more", "recommended",
+                  choice("discount", "Discount / fold", "recommended",
                     "OOP one-pair dies to pressure."),
-                  choice("hero", "Hero-call every street", "clear_mistake",
+                  choice("hero", "Hero-call", "clear_mistake",
                     "Over-realize fantasy.", {betterChoiceId: "discount"})
                 ],
               }),
@@ -860,9 +860,9 @@ export function buildSectionSix() {
                 a11y: "Realize equity via fold equity + outs.",
                 objectives: ["Use aggression to realize when appropriate"], lifeLoss: true,
                 choices: [
-                  choice("realize", "Create fold equity and deny their cheap cards", "recommended",
+                  choice("realize", "Fold equity", "recommended",
                     "Aggression can realize equity."),
-                  choice("fancy", "Fancy play for its own sake", "clear_mistake",
+                  choice("fancy", "Fancy play", "clear_mistake",
                     "Need a reason.", {betterChoiceId: "realize"})
                 ],
               }),
@@ -872,7 +872,7 @@ export function buildSectionSix() {
                 a11y: "Position and initiative.",
                 objectives: ["Prefer IP for marginal equity"], lifeLoss: true,
                 choices: [
-                  choice("pos", "Position and initiative", "recommended",
+                  choice("pos", "Position + initiative", "recommended",
                     "Core levers."),
                   choice("hope", "Hope alone", "clear_mistake",
                     "Not a plan.", {betterChoiceId: "pos"})
