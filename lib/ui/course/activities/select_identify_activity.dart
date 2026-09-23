@@ -394,6 +394,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Tiny range, huge raise — tap the line.',
       'act-04-10-02-jump-maniac' =>
           'Barrels forever, top pair — tap the line.',
+      'act-05-01-01-guided' =>
+          'Four-way flop — tap the best continue.',
+      'act-05-01-01-checkpoint' =>
+          'Multiway priority — tap the construction rule.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -444,7 +448,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-04-10-02-jump-range' ||
             widget.activity.id == 'act-04-10-02-jump-station' ||
             widget.activity.id == 'act-04-10-02-jump-nit' ||
-            widget.activity.id == 'act-04-10-02-jump-maniac';
+            widget.activity.id == 'act-04-10-02-jump-maniac' ||
+            widget.activity.id == 'act-05-01-01-guided' ||
+            widget.activity.id == 'act-05-01-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

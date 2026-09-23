@@ -247,6 +247,11 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // S4 jump: tap answers on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-05-01-01-guided' ||
+      activity.id == 'act-05-01-01-checkpoint') {
+    // Multiway ranges: tap nut preference on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

@@ -346,6 +346,21 @@ enum LessonTableRegion {
 
   /// S4 jump: Maniac fold all one-pair (mistake).
   jumpManiacFoldAll,
+
+  /// Multiway: nut flush draw (correct).
+  multiwayNutFd,
+
+  /// Multiway: weak flush draw (questionable).
+  multiwayWeakFd,
+
+  /// Multiway: complete air (mistake).
+  multiwayAirStab,
+
+  /// Multiway checkpoint: nut potential (correct).
+  multiwayNutsPriority,
+
+  /// Multiway checkpoint: any two (mistake).
+  multiwayAnyTwo,
 }
 
 /// How the mini-table is arranged.
@@ -475,6 +490,12 @@ enum LessonTableLayout {
 
   /// S4 jump: maniac exploit tiles.
   jumpManiacExploitOutcomes,
+
+  /// Multiway guided: NFD vs weak FD vs air.
+  multiwayContinueOutcomes,
+
+  /// Multiway checkpoint: nut potential vs any two.
+  multiwayPriorityOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1101,6 +1122,16 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.jumpManiacExploitOutcomes,
         caption: 'Barrels forever · you have top pair',
       );
+    case 'act-05-01-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.multiwayContinueOutcomes,
+        caption: 'Four-way flop — best continue',
+      );
+    case 'act-05-01-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.multiwayPriorityOutcomes,
+        caption: 'Multiway construction priority',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -1647,6 +1678,19 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.jumpManiacFoldAll => pick('j4-man-fold'),
         _ => null,
       };
+    case 'act-05-01-01-guided':
+      return switch (region) {
+        LessonTableRegion.multiwayNutFd => pick('nfd'),
+        LessonTableRegion.multiwayWeakFd => pick('weak-fd'),
+        LessonTableRegion.multiwayAirStab => pick('air'),
+        _ => null,
+      };
+    case 'act-05-01-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.multiwayNutsPriority => pick('nuts'),
+        LessonTableRegion.multiwayAnyTwo => pick('any-two'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -1756,7 +1800,9 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-04-10-02-jump-range' ||
       activity.id == 'act-04-10-02-jump-station' ||
       activity.id == 'act-04-10-02-jump-nit' ||
-      activity.id == 'act-04-10-02-jump-maniac';
+      activity.id == 'act-04-10-02-jump-maniac' ||
+      activity.id == 'act-05-01-01-guided' ||
+      activity.id == 'act-05-01-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -1952,6 +1998,10 @@ class LessonTableContext extends StatelessWidget {
           _buildJumpNitExploitOutcomes(),
       LessonTableLayout.jumpManiacExploitOutcomes =>
           _buildJumpManiacExploitOutcomes(),
+      LessonTableLayout.multiwayContinueOutcomes =>
+          _buildMultiwayContinueOutcomes(),
+      LessonTableLayout.multiwayPriorityOutcomes =>
+          _buildMultiwayPriorityOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -3720,6 +3770,78 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Too tight',
           visual: const Icon(
             Icons.block,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMultiwayContinueOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive multiway — tap nut flush draw, weak draw, or air',
+      semanticsStatic: 'Multiway continue outcomes',
+      caption: scene.caption ?? 'Four-way flop — best continue',
+      phases: [
+        (
+          region: LessonTableRegion.multiwayNutFd,
+          title: 'Nut FD',
+          detail: 'Best equity',
+          visual: const Icon(
+            Icons.workspace_premium_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.multiwayWeakFd,
+          title: 'Weak FD',
+          detail: 'Dominated',
+          visual: const Icon(
+            Icons.water_drop_outlined,
+            color: AppColors.cream,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.multiwayAirStab,
+          title: 'Air stab',
+          detail: 'Crowds punish',
+          visual: const Icon(
+            Icons.air,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMultiwayPriorityOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive multiway — tap nut potential or any two',
+      semanticsStatic: 'Multiway priority outcomes',
+      caption: scene.caption ?? 'Multiway construction priority',
+      phases: [
+        (
+          region: LessonTableRegion.multiwayNutsPriority,
+          title: 'Nut potential',
+          detail: 'Clean equity',
+          visual: const Icon(
+            Icons.workspace_premium_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.multiwayAnyTwo,
+          title: 'Any two',
+          detail: 'Crowds punish',
+          visual: const Icon(
+            Icons.all_inclusive,
             color: AppColors.slate,
             size: 24,
           ),

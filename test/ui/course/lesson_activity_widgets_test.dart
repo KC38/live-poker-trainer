@@ -9701,6 +9701,48 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s5 multiway guided taps Nut FD on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-05-01-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Nut flush draw beats weak pair-draw mixes.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Four-way flop. Best continue with?',
+      choices: const [
+        CourseChoice(id: 'nfd', label: 'Nut flush draw'),
+        CourseChoice(id: 'weak-fd', label: 'Low flush draw with no overs'),
+        CourseChoice(id: 'air', label: 'Complete air for a stab'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Four-way flop — tap the best continue.'),
+      findsOneWidget,
+    );
+    expect(find.text('Nut FD'), findsOneWidget);
+    await tester.tap(find.text('Nut FD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'nfd');
+    controller.dispose();
+  });
+
   testWidgets('s4 meet nit guided taps Nit on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-04-07-02-guided',
