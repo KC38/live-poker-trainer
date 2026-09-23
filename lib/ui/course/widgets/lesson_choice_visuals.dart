@@ -442,6 +442,13 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Plans by pot type: tap limped / SRP / 3-4bet plan tiles on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-07-05-01-guided' ||
+      activity.id == 'act-07-05-01-scaffolded' ||
+      activity.id == 'act-07-05-01-unguided' ||
+      activity.id == 'act-07-05-01-checkpoint') {
+    // HU vs multiway: tap bluff / value / steal / player-count tiles on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.
