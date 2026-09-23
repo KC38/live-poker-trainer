@@ -18479,4 +18479,293 @@ void main() {
     controller.dispose();
   });
 
+
+  testWidgets('s7 five type final cs taps Station value on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-07-12-01-cs',
+      order: 1,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.playerReadClassify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Calling Station — value more.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Sticky calls three streets. Label + exploit?',
+      choices: const [
+        CourseChoice(
+          id: 'cs',
+          label: 'Calling Station — thicker value, fewer bluffs',
+        ),
+        CourseChoice(
+          id: 'cs-wrong',
+          label: 'Calling Station — bluff more',
+        ),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Sticky calls — tap Station value.'), findsOneWidget);
+    await tester.tap(find.text('Station value'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'cs');
+    controller.dispose();
+  });
+
+  testWidgets('s7 five type final nit taps Nit respect on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-07-12-01-nit',
+      order: 2,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.playerReadClassify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Nit — respect.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tiny range, huge check-raise. Label + line?',
+      choices: const [
+        CourseChoice(
+          id: 'nit',
+          label: 'Nit — respect heat; steal elsewhere',
+        ),
+        CourseChoice(
+          id: 'nit-wrong',
+          label: 'Nit — call down light always',
+        ),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Tiny range heat — tap Nit respect.'), findsOneWidget);
+    await tester.tap(find.text('Nit respect'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'nit');
+    controller.dispose();
+  });
+
+  testWidgets('s7 five type final maniac taps Maniac catch on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-12-01-maniac',
+      order: 3,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.playerReadClassify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Maniac — call wider.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Endless barrels, never folds. Label + line?',
+      choices: const [
+        CourseChoice(
+          id: 'man',
+          label: 'Maniac — widen catches; avoid ego raises',
+        ),
+        CourseChoice(
+          id: 'man-wrong',
+          label: 'Maniac — fold all one-pair forever',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Endless barrels — tap Maniac catch.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Maniac catch'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'man');
+    controller.dispose();
+  });
+
+  testWidgets('s7 five type final tag taps TAG respect on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-07-12-01-tag',
+      order: 4,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.playerReadClassify,
+      estimatedSeconds: 40,
+      accessibilityText: 'TAG — respect.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Selective entry, disciplined barrels. Label + vs raise?',
+      choices: const [
+        CourseChoice(
+          id: 'tag',
+          label: 'TAG — respect raises; steal less than vs nits',
+        ),
+        CourseChoice(
+          id: 'tag-wrong',
+          label: 'TAG — bluff their check-raises light',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Selective barrels — tap TAG respect.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('TAG respect'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'tag');
+    controller.dispose();
+  });
+
+  testWidgets('s7 five type final lag taps LAG trap on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-07-12-01-lag',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.playerReadClassify,
+      estimatedSeconds: 40,
+      accessibilityText: 'LAG — trap/call wider.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Wide entry, sustained pressure, some folds. Label + line?',
+      choices: const [
+        CourseChoice(
+          id: 'lag',
+          label: 'LAG — trap more; call wider; fancy less',
+        ),
+        CourseChoice(
+          id: 'lag-wrong',
+          label: 'LAG — bluff into them more',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Wide pressure — tap LAG trap.'), findsOneWidget);
+    await tester.tap(find.text('LAG trap'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'lag');
+    controller.dispose();
+  });
+
+  testWidgets('s7 five type final uncertain taps Low certainty on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-12-01-uncertain',
+      order: 6,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Low — keep baseline heavier.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Three mixed samples only. Confidence?',
+      choices: const [
+        CourseChoice(
+          id: 'low',
+          label: 'Low — lean baseline until samples grow',
+        ),
+        CourseChoice(
+          id: 'max',
+          label: 'Maximum certainty on a label',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Three mixed samples — tap Low certainty.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Low certainty'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'low');
+    controller.dispose();
+  });
+
+  testWidgets('s7 five type final retire taps Retire model on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-12-01-retire',
+      order: 7,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Retire/update the label.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'Old Calling Station now folds rivers and 3-bets light. Do?',
+      choices: const [
+        CourseChoice(
+          id: 'retire',
+          label: 'Retire or update the model',
+        ),
+        CourseChoice(
+          id: 'freeze',
+          label: 'Keep the old label forever',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Label flipped — tap Retire model.'), findsOneWidget);
+    await tester.tap(find.text('Retire model'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'retire');
+    controller.dispose();
+  });
+
 }

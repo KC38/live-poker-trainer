@@ -1057,6 +1057,48 @@ enum LessonTableRegion {
 
   /// Live warm-up checkpoint: mash buttons (mistake).
   liveWarmupMash,
+
+  /// Five-type final CS: thicker value (correct).
+  fiveTypeCsValue,
+
+  /// Five-type final CS: bluff more (mistake).
+  fiveTypeCsBluff,
+
+  /// Five-type final Nit: respect heat (correct).
+  fiveTypeNitRespect,
+
+  /// Five-type final Nit: call down light (mistake).
+  fiveTypeNitCallLight,
+
+  /// Five-type final Maniac: widen catches (correct).
+  fiveTypeManiacCatch,
+
+  /// Five-type final Maniac: fold all one-pair (mistake).
+  fiveTypeManiacFoldAll,
+
+  /// Five-type final TAG: respect raises (correct).
+  fiveTypeTagRespect,
+
+  /// Five-type final TAG: bluff check-raises (mistake).
+  fiveTypeTagBluffXr,
+
+  /// Five-type final LAG: trap / call wider (correct).
+  fiveTypeLagTrap,
+
+  /// Five-type final LAG: bluff into them (mistake).
+  fiveTypeLagBluffMore,
+
+  /// Five-type final uncertain: low certainty (correct).
+  fiveTypeLowCertainty,
+
+  /// Five-type final uncertain: max certainty (mistake).
+  fiveTypeMaxCertainty,
+
+  /// Five-type final retire: retire/update (correct).
+  fiveTypeRetire,
+
+  /// Five-type final retire: freeze forever (mistake).
+  fiveTypeFreeze,
 }
 
 /// How the mini-table is arranged.
@@ -1549,6 +1591,27 @@ enum LessonTableLayout {
 
   /// Live warm-up checkpoint: one hand vs mash buttons.
   liveWarmupCheckpointOutcomes,
+
+  /// Five-type final CS outcomes.
+  fiveTypeCsOutcomes,
+
+  /// Five-type final Nit outcomes.
+  fiveTypeNitOutcomes,
+
+  /// Five-type final Maniac outcomes.
+  fiveTypeManiacOutcomes,
+
+  /// Five-type final TAG outcomes.
+  fiveTypeTagOutcomes,
+
+  /// Five-type final LAG outcomes.
+  fiveTypeLagOutcomes,
+
+  /// Five-type final uncertain outcomes.
+  fiveTypeUncertainOutcomes,
+
+  /// Five-type final retire outcomes.
+  fiveTypeRetireOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -2750,6 +2813,41 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         layout: LessonTableLayout.liveWarmupCheckpointOutcomes,
         caption: 'Warm-up goal?',
+      );
+    case 'act-07-12-01-cs':
+      return const LessonTableScene(
+        layout: LessonTableLayout.fiveTypeCsOutcomes,
+        caption: 'Sticky calls three streets. Label + exploit?',
+      );
+    case 'act-07-12-01-nit':
+      return const LessonTableScene(
+        layout: LessonTableLayout.fiveTypeNitOutcomes,
+        caption: 'Tiny range, huge check-raise. Label + line?',
+      );
+    case 'act-07-12-01-maniac':
+      return const LessonTableScene(
+        layout: LessonTableLayout.fiveTypeManiacOutcomes,
+        caption: 'Endless barrels, never folds. Label + line?',
+      );
+    case 'act-07-12-01-tag':
+      return const LessonTableScene(
+        layout: LessonTableLayout.fiveTypeTagOutcomes,
+        caption: 'Selective entry, disciplined barrels. Label + vs raise?',
+      );
+    case 'act-07-12-01-lag':
+      return const LessonTableScene(
+        layout: LessonTableLayout.fiveTypeLagOutcomes,
+        caption: 'Wide entry, sustained pressure, some folds. Label + line?',
+      );
+    case 'act-07-12-01-uncertain':
+      return const LessonTableScene(
+        layout: LessonTableLayout.fiveTypeUncertainOutcomes,
+        caption: 'Three mixed samples only. Confidence?',
+      );
+    case 'act-07-12-01-retire':
+      return const LessonTableScene(
+        layout: LessonTableLayout.fiveTypeRetireOutcomes,
+        caption: 'Old Calling Station now folds rivers and 3-bets light. Do?',
       );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
@@ -4005,6 +4103,48 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.liveWarmupMash => pick('grind'),
         _ => null,
       };
+    case 'act-07-12-01-cs':
+      return switch (region) {
+        LessonTableRegion.fiveTypeCsValue => pick('cs'),
+        LessonTableRegion.fiveTypeCsBluff => pick('cs-wrong'),
+        _ => null,
+      };
+    case 'act-07-12-01-nit':
+      return switch (region) {
+        LessonTableRegion.fiveTypeNitRespect => pick('nit'),
+        LessonTableRegion.fiveTypeNitCallLight => pick('nit-wrong'),
+        _ => null,
+      };
+    case 'act-07-12-01-maniac':
+      return switch (region) {
+        LessonTableRegion.fiveTypeManiacCatch => pick('man'),
+        LessonTableRegion.fiveTypeManiacFoldAll => pick('man-wrong'),
+        _ => null,
+      };
+    case 'act-07-12-01-tag':
+      return switch (region) {
+        LessonTableRegion.fiveTypeTagRespect => pick('tag'),
+        LessonTableRegion.fiveTypeTagBluffXr => pick('tag-wrong'),
+        _ => null,
+      };
+    case 'act-07-12-01-lag':
+      return switch (region) {
+        LessonTableRegion.fiveTypeLagTrap => pick('lag'),
+        LessonTableRegion.fiveTypeLagBluffMore => pick('lag-wrong'),
+        _ => null,
+      };
+    case 'act-07-12-01-uncertain':
+      return switch (region) {
+        LessonTableRegion.fiveTypeLowCertainty => pick('low'),
+        LessonTableRegion.fiveTypeMaxCertainty => pick('max'),
+        _ => null,
+      };
+    case 'act-07-12-01-retire':
+      return switch (region) {
+        LessonTableRegion.fiveTypeRetire => pick('retire'),
+        LessonTableRegion.fiveTypeFreeze => pick('freeze'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -4251,7 +4391,14 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-07-11-01-guided' ||
       activity.id == 'act-07-11-01-scaffolded' ||
       activity.id == 'act-07-11-01-unguided' ||
-      activity.id == 'act-07-11-01-checkpoint';
+      activity.id == 'act-07-11-01-checkpoint' ||
+      activity.id == 'act-07-12-01-cs' ||
+      activity.id == 'act-07-12-01-nit' ||
+      activity.id == 'act-07-12-01-maniac' ||
+      activity.id == 'act-07-12-01-tag' ||
+      activity.id == 'act-07-12-01-lag' ||
+      activity.id == 'act-07-12-01-uncertain' ||
+      activity.id == 'act-07-12-01-retire';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -4639,6 +4786,16 @@ class LessonTableContext extends StatelessWidget {
           _buildLiveWarmupUnguidedOutcomes(),
       LessonTableLayout.liveWarmupCheckpointOutcomes =>
           _buildLiveWarmupCheckpointOutcomes(),
+      LessonTableLayout.fiveTypeCsOutcomes => _buildFiveTypeCsOutcomes(),
+      LessonTableLayout.fiveTypeNitOutcomes => _buildFiveTypeNitOutcomes(),
+      LessonTableLayout.fiveTypeManiacOutcomes =>
+          _buildFiveTypeManiacOutcomes(),
+      LessonTableLayout.fiveTypeTagOutcomes => _buildFiveTypeTagOutcomes(),
+      LessonTableLayout.fiveTypeLagOutcomes => _buildFiveTypeLagOutcomes(),
+      LessonTableLayout.fiveTypeUncertainOutcomes =>
+          _buildFiveTypeUncertainOutcomes(),
+      LessonTableLayout.fiveTypeRetireOutcomes =>
+          _buildFiveTypeRetireOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -10110,6 +10267,174 @@ class LessonTableContext extends StatelessWidget {
             color: AppColors.danger,
             size: 24,
           ),
+        ),
+      ],
+    );
+  }
+
+
+  Widget _buildFiveTypeCsOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive five-type final — tap Station value or Station bluff',
+      semanticsStatic: 'Five-type final Calling Station outcomes',
+      caption: scene.caption ?? 'Sticky calls three streets. Label + exploit?',
+      phases: [
+        (
+          region: LessonTableRegion.fiveTypeCsValue,
+          title: 'Station value',
+          detail: 'Thicker · fewer bluffs',
+          visual: const Icon(Icons.savings_outlined, color: AppColors.gold, size: 24),
+        ),
+        (
+          region: LessonTableRegion.fiveTypeCsBluff,
+          title: 'Station bluff',
+          detail: 'Wrong exploit',
+          visual: const Icon(Icons.warning_amber_outlined, color: AppColors.danger, size: 24),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFiveTypeNitOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive five-type final — tap Nit respect or Nit call light',
+      semanticsStatic: 'Five-type final Nit outcomes',
+      caption: scene.caption ?? 'Tiny range, huge check-raise. Label + line?',
+      phases: [
+        (
+          region: LessonTableRegion.fiveTypeNitRespect,
+          title: 'Nit respect',
+          detail: 'Steal elsewhere',
+          visual: const Icon(Icons.shield_outlined, color: AppColors.gold, size: 24),
+        ),
+        (
+          region: LessonTableRegion.fiveTypeNitCallLight,
+          title: 'Nit call light',
+          detail: 'Wrong vs heat',
+          visual: const Icon(Icons.call_received, color: AppColors.danger, size: 24),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFiveTypeManiacOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive five-type final — tap Maniac catch or Maniac fold all',
+      semanticsStatic: 'Five-type final Maniac outcomes',
+      caption: scene.caption ?? 'Endless barrels, never folds. Label + line?',
+      phases: [
+        (
+          region: LessonTableRegion.fiveTypeManiacCatch,
+          title: 'Maniac catch',
+          detail: 'Widen · no ego',
+          visual: const Icon(Icons.sports_handball, color: AppColors.gold, size: 24),
+        ),
+        (
+          region: LessonTableRegion.fiveTypeManiacFoldAll,
+          title: 'Maniac fold all',
+          detail: 'Too tight',
+          visual: const Icon(Icons.block, color: AppColors.slate, size: 24),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFiveTypeTagOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive five-type final — tap TAG respect or TAG bluff XR',
+      semanticsStatic: 'Five-type final TAG outcomes',
+      caption:
+          scene.caption ??
+          'Selective entry, disciplined barrels. Label + vs raise?',
+      phases: [
+        (
+          region: LessonTableRegion.fiveTypeTagRespect,
+          title: 'TAG respect',
+          detail: 'Steal less vs nits',
+          visual: const Icon(Icons.precision_manufacturing_outlined, color: AppColors.gold, size: 24),
+        ),
+        (
+          region: LessonTableRegion.fiveTypeTagBluffXr,
+          title: 'TAG bluff XR',
+          detail: 'Light vs heat',
+          visual: const Icon(Icons.flash_on, color: AppColors.danger, size: 24),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFiveTypeLagOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive five-type final — tap LAG trap or LAG bluff more',
+      semanticsStatic: 'Five-type final LAG outcomes',
+      caption:
+          scene.caption ??
+          'Wide entry, sustained pressure, some folds. Label + line?',
+      phases: [
+        (
+          region: LessonTableRegion.fiveTypeLagTrap,
+          title: 'LAG trap',
+          detail: 'Call wider · fancy less',
+          visual: const Icon(Icons.psychology_outlined, color: AppColors.gold, size: 24),
+        ),
+        (
+          region: LessonTableRegion.fiveTypeLagBluffMore,
+          title: 'LAG bluff more',
+          detail: 'Into pressure',
+          visual: const Icon(Icons.trending_up, color: AppColors.danger, size: 24),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFiveTypeUncertainOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive five-type final — tap Low certainty or Max certainty',
+      semanticsStatic: 'Five-type final uncertain outcomes',
+      caption: scene.caption ?? 'Three mixed samples only. Confidence?',
+      phases: [
+        (
+          region: LessonTableRegion.fiveTypeLowCertainty,
+          title: 'Low certainty',
+          detail: 'Lean baseline',
+          visual: const Icon(Icons.hourglass_bottom, color: AppColors.gold, size: 24),
+        ),
+        (
+          region: LessonTableRegion.fiveTypeMaxCertainty,
+          title: 'Max certainty',
+          detail: 'Too early',
+          visual: const Icon(Icons.verified, color: AppColors.slate, size: 24),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFiveTypeRetireOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive five-type final — tap Retire model or Freeze label',
+      semanticsStatic: 'Five-type final retire outcomes',
+      caption:
+          scene.caption ??
+          'Old Calling Station now folds rivers and 3-bets light. Do?',
+      phases: [
+        (
+          region: LessonTableRegion.fiveTypeRetire,
+          title: 'Retire model',
+          detail: 'Update on evidence',
+          visual: const Icon(Icons.update, color: AppColors.gold, size: 24),
+        ),
+        (
+          region: LessonTableRegion.fiveTypeFreeze,
+          title: 'Freeze label',
+          detail: 'Ignore flips',
+          visual: const Icon(Icons.lock_outline, color: AppColors.danger, size: 24),
         ),
       ],
     );
