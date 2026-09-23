@@ -3482,7 +3482,10 @@ void main() {
         ),
       );
       expect(find.byType(OverbetGeometryDemo), findsOneWidget);
+      // Rex cue below the felt — not a second footer inside the demo.
       expect(find.text('Tap Overbet, Polar, and Geo.'), findsOneWidget);
+      expect(find.text('Tap Overbet, Polar, and Geo'), findsNothing);
+      expect(find.text('Polar story across streets'), findsNothing);
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
@@ -11753,6 +11756,169 @@ void main() {
     await tester.tap(find.text('Thin value'));
     await tester.pump();
     expect(controller.draft.choiceId, 'thin');
+    controller.dispose();
+  });
+
+  testWidgets('s6 overbet guided taps Nuts / bluffs on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-05-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Nuts or strong bluffs with blockers.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Best overbet river candidate?',
+      choices: const [
+        CourseChoice(id: 'polar-ob', label: 'Nuts / bluffs'),
+        CourseChoice(id: 'tpwk', label: 'Top pair weak'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Best overbet river — tap Nuts / bluffs.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Nuts / bluffs'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'polar-ob');
+    controller.dispose();
+  });
+
+  testWidgets('s6 overbet scaffolded docks Bet ~20 on turn', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-05-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Around 20.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Pot 20 after half-pot flop. Geometric turn?',
+      choices: const [
+        CourseChoice(
+          id: 'mid',
+          label: 'Bet ~20',
+          action: 'BET',
+          amountBb: 20,
+        ),
+        CourseChoice(
+          id: 'tiny',
+          label: 'Bet tiny',
+          action: 'BET',
+          amountBb: 3,
+        ),
+        CourseChoice(
+          id: 'bomb',
+          label: 'Bet 3x pot',
+          action: 'BET',
+          amountBb: 60,
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Pot 20 after half-pot flop — tap Bet ~20.'),
+      findsOneWidget,
+    );
+    expect(find.text('BET ~20'), findsOneWidget);
+    await tester.tap(find.text('BET ~20'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'mid');
+    controller.dispose();
+  });
+
+  testWidgets('s6 overbet unguided taps Avoid on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-05-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Avoid.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Random 3x pot bet with medium strength?',
+      choices: const [
+        CourseChoice(id: 'avoid', label: 'Avoid'),
+        CourseChoice(id: 'yolo', label: 'Always fine'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Random 3x pot medium — tap Avoid.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Avoid'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'avoid');
+    controller.dispose();
+  });
+
+  testWidgets('s6 overbet checkpoint taps Multi-street plan on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-05-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Multi-street stack pressure.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Geometric sizing primarily helps?',
+      choices: const [
+        CourseChoice(id: 'multi', label: 'Multi-street plan'),
+        CourseChoice(id: 'style', label: 'Look flashy'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Geometric sizing helps — tap Multi-street plan.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Multi-street plan'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'multi');
     controller.dispose();
   });
 

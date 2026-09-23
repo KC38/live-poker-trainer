@@ -586,6 +586,24 @@ enum LessonTableRegion {
 
   /// Polar/merged checkpoint: only bet nuts (mistake).
   polarOnlyNuts,
+
+  /// Overbet guided: nuts / bluffs candidate (correct).
+  overbetNutsBluffs,
+
+  /// Overbet guided: top pair weak (mistake).
+  overbetTopPairWeak,
+
+  /// Overbet unguided: avoid random bombs (correct).
+  overbetAvoid,
+
+  /// Overbet unguided: always fine (mistake).
+  overbetAlwaysFine,
+
+  /// Overbet checkpoint: multi-street plan (correct).
+  overbetMultiStreet,
+
+  /// Overbet checkpoint: look flashy (mistake).
+  overbetLookFlashy,
 }
 
 /// How the mini-table is arranged.
@@ -835,6 +853,15 @@ enum LessonTableLayout {
 
   /// Polar/merged checkpoint: thin value vs only nuts.
   polarAimOutcomes,
+
+  /// Overbet guided: nuts/bluffs vs top pair weak.
+  overbetGuidedOutcomes,
+
+  /// Overbet unguided: avoid vs always fine.
+  overbetAvoidOutcomes,
+
+  /// Overbet checkpoint: multi-street plan vs look flashy.
+  overbetPlanOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1661,6 +1688,21 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.polarAimOutcomes,
         caption: 'Merged betting aims to?',
       );
+    case 'act-06-05-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.overbetGuidedOutcomes,
+        caption: 'Best overbet river candidate?',
+      );
+    case 'act-06-05-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.overbetAvoidOutcomes,
+        caption: 'Random 3x pot medium?',
+      );
+    case 'act-06-05-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.overbetPlanOutcomes,
+        caption: 'Geometric sizing primarily helps?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -2450,6 +2492,24 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.polarOnlyNuts => pick('only-nuts'),
         _ => null,
       };
+    case 'act-06-05-01-guided':
+      return switch (region) {
+        LessonTableRegion.overbetNutsBluffs => pick('polar-ob'),
+        LessonTableRegion.overbetTopPairWeak => pick('tpwk'),
+        _ => null,
+      };
+    case 'act-06-05-01-unguided':
+      return switch (region) {
+        LessonTableRegion.overbetAvoid => pick('avoid'),
+        LessonTableRegion.overbetAlwaysFine => pick('yolo'),
+        _ => null,
+      };
+    case 'act-06-05-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.overbetMultiStreet => pick('multi'),
+        LessonTableRegion.overbetLookFlashy => pick('style'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -2599,7 +2659,10 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-06-03-01-checkpoint' ||
       activity.id == 'act-06-04-01-guided' ||
       activity.id == 'act-06-04-01-unguided' ||
-      activity.id == 'act-06-04-01-checkpoint';
+      activity.id == 'act-06-04-01-checkpoint' ||
+      activity.id == 'act-06-05-01-guided' ||
+      activity.id == 'act-06-05-01-unguided' ||
+      activity.id == 'act-06-05-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -2860,6 +2923,9 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.polarGuidedOutcomes => _buildPolarGuidedOutcomes(),
       LessonTableLayout.polarMismatchOutcomes => _buildPolarMismatchOutcomes(),
       LessonTableLayout.polarAimOutcomes => _buildPolarAimOutcomes(),
+      LessonTableLayout.overbetGuidedOutcomes => _buildOverbetGuidedOutcomes(),
+      LessonTableLayout.overbetAvoidOutcomes => _buildOverbetAvoidOutcomes(),
+      LessonTableLayout.overbetPlanOutcomes => _buildOverbetPlanOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -5894,6 +5960,99 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Too polar',
           visual: const Icon(
             Icons.diamond_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildOverbetGuidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive overbet candidates — tap nuts/bluffs vs top pair weak',
+      semanticsStatic: 'Overbet guided outcomes',
+      caption: scene.caption ?? 'Best overbet river candidate?',
+      phases: [
+        (
+          region: LessonTableRegion.overbetNutsBluffs,
+          title: 'Nuts / bluffs',
+          detail: 'Polar story',
+          visual: const Icon(
+            Icons.swap_vert,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.overbetTopPairWeak,
+          title: 'Top pair weak',
+          detail: 'Wrong size',
+          visual: const Icon(
+            Icons.horizontal_rule,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildOverbetAvoidOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive overbet discipline — tap avoid vs always fine',
+      semanticsStatic: 'Overbet avoid outcomes',
+      caption: scene.caption ?? 'Random 3x pot medium?',
+      phases: [
+        (
+          region: LessonTableRegion.overbetAvoid,
+          title: 'Avoid',
+          detail: 'Needs a story',
+          visual: const Icon(
+            Icons.block,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.overbetAlwaysFine,
+          title: 'Always fine',
+          detail: 'Leaks stacks',
+          visual: const Icon(
+            Icons.all_inclusive,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildOverbetPlanOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive geometric aims — tap multi-street plan vs look flashy',
+      semanticsStatic: 'Overbet plan outcomes',
+      caption: scene.caption ?? 'Geometric sizing primarily helps?',
+      phases: [
+        (
+          region: LessonTableRegion.overbetMultiStreet,
+          title: 'Multi-street plan',
+          detail: 'Link streets',
+          visual: const Icon(
+            Icons.account_tree_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.overbetLookFlashy,
+          title: 'Look flashy',
+          detail: 'Not the goal',
+          visual: const Icon(
+            Icons.auto_awesome,
             color: AppColors.slate,
             size: 24,
           ),

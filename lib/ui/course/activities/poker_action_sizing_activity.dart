@@ -342,6 +342,8 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Capped river · thin value — tap Bet thin.',
     'act-06-04-01-scaffolded' =>
       'Thin value vs station — tap Bet medium.',
+    'act-06-05-01-scaffolded' =>
+      'Pot 20 after half-pot flop — tap Bet ~20.',
     _ => null,
   };
 }

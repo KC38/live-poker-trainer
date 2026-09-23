@@ -474,6 +474,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Mismatch to avoid — tap Tiny bluffs.',
       'act-06-04-01-checkpoint' =>
           'Merged betting aims to — tap Thin value.',
+      'act-06-05-01-guided' =>
+          'Best overbet river — tap Nuts / bluffs.',
+      'act-06-05-01-unguided' =>
+          'Random 3x pot medium — tap Avoid.',
+      'act-06-05-01-checkpoint' =>
+          'Geometric sizing helps — tap Multi-street plan.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -564,7 +570,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-06-03-01-checkpoint' ||
             widget.activity.id == 'act-06-04-01-guided' ||
             widget.activity.id == 'act-06-04-01-unguided' ||
-            widget.activity.id == 'act-06-04-01-checkpoint';
+            widget.activity.id == 'act-06-04-01-checkpoint' ||
+            widget.activity.id == 'act-06-05-01-guided' ||
+            widget.activity.id == 'act-06-05-01-unguided' ||
+            widget.activity.id == 'act-06-05-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&
