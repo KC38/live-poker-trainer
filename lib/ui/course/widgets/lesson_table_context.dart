@@ -2974,10 +2974,13 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
     case 'act-01-04-01-checkpoint-postflop':
       return const LessonTableScene(
         layout: LessonTableLayout.blindsSeats,
-        highlight: LessonTableHighlight.button,
+        // No seat pulse — checkpoint must not spoil who acts first.
+        // (Previously pulsed the button, which taught the wrong seat.)
+        highlight: LessonTableHighlight.none,
         seatCount: 6,
         buttonSeat: 3,
-        caption: 'Postflop · tap who acts first',
+        // Rex already owns the cue — keep the felt quiet.
+        caption: null,
       );
     case 'act-01-05-01-guided-fold-win':
       return const LessonTableScene(
