@@ -1543,6 +1543,107 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('hand-families guided sees holes then taps Pocket pair', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-02-01-guided-pair',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText:
+          'Look at pocket eights on the felt — tap Pocket pair.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Name the family for your holes.',
+      choices: const [
+        CourseChoice(id: 'hf-pair', label: 'Pocket pair'),
+        CourseChoice(id: 'hf-suited-ace', label: 'Suited ace'),
+        CourseChoice(id: 'hf-broadway', label: 'Broadway'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.handCategoryTap,
+    );
+    expect(resolveLessonTableScene(activity)?.heroCodes, ['8h', '8c']);
+    expect(
+      resolveHandExample(id: 'hf-pair', label: 'Pocket pair')?.codes,
+      ['8h', '8c'],
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Matching ranks in the hole — tap the family.'),
+      findsOneWidget,
+    );
+    expect(find.text('Name the family for your holes.'), findsNothing);
+    expect(find.text('Which hand is a pocket pair?'), findsNothing);
+    expect(find.text('Tap the starting-hand family.'), findsOneWidget);
+    expect(find.text('Pocket pair'), findsOneWidget);
+    await tester.tap(find.text('Pocket pair'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'hf-pair');
+    controller.dispose();
+  });
+
+  test('hand-families identify steps use classify-on-felt presentation', () {
+    for (final id in const [
+      'act-02-02-01-guided-pair',
+      'act-02-02-01-scaffolded-broadway',
+      'act-02-02-01-unguided-sc',
+      'act-02-02-01-checkpoint-trash',
+    ]) {
+      final activity = CourseActivity(
+        id: id,
+        order: 2,
+        stage: ActivityStage.guided,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'classify',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Name the family for your holes.',
+        choices: const [
+          CourseChoice(id: 'hf-pair', label: 'Pocket pair'),
+          CourseChoice(id: 'hf-trash', label: 'Offsuit trash'),
+        ],
+      );
+      expect(
+        resolveSelectIdentifyPresentation(activity),
+        SelectIdentifyPresentation.handCategoryTap,
+        reason: id,
+      );
+      expect(resolveLessonTableScene(activity), isNotNull, reason: id);
+    }
+    expect(
+      resolveLessonTableScene(
+        CourseActivity(
+          id: 'act-02-02-01-unguided-sc',
+          order: 4,
+          stage: ActivityStage.unguided,
+          renderer: ActivityRenderer.selectIdentify,
+          estimatedSeconds: 40,
+          accessibilityText: 'sc',
+          acceptedGrades: const [SoftGrade.recommended],
+          prompt: 'Name the family for your holes.',
+          choices: const [
+            CourseChoice(id: 'hf-sc', label: 'Suited connector'),
+          ],
+        ),
+      )?.heroCodes,
+      ['7h', '6h'],
+    );
+  });
+
 
   testWidgets('open-range explain taps Early Button Live 3x instead of Continue', (
     tester,

@@ -149,6 +149,42 @@ LessonHandExample? resolveHandExample({
         title: 'Offsuit trash',
         codes: ['7c', '2d'],
       );
+    case 'hf-pair':
+      return const LessonHandExample(
+        id: 'hf-pair',
+        title: 'Pocket pair',
+        codes: ['8h', '8c'],
+      );
+    case 'hf-broadway':
+      return const LessonHandExample(
+        id: 'hf-broadway',
+        title: 'Broadway',
+        codes: ['As', 'Kd'],
+      );
+    case 'hf-suited-ace':
+      return const LessonHandExample(
+        id: 'hf-suited-ace',
+        title: 'Suited ace',
+        codes: ['Ah', '9h'],
+      );
+    case 'hf-sc':
+      return const LessonHandExample(
+        id: 'hf-sc',
+        title: 'Suited connector',
+        codes: ['7h', '6h'],
+      );
+    case 'hf-offsuit-conn':
+      return const LessonHandExample(
+        id: 'hf-offsuit-conn',
+        title: 'Offsuit connector',
+        codes: ['7h', '6d'],
+      );
+    case 'hf-trash':
+      return const LessonHandExample(
+        id: 'hf-trash',
+        title: 'Offsuit trash',
+        codes: ['7c', '2d'],
+      );
     case 'made-tp':
       return const LessonHandExample(
         id: 'made-tp',

@@ -94,6 +94,11 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Jump: see Ah5h on felt, tap the starting-hand family tile.
     return SelectIdentifyPresentation.handCategoryTap;
   }
+  if (activity.id.startsWith('act-02-02-01-') &&
+      activity.renderer == ActivityRenderer.selectIdentify) {
+    // Hand families: see holes on felt → tap the family name.
+    return SelectIdentifyPresentation.handCategoryTap;
+  }
   if (activity.id == 'act-01-02-02-unguided-board') {
     // Board-plays chop: tap the felt (board / you / them), not text tiles.
     return SelectIdentifyPresentation.tableRegionTap;

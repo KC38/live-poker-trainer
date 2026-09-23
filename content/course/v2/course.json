@@ -3581,7 +3581,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Identify pocket eights.",
+                  "accessibilityText": "Look at pocket eights on the felt — tap Pocket pair.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -3591,35 +3591,35 @@
                   "objectives": [
                     "Recognize pocket pairs"
                   ],
-                  "prompt": "Which hand is a pocket pair?",
+                  "prompt": "Name the family for your holes.",
                   "choices": [
                     {
-                      "id": "fam-88",
-                      "label": "8h 8c",
-                      "accessibilityText": "8h 8c",
+                      "id": "hf-pair",
+                      "label": "Pocket pair",
+                      "accessibilityText": "Pocket pair",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Pocket eights."
+                        "feedback": "Matching ranks — pocket eights."
                       }
                     },
                     {
-                      "id": "fam-a9s",
-                      "label": "Ah 9h",
-                      "accessibilityText": "Ah 9h",
+                      "id": "hf-suited-ace",
+                      "label": "Suited ace",
+                      "accessibilityText": "Suited ace",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Suited ace, not a pair.",
-                        "betterChoiceId": "fam-88"
+                        "feedback": "Suited ace needs an ace with a suited kicker.",
+                        "betterChoiceId": "hf-pair"
                       }
                     },
                     {
-                      "id": "fam-jt",
-                      "label": "Jd Tc",
-                      "accessibilityText": "Jd Tc",
+                      "id": "hf-broadway",
+                      "label": "Broadway",
+                      "accessibilityText": "Broadway",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Broadway connector feel, not a pair.",
-                        "betterChoiceId": "fam-88"
+                        "feedback": "Broadway needs both cards ten-or-better.",
+                        "betterChoiceId": "hf-pair"
                       }
                     }
                   ],
@@ -3637,7 +3637,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Identify ace-king as broadway.",
+                  "accessibilityText": "Look at ace-king on the felt — tap Broadway.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -3647,35 +3647,35 @@
                   "objectives": [
                     "Recognize broadways and suited aces"
                   ],
-                  "prompt": "Which hand is a broadway?",
+                  "prompt": "Name the family for your holes.",
                   "choices": [
                     {
-                      "id": "fam-ak",
-                      "label": "As Kd",
-                      "accessibilityText": "As Kd",
+                      "id": "hf-broadway",
+                      "label": "Broadway",
+                      "accessibilityText": "Broadway",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Both cards ten-or-better — broadway."
                       }
                     },
                     {
-                      "id": "fam-55",
-                      "label": "5h 5d",
-                      "accessibilityText": "5h 5d",
+                      "id": "hf-pair",
+                      "label": "Pocket pair",
+                      "accessibilityText": "Pocket pair",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Pair, but not broadway cards.",
-                        "betterChoiceId": "fam-ak"
+                        "feedback": "Ranks do not match — not a pair.",
+                        "betterChoiceId": "hf-broadway"
                       }
                     },
                     {
-                      "id": "fam-72",
-                      "label": "7c 2d",
-                      "accessibilityText": "7c 2d",
+                      "id": "hf-trash",
+                      "label": "Offsuit trash",
+                      "accessibilityText": "Offsuit trash",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Classic trash.",
-                        "betterChoiceId": "fam-ak"
+                        "feedback": "Ace-king is a premium broadway, not trash.",
+                        "betterChoiceId": "hf-broadway"
                       }
                     }
                   ]
@@ -3686,7 +3686,7 @@
                   "stage": "unguided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Identify seven-six suited as a suited connector.",
+                  "accessibilityText": "Look at seven-six suited on the felt — tap Suited connector.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -3696,34 +3696,34 @@
                   "objectives": [
                     "Recognize suited connectors versus offsuit trash"
                   ],
-                  "prompt": "Which is a suited connector?",
+                  "prompt": "Name the family for your holes.",
                   "choices": [
                     {
-                      "id": "fam-76s",
-                      "label": "7h 6h",
-                      "accessibilityText": "7h 6h",
+                      "id": "hf-sc",
+                      "label": "Suited connector",
+                      "accessibilityText": "Suited connector",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Connected and suited."
                       }
                     },
                     {
-                      "id": "fam-76o",
-                      "label": "7h 6d",
-                      "accessibilityText": "7h 6d",
+                      "id": "hf-offsuit-conn",
+                      "label": "Offsuit connector",
+                      "accessibilityText": "Offsuit connector",
                       "grading": {
                         "grade": "questionable",
                         "feedback": "Connected but offsuit — weaker family."
                       }
                     },
                     {
-                      "id": "fam-a4o",
-                      "label": "Ac 4d",
-                      "accessibilityText": "Ac 4d",
+                      "id": "hf-trash",
+                      "label": "Offsuit trash",
+                      "accessibilityText": "Offsuit trash",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Weak offsuit ace, not a connector.",
-                        "betterChoiceId": "fam-76s"
+                        "feedback": "Connected and suited is a real family, not trash.",
+                        "betterChoiceId": "hf-sc"
                       }
                     }
                   ]
@@ -3734,7 +3734,7 @@
                   "stage": "checkpoint",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Identify seven-two offsuit as trash.",
+                  "accessibilityText": "Look at seven-two offsuit on the felt — tap Offsuit trash.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -3744,35 +3744,35 @@
                   "objectives": [
                     "Recognize suited connectors versus offsuit trash"
                   ],
-                  "prompt": "Which hand is offsuit trash from early position?",
+                  "prompt": "Name the family for your holes.",
                   "choices": [
                     {
-                      "id": "trash-72o",
-                      "label": "7c 2d",
-                      "accessibilityText": "7c 2d",
+                      "id": "hf-trash",
+                      "label": "Offsuit trash",
+                      "accessibilityText": "Offsuit trash",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Worst starting shape — fold early."
                       }
                     },
                     {
-                      "id": "trash-qq",
-                      "label": "Qh Qd",
-                      "accessibilityText": "Qh Qd",
+                      "id": "hf-pair",
+                      "label": "Pocket pair",
+                      "accessibilityText": "Pocket pair",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Premium pair.",
-                        "betterChoiceId": "trash-72o"
+                        "feedback": "Ranks do not match — premium pairs look like QQ.",
+                        "betterChoiceId": "hf-trash"
                       }
                     },
                     {
-                      "id": "trash-a5s",
-                      "label": "Ah 5h",
-                      "accessibilityText": "Ah 5h",
+                      "id": "hf-suited-ace",
+                      "label": "Suited ace",
+                      "accessibilityText": "Suited ace",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Suited ace has playability.",
-                        "betterChoiceId": "trash-72o"
+                        "feedback": "Suited ace has playability — this is offsuit junk.",
+                        "betterChoiceId": "hf-trash"
                       }
                     }
                   ]
