@@ -17149,8 +17149,8 @@ void main() {
         ),
       );
       expect(find.byType(Capstone3betDemo), findsOneWidget);
-      expect(find.text('Tap SPR, Continue, and Close.'), findsNothing);
-      expect(find.text('Tap SPR, Continue, and Close'), findsNothing);
+      expect(find.text('Tap SPR, Turn, and Close.'), findsNothing);
+      expect(find.text('Tap SPR, Turn, and Close'), findsNothing);
       expect(
         find.text('Short prompts — plan by SPR, then close clean'),
         findsNothing,
@@ -17158,7 +17158,7 @@ void main() {
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['SPR', 'CONTINUE', 'CLOSE']) {
+      for (final title in ['SPR', 'TURN', 'CLOSE']) {
         await tester.tap(find.text(title));
         await tester.pump();
       }

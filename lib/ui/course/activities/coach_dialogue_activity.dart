@@ -920,7 +920,7 @@ class CoachDialogueVisual {
     CoachDialogueVisualKind.capstoneSrp =>
       'Tap Plan, Update, and Finish.',
     CoachDialogueVisualKind.capstone3bet =>
-      'Tap SPR, Continue, and Close.',
+      'Tap SPR, Turn, and Close.',
     CoachDialogueVisualKind.capstoneMultiwayDeep =>
       'Tap Nuts, Deep, and No-bluff.',
     CoachDialogueVisualKind.capstoneLimped =>
