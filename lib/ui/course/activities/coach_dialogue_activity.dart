@@ -24,6 +24,7 @@ import 'package:live_poker_trainer/ui/course/widgets/tag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/wide_pressure_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/preflop_flop_plan_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/turn_map_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -360,6 +361,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.preflopFlopPlan
                     ? null
                     : onFeltAcknowledge,
+            onTurnMapAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.turnMap
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance &&
@@ -624,6 +629,9 @@ enum CoachDialogueVisualKind {
 
   /// Enter with a reason; flop confirms or cancels the preflop plan.
   preflopFlopPlan,
+
+  /// List continue and give-up turn cards before you bet the flop.
+  turnMap,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -778,6 +786,8 @@ class CoachDialogueVisual {
       'Tap Wide, Pressure, and Sample.',
     CoachDialogueVisualKind.preflopFlopPlan =>
       'Tap Reason, Confirm, and Cancel.',
+    CoachDialogueVisualKind.turnMap =>
+      'Tap Continue, Give-up, and Map.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -850,7 +860,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.tagModel ||
       kind == CoachDialogueVisualKind.lagModel ||
       kind == CoachDialogueVisualKind.widePressure ||
-      kind == CoachDialogueVisualKind.preflopFlopPlan;
+      kind == CoachDialogueVisualKind.preflopFlopPlan ||
+      kind == CoachDialogueVisualKind.turnMap;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -991,6 +1002,8 @@ class CoachDialogueVisual {
       'Wide-pressure tiles: wide entry, planned barrels, count samples',
     CoachDialogueVisualKind.preflopFlopPlan =>
       'Preflop-to-flop tiles: reason, confirm, cancel',
+    CoachDialogueVisualKind.turnMap =>
+      'Flop-to-turn map tiles: continue, give-up, map',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -1245,6 +1258,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-07-01-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.preflopFlopPlan,
+      );
+    case 'act-07-02-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.turnMap,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1796,6 +1813,18 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.preflopFlopPlan,
     );
   }
+  // Phrase-safe flop→turn map — continue / give-up / map framing.
+  if (blob.contains('flop bet needs a turn map') ||
+      blob.contains('continue or kill') ||
+      blob.contains('map turn barrels') ||
+      (blob.contains('turn map') &&
+          (blob.contains('continue') || blob.contains('give-up') ||
+              blob.contains('give up'))) ||
+      (blob.contains('continue cards') && blob.contains('give-up'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.turnMap,
+    );
+  }
   // Phrase-safe vs LAG — require versus/trap/fancy framing.
   if (blob.contains('versus lag') ||
       blob.contains('versus lags') ||
@@ -1906,6 +1935,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onLagModelAcknowledge,
     this.onWidePressureAcknowledge,
     this.onPreflopFlopPlanAcknowledge,
+    this.onTurnMapAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1977,6 +2007,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onLagModelAcknowledge;
   final VoidCallback? onWidePressureAcknowledge;
   final VoidCallback? onPreflopFlopPlanAcknowledge;
+  final VoidCallback? onTurnMapAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -2324,6 +2355,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onPreflopFlopPlanAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onPreflopFlopPlanAcknowledge,
+        ),
+        CoachDialogueVisualKind.turnMap => TurnMapDemo(
+          interactive: onTurnMapAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onTurnMapAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },

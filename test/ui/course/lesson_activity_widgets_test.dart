@@ -28,6 +28,7 @@ import 'package:live_poker_trainer/ui/course/widgets/hard_fold_cooler_demo.dart'
 import 'package:live_poker_trainer/ui/course/widgets/selective_aggression_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/tag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/preflop_flop_plan_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/turn_map_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
@@ -15099,6 +15100,229 @@ void main() {
     await tester.tap(find.text('Abandon quickly'));
     await tester.pump();
     expect(controller.draft.choiceId, 'abandon');
+    controller.dispose();
+  });
+
+  testWidgets(
+    's7 turn map explain taps Continue Give-up Map instead of Continue',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-07-02-01-explain',
+        order: 1,
+        stage: ActivityStage.explain,
+        renderer: ActivityRenderer.coachDialogue,
+        estimatedSeconds: 30,
+        accessibilityText: 'Flop bet needs a turn map. Continue or kill.',
+        acceptedGrades: const [SoftGrade.recommended],
+        objectives: const ['List turn continue cards'],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'm',
+            kind: 'dialogue',
+            text: 'Flop bet needs a turn map. Continue or kill.',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      var feltAck = 0;
+      await tester.pumpWidget(
+        _wrap(
+          CoachDialogueActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+            onFeltAcknowledge: () => feltAck += 1,
+          ),
+        ),
+      );
+      expect(find.byType(TurnMapDemo), findsOneWidget);
+      expect(find.text('Tap Continue, Give-up, and Map.'), findsOneWidget);
+      expect(find.text('Tap Continue, Give-up, and Map'), findsNothing);
+      expect(
+        find.text('List continue and give-up cards before you bet'),
+        findsNothing,
+      );
+      expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+      expect(isTableRegionTapActivity(activity), isTrue);
+
+      for (final title in ['CONTINUE', 'GIVE-UP', 'MAP']) {
+        await tester.tap(find.text(title));
+        await tester.pump();
+      }
+      expect(feltAck, 1);
+      controller.dispose();
+    },
+  );
+
+  testWidgets('s7 turn map guided taps Aces & blanks on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-02-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'A/K or blanks that keep equity.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'C-betting AK on Q72r. Good turn continue?',
+      choices: const [
+        CourseChoice(
+          id: 'ok',
+          label: 'Aces, kings, and many blanks with a plan',
+        ),
+        CourseChoice(
+          id: 'any',
+          label: 'Any card including four-to-flush always',
+        ),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('AK c-bet · Q72r — tap Aces & blanks.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Aces & blanks'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'ok');
+    controller.dispose();
+  });
+
+  testWidgets('s7 turn map scaffolded taps Give up on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-02-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Often give up.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'You c-bet a gutshot. Turn bricks and they raise big. Map says?',
+      choices: const [
+        CourseChoice(id: 'give', label: 'Give up — map included this kill'),
+        CourseChoice(
+          id: 'hero',
+          label: 'Hero-call because flop bet exists',
+        ),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Gutshot · brick raise — tap Give up.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Give up'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'give');
+    controller.dispose();
+  });
+
+  testWidgets('s7 turn map unguided taps Map first on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-02-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Avoid.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Bet flop with no turn idea?',
+      choices: const [
+        CourseChoice(id: 'avoid', label: 'Avoid — map first'),
+        CourseChoice(id: 'yolo', label: 'Yolo barrels'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('No turn idea — tap Map first.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Map first'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'avoid');
+    controller.dispose();
+  });
+
+  testWidgets('s7 turn map checkpoint taps Continue/kill list on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-02-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Continue vs kill list.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Turn map is?',
+      choices: const [
+        CourseChoice(
+          id: 'list',
+          label: 'A continue/kill list made on the flop',
+        ),
+        CourseChoice(
+          id: 'later',
+          label: 'Something you invent after you are stuck',
+        ),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Turn map — tap Continue/kill list.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Continue/kill list'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'list');
     controller.dispose();
   });
 }
