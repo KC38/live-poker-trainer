@@ -344,6 +344,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Limps, calls, never folds turns — tap the label.',
       'act-04-06-02-checkpoint' =>
           'Only two hands so far — tap your confidence.',
+      'act-04-06-03-checkpoint' =>
+          'Why cut bluffs vs a station — tap the cite.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -378,7 +380,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-04-06-02-guided' ||
             widget.activity.id == 'act-04-06-02-scaffolded' ||
             widget.activity.id == 'act-04-06-02-unguided' ||
-            widget.activity.id == 'act-04-06-02-checkpoint';
+            widget.activity.id == 'act-04-06-02-checkpoint' ||
+            widget.activity.id == 'act-04-06-03-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

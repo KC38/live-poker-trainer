@@ -9297,6 +9297,85 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 adjust station guided docks thin value on river felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-06-03-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Thin value versus station.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Known sticky caller. You have second pair good kicker on river. Action?',
+      choices: const [
+        CourseChoice(id: 'thin-val', label: 'Bet thin value', action: 'BET'),
+        CourseChoice(id: 'check-val', label: 'Check behind', action: 'CHECK'),
+        CourseChoice(
+          id: 'bluff-air',
+          label: 'Bluff-raise later with air',
+          action: 'RAISE',
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Sticky seat, second pair river — tap Bet thin value.'),
+      findsOneWidget,
+    );
+    expect(find.text('BET THIN VALUE'), findsOneWidget);
+    await tester.tap(find.text('BET THIN VALUE'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'thin-val');
+    controller.dispose();
+  });
+
+  testWidgets('s4 adjust station checkpoint taps rarely folds on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-06-03-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Because they fold too little.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Why bluff less versus a Calling Station?',
+      choices: const [
+        CourseChoice(id: 'cite-fold', label: 'They fold too rarely'),
+        CourseChoice(id: 'cite-mean', label: 'The label sounds mean'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(find.text('Rarely folds'), findsOneWidget);
+    await tester.tap(find.text('Rarely folds'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'cite-fold');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {

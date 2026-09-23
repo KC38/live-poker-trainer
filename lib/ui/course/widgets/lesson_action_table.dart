@@ -477,6 +477,39 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         facingBet: true,
         feltStatusLine: 'Weigh SPR before you put it in',
       );
+    case 'act-04-06-03-guided':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', 'Td'],
+        boardCodes: ['Qc', 'Ts', '3h', '2d', '7c'],
+        potLabel: 'Pot 28',
+        villainLine: 'Sticky caller · checked to you',
+        streetLabel: 'River · second pair',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Stations call thin value',
+      );
+    case 'act-04-06-03-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['8h', '7h'],
+        boardCodes: ['Kc', '2s', '2d', '9c', '3d'],
+        potLabel: 'Pot 24',
+        villainLine: 'Same sticky seat · brick river',
+        streetLabel: 'River · missed draw',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'No fold equity vs stations',
+      );
+    case 'act-04-06-03-unguided':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', 'Td'],
+        boardCodes: ['Qc', 'Ts', '3h', '2d', '7c'],
+        potLabel: 'Pot 28',
+        villainLine: 'Unknown · no samples yet',
+        streetLabel: 'River · second pair',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'No sticky read — stay cautious',
+      );
   }
   return null;
 }
@@ -658,6 +691,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-04-05-01-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-04-06-03-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }

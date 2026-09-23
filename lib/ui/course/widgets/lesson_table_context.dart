@@ -196,6 +196,12 @@ enum LessonTableRegion {
 
   /// Maximum certainty too early (mistake).
   sampleConfidenceMax,
+
+  /// Bluff less because they rarely fold (correct).
+  citeRarelyFolds,
+
+  /// Bluff less because the label sounds mean (mistake).
+  citeLabelMean,
 }
 
 /// How the mini-table is arranged.
@@ -262,6 +268,9 @@ enum LessonTableLayout {
 
   /// Meet Calling Station: sample confidence low vs max.
   sampleConfidenceOutcomes,
+
+  /// Adjust vs Station: why bluff less (rarely folds vs mean label).
+  stationBluffCiteOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -751,6 +760,11 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.sampleConfidenceOutcomes,
         caption: 'Only 2 hands tagged so far',
       );
+    case 'act-04-06-03-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.stationBluffCiteOutcomes,
+        caption: 'Why cut bluffs vs a Calling Station?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -1147,6 +1161,12 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.sampleConfidenceMax => pick('max'),
         _ => null,
       };
+    case 'act-04-06-03-checkpoint':
+      return switch (region) {
+        LessonTableRegion.citeRarelyFolds => pick('cite-fold'),
+        LessonTableRegion.citeLabelMean => pick('cite-mean'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -1240,7 +1260,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-04-06-02-guided' ||
       activity.id == 'act-04-06-02-scaffolded' ||
       activity.id == 'act-04-06-02-unguided' ||
-      activity.id == 'act-04-06-02-checkpoint';
+      activity.id == 'act-04-06-02-checkpoint' ||
+      activity.id == 'act-04-06-03-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -1387,6 +1408,8 @@ class LessonTableContext extends StatelessWidget {
           _buildPlayerTypeStationManiacOutcomes(),
       LessonTableLayout.sampleConfidenceOutcomes =>
           _buildSampleConfidenceOutcomes(),
+      LessonTableLayout.stationBluffCiteOutcomes =>
+          _buildStationBluffCiteOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -2404,6 +2427,37 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Too sure',
           visual: const Icon(
             Icons.verified_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStationBluffCiteOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive bluff cite — tap why you bluff less',
+      semanticsStatic: 'Station bluff cite outcomes',
+      caption: scene.caption ?? 'Why cut bluffs vs a Calling Station?',
+      phases: [
+        (
+          region: LessonTableRegion.citeRarelyFolds,
+          title: 'Rarely folds',
+          detail: 'Cite tendency',
+          visual: const Icon(
+            Icons.do_not_touch_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.citeLabelMean,
+          title: 'Sounds mean',
+          detail: 'Vibe only',
+          visual: const Icon(
+            Icons.mood_bad_outlined,
             color: AppColors.slate,
             size: 24,
           ),
