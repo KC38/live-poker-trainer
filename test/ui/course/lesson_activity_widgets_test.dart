@@ -8789,7 +8789,7 @@ void main() {
     );
     expect(
       find.text(
-        'Medium hand multiway and deep — tap Check to keep it small.',
+        'Medium hand multiway and deep — tap Keep pot small.',
       ),
       findsOneWidget,
     );
