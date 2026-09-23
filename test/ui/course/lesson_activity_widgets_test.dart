@@ -1934,15 +1934,20 @@ void main() {
       ),
     );
     expect(find.byType(BbStackDepthDemo), findsOneWidget);
-    expect(find.text('Tap Chips→BB, Shorter, and Depth'), findsOneWidget);
+    expect(find.text('Tap CHIPS→BB next'), findsOneWidget);
+    expect(find.text('Tap Chips→BB, Shorter, and Depth'), findsNothing);
     expect(find.text('Tap Chips→BB, Shorter, and Depth.'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['CHIPS→BB', 'SHORTER', 'DEPTH']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('CHIPS→BB'));
+    await tester.pump();
+    expect(find.text('Tap SHORTER next'), findsOneWidget);
+    await tester.tap(find.text('SHORTER'));
+    await tester.pump();
+    expect(find.text('Tap DEPTH next'), findsOneWidget);
+    await tester.tap(find.text('DEPTH'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
