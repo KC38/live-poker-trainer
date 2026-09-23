@@ -5806,6 +5806,61 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('section jump stack taps 55bb effective on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-02-07-02-jump-stack',
+      order: 5,
+      stage: ActivityStage.jumpTest,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 35,
+      accessibilityText: 'Jump test: effective stack is 55bb.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'You 120bb, villain 55bb. Effective stack?',
+      choices: const [
+        CourseChoice(id: 'j2-55', label: '55bb'),
+        CourseChoice(id: 'j2-120', label: '120bb'),
+        CourseChoice(id: 'j2-175', label: '175bb'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.effectiveStackOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.effectiveStackShort,
+        choices: activity.choices,
+      ),
+      'j2-55',
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Effective stack is the shorter one — tap it.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('You 120bb, villain 55bb. Effective stack?'),
+      findsNothing,
+    );
+    expect(find.text('55bb'), findsOneWidget);
+    await tester.tap(find.text('55bb'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'j2-55');
+    controller.dispose();
+  });
+
   testWidgets('numeric entry updates draft', (tester) async {
     final activity = _activity(
       renderer: ActivityRenderer.numericPotPrice,
