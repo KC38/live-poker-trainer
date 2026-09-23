@@ -154,6 +154,11 @@ final class AgentUiDriver {
       final lower = text.toLowerCase().trim();
       if (lower.isEmpty) return;
       if (lower != needleLower && !lower.contains(needleLower)) return;
+      // Short lesson CTAs must not fuzzy-match home-map lesson titles
+      // (e.g. Check → "Fold, check, call" / Continue → "…continue…").
+      if (_isShortLessonCta(needleLower) && lower != needleLower) {
+        return;
+      }
       // Avoid "continue on home" stealing a plain "continue" tap when an
       // exact Continue dock exists — handled by exact sort, but also skip
       // home-nav labels when the needle is a short CTA word.
@@ -328,6 +333,20 @@ final class AgentUiDriver {
     // Allow the framework to settle selection / auto-submit.
     await Future<void>.delayed(const Duration(milliseconds: 50));
   }
+}
+
+/// True for short bottom-dock / feedback CTA labels that must match exactly.
+bool _isShortLessonCta(String needleLower) {
+  const ctas = {
+    'continue',
+    'check',
+    'got it',
+    'try again',
+    'undo last',
+    'hint',
+    'back',
+  };
+  return ctas.contains(needleLower);
 }
 
 class _TapCandidate {
