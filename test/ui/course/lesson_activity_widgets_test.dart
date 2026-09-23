@@ -10315,7 +10315,7 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('s5 line-reading guided taps Capped on bet-check felt', (
+  testWidgets('s5 line-reading guided taps Fewer nuts on bet-check felt', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -10350,8 +10350,8 @@ void main() {
       find.text('Bet flop, check turn — tap Capped.'),
       findsOneWidget,
     );
-    expect(find.text('Capped'), findsOneWidget);
-    await tester.tap(find.text('Capped'));
+    expect(find.text('Fewer nuts'), findsOneWidget);
+    await tester.tap(find.text('Fewer nuts'));
     await tester.pump();
     expect(controller.draft.choiceId, 'capped');
     controller.dispose();
