@@ -283,6 +283,8 @@ final class AgentUiDriver {
     final preferPointer =
         chosen.fromSemantics &&
         (needleLower.startsWith('card ') ||
+            needleLower == 'you' ||
+            needleLower == 'them' ||
             chosen.text.startsWith('card ') ||
             chosen.text.startsWith('board ') ||
             chosen.text.startsWith('your hole') ||
@@ -345,6 +347,10 @@ bool _isShortLessonCta(String needleLower) {
     'undo last',
     'hint',
     'back',
+    // Felt seat captions — must not fuzzy-match Rex / resume copy
+    // (e.g. You → "…where you left off…").
+    'you',
+    'them',
   };
   return ctas.contains(needleLower);
 }
