@@ -667,6 +667,24 @@ enum LessonTableRegion {
 
   /// Mixed strategy checkpoint: chaos (mistake).
   mixChaos,
+
+  /// 3-bet/4-bet guided: high commit (correct).
+  threeBetHighCommit,
+
+  /// 3-bet/4-bet guided: 300bb deep (mistake).
+  threeBetPlayDeep,
+
+  /// 3-bet/4-bet unguided: avoid ego (correct).
+  threeBetAvoidEgo,
+
+  /// 3-bet/4-bet unguided: ego 4-bet (mistake).
+  threeBetEgoFourBet,
+
+  /// 3-bet/4-bet checkpoint: SPR / commit (correct).
+  threeBetSprCommit,
+
+  /// 3-bet/4-bet checkpoint: felt suits (mistake).
+  threeBetFeltSuits,
 }
 
 /// How the mini-table is arranged.
@@ -955,6 +973,15 @@ enum LessonTableLayout {
 
   /// Mixed strategy checkpoint: purpose freq vs chaos.
   mixPurposeOutcomes,
+
+  /// 3-bet/4-bet guided: high commit vs 300bb deep.
+  threeBetCommitOutcomes,
+
+  /// 3-bet/4-bet unguided: avoid ego vs ego 4-bet.
+  threeBetEgoOutcomes,
+
+  /// 3-bet/4-bet checkpoint: SPR / commit vs felt suits.
+  threeBetSprOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1847,6 +1874,21 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.mixPurposeOutcomes,
         caption: 'Best mix description?',
       );
+    case 'act-06-09-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.threeBetCommitOutcomes,
+        caption: '100bb 4-bet pot. Flop top pair. Default mindset?',
+      );
+    case 'act-06-09-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.threeBetEgoOutcomes,
+        caption: 'Light 4-bet bluff with no blockers for ego?',
+      );
+    case 'act-06-09-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.threeBetSprOutcomes,
+        caption: 'Depth change in 3-bet pots mainly changes?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -2715,6 +2757,24 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.mixChaos => pick('chaos'),
         _ => null,
       };
+    case 'act-06-09-01-guided':
+      return switch (region) {
+        LessonTableRegion.threeBetHighCommit => pick('careful'),
+        LessonTableRegion.threeBetPlayDeep => pick('deep'),
+        _ => null,
+      };
+    case 'act-06-09-01-unguided':
+      return switch (region) {
+        LessonTableRegion.threeBetAvoidEgo => pick('avoid'),
+        LessonTableRegion.threeBetEgoFourBet => pick('ego'),
+        _ => null,
+      };
+    case 'act-06-09-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.threeBetSprCommit => pick('spr'),
+        LessonTableRegion.threeBetFeltSuits => pick('suits'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -2877,7 +2937,10 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-06-07-01-checkpoint' ||
       activity.id == 'act-06-08-01-scaffolded' ||
       activity.id == 'act-06-08-01-unguided' ||
-      activity.id == 'act-06-08-01-checkpoint';
+      activity.id == 'act-06-08-01-checkpoint' ||
+      activity.id == 'act-06-09-01-guided' ||
+      activity.id == 'act-06-09-01-unguided' ||
+      activity.id == 'act-06-09-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -3153,6 +3216,10 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.mixStationOutcomes => _buildMixStationOutcomes(),
       LessonTableLayout.mixReasonOutcomes => _buildMixReasonOutcomes(),
       LessonTableLayout.mixPurposeOutcomes => _buildMixPurposeOutcomes(),
+      LessonTableLayout.threeBetCommitOutcomes =>
+          _buildThreeBetCommitOutcomes(),
+      LessonTableLayout.threeBetEgoOutcomes => _buildThreeBetEgoOutcomes(),
+      LessonTableLayout.threeBetSprOutcomes => _buildThreeBetSprOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -6609,6 +6676,102 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Not a lifestyle',
           visual: const Icon(
             Icons.shuffle,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildThreeBetCommitOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive 4-bet mindset — tap high commit vs 300bb deep',
+      semanticsStatic: '3-bet commit outcomes',
+      caption:
+          scene.caption ?? '100bb 4-bet pot. Flop top pair. Default mindset?',
+      phases: [
+        (
+          region: LessonTableRegion.threeBetHighCommit,
+          title: 'High commit',
+          detail: 'SPR is low',
+          visual: const Icon(
+            Icons.lock_outline,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.threeBetPlayDeep,
+          title: '300bb deep',
+          detail: 'Wrong depth',
+          visual: const Icon(
+            Icons.layers_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildThreeBetEgoOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive ego 4-bet — tap avoid ego vs ego 4-bet',
+      semanticsStatic: '3-bet ego outcomes',
+      caption:
+          scene.caption ?? 'Light 4-bet bluff with no blockers for ego?',
+      phases: [
+        (
+          region: LessonTableRegion.threeBetAvoidEgo,
+          title: 'Avoid ego',
+          detail: 'Need blockers',
+          visual: const Icon(
+            Icons.block,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.threeBetEgoFourBet,
+          title: 'Ego 4-bet',
+          detail: 'Style leak',
+          visual: const Icon(
+            Icons.flash_on_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildThreeBetSprOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive depth change — tap SPR / commit vs felt suits',
+      semanticsStatic: '3-bet SPR outcomes',
+      caption:
+          scene.caption ?? 'Depth change in 3-bet pots mainly changes?',
+      phases: [
+        (
+          region: LessonTableRegion.threeBetSprCommit,
+          title: 'SPR / commit',
+          detail: 'Core lever',
+          visual: const Icon(
+            Icons.straighten,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.threeBetFeltSuits,
+          title: 'Felt suits',
+          detail: 'Irrelevant',
+          visual: const Icon(
+            Icons.palette_outlined,
             color: AppColors.danger,
             size: 24,
           ),

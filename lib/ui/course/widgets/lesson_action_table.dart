@@ -842,6 +842,17 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'Mix strong — check sometimes',
       );
+    case 'act-06-09-01-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', 'Qd'],
+        boardCodes: ['8c', '3h', '2s'],
+        potLabel: 'Pot 22',
+        villainLine: 'Checked to you · 180bb deep',
+        streetLabel: 'Flop · AQo miss after 3-bet',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Deep 3-bet — small c-bet or give-up',
+      );
   }
   return null;
 }
@@ -1100,6 +1111,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-06-08-01-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-06-09-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }

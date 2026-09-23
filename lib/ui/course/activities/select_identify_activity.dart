@@ -500,6 +500,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Randomness for its own sake — tap Need a reason.',
       'act-06-08-01-checkpoint' =>
           'Best mix description — tap Purpose freq.',
+      'act-06-09-01-guided' =>
+          '100bb 4-bet pot · top pair — tap High commit.',
+      'act-06-09-01-unguided' =>
+          'Light 4-bet for ego — tap Avoid ego.',
+      'act-06-09-01-checkpoint' =>
+          'Depth change in 3-bet pots — tap SPR / commit.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -603,7 +609,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-06-07-01-checkpoint' ||
             widget.activity.id == 'act-06-08-01-scaffolded' ||
             widget.activity.id == 'act-06-08-01-unguided' ||
-            widget.activity.id == 'act-06-08-01-checkpoint';
+            widget.activity.id == 'act-06-08-01-checkpoint' ||
+            widget.activity.id == 'act-06-09-01-guided' ||
+            widget.activity.id == 'act-06-09-01-unguided' ||
+            widget.activity.id == 'act-06-09-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&
