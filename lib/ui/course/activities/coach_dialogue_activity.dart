@@ -17,6 +17,7 @@ import 'package:live_poker_trainer/ui/course/widgets/overbet_geometry_demo.dart'
 import 'package:live_poker_trainer/ui/course/widgets/blockers_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/defend_enough_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/mix_with_reason_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/three_bet_four_bet_spr_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -310,6 +311,11 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.mixWithReason
                     ? null
                     : onFeltAcknowledge,
+            onThreeBetFourBetSprAcknowledge:
+                locked ||
+                        visual.kind != CoachDialogueVisualKind.threeBetFourBetSpr
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -526,6 +532,9 @@ enum CoachDialogueVisualKind {
 
   /// Mixing is frequency with a purpose — not coin-flip theater.
   mixWithReason,
+
+  /// 3-bet/4-bet pots shrink ranges and SPR — depth decides commitment.
+  threeBetFourBetSpr,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -662,6 +671,8 @@ class CoachDialogueVisual {
       'Tap Defend, Bluff, and Enough.',
     CoachDialogueVisualKind.mixWithReason =>
       'Tap Mix, Purpose, and No Coin.',
+    CoachDialogueVisualKind.threeBetFourBetSpr =>
+      'Tap 3-Bet, 4-Bet, and Depth.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -725,7 +736,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.overbetGeometry ||
       kind == CoachDialogueVisualKind.blockers ||
       kind == CoachDialogueVisualKind.defendEnough ||
-      kind == CoachDialogueVisualKind.mixWithReason;
+      kind == CoachDialogueVisualKind.mixWithReason ||
+      kind == CoachDialogueVisualKind.threeBetFourBetSpr;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -848,6 +860,8 @@ class CoachDialogueVisual {
       'Defend-enough tiles: defend, bluff, enough',
     CoachDialogueVisualKind.mixWithReason =>
       'Mix-with-reason tiles: mix, purpose, no coin',
+    CoachDialogueVisualKind.threeBetFourBetSpr =>
+      '3-bet/4-bet SPR tiles: 3-bet, 4-bet, depth',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -1062,6 +1076,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-06-08-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.mixWithReason,
+      );
+    case 'act-06-09-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.threeBetFourBetSpr,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1338,6 +1356,15 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       (blob.contains('polar') && blob.contains('pressure'))) {
     return const CoachDialogueVisual(
       kind: CoachDialogueVisualKind.sizingLanguage,
+    );
+  }
+  // Phrase-safe 3-bet/4-bet SPR — before bare "spr" / stack-to-pot.
+  if (blob.contains('3-bet and 4-bet') ||
+      blob.contains('depth decides commitment') ||
+      (blob.contains('4-bet pots') && blob.contains('spr')) ||
+      (blob.contains('shrink ranges') && blob.contains('spr'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.threeBetFourBetSpr,
     );
   }
   if (blob.contains('spr') ||
@@ -1621,6 +1648,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onBlockersAcknowledge,
     this.onDefendEnoughAcknowledge,
     this.onMixWithReasonAcknowledge,
+    this.onThreeBetFourBetSprAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1683,6 +1711,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onBlockersAcknowledge;
   final VoidCallback? onDefendEnoughAcknowledge;
   final VoidCallback? onMixWithReasonAcknowledge;
+  final VoidCallback? onThreeBetFourBetSprAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1985,6 +2014,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onMixWithReasonAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onMixWithReasonAcknowledge,
+        ),
+        CoachDialogueVisualKind.threeBetFourBetSpr => ThreeBetFourBetSprDemo(
+          interactive: onThreeBetFourBetSprAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onThreeBetFourBetSprAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
