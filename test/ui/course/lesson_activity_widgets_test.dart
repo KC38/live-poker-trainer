@@ -2096,9 +2096,10 @@ void main() {
       ),
     );
     expect(find.byType(TableReadDemo), findsOneWidget);
+    expect(find.text('Tap POT next'), findsOneWidget);
     expect(
       find.text('Tap Pot, Stacks, Button, and Who Acts'),
-      findsOneWidget,
+      findsNothing,
     );
     expect(
       find.text('Tap Pot, Stacks, Button, and Who Acts.'),
@@ -2107,10 +2108,17 @@ void main() {
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['POT', 'STACKS', 'BUTTON', 'WHO ACTS']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('POT'));
+    await tester.pump();
+    expect(find.text('Tap STACKS next'), findsOneWidget);
+    await tester.tap(find.text('STACKS'));
+    await tester.pump();
+    expect(find.text('Tap BUTTON next'), findsOneWidget);
+    await tester.tap(find.text('BUTTON'));
+    await tester.pump();
+    expect(find.text('Tap WHO ACTS next'), findsOneWidget);
+    await tester.tap(find.text('WHO ACTS'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });

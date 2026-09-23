@@ -2547,8 +2547,16 @@ class _TableReadDemoState extends State<TableReadDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in TableReadDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -2579,20 +2587,27 @@ class _TableReadDemoState extends State<TableReadDemo> {
                 for (var col = 0; col < 2; col++) ...[
                   if (col > 0) const SizedBox(width: 8),
                   Expanded(
-                    child: _DemoActionCard(
-                      label: TableReadDemo.points[row * 2 + col].label,
-                      caption: TableReadDemo.points[row * 2 + col].caption,
-                      color: TableReadDemo.points[row * 2 + col].color,
-                      selected: _tapped.contains(
-                        TableReadDemo.points[row * 2 + col].label,
+                    child: _DemoSoftPulse(
+                      active:
+                          widget.interactive &&
+                          widget.enabled &&
+                          next?.label ==
+                              TableReadDemo.points[row * 2 + col].label,
+                      child: _DemoActionCard(
+                        label: TableReadDemo.points[row * 2 + col].label,
+                        caption: TableReadDemo.points[row * 2 + col].caption,
+                        color: TableReadDemo.points[row * 2 + col].color,
+                        selected: _tapped.contains(
+                          TableReadDemo.points[row * 2 + col].label,
+                        ),
+                        enabled: widget.interactive && widget.enabled,
+                        onPressed:
+                            widget.interactive
+                                ? () => _onTap(
+                                  TableReadDemo.points[row * 2 + col].label,
+                                )
+                                : null,
                       ),
-                      enabled: widget.interactive && widget.enabled,
-                      onPressed:
-                          widget.interactive
-                              ? () => _onTap(
-                                TableReadDemo.points[row * 2 + col].label,
-                              )
-                              : null,
                     ),
                   ),
                 ],
@@ -2602,7 +2617,9 @@ class _TableReadDemoState extends State<TableReadDemo> {
           const SizedBox(height: 10),
           Text(
             widget.interactive
-                ? 'Tap Pot, Stacks, Button, and Who Acts'
+                ? (next == null
+                    ? 'Pot · stacks · button · who acts'
+                    : 'Tap ${next.label} next')
                 : 'Pot · stacks · button · who acts',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
