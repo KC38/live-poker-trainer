@@ -612,6 +612,26 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'Deep BTN vs nit — steal wider',
       );
+    case 'act-04-10-02-jump-3bet':
+      return const LessonActionSpot(
+        heroCodes: ['Kh', 'Kd'],
+        potLabel: 'Pot 3 → 9',
+        villainLine: 'CO opens to 6',
+        streetLabel: 'Preflop · Button · KK',
+        facingBet: true,
+        feltStatusLine: 'Kings — 3-bet value',
+      );
+    case 'act-04-10-02-jump-size':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', 'Kd'],
+        boardCodes: ['As', '7c', '2d'],
+        potLabel: 'Pot 20',
+        villainLine: 'Checked to you',
+        streetLabel: 'Flop · top pair',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Value language — half pot',
+      );
   }
   return null;
 }
@@ -811,6 +831,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
   if (id.startsWith('act-04-10-01-') &&
       (activity.renderer == ActivityRenderer.pokerActionSizing ||
           activity.renderer == ActivityRenderer.fullTableHandLab)) {
+    return true;
+  }
+  if (id.startsWith('act-04-10-02-jump-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
   return (id.startsWith('act-01-03-01-') || id.startsWith('act-01-03-02-')) &&

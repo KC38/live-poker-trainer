@@ -56,6 +56,8 @@ class _NumericPotPriceActivityState extends State<NumericPotPriceActivity> {
     return switch (activity.id) {
       'act-04-05-01-guided' =>
         'Effective 80 into pot 20 — type the SPR.',
+      'act-04-10-02-jump-spr' =>
+        'Stack 60bb, pot 15bb — type the SPR.',
       _ => 'Type the amount in chips — match the bet to call.',
     };
   }
@@ -70,6 +72,15 @@ class _NumericPotPriceActivityState extends State<NumericPotPriceActivity> {
         streetLabel: 'Preflop · SPR check',
         facingBet: false,
         feltStatusLine: 'SPR = stack ÷ pot',
+      ),
+      'act-04-10-02-jump-spr' => const LessonActionSpot(
+        heroCodes: ['Ah', 'Kd'],
+        potLabel: 'Pot 15bb',
+        stackLabel: 'Stack 60bb',
+        villainLine: 'Effective stack vs pot',
+        streetLabel: 'Jump · SPR check',
+        facingBet: false,
+        feltStatusLine: 'SPR = 60 ÷ 15',
       ),
       _ => null,
     };

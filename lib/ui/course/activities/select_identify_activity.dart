@@ -386,6 +386,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Station starts folding — tap the next step.',
       'act-04-09-01-checkpoint' =>
           'Beside a type label — tap what belongs.',
+      'act-04-10-02-jump-range' =>
+          'UTG open — tap how wide the range is.',
+      'act-04-10-02-jump-station' =>
+          'Sticky three streets — tap the exploit.',
+      'act-04-10-02-jump-nit' =>
+          'Tiny range, huge raise — tap the line.',
+      'act-04-10-02-jump-maniac' =>
+          'Barrels forever, top pair — tap the line.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -432,7 +440,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-04-08-02-unguided' ||
             widget.activity.id == 'act-04-08-02-checkpoint' ||
             widget.activity.id == 'act-04-08-03-checkpoint' ||
-            widget.activity.id.startsWith('act-04-09-01-');
+            widget.activity.id.startsWith('act-04-09-01-') ||
+            widget.activity.id == 'act-04-10-02-jump-range' ||
+            widget.activity.id == 'act-04-10-02-jump-station' ||
+            widget.activity.id == 'act-04-10-02-jump-nit' ||
+            widget.activity.id == 'act-04-10-02-jump-maniac';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

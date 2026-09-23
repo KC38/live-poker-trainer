@@ -322,6 +322,30 @@ enum LessonTableRegion {
 
   /// Destiny and aura (mistake).
   confidenceDestinyAura,
+
+  /// S4 jump: UTG open is stronger/narrower (correct).
+  jumpUtgNarrower,
+
+  /// S4 jump: UTG open is any two (mistake).
+  jumpUtgAnyTwo,
+
+  /// S4 jump: Calling Station exploit (correct).
+  jumpStationValue,
+
+  /// S4 jump: Station bluff more (mistake).
+  jumpStationBluff,
+
+  /// S4 jump: Nit respect + steal (correct).
+  jumpNitRespect,
+
+  /// S4 jump: Nit bluff-catch light (mistake).
+  jumpNitBluffCatch,
+
+  /// S4 jump: Maniac widen catch (correct).
+  jumpManiacCall,
+
+  /// S4 jump: Maniac fold all one-pair (mistake).
+  jumpManiacFoldAll,
 }
 
 /// How the mini-table is arranged.
@@ -439,6 +463,18 @@ enum LessonTableLayout {
 
   /// Confidence checkpoint: limits vs destiny.
   confidenceLimitsOutcomes,
+
+  /// S4 jump: UTG range narrower vs any two.
+  jumpUtgRangeOutcomes,
+
+  /// S4 jump: station exploit tiles.
+  jumpStationExploitOutcomes,
+
+  /// S4 jump: nit exploit tiles.
+  jumpNitExploitOutcomes,
+
+  /// S4 jump: maniac exploit tiles.
+  jumpManiacExploitOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1045,6 +1081,26 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.confidenceLimitsOutcomes,
         caption: 'What belongs beside a type label?',
       );
+    case 'act-04-10-02-jump-range':
+      return const LessonTableScene(
+        layout: LessonTableLayout.jumpUtgRangeOutcomes,
+        caption: 'UTG open — describe the range',
+      );
+    case 'act-04-10-02-jump-station':
+      return const LessonTableScene(
+        layout: LessonTableLayout.jumpStationExploitOutcomes,
+        caption: 'Sticky caller three streets',
+      );
+    case 'act-04-10-02-jump-nit':
+      return const LessonTableScene(
+        layout: LessonTableLayout.jumpNitExploitOutcomes,
+        caption: 'Tiny range · huge check-raise',
+      );
+    case 'act-04-10-02-jump-maniac':
+      return const LessonTableScene(
+        layout: LessonTableLayout.jumpManiacExploitOutcomes,
+        caption: 'Barrels forever · you have top pair',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -1567,6 +1623,30 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.confidenceDestinyAura => pick('destiny'),
         _ => null,
       };
+    case 'act-04-10-02-jump-range':
+      return switch (region) {
+        LessonTableRegion.jumpUtgNarrower => pick('j4-range'),
+        LessonTableRegion.jumpUtgAnyTwo => pick('j4-any'),
+        _ => null,
+      };
+    case 'act-04-10-02-jump-station':
+      return switch (region) {
+        LessonTableRegion.jumpStationValue => pick('j4-cs'),
+        LessonTableRegion.jumpStationBluff => pick('j4-cs-wrong'),
+        _ => null,
+      };
+    case 'act-04-10-02-jump-nit':
+      return switch (region) {
+        LessonTableRegion.jumpNitRespect => pick('j4-nit'),
+        LessonTableRegion.jumpNitBluffCatch => pick('j4-nit-bluff'),
+        _ => null,
+      };
+    case 'act-04-10-02-jump-maniac':
+      return switch (region) {
+        LessonTableRegion.jumpManiacCall => pick('j4-man'),
+        LessonTableRegion.jumpManiacFoldAll => pick('j4-man-fold'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -1672,7 +1752,11 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-04-08-02-unguided' ||
       activity.id == 'act-04-08-02-checkpoint' ||
       activity.id == 'act-04-08-03-checkpoint' ||
-      activity.id.startsWith('act-04-09-01-');
+      activity.id.startsWith('act-04-09-01-') ||
+      activity.id == 'act-04-10-02-jump-range' ||
+      activity.id == 'act-04-10-02-jump-station' ||
+      activity.id == 'act-04-10-02-jump-nit' ||
+      activity.id == 'act-04-10-02-jump-maniac';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -1860,6 +1944,14 @@ class LessonTableContext extends StatelessWidget {
           _buildConfidenceUpdateOutcomes(),
       LessonTableLayout.confidenceLimitsOutcomes =>
           _buildConfidenceLimitsOutcomes(),
+      LessonTableLayout.jumpUtgRangeOutcomes =>
+          _buildJumpUtgRangeOutcomes(),
+      LessonTableLayout.jumpStationExploitOutcomes =>
+          _buildJumpStationExploitOutcomes(),
+      LessonTableLayout.jumpNitExploitOutcomes =>
+          _buildJumpNitExploitOutcomes(),
+      LessonTableLayout.jumpManiacExploitOutcomes =>
+          _buildJumpManiacExploitOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -3505,6 +3597,129 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Aura story',
           visual: const Icon(
             Icons.auto_awesome_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildJumpUtgRangeOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive: 'Interactive jump — tap narrower or any two',
+      semanticsStatic: 'UTG range jump outcomes',
+      caption: scene.caption ?? 'UTG open — describe the range',
+      phases: [
+        (
+          region: LessonTableRegion.jumpUtgNarrower,
+          title: 'Narrower',
+          detail: 'Stronger UTG',
+          visual: const Icon(
+            Icons.filter_list,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.jumpUtgAnyTwo,
+          title: 'Any two',
+          detail: 'Too wide',
+          visual: const Icon(
+            Icons.all_inclusive,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildJumpStationExploitOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive jump — tap station value or bluff more',
+      semanticsStatic: 'Station jump exploit outcomes',
+      caption: scene.caption ?? 'Sticky caller three streets',
+      phases: [
+        (
+          region: LessonTableRegion.jumpStationValue,
+          title: 'Value more',
+          detail: 'Bluff less',
+          visual: const Icon(
+            Icons.savings_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.jumpStationBluff,
+          title: 'Bluff more',
+          detail: 'Wrong exploit',
+          visual: const Icon(
+            Icons.whatshot_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildJumpNitExploitOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive jump — tap respect heat or bluff-catch light',
+      semanticsStatic: 'Nit jump exploit outcomes',
+      caption: scene.caption ?? 'Tiny range · huge check-raise',
+      phases: [
+        (
+          region: LessonTableRegion.jumpNitRespect,
+          title: 'Respect',
+          detail: 'Steal elsewhere',
+          visual: const Icon(
+            Icons.shield_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.jumpNitBluffCatch,
+          title: 'Catch light',
+          detail: 'Wrong vs heat',
+          visual: const Icon(
+            Icons.pan_tool_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildJumpManiacExploitOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive jump — tap call wider or fold all one-pair',
+      semanticsStatic: 'Maniac jump exploit outcomes',
+      caption: scene.caption ?? 'Barrels forever · you have top pair',
+      phases: [
+        (
+          region: LessonTableRegion.jumpManiacCall,
+          title: 'Call wider',
+          detail: 'No ego raise',
+          visual: const Icon(
+            Icons.handshake_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.jumpManiacFoldAll,
+          title: 'Fold all',
+          detail: 'Too tight',
+          visual: const Icon(
+            Icons.block,
             color: AppColors.slate,
             size: 24,
           ),

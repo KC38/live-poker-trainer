@@ -240,6 +240,13 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Confidence and samples: tap notes on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-04-10-02-jump-range' ||
+      activity.id == 'act-04-10-02-jump-station' ||
+      activity.id == 'act-04-10-02-jump-nit' ||
+      activity.id == 'act-04-10-02-jump-maniac') {
+    // S4 jump: tap answers on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

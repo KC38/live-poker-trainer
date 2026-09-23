@@ -302,6 +302,10 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Maniac barrels second pair — tap Call.',
     'act-04-10-01-checkpoint' =>
       'BTN vs Nit BB with KTo — tap Open to 6.',
+    'act-04-10-02-jump-3bet' =>
+      'CO opens · KK on BTN — tap 3-bet to 18.',
+    'act-04-10-02-jump-size' =>
+      'Top pair into pot 20 — tap Bet 10.',
     _ => null,
   };
 }

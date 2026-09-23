@@ -9660,6 +9660,47 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 jump range taps Narrower on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-04-10-02-jump-range',
+      order: 1,
+      stage: ActivityStage.jumpTest,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Jump: stronger narrower range.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'UTG open is best described as?',
+      choices: const [
+        CourseChoice(id: 'j4-range', label: 'Stronger, narrower range'),
+        CourseChoice(id: 'j4-any', label: 'Any two'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('UTG open — tap how wide the range is.'),
+      findsOneWidget,
+    );
+    expect(find.text('Narrower'), findsOneWidget);
+    await tester.tap(find.text('Narrower'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'j4-range');
+    controller.dispose();
+  });
+
   testWidgets('s4 meet nit guided taps Nit on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-04-07-02-guided',
