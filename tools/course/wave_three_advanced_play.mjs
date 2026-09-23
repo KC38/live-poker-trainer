@@ -656,9 +656,9 @@ export function buildSectionFive() {
                 a11y: "Nut potential.",
                 objectives: ["Confirm multiway and deep-stack priorities"], lifeLoss: true,
                 choices: [
-                  choice("nut", "Nut potential over weak bluffs", "recommended",
+                  choice("nut", "Nut potential", "recommended",
                     "Crowds punish air."),
-                  choice("bluff", "Bluff more multiway", "clear_mistake",
+                  choice("bluff", "Bluff more", "clear_mistake",
                     "Opposite.", {betterChoiceId: "nut"})
                 ],
               }),
@@ -686,7 +686,7 @@ export function buildSectionFive() {
                 choices: [
                   choice("call", "Call", "recommended",
                     "Wide aggression.", {action: "CALL", reversalRead: "Nit barrel: fold more."}),
-                  choice("fold", "Fold always", "questionable",
+                  choice("fold", "Fold", "questionable",
                     "Too tight.", {action: "FOLD"})
                 ],
               }),
@@ -696,7 +696,7 @@ export function buildSectionFive() {
                 a11y: "Nothing absolute.",
                 objectives: ["Confirm soft evidence and discipline"], lifeLoss: true,
                 choices: [
-                  choice("soft", "Nothing absolute — soft evidence only", "recommended",
+                  choice("soft", "Soft evidence", "recommended",
                     "No magic tells."),
                   choice("nuts", "Absolute nuts", "clear_mistake",
                     "Overclaim.", {betterChoiceId: "soft"})
@@ -708,7 +708,7 @@ export function buildSectionFive() {
                 a11y: "Stop.",
                 objectives: ["Confirm soft evidence and discipline"], lifeLoss: true,
                 choices: [
-                  choice("stop", "Honor the stop-loss", "recommended",
+                  choice("stop", "Honor stop", "recommended",
                     "Guardrails."),
                   choice("chase", "Chase", "clear_mistake",
                     "Leak.", {betterChoiceId: "stop"})

@@ -499,6 +499,15 @@ enum LessonTableRegion {
 
   /// Session discipline checkpoint: soft skills only (mistake).
   disciplineSoftOnly,
+
+  /// S5 exit multiway: bluff more (mistake).
+  s5CpBluffMore,
+
+  /// S5 exit tell: absolute nuts claim (mistake).
+  s5CpAbsoluteNuts,
+
+  /// S5 exit stop: chase after stop-loss (mistake).
+  s5CpChase,
 }
 
 /// How the mini-table is arranged.
@@ -700,6 +709,15 @@ enum LessonTableLayout {
 
   /// Session discipline checkpoint: edge vs soft skills.
   disciplineEdgeOutcomes,
+
+  /// S5 exit: nut potential vs bluff more multiway.
+  s5CpMultiOutcomes,
+
+  /// S5 exit: soft evidence vs absolute nuts.
+  s5CpTellOutcomes,
+
+  /// S5 exit: honor stop vs chase.
+  s5CpStopOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1446,6 +1464,21 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.disciplineEdgeOutcomes,
         caption: 'Session discipline is part of?',
       );
+    case 'act-05-09-02-cp-multi':
+      return const LessonTableScene(
+        layout: LessonTableLayout.s5CpMultiOutcomes,
+        caption: 'Four-way pot priority?',
+      );
+    case 'act-05-09-02-cp-tell':
+      return const LessonTableScene(
+        layout: LessonTableLayout.s5CpTellOutcomes,
+        caption: 'Instant shove proves?',
+      );
+    case 'act-05-09-02-cp-stop':
+      return const LessonTableScene(
+        layout: LessonTableLayout.s5CpStopOutcomes,
+        caption: 'Hit stop-loss — do?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -2139,6 +2172,24 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.disciplineSoftOnly => pick('soft'),
         _ => null,
       };
+    case 'act-05-09-02-cp-multi':
+      return switch (region) {
+        LessonTableRegion.multiwayNutsPriority => pick('nut'),
+        LessonTableRegion.s5CpBluffMore => pick('bluff'),
+        _ => null,
+      };
+    case 'act-05-09-02-cp-tell':
+      return switch (region) {
+        LessonTableRegion.timingSoftEvidence => pick('soft'),
+        LessonTableRegion.s5CpAbsoluteNuts => pick('nuts'),
+        _ => null,
+      };
+    case 'act-05-09-02-cp-stop':
+      return switch (region) {
+        LessonTableRegion.disciplineStop => pick('stop'),
+        LessonTableRegion.s5CpChase => pick('chase'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -2272,7 +2323,10 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-05-09-01-guided' ||
       activity.id == 'act-05-09-01-scaffolded' ||
       activity.id == 'act-05-09-01-unguided' ||
-      activity.id == 'act-05-09-01-checkpoint';
+      activity.id == 'act-05-09-01-checkpoint' ||
+      activity.id == 'act-05-09-02-cp-multi' ||
+      activity.id == 'act-05-09-02-cp-tell' ||
+      activity.id == 'act-05-09-02-cp-stop';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -2513,6 +2567,9 @@ class LessonTableContext extends StatelessWidget {
           _buildDisciplineCashOutOutcomes(),
       LessonTableLayout.disciplineEdgeOutcomes =>
           _buildDisciplineEdgeOutcomes(),
+      LessonTableLayout.s5CpMultiOutcomes => _buildS5CpMultiOutcomes(),
+      LessonTableLayout.s5CpTellOutcomes => _buildS5CpTellOutcomes(),
+      LessonTableLayout.s5CpStopOutcomes => _buildS5CpStopOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -5052,6 +5109,99 @@ class LessonTableContext extends StatelessWidget {
           visual: const Icon(
             Icons.spa_outlined,
             color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildS5CpMultiOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive S5 exit — tap nut potential vs bluff more',
+      semanticsStatic: 'S5 exit multiway outcomes',
+      caption: scene.caption ?? 'Four-way pot priority?',
+      phases: [
+        (
+          region: LessonTableRegion.multiwayNutsPriority,
+          title: 'Nut potential',
+          detail: 'Over weak bluffs',
+          visual: const Icon(
+            Icons.workspace_premium_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.s5CpBluffMore,
+          title: 'Bluff more',
+          detail: 'Crowds punish',
+          visual: const Icon(
+            Icons.air,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildS5CpTellOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive S5 exit — tap soft evidence vs absolute nuts',
+      semanticsStatic: 'S5 exit tell outcomes',
+      caption: scene.caption ?? 'Instant shove proves?',
+      phases: [
+        (
+          region: LessonTableRegion.timingSoftEvidence,
+          title: 'Soft evidence',
+          detail: 'Nothing absolute',
+          visual: const Icon(
+            Icons.tune,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.s5CpAbsoluteNuts,
+          title: 'Absolute nuts',
+          detail: 'Overclaim',
+          visual: const Icon(
+            Icons.workspace_premium_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildS5CpStopOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive S5 exit — tap honor stop vs chase',
+      semanticsStatic: 'S5 exit stop-loss outcomes',
+      caption: scene.caption ?? 'Hit stop-loss — do?',
+      phases: [
+        (
+          region: LessonTableRegion.disciplineStop,
+          title: 'Honor stop',
+          detail: 'Guardrails',
+          visual: const Icon(
+            Icons.front_hand_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.s5CpChase,
+          title: 'Chase',
+          detail: 'Bankroll leak',
+          visual: const Icon(
+            Icons.replay,
+            color: AppColors.danger,
             size: 24,
           ),
         ),

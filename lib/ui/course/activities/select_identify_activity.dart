@@ -442,6 +442,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Tired and up small — tap Cash out.',
       'act-05-09-01-checkpoint' =>
           'Session discipline — tap Your edge.',
+      'act-05-09-02-cp-multi' =>
+          'Four-way pot — tap Nut potential.',
+      'act-05-09-02-cp-tell' =>
+          'Instant shove — tap Soft evidence.',
+      'act-05-09-02-cp-stop' =>
+          'Hit stop-loss — tap Honor stop.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -516,7 +522,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-05-09-01-guided' ||
             widget.activity.id == 'act-05-09-01-scaffolded' ||
             widget.activity.id == 'act-05-09-01-unguided' ||
-            widget.activity.id == 'act-05-09-01-checkpoint';
+            widget.activity.id == 'act-05-09-01-checkpoint' ||
+            widget.activity.id == 'act-05-09-02-cp-multi' ||
+            widget.activity.id == 'act-05-09-02-cp-tell' ||
+            widget.activity.id == 'act-05-09-02-cp-stop';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&
