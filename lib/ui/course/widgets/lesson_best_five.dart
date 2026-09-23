@@ -265,6 +265,7 @@ class SelectableBestFiveCard extends StatelessWidget {
     required this.enabled,
     this.highlighted = false,
     this.dimmed = false,
+    this.size = MiniCardSize.small,
     this.onPressed,
   });
 
@@ -273,6 +274,7 @@ class SelectableBestFiveCard extends StatelessWidget {
   final bool enabled;
   final bool highlighted;
   final bool dimmed;
+  final MiniCardSize size;
   final VoidCallback? onPressed;
 
   @override
@@ -289,14 +291,15 @@ class SelectableBestFiveCard extends StatelessWidget {
             : highlighted
             ? AppColors.gold.withValues(alpha: 0.75)
             : AppColors.slateDark.withValues(alpha: 0.7);
+    final radius = size == MiniCardSize.hero ? 10.0 : 8.0;
     final child = AnimatedOpacity(
       duration: const Duration(milliseconds: 140),
       opacity: dimmed && !selected ? 0.38 : 1,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 140),
-        padding: const EdgeInsets.all(3),
+        padding: EdgeInsets.all(size == MiniCardSize.hero ? 4 : 3),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(radius),
           border: Border.all(
             color: border,
             width: selected ? 2.4 : highlighted ? 2 : 1,
@@ -311,10 +314,10 @@ class SelectableBestFiveCard extends StatelessWidget {
         child:
             card == null
                 ? SizedBox(
-                  width: MiniCardSize.small.dimensions.width,
-                  height: MiniCardSize.small.dimensions.height,
+                  width: size.dimensions.width,
+                  height: size.dimensions.height,
                 )
-                : MiniCard(card: card, size: MiniCardSize.small),
+                : MiniCard(card: card, size: size),
       ),
     );
     if (onPressed == null) return child;
@@ -326,7 +329,7 @@ class SelectableBestFiveCard extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: enabled ? onPressed : null,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(radius),
           child: child,
         ),
       ),
@@ -459,87 +462,110 @@ class _BestFiveCardPickerState extends State<BestFiveCardPicker> {
   @override
   Widget build(BuildContext context) {
     final spot = widget.spot;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          'You',
-          style: GoogleFonts.manrope(
-            color: AppColors.cream,
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.feltBorder.withValues(alpha: 0.85),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'You',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.manrope(
+              color: AppColors.cream,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
           ),
-        ),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            for (final code in spot.heroCodes)
-              SelectableBestFiveCard(
-                key: ValueKey<String>('best-five-$code'),
-                code: code,
-                selected: _selected.contains(code),
-                enabled: !widget.locked,
-                onPressed: () => _toggle(code),
-              ),
-          ],
-        ),
-        const SizedBox(height: 14),
-        Text(
-          'Board',
-          style: GoogleFonts.manrope(
-            color: AppColors.cream,
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            alignment: WrapAlignment.center,
+            children: [
+              for (final code in spot.heroCodes)
+                SelectableBestFiveCard(
+                  key: ValueKey<String>('best-five-$code'),
+                  code: code,
+                  selected: _selected.contains(code),
+                  enabled: !widget.locked,
+                  size: MiniCardSize.hero,
+                  onPressed: () => _toggle(code),
+                ),
+            ],
           ),
-        ),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            for (final code in spot.boardCodes)
-              SelectableBestFiveCard(
-                key: ValueKey<String>('best-five-$code'),
-                code: code,
-                selected: _selected.contains(code),
-                enabled: !widget.locked,
-                onPressed: () => _toggle(code),
-              ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Builder(
-          builder: (context) {
-            final status = () {
-              if (widget.controller.lastResult != null) return '';
-              if (widget.controller.submitting) return 'Checking…';
-              if (_selected.length == 5) {
-                return mapBestFiveSelectionToChoiceId(
-                          selected: _selected,
-                          spot: spot,
-                          choices: widget.activity.choices,
-                        ) !=
-                        null
-                    ? 'Checking…'
-                    : 'Five tapped — try a stronger five.';
-              }
-              return '${_selected.length}/5 selected — ${spot.hint}';
-            }();
-            if (status.isEmpty) return const SizedBox.shrink();
-            return Text(
-              status,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-              ),
-            );
-          },
-        ),
-      ],
+          const SizedBox(height: 16),
+          Text(
+            'BOARD · shared',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.manrope(
+              color: AppColors.cream.withValues(alpha: 0.7),
+              fontSize: 10,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.7,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            alignment: WrapAlignment.center,
+            children: [
+              for (final code in spot.boardCodes)
+                SelectableBestFiveCard(
+                  key: ValueKey<String>('best-five-$code'),
+                  code: code,
+                  selected: _selected.contains(code),
+                  enabled: !widget.locked,
+                  size: MiniCardSize.hero,
+                  onPressed: () => _toggle(code),
+                ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Builder(
+            builder: (context) {
+              final status = () {
+                if (widget.controller.lastResult != null) return '';
+                if (widget.controller.submitting) return 'Checking…';
+                if (_selected.length == 5) {
+                  return mapBestFiveSelectionToChoiceId(
+                            selected: _selected,
+                            spot: spot,
+                            choices: widget.activity.choices,
+                          ) !=
+                          null
+                      ? 'Checking…'
+                      : 'Five tapped — try a stronger five.';
+                }
+                // Rex already says tap the ones that play — keep a quiet count.
+                return '${_selected.length}/5 selected';
+              }();
+              if (status.isEmpty) return const SizedBox.shrink();
+              return Text(
+                status,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.manrope(
+                  color: AppColors.slate,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }
