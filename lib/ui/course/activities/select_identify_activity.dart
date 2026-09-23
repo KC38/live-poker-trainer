@@ -682,6 +682,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id.startsWith('act-02-01-01-') ||
             widget.activity.id == 'act-02-01-02-unguided-wait' ||
             widget.activity.id == 'act-02-01-02-checkpoint-full' ||
+            widget.activity.id == 'act-01-02-02-unguided-board' ||
             widget.activity.id.startsWith('act-02-06-01-') ||
             widget.activity.id == 'act-02-07-01-checkpoint-habit' ||
             widget.activity.id == 'act-02-07-02-jump-pos' ||
@@ -865,9 +866,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                 selectedRegion: _selectedRegion,
                 selectedSeatIndex: _selectedSeatIndex,
                 showSoftPulse:
-                    widget.showGuidance &&
                     selected == null &&
-                    widget.activity.stage == ActivityStage.guided,
+                    !locked &&
+                    ((widget.showGuidance &&
+                            widget.activity.stage == ActivityStage.guided) ||
+                        widget.activity.id == 'act-01-02-02-unguided-board'),
                 enabled: !locked,
                 onRegionTap:
                     locked
