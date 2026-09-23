@@ -61,6 +61,12 @@ class AuthoredMultiStepActivity extends StatelessWidget {
         'Two callers · blank — tap Continue value.',
       ('act-07-10-04-hand', 'step-limp-river') =>
         'Both call · thin value — tap Bet thin value.',
+      ('act-07-10-05-hand', 'step-4b-flop') =>
+        '4-bet pot · Q83r — tap Bet.',
+      ('act-07-10-05-hand', 'step-4b-turn') =>
+        'Called · blank — tap Continue / commit.',
+      ('act-07-10-05-hand', 'step-4b-river') =>
+        'Ace hits · jam — tap Fold.',
       _ => 'Play the street — tap your action on the dock.',
     };
   }

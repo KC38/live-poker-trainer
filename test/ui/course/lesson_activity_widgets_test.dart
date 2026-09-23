@@ -40,6 +40,7 @@ import 'package:live_poker_trainer/ui/course/widgets/capstone_srp_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/capstone_3bet_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/capstone_multiway_deep_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/capstone_limped_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/capstone_4bet_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
@@ -17974,6 +17975,284 @@ void main() {
     await tester.tap(find.text('BET THIN VALUE'));
     await tester.pump();
     expect(controller.draft.choiceId, 'value');
+    controller.dispose();
+  });
+
+
+  testWidgets(
+    's7 capstone 4bet explain taps SPR Commit Fold instead of Continue',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-07-10-05-explain',
+        order: 1,
+        stage: ActivityStage.explain,
+        renderer: ActivityRenderer.coachDialogue,
+        estimatedSeconds: 30,
+        accessibilityText: 'Capstone 4-bet. Short SPR. No hints.',
+        acceptedGrades: const [SoftGrade.recommended],
+        objectives: const ['Respect short SPR commitment'],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'm',
+            kind: 'dialogue',
+            text: 'Capstone 4-bet. Short SPR. No hints.',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      var feltAck = 0;
+      await tester.pumpWidget(
+        _wrap(
+          CoachDialogueActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+            onFeltAcknowledge: () => feltAck += 1,
+          ),
+        ),
+      );
+      expect(find.byType(Capstone4betDemo), findsOneWidget);
+      expect(find.text('Tap SPR, Commit, and Fold.'), findsOneWidget);
+      expect(
+        find.text('Short SPR — commit clean, fold ego'),
+        findsNothing,
+      );
+      expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+      expect(isTableRegionTapActivity(activity), isTrue);
+
+      for (final title in ['SPR', 'COMMIT', 'FOLD']) {
+        await tester.tap(find.text(title));
+        await tester.pump();
+      }
+      expect(feltAck, 1);
+      controller.dispose();
+    },
+  );
+
+  testWidgets('s7 capstone 4bet hand docks Bet on flop felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-07-10-05-hand',
+      order: 2,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 70,
+      accessibilityText: '100bb 4-bet pot; you hold KK after 4-betting.',
+      acceptedGrades: const [SoftGrade.recommended],
+      handSteps: const [
+        CourseHandStep(
+          id: 'step-4b-flop',
+          street: 'flop',
+          prompt: 'Flop Q83r. Action?',
+          choices: [
+            CourseChoice(id: 'bet', label: 'C-bet', action: 'BET', amountBb: 12),
+            CourseChoice(id: 'check', label: 'Check', action: 'CHECK'),
+            CourseChoice(id: 'min', label: 'Bet 1bb', action: 'BET', amountBb: 1),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-4b-turn',
+          street: 'turn',
+          prompt: 'Called. Turn 2d. Action?',
+          choices: [
+            CourseChoice(
+              id: 'barrel',
+              label: 'Continue / commit',
+              action: 'BET',
+              amountBb: 28,
+            ),
+            CourseChoice(
+              id: 'check-t',
+              label: 'Check/give up',
+              action: 'CHECK',
+            ),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-4b-river',
+          street: 'river',
+          prompt: 'Called. River Ad. Opponent jams. Action?',
+          choices: [
+            CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+            CourseChoice(id: 'call', label: 'Hero call', action: 'CALL'),
+            CourseChoice(
+              id: 'jam',
+              label: 'Rejam for style',
+              action: 'RAISE',
+              amountBb: 60,
+            ),
+          ],
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        AuthoredMultiStepActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('4-bet pot · Q83r — tap Bet.'), findsOneWidget);
+    expect(find.textContaining('Flop · Q83r · KK'), findsOneWidget);
+    expect(find.text('BET'), findsWidgets);
+    expect(find.text('Flop Q83r. Action?'), findsNothing);
+    await tester.tap(find.text('BET').first);
+    await tester.pump();
+    expect(controller.draft.choiceId, 'bet');
+    controller.dispose();
+  });
+
+  testWidgets('s7 capstone 4bet hand docks Continue / commit on turn felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-10-05-hand',
+      order: 2,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 70,
+      accessibilityText: '100bb 4-bet pot; you hold KK after 4-betting.',
+      acceptedGrades: const [SoftGrade.recommended],
+      handSteps: const [
+        CourseHandStep(
+          id: 'step-4b-flop',
+          street: 'flop',
+          prompt: 'Flop Q83r. Action?',
+          choices: [
+            CourseChoice(id: 'bet', label: 'C-bet', action: 'BET'),
+            CourseChoice(id: 'check', label: 'Check', action: 'CHECK'),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-4b-turn',
+          street: 'turn',
+          prompt: 'Called. Turn 2d. Action?',
+          choices: [
+            CourseChoice(
+              id: 'barrel',
+              label: 'Continue / commit',
+              action: 'BET',
+              amountBb: 28,
+            ),
+            CourseChoice(
+              id: 'check-t',
+              label: 'Check/give up',
+              action: 'CHECK',
+            ),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-4b-river',
+          street: 'river',
+          prompt: 'Called. River Ad. Opponent jams. Action?',
+          choices: [
+            CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+            CourseChoice(id: 'call', label: 'Hero call', action: 'CALL'),
+          ],
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    controller.setHandStepIndex(1);
+    await tester.pumpWidget(
+      _wrap(
+        AuthoredMultiStepActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Called · blank — tap Continue / commit.'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('Turn · Q832 · KK'), findsOneWidget);
+    expect(find.text('CONTINUE / COMMIT'), findsOneWidget);
+    expect(find.text('Called. Turn 2d. Action?'), findsNothing);
+    await tester.tap(find.text('CONTINUE / COMMIT'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'barrel');
+    controller.dispose();
+  });
+
+  testWidgets('s7 capstone 4bet hand docks Fold on river felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-07-10-05-hand',
+      order: 2,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 70,
+      accessibilityText: '100bb 4-bet pot; you hold KK after 4-betting.',
+      acceptedGrades: const [SoftGrade.recommended],
+      handSteps: const [
+        CourseHandStep(
+          id: 'step-4b-flop',
+          street: 'flop',
+          prompt: 'Flop Q83r. Action?',
+          choices: [
+            CourseChoice(id: 'bet', label: 'C-bet', action: 'BET'),
+            CourseChoice(id: 'check', label: 'Check', action: 'CHECK'),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-4b-turn',
+          street: 'turn',
+          prompt: 'Called. Turn 2d. Action?',
+          choices: [
+            CourseChoice(
+              id: 'barrel',
+              label: 'Continue / commit',
+              action: 'BET',
+            ),
+            CourseChoice(
+              id: 'check-t',
+              label: 'Check/give up',
+              action: 'CHECK',
+            ),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-4b-river',
+          street: 'river',
+          prompt: 'Called. River Ad. Opponent jams. Action?',
+          choices: [
+            CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+            CourseChoice(id: 'call', label: 'Hero call', action: 'CALL'),
+            CourseChoice(
+              id: 'jam',
+              label: 'Rejam for style',
+              action: 'RAISE',
+              amountBb: 60,
+            ),
+          ],
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    controller.setHandStepIndex(2);
+    await tester.pumpWidget(
+      _wrap(
+        AuthoredMultiStepActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Ace hits · jam — tap Fold.'), findsOneWidget);
+    expect(find.textContaining('River · Q832A · KK'), findsOneWidget);
+    expect(find.text('FOLD'), findsOneWidget);
+    expect(
+      find.text('Called. River Ad. Opponent jams. Action?'),
+      findsNothing,
+    );
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'fold');
     controller.dispose();
   });
 
