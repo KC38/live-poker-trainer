@@ -362,6 +362,12 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'LAG barrels river · second pair — tap Call.',
     'act-06-12-03-scaffolded' =>
       'Top set vs LAG — tap Trap / induce.',
+    'act-06-13-01-guided' =>
+      'River second pair vs Calling Station — tap Bet thin value.',
+    'act-06-13-01-scaffolded' =>
+      'Same hand · Nit check-raises — tap Fold.',
+    'act-06-13-01-unguided' =>
+      'Same hand · LAG barrels — tap Call.',
     _ => null,
   };
 }

@@ -550,6 +550,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Inventing triple-barrel bluffs into a LAG — tap Usually avoid.',
       'act-06-12-03-checkpoint' =>
           'LAG exploit cites — tap Wide + pressure.',
+      'act-06-13-01-checkpoint' =>
+          'Selective entry + disciplined barrels — tap TAG — respect.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -678,7 +680,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-06-12-02-unguided' ||
             widget.activity.id == 'act-06-12-02-checkpoint' ||
             widget.activity.id == 'act-06-12-03-unguided' ||
-            widget.activity.id == 'act-06-12-03-checkpoint';
+            widget.activity.id == 'act-06-12-03-checkpoint' ||
+            widget.activity.id == 'act-06-13-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&
