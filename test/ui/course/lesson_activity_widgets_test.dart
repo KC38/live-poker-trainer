@@ -3380,7 +3380,10 @@ void main() {
         ),
       );
       expect(find.byType(CappedUncappedDemo), findsOneWidget);
+      // Rex cue below the felt — not a second footer inside the demo.
       expect(find.text('Tap Capped, Uncapped, and Nuts.'), findsOneWidget);
+      expect(find.text('Tap Capped, Uncapped, and Nuts'), findsNothing);
+      expect(find.text('Nuts unlikely vs still live'), findsNothing);
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
@@ -11451,6 +11454,149 @@ void main() {
     await tester.tap(find.text('Position + initiative'));
     await tester.pump();
     expect(controller.draft.choiceId, 'pos');
+    controller.dispose();
+  });
+
+  testWidgets('s6 capped guided taps Capped on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-03-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Capped.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Villain checks turn after betting flop. Often?',
+      choices: const [
+        CourseChoice(id: 'cap', label: 'Capped'),
+        CourseChoice(id: 'uncap', label: 'Uncapped'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Checks turn after flop bet — tap Capped.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Capped'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'cap');
+    controller.dispose();
+  });
+
+  testWidgets('s6 capped scaffolded docks Bet thin on river', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-03-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Bet thin / stab.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Villain capped on river. You have thin value. Action?',
+      choices: const [
+        CourseChoice(id: 'bet', label: 'Bet thin', action: 'BET', amountBb: 10),
+        CourseChoice(id: 'check', label: 'Check', action: 'CHECK'),
+        CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Capped river · thin value — tap Bet thin.'),
+      findsOneWidget,
+    );
+    expect(find.text('BET THIN'), findsOneWidget);
+    await tester.tap(find.text('BET THIN'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'bet');
+    controller.dispose();
+  });
+
+  testWidgets('s6 capped unguided taps Uncapped on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-03-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Uncapped — respect.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Check-raise flop, bet turn, bomb river. Treat as?',
+      choices: const [
+        CourseChoice(id: 'uncap', label: 'Uncapped'),
+        CourseChoice(id: 'cap2', label: 'Capped air'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('XR flop / bet turn / bomb — tap Uncapped.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Uncapped'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'uncap');
+    controller.dispose();
+  });
+
+  testWidgets('s6 capped checkpoint taps Attack caps on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-03-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Attacking.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Caps are for?',
+      choices: const [
+        CourseChoice(id: 'attack', label: 'Attack caps'),
+        CourseChoice(id: 'fear', label: 'Auto-fold'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Caps are for — tap Attack caps.'), findsOneWidget);
+    await tester.tap(find.text('Attack caps'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'attack');
     controller.dispose();
   });
 

@@ -462,6 +462,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Nut draw XR — tap Fold equity.',
       'act-06-02-01-checkpoint' =>
           'Realization rises with — tap Position + initiative.',
+      'act-06-03-01-guided' =>
+          'Checks turn after flop bet — tap Capped.',
+      'act-06-03-01-unguided' =>
+          'XR flop / bet turn / bomb — tap Uncapped.',
+      'act-06-03-01-checkpoint' =>
+          'Caps are for — tap Attack caps.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -546,7 +552,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-06-02-01-guided' ||
             widget.activity.id == 'act-06-02-01-scaffolded' ||
             widget.activity.id == 'act-06-02-01-unguided' ||
-            widget.activity.id == 'act-06-02-01-checkpoint';
+            widget.activity.id == 'act-06-02-01-checkpoint' ||
+            widget.activity.id == 'act-06-03-01-guided' ||
+            widget.activity.id == 'act-06-03-01-unguided' ||
+            widget.activity.id == 'act-06-03-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

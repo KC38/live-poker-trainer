@@ -550,6 +550,24 @@ enum LessonTableRegion {
 
   /// Equity realize checkpoint: hope alone (mistake).
   eqRealizeHope,
+
+  /// Capped/uncapped guided: check-turn capped (correct).
+  cappedCheckTurn,
+
+  /// Capped/uncapped guided: still full nuts (mistake).
+  cappedStillNuts,
+
+  /// Capped/uncapped unguided: uncapped XR line (correct).
+  uncappedXrLine,
+
+  /// Capped/uncapped unguided: capped air only (mistake).
+  cappedAirOnly,
+
+  /// Capped/uncapped checkpoint: attack caps (correct).
+  capsAttack,
+
+  /// Capped/uncapped checkpoint: auto-fold (mistake).
+  capsAutoFold,
 }
 
 /// How the mini-table is arranged.
@@ -781,6 +799,15 @@ enum LessonTableLayout {
 
   /// Equity realize checkpoint: position+initiative vs hope.
   eqRealizePosOutcomes,
+
+  /// Capped/uncapped guided: capped vs still nuts.
+  cappedGuidedOutcomes,
+
+  /// Capped/uncapped unguided: uncapped XR vs capped air.
+  cappedUncappedLineOutcomes,
+
+  /// Capped/uncapped checkpoint: attack caps vs auto-fold.
+  cappedAttackOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1577,6 +1604,21 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.eqRealizePosOutcomes,
         caption: 'Equity realization rises with?',
       );
+    case 'act-06-03-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.cappedGuidedOutcomes,
+        caption: 'Checks turn after flop bet — often?',
+      );
+    case 'act-06-03-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.cappedUncappedLineOutcomes,
+        caption: 'XR flop, bet turn, bomb river?',
+      );
+    case 'act-06-03-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.cappedAttackOutcomes,
+        caption: 'Caps are for?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -2330,6 +2372,24 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.eqRealizeHope => pick('hope'),
         _ => null,
       };
+    case 'act-06-03-01-guided':
+      return switch (region) {
+        LessonTableRegion.cappedCheckTurn => pick('cap'),
+        LessonTableRegion.cappedStillNuts => pick('uncap'),
+        _ => null,
+      };
+    case 'act-06-03-01-unguided':
+      return switch (region) {
+        LessonTableRegion.uncappedXrLine => pick('uncap'),
+        LessonTableRegion.cappedAirOnly => pick('cap2'),
+        _ => null,
+      };
+    case 'act-06-03-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.capsAttack => pick('attack'),
+        LessonTableRegion.capsAutoFold => pick('fear'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -2473,7 +2533,10 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-06-02-01-guided' ||
       activity.id == 'act-06-02-01-scaffolded' ||
       activity.id == 'act-06-02-01-unguided' ||
-      activity.id == 'act-06-02-01-checkpoint';
+      activity.id == 'act-06-02-01-checkpoint' ||
+      activity.id == 'act-06-03-01-guided' ||
+      activity.id == 'act-06-03-01-unguided' ||
+      activity.id == 'act-06-03-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -2727,6 +2790,10 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.eqRealizeAggressionOutcomes =>
           _buildEqRealizeAggressionOutcomes(),
       LessonTableLayout.eqRealizePosOutcomes => _buildEqRealizePosOutcomes(),
+      LessonTableLayout.cappedGuidedOutcomes => _buildCappedGuidedOutcomes(),
+      LessonTableLayout.cappedUncappedLineOutcomes =>
+          _buildCappedUncappedLineOutcomes(),
+      LessonTableLayout.cappedAttackOutcomes => _buildCappedAttackOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -5575,6 +5642,99 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Not a plan',
           visual: const Icon(
             Icons.help_outline,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCappedGuidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive capped ranges — tap capped vs uncapped',
+      semanticsStatic: 'Capped range guided outcomes',
+      caption: scene.caption ?? 'Checks turn after flop bet — often?',
+      phases: [
+        (
+          region: LessonTableRegion.cappedCheckTurn,
+          title: 'Capped',
+          detail: 'Fewer nuts',
+          visual: const Icon(
+            Icons.vertical_align_bottom,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.cappedStillNuts,
+          title: 'Uncapped',
+          detail: 'Wrong story',
+          visual: const Icon(
+            Icons.workspace_premium_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCappedUncappedLineOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive uncapped lines — tap uncapped vs capped air',
+      semanticsStatic: 'Uncapped line outcomes',
+      caption: scene.caption ?? 'XR flop, bet turn, bomb river?',
+      phases: [
+        (
+          region: LessonTableRegion.uncappedXrLine,
+          title: 'Uncapped',
+          detail: 'Nuts still live',
+          visual: const Icon(
+            Icons.local_fire_department,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.cappedAirOnly,
+          title: 'Capped air',
+          detail: 'Wrong read',
+          visual: const Icon(
+            Icons.air,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCappedAttackOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive capped ranges — tap attack caps vs auto-fold',
+      semanticsStatic: 'Capped attack outcomes',
+      caption: scene.caption ?? 'Caps are for?',
+      phases: [
+        (
+          region: LessonTableRegion.capsAttack,
+          title: 'Attack caps',
+          detail: 'Thin value + bluffs',
+          visual: const Icon(
+            Icons.bolt,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.capsAutoFold,
+          title: 'Auto-fold',
+          detail: 'Opposite exploit',
+          visual: const Icon(
+            Icons.do_not_disturb_on_outlined,
             color: AppColors.slate,
             size: 24,
           ),

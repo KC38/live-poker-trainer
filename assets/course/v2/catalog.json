@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "8fc01c82d8e268e4a599586f81b17b50206301514a0fffc26c94bdd6a2f6d356",
+  "contentChecksum": "f4105a22039e1c29baef29338e8ce46e4254aa65b203eeb3ecc1357f1535b045",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -11457,13 +11457,13 @@
                   "choices": [
                     {
                       "id": "cap",
-                      "label": "Capped — fewer nuts",
-                      "accessibilityText": "Capped — fewer nuts"
+                      "label": "Capped",
+                      "accessibilityText": "Capped"
                     },
                     {
                       "id": "uncap",
-                      "label": "Still full uncapped nuts",
-                      "accessibilityText": "Still full uncapped nuts"
+                      "label": "Uncapped",
+                      "accessibilityText": "Uncapped"
                     }
                   ]
                 },
@@ -11487,20 +11487,21 @@
                   "choices": [
                     {
                       "id": "bet",
-                      "label": "Bet for thin value or a stab",
-                      "accessibilityText": "Bet for thin value or a stab",
+                      "label": "Bet thin",
+                      "accessibilityText": "Bet thin",
                       "action": "BET",
                       "amountBb": 10
                     },
                     {
                       "id": "check",
-                      "label": "Always check",
-                      "accessibilityText": "Always check"
+                      "label": "Check",
+                      "accessibilityText": "Check",
+                      "action": "CHECK"
                     },
                     {
                       "id": "fold",
-                      "label": "Fold showdown value",
-                      "accessibilityText": "Fold showdown value",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
                       "action": "FOLD"
                     }
                   ]
@@ -11525,13 +11526,13 @@
                   "choices": [
                     {
                       "id": "uncap",
-                      "label": "Uncapped — need a strong catcher",
-                      "accessibilityText": "Uncapped — need a strong catcher"
+                      "label": "Uncapped",
+                      "accessibilityText": "Uncapped"
                     },
                     {
                       "id": "cap2",
-                      "label": "Capped air only",
-                      "accessibilityText": "Capped air only"
+                      "label": "Capped air",
+                      "accessibilityText": "Capped air"
                     }
                   ]
                 },
@@ -11555,13 +11556,13 @@
                   "choices": [
                     {
                       "id": "attack",
-                      "label": "Attacking with value and chosen bluffs",
-                      "accessibilityText": "Attacking with value and chosen bluffs"
+                      "label": "Attack caps",
+                      "accessibilityText": "Attack caps"
                     },
                     {
                       "id": "fear",
-                      "label": "Automatic folds forever",
-                      "accessibilityText": "Automatic folds forever"
+                      "label": "Auto-fold",
+                      "accessibilityText": "Auto-fold"
                     }
                   ]
                 }
