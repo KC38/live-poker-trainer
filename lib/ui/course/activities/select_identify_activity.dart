@@ -735,19 +735,28 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             if (!locked &&
                 (widget.controller.submitting ||
                     widget.controller.lastResult == null)) ...[
-              const SizedBox(height: 12),
-              Text(
-                widget.controller.submitting
-                    ? 'Checking…'
-                    : feltFirstSelect
-                    ? 'Tap on the felt.'
-                    : 'Tap the answer on the table.',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.manrope(
-                  color: AppColors.slate,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                ),
+              Builder(
+                builder: (context) {
+                  final status = widget.controller.submitting
+                      ? 'Checking…'
+                      : feltFirstSelect
+                      // Rex already cues the tile — no third "tap…" line.
+                      ? (coach.isNotEmpty ? '' : 'Tap on the felt.')
+                      : 'Tap the answer on the table.';
+                  if (status.isEmpty) return const SizedBox.shrink();
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Text(
+                      status,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.manrope(
+                        color: AppColors.slate,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           ],
