@@ -3681,7 +3681,13 @@ void main() {
         ),
       );
       expect(find.byType(MixedStrategyDemo), findsOneWidget);
+      // Rex cue below the felt — not a second footer inside the demo.
       expect(find.text('Tap Mix, Purpose, and Strong.'), findsOneWidget);
+      expect(find.text('Tap Mix, Purpose, and Strong'), findsNothing);
+      expect(
+        find.text('Frequency with a purpose — not coin-flip'),
+        findsNothing,
+      );
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
@@ -12224,6 +12230,149 @@ void main() {
     await tester.tap(find.text('Punish over-bluffs'));
     await tester.pump();
     expect(controller.draft.choiceId, 'punish');
+    controller.dispose();
+  });
+
+  testWidgets('s6 mix guided docks Check on flopped set', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-08-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Check — protect checking range / induce.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'You flop a set. Sometimes?',
+      choices: const [
+        CourseChoice(id: 'protect', label: 'Check', action: 'CHECK'),
+        CourseChoice(id: 'coin', label: 'Always bet', action: 'BET'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Flopped set — tap Check.'), findsOneWidget);
+    expect(find.text('CHECK'), findsOneWidget);
+    expect(find.text('ALWAYS BET'), findsOneWidget);
+    await tester.tap(find.text('CHECK'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'protect');
+    controller.dispose();
+  });
+
+  testWidgets('s6 mix scaffolded taps Less bluff on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-08-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Less — they do not fold.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Versus a Calling Station, how much bluff-mixing?',
+      choices: const [
+        CourseChoice(id: 'less', label: 'Less bluff'),
+        CourseChoice(id: 'same', label: 'Same mix'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Vs Calling Station — tap Less bluff.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Less bluff'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'less');
+    controller.dispose();
+  });
+
+  testWidgets('s6 mix unguided taps Need a reason on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-08-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'No.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Randomness for its own sake?',
+      choices: const [
+        CourseChoice(id: 'no', label: 'Need a reason'),
+        CourseChoice(id: 'yes', label: 'Always random'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Randomness for its own sake — tap Need a reason.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Need a reason'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'no');
+    controller.dispose();
+  });
+
+  testWidgets('s6 mix checkpoint taps Purpose freq on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-08-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Frequency with purpose.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Best mix description?',
+      choices: const [
+        CourseChoice(id: 'freq', label: 'Purpose freq'),
+        CourseChoice(id: 'chaos', label: 'Chaos'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Best mix description — tap Purpose freq.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Purpose freq'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'freq');
     controller.dispose();
   });
 

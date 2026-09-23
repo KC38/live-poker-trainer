@@ -494,6 +494,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'MDF numbers — tap Intuition.',
       'act-06-07-01-checkpoint' =>
           'Minimum defense goal — tap Punish over-bluffs.',
+      'act-06-08-01-scaffolded' =>
+          'Vs Calling Station — tap Less bluff.',
+      'act-06-08-01-unguided' =>
+          'Randomness for its own sake — tap Need a reason.',
+      'act-06-08-01-checkpoint' =>
+          'Best mix description — tap Purpose freq.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -594,7 +600,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-06-06-01-checkpoint' ||
             widget.activity.id == 'act-06-07-01-guided' ||
             widget.activity.id == 'act-06-07-01-unguided' ||
-            widget.activity.id == 'act-06-07-01-checkpoint';
+            widget.activity.id == 'act-06-07-01-checkpoint' ||
+            widget.activity.id == 'act-06-08-01-scaffolded' ||
+            widget.activity.id == 'act-06-08-01-unguided' ||
+            widget.activity.id == 'act-06-08-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

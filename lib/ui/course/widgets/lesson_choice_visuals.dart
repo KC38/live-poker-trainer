@@ -348,6 +348,12 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Min-defense: tap continue / MDF stance reads on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-06-08-01-scaffolded' ||
+      activity.id == 'act-06-08-01-unguided' ||
+      activity.id == 'act-06-08-01-checkpoint') {
+    // Mixed strategy: tap mix-reason reads on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

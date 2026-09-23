@@ -649,6 +649,24 @@ enum LessonTableRegion {
 
   /// Min-defense checkpoint: never fold (mistake).
   defendNeverFold,
+
+  /// Mixed strategy scaffolded: less bluff vs station (correct).
+  mixLessBluff,
+
+  /// Mixed strategy scaffolded: same mix always (mistake).
+  mixSameAlways,
+
+  /// Mixed strategy unguided: need a reason (correct).
+  mixNeedReason,
+
+  /// Mixed strategy unguided: always random (mistake).
+  mixAlwaysRandom,
+
+  /// Mixed strategy checkpoint: purpose frequency (correct).
+  mixPurposeFreq,
+
+  /// Mixed strategy checkpoint: chaos (mistake).
+  mixChaos,
 }
 
 /// How the mini-table is arranged.
@@ -928,6 +946,15 @@ enum LessonTableLayout {
 
   /// Min-defense checkpoint: punish over-bluffs vs never fold.
   defendPunishOutcomes,
+
+  /// Mixed strategy scaffolded: less bluff vs same mix.
+  mixStationOutcomes,
+
+  /// Mixed strategy unguided: need a reason vs always random.
+  mixReasonOutcomes,
+
+  /// Mixed strategy checkpoint: purpose freq vs chaos.
+  mixPurposeOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1805,6 +1832,21 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.defendPunishOutcomes,
         caption: 'Minimum defense goal?',
       );
+    case 'act-06-08-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.mixStationOutcomes,
+        caption: 'Versus a Calling Station, how much bluff-mixing?',
+      );
+    case 'act-06-08-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.mixReasonOutcomes,
+        caption: 'Randomness for its own sake?',
+      );
+    case 'act-06-08-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.mixPurposeOutcomes,
+        caption: 'Best mix description?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -2655,6 +2697,24 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.defendNeverFold => pick('call-all'),
         _ => null,
       };
+    case 'act-06-08-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.mixLessBluff => pick('less'),
+        LessonTableRegion.mixSameAlways => pick('same'),
+        _ => null,
+      };
+    case 'act-06-08-01-unguided':
+      return switch (region) {
+        LessonTableRegion.mixNeedReason => pick('no'),
+        LessonTableRegion.mixAlwaysRandom => pick('yes'),
+        _ => null,
+      };
+    case 'act-06-08-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.mixPurposeFreq => pick('freq'),
+        LessonTableRegion.mixChaos => pick('chaos'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -2814,7 +2874,10 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-06-06-01-checkpoint' ||
       activity.id == 'act-06-07-01-guided' ||
       activity.id == 'act-06-07-01-unguided' ||
-      activity.id == 'act-06-07-01-checkpoint';
+      activity.id == 'act-06-07-01-checkpoint' ||
+      activity.id == 'act-06-08-01-scaffolded' ||
+      activity.id == 'act-06-08-01-unguided' ||
+      activity.id == 'act-06-08-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -3087,6 +3150,9 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.defendIntuitionOutcomes =>
           _buildDefendIntuitionOutcomes(),
       LessonTableLayout.defendPunishOutcomes => _buildDefendPunishOutcomes(),
+      LessonTableLayout.mixStationOutcomes => _buildMixStationOutcomes(),
+      LessonTableLayout.mixReasonOutcomes => _buildMixReasonOutcomes(),
+      LessonTableLayout.mixPurposeOutcomes => _buildMixPurposeOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -6449,6 +6515,100 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Too wide',
           visual: const Icon(
             Icons.all_inclusive,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMixStationOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive station mix — tap less bluff vs same mix',
+      semanticsStatic: 'Mix station outcomes',
+      caption:
+          scene.caption ?? 'Versus a Calling Station, how much bluff-mixing?',
+      phases: [
+        (
+          region: LessonTableRegion.mixLessBluff,
+          title: 'Less bluff',
+          detail: 'Value heavier',
+          visual: const Icon(
+            Icons.trending_down,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.mixSameAlways,
+          title: 'Same mix',
+          detail: 'Ignore type',
+          visual: const Icon(
+            Icons.sync_alt,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMixReasonOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive mix reason — tap need a reason vs always random',
+      semanticsStatic: 'Mix reason outcomes',
+      caption: scene.caption ?? 'Randomness for its own sake?',
+      phases: [
+        (
+          region: LessonTableRegion.mixNeedReason,
+          title: 'Need a reason',
+          detail: 'Frequency ≠ chaos',
+          visual: const Icon(
+            Icons.lightbulb_outline,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.mixAlwaysRandom,
+          title: 'Always random',
+          detail: 'Coin-flip theater',
+          visual: const Icon(
+            Icons.casino_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMixPurposeOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive mix description — tap purpose freq vs chaos',
+      semanticsStatic: 'Mix purpose outcomes',
+      caption: scene.caption ?? 'Best mix description?',
+      phases: [
+        (
+          region: LessonTableRegion.mixPurposeFreq,
+          title: 'Purpose freq',
+          detail: 'Course standard',
+          visual: const Icon(
+            Icons.balance_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.mixChaos,
+          title: 'Chaos',
+          detail: 'Not a lifestyle',
+          visual: const Icon(
+            Icons.shuffle,
             color: AppColors.danger,
             size: 24,
           ),

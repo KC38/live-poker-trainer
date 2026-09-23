@@ -15673,9 +15673,9 @@
                   "id": "act-06-08-01-guided",
                   "order": 2,
                   "stage": "guided",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
-                  "accessibilityText": "Protect checking range / induce.",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Check — protect checking range / induce.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -15685,26 +15685,28 @@
                   "objectives": [
                     "Mix strong hands sometimes"
                   ],
-                  "prompt": "Why check a set sometimes?",
+                  "prompt": "You flop a set. Sometimes?",
                   "choices": [
                     {
                       "id": "protect",
-                      "label": "Protect checks and induce bluffs",
-                      "accessibilityText": "Protect checks and induce bluffs",
+                      "label": "Check",
+                      "accessibilityText": "Check",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Purposeful mix."
-                      }
+                      },
+                      "action": "CHECK"
                     },
                     {
                       "id": "coin",
-                      "label": "Because a coin said so",
-                      "accessibilityText": "Because a coin said so",
+                      "label": "Always bet",
+                      "accessibilityText": "Always bet",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Need a reason.",
                         "betterChoiceId": "protect"
-                      }
+                      },
+                      "action": "BET"
                     }
                   ]
                 },
@@ -15728,8 +15730,8 @@
                   "choices": [
                     {
                       "id": "less",
-                      "label": "Less bluffing — value heavier",
-                      "accessibilityText": "Less bluffing — value heavier",
+                      "label": "Less bluff",
+                      "accessibilityText": "Less bluff",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Exploit reduces mix need.",
@@ -15738,8 +15740,8 @@
                     },
                     {
                       "id": "same",
-                      "label": "Same mix as versus unknowns always",
-                      "accessibilityText": "Same mix as versus unknowns always",
+                      "label": "Same mix",
+                      "accessibilityText": "Same mix",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Ignore type.",
@@ -15771,8 +15773,8 @@
                   "choices": [
                     {
                       "id": "no",
-                      "label": "No — mix only with a strategic reason",
-                      "accessibilityText": "No — mix only with a strategic reason",
+                      "label": "Need a reason",
+                      "accessibilityText": "Need a reason",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Frequency ≠ chaos."
@@ -15780,8 +15782,8 @@
                     },
                     {
                       "id": "yes",
-                      "label": "Yes — always randomize",
-                      "accessibilityText": "Yes — always randomize",
+                      "label": "Always random",
+                      "accessibilityText": "Always random",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Wrong.",
@@ -15810,8 +15812,8 @@
                   "choices": [
                     {
                       "id": "freq",
-                      "label": "Frequency with purpose",
-                      "accessibilityText": "Frequency with purpose",
+                      "label": "Purpose freq",
+                      "accessibilityText": "Purpose freq",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Course standard."
@@ -15819,8 +15821,8 @@
                     },
                     {
                       "id": "chaos",
-                      "label": "Chaos as a lifestyle",
-                      "accessibilityText": "Chaos as a lifestyle",
+                      "label": "Chaos",
+                      "accessibilityText": "Chaos",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "No.",
