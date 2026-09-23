@@ -328,6 +328,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Preflop — tap who acts first (left of the BB).',
       'act-03-01-01-unguided' =>
           'You said raise. Tap what counts at a live table.',
+      'act-03-01-01-checkpoint' =>
+          'Shorter stack caps the matchup — tap what matters with the pot.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -355,7 +357,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-02-07-02-jump-stack' ||
             widget.activity.id == 'act-03-01-01-guided' ||
             widget.activity.id == 'act-03-01-01-scaffolded' ||
-            widget.activity.id == 'act-03-01-01-unguided';
+            widget.activity.id == 'act-03-01-01-unguided' ||
+            widget.activity.id == 'act-03-01-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

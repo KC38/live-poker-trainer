@@ -136,6 +136,15 @@ enum LessonTableRegion {
 
   /// Verbal action distractor: only dealer decides later.
   verbalDealerChoice,
+
+  /// Table-read checkpoint: effective stack + pot (correct).
+  tableMatterEffAndPot,
+
+  /// Table-read checkpoint distractor: only hero's larger stack.
+  tableMatterHeroOnly,
+
+  /// Table-read checkpoint distractor: ignore pot until river.
+  tableMatterIgnorePot,
 }
 
 /// How the mini-table is arranged.
@@ -178,6 +187,9 @@ enum LessonTableLayout {
 
   /// Verbal declaration tiles: raise stands / takeback / dealer.
   verbalBindingOutcomes,
+
+  /// Table-read checkpoint: effective+pot / hero only / ignore pot.
+  tableReadMattersOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -423,6 +435,11 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         layout: LessonTableLayout.verbalBindingOutcomes,
         caption: 'You said "raise" · live table',
+      );
+    case 'act-03-01-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.tableReadMattersOutcomes,
+        caption: 'Hero 140bb · Villain 55bb · pot 18',
       );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
@@ -768,6 +785,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.verbalDealerChoice => pick('dealer-choice'),
         _ => null,
       };
+    case 'act-03-01-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.tableMatterEffAndPot => pick('eff-55'),
+        LessonTableRegion.tableMatterHeroOnly => pick('hero-140'),
+        LessonTableRegion.tableMatterIgnorePot => pick('ignore-pot'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -851,7 +875,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-02-07-02-jump-stack' ||
       activity.id == 'act-03-01-01-guided' ||
       activity.id == 'act-03-01-01-scaffolded' ||
-      activity.id == 'act-03-01-01-unguided';
+      activity.id == 'act-03-01-01-unguided' ||
+      activity.id == 'act-03-01-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -985,6 +1010,8 @@ class LessonTableContext extends StatelessWidget {
         _buildEffectiveStackOutcomes(),
       LessonTableLayout.potMultiwayOutcomes => _buildPotMultiwayOutcomes(),
       LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
+      LessonTableLayout.tableReadMattersOutcomes =>
+          _buildTableReadMattersOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -1747,6 +1774,39 @@ class LessonTableContext extends StatelessWidget {
           detail: 'After cards',
           visual: const Icon(
             Icons.gavel_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTableReadMattersOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive table read — tap effective stack and pot',
+      semanticsStatic: 'Table-read what matters outcomes',
+      caption: scene.caption ?? 'Hero 140bb · Villain 55bb · pot 18',
+      phases: [
+        (
+          region: LessonTableRegion.tableMatterEffAndPot,
+          title: '55bb + pot',
+          detail: 'Effective',
+          visual: const _PotChipDot(label: '55', gold: true),
+        ),
+        (
+          region: LessonTableRegion.tableMatterHeroOnly,
+          title: '140bb only',
+          detail: 'Your stack',
+          visual: const _PotChipDot(label: '140', gold: false),
+        ),
+        (
+          region: LessonTableRegion.tableMatterIgnorePot,
+          title: 'Ignore pot',
+          detail: 'Until river',
+          visual: const Icon(
+            Icons.visibility_off_outlined,
             color: AppColors.slate,
             size: 24,
           ),
