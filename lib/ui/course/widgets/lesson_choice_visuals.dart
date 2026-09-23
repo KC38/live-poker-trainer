@@ -317,6 +317,12 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Equity realization: tap IP / discount / fold equity / levers on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-06-03-01-guided' ||
+      activity.id == 'act-06-03-01-unguided' ||
+      activity.id == 'act-06-03-01-checkpoint') {
+    // Capped / uncapped ranges: tap line reads on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

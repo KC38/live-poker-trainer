@@ -14588,8 +14588,8 @@
                   "choices": [
                     {
                       "id": "cap",
-                      "label": "Capped — fewer nuts",
-                      "accessibilityText": "Capped — fewer nuts",
+                      "label": "Capped",
+                      "accessibilityText": "Capped",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Strong hands keep charging."
@@ -14597,8 +14597,8 @@
                     },
                     {
                       "id": "uncap",
-                      "label": "Still full uncapped nuts",
-                      "accessibilityText": "Still full uncapped nuts",
+                      "label": "Uncapped",
+                      "accessibilityText": "Uncapped",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Less likely.",
@@ -14627,8 +14627,8 @@
                   "choices": [
                     {
                       "id": "bet",
-                      "label": "Bet for thin value or a stab",
-                      "accessibilityText": "Bet for thin value or a stab",
+                      "label": "Bet thin",
+                      "accessibilityText": "Bet thin",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Caps call worse and fold medium."
@@ -14638,17 +14638,18 @@
                     },
                     {
                       "id": "check",
-                      "label": "Always check",
-                      "accessibilityText": "Always check",
+                      "label": "Check",
+                      "accessibilityText": "Check",
                       "grading": {
                         "grade": "questionable",
                         "feedback": "Misses the exploit."
-                      }
+                      },
+                      "action": "CHECK"
                     },
                     {
                       "id": "fold",
-                      "label": "Fold showdown value",
-                      "accessibilityText": "Fold showdown value",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "You are betting.",
@@ -14678,8 +14679,8 @@
                   "choices": [
                     {
                       "id": "uncap",
-                      "label": "Uncapped — need a strong catcher",
-                      "accessibilityText": "Uncapped — need a strong catcher",
+                      "label": "Uncapped",
+                      "accessibilityText": "Uncapped",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Baseline respect."
@@ -14687,8 +14688,8 @@
                     },
                     {
                       "id": "cap2",
-                      "label": "Capped air only",
-                      "accessibilityText": "Capped air only",
+                      "label": "Capped air",
+                      "accessibilityText": "Capped air",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Wrong.",
@@ -14717,8 +14718,8 @@
                   "choices": [
                     {
                       "id": "attack",
-                      "label": "Attacking with value and chosen bluffs",
-                      "accessibilityText": "Attacking with value and chosen bluffs",
+                      "label": "Attack caps",
+                      "accessibilityText": "Attack caps",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "That is the exploit."
@@ -14726,8 +14727,8 @@
                     },
                     {
                       "id": "fear",
-                      "label": "Automatic folds forever",
-                      "accessibilityText": "Automatic folds forever",
+                      "label": "Auto-fold",
+                      "accessibilityText": "Auto-fold",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Opposite.",

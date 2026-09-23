@@ -899,9 +899,9 @@ export function buildSectionSix() {
                 a11y: "Capped.",
                 objectives: ["Spot capped ranges from passive lines"],
                 choices: [
-                  choice("cap", "Capped — fewer nuts", "recommended",
+                  choice("cap", "Capped", "recommended",
                     "Strong hands keep charging."),
-                  choice("uncap", "Still full uncapped nuts", "clear_mistake",
+                  choice("uncap", "Uncapped", "clear_mistake",
                     "Less likely.", {betterChoiceId: "cap"})
                 ],
               }),
@@ -911,11 +911,11 @@ export function buildSectionSix() {
                 a11y: "Bet thin / stab.",
                 objectives: ["Attack caps with thin value and bluffs"],
                 choices: [
-                  choice("bet", "Bet for thin value or a stab", "recommended",
+                  choice("bet", "Bet thin", "recommended",
                     "Caps call worse and fold medium.", {action: "BET", amountBb: 10}),
-                  choice("check", "Always check", "questionable",
-                    "Misses the exploit."),
-                  choice("fold", "Fold showdown value", "clear_mistake",
+                  choice("check", "Check", "questionable",
+                    "Misses the exploit.", {action: "CHECK"}),
+                  choice("fold", "Fold", "clear_mistake",
                     "You are betting.", {action: "FOLD", betterChoiceId: "bet"})
                 ],
               }),
@@ -925,9 +925,9 @@ export function buildSectionSix() {
                 a11y: "Uncapped — respect.",
                 objectives: ["Respect uncapped aggression"], lifeLoss: true,
                 choices: [
-                  choice("uncap", "Uncapped — need a strong catcher", "recommended",
+                  choice("uncap", "Uncapped", "recommended",
                     "Baseline respect."),
-                  choice("cap2", "Capped air only", "clear_mistake",
+                  choice("cap2", "Capped air", "clear_mistake",
                     "Wrong.", {betterChoiceId: "uncap"})
                 ],
               }),
@@ -937,9 +937,9 @@ export function buildSectionSix() {
                 a11y: "Attacking.",
                 objectives: ["Attack caps with thin value and bluffs"], lifeLoss: true,
                 choices: [
-                  choice("attack", "Attacking with value and chosen bluffs", "recommended",
+                  choice("attack", "Attack caps", "recommended",
                     "That is the exploit."),
-                  choice("fear", "Automatic folds forever", "clear_mistake",
+                  choice("fear", "Auto-fold", "clear_mistake",
                     "Opposite.", {betterChoiceId: "attack"})
                 ],
               }),

@@ -788,6 +788,17 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'Range + nut lean — c-bet',
       );
+    case 'act-06-03-01-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', '9d'],
+        boardCodes: ['Kc', '9s', '4h', '2d', '7c'],
+        potLabel: 'Pot 42',
+        villainLine: 'Checked turn · capped',
+        streetLabel: 'River · second pair',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Cap on river — bet thin',
+      );
   }
   return null;
 }
@@ -1026,6 +1037,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-06-01-01-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-06-03-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }

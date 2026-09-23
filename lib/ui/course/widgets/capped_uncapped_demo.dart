@@ -71,7 +71,9 @@ class _CappedUncappedDemoState extends State<CappedUncappedDemo> {
                     label: CappedUncappedDemo.points[i].label,
                     caption: CappedUncappedDemo.points[i].caption,
                     color: CappedUncappedDemo.points[i].color,
-                    selected: _tapped.contains(CappedUncappedDemo.points[i].label),
+                    selected: _tapped.contains(
+                      CappedUncappedDemo.points[i].label,
+                    ),
                     enabled: widget.interactive && widget.enabled,
                     onPressed: widget.interactive
                         ? () => _onTap(CappedUncappedDemo.points[i].label)
@@ -81,18 +83,19 @@ class _CappedUncappedDemoState extends State<CappedUncappedDemo> {
               ],
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap Capped, Uncapped, and Nuts'
-                : 'Nuts unlikely vs still live',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues Capped / Uncapped / Nuts — no dupe footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Nuts unlikely vs still live',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );
@@ -155,7 +158,19 @@ class _CappedTile extends StatelessWidget {
         ],
       ),
     );
-    if (!enabled || onPressed == null) return child;
-    return GestureDetector(onTap: onPressed, child: child);
+    if (onPressed == null) return child;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: enabled ? onPressed : null,
+          borderRadius: BorderRadius.circular(12),
+          child: child,
+        ),
+      ),
+    );
   }
 }

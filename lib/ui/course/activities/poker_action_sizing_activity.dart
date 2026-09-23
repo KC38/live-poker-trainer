@@ -338,6 +338,8 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Maniac river barrel — tap Call.',
     'act-06-01-01-unguided' =>
       'PFR on K72r — tap C-bet 6.',
+    'act-06-03-01-scaffolded' =>
+      'Capped river · thin value — tap Bet thin.',
     _ => null,
   };
 }
