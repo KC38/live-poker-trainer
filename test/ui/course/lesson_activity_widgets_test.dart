@@ -13364,6 +13364,42 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s6 meet lag explain resolves lagModel not callingStation', (
+    tester,
+  ) async {
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-06-12-02-explain',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText:
+              'LAG: wide in, pressure on — still a working model.',
+          objectives: const ['Introduce LAG'],
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      CoachDialogueVisualKind.lagModel,
+    );
+    // Blob-only (no id match) must not treat bare "working model" as Station.
+    expect(
+      resolveCoachDialogueVisual(
+        CourseActivity(
+          id: 'act-generic-working-model-only',
+          order: 1,
+          stage: ActivityStage.explain,
+          renderer: ActivityRenderer.coachDialogue,
+          estimatedSeconds: 30,
+          accessibilityText: 'Still a working model.',
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      ).kind,
+      isNot(CoachDialogueVisualKind.callingStation),
+    );
+  });
+
   testWidgets(
     's6 meet lag explain taps Wide Pressure Model instead of Continue',
     (tester) async {

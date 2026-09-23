@@ -1512,7 +1512,8 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     );
   }
   if (blob.contains('calling station') ||
-      blob.contains('working model') ||
+      (blob.contains('working model') &&
+          (blob.contains('station') || blob.contains('participation'))) ||
       (blob.contains('high participation') && blob.contains('low folding'))) {
     return const CoachDialogueVisual(
       kind: CoachDialogueVisualKind.callingStation,
