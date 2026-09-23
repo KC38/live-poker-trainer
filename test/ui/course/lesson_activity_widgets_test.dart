@@ -417,7 +417,9 @@ void main() {
       ),
     );
     expect(find.byType(PassiveActionsDemo), findsOneWidget);
-    expect(find.text('Tap Fold, Check, and Call.'), findsOneWidget);
+    // Felt embeds the tap hint — no duplicate gold line under the demo.
+    expect(find.text('Tap Fold, Check, and Call'), findsOneWidget);
+    expect(find.text('Tap Fold, Check, and Call.'), findsNothing);
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(feltAck, 0);
@@ -461,7 +463,9 @@ void main() {
       ),
     );
     expect(find.byType(AggressiveActionsDemo), findsOneWidget);
-    expect(find.text('Tap Bet, Raise, and All-in.'), findsOneWidget);
+    // Felt embeds the tap hint — no duplicate gold line under the demo.
+    expect(find.text('Tap Bet, Raise, and All-in'), findsOneWidget);
+    expect(find.text('Tap Bet, Raise, and All-in.'), findsNothing);
     await tester.tap(find.text('BET'));
     await tester.pump();
     await tester.tap(find.text('RAISE'));
