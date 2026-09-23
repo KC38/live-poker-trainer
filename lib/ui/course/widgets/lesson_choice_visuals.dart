@@ -186,6 +186,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Sizing: nearby soft grades vs exactness / junk sizes.
     return SelectIdentifyPresentation.handCategoryTap;
   }
+  if (activity.id == 'act-04-06-01-guided') {
+    // Observe: tap participation note on felt tiles.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

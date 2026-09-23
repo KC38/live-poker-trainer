@@ -163,6 +163,15 @@ enum LessonTableRegion {
 
   /// Table-read checkpoint distractor: ignore pot until river.
   tableMatterIgnorePot,
+
+  /// Observe sticky: high participation note (correct).
+  observeHighParticipation,
+
+  /// Observe sticky distractor: low participation.
+  observeLowParticipation,
+
+  /// Observe sticky distractor: label archetype too early.
+  observeLabelNow,
 }
 
 /// How the mini-table is arranged.
@@ -214,6 +223,9 @@ enum LessonTableLayout {
 
   /// Table-read checkpoint: effective+pot / hero only / ignore pot.
   tableReadMattersOutcomes,
+
+  /// Observe sticky: high / low participation / label-now tiles.
+  observeParticipationOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -655,10 +667,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-04-06-01-guided':
       return const LessonTableScene(
-        layout: LessonTableLayout.positionLabels,
-        seatCount: 6,
-        buttonSeat: 3,
-        highlight: LessonTableHighlight.none,
+        layout: LessonTableLayout.observeParticipationOutcomes,
         caption: 'Seat calls 7 of 9 preflops',
       );
     case 'act-04-06-01-scaffolded':
@@ -1050,6 +1059,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.tableMatterIgnorePot => pick('ignore-pot'),
         _ => null,
       };
+    case 'act-04-06-01-guided':
+      return switch (region) {
+        LessonTableRegion.observeHighParticipation => pick('high-part'),
+        LessonTableRegion.observeLowParticipation => pick('low-part'),
+        LessonTableRegion.observeLabelNow => pick('label-now'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -1135,7 +1151,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-01-01-scaffolded' ||
       activity.id == 'act-03-01-01-unguided' ||
       activity.id == 'act-03-01-01-checkpoint' ||
-      activity.id == 'act-03-03-01-scaffolded';
+      activity.id == 'act-03-03-01-scaffolded' ||
+      activity.id == 'act-04-06-01-guided';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -1273,6 +1290,8 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
       LessonTableLayout.tableReadMattersOutcomes =>
           _buildTableReadMattersOutcomes(),
+      LessonTableLayout.observeParticipationOutcomes =>
+          _buildObserveParticipationOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -2145,6 +2164,39 @@ class LessonTableContext extends StatelessWidget {
     );
   }
 
+  Widget _buildObserveParticipationOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive observe — tap the participation note',
+      semanticsStatic: 'Observe participation outcomes',
+      caption: scene.caption ?? 'Seat calls 7 of 9 preflops',
+      phases: [
+        (
+          region: LessonTableRegion.observeHighParticipation,
+          title: 'High part.',
+          detail: '7 of 9',
+          visual: const _PotChipDot(label: '7/9', gold: true),
+        ),
+        (
+          region: LessonTableRegion.observeLowParticipation,
+          title: 'Low part.',
+          detail: 'Rare pots',
+          visual: const _PotChipDot(label: '2/9', gold: false),
+        ),
+        (
+          region: LessonTableRegion.observeLabelNow,
+          title: 'Label now',
+          detail: 'Too soon',
+          visual: const Icon(
+            Icons.sell_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildOutcomePhases({
     required String semanticsInteractive,
     required String semanticsStatic,
@@ -2883,7 +2935,7 @@ class _PotChipDot extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = gold ? AppColors.gold : AppColors.slate;
     return Container(
-      width: label.length > 1 ? 32 : 26,
+      width: label.length > 2 ? 40 : (label.length > 1 ? 32 : 26),
       height: 26,
       alignment: Alignment.center,
       decoration: BoxDecoration(
