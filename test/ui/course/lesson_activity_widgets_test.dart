@@ -8967,6 +8967,45 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 spr scaffolded docks commit on low-SPR top set', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-05-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Get it in with top set at low SPR.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'SPR ~1 after a 3-bet. You flop top set. Action?',
+      choices: const [
+        CourseChoice(id: 'commit', label: 'Commit for stacks', action: 'RAISE'),
+        CourseChoice(id: 'tiny', label: 'Check forever', action: 'CHECK'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Top set at SPR ~1 — tap Commit for stacks.'),
+      findsOneWidget,
+    );
+    expect(find.text('COMMIT FOR STACKS'), findsOneWidget);
+    await tester.tap(find.text('COMMIT FOR STACKS'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'commit');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {

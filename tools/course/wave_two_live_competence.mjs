@@ -1065,10 +1065,11 @@ export function buildSectionFour() {
                 a11y: "Get it in with top set at low SPR.",
                 objectives: ["Commit correctly at low SPR"],
                 choices: [
-                  choice("commit", "Commit / raise for stacks", "recommended",
+                  choice("commit", "Commit for stacks", "recommended",
                     "Low SPR + monster = get it in.", {action: "RAISE", amountBb: 20}),
-                  choice("tiny", "Min-check forever", "clear_mistake",
-                    "You are missing value and risking free cards.", {action: "CHECK", betterChoiceId: "commit"})
+                  choice("tiny", "Check forever", "clear_mistake",
+                    "You are missing value and risking free cards.",
+                    {action: "CHECK", betterChoiceId: "commit"})
                 ],
               }),
               actionAct({
@@ -1078,7 +1079,7 @@ export function buildSectionFour() {
                 objectives: ["Keep flexibility at high SPR"],
                 lifeLoss: true,
                 choices: [
-                  choice("flexible", "Control pot size", "recommended",
+                  choice("flexible", "Keep pot small", "recommended",
                     "Deep SPR punishes medium-strength stacks-in.", {action: "CHECK"}),
                   choice("spr-jam", "Jam day one", "clear_mistake",
                     "Over-commitment.", {action: "ALL_IN", betterChoiceId: "flexible"})
@@ -1095,7 +1096,7 @@ export function buildSectionFour() {
                     "Commitment is an SPR decision."),
                   choice("never", "Never — only hole cards matter", "clear_mistake",
                     "Depth changes correct plays.", {betterChoiceId: "before"}),
-                  choice("showdown-only", "Only at showdown arithmetic", "clear_mistake",
+                  choice("showdown-only", "Only at showdown", "clear_mistake",
                     "Decide earlier.", {betterChoiceId: "before"})
                 ],
               }),

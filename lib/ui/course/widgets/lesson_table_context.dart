@@ -645,6 +645,14 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.none,
         caption: 'Two value sizes · same story',
       );
+    case 'act-04-05-01-checkpoint':
+      return const LessonTableScene(
+        heroCodes: ['Ah', 'Kd'],
+        boardCodes: ['Qs', '7c', '2d'],
+        villainSeatCount: 1,
+        highlight: LessonTableHighlight.none,
+        caption: 'Stacks vs pot — decide before you jam',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,

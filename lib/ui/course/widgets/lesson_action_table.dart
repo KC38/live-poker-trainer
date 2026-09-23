@@ -444,6 +444,28 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'Tap the worst value size',
       );
+    case 'act-04-05-01-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['Kh', 'Kd'],
+        boardCodes: ['Kc', '7s', '2d'],
+        potLabel: 'Pot ~60 · SPR ~1',
+        villainLine: '3-bet pot · short SPR',
+        streetLabel: 'Flop · top set',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Low SPR — get it in',
+      );
+    case 'act-04-05-01-unguided':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', '9d'],
+        boardCodes: ['Qc', '9s', '3h'],
+        potLabel: 'Pot 12 · SPR 20',
+        villainLine: 'Multiway · deep stacks',
+        streetLabel: 'Flop · second pair',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'High SPR — keep it small',
+      );
   }
   return null;
 }
@@ -621,6 +643,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-04-04-01-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-04-05-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
