@@ -71,8 +71,9 @@ class _OverbetGeometryDemoState extends State<OverbetGeometryDemo> {
                     label: OverbetGeometryDemo.points[i].label,
                     caption: OverbetGeometryDemo.points[i].caption,
                     color: OverbetGeometryDemo.points[i].color,
-                    selected:
-                        _tapped.contains(OverbetGeometryDemo.points[i].label),
+                    selected: _tapped.contains(
+                      OverbetGeometryDemo.points[i].label,
+                    ),
                     enabled: widget.interactive && widget.enabled,
                     onPressed: widget.interactive
                         ? () => _onTap(OverbetGeometryDemo.points[i].label)
@@ -82,18 +83,19 @@ class _OverbetGeometryDemoState extends State<OverbetGeometryDemo> {
               ],
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap Overbet, Polar, and Geo'
-                : 'Polar story across streets',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues Overbet / Polar / Geo — no dupe footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Polar story across streets',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );
@@ -156,7 +158,19 @@ class _OverbetTile extends StatelessWidget {
         ],
       ),
     );
-    if (!enabled || onPressed == null) return child;
-    return GestureDetector(onTap: onPressed, child: child);
+    if (onPressed == null) return child;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: enabled ? onPressed : null,
+          borderRadius: BorderRadius.circular(12),
+          child: child,
+        ),
+      ),
+    );
   }
 }

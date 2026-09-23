@@ -15035,8 +15035,8 @@
                   "choices": [
                     {
                       "id": "polar-ob",
-                      "label": "Nuts or chosen bluffs with blockers",
-                      "accessibilityText": "Nuts or chosen bluffs with blockers",
+                      "label": "Nuts / bluffs",
+                      "accessibilityText": "Nuts / bluffs",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Polar story."
@@ -15044,8 +15044,8 @@
                     },
                     {
                       "id": "tpwk",
-                      "label": "Top pair weak kicker always",
-                      "accessibilityText": "Top pair weak kicker always",
+                      "label": "Top pair weak",
+                      "accessibilityText": "Top pair weak",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Merged hand, wrong size.",
@@ -15058,8 +15058,8 @@
                   "id": "act-06-05-01-scaffolded",
                   "order": 3,
                   "stage": "scaffolded",
-                  "renderer": "numeric_pot_price",
-                  "estimatedSeconds": 40,
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
                   "accessibilityText": "Around 20.",
                   "acceptedGrades": [
                     "recommended",
@@ -15070,20 +15070,42 @@
                   "objectives": [
                     "Plan geometric street sizes"
                   ],
-                  "numericPrompt": {
-                    "question": "Pot 20. Geometric ~pot-ish turn after half-pot flop. Rough turn bet?",
-                    "unit": "chips",
-                    "acceptedMin": 16,
-                    "acceptedMax": 28,
-                    "grading": {
-                      "grade": "recommended",
-                      "feedback": "Near-pot keeps river shove geometry clean."
+                  "prompt": "Pot 20 after half-pot flop. Geometric turn?",
+                  "choices": [
+                    {
+                      "id": "mid",
+                      "label": "Bet ~20",
+                      "accessibilityText": "Bet ~20",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Near-pot keeps river shove geometry clean."
+                      },
+                      "action": "BET",
+                      "amountBb": 20
                     },
-                    "missGrading": {
-                      "grade": "clear_mistake",
-                      "feedback": "Think pot-sized continuation."
+                    {
+                      "id": "tiny",
+                      "label": "Bet tiny",
+                      "accessibilityText": "Bet tiny",
+                      "grading": {
+                        "grade": "questionable",
+                        "feedback": "Too small to keep geometry clean."
+                      },
+                      "action": "BET",
+                      "amountBb": 3
+                    },
+                    {
+                      "id": "bomb",
+                      "label": "Bet 3x pot",
+                      "accessibilityText": "Bet 3x pot",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Think pot-sized continuation."
+                      },
+                      "action": "BET",
+                      "amountBb": 60
                     }
-                  }
+                  ]
                 },
                 {
                   "id": "act-06-05-01-unguided",
@@ -15105,8 +15127,8 @@
                   "choices": [
                     {
                       "id": "avoid",
-                      "label": "Avoid — size needs a story",
-                      "accessibilityText": "Avoid — size needs a story",
+                      "label": "Avoid",
+                      "accessibilityText": "Avoid",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "No random bombs."
@@ -15144,8 +15166,8 @@
                   "choices": [
                     {
                       "id": "multi",
-                      "label": "Multi-street commitment planning",
-                      "accessibilityText": "Multi-street commitment planning",
+                      "label": "Multi-street plan",
+                      "accessibilityText": "Multi-street plan",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Link streets."
@@ -15153,8 +15175,8 @@
                     },
                     {
                       "id": "style",
-                      "label": "Looking flashy",
-                      "accessibilityText": "Looking flashy",
+                      "label": "Look flashy",
+                      "accessibilityText": "Look flashy",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Not the goal.",

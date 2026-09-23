@@ -12,7 +12,6 @@ import {
   handLabAct,
   lesson,
   multiStepAct,
-  numericAct,
   selectAct,
   unit,
 } from "./wave_one_foundations.mjs";
@@ -1030,20 +1029,28 @@ export function buildSectionSix() {
                 a11y: "Nuts or strong bluffs with blockers.",
                 objectives: ["Select overbets for polar spots"],
                 choices: [
-                  choice("polar-ob", "Nuts or chosen bluffs with blockers", "recommended",
+                  choice("polar-ob", "Nuts / bluffs", "recommended",
                     "Polar story."),
-                  choice("tpwk", "Top pair weak kicker always", "clear_mistake",
+                  choice("tpwk", "Top pair weak", "clear_mistake",
                     "Merged hand, wrong size.", {betterChoiceId: "polar-ob"})
                 ],
               }),
-              numericAct({
+              actionAct({
                 id: "act-06-05-01-scaffolded", order: 3, stage: "scaffolded",
-                question: "Pot 20. Geometric ~pot-ish turn after half-pot flop. Rough turn bet?",
+                prompt: "Pot 20 after half-pot flop. Geometric turn?",
                 a11y: "Around 20.",
                 objectives: ["Plan geometric street sizes"],
-                unit: "chips", min: 16, max: 28,
-                okFeedback: "Near-pot keeps river shove geometry clean.",
-                missFeedback: "Think pot-sized continuation.",
+                choices: [
+                  choice("mid", "Bet ~20", "recommended",
+                    "Near-pot keeps river shove geometry clean.",
+                    {action: "BET", amountBb: 20}),
+                  choice("tiny", "Bet tiny", "questionable",
+                    "Too small to keep geometry clean.",
+                    {action: "BET", amountBb: 3}),
+                  choice("bomb", "Bet 3x pot", "clear_mistake",
+                    "Think pot-sized continuation.",
+                    {action: "BET", amountBb: 60})
+                ],
               }),
               selectAct({
                 id: "act-06-05-01-unguided", order: 4, stage: "unguided",
@@ -1051,7 +1058,7 @@ export function buildSectionSix() {
                 a11y: "Avoid.",
                 objectives: ["Avoid random huge bets"], lifeLoss: true,
                 choices: [
-                  choice("avoid", "Avoid — size needs a story", "recommended",
+                  choice("avoid", "Avoid", "recommended",
                     "No random bombs."),
                   choice("yolo", "Always fine", "clear_mistake",
                     "Leaks stacks.", {betterChoiceId: "avoid"})
@@ -1063,9 +1070,9 @@ export function buildSectionSix() {
                 a11y: "Multi-street stack pressure.",
                 objectives: ["Plan geometric street sizes"], lifeLoss: true,
                 choices: [
-                  choice("multi", "Multi-street commitment planning", "recommended",
+                  choice("multi", "Multi-street plan", "recommended",
                     "Link streets."),
-                  choice("style", "Looking flashy", "clear_mistake",
+                  choice("style", "Look flashy", "clear_mistake",
                     "Not the goal.", {betterChoiceId: "multi"})
                 ],
               }),
