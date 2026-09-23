@@ -167,6 +167,12 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Leak repair: tap the seat-note tile.
     return SelectIdentifyPresentation.handCategoryTap;
   }
+  if (activity.id == 'act-03-08-02-jump-table' ||
+      activity.id == 'act-03-08-02-jump-class' ||
+      activity.id == 'act-03-08-02-jump-leak') {
+    // S3 jump: track / class / price on felt tiles.
+    return SelectIdentifyPresentation.handCategoryTap;
+  }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {
     return SelectIdentifyPresentation.showdownTap;

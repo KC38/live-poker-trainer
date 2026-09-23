@@ -248,6 +248,10 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Gutshot vs an overbet — tap Fold.',
     'act-03-08-01-unguided' =>
       'Air multiway vs a bet — tap Fold.',
+    'act-03-08-02-jump-mw' =>
+      'Air four-way on a wet flop — tap Fold.',
+    'act-03-08-02-jump-river' =>
+      'Top two on a brick river — tap a value bet.',
     _ => null,
   };
 }

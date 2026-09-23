@@ -8305,6 +8305,185 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s3 jump table taps pot+eff tile on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-03-08-02-jump-table',
+      order: 1,
+      stage: ActivityStage.jumpTest,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Jump: pot and effective stack.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Pot 16, shorter stack 40bb. What do you track first?',
+      choices: const [
+        CourseChoice(id: 'j3-track', label: 'Pot and effective 40bb'),
+        CourseChoice(id: 'j3-ignore', label: 'Only hole cards'),
+        CourseChoice(id: 'j3-chat', label: 'Only table talk'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.handCategoryTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Pot + effective 40bb'), findsOneWidget);
+    await tester.tap(find.text('Pot + effective 40bb'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'j3-track');
+    controller.dispose();
+  });
+
+  testWidgets('s3 jump class taps draw tile on combo-draw felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-03-08-02-jump-class',
+      order: 2,
+      stage: ActivityStage.jumpTest,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Jump: combo draw.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Board Qd 9d 3c. You hold Jd Td. Class?',
+      choices: const [
+        CourseChoice(
+          id: 'j3-draw',
+          label: 'Draw — straight and flush potential',
+        ),
+        CourseChoice(id: 'j3-made', label: 'Made two pair'),
+        CourseChoice(id: 'j3-air', label: 'Air'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Draw — OESD + flush'), findsOneWidget);
+    await tester.tap(find.text('Draw — OESD + flush'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'j3-draw');
+    controller.dispose();
+  });
+
+  testWidgets('s3 jump mw docks Fold on multiway air felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-03-08-02-jump-mw',
+      order: 3,
+      stage: ActivityStage.jumpTest,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 40,
+      accessibilityText: 'Jump: fold air multiway.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Four-way. You have air on a wet flop. Action?',
+      choices: const [
+        CourseChoice(id: 'j3-fold', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'j3-bluff', label: 'Bluff large', action: 'BET'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Air four-way on a wet flop — tap Fold.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'j3-fold');
+    controller.dispose();
+  });
+
+  testWidgets('s3 jump river docks value on top-two felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-03-08-02-jump-river',
+      order: 4,
+      stage: ActivityStage.jumpTest,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 40,
+      accessibilityText: 'Jump: value bet two pair.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Brick river. You have top two. Villain checks. Action?',
+      choices: const [
+        CourseChoice(id: 'j3-val', label: 'Bet value', action: 'BET'),
+        CourseChoice(id: 'j3-check', label: 'Check always', action: 'CHECK'),
+        CourseChoice(id: 'j3-fold2', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('BET VALUE'), findsOneWidget);
+    await tester.tap(find.text('BET VALUE'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'j3-val');
+    controller.dispose();
+  });
+
+  testWidgets('s3 jump leak taps fold-price tile on gutshot felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-08-02-jump-leak',
+      order: 5,
+      stage: ActivityStage.jumpTest,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Jump: fold bad price.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Gutshot, pot 10, face a 20 bet. Fix the leak?',
+      choices: const [
+        CourseChoice(id: 'j3-foldprice', label: 'Fold — price is wrong'),
+        CourseChoice(
+          id: 'j3-callprice',
+          label: 'Call because any draw is lucky',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Fold — price is wrong'), findsOneWidget);
+    await tester.tap(find.text('Fold — price is wrong'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'j3-foldprice');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {

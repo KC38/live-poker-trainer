@@ -568,6 +568,28 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.none,
         caption: 'Seat A raises a lot · Seat B rarely enters',
       );
+    case 'act-03-08-02-jump-table':
+      return const LessonTableScene(
+        villainSeatCount: 1,
+        highlight: LessonTableHighlight.none,
+        caption: 'Pot 16 · shorter stack 40bb',
+      );
+    case 'act-03-08-02-jump-class':
+      return const LessonTableScene(
+        heroCodes: ['Jd', 'Td'],
+        boardCodes: ['Qd', '9d', '3c'],
+        villainSeatCount: 0,
+        highlight: LessonTableHighlight.none,
+        caption: 'Flop · class?',
+      );
+    case 'act-03-08-02-jump-leak':
+      return const LessonTableScene(
+        heroCodes: ['Jh', 'Td'],
+        boardCodes: ['As', '7c', '2d'],
+        villainSeatCount: 1,
+        highlight: LessonTableHighlight.none,
+        caption: 'Gutshot · pot 10 · bet 20',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
