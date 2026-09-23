@@ -15,6 +15,7 @@ import 'package:live_poker_trainer/ui/course/widgets/capped_uncapped_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/polar_merged_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/overbet_geometry_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/blockers_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/defend_enough_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -300,6 +301,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.blockers
                     ? null
                     : onFeltAcknowledge,
+            onDefendEnoughAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.defendEnough
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -510,6 +515,9 @@ enum CoachDialogueVisualKind {
 
   /// Blockers remove hands — use them; do not invent EV decimals.
   blockers,
+
+  /// Defend enough that over-bluffing fails — no fake percentages.
+  defendEnough,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -642,6 +650,8 @@ class CoachDialogueVisual {
       'Tap Overbet, Polar, and Geo.',
     CoachDialogueVisualKind.blockers =>
       'Tap Block, Use, and No EV.',
+    CoachDialogueVisualKind.defendEnough =>
+      'Tap Defend, Bluff, and Enough.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -703,7 +713,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.cappedUncapped ||
       kind == CoachDialogueVisualKind.polarMerged ||
       kind == CoachDialogueVisualKind.overbetGeometry ||
-      kind == CoachDialogueVisualKind.blockers;
+      kind == CoachDialogueVisualKind.blockers ||
+      kind == CoachDialogueVisualKind.defendEnough;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -822,6 +833,8 @@ class CoachDialogueVisual {
       'Overbet/geometry tiles: overbet, polar, geo',
     CoachDialogueVisualKind.blockers =>
       'Blocker tiles: block, use, no EV',
+    CoachDialogueVisualKind.defendEnough =>
+      'Defend-enough tiles: defend, bluff, enough',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -1028,6 +1041,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-06-06-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.blockers,
+      );
+    case 'act-06-07-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.defendEnough,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1576,6 +1593,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onPolarMergedAcknowledge,
     this.onOverbetGeometryAcknowledge,
     this.onBlockersAcknowledge,
+    this.onDefendEnoughAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1636,6 +1654,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onPolarMergedAcknowledge;
   final VoidCallback? onOverbetGeometryAcknowledge;
   final VoidCallback? onBlockersAcknowledge;
+  final VoidCallback? onDefendEnoughAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1928,6 +1947,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onBlockersAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onBlockersAcknowledge,
+        ),
+        CoachDialogueVisualKind.defendEnough => DefendEnoughDemo(
+          interactive: onDefendEnoughAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onDefendEnoughAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },

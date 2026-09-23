@@ -21,6 +21,7 @@ import 'package:live_poker_trainer/ui/course/widgets/capped_uncapped_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/polar_merged_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/overbet_geometry_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/blockers_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/defend_enough_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
@@ -3211,6 +3212,54 @@ void main() {
     expect(feltAck, 1);
     controller.dispose();
   });
+
+  testWidgets(
+    'defend-enough explain taps Defend Bluff Enough instead of Continue',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-06-07-01-explain',
+        order: 1,
+        stage: ActivityStage.explain,
+        renderer: ActivityRenderer.coachDialogue,
+        estimatedSeconds: 30,
+        accessibilityText:
+            'Defend enough that over-bluffing fails. No fake percentages.',
+        acceptedGrades: const [SoftGrade.recommended],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'm',
+            kind: 'dialogue',
+            text:
+                'Defend enough that over-bluffing fails. No fake percentages.',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      var feltAck = 0;
+      await tester.pumpWidget(
+        _wrap(
+          CoachDialogueActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+            onFeltAcknowledge: () => feltAck += 1,
+          ),
+        ),
+      );
+      expect(find.byType(DefendEnoughDemo), findsOneWidget);
+      expect(find.text('Tap Defend, Bluff, and Enough.'), findsOneWidget);
+      expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+      expect(isTableRegionTapActivity(activity), isTrue);
+
+      for (final title in ['DEFEND', 'BLUFF', 'ENOUGH']) {
+        await tester.tap(find.text(title));
+        await tester.pump();
+      }
+      expect(feltAck, 1);
+      controller.dispose();
+    },
+  );
+
 
   testWidgets('select identify selects a choice', (tester) async {
     final activity = _activity(
