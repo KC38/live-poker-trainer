@@ -188,7 +188,7 @@ class _LessonFeedbackSheetState extends State<LessonFeedbackSheet>
                 ),
                 if (widget.betterChoiceLabel != null) ...[
                   const SizedBox(height: 10),
-                  // Preferred recovery as a scannable chip (not flat slate prose).
+                  // Recovery chip — short learner cue for the right tap.
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(
@@ -203,7 +203,7 @@ class _LessonFeedbackSheetState extends State<LessonFeedbackSheet>
                       ),
                     ),
                     child: Text(
-                      'Preferred: ${widget.betterChoiceLabel}',
+                      'Try: ${widget.betterChoiceLabel}',
                       style: GoogleFonts.manrope(
                         color: AppColors.cream,
                         fontSize: 13,

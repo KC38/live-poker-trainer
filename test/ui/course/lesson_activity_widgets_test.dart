@@ -14375,7 +14375,7 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.text('Preferred: Hole cards'), findsOneWidget);
+    expect(find.text('Try: Hole cards'), findsOneWidget);
     expect(find.widgetWithText(FilledButton, 'Got it'), findsNothing);
     expect(find.widgetWithText(OutlinedButton, 'Try again'), findsNothing);
   });
