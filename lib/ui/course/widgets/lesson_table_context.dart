@@ -172,6 +172,12 @@ enum LessonTableRegion {
 
   /// Observe sticky distractor: label archetype too early.
   observeLabelNow,
+
+  /// Calling Station label (correct for sticky-call evidence).
+  playerTypeStation,
+
+  /// Nit label distractor (folds too much).
+  playerTypeNit,
 }
 
 /// How the mini-table is arranged.
@@ -226,6 +232,9 @@ enum LessonTableLayout {
 
   /// Observe sticky: high / low participation / label-now tiles.
   observeParticipationOutcomes,
+
+  /// Meet Calling Station: Station vs Nit label tiles on sticky evidence.
+  playerTypeStationOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -313,7 +322,8 @@ final _cardToken = RegExp(r'\b([2-9TJQKA][shdc])\b', caseSensitive: false);
 /// Returns null when the activity is a pure text quiz (e.g. suit names).
 LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
   if (activity.renderer != ActivityRenderer.selectIdentify &&
-      activity.renderer != ActivityRenderer.coachDialogue) {
+      activity.renderer != ActivityRenderer.coachDialogue &&
+      activity.renderer != ActivityRenderer.playerReadClassify) {
     return null;
   }
 
@@ -694,6 +704,11 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.none,
         caption: 'Bundle the evidence before labeling',
       );
+    case 'act-04-06-02-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.playerTypeStationOutcomes,
+        caption: 'Called 3 streets · second pair ×2',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -1066,6 +1081,12 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.observeLabelNow => pick('label-now'),
         _ => null,
       };
+    case 'act-04-06-02-guided':
+      return switch (region) {
+        LessonTableRegion.playerTypeStation => pick('pt-station'),
+        LessonTableRegion.playerTypeNit => pick('pt-nit'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -1138,7 +1159,10 @@ bool isTableRegionTapActivity(CourseActivity activity) {
         activity.id == 'act-06-11-01-explain' ||
         activity.id == 'act-06-11-02-explain';
   }
-  if (activity.renderer != ActivityRenderer.selectIdentify) return false;
+  if (activity.renderer != ActivityRenderer.selectIdentify &&
+      activity.renderer != ActivityRenderer.playerReadClassify) {
+    return false;
+  }
   return activity.id.startsWith('act-01-01-01-') ||
       activity.id.startsWith('act-01-01-03-') ||
       activity.id.startsWith('act-01-04-01-') ||
@@ -1152,7 +1176,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-01-01-unguided' ||
       activity.id == 'act-03-01-01-checkpoint' ||
       activity.id == 'act-03-03-01-scaffolded' ||
-      activity.id == 'act-04-06-01-guided';
+      activity.id == 'act-04-06-01-guided' ||
+      activity.id == 'act-04-06-02-guided';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -1292,6 +1317,8 @@ class LessonTableContext extends StatelessWidget {
           _buildTableReadMattersOutcomes(),
       LessonTableLayout.observeParticipationOutcomes =>
           _buildObserveParticipationOutcomes(),
+      LessonTableLayout.playerTypeStationOutcomes =>
+          _buildPlayerTypeStationOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -2189,6 +2216,37 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Too soon',
           visual: const Icon(
             Icons.sell_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPlayerTypeStationOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive player type — tap Calling Station or Nit',
+      semanticsStatic: 'Calling Station vs Nit outcomes',
+      caption: scene.caption ?? 'Called three streets · second pair',
+      phases: [
+        (
+          region: LessonTableRegion.playerTypeStation,
+          title: 'Station',
+          detail: 'Sticky calls',
+          visual: const Icon(
+            Icons.people_outline,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.playerTypeNit,
+          title: 'Nit',
+          detail: 'Overfolds',
+          visual: const Icon(
+            Icons.lock_outline,
             color: AppColors.slate,
             size: 24,
           ),

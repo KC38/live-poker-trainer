@@ -9140,6 +9140,50 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 meet station guided taps Station on sticky evidence felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-06-02-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.playerReadClassify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Calling Station fits sticky calls.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Seat called three streets with second pair. Best working label?',
+      choices: const [
+        CourseChoice(id: 'pt-station', label: 'Calling Station'),
+        CourseChoice(id: 'pt-nit', label: 'Nit'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Sticky second pair calls — tap the working label.'),
+      findsOneWidget,
+    );
+    expect(find.text('Station'), findsOneWidget);
+    expect(find.textContaining('second pair'), findsWidgets);
+    await tester.tap(find.text('Station'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'pt-station');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {

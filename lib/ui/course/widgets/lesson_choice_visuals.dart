@@ -190,6 +190,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Observe: tap participation note on felt tiles.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-04-06-02-guided') {
+    // Meet Calling Station: tap Station vs Nit on sticky evidence felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.
