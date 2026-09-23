@@ -333,11 +333,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         final coach = _coachText;
         final prompt = widget.activity.prompt?.trim();
         // Felt + Rex already teach — skip near-duplicate prompt dumps on
-        // street-end / postflop felt quizzes (and hide Rex under Nice!).
-        final feltFirstStreets =
-            widget.activity.id.startsWith('act-01-04-01-');
+        // street / pot felt quizzes (and hide Rex under Nice!).
+        final feltFirstSelect =
+            widget.activity.id.startsWith('act-01-04-01-') ||
+            widget.activity.id.startsWith('act-01-05-01-');
         final showPrompt =
-            !feltFirstStreets &&
+            !feltFirstSelect &&
             prompt != null &&
             prompt.isNotEmpty &&
             prompt.toLowerCase() != coach.trim().toLowerCase();
@@ -394,7 +395,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
               Text(
                 widget.controller.submitting
                     ? 'Checking…'
-                    : feltFirstStreets
+                    : feltFirstSelect
                     ? 'Tap on the felt.'
                     : 'Tap the answer on the table.',
                 textAlign: TextAlign.center,

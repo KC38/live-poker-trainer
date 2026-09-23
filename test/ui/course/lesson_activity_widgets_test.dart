@@ -733,11 +733,88 @@ void main() {
       ),
     );
     expect(find.byType(WinningPathsDemo), findsOneWidget);
+    // Felt embeds the tap hint — no duplicate gold line under the demo.
+    expect(
+      find.text('Tap Fold win, Showdown, and Side pot'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Tap Fold win, Showdown, and Side pot.'),
+      findsNothing,
+    );
     for (final title in ['FOLD WIN', 'SHOWDOWN', 'SIDE POT']) {
       await tester.tap(find.text(title));
       await tester.pump();
     }
     expect(feltAck, 1);
+    controller.dispose();
+  });
+
+  testWidgets('winning-paths explain hides outer tap hint under Nice!', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-05-01-explain-win',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText: 'How a pot is won.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'Folds win pots early. Showdown compares hands. Short stacks make side pots.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () {},
+        ),
+      ),
+    );
+    expect(
+      find.text('Tap Fold win, Showdown, and Side pot'),
+      findsOneWidget,
+    );
+    controller.finishSubmit(
+      SubmitCourseStepResult(
+        attemptId: 'a1',
+        activityId: activity.id,
+        grade: SoftGrade.recommended,
+        feedback:
+            'Folds win pots early. Showdown compares hands. Short stacks make side pots.',
+        accepted: true,
+        lifeLost: false,
+        livesRemaining: 3,
+        xpAwarded: 10,
+        remediationRequired: false,
+        resume: const CourseResumePointer(
+          attemptId: 'a1',
+          lessonId: 'lesson-01-05-01-winning-pots',
+          activityId: 'act-01-05-01-explain-win',
+          activityIndex: 0,
+        ),
+        duplicate: false,
+      ),
+    );
+    await tester.pump();
+    expect(
+      find.text('Tap Fold win, Showdown, and Side pot'),
+      findsNothing,
+    );
+    expect(
+      find.text('Folds, showdown, or side pots decide it'),
+      findsOneWidget,
+    );
     controller.dispose();
   });
 
@@ -5387,6 +5464,11 @@ void main() {
           showGuidance: true,
         ),
       ),
+    );
+    expect(find.text('Everyone folded. Tap how you take the pot.'), findsOneWidget);
+    expect(
+      find.text('You bet. Everyone folds. Tap how you take the pot.'),
+      findsNothing,
     );
     expect(find.text('Take pot'), findsWidgets);
     await tester.tap(find.text('Take pot').first);

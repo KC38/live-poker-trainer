@@ -346,7 +346,8 @@ class CoachDialogueActivity extends StatelessWidget {
             visual.kind != CoachDialogueVisualKind.bestFive &&
             visual.kind != CoachDialogueVisualKind.passiveActions &&
             visual.kind != CoachDialogueVisualKind.aggressiveActions &&
-            visual.kind != CoachDialogueVisualKind.streetsTimeline) ...[
+            visual.kind != CoachDialogueVisualKind.streetsTimeline &&
+            visual.kind != CoachDialogueVisualKind.winningPaths) ...[
           const SizedBox(height: 10),
           _TapHint(text: visual.continueHint),
         ],
