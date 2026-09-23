@@ -6051,6 +6051,68 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s3 table-read checkpoint taps 55bb + pot on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-01-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Effective stack is the shorter committed stack.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Hero 140bb, villain 55bb, pot 18. What matters most next?',
+      choices: const [
+        CourseChoice(id: 'eff-55', label: 'Effective 55bb and the 18 pot'),
+        CourseChoice(id: 'hero-140', label: "Only hero's 140bb"),
+        CourseChoice(id: 'ignore-pot', label: 'Ignore pot until the river'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.tableReadMattersOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.tableMatterEffAndPot,
+        choices: activity.choices,
+      ),
+      'eff-55',
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Shorter stack caps the matchup — tap what matters with the pot.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Hero 140bb, villain 55bb, pot 18. What matters most next?',
+      ),
+      findsNothing,
+    );
+    expect(find.text('Effective 55bb and the 18 pot'), findsNothing);
+    expect(find.text('55bb + pot'), findsOneWidget);
+    await tester.tap(find.text('55bb + pot'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'eff-55');
+    controller.dispose();
+  });
+
   testWidgets('numeric entry updates draft', (tester) async {
     final activity = _activity(
       renderer: ActivityRenderer.numericPotPrice,

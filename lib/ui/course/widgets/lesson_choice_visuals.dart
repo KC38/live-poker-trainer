@@ -120,6 +120,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Table-read: tap whether the verbal raise stands.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-03-01-01-checkpoint') {
+    // Table-read: tap effective stack + pot on the felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {
     return SelectIdentifyPresentation.showdownTap;
