@@ -12,6 +12,7 @@ import 'package:live_poker_trainer/ui/course/widgets/guardrails_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/range_advantage_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/equity_realize_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/capped_uncapped_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/polar_merged_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -285,6 +286,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.cappedUncapped
                     ? null
                     : onFeltAcknowledge,
+            onPolarMergedAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.polarMerged
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -486,6 +491,9 @@ enum CoachDialogueVisualKind {
 
   /// Capped = nuts unlikely; uncapped = nuts still live.
   cappedUncapped,
+
+  /// Polar = nuts or air; merged = many medium-strong hands.
+  polarMerged,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -612,6 +620,8 @@ class CoachDialogueVisual {
       'Tap Equity, Cash, and Pos.',
     CoachDialogueVisualKind.cappedUncapped =>
       'Tap Capped, Uncapped, and Nuts.',
+    CoachDialogueVisualKind.polarMerged =>
+      'Tap Polar, Merged, and Size.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -670,7 +680,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.guardrails ||
       kind == CoachDialogueVisualKind.rangeAdvantage ||
       kind == CoachDialogueVisualKind.equityRealize ||
-      kind == CoachDialogueVisualKind.cappedUncapped;
+      kind == CoachDialogueVisualKind.cappedUncapped ||
+      kind == CoachDialogueVisualKind.polarMerged;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -783,6 +794,8 @@ class CoachDialogueVisual {
       'Equity-realize tiles: equity, cash, position',
     CoachDialogueVisualKind.cappedUncapped =>
       'Capped/uncapped tiles: capped, uncapped, nuts',
+    CoachDialogueVisualKind.polarMerged =>
+      'Polar/merged tiles: polar, merged, size',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -977,6 +990,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-06-03-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.cappedUncapped,
+      );
+    case 'act-06-04-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.polarMerged,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1522,6 +1539,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onRangeAdvantageAcknowledge,
     this.onEquityRealizeAcknowledge,
     this.onCappedUncappedAcknowledge,
+    this.onPolarMergedAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1579,6 +1597,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onRangeAdvantageAcknowledge;
   final VoidCallback? onEquityRealizeAcknowledge;
   final VoidCallback? onCappedUncappedAcknowledge;
+  final VoidCallback? onPolarMergedAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -1856,6 +1875,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onCappedUncappedAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onCappedUncappedAcknowledge,
+        ),
+        CoachDialogueVisualKind.polarMerged => PolarMergedDemo(
+          interactive: onPolarMergedAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onPolarMergedAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
