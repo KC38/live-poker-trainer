@@ -195,7 +195,7 @@ class PokerActionSizingActivity extends StatelessWidget {
   }
 }
 
-/// Felt-first Rex lines for Section 1 action spots (felt already shows cards).
+/// Felt-first Rex lines for action spots (felt already shows cards/context).
 String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
   return switch (activity.id) {
     'act-01-03-01-guided-fold' => 'Worst hand vs a raise — tap Fold.',
@@ -207,6 +207,10 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     'act-01-03-02-scaffolded-raise' => 'They bet — tap a raise size.',
     'act-01-03-02-unguided-allin' => 'Short vs a big bet — tap All-in.',
     'act-01-03-02-checkpoint-names' => 'The pot is open — tap Bet.',
+    'act-02-07-01-guided-ep' =>
+      'Suited broadway UTG — tap Open to 6.',
+    'act-02-07-01-scaffolded-vs' =>
+      'Pair on the button vs a small open — tap Call.',
     _ => null,
   };
 }

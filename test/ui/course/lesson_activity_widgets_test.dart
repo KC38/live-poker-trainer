@@ -6147,6 +6147,139 @@ void main() {
     controller.dispose();
   });
 
+  test('baseline full-hand action spots resolve mini-table dock mode', () {
+    final guided = CourseActivity(
+      id: 'act-02-07-01-guided-ep',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Open ace-jack suited under the gun',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Nine-handed. UTG with AJs. Action?',
+      choices: const [
+        CourseChoice(id: 'open-ajs', label: 'Open to 6', action: 'RAISE'),
+        CourseChoice(id: 'fold-ajs', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'limp-ajs', label: 'Limp', action: 'CALL'),
+      ],
+    );
+    expect(isLessonActionTableActivity(guided), isTrue);
+    final guidedSpot = resolveLessonActionSpot(guided)!;
+    expect(guidedSpot.openPot, isTrue);
+    expect(guidedSpot.facingBet, isFalse);
+    expect(guidedSpot.heroCodes, ['Ah', 'Jh']);
+    expect(guidedSpot.potLabel, 'Pot 3');
+
+    final vsOpen = CourseActivity(
+      id: 'act-02-07-01-scaffolded-vs',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Call a small pair on the button',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'UTG opens to 6. You have 22 on the button. Action?',
+      choices: const [
+        CourseChoice(id: 'call-22', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'fold-22', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: '3bet-22', label: '3-bet to 18', action: 'RAISE'),
+      ],
+    );
+    expect(isLessonActionTableActivity(vsOpen), isTrue);
+    final vsSpot = resolveLessonActionSpot(vsOpen)!;
+    expect(vsSpot.facingBet, isTrue);
+    expect(vsSpot.heroCodes, ['2h', '2d']);
+    expect(vsSpot.villainLine, 'UTG opens to 6');
+  });
+
+  testWidgets('baseline guided EP docks Open to 6 on felt — no text prompt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-07-01-guided-ep',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Open ace-jack suited under the gun',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Nine-handed. UTG with AJs. Action?',
+      choices: const [
+        CourseChoice(id: 'open-ajs', label: 'Open to 6', action: 'RAISE'),
+        CourseChoice(id: 'fold-ajs', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'limp-ajs', label: 'Limp', action: 'CALL'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byType(LessonActionTable), findsOneWidget);
+    expect(find.byType(LessonActionDock), findsOneWidget);
+    expect(
+      find.text('Suited broadway UTG — tap Open to 6.'),
+      findsOneWidget,
+    );
+    expect(find.text('First in — open the pot'), findsOneWidget);
+    expect(find.text('Nine-handed. UTG with AJs. Action?'), findsNothing);
+    expect(find.text('OPEN TO 6'), findsOneWidget);
+    expect(find.text('LIMP'), findsOneWidget);
+    expect(find.text('RAISE (off)'), findsNothing);
+    await tester.tap(find.text('OPEN TO 6'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'open-ajs');
+    controller.dispose();
+  });
+
+  testWidgets('baseline scaffolded vs-open docks Call on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-02-07-01-scaffolded-vs',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Call a small pair on the button',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'UTG opens to 6. You have 22 on the button. Action?',
+      choices: const [
+        CourseChoice(id: 'call-22', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'fold-22', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: '3bet-22', label: '3-bet to 18', action: 'RAISE'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byType(LessonActionTable), findsOneWidget);
+    expect(
+      find.text('Pair on the button vs a small open — tap Call.'),
+      findsOneWidget,
+    );
+    expect(find.text('A bet faces you'), findsOneWidget);
+    expect(
+      find.text('UTG opens to 6. You have 22 on the button. Action?'),
+      findsNothing,
+    );
+    expect(find.text('3-BET TO 18'), findsOneWidget);
+    await tester.tap(find.text('CALL'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'call-22');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {
