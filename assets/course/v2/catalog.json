@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "7eaccca7a5bd038551033b99382a26b09dc3cb19e2e1b0dd404746d1608b13bf",
+  "contentChecksum": "de2045e2ed25a84a771549e9fdd1c4f6880f722310f55733835e34a4c5ab9922",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -12900,8 +12900,8 @@
                   "choices": [
                     {
                       "id": "sel",
-                      "label": "Selective entry with disciplined aggression",
-                      "accessibilityText": "Selective entry with disciplined aggression"
+                      "label": "Selective + plan",
+                      "accessibilityText": "Selective + plan"
                     },
                     {
                       "id": "loose",
@@ -12910,8 +12910,8 @@
                     },
                     {
                       "id": "label",
-                      "label": "Name an archetype immediately",
-                      "accessibilityText": "Name an archetype immediately"
+                      "label": "Label now",
+                      "accessibilityText": "Label now"
                     }
                   ]
                 },
@@ -12935,13 +12935,13 @@
                   "choices": [
                     {
                       "id": "disc",
-                      "label": "Disciplined give-ups — not spewy",
-                      "accessibilityText": "Disciplined give-ups — not spewy"
+                      "label": "Disciplined",
+                      "accessibilityText": "Disciplined"
                     },
                     {
                       "id": "mania",
-                      "label": "Identical to maniac",
-                      "accessibilityText": "Identical to maniac"
+                      "label": "Same maniac",
+                      "accessibilityText": "Same maniac"
                     }
                   ]
                 },
@@ -12965,13 +12965,13 @@
                   "choices": [
                     {
                       "id": "low",
-                      "label": "Low — keep sampling",
-                      "accessibilityText": "Low — keep sampling"
+                      "label": "Keep sampling",
+                      "accessibilityText": "Keep sampling"
                     },
                     {
                       "id": "max",
-                      "label": "Maximum certainty",
-                      "accessibilityText": "Maximum certainty"
+                      "label": "Max certainty",
+                      "accessibilityText": "Max certainty"
                     }
                   ]
                 },
@@ -12995,8 +12995,8 @@
                   "choices": [
                     {
                       "id": "bundle",
-                      "label": "Tight entry + planned aggression + give-ups",
-                      "accessibilityText": "Tight entry + planned aggression + give-ups"
+                      "label": "Tight · plan · give",
+                      "accessibilityText": "Tight · plan · give"
                     },
                     {
                       "id": "vibe",

@@ -703,6 +703,33 @@ enum LessonTableRegion {
 
   /// Hard folds checkpoint: tilt harder (mistake).
   hardFoldTiltHarder,
+
+  /// Observe selective guided: selective + plan (correct).
+  selectivePlanOk,
+
+  /// Observe selective guided: loose passive (mistake).
+  selectiveLoosePassive,
+
+  /// Observe selective guided: label now (mistake).
+  selectiveLabelNow,
+
+  /// Observe selective scaffolded: disciplined (correct).
+  selectiveDisciplined,
+
+  /// Observe selective scaffolded: same maniac (mistake).
+  selectiveSameManiac,
+
+  /// Observe selective unguided: keep sampling (correct).
+  selectiveKeepSampling,
+
+  /// Observe selective unguided: max certainty (mistake).
+  selectiveMaxCertainty,
+
+  /// Observe selective checkpoint: tight · plan · give (correct).
+  selectiveEvidenceBundle,
+
+  /// Observe selective checkpoint: good haircut (mistake).
+  selectiveHaircut,
 }
 
 /// How the mini-table is arranged.
@@ -1009,6 +1036,18 @@ enum LessonTableLayout {
 
   /// Hard folds checkpoint: cooler / mistake? vs tilt harder.
   hardFoldReviewOutcomes,
+
+  /// Observe selective guided: selective + plan vs loose vs label now.
+  selectiveGuidedOutcomes,
+
+  /// Observe selective scaffolded: disciplined vs same maniac.
+  selectiveDiscOutcomes,
+
+  /// Observe selective unguided: keep sampling vs max certainty.
+  selectiveSampleOutcomes,
+
+  /// Observe selective checkpoint: tight · plan · give vs good haircut.
+  selectiveBundleOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1931,6 +1970,27 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.hardFoldReviewOutcomes,
         caption: 'Review question after a big loss?',
       );
+    case 'act-06-11-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.selectiveGuidedOutcomes,
+        caption:
+            'Seat folds most hands, then 3-bets and c-bets strong boards. Note?',
+      );
+    case 'act-06-11-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.selectiveDiscOutcomes,
+        caption: 'Same seat gives up on turns when called. Observation?',
+      );
+    case 'act-06-11-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.selectiveSampleOutcomes,
+        caption: 'Two hands of tightness. Confidence?',
+      );
+    case 'act-06-11-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.selectiveBundleOutcomes,
+        caption: 'Best pre-label note bundle?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -2835,6 +2895,31 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.hardFoldTiltHarder => pick('rtilt'),
         _ => null,
       };
+    case 'act-06-11-01-guided':
+      return switch (region) {
+        LessonTableRegion.selectivePlanOk => pick('sel'),
+        LessonTableRegion.selectiveLoosePassive => pick('loose'),
+        LessonTableRegion.selectiveLabelNow => pick('label'),
+        _ => null,
+      };
+    case 'act-06-11-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.selectiveDisciplined => pick('disc'),
+        LessonTableRegion.selectiveSameManiac => pick('mania'),
+        _ => null,
+      };
+    case 'act-06-11-01-unguided':
+      return switch (region) {
+        LessonTableRegion.selectiveKeepSampling => pick('low'),
+        LessonTableRegion.selectiveMaxCertainty => pick('max'),
+        _ => null,
+      };
+    case 'act-06-11-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.selectiveEvidenceBundle => pick('bundle'),
+        LessonTableRegion.selectiveHaircut => pick('vibe'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -3003,7 +3088,11 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-06-09-01-checkpoint' ||
       activity.id == 'act-06-10-01-scaffolded' ||
       activity.id == 'act-06-10-01-unguided' ||
-      activity.id == 'act-06-10-01-checkpoint';
+      activity.id == 'act-06-10-01-checkpoint' ||
+      activity.id == 'act-06-11-01-guided' ||
+      activity.id == 'act-06-11-01-scaffolded' ||
+      activity.id == 'act-06-11-01-unguided' ||
+      activity.id == 'act-06-11-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -3288,6 +3377,14 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.hardFoldEgoOutcomes => _buildHardFoldEgoOutcomes(),
       LessonTableLayout.hardFoldReviewOutcomes =>
           _buildHardFoldReviewOutcomes(),
+      LessonTableLayout.selectiveGuidedOutcomes =>
+          _buildSelectiveGuidedOutcomes(),
+      LessonTableLayout.selectiveDiscOutcomes =>
+          _buildSelectiveDiscOutcomes(),
+      LessonTableLayout.selectiveSampleOutcomes =>
+          _buildSelectiveSampleOutcomes(),
+      LessonTableLayout.selectiveBundleOutcomes =>
+          _buildSelectiveBundleOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -6934,6 +7031,142 @@ class LessonTableContext extends StatelessWidget {
           detail: 'No',
           visual: const Icon(
             Icons.whatshot_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSelectiveGuidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive selective observe — tap selective + plan, loose passive, or label now',
+      semanticsStatic: 'Selective guided outcomes',
+      caption: scene.caption ??
+          'Seat folds most hands, then 3-bets and c-bets strong boards. Note?',
+      phases: [
+        (
+          region: LessonTableRegion.selectivePlanOk,
+          title: 'Selective + plan',
+          detail: 'Evidence',
+          visual: const Icon(
+            Icons.visibility_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.selectiveLoosePassive,
+          title: 'Loose passive',
+          detail: 'Opposite',
+          visual: const Icon(
+            Icons.call_received,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.selectiveLabelNow,
+          title: 'Label now',
+          detail: 'Too soon',
+          visual: const Icon(
+            Icons.sell_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSelectiveDiscOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive give-ups — tap disciplined vs same maniac',
+      semanticsStatic: 'Selective discipline outcomes',
+      caption: scene.caption ??
+          'Same seat gives up on turns when called. Observation?',
+      phases: [
+        (
+          region: LessonTableRegion.selectiveDisciplined,
+          title: 'Disciplined',
+          detail: 'Not spewy',
+          visual: const Icon(
+            Icons.rule_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.selectiveSameManiac,
+          title: 'Same maniac',
+          detail: 'Wrong',
+          visual: const Icon(
+            Icons.flash_on_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSelectiveSampleOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive sample confidence — tap keep sampling vs max certainty',
+      semanticsStatic: 'Selective sample outcomes',
+      caption: scene.caption ?? 'Two hands of tightness. Confidence?',
+      phases: [
+        (
+          region: LessonTableRegion.selectiveKeepSampling,
+          title: 'Keep sampling',
+          detail: 'Working notes',
+          visual: const Icon(
+            Icons.science_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.selectiveMaxCertainty,
+          title: 'Max certainty',
+          detail: 'Too soon',
+          visual: const Icon(
+            Icons.verified_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSelectiveBundleOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive pre-label bundle — tap tight · plan · give vs good haircut',
+      semanticsStatic: 'Selective bundle outcomes',
+      caption: scene.caption ?? 'Best pre-label note bundle?',
+      phases: [
+        (
+          region: LessonTableRegion.selectiveEvidenceBundle,
+          title: 'Tight · plan · give',
+          detail: 'Evidence',
+          visual: const Icon(
+            Icons.inventory_2_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.selectiveHaircut,
+          title: 'Good haircut',
+          detail: 'Not evidence',
+          visual: const Icon(
+            Icons.content_cut,
             color: AppColors.danger,
             size: 24,
           ),
