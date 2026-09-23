@@ -26,6 +26,7 @@ import 'package:live_poker_trainer/ui/course/widgets/wide_pressure_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/preflop_flop_plan_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/turn_map_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/river_composition_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/pot_type_plans_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -370,6 +371,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.riverComposition
                     ? null
                     : onFeltAcknowledge,
+            onPotTypePlansAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.potTypePlans
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance &&
@@ -640,6 +645,9 @@ enum CoachDialogueVisualKind {
 
   /// Compose river value, bluffs with blockers, and check trash without a story.
   riverComposition,
+
+  /// Change plans by pot type: limped, SRP, and 3-/4-bet pots.
+  potTypePlans,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -798,6 +806,8 @@ class CoachDialogueVisual {
       'Tap Continue, Give-up, and Map.',
     CoachDialogueVisualKind.riverComposition =>
       'Tap Value, Bluff, and Check.',
+    CoachDialogueVisualKind.potTypePlans =>
+      'Tap Limped, SRP, and 3-4bet.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -872,7 +882,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.widePressure ||
       kind == CoachDialogueVisualKind.preflopFlopPlan ||
       kind == CoachDialogueVisualKind.turnMap ||
-      kind == CoachDialogueVisualKind.riverComposition;
+      kind == CoachDialogueVisualKind.riverComposition ||
+      kind == CoachDialogueVisualKind.potTypePlans;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -1017,6 +1028,8 @@ class CoachDialogueVisual {
       'Flop-to-turn map tiles: continue, give-up, map',
     CoachDialogueVisualKind.riverComposition =>
       'River composition tiles: value, bluff, check',
+    CoachDialogueVisualKind.potTypePlans =>
+      'Pot-type plan tiles: limped, SRP, 3-4bet',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -1279,6 +1292,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-07-03-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.riverComposition,
+      );
+    case 'act-07-04-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.potTypePlans,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1859,6 +1876,22 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.turnMap,
     );
   }
+  // Phrase-safe pot-type plans — limped / SRP / 3-4bet framing.
+  if (blob.contains('pot type sets ranges') ||
+      blob.contains('plan accordingly') ||
+      blob.contains('change plans by pot type') ||
+      (blob.contains('pot type') &&
+          (blob.contains('limped') ||
+              blob.contains('spr') ||
+              blob.contains('3-bet') ||
+              blob.contains('4-bet'))) ||
+      (blob.contains('limped') &&
+          blob.contains('single-raised') &&
+          (blob.contains('3-bet') || blob.contains('4-bet')))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.potTypePlans,
+    );
+  }
   // Phrase-safe vs LAG — require versus/trap/fancy framing.
   if (blob.contains('versus lag') ||
       blob.contains('versus lags') ||
@@ -1971,6 +2004,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onPreflopFlopPlanAcknowledge,
     this.onTurnMapAcknowledge,
     this.onRiverCompositionAcknowledge,
+    this.onPotTypePlansAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -2044,6 +2078,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onPreflopFlopPlanAcknowledge;
   final VoidCallback? onTurnMapAcknowledge;
   final VoidCallback? onRiverCompositionAcknowledge;
+  final VoidCallback? onPotTypePlansAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -2401,6 +2436,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onRiverCompositionAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onRiverCompositionAcknowledge,
+        ),
+        CoachDialogueVisualKind.potTypePlans => PotTypePlansDemo(
+          interactive: onPotTypePlansAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onPotTypePlansAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },

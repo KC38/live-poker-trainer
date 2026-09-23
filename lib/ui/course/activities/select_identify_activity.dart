@@ -584,6 +584,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'No story — tap Check.',
       'act-07-03-01-checkpoint' =>
           'River rule — tap Value needs calls.',
+      'act-07-04-01-guided' =>
+          'Multiway limped — tap Nut potential.',
+      'act-07-04-01-scaffolded' =>
+          'HU SRP IP — tap C-bet maps.',
+      'act-07-04-01-unguided' =>
+          '4-bet 100bb — tap Higher commitment.',
+      'act-07-04-01-checkpoint' =>
+          'Pot type — tap Ranges and SPR.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -729,7 +737,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-07-02-01-checkpoint' ||
             widget.activity.id == 'act-07-03-01-scaffolded' ||
             widget.activity.id == 'act-07-03-01-unguided' ||
-            widget.activity.id == 'act-07-03-01-checkpoint';
+            widget.activity.id == 'act-07-03-01-checkpoint' ||
+            widget.activity.id == 'act-07-04-01-guided' ||
+            widget.activity.id == 'act-07-04-01-scaffolded' ||
+            widget.activity.id == 'act-07-04-01-unguided' ||
+            widget.activity.id == 'act-07-04-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&
