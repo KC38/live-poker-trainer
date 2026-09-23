@@ -184,7 +184,7 @@ export function buildSectionFive() {
         "When depth pays you — and when it taxes you.", [
           lesson({
             id: L050301, order: 1,
-            title: "Price draws with implied and reverse implied odds",
+            title: "Implied and reverse odds",
             summary: "Estimate future payoffs and domination risk, not only pot odds.",
             objectives: ["Estimate implied odds from depth and tendencies", "Spot reverse implied odds traps", "Skip dominated draws multiway"],
             prereq: L050201, remediation: L050201, minutes: 9, band: 4,
