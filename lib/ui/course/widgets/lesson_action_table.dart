@@ -398,6 +398,33 @@ LessonActionSpot? resolveToyHandStepSpot({
   required String activityId,
   required String stepId,
 }) {
+  if (activityId == 'act-04-03-01-guided') {
+    switch (stepId) {
+      case 'step-flop-tp':
+        return const LessonActionSpot(
+          heroCodes: ['Ah', 'Kd'],
+          boardCodes: ['As', '7c', '2d'],
+          potLabel: 'Pot 12',
+          villainLine: 'Checked to you',
+          streetLabel: 'Flop · A72 rainbow · TPTK',
+          facingBet: false,
+          openPot: true,
+          feltStatusLine: 'Start the value plan',
+        );
+      case 'step-turn-tp':
+        return const LessonActionSpot(
+          heroCodes: ['Ah', 'Kd'],
+          boardCodes: ['As', '7c', '2d', '3h'],
+          potLabel: 'Pot 20',
+          villainLine: 'Called flop · brick turn',
+          streetLabel: 'Turn · A723 · TPTK',
+          facingBet: false,
+          openPot: true,
+          feltStatusLine: 'Second barrel for value',
+        );
+    }
+    return null;
+  }
   if (!activityId.startsWith('act-01-06-0')) return null;
   switch (stepId) {
     case 'step-01-06-pre':
@@ -482,6 +509,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id == 'act-01-06-02-jump-hand' &&
+      activity.renderer == ActivityRenderer.authoredMultiStepHand) {
+    return true;
+  }
+  if (id == 'act-04-03-01-guided' &&
       activity.renderer == ActivityRenderer.authoredMultiStepHand) {
     return true;
   }
@@ -2423,18 +2454,19 @@ class _MultiStreetPlanDemoState extends State<MultiStreetPlanDemo> {
               ],
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap Flop, Turn, and River'
-                : 'Flop choice answers turn and river',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues the three taps — no duplicate footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Flop choice answers turn and river',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );
