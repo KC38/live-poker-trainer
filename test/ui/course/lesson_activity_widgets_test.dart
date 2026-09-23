@@ -8755,6 +8755,95 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 plan unguided docks Check on medium multiway felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-03-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 40,
+      accessibilityText: 'Keep medium hands in smaller pots.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Medium strength, deep stacks, multiway. Prefer?',
+      choices: const [
+        CourseChoice(
+          id: 'small-pot',
+          label: 'Keep pot small',
+          action: 'CHECK',
+        ),
+        CourseChoice(id: 'jam-med', label: 'Jam stacks in', action: 'ALL_IN'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Medium hand multiway and deep — tap Check to keep it small.',
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('KEEP POT SMALL'), findsOneWidget);
+    await tester.tap(find.text('KEEP POT SMALL'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'small-pot');
+    controller.dispose();
+  });
+
+  testWidgets('s4 plan checkpoint taps branching plan on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-04-03-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Plans state flop intent and turn/river branches.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Good multi-street plans do what?',
+      choices: const [
+        CourseChoice(
+          id: 'branches',
+          label: 'Brick → barrel · flush → abort',
+        ),
+        CourseChoice(id: 'vibes', label: 'Wait for vibes each street'),
+        CourseChoice(id: 'one-street', label: 'Only this street, always'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.handCategoryTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('You have a flop plan — tap the turn branches.'),
+      findsOneWidget,
+    );
+    expect(find.text('Brick → barrel · flush → abort'), findsOneWidget);
+    await tester.tap(find.text('Brick → barrel · flush → abort'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'branches');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {

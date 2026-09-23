@@ -521,6 +521,24 @@ LessonHandExample? resolveHandExample({
         title: 'Fold AK',
         codes: [],
       );
+    case 'branches':
+      return const LessonHandExample(
+        id: 'branches',
+        title: 'Brick → barrel · flush → abort',
+        codes: [],
+      );
+    case 'vibes':
+      return const LessonHandExample(
+        id: 'vibes',
+        title: 'Wait for vibes each street',
+        codes: [],
+      );
+    case 'one-street':
+      return const LessonHandExample(
+        id: 'one-street',
+        title: 'Only this street, always',
+        codes: [],
+      );
     case 'split':
       return const LessonHandExample(
         id: 'split',
