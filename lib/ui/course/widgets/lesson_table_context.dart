@@ -178,6 +178,24 @@ enum LessonTableRegion {
 
   /// Nit label distractor (folds too much).
   playerTypeNit,
+
+  /// Label is a working model from evidence (correct).
+  labelWorkingModel,
+
+  /// Label is a permanent personality verdict (mistake).
+  labelPermanentSoul,
+
+  /// Calling Station for limp/call/never-fold evidence.
+  playerTypeStationLimp,
+
+  /// Maniac distractor for sticky-call evidence.
+  playerTypeManiac,
+
+  /// Low sample confidence (correct after 2 hands).
+  sampleConfidenceLow,
+
+  /// Maximum certainty too early (mistake).
+  sampleConfidenceMax,
 }
 
 /// How the mini-table is arranged.
@@ -235,6 +253,15 @@ enum LessonTableLayout {
 
   /// Meet Calling Station: Station vs Nit label tiles on sticky evidence.
   playerTypeStationOutcomes,
+
+  /// Meet Calling Station: working model vs permanent verdict.
+  labelModelOutcomes,
+
+  /// Meet Calling Station: Station vs Maniac on limp/call evidence.
+  playerTypeStationManiacOutcomes,
+
+  /// Meet Calling Station: sample confidence low vs max.
+  sampleConfidenceOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -709,6 +736,21 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.playerTypeStationOutcomes,
         caption: 'Called 3 streets · second pair ×2',
       );
+    case 'act-04-06-02-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.labelModelOutcomes,
+        caption: 'Update the label as samples change',
+      );
+    case 'act-04-06-02-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.playerTypeStationManiacOutcomes,
+        caption: 'Limps · calls raises · never folds turns',
+      );
+    case 'act-04-06-02-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.sampleConfidenceOutcomes,
+        caption: 'Only 2 hands tagged so far',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -1087,6 +1129,24 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.playerTypeNit => pick('pt-nit'),
         _ => null,
       };
+    case 'act-04-06-02-scaffolded':
+      return switch (region) {
+        LessonTableRegion.labelWorkingModel => pick('model'),
+        LessonTableRegion.labelPermanentSoul => pick('soul'),
+        _ => null,
+      };
+    case 'act-04-06-02-unguided':
+      return switch (region) {
+        LessonTableRegion.playerTypeStationLimp => pick('station2'),
+        LessonTableRegion.playerTypeManiac => pick('maniac2'),
+        _ => null,
+      };
+    case 'act-04-06-02-checkpoint':
+      return switch (region) {
+        LessonTableRegion.sampleConfidenceLow => pick('low'),
+        LessonTableRegion.sampleConfidenceMax => pick('max'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -1177,7 +1237,10 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-01-01-checkpoint' ||
       activity.id == 'act-03-03-01-scaffolded' ||
       activity.id == 'act-04-06-01-guided' ||
-      activity.id == 'act-04-06-02-guided';
+      activity.id == 'act-04-06-02-guided' ||
+      activity.id == 'act-04-06-02-scaffolded' ||
+      activity.id == 'act-04-06-02-unguided' ||
+      activity.id == 'act-04-06-02-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -1319,6 +1382,11 @@ class LessonTableContext extends StatelessWidget {
           _buildObserveParticipationOutcomes(),
       LessonTableLayout.playerTypeStationOutcomes =>
           _buildPlayerTypeStationOutcomes(),
+      LessonTableLayout.labelModelOutcomes => _buildLabelModelOutcomes(),
+      LessonTableLayout.playerTypeStationManiacOutcomes =>
+          _buildPlayerTypeStationManiacOutcomes(),
+      LessonTableLayout.sampleConfidenceOutcomes =>
+          _buildSampleConfidenceOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -2247,6 +2315,95 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Overfolds',
           visual: const Icon(
             Icons.lock_outline,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLabelModelOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive label model — tap working model or permanent verdict',
+      semanticsStatic: 'Label model outcomes',
+      caption: scene.caption ?? 'Update the label as samples change',
+      phases: [
+        (
+          region: LessonTableRegion.labelWorkingModel,
+          title: 'Working model',
+          detail: 'From evidence',
+          visual: const Icon(
+            Icons.science_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.labelPermanentSoul,
+          title: 'Permanent',
+          detail: 'Personality',
+          visual: const Icon(
+            Icons.psychology_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPlayerTypeStationManiacOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive player type — tap Calling Station or Maniac',
+      semanticsStatic: 'Calling Station vs Maniac outcomes',
+      caption: scene.caption ?? 'Limps · calls raises · never folds turns',
+      phases: [
+        (
+          region: LessonTableRegion.playerTypeStationLimp,
+          title: 'Station',
+          detail: 'Calls sticky',
+          visual: const Icon(
+            Icons.people_outline,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.playerTypeManiac,
+          title: 'Maniac',
+          detail: 'Raises wild',
+          visual: const Icon(
+            Icons.local_fire_department_outlined,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSampleConfidenceOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive sample confidence — tap low or maximum',
+      semanticsStatic: 'Sample confidence outcomes',
+      caption: scene.caption ?? 'Only 2 hands tagged so far',
+      phases: [
+        (
+          region: LessonTableRegion.sampleConfidenceLow,
+          title: 'Low',
+          detail: 'Keep sampling',
+          visual: const _PotChipDot(label: '2', gold: true),
+        ),
+        (
+          region: LessonTableRegion.sampleConfidenceMax,
+          title: 'Maximum',
+          detail: 'Too sure',
+          visual: const Icon(
+            Icons.verified_outlined,
             color: AppColors.slate,
             size: 24,
           ),

@@ -9184,6 +9184,119 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 meet station scaffolded taps working model on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-06-02-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Working model, not a personality judgment.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'A label is…',
+      choices: const [
+        CourseChoice(id: 'model', label: 'A working model from evidence'),
+        CourseChoice(id: 'soul', label: 'A permanent personality verdict'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('A player-type label is a working model — tap it.'),
+      findsOneWidget,
+    );
+    expect(find.text('Working model'), findsOneWidget);
+    await tester.tap(find.text('Working model'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'model');
+    controller.dispose();
+  });
+
+  testWidgets('s4 meet station unguided taps Station on limp evidence felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-06-02-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.playerReadClassify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Calling Station.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Seat limps often, calls raises, almost never folds turns. Label?',
+      choices: const [
+        CourseChoice(id: 'station2', label: 'Calling Station'),
+        CourseChoice(id: 'maniac2', label: 'Maniac'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(find.text('Station'), findsOneWidget);
+    await tester.tap(find.text('Station'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'station2');
+    controller.dispose();
+  });
+
+  testWidgets('s4 meet station checkpoint taps low confidence on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-06-02-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Low sample confidence.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'After 2 hands, confidence in Calling Station should be?',
+      choices: const [
+        CourseChoice(id: 'low', label: 'Low — keep collecting samples'),
+        CourseChoice(id: 'max', label: 'Maximum certainty'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(find.text('Low'), findsOneWidget);
+    await tester.tap(find.text('Low'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'low');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {
