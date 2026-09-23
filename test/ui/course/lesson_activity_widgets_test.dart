@@ -39,6 +39,7 @@ import 'package:live_poker_trainer/ui/course/widgets/leak_review_book_demo.dart'
 import 'package:live_poker_trainer/ui/course/widgets/capstone_srp_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/capstone_3bet_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/capstone_multiway_deep_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/capstone_limped_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
@@ -17679,6 +17680,300 @@ void main() {
     await tester.tap(find.text('CHECK'));
     await tester.pump();
     expect(controller.draft.choiceId, 'check');
+    controller.dispose();
+  });
+
+
+  testWidgets(
+    's7 capstone limped explain taps Nuts Value Thin instead of Continue',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-07-10-04-explain',
+        order: 1,
+        stage: ActivityStage.explain,
+        renderer: ActivityRenderer.coachDialogue,
+        estimatedSeconds: 30,
+        accessibilityText: 'Capstone limped pot. Crowded. No hints.',
+        acceptedGrades: const [SoftGrade.recommended],
+        objectives: const ['Prefer nut potential limped multiway'],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'm',
+            kind: 'dialogue',
+            text: 'Capstone limped pot. Crowded. No hints.',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      var feltAck = 0;
+      await tester.pumpWidget(
+        _wrap(
+          CoachDialogueActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+            onFeltAcknowledge: () => feltAck += 1,
+          ),
+        ),
+      );
+      expect(find.byType(CapstoneLimpedDemo), findsOneWidget);
+      expect(find.text('Tap Nuts, Value, and Thin.'), findsOneWidget);
+      expect(
+        find.text('Limped multiway — value thick, bluffs thin'),
+        findsNothing,
+      );
+      expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+      expect(isTableRegionTapActivity(activity), isTrue);
+
+      for (final title in ['NUTS', 'VALUE', 'THIN']) {
+        await tester.tap(find.text(title));
+        await tester.pump();
+      }
+      expect(feltAck, 1);
+      controller.dispose();
+    },
+  );
+
+  testWidgets('s7 capstone limped hand docks Bet value on flop felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-10-04-hand',
+      order: 2,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 70,
+      accessibilityText: 'Four-way limp, 150bb, you hold AhKh on BTN.',
+      acceptedGrades: const [SoftGrade.recommended],
+      handSteps: const [
+        CourseHandStep(
+          id: 'step-limp-flop',
+          street: 'flop',
+          prompt: 'Flop Kd 9c 4h. Checked to you. Action?',
+          choices: [
+            CourseChoice(
+              id: 'bet',
+              label: 'Bet value',
+              action: 'BET',
+              amountBb: 8,
+            ),
+            CourseChoice(id: 'check', label: 'Check forever', action: 'CHECK'),
+            CourseChoice(
+              id: 'jam',
+              label: 'Jam 150bb',
+              action: 'RAISE',
+              amountBb: 150,
+            ),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-limp-turn',
+          street: 'turn',
+          prompt: 'Called by two. Turn 2s. Action?',
+          choices: [
+            CourseChoice(
+              id: 'barrel',
+              label: 'Continue value',
+              action: 'BET',
+              amountBb: 18,
+            ),
+            CourseChoice(id: 'check-t', label: 'Check', action: 'CHECK'),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-limp-river',
+          street: 'river',
+          prompt: 'Both call. River 8d. Action?',
+          choices: [
+            CourseChoice(
+              id: 'value',
+              label: 'Bet thin value',
+              action: 'BET',
+              amountBb: 22,
+            ),
+            CourseChoice(id: 'check-r', label: 'Check', action: 'CHECK'),
+            CourseChoice(
+              id: 'bluff',
+              label: 'Blast as a pure bluff',
+              action: 'BET',
+              amountBb: 80,
+            ),
+          ],
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        AuthoredMultiStepActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Limped · top pair — tap Bet value.'), findsOneWidget);
+    expect(find.textContaining('Flop · Kd9c4h · AK'), findsOneWidget);
+    expect(find.text('BET VALUE'), findsOneWidget);
+    expect(find.text('Flop Kd 9c 4h. Checked to you. Action?'), findsNothing);
+    await tester.tap(find.text('BET VALUE'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'bet');
+    controller.dispose();
+  });
+
+  testWidgets('s7 capstone limped hand docks Continue value on turn felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-10-04-hand',
+      order: 2,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 70,
+      accessibilityText: 'Four-way limp, 150bb, you hold AhKh on BTN.',
+      acceptedGrades: const [SoftGrade.recommended],
+      handSteps: const [
+        CourseHandStep(
+          id: 'step-limp-flop',
+          street: 'flop',
+          prompt: 'Flop Kd 9c 4h. Checked to you. Action?',
+          choices: [
+            CourseChoice(id: 'bet', label: 'Bet value', action: 'BET'),
+            CourseChoice(id: 'check', label: 'Check forever', action: 'CHECK'),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-limp-turn',
+          street: 'turn',
+          prompt: 'Called by two. Turn 2s. Action?',
+          choices: [
+            CourseChoice(
+              id: 'barrel',
+              label: 'Continue value',
+              action: 'BET',
+              amountBb: 18,
+            ),
+            CourseChoice(id: 'check-t', label: 'Check', action: 'CHECK'),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-limp-river',
+          street: 'river',
+          prompt: 'Both call. River 8d. Action?',
+          choices: [
+            CourseChoice(
+              id: 'value',
+              label: 'Bet thin value',
+              action: 'BET',
+            ),
+            CourseChoice(id: 'check-r', label: 'Check', action: 'CHECK'),
+          ],
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    controller.setHandStepIndex(1);
+    await tester.pumpWidget(
+      _wrap(
+        AuthoredMultiStepActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Two callers · blank — tap Continue value.'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('Turn · Kd9c4h2s · AK'), findsOneWidget);
+    expect(find.text('CONTINUE VALUE'), findsOneWidget);
+    expect(find.text('Called by two. Turn 2s. Action?'), findsNothing);
+    await tester.tap(find.text('CONTINUE VALUE'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'barrel');
+    controller.dispose();
+  });
+
+  testWidgets('s7 capstone limped hand docks Bet thin value on river felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-10-04-hand',
+      order: 2,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 70,
+      accessibilityText: 'Four-way limp, 150bb, you hold AhKh on BTN.',
+      acceptedGrades: const [SoftGrade.recommended],
+      handSteps: const [
+        CourseHandStep(
+          id: 'step-limp-flop',
+          street: 'flop',
+          prompt: 'Flop Kd 9c 4h. Checked to you. Action?',
+          choices: [
+            CourseChoice(id: 'bet', label: 'Bet value', action: 'BET'),
+            CourseChoice(id: 'check', label: 'Check forever', action: 'CHECK'),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-limp-turn',
+          street: 'turn',
+          prompt: 'Called by two. Turn 2s. Action?',
+          choices: [
+            CourseChoice(
+              id: 'barrel',
+              label: 'Continue value',
+              action: 'BET',
+            ),
+            CourseChoice(id: 'check-t', label: 'Check', action: 'CHECK'),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-limp-river',
+          street: 'river',
+          prompt: 'Both call. River 8d. Action?',
+          choices: [
+            CourseChoice(
+              id: 'value',
+              label: 'Bet thin value',
+              action: 'BET',
+              amountBb: 22,
+            ),
+            CourseChoice(id: 'check-r', label: 'Check', action: 'CHECK'),
+            CourseChoice(
+              id: 'bluff',
+              label: 'Blast as a pure bluff',
+              action: 'BET',
+              amountBb: 80,
+            ),
+          ],
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    controller.setHandStepIndex(2);
+    await tester.pumpWidget(
+      _wrap(
+        AuthoredMultiStepActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Both call · thin value — tap Bet thin value.'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('River · Kd9c4h2s8d · TPTK'), findsOneWidget);
+    expect(find.text('BET THIN VALUE'), findsOneWidget);
+    expect(find.text('Both call. River 8d. Action?'), findsNothing);
+    await tester.tap(find.text('BET THIN VALUE'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'value');
     controller.dispose();
   });
 
