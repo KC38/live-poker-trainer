@@ -2428,8 +2428,16 @@ class _FullRingDemoState extends State<FullRingDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in FullRingDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -2458,16 +2466,23 @@ class _FullRingDemoState extends State<FullRingDemo> {
               for (var i = 0; i < FullRingDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: FullRingDemo.points[i].label,
-                    caption: FullRingDemo.points[i].caption,
-                    color: FullRingDemo.points[i].color,
-                    selected: _tapped.contains(FullRingDemo.points[i].label),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(FullRingDemo.points[i].label)
-                            : null,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == FullRingDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: FullRingDemo.points[i].label,
+                      caption: FullRingDemo.points[i].caption,
+                      color: FullRingDemo.points[i].color,
+                      selected:
+                          _tapped.contains(FullRingDemo.points[i].label),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(FullRingDemo.points[i].label)
+                              : null,
+                    ),
                   ),
                 ),
               ],
@@ -2476,7 +2491,9 @@ class _FullRingDemoState extends State<FullRingDemo> {
           const SizedBox(height: 10),
           Text(
             widget.interactive
-                ? 'Tap Nine, Same, and Position'
+                ? (next == null
+                    ? 'Nine seats · same rules · position still matters'
+                    : 'Tap ${next.label} next')
                 : 'Nine seats · same rules · position still matters',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
