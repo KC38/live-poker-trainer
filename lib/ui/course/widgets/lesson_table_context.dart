@@ -829,6 +829,36 @@ enum LessonTableRegion {
 
   /// Mix five types: Calling Station — bluff more (mistake).
   mixFiveStationBluff,
+
+  /// S6 section checkpoint: range advantage (correct).
+  s6CpRangeAdvantage,
+
+  /// S6 section checkpoint: no concept applies (mistake).
+  s6CpNoConcept,
+
+  /// S6 section checkpoint: more capped (correct).
+  s6CpMoreCapped,
+
+  /// S6 section checkpoint: more uncapped nuts (mistake).
+  s6CpUncappedNuts,
+
+  /// S6 section checkpoint: polarized (correct).
+  s6CpPolarized,
+
+  /// S6 section checkpoint: always merged thin value (mistake).
+  s6CpAlwaysMerged,
+
+  /// S6 section checkpoint: TAG label (correct).
+  s6CpTag,
+
+  /// S6 section checkpoint: LAG distractor on TAG evidence.
+  s6CpLagDistractor,
+
+  /// S6 section checkpoint: LAG label (correct).
+  s6CpLag,
+
+  /// S6 section checkpoint: Nit distractor on LAG evidence.
+  s6CpNit,
 }
 
 /// How the mini-table is arranged.
@@ -1195,6 +1225,21 @@ enum LessonTableLayout {
 
   /// Mix five types checkpoint: TAG respect vs Station bluff.
   mixFiveTagRespectOutcomes,
+
+  /// S6 section checkpoint: range advantage vs no concept.
+  s6CpAdvOutcomes,
+
+  /// S6 section checkpoint: more capped vs uncapped nuts.
+  s6CpCapOutcomes,
+
+  /// S6 section checkpoint: polarized vs always merged.
+  s6CpPolarOutcomes,
+
+  /// S6 section checkpoint: TAG vs LAG.
+  s6CpTagOutcomes,
+
+  /// S6 section checkpoint: LAG vs Nit.
+  s6CpLagOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -2218,6 +2263,31 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         layout: LessonTableLayout.mixFiveTagRespectOutcomes,
         caption: 'Selective entry + disciplined barrels. Label + line?',
+      );
+    case 'act-06-13-02-cp-adv':
+      return const LessonTableScene(
+        layout: LessonTableLayout.s6CpAdvOutcomes,
+        caption: 'PFR on dry A-high often has?',
+      );
+    case 'act-06-13-02-cp-cap':
+      return const LessonTableScene(
+        layout: LessonTableLayout.s6CpCapOutcomes,
+        caption: 'Check-back turn often makes river range?',
+      );
+    case 'act-06-13-02-cp-polar':
+      return const LessonTableScene(
+        layout: LessonTableLayout.s6CpPolarOutcomes,
+        caption: 'River overbet shape?',
+      );
+    case 'act-06-13-02-cp-tag':
+      return const LessonTableScene(
+        layout: LessonTableLayout.s6CpTagOutcomes,
+        caption: 'Tight entry, planned barrels. Label?',
+      );
+    case 'act-06-13-02-cp-lag':
+      return const LessonTableScene(
+        layout: LessonTableLayout.s6CpLagOutcomes,
+        caption: 'Wide entry, sustained pressure. Label?',
       );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
@@ -3245,6 +3315,36 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.mixFiveStationBluff => pick('wrong'),
         _ => null,
       };
+    case 'act-06-13-02-cp-adv':
+      return switch (region) {
+        LessonTableRegion.s6CpRangeAdvantage => pick('ra'),
+        LessonTableRegion.s6CpNoConcept => pick('none'),
+        _ => null,
+      };
+    case 'act-06-13-02-cp-cap':
+      return switch (region) {
+        LessonTableRegion.s6CpMoreCapped => pick('cap'),
+        LessonTableRegion.s6CpUncappedNuts => pick('uncap'),
+        _ => null,
+      };
+    case 'act-06-13-02-cp-polar':
+      return switch (region) {
+        LessonTableRegion.s6CpPolarized => pick('polar'),
+        LessonTableRegion.s6CpAlwaysMerged => pick('merged'),
+        _ => null,
+      };
+    case 'act-06-13-02-cp-tag':
+      return switch (region) {
+        LessonTableRegion.s6CpTag => pick('tag'),
+        LessonTableRegion.s6CpLagDistractor => pick('lag'),
+        _ => null,
+      };
+    case 'act-06-13-02-cp-lag':
+      return switch (region) {
+        LessonTableRegion.s6CpLag => pick('lag'),
+        LessonTableRegion.s6CpNit => pick('nit'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -3438,7 +3538,12 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-06-12-02-checkpoint' ||
       activity.id == 'act-06-12-03-unguided' ||
       activity.id == 'act-06-12-03-checkpoint' ||
-      activity.id == 'act-06-13-01-checkpoint';
+      activity.id == 'act-06-13-01-checkpoint' ||
+      activity.id == 'act-06-13-02-cp-adv' ||
+      activity.id == 'act-06-13-02-cp-cap' ||
+      activity.id == 'act-06-13-02-cp-polar' ||
+      activity.id == 'act-06-13-02-cp-tag' ||
+      activity.id == 'act-06-13-02-cp-lag';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -3757,6 +3862,11 @@ class LessonTableContext extends StatelessWidget {
           _buildLagAdjustCiteOutcomes(),
       LessonTableLayout.mixFiveTagRespectOutcomes =>
           _buildMixFiveTagRespectOutcomes(),
+      LessonTableLayout.s6CpAdvOutcomes => _buildS6CpAdvOutcomes(),
+      LessonTableLayout.s6CpCapOutcomes => _buildS6CpCapOutcomes(),
+      LessonTableLayout.s6CpPolarOutcomes => _buildS6CpPolarOutcomes(),
+      LessonTableLayout.s6CpTagOutcomes => _buildS6CpTagOutcomes(),
+      LessonTableLayout.s6CpLagOutcomes => _buildS6CpLagOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -8048,6 +8158,159 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Wrong model',
           visual: const Icon(
             Icons.people_outline,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildS6CpAdvOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive S6 checkpoint — tap range advantage or no concept',
+      semanticsStatic: 'S6 checkpoint range advantage outcomes',
+      caption: scene.caption ?? 'PFR on dry A-high often has?',
+      phases: [
+        (
+          region: LessonTableRegion.s6CpRangeAdvantage,
+          title: 'Range advantage',
+          detail: 'PFR owns A-high',
+          visual: const Icon(
+            Icons.north_east,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.s6CpNoConcept,
+          title: 'No concept',
+          detail: 'It applies',
+          visual: const Icon(
+            Icons.block,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildS6CpCapOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive S6 checkpoint — tap more capped or uncapped nuts',
+      semanticsStatic: 'S6 checkpoint capped outcomes',
+      caption: scene.caption ?? 'Check-back turn often makes river range?',
+      phases: [
+        (
+          region: LessonTableRegion.s6CpMoreCapped,
+          title: 'More capped',
+          detail: 'Fewer nuts',
+          visual: const Icon(
+            Icons.vertical_align_bottom,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.s6CpUncappedNuts,
+          title: 'Uncapped nuts',
+          detail: 'Wrong story',
+          visual: const Icon(
+            Icons.workspace_premium_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildS6CpPolarOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive S6 checkpoint — tap polarized or always merged',
+      semanticsStatic: 'S6 checkpoint polar outcomes',
+      caption: scene.caption ?? 'River overbet shape?',
+      phases: [
+        (
+          region: LessonTableRegion.s6CpPolarized,
+          title: 'Polarized',
+          detail: 'Value or bluff',
+          visual: const Icon(
+            Icons.swap_vert,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.s6CpAlwaysMerged,
+          title: 'Always merged',
+          detail: 'Wrong size story',
+          visual: const Icon(
+            Icons.horizontal_rule,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildS6CpTagOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive: 'Interactive S6 checkpoint — tap TAG or LAG',
+      semanticsStatic: 'S6 checkpoint TAG outcomes',
+      caption: scene.caption ?? 'Tight entry, planned barrels. Label?',
+      phases: [
+        (
+          region: LessonTableRegion.s6CpTag,
+          title: 'TAG',
+          detail: 'Selective + plan',
+          visual: const Icon(
+            Icons.gps_fixed,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.s6CpLagDistractor,
+          title: 'LAG',
+          detail: 'Entry too tight',
+          visual: const Icon(
+            Icons.local_fire_department_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildS6CpLagOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive: 'Interactive S6 checkpoint — tap LAG or Nit',
+      semanticsStatic: 'S6 checkpoint LAG outcomes',
+      caption: scene.caption ?? 'Wide entry, sustained pressure. Label?',
+      phases: [
+        (
+          region: LessonTableRegion.s6CpLag,
+          title: 'LAG',
+          detail: 'Wide + pressure',
+          visual: const Icon(
+            Icons.local_fire_department_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.s6CpNit,
+          title: 'Nit',
+          detail: 'Opposite',
+          visual: const Icon(
+            Icons.lock_outlined,
             color: AppColors.slate,
             size: 24,
           ),
