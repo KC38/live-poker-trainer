@@ -14948,7 +14948,8 @@ void main() {
     );
     expect(find.textContaining('broadway clubs'), findsNothing);
     expect(find.text('Chop — board plays'), findsNothing);
-    expect(find.text('Tap the answer on the table.'), findsOneWidget);
+    // Rex already owns the cue — no third status line.
+    expect(find.text('Tap the answer on the table.'), findsNothing);
 
     final boardCards = find.byWidgetPredicate(
       (w) => w is MiniCard && w.size == MiniCardSize.small,
