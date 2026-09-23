@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "f4105a22039e1c29baef29338e8ce46e4254aa65b203eeb3ecc1357f1535b045",
+  "contentChecksum": "2a8eee68db4bb93097f3c4f6d626079d303f0bd8e2893d2330e5f016f0d00086",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -14811,8 +14811,8 @@
                   "choices": [
                     {
                       "id": "polar",
-                      "label": "Polarized — value or bluff",
-                      "accessibilityText": "Polarized — value or bluff",
+                      "label": "Polarized",
+                      "accessibilityText": "Polarized",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Overbets punish medium."
@@ -14820,8 +14820,8 @@
                     },
                     {
                       "id": "merged",
-                      "label": "Merged thin value only",
-                      "accessibilityText": "Merged thin value only",
+                      "label": "Merged",
+                      "accessibilityText": "Merged",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Thin value prefers smaller.",
@@ -14850,8 +14850,8 @@
                   "choices": [
                     {
                       "id": "mid",
-                      "label": "Medium merged value bet",
-                      "accessibilityText": "Medium merged value bet",
+                      "label": "Bet medium",
+                      "accessibilityText": "Bet medium",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Get called by worse."
@@ -14861,21 +14861,24 @@
                     },
                     {
                       "id": "ob",
-                      "label": "Huge polar overbet",
-                      "accessibilityText": "Huge polar overbet",
+                      "label": "Huge overbet",
+                      "accessibilityText": "Huge overbet",
                       "grading": {
                         "grade": "questionable",
                         "feedback": "Can fold out worse."
-                      }
+                      },
+                      "action": "BET",
+                      "amountBb": 30
                     },
                     {
                       "id": "check",
-                      "label": "Check always",
-                      "accessibilityText": "Check always",
+                      "label": "Check",
+                      "accessibilityText": "Check",
                       "grading": {
                         "grade": "questionable",
                         "feedback": "Misses value."
-                      }
+                      },
+                      "action": "CHECK"
                     }
                   ],
                   "playerTypeRefs": [
@@ -14902,8 +14905,8 @@
                   "choices": [
                     {
                       "id": "mismatch",
-                      "label": "Tiny \"polar\" bluffs that never get folds",
-                      "accessibilityText": "Tiny \"polar\" bluffs that never get folds",
+                      "label": "Tiny bluffs",
+                      "accessibilityText": "Tiny bluffs",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Shape must match goal."
@@ -14911,8 +14914,8 @@
                     },
                     {
                       "id": "ok",
-                      "label": "Any size is always fine",
-                      "accessibilityText": "Any size is always fine",
+                      "label": "Any size",
+                      "accessibilityText": "Any size",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Sizes communicate.",
@@ -14941,8 +14944,8 @@
                   "choices": [
                     {
                       "id": "thin",
-                      "label": "Extract from worse medium hands",
-                      "accessibilityText": "Extract from worse medium hands",
+                      "label": "Thin value",
+                      "accessibilityText": "Thin value",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Classic thin value."
@@ -14950,8 +14953,8 @@
                     },
                     {
                       "id": "only-nuts",
-                      "label": "Only ever bet nuts",
-                      "accessibilityText": "Only ever bet nuts",
+                      "label": "Only nuts",
+                      "accessibilityText": "Only nuts",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Too polar.",

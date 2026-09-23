@@ -468,6 +468,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'XR flop / bet turn / bomb — tap Uncapped.',
       'act-06-03-01-checkpoint' =>
           'Caps are for — tap Attack caps.',
+      'act-06-04-01-guided' =>
+          'River overbet — tap Polarized.',
+      'act-06-04-01-unguided' =>
+          'Mismatch to avoid — tap Tiny bluffs.',
+      'act-06-04-01-checkpoint' =>
+          'Merged betting aims to — tap Thin value.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -555,7 +561,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-06-02-01-checkpoint' ||
             widget.activity.id == 'act-06-03-01-guided' ||
             widget.activity.id == 'act-06-03-01-unguided' ||
-            widget.activity.id == 'act-06-03-01-checkpoint';
+            widget.activity.id == 'act-06-03-01-checkpoint' ||
+            widget.activity.id == 'act-06-04-01-guided' ||
+            widget.activity.id == 'act-06-04-01-unguided' ||
+            widget.activity.id == 'act-06-04-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

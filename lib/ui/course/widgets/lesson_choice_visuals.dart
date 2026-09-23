@@ -323,6 +323,12 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Capped / uncapped ranges: tap line reads on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-06-04-01-guided' ||
+      activity.id == 'act-06-04-01-unguided' ||
+      activity.id == 'act-06-04-01-checkpoint') {
+    // Polar vs merged: tap range-shape reads on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

@@ -568,6 +568,24 @@ enum LessonTableRegion {
 
   /// Capped/uncapped checkpoint: auto-fold (mistake).
   capsAutoFold,
+
+  /// Polar/merged guided: polarized overbet shape (correct).
+  polarShape,
+
+  /// Polar/merged guided: merged shape (mistake).
+  mergedShape,
+
+  /// Polar/merged unguided: tiny polar bluffs (correct mismatch).
+  polarTinyBluffs,
+
+  /// Polar/merged unguided: any size fine (mistake).
+  polarAnySize,
+
+  /// Polar/merged checkpoint: extract thin value (correct).
+  polarThinValue,
+
+  /// Polar/merged checkpoint: only bet nuts (mistake).
+  polarOnlyNuts,
 }
 
 /// How the mini-table is arranged.
@@ -808,6 +826,15 @@ enum LessonTableLayout {
 
   /// Capped/uncapped checkpoint: attack caps vs auto-fold.
   cappedAttackOutcomes,
+
+  /// Polar/merged guided: polarized vs merged.
+  polarGuidedOutcomes,
+
+  /// Polar/merged unguided: tiny bluffs vs any size.
+  polarMismatchOutcomes,
+
+  /// Polar/merged checkpoint: thin value vs only nuts.
+  polarAimOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -1619,6 +1646,21 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.cappedAttackOutcomes,
         caption: 'Caps are for?',
       );
+    case 'act-06-04-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.polarGuidedOutcomes,
+        caption: 'River overbet usually wants?',
+      );
+    case 'act-06-04-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.polarMismatchOutcomes,
+        caption: 'Mismatch to avoid?',
+      );
+    case 'act-06-04-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.polarAimOutcomes,
+        caption: 'Merged betting aims to?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -2390,6 +2432,24 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.capsAutoFold => pick('fear'),
         _ => null,
       };
+    case 'act-06-04-01-guided':
+      return switch (region) {
+        LessonTableRegion.polarShape => pick('polar'),
+        LessonTableRegion.mergedShape => pick('merged'),
+        _ => null,
+      };
+    case 'act-06-04-01-unguided':
+      return switch (region) {
+        LessonTableRegion.polarTinyBluffs => pick('mismatch'),
+        LessonTableRegion.polarAnySize => pick('ok'),
+        _ => null,
+      };
+    case 'act-06-04-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.polarThinValue => pick('thin'),
+        LessonTableRegion.polarOnlyNuts => pick('only-nuts'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -2536,7 +2596,10 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-06-02-01-checkpoint' ||
       activity.id == 'act-06-03-01-guided' ||
       activity.id == 'act-06-03-01-unguided' ||
-      activity.id == 'act-06-03-01-checkpoint';
+      activity.id == 'act-06-03-01-checkpoint' ||
+      activity.id == 'act-06-04-01-guided' ||
+      activity.id == 'act-06-04-01-unguided' ||
+      activity.id == 'act-06-04-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -2794,6 +2857,9 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.cappedUncappedLineOutcomes =>
           _buildCappedUncappedLineOutcomes(),
       LessonTableLayout.cappedAttackOutcomes => _buildCappedAttackOutcomes(),
+      LessonTableLayout.polarGuidedOutcomes => _buildPolarGuidedOutcomes(),
+      LessonTableLayout.polarMismatchOutcomes => _buildPolarMismatchOutcomes(),
+      LessonTableLayout.polarAimOutcomes => _buildPolarAimOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -5735,6 +5801,99 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Opposite exploit',
           visual: const Icon(
             Icons.do_not_disturb_on_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPolarGuidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive polar vs merged — tap polarized vs merged',
+      semanticsStatic: 'Polar merged guided outcomes',
+      caption: scene.caption ?? 'River overbet usually wants?',
+      phases: [
+        (
+          region: LessonTableRegion.polarShape,
+          title: 'Polarized',
+          detail: 'Value or bluff',
+          visual: const Icon(
+            Icons.swap_vert,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.mergedShape,
+          title: 'Merged',
+          detail: 'Thin value only',
+          visual: const Icon(
+            Icons.horizontal_rule,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPolarMismatchOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive polar mismatches — tap tiny bluffs vs any size',
+      semanticsStatic: 'Polar mismatch outcomes',
+      caption: scene.caption ?? 'Mismatch to avoid?',
+      phases: [
+        (
+          region: LessonTableRegion.polarTinyBluffs,
+          title: 'Tiny bluffs',
+          detail: 'Never get folds',
+          visual: const Icon(
+            Icons.warning_amber_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.polarAnySize,
+          title: 'Any size',
+          detail: 'Always fine?',
+          visual: const Icon(
+            Icons.all_inclusive,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPolarAimOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive merged aims — tap thin value vs only nuts',
+      semanticsStatic: 'Polar merged aim outcomes',
+      caption: scene.caption ?? 'Merged betting aims to?',
+      phases: [
+        (
+          region: LessonTableRegion.polarThinValue,
+          title: 'Thin value',
+          detail: 'Extract from worse',
+          visual: const Icon(
+            Icons.trending_up,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.polarOnlyNuts,
+          title: 'Only nuts',
+          detail: 'Too polar',
+          visual: const Icon(
+            Icons.diamond_outlined,
             color: AppColors.slate,
             size: 24,
           ),

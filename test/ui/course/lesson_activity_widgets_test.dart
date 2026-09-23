@@ -3431,7 +3431,10 @@ void main() {
         ),
       );
       expect(find.byType(PolarMergedDemo), findsOneWidget);
+      // Rex cue below the felt — not a second footer inside the demo.
       expect(find.text('Tap Polar, Merged, and Size.'), findsOneWidget);
+      expect(find.text('Tap Polar, Merged, and Size'), findsNothing);
+      expect(find.text('Nuts/air vs medium-strong'), findsNothing);
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
@@ -11597,6 +11600,159 @@ void main() {
     await tester.tap(find.text('Attack caps'));
     await tester.pump();
     expect(controller.draft.choiceId, 'attack');
+    controller.dispose();
+  });
+
+  testWidgets('s6 polar guided taps Polarized on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-04-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Polarized.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'River overbet usually wants which shape?',
+      choices: const [
+        CourseChoice(id: 'polar', label: 'Polarized'),
+        CourseChoice(id: 'merged', label: 'Merged'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('River overbet — tap Polarized.'), findsOneWidget);
+    await tester.tap(find.text('Polarized'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'polar');
+    controller.dispose();
+  });
+
+  testWidgets('s6 polar scaffolded docks Bet medium on river', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-04-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Merged medium.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Thin value vs station on river. Size shape?',
+      choices: const [
+        CourseChoice(
+          id: 'mid',
+          label: 'Bet medium',
+          action: 'BET',
+          amountBb: 8,
+        ),
+        CourseChoice(
+          id: 'ob',
+          label: 'Huge overbet',
+          action: 'BET',
+          amountBb: 30,
+        ),
+        CourseChoice(id: 'check', label: 'Check', action: 'CHECK'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Thin value vs station — tap Bet medium.'),
+      findsOneWidget,
+    );
+    expect(find.text('BET MEDIUM'), findsOneWidget);
+    await tester.tap(find.text('BET MEDIUM'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'mid');
+    controller.dispose();
+  });
+
+  testWidgets('s6 polar unguided taps Tiny bluffs on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-04-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Tiny bets as pure polar bluffs without a story.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Mismatch to avoid?',
+      choices: const [
+        CourseChoice(id: 'mismatch', label: 'Tiny bluffs'),
+        CourseChoice(id: 'ok', label: 'Any size'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Mismatch to avoid — tap Tiny bluffs.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Tiny bluffs'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'mismatch');
+    controller.dispose();
+  });
+
+  testWidgets('s6 polar checkpoint taps Thin value on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-04-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Get called by worse / fold out some better sometimes.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Merged betting aims to?',
+      choices: const [
+        CourseChoice(id: 'thin', label: 'Thin value'),
+        CourseChoice(id: 'only-nuts', label: 'Only nuts'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Merged betting aims to — tap Thin value.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Thin value'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'thin');
     controller.dispose();
   });
 
