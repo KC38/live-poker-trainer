@@ -55,6 +55,12 @@ class AuthoredMultiStepActivity extends StatelessWidget {
         'Turn checked · nut draw — tap Bet semi-bluff.',
       ('act-07-10-03-hand', 'step-mw-river') =>
         'Missed river · two behind — tap Check.',
+      ('act-07-10-04-hand', 'step-limp-flop') =>
+        'Limped · top pair — tap Bet value.',
+      ('act-07-10-04-hand', 'step-limp-turn') =>
+        'Two callers · blank — tap Continue value.',
+      ('act-07-10-04-hand', 'step-limp-river') =>
+        'Both call · thin value — tap Bet thin value.',
       _ => 'Play the street — tap your action on the dock.',
     };
   }
