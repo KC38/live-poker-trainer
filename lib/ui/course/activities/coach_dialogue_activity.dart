@@ -19,6 +19,7 @@ import 'package:live_poker_trainer/ui/course/widgets/defend_enough_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/mixed_strategy_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/three_bet_four_bet_spr_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/hard_fold_cooler_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/selective_aggression_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -321,6 +322,12 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.hardFoldCooler
                     ? null
                     : onFeltAcknowledge,
+            onSelectiveAggressionAcknowledge:
+                locked ||
+                        visual.kind !=
+                            CoachDialogueVisualKind.selectiveAggression
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance && visual.requiresFeltTap) ...[
@@ -543,6 +550,9 @@ enum CoachDialogueVisualKind {
 
   /// Hard folds save buy-ins; coolers happen; ego call-downs are mistakes.
   hardFoldCooler,
+
+  /// Selective aggression: tight entry, then barrels with a plan — count samples.
+  selectiveAggression,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -683,6 +693,8 @@ class CoachDialogueVisual {
       'Tap 3-Bet, 4-Bet, and Depth.',
     CoachDialogueVisualKind.hardFoldCooler =>
       'Tap Hard, Cooler, and Ego.',
+    CoachDialogueVisualKind.selectiveAggression =>
+      'Tap Tight, Barrel, and Sample.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -748,7 +760,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.defendEnough ||
       kind == CoachDialogueVisualKind.mixedStrategy ||
       kind == CoachDialogueVisualKind.threeBetFourBetSpr ||
-      kind == CoachDialogueVisualKind.hardFoldCooler;
+      kind == CoachDialogueVisualKind.hardFoldCooler ||
+      kind == CoachDialogueVisualKind.selectiveAggression;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -875,6 +888,8 @@ class CoachDialogueVisual {
       '3-bet/4-bet SPR tiles: 3-bet, 4-bet, depth',
     CoachDialogueVisualKind.hardFoldCooler =>
       'Hard-fold/cooler tiles: hard, cooler, ego',
+    CoachDialogueVisualKind.selectiveAggression =>
+      'Selective-aggression tiles: tight, barrel, sample',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -1097,6 +1112,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-06-10-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.hardFoldCooler,
+      );
+    case 'act-06-11-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.selectiveAggression,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1583,6 +1602,16 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.mixedStrategy,
     );
   }
+  // Phrase-safe selective aggression — before bare "tight" / "barrel" alone.
+  if (blob.contains('enters tight') ||
+      blob.contains('barrels with a plan') ||
+      blob.contains('count samples') ||
+      blob.contains('selective aggression') ||
+      (blob.contains('before labels') && blob.contains('count samples'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.selectiveAggression,
+    );
+  }
   // Phrase-safe hard folds / coolers — avoid bare "cooler" / "ego" alone.
   if (blob.contains('hard folds save buy-ins') ||
       blob.contains('coolers happen') ||
@@ -1676,6 +1705,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onMixedStrategyAcknowledge,
     this.onThreeBetFourBetSprAcknowledge,
     this.onHardFoldCoolerAcknowledge,
+    this.onSelectiveAggressionAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -1740,6 +1770,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onMixedStrategyAcknowledge;
   final VoidCallback? onThreeBetFourBetSprAcknowledge;
   final VoidCallback? onHardFoldCoolerAcknowledge;
+  final VoidCallback? onSelectiveAggressionAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -2052,6 +2083,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onHardFoldCoolerAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onHardFoldCoolerAcknowledge,
+        ),
+        CoachDialogueVisualKind.selectiveAggression => SelectiveAggressionDemo(
+          interactive: onSelectiveAggressionAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onSelectiveAggressionAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
