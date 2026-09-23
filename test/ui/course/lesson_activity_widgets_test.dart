@@ -3610,6 +3610,10 @@ void main() {
     expect(find.text('Tap the dealer button on the table.'), findsOneWidget);
     expect(find.byType(LessonTableContext), findsOneWidget);
     expect(find.text('The seat with the D chip'), findsNothing);
+    // Identify steps hide role word labels — chips alone teach.
+    expect(find.text('Button'), findsNothing);
+    expect(find.text('Small blind'), findsNothing);
+    expect(find.text('Big blind'), findsNothing);
 
     await tester.tap(
       find.descendant(
@@ -3620,11 +3624,14 @@ void main() {
     await tester.pump();
     expect(controller.draft.choiceId, 'btn-seat');
 
+    // Big blind is the stacked chips labeled "2" (no word spoiler).
     await tester.tap(
-      find.descendant(
-        of: find.byType(LessonTableContext),
-        matching: find.text('Big blind'),
-      ),
+      find
+          .descendant(
+            of: find.byType(LessonTableContext),
+            matching: find.text('2'),
+          )
+          .first,
     );
     await tester.pump();
     expect(controller.draft.choiceId, 'bb-seat');

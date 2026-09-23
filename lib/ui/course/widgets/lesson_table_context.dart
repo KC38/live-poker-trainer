@@ -151,6 +151,7 @@ class LessonTableScene {
     this.buttonSeat = 5,
     this.numberSeats = false,
     this.showSeatNeverMatters = false,
+    this.showRoleLabels = true,
   });
 
   /// Face-up hero hole cards (e.g. `Ah`, `Kd`).
@@ -188,6 +189,10 @@ class LessonTableScene {
 
   /// Show a "Seat never matters" distractor under position labels.
   final bool showSeatNeverMatters;
+
+  /// When false, identify steps hide "Button" / "SB" word labels so the
+  /// chip visuals teach (Duolingo-style — no answer printed on the piece).
+  final bool showRoleLabels;
 }
 
 /// Which region of the mini-table should read as the teaching target.
@@ -260,12 +265,21 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
     // Suited / pair identify steps: choices are the visual. Do not put the
     // recommended hand on the felt above the options (spoils the puzzle).
     case 'act-01-01-03-explain-button':
+      // Explain keeps role names so learners map words → chips.
+      return const LessonTableScene(
+        layout: LessonTableLayout.blindsSeats,
+        highlight: LessonTableHighlight.button,
+        seatCount: 6,
+        buttonSeat: 3,
+        showRoleLabels: true,
+      );
     case 'act-01-01-03-guided-button':
       return const LessonTableScene(
         layout: LessonTableLayout.blindsSeats,
         highlight: LessonTableHighlight.button,
         seatCount: 6,
         buttonSeat: 3,
+        showRoleLabels: false,
       );
     case 'act-01-01-03-scaffolded-blinds':
       return const LessonTableScene(
@@ -273,6 +287,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.bigBlind,
         seatCount: 6,
         buttonSeat: 3,
+        showRoleLabels: false,
       );
     case 'act-01-01-03-unguided-when':
       return const LessonTableScene(
@@ -285,6 +300,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         seatCount: 6,
         buttonSeat: 5,
         numberSeats: true,
+        showRoleLabels: false,
       );
     case 'act-02-01-01-explain-pos':
     case 'act-02-01-01-guided-btn':
@@ -877,6 +893,7 @@ class LessonTableContext extends StatelessWidget {
         seatIndex: seat,
         role: role,
         numberSeats: scene.numberSeats,
+        showRoleLabels: scene.showRoleLabels,
         selected: selected,
         highlighted: pulseRole(role),
         enabled: enabled && _interactive,
@@ -1904,6 +1921,7 @@ class _BlindsSeatChip extends StatelessWidget {
     required this.seatIndex,
     required this.role,
     required this.numberSeats,
+    required this.showRoleLabels,
     required this.selected,
     required this.highlighted,
     required this.enabled,
@@ -1913,13 +1931,15 @@ class _BlindsSeatChip extends StatelessWidget {
   final int seatIndex;
   final LessonTableRegion role;
   final bool numberSeats;
+  final bool showRoleLabels;
   final bool selected;
   final bool highlighted;
   final bool enabled;
   final VoidCallback? onTap;
 
-  String get _title {
+  String? get _title {
     if (numberSeats) return 'Seat $seatIndex';
+    if (!showRoleLabels) return null;
     return switch (role) {
       LessonTableRegion.button => 'Button',
       LessonTableRegion.smallBlind => 'Small blind',
@@ -1940,6 +1960,7 @@ class _BlindsSeatChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final title = _title;
     return _TappableRegion(
       label: _a11y,
       selected: selected,
@@ -1950,22 +1971,28 @@ class _BlindsSeatChip extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(6, 6, 6, 6),
         child: Column(
           children: [
-            Text(
-              _title,
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
+            if (title != null) ...[
+              Text(
+                title,
+                style: GoogleFonts.manrope(
+                  color: AppColors.slate,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
+              const SizedBox(height: 4),
+            ],
             switch (role) {
               LessonTableRegion.button => const _DealerChipBadge(),
               LessonTableRegion.smallBlind => const _BlindChipStack(amount: 1),
               LessonTableRegion.bigBlind => const _BlindChipStack(amount: 2),
               _ => const _EmptySeatMark(),
             },
-            if (numberSeats && role != LessonTableRegion.emptySeat) ...[
+            // Role letter badges (D/SB/BB) only when teaching names explicitly —
+            // never on identify taps where they would print the answer.
+            if (showRoleLabels &&
+                numberSeats &&
+                role != LessonTableRegion.emptySeat) ...[
               const SizedBox(height: 4),
               Text(
                 switch (role) {
