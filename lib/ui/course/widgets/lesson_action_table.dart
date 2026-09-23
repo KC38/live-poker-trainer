@@ -248,6 +248,38 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         openPot: true,
         feltStatusLine: 'Draw hit — delayed value',
       );
+    case 'act-03-06-01-guided':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', 'Kd'],
+        boardCodes: ['As', 'Kc', '7d', '2h', '3c'],
+        potLabel: 'Pot 28',
+        villainLine: 'Checked to you',
+        streetLabel: 'River · Brick · Top two',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Brick river — get paid',
+      );
+    case 'act-03-06-01-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['9h', '8h'],
+        boardCodes: ['Kh', '7h', '2c', '3d', 'Ah'],
+        potLabel: 'Pot 40',
+        villainLine: 'Checked to you',
+        streetLabel: 'River · Flush completes · Missed',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Flush hits — tell that story',
+      );
+    case 'act-03-06-01-unguided':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', '4d'],
+        boardCodes: ['As', '9c', '7d', '2h', '3c'],
+        potLabel: 'Pot 50',
+        villainLine: 'Jams all-in',
+        streetLabel: 'River · Quiet line · Weak TPTK',
+        facingBet: true,
+        feltStatusLine: 'Huge jam — weak kicker',
+      );
   }
   return null;
 }
@@ -362,6 +394,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-03-05-01-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-03-06-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
@@ -1738,18 +1774,19 @@ class _RiverBinaryDemoState extends State<RiverBinaryDemo> {
               ],
             ),
           ],
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? 'Tap Value, Bluff, Catch, and Fold'
-                : 'Value · bluff · bluff-catch · fold',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          // Interactive: Rex already cues the four taps — no duplicate footer.
+          if (!widget.interactive) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Value · bluff · bluff-catch · fold',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ],
       ),
     );

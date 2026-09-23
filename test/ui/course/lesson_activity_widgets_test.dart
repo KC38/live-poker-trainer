@@ -7749,6 +7749,202 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s3 river guided docks value bet on brick river felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-06-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Value bet two pair on a brick river.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'River bricks. You have top two pair. Villain checked. Action?',
+      choices: const [
+        CourseChoice(id: 'val-bet', label: 'Bet for value', action: 'BET'),
+        CourseChoice(id: 'val-check', label: 'Check', action: 'CHECK'),
+        CourseChoice(id: 'val-fold', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byType(LessonActionTable), findsOneWidget);
+    expect(
+      find.text('Top two on a brick river — tap a value bet.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('River bricks. You have top two pair. Villain checked. Action?'),
+      findsNothing,
+    );
+    expect(find.text('BET FOR VALUE'), findsOneWidget);
+    await tester.tap(find.text('BET FOR VALUE'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'val-bet');
+    controller.dispose();
+  });
+
+  testWidgets('s3 river scaffolded docks flush-story bluff on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-06-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Represent the flush as a bluff when the story fits.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'You missed a flush draw after betting twice. River completes the flush. Action?',
+      choices: const [
+        CourseChoice(
+          id: 'bluff',
+          label: 'Bluff the completed flush',
+          action: 'BET',
+        ),
+        CourseChoice(
+          id: 'giveup',
+          label: 'Give up — never bluff rivers',
+          action: 'CHECK',
+        ),
+        CourseChoice(
+          id: 'tiny',
+          label: 'Bet 1 chip as a joke',
+          action: 'BET',
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('You missed; river completes the flush — tap the bluff.'),
+      findsOneWidget,
+    );
+    expect(find.text('BLUFF THE COMPLETED FLUSH'), findsOneWidget);
+    await tester.tap(find.text('BLUFF THE COMPLETED FLUSH'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'bluff');
+    controller.dispose();
+  });
+
+  testWidgets('s3 river unguided docks Fold vs quiet jam on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-06-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Often fold weak top pair to a huge river jam.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'You have top pair weak kicker. Villain jams river after a quiet line. Action?',
+      choices: const [
+        CourseChoice(id: 'fold-weak', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'call-weak', label: 'Call', action: 'CALL'),
+        CourseChoice(
+          id: 'raise-weak',
+          label: 'Re-raise all-in',
+          action: 'RAISE',
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Weak top pair faces a quiet-line jam — tap Fold or Call.'),
+      findsOneWidget,
+    );
+    expect(find.text('FOLD'), findsOneWidget);
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'fold-weak');
+    controller.dispose();
+  });
+
+  testWidgets('s3 river checkpoint taps bluff-catch job on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-06-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Medium one pair is often a bluff-catch decision.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'Which river job matches medium-strength one pair versus a big bet?',
+      choices: const [
+        CourseChoice(
+          id: 'role-catch',
+          label: 'Bluff-catch or fold — not thin value',
+        ),
+        CourseChoice(id: 'role-value', label: 'Always thin-value shove'),
+        CourseChoice(id: 'role-air', label: 'Pure bluff with one pair'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.handCategoryTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Medium one pair faces a big bet — tap the river job.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Which river job matches medium-strength one pair versus a big bet?',
+      ),
+      findsNothing,
+    );
+    expect(find.text('Bluff-catch or fold'), findsOneWidget);
+    await tester.tap(find.text('Bluff-catch or fold'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'role-catch');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {

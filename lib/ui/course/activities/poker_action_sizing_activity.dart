@@ -232,6 +232,12 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'TPTK on a brick turn after a call — tap a barrel.',
     'act-03-05-01-unguided' =>
       'Flush comes in; checked to you — tap delayed value.',
+    'act-03-06-01-guided' =>
+      'Top two on a brick river — tap a value bet.',
+    'act-03-06-01-scaffolded' =>
+      'You missed; river completes the flush — tap the bluff.',
+    'act-03-06-01-unguided' =>
+      'Weak top pair faces a quiet-line jam — tap Fold or Call.',
     _ => null,
   };
 }
