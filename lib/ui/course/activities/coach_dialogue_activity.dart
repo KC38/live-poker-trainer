@@ -32,6 +32,7 @@ import 'package:live_poker_trainer/ui/course/widgets/stack_depth_plans_demo.dart
 import 'package:live_poker_trainer/ui/course/widgets/same_cards_types_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/type_board_line_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/leak_review_book_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/capstone_srp_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -400,6 +401,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.leakReviewBook
                     ? null
                     : onFeltAcknowledge,
+            onCapstoneSrpAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.capstoneSrp
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance &&
@@ -688,6 +693,9 @@ enum CoachDialogueVisualKind {
 
   /// Personal leak notes, written default book, and scheduled review habits.
   leakReviewBook,
+
+  /// Capstone single-raised pot: plan, update streets, finish river.
+  capstoneSrp,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -858,6 +866,8 @@ class CoachDialogueVisual {
       'Tap Type, Board, Line, and Size.',
     CoachDialogueVisualKind.leakReviewBook =>
       'Tap Leak, Book, and Review.',
+    CoachDialogueVisualKind.capstoneSrp =>
+      'Tap Plan, Update, and Finish.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -938,7 +948,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.stackDepthPlans ||
       kind == CoachDialogueVisualKind.sameCardsTypes ||
       kind == CoachDialogueVisualKind.typeBoardLine ||
-      kind == CoachDialogueVisualKind.leakReviewBook;
+      kind == CoachDialogueVisualKind.leakReviewBook ||
+      kind == CoachDialogueVisualKind.capstoneSrp;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -1095,6 +1106,8 @@ class CoachDialogueVisual {
       'Type-board-line tiles: type, board, line, size — one action',
     CoachDialogueVisualKind.leakReviewBook =>
       'Leak-review tiles: specific leak, written book, scheduled review',
+    CoachDialogueVisualKind.capstoneSrp =>
+      'Capstone SRP tiles: plan, update streets, finish river',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -1381,6 +1394,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-07-09-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.leakReviewBook,
+      );
+    case 'act-07-10-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.capstoneSrp,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1826,6 +1843,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.typeBoardLine,
     );
   }
+  // Capstone SRP — full-hand transfer without hints.
+  if (blob.contains('capstone srp') ||
+      (blob.contains('trust your map') && blob.contains('no hints')) ||
+      (blob.contains('full srp') && blob.contains('plan'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.capstoneSrp,
+    );
+  }
   // Phrase-safe leak review / default book — before commonLeaks so "review leaks"
   // with "defaults" / "write the book" is not stolen by the common-leaks demo.
   if (blob.contains('defaults beat vibes') ||
@@ -2175,6 +2200,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onSameCardsTypesAcknowledge,
     this.onTypeBoardLineAcknowledge,
     this.onLeakReviewBookAcknowledge,
+    this.onCapstoneSrpAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -2254,6 +2280,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onSameCardsTypesAcknowledge;
   final VoidCallback? onTypeBoardLineAcknowledge;
   final VoidCallback? onLeakReviewBookAcknowledge;
+  final VoidCallback? onCapstoneSrpAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -2641,6 +2668,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onLeakReviewBookAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onLeakReviewBookAcknowledge,
+        ),
+        CoachDialogueVisualKind.capstoneSrp => CapstoneSrpDemo(
+          interactive: onCapstoneSrpAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onCapstoneSrpAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },

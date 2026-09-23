@@ -37,6 +37,12 @@ class AuthoredMultiStepActivity extends StatelessWidget {
         'TPTK on a dry flop — tap Bet to start the plan.',
       ('act-04-03-01-guided', 'step-turn-tp') =>
         'Brick turn after a call — tap Bet again for value.',
+      ('act-07-10-01-hand', 'step-flop') =>
+        'BTN SRP on K72r — tap Bet.',
+      ('act-07-10-01-hand', 'step-turn') =>
+        'Called · paired turn — tap Barrel many blanks.',
+      ('act-07-10-01-hand', 'step-river') =>
+        'Ace-high on 9c — tap Check.',
       _ => 'Play the street — tap your action on the dock.',
     };
   }
