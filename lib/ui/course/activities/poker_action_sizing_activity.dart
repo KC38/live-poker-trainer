@@ -219,6 +219,7 @@ String? _guidedPulseChoiceId({
   }
   return switch (activity.id) {
     'act-02-03-01-guided-utg' => 'fold',
+    'act-02-04-01-guided-fold' => 'fold-j3',
     _ => null,
   };
 }
@@ -253,6 +254,14 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Folds to you on the button — tap Fold, Open, or Limp.',
     'act-02-03-01-checkpoint-hj' =>
       'Hijack first in — tap your action.',
+    'act-02-04-01-guided-fold' =>
+      'Junk in the big blind vs an open — tap Fold.',
+    'act-02-04-01-scaffolded-call' =>
+      'Suited connector on the button vs a CO open — tap Call.',
+    'act-02-04-01-unguided-3bet' =>
+      'Kings in the small blind vs a button open — tap Fold, Call, or 3-bet.',
+    'act-02-04-01-checkpoint-aq' =>
+      'Strong suited broadway in the CO — tap your action.',
     'act-02-07-02-jump-vs' =>
       'Aces in the big blind vs an open — tap your action.',
     'act-03-04-01-guided' =>
