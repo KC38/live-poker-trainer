@@ -1697,6 +1697,103 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('open-fold guided docks Fold on UTG felt — no text prompt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-03-01-guided-utg',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Fold seven-two offsuit under the gun.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'You are UTG with 72o at 1/2. What do you do?',
+      choices: const [
+        CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'open-six', label: 'Open to 6', action: 'RAISE'),
+        CourseChoice(id: 'limp', label: 'Limp', action: 'CALL'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    expect(
+      resolveLessonActionSpot(activity)?.heroCodes,
+      ['7h', '2d'],
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byType(LessonActionTable), findsOneWidget);
+    expect(find.byType(LessonActionDock), findsOneWidget);
+    expect(find.text('Trash UTG — tap Fold.'), findsOneWidget);
+    expect(find.text('First in — trash folds'), findsOneWidget);
+    expect(
+      find.text('You are UTG with 72o at 1/2. What do you do?'),
+      findsNothing,
+    );
+    expect(find.text('FOLD'), findsOneWidget);
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'fold');
+    controller.dispose();
+  });
+
+  test('open-fold identify steps resolve felt action spots', () {
+    expect(
+      resolveLessonActionSpot(
+        CourseActivity(
+          id: 'act-02-03-01-scaffolded-qq',
+          order: 3,
+          stage: ActivityStage.scaffolded,
+          renderer: ActivityRenderer.pokerActionSizing,
+          estimatedSeconds: 55,
+          accessibilityText: 'qq',
+          acceptedGrades: const [SoftGrade.recommended],
+          choices: const [],
+        ),
+      )?.heroCodes,
+      ['Qh', 'Qd'],
+    );
+    expect(
+      resolveLessonActionSpot(
+        CourseActivity(
+          id: 'act-02-03-01-unguided-btn',
+          order: 4,
+          stage: ActivityStage.unguided,
+          renderer: ActivityRenderer.pokerActionSizing,
+          estimatedSeconds: 55,
+          accessibilityText: 'btn',
+          acceptedGrades: const [SoftGrade.recommended],
+          choices: const [],
+        ),
+      )?.heroCodes,
+      ['Kh', '9h'],
+    );
+    expect(
+      resolveLessonActionSpot(
+        CourseActivity(
+          id: 'act-02-03-01-checkpoint-hj',
+          order: 5,
+          stage: ActivityStage.checkpoint,
+          renderer: ActivityRenderer.pokerActionSizing,
+          estimatedSeconds: 55,
+          accessibilityText: 'hj',
+          acceptedGrades: const [SoftGrade.recommended],
+          choices: const [],
+        ),
+      )?.heroCodes,
+      ['Ah', 'Td'],
+    );
+  });
+
 
   testWidgets('vs-open explain taps Fold Call 3-Bet instead of Continue', (
     tester,

@@ -186,6 +186,46 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         // Correct action is Fold — do not imply "open the pot".
         feltStatusLine: 'First in — trash folds',
       );
+    case 'act-02-03-01-guided-utg':
+      return const LessonActionSpot(
+        heroCodes: ['7h', '2d'],
+        potLabel: 'Pot 3',
+        villainLine: 'Folds to you',
+        streetLabel: 'Preflop · UTG · 1/2',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'First in — trash folds',
+      );
+    case 'act-02-03-01-scaffolded-qq':
+      return const LessonActionSpot(
+        heroCodes: ['Qh', 'Qd'],
+        potLabel: 'Pot 3',
+        villainLine: 'Folds to you',
+        streetLabel: 'Preflop · UTG · 1/2',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'First in — open the pot',
+      );
+    case 'act-02-03-01-unguided-btn':
+      return const LessonActionSpot(
+        heroCodes: ['Kh', '9h'],
+        potLabel: 'Pot 3',
+        villainLine: 'Folds to you',
+        streetLabel: 'Preflop · Button · 1/2',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'First in — button can open wider',
+      );
+    case 'act-02-03-01-checkpoint-hj':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', 'Td'],
+        potLabel: 'Pot 3',
+        villainLine: 'Folds to you',
+        streetLabel: 'Preflop · Hijack · 1/2',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'First in — mid-late open',
+      );
     case 'act-02-07-02-jump-vs':
       return const LessonActionSpot(
         heroCodes: ['Ah', 'Ad'],
@@ -1377,6 +1417,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
   if (id.startsWith('act-02-07-01-') &&
       (activity.renderer == ActivityRenderer.pokerActionSizing ||
           activity.renderer == ActivityRenderer.fullTableHandLab)) {
+    return true;
+  }
+  if (id.startsWith('act-02-03-01-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
   if (id.startsWith('act-02-07-02-jump-') &&
