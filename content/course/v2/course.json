@@ -1095,7 +1095,7 @@
                   "objectives": [
                     "Build the best five-card hand from seven"
                   ],
-                  "prompt": "You hold Ah Kd. Board As 7c 2d 9h 3s. Tap your best five.",
+                  "prompt": "Tap the five cards that make your best hand.",
                   "choices": [
                     {
                       "id": "best-pair-k",
@@ -1250,7 +1250,7 @@
                     "Build the best five-card hand from seven",
                     "Use kickers when categories tie"
                   ],
-                  "prompt": "You hold 8h 8d. Board 8c Kd Ks 2h 2c. Tap your best five.",
+                  "prompt": "Tap the five cards for your strongest hand.",
                   "choices": [
                     {
                       "id": "fh-eights",

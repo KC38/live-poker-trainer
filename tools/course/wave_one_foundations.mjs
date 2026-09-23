@@ -580,7 +580,7 @@ export function buildSectionOne() {
                 {objectives: ["Build the best five-card hand from seven"]}),
               selectAct({
                 id: "act-01-02-02-guided-seven", order: 2, stage: "guided",
-                prompt: "You hold Ah Kd. Board As 7c 2d 9h 3s. Tap your best five.",
+                prompt: "Tap the five cards that make your best hand.",
                 a11y: "Tap the five cards for aces with king kicker.",
                 objectives: ["Build the best five-card hand from seven"],
                 hint: "You only need one ace from the board for top pair.",
@@ -627,7 +627,7 @@ export function buildSectionOne() {
               }),
               selectAct({
                 id: "act-01-02-02-checkpoint-build", order: 5, stage: "checkpoint",
-                prompt: "You hold 8h 8d. Board 8c Kd Ks 2h 2c. Tap your best five.",
+                prompt: "Tap the five cards for your strongest hand.",
                 a11y: "Tap three eights and two kings for eights full of kings.",
                 objectives: [
                   "Build the best five-card hand from seven",

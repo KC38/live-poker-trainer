@@ -638,26 +638,11 @@ class _BestFiveCardTapActivity extends StatelessWidget {
       animation: controller,
       builder: (context, _) {
         final locked = controller.submitting || controller.lastResult != null;
-        final resolved = resolveLessonCoachPrompt(
-          activity: activity,
-          fallback: _coachFallback,
-        );
+        // Cards are on the picker — never dump hole/board codes into Rex.
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            RexCoachLine(text: resolved.coach),
-            if (resolved.showPrompt) ...[
-              const SizedBox(height: 14),
-              Text(
-                activity.prompt!,
-                style: GoogleFonts.manrope(
-                  color: AppColors.cream,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  height: 1.3,
-                ),
-              ),
-            ],
+            RexCoachLine(text: _coachFallback),
             const SizedBox(height: 14),
             BestFiveCardPicker(
               key: ValueKey<String>(
