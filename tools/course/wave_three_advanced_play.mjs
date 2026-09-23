@@ -1421,11 +1421,11 @@ export function buildSectionSix() {
                 a11y: "Selective entry + disciplined aggression.",
                 objectives: ["Note selective entry"],
                 choices: [
-                  choice("sel", "Selective entry with disciplined aggression", "recommended",
+                  choice("sel", "Selective + plan", "recommended",
                     "That is the evidence bundle."),
                   choice("loose", "Loose passive", "clear_mistake",
                     "Opposite.", {betterChoiceId: "sel"}),
-                  choice("label", "Name an archetype immediately", "clear_mistake",
+                  choice("label", "Label now", "clear_mistake",
                     "Observe first — need samples.", {betterChoiceId: "sel"})
                 ],
               }),
@@ -1435,9 +1435,9 @@ export function buildSectionSix() {
                 a11y: "Disciplined — not maniac.",
                 objectives: ["Note disciplined aggression"],
                 choices: [
-                  choice("disc", "Disciplined give-ups — not spewy", "recommended",
+                  choice("disc", "Disciplined", "recommended",
                     "Separates planned aggression from maniac spew."),
-                  choice("mania", "Identical to maniac", "clear_mistake",
+                  choice("mania", "Same maniac", "clear_mistake",
                     "Maniacs continue too wide.", {betterChoiceId: "disc"})
                 ],
               }),
@@ -1447,9 +1447,9 @@ export function buildSectionSix() {
                 a11y: "Low.",
                 objectives: ["Delay the label until samples exist"], lifeLoss: true,
                 choices: [
-                  choice("low", "Low — keep sampling", "recommended",
+                  choice("low", "Keep sampling", "recommended",
                     "Working notes first."),
-                  choice("max", "Maximum certainty", "clear_mistake",
+                  choice("max", "Max certainty", "clear_mistake",
                     "Too soon.", {betterChoiceId: "low"})
                 ],
               }),
@@ -1459,7 +1459,7 @@ export function buildSectionSix() {
                 a11y: "Tight in, aggressive with discipline.",
                 objectives: ["Delay the label until samples exist"], lifeLoss: true,
                 choices: [
-                  choice("bundle", "Tight entry + planned aggression + give-ups", "recommended",
+                  choice("bundle", "Tight · plan · give", "recommended",
                     "That's the bundle."),
                   choice("vibe", "Good haircut", "clear_mistake",
                     "Not evidence.", {betterChoiceId: "bundle"})

@@ -512,6 +512,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Calling because you are "due" — tap Ego call.',
       'act-06-10-01-checkpoint' =>
           'Review after a big loss — tap Cooler / mistake?.',
+      'act-06-11-01-guided' =>
+          'Folds most, then 3-bets / c-bets — tap Selective + plan.',
+      'act-06-11-01-scaffolded' =>
+          'Gives up on turns when called — tap Disciplined.',
+      'act-06-11-01-unguided' =>
+          'Two hands of tightness — tap Keep sampling.',
+      'act-06-11-01-checkpoint' =>
+          'Best pre-label note bundle — tap Tight · plan · give.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -621,7 +629,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-06-09-01-checkpoint' ||
             widget.activity.id == 'act-06-10-01-scaffolded' ||
             widget.activity.id == 'act-06-10-01-unguided' ||
-            widget.activity.id == 'act-06-10-01-checkpoint';
+            widget.activity.id == 'act-06-10-01-checkpoint' ||
+            widget.activity.id == 'act-06-11-01-guided' ||
+            widget.activity.id == 'act-06-11-01-scaffolded' ||
+            widget.activity.id == 'act-06-11-01-unguided' ||
+            widget.activity.id == 'act-06-11-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

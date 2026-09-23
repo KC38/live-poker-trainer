@@ -366,6 +366,13 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Hard folds / coolers: tap cooler vs ego-call review labels on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-06-11-01-guided' ||
+      activity.id == 'act-06-11-01-scaffolded' ||
+      activity.id == 'act-06-11-01-unguided' ||
+      activity.id == 'act-06-11-01-checkpoint') {
+    // Observe selective aggression: tap evidence notes on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

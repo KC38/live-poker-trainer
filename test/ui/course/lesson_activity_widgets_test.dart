@@ -3842,7 +3842,13 @@ void main() {
         ),
       );
       expect(find.byType(SelectiveAggressionDemo), findsOneWidget);
+      // Rex cue below the felt — not a second footer inside the demo.
       expect(find.text('Tap Tight, Barrel, and Sample.'), findsOneWidget);
+      expect(find.text('Tap Tight, Barrel, and Sample'), findsNothing);
+      expect(
+        find.text('Tight entry, then barrels with a plan — count samples'),
+        findsNothing,
+      );
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
@@ -12701,6 +12707,160 @@ void main() {
     await tester.tap(find.text('Cooler / mistake?'));
     await tester.pump();
     expect(controller.draft.choiceId, 'ask');
+    controller.dispose();
+  });
+
+  testWidgets('s6 selective guided taps Selective + plan on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-11-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Selective entry + disciplined aggression.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'Seat folds most hands, then 3-bets and c-bets strong boards. Note?',
+      choices: const [
+        CourseChoice(id: 'sel', label: 'Selective + plan'),
+        CourseChoice(id: 'loose', label: 'Loose passive'),
+        CourseChoice(id: 'label', label: 'Label now'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Folds most, then 3-bets / c-bets — tap Selective + plan.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Selective + plan'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'sel');
+    controller.dispose();
+  });
+
+  testWidgets('s6 selective scaffolded taps Disciplined on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-11-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Disciplined — not maniac.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Same seat gives up on turns when called. Observation?',
+      choices: const [
+        CourseChoice(id: 'disc', label: 'Disciplined'),
+        CourseChoice(id: 'mania', label: 'Same maniac'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Gives up on turns when called — tap Disciplined.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Disciplined'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'disc');
+    controller.dispose();
+  });
+
+  testWidgets('s6 selective unguided taps Keep sampling on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-11-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Low.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Two hands of tightness. Confidence?',
+      choices: const [
+        CourseChoice(id: 'low', label: 'Keep sampling'),
+        CourseChoice(id: 'max', label: 'Max certainty'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Two hands of tightness — tap Keep sampling.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Keep sampling'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'low');
+    controller.dispose();
+  });
+
+  testWidgets('s6 selective checkpoint taps Tight · plan · give on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-11-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Tight in, aggressive with discipline.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Best pre-label note bundle?',
+      choices: const [
+        CourseChoice(id: 'bundle', label: 'Tight · plan · give'),
+        CourseChoice(id: 'vibe', label: 'Good haircut'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Best pre-label note bundle — tap Tight · plan · give.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Tight · plan · give'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'bundle');
     controller.dispose();
   });
 
