@@ -133,6 +133,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Flop class scaffolded / unguided / checkpoint: same teach-by-doing.
     return SelectIdentifyPresentation.handCategoryTap;
   }
+  if (activity.id == 'act-03-03-01-guided') {
+    // Outs: see board + holes, tap clean-out count.
+    return SelectIdentifyPresentation.handCategoryTap;
+  }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {
     return SelectIdentifyPresentation.showdownTap;

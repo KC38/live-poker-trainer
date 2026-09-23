@@ -6221,6 +6221,60 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s3 outs guided taps 3 clean aces on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-03-03-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Three remaining aces are the clean outs.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Board Kc 8h 2d. You hold Ah Qh. Clean outs to the best hand?',
+      choices: const [
+        CourseChoice(id: 'outs-3', label: 'About 3 — the aces'),
+        CourseChoice(id: 'outs-6', label: '6 — aces and queens'),
+        CourseChoice(id: 'outs-0', label: '0 — never improve'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.handCategoryTap,
+    );
+    expect(resolveLessonTableScene(activity)?.heroCodes, ['Ah', 'Qh']);
+    expect(
+      resolveLessonTableScene(activity)?.boardCodes,
+      ['Kc', '8h', '2d'],
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('King-high board. Tap how many clean outs you have.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Board Kc 8h 2d. You hold Ah Qh. Clean outs to the best hand?',
+      ),
+      findsNothing,
+    );
+    expect(find.text('About 3 — the aces'), findsNothing);
+    expect(find.text('3 — the aces'), findsOneWidget);
+    await tester.tap(find.text('3 — the aces'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'outs-3');
+    controller.dispose();
+  });
+
   testWidgets('numeric entry updates draft', (tester) async {
     final activity = _activity(
       renderer: ActivityRenderer.numericPotPrice,
