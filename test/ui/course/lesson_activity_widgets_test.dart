@@ -22,8 +22,7 @@ import 'package:live_poker_trainer/ui/course/widgets/polar_merged_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/overbet_geometry_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/blockers_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/defend_enough_demo.dart';
-import 'package:live_poker_trainer/ui/course/widgets/mix_with_reason_demo.dart';
-import 'package:live_poker_trainer/ui/course/widgets/three_bet_four_bet_spr_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/mixed_strategy_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
@@ -3265,7 +3264,7 @@ void main() {
 
 
   testWidgets(
-    'mix-with-reason explain taps Mix Purpose No Coin instead of Continue',
+    'mix-strategy explain taps Mix Purpose Strong instead of Continue',
     (tester) async {
       final activity = CourseActivity(
         id: 'act-06-08-01-explain',
@@ -3297,59 +3296,12 @@ void main() {
           ),
         ),
       );
-      expect(find.byType(MixWithReasonDemo), findsOneWidget);
-      expect(find.text('Tap Mix, Purpose, and No Coin.'), findsOneWidget);
+      expect(find.byType(MixedStrategyDemo), findsOneWidget);
+      expect(find.text('Tap Mix, Purpose, and Strong.'), findsOneWidget);
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['MIX', 'PURPOSE', 'NO COIN']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
-      expect(feltAck, 1);
-      controller.dispose();
-    },
-  );
-
-  testWidgets(
-    '3-bet/4-bet SPR explain taps 3BET 4BET DEPTH instead of Continue',
-    (tester) async {
-      final activity = CourseActivity(
-        id: 'act-06-09-01-explain',
-        order: 1,
-        stage: ActivityStage.explain,
-        renderer: ActivityRenderer.coachDialogue,
-        estimatedSeconds: 30,
-        accessibilityText:
-            '3-bet and 4-bet pots shrink ranges and SPR. Depth decides commitment.',
-        acceptedGrades: const [SoftGrade.recommended],
-        coachMedia: const [
-          CoachMediaRef(
-            id: 'm',
-            kind: 'dialogue',
-            text:
-                '3-bet and 4-bet pots shrink ranges and SPR. Depth decides commitment.',
-          ),
-        ],
-      );
-      final controller = LessonActivityController(activity: activity);
-      var feltAck = 0;
-      await tester.pumpWidget(
-        _wrap(
-          CoachDialogueActivity(
-            activity: activity,
-            controller: controller,
-            showGuidance: true,
-            onFeltAcknowledge: () => feltAck += 1,
-          ),
-        ),
-      );
-      expect(find.byType(ThreeBetFourBetSprDemo), findsOneWidget);
-      expect(find.text('Tap 3-Bet, 4-Bet, and Depth.'), findsOneWidget);
-      expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
-      expect(isTableRegionTapActivity(activity), isTrue);
-
-      for (final title in ['3BET', '4BET', 'DEPTH']) {
+      for (final title in ['MIX', 'PURPOSE', 'STRONG']) {
         await tester.tap(find.text(title));
         await tester.pump();
       }

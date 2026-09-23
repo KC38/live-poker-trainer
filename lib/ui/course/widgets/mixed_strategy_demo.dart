@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 
-/// Mix / purpose / no-coin tiles for mixed-strategy explain demos.
-class MixWithReasonDemo extends StatefulWidget {
+/// Mix / purpose / strong tiles for mixed-strategy explain demos.
+class MixedStrategyDemo extends StatefulWidget {
   /// Creates the demo.
-  const MixWithReasonDemo({
+  const MixedStrategyDemo({
     super.key,
     this.interactive = false,
     this.enabled = false,
@@ -17,22 +17,22 @@ class MixWithReasonDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'MIX', caption: 'Frequency play', color: AppColors.gold),
-    (label: 'PURPOSE', caption: 'Exploit why', color: AppColors.cream),
-    (label: 'NO COIN', caption: 'Not theater', color: AppColors.danger),
+    (label: 'MIX', caption: 'With a reason', color: AppColors.gold),
+    (label: 'PURPOSE', caption: 'Not coin-flip', color: AppColors.cream),
+    (label: 'STRONG', caption: 'Mix sometimes', color: AppColors.danger),
   ];
 
   @override
-  State<MixWithReasonDemo> createState() => _MixWithReasonDemoState();
+  State<MixedStrategyDemo> createState() => _MixedStrategyDemoState();
 }
 
-class _MixWithReasonDemoState extends State<MixWithReasonDemo> {
+class _MixedStrategyDemoState extends State<MixedStrategyDemo> {
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
     setState(() => _tapped.add(label));
-    if (_tapped.length >= MixWithReasonDemo.points.length) {
+    if (_tapped.length >= MixedStrategyDemo.points.length) {
       widget.onAllPointsTapped!();
     }
   }
@@ -64,17 +64,17 @@ class _MixWithReasonDemoState extends State<MixWithReasonDemo> {
           const SizedBox(height: 12),
           Row(
             children: [
-              for (var i = 0; i < MixWithReasonDemo.points.length; i++) ...[
+              for (var i = 0; i < MixedStrategyDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
                   child: _MixTile(
-                    label: MixWithReasonDemo.points[i].label,
-                    caption: MixWithReasonDemo.points[i].caption,
-                    color: MixWithReasonDemo.points[i].color,
-                    selected: _tapped.contains(MixWithReasonDemo.points[i].label),
+                    label: MixedStrategyDemo.points[i].label,
+                    caption: MixedStrategyDemo.points[i].caption,
+                    color: MixedStrategyDemo.points[i].color,
+                    selected: _tapped.contains(MixedStrategyDemo.points[i].label),
                     enabled: widget.interactive && widget.enabled,
                     onPressed: widget.interactive
-                        ? () => _onTap(MixWithReasonDemo.points[i].label)
+                        ? () => _onTap(MixedStrategyDemo.points[i].label)
                         : null,
                   ),
                 ),
@@ -84,8 +84,8 @@ class _MixWithReasonDemoState extends State<MixWithReasonDemo> {
           const SizedBox(height: 10),
           Text(
             widget.interactive
-                ? 'Tap Mix, Purpose, and No Coin'
-                : 'Frequency with purpose — not coin-flip theater',
+                ? 'Tap Mix, Purpose, and Strong'
+                : 'Frequency with a purpose — not coin-flip',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
               fontSize: 12,
