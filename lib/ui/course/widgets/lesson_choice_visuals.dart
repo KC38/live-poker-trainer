@@ -108,6 +108,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Jump: tap the effective (shorter) stack on the felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-03-01-01-guided') {
+    // Table-read: tap the multiway pot total on the felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {
     return SelectIdentifyPresentation.showdownTap;

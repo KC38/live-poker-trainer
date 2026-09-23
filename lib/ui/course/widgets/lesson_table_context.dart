@@ -121,6 +121,12 @@ enum LessonTableRegion {
 
   /// Effective stack distractor: sum of stacks.
   effectiveStackSum,
+
+  /// Multiway pot: correct total after blinds + open + callers.
+  potChipsTwentyOne,
+
+  /// Multiway pot distractor: dropped a blind.
+  potChipsEighteen,
 }
 
 /// How the mini-table is arranged.
@@ -157,6 +163,9 @@ enum LessonTableLayout {
 
   /// Effective-stack tiles: shorter / hero / sum.
   effectiveStackOutcomes,
+
+  /// Multiway pot tiles after open + callers (21 / 18 / 12).
+  potMultiwayOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -384,6 +393,11 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         layout: LessonTableLayout.effectiveStackOutcomes,
         caption: 'You 120bb · Villain 55bb',
+      );
+    case 'act-03-01-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.potMultiwayOutcomes,
+        caption: '1/2 · UTG 6 · BTN call · BB call',
       );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
@@ -707,6 +721,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.effectiveStackSum => pick('j2-175'),
         _ => null,
       };
+    case 'act-03-01-01-guided':
+      return switch (region) {
+        LessonTableRegion.potChipsTwentyOne => pick('pot-21'),
+        LessonTableRegion.potChipsEighteen => pick('pot-18'),
+        LessonTableRegion.potChipsTwelve => pick('pot-12'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -787,7 +808,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id.startsWith('act-02-01-01-') ||
       activity.id == 'act-02-07-01-checkpoint-habit' ||
       activity.id == 'act-02-07-02-jump-pos' ||
-      activity.id == 'act-02-07-02-jump-stack';
+      activity.id == 'act-02-07-02-jump-stack' ||
+      activity.id == 'act-03-01-01-guided';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -919,6 +941,7 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.habitCoverOutcomes => _buildHabitCoverOutcomes(),
       LessonTableLayout.effectiveStackOutcomes =>
         _buildEffectiveStackOutcomes(),
+      LessonTableLayout.potMultiwayOutcomes => _buildPotMultiwayOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -1596,6 +1619,34 @@ class LessonTableContext extends StatelessWidget {
           title: '175bb',
           detail: 'Added up',
           visual: const _PotChipDot(label: '175', gold: false),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPotMultiwayOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive: 'Interactive pot size — tap the chip total',
+      semanticsStatic: 'Multiway pot size outcomes',
+      caption: scene.caption ?? '1/2 · UTG opens · callers',
+      phases: [
+        (
+          region: LessonTableRegion.potChipsEighteen,
+          title: '18 chips',
+          detail: 'Miss a blind',
+          visual: const _PotChipDot(label: '18', gold: false),
+        ),
+        (
+          region: LessonTableRegion.potChipsTwentyOne,
+          title: '21 chips',
+          detail: '1+2+6+6+6',
+          visual: const _PotChipDot(label: '21', gold: true),
+        ),
+        (
+          region: LessonTableRegion.potChipsTwelve,
+          title: '12 chips',
+          detail: 'Open only',
+          visual: const _PotChipDot(label: '12', gold: false),
         ),
       ],
     );
