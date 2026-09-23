@@ -10,6 +10,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:live_poker_trainer/core/debug/agent_commands.dart';
 
 /// Installs a global agent UI driver (debug builds only).
@@ -19,6 +20,7 @@ final class AgentUiDriver {
   static StreamSubscription<String>? _sub;
   static Future<void> Function()? _signOut;
   static Future<void> Function(String lessonId)? _openLesson;
+  static int _pointerSeq = 100;
 
   /// Registers the driver. Call once from app startup.
   ///
@@ -108,6 +110,42 @@ final class AgentUiDriver {
     final needleLower = needle.toLowerCase();
     final candidates = <_TapCandidate>[];
 
+    // Prefer ValueKey('best-five-Ah') when tapping "card ah".
+    final cardKeyMatch = RegExp(
+      r'^card\s+([2-9tjqka][shdc])$',
+      caseSensitive: false,
+    ).firstMatch(needleLower);
+    if (cardKeyMatch != null) {
+      final code = cardKeyMatch.group(1)!;
+      final keyNeedle = 'best-five-$code';
+      Element? keyed;
+      void visitKey(Element element) {
+        final key = element.widget.key;
+        if (key is ValueKey<String> &&
+            key.value.toLowerCase() == keyNeedle.toLowerCase()) {
+          keyed = element;
+          return;
+        }
+        element.visitChildren(visitKey);
+      }
+
+      binding.rootElement?.visitChildren(visitKey);
+      final hit = keyed;
+      if (hit != null) {
+        final ro = hit.renderObject;
+        if (ro is RenderBox && ro.hasSize && ro.attached) {
+          await _pointerTap(
+            ro.localToGlobal(ro.size.center(Offset.zero)),
+            label: 'key:$keyNeedle',
+          );
+          debugPrint(
+            'AgentUiDriver: pointer-tapped "$needle" -> key:$keyNeedle',
+          );
+          return;
+        }
+      }
+    }
+
     void consider({
       required String text,
       required Element element,
@@ -116,6 +154,14 @@ final class AgentUiDriver {
       final lower = text.toLowerCase().trim();
       if (lower.isEmpty) return;
       if (lower != needleLower && !lower.contains(needleLower)) return;
+      // Avoid "continue on home" stealing a plain "continue" tap when an
+      // exact Continue dock exists — handled by exact sort, but also skip
+      // home-nav labels when the needle is a short CTA word.
+      if (needleLower == 'continue' &&
+          lower != 'continue' &&
+          lower.contains('home')) {
+        return;
+      }
       final ro = element.renderObject;
       if (ro is! RenderBox || !ro.hasSize || !ro.attached) return;
 
@@ -226,19 +272,45 @@ final class AgentUiDriver {
     });
 
     final chosen = candidates.first;
-    if (chosen.onPressed != null) {
-      chosen.onPressed!();
+    // Card / felt semantics: always deliver a real pointer hit so InkWell
+    // gesture recognizers run (direct onTap invoke was a no-op on some
+    // best-five cards after hot restart).
+    final preferPointer =
+        chosen.fromSemantics &&
+        (needleLower.startsWith('card ') ||
+            chosen.text.startsWith('card ') ||
+            chosen.text.startsWith('board ') ||
+            chosen.text.startsWith('your hole') ||
+            chosen.text.startsWith('them'));
+    if (chosen.onPressed != null && !preferPointer) {
+      // Run after the current microtask so setState lands in a frame.
+      final cb = chosen.onPressed!;
+      final completer = Completer<void>();
+      SchedulerBinding.instance.scheduleFrameCallback((_) {
+        cb();
+        completer.complete();
+      });
+      binding.scheduleFrame();
+      await completer.future;
       debugPrint(
         'AgentUiDriver: invoked onPressed for "$needle" -> "${chosen.text}"',
       );
       return;
     }
 
-    final point = chosen.offset;
+    await _pointerTap(chosen.offset, label: chosen.text);
+    debugPrint(
+      'AgentUiDriver: pointer-tapped "$needle" -> "${chosen.text}" at ${chosen.offset}',
+    );
+  }
+
+  static Future<void> _pointerTap(Offset point, {required String label}) async {
+    final binding = WidgetsBinding.instance;
     final view = binding.platformDispatcher.views.first;
+    final pointer = ++_pointerSeq;
     GestureBinding.instance.handlePointerEvent(
       PointerDownEvent(
-        pointer: 1,
+        pointer: pointer,
         position: point,
         kind: PointerDeviceKind.touch,
         viewId: view.viewId,
@@ -247,15 +319,14 @@ final class AgentUiDriver {
     await Future<void>.delayed(const Duration(milliseconds: 40));
     GestureBinding.instance.handlePointerEvent(
       PointerUpEvent(
-        pointer: 1,
+        pointer: pointer,
         position: point,
         kind: PointerDeviceKind.touch,
         viewId: view.viewId,
       ),
     );
-    debugPrint(
-      'AgentUiDriver: pointer-tapped "$needle" -> "${chosen.text}" at $point',
-    );
+    // Allow the framework to settle selection / auto-submit.
+    await Future<void>.delayed(const Duration(milliseconds: 50));
   }
 }
 
