@@ -173,6 +173,11 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // S3 jump: track / class / price on felt tiles.
     return SelectIdentifyPresentation.handCategoryTap;
   }
+  if (activity.id.startsWith('act-04-01-01-') &&
+      activity.renderer == ActivityRenderer.selectIdentify) {
+    // Ranges: tap range descriptions on seat/action felt.
+    return SelectIdentifyPresentation.handCategoryTap;
+  }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {
     return SelectIdentifyPresentation.showdownTap;

@@ -8484,6 +8484,94 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 ranges guided taps stronger-narrower on UTG felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-01-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Early opens are a stronger, narrower range.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'UTG opens at 1/2. Best description?',
+      choices: const [
+        CourseChoice(id: 'strong-narrow', label: 'Stronger, narrower range'),
+        CourseChoice(id: 'any-two', label: 'Any two cards'),
+        CourseChoice(id: 'exact-ak', label: 'Exactly Ace-King'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.handCategoryTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('UTG opens at 1/2 — tap the range shape.'),
+      findsOneWidget,
+    );
+    expect(find.text('UTG opens at 1/2. Best description?'), findsNothing);
+    expect(find.text('Stronger, narrower range'), findsOneWidget);
+    await tester.tap(find.text('Stronger, narrower range'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'strong-narrow');
+    controller.dispose();
+  });
+
+  testWidgets('s4 ranges unguided taps too-exact on bet-twice felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-01-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Over-precision is a leak.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Villain bets twice. You decide they have exactly AK. Problem?',
+      choices: const [
+        CourseChoice(
+          id: 'too-exact',
+          label: 'Too exact — keep a weighted range',
+        ),
+        CourseChoice(
+          id: 'fine-exact',
+          label: 'Exact hands are always knowable',
+        ),
+        CourseChoice(
+          id: 'ignore-action',
+          label: 'Ignore betting pattern entirely',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Too exact — keep a range'), findsOneWidget);
+    await tester.tap(find.text('Too exact — keep a range'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'too-exact');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {
