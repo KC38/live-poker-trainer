@@ -1,6 +1,8 @@
 /// Street timeline + tap-to-order visuals for Streets and action order.
 library;
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
@@ -17,7 +19,9 @@ bool isStreetSequenceActivity(CourseActivity activity) {
 /// Whether this order-sequence activity uses preflop seat tiles.
 bool isSeatOrderSequenceActivity(CourseActivity activity) {
   return activity.id == 'act-01-04-01-scaffolded-order' ||
-      activity.id == 'act-01-06-02-jump-order';
+      activity.id == 'act-01-06-02-jump-order' ||
+      activity.id == 'act-02-01-02-guided-pre' ||
+      activity.id == 'act-02-01-02-scaffolded-post';
 }
 
 /// Explain-step demo: four streets progressing on a mini felt.
@@ -367,11 +371,17 @@ class SeatOrderTile extends StatelessWidget {
   String get _caption {
     switch (label.toUpperCase()) {
       case 'UTG':
-        return 'First';
+        return 'Early';
       case 'HJ':
-        return 'Middle';
+        return 'Mid';
+      case 'CO':
+        return 'Late';
       case 'BTN':
-        return 'Last';
+        return 'Dealer';
+      case 'SB':
+        return 'Posts 1';
+      case 'BB':
+        return 'Posts 2';
       default:
         return 'Seat';
     }
@@ -478,12 +488,32 @@ class ActionOrderDemo extends StatefulWidget {
 }
 
 class _ActionOrderDemoState extends State<ActionOrderDemo> {
-  final Set<String> _tapped = <String>{};
+  final List<String> _ordered = <String>[];
+
+  static const _correct = ['UTG', 'HJ', 'BTN'];
+
+  late final List<({String label, String detail})> _palette = () {
+    final seats = List<({String label, String detail})>.of(ActionOrderDemo.seats);
+    // Stable shuffle so rebuilds keep palette order; never leave authored order.
+    seats.shuffle(Random(0xAC70));
+    if (seats[0].label == ActionOrderDemo.seats[0].label &&
+        seats[1].label == ActionOrderDemo.seats[1].label) {
+      final tmp = seats[0];
+      seats[0] = seats[2];
+      seats[2] = tmp;
+    }
+    return List<({String label, String detail})>.unmodifiable(seats);
+  }();
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllSeatsTapped == null) return;
-    setState(() => _tapped.add(label));
-    if (_tapped.length >= ActionOrderDemo.seats.length) {
+    if (_ordered.contains(label)) return;
+    final nextIndex = _ordered.length;
+    if (nextIndex >= _correct.length || _correct[nextIndex] != label) {
+      return;
+    }
+    setState(() => _ordered.add(label));
+    if (_ordered.length >= _correct.length) {
       widget.onAllSeatsTapped!();
     }
   }
@@ -520,15 +550,21 @@ class _ActionOrderDemoState extends State<ActionOrderDemo> {
             runSpacing: 8,
             alignment: WrapAlignment.center,
             children: [
-              for (var i = 0; i < ActionOrderDemo.seats.length; i++)
+              for (final seat in _palette)
                 SeatOrderTile(
-                  label: ActionOrderDemo.seats[i].label,
-                  badge: '${i + 1}',
-                  selected: _tapped.contains(ActionOrderDemo.seats[i].label),
-                  enabled: widget.interactive && widget.enabled,
+                  label: seat.label,
+                  badge:
+                      _ordered.contains(seat.label)
+                          ? '${_ordered.indexOf(seat.label) + 1}'
+                          : null,
+                  selected: _ordered.contains(seat.label),
+                  enabled:
+                      widget.interactive &&
+                      widget.enabled &&
+                      !_ordered.contains(seat.label),
                   onPressed:
                       widget.interactive
-                          ? () => _onTap(ActionOrderDemo.seats[i].label)
+                          ? () => _onTap(seat.label)
                           : null,
                 ),
             ],
@@ -545,7 +581,7 @@ class _ActionOrderDemoState extends State<ActionOrderDemo> {
           const SizedBox(height: 8),
           Text(
             widget.interactive
-                ? 'Tap UTG, then HJ, then BTN'
+                ? 'Tap each seat in preflop order'
                 : 'Left of BB preflop · left of button postflop',
             style: GoogleFonts.manrope(
               color: AppColors.gold,

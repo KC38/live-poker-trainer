@@ -1441,10 +1441,17 @@ void main() {
       ),
     );
     expect(find.byType(ActionOrderDemo), findsOneWidget);
-    expect(find.text('Tap UTG, then HJ, then BTN.'), findsOneWidget);
+    expect(find.text('Tap each seat in preflop order'), findsOneWidget);
+    expect(find.text('Tap UTG, then HJ, then BTN.'), findsNothing);
+    expect(find.text('Tap UTG, then HJ, then BTN'), findsNothing);
+    expect(find.text('First'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
+    // Wrong first seat is ignored — teach-by-doing requires order.
+    await tester.tap(find.text('BTN'));
+    await tester.pump();
+    expect(feltAck, 0);
     await tester.tap(find.text('UTG'));
     await tester.pump();
     expect(feltAck, 0);
