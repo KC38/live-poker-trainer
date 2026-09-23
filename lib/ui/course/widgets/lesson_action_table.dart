@@ -4535,6 +4535,7 @@ class LessonActionDock extends StatelessWidget {
     required this.enabled,
     required this.onSelect,
     this.identifyUnavailable = false,
+    this.facingBet = false,
   });
 
   final List<CourseChoice> choices;
@@ -4543,6 +4544,19 @@ class LessonActionDock extends StatelessWidget {
   final ValueChanged<String> onSelect;
   final bool identifyUnavailable;
 
+  /// When true, Check is illegal live — show CHECK (off) chrome.
+  final bool facingBet;
+
+  static bool _isCheck(CourseChoice c) {
+    final action = (c.action ?? c.label).toUpperCase();
+    return action.startsWith('CHECK') || c.id.contains('check');
+  }
+
+  static bool _isCall(CourseChoice c) {
+    final action = (c.action ?? c.label).toUpperCase();
+    return action.startsWith('CALL') || c.id.contains('call');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -4550,15 +4564,23 @@ class LessonActionDock extends StatelessWidget {
         for (var i = 0; i < choices.length; i++) ...[
           if (i > 0) const SizedBox(width: 8),
           Expanded(
-            child: _DockButton(
-              choice: choices[i],
-              selected: selectedId == choices[i].id,
-              enabled: enabled,
-              unavailableLook:
-                  identifyUnavailable &&
-                  (choices[i].action?.toUpperCase() == 'CHECK' ||
-                      choices[i].id.contains('check')),
-              onPressed: () => onSelect(choices[i].id),
+            child: Builder(
+              builder: (context) {
+                final choice = choices[i];
+                // Live dock: Check is off vs a bet; Call is off with nothing
+                // to match. Checkpoint (identifyUnavailable) also marks Check.
+                final unavailableLook =
+                    (_isCheck(choice) &&
+                        (facingBet || identifyUnavailable)) ||
+                    (_isCall(choice) && !facingBet);
+                return _DockButton(
+                  choice: choice,
+                  selected: selectedId == choice.id,
+                  enabled: enabled,
+                  unavailableLook: unavailableLook,
+                  onPressed: () => onSelect(choice.id),
+                );
+              },
             ),
           ),
         ],
@@ -4622,7 +4644,7 @@ class _DockButton extends StatelessWidget {
         authoredWords.first != 'FOLD';
     final short =
         unavailableLook
-            ? 'CHECK (off)'
+            ? (action.startsWith('CALL') ? 'CALL (off)' : 'CHECK (off)')
             : preferAuthoredLabel
             ? authored
             : action.startsWith('ALL')
