@@ -9458,6 +9458,47 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 meet maniac guided taps Maniac on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-04-08-02-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.playerReadClassify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Maniac.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Seat open-raises 60% and triple-barrels light. Label?',
+      choices: const [
+        CourseChoice(id: 'pt-maniac', label: 'Maniac'),
+        CourseChoice(id: 'pt-nit-m', label: 'Nit'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Opens 60%, barrels light — tap the working label.'),
+      findsOneWidget,
+    );
+    expect(find.text('Maniac'), findsOneWidget);
+    await tester.tap(find.text('Maniac'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'pt-maniac');
+    controller.dispose();
+  });
+
   testWidgets('s4 meet nit guided taps Nit on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-04-07-02-guided',

@@ -274,6 +274,24 @@ enum LessonTableRegion {
 
   /// Observe wild checkpoint distractor: almost never plays.
   observeWildNitBundle,
+
+  /// Meet Maniac label (correct for extreme entry evidence).
+  meetManiacLabel,
+
+  /// Nit distractor on maniac evidence.
+  meetManiacNitDistractor,
+
+  /// Meet Maniac label for light 3-bet / never-give-up.
+  meetManiacLabel2,
+
+  /// Calling Station distractor on maniac evidence.
+  meetManiacStationDistractor,
+
+  /// Mix only Station / Nit / Maniac (correct).
+  meetManiacMixThree,
+
+  /// Mix an unlabeled loose seat too early (mistake).
+  meetManiacMixEarly,
 }
 
 /// How the mini-table is arranged.
@@ -367,6 +385,15 @@ enum LessonTableLayout {
 
   /// Observe wild checkpoint: maniac vs nit bundle.
   observeWildBundleOutcomes,
+
+  /// Meet Maniac: Maniac vs Nit label tiles.
+  meetManiacVsNitOutcomes,
+
+  /// Meet Maniac: Maniac vs Station label tiles.
+  meetManiacVsStationOutcomes,
+
+  /// Meet Maniac checkpoint: mix three introduced types.
+  meetManiacMixOutcomes,
 
   /// Meet Nit: Nit vs Calling Station.
   meetNitVsStationOutcomes,
@@ -933,6 +960,21 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.observeWildBundleOutcomes,
         caption: 'Bundle the pre-label notes',
       );
+    case 'act-04-08-02-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.meetManiacVsNitOutcomes,
+        caption: 'Opens 60% · triple-barrels light',
+      );
+    case 'act-04-08-02-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.meetManiacVsStationOutcomes,
+        caption: '3-bets light · never gives up rivers',
+      );
+    case 'act-04-08-02-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.meetManiacMixOutcomes,
+        caption: 'Which types are legal to mix now?',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -1407,6 +1449,24 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.observeWildNitBundle => pick('bundle-n'),
         _ => null,
       };
+    case 'act-04-08-02-guided':
+      return switch (region) {
+        LessonTableRegion.meetManiacLabel => pick('pt-maniac'),
+        LessonTableRegion.meetManiacNitDistractor => pick('pt-nit-m'),
+        _ => null,
+      };
+    case 'act-04-08-02-unguided':
+      return switch (region) {
+        LessonTableRegion.meetManiacLabel2 => pick('maniac2'),
+        LessonTableRegion.meetManiacStationDistractor => pick('station-m'),
+        _ => null,
+      };
+    case 'act-04-08-02-checkpoint':
+      return switch (region) {
+        LessonTableRegion.meetManiacMixThree => pick('three'),
+        LessonTableRegion.meetManiacMixEarly => pick('early'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -1507,7 +1567,10 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-04-07-02-unguided' ||
       activity.id == 'act-04-07-02-checkpoint' ||
       activity.id == 'act-04-07-03-checkpoint' ||
-      activity.id.startsWith('act-04-08-01-');
+      activity.id.startsWith('act-04-08-01-') ||
+      activity.id == 'act-04-08-02-guided' ||
+      activity.id == 'act-04-08-02-unguided' ||
+      activity.id == 'act-04-08-02-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -1679,6 +1742,12 @@ class LessonTableContext extends StatelessWidget {
           _buildObserveWildNotesOutcomes(),
       LessonTableLayout.observeWildBundleOutcomes =>
           _buildObserveWildBundleOutcomes(),
+      LessonTableLayout.meetManiacVsNitOutcomes =>
+          _buildMeetManiacVsNitOutcomes(),
+      LessonTableLayout.meetManiacVsStationOutcomes =>
+          _buildMeetManiacVsStationOutcomes(),
+      LessonTableLayout.meetManiacMixOutcomes =>
+          _buildMeetManiacMixOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -3085,6 +3154,98 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Nit note',
           visual: const Icon(
             Icons.lock_outline,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMeetManiacVsNitOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive: 'Interactive player type — tap Maniac or Nit',
+      semanticsStatic: 'Maniac vs Nit outcomes',
+      caption: scene.caption ?? 'Opens 60% · triple-barrels light',
+      phases: [
+        (
+          region: LessonTableRegion.meetManiacLabel,
+          title: 'Maniac',
+          detail: 'Extreme fire',
+          visual: const Icon(
+            Icons.local_fire_department_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.meetManiacNitDistractor,
+          title: 'Nit',
+          detail: 'Rare entry',
+          visual: const Icon(
+            Icons.lock_outline,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMeetManiacVsStationOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive player type — tap Maniac or Calling Station',
+      semanticsStatic: 'Maniac vs Station outcomes',
+      caption: scene.caption ?? '3-bets light · never gives up rivers',
+      phases: [
+        (
+          region: LessonTableRegion.meetManiacLabel2,
+          title: 'Maniac',
+          detail: 'Pressure wide',
+          visual: const Icon(
+            Icons.local_fire_department_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.meetManiacStationDistractor,
+          title: 'Station',
+          detail: 'Calls wide',
+          visual: const Icon(
+            Icons.people_outline,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMeetManiacMixOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive mix — tap introduced types or unlabeled seat',
+      semanticsStatic: 'Maniac mix outcomes',
+      caption: scene.caption ?? 'Which types are legal to mix now?',
+      phases: [
+        (
+          region: LessonTableRegion.meetManiacMixThree,
+          title: 'Three types',
+          detail: 'Station · Nit · Maniac',
+          visual: const Icon(
+            Icons.groups_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.meetManiacMixEarly,
+          title: 'Unlabeled',
+          detail: 'Too early',
+          visual: const Icon(
+            Icons.person_outline,
             color: AppColors.slate,
             size: 24,
           ),
