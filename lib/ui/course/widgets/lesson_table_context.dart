@@ -3013,6 +3013,16 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.none,
         caption: 'You',
       );
+    case 'act-01-02-01-checkpoint-winner':
+      // Same board: you make the club flush; they make 9-high straight.
+      return const LessonTableScene(
+        heroCodes: ['Ac', 'Kc'],
+        boardCodes: ['9c', '8h', '7d', '4c', '2c'],
+        villainCodes: ['6s', '5h'],
+        villainSeatCount: 0,
+        highlight: LessonTableHighlight.none,
+        caption: 'You',
+      );
     case 'act-01-02-01-explain-ladder':
       return null;
     case 'act-01-02-02-explain-five':
@@ -3192,6 +3202,14 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.board => pick('chop-broadway'),
         LessonTableRegion.hero => pick('high-card-wins'),
         LessonTableRegion.villain => pick('button-wins'),
+        _ => null,
+      };
+    case 'act-01-02-01-checkpoint-winner':
+      // Tap You / Them on the felt (chop stays a dock tile).
+      return switch (region) {
+        LessonTableRegion.hero => pick('you-win'),
+        LessonTableRegion.villain => pick('they-win'),
+        LessonTableRegion.board => pick('split'),
         _ => null,
       };
     case 'act-01-04-01-unguided-end':

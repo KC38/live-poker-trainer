@@ -1126,7 +1126,7 @@ class _HandCategoryTapActivity extends StatelessWidget {
   }
 }
 
-class _ShowdownTapActivity extends StatelessWidget {
+class _ShowdownTapActivity extends StatefulWidget {
   const _ShowdownTapActivity({
     super.key,
     required this.activity,
@@ -1138,40 +1138,83 @@ class _ShowdownTapActivity extends StatelessWidget {
   final LessonActivityController controller;
   final bool showGuidance;
 
+  @override
+  State<_ShowdownTapActivity> createState() => _ShowdownTapActivityState();
+}
+
+class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
+  LessonTableRegion? _selectedRegion;
+
   String get _coachFallback {
-    if (activity.id == 'act-01-02-02-scaffolded-kicker') {
+    if (widget.activity.id == 'act-01-02-02-scaffolded-kicker') {
       return 'Same pair — tap who wins on kickers.';
     }
-    if (activity.id == 'act-01-02-02-unguided-board') {
+    if (widget.activity.id == 'act-01-02-02-unguided-board') {
       return 'Both checked down — tap who takes the pot.';
+    }
+    if (widget.activity.id == 'act-01-02-01-checkpoint-winner') {
+      return 'Showdown — tap who wins on the felt.';
     }
     return 'Look at both hands — tap who wins.';
   }
 
   @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_onController);
+  }
+
+  @override
+  void didUpdateWidget(covariant _ShowdownTapActivity oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      oldWidget.controller.removeListener(_onController);
+      widget.controller.addListener(_onController);
+      _selectedRegion = null;
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_onController);
+    super.dispose();
+  }
+
+  void _onController() {
+    if (widget.controller.draft.choiceId == null && _selectedRegion != null) {
+      setState(() => _selectedRegion = null);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final scene = resolveLessonTableScene(activity);
+    final scene = resolveLessonTableScene(widget.activity);
+    final feltInteractive =
+        scene != null &&
+        (scene.villainCodes.isNotEmpty || scene.heroCodes.isNotEmpty);
     return AnimatedBuilder(
-      animation: controller,
+      animation: widget.controller,
       builder: (context, _) {
-        final locked = controller.submitting || controller.lastResult != null;
-        final selected = controller.draft.choiceId;
+        final locked =
+            widget.controller.submitting ||
+            widget.controller.lastResult != null;
+        final selected = widget.controller.draft.choiceId;
         // Felt already shows the cards — never dump board/hole codes into Rex.
         final resolved =
             scene != null
                 ? (coach: _coachFallback, showPrompt: false)
                 : resolveLessonCoachPrompt(
-                  activity: activity,
+                  activity: widget.activity,
                   fallback: _coachFallback,
                 );
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            RexCoachLine(text: resolved.coach),
+            if (!locked) RexCoachLine(text: resolved.coach),
             if (scene == null && resolved.showPrompt) ...[
               const SizedBox(height: 14),
               Text(
-                activity.prompt!,
+                widget.activity.prompt!,
                 style: GoogleFonts.manrope(
                   color: AppColors.cream,
                   fontSize: 18,
@@ -1182,14 +1225,47 @@ class _ShowdownTapActivity extends StatelessWidget {
             ],
             if (scene != null) ...[
               const SizedBox(height: 12),
-              LessonTableContext(scene: scene),
+              LessonTableContext(
+                scene: scene,
+                selectedRegion: _selectedRegion,
+                showSoftPulse:
+                    widget.showGuidance &&
+                    selected == null &&
+                    !locked &&
+                    widget.activity.stage == ActivityStage.guided,
+                enabled: !locked,
+                onRegionTap:
+                    feltInteractive && !locked
+                        ? (target) {
+                          final mapped = mapTableRegionToChoiceId(
+                            activityId: widget.activity.id,
+                            region: target.region,
+                            seatIndex: target.seatIndex,
+                            choices: widget.activity.choices,
+                          );
+                          if (mapped == null) return;
+                          setState(() => _selectedRegion = target.region);
+                          widget.controller.selectChoice(
+                            mapped,
+                            autoSubmit: true,
+                          );
+                        }
+                        : null,
+              ),
             ],
             const SizedBox(height: 12),
-            for (var i = 0; i < activity.choices.length; i++) ...[
+            for (var i = 0; i < widget.activity.choices.length; i++) ...[
               if (i > 0) const SizedBox(height: 8),
               Builder(
                 builder: (context) {
-                  final choice = activity.choices[i];
+                  final choice = widget.activity.choices[i];
+                  // Felt already teaches You vs Them — keep Chop as the dock,
+                  // and keep all docks when there is no interactive felt.
+                  if (feltInteractive &&
+                      choice.id != 'split' &&
+                      choice.id != 'chop-broadway') {
+                    return const SizedBox.shrink();
+                  }
                   final example =
                       resolveHandExample(id: choice.id, label: choice.label) ??
                       LessonHandExample(
@@ -1201,11 +1277,12 @@ class _ShowdownTapActivity extends StatelessWidget {
                     example: example,
                     selected: selected == choice.id,
                     enabled: !locked,
-                    compact: true,
+                    compact: false,
+                    expand: true,
                     onPressed:
                         locked
                             ? null
-                            : () => controller.selectChoice(
+                            : () => widget.controller.selectChoice(
                               choice.id,
                               autoSubmit: true,
                             ),
@@ -1217,10 +1294,12 @@ class _ShowdownTapActivity extends StatelessWidget {
             Builder(
               builder: (context) {
                 final status = () {
-                  if (controller.lastResult != null) return '';
-                  if (controller.submitting) return 'Checking…';
+                  if (widget.controller.lastResult != null) return '';
+                  if (widget.controller.submitting) return 'Checking…';
                   if (selected == null) {
-                    return 'Tap the result that wins the pot.';
+                    return feltInteractive
+                        ? 'Tap You or Them on the felt.'
+                        : 'Tap the result that wins the pot.';
                   }
                   return 'Checking…';
                 }();
