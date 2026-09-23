@@ -1551,7 +1551,8 @@ void main() {
       ),
     );
     expect(find.byType(OpenRangeDemo), findsOneWidget);
-    expect(find.text('Tap Early, Button, and Live 3x.'), findsOneWidget);
+    expect(find.text('Tap Early, Button, and Live 3x'), findsOneWidget);
+    expect(find.text('Tap Early, Button, and Live 3x.'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
