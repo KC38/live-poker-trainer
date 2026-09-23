@@ -204,6 +204,11 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Adjust vs Station: cite fold tendency on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id.startsWith('act-04-07-01-') &&
+      activity.renderer == ActivityRenderer.selectIdentify) {
+    // Observe narrow players: tap notes on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

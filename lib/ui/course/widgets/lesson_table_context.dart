@@ -202,6 +202,30 @@ enum LessonTableRegion {
 
   /// Bluff less because the label sounds mean (mistake).
   citeLabelMean,
+
+  /// Narrow entry observation (correct).
+  observeNarrowEntry,
+
+  /// Wide entry distractor.
+  observeWideEntry,
+
+  /// Strong aggression when involved (correct).
+  observeStrongAggression,
+
+  /// Passive callers distractor.
+  observePassiveCallers,
+
+  /// Wait for more samples (correct).
+  observeWaitSamples,
+
+  /// Label now with two folds (mistake).
+  observeLabelNowThin,
+
+  /// Nit evidence bundle (correct).
+  observeNitBundle,
+
+  /// Station evidence bundle distractor.
+  observeStationBundle,
 }
 
 /// How the mini-table is arranged.
@@ -271,6 +295,18 @@ enum LessonTableLayout {
 
   /// Adjust vs Station: why bluff less (rarely folds vs mean label).
   stationBluffCiteOutcomes,
+
+  /// Observe narrow: narrow vs wide entry.
+  observeNarrowEntryOutcomes,
+
+  /// Observe narrow: strong aggression vs passive.
+  observeNarrowAggressionOutcomes,
+
+  /// Observe narrow: wait vs label now.
+  observeNarrowSampleOutcomes,
+
+  /// Observe narrow checkpoint: nit vs station bundle.
+  observeNarrowBundleOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -765,6 +801,26 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.stationBluffCiteOutcomes,
         caption: 'Why cut bluffs vs a Calling Station?',
       );
+    case 'act-04-07-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.observeNarrowEntryOutcomes,
+        caption: 'Folded 20 of 22 hands',
+      );
+    case 'act-04-07-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.observeNarrowAggressionOutcomes,
+        caption: 'Finally raises · then barrels',
+      );
+    case 'act-04-07-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.observeNarrowSampleOutcomes,
+        caption: 'Only two folds so far',
+      );
+    case 'act-04-07-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.observeNarrowBundleOutcomes,
+        caption: 'Bundle the pre-label notes',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -1167,6 +1223,30 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.citeLabelMean => pick('cite-mean'),
         _ => null,
       };
+    case 'act-04-07-01-guided':
+      return switch (region) {
+        LessonTableRegion.observeNarrowEntry => pick('narrow'),
+        LessonTableRegion.observeWideEntry => pick('wide'),
+        _ => null,
+      };
+    case 'act-04-07-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.observeStrongAggression => pick('strong-aggr'),
+        LessonTableRegion.observePassiveCallers => pick('passive'),
+        _ => null,
+      };
+    case 'act-04-07-01-unguided':
+      return switch (region) {
+        LessonTableRegion.observeWaitSamples => pick('wait'),
+        LessonTableRegion.observeLabelNowThin => pick('now'),
+        _ => null,
+      };
+    case 'act-04-07-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.observeNitBundle => pick('bundle-nit'),
+        LessonTableRegion.observeStationBundle => pick('bundle-station'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -1261,7 +1341,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-04-06-02-scaffolded' ||
       activity.id == 'act-04-06-02-unguided' ||
       activity.id == 'act-04-06-02-checkpoint' ||
-      activity.id == 'act-04-06-03-checkpoint';
+      activity.id == 'act-04-06-03-checkpoint' ||
+      activity.id.startsWith('act-04-07-01-');
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -1410,6 +1491,14 @@ class LessonTableContext extends StatelessWidget {
           _buildSampleConfidenceOutcomes(),
       LessonTableLayout.stationBluffCiteOutcomes =>
           _buildStationBluffCiteOutcomes(),
+      LessonTableLayout.observeNarrowEntryOutcomes =>
+          _buildObserveNarrowEntryOutcomes(),
+      LessonTableLayout.observeNarrowAggressionOutcomes =>
+          _buildObserveNarrowAggressionOutcomes(),
+      LessonTableLayout.observeNarrowSampleOutcomes =>
+          _buildObserveNarrowSampleOutcomes(),
+      LessonTableLayout.observeNarrowBundleOutcomes =>
+          _buildObserveNarrowBundleOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -2458,6 +2547,119 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Vibe only',
           visual: const Icon(
             Icons.mood_bad_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildObserveNarrowEntryOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive: 'Interactive observe — tap narrow or wide entry',
+      semanticsStatic: 'Narrow entry outcomes',
+      caption: scene.caption ?? 'Folded 20 of 22 hands',
+      phases: [
+        (
+          region: LessonTableRegion.observeNarrowEntry,
+          title: 'Narrow',
+          detail: '20 of 22 fold',
+          visual: const _PotChipDot(label: '2', gold: true),
+        ),
+        (
+          region: LessonTableRegion.observeWideEntry,
+          title: 'Wide',
+          detail: 'Many pots',
+          visual: const _PotChipDot(label: '20', gold: false),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildObserveNarrowAggressionOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive observe — tap strong aggression or passive',
+      semanticsStatic: 'Narrow aggression outcomes',
+      caption: scene.caption ?? 'Finally raises · then barrels',
+      phases: [
+        (
+          region: LessonTableRegion.observeStrongAggression,
+          title: 'Strong heat',
+          detail: 'When involved',
+          visual: const Icon(
+            Icons.whatshot_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.observePassiveCallers,
+          title: 'Passive',
+          detail: 'Just calls',
+          visual: const Icon(
+            Icons.pan_tool_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildObserveNarrowSampleOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive: 'Interactive observe — tap wait or label now',
+      semanticsStatic: 'Narrow sample outcomes',
+      caption: scene.caption ?? 'Only two folds so far',
+      phases: [
+        (
+          region: LessonTableRegion.observeWaitSamples,
+          title: 'Wait',
+          detail: 'Need samples',
+          visual: const Icon(
+            Icons.hourglass_empty,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.observeLabelNowThin,
+          title: 'Label now',
+          detail: 'Two folds',
+          visual: const Icon(
+            Icons.sell_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildObserveNarrowBundleOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive: 'Interactive observe — tap the evidence bundle',
+      semanticsStatic: 'Narrow bundle outcomes',
+      caption: scene.caption ?? 'Bundle the pre-label notes',
+      phases: [
+        (
+          region: LessonTableRegion.observeNitBundle,
+          title: 'Few + heat',
+          detail: 'Pre-label',
+          visual: const Icon(
+            Icons.inventory_2_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.observeStationBundle,
+          title: 'Calls all',
+          detail: 'Wrong note',
+          visual: const Icon(
+            Icons.call_received,
             color: AppColors.slate,
             size: 24,
           ),
