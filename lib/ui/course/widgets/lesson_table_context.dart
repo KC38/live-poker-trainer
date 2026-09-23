@@ -399,6 +399,14 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.potMultiwayOutcomes,
         caption: '1/2 · UTG 6 · BTN call · BB call',
       );
+    case 'act-03-01-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.positionLabels,
+        highlight: LessonTableHighlight.earlyPosition,
+        seatCount: 9,
+        buttonSeat: 7,
+        caption: 'Nine-handed · button seat 7 · tap who opens',
+      );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
         layout: LessonTableLayout.streetEndPhases,
@@ -728,6 +736,14 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.potChipsTwelve => pick('pot-12'),
         _ => null,
       };
+    case 'act-03-01-01-scaffolded':
+      // Preflop open: UTG is left of the BB (earlyPosition on the felt).
+      return switch (region) {
+        LessonTableRegion.earlyPosition => pick('utg-first'),
+        LessonTableRegion.button => pick('btn-first'),
+        LessonTableRegion.smallBlind => pick('sb-first'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -809,7 +825,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-02-07-01-checkpoint-habit' ||
       activity.id == 'act-02-07-02-jump-pos' ||
       activity.id == 'act-02-07-02-jump-stack' ||
-      activity.id == 'act-03-01-01-guided';
+      activity.id == 'act-03-01-01-guided' ||
+      activity.id == 'act-03-01-01-scaffolded';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -979,11 +996,24 @@ class LessonTableContext extends StatelessWidget {
         if (!bottomRow.contains(i)) i,
     ];
 
-    LessonTableRegion roleOf(int seat) => blindsRoleForSeat(
-      seatIndex: seat,
-      buttonSeat: button,
-      seatCount: n,
-    );
+    LessonTableRegion roleOf(int seat) {
+      final blinds = blindsRoleForSeat(
+        seatIndex: seat,
+        buttonSeat: button,
+        seatCount: n,
+      );
+      if (blinds != LessonTableRegion.emptySeat) return blinds;
+      // Preflop open seat (UTG) sits left of the BB — mark it when highlighted
+      // so nine-handed "who opens" taps teach by seat, not by text tiles.
+      if (scene.highlight == LessonTableHighlight.earlyPosition ||
+          scene.highlight == LessonTableHighlight.bigBlind) {
+        if (seat ==
+            positionEarlySeat(buttonSeat: button, seatCount: n)) {
+          return LessonTableRegion.earlyPosition;
+        }
+      }
+      return LessonTableRegion.emptySeat;
+    }
 
     bool pulseRole(LessonTableRegion role) {
       if (!showSoftPulse ||
@@ -996,6 +1026,8 @@ class LessonTableContext extends StatelessWidget {
         LessonTableHighlight.smallBlind =>
           role == LessonTableRegion.smallBlind,
         LessonTableHighlight.bigBlind => role == LessonTableRegion.bigBlind,
+        LessonTableHighlight.earlyPosition =>
+          role == LessonTableRegion.earlyPosition,
         _ => false,
       };
     }
@@ -1115,8 +1147,12 @@ class LessonTableContext extends StatelessWidget {
 
     return _feltShell(
       semanticsLabel: _interactive
-          ? 'Interactive six-max table with position labels'
-          : 'Six-max table showing EP, HJ, CO, button, and blinds',
+          ? (n >= 9
+              ? 'Interactive nine-handed table with position labels'
+              : 'Interactive six-max table with position labels')
+          : (n >= 9
+              ? 'Nine-handed table showing UTG, mid, late, button, and blinds'
+              : 'Six-max table showing EP, HJ, CO, button, and blinds'),
       child: Column(
         children: [
           Row(
@@ -2172,7 +2208,7 @@ class _PositionSeatChip extends StatelessWidget {
         LessonTableRegion.button => 'Button seat',
         LessonTableRegion.smallBlind => 'Small blind seat',
         LessonTableRegion.bigBlind => 'Big blind seat',
-        LessonTableRegion.earlyPosition => 'Early position seat',
+        LessonTableRegion.earlyPosition => 'UTG seat — first to act preflop',
         LessonTableRegion.hijack => 'Hijack seat',
         LessonTableRegion.cutoff => 'Cutoff seat',
         _ => 'Seat',

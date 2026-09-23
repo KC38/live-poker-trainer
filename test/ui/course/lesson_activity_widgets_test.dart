@@ -5916,6 +5916,69 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s3 table-read scaffolded taps UTG seat on nine-handed felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-01-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Find UTG left of the big blind.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Nine-handed. Dealer button is on seat 7. Who acts first preflop?',
+      choices: const [
+        CourseChoice(id: 'utg-first', label: 'Seat left of the big blind (UTG)'),
+        CourseChoice(id: 'btn-first', label: 'The button'),
+        CourseChoice(id: 'sb-first', label: 'Small blind'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.positionLabels,
+    );
+    expect(resolveLessonTableScene(activity)?.seatCount, 9);
+    expect(resolveLessonTableScene(activity)?.buttonSeat, 7);
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.earlyPosition,
+        choices: activity.choices,
+      ),
+      'utg-first',
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Preflop — tap who acts first (left of the BB).'),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Nine-handed. Dealer button is on seat 7. Who acts first preflop?',
+      ),
+      findsNothing,
+    );
+    expect(find.text('Seat left of the big blind (UTG)'), findsNothing);
+    expect(find.text('UTG'), findsOneWidget);
+    expect(find.text('EP'), findsOneWidget);
+    await tester.tap(find.text('UTG'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'utg-first');
+    controller.dispose();
+  });
+
   testWidgets('numeric entry updates draft', (tester) async {
     final activity = _activity(
       renderer: ActivityRenderer.numericPotPrice,
