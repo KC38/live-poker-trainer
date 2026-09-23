@@ -600,6 +600,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Multiway top set — tap Thicker value.',
       'act-07-05-01-checkpoint' =>
           'Player count — tap First-class input.',
+      'act-07-06-01-guided' =>
+          '35bb TPTK — tap Closer to stacking.',
+      'act-07-06-01-scaffolded' =>
+          '250bb 55 — tap More attractive.',
+      'act-07-06-01-unguided' =>
+          'Hero 200 / Villain 40 — tap 40bb.',
+      'act-07-06-01-checkpoint' =>
+          'Stack depth — tap Every hand.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -753,7 +761,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-07-05-01-guided' ||
             widget.activity.id == 'act-07-05-01-scaffolded' ||
             widget.activity.id == 'act-07-05-01-unguided' ||
-            widget.activity.id == 'act-07-05-01-checkpoint';
+            widget.activity.id == 'act-07-05-01-checkpoint' ||
+            widget.activity.id == 'act-07-06-01-guided' ||
+            widget.activity.id == 'act-07-06-01-scaffolded' ||
+            widget.activity.id == 'act-07-06-01-unguided' ||
+            widget.activity.id == 'act-07-06-01-checkpoint';
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&

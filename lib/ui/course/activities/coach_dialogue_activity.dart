@@ -28,6 +28,7 @@ import 'package:live_poker_trainer/ui/course/widgets/turn_map_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/river_composition_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/pot_type_plans_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/hu_vs_multiway_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/stack_depth_plans_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -380,6 +381,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.huVsMultiway
                     ? null
                     : onFeltAcknowledge,
+            onStackDepthPlansAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.stackDepthPlans
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance &&
@@ -656,6 +661,9 @@ enum CoachDialogueVisualKind {
 
   /// Switch gears: bluff less multiway, value thicker, widen selected HU bluffs.
   huVsMultiway,
+
+  /// Rewrite plans by stack depth: short commit, deep implied, effective each hand.
+  stackDepthPlans,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -818,6 +826,8 @@ class CoachDialogueVisual {
       'Tap Limped, SRP, and 3-4bet.',
     CoachDialogueVisualKind.huVsMultiway =>
       'Tap Fewer, Thicker, and Widen.',
+    CoachDialogueVisualKind.stackDepthPlans =>
+      'Tap Short, Deep, and Effective.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -894,7 +904,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.turnMap ||
       kind == CoachDialogueVisualKind.riverComposition ||
       kind == CoachDialogueVisualKind.potTypePlans ||
-      kind == CoachDialogueVisualKind.huVsMultiway;
+      kind == CoachDialogueVisualKind.huVsMultiway ||
+      kind == CoachDialogueVisualKind.stackDepthPlans;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -1043,6 +1054,8 @@ class CoachDialogueVisual {
       'Pot-type plan tiles: limped, SRP, 3-4bet',
     CoachDialogueVisualKind.huVsMultiway =>
       'HU vs multiway tiles: fewer bluffs, thicker value, widen HU',
+    CoachDialogueVisualKind.stackDepthPlans =>
+      'Stack-depth plan tiles: short commit, deep implied, effective',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -1313,6 +1326,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-07-05-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.huVsMultiway,
+      );
+    case 'act-07-06-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.stackDepthPlans,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1930,6 +1947,23 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.potTypePlans,
     );
   }
+  // Phrase-safe stack-depth plans — short commit / deep implied / effective each hand.
+  // Before deepStacks / impliedOdds so "effective stack rewrites" is not stolen.
+  if (blob.contains('effective stack rewrites') ||
+      blob.contains('rewrite plans when stacks') ||
+      blob.contains('plans by stack depth') ||
+      (blob.contains('effective stack') &&
+          (blob.contains('rewrites the plan') ||
+              blob.contains('every hand') ||
+              blob.contains('recalculate'))) ||
+      (blob.contains('short') &&
+          blob.contains('commit') &&
+          blob.contains('implied') &&
+          blob.contains('deep'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.stackDepthPlans,
+    );
+  }
   // Phrase-safe vs LAG — require versus/trap/fancy framing.
   if (blob.contains('versus lag') ||
       blob.contains('versus lags') ||
@@ -2044,6 +2078,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onRiverCompositionAcknowledge,
     this.onPotTypePlansAcknowledge,
     this.onHuVsMultiwayAcknowledge,
+    this.onStackDepthPlansAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -2119,6 +2154,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onRiverCompositionAcknowledge;
   final VoidCallback? onPotTypePlansAcknowledge;
   final VoidCallback? onHuVsMultiwayAcknowledge;
+  final VoidCallback? onStackDepthPlansAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -2486,6 +2522,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onHuVsMultiwayAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onHuVsMultiwayAcknowledge,
+        ),
+        CoachDialogueVisualKind.stackDepthPlans => StackDepthPlansDemo(
+          interactive: onStackDepthPlansAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onStackDepthPlansAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },

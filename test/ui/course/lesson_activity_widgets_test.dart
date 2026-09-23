@@ -32,6 +32,7 @@ import 'package:live_poker_trainer/ui/course/widgets/turn_map_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/river_composition_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/pot_type_plans_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/hu_vs_multiway_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/stack_depth_plans_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
@@ -15961,6 +15962,216 @@ void main() {
     await tester.tap(find.text('First-class input'));
     await tester.pump();
     expect(controller.draft.choiceId, 'input');
+    controller.dispose();
+  });
+
+  testWidgets(
+    's7 stack explain taps Short Deep Effective instead of Continue',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-07-06-01-explain',
+        order: 1,
+        stage: ActivityStage.explain,
+        renderer: ActivityRenderer.coachDialogue,
+        estimatedSeconds: 30,
+        accessibilityText: 'Effective stack rewrites the plan every hand.',
+        acceptedGrades: const [SoftGrade.recommended],
+        objectives: const ['Recalculate effective stacks each hand'],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'm',
+            kind: 'dialogue',
+            text: 'Effective stack rewrites the plan every hand.',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      var feltAck = 0;
+      await tester.pumpWidget(
+        _wrap(
+          CoachDialogueActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+            onFeltAcknowledge: () => feltAck += 1,
+          ),
+        ),
+      );
+      expect(find.byType(StackDepthPlansDemo), findsOneWidget);
+      expect(find.text('Tap Short, Deep, and Effective.'), findsOneWidget);
+      expect(find.text('Tap Short, Deep, and Effective'), findsNothing);
+      expect(
+        find.text('Effective stack rewrites the plan every hand'),
+        findsNothing,
+      );
+      expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+      expect(isTableRegionTapActivity(activity), isTrue);
+
+      for (final title in ['SHORT', 'DEEP', 'EFFECTIVE']) {
+        await tester.tap(find.text(title));
+        await tester.pump();
+      }
+      expect(feltAck, 1);
+      controller.dispose();
+    },
+  );
+
+  testWidgets('s7 stack guided taps Closer to stacking on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-06-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Closer to committed.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: '35bb effective. Top pair strong kicker vs raise. Lean?',
+      choices: const [
+        CourseChoice(
+          id: 'commit',
+          label: 'Closer to stacking — SPR is low',
+        ),
+        CourseChoice(id: 'deep', label: 'Play as 250bb deep'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('35bb TPTK — tap Closer to stacking.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Closer to stacking'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'commit');
+    controller.dispose();
+  });
+
+  testWidgets('s7 stack scaffolded taps More attractive on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-06-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'More attractive.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: '250bb. Set-mine 55?',
+      choices: const [
+        CourseChoice(id: 'yes', label: 'More attractive with depth'),
+        CourseChoice(id: 'no', label: 'Never set-mine deep'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('250bb 55 — tap More attractive.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('More attractive'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'yes');
+    controller.dispose();
+  });
+
+  testWidgets('s7 stack unguided taps 40bb on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-06-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: '40bb.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Hero 200bb, villain 40bb. Effective?',
+      choices: const [
+        CourseChoice(id: '40', label: '40bb'),
+        CourseChoice(id: '200', label: '200bb'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Hero 200 / Villain 40 — tap 40bb.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('40bb'));
+    await tester.pump();
+    expect(controller.draft.choiceId, '40');
+    controller.dispose();
+  });
+
+  testWidgets('s7 stack checkpoint taps Every hand on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-06-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Plan input every hand.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Stack depth is?',
+      choices: const [
+        CourseChoice(id: 'every', label: 'Recalculated every hand'),
+        CourseChoice(id: 'once', label: 'Set once per lifetime'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Stack depth — tap Every hand.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Every hand'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'every');
     controller.dispose();
   });
 }
