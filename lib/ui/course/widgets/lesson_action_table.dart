@@ -1858,8 +1858,16 @@ class _OpenRangeDemoState extends State<OpenRangeDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in OpenRangeDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -1888,16 +1896,23 @@ class _OpenRangeDemoState extends State<OpenRangeDemo> {
               for (var i = 0; i < OpenRangeDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: OpenRangeDemo.points[i].label,
-                    caption: OpenRangeDemo.points[i].caption,
-                    color: OpenRangeDemo.points[i].color,
-                    selected: _tapped.contains(OpenRangeDemo.points[i].label),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(OpenRangeDemo.points[i].label)
-                            : null,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == OpenRangeDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: OpenRangeDemo.points[i].label,
+                      caption: OpenRangeDemo.points[i].caption,
+                      color: OpenRangeDemo.points[i].color,
+                      selected:
+                          _tapped.contains(OpenRangeDemo.points[i].label),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(OpenRangeDemo.points[i].label)
+                              : null,
+                    ),
                   ),
                 ),
               ],
@@ -1906,7 +1921,9 @@ class _OpenRangeDemoState extends State<OpenRangeDemo> {
           const SizedBox(height: 10),
           Text(
             widget.interactive
-                ? 'Tap Early, Button, and Live 3x'
+                ? (next == null
+                    ? 'Early tight · button wider · live opens ~3x'
+                    : 'Tap ${next.label} next')
                 : 'Early tight · button wider · live opens ~3x',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
