@@ -257,6 +257,24 @@ LessonHandExample? resolveHandExample({
         title: 'Raise every draw',
         codes: [],
       );
+    case 'implied-yes':
+      return const LessonHandExample(
+        id: 'implied-yes',
+        title: 'Implied — they pay when you hit',
+        codes: [],
+      );
+    case 'implied-no':
+      return const LessonHandExample(
+        id: 'implied-no',
+        title: 'Depth never changes price',
+        codes: [],
+      );
+    case 'fold-nfd':
+      return const LessonHandExample(
+        id: 'fold-nfd',
+        title: 'Fold every nut draw',
+        codes: [],
+      );
     case 'split':
       return const LessonHandExample(
         id: 'split',
