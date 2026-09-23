@@ -17488,7 +17488,7 @@ void main() {
           prompt: 'River 9c misses. Two players behind. Action?',
           choices: [
             CourseChoice(
-              id: 'check',
+              id: 'check-r',
               label: 'Check',
               action: 'CHECK',
             ),
@@ -17567,7 +17567,7 @@ void main() {
           prompt: 'River 9c misses. Two players behind. Action?',
           choices: [
             CourseChoice(
-              id: 'check',
+              id: 'check-r',
               label: 'Check',
               action: 'CHECK',
             ),
@@ -17644,7 +17644,7 @@ void main() {
           prompt: 'River 9c misses. Two players behind. Action?',
           choices: [
             CourseChoice(
-              id: 'check',
+              id: 'check-r',
               label: 'Check',
               action: 'CHECK',
             ),
@@ -17681,7 +17681,7 @@ void main() {
     );
     await tester.tap(find.text('CHECK'));
     await tester.pump();
-    expect(controller.draft.choiceId, 'check');
+    expect(controller.draft.choiceId, 'check-r');
     controller.dispose();
   });
 

@@ -2717,10 +2717,12 @@ export function buildSectionSeven() {
                     prompt: "River 9c misses. Two players behind. Action?",
                     accessibilityText: "Do not bluff the crowd light.",
                     choices: [
-                      choice("check", "Check / give up", "recommended",
+                      // Unique id — duplicate "check" with turn blocked
+                      // shouldAdvanceActivityAfterSubmit (first-match trap).
+                      choice("check-r", "Check", "recommended",
                         "Multiway missed draw — no crowd bluff.", {action: "CHECK"}),
                       choice("bluff", "Blast bluff both", "clear_mistake",
-                        "Crowds call.", {action: "BET", amountBb: 60, betterChoiceId: "check"}),
+                        "Crowds call.", {action: "BET", amountBb: 60, betterChoiceId: "check-r"}),
                     ],
                   },
                 ],

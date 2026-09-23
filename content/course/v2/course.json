@@ -20515,9 +20515,9 @@
                       "accessibilityText": "Do not bluff the crowd light.",
                       "choices": [
                         {
-                          "id": "check",
-                          "label": "Check / give up",
-                          "accessibilityText": "Check / give up",
+                          "id": "check-r",
+                          "label": "Check",
+                          "accessibilityText": "Check",
                           "grading": {
                             "grade": "recommended",
                             "feedback": "Multiway missed draw — no crowd bluff."
@@ -20531,7 +20531,7 @@
                           "grading": {
                             "grade": "clear_mistake",
                             "feedback": "Crowds call.",
-                            "betterChoiceId": "check"
+                            "betterChoiceId": "check-r"
                           },
                           "action": "BET",
                           "amountBb": 60

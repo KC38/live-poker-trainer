@@ -1426,11 +1426,12 @@ export function shouldAdvanceActivityAfterSubmit(options: {
   const steps = activity.handSteps;
   if (!Array.isArray(steps) || steps.length <= 1) return true;
   if (!choiceId) return true;
+  // Prefer the *last* street that owns this choiceId so duplicate ids across
+  // streets (legacy content) still advance on the final street.
   let stepIndex = -1;
   for (let i = 0; i < steps.length; i++) {
     if (steps[i]?.choices?.some((choice: CourseChoice) => choice.id === choiceId)) {
       stepIndex = i;
-      break;
     }
   }
   // Unknown choice: keep prior advance-on-accept behavior.
