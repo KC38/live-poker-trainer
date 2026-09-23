@@ -25,12 +25,24 @@ class AuthoredMultiStepActivity extends StatelessWidget {
 
   String _coachTextFor(CourseHandStep step) {
     return switch ((activity.id, step.id)) {
+      ('act-01-06-01-guided-steps', 'step-01-06-pre') =>
+        'Button toy hand — open, then see if it ends.',
+      ('act-01-06-01-guided-steps', 'step-01-06-flop') =>
+        'Blinds folded — what happened to the pot?',
       ('act-01-06-01-guided-steps', _) =>
         'Button toy hand — open, then see if it ends.',
+      ('act-01-06-01-scaffolded-multi', 'step-01-06-bb-defend') =>
+        'BB called — is the hand still alive?',
+      ('act-01-06-01-scaffolded-multi', 'step-01-06-flop-cbet') =>
+        'Top pair on A72 — tap your flop action.',
       ('act-01-06-01-scaffolded-multi', _) =>
         'Called open — confirm the flop, then act.',
+      ('act-01-06-01-checkpoint-finish', 'step-01-06-cp-end') =>
+        'Blinds folded — what happened to the pot?',
       ('act-01-06-01-checkpoint-finish', _) =>
         'Finish a short button hand without freezing.',
+      ('act-01-06-02-jump-hand', 'j-hand-end') =>
+        'Blinds folded — what happened to the pot?',
       ('act-01-06-02-jump-hand', _) =>
         'Jump check — open the button, then take the blinds.',
       ('act-04-03-01-guided', 'step-flop-tp') =>
@@ -123,10 +135,18 @@ class AuthoredMultiStepActivity extends StatelessWidget {
               ),
               Builder(
                 builder: (context) {
+                  // Outcome tiles (Won pot / Must flop) are not poker actions.
+                  final outcomeAsk = step.choices.every(
+                    (c) => c.action == null || c.action!.isEmpty,
+                  );
                   final status = () {
                     if (controller.lastResult != null) return '';
                     if (controller.submitting) return 'Checking…';
-                    if (selected == null) return 'Tap your action on the dock.';
+                    if (selected == null) {
+                      return outcomeAsk
+                          ? 'What happened? Tap below.'
+                          : 'Tap your action on the dock.';
+                    }
                     return 'Checking…';
                   }();
                   if (status.isEmpty) return const SizedBox.shrink();

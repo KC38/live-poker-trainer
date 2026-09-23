@@ -4721,6 +4721,20 @@ void main() {
     );
     expect(
       resolveToyHandStepSpot(
+        activityId: 'act-01-06-01-guided-steps',
+        stepId: 'step-01-06-flop',
+      )?.feltStatusLine,
+      'Uncontested — stack the chips',
+    );
+    expect(
+      resolveToyHandStepSpot(
+        activityId: 'act-01-06-01-scaffolded-multi',
+        stepId: 'step-01-06-bb-defend',
+      )?.feltStatusLine,
+      'Call keeps the hand alive',
+    );
+    expect(
+      resolveToyHandStepSpot(
         activityId: 'act-01-06-01-scaffolded-multi',
         stepId: 'step-01-06-flop-cbet',
       )?.boardCodes,
