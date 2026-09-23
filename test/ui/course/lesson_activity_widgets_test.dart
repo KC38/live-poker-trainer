@@ -1551,7 +1551,8 @@ void main() {
       ),
     );
     expect(find.byType(OpenRangeDemo), findsOneWidget);
-    expect(find.text('Tap Early, Button, and Live 3x.'), findsOneWidget);
+    expect(find.text('Tap Early, Button, and Live 3x'), findsOneWidget);
+    expect(find.text('Tap Early, Button, and Live 3x.'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
@@ -1598,7 +1599,8 @@ void main() {
       ),
     );
     expect(find.byType(VsOpenResponseDemo), findsOneWidget);
-    expect(find.text('Tap Fold, Call, and 3-Bet.'), findsOneWidget);
+    expect(find.text('Tap Fold, Call, and 3-Bet'), findsOneWidget);
+    expect(find.text('Tap Fold, Call, and 3-Bet.'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
@@ -1645,7 +1647,8 @@ void main() {
       ),
     );
     expect(find.byType(BbStackDepthDemo), findsOneWidget);
-    expect(find.text('Tap Chips→BB, Shorter, and Depth.'), findsOneWidget);
+    expect(find.text('Tap Chips→BB, Shorter, and Depth'), findsOneWidget);
+    expect(find.text('Tap Chips→BB, Shorter, and Depth.'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
@@ -1692,7 +1695,8 @@ void main() {
       ),
     );
     expect(find.byType(TableHabitsDemo), findsOneWidget);
-    expect(find.text('Tap Watch, Say, Cover, and Wait.'), findsOneWidget);
+    expect(find.text('Tap Watch, Say, Cover, and Wait'), findsOneWidget);
+    expect(find.text('Tap Watch, Say, Cover, and Wait.'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
