@@ -153,6 +153,14 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         streetLabel: 'Preflop · Button · 9-max',
         facingBet: true,
       );
+    case 'act-02-07-01-unguided-lab':
+      return const LessonActionSpot(
+        heroCodes: ['Kh', 'Qd'],
+        potLabel: 'Pot 3 → 9',
+        villainLine: 'CO opens to 6',
+        streetLabel: 'Preflop · Button · 9-max',
+        facingBet: true,
+      );
   }
   return null;
 }
@@ -254,7 +262,8 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-02-07-01-') &&
-      activity.renderer == ActivityRenderer.pokerActionSizing) {
+      (activity.renderer == ActivityRenderer.pokerActionSizing ||
+          activity.renderer == ActivityRenderer.fullTableHandLab)) {
     return true;
   }
   return (id.startsWith('act-01-03-01-') || id.startsWith('act-01-03-02-')) &&
