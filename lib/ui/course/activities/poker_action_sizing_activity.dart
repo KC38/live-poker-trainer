@@ -376,6 +376,12 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Same top pair · TAG check-raises — tap Fold.',
     'act-07-07-01-unguided' =>
       'Same top pair · LAG barrels — tap Call.',
+    'act-07-08-01-guided' =>
+      'Wet board · Maniac overbet — tap Call.',
+    'act-07-08-01-scaffolded' =>
+      'Dry board · Nit tiny bet — tap Raise as a bluff candidate.',
+    'act-07-08-01-unguided' =>
+      'TAG pots river · second pair — tap Fold.',
     _ => null,
   };
 }

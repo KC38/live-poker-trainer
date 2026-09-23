@@ -1003,6 +1003,12 @@ enum LessonTableRegion {
 
   /// Same-cards checkpoint: guess a type and overfit (mistake).
   sameCardsGuess,
+
+  /// Type-board-line checkpoint: all four inputs (correct).
+  typeBoardAllFour,
+
+  /// Type-board-line checkpoint: hole-card beauty alone (mistake).
+  typeBoardCardsOnly,
 }
 
 /// How the mini-table is arranged.
@@ -1468,6 +1474,9 @@ enum LessonTableLayout {
 
   /// Same-cards checkpoint: baseline vs guess/overfit.
   sameCardsCheckpointOutcomes,
+
+  /// Type-board-line checkpoint: all four vs hole cards only.
+  typeBoardCheckpointOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -2624,6 +2633,11 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         layout: LessonTableLayout.sameCardsCheckpointOutcomes,
         caption: 'No type evidence yet. Default?',
+      );
+    case 'act-07-08-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.typeBoardCheckpointOutcomes,
+        caption: 'Integrated decision uses?',
       );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
@@ -3825,6 +3839,12 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.sameCardsGuess => pick('guess'),
         _ => null,
       };
+    case 'act-07-08-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.typeBoardAllFour => pick('four'),
+        LessonTableRegion.typeBoardCardsOnly => pick('one'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -3907,7 +3927,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
         activity.id == 'act-07-04-01-explain' ||
         activity.id == 'act-07-05-01-explain' ||
         activity.id == 'act-07-06-01-explain' ||
-        activity.id == 'act-07-07-01-explain';
+        activity.id == 'act-07-07-01-explain' ||
+        activity.id == 'act-07-08-01-explain';
   }
   if (activity.renderer != ActivityRenderer.selectIdentify &&
       activity.renderer != ActivityRenderer.playerReadClassify) {
@@ -4054,7 +4075,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-07-06-01-scaffolded' ||
       activity.id == 'act-07-06-01-unguided' ||
       activity.id == 'act-07-06-01-checkpoint' ||
-      activity.id == 'act-07-07-01-checkpoint';
+      activity.id == 'act-07-07-01-checkpoint' ||
+      activity.id == 'act-07-08-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -4424,6 +4446,8 @@ class LessonTableContext extends StatelessWidget {
           _buildStackDepthCheckpointOutcomes(),
       LessonTableLayout.sameCardsCheckpointOutcomes =>
           _buildSameCardsCheckpointOutcomes(),
+      LessonTableLayout.typeBoardCheckpointOutcomes =>
+          _buildTypeBoardCheckpointOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -9612,6 +9636,37 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Overfit',
           visual: const Icon(
             Icons.casino_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTypeBoardCheckpointOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive type-board-line — tap All four or Cards only',
+      semanticsStatic: 'Type-board-line checkpoint outcomes',
+      caption: scene.caption ?? 'Integrated decision uses?',
+      phases: [
+        (
+          region: LessonTableRegion.typeBoardAllFour,
+          title: 'All four',
+          detail: 'Type · board · line · size',
+          visual: const Icon(
+            Icons.hub_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.typeBoardCardsOnly,
+          title: 'Cards only',
+          detail: 'Hole beauty alone',
+          visual: const Icon(
+            Icons.style_outlined,
             color: AppColors.slate,
             size: 24,
           ),

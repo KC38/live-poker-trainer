@@ -34,6 +34,7 @@ import 'package:live_poker_trainer/ui/course/widgets/pot_type_plans_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/hu_vs_multiway_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/stack_depth_plans_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/same_cards_types_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/type_board_line_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
@@ -16379,6 +16380,221 @@ void main() {
     await tester.tap(find.text('Baseline'));
     await tester.pump();
     expect(controller.draft.choiceId, 'base');
+    controller.dispose();
+  });
+
+  testWidgets(
+    's7 type board explain taps Type Board Line Size instead of Continue',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-07-08-01-explain',
+        order: 1,
+        stage: ActivityStage.explain,
+        renderer: ActivityRenderer.coachDialogue,
+        estimatedSeconds: 30,
+        accessibilityText: 'Type × board × line × size. One answer.',
+        acceptedGrades: const [SoftGrade.recommended],
+        objectives: const ['Produce one coherent action'],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'm',
+            kind: 'dialogue',
+            text: 'Type × board × line × size. One answer.',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      var feltAck = 0;
+      await tester.pumpWidget(
+        _wrap(
+          CoachDialogueActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+            onFeltAcknowledge: () => feltAck += 1,
+          ),
+        ),
+      );
+      expect(find.byType(TypeBoardLineDemo), findsOneWidget);
+      expect(find.text('Tap Type, Board, Line, and Size.'), findsOneWidget);
+      expect(find.text('Tap Type, Board, Line, and Size'), findsNothing);
+      expect(
+        find.text('One coherent action from all four inputs'),
+        findsNothing,
+      );
+      expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+      expect(isTableRegionTapActivity(activity), isTrue);
+
+      for (final title in ['TYPE', 'BOARD', 'LINE', 'SIZE']) {
+        await tester.tap(find.text(title));
+        await tester.pump();
+      }
+      expect(feltAck, 1);
+      controller.dispose();
+    },
+  );
+
+  testWidgets('s7 type board guided docks Call on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-07-08-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Call.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Wet board. Maniac overbets turn. Second pair. Action?',
+      choices: const [
+        CourseChoice(id: 'call', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Wet board · Maniac overbet — tap Call.'),
+      findsOneWidget,
+    );
+    expect(find.text('CALL'), findsOneWidget);
+    await tester.tap(find.text('CALL'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'call');
+    controller.dispose();
+  });
+
+  testWidgets('s7 type board scaffolded docks Raise on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-07-08-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Raise/bluff more available.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Dry board. Nit tiny turn bet. Air. Action?',
+      choices: const [
+        CourseChoice(
+          id: 'raise',
+          label: 'Raise as a bluff candidate',
+          action: 'RAISE',
+        ),
+        CourseChoice(id: 'call', label: 'Call air', action: 'CALL'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Dry board · Nit tiny bet — tap Raise as a bluff candidate.'),
+      findsOneWidget,
+    );
+    expect(find.text('RAISE AS A BLUFF CANDIDATE'), findsOneWidget);
+    await tester.tap(find.text('RAISE AS A BLUFF CANDIDATE'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'raise');
+    controller.dispose();
+  });
+
+  testWidgets('s7 type board unguided docks Fold on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-07-08-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Fold.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'TAG pots river after strong line. Second pair. Action?',
+      choices: const [
+        CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+        CourseChoice(
+          id: 'hero',
+          label: 'Hero-call for storytime',
+          action: 'CALL',
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('TAG pots river · second pair — tap Fold.'),
+      findsOneWidget,
+    );
+    expect(find.text('FOLD'), findsOneWidget);
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'fold');
+    controller.dispose();
+  });
+
+  testWidgets('s7 type board checkpoint taps All four on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-08-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'All four inputs.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Integrated decision uses?',
+      choices: const [
+        CourseChoice(
+          id: 'four',
+          label: 'Type, board, line, and sizing together',
+        ),
+        CourseChoice(id: 'one', label: 'Only hole card beauty'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Integrated decision — tap All four.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('All four'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'four');
     controller.dispose();
   });
 }

@@ -460,6 +460,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Same cards, different types: baseline vs guess/overfit on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-07-08-01-checkpoint') {
+    // Type × board × line × sizing: all four vs hole-card beauty on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

@@ -30,6 +30,7 @@ import 'package:live_poker_trainer/ui/course/widgets/pot_type_plans_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/hu_vs_multiway_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/stack_depth_plans_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/same_cards_types_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/type_board_line_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -390,6 +391,10 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked || visual.kind != CoachDialogueVisualKind.sameCardsTypes
                     ? null
                     : onFeltAcknowledge,
+            onTypeBoardLineAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.typeBoardLine
+                    ? null
+                    : onFeltAcknowledge,
           ),
         ],
         if (showGuidance &&
@@ -672,6 +677,9 @@ enum CoachDialogueVisualKind {
 
   /// Replay same holdings across five type models; cite tendency or keep baseline.
   sameCardsTypes,
+
+  /// Integrate type, board texture, line history, and sizing into one action.
+  typeBoardLine,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -838,6 +846,8 @@ class CoachDialogueVisual {
       'Tap Short, Deep, and Effective.',
     CoachDialogueVisualKind.sameCardsTypes =>
       'Tap Cards, Models, and Cite.',
+    CoachDialogueVisualKind.typeBoardLine =>
+      'Tap Type, Board, Line, and Size.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -916,7 +926,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.potTypePlans ||
       kind == CoachDialogueVisualKind.huVsMultiway ||
       kind == CoachDialogueVisualKind.stackDepthPlans ||
-      kind == CoachDialogueVisualKind.sameCardsTypes;
+      kind == CoachDialogueVisualKind.sameCardsTypes ||
+      kind == CoachDialogueVisualKind.typeBoardLine;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -1069,6 +1080,8 @@ class CoachDialogueVisual {
       'Stack-depth plan tiles: short commit, deep implied, effective',
     CoachDialogueVisualKind.sameCardsTypes =>
       'Same-cards tiles: same holdings, five models, cite tendency',
+    CoachDialogueVisualKind.typeBoardLine =>
+      'Type-board-line tiles: type, board, line, size — one action',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -1347,6 +1360,10 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
     case 'act-07-07-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.sameCardsTypes,
+      );
+    case 'act-07-08-01-explain':
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.typeBoardLine,
       );
     case 'act-01-02-01-explain-ladder':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
@@ -1779,6 +1796,19 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.sameCardsTypes,
     );
   }
+  // Phrase-safe type × board × line × size — one coherent action.
+  if (blob.contains('type × board × line') ||
+      blob.contains('type x board x line') ||
+      blob.contains('one answer') && blob.contains('size') ||
+      (blob.contains('type') &&
+          blob.contains('board') &&
+          blob.contains('line') &&
+          blob.contains('size') &&
+          blob.contains('one'))) {
+    return const CoachDialogueVisual(
+      kind: CoachDialogueVisualKind.typeBoardLine,
+    );
+  }
   if (blob.contains('same cards') ||
       blob.contains('different seats') ||
       blob.contains('exploits change') ||
@@ -2111,6 +2141,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.onHuVsMultiwayAcknowledge,
     this.onStackDepthPlansAcknowledge,
     this.onSameCardsTypesAcknowledge,
+    this.onTypeBoardLineAcknowledge,
   });
 
   final CoachDialogueVisual visual;
@@ -2188,6 +2219,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final VoidCallback? onHuVsMultiwayAcknowledge;
   final VoidCallback? onStackDepthPlansAcknowledge;
   final VoidCallback? onSameCardsTypesAcknowledge;
+  final VoidCallback? onTypeBoardLineAcknowledge;
 
   @override
   Widget build(BuildContext context) {
@@ -2565,6 +2597,11 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           interactive: onSameCardsTypesAcknowledge != null,
           enabled: enabled,
           onAllPointsTapped: onSameCardsTypesAcknowledge,
+        ),
+        CoachDialogueVisualKind.typeBoardLine => TypeBoardLineDemo(
+          interactive: onTypeBoardLineAcknowledge != null,
+          enabled: enabled,
+          onAllPointsTapped: onTypeBoardLineAcknowledge,
         ),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },

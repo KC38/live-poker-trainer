@@ -988,6 +988,36 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         facingBet: true,
         feltStatusLine: 'Same cards — LAG pressure is wide',
       );
+    case 'act-07-08-01-guided':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', 'Td'],
+        boardCodes: ['Ts', '9h', '8c', '2d'],
+        potLabel: 'Pot 48',
+        villainLine: 'Maniac overbets turn',
+        streetLabel: 'Turn · second pair · wet',
+        facingBet: true,
+        feltStatusLine: 'Wet board — maniac overbets wide',
+      );
+    case 'act-07-08-01-scaffolded':
+      return const LessonActionSpot(
+        heroCodes: ['9h', '8d'],
+        boardCodes: ['Ac', '7s', '2d', 'Kd'],
+        potLabel: 'Pot 22',
+        villainLine: 'Nit bets tiny on turn',
+        streetLabel: 'Turn · air · dry',
+        facingBet: true,
+        feltStatusLine: 'Dry board — tiny nit bets are weak',
+      );
+    case 'act-07-08-01-unguided':
+      return const LessonActionSpot(
+        heroCodes: ['Jh', 'Td'],
+        boardCodes: ['Qc', 'Ts', '3h', '2d', '7c'],
+        potLabel: 'Pot 54',
+        villainLine: 'TAG pots river after strong line',
+        streetLabel: 'River · second pair',
+        facingBet: true,
+        feltStatusLine: 'Strong TAG line — fold second pair',
+      );
   }
   return null;
 }
@@ -1274,6 +1304,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id.startsWith('act-07-07-01-') &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-07-08-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
