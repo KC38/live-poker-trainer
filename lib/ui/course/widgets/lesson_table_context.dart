@@ -973,6 +973,30 @@ enum LessonTableRegion {
 
   /// HU vs multiway checkpoint: noise (mistake).
   huMwNoise,
+
+  /// Stack-depth guided: closer to stacking (correct).
+  stackDepthCloserCommit,
+
+  /// Stack-depth guided: play as 250bb deep (mistake).
+  stackDepthPlayDeep,
+
+  /// Stack-depth scaffolded: more attractive with depth (correct).
+  stackDepthMoreAttractive,
+
+  /// Stack-depth scaffolded: never set-mine deep (mistake).
+  stackDepthNeverMine,
+
+  /// Stack-depth unguided: 40bb effective (correct).
+  stackDepth40bb,
+
+  /// Stack-depth unguided: 200bb (mistake).
+  stackDepth200bb,
+
+  /// Stack-depth checkpoint: every hand (correct).
+  stackDepthEveryHand,
+
+  /// Stack-depth checkpoint: once per lifetime (mistake).
+  stackDepthOnceLifetime,
 }
 
 /// How the mini-table is arranged.
@@ -1423,6 +1447,18 @@ enum LessonTableLayout {
 
   /// HU vs multiway checkpoint: first-class input vs noise.
   huMwCheckpointOutcomes,
+
+  /// Stack-depth guided: closer to stacking vs 250bb deep.
+  stackDepthGuidedOutcomes,
+
+  /// Stack-depth scaffolded: more attractive vs never set-mine.
+  stackDepthScaffoldedOutcomes,
+
+  /// Stack-depth unguided: 40bb vs 200bb effective.
+  stackDepthUnguidedOutcomes,
+
+  /// Stack-depth checkpoint: every hand vs once per lifetime.
+  stackDepthCheckpointOutcomes,
 }
 
 /// Authored (or inferred) mini-table scene for a lesson activity.
@@ -2554,6 +2590,26 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         layout: LessonTableLayout.huMwCheckpointOutcomes,
         caption: 'Player count is?',
+      );
+    case 'act-07-06-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.stackDepthGuidedOutcomes,
+        caption: '35bb TPTK vs raise — lean?',
+      );
+    case 'act-07-06-01-scaffolded':
+      return const LessonTableScene(
+        layout: LessonTableLayout.stackDepthScaffoldedOutcomes,
+        caption: '250bb — set-mine 55?',
+      );
+    case 'act-07-06-01-unguided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.stackDepthUnguidedOutcomes,
+        caption: 'Hero 200bb, villain 40bb — effective?',
+      );
+    case 'act-07-06-01-checkpoint':
+      return const LessonTableScene(
+        layout: LessonTableLayout.stackDepthCheckpointOutcomes,
+        caption: 'Stack depth is?',
       );
     case 'act-01-04-01-unguided-end':
       return const LessonTableScene(
@@ -3725,6 +3781,30 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.huMwNoise => pick('ignore'),
         _ => null,
       };
+    case 'act-07-06-01-guided':
+      return switch (region) {
+        LessonTableRegion.stackDepthCloserCommit => pick('commit'),
+        LessonTableRegion.stackDepthPlayDeep => pick('deep'),
+        _ => null,
+      };
+    case 'act-07-06-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.stackDepthMoreAttractive => pick('yes'),
+        LessonTableRegion.stackDepthNeverMine => pick('no'),
+        _ => null,
+      };
+    case 'act-07-06-01-unguided':
+      return switch (region) {
+        LessonTableRegion.stackDepth40bb => pick('40'),
+        LessonTableRegion.stackDepth200bb => pick('200'),
+        _ => null,
+      };
+    case 'act-07-06-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.stackDepthEveryHand => pick('every'),
+        LessonTableRegion.stackDepthOnceLifetime => pick('once'),
+        _ => null,
+      };
   }
   return null;
 }
@@ -3805,7 +3885,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
         activity.id == 'act-07-02-01-explain' ||
         activity.id == 'act-07-03-01-explain' ||
         activity.id == 'act-07-04-01-explain' ||
-        activity.id == 'act-07-05-01-explain';
+        activity.id == 'act-07-05-01-explain' ||
+        activity.id == 'act-07-06-01-explain';
   }
   if (activity.renderer != ActivityRenderer.selectIdentify &&
       activity.renderer != ActivityRenderer.playerReadClassify) {
@@ -3947,7 +4028,11 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-07-05-01-guided' ||
       activity.id == 'act-07-05-01-scaffolded' ||
       activity.id == 'act-07-05-01-unguided' ||
-      activity.id == 'act-07-05-01-checkpoint';
+      activity.id == 'act-07-05-01-checkpoint' ||
+      activity.id == 'act-07-06-01-guided' ||
+      activity.id == 'act-07-06-01-scaffolded' ||
+      activity.id == 'act-07-06-01-unguided' ||
+      activity.id == 'act-07-06-01-checkpoint';
 }
 
 /// Small-blind seat index clockwise from the button.
@@ -4307,6 +4392,14 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.huMwUnguidedOutcomes => _buildHuMwUnguidedOutcomes(),
       LessonTableLayout.huMwCheckpointOutcomes =>
           _buildHuMwCheckpointOutcomes(),
+      LessonTableLayout.stackDepthGuidedOutcomes =>
+          _buildStackDepthGuidedOutcomes(),
+      LessonTableLayout.stackDepthScaffoldedOutcomes =>
+          _buildStackDepthScaffoldedOutcomes(),
+      LessonTableLayout.stackDepthUnguidedOutcomes =>
+          _buildStackDepthUnguidedOutcomes(),
+      LessonTableLayout.stackDepthCheckpointOutcomes =>
+          _buildStackDepthCheckpointOutcomes(),
       LessonTableLayout.holeCards => _buildHoleCards(),
     };
   }
@@ -9340,6 +9433,130 @@ class LessonTableContext extends StatelessWidget {
           detail: 'It matters',
           visual: const Icon(
             Icons.hearing_disabled,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStackDepthGuidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive stack depth — tap Closer to stacking or 250bb deep',
+      semanticsStatic: 'Stack-depth guided outcomes',
+      caption: scene.caption ?? '35bb TPTK vs raise — lean?',
+      phases: [
+        (
+          region: LessonTableRegion.stackDepthCloserCommit,
+          title: 'Closer to stacking',
+          detail: 'SPR is low',
+          visual: const Icon(
+            Icons.lock_outline,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.stackDepthPlayDeep,
+          title: '250bb deep',
+          detail: 'Wrong depth',
+          visual: const Icon(
+            Icons.swap_vert,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStackDepthScaffoldedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive stack depth — tap More attractive or Never set-mine',
+      semanticsStatic: 'Stack-depth scaffolded outcomes',
+      caption: scene.caption ?? '250bb — set-mine 55?',
+      phases: [
+        (
+          region: LessonTableRegion.stackDepthMoreAttractive,
+          title: 'More attractive',
+          detail: 'With depth',
+          visual: const Icon(
+            Icons.trending_up,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.stackDepthNeverMine,
+          title: 'Never set-mine',
+          detail: 'Opposite',
+          visual: const Icon(
+            Icons.block,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStackDepthUnguidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive stack depth — tap 40bb or 200bb',
+      semanticsStatic: 'Stack-depth unguided outcomes',
+      caption: scene.caption ?? 'Hero 200bb, villain 40bb — effective?',
+      phases: [
+        (
+          region: LessonTableRegion.stackDepth40bb,
+          title: '40bb',
+          detail: 'Shorter caps',
+          visual: const Icon(
+            Icons.vertical_align_bottom,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.stackDepth200bb,
+          title: '200bb',
+          detail: "Can't exceed",
+          visual: const Icon(
+            Icons.vertical_align_top,
+            color: AppColors.danger,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStackDepthCheckpointOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive stack depth — tap Every hand or Once per lifetime',
+      semanticsStatic: 'Stack-depth checkpoint outcomes',
+      caption: scene.caption ?? 'Stack depth is?',
+      phases: [
+        (
+          region: LessonTableRegion.stackDepthEveryHand,
+          title: 'Every hand',
+          detail: 'Recalculate',
+          visual: const Icon(
+            Icons.refresh,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.stackDepthOnceLifetime,
+          title: 'Once per lifetime',
+          detail: 'No',
+          visual: const Icon(
+            Icons.event_busy,
             color: AppColors.slate,
             size: 24,
           ),
