@@ -8572,6 +8572,83 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 3bet guided docks 3-bet on QQ button felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-04-02-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: '3-bet queens for value.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'CO opens to 6. You have QQ on the button. Action?',
+      choices: const [
+        CourseChoice(id: '3bet-qq', label: '3-bet to ~18', action: 'RAISE'),
+        CourseChoice(id: 'call-qq', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'fold-qq', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Queens on the button vs a CO open — tap a 3-bet.'),
+      findsOneWidget,
+    );
+    expect(find.text('3-BET TO ~18'), findsOneWidget);
+    await tester.tap(find.text('3-BET TO ~18'));
+    await tester.pump();
+    expect(controller.draft.choiceId, '3bet-qq');
+    controller.dispose();
+  });
+
+  testWidgets('s4 3bet unguided taps squeeze tile on multiway felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-02-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Squeeze with strong hands multiway.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'UTG opens, two callers. You have AKo in the big blind. Idea?',
+      choices: const [
+        CourseChoice(id: 'squeeze', label: '3-bet / squeeze for value'),
+        CourseChoice(id: 'limp-more', label: 'Limp behind'),
+        CourseChoice(id: 'fold-ak', label: 'Fold AK'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.handCategoryTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('3-bet / squeeze for value'), findsOneWidget);
+    await tester.tap(find.text('3-bet / squeeze for value'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'squeeze');
+    controller.dispose();
+  });
+
   testWidgets('feedback sheet never shows life loss for questionable', (
     tester,
   ) async {
