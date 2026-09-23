@@ -3788,7 +3788,13 @@ void main() {
         ),
       );
       expect(find.byType(HardFoldCoolerDemo), findsOneWidget);
+      // Rex cue below the felt — not a second footer inside the demo.
       expect(find.text('Tap Hard, Cooler, and Ego.'), findsOneWidget);
+      expect(find.text('Tap Hard, Cooler, and Ego'), findsNothing);
+      expect(
+        find.text('Hard folds save buy-ins — skip ego call-downs'),
+        findsNothing,
+      );
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
@@ -12537,6 +12543,164 @@ void main() {
     await tester.tap(find.text('SPR / commit'));
     await tester.pump();
     expect(controller.draft.choiceId, 'spr');
+    controller.dispose();
+  });
+
+  testWidgets('s6 hardfolds guided docks Fold vs triple barrels', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-10-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Often fold.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'Top pair weak kicker faces triple barrels from a solid unknown. Action?',
+      choices: const [
+        CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'call', label: 'Call it off'),
+        CourseChoice(
+          id: 'raise',
+          label: 'Hero raise',
+          action: 'RAISE',
+          amountBb: 40,
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('TPWK vs triple barrels — tap Fold.'),
+      findsOneWidget,
+    );
+    expect(find.text('FOLD'), findsOneWidget);
+    expect(find.text('CALL IT OFF'), findsOneWidget);
+    expect(find.text('HERO RAISE'), findsOneWidget);
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'fold');
+    controller.dispose();
+  });
+
+  testWidgets('s6 hardfolds scaffolded taps Cooler on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-10-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Cooler.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'KK loses to AA all-in pre. Review label?',
+      choices: const [
+        CourseChoice(id: 'cooler', label: 'Cooler'),
+        CourseChoice(id: 'mistake', label: 'Fold KK'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('KK loses to AA all-in — tap Cooler.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Cooler'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'cooler');
+    controller.dispose();
+  });
+
+  testWidgets('s6 hardfolds unguided taps Ego call on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-10-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Mistake.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Calling because you are "due"?',
+      choices: const [
+        CourseChoice(id: 'ego', label: 'Ego call'),
+        CourseChoice(id: 'ok', label: 'Sound play'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Calling because you are "due" — tap Ego call.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Ego call'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'ego');
+    controller.dispose();
+  });
+
+  testWidgets('s6 hardfolds checkpoint taps Cooler / mistake? on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-10-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Cooler or mistake?',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Review question after a big loss?',
+      choices: const [
+        CourseChoice(id: 'ask', label: 'Cooler / mistake?'),
+        CourseChoice(id: 'rtilt', label: 'Tilt harder'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Review after a big loss — tap Cooler / mistake?.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Cooler / mistake?'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'ask');
     controller.dispose();
   });
 

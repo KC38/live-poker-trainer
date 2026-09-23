@@ -360,6 +360,12 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // 3-bet / 4-bet by depth: tap commitment / ego / SPR reads on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-06-10-01-scaffolded' ||
+      activity.id == 'act-06-10-01-unguided' ||
+      activity.id == 'act-06-10-01-checkpoint') {
+    // Hard folds / coolers: tap cooler vs ego-call review labels on felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: tap notes on seat evidence felt.

@@ -350,6 +350,8 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Flopped set — tap Check.',
     'act-06-09-01-scaffolded' =>
       'Deep 3-bet miss — tap Small c-bet.',
+    'act-06-10-01-guided' =>
+      'TPWK vs triple barrels — tap Fold.',
     _ => null,
   };
 }
