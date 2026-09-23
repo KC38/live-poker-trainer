@@ -41,6 +41,7 @@ import 'package:live_poker_trainer/ui/course/widgets/capstone_3bet_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/capstone_multiway_deep_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/capstone_limped_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/capstone_4bet_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/live_warmup_prep_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
@@ -18253,6 +18254,228 @@ void main() {
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'fold');
+    controller.dispose();
+  });
+
+
+  testWidgets(
+    's7 live warmup explain taps Checklist Defaults One hand instead of Continue',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-07-11-01-explain',
+        order: 1,
+        stage: ActivityStage.explain,
+        renderer: ActivityRenderer.coachDialogue,
+        estimatedSeconds: 30,
+        accessibilityText:
+            'Live warm-up: short checklist, then play. Plan 10 wires the bridge.',
+        acceptedGrades: const [SoftGrade.recommended],
+        objectives: const ['List warm-up checklist items'],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'm',
+            kind: 'dialogue',
+            text:
+                'Live warm-up: short checklist, then play. Plan 10 wires the bridge.',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      var feltAck = 0;
+      await tester.pumpWidget(
+        _wrap(
+          CoachDialogueActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+            onFeltAcknowledge: () => feltAck += 1,
+          ),
+        ),
+      );
+      expect(find.byType(LiveWarmupPrepDemo), findsOneWidget);
+      expect(
+        find.text('Tap Checklist, Defaults, and One hand.'),
+        findsOneWidget,
+      );
+      expect(
+        find.text('Short checklist, then one coached hand'),
+        findsNothing,
+      );
+      expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+      expect(isTableRegionTapActivity(activity), isTrue);
+
+      for (final title in ['CHECKLIST', 'DEFAULTS', 'ONE HAND']) {
+        await tester.tap(find.text(title));
+        await tester.pump();
+      }
+      expect(feltAck, 1);
+      controller.dispose();
+    },
+  );
+
+  testWidgets('s7 live warmup guided taps Full list on felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-07-11-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Effective stacks, pot type, type notes, street map.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Warm-up checklist must include?',
+      choices: const [
+        CourseChoice(
+          id: 'list',
+          label: 'Stacks, pot type, type notes, street map',
+        ),
+        CourseChoice(
+          id: 'hud',
+          label: 'Ignore stacks and invent a random plan',
+        ),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Warm-up checklist — tap Full list.'), findsOneWidget);
+    await tester.tap(find.text('Full list'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'list');
+    controller.dispose();
+  });
+
+  testWidgets('s7 live warmup scaffolded taps Defaults + exploits on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-11-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Course defaults + exploit notes.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Carry into Live?',
+      choices: const [
+        CourseChoice(
+          id: 'defaults',
+          label: 'Course defaults plus typed exploits',
+        ),
+        CourseChoice(id: 'blank', label: 'Forget the course'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Carry into Live — tap Defaults + exploits.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Defaults + exploits'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'defaults');
+    controller.dispose();
+  });
+
+  testWidgets('s7 live warmup unguided taps Live cash NLH on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-11-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Live cash NLH only.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Scope reminder?',
+      choices: const [
+        CourseChoice(id: 'scope', label: 'Live cash NLH only'),
+        CourseChoice(
+          id: 'tourney',
+          label: 'Study other betting games instead',
+        ),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Scope reminder — tap Live cash NLH.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Live cash NLH'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'scope');
+    controller.dispose();
+  });
+
+  testWidgets('s7 live warmup checkpoint taps One hand on felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-07-11-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Load the plan, then execute one hand.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Warm-up goal?',
+      choices: const [
+        CourseChoice(
+          id: 'one',
+          label: 'Load checklist and execute one coached hand',
+        ),
+        CourseChoice(
+          id: 'grind',
+          label: 'Ignore checklist and mash buttons',
+        ),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Warm-up goal — tap One hand.'), findsOneWidget);
+    await tester.tap(find.text('One hand'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'one');
     controller.dispose();
   });
 
