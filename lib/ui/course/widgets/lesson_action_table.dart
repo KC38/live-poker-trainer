@@ -136,6 +136,23 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         facingBet: true,
         identifyUnavailable: true,
       );
+    case 'act-02-07-01-guided-ep':
+      return const LessonActionSpot(
+        heroCodes: ['Ah', 'Jh'],
+        potLabel: 'Pot 3',
+        villainLine: 'Folds to you',
+        streetLabel: 'Preflop · UTG · 9-max',
+        facingBet: false,
+        openPot: true,
+      );
+    case 'act-02-07-01-scaffolded-vs':
+      return const LessonActionSpot(
+        heroCodes: ['2h', '2d'],
+        potLabel: 'Pot 3 → 9',
+        villainLine: 'UTG opens to 6',
+        streetLabel: 'Preflop · Button · 9-max',
+        facingBet: true,
+      );
   }
   return null;
 }
@@ -233,6 +250,10 @@ bool isLessonActionTableActivity(CourseActivity activity) {
     return true;
   }
   if (id == 'act-01-06-02-jump-legal' &&
+      activity.renderer == ActivityRenderer.pokerActionSizing) {
+    return true;
+  }
+  if (id.startsWith('act-02-07-01-') &&
       activity.renderer == ActivityRenderer.pokerActionSizing) {
     return true;
   }
@@ -4460,7 +4481,10 @@ class LessonActionTable extends StatelessWidget {
           ] else if (spot.openPot) ...[
             const SizedBox(height: 8),
             Text(
-              'Pot is open to a bet',
+              // Preflop first-in is an open-raise; postflop open is a bet.
+              spot.streetLabel?.toLowerCase().contains('preflop') == true
+                  ? 'First in — open the pot'
+                  : 'Pot is open to a bet',
               style: GoogleFonts.manrope(
                 color: AppColors.gold,
                 fontSize: 11,
@@ -4677,7 +4701,14 @@ class _DockButton extends StatelessWidget {
             : switch (action.split(' ').first) {
               'FOLD' => 'FOLD',
               'CHECK' => 'CHECK',
-              'CALL' => authored.startsWith('CALL') ? authored : 'CALL',
+              // Keep limp chrome explicit — CALL alone hides the teachable
+              // mistake of limping first-in.
+              'CALL' =>
+                authored.startsWith('LIMP')
+                    ? authored
+                    : authored.startsWith('CALL')
+                    ? authored
+                    : 'CALL',
               'RAISE' => authored.startsWith('RAISE') ? authored : 'RAISE',
               'BET' => authored.startsWith('BET') ? authored : 'BET',
               _ => authored,
