@@ -631,11 +631,73 @@ void main() {
       ),
     );
     expect(find.byType(StreetsTimelineDemo), findsOneWidget);
+    // Felt embeds the tap hint — no duplicate gold line under the demo.
+    expect(find.text('Tap each street from preflop to river'), findsOneWidget);
+    expect(find.text('Tap each street from preflop to river.'), findsNothing);
     for (final title in ['PREFLOP', 'FLOP', 'TURN', 'RIVER']) {
       await tester.tap(find.text(title));
       await tester.pump();
     }
     expect(feltAck, 1);
+    controller.dispose();
+  });
+
+  testWidgets('streets explain hides outer tap hint under Nice!', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-04-01-explain-streets',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText: 'Four streets of a hand.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text: 'Four streets: preflop, flop, turn, river. Match bets to move on.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () {},
+        ),
+      ),
+    );
+    // Interactive felt embeds the only tap cue.
+    expect(find.text('Tap each street from preflop to river'), findsOneWidget);
+    controller.finishSubmit(
+      SubmitCourseStepResult(
+        attemptId: 'a1',
+        activityId: activity.id,
+        grade: SoftGrade.recommended,
+        feedback:
+            'Four streets: preflop, flop, turn, river. Match bets to move on.',
+        accepted: true,
+        lifeLost: false,
+        livesRemaining: 3,
+        xpAwarded: 10,
+        remediationRequired: false,
+        resume: const CourseResumePointer(
+          attemptId: 'a1',
+          lessonId: 'lesson-01-04-01-streets-and-order',
+          activityId: 'act-01-04-01-explain-streets',
+          activityIndex: 0,
+        ),
+        duplicate: false,
+      ),
+    );
+    await tester.pump();
+    expect(find.text('Tap each street from preflop to river'), findsNothing);
+    expect(find.text('Match bets to leave each street'), findsOneWidget);
     controller.dispose();
   });
 
@@ -5113,11 +5175,38 @@ void main() {
     expect(find.text('FLOP'), findsOneWidget);
     expect(find.text('TURN'), findsOneWidget);
     expect(find.text('RIVER'), findsOneWidget);
+    expect(find.text('Tap the streets from first to last.'), findsOneWidget);
+    expect(find.text('Build order here'), findsOneWidget);
+    expect(find.text('Tap streets below first → last'), findsNothing);
+    expect(find.text('Tap next'), findsNothing);
     await tester.tap(find.text('PREFLOP'));
     await tester.pump();
     await tester.tap(find.text('FLOP'));
     await tester.pump();
     expect(controller.draft.orderedIds, ['st-pre', 'st-flop']);
+    controller.finishSubmit(
+      SubmitCourseStepResult(
+        attemptId: 'a1',
+        activityId: activity.id,
+        grade: SoftGrade.recommended,
+        feedback: 'Preflop → flop → turn → river.',
+        accepted: true,
+        lifeLost: false,
+        livesRemaining: 3,
+        xpAwarded: 10,
+        remediationRequired: false,
+        resume: const CourseResumePointer(
+          attemptId: 'a1',
+          lessonId: 'lesson-01-04-01-streets-and-order',
+          activityId: 'act-01-04-01-guided-streets',
+          activityIndex: 1,
+        ),
+        duplicate: false,
+      ),
+    );
+    await tester.pump();
+    expect(find.text('Tap the streets from first to last.'), findsNothing);
+    expect(find.text('Checking…'), findsNothing);
     controller.dispose();
   });
 
@@ -5146,6 +5235,12 @@ void main() {
           showGuidance: false,
         ),
       ),
+    );
+    expect(find.text('Betting is live. Tap when this street is done.'), findsOneWidget);
+    // Felt-first: authored prompt dump stays off when Rex already coaches.
+    expect(
+      find.text('Flop betting is live. Tap when this street ends.'),
+      findsNothing,
     );
     expect(find.text('Bets matched'), findsWidgets);
     await tester.tap(find.text('Bets matched').first);

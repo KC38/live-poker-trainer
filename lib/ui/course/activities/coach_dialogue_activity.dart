@@ -340,11 +340,13 @@ class CoachDialogueActivity extends StatelessWidget {
           ),
         ],
         if (showGuidance &&
+            !locked &&
             visual.requiresFeltTap &&
             // These demos embed their own tap hint on the felt / chrome.
             visual.kind != CoachDialogueVisualKind.bestFive &&
             visual.kind != CoachDialogueVisualKind.passiveActions &&
-            visual.kind != CoachDialogueVisualKind.aggressiveActions) ...[
+            visual.kind != CoachDialogueVisualKind.aggressiveActions &&
+            visual.kind != CoachDialogueVisualKind.streetsTimeline) ...[
           const SizedBox(height: 10),
           _TapHint(text: visual.continueHint),
         ],
