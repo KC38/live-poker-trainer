@@ -4074,17 +4074,21 @@ void main() {
         ),
       );
       expect(find.byType(BlockersDemo), findsOneWidget);
-      // Rex cue below the felt — not a second footer inside the demo.
-      expect(find.text('Tap Block, Use, and No EV.'), findsOneWidget);
+      expect(find.text('Tap BLOCK next'), findsOneWidget);
+      expect(find.text('Tap Block, Use, and No EV.'), findsNothing);
       expect(find.text('Tap Block, Use, and No EV'), findsNothing);
       expect(find.text('Remove hands — skip EV decimals'), findsNothing);
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['BLOCK', 'USE', 'NO EV']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
+      await tester.tap(find.text('BLOCK'));
+      await tester.pump();
+      expect(find.text('Tap USE next'), findsOneWidget);
+      await tester.tap(find.text('USE'));
+      await tester.pump();
+      expect(find.text('Tap NO EV next'), findsOneWidget);
+      await tester.tap(find.text('NO EV'));
+      await tester.pump();
       expect(feltAck, 1);
       controller.dispose();
     },
