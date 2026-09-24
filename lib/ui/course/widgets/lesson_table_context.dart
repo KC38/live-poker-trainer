@@ -3482,11 +3482,15 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
     case 'act-01-05-01-checkpoint-side':
       return const LessonTableScene(
         layout: LessonTableLayout.potSideOutcomes,
+        // Outcome tiles teach side pots — no decoy face-down "Them".
+        villainSeatCount: 0,
         caption: 'You all-in short · others keep betting',
       );
     case 'act-01-05-01-unguided-pot':
       return const LessonTableScene(
         layout: LessonTableLayout.potOpenSizeOutcomes,
+        // Chip-total tiles teach pot math — no decoy face-down "Them".
+        villainSeatCount: 0,
         caption: '1/2 · BTN opens 6 · blinds still to act',
       );
     case 'act-01-02-01-scaffolded-spot':
@@ -6561,6 +6565,9 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive: 'Interactive side pot — tap what is true',
       semanticsStatic: 'Side pot outcomes',
       caption: scene.caption ?? 'You all-in short · others keep betting',
+      // No spot cards — keep teach densify; Rex owns the cue.
+      cueLabel: '',
+      minHeightFactor: 0.58,
       phases: [
         (
           region: LessonTableRegion.potSideForms,
@@ -6604,6 +6611,9 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive: 'Interactive pot size — tap the chip total',
       semanticsStatic: 'Open pot size outcomes',
       caption: scene.caption ?? '1/2 · BTN opens 6',
+      // No spot cards — keep teach densify; Rex owns the cue.
+      cueLabel: '',
+      minHeightFactor: 0.58,
       phases: [
         (
           region: LessonTableRegion.potChipsSeven,
