@@ -3593,14 +3593,20 @@ void main() {
       ),
     );
     expect(find.byType(RangeRewriteDemo), findsOneWidget);
-    expect(find.text('Tap Action, Rewrite, and Update.'), findsOneWidget);
+    expect(find.text('Tap ACTION next'), findsOneWidget);
+    expect(find.text('Tap Action, Rewrite, and Update.'), findsNothing);
+    expect(find.text('Tap Action, Rewrite, and Update'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['ACTION', 'REWRITE', 'UPDATE']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('ACTION'));
+    await tester.pump();
+    expect(find.text('Tap REWRITE next'), findsOneWidget);
+    await tester.tap(find.text('REWRITE'));
+    await tester.pump();
+    expect(find.text('Tap UPDATE next'), findsOneWidget);
+    await tester.tap(find.text('UPDATE'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
