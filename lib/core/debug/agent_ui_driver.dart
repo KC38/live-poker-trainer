@@ -114,31 +114,32 @@ final class AgentUiDriver {
     ).firstMatch(needleLower);
     if (cardKeyMatch != null) {
       final code = cardKeyMatch.group(1)!;
-      final keyNeedle = 'best-five-$code';
-      Element? keyed;
-      void visitKey(Element element) {
-        final key = element.widget.key;
-        if (key is ValueKey<String> &&
-            key.value.toLowerCase() == keyNeedle.toLowerCase()) {
-          keyed = element;
-          return;
+      for (final keyNeedle in ['best-five-$code', 'board-tap-$code']) {
+        Element? keyed;
+        void visitKey(Element element) {
+          final key = element.widget.key;
+          if (key is ValueKey<String> &&
+              key.value.toLowerCase() == keyNeedle.toLowerCase()) {
+            keyed = element;
+            return;
+          }
+          element.visitChildren(visitKey);
         }
-        element.visitChildren(visitKey);
-      }
 
-      binding.rootElement?.visitChildren(visitKey);
-      final hit = keyed;
-      if (hit != null) {
-        final ro = hit.renderObject;
-        if (ro is RenderBox && ro.hasSize && ro.attached) {
-          await _pointerTap(
-            ro.localToGlobal(ro.size.center(Offset.zero)),
-            label: 'key:$keyNeedle',
-          );
-          debugPrint(
-            'AgentUiDriver: pointer-tapped "$needle" -> key:$keyNeedle',
-          );
-          return;
+        binding.rootElement?.visitChildren(visitKey);
+        final hit = keyed;
+        if (hit != null) {
+          final ro = hit.renderObject;
+          if (ro is RenderBox && ro.hasSize && ro.attached) {
+            await _pointerTap(
+              ro.localToGlobal(ro.size.center(Offset.zero)),
+              label: 'key:$keyNeedle',
+            );
+            debugPrint(
+              'AgentUiDriver: pointer-tapped "$needle" -> key:$keyNeedle',
+            );
+            return;
+          }
         }
       }
     }
