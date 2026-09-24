@@ -4351,8 +4351,8 @@ void main() {
         ),
       );
       expect(find.byType(HardFoldCoolerDemo), findsOneWidget);
-      // Rex cue below the felt — not a second footer inside the demo.
-      expect(find.text('Tap Hard, Cooler, and Ego.'), findsOneWidget);
+      expect(find.text('Tap HARD next'), findsOneWidget);
+      expect(find.text('Tap Hard, Cooler, and Ego.'), findsNothing);
       expect(find.text('Tap Hard, Cooler, and Ego'), findsNothing);
       expect(
         find.text('Hard folds save buy-ins — skip ego call-downs'),
@@ -4361,10 +4361,14 @@ void main() {
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['HARD', 'COOLER', 'EGO']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
+      await tester.tap(find.text('HARD'));
+      await tester.pump();
+      expect(find.text('Tap COOLER next'), findsOneWidget);
+      await tester.tap(find.text('COOLER'));
+      await tester.pump();
+      expect(find.text('Tap EGO next'), findsOneWidget);
+      await tester.tap(find.text('EGO'));
+      await tester.pump();
       expect(feltAck, 1);
       controller.dispose();
     },

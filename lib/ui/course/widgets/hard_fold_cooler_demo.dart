@@ -37,8 +37,16 @@ class _HardFoldCoolerDemoState extends State<HardFoldCoolerDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in HardFoldCoolerDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -67,34 +75,43 @@ class _HardFoldCoolerDemoState extends State<HardFoldCoolerDemo> {
               for (var i = 0; i < HardFoldCoolerDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _HardFoldTile(
-                    label: HardFoldCoolerDemo.points[i].label,
-                    caption: HardFoldCoolerDemo.points[i].caption,
-                    color: HardFoldCoolerDemo.points[i].color,
-                    selected:
-                        _tapped.contains(HardFoldCoolerDemo.points[i].label),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed: widget.interactive
-                        ? () => _onTap(HardFoldCoolerDemo.points[i].label)
-                        : null,
+                  child: _HardFoldSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == HardFoldCoolerDemo.points[i].label,
+                    child: _HardFoldTile(
+                      label: HardFoldCoolerDemo.points[i].label,
+                      caption: HardFoldCoolerDemo.points[i].caption,
+                      color: HardFoldCoolerDemo.points[i].color,
+                      selected: _tapped.contains(
+                        HardFoldCoolerDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed: widget.interactive
+                          ? () =>
+                              _onTap(HardFoldCoolerDemo.points[i].label)
+                          : null,
+                    ),
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues Hard / Cooler / Ego — no dupe footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Hard folds save buy-ins — skip ego call-downs',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Hard folds save buy-ins — skip ego call-downs'
+                    : 'Tap ${next.label} next')
+                : 'Hard folds save buy-ins — skip ego call-downs',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
@@ -161,3 +178,73 @@ class _HardFoldTile extends StatelessWidget {
     return GestureDetector(onTap: onPressed, child: child);
   }
 }
+
+class _HardFoldSoftPulse extends StatefulWidget {
+  const _HardFoldSoftPulse({required this.active, required this.child});
+
+  final bool active;
+  final Widget child;
+
+  @override
+  State<_HardFoldSoftPulse> createState() => _HardFoldSoftPulseState();
+}
+
+class _HardFoldSoftPulseState extends State<_HardFoldSoftPulse>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+    if (widget.active) {
+      _pulse.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _HardFoldSoftPulse oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.active && !_pulse.isAnimating) {
+      _pulse.repeat(reverse: true);
+    } else if (!widget.active && _pulse.isAnimating) {
+      _pulse.stop();
+      _pulse.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.active) return widget.child;
+    return AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final glow = 0.22 + (_pulse.value * 0.38);
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.gold.withValues(alpha: glow),
+                blurRadius: 10 + (_pulse.value * 8),
+                spreadRadius: 0.5 + (_pulse.value * 1.2),
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
+      child: widget.child,
+    );
+  }
+}
+
