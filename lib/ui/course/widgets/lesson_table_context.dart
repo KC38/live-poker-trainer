@@ -2597,6 +2597,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
     case 'act-04-05-01-guided':
       return const LessonTableScene(
         layout: LessonTableLayout.sprGuidedOutcomes,
+        villainSeatCount: 0,
         highlight: LessonTableHighlight.none,
         caption: 'Stack 80bb · Pot 20bb',
       );
