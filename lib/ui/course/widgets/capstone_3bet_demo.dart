@@ -47,71 +47,94 @@ class _Capstone3betDemoState extends State<Capstone3betDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final child = Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.feltLight, AppColors.feltDark],
-        ),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'Capstone · 3-bet pot',
-            style: GoogleFonts.manrope(
-              color: AppColors.slate,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-            ),
+    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final minFelt =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final child = ConstrainedBox(
+      constraints:
+          minFelt != null
+              ? BoxConstraints(minHeight: minFelt)
+              : const BoxConstraints(),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+        alignment: minFelt != null ? Alignment.center : null,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [AppColors.feltLight, AppColors.feltDark],
           ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              for (var i = 0; i < Capstone3betDemo.points.length; i++) ...[
-                if (i > 0) const SizedBox(width: 8),
-                Expanded(
-                  child: _ThreeBetSoftPulse(
-                    active:
-                        widget.interactive &&
-                        widget.enabled &&
-                        next?.label == Capstone3betDemo.points[i].label,
-                    child: _Capstone3betTile(
-                      label: Capstone3betDemo.points[i].label,
-                      caption: Capstone3betDemo.points[i].caption,
-                      color: Capstone3betDemo.points[i].color,
-                      selected: _tapped.contains(
-                        Capstone3betDemo.points[i].label,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: AppColors.feltBorder.withValues(alpha: 0.85),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Capstone · 3-bet pot',
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                for (var i = 0; i < Capstone3betDemo.points.length; i++) ...[
+                  if (i > 0) const SizedBox(width: 8),
+                  Expanded(
+                    child: _ThreeBetSoftPulse(
+                      active:
+                          widget.interactive &&
+                          widget.enabled &&
+                          next?.label == Capstone3betDemo.points[i].label,
+                      child: _Capstone3betTile(
+                        label: Capstone3betDemo.points[i].label,
+                        caption: Capstone3betDemo.points[i].caption,
+                        color: Capstone3betDemo.points[i].color,
+                        selected: _tapped.contains(
+                          Capstone3betDemo.points[i].label,
+                        ),
+                        enabled: widget.interactive && widget.enabled,
+                        onPressed: widget.interactive
+                            ? () => _onTap(Capstone3betDemo.points[i].label)
+                            : null,
                       ),
-                      enabled: widget.interactive && widget.enabled,
-                      onPressed: widget.interactive
-                          ? () => _onTap(Capstone3betDemo.points[i].label)
-                          : null,
                     ),
                   ),
-                ),
+                ],
               ],
-            ],
-          ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? (next == null
-                    ? 'Short prompts — plan by SPR, then close clean'
-                    : 'Tap ${next.label} next')
-                : 'Short prompts — plan by SPR, then close clean',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+            const SizedBox(height: 14),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.feltDark.withValues(alpha: 0.65),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: AppColors.gold.withValues(alpha: 0.45),
+                ),
+              ),
+              child: Text(
+                widget.interactive
+                    ? (next == null
+                        ? 'Short prompts — plan by SPR, then close clean'
+                        : 'Tap ${next.label} next')
+                    : 'Short prompts — plan by SPR, then close clean',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.manrope(
+                  color: AppColors.gold,
+                  fontSize: expandTeach ? 14 : 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
     if (widget.interactive) return child;
