@@ -3010,12 +3010,27 @@ await tester.tap(find.text('BRICK'));
     );
     expect(find.byType(RiverBinaryDemo), findsOneWidget);
     expect(find.text('Tap VALUE next'), findsOneWidget);
-    expect(find.text('Tap Value, Bluff, Catch, and Fold.'), findsNothing);
     expect(find.text('Tap Value, Bluff, Catch, and Fold'), findsNothing);
+    expect(find.text('Tap Value, Bluff, Catch, and Fold.'), findsNothing);
+    expect(
+      find.text('Value · bluff · bluff-catch · fold'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(RiverBinaryDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
-    await tester.tap(find.text('VALUE'));
+await tester.tap(find.text('VALUE'));
     await tester.pump();
     expect(find.text('Tap BLUFF next'), findsOneWidget);
     await tester.tap(find.text('BLUFF'));
@@ -3027,6 +3042,15 @@ await tester.tap(find.text('BRICK'));
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Value · bluff · bluff-catch · fold'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(RiverBinaryDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
