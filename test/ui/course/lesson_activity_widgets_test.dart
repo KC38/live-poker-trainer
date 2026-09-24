@@ -4409,8 +4409,8 @@ void main() {
         ),
       );
       expect(find.byType(SelectiveAggressionDemo), findsOneWidget);
-      // Rex cue below the felt — not a second footer inside the demo.
-      expect(find.text('Tap Tight, Barrel, and Sample.'), findsOneWidget);
+      expect(find.text('Tap TIGHT next'), findsOneWidget);
+      expect(find.text('Tap Tight, Barrel, and Sample.'), findsNothing);
       expect(find.text('Tap Tight, Barrel, and Sample'), findsNothing);
       expect(
         find.text('Tight entry, then barrels with a plan — count samples'),
@@ -4419,10 +4419,14 @@ void main() {
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['TIGHT', 'BARREL', 'SAMPLE']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
+      await tester.tap(find.text('TIGHT'));
+      await tester.pump();
+      expect(find.text('Tap BARREL next'), findsOneWidget);
+      await tester.tap(find.text('BARREL'));
+      await tester.pump();
+      expect(find.text('Tap SAMPLE next'), findsOneWidget);
+      await tester.tap(find.text('SAMPLE'));
+      await tester.pump();
       expect(feltAck, 1);
       controller.dispose();
     },
