@@ -15581,6 +15581,8 @@ void main() {
       findsOneWidget,
     );
     expect(find.textContaining('Board Kc'), findsNothing);
+    // SoftPulse invite is active on category tiles (not a prose footer quiz).
+    expect(find.text('Tap the hand category you made.'), findsOneWidget);
 
     await tester.tap(find.text('Flush'));
     await tester.pump();
