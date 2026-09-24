@@ -2806,7 +2806,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllPointsTapped: onBlockersAcknowledge,
         ),
         CoachDialogueVisualKind.defendEnough => DefendEnoughDemo(
-          interactive: onDefendEnoughAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPointsTapped: onDefendEnoughAcknowledge,
         ),
