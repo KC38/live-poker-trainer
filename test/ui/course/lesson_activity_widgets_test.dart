@@ -3807,12 +3807,27 @@ await tester.tap(find.text('RARE'));
     );
     expect(find.byType(NitModelDemo), findsOneWidget);
     expect(find.text('Tap NIT next'), findsOneWidget);
-    expect(find.text('Tap Nit, Narrow, and Respect.'), findsNothing);
     expect(find.text('Tap Nit, Narrow, and Respect'), findsNothing);
+    expect(find.text('Tap Nit, Narrow, and Respect.'), findsNothing);
+    expect(
+      find.text('Narrow entry · respect heavy action'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(NitModelDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
-    await tester.tap(find.text('NIT'));
+await tester.tap(find.text('NIT'));
     await tester.pump();
     expect(find.text('Tap NARROW next'), findsOneWidget);
     await tester.tap(find.text('NARROW'));
@@ -3821,6 +3836,15 @@ await tester.tap(find.text('RARE'));
     await tester.tap(find.text('RESPECT'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Narrow entry · respect heavy action'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(NitModelDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
