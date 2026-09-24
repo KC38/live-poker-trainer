@@ -16562,7 +16562,8 @@ void main() {
         ),
       );
       expect(find.byType(PotTypePlansDemo), findsOneWidget);
-      expect(find.text('Tap Limped, SRP, and 3-4bet.'), findsOneWidget);
+      expect(find.text('Tap LIMPED next'), findsOneWidget);
+      expect(find.text('Tap Limped, SRP, and 3-4bet.'), findsNothing);
       expect(find.text('Tap Limped, SRP, and 3-4bet'), findsNothing);
       expect(
         find.text('Pot type sets ranges and SPR — plan accordingly'),
@@ -16571,10 +16572,14 @@ void main() {
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['LIMPED', 'SRP', '3-4BET']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
+      await tester.tap(find.text('LIMPED'));
+      await tester.pump();
+      expect(find.text('Tap SRP next'), findsOneWidget);
+      await tester.tap(find.text('SRP'));
+      await tester.pump();
+      expect(find.text('Tap 3-4BET next'), findsOneWidget);
+      await tester.tap(find.text('3-4BET'));
+      await tester.pump();
       expect(feltAck, 1);
       controller.dispose();
     },
