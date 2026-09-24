@@ -4269,6 +4269,17 @@ void main() {
       expect(find.text('Nuts unlikely vs still live'), findsNothing);
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
+      final teachHeight =
+          tester.getSize(find.byType(CappedUncappedDemo)).height;
+      expect(
+        teachHeight,
+        moreOrLessEquals(
+          tester.view.physicalSize.height /
+              tester.view.devicePixelRatio *
+              0.58,
+          epsilon: 1,
+        ),
+      );
 
       await tester.tap(find.text('CAPPED'));
       await tester.pump();
@@ -4279,6 +4290,12 @@ void main() {
       await tester.tap(find.text('NUTS'));
       await tester.pump();
       expect(feltAck, 1);
+      // Lock clears enabled / ack — densified shell must stay filled.
+      expect(find.text('Nuts unlikely vs still live'), findsOneWidget);
+      expect(
+        tester.getSize(find.byType(CappedUncappedDemo)).height,
+        moreOrLessEquals(teachHeight, epsilon: 1),
+      );
       controller.dispose();
     },
   );
