@@ -7698,6 +7698,7 @@ class LessonActionTable extends StatelessWidget {
                 : MediaQuery.sizeOf(context).height * 0.55;
         // Spacers need spare vertical room; short test shells pack tight.
         final breathe = feltHeight >= 420;
+        final cardScale = breathe ? 1.4 : 1.0;
 
         Widget sceneStatus() {
           if (spot.feltStatusLine != null) {
@@ -7718,7 +7719,7 @@ class LessonActionTable extends StatelessWidget {
           return statusLine('No bet to match', color: AppColors.slate);
         }
 
-        final scene = Column(
+        final header = Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (spot.streetLabel != null)
@@ -7726,17 +7727,17 @@ class LessonActionTable extends StatelessWidget {
                 spot.streetLabel!,
                 style: GoogleFonts.manrope(
                   color: AppColors.slate,
-                  fontSize: 13,
+                  fontSize: breathe ? 15 : 13,
                   fontWeight: FontWeight.w700,
                 ),
               ),
             if (spot.streetLabel != null && spot.villainLine != null)
-              const SizedBox(height: 10),
+              SizedBox(height: breathe ? 12 : 10),
             if (spot.villainLine != null)
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
+                padding: EdgeInsets.symmetric(
+                  horizontal: breathe ? 14 : 12,
+                  vertical: breathe ? 10 : 8,
                 ),
                 decoration: BoxDecoration(
                   color: AppColors.bgDark.withValues(alpha: 0.45),
@@ -7747,12 +7748,12 @@ class LessonActionTable extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: GoogleFonts.manrope(
                     color: AppColors.cream,
-                    fontSize: 14,
+                    fontSize: breathe ? 15 : 14,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
-            const SizedBox(height: 12),
+            SizedBox(height: breathe ? 14 : 12),
             Wrap(
               alignment: WrapAlignment.center,
               spacing: 8,
@@ -7762,18 +7763,28 @@ class LessonActionTable extends StatelessWidget {
                 if (spot.stackLabel != null) _PotChip(label: spot.stackLabel!),
               ],
             ),
-            const SizedBox(height: 16),
+          ],
+        );
+
+        final cards = Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
             if (board.isNotEmpty)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   for (var i = 0; i < board.length; i++) ...[
-                    if (i > 0) const SizedBox(width: 6),
-                    MiniCard(card: board[i], size: cardSize),
+                    if (i > 0) SizedBox(width: breathe ? 8 : 6),
+                    MiniCard(
+                      card: board[i],
+                      size: cardSize,
+                      scale: cardScale,
+                    ),
                   ],
                 ],
               ),
-            if (board.isNotEmpty && hero.isNotEmpty) const SizedBox(height: 14),
+            if (board.isNotEmpty && hero.isNotEmpty)
+              SizedBox(height: breathe ? 16 : 14),
             if (hero.isNotEmpty)
               Column(
                 mainAxisSize: MainAxisSize.min,
@@ -7782,24 +7793,39 @@ class LessonActionTable extends StatelessWidget {
                     'You',
                     style: GoogleFonts.manrope(
                       color: AppColors.cream,
-                      fontSize: 12,
+                      fontSize: breathe ? 13 : 12,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: breathe ? 8 : 6),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       for (var i = 0; i < hero.length; i++) ...[
-                        if (i > 0) const SizedBox(width: 8),
-                        MiniCard(card: hero[i], size: cardSize),
+                        if (i > 0) SizedBox(width: breathe ? 10 : 8),
+                        MiniCard(
+                          card: hero[i],
+                          size: cardSize,
+                          scale: cardScale,
+                        ),
                       ],
                     ],
                   ),
                 ],
               ),
+          ],
+        );
+
+        final status = sceneStatus();
+
+        final packed = Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            header,
+            const SizedBox(height: 16),
+            cards,
             const SizedBox(height: 14),
-            sceneStatus(),
+            status,
           ],
         );
 
@@ -7810,7 +7836,12 @@ class LessonActionTable extends StatelessWidget {
               bounded
                   ? null
                   : BoxConstraints(minHeight: feltHeight),
-          padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+          padding: EdgeInsets.fromLTRB(
+            12,
+            breathe ? 18 : 14,
+            12,
+            breathe ? 18 : 14,
+          ),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
               begin: Alignment.topCenter,
@@ -7822,17 +7853,17 @@ class LessonActionTable extends StatelessWidget {
               color: AppColors.feltBorder.withValues(alpha: 0.85),
             ),
           ),
+          // Tall teach: pin header / cards / status to the felt edges so
+          // spare height sits *between* clusters — not as empty green
+          // Spacers above and below a centered scene.
           child:
               breathe
                   ? Column(
                     mainAxisSize: MainAxisSize.max,
-                    children: [
-                      const Spacer(flex: 2),
-                      scene,
-                      const Spacer(flex: 2),
-                    ],
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [header, cards, status],
                   )
-                  : scene,
+                  : packed,
         );
       },
     );
