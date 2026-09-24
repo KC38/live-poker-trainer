@@ -5050,15 +5050,23 @@ class LessonTableContext extends StatelessWidget {
           _buildFiveTypeUncertainOutcomes(),
       LessonTableLayout.fiveTypeRetireOutcomes =>
           _buildFiveTypeRetireOutcomes(),
-      LessonTableLayout.holeCards => _buildHoleCards(),
+      LessonTableLayout.holeCards => _buildHoleCards(context),
     };
   }
 
-  Widget _feltShell({required Widget child, required String semanticsLabel}) {
+  Widget _feltShell({
+    required Widget child,
+    required String semanticsLabel,
+    double? minHeight,
+    bool centerChild = false,
+  }) {
     return Semantics(
       label: semanticsLabel,
       child: Container(
         width: double.infinity,
+        constraints:
+            minHeight != null ? BoxConstraints(minHeight: minHeight) : null,
+        alignment: centerChild ? Alignment.center : null,
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 8),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
@@ -11144,7 +11152,7 @@ class LessonTableContext extends StatelessWidget {
     );
   }
 
-  Widget _buildHoleCards() {
+  Widget _buildHoleCards(BuildContext context) {
     final hero = scene.heroCodes
         .map(CardModel.fromCode)
         .toList(growable: false);
@@ -11166,14 +11174,29 @@ class LessonTableContext extends StatelessWidget {
         villainFaceUp.isNotEmpty ||
         scene.villainSeatCount > 0 ||
         scene.showDealerChip;
+    // Solo hero teach (S1 explain) — grow felt into the tall-phone void so
+    // navy empty space becomes green felt with centered hole cards.
+    final expandTeach =
+        pulseHero &&
+        board.isEmpty &&
+        !showVillainRail &&
+        !scene.showMuck;
+    final minFelt =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.42 : null;
+    final heroScale = expandTeach ? 1.35 : 1.0;
 
     return _feltShell(
       semanticsLabel: _semanticsLabel(hero, board, villainFaceUp),
+      minHeight: minFelt,
+      centerChild: expandTeach,
       child: Padding(
         padding: EdgeInsets.symmetric(
           vertical: pulseHero || pulseBoard ? 8 : 0,
         ),
         child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment:
+            expandTeach ? MainAxisAlignment.center : MainAxisAlignment.start,
         children: [
           if (showVillainRail) ...[
             Row(
@@ -11336,7 +11359,11 @@ class LessonTableContext extends StatelessWidget {
                     children: [
                       for (var i = 0; i < hero.length; i++) ...[
                         if (i > 0) const SizedBox(width: 8),
-                        MiniCard(card: hero[i], size: MiniCardSize.hero),
+                        MiniCard(
+                          card: hero[i],
+                          size: MiniCardSize.hero,
+                          scale: heroScale,
+                        ),
                       ],
                     ],
                   ),
@@ -11351,7 +11378,7 @@ class LessonTableContext extends StatelessWidget {
               textAlign: TextAlign.center,
               style: GoogleFonts.manrope(
                 color: AppColors.gold,
-                fontSize: 12,
+                fontSize: expandTeach ? 14 : 12,
                 fontWeight: FontWeight.w700,
               ),
             ),

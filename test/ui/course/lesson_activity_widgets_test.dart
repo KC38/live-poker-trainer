@@ -153,6 +153,18 @@ void main() {
     expect(find.text('Rex'), findsWidgets);
     expect(find.text('Tap your cards'), findsOneWidget);
     expect(find.text('Tap your two cards on the felt.'), findsNothing);
+    // Solo hero teach expands felt into the tall-phone void (~42% height).
+    final felt = find.byWidgetPredicate(
+      (w) =>
+          w is Container &&
+          w.decoration is BoxDecoration &&
+          (w.decoration! as BoxDecoration).gradient != null,
+    );
+    expect(felt, findsWidgets);
+    final feltH = tester.getSize(felt.first).height;
+    expect(feltH, greaterThanOrEqualTo(tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.35));
     controller.dispose();
   });
 
