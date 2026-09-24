@@ -3122,14 +3122,20 @@ void main() {
       ),
     );
     expect(find.byType(ManiacModelDemo), findsOneWidget);
-    expect(find.text('Tap Maniac, Entry, and Aggro.'), findsOneWidget);
+    expect(find.text('Tap MANIAC next'), findsOneWidget);
+    expect(find.text('Tap Maniac, Entry, and Aggro.'), findsNothing);
+    expect(find.text('Tap Maniac, Entry, and Aggro'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['MANIAC', 'ENTRY', 'AGGRO']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('MANIAC'));
+    await tester.pump();
+    expect(find.text('Tap ENTRY next'), findsOneWidget);
+    await tester.tap(find.text('ENTRY'));
+    await tester.pump();
+    expect(find.text('Tap AGGRO next'), findsOneWidget);
+    await tester.tap(find.text('AGGRO'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
