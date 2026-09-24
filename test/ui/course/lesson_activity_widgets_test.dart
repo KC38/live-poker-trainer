@@ -16516,7 +16516,20 @@ void main() {
     );
     expect(
       resolveSelectIdentifyPresentation(showdown),
-      SelectIdentifyPresentation.showdownTap,
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(showdown), isTrue);
+    expect(
+      resolveLessonTableScene(showdown)?.layout,
+      LessonTableLayout.handRankShowdownOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: showdown.id,
+        region: LessonTableRegion.handRankYouWin,
+        choices: showdown.choices,
+      ),
+      'you-win',
     );
 
     expect(
@@ -16698,7 +16711,7 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('showdown tap selects your flush over straight', (tester) async {
+  testWidgets('hand ranks showdown taps You on densified felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-01-02-01-checkpoint-winner',
       order: 5,
@@ -16714,6 +16727,32 @@ void main() {
         CourseChoice(id: 'split', label: 'Chop the pot'),
       ],
     );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.handRankShowdownOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.handRankYouWin,
+        choices: activity.choices,
+      ),
+      'you-win',
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.handRankChop,
+        choices: activity.choices,
+      ),
+      'split',
+    );
+
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
       _wrap(
@@ -16724,20 +16763,27 @@ void main() {
         ),
       ),
     );
-    // Felt teaches You vs Them — docks only keep Chop.
-    expect(find.byType(LessonTableContext), findsOneWidget);
-    expect(find.text('Your flush'), findsNothing);
-    expect(find.text('Their straight'), findsNothing);
-    expect(find.text('Chop the pot'), findsOneWidget);
-    expect(find.text('Tap You or Them on the felt.'), findsOneWidget);
     expect(
-      find.text('Showdown — tap who wins on the felt.'),
+      find.text('Flush vs straight on the river — tap who wins.'),
       findsOneWidget,
     );
+    expect(find.text('Showdown — tap who wins.'), findsNothing);
+    expect(find.text('Chop the pot'), findsNothing);
+    expect(find.text('Tap You or Them on the felt.'), findsNothing);
+    expect(find.byType(HandExampleTile), findsNothing);
+    // Spot rail + outcome tile both label You / Them.
+    expect(find.text('You'), findsWidgets);
+    expect(find.text('Them'), findsWidgets);
+    expect(find.text('Chop'), findsOneWidget);
+    expect(find.text('Club flush'), findsOneWidget);
+    expect(find.text('Straight?'), findsOneWidget);
+    expect(find.text('Split pot?'), findsOneWidget);
+    // Checkpoint: no SoftPulse spoiler cue.
+    expect(find.text('Tap You.'), findsNothing);
 
     var autoSubmits = 0;
     controller.onAutoSubmit = () => autoSubmits += 1;
-    await tester.tap(find.text('You').first);
+    await tester.tap(find.text('Club flush'));
     await tester.pump();
     expect(controller.draft.choiceId, 'you-win');
     expect(autoSubmits, 1);
