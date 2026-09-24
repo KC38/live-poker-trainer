@@ -91,8 +91,8 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     return SelectIdentifyPresentation.handCategoryTap;
   }
   if (activity.id == 'act-02-07-02-jump-family') {
-    // Jump: see Ah5h on felt, tap the starting-hand family tile.
-    return SelectIdentifyPresentation.handCategoryTap;
+    // Jump: tap Suited ace / Pocket pair / Trash on densified holes felt.
+    return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-02-02-01-guided-pair') {
     // Hand families: tap Pocket pair / Suited ace / Broadway on densified felt.

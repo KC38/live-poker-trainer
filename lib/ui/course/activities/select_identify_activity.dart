@@ -332,6 +332,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'You raised early — tap what went wrong.',
       'act-02-07-02-jump-pos' =>
           'Tap the seat right before the button.',
+      'act-02-07-02-jump-family' =>
+          'Look at your holes — tap the family they belong to.',
       'act-02-07-02-jump-stack' =>
           'Effective stack is the shorter one — tap it.',
       'act-02-02-01-guided-pair' =>
@@ -743,6 +745,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-02-02-01-scaffolded-broadway' ||
             widget.activity.id == 'act-02-02-01-unguided-sc' ||
             widget.activity.id == 'act-02-02-01-checkpoint-trash' ||
+            widget.activity.id == 'act-02-07-02-jump-family' ||
             widget.activity.id == 'act-03-01-01-guided' ||
             widget.activity.id == 'act-03-01-01-scaffolded' ||
             widget.activity.id == 'act-03-01-01-unguided' ||

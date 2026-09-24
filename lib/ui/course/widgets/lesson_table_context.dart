@@ -245,6 +245,15 @@ enum LessonTableRegion {
   /// Hand-family checkpoint distractor: suited ace.
   handFamilyCpSuitedAce,
 
+  /// S2 jump family: suited ace (correct).
+  jumpFamilySuitedAce,
+
+  /// S2 jump family distractor: pocket pair.
+  jumpFamilyPair,
+
+  /// S2 jump family distractor: offsuit trash.
+  jumpFamilyTrash,
+
   /// Turn guided: blank turn is a brick (correct).
   turnBrick,
 
@@ -1553,6 +1562,9 @@ enum LessonTableLayout {
   /// Hand-family checkpoint: trash vs pair vs suited ace.
   handFamilyCheckpointOutcomes,
 
+  /// S2 jump: suited ace vs pair vs trash.
+  jumpFamilyOutcomes,
+
   /// Turn guided: brick vs scare vs always-change.
   turnBrickScareOutcomes,
 
@@ -2215,9 +2227,10 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-02-07-02-jump-family':
       return const LessonTableScene(
+        layout: LessonTableLayout.jumpFamilyOutcomes,
         heroCodes: ['Ah', '5h'],
         villainSeatCount: 0,
-        highlight: LessonTableHighlight.hero,
+        highlight: LessonTableHighlight.none,
         caption: 'Your holes',
       );
     case 'act-02-02-01-guided-pair':
@@ -3766,6 +3779,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.handFamilyCpSuitedAce => pick('hf-suited-ace'),
         _ => null,
       };
+    case 'act-02-07-02-jump-family':
+      return switch (region) {
+        LessonTableRegion.jumpFamilySuitedAce => pick('j2-sa'),
+        LessonTableRegion.jumpFamilyPair => pick('j2-pair'),
+        LessonTableRegion.jumpFamilyTrash => pick('j2-trash'),
+        _ => null,
+      };
     case 'act-03-03-01-guided':
       return switch (region) {
         LessonTableRegion.outsCleanAces => pick('outs-3'),
@@ -4992,6 +5012,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-02-02-01-scaffolded-broadway' ||
       activity.id == 'act-02-02-01-unguided-sc' ||
       activity.id == 'act-02-02-01-checkpoint-trash' ||
+      activity.id == 'act-02-07-02-jump-family' ||
       activity.id == 'act-03-01-01-guided' ||
       activity.id == 'act-03-01-01-scaffolded' ||
       activity.id == 'act-03-01-01-unguided' ||
@@ -5317,6 +5338,7 @@ class LessonTableContext extends StatelessWidget {
           _buildHandFamilyUnguidedOutcomes(),
       LessonTableLayout.handFamilyCheckpointOutcomes =>
           _buildHandFamilyCheckpointOutcomes(),
+      LessonTableLayout.jumpFamilyOutcomes => _buildJumpFamilyOutcomes(),
       LessonTableLayout.turnBrickScareOutcomes => _buildTurnBrickScareOutcomes(),
       LessonTableLayout.turnScarePlanOutcomes => _buildTurnScarePlanOutcomes(),
       LessonTableLayout.riverJobOutcomes => _buildRiverJobOutcomes(),
@@ -7040,6 +7062,53 @@ class LessonTableContext extends StatelessWidget {
           title: 'Suited ace',
           detail: 'Ace + suited?',
           visual: miniPair('Ah', '9h'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildJumpFamilyOutcomes() {
+    Widget miniPair(String a, String b) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          MiniCard(
+            card: CardModel.fromCode(a),
+            size: MiniCardSize.tiny,
+          ),
+          const SizedBox(width: 2),
+          MiniCard(
+            card: CardModel.fromCode(b),
+            size: MiniCardSize.tiny,
+          ),
+        ],
+      );
+    }
+
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive jump family — tap Suited ace, Pocket pair, or Offsuit trash',
+      semanticsStatic: 'Jump family outcomes',
+      caption: scene.caption ?? 'Your holes',
+      phases: [
+        (
+          region: LessonTableRegion.jumpFamilySuitedAce,
+          title: 'Suited ace',
+          detail: 'Ace + suited',
+          visual: miniPair('Ah', '5h'),
+        ),
+        (
+          region: LessonTableRegion.jumpFamilyPair,
+          title: 'Pocket pair',
+          detail: 'Matching ranks',
+          visual: miniPair('8h', '8c'),
+        ),
+        (
+          region: LessonTableRegion.jumpFamilyTrash,
+          title: 'Offsuit trash',
+          detail: 'Weak offsuit',
+          visual: miniPair('7c', '2d'),
         ),
       ],
     );
