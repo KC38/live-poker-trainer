@@ -4128,6 +4128,1282 @@ class _ThreeBetSqueezeDemoState extends State<ThreeBetSqueezeDemo> {
   }
 }
 
+class _MultiStreetPlanDemoState extends State<MultiStreetPlanDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= MultiStreetPlanDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in MultiStreetPlanDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final next = _nextPoint;
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Plan every street',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < MultiStreetPlanDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == MultiStreetPlanDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: MultiStreetPlanDemo.points[i].label,
+                      caption: MultiStreetPlanDemo.points[i].caption,
+                      color: MultiStreetPlanDemo.points[i].color,
+                      selected: _tapped.contains(
+                        MultiStreetPlanDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(
+                                    MultiStreetPlanDemo.points[i].label,
+                                  )
+                              : null,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Flop choice answers turn and river'
+                    : 'Tap ${next.label} next')
+                : 'Flop choice answers turn and river',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
+/// Value / pressure / size tiles for sizing-language explain demos.
+class SizingLanguageDemo extends StatefulWidget {
+  /// Creates the demo.
+  const SizingLanguageDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'VALUE', caption: 'Looks like value', color: AppColors.gold),
+    (label: 'PRESSURE', caption: 'Looks like pressure', color: AppColors.danger),
+    (label: 'SIZE', caption: 'Says which story', color: AppColors.cream),
+  ];
+
+  @override
+  State<SizingLanguageDemo> createState() => _SizingLanguageDemoState();
+}
+
+class _SizingLanguageDemoState extends State<SizingLanguageDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= SizingLanguageDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in SizingLanguageDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final next = _nextPoint;
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Size is language',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < SizingLanguageDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == SizingLanguageDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: SizingLanguageDemo.points[i].label,
+                      caption: SizingLanguageDemo.points[i].caption,
+                      color: SizingLanguageDemo.points[i].color,
+                      selected: _tapped.contains(
+                        SizingLanguageDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () =>
+                                  _onTap(SizingLanguageDemo.points[i].label)
+                              : null,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Value looks like value · pressure looks like pressure'
+                    : 'Tap ${next.label} next')
+                : 'Value looks like value · pressure looks like pressure',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
+/// SPR / low / high tiles for stack-to-pot explain demos.
+class SprDepthDemo extends StatefulWidget {
+  /// Creates the demo.
+  const SprDepthDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'SPR', caption: 'Stack ÷ pot', color: AppColors.gold),
+    (label: 'LOW', caption: 'Commit', color: AppColors.danger),
+    (label: 'HIGH', caption: 'Maneuver', color: AppColors.cream),
+  ];
+
+  @override
+  State<SprDepthDemo> createState() => _SprDepthDemoState();
+}
+
+class _SprDepthDemoState extends State<SprDepthDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= SprDepthDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in SprDepthDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final next = _nextPoint;
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Stack-to-pot ratio',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < SprDepthDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == SprDepthDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: SprDepthDemo.points[i].label,
+                      caption: SprDepthDemo.points[i].caption,
+                      color: SprDepthDemo.points[i].color,
+                      selected: _tapped.contains(SprDepthDemo.points[i].label),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(SprDepthDemo.points[i].label)
+                              : null,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Low SPR: commit · High SPR: maneuver'
+                    : 'Tap ${next.label} next')
+                : 'Low SPR: commit · High SPR: maneuver',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
+/// Enters / calls / folds tiles for player-observe explain demos.
+class PlayerObserveDemo extends StatefulWidget {
+  /// Creates the demo.
+  const PlayerObserveDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'ENTERS', caption: 'Who plays pots', color: AppColors.gold),
+    (label: 'CALLS', caption: 'Who sticks around', color: AppColors.cream),
+    (label: 'FOLDS', caption: 'Who gives up', color: AppColors.danger),
+  ];
+
+  @override
+  State<PlayerObserveDemo> createState() => _PlayerObserveDemoState();
+}
+
+class _PlayerObserveDemoState extends State<PlayerObserveDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= PlayerObserveDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in PlayerObserveDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final next = _nextPoint;
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Watch before you label',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < PlayerObserveDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == PlayerObserveDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: PlayerObserveDemo.points[i].label,
+                      caption: PlayerObserveDemo.points[i].caption,
+                      color: PlayerObserveDemo.points[i].color,
+                      selected: _tapped.contains(
+                        PlayerObserveDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () =>
+                                  _onTap(PlayerObserveDemo.points[i].label)
+                              : null,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Count samples before you tag'
+                    : 'Tap ${next.label} next')
+                : 'Count samples before you tag',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
+/// Station / high / low tiles for Calling Station explain demos.
+class CallingStationDemo extends StatefulWidget {
+  /// Creates the demo.
+  const CallingStationDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'STATION', caption: 'Working model', color: AppColors.gold),
+    (label: 'HIGH', caption: 'Plays many pots', color: AppColors.cream),
+    (label: 'LOW', caption: 'Rarely folds', color: AppColors.danger),
+  ];
+
+  @override
+  State<CallingStationDemo> createState() => _CallingStationDemoState();
+}
+
+class _CallingStationDemoState extends State<CallingStationDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= CallingStationDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in CallingStationDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final next = _nextPoint;
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Calling Station',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < CallingStationDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == CallingStationDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: CallingStationDemo.points[i].label,
+                      caption: CallingStationDemo.points[i].caption,
+                      color: CallingStationDemo.points[i].color,
+                      selected: _tapped.contains(
+                        CallingStationDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(
+                                    CallingStationDemo.points[i].label,
+                                  )
+                              : null,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'High participation · low folding'
+                    : 'Tap ${next.label} next')
+                : 'High participation · low folding',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
+/// Value / bluffs / cite tiles for versus-station explain demos.
+class VsStationDemo extends StatefulWidget {
+  /// Creates the demo.
+  const VsStationDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'VALUE', caption: 'Thicker value', color: AppColors.gold),
+    (label: 'BLUFFS', caption: 'Fewer pure bluffs', color: AppColors.danger),
+    (label: 'CITE', caption: 'Their calling', color: AppColors.cream),
+  ];
+
+  @override
+  State<VsStationDemo> createState() => _VsStationDemoState();
+}
+
+class _VsStationDemoState extends State<VsStationDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= VsStationDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in VsStationDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final next = _nextPoint;
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Versus Calling Stations',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < VsStationDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == VsStationDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: VsStationDemo.points[i].label,
+                      caption: VsStationDemo.points[i].caption,
+                      color: VsStationDemo.points[i].color,
+                      selected: _tapped.contains(VsStationDemo.points[i].label),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(VsStationDemo.points[i].label)
+                              : null,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Value wider · bluff less · cite calling'
+                    : 'Tap ${next.label} next')
+                : 'Value wider · bluff less · cite calling',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
+
+
+/// Explain-step demo: tight seats rarely enter; when they do, they mean it.
+class TightSeatsDemo extends StatefulWidget {
+  /// Creates the demo.
+  const TightSeatsDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'RARE', caption: 'Almost never enter', color: AppColors.slate),
+    (label: 'ENTER', caption: 'When they do', color: AppColors.cream),
+    (label: 'MEAN IT', caption: 'Note both', color: AppColors.gold),
+  ];
+
+  @override
+  State<TightSeatsDemo> createState() => _TightSeatsDemoState();
+}
+
+class _TightSeatsDemoState extends State<TightSeatsDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= TightSeatsDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in TightSeatsDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final next = _nextPoint;
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Tight seats',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < TightSeatsDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == TightSeatsDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: TightSeatsDemo.points[i].label,
+                      caption: TightSeatsDemo.points[i].caption,
+                      color: TightSeatsDemo.points[i].color,
+                      selected: _tapped.contains(
+                        TightSeatsDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () =>
+                                  _onTap(TightSeatsDemo.points[i].label)
+                              : null,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Rare entries · when they do, they mean it'
+                    : 'Tap ${next.label} next')
+                : 'Rare entries · when they do, they mean it',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
+/// Nit / narrow / respect tiles for Nit-model explain demos.
+class NitModelDemo extends StatefulWidget {
+  /// Creates the demo.
+  const NitModelDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'NIT', caption: 'Working label', color: AppColors.gold),
+    (label: 'NARROW', caption: 'Rarely enters', color: AppColors.cream),
+    (label: 'RESPECT', caption: 'Heavy action means it', color: AppColors.danger),
+  ];
+
+  @override
+  State<NitModelDemo> createState() => _NitModelDemoState();
+}
+
+class _NitModelDemoState extends State<NitModelDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= NitModelDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in NitModelDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final next = _nextPoint;
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Nit model',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < NitModelDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == NitModelDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: NitModelDemo.points[i].label,
+                      caption: NitModelDemo.points[i].caption,
+                      color: NitModelDemo.points[i].color,
+                      selected: _tapped.contains(NitModelDemo.points[i].label),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(NitModelDemo.points[i].label)
+                              : null,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Narrow entry · respect heavy action'
+                    : 'Tap ${next.label} next')
+                : 'Narrow entry · respect heavy action',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
+/// Steal / credit / explode tiles for versus-nits explain demos.
+class VsNitsDemo extends StatefulWidget {
+  /// Creates the demo.
+  const VsNitsDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'STEAL', caption: 'Blinds more often', color: AppColors.gold),
+    (label: 'CREDIT', caption: 'When they fire', color: AppColors.cream),
+    (label: 'EXPLODE', caption: 'Believe the heat', color: AppColors.danger),
+  ];
+
+  @override
+  State<VsNitsDemo> createState() => _VsNitsDemoState();
+}
+
+class _VsNitsDemoState extends State<VsNitsDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= VsNitsDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in VsNitsDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final next = _nextPoint;
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Versus Nits',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < VsNitsDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == VsNitsDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: VsNitsDemo.points[i].label,
+                      caption: VsNitsDemo.points[i].caption,
+                      color: VsNitsDemo.points[i].color,
+                      selected: _tapped.contains(VsNitsDemo.points[i].label),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(VsNitsDemo.points[i].label)
+                              : null,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Steal more · give credit when they explode'
+                    : 'Tap ${next.label} next')
+                : 'Steal more · give credit when they explode',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
+/// Raise / barrel / count tiles for extreme-entry explain demos.
+class ExtremeEntryDemo extends StatefulWidget {
+  /// Creates the demo.
+  const ExtremeEntryDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'RAISE', caption: 'Enters with aggression', color: AppColors.gold),
+    (label: 'BARREL', caption: 'Keeps firing streets', color: AppColors.danger),
+    (label: 'COUNT', caption: 'Sample calmly', color: AppColors.cream),
+  ];
+
+  @override
+  State<ExtremeEntryDemo> createState() => _ExtremeEntryDemoState();
+}
+
+class _ExtremeEntryDemoState extends State<ExtremeEntryDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= ExtremeEntryDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in ExtremeEntryDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final next = _nextPoint;
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Extreme entry',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < ExtremeEntryDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == ExtremeEntryDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: ExtremeEntryDemo.points[i].label,
+                      caption: ExtremeEntryDemo.points[i].caption,
+                      color: ExtremeEntryDemo.points[i].color,
+                      selected: _tapped.contains(
+                        ExtremeEntryDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () =>
+                                  _onTap(ExtremeEntryDemo.points[i].label)
+                              : null,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Raise and barrel · count calmly'
+                    : 'Tap ${next.label} next')
+                : 'Raise and barrel · count calmly',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
+/// Maniac / entry / aggro tiles for Maniac-model explain demos.
+class ManiacModelDemo extends StatefulWidget {
+  /// Creates the demo.
+  const ManiacModelDemo({
+    super.key,
+    this.interactive = false,
+    this.enabled = false,
+    this.onAllPointsTapped,
+  });
+
+  final bool interactive;
+  final bool enabled;
+  final VoidCallback? onAllPointsTapped;
+
+  static const points = <({String label, String caption, Color color})>[
+    (label: 'MANIAC', caption: 'Working model', color: AppColors.gold),
+    (label: 'ENTRY', caption: 'Extreme frequency', color: AppColors.cream),
+    (label: 'AGGRO', caption: 'Not an insult', color: AppColors.danger),
+  ];
+
+  @override
+  State<ManiacModelDemo> createState() => _ManiacModelDemoState();
+}
+
+class _ManiacModelDemoState extends State<ManiacModelDemo> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= ManiacModelDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in ManiacModelDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final next = _nextPoint;
+    final child = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Maniac model',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              for (var i = 0; i < ManiacModelDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == ManiacModelDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: ManiacModelDemo.points[i].label,
+                      caption: ManiacModelDemo.points[i].caption,
+                      color: ManiacModelDemo.points[i].color,
+                      selected:
+                          _tapped.contains(ManiacModelDemo.points[i].label),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () =>
+                                  _onTap(ManiacModelDemo.points[i].label)
+                              : null,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Extreme entry · aggression · a model'
+                    : 'Tap ${next.label} next')
+                : 'Extreme entry · aggression · a model',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    if (widget.interactive) return child;
+    return ExcludeSemantics(child: child);
+  }
+}
+
 
 /// Wider / hang / ego tiles for versus-maniacs explain demos.
 class VsManiacsDemo extends StatefulWidget {
