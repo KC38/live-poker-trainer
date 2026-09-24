@@ -297,9 +297,10 @@ void main() {
       ),
     );
     expect(find.byType(LessonTableContext), findsOneWidget);
+    expect(find.text('Tap BTN — the latest seat'), findsOneWidget);
     expect(
       find.text('Tap the button (BTN) — the latest seat.'),
-      findsOneWidget,
+      findsNothing,
     );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
 

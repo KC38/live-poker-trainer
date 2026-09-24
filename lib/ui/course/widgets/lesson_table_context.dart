@@ -4766,7 +4766,7 @@ class LessonTableContext extends StatelessWidget {
   Widget build(BuildContext context) {
     return switch (scene.layout) {
       LessonTableLayout.blindsSeats => _buildBlindsSeats(context),
-      LessonTableLayout.positionLabels => _buildPositionLabels(),
+      LessonTableLayout.positionLabels => _buildPositionLabels(context),
       LessonTableLayout.blindsTiming => _buildBlindsTiming(),
       LessonTableLayout.streetEndPhases => _buildStreetEndPhases(),
       LessonTableLayout.potFoldWinOutcomes => _buildPotFoldWinOutcomes(),
@@ -5219,7 +5219,7 @@ class LessonTableContext extends StatelessWidget {
     );
   }
 
-  Widget _buildPositionLabels() {
+  Widget _buildPositionLabels(BuildContext context) {
     final n = scene.seatCount;
     final button = scene.buttonSeat % n;
     final sb = blindsSmallBlindSeat(buttonSeat: button, seatCount: n);
@@ -5276,6 +5276,14 @@ class LessonTableContext extends StatelessWidget {
       );
     }
 
+    final expandTeach =
+        showSoftPulse &&
+        selectedRegion == null &&
+        selectedSeatIndex == null &&
+        scene.highlight == LessonTableHighlight.button;
+    final minFelt =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.40 : null;
+
     return _feltShell(
       semanticsLabel: _interactive
           ? (n >= 9
@@ -5284,7 +5292,10 @@ class LessonTableContext extends StatelessWidget {
           : (n >= 9
               ? 'Nine-handed table showing UTG, mid, late, button, and blinds'
               : 'Six-max table showing EP, HJ, CO, button, and blinds'),
+      minHeight: minFelt,
+      centerChild: expandTeach,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -5305,6 +5316,18 @@ class LessonTableContext extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [for (final s in bottomRow) seatChip(s)],
           ),
+          if (expandTeach) ...[
+            const SizedBox(height: 12),
+            Text(
+              'Tap BTN — the latest seat',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
           if (scene.showSeatNeverMatters) ...[
             const SizedBox(height: 8),
             _TappableRegion(
