@@ -2369,8 +2369,23 @@ void main() {
     expect(find.text('Tap CHIPS→BB next'), findsOneWidget);
     expect(find.text('Tap Chips→BB, Shorter, and Depth'), findsNothing);
     expect(find.text('Tap Chips→BB, Shorter, and Depth.'), findsNothing);
+    expect(
+      find.text('Count in BB · shorter stack caps the pot'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(BbStackDepthDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
     await tester.tap(find.text('CHIPS→BB'));
     await tester.pump();
@@ -2381,6 +2396,15 @@ void main() {
     await tester.tap(find.text('DEPTH'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Count in BB · shorter stack caps the pot'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(BbStackDepthDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
