@@ -4858,7 +4858,9 @@ class _SprDepthDemoState extends State<SprDepthDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled;
+    // Keep densify after the last tap while Continue shows — locking
+    // `enabled` false must not collapse the teach shell into navy void.
+    final expandTeach = widget.interactive;
     // Tall-phone teach: fixed felt + stretched tiles (minHeight alone leaves
     // sparse green under SPR / LOW / HIGH).
     final feltHeight =

@@ -3475,12 +3475,27 @@ await tester.tap(find.text('VALUE'));
     );
     expect(find.byType(SprDepthDemo), findsOneWidget);
     expect(find.text('Tap SPR next'), findsOneWidget);
-    expect(find.text('Tap SPR, Low, and High.'), findsNothing);
     expect(find.text('Tap SPR, Low, and High'), findsNothing);
+    expect(find.text('Tap SPR, Low, and High.'), findsNothing);
+    expect(
+      find.text('Low SPR: commit · High SPR: maneuver'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(SprDepthDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
-    await tester.tap(find.text('SPR'));
+await tester.tap(find.text('SPR'));
     await tester.pump();
     expect(find.text('Tap LOW next'), findsOneWidget);
     await tester.tap(find.text('LOW'));
@@ -3489,6 +3504,15 @@ await tester.tap(find.text('VALUE'));
     await tester.tap(find.text('HIGH'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Low SPR: commit · High SPR: maneuver'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(SprDepthDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
