@@ -773,14 +773,27 @@ class CourseCatalog {
   }
 
   /// Finds a lesson by id.
+  ///
+  /// Exact id wins. If none match, a unique prefix of a lesson id also
+  /// resolves (e.g. `lesson-01-01-01` → `lesson-01-01-01-your-two-cards`).
+  /// Ambiguous prefixes return null.
   CourseLesson? lessonById(String lessonId) {
+    if (lessonId.isEmpty) return null;
+    CourseLesson? exact;
+    final prefixHits = <CourseLesson>[];
     for (final section in sections) {
       for (final unit in section.units) {
         for (final lesson in unit.lessons) {
-          if (lesson.id == lessonId) return lesson;
+          if (lesson.id == lessonId) {
+            exact = lesson;
+          } else if (lesson.id.startsWith(lessonId)) {
+            prefixHits.add(lesson);
+          }
         }
       }
     }
+    if (exact != null) return exact;
+    if (prefixHits.length == 1) return prefixHits.first;
     return null;
   }
 
