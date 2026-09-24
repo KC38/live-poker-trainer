@@ -15892,7 +15892,8 @@ void main() {
         ),
       );
       expect(find.byType(PreflopFlopPlanDemo), findsOneWidget);
-      expect(find.text('Tap Reason, Confirm, and Cancel.'), findsOneWidget);
+      expect(find.text('Tap REASON next'), findsOneWidget);
+      expect(find.text('Tap Reason, Confirm, and Cancel.'), findsNothing);
       expect(find.text('Tap Reason, Confirm, and Cancel'), findsNothing);
       expect(
         find.text('Reason in · flop confirms or cancels'),
@@ -15901,10 +15902,14 @@ void main() {
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['REASON', 'CONFIRM', 'CANCEL']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
+      await tester.tap(find.text('REASON'));
+      await tester.pump();
+      expect(find.text('Tap CONFIRM next'), findsOneWidget);
+      await tester.tap(find.text('CONFIRM'));
+      await tester.pump();
+      expect(find.text('Tap CANCEL next'), findsOneWidget);
+      await tester.tap(find.text('CANCEL'));
+      await tester.pump();
       expect(feltAck, 1);
       controller.dispose();
     },
