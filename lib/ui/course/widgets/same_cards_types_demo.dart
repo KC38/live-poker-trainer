@@ -37,8 +37,16 @@ class _SameCardsTypesDemoState extends State<SameCardsTypesDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in SameCardsTypesDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -67,35 +75,42 @@ class _SameCardsTypesDemoState extends State<SameCardsTypesDemo> {
               for (var i = 0; i < SameCardsTypesDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _SameCardsTypesTile(
-                    label: SameCardsTypesDemo.points[i].label,
-                    caption: SameCardsTypesDemo.points[i].caption,
-                    color: SameCardsTypesDemo.points[i].color,
-                    selected: _tapped.contains(
-                      SameCardsTypesDemo.points[i].label,
+                  child: _SameSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == SameCardsTypesDemo.points[i].label,
+                    child: _SameCardsTypesTile(
+                      label: SameCardsTypesDemo.points[i].label,
+                      caption: SameCardsTypesDemo.points[i].caption,
+                      color: SameCardsTypesDemo.points[i].color,
+                      selected: _tapped.contains(
+                        SameCardsTypesDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed: widget.interactive
+                          ? () => _onTap(SameCardsTypesDemo.points[i].label)
+                          : null,
                     ),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed: widget.interactive
-                        ? () => _onTap(SameCardsTypesDemo.points[i].label)
-                        : null,
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues Cards / Models / Cite — no dupe footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Change lines only when the tendency justifies it',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Change lines only when the tendency justifies it'
+                    : 'Tap ${next.label} next')
+                : 'Change lines only when the tendency justifies it',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
@@ -160,5 +175,74 @@ class _SameCardsTypesTile extends StatelessWidget {
     );
     if (!enabled || onPressed == null) return child;
     return GestureDetector(onTap: onPressed, child: child);
+  }
+}
+
+class _SameSoftPulse extends StatefulWidget {
+  const _SameSoftPulse({required this.active, required this.child});
+
+  final bool active;
+  final Widget child;
+
+  @override
+  State<_SameSoftPulse> createState() => _SameSoftPulseState();
+}
+
+class _SameSoftPulseState extends State<_SameSoftPulse>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+    if (widget.active) {
+      _pulse.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _SameSoftPulse oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.active && !_pulse.isAnimating) {
+      _pulse.repeat(reverse: true);
+    } else if (!widget.active && _pulse.isAnimating) {
+      _pulse.stop();
+      _pulse.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.active) return widget.child;
+    return AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final glow = 0.22 + (_pulse.value * 0.38);
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.gold.withValues(alpha: glow),
+                blurRadius: 10 + (_pulse.value * 8),
+                spreadRadius: 0.5 + (_pulse.value * 1.2),
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
+      child: widget.child,
+    );
   }
 }
