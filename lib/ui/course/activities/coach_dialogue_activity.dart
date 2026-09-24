@@ -2677,7 +2677,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllPointsTapped: onMultiStreetPlanAcknowledge,
         ),
         CoachDialogueVisualKind.sizingLanguage => SizingLanguageDemo(
-          interactive: onSizingLanguageAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPointsTapped: onSizingLanguageAcknowledge,
         ),
