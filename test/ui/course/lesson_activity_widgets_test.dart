@@ -9601,6 +9601,66 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 ranges scaffolded taps BB 3-bet on densified felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-01-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'The 3-bettor\'s range is stronger.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'BTN opens, BB 3-bets, BTN calls. Whose range is stronger?',
+      choices: const [
+        CourseChoice(
+          id: 'bb-stronger',
+          label: 'Big blind 3-bet range is stronger',
+        ),
+        CourseChoice(id: 'btn-stronger', label: 'Button call is stronger'),
+        CourseChoice(id: 'equal', label: 'Identical ranges'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.rangesScaffoldedOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.rangesBbStronger,
+        choices: activity.choices,
+      ),
+      'bb-stronger',
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('BTN open, BB 3-bet, BTN calls — tap who is stronger.'),
+      findsOneWidget,
+    );
+    expect(find.text('BB 3-bet'), findsOneWidget);
+    expect(find.text('Stronger'), findsOneWidget);
+    await tester.tap(find.text('BB 3-bet'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'bb-stronger');
+    controller.dispose();
+  });
+
   testWidgets('s4 ranges guided taps stronger-narrower on densified felt', (
     tester,
   ) async {

@@ -287,6 +287,15 @@ enum LessonTableRegion {
   /// S4 ranges guided distractor: exactly AK.
   rangesExactAk,
 
+  /// S4 ranges scaffolded: BB 3-bet stronger (correct).
+  rangesBbStronger,
+
+  /// S4 ranges scaffolded distractor: BTN call stronger.
+  rangesBtnStronger,
+
+  /// S4 ranges scaffolded distractor: identical ranges.
+  rangesIdentical,
+
   /// Verbal action: raise stands (binding).
   verbalRaiseStands,
 
@@ -1442,6 +1451,9 @@ enum LessonTableLayout {
   /// S4 ranges guided: UTG open shape.
   rangesGuidedOutcomes,
 
+  /// S4 ranges scaffolded: who is stronger after 3-bet.
+  rangesScaffoldedOutcomes,
+
   /// Thin-value checkpoint: read-driven line vs coin flip.
   thinValueReadOutcomes,
 
@@ -2289,10 +2301,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-04-01-01-scaffolded':
       return const LessonTableScene(
-        layout: LessonTableLayout.positionLabels,
+        layout: LessonTableLayout.rangesScaffoldedOutcomes,
         highlight: LessonTableHighlight.none,
-        seatCount: 6,
-        buttonSeat: 3,
         caption: 'BTN open · BB 3-bet · BTN calls',
       );
     case 'act-04-01-01-unguided':
@@ -3647,6 +3657,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.rangesExactAk => pick('exact-ak'),
         _ => null,
       };
+    case 'act-04-01-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.rangesBbStronger => pick('bb-stronger'),
+        LessonTableRegion.rangesBtnStronger => pick('btn-stronger'),
+        LessonTableRegion.rangesIdentical => pick('equal'),
+        _ => null,
+      };
     case 'act-03-01-01-scaffolded':
       // Preflop open: UTG is left of the BB (earlyPosition on the felt).
       return switch (region) {
@@ -4726,6 +4743,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-08-02-jump-class' ||
       activity.id == 'act-03-08-02-jump-leak' ||
       activity.id == 'act-04-01-01-guided' ||
+      activity.id == 'act-04-01-01-scaffolded' ||
       activity.id == 'act-04-06-01-guided' ||
       activity.id == 'act-04-06-02-guided' ||
       activity.id == 'act-04-06-02-scaffolded' ||
@@ -5028,6 +5046,8 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.jumpLeakPriceOutcomes =>
           _buildJumpLeakPriceOutcomes(),
       LessonTableLayout.rangesGuidedOutcomes => _buildRangesGuidedOutcomes(),
+      LessonTableLayout.rangesScaffoldedOutcomes =>
+          _buildRangesScaffoldedOutcomes(),
       LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
       LessonTableLayout.tableReadMattersOutcomes =>
           _buildTableReadMattersOutcomes(),
@@ -6898,6 +6918,49 @@ class LessonTableContext extends StatelessWidget {
                 const SizedBox(width: 2),
               ],
             ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRangesScaffoldedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive 3-bet ranges — tap BB stronger, BTN call, or identical',
+      semanticsStatic: 'Ranges scaffolded outcomes',
+      caption: scene.caption ?? 'BTN open · BB 3-bet · BTN calls',
+      cueLabel: 'Tap BB 3-bet.',
+      guideRegion: LessonTableRegion.rangesBbStronger,
+      phases: [
+        (
+          region: LessonTableRegion.rangesBbStronger,
+          title: 'BB 3-bet',
+          detail: 'Stronger',
+          visual: const Icon(
+            Icons.trending_up,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.rangesBtnStronger,
+          title: 'BTN call',
+          detail: 'Wider',
+          visual: const Icon(
+            Icons.call_received,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.rangesIdentical,
+          title: 'Same',
+          detail: 'Identical',
+          visual: const Icon(
+            Icons.compare_arrows,
+            color: AppColors.slate,
+            size: 24,
           ),
         ),
       ],

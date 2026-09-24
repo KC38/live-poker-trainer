@@ -206,8 +206,11 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Ranges: tap stronger/narrower on densified UTG felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
-  if ((activity.id == 'act-04-01-01-scaffolded' ||
-          activity.id == 'act-04-01-01-unguided' ||
+  if (activity.id == 'act-04-01-01-scaffolded') {
+    // Ranges: tap BB 3-bet stronger on densified felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
+  if ((activity.id == 'act-04-01-01-unguided' ||
           activity.id == 'act-04-01-01-checkpoint') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Ranges: remaining steps still on category tiles (refining).
