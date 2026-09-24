@@ -7802,6 +7802,40 @@ await tester.tap(find.text('STRONGER'));
     controller.dispose();
   });
 
+  testWidgets('unguided hand compare hides Tap to place under Rex', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-02-01-unguided-compare',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.compareRank,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap strongest to weakest',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap strongest to weakest.',
+      sequenceItems: const [
+        CourseChoice(id: 'hr-trips', label: 'Three of a kind'),
+        CourseChoice(id: 'hr-full', label: 'Full house'),
+        CourseChoice(id: 'hr-two', label: 'Two pair'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        OrderSequenceActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(find.text('Tap strongest to weakest.'), findsOneWidget);
+    expect(find.text('Tap to place'), findsNothing);
+    expect(find.byKey(const ValueKey('hand-order-felt')), findsOneWidget);
+    controller.dispose();
+  });
+
   testWidgets('streets unguided end taps bets matched on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-01-04-01-unguided-end',

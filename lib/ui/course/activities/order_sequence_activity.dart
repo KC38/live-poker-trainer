@@ -262,7 +262,8 @@ class OrderSequenceActivity extends StatelessWidget {
                   const densify = true;
                   final feltHeight =
                       MediaQuery.sizeOf(context).height * 0.58;
-                  final coachOwnsCue = showCoach && showGuidance;
+                  // Rex alone owns the order instruction — SoftPulse is optional (unguided).
+                  final coachOwnsCue = showCoach;
                   final body = Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
