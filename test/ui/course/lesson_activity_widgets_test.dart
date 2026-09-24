@@ -4180,17 +4180,21 @@ void main() {
         ),
       );
       expect(find.byType(DefendEnoughDemo), findsOneWidget);
-      // Rex cue below the felt — not a second footer inside the demo.
-      expect(find.text('Tap Defend, Bluff, and Enough.'), findsOneWidget);
+      expect(find.text('Tap DEFEND next'), findsOneWidget);
+      expect(find.text('Tap Defend, Bluff, and Enough.'), findsNothing);
       expect(find.text('Tap Defend, Bluff, and Enough'), findsNothing);
       expect(find.text('Defend better hands — skip fake %'), findsNothing);
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['DEFEND', 'BLUFF', 'ENOUGH']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
+      await tester.tap(find.text('DEFEND'));
+      await tester.pump();
+      expect(find.text('Tap BLUFF next'), findsOneWidget);
+      await tester.tap(find.text('BLUFF'));
+      await tester.pump();
+      expect(find.text('Tap ENOUGH next'), findsOneWidget);
+      await tester.tap(find.text('ENOUGH'));
+      await tester.pump();
       expect(feltAck, 1);
       controller.dispose();
     },
