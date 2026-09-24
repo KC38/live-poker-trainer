@@ -418,141 +418,177 @@ class OrderSequenceActivity extends StatelessWidget {
               ),
             ] else if (isStreetSequenceActivity(activity) ||
                 isSeatOrderSequenceActivity(activity)) ...[
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [AppColors.feltLight, AppColors.feltDark],
-                  ),
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(
-                    color: AppColors.feltBorder.withValues(alpha: 0.85),
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      ordered.isEmpty
-                          ? (isStreetSequenceActivity(activity)
-                              ? 'Your street order'
-                              : 'Your seat order')
-                          : 'Your order',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.manrope(
-                        color: AppColors.slate,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Semantics(
-                      label:
-                          'Current order: ${ordered.isEmpty ? 'empty' : ordered.join(', ')}',
-                      child: Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        alignment: WrapAlignment.center,
-                        children: [
-                          if (ordered.isEmpty)
-                            Text(
-                              trayHint,
-                              style: GoogleFonts.manrope(
-                                color: AppColors.slate,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )
-                          else
-                            for (var i = 0; i < ordered.length; i++)
-                              if (isStreetSequenceActivity(activity))
-                                StreetOrderTile(
-                                  label: _labelFor(ordered[i]),
-                                  badge: '${i + 1}',
-                                  selected: true,
-                                  enabled: false,
-                                )
-                              else
-                                SeatOrderTile(
-                                  label: _labelFor(ordered[i]),
-                                  badge: '${i + 1}',
-                                  selected: true,
-                                  enabled: false,
+              Builder(
+                builder: (context) {
+                  // Tall-phone teach: pack tray+palette, then scale to fill
+                  // densified felt (contain — not width-pinned scaleDown).
+                  final densify = true;
+                  final feltHeight =
+                      MediaQuery.sizeOf(context).height * 0.58;
+                  final packWidth =
+                      MediaQuery.sizeOf(context).width - 48;
+                  final nextId =
+                      showGuidance &&
+                              !locked &&
+                              ordered.length < activity.sequenceItems.length
+                          ? activity.sequenceItems[ordered.length].id
+                          : null;
+                  final palette =
+                      isStreetSequenceActivity(activity)
+                          ? _StreetTileGrid(
+                            items: remaining,
+                            locked: locked,
+                            nextId: nextId,
+                            onPick:
+                                (id) => appendOrderedId(
+                                  controller: controller,
+                                  activity: activity,
+                                  ordered: ordered,
+                                  id: id,
                                 ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 14),
-                    if (statusLine.isNotEmpty) ...[
+                          )
+                          : Wrap(
+                            spacing: densify ? 12 : 8,
+                            runSpacing: densify ? 12 : 8,
+                            alignment: WrapAlignment.center,
+                            children: [
+                              for (final item in remaining)
+                                _SoftPulseTarget(
+                                  active:
+                                      nextId != null && item.id == nextId,
+                                  child: SeatOrderTile(
+                                    label: item.label,
+                                    emphasizeDealer: false,
+                                    enabled: !locked,
+                                    onPressed:
+                                        locked
+                                            ? null
+                                            : () => appendOrderedId(
+                                              controller: controller,
+                                              activity: activity,
+                                              ordered: ordered,
+                                              id: item.id,
+                                            ),
+                                  ),
+                                ),
+                            ],
+                          );
+                  final body = Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
                       Text(
-                        statusLine,
+                        ordered.isEmpty
+                            ? (isStreetSequenceActivity(activity)
+                                ? 'Your street order'
+                                : 'Your seat order')
+                            : 'Your order',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.manrope(
                           color: AppColors.slate,
-                          fontSize: 12,
+                          fontSize: densify ? 15 : 12,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      const SizedBox(height: 8),
-                    ],
-                    if (isStreetSequenceActivity(activity))
-                      _StreetTileGrid(
-                        items: remaining,
-                        locked: locked,
-                        nextId:
-                            showGuidance &&
-                                    !locked &&
-                                    ordered.length <
-                                        activity.sequenceItems.length
-                                ? activity.sequenceItems[ordered.length].id
-                                : null,
-                        onPick:
-                            (id) => appendOrderedId(
-                              controller: controller,
-                              activity: activity,
-                              ordered: ordered,
-                              id: id,
-                            ),
-                      )
-                    else
-                      Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        alignment: WrapAlignment.center,
-                        children: [
-                          for (final item in remaining)
-                            _SoftPulseTarget(
-                              active:
-                                  showGuidance &&
-                                  !locked &&
-                                  ordered.length <
-                                      activity.sequenceItems.length &&
-                                  item.id ==
-                                      activity
-                                          .sequenceItems[ordered.length]
-                                          .id,
-                              child: SeatOrderTile(
-                                label: item.label,
-                                emphasizeDealer: false,
-                                enabled: !locked,
-                                onPressed:
-                                    locked
-                                        ? null
-                                        : () => appendOrderedId(
-                                          controller: controller,
-                                          activity: activity,
-                                          ordered: ordered,
-                                          id: item.id,
-                                        ),
-                              ),
-                            ),
-                        ],
+                      SizedBox(height: densify ? 12 : 10),
+                      Semantics(
+                        label:
+                            'Current order: ${ordered.isEmpty ? 'empty' : ordered.join(', ')}',
+                        child: Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          alignment: WrapAlignment.center,
+                          children: [
+                            if (ordered.isEmpty)
+                              Text(
+                                trayHint,
+                                style: GoogleFonts.manrope(
+                                  color: AppColors.slate,
+                                  fontSize: densify ? 14 : 13,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )
+                            else
+                              for (var i = 0; i < ordered.length; i++)
+                                if (isStreetSequenceActivity(activity))
+                                  StreetOrderTile(
+                                    label: _labelFor(ordered[i]),
+                                    badge: '${i + 1}',
+                                    selected: true,
+                                    enabled: false,
+                                  )
+                                else
+                                  SeatOrderTile(
+                                    label: _labelFor(ordered[i]),
+                                    badge: '${i + 1}',
+                                    selected: true,
+                                    enabled: false,
+                                  ),
+                          ],
+                        ),
                       ),
-                  ],
-                ),
+                      if (statusLine.isNotEmpty) ...[
+                        SizedBox(height: densify ? 12 : 8),
+                        Text(
+                          statusLine,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.manrope(
+                            color: AppColors.gold,
+                            fontSize: densify ? 15 : 12,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                      if (remaining.isNotEmpty) ...[
+                        SizedBox(height: densify ? 14 : 14),
+                        palette,
+                      ],
+                    ],
+                  );
+                  return Container(
+                    key: ValueKey(
+                      isStreetSequenceActivity(activity)
+                          ? 'street-order-felt'
+                          : 'seat-order-felt',
+                    ),
+                    width: double.infinity,
+                    height: feltHeight,
+                    padding: EdgeInsets.fromLTRB(
+                      12,
+                      densify ? 16 : 12,
+                      12,
+                      densify ? 16 : 12,
+                    ),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [AppColors.feltLight, AppColors.feltDark],
+                      ),
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(
+                        color: AppColors.feltBorder.withValues(alpha: 0.85),
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Expanded(
+                          child: FittedBox(
+                            // contain so sparse seat/street palettes scale up
+                            // into the densified felt (not letterboxed navy).
+                            fit: BoxFit.contain,
+                            alignment: Alignment.center,
+                            child: SizedBox(
+                              width: packWidth,
+                              child: body,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
             ] else ...[
               Builder(
