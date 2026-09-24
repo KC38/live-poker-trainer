@@ -750,6 +750,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         // street / pot / position felt quizzes (and hide Rex under Nice!).
         final feltFirstSelect =
             widget.activity.id.startsWith('act-01-01-01-') ||
+            widget.activity.id.startsWith('act-01-01-03-') ||
             widget.activity.id.startsWith('act-01-04-01-') ||
             widget.activity.id.startsWith('act-01-05-01-') ||
             widget.activity.id.startsWith('act-02-01-01-') ||
@@ -983,6 +984,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                                 widget.activity.stage ==
                                     ActivityStage.scaffolded)) ||
                         widget.activity.id == 'act-01-02-02-unguided-board'),
+                showInviteCue: !feltFirstSelect,
                 enabled: !locked,
                 onRegionTap:
                     locked

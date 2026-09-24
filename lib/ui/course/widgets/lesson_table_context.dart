@@ -5457,6 +5457,7 @@ class LessonTableContext extends StatelessWidget {
     this.onRegionTap,
     this.enabled = true,
     this.showSoftPulse = false,
+    this.showInviteCue = true,
   });
 
   final LessonTableScene scene;
@@ -5474,6 +5475,10 @@ class LessonTableContext extends StatelessWidget {
 
   /// Guided soft pulse on [scene.highlight] when nothing is selected yet.
   final bool showSoftPulse;
+
+  /// Gold "Tap the …" line under SoftPulse seats. Hide when Rex already owns
+  /// the teach line (felt-first select/identify).
+  final bool showInviteCue;
 
   bool get _interactive => onRegionTap != null;
 
@@ -5940,6 +5945,7 @@ class LessonTableContext extends StatelessWidget {
     }
 
     final inviteCue =
+        showInviteCue &&
         showSoftPulse &&
         selectedRegion == null &&
         selectedSeatIndex == null &&
@@ -6121,6 +6127,7 @@ class LessonTableContext extends StatelessWidget {
     // selection clear on lock must not collapse the teach shell.
     final densifyShell = scene.highlight == LessonTableHighlight.button;
     final inviteCue =
+        showInviteCue &&
         showSoftPulse &&
         selectedRegion == null &&
         selectedSeatIndex == null &&

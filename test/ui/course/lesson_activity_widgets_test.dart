@@ -6197,7 +6197,11 @@ await tester.tap(find.text('STRONGER'));
       ),
     );
 
-    expect(find.text('Tap the dealer button on the table.'), findsOneWidget);
+    expect(find.text('Find the dealer button on the felt.'), findsOneWidget);
+    // Felt-first: Rex + SoftPulse own the cue — no prompt / invite / footer stack.
+    expect(find.text('Tap the dealer button on the table.'), findsNothing);
+    expect(find.text('Tap the dealer button'), findsNothing);
+    expect(find.text('Tap the answer on the table.'), findsNothing);
     expect(find.byType(LessonTableContext), findsOneWidget);
     expect(find.text('The seat with the D chip'), findsNothing);
     // Identify steps hide role word labels — chips alone teach.
