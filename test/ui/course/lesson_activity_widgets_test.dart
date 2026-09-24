@@ -4341,6 +4341,17 @@ void main() {
       expect(find.text('Nuts/air vs medium-strong'), findsNothing);
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
+      final teachHeight =
+          tester.getSize(find.byType(PolarMergedDemo)).height;
+      expect(
+        teachHeight,
+        moreOrLessEquals(
+          tester.view.physicalSize.height /
+              tester.view.devicePixelRatio *
+              0.58,
+          epsilon: 1,
+        ),
+      );
 
       await tester.tap(find.text('POLAR'));
       await tester.pump();
@@ -4351,6 +4362,12 @@ void main() {
       await tester.tap(find.text('SIZE'));
       await tester.pump();
       expect(feltAck, 1);
+      // Lock clears enabled / ack — densified shell must stay filled.
+      expect(find.text('Nuts/air vs medium-strong'), findsOneWidget);
+      expect(
+        tester.getSize(find.byType(PolarMergedDemo)).height,
+        moreOrLessEquals(teachHeight, epsilon: 1),
+      );
       controller.dispose();
     },
   );
