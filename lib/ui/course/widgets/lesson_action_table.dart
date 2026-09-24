@@ -6505,8 +6505,16 @@ class _TablesChangeDemoState extends State<TablesChangeDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in TablesChangeDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -6535,34 +6543,44 @@ class _TablesChangeDemoState extends State<TablesChangeDemo> {
               for (var i = 0; i < TablesChangeDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: TablesChangeDemo.points[i].label,
-                    caption: TablesChangeDemo.points[i].caption,
-                    color: TablesChangeDemo.points[i].color,
-                    selected: _tapped.contains(TablesChangeDemo.points[i].label),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(TablesChangeDemo.points[i].label)
-                            : null,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == TablesChangeDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: TablesChangeDemo.points[i].label,
+                      caption: TablesChangeDemo.points[i].caption,
+                      color: TablesChangeDemo.points[i].color,
+                      selected: _tapped.contains(
+                        TablesChangeDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () =>
+                                  _onTap(TablesChangeDemo.points[i].label)
+                              : null,
+                    ),
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues the three taps — no duplicate footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Update when the table shifts',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Update when the table shifts'
+                    : 'Tap ${next.label} next')
+                : 'Update when the table shifts',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
