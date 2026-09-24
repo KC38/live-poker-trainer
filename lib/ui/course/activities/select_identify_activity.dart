@@ -346,6 +346,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'You said raise. Tap what counts at a live table.',
       'act-03-01-01-checkpoint' =>
           'Shorter stack caps the matchup — tap what matters with the pot.',
+      'act-03-02-01-guided' =>
+          'Board pairs your king — tap the flop class.',
       'act-03-03-01-scaffolded' =>
           'Pot 20, bet 10 — tap how many chips to call.',
       'act-03-03-01-unguided' =>
@@ -725,6 +727,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-03-01-01-scaffolded' ||
             widget.activity.id == 'act-03-01-01-unguided' ||
             widget.activity.id == 'act-03-01-01-checkpoint' ||
+            widget.activity.id == 'act-03-02-01-guided' ||
             widget.activity.id == 'act-03-03-01-scaffolded' ||
             widget.activity.id == 'act-03-03-01-unguided' ||
             widget.activity.id == 'act-03-03-01-checkpoint' ||
@@ -1172,7 +1175,6 @@ class _HandCategoryTapActivity extends StatelessWidget {
                             selected == null &&
                             !locked &&
                             (activity.id.startsWith('act-02-02-01-') ||
-                                activity.id == 'act-03-02-01-guided' ||
                                 activity.id == 'act-03-05-01-guided');
                         final invitePulse =
                             showGuidance &&

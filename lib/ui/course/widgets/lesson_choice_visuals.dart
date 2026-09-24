@@ -142,12 +142,12 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-03-02-01-guided') {
-    // Flop class: see board + holes, tap Made / Draw / Air.
-    return SelectIdentifyPresentation.handCategoryTap;
+    // Flop class: tap Made / Draw / Air on densified felt.
+    return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id.startsWith('act-03-02-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
-    // Flop class scaffolded / unguided / checkpoint: same teach-by-doing.
+    // Flop class scaffolded / unguided / checkpoint: bottom tiles for now.
     return SelectIdentifyPresentation.handCategoryTap;
   }
   if (activity.id == 'act-03-03-01-guided') {

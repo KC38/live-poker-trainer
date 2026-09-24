@@ -272,6 +272,15 @@ enum LessonTableRegion {
   /// S3 jump class distractor: air.
   jumpClassAir,
 
+  /// Flop-class guided: made top pair (correct).
+  flopClassMade,
+
+  /// Flop-class guided distractor: draw only.
+  flopClassDraw,
+
+  /// Flop-class guided distractor: air.
+  flopClassAir,
+
   /// S3 jump leak: fold bad price (correct).
   jumpLeakFoldPrice,
 
@@ -1481,6 +1490,9 @@ enum LessonTableLayout {
   /// S3 jump: flop class Draw / Made / Air.
   jumpFlopClassOutcomes,
 
+  /// Flop-class guided: Made / Draw / Air with board + holes.
+  flopClassGuidedOutcomes,
+
   /// S3 jump: fold bad price vs call any draw.
   jumpLeakPriceOutcomes,
 
@@ -2207,6 +2219,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-03-02-01-guided':
       return const LessonTableScene(
+        layout: LessonTableLayout.flopClassGuidedOutcomes,
         heroCodes: ['Kh', 'Qh'],
         boardCodes: ['Ks', '9d', '2c'],
         villainSeatCount: 0,
@@ -3698,6 +3711,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.jumpClassAir => pick('j3-air'),
         _ => null,
       };
+    case 'act-03-02-01-guided':
+      return switch (region) {
+        LessonTableRegion.flopClassMade => pick('made-tp'),
+        LessonTableRegion.flopClassDraw => pick('draw-tp'),
+        LessonTableRegion.flopClassAir => pick('air-tp'),
+        _ => null,
+      };
     case 'act-03-08-02-jump-leak':
       return switch (region) {
         LessonTableRegion.jumpLeakFoldPrice => pick('j3-foldprice'),
@@ -4812,6 +4832,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-01-01-scaffolded' ||
       activity.id == 'act-03-01-01-unguided' ||
       activity.id == 'act-03-01-01-checkpoint' ||
+      activity.id == 'act-03-02-01-guided' ||
       activity.id == 'act-03-03-01-scaffolded' ||
       activity.id == 'act-03-03-01-unguided' ||
       activity.id == 'act-03-03-01-checkpoint' ||
@@ -5129,6 +5150,8 @@ class LessonTableContext extends StatelessWidget {
           _buildJumpTableTrackOutcomes(),
       LessonTableLayout.jumpFlopClassOutcomes =>
           _buildJumpFlopClassOutcomes(),
+      LessonTableLayout.flopClassGuidedOutcomes =>
+          _buildFlopClassGuidedOutcomes(),
       LessonTableLayout.jumpLeakPriceOutcomes =>
           _buildJumpLeakPriceOutcomes(),
       LessonTableLayout.rangesGuidedOutcomes => _buildRangesGuidedOutcomes(),
@@ -6923,6 +6946,49 @@ class LessonTableContext extends StatelessWidget {
         ),
         (
           region: LessonTableRegion.jumpClassAir,
+          title: 'Air',
+          detail: 'No equity',
+          visual: const Icon(
+            Icons.air,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFlopClassGuidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive flop class — tap Made, Draw, or Air',
+      semanticsStatic: 'Flop class guided outcomes',
+      caption: scene.caption ?? 'Flop · your holes',
+      cueLabel: 'Tap Made.',
+      guideRegion: LessonTableRegion.flopClassMade,
+      phases: [
+        (
+          region: LessonTableRegion.flopClassMade,
+          title: 'Made',
+          detail: 'Top pair',
+          visual: const Icon(
+            Icons.workspace_premium_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.flopClassDraw,
+          title: 'Draw',
+          detail: 'Needs runout',
+          visual: const Icon(
+            Icons.waterfall_chart,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.flopClassAir,
           title: 'Air',
           detail: 'No equity',
           visual: const Icon(
