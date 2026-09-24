@@ -4335,8 +4335,23 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Tap NUTTED next'), findsOneWidget);
     expect(find.text('Tap Nutted, Air, and Domination.'), findsNothing);
     expect(find.text('Tap Nutted, Air, and Domination'), findsNothing);
+    expect(
+      find.text('Nutted up · air down · domination hurts'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(MultiwayNutsDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
     await tester.tap(find.text('NUTTED'));
     await tester.pump();
@@ -4347,6 +4362,15 @@ await tester.tap(find.text('NIT'));
     await tester.tap(find.text('DOMINATION'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Nutted up · air down · domination hurts'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(MultiwayNutsDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
