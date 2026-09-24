@@ -3297,8 +3297,16 @@ class _MultiwayPlanDemoState extends State<MultiwayPlanDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in MultiwayPlanDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -3327,35 +3335,42 @@ class _MultiwayPlanDemoState extends State<MultiwayPlanDemo> {
               for (var i = 0; i < MultiwayPlanDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: MultiwayPlanDemo.points[i].label,
-                    caption: MultiwayPlanDemo.points[i].caption,
-                    color: MultiwayPlanDemo.points[i].color,
-                    selected:
-                        _tapped.contains(MultiwayPlanDemo.points[i].label),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(MultiwayPlanDemo.points[i].label)
-                            : null,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == MultiwayPlanDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: MultiwayPlanDemo.points[i].label,
+                      caption: MultiwayPlanDemo.points[i].caption,
+                      color: MultiwayPlanDemo.points[i].color,
+                      selected:
+                          _tapped.contains(MultiwayPlanDemo.points[i].label),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(MultiwayPlanDemo.points[i].label)
+                              : null,
+                    ),
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues the three taps — no duplicate footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Stronger value · fewer bluffs · chase nuts',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Stronger value · fewer bluffs · chase nuts'
+                    : 'Tap ${next.label} next')
+                : 'Stronger value · fewer bluffs · chase nuts',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
