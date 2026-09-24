@@ -1674,95 +1674,115 @@ class _PassiveActionsDemoState extends State<PassiveActionsDemo> {
 
   @override
   Widget build(BuildContext context) {
-    final expandTeach = widget.interactive && widget.enabled;
-    final minFelt = expandTeach
-        ? MediaQuery.sizeOf(context).height * 0.38
-        : null;
-    final child = ConstrainedBox(
-      constraints: minFelt != null
-          ? BoxConstraints(minHeight: minFelt)
-          : const BoxConstraints(),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-        alignment: minFelt != null ? Alignment.center : null,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.feltLight, AppColors.feltDark],
+    // Keep densify after the last tap while Continue shows — locking
+    // `enabled` false must not collapse the teach shell into navy void.
+    final expandTeach = widget.interactive;
+    // Tall-phone teach: fixed felt + stretched tiles (minHeight alone leaves
+    // sparse green under FOLD / CHECK / CALL).
+    final feltHeight =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+    final tiles = Row(
+      crossAxisAlignment:
+          expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
+      children: [
+        for (var i = 0; i < PassiveActionsDemo.actions.length; i++) ...[
+          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          Expanded(
+            child: _DemoSoftPulse(
+              active:
+                  widget.interactive &&
+                  widget.enabled &&
+                  !_tapped.contains(PassiveActionsDemo.actions[i].$1) &&
+                  // Pulse only the next untapped button in order.
+                  PassiveActionsDemo.actions
+                      .take(i)
+                      .every((a) => _tapped.contains(a.$1)),
+              child: _DemoActionCard(
+                label: PassiveActionsDemo.actions[i].$1,
+                caption: PassiveActionsDemo.actions[i].$2,
+                color: PassiveActionsDemo.actions[i].$3,
+                densify: expandTeach,
+                selected: _tapped.contains(PassiveActionsDemo.actions[i].$1),
+                enabled: widget.interactive && widget.enabled,
+                onPressed: widget.interactive
+                    ? () => _onTap(PassiveActionsDemo.actions[i].$1)
+                    : null,
+              ),
+            ),
           ),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.feltBorder.withValues(alpha: 0.85),
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Your three passive buttons',
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 14),
-            Row(
-              children: [
-                for (var i = 0; i < PassiveActionsDemo.actions.length; i++) ...[
-                  if (i > 0) const SizedBox(width: 8),
-                  Expanded(
-                    child: _DemoSoftPulse(
-                      active:
-                          widget.interactive &&
-                          widget.enabled &&
-                          !_tapped.contains(PassiveActionsDemo.actions[i].$1) &&
-                          // Pulse only the next untapped button in order.
-                          PassiveActionsDemo.actions
-                              .take(i)
-                              .every((a) => _tapped.contains(a.$1)),
-                      child: _DemoActionCard(
-                        label: PassiveActionsDemo.actions[i].$1,
-                        caption: PassiveActionsDemo.actions[i].$2,
-                        color: PassiveActionsDemo.actions[i].$3,
-                        selected: _tapped.contains(
-                          PassiveActionsDemo.actions[i].$1,
-                        ),
-                        enabled: widget.interactive && widget.enabled,
-                        onPressed: widget.interactive
-                            ? () => _onTap(PassiveActionsDemo.actions[i].$1)
-                            : null,
-                      ),
-                    ),
-                  ),
-                ],
-              ],
-            ),
-            const SizedBox(height: 14),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.feltDark.withValues(alpha: 0.65),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: AppColors.gold.withValues(alpha: 0.45),
-                ),
-              ),
-              child: Text(
-                _statusCue,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.manrope(
-                  color: AppColors.gold,
-                  fontSize: expandTeach ? 14 : 12,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ],
+        ],
+      ],
+    );
+    final cue = Container(
+      width: expandTeach ? double.infinity : null,
+      padding: EdgeInsets.symmetric(
+        horizontal: expandTeach ? 18 : 14,
+        vertical: expandTeach ? 14 : 8,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.feltDark.withValues(alpha: 0.65),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.gold.withValues(alpha: 0.45)),
+      ),
+      child: Text(
+        _statusCue,
+        textAlign: TextAlign.center,
+        style: GoogleFonts.manrope(
+          color: AppColors.gold,
+          fontSize: expandTeach ? 16 : 12,
+          fontWeight: FontWeight.w700,
         ),
       ),
+    );
+    final body = Column(
+      mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisAlignment:
+          expandTeach
+              ? MainAxisAlignment.spaceEvenly
+              : MainAxisAlignment.start,
+      children: [
+        Text(
+          'Your three passive buttons',
+          style: GoogleFonts.manrope(
+            color: AppColors.slate,
+            fontSize: expandTeach ? 15 : 12,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        if (!expandTeach) const SizedBox(height: 14),
+        expandTeach
+            ? Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: tiles,
+              ),
+            )
+            : tiles,
+        if (!expandTeach) const SizedBox(height: 14),
+        cue,
+      ],
+    );
+    final child = Container(
+      width: double.infinity,
+      height: feltHeight,
+      padding: EdgeInsets.fromLTRB(
+        12,
+        expandTeach ? 18 : 14,
+        12,
+        expandTeach ? 18 : 14,
+      ),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.feltBorder.withValues(alpha: 0.85),
+        ),
+      ),
+      child: body,
     );
     if (widget.interactive) return child;
     return ExcludeSemantics(child: child);

@@ -2526,7 +2526,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllPlayingTapped: onBestFiveAcknowledge,
         ),
         CoachDialogueVisualKind.passiveActions => PassiveActionsDemo(
-          interactive: onPassiveAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllActionsTapped: onPassiveAcknowledge,
         ),
