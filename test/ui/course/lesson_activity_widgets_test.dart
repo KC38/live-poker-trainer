@@ -16780,7 +16780,8 @@ void main() {
         ),
       );
       expect(find.byType(HuVsMultiwayDemo), findsOneWidget);
-      expect(find.text('Tap Fewer, Thicker, and Widen.'), findsOneWidget);
+      expect(find.text('Tap FEWER next'), findsOneWidget);
+      expect(find.text('Tap Fewer, Thicker, and Widen.'), findsNothing);
       expect(find.text('Tap Fewer, Thicker, and Widen'), findsNothing);
       expect(
         find.text('More players: fewer bluffs, thicker value'),
@@ -16789,10 +16790,14 @@ void main() {
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['FEWER', 'THICKER', 'WIDEN']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
+      await tester.tap(find.text('FEWER'));
+      await tester.pump();
+      expect(find.text('Tap THICKER next'), findsOneWidget);
+      await tester.tap(find.text('THICKER'));
+      await tester.pump();
+      expect(find.text('Tap WIDEN next'), findsOneWidget);
+      await tester.tap(find.text('WIDEN'));
+      await tester.pump();
       expect(feltAck, 1);
       controller.dispose();
     },
