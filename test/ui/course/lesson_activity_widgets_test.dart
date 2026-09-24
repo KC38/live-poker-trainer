@@ -4107,8 +4107,23 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Tap WIDER next'), findsOneWidget);
     expect(find.text('Tap Wider, Hang, and Ego.'), findsNothing);
     expect(find.text('Tap Wider, Hang, and Ego'), findsNothing);
+    expect(
+      find.text('Call wider · let them hang · no ego'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(VsManiacsDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
     await tester.tap(find.text('WIDER'));
     await tester.pump();
@@ -4119,6 +4134,15 @@ await tester.tap(find.text('NIT'));
     await tester.tap(find.text('EGO'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Call wider · let them hang · no ego'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(VsManiacsDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
