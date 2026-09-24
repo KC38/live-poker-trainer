@@ -449,6 +449,22 @@ void main() {
       find.text('Tap each highlighted card — those five count'),
       findsOneWidget,
     );
+    // Tall-phone teach felt expands into the navy void.
+    final felt = find.byWidgetPredicate(
+      (w) =>
+          w is Container &&
+          w.decoration is BoxDecoration &&
+          (w.decoration! as BoxDecoration).gradient != null,
+    );
+    expect(felt, findsWidgets);
+    expect(
+      tester.getSize(felt.first).height,
+      greaterThanOrEqualTo(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.32,
+      ),
+    );
     // No duplicate gold hint under the felt (demo embeds the instruction).
     expect(
       find.text('Tap each highlighted card — only five of seven play.'),
