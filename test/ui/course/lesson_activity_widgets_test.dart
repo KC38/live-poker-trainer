@@ -3399,12 +3399,27 @@ await tester.tap(find.text('FLOP'));
     );
     expect(find.byType(SizingLanguageDemo), findsOneWidget);
     expect(find.text('Tap VALUE next'), findsOneWidget);
-    expect(find.text('Tap Value, Pressure, and Size.'), findsNothing);
     expect(find.text('Tap Value, Pressure, and Size'), findsNothing);
+    expect(find.text('Tap Value, Pressure, and Size.'), findsNothing);
+    expect(
+      find.text('Value looks like value · pressure looks like pressure'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(SizingLanguageDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
-    await tester.tap(find.text('VALUE'));
+await tester.tap(find.text('VALUE'));
     await tester.pump();
     expect(find.text('Tap PRESSURE next'), findsOneWidget);
     await tester.tap(find.text('PRESSURE'));
@@ -3413,6 +3428,15 @@ await tester.tap(find.text('FLOP'));
     await tester.tap(find.text('SIZE'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Value looks like value · pressure looks like pressure'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(SizingLanguageDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
