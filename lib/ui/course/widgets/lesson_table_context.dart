@@ -5488,7 +5488,7 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.blindsSeats => _buildBlindsSeats(context),
       LessonTableLayout.positionLabels => _buildPositionLabels(context),
       LessonTableLayout.blindsTiming => _buildBlindsTiming(context),
-      LessonTableLayout.streetEndPhases => _buildStreetEndPhases(),
+      LessonTableLayout.streetEndPhases => _buildStreetEndPhases(context),
       LessonTableLayout.potFoldWinOutcomes => _buildPotFoldWinOutcomes(),
       LessonTableLayout.potShowdownOutcomes => _buildPotShowdownOutcomes(),
       LessonTableLayout.potSideOutcomes => _buildPotSideOutcomes(),
@@ -6332,7 +6332,12 @@ class LessonTableContext extends StatelessWidget {
     );
   }
 
-  Widget _buildStreetEndPhases() {
+  Widget _buildStreetEndPhases(BuildContext context) {
+    // Tall-phone teach: fill navy void under the three end-of-street tiles.
+    // Unguided — densify only, no SoftPulse spoiler on the correct phase.
+    final densifyShell = true;
+    final feltHeight = MediaQuery.sizeOf(context).height * 0.58;
+
     Widget phase({
       required LessonTableRegion region,
       required String title,
@@ -6345,32 +6350,39 @@ class LessonTableContext extends StatelessWidget {
           label: title,
           selected: selected,
           enabled: enabled && _interactive,
+          expand: densifyShell,
           onTap:
               _interactive
                   ? () => onRegionTap!(LessonTableTapTarget(region))
                   : null,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(6, 8, 6, 8),
+            padding: EdgeInsets.fromLTRB(
+              densifyShell ? 10 : 6,
+              densifyShell ? 14 : 8,
+              densifyShell ? 10 : 6,
+              densifyShell ? 14 : 8,
+            ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 visual,
-                const SizedBox(height: 6),
+                SizedBox(height: densifyShell ? 12 : 6),
                 Text(
                   title,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.manrope(
                     color: AppColors.cream,
-                    fontSize: 12,
+                    fontSize: densifyShell ? 15 : 12,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: densifyShell ? 4 : 2),
                 Text(
                   detail,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.manrope(
                     color: AppColors.slate,
-                    fontSize: 10,
+                    fontSize: densifyShell ? 12 : 10,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -6382,20 +6394,23 @@ class LessonTableContext extends StatelessWidget {
     }
 
     return _feltShell(
+      key: const ValueKey('street-end-felt'),
       semanticsLabel:
           _interactive
               ? 'Interactive street timing — when betting ends'
               : 'Street end phases',
+      height: feltHeight,
+      centerChild: densifyShell,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           phase(
             region: LessonTableRegion.streetActionMatched,
             title: 'Bets matched',
             detail: 'Action equal',
-            visual: const _BlindChipStack(amount: 3),
+            visual: const _BlindChipStack(amount: 3, densify: true),
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 10),
           phase(
             region: LessonTableRegion.streetFlopDealt,
             title: 'Flop appears',
@@ -6406,22 +6421,22 @@ class LessonTableContext extends StatelessWidget {
                 for (final code in const ['Qs', 'Jh', '2c']) ...[
                   MiniCard(
                     card: CardModel.fromCode(code),
-                    size: MiniCardSize.tiny,
+                    size: MiniCardSize.small,
                   ),
-                  const SizedBox(width: 2),
+                  const SizedBox(width: 3),
                 ],
               ],
             ),
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 10),
           phase(
             region: LessonTableRegion.streetSomeoneFolds,
             title: 'Someone folds',
             detail: 'Others act',
-            visual: const Icon(
+            visual: Icon(
               Icons.person_off_outlined,
               color: AppColors.slate,
-              size: 24,
+              size: densifyShell ? 36 : 24,
             ),
           ),
         ],
