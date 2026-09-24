@@ -6162,6 +6162,7 @@ void main() {
     expect(find.text('Tap strongest first'), findsNothing);
     expect(find.text('Tap strong → weak'), findsNothing);
     expect(find.text('Tap to place'), findsOneWidget);
+    expect(find.text('Tap Flush'), findsOneWidget);
     expect(find.text('Flush'), findsOneWidget);
     expect(find.text('Straight'), findsOneWidget);
     expect(find.text('Two pair'), findsOneWidget);
@@ -15477,15 +15478,18 @@ void main() {
         ),
       ),
     );
-    expect(find.text('Tap lowest first'), findsOneWidget);
-    expect(find.text('Tap low → high'), findsOneWidget);
+    // Rex owns "Tap weakest to strongest" — tray uses Tap LABEL SoftPulse cue.
+    expect(find.text('Tap weakest to strongest.'), findsOneWidget);
+    expect(find.text('Tap High card'), findsOneWidget);
     expect(find.byType(HandExampleTile), findsNWidgets(3));
     expect(find.byType(ActionChip), findsNothing);
 
     await tester.tap(find.text('High card'));
     await tester.pump();
+    expect(find.text('Tap One pair'), findsOneWidget);
     await tester.tap(find.text('One pair'));
     await tester.pump();
+    expect(find.text('Tap Flush'), findsOneWidget);
     await tester.tap(find.text('Flush'));
     await tester.pump();
     expect(controller.draft.orderedIds, ['hr-high', 'hr-pair', 'hr-flush']);
