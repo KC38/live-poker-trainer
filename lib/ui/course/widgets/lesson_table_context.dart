@@ -2063,6 +2063,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-03-03-01-unguided':
       return const LessonTableScene(
+        layout: LessonTableLayout.drawPriceOutcomes,
         heroCodes: ['Ah', 'Qh'],
         boardCodes: ['Kc', '8h', '2d'],
         villainSeatCount: 0,
@@ -4500,6 +4501,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-01-01-unguided' ||
       activity.id == 'act-03-01-01-checkpoint' ||
       activity.id == 'act-03-03-01-scaffolded' ||
+      activity.id == 'act-03-03-01-unguided' ||
       activity.id == 'act-04-06-01-guided' ||
       activity.id == 'act-04-06-02-guided' ||
       activity.id == 'act-04-06-02-scaffolded' ||
@@ -6162,6 +6164,7 @@ class LessonTableContext extends StatelessWidget {
           'Interactive draw price — tap call, fold, or raise',
       semanticsStatic: 'Draw price outcomes',
       caption: scene.caption ?? 'Pot 20 · bet 10 · outs',
+      cueLabel: 'Tap Call, Fold, or Raise.',
       phases: [
         (
           region: LessonTableRegion.drawPriceCall,
@@ -11115,12 +11118,13 @@ class LessonTableContext extends StatelessWidget {
         .map(CardModel.fromCode)
         .toList(growable: false);
     final showSpotCards = hero.isNotEmpty || board.isNotEmpty;
-    // Grow outcome-tile felts on tall phones; SoftPulse invites every tile
-    // (not only index 0) so call-price traps aren't falsely highlighted.
+    // Grow interactive outcome felts on tall phones even without SoftPulse
+    // (unguided must densify without pulsing a spoiler tile).
     final expandTeach =
-        showSoftPulse && selectedRegion == null && enabled && _interactive;
+        selectedRegion == null && enabled && _interactive;
+    final invitePulse = showSoftPulse && expandTeach;
     final cue =
-        expandTeach
+        invitePulse
             ? (cueLabel ?? 'Tap your answer on the felt.')
             : null;
 
@@ -11214,7 +11218,7 @@ class LessonTableContext extends StatelessWidget {
                   title: phases[i].title,
                   detail: phases[i].detail,
                   visual: phases[i].visual,
-                  highlighted: expandTeach,
+                  highlighted: invitePulse,
                 ),
               ],
             ],
