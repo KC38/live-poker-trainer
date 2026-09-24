@@ -16002,8 +16002,23 @@ await tester.tap(find.text('STRONGER'));
     expect(find.text('Tap CREDIT next'), findsOneWidget);
     expect(find.text('Tap Credit, Tighter, and No light.'), findsNothing);
     expect(find.text('Tap Credit, Tighter, and No light'), findsNothing);
+    expect(
+      find.text('Respect heat · steal less · no light XR'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(VsTagsDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
     await tester.tap(find.text('CREDIT'));
     await tester.pump();
@@ -16014,6 +16029,15 @@ await tester.tap(find.text('STRONGER'));
     await tester.tap(find.text('NO LIGHT'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Respect heat · steal less · no light XR'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(VsTagsDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
