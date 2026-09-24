@@ -920,69 +920,94 @@ class _HandRankLadderDemoState extends State<HandRankLadderDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextRung;
-    final child = Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.feltLight, AppColors.feltDark],
-        ),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'Weakest → strongest',
-            style: GoogleFonts.manrope(
-              color: AppColors.slate,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-            ),
+    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final minFelt =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.40 : null;
+    final child = ConstrainedBox(
+      constraints:
+          minFelt != null
+              ? BoxConstraints(minHeight: minFelt)
+              : const BoxConstraints(),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+        alignment: minFelt != null ? Alignment.center : null,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [AppColors.feltLight, AppColors.feltDark],
           ),
-          const SizedBox(height: 12),
-          for (var i = 0; i < HandRankLadderDemo.rungs.length; i++) ...[
-            if (i > 0) ...[
-              const SizedBox(height: 6),
-              Icon(
-                Icons.arrow_downward_rounded,
-                color: AppColors.gold.withValues(alpha: 0.75),
-                size: 18,
-              ),
-              const SizedBox(height: 6),
-            ],
-            _SoftPulseTarget(
-              active:
-                  widget.interactive &&
-                  widget.enabled &&
-                  next?.id == HandRankLadderDemo.rungs[i].id,
-              child: HandExampleTile(
-                example: HandRankLadderDemo.rungs[i],
-                selected: _tapped.contains(HandRankLadderDemo.rungs[i].id),
-                enabled: widget.interactive && widget.enabled,
-                compact: true,
-                onPressed:
-                    widget.interactive
-                        ? () => _onRungTap(HandRankLadderDemo.rungs[i])
-                        : null,
-              ),
-            ),
-          ],
-          if (widget.interactive && widget.enabled && next != null) ...[
-            const SizedBox(height: 12),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: AppColors.feltBorder.withValues(alpha: 0.85),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
             Text(
-              'Tap ${next.title}',
+              'Weakest → strongest',
               style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 14,
+                color: AppColors.slate,
+                fontSize: 12,
                 fontWeight: FontWeight.w700,
               ),
-              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 14),
+            for (var i = 0; i < HandRankLadderDemo.rungs.length; i++) ...[
+              if (i > 0) ...[
+                const SizedBox(height: 6),
+                Icon(
+                  Icons.arrow_downward_rounded,
+                  color: AppColors.gold.withValues(alpha: 0.75),
+                  size: 18,
+                ),
+                const SizedBox(height: 6),
+              ],
+              _SoftPulseTarget(
+                active:
+                    widget.interactive &&
+                    widget.enabled &&
+                    next?.id == HandRankLadderDemo.rungs[i].id,
+                child: HandExampleTile(
+                  example: HandRankLadderDemo.rungs[i],
+                  selected: _tapped.contains(HandRankLadderDemo.rungs[i].id),
+                  enabled: widget.interactive && widget.enabled,
+                  compact: true,
+                  onPressed:
+                      widget.interactive
+                          ? () => _onRungTap(HandRankLadderDemo.rungs[i])
+                          : null,
+                ),
+              ),
+            ],
+            const SizedBox(height: 14),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.feltDark.withValues(alpha: 0.65),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: AppColors.gold.withValues(alpha: 0.45),
+                ),
+              ),
+              child: Text(
+                widget.interactive
+                    ? (next == null
+                        ? 'High card → pair → flush'
+                        : 'Tap ${next.title}')
+                    : 'High card → pair → flush',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.manrope(
+                  color: AppColors.gold,
+                  fontSize: expandTeach ? 14 : 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
             ),
           ],
-        ],
+        ),
       ),
     );
     if (widget.interactive) return child;
