@@ -3045,8 +3045,16 @@ class _TurnStoryDemoState extends State<TurnStoryDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in TurnStoryDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -3077,39 +3085,47 @@ class _TurnStoryDemoState extends State<TurnStoryDemo> {
                 for (var col = 0; col < 2; col++) ...[
                   if (col > 0) const SizedBox(width: 8),
                   Expanded(
-                    child: _DemoActionCard(
-                      label: TurnStoryDemo.points[row * 2 + col].label,
-                      caption: TurnStoryDemo.points[row * 2 + col].caption,
-                      color: TurnStoryDemo.points[row * 2 + col].color,
-                      selected: _tapped.contains(
-                        TurnStoryDemo.points[row * 2 + col].label,
+                    child: _DemoSoftPulse(
+                      active:
+                          widget.interactive &&
+                          widget.enabled &&
+                          next?.label ==
+                              TurnStoryDemo.points[row * 2 + col].label,
+                      child: _DemoActionCard(
+                        label: TurnStoryDemo.points[row * 2 + col].label,
+                        caption: TurnStoryDemo.points[row * 2 + col].caption,
+                        color: TurnStoryDemo.points[row * 2 + col].color,
+                        selected: _tapped.contains(
+                          TurnStoryDemo.points[row * 2 + col].label,
+                        ),
+                        enabled: widget.interactive && widget.enabled,
+                        onPressed:
+                            widget.interactive
+                                ? () => _onTap(
+                                  TurnStoryDemo.points[row * 2 + col].label,
+                                )
+                                : null,
                       ),
-                      enabled: widget.interactive && widget.enabled,
-                      onPressed:
-                          widget.interactive
-                              ? () => _onTap(
-                                TurnStoryDemo.points[row * 2 + col].label,
-                              )
-                              : null,
                     ),
                   ),
                 ],
               ],
             ),
           ],
-          // Interactive: Rex already cues the four taps — no duplicate footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Brick · change · barrel · delay with intent',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Brick · change · barrel · delay with intent'
+                    : 'Tap ${next.label} next')
+                : 'Brick · change · barrel · delay with intent',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );

@@ -224,6 +224,7 @@ String? _guidedPulseChoiceId({
     'act-02-04-01-guided-fold' => 'fold-j3',
     'act-03-04-01-guided' => 'bet-tp',
     'act-03-04-01-scaffolded' => 'cbet',
+    'act-03-05-01-scaffolded' => 'barrel',
     _ => null,
   };
 }

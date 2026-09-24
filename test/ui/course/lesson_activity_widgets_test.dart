@@ -2329,17 +2329,23 @@ void main() {
       ),
     );
     expect(find.byType(TurnStoryDemo), findsOneWidget);
-    expect(
-      find.text('Tap Brick, Change, Barrel, and Delay.'),
-      findsOneWidget,
-    );
+    expect(find.text('Tap BRICK next'), findsOneWidget);
+    expect(find.text('Tap Brick, Change, Barrel, and Delay.'), findsNothing);
+    expect(find.text('Tap Brick, Change, Barrel, and Delay'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['BRICK', 'CHANGE', 'BARREL', 'DELAY']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('BRICK'));
+    await tester.pump();
+    expect(find.text('Tap CHANGE next'), findsOneWidget);
+    await tester.tap(find.text('CHANGE'));
+    await tester.pump();
+    expect(find.text('Tap BARREL next'), findsOneWidget);
+    await tester.tap(find.text('BARREL'));
+    await tester.pump();
+    expect(find.text('Tap DELAY next'), findsOneWidget);
+    await tester.tap(find.text('DELAY'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
