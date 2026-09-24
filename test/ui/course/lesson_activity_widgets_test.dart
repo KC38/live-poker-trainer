@@ -527,6 +527,21 @@ void main() {
     expect(find.text('Tap Fold'), findsOneWidget);
     expect(find.text('Tap Fold, Check, and Call'), findsNothing);
     expect(find.text('Tap Fold, Check, and Call.'), findsNothing);
+    expect(
+      find.text('Fold · Check · Call — your three passives'),
+      findsNothing,
+    );
+    final teachHeight =
+        tester.getSize(find.byType(PassiveActionsDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(feltAck, 0);
@@ -537,6 +552,15 @@ void main() {
     await tester.tap(find.text('CALL'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Fold · Check · Call — your three passives'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(PassiveActionsDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
