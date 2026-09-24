@@ -2823,7 +2823,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllPointsTapped: onRangeRewriteAcknowledge,
         ),
         CoachDialogueVisualKind.timingClues => TimingCluesDemo(
-          interactive: onTimingCluesAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPointsTapped: onTimingCluesAcknowledge,
         ),
