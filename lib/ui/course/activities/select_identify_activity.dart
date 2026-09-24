@@ -352,6 +352,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Two hearts on board with the nut heart — tap the class.',
       'act-03-02-01-unguided' =>
           'No pair, almost no draw multiway — tap the class.',
+      'act-03-02-01-checkpoint' =>
+          'Eight or queen completes — tap the class.',
       'act-03-03-01-scaffolded' =>
           'Pot 20, bet 10 — tap how many chips to call.',
       'act-03-03-01-unguided' =>
@@ -734,6 +736,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-03-02-01-guided' ||
             widget.activity.id == 'act-03-02-01-scaffolded' ||
             widget.activity.id == 'act-03-02-01-unguided' ||
+            widget.activity.id == 'act-03-02-01-checkpoint' ||
             widget.activity.id == 'act-03-03-01-scaffolded' ||
             widget.activity.id == 'act-03-03-01-unguided' ||
             widget.activity.id == 'act-03-03-01-checkpoint' ||
