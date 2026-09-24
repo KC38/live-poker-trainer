@@ -4765,7 +4765,7 @@ class LessonTableContext extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return switch (scene.layout) {
-      LessonTableLayout.blindsSeats => _buildBlindsSeats(),
+      LessonTableLayout.blindsSeats => _buildBlindsSeats(context),
       LessonTableLayout.positionLabels => _buildPositionLabels(),
       LessonTableLayout.blindsTiming => _buildBlindsTiming(),
       LessonTableLayout.streetEndPhases => _buildStreetEndPhases(),
@@ -5084,7 +5084,7 @@ class LessonTableContext extends StatelessWidget {
     );
   }
 
-  Widget _buildBlindsSeats() {
+  Widget _buildBlindsSeats(BuildContext context) {
     final n = scene.seatCount;
     final button = scene.buttonSeat % n;
     final sb = blindsSmallBlindSeat(buttonSeat: button, seatCount: n);
@@ -5153,12 +5153,31 @@ class LessonTableContext extends StatelessWidget {
       );
     }
 
+    final expandTeach =
+        showSoftPulse &&
+        selectedRegion == null &&
+        selectedSeatIndex == null &&
+        (scene.highlight == LessonTableHighlight.button ||
+            scene.highlight == LessonTableHighlight.smallBlind ||
+            scene.highlight == LessonTableHighlight.bigBlind);
+    final minFelt =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.40 : null;
+    final cueLabel = switch (scene.highlight) {
+      LessonTableHighlight.button => 'Tap the dealer button',
+      LessonTableHighlight.smallBlind => 'Tap the small blind',
+      LessonTableHighlight.bigBlind => 'Tap the big blind',
+      _ => null,
+    };
+
     return _feltShell(
       semanticsLabel:
           _interactive
               ? 'Interactive poker table with button and blinds'
               : 'Poker table showing dealer button and blinds',
+      minHeight: minFelt,
+      centerChild: expandTeach,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           if (topRow.isNotEmpty)
             Row(
@@ -5183,6 +5202,18 @@ class LessonTableContext extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [for (final s in bottomRow) seatChip(s)],
           ),
+          if (expandTeach && cueLabel != null) ...[
+            const SizedBox(height: 12),
+            Text(
+              cueLabel,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
         ],
       ),
     );
