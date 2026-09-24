@@ -13766,6 +13766,58 @@ void main() {
     );
   });
 
+  testWidgets(
+    'vs-tags explain taps Credit Tighter No light instead of Continue',
+    (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-11-03-explain',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'Versus TAG: respect raises; do not invent light bluff-raises.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text:
+              'Versus TAG: respect raises; do not invent light bluff-raises.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(VsTagsDemo), findsOneWidget);
+    expect(find.text('Tap CREDIT next'), findsOneWidget);
+    expect(find.text('Tap Credit, Tighter, and No light.'), findsNothing);
+    expect(find.text('Tap Credit, Tighter, and No light'), findsNothing);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    await tester.tap(find.text('CREDIT'));
+    await tester.pump();
+    expect(find.text('Tap TIGHTER next'), findsOneWidget);
+    await tester.tap(find.text('TIGHTER'));
+    await tester.pump();
+    expect(find.text('Tap NO LIGHT next'), findsOneWidget);
+    await tester.tap(find.text('NO LIGHT'));
+    await tester.pump();
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
   testWidgets('s6 adjust tag guided docks Fold on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-06-11-03-guided',
