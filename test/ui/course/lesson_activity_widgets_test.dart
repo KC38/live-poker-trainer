@@ -3964,17 +3964,21 @@ void main() {
         ),
       );
       expect(find.byType(PolarMergedDemo), findsOneWidget);
-      // Rex cue below the felt — not a second footer inside the demo.
-      expect(find.text('Tap Polar, Merged, and Size.'), findsOneWidget);
+      expect(find.text('Tap POLAR next'), findsOneWidget);
+      expect(find.text('Tap Polar, Merged, and Size.'), findsNothing);
       expect(find.text('Tap Polar, Merged, and Size'), findsNothing);
       expect(find.text('Nuts/air vs medium-strong'), findsNothing);
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['POLAR', 'MERGED', 'SIZE']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
+      await tester.tap(find.text('POLAR'));
+      await tester.pump();
+      expect(find.text('Tap MERGED next'), findsOneWidget);
+      await tester.tap(find.text('MERGED'));
+      await tester.pump();
+      expect(find.text('Tap SIZE next'), findsOneWidget);
+      await tester.tap(find.text('SIZE'));
+      await tester.pump();
       expect(feltAck, 1);
       controller.dispose();
     },
