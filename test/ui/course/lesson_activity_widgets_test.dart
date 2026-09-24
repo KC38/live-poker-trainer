@@ -18662,8 +18662,22 @@ await tester.tap(find.text('STRONGER'));
     expect(find.text('Queen kicker'), findsOneWidget);
     expect(find.text('Jack kicker?'), findsOneWidget);
     expect(find.text('Same pair ties?'), findsOneWidget);
-    expect(find.text('Tap You.'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no Tap You. footer under the felt.
+    expect(find.text('Tap You.'), findsNothing);
     expect(find.text('Them'), findsWidgets);
+
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('outcome-phases-felt')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
     var autoSubmits = 0;
     controller.onAutoSubmit = () => autoSubmits += 1;

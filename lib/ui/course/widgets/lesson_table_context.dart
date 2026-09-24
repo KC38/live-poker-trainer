@@ -7531,7 +7531,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive kicker showdown — tap You, Them, or Chop',
       semanticsStatic: 'Kicker showdown outcomes',
       caption: scene.caption ?? 'Your holes',
-      cueLabel: 'Tap You.',
+      // SoftPulse glow on You + Rex "tap who wins" — no Tap You. footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.handRankYouWin,
       phases: [
         (
@@ -13678,10 +13679,13 @@ class LessonTableContext extends StatelessWidget {
     final expandTeach =
         selectedRegion == null && enabled && _interactive;
     final invitePulse = showSoftPulse && expandTeach;
+    // Empty cueLabel = SoftPulse-only (no footer). Null = default footer copy.
     final cue =
-        invitePulse
-            ? (cueLabel ?? 'Tap your answer on the felt.')
-            : null;
+        !invitePulse
+            ? null
+            : (cueLabel != null && cueLabel.isEmpty)
+            ? null
+            : (cueLabel ?? 'Tap your answer on the felt.');
 
     return Builder(
       builder: (context) {
@@ -13717,6 +13721,7 @@ class LessonTableContext extends StatelessWidget {
           ],
         );
         return _feltShell(
+          key: const ValueKey('outcome-phases-felt'),
           semanticsLabel:
               _interactive ? semanticsInteractive : semanticsStatic,
           height: feltHeight,
@@ -13732,12 +13737,138 @@ class LessonTableContext extends StatelessWidget {
                 if (!expandTeach) SizedBox(height: 10),
               ],
               if (showSpotCards) ...[
+                if (expandTeach)
+                  Expanded(
+                    flex: 5,
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final roomy = constraints.maxHeight >= 280;
+                        final holeScale = roomy ? 1.35 : 1.0;
+                        final boardScale = roomy ? 1.15 : 1.0;
+                        Widget labeledCards({
+                          required String label,
+                          required List<CardModel> cards,
+                          required double scale,
+                          Color? labelColor,
+                        }) {
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                label,
+                                style: GoogleFonts.manrope(
+                                  color: labelColor ?? AppColors.slate,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 0.6,
+                                ),
+                              ),
+                              const SizedBox(height: 6),
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    for (var i = 0; i < cards.length; i++) ...[
+                                      if (i > 0) SizedBox(width: 6 * scale),
+                                      MiniCard(
+                                        card: cards[i],
+                                        size:
+                                            (!roomy || cards.length > 2)
+                                                ? MiniCardSize.small
+                                                : MiniCardSize.hero,
+                                        scale: scale,
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              ),
+                            ],
+                          );
+                        }
+
+                        final rails = <Widget>[
+                          if (villainFaceUp.isNotEmpty)
+                            labeledCards(
+                              label: 'Them',
+                              cards: villainFaceUp,
+                              scale: holeScale,
+                            )
+                          else if (scene.villainSeatCount > 0)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                for (var i = 0; i < scene.villainSeatCount; i++)
+                                  const _FaceDownPair(),
+                              ],
+                            ),
+                          if (board.isNotEmpty)
+                            labeledCards(
+                              label: 'BOARD · shared',
+                              cards: board,
+                              scale: boardScale,
+                            ),
+                          if (hero.isNotEmpty) ...[
+                            Text(
+                              caption,
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.manrope(
+                                color: AppColors.gold,
+                                fontSize: roomy ? 13 : 11,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            labeledCards(
+                              label: 'You',
+                              cards: hero,
+                              scale: holeScale,
+                              labelColor: AppColors.slate,
+                            ),
+                          ] else
+                            Text(
+                              caption,
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.manrope(
+                                color: AppColors.gold,
+                                fontSize: roomy ? 13 : 11,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                        ];
+                        if (roomy) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: rails,
+                          );
+                        }
+                        // Short test viewports: pack + scaleDown, never overflow.
+                        return FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.center,
+                          child: SizedBox(
+                            width: constraints.maxWidth,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                for (var i = 0; i < rails.length; i++) ...[
+                                  if (i > 0) const SizedBox(height: 8),
+                                  rails[i],
+                                ],
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                else ...[
                 if (villainFaceUp.isNotEmpty) ...[
                   Text(
                     'Them',
                     style: GoogleFonts.manrope(
                       color: AppColors.slate,
-                      fontSize: expandTeach ? 11 : 10,
+                      fontSize: 10,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.6,
                     ),
@@ -13755,7 +13886,7 @@ class LessonTableContext extends StatelessWidget {
                       ],
                     ],
                   ),
-                  if (!expandTeach) SizedBox(height: 8),
+                  SizedBox(height: 8),
                 ] else if (scene.villainSeatCount > 0) ...[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -13764,14 +13895,14 @@ class LessonTableContext extends StatelessWidget {
                         const _FaceDownPair(),
                     ],
                   ),
-                  if (!expandTeach) SizedBox(height: 8),
+                  SizedBox(height: 8),
                 ],
                 if (board.isNotEmpty) ...[
                   Text(
                     'BOARD · shared',
                     style: GoogleFonts.manrope(
                       color: AppColors.slate,
-                      fontSize: expandTeach ? 11 : 10,
+                      fontSize: 10,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.6,
                     ),
@@ -13789,7 +13920,7 @@ class LessonTableContext extends StatelessWidget {
                       ],
                     ],
                   ),
-                  if (!expandTeach) SizedBox(height: 8),
+                  SizedBox(height: 8),
                 ],
                 if (hero.isNotEmpty) ...[
                   Text(
@@ -13797,7 +13928,7 @@ class LessonTableContext extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: GoogleFonts.manrope(
                       color: AppColors.gold,
-                      fontSize: expandTeach ? 13 : 11,
+                      fontSize: 11,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -13806,7 +13937,7 @@ class LessonTableContext extends StatelessWidget {
                     'You',
                     style: GoogleFonts.manrope(
                       color: AppColors.slate,
-                      fontSize: expandTeach ? 11 : 10,
+                      fontSize: 10,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.6,
                     ),
@@ -13824,18 +13955,19 @@ class LessonTableContext extends StatelessWidget {
                       ],
                     ],
                   ),
-                  if (!expandTeach) const SizedBox(height: 10),
+                  const SizedBox(height: 10),
                 ] else ...[
                   Text(
                     caption,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.manrope(
                       color: AppColors.gold,
-                      fontSize: expandTeach ? 13 : 11,
+                      fontSize: 11,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  if (!expandTeach) const SizedBox(height: 10),
+                  const SizedBox(height: 10),
+                ],
                 ],
               ] else ...[
                 Text(
@@ -13851,6 +13983,7 @@ class LessonTableContext extends StatelessWidget {
               ],
               expandTeach
                   ? Expanded(
+                    flex: 4,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: phaseRow,
