@@ -74,4 +74,32 @@ void main() {
     }
     expect(introduced, hasLength(5));
   });
+
+  group('lessonById', () {
+    test('exact id wins', () {
+      final lesson = catalog.lessonById('lesson-01-01-01-your-two-cards');
+      expect(lesson, isNotNull);
+      expect(lesson!.id, 'lesson-01-01-01-your-two-cards');
+    });
+
+    test('unique numeric prefix resolves truncated openlesson ids', () {
+      final first = catalog.lessonById('lesson-01-01-01');
+      expect(first, isNotNull);
+      expect(first!.id, 'lesson-01-01-01-your-two-cards');
+
+      final selective = catalog.lessonById('lesson-06-11-01');
+      expect(selective, isNotNull);
+      expect(selective!.id, 'lesson-06-11-01-observe-selective');
+    });
+
+    test('ambiguous prefix returns null', () {
+      expect(catalog.lessonById('lesson-01-01'), isNull);
+      expect(catalog.lessonById('lesson-01'), isNull);
+    });
+
+    test('empty and unknown ids return null', () {
+      expect(catalog.lessonById(''), isNull);
+      expect(catalog.lessonById('lesson-99-99-99'), isNull);
+    });
+  });
 }
