@@ -17641,6 +17641,7 @@ void main() {
         ),
       );
       expect(find.byType(LeakReviewBookDemo), findsOneWidget);
+      expect(find.text('Tap LEAK next'), findsOneWidget);
       expect(find.text('Tap Leak, Book, and Review.'), findsNothing);
       expect(find.text('Tap Leak, Book, and Review'), findsNothing);
       expect(
@@ -17650,10 +17651,14 @@ void main() {
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['LEAK', 'BOOK', 'REVIEW']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
+      await tester.tap(find.text('LEAK'));
+      await tester.pump();
+      expect(find.text('Tap BOOK next'), findsOneWidget);
+      await tester.tap(find.text('BOOK'));
+      await tester.pump();
+      expect(find.text('Tap REVIEW next'), findsOneWidget);
+      await tester.tap(find.text('REVIEW'));
+      await tester.pump();
       expect(feltAck, 1);
       controller.dispose();
     },
