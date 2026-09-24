@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "8c91a182c82349180140fab6893336bb93a4ea7f15fa471d6cc37880d3d5d8c9",
+  "contentChecksum": "41a287a4cc3f68b9b589839c5aaf44b232a44f8104d7ee7112c2e4243296c6c6",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -7254,7 +7254,7 @@
                   "choices": [
                     {
                       "id": "careful",
-                      "label": "Fold or keep the pot small",
+                      "label": "Fold",
                       "accessibilityText": "Fold or keep the pot small",
                       "grading": {
                         "grade": "recommended",
@@ -7264,7 +7264,7 @@
                     },
                     {
                       "id": "stack",
-                      "label": "Jam for stacks",
+                      "label": "Jam stacks",
                       "accessibilityText": "Jam for stacks",
                       "grading": {
                         "grade": "clear_mistake",
@@ -7275,7 +7275,7 @@
                     },
                     {
                       "id": "call-down",
-                      "label": "Silent call-down forever",
+                      "label": "Call forever",
                       "accessibilityText": "Silent call-down forever",
                       "grading": {
                         "grade": "questionable",
@@ -7367,7 +7367,7 @@
                     },
                     {
                       "id": "float-air",
-                      "label": "Call to keep them honest",
+                      "label": "Float call",
                       "accessibilityText": "Call to keep them honest",
                       "grading": {
                         "grade": "clear_mistake",
@@ -7378,7 +7378,7 @@
                     },
                     {
                       "id": "bluff-crowd",
-                      "label": "Raise as a bluff",
+                      "label": "Bluff raise",
                       "accessibilityText": "Raise as a bluff",
                       "grading": {
                         "grade": "clear_mistake",

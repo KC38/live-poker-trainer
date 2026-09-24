@@ -187,8 +187,8 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-03-08-01-checkpoint') {
-    // Leak repair: tap the seat-note tile.
-    return SelectIdentifyPresentation.handCategoryTap;
+    // Leak repair: tap seat-frequency notes on densified felt.
+    return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-03-08-02-jump-table' ||
       activity.id == 'act-03-08-02-jump-class' ||
