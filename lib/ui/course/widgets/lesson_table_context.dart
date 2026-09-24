@@ -6225,10 +6225,10 @@ class LessonTableContext extends StatelessWidget {
   Widget _buildOutsImpliedOutcomes() {
     return _buildOutcomePhases(
       semanticsInteractive:
-          'Interactive implied odds — tap the edge of the nut flush draw',
+          'Interactive implied odds — tap Implied',
       semanticsStatic: 'Outs implied odds outcomes',
       caption: scene.caption ?? '200bb · pot bet · sticky caller',
-      cueLabel: 'Tap the implied-odds edge.',
+      cueLabel: 'Tap Implied.',
       phases: [
         (
           region: LessonTableRegion.outsImpliedPay,
