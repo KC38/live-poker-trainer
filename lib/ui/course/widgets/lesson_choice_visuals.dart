@@ -795,6 +795,7 @@ class HoleCardChoiceButton extends StatelessWidget {
     required this.onPressed,
     this.accessibilityText,
     this.highlighted = false,
+    this.densify = false,
   });
 
   final List<String> codes;
@@ -803,6 +804,9 @@ class HoleCardChoiceButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String? accessibilityText;
   final bool highlighted;
+
+  /// Larger padding + centered faces for densified felt trays.
+  final bool densify;
 
   @override
   Widget build(BuildContext context) {
@@ -820,6 +824,7 @@ class HoleCardChoiceButton extends StatelessWidget {
             : highlighted
             ? AppColors.goldMuted
             : AppColors.slateDark;
+    final radius = densify ? 14.0 : 10.0;
     return Semantics(
       button: true,
       selected: selected,
@@ -835,22 +840,27 @@ class HoleCardChoiceButton extends StatelessWidget {
                   : highlighted
                   ? AppColors.gold.withValues(alpha: 0.08)
                   : AppColors.surfaceMuted.withValues(alpha: 0.65),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(radius),
           child: InkWell(
             onTap: enabled ? onPressed : null,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(radius),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 160),
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+              padding: EdgeInsets.symmetric(
+                horizontal: densify ? 18 : 12,
+                vertical: densify ? 16 : 9,
+              ),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(radius),
                 border: Border.all(color: border, width: selected ? 2 : 1),
               ),
               child: Row(
+                mainAxisAlignment:
+                    densify ? MainAxisAlignment.center : MainAxisAlignment.start,
                 children: [
                   for (var i = 0; i < cards.length; i++) ...[
-                    if (i > 0) const SizedBox(width: 8),
+                    if (i > 0) SizedBox(width: densify ? 12 : 8),
                     MiniCard(card: cards[i], size: MiniCardSize.hero),
                   ],
                   if (cards.isEmpty)
@@ -859,6 +869,7 @@ class HoleCardChoiceButton extends StatelessWidget {
                       style: GoogleFonts.manrope(
                         color: AppColors.cream,
                         fontWeight: FontWeight.w700,
+                        fontSize: densify ? 18 : null,
                       ),
                     ),
                 ],
