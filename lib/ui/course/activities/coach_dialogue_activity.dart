@@ -2759,7 +2759,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllPointsTapped: onVsTagsAcknowledge,
         ),
         CoachDialogueVisualKind.vsLags => VsLagsDemo(
-          interactive: onVsLagsAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPointsTapped: onVsLagsAcknowledge,
         ),
