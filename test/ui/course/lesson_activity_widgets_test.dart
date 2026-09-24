@@ -1653,7 +1653,7 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('hand-families guided sees holes then taps Pocket pair', (
+  testWidgets('hand-families guided taps Pocket pair on densified felt', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -1674,12 +1674,21 @@ void main() {
     );
     expect(
       resolveSelectIdentifyPresentation(activity),
-      SelectIdentifyPresentation.handCategoryTap,
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.handFamilyGuidedOutcomes,
     );
     expect(resolveLessonTableScene(activity)?.heroCodes, ['8h', '8c']);
     expect(
-      resolveHandExample(id: 'hf-pair', label: 'Pocket pair')?.codes,
-      ['8h', '8c'],
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.handFamilyPair,
+        choices: activity.choices,
+      ),
+      'hf-pair',
     );
 
     final controller = LessonActivityController(activity: activity);
@@ -1697,9 +1706,9 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('Name the family for your holes.'), findsNothing);
-    expect(find.text('Which hand is a pocket pair?'), findsNothing);
-    expect(find.text('Tap the starting-hand family.'), findsOneWidget);
     expect(find.text('Pocket pair'), findsOneWidget);
+    expect(find.text('Matching ranks'), findsOneWidget);
+    expect(find.text('Tap Pocket pair.'), findsOneWidget);
     await tester.tap(find.text('Pocket pair'));
     await tester.pump();
     expect(controller.draft.choiceId, 'hf-pair');
@@ -1707,8 +1716,25 @@ void main() {
   });
 
   test('hand-families identify steps use classify-on-felt presentation', () {
+    expect(
+      resolveSelectIdentifyPresentation(
+        CourseActivity(
+          id: 'act-02-02-01-guided-pair',
+          order: 2,
+          stage: ActivityStage.guided,
+          renderer: ActivityRenderer.selectIdentify,
+          estimatedSeconds: 40,
+          accessibilityText: 'classify',
+          acceptedGrades: const [SoftGrade.recommended],
+          prompt: 'Name the family for your holes.',
+          choices: const [
+            CourseChoice(id: 'hf-pair', label: 'Pocket pair'),
+          ],
+        ),
+      ),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
     for (final id in const [
-      'act-02-02-01-guided-pair',
       'act-02-02-01-scaffolded-broadway',
       'act-02-02-01-unguided-sc',
       'act-02-02-01-checkpoint-trash',
