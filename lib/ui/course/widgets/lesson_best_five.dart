@@ -132,78 +132,90 @@ class _BestFiveDemoState extends State<BestFiveDemo> {
 
   @override
   Widget build(BuildContext context) {
-    final child = Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.feltLight, AppColors.feltDark],
+    final expandTeach = widget.interactive && widget.enabled;
+    final minFelt =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.40 : null;
+    final child = ConstrainedBox(
+      constraints:
+          minFelt != null
+              ? BoxConstraints(minHeight: minFelt)
+              : const BoxConstraints(),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+        alignment: minFelt != null ? Alignment.center : null,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [AppColors.feltLight, AppColors.feltDark],
+          ),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: AppColors.feltBorder.withValues(alpha: 0.85),
+          ),
         ),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: AppColors.feltBorder.withValues(alpha: 0.85),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Seven available · five play',
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'You',
+              style: GoogleFonts.manrope(
+                color: AppColors.cream,
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 6),
+            _DemoRow(
+              codes: BestFiveDemo.hero,
+              playing: BestFiveDemo.playing,
+              tapped: _tapped,
+              interactive: widget.interactive,
+              enabled: widget.enabled,
+              onCardTap: _onCardTap,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'Board',
+              style: GoogleFonts.manrope(
+                color: AppColors.cream,
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 6),
+            _DemoRow(
+              codes: BestFiveDemo.board,
+              playing: BestFiveDemo.playing,
+              tapped: _tapped,
+              interactive: widget.interactive,
+              enabled: widget.enabled,
+              onCardTap: _onCardTap,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              widget.interactive
+                  ? 'Tap each highlighted card — those five count'
+                  : 'Highlighted = the five that count',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: expandTeach ? 14 : 12,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
         ),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'Seven available · five play',
-            style: GoogleFonts.manrope(
-              color: AppColors.slate,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'You',
-            style: GoogleFonts.manrope(
-              color: AppColors.cream,
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 6),
-          _DemoRow(
-            codes: BestFiveDemo.hero,
-            playing: BestFiveDemo.playing,
-            tapped: _tapped,
-            interactive: widget.interactive,
-            enabled: widget.enabled,
-            onCardTap: _onCardTap,
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'Board',
-            style: GoogleFonts.manrope(
-              color: AppColors.cream,
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 6),
-          _DemoRow(
-            codes: BestFiveDemo.board,
-            playing: BestFiveDemo.playing,
-            tapped: _tapped,
-            interactive: widget.interactive,
-            enabled: widget.enabled,
-            onCardTap: _onCardTap,
-          ),
-          const SizedBox(height: 12),
-          Text(
-            widget.interactive
-                ? 'Tap each highlighted card — those five count'
-                : 'Highlighted = the five that count',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ],
       ),
     );
     if (widget.interactive) return child;
