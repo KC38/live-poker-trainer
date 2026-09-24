@@ -8229,7 +8229,24 @@ await tester.tap(find.text('STRONGER'));
       find.text('You bet. Everyone folds. Tap how you take the pot.'),
       findsNothing,
     );
+    // SoftPulse Take pot; Rex owns the teach line — no footer cue stack.
+    expect(find.text('Tap your answer on the felt.'), findsNothing);
+    expect(find.text('Tap on the felt.'), findsNothing);
     expect(find.text('Take pot'), findsWidgets);
+    expect(find.text('Must show'), findsWidgets);
+    expect(find.text('Dealer shows'), findsWidgets);
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('outcome-phases-felt')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
     await tester.tap(find.text('Take pot').first);
     await tester.pump();
     expect(controller.draft.choiceId, 'no-show');

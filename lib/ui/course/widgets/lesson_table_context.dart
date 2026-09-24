@@ -6462,6 +6462,9 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive: 'Interactive fold-win — tap how you take the pot',
       semanticsStatic: 'Fold-win outcomes',
       caption: scene.caption ?? 'You bet · everyone folds',
+      // SoftPulse Take pot; Rex already owns the teach line (no footer cue).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.potTakeQuiet,
       phases: [
         (
           region: LessonTableRegion.potTakeQuiet,
@@ -6509,6 +6512,8 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive: 'Interactive showdown — tap what happens next',
       semanticsStatic: 'Showdown outcomes',
       caption: scene.caption ?? 'River · called',
+      cueLabel: '',
+      guideRegion: LessonTableRegion.potShowdown,
       phases: [
         (
           region: LessonTableRegion.potShowdown,
@@ -13707,11 +13712,14 @@ class LessonTableContext extends StatelessWidget {
     final expandTeach =
         selectedRegion == null && enabled && _interactive;
     final invitePulse = showSoftPulse && expandTeach;
-    // Empty cueLabel = SoftPulse-only (no footer). Null = default footer copy.
+    // Empty cueLabel = SoftPulse-only (no footer). Null = default footer.
+    // showInviteCue false when Rex already owns the teach line (felt-first).
     final cue =
         !invitePulse
             ? null
             : (cueLabel != null && cueLabel.isEmpty)
+            ? null
+            : !showInviteCue
             ? null
             : (cueLabel ?? 'Tap your answer on the felt.');
 
