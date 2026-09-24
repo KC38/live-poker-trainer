@@ -6356,8 +6356,16 @@ class _TimingCluesDemoState extends State<TimingCluesDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in TimingCluesDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -6386,34 +6394,44 @@ class _TimingCluesDemoState extends State<TimingCluesDemo> {
               for (var i = 0; i < TimingCluesDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: TimingCluesDemo.points[i].label,
-                    caption: TimingCluesDemo.points[i].caption,
-                    color: TimingCluesDemo.points[i].color,
-                    selected: _tapped.contains(TimingCluesDemo.points[i].label),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(TimingCluesDemo.points[i].label)
-                            : null,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == TimingCluesDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: TimingCluesDemo.points[i].label,
+                      caption: TimingCluesDemo.points[i].caption,
+                      color: TimingCluesDemo.points[i].color,
+                      selected: _tapped.contains(
+                        TimingCluesDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () =>
+                                  _onTap(TimingCluesDemo.points[i].label)
+                              : null,
+                    ),
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues the three taps — no duplicate footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Small updates only',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Small updates only'
+                    : 'Tap ${next.label} next')
+                : 'Small updates only',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );

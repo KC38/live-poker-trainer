@@ -3645,14 +3645,20 @@ void main() {
       ),
     );
     expect(find.byType(TimingCluesDemo), findsOneWidget);
-    expect(find.text('Tap Timing, Sizing, and Clues.'), findsOneWidget);
+    expect(find.text('Tap TIMING next'), findsOneWidget);
+    expect(find.text('Tap Timing, Sizing, and Clues.'), findsNothing);
+    expect(find.text('Tap Timing, Sizing, and Clues'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['TIMING', 'SIZING', 'CLUES']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('TIMING'));
+    await tester.pump();
+    expect(find.text('Tap SIZING next'), findsOneWidget);
+    await tester.tap(find.text('SIZING'));
+    await tester.pump();
+    expect(find.text('Tap CLUES next'), findsOneWidget);
+    await tester.tap(find.text('CLUES'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
