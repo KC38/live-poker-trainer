@@ -18722,11 +18722,13 @@ void main() {
       ),
     );
     expect(
-      find.text('Dry board · Nit tiny bet — tap Raise as a bluff candidate.'),
+      find.text('Dry board · Nit tiny bet — tap Raise.'),
       findsOneWidget,
     );
-    expect(find.text('RAISE AS A BLUFF CANDIDATE'), findsOneWidget);
-    await tester.tap(find.text('RAISE AS A BLUFF CANDIDATE'));
+    expect(find.text('RAISE AS A BLUFF CANDIDATE'), findsNothing);
+    expect(find.text('RAISE BLUFF'), findsOneWidget);
+    expect(find.text('CALL AIR'), findsOneWidget);
+    await tester.tap(find.text('RAISE BLUFF'));
     await tester.pump();
     expect(controller.draft.choiceId, 'raise');
     controller.dispose();
