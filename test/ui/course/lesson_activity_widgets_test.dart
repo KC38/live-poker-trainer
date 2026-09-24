@@ -2689,8 +2689,23 @@ void main() {
     expect(find.text('Tap MADE next'), findsOneWidget);
     expect(find.text('Tap Made, Draw, SDV, and Air'), findsNothing);
     expect(find.text('Tap Made, Draw, SDV, and Air.'), findsNothing);
+    expect(
+      find.text('Made · draw · showdown value · air'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(FlopLabelDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
     await tester.tap(find.text('MADE'));
     await tester.pump();
@@ -2704,6 +2719,15 @@ void main() {
     await tester.tap(find.text('AIR'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Made · draw · showdown value · air'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(FlopLabelDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
