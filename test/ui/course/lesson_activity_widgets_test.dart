@@ -8039,6 +8039,32 @@ await tester.tap(find.text('STRONGER'));
       tester.getSize(find.byKey(const ValueKey('blinds-seats-felt'))).height,
       moreOrLessEquals(teachHeight, epsilon: 1),
     );
+    // Graded/locked clears onRegionTap — densify must still hold for Continue.
+    controller.finishSubmit(
+      SubmitCourseStepResult(
+        attemptId: 'a1',
+        activityId: activity.id,
+        grade: SoftGrade.recommended,
+        feedback: 'Postflop starts left of the button.',
+        accepted: true,
+        lifeLost: false,
+        livesRemaining: 3,
+        xpAwarded: 10,
+        remediationRequired: false,
+        resume: const CourseResumePointer(
+          attemptId: 'a1',
+          lessonId: 'lesson-01-04-01-streets-and-order',
+          activityId: 'act-01-04-01-checkpoint-postflop',
+          activityIndex: 4,
+        ),
+        duplicate: false,
+      ),
+    );
+    await tester.pump();
+    expect(
+      tester.getSize(find.byKey(const ValueKey('blinds-seats-felt'))).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
