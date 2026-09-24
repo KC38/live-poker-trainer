@@ -95,6 +95,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Hand ranks showdown: tap You / Them / Chop on densified felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-01-02-02-scaffolded-kicker') {
+    // Kicker showdown: tap You / Them / Chop on densified felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id == 'act-02-07-02-jump-family') {
     // Jump: tap Suited ace / Pocket pair / Trash on densified holes felt.
     return SelectIdentifyPresentation.tableRegionTap;
@@ -567,9 +571,6 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
       activity.renderer == ActivityRenderer.selectIdentify) {
     // Observe sticky callers: all densified steps handled above.
     return SelectIdentifyPresentation.tableRegionTap;
-  }
-  if (activity.id == 'act-01-02-02-scaffolded-kicker') {
-    return SelectIdentifyPresentation.showdownTap;
   }
   if (activity.id == 'act-01-02-02-guided-seven' ||
       activity.id == 'act-01-02-02-checkpoint-build') {

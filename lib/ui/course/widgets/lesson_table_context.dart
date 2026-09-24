@@ -1616,6 +1616,9 @@ enum LessonTableLayout {
   /// Hand ranks checkpoint: You / Them / Chop on densified showdown felt.
   handRankShowdownOutcomes,
 
+  /// Best-five scaffolded: You / Them / Chop on densified kicker showdown.
+  kickerShowdownOutcomes,
+
   /// Turn guided: brick vs scare vs always-change.
   turnBrickScareOutcomes,
 
@@ -3456,12 +3459,13 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return null;
     case 'act-01-02-02-scaffolded-kicker':
       return const LessonTableScene(
+        layout: LessonTableLayout.kickerShowdownOutcomes,
         heroCodes: ['Ah', 'Qd'],
         boardCodes: ['Kh', 'Kd', '7c', '3s', '2d'],
         villainCodes: ['As', 'Jd'],
         villainSeatCount: 0,
         highlight: LessonTableHighlight.none,
-        caption: 'You (AQ)',
+        caption: 'Your holes',
       );
     case 'act-01-02-02-unguided-board':
       return const LessonTableScene(
@@ -3639,11 +3643,10 @@ String? mapTableRegionToChoiceId({
         _ => null,
       };
     case 'act-01-02-02-scaffolded-kicker':
-      // Same kings — tap You (queen kicker) vs Them (jack).
       return switch (region) {
-        LessonTableRegion.hero => pick('you-kicker'),
-        LessonTableRegion.villain => pick('they-kicker'),
-        LessonTableRegion.board => pick('chop-kicker'),
+        LessonTableRegion.handRankYouWin => pick('you-kicker'),
+        LessonTableRegion.handRankTheyWin => pick('they-kicker'),
+        LessonTableRegion.handRankChop => pick('chop-kicker'),
         _ => null,
       };
     case 'act-01-04-01-unguided-end':
@@ -5093,6 +5096,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-02-07-02-jump-family' ||
       activity.id == 'act-01-02-01-scaffolded-spot' ||
       activity.id == 'act-01-02-01-checkpoint-winner' ||
+      activity.id == 'act-01-02-02-scaffolded-kicker' ||
       activity.id == 'act-03-01-01-guided' ||
       activity.id == 'act-03-01-01-scaffolded' ||
       activity.id == 'act-03-01-01-unguided' ||
@@ -5425,6 +5429,8 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.handRankSpotOutcomes => _buildHandRankSpotOutcomes(),
       LessonTableLayout.handRankShowdownOutcomes =>
           _buildHandRankShowdownOutcomes(),
+      LessonTableLayout.kickerShowdownOutcomes =>
+          _buildKickerShowdownOutcomes(),
       LessonTableLayout.turnBrickScareOutcomes => _buildTurnBrickScareOutcomes(),
       LessonTableLayout.turnScarePlanOutcomes => _buildTurnScarePlanOutcomes(),
       LessonTableLayout.riverJobOutcomes => _buildRiverJobOutcomes(),
@@ -7296,6 +7302,59 @@ class LessonTableContext extends StatelessWidget {
           region: LessonTableRegion.handRankChop,
           title: 'Chop',
           detail: 'Split pot?',
+          visual: const Icon(
+            Icons.call_split,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildKickerShowdownOutcomes() {
+    Widget miniPair(String a, String b) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          MiniCard(
+            card: CardModel.fromCode(a),
+            size: MiniCardSize.tiny,
+          ),
+          const SizedBox(width: 2),
+          MiniCard(
+            card: CardModel.fromCode(b),
+            size: MiniCardSize.tiny,
+          ),
+        ],
+      );
+    }
+
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive kicker showdown — tap You, Them, or Chop',
+      semanticsStatic: 'Kicker showdown outcomes',
+      caption: scene.caption ?? 'Your holes',
+      cueLabel: 'Tap You.',
+      guideRegion: LessonTableRegion.handRankYouWin,
+      phases: [
+        (
+          region: LessonTableRegion.handRankYouWin,
+          title: 'You',
+          detail: 'Queen kicker',
+          visual: miniPair('Ah', 'Qd'),
+        ),
+        (
+          region: LessonTableRegion.handRankTheyWin,
+          title: 'Them',
+          detail: 'Jack kicker?',
+          visual: miniPair('As', 'Jd'),
+        ),
+        (
+          region: LessonTableRegion.handRankChop,
+          title: 'Chop',
+          detail: 'Same pair ties?',
           visual: const Icon(
             Icons.call_split,
             color: AppColors.slate,

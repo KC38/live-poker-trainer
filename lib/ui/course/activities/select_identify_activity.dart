@@ -338,6 +338,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Board and holes show five clubs — tap what you made.',
       'act-01-02-01-checkpoint-winner' =>
           'Flush vs straight on the river — tap who wins.',
+      'act-01-02-02-scaffolded-kicker' =>
+          'Same pair of kings — tap who wins on kickers.',
       'act-02-07-02-jump-stack' =>
           'Effective stack is the shorter one — tap it.',
       'act-02-02-01-guided-pair' =>
@@ -758,6 +760,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-02-07-02-jump-family' ||
             widget.activity.id == 'act-01-02-01-scaffolded-spot' ||
             widget.activity.id == 'act-01-02-01-checkpoint-winner' ||
+            widget.activity.id == 'act-01-02-02-scaffolded-kicker' ||
             widget.activity.id == 'act-03-01-01-guided' ||
             widget.activity.id == 'act-03-01-01-scaffolded' ||
             widget.activity.id == 'act-03-01-01-unguided' ||

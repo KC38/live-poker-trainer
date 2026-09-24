@@ -16926,7 +16926,7 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('kicker showdown taps you-win tile', (tester) async {
+  testWidgets('kicker showdown taps You on densified felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-01-02-02-scaffolded-kicker',
       order: 3,
@@ -16942,6 +16942,25 @@ void main() {
         CourseChoice(id: 'chop-kicker', label: 'Chop'),
       ],
     );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.kickerShowdownOutcomes,
+    );
+    expect(resolveLessonTableScene(activity)?.villainCodes, ['As', 'Jd']);
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.handRankYouWin,
+        choices: activity.choices,
+      ),
+      'you-kicker',
+    );
+
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
       _wrap(
@@ -16953,24 +16972,22 @@ void main() {
       ),
     );
     expect(
-      resolveSelectIdentifyPresentation(activity),
-      SelectIdentifyPresentation.showdownTap,
-    );
-    // Felt teaches You vs Them — queen-kicker tile is hidden.
-    expect(find.text('You — kings, Q kicker'), findsNothing);
-    expect(find.textContaining('Chop'), findsOneWidget);
-    expect(
-      find.text('Same pair — tap who wins on kickers.'),
+      find.text('Same pair of kings — tap who wins on kickers.'),
       findsOneWidget,
     );
-    expect(find.textContaining('Board Kh'), findsNothing);
-    final scene = resolveLessonTableScene(activity);
-    expect(scene?.villainCodes, ['As', 'Jd']);
-    expect(find.text('Them'), findsOneWidget);
-    expect(find.text('Tap You or Them on the felt.'), findsOneWidget);
+    expect(find.text('Tap who wins.'), findsNothing);
+    expect(find.text('Chop the pot'), findsNothing);
+    expect(find.text('Tap You or Them on the felt.'), findsNothing);
+    expect(find.byType(HandExampleTile), findsNothing);
+    expect(find.text('Queen kicker'), findsOneWidget);
+    expect(find.text('Jack kicker?'), findsOneWidget);
+    expect(find.text('Same pair ties?'), findsOneWidget);
+    expect(find.text('Tap You.'), findsOneWidget);
+    expect(find.text('Them'), findsWidgets);
+
     var autoSubmits = 0;
     controller.onAutoSubmit = () => autoSubmits += 1;
-    await tester.tap(find.text('You (AQ)'));
+    await tester.tap(find.text('Queen kicker'));
     await tester.pump();
     expect(controller.draft.choiceId, 'you-kicker');
     expect(autoSubmits, 1);
