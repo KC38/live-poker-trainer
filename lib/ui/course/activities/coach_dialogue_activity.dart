@@ -440,6 +440,7 @@ class CoachDialogueActivity extends StatelessWidget {
             // These demos embed their own tap hint on the felt / chrome —
             // or Rex already names the tiles (no duplicate gold footer).
             visual.kind != CoachDialogueVisualKind.bestFive &&
+            visual.kind != CoachDialogueVisualKind.holeCards &&
             visual.kind != CoachDialogueVisualKind.passiveActions &&
             visual.kind != CoachDialogueVisualKind.aggressiveActions &&
             visual.kind != CoachDialogueVisualKind.streetsTimeline &&

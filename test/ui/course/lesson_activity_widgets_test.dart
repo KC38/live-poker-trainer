@@ -151,7 +151,8 @@ void main() {
     );
     expect(find.byType(MiniCard), findsNWidgets(2));
     expect(find.text('Rex'), findsWidgets);
-    expect(find.text('Tap your two cards on the felt.'), findsOneWidget);
+    expect(find.text('Tap your cards'), findsOneWidget);
+    expect(find.text('Tap your two cards on the felt.'), findsNothing);
     controller.dispose();
   });
 

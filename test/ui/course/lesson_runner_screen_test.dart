@@ -192,13 +192,13 @@ void main() {
     await tester.pump();
     for (
       var i = 0;
-      i < 40 && find.text('Tap your two cards on the felt.').evaluate().isEmpty;
+      i < 40 && find.text('Tap your cards').evaluate().isEmpty;
       i++
     ) {
       await tester.pump(const Duration(milliseconds: 50));
     }
 
-    expect(find.text('Tap your two cards on the felt.'), findsOneWidget);
+    expect(find.text('Tap your cards'), findsOneWidget);
     // Explain is teach-by-doing — no Continue dock.
     expect(find.widgetWithText(FilledButton, 'Continue'), findsNothing);
 
@@ -340,13 +340,13 @@ void main() {
     await tester.pump();
     for (
       var i = 0;
-      i < 40 && find.text('Tap your two cards on the felt.').evaluate().isEmpty;
+      i < 40 && find.text('Tap your cards').evaluate().isEmpty;
       i++
     ) {
       await tester.pump(const Duration(milliseconds: 50));
     }
 
-    expect(find.text('Tap your two cards on the felt.'), findsOneWidget);
+    expect(find.text('Tap your cards'), findsOneWidget);
     final heroRail = find.byWidgetPredicate(
       (w) => w is MiniCard && w.size == MiniCardSize.hero,
     );
