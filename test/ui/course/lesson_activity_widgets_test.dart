@@ -2067,8 +2067,22 @@ void main() {
     expect(find.text('Tap EARLY next'), findsOneWidget);
     expect(find.text('Tap Early, Button, and Live 3x'), findsNothing);
     expect(find.text('Tap Early, Button, and Live 3x.'), findsNothing);
+    expect(
+      find.text('Early tight · button wider · live opens ~3x'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight = tester.getSize(find.byType(OpenRangeDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
     await tester.tap(find.text('EARLY'));
     await tester.pump();
@@ -2079,6 +2093,15 @@ void main() {
     await tester.tap(find.text('LIVE 3x'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Early tight · button wider · live opens ~3x'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(OpenRangeDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
