@@ -8793,22 +8793,26 @@ void main() {
       choices: const [
         CourseChoice(
           id: 'bluff',
-          label: 'Bluff the completed flush',
+          label: 'Bluff flush',
           action: 'BET',
         ),
         CourseChoice(
           id: 'giveup',
-          label: 'Give up — never bluff rivers',
+          label: 'Give up',
           action: 'CHECK',
         ),
         CourseChoice(
           id: 'tiny',
-          label: 'Bet 1 chip as a joke',
+          label: 'Joke 1 chip',
           action: 'BET',
         ),
       ],
     );
     expect(isLessonActionTableActivity(activity), isTrue);
+    expect(
+      resolveLessonActionSpot(activity)?.heroCodes,
+      ['9s', '8s'],
+    );
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
       _wrap(
@@ -8823,8 +8827,10 @@ void main() {
       find.text('You missed; river completes the flush — tap the bluff.'),
       findsOneWidget,
     );
-    expect(find.text('BLUFF THE COMPLETED FLUSH'), findsOneWidget);
-    await tester.tap(find.text('BLUFF THE COMPLETED FLUSH'));
+    expect(find.text('BLUFF FLUSH'), findsOneWidget);
+    expect(find.text('GIVE UP'), findsOneWidget);
+    expect(find.text('JOKE 1 CHIP'), findsOneWidget);
+    await tester.tap(find.text('BLUFF FLUSH'));
     await tester.pump();
     expect(controller.draft.choiceId, 'bluff');
     controller.dispose();

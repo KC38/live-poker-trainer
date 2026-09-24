@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "24c7050249a293561834e2fa4973a167e2a5386ea1a30ce28b5a408e38773a5f",
+  "contentChecksum": "8c91a182c82349180140fab6893336bb93a4ea7f15fa471d6cc37880d3d5d8c9",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -6790,7 +6790,7 @@
                   "choices": [
                     {
                       "id": "bluff",
-                      "label": "Bluff the completed flush",
+                      "label": "Bluff flush",
                       "accessibilityText": "Bluff the completed flush",
                       "grading": {
                         "grade": "recommended",
@@ -6801,7 +6801,7 @@
                     },
                     {
                       "id": "giveup",
-                      "label": "Give up — never bluff rivers",
+                      "label": "Give up",
                       "accessibilityText": "Give up — never bluff rivers",
                       "grading": {
                         "grade": "questionable",
@@ -6811,7 +6811,7 @@
                     },
                     {
                       "id": "tiny",
-                      "label": "Bet 1 chip as a joke",
+                      "label": "Joke 1 chip",
                       "accessibilityText": "Bet 1 chip as a joke",
                       "grading": {
                         "grade": "clear_mistake",
