@@ -205,22 +205,32 @@ class _TypeBoardLineTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            label,
-            style: GoogleFonts.manrope(
-              color: AppColors.cream,
-              fontSize: densify ? 18 : 12,
-              fontWeight: FontWeight.w900,
+          // Scale long labels (BOARD) to one line — densify tiles are narrow.
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              label,
+              maxLines: 1,
+              softWrap: false,
+              style: GoogleFonts.manrope(
+                color: AppColors.cream,
+                fontSize: densify ? 18 : 12,
+                fontWeight: FontWeight.w900,
+              ),
             ),
           ),
           SizedBox(height: densify ? 10 : 4),
-          Text(
-            caption,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.manrope(
-              color: AppColors.cream.withValues(alpha: 0.9),
-              fontSize: densify ? 13 : 10,
-              fontWeight: FontWeight.w600,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              caption,
+              maxLines: 2,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.cream.withValues(alpha: 0.9),
+                fontSize: densify ? 13 : 10,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],
