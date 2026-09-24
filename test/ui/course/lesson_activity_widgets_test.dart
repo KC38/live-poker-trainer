@@ -2550,14 +2550,20 @@ void main() {
       ),
     );
     expect(find.byType(ThreeBetSqueezeDemo), findsOneWidget);
-    expect(find.text('Tap 3-Bet, Ranges, and Squeeze.'), findsOneWidget);
+    expect(find.text('Tap 3-BET next'), findsOneWidget);
+    expect(find.text('Tap 3-Bet, Ranges, and Squeeze.'), findsNothing);
+    expect(find.text('Tap 3-Bet, Ranges, and Squeeze'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['3-BET', 'RANGES', 'SQUEEZE']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('3-BET'));
+    await tester.pump();
+    expect(find.text('Tap RANGES next'), findsOneWidget);
+    await tester.tap(find.text('RANGES'));
+    await tester.pump();
+    expect(find.text('Tap SQUEEZE next'), findsOneWidget);
+    await tester.tap(find.text('SQUEEZE'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
@@ -9217,9 +9223,53 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('3-BET TO ~18'), findsOneWidget);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, '3bet-qq');
     await tester.tap(find.text('3-BET TO ~18'));
     await tester.pump();
     expect(controller.draft.choiceId, '3bet-qq');
+    controller.dispose();
+  });
+
+  testWidgets('s4 3bet scaffolded docks Fold on 72o vs 3-bet felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-02-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Fold trash to a 3-bet.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'You open BTN to 6. BB 3-bets to 20. You have 72o. Action?',
+      choices: const [
+        CourseChoice(id: 'fold-72', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'call-72', label: 'Call', action: 'CALL'),
+        CourseChoice(id: '4bet-72', label: '4-bet bluff', action: 'RAISE'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('72o faces a BB 3-bet — tap Fold.'),
+      findsOneWidget,
+    );
+    expect(find.text('FOLD'), findsOneWidget);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'fold-72');
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'fold-72');
     controller.dispose();
   });
 
@@ -9257,10 +9307,18 @@ void main() {
       ),
     );
     expect(
-      find.text('UTG open, two callers, AKo in BB — tap a squeeze.'),
+      find.text(
+        'UTG open, two callers, AKo in BB — tap Fold, Call, or Squeeze.',
+      ),
       findsOneWidget,
     );
+    expect(
+      find.text('UTG open, two callers, AKo in BB — tap a squeeze.'),
+      findsNothing,
+    );
     expect(find.text('SQUEEZE TO ~20'), findsOneWidget);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, isNull);
     await tester.tap(find.text('SQUEEZE TO ~20'));
     await tester.pump();
     expect(controller.draft.choiceId, 'squeeze');

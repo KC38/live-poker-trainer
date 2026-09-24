@@ -3683,8 +3683,16 @@ class _ThreeBetSqueezeDemoState extends State<ThreeBetSqueezeDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in ThreeBetSqueezeDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -3713,36 +3721,44 @@ class _ThreeBetSqueezeDemoState extends State<ThreeBetSqueezeDemo> {
               for (var i = 0; i < ThreeBetSqueezeDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: ThreeBetSqueezeDemo.points[i].label,
-                    caption: ThreeBetSqueezeDemo.points[i].caption,
-                    color: ThreeBetSqueezeDemo.points[i].color,
-                    selected: _tapped.contains(
-                      ThreeBetSqueezeDemo.points[i].label,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == ThreeBetSqueezeDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: ThreeBetSqueezeDemo.points[i].label,
+                      caption: ThreeBetSqueezeDemo.points[i].caption,
+                      color: ThreeBetSqueezeDemo.points[i].color,
+                      selected: _tapped.contains(
+                        ThreeBetSqueezeDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () =>
+                                  _onTap(ThreeBetSqueezeDemo.points[i].label)
+                              : null,
                     ),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(ThreeBetSqueezeDemo.points[i].label)
-                            : null,
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues the three taps — no duplicate footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              '3-bets define ranges · squeezes punish flats',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? '3-bets define ranges · squeezes punish flats'
+                    : 'Tap ${next.label} next')
+                : '3-bets define ranges · squeezes punish flats',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
