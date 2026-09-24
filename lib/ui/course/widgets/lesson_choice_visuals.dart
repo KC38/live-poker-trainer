@@ -210,10 +210,13 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Ranges: tap BB 3-bet stronger on densified felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
-  if ((activity.id == 'act-04-01-01-unguided' ||
-          activity.id == 'act-04-01-01-checkpoint') &&
+  if (activity.id == 'act-04-01-01-unguided') {
+    // Ranges: tap keep weighted range on densified bet-twice felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
+  if (activity.id == 'act-04-01-01-checkpoint' &&
       activity.renderer == ActivityRenderer.selectIdentify) {
-    // Ranges: remaining steps still on category tiles (refining).
+    // Ranges: checkpoint still on category tiles (refining).
     return SelectIdentifyPresentation.handCategoryTap;
   }
   if (activity.id == 'act-04-03-01-checkpoint') {
