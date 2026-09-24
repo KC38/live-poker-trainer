@@ -1673,14 +1673,6 @@ class SuitTapPicker extends StatefulWidget {
 }
 
 class _SuitTapPickerState extends State<SuitTapPicker> {
-  static const _palette = <LessonSuitToken>[
-    LessonSuitToken.hearts,
-    LessonSuitToken.diamonds,
-    LessonSuitToken.clubs,
-    LessonSuitToken.spades,
-    LessonSuitToken.stars,
-  ];
-
   final Set<LessonSuitToken> _selected = <LessonSuitToken>{};
 
   @override
@@ -1804,6 +1796,20 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
     return '$realCount of 4 real suits — skip decoys.';
   }
 
+  /// First real suit still missing — SoftPulse that tile to teach by doing.
+  LessonSuitToken? _nextHintSuit() {
+    if (widget.locked) return null;
+    for (final token in const [
+      LessonSuitToken.hearts,
+      LessonSuitToken.diamonds,
+      LessonSuitToken.clubs,
+      LessonSuitToken.spades,
+    ]) {
+      if (!_selected.contains(token)) return token;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -1811,20 +1817,13 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
       builder: (context, _) {
         final status = _statusLine();
         final feltHeight = MediaQuery.sizeOf(context).height * 0.58;
-        final tiles = Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          alignment: WrapAlignment.center,
-          children: [
-            for (final token in _palette)
-              SuitTapTile(
-                token: token,
-                selected: _selected.contains(token),
-                enabled: !widget.locked,
-                onPressed: () => _toggle(token),
-              ),
-          ],
-        );
+        final hint = _nextHintSuit();
+        final realSuits = const [
+          LessonSuitToken.hearts,
+          LessonSuitToken.diamonds,
+          LessonSuitToken.clubs,
+          LessonSuitToken.spades,
+        ];
         final statusText =
             status.isEmpty
                 ? null
@@ -1833,25 +1832,15 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
                   textAlign: TextAlign.center,
                   style: GoogleFonts.manrope(
                     color: AppColors.gold,
-                    fontSize: 16,
+                    fontSize: 17,
                     fontWeight: FontWeight.w700,
                   ),
                 );
-        final content = Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            tiles,
-            if (statusText != null) ...[
-              const SizedBox(height: 16),
-              statusText,
-            ],
-          ],
-        );
         return Container(
           key: const ValueKey('suit-tap-picker-felt'),
           width: double.infinity,
           height: feltHeight,
-          padding: const EdgeInsets.fromLTRB(12, 18, 12, 18),
+          padding: const EdgeInsets.fromLTRB(14, 16, 14, 16),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
               begin: Alignment.topCenter,
@@ -1864,18 +1853,52 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
             ),
           ),
           child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Expanded(
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: SizedBox(
-                    width: MediaQuery.sizeOf(context).width - 48,
-                    child: content,
+                flex: 5,
+                child: Row(
+                  children: [
+                    for (var i = 0; i < realSuits.length; i++) ...[
+                      if (i > 0) const SizedBox(width: 10),
+                      Expanded(
+                        child: _FamilySoftPulse(
+                          active:
+                              hint != null &&
+                              realSuits[i] == hint &&
+                              !widget.locked,
+                          child: SuitTapTile(
+                            token: realSuits[i],
+                            selected: _selected.contains(realSuits[i]),
+                            enabled: !widget.locked,
+                            densify: true,
+                            onPressed: () => _toggle(realSuits[i]),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
+              Expanded(
+                flex: 3,
+                child: Center(
+                  child: AspectRatio(
+                    aspectRatio: 0.92,
+                    child: SuitTapTile(
+                      token: LessonSuitToken.stars,
+                      selected: _selected.contains(LessonSuitToken.stars),
+                      enabled: !widget.locked,
+                      densify: true,
+                      onPressed: () => _toggle(LessonSuitToken.stars),
+                    ),
                   ),
                 ),
               ),
+              if (statusText != null) ...[
+                const SizedBox(height: 12),
+                statusText,
+              ],
             ],
           ),
         );

@@ -721,6 +721,7 @@ class SuitTapTile extends StatelessWidget {
     required this.selected,
     required this.enabled,
     required this.onPressed,
+    this.densify = false,
   });
 
   final LessonSuitToken token;
@@ -728,8 +729,35 @@ class SuitTapTile extends StatelessWidget {
   final bool enabled;
   final VoidCallback? onPressed;
 
+  /// Expand to fill a densified felt cell (large glyph + label).
+  final bool densify;
+
   @override
   Widget build(BuildContext context) {
+    final radius = densify ? 18.0 : 14.0;
+    final face = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          token.glyph,
+          style: TextStyle(
+            color: token.color,
+            fontSize: densify ? 44 : 28,
+            fontWeight: FontWeight.w800,
+            height: 1,
+          ),
+        ),
+        SizedBox(height: densify ? 10 : 6),
+        Text(
+          token.label,
+          style: GoogleFonts.manrope(
+            color: AppColors.cream,
+            fontSize: densify ? 14 : 10,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ],
+    );
     return Semantics(
       button: true,
       selected: selected,
@@ -739,44 +767,24 @@ class SuitTapTile extends StatelessWidget {
             selected
                 ? token.color.withValues(alpha: 0.22)
                 : AppColors.surfaceMuted.withValues(alpha: 0.7),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(radius),
         child: InkWell(
           onTap: enabled ? onPressed : null,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(radius),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 160),
-            width: 64,
-            height: 76,
+            width: densify ? double.infinity : 64,
+            height: densify ? double.infinity : 76,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(radius),
               border: Border.all(
                 color: selected ? AppColors.gold : AppColors.slateDark,
                 width: selected ? 2.5 : 1,
               ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  token.glyph,
-                  style: TextStyle(
-                    color: token.color,
-                    fontSize: 28,
-                    fontWeight: FontWeight.w800,
-                    height: 1,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  token.label,
-                  style: GoogleFonts.manrope(
-                    color: AppColors.cream,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-            ),
+            child: densify
+                ? FittedBox(fit: BoxFit.scaleDown, child: face)
+                : face,
           ),
         ),
       ),
