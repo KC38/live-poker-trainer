@@ -967,13 +967,18 @@ void main() {
       ),
     );
     expect(find.byType(ToyHandRunDemo), findsOneWidget);
-    // Felt embeds the tap hint — no duplicate gold line under the demo.
-    expect(find.text('Tap Blinds, You act, and Ending'), findsOneWidget);
+    // Sequential SoftPulse cue — one next step at a time.
+    expect(find.text('Tap Blinds'), findsOneWidget);
+    expect(find.text('Tap Blinds, You act, and Ending'), findsNothing);
     expect(find.text('Tap Blinds, You act, and Ending.'), findsNothing);
-    for (final title in ['BLINDS', 'YOU ACT', 'ENDING']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('BLINDS'));
+    await tester.pump();
+    expect(find.text('Tap You act'), findsOneWidget);
+    await tester.tap(find.text('YOU ACT'));
+    await tester.pump();
+    expect(find.text('Tap Ending'), findsOneWidget);
+    await tester.tap(find.text('ENDING'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
@@ -1008,7 +1013,10 @@ void main() {
         ),
       ),
     );
-    expect(find.text('Tap Blinds, You act, and Ending'), findsOneWidget);
+    // In-felt sequential SoftPulse cue; outer bulk _TapHint suppressed.
+    expect(find.text('Tap Blinds'), findsOneWidget);
+    expect(find.text('Tap Blinds, You act, and Ending'), findsNothing);
+    expect(find.text('Tap Blinds, You act, and Ending.'), findsNothing);
     controller.finishSubmit(
       SubmitCourseStepResult(
         attemptId: 'a1',
@@ -1031,6 +1039,7 @@ void main() {
       ),
     );
     await tester.pump();
+    expect(find.text('Tap Blinds'), findsNothing);
     expect(find.text('Tap Blinds, You act, and Ending'), findsNothing);
     expect(find.text('Blinds post, you act, then finish'), findsOneWidget);
     controller.dispose();
