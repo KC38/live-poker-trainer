@@ -459,6 +459,7 @@ class CoachDialogueActivity extends StatelessWidget {
             visual.kind != CoachDialogueVisualKind.turnStory &&
             visual.kind != CoachDialogueVisualKind.riverBinary &&
             visual.kind != CoachDialogueVisualKind.multiwayPlan &&
+            visual.kind != CoachDialogueVisualKind.commonLeaks &&
             visual.kind != CoachDialogueVisualKind.leakReviewBook &&
             visual.kind != CoachDialogueVisualKind.capstoneSrp &&
             visual.kind != CoachDialogueVisualKind.capstone3bet &&
@@ -822,7 +823,7 @@ class CoachDialogueVisual {
     CoachDialogueVisualKind.multiwayPlan =>
       'Tap Stronger, Fewer, and Nuts.',
     CoachDialogueVisualKind.commonLeaks =>
-      'Tap each common leak once.',
+      'Tap Top pair, Prices, Passive, and Crowds.',
     CoachDialogueVisualKind.rangeUpdate =>
       'Tap One Hand, Range, and Update.',
     CoachDialogueVisualKind.threeBetSqueeze =>
