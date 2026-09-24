@@ -202,9 +202,15 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // S3 jump: tap Fold wrong price on densified gutshot felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
-  if (activity.id.startsWith('act-04-01-01-') &&
+  if (activity.id == 'act-04-01-01-guided') {
+    // Ranges: tap stronger/narrower on densified UTG felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
+  if ((activity.id == 'act-04-01-01-scaffolded' ||
+          activity.id == 'act-04-01-01-unguided' ||
+          activity.id == 'act-04-01-01-checkpoint') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
-    // Ranges: tap range descriptions on seat/action felt.
+    // Ranges: remaining steps still on category tiles (refining).
     return SelectIdentifyPresentation.handCategoryTap;
   }
   if (activity.id == 'act-04-03-01-checkpoint') {

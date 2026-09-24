@@ -9601,7 +9601,7 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('s4 ranges guided taps stronger-narrower on UTG felt', (
+  testWidgets('s4 ranges guided taps stronger-narrower on densified felt', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -9621,7 +9621,20 @@ void main() {
     );
     expect(
       resolveSelectIdentifyPresentation(activity),
-      SelectIdentifyPresentation.handCategoryTap,
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.rangesGuidedOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.rangesStrongNarrow,
+        choices: activity.choices,
+      ),
+      'strong-narrow',
     );
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
@@ -9638,8 +9651,9 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('UTG opens at 1/2. Best description?'), findsNothing);
-    expect(find.text('Stronger, narrower range'), findsOneWidget);
-    await tester.tap(find.text('Stronger, narrower range'));
+    expect(find.text('Strong narrow'), findsOneWidget);
+    expect(find.text('UTG opens'), findsOneWidget);
+    await tester.tap(find.text('Strong narrow'));
     await tester.pump();
     expect(controller.draft.choiceId, 'strong-narrow');
     controller.dispose();
