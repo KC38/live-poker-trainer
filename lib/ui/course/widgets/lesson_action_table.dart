@@ -5523,8 +5523,16 @@ class _ExploitEvidenceDemoState extends State<ExploitEvidenceDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in ExploitEvidenceDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -5553,37 +5561,44 @@ class _ExploitEvidenceDemoState extends State<ExploitEvidenceDemo> {
               for (var i = 0; i < ExploitEvidenceDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: ExploitEvidenceDemo.points[i].label,
-                    caption: ExploitEvidenceDemo.points[i].caption,
-                    color: ExploitEvidenceDemo.points[i].color,
-                    selected: _tapped.contains(
-                      ExploitEvidenceDemo.points[i].label,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == ExploitEvidenceDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: ExploitEvidenceDemo.points[i].label,
+                      caption: ExploitEvidenceDemo.points[i].caption,
+                      color: ExploitEvidenceDemo.points[i].color,
+                      selected: _tapped.contains(
+                        ExploitEvidenceDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () =>
+                                  _onTap(ExploitEvidenceDemo.points[i].label)
+                              : null,
                     ),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () =>
-                                _onTap(ExploitEvidenceDemo.points[i].label)
-                            : null,
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues the three taps — no duplicate footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Same cards · different seats · evidence',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Same cards · different seats · evidence'
+                    : 'Tap ${next.label} next')
+                : 'Same cards · different seats · evidence',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );

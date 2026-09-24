@@ -3278,14 +3278,20 @@ void main() {
       ),
     );
     expect(find.byType(ExploitEvidenceDemo), findsOneWidget);
-    expect(find.text('Tap Cards, Seats, and Evidence.'), findsOneWidget);
+    expect(find.text('Tap CARDS next'), findsOneWidget);
+    expect(find.text('Tap Cards, Seats, and Evidence.'), findsNothing);
+    expect(find.text('Tap Cards, Seats, and Evidence'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['CARDS', 'SEATS', 'EVIDENCE']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('CARDS'));
+    await tester.pump();
+    expect(find.text('Tap SEATS next'), findsOneWidget);
+    await tester.tap(find.text('SEATS'));
+    await tester.pump();
+    expect(find.text('Tap EVIDENCE next'), findsOneWidget);
+    await tester.tap(find.text('EVIDENCE'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
