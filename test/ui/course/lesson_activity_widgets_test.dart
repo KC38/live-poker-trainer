@@ -3731,12 +3731,27 @@ await tester.tap(find.text('VALUE'));
     );
     expect(find.byType(TightSeatsDemo), findsOneWidget);
     expect(find.text('Tap RARE next'), findsOneWidget);
-    expect(find.text('Tap Rare, Enter, and Mean It.'), findsNothing);
     expect(find.text('Tap Rare, Enter, and Mean It'), findsNothing);
+    expect(find.text('Tap Rare, Enter, and Mean It.'), findsNothing);
+    expect(
+      find.text('Rare entries · when they do, they mean it'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(TightSeatsDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
-    await tester.tap(find.text('RARE'));
+await tester.tap(find.text('RARE'));
     await tester.pump();
     expect(find.text('Tap ENTER next'), findsOneWidget);
     await tester.tap(find.text('ENTER'));
@@ -3745,6 +3760,15 @@ await tester.tap(find.text('VALUE'));
     await tester.tap(find.text('MEAN IT'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Rare entries · when they do, they mean it'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(TightSeatsDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
