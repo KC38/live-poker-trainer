@@ -2649,7 +2649,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllPointsTapped: onMultiwayAcknowledge,
         ),
         CoachDialogueVisualKind.commonLeaks => CommonLeaksDemo(
-          interactive: onCommonLeaksAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllLeaksTapped: onCommonLeaksAcknowledge,
         ),

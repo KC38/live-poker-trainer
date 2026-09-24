@@ -3092,10 +3092,25 @@ await tester.tap(find.text('VALUE'));
     expect(find.text('Tap TOP PAIR next'), findsOneWidget);
     expect(find.text('Tap each common leak once.'), findsNothing);
     expect(find.text('Tap each common leak once'), findsNothing);
+    expect(
+      find.text('Top pair · bad prices · passive calls · bluff crowds'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(CommonLeaksDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
-    await tester.tap(find.text('TOP PAIR'));
+await tester.tap(find.text('TOP PAIR'));
     await tester.pump();
     expect(find.text('Tap PRICES next'), findsOneWidget);
     await tester.tap(find.text('PRICES'));
@@ -3107,6 +3122,15 @@ await tester.tap(find.text('VALUE'));
     await tester.tap(find.text('CROWDS'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Top pair · bad prices · passive calls · bluff crowds'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(CommonLeaksDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
