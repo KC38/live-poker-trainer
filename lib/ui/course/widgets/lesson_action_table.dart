@@ -7990,10 +7990,11 @@ class _DockButton extends StatelessWidget {
         authoredWords.length >= 2 &&
         authoredWords.first != 'CHECK' &&
         authoredWords.first != 'FOLD';
-    // Drop filler words so "Raise as a bluff candidate" → RAISE BLUFF on
-    // the dock (Rex still carries the full teach sentence).
+    // Long teaching labels only: "Raise as a bluff candidate" → RAISE BLUFF.
+    // Keep short sizing chrome intact ("RAISE TO 6").
     const fillers = {'AS', 'A', 'AN', 'THE', 'TO', 'OF', 'FOR', 'ON', 'IN'};
     final compactAuthored = () {
+      if (authoredWords.length <= 3) return authored;
       final kept =
           authoredWords.where((w) => !fillers.contains(w)).toList(growable: false);
       if (kept.isEmpty) return authored;
