@@ -351,7 +351,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-03-03-01-unguided' =>
           'Getting 3:1 with real outs — tap what you do.',
       'act-03-03-01-checkpoint' =>
-          'Nut flush draw, deep and sticky — tap the edge.',
+          'Nut flush draw, deep and sticky — tap Implied.',
       'act-04-06-01-guided' =>
           'Seat calls 7 of 9 preflops — tap the observation.',
       'act-04-06-02-guided' =>
@@ -967,7 +967,7 @@ class _HandCategoryTapActivity extends StatelessWidget {
         'act-03-03-01-unguided' =>
           'Getting 3:1 with real outs — tap what you do.',
         'act-03-03-01-checkpoint' =>
-          'Nut flush draw, deep and sticky — tap the edge.',
+          'Nut flush draw, deep and sticky — tap Implied.',
         'act-03-05-01-guided' =>
           'Dry ace flop, blank three — tap brick or scare.',
         'act-03-05-01-checkpoint' =>
@@ -1073,7 +1073,7 @@ class _HandCategoryTapActivity extends StatelessWidget {
                         : activity.id == 'act-03-03-01-unguided'
                         ? 'Tap Call, Fold, or Raise.'
                         : activity.id == 'act-03-03-01-checkpoint'
-                        ? 'Tap the implied-odds edge.'
+                        ? 'Tap Implied.'
                         : activity.id == 'act-03-05-01-guided'
                         ? 'Tap brick or scare.'
                         : activity.id == 'act-03-05-01-checkpoint'

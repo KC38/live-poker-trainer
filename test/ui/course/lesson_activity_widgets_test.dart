@@ -7296,7 +7296,7 @@ void main() {
       ),
     );
     expect(
-      find.text('Nut flush draw, deep and sticky — tap the edge.'),
+      find.text('Nut flush draw, deep and sticky — tap Implied.'),
       findsOneWidget,
     );
     expect(

@@ -163,7 +163,7 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-03-03-01-checkpoint') {
-    // Outs: deep NFD — tap implied-odds edge on the felt.
+    // Outs: deep NFD — tap Implied on the felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-03-05-01-guided' ||
