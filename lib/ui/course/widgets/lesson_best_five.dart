@@ -150,8 +150,9 @@ class _BestFiveDemoState extends State<BestFiveDemo> {
     final next = _nextCode;
     // Width-capped FittedBox.contain left tiny cards in green void — scale
     // hero/board rows and spaceEvenly so the densified felt fills vertically.
+    // Board stays ≤~1.2 so five hero cards fit one row on Pro width.
     final heroScale = expandTeach ? 1.85 : 1.0;
-    final boardScale = expandTeach ? 1.4 : 1.0;
+    final boardScale = expandTeach ? 1.2 : 1.0;
     final cueLabel = () {
       if (!widget.interactive) return 'Highlighted = the five that count';
       if (next == null) return 'Five play · two leftovers';
@@ -340,37 +341,41 @@ class _DemoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gap = cardSize == MiniCardSize.hero ? 10.0 * cardScale.clamp(1.0, 1.5) : 6.0;
-    return Wrap(
-      spacing: gap,
-      runSpacing: gap,
-      alignment: WrapAlignment.center,
+    // Row (not Wrap) — five board cards must stay one street, never 4+1.
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        for (final code in codes)
+        for (var i = 0; i < codes.length; i++) ...[
+          if (i > 0) SizedBox(width: gap),
           _SoftPulseTarget(
             active:
                 interactive &&
                 enabled &&
-                playing.contains(code) &&
-                code == nextCode,
+                playing.contains(codes[i]) &&
+                codes[i] == nextCode,
             child: SelectableBestFiveCard(
-              code: code,
+              code: codes[i],
               selected:
-                  interactive ? tapped.contains(code) : playing.contains(code),
+                  interactive
+                      ? tapped.contains(codes[i])
+                      : playing.contains(codes[i]),
               highlighted:
                   interactive &&
                   enabled &&
-                  playing.contains(code) &&
-                  code == nextCode,
-              enabled: interactive && enabled && playing.contains(code),
-              dimmed: !playing.contains(code),
+                  playing.contains(codes[i]) &&
+                  codes[i] == nextCode,
+              enabled: interactive && enabled && playing.contains(codes[i]),
+              dimmed: !playing.contains(codes[i]),
               size: cardSize,
               scale: cardScale,
               onPressed:
-                  interactive && playing.contains(code)
-                      ? () => onCardTap(code)
+                  interactive && playing.contains(codes[i])
+                      ? () => onCardTap(codes[i])
                       : null,
             ),
           ),
+        ],
       ],
     );
   }
@@ -660,7 +665,7 @@ class _BestFiveCardPickerState extends State<BestFiveCardPicker> {
     final feltHeight =
         densify ? MediaQuery.sizeOf(context).height * 0.58 : null;
     final heroScale = densify ? 1.85 : 1.0;
-    final boardScale = densify ? 1.4 : 1.0;
+    final boardScale = densify ? 1.2 : 1.0;
 
     Widget statusLine() {
       final status = () {
@@ -714,21 +719,23 @@ class _BestFiveCardPickerState extends State<BestFiveCardPicker> {
             ),
           ),
           SizedBox(height: densify ? 12 : 8),
-          Wrap(
-            spacing: gap,
-            runSpacing: gap,
-            alignment: WrapAlignment.center,
+          // Row keeps five board cards on one street (no Wrap 4+1).
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              for (final code in codes)
+              for (var i = 0; i < codes.length; i++) ...[
+                if (i > 0) SizedBox(width: gap),
                 SelectableBestFiveCard(
-                  key: ValueKey<String>('best-five-$code'),
-                  code: code,
-                  selected: _selected.contains(code),
+                  key: ValueKey<String>('best-five-${codes[i]}'),
+                  code: codes[i],
+                  selected: _selected.contains(codes[i]),
                   enabled: !widget.locked,
                   size: MiniCardSize.hero,
                   scale: cardScale,
-                  onPressed: () => _toggle(code),
+                  onPressed: () => _toggle(codes[i]),
                 ),
+              ],
             ],
           ),
         ],
