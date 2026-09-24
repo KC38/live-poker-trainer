@@ -2553,7 +2553,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllStreetsTapped: onStreetsAcknowledge,
         ),
         CoachDialogueVisualKind.winningPaths => WinningPathsDemo(
-          interactive: onPathsAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPathsTapped: onPathsAcknowledge,
         ),

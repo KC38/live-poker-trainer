@@ -964,6 +964,18 @@ void main() {
     expect(find.text('Tap Fold win'), findsOneWidget);
     expect(find.text('Tap Fold win, Showdown, and Side pot'), findsNothing);
     expect(find.text('Tap Fold win, Showdown, and Side pot.'), findsNothing);
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('winning-paths-felt')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
     await tester.tap(find.text('FOLD WIN'));
     await tester.pump();
     expect(find.text('Tap Showdown'), findsOneWidget);
@@ -973,6 +985,12 @@ void main() {
     await tester.tap(find.text('SIDE POT'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(find.text('Fold win · Showdown · Side pot'), findsOneWidget);
+    expect(
+      tester.getSize(find.byKey(const ValueKey('winning-paths-felt'))).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
