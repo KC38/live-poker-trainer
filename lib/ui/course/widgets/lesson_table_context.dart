@@ -227,6 +227,15 @@ enum LessonTableRegion {
   /// River checkpoint distractor: pure bluff with one pair.
   riverJobAir,
 
+  /// Multiway unguided: suited connector IP (correct).
+  mwSpecSc,
+
+  /// Multiway unguided distractor: KTo OOP.
+  mwSpecKto,
+
+  /// Multiway unguided distractor: Q6o any seat.
+  mwSpecQ6o,
+
   /// Verbal action: raise stands (binding).
   verbalRaiseStands,
 
@@ -1361,6 +1370,9 @@ enum LessonTableLayout {
   /// River checkpoint: catch vs thin value vs air.
   riverJobOutcomes,
 
+  /// Multiway unguided: pick speculative hand.
+  multiwaySpecOutcomes,
+
   /// Thin-value checkpoint: read-driven line vs coin flip.
   thinValueReadOutcomes,
 
@@ -2156,6 +2168,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-03-07-01-unguided':
       return const LessonTableScene(
+        layout: LessonTableLayout.multiwaySpecOutcomes,
         villainSeatCount: 2,
         highlight: LessonTableHighlight.none,
         caption: 'Multiway · deep · pick the speculative',
@@ -3514,6 +3527,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.riverJobAir => pick('role-air'),
         _ => null,
       };
+    case 'act-03-07-01-unguided':
+      return switch (region) {
+        LessonTableRegion.mwSpecSc => pick('sc'),
+        LessonTableRegion.mwSpecKto => pick('kto'),
+        LessonTableRegion.mwSpecQ6o => pick('q6o'),
+        _ => null,
+      };
     case 'act-03-01-01-scaffolded':
       // Preflop open: UTG is left of the BB (earlyPosition on the felt).
       return switch (region) {
@@ -4586,6 +4606,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-05-01-guided' ||
       activity.id == 'act-03-05-01-checkpoint' ||
       activity.id == 'act-03-06-01-checkpoint' ||
+      activity.id == 'act-03-07-01-unguided' ||
       activity.id == 'act-04-06-01-guided' ||
       activity.id == 'act-04-06-02-guided' ||
       activity.id == 'act-04-06-02-scaffolded' ||
@@ -4877,6 +4898,7 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.turnBrickScareOutcomes => _buildTurnBrickScareOutcomes(),
       LessonTableLayout.turnScarePlanOutcomes => _buildTurnScarePlanOutcomes(),
       LessonTableLayout.riverJobOutcomes => _buildRiverJobOutcomes(),
+      LessonTableLayout.multiwaySpecOutcomes => _buildMultiwaySpecOutcomes(),
       LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
       LessonTableLayout.tableReadMattersOutcomes =>
           _buildTableReadMattersOutcomes(),
@@ -6455,6 +6477,48 @@ class LessonTableContext extends StatelessWidget {
             color: AppColors.slate,
             size: 24,
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMultiwaySpecOutcomes() {
+    Widget holes(String a, String b) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          MiniCard(card: CardModel.fromCode(a), size: MiniCardSize.small),
+          const SizedBox(width: 4),
+          MiniCard(card: CardModel.fromCode(b), size: MiniCardSize.small),
+        ],
+      );
+    }
+
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive speculative hand — tap suited connector, KTo, or Q6o',
+      semanticsStatic: 'Multiway speculative outcomes',
+      caption: scene.caption ?? 'Multiway · deep · pick the speculative',
+      cueLabel: 'Tap 76s.',
+      guideRegion: LessonTableRegion.mwSpecSc,
+      phases: [
+        (
+          region: LessonTableRegion.mwSpecSc,
+          title: '76s · IP',
+          detail: 'Nut potential',
+          visual: holes('7h', '6h'),
+        ),
+        (
+          region: LessonTableRegion.mwSpecKto,
+          title: 'KTo · OOP',
+          detail: 'Dominated',
+          visual: holes('Kd', 'Tc'),
+        ),
+        (
+          region: LessonTableRegion.mwSpecQ6o,
+          title: 'Q6o · any',
+          detail: 'Trashy',
+          visual: holes('Qh', '6d'),
         ),
       ],
     );
@@ -11387,7 +11451,10 @@ class LessonTableContext extends StatelessWidget {
     final board = scene.boardCodes
         .map(CardModel.fromCode)
         .toList(growable: false);
-    final showSpotCards = hero.isNotEmpty || board.isNotEmpty;
+    final showSpotCards =
+        hero.isNotEmpty ||
+        board.isNotEmpty ||
+        scene.villainSeatCount > 0;
     // Grow interactive outcome felts on tall phones even without SoftPulse
     // (unguided/checkpoint densify without pulsing a spoiler tile).
     final expandTeach =
@@ -11491,6 +11558,17 @@ class LessonTableContext extends StatelessWidget {
                         ),
                       ],
                     ],
+                  ),
+                  SizedBox(height: expandTeach ? 14 : 10),
+                ] else ...[
+                  Text(
+                    caption,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.manrope(
+                      color: AppColors.gold,
+                      fontSize: expandTeach ? 13 : 11,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   SizedBox(height: expandTeach ? 14 : 10),
                 ],
