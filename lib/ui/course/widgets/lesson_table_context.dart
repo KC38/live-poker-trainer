@@ -5931,15 +5931,19 @@ class LessonTableContext extends StatelessWidget {
       );
     }
 
-    final expandTeach =
+    // Keep densify after the seat tap while Continue shows — SoftPulse /
+    // selection clear on lock must not collapse the teach shell.
+    final densifyShell =
+        scene.highlight == LessonTableHighlight.button ||
+        scene.highlight == LessonTableHighlight.smallBlind ||
+        scene.highlight == LessonTableHighlight.bigBlind;
+    final inviteCue =
         showSoftPulse &&
         selectedRegion == null &&
         selectedSeatIndex == null &&
-        (scene.highlight == LessonTableHighlight.button ||
-            scene.highlight == LessonTableHighlight.smallBlind ||
-            scene.highlight == LessonTableHighlight.bigBlind);
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.40 : null;
+        densifyShell;
+    final feltHeight =
+        densifyShell ? MediaQuery.sizeOf(context).height * 0.58 : null;
     final cueLabel = switch (scene.highlight) {
       LessonTableHighlight.button => 'Tap the dealer button',
       LessonTableHighlight.smallBlind => 'Tap the small blind',
@@ -5948,12 +5952,13 @@ class LessonTableContext extends StatelessWidget {
     };
 
     return _feltShell(
+      key: const ValueKey('blinds-seats-felt'),
       semanticsLabel:
           _interactive
               ? 'Interactive poker table with button and blinds'
               : 'Poker table showing dealer button and blinds',
-      minHeight: minFelt,
-      centerChild: expandTeach,
+      height: feltHeight,
+      centerChild: densifyShell,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -5971,7 +5976,7 @@ class LessonTableContext extends StatelessWidget {
             textAlign: TextAlign.center,
             style: GoogleFonts.manrope(
               color: AppColors.slate,
-              fontSize: 11,
+              fontSize: densifyShell ? 13 : 11,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -5980,14 +5985,14 @@ class LessonTableContext extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [for (final s in bottomRow) seatChip(s)],
           ),
-          if (expandTeach && cueLabel != null) ...[
+          if (inviteCue && cueLabel != null) ...[
             const SizedBox(height: 12),
             Text(
               cueLabel,
               textAlign: TextAlign.center,
               style: GoogleFonts.manrope(
                 color: AppColors.gold,
-                fontSize: 14,
+                fontSize: densifyShell ? 16 : 14,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -6054,15 +6059,19 @@ class LessonTableContext extends StatelessWidget {
       );
     }
 
-    final expandTeach =
+    // Keep densify after the BTN tap while Continue shows — SoftPulse /
+    // selection clear on lock must not collapse the teach shell.
+    final densifyShell = scene.highlight == LessonTableHighlight.button;
+    final inviteCue =
         showSoftPulse &&
         selectedRegion == null &&
         selectedSeatIndex == null &&
-        scene.highlight == LessonTableHighlight.button;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.40 : null;
+        densifyShell;
+    final feltHeight =
+        densifyShell ? MediaQuery.sizeOf(context).height * 0.58 : null;
 
     return _feltShell(
+      key: const ValueKey('position-labels-felt'),
       semanticsLabel: _interactive
           ? (n >= 9
               ? 'Interactive nine-handed table with position labels'
@@ -6070,8 +6079,8 @@ class LessonTableContext extends StatelessWidget {
           : (n >= 9
               ? 'Nine-handed table showing UTG, mid, late, button, and blinds'
               : 'Six-max table showing EP, HJ, CO, button, and blinds'),
-      minHeight: minFelt,
-      centerChild: expandTeach,
+      height: feltHeight,
+      centerChild: densifyShell,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -6085,7 +6094,7 @@ class LessonTableContext extends StatelessWidget {
             textAlign: TextAlign.center,
             style: GoogleFonts.manrope(
               color: AppColors.slate,
-              fontSize: 11,
+              fontSize: densifyShell ? 13 : 11,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -6094,14 +6103,14 @@ class LessonTableContext extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [for (final s in bottomRow) seatChip(s)],
           ),
-          if (expandTeach) ...[
+          if (inviteCue) ...[
             const SizedBox(height: 12),
             Text(
               'Tap BTN — the latest seat',
               textAlign: TextAlign.center,
               style: GoogleFonts.manrope(
                 color: AppColors.gold,
-                fontSize: 14,
+                fontSize: densifyShell ? 16 : 14,
                 fontWeight: FontWeight.w700,
               ),
             ),
