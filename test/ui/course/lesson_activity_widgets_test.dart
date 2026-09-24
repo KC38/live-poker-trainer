@@ -3170,12 +3170,27 @@ await tester.tap(find.text('TOP PAIR'));
     );
     expect(find.byType(RangeUpdateDemo), findsOneWidget);
     expect(find.text('Tap ONE HAND next'), findsOneWidget);
-    expect(find.text('Tap One Hand, Range, and Update.'), findsNothing);
     expect(find.text('Tap One Hand, Range, and Update'), findsNothing);
+    expect(find.text('Tap One Hand, Range, and Update.'), findsNothing);
+    expect(
+      find.text('Never one hand · know a range · then update'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(RangeUpdateDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
-    await tester.tap(find.text('ONE HAND'));
+await tester.tap(find.text('ONE HAND'));
     await tester.pump();
     expect(find.text('Tap RANGE next'), findsOneWidget);
     await tester.tap(find.text('RANGE'));
@@ -3184,6 +3199,15 @@ await tester.tap(find.text('TOP PAIR'));
     await tester.tap(find.text('UPDATE'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Never one hand · know a range · then update'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(RangeUpdateDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
