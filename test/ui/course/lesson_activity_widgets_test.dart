@@ -9308,14 +9308,22 @@ void main() {
     );
     expect(
       find.text(
-        'UTG open, two callers, AKo in BB — tap Fold, Call, or Squeeze.',
+        'UTG open, two callers, AKo in BB — tap Fold, Limp behind, or Squeeze.',
       ),
       findsOneWidget,
+    );
+    expect(
+      find.text(
+        'UTG open, two callers, AKo in BB — tap Fold, Call, or Squeeze.',
+      ),
+      findsNothing,
     );
     expect(
       find.text('UTG open, two callers, AKo in BB — tap a squeeze.'),
       findsNothing,
     );
+    expect(find.text('Multiway — AKo in BB'), findsOneWidget);
+    expect(find.text('Multiway — squeeze AK'), findsNothing);
     expect(find.text('SQUEEZE TO ~20'), findsOneWidget);
     final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
     expect(dock.pulseChoiceId, isNull);
