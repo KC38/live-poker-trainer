@@ -2865,7 +2865,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllPointsTapped: onRiverCompositionAcknowledge,
         ),
         CoachDialogueVisualKind.potTypePlans => PotTypePlansDemo(
-          interactive: onPotTypePlansAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPointsTapped: onPotTypePlansAcknowledge,
         ),
