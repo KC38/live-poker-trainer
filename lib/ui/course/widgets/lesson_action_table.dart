@@ -4133,8 +4133,16 @@ class _PlayerObserveDemoState extends State<PlayerObserveDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in PlayerObserveDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -4163,36 +4171,44 @@ class _PlayerObserveDemoState extends State<PlayerObserveDemo> {
               for (var i = 0; i < PlayerObserveDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: PlayerObserveDemo.points[i].label,
-                    caption: PlayerObserveDemo.points[i].caption,
-                    color: PlayerObserveDemo.points[i].color,
-                    selected: _tapped.contains(
-                      PlayerObserveDemo.points[i].label,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == PlayerObserveDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: PlayerObserveDemo.points[i].label,
+                      caption: PlayerObserveDemo.points[i].caption,
+                      color: PlayerObserveDemo.points[i].color,
+                      selected: _tapped.contains(
+                        PlayerObserveDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () =>
+                                  _onTap(PlayerObserveDemo.points[i].label)
+                              : null,
                     ),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(PlayerObserveDemo.points[i].label)
-                            : null,
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues the three taps — no duplicate footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Count samples before you tag',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Count samples before you tag'
+                    : 'Tap ${next.label} next')
+                : 'Count samples before you tag',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
