@@ -14056,17 +14056,22 @@ class LessonTableContext extends StatelessWidget {
     final feltHeight =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
     // Solo explain can go larger; multi-rail guided still needs a bump.
-    // Board-chop teach: board is the hero visual — holes stay secondary.
+    // Board-chop teach: pack rails tight, then FittedBox.contain scales the
+    // packed unit up — big board cards, not empty green gaps.
     final heroScale =
         boardTeach
-            ? 1.0
+            ? 0.85
             : expandTeach
             ? (soloHero ? 1.85 : 1.4)
             : 1.0;
     // Board SoftPulse uses hero footprint so five shared cards dominate.
     final boardCardSize =
         boardTeach ? MiniCardSize.hero : MiniCardSize.small;
-    final boardScale = boardTeach ? 1.05 : (expandTeach ? 1.25 : 1.0);
+    final boardScale = boardTeach ? 1.2 : (expandTeach ? 1.25 : 1.0);
+    final railGap = boardTeach ? 6.0 : (expandTeach ? 16.0 : 8.0);
+    final heroPadV = boardTeach ? 6.0 : (expandTeach ? 18.0 : 10.0);
+    final heroPadH = boardTeach ? 10.0 : (expandTeach ? 18.0 : 10.0);
+    final heroLabelGap = boardTeach ? 4.0 : (expandTeach ? 12.0 : 6.0);
 
     final heroTile = _TappableRegion(
       label: 'Your hole cards ${hero.map((c) => c.display).join(' ')}',
@@ -14081,8 +14086,8 @@ class LessonTableContext extends StatelessWidget {
               : null,
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: expandTeach ? 18 : 10,
-          vertical: expandTeach ? 18 : 10,
+          horizontal: heroPadH,
+          vertical: heroPadV,
         ),
         child: Column(
           children: [
@@ -14090,12 +14095,12 @@ class LessonTableContext extends StatelessWidget {
               scene.caption ?? 'You',
               style: GoogleFonts.manrope(
                 color: boardTeach ? AppColors.slate : AppColors.gold,
-                fontSize: expandTeach ? 15 : 11,
+                fontSize: boardTeach ? 12 : (expandTeach ? 15 : 11),
                 fontWeight: FontWeight.w800,
                 letterSpacing: 0.8,
               ),
             ),
-            SizedBox(height: expandTeach ? 12 : 6),
+            SizedBox(height: heroLabelGap),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
@@ -14275,7 +14280,7 @@ class LessonTableContext extends StatelessWidget {
                               ),
                             )
                             : null,
-                    child: _FaceDownPair(densify: expandTeach),
+                    child: _FaceDownPair(densify: expandTeach && !boardTeach),
                   ),
               if (scene.showDealerChip)
                 _TappableRegion(
@@ -14294,7 +14299,7 @@ class LessonTableContext extends StatelessWidget {
                 ),
             ],
           ),
-          SizedBox(height: expandTeach ? 16 : 8),
+          SizedBox(height: railGap),
         ],
         if (board.isNotEmpty) ...[
           _TappableRegion(
@@ -14310,16 +14315,17 @@ class LessonTableContext extends StatelessWidget {
                     : null,
             child: Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: boardTeach ? 14 : 8,
-                vertical: boardTeach ? 14 : 6,
+                horizontal: boardTeach ? 8 : 8,
+                vertical: boardTeach ? 8 : 6,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   for (var i = 0; i < board.length; i++) ...[
-                    if (i > 0) SizedBox(width: boardTeach ? 8 : 4),
+                    if (i > 0) SizedBox(width: boardTeach ? 6 : 4),
                     MiniCard(
+                      key: ValueKey('board-tap-${board[i].code}'),
                       card: board[i],
                       size: boardCardSize,
                       scale: boardScale,
@@ -14331,7 +14337,7 @@ class LessonTableContext extends StatelessWidget {
           ),
           // Teach vocabulary at the moment of use (Duolingo-style label).
           Padding(
-            padding: EdgeInsets.only(bottom: expandTeach ? 10 : 6),
+            padding: EdgeInsets.only(top: boardTeach ? 4 : 0, bottom: boardTeach ? 4 : (expandTeach ? 10 : 6)),
             child: Text(
               'BOARD · shared',
               textAlign: TextAlign.center,
@@ -14340,7 +14346,7 @@ class LessonTableContext extends StatelessWidget {
                     boardTeach
                         ? AppColors.gold
                         : AppColors.cream.withValues(alpha: 0.7),
-                fontSize: boardTeach ? 15 : (expandTeach ? 12 : 10),
+                fontSize: boardTeach ? 14 : (expandTeach ? 12 : 10),
                 fontWeight: FontWeight.w800,
                 letterSpacing: 0.7,
               ),
@@ -14348,9 +14354,9 @@ class LessonTableContext extends StatelessWidget {
           ),
           // Board SoftPulse: cue sits under the teach target, not under You.
           if (boardTeach && inviteCue != null) ...[
-            SizedBox(height: expandTeach ? 10 : 8),
+            SizedBox(height: boardTeach ? 4 : 8),
             inviteCue,
-            SizedBox(height: expandTeach ? 12 : 8),
+            SizedBox(height: boardTeach ? 6 : 8),
           ],
         ],
         heroTile,
