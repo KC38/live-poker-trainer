@@ -92,6 +92,20 @@ class LessonActivityController extends ChangeNotifier {
 
   void selectChoice(String choiceId, {bool autoSubmit = false}) {
     if (_submitting || _lastResult != null) return;
+    // Ignore stale taps from a just-replaced activity (e.g. Continue rebound
+    // the controller to scaffolded while a guided SoftPulse onPressed still
+    // fires with the previous choice id).
+    final known = _activity.choices.any((c) => c.id == choiceId);
+    if (!known) {
+      assert(() {
+        debugPrint(
+          'LessonActivityController: ignore unknown choiceId=$choiceId '
+          'for activity=${_activity.id}',
+        );
+        return true;
+      }());
+      return;
+    }
     assert(() {
       debugPrint(
         'LessonActivityController: selectChoice '

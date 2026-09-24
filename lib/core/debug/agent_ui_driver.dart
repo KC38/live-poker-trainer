@@ -393,6 +393,17 @@ bool _isShortSoftPulseLabel(String needleLower) {
     'quit',
     'guard',
     'first',
+    // 3-bet / 4-bet SoftPulse + commitment tiles — never hit home "resume …"
+    // or Rex lines that merely contain these words.
+    '3bet',
+    '4bet',
+    'depth',
+    'high commit',
+    '300bb deep',
+    'avoid ego',
+    'ego 4-bet',
+    'spr / commit',
+    'felt suits',
   };
   return labels.contains(needleLower);
 }

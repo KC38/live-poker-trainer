@@ -51,6 +51,15 @@ void main() {
       'quit',
       'guard',
       'first',
+      '3bet',
+      '4bet',
+      'depth',
+      'high commit',
+      '300bb deep',
+      'avoid ego',
+      'ego 4-bet',
+      'spr / commit',
+      'felt suits',
     ];
     for (final label in labels) {
       expect(agentTapLabelMatches(label, label), isTrue, reason: label);
@@ -63,6 +72,20 @@ void main() {
     expect(agentTapLabelMatches('value', 'Value'), isTrue);
     expect(agentTapLabelMatches('call', 'call the river'), isFalse);
     expect(agentTapLabelMatches('fold', 'call'), isFalse);
+    expect(
+      agentTapLabelMatches(
+        'depth',
+        'resume navigate 3-bet and 4-bet pots by depth',
+      ),
+      isFalse,
+    );
+    expect(
+      agentTapLabelMatches(
+        'high commit',
+        '100bb 4-bet pot · top pair — tap High commit.',
+      ),
+      isFalse,
+    );
   });
 
   test('You and Them match seat captions, not mid-sentence copy', () {
