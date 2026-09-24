@@ -7189,7 +7189,9 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('s3 outs guided taps 3 clean aces on felt', (tester) async {
+  testWidgets('s3 outs guided taps remaining aces on densified felt', (
+    tester,
+  ) async {
     final activity = CourseActivity(
       id: 'act-03-03-01-guided',
       order: 2,
@@ -7207,12 +7209,25 @@ void main() {
     );
     expect(
       resolveSelectIdentifyPresentation(activity),
-      SelectIdentifyPresentation.handCategoryTap,
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.outsGuidedCountOutcomes,
     );
     expect(resolveLessonTableScene(activity)?.heroCodes, ['Ah', 'Qh']);
     expect(
       resolveLessonTableScene(activity)?.boardCodes,
       ['Kc', '8h', '2d'],
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.outsCleanAces,
+        choices: activity.choices,
+      ),
+      'outs-3',
     );
 
     final controller = LessonActivityController(activity: activity);
@@ -7235,9 +7250,8 @@ void main() {
       ),
       findsNothing,
     );
-    expect(find.text('About 3 — the aces'), findsNothing);
-    expect(find.text('3 — the aces'), findsNothing);
     expect(find.text('Remaining aces'), findsOneWidget);
+    expect(find.text('Clean outs'), findsOneWidget);
     expect(find.text('Tap the remaining aces.'), findsOneWidget);
     await tester.tap(find.text('Remaining aces'));
     await tester.pump();

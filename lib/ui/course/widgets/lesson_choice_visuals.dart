@@ -158,8 +158,8 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-03-03-01-guided') {
-    // Outs: see board + holes, tap clean-out count.
-    return SelectIdentifyPresentation.handCategoryTap;
+    // Outs: tap remaining-aces / dirty / none on densified felt.
+    return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-03-03-01-scaffolded') {
     // Outs: tap chips to call on the felt.

@@ -200,6 +200,15 @@ enum LessonTableRegion {
   /// Outs checkpoint distractor: fold every nut flush draw.
   outsImpliedFoldNfd,
 
+  /// Outs guided: remaining clean aces (correct).
+  outsCleanAces,
+
+  /// Outs guided distractor: aces + queens (dirty).
+  outsDirtyAcesQueens,
+
+  /// Outs guided distractor: no clean outs.
+  outsNoClean,
+
   /// Turn guided: blank turn is a brick (correct).
   turnBrick,
 
@@ -1493,6 +1502,9 @@ enum LessonTableLayout {
   /// Outs checkpoint: implied edge vs depth-never / fold-NFD.
   outsImpliedOutcomes,
 
+  /// Outs guided: remaining aces vs dirty queens vs none.
+  outsGuidedCountOutcomes,
+
   /// Turn guided: brick vs scare vs always-change.
   turnBrickScareOutcomes,
 
@@ -2291,6 +2303,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-03-03-01-guided':
       return const LessonTableScene(
+        layout: LessonTableLayout.outsGuidedCountOutcomes,
         heroCodes: ['Ah', 'Qh'],
         boardCodes: ['Kc', '8h', '2d'],
         villainSeatCount: 0,
@@ -3673,6 +3686,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.potChipsTwelve => pick('pot-12'),
         _ => null,
       };
+    case 'act-03-03-01-guided':
+      return switch (region) {
+        LessonTableRegion.outsCleanAces => pick('outs-3'),
+        LessonTableRegion.outsDirtyAcesQueens => pick('outs-6'),
+        LessonTableRegion.outsNoClean => pick('outs-0'),
+        _ => null,
+      };
     case 'act-03-03-01-scaffolded':
       return switch (region) {
         LessonTableRegion.callChipsTen => pick('call-10'),
@@ -4896,6 +4916,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-02-01-scaffolded' ||
       activity.id == 'act-03-02-01-unguided' ||
       activity.id == 'act-03-02-01-checkpoint' ||
+      activity.id == 'act-03-03-01-guided' ||
       activity.id == 'act-03-03-01-scaffolded' ||
       activity.id == 'act-03-03-01-unguided' ||
       activity.id == 'act-03-03-01-checkpoint' ||
@@ -5202,6 +5223,8 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.callPriceOutcomes => _buildCallPriceOutcomes(),
       LessonTableLayout.drawPriceOutcomes => _buildDrawPriceOutcomes(),
       LessonTableLayout.outsImpliedOutcomes => _buildOutsImpliedOutcomes(),
+      LessonTableLayout.outsGuidedCountOutcomes =>
+          _buildOutsGuidedCountOutcomes(),
       LessonTableLayout.turnBrickScareOutcomes => _buildTurnBrickScareOutcomes(),
       LessonTableLayout.turnScarePlanOutcomes => _buildTurnScarePlanOutcomes(),
       LessonTableLayout.riverJobOutcomes => _buildRiverJobOutcomes(),
@@ -6687,6 +6710,56 @@ class LessonTableContext extends StatelessWidget {
     );
   }
 
+  Widget _buildOutsGuidedCountOutcomes() {
+    Widget miniRow(List<String> codes) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (var i = 0; i < codes.length; i++) ...[
+            if (i > 0) const SizedBox(width: 2),
+            MiniCard(
+              card: CardModel.fromCode(codes[i]),
+              size: MiniCardSize.tiny,
+            ),
+          ],
+        ],
+      );
+    }
+
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive clean outs — tap remaining aces, aces+queens, or none',
+      semanticsStatic: 'Outs guided count outcomes',
+      caption: scene.caption ?? 'Flop · clean outs?',
+      cueLabel: 'Tap the remaining aces.',
+      guideRegion: LessonTableRegion.outsCleanAces,
+      phases: [
+        (
+          region: LessonTableRegion.outsCleanAces,
+          title: 'Remaining aces',
+          detail: 'Clean outs',
+          visual: miniRow(const ['As', 'Ad', 'Ac']),
+        ),
+        (
+          region: LessonTableRegion.outsDirtyAcesQueens,
+          title: 'Aces + queens',
+          detail: 'Dirty mix',
+          visual: miniRow(const ['As', 'Ad', 'Qs', 'Qd']),
+        ),
+        (
+          region: LessonTableRegion.outsNoClean,
+          title: 'No clean outs',
+          detail: 'Never improve?',
+          visual: const Icon(
+            Icons.block,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
 
   Widget _buildTurnBrickScareOutcomes() {
     return _buildOutcomePhases(
