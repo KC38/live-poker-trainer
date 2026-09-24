@@ -7130,6 +7130,65 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s3 flop-class checkpoint taps Draw on densified open-ender felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-02-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Open-ender with a spade is a draw class.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Board Ts 9s 4d. You hold Js 8d. Best label?',
+      choices: const [
+        CourseChoice(id: 'oesd', label: 'Draw — open-ended straight draw'),
+        CourseChoice(id: 'made-jt', label: 'Made top pair'),
+        CourseChoice(id: 'air-j8', label: 'Pure air'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final scene = resolveLessonTableScene(activity);
+    expect(scene?.layout, LessonTableLayout.flopClassCheckpointOutcomes);
+    expect(scene?.heroCodes, ['Js', '8d']);
+    expect(scene?.boardCodes, ['Ts', '9s', '4d']);
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.flopClassOesd,
+        choices: activity.choices,
+      ),
+      'oesd',
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(
+      find.text('Eight or queen completes — tap the class.'),
+      findsOneWidget,
+    );
+    expect(find.text('Draw'), findsOneWidget);
+    expect(find.text('Open-ender'), findsOneWidget);
+    expect(find.text('Tap Draw.'), findsNothing);
+    await tester.tap(find.text('Draw'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'oesd');
+    controller.dispose();
+  });
+
   testWidgets('s3 outs guided taps 3 clean aces on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-03-03-01-guided',

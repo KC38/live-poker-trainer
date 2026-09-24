@@ -299,6 +299,15 @@ enum LessonTableRegion {
   /// Flop-class unguided distractor: made hand.
   flopClassMadeMw,
 
+  /// Flop-class checkpoint: open-ender draw (correct).
+  flopClassOesd,
+
+  /// Flop-class checkpoint distractor: made top pair.
+  flopClassCpMade,
+
+  /// Flop-class checkpoint distractor: pure air.
+  flopClassCpAir,
+
   /// S3 jump leak: fold bad price (correct).
   jumpLeakFoldPrice,
 
@@ -1517,6 +1526,9 @@ enum LessonTableLayout {
   /// Flop-class unguided: Air / SDV / Made multiway.
   flopClassUnguidedOutcomes,
 
+  /// Flop-class checkpoint: Draw / Made / Air open-ender.
+  flopClassCheckpointOutcomes,
+
   /// S3 jump: fold bad price vs call any draw.
   jumpLeakPriceOutcomes,
 
@@ -2270,6 +2282,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-03-02-01-checkpoint':
       return const LessonTableScene(
+        layout: LessonTableLayout.flopClassCheckpointOutcomes,
         heroCodes: ['Js', '8d'],
         boardCodes: ['Ts', '9s', '4d'],
         villainSeatCount: 0,
@@ -3758,6 +3771,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.flopClassMadeMw => pick('made-54'),
         _ => null,
       };
+    case 'act-03-02-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.flopClassOesd => pick('oesd'),
+        LessonTableRegion.flopClassCpMade => pick('made-jt'),
+        LessonTableRegion.flopClassCpAir => pick('air-j8'),
+        _ => null,
+      };
     case 'act-03-08-02-jump-leak':
       return switch (region) {
         LessonTableRegion.jumpLeakFoldPrice => pick('j3-foldprice'),
@@ -4875,6 +4895,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-02-01-guided' ||
       activity.id == 'act-03-02-01-scaffolded' ||
       activity.id == 'act-03-02-01-unguided' ||
+      activity.id == 'act-03-02-01-checkpoint' ||
       activity.id == 'act-03-03-01-scaffolded' ||
       activity.id == 'act-03-03-01-unguided' ||
       activity.id == 'act-03-03-01-checkpoint' ||
@@ -5198,6 +5219,8 @@ class LessonTableContext extends StatelessWidget {
           _buildFlopClassScaffoldedOutcomes(),
       LessonTableLayout.flopClassUnguidedOutcomes =>
           _buildFlopClassUnguidedOutcomes(),
+      LessonTableLayout.flopClassCheckpointOutcomes =>
+          _buildFlopClassCheckpointOutcomes(),
       LessonTableLayout.jumpLeakPriceOutcomes =>
           _buildJumpLeakPriceOutcomes(),
       LessonTableLayout.rangesGuidedOutcomes => _buildRangesGuidedOutcomes(),
@@ -7124,6 +7147,48 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Paired?',
           visual: const Icon(
             Icons.workspace_premium_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFlopClassCheckpointOutcomes() {
+    // Checkpoint: no SoftPulse guide — find the open-ender yourself.
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive flop class — tap Draw, Made, or Air',
+      semanticsStatic: 'Flop class checkpoint outcomes',
+      caption: scene.caption ?? 'Flop · open-ender',
+      phases: [
+        (
+          region: LessonTableRegion.flopClassOesd,
+          title: 'Draw',
+          detail: 'Open-ender',
+          visual: const Icon(
+            Icons.waterfall_chart,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.flopClassCpMade,
+          title: 'Made',
+          detail: 'Top pair?',
+          visual: const Icon(
+            Icons.workspace_premium_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.flopClassCpAir,
+          title: 'Air',
+          detail: 'No outs?',
+          visual: const Icon(
+            Icons.air,
             color: AppColors.slate,
             size: 24,
           ),
