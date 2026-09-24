@@ -4090,8 +4090,19 @@ void main() {
     expect(find.text('Tap QUIT next'), findsOneWidget);
     expect(find.text('Tap Quit, Guard, and First.'), findsNothing);
     expect(find.text('Tap Quit, Guard, and First'), findsNothing);
+    expect(find.text('Know when to quit'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight = tester.getSize(find.byType(GuardrailsDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
     await tester.tap(find.text('QUIT'));
     await tester.pump();
@@ -4102,6 +4113,12 @@ void main() {
     await tester.tap(find.text('FIRST'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(find.text('Know when to quit'), findsOneWidget);
+    expect(
+      tester.getSize(find.byType(GuardrailsDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
