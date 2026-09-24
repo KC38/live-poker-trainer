@@ -17857,6 +17857,7 @@ void main() {
         ),
       );
       expect(find.byType(CapstoneSrpDemo), findsOneWidget);
+      expect(find.text('Tap PLAN next'), findsOneWidget);
       expect(find.text('Tap Plan, Update, and Finish.'), findsNothing);
       expect(find.text('Tap Plan, Update, and Finish'), findsNothing);
       expect(
@@ -17866,10 +17867,14 @@ void main() {
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['PLAN', 'UPDATE', 'FINISH']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
+      await tester.tap(find.text('PLAN'));
+      await tester.pump();
+      expect(find.text('Tap UPDATE next'), findsOneWidget);
+      await tester.tap(find.text('UPDATE'));
+      await tester.pump();
+      expect(find.text('Tap FINISH next'), findsOneWidget);
+      await tester.tap(find.text('FINISH'));
+      await tester.pump();
       expect(feltAck, 1);
       controller.dispose();
     },
