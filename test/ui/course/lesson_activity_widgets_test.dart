@@ -541,9 +541,10 @@ void main() {
       ),
     );
     expect(find.byType(BestFiveDemo), findsOneWidget);
+    expect(find.text('Tap A♥'), findsOneWidget);
     expect(
       find.text('Tap each highlighted card — those five count'),
-      findsOneWidget,
+      findsNothing,
     );
     final teachHeight = tester
         .getSize(find.byKey(const ValueKey('best-five-felt')))
@@ -568,14 +569,20 @@ void main() {
       (w) => w is SelectableBestFiveCard && w.enabled,
     );
     expect(playing, findsNWidgets(5));
+    // Sequential SoftPulse — only the next card is highlighted.
     expect(
       find.byWidgetPredicate(
         (w) => w is SelectableBestFiveCard && w.highlighted && w.enabled,
       ),
-      findsNWidgets(5),
+      findsOneWidget,
     );
-    for (final el in playing.evaluate()) {
-      await tester.tap(find.byWidget(el.widget));
+    // Tap in teach order; re-find after each rebuild (evaluate() goes stale).
+    for (final code in const ['Ah', 'Kd', 'As', '7c', '9h']) {
+      await tester.tap(
+        find.byWidgetPredicate(
+          (w) => w is SelectableBestFiveCard && w.code == code,
+        ),
+      );
       await tester.pump();
     }
     expect(feltAck, 1);

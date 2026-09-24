@@ -121,6 +121,16 @@ class BestFiveDemo extends StatefulWidget {
 class _BestFiveDemoState extends State<BestFiveDemo> {
   final Set<String> _tapped = <String>{};
 
+  /// Visual left→right among the five that play (hero row, then board).
+  static const _playOrder = ['Ah', 'Kd', 'As', '7c', '9h'];
+
+  String? get _nextCode {
+    for (final code in _playOrder) {
+      if (!_tapped.contains(code)) return code;
+    }
+    return null;
+  }
+
   void _onCardTap(String code) {
     if (!widget.enabled || widget.onAllPlayingTapped == null) return;
     if (!BestFiveDemo.playing.contains(code)) return;
@@ -137,9 +147,76 @@ class _BestFiveDemoState extends State<BestFiveDemo> {
     final expandTeach = widget.interactive;
     final feltHeight =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
-    final done = _tapped.containsAll(BestFiveDemo.playing);
-    final content = Column(
+    final next = _nextCode;
+    final cardSize = expandTeach ? MiniCardSize.hero : MiniCardSize.small;
+    final cueLabel = () {
+      if (!widget.interactive) return 'Highlighted = the five that count';
+      if (next == null) return 'Five play · two leftovers';
+      try {
+        return 'Tap ${CardModel.fromCode(next).display}';
+      } catch (_) {
+        return 'Tap $next';
+      }
+    }();
+    final cards = Column(
       mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          'You',
+          style: GoogleFonts.manrope(
+            color: AppColors.cream,
+            fontSize: expandTeach ? 13 : 11,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        SizedBox(height: expandTeach ? 10 : 6),
+        _DemoRow(
+          codes: BestFiveDemo.hero,
+          playing: BestFiveDemo.playing,
+          tapped: _tapped,
+          nextCode: next,
+          interactive: widget.interactive,
+          enabled: widget.enabled,
+          cardSize: cardSize,
+          onCardTap: _onCardTap,
+        ),
+        SizedBox(height: expandTeach ? 18 : 12),
+        Text(
+          'Board',
+          style: GoogleFonts.manrope(
+            color: AppColors.cream,
+            fontSize: expandTeach ? 13 : 11,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        SizedBox(height: expandTeach ? 10 : 6),
+        _DemoRow(
+          codes: BestFiveDemo.board,
+          playing: BestFiveDemo.playing,
+          tapped: _tapped,
+          nextCode: next,
+          interactive: widget.interactive,
+          enabled: widget.enabled,
+          cardSize: cardSize,
+          onCardTap: _onCardTap,
+        ),
+      ],
+    );
+    final cue = Text(
+      cueLabel,
+      textAlign: TextAlign.center,
+      style: GoogleFonts.manrope(
+        color: AppColors.gold,
+        fontSize: expandTeach ? 16 : 12,
+        fontWeight: FontWeight.w700,
+      ),
+    );
+    final body = Column(
+      mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisAlignment:
+          expandTeach
+              ? MainAxisAlignment.spaceEvenly
+              : MainAxisAlignment.start,
       children: [
         Text(
           'Seven available · five play',
@@ -149,75 +226,28 @@ class _BestFiveDemoState extends State<BestFiveDemo> {
             fontWeight: FontWeight.w700,
           ),
         ),
-        SizedBox(height: expandTeach ? 14 : 12),
-        Text(
-          'You',
-          style: GoogleFonts.manrope(
-            color: AppColors.cream,
-            fontSize: expandTeach ? 13 : 11,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        const SizedBox(height: 6),
-        _DemoRow(
-          codes: BestFiveDemo.hero,
-          playing: BestFiveDemo.playing,
-          tapped: _tapped,
-          interactive: widget.interactive,
-          enabled: widget.enabled,
-          onCardTap: _onCardTap,
-        ),
-        SizedBox(height: expandTeach ? 14 : 12),
-        Text(
-          'Board',
-          style: GoogleFonts.manrope(
-            color: AppColors.cream,
-            fontSize: expandTeach ? 13 : 11,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        const SizedBox(height: 6),
-        _DemoRow(
-          codes: BestFiveDemo.board,
-          playing: BestFiveDemo.playing,
-          tapped: _tapped,
-          interactive: widget.interactive,
-          enabled: widget.enabled,
-          onCardTap: _onCardTap,
-        ),
-        SizedBox(height: expandTeach ? 14 : 12),
-        Text(
-          widget.interactive
-              ? (done
-                  ? 'Five play · two leftovers'
-                  : 'Tap each highlighted card — those five count')
-              : 'Highlighted = the five that count',
-          textAlign: TextAlign.center,
-          style: GoogleFonts.manrope(
-            color: AppColors.gold,
-            fontSize: expandTeach ? 16 : 12,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ],
-    );
-    final body = expandTeach
-        ? Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: SizedBox(
-                  width: MediaQuery.sizeOf(context).width - 48,
-                  child: content,
+        if (!expandTeach) const SizedBox(height: 12),
+        expandTeach
+            ? Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: FittedBox(
+                  // contain (not scaleDown) so hero cards fill the densified
+                  // felt instead of sitting tiny in green void.
+                  fit: BoxFit.contain,
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    width: MediaQuery.sizeOf(context).width - 48,
+                    child: cards,
+                  ),
                 ),
               ),
-            ),
-          ],
-        )
-        : content;
+            )
+            : cards,
+        if (!expandTeach) const SizedBox(height: 12),
+        cue,
+      ],
+    );
     final child = Container(
       key: const ValueKey('best-five-felt'),
       width: double.infinity,
@@ -251,41 +281,124 @@ class _DemoRow extends StatelessWidget {
     required this.codes,
     required this.playing,
     required this.tapped,
+    required this.nextCode,
     required this.interactive,
     required this.enabled,
+    required this.cardSize,
     required this.onCardTap,
   });
 
   final List<String> codes;
   final Set<String> playing;
   final Set<String> tapped;
+  final String? nextCode;
   final bool interactive;
   final bool enabled;
+  final MiniCardSize cardSize;
   final ValueChanged<String> onCardTap;
 
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 6,
-      runSpacing: 6,
+      spacing: cardSize == MiniCardSize.hero ? 10 : 6,
+      runSpacing: cardSize == MiniCardSize.hero ? 10 : 6,
       alignment: WrapAlignment.center,
       children: [
         for (final code in codes)
-          SelectableBestFiveCard(
-            code: code,
-            selected: interactive ? tapped.contains(code) : playing.contains(code),
-            highlighted:
+          _SoftPulseTarget(
+            active:
                 interactive &&
+                enabled &&
                 playing.contains(code) &&
-                !tapped.contains(code),
-            enabled: interactive && enabled && playing.contains(code),
-            dimmed: !playing.contains(code),
-            onPressed:
-                interactive && playing.contains(code)
-                    ? () => onCardTap(code)
-                    : null,
+                code == nextCode,
+            child: SelectableBestFiveCard(
+              code: code,
+              selected:
+                  interactive ? tapped.contains(code) : playing.contains(code),
+              highlighted:
+                  interactive &&
+                  enabled &&
+                  playing.contains(code) &&
+                  code == nextCode,
+              enabled: interactive && enabled && playing.contains(code),
+              dimmed: !playing.contains(code),
+              size: cardSize,
+              onPressed:
+                  interactive && playing.contains(code)
+                      ? () => onCardTap(code)
+                      : null,
+            ),
           ),
       ],
+    );
+  }
+}
+
+class _SoftPulseTarget extends StatefulWidget {
+  const _SoftPulseTarget({required this.active, required this.child});
+
+  final bool active;
+  final Widget child;
+
+  @override
+  State<_SoftPulseTarget> createState() => _SoftPulseTargetState();
+}
+
+class _SoftPulseTargetState extends State<_SoftPulseTarget>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+    if (widget.active) {
+      _pulse.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _SoftPulseTarget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.active && !_pulse.isAnimating) {
+      _pulse.repeat(reverse: true);
+    } else if (!widget.active && _pulse.isAnimating) {
+      _pulse.stop();
+      _pulse.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.active) return widget.child;
+    return AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final glow = 0.4 + (_pulse.value * 0.55);
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.gold.withValues(alpha: glow * 0.55),
+                blurRadius: 14 + (_pulse.value * 10),
+                spreadRadius: 1 + (_pulse.value * 2),
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
+      child: widget.child,
     );
   }
 }
