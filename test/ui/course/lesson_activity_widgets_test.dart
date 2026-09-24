@@ -742,13 +742,21 @@ void main() {
       ),
     );
     expect(find.byType(StreetsTimelineDemo), findsOneWidget);
-    // Felt embeds the tap hint — no duplicate gold line under the demo.
-    expect(find.text('Tap each street from preflop to river'), findsOneWidget);
+    // Sequential SoftPulse cue — one next street at a time.
+    expect(find.text('Tap Preflop'), findsOneWidget);
+    expect(find.text('Tap each street from preflop to river'), findsNothing);
     expect(find.text('Tap each street from preflop to river.'), findsNothing);
-    for (final title in ['PREFLOP', 'FLOP', 'TURN', 'RIVER']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('PREFLOP'));
+    await tester.pump();
+    expect(find.text('Tap Flop'), findsOneWidget);
+    await tester.tap(find.text('FLOP'));
+    await tester.pump();
+    expect(find.text('Tap Turn'), findsOneWidget);
+    await tester.tap(find.text('TURN'));
+    await tester.pump();
+    expect(find.text('Tap River'), findsOneWidget);
+    await tester.tap(find.text('RIVER'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
@@ -784,7 +792,8 @@ void main() {
       ),
     );
     // Interactive felt embeds the only tap cue.
-    expect(find.text('Tap each street from preflop to river'), findsOneWidget);
+    expect(find.text('Tap Preflop'), findsOneWidget);
+    expect(find.text('Tap each street from preflop to river'), findsNothing);
     controller.finishSubmit(
       SubmitCourseStepResult(
         attemptId: 'a1',
