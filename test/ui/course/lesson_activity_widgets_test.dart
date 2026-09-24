@@ -4183,8 +4183,23 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Tap OBSERVE next'), findsOneWidget);
     expect(find.text('Tap Observe, Samples, and Showdowns.'), findsNothing);
     expect(find.text('Tap Observe, Samples, and Showdowns'), findsNothing);
+    expect(
+      find.text('Samples and showdowns grow confidence'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(ObservationCertaintyDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
     await tester.tap(find.text('OBSERVE'));
     await tester.pump();
@@ -4195,6 +4210,15 @@ await tester.tap(find.text('NIT'));
     await tester.tap(find.text('SHOWDOWNS'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Samples and showdowns grow confidence'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(ObservationCertaintyDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
