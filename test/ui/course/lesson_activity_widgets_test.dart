@@ -523,14 +523,17 @@ void main() {
       ),
     );
     expect(find.byType(PassiveActionsDemo), findsOneWidget);
-    // Felt embeds the tap hint — no duplicate gold line under the demo.
-    expect(find.text('Tap Fold, Check, and Call'), findsOneWidget);
+    // Sequential SoftPulse cue — one next action at a time.
+    expect(find.text('Tap Fold'), findsOneWidget);
+    expect(find.text('Tap Fold, Check, and Call'), findsNothing);
     expect(find.text('Tap Fold, Check, and Call.'), findsNothing);
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(feltAck, 0);
+    expect(find.text('Tap Check'), findsOneWidget);
     await tester.tap(find.text('CHECK'));
     await tester.pump();
+    expect(find.text('Tap Call'), findsOneWidget);
     await tester.tap(find.text('CALL'));
     await tester.pump();
     expect(feltAck, 1);
@@ -569,11 +572,13 @@ void main() {
       ),
     );
     expect(find.byType(AggressiveActionsDemo), findsOneWidget);
-    // Felt embeds the tap hint — no duplicate gold line under the demo.
-    expect(find.text('Tap Bet, Raise, and All-in'), findsOneWidget);
+    // Sequential SoftPulse cue — one next action at a time.
+    expect(find.text('Tap Bet'), findsOneWidget);
+    expect(find.text('Tap Bet, Raise, and All-in'), findsNothing);
     expect(find.text('Tap Bet, Raise, and All-in.'), findsNothing);
     await tester.tap(find.text('BET'));
     await tester.pump();
+    expect(find.text('Tap Raise'), findsOneWidget);
     await tester.tap(find.text('RAISE'));
     await tester.pump();
     await tester.tap(find.text('ALL-IN'));
