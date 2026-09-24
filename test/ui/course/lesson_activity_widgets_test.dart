@@ -6098,8 +6098,10 @@ await tester.tap(find.text('STRONGER'));
       ),
     );
 
-    expect(find.text('Tap the cards only you can see.'), findsOneWidget);
-    expect(find.text('Tap the cards only you can see.'), findsOneWidget);
+    expect(find.text('Nobody else can peek at your holes.'), findsOneWidget);
+    // Felt-first: Rex owns the teach line — no duplicate prompt/footer.
+    expect(find.text('Tap the cards only you can see.'), findsNothing);
+    expect(find.text('Tap the answer on the table.'), findsNothing);
     expect(find.byType(LessonTableContext), findsOneWidget);
     expect(find.byType(MiniCard), findsAtLeastNWidgets(2));
     expect(find.text('Only you'), findsNothing);
