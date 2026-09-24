@@ -124,70 +124,81 @@ class AuthoredMultiStepActivity extends StatelessWidget {
         final coachText = _coachTextFor(step);
 
         if (tableMode) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Nice! owns the line — hide stale Rex; felt already shows cards.
-              if (!locked) RexCoachLine(text: coachText),
-              const SizedBox(height: 10),
-              Text(
-                'Street ${index + 1} of ${steps.length}',
-                style: GoogleFonts.manrope(
-                  color: AppColors.slate,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 14),
-              LessonActionTable(spot: spot),
-              const SizedBox(height: 14),
-              LessonActionDock(
-                choices: step.choices,
-                selectedId: selected,
-                enabled: !locked,
-                facingBet: spot.facingBet,
-                heroStackAmount: spot.heroStackAmount,
-                pulseChoiceId:
-                    locked || selected != null
-                        ? null
-                        : _pulseChoiceIdFor(step),
-                onSelect:
-                    (id) => controller.selectChoice(id, autoSubmit: true),
-              ),
-              Builder(
-                builder: (context) {
-                  // Outcome tiles (Won pot / Must flop) are not poker actions.
-                  final outcomeAsk = step.choices.every(
-                    (c) => c.action == null || c.action!.isEmpty,
-                  );
-                  final status = () {
-                    if (controller.lastResult != null) return '';
-                    if (controller.submitting) return 'Checking…';
-                    if (selected == null) {
-                      // Rex already cues the dock — SoftPulse highlights it.
-                      if (showGuidance) return '';
-                      return outcomeAsk
-                          ? 'What happened? Tap below.'
-                          : 'Tap your action on the dock.';
-                    }
-                    return 'Checking…';
-                  }();
-                  if (status.isEmpty) return const SizedBox.shrink();
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Text(
-                      status,
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.manrope(
-                        color: AppColors.slate,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                      ),
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final fill =
+                  constraints.hasBoundedHeight &&
+                  constraints.maxHeight.isFinite;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: fill ? MainAxisSize.max : MainAxisSize.min,
+                children: [
+                  // Nice! owns the line — hide stale Rex; felt already shows cards.
+                  if (!locked) RexCoachLine(text: coachText),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Street ${index + 1} of ${steps.length}',
+                    style: GoogleFonts.manrope(
+                      color: AppColors.slate,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
                     ),
-                  );
-                },
-              ),
-            ],
+                  ),
+                  const SizedBox(height: 14),
+                  if (fill)
+                    Expanded(child: LessonActionTable(spot: spot))
+                  else
+                    LessonActionTable(spot: spot),
+                  const SizedBox(height: 14),
+                  LessonActionDock(
+                    choices: step.choices,
+                    selectedId: selected,
+                    enabled: !locked,
+                    facingBet: spot.facingBet,
+                    heroStackAmount: spot.heroStackAmount,
+                    pulseChoiceId:
+                        locked || selected != null
+                            ? null
+                            : _pulseChoiceIdFor(step),
+                    onSelect:
+                        (id) => controller.selectChoice(id, autoSubmit: true),
+                  ),
+                  Builder(
+                    builder: (context) {
+                      // Outcome tiles (Won pot / Must flop) are not poker actions.
+                      final outcomeAsk = step.choices.every(
+                        (c) => c.action == null || c.action!.isEmpty,
+                      );
+                      final status = () {
+                        if (controller.lastResult != null) return '';
+                        if (controller.submitting) return 'Checking…';
+                        if (selected == null) {
+                          // Rex already cues the dock — SoftPulse highlights it.
+                          if (showGuidance) return '';
+                          return outcomeAsk
+                              ? 'What happened? Tap below.'
+                              : 'Tap your action on the dock.';
+                        }
+                        return 'Checking…';
+                      }();
+                      if (status.isEmpty) return const SizedBox.shrink();
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Text(
+                          status,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.manrope(
+                            color: AppColors.slate,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              );
+            },
           );
         }
 

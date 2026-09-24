@@ -7670,9 +7670,6 @@ class LessonActionTable extends StatelessWidget {
       } catch (_) {}
     }
 
-    // Tall-phone teach: fill under Rex before the dock (fixed height so
-    // cards/status space evenly without a navy void / center-shrink sparse felt).
-    final feltHeight = MediaQuery.sizeOf(context).height * 0.50;
     const cardSize = MiniCardSize.hero;
 
     Widget statusLine(String text, {Color color = AppColors.gold}) {
@@ -7687,111 +7684,130 @@ class LessonActionTable extends StatelessWidget {
       );
     }
 
-    return Container(
-      width: double.infinity,
-      height: feltHeight,
-      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.feltLight, AppColors.feltDark],
-        ),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: AppColors.feltBorder.withValues(alpha: 0.85),
-        ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          if (spot.streetLabel != null)
-            Text(
-              spot.streetLabel!,
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-              ),
+    // Tall-phone teach: fill Rex→dock when parent expands; else ~55% shell
+    // so we never leave a navy void under a center-shrunk mini felt.
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final bounded =
+            constraints.hasBoundedHeight &&
+            constraints.maxHeight.isFinite &&
+            constraints.maxHeight > 120;
+        final feltHeight =
+            bounded
+                ? constraints.maxHeight
+                : MediaQuery.sizeOf(context).height * 0.55;
+
+        return Container(
+          width: double.infinity,
+          height: feltHeight,
+          padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [AppColors.feltLight, AppColors.feltDark],
             ),
-          if (spot.villainLine != null)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.bgDark.withValues(alpha: 0.45),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Text(
-                spot.villainLine!,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.manrope(
-                  color: AppColors.cream,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: AppColors.feltBorder.withValues(alpha: 0.85),
             ),
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              _PotChip(label: spot.potLabel),
-              if (spot.stackLabel != null) _PotChip(label: spot.stackLabel!),
-            ],
           ),
-          if (board.isNotEmpty)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                for (var i = 0; i < board.length; i++) ...[
-                  if (i > 0) const SizedBox(width: 6),
-                  MiniCard(card: board[i], size: cardSize),
-                ],
-              ],
-            ),
-          Column(
-            mainAxisSize: MainAxisSize.min,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text(
-                'You',
-                style: GoogleFonts.manrope(
-                  color: AppColors.cream,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
+              if (spot.streetLabel != null)
+                Text(
+                  spot.streetLabel!,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.slate,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 6),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              if (spot.villainLine != null)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.bgDark.withValues(alpha: 0.45),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    spot.villainLine!,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.manrope(
+                      color: AppColors.cream,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 8,
+                runSpacing: 8,
                 children: [
-                  for (var i = 0; i < hero.length; i++) ...[
-                    if (i > 0) const SizedBox(width: 8),
-                    MiniCard(card: hero[i], size: cardSize),
-                  ],
+                  _PotChip(label: spot.potLabel),
+                  if (spot.stackLabel != null)
+                    _PotChip(label: spot.stackLabel!),
                 ],
               ),
+              if (board.isNotEmpty)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    for (var i = 0; i < board.length; i++) ...[
+                      if (i > 0) const SizedBox(width: 6),
+                      MiniCard(card: board[i], size: cardSize),
+                    ],
+                  ],
+                ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'You',
+                    style: GoogleFonts.manrope(
+                      color: AppColors.cream,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (var i = 0; i < hero.length; i++) ...[
+                        if (i > 0) const SizedBox(width: 8),
+                        MiniCard(card: hero[i], size: cardSize),
+                      ],
+                    ],
+                  ),
+                ],
+              ),
+              if (spot.feltStatusLine != null)
+                statusLine(spot.feltStatusLine!)
+              else if (spot.facingBet)
+                statusLine('A bet faces you')
+              else if (spot.openPot)
+                statusLine(
+                  // Preflop first-in is an open-raise; postflop open is a bet.
+                  spot.streetLabel?.toLowerCase().contains('preflop') == true
+                      ? 'First in — open the pot'
+                      : 'Pot is open to a bet',
+                )
+              else if (spot.streetLabel?.toLowerCase().contains('hand over') ==
+                  true)
+                statusLine('Uncontested — stack the chips')
+              else
+                statusLine('No bet to match', color: AppColors.slate),
             ],
           ),
-          if (spot.feltStatusLine != null)
-            statusLine(spot.feltStatusLine!)
-          else if (spot.facingBet)
-            statusLine('A bet faces you')
-          else if (spot.openPot)
-            statusLine(
-              // Preflop first-in is an open-raise; postflop open is a bet.
-              spot.streetLabel?.toLowerCase().contains('preflop') == true
-                  ? 'First in — open the pot'
-                  : 'Pot is open to a bet',
-            )
-          else if (spot.streetLabel?.toLowerCase().contains('hand over') ==
-              true)
-            statusLine('Uncontested — stack the chips')
-          else
-            statusLine('No bet to match', color: AppColors.slate),
-        ],
-      ),
+        );
+      },
     );
   }
 }
