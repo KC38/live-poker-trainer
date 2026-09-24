@@ -2441,14 +2441,23 @@ void main() {
       ),
     );
     expect(find.byType(CommonLeaksDemo), findsOneWidget);
-    expect(find.text('Tap each common leak once.'), findsOneWidget);
+    expect(find.text('Tap TOP PAIR next'), findsOneWidget);
+    expect(find.text('Tap each common leak once.'), findsNothing);
+    expect(find.text('Tap each common leak once'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['TOP PAIR', 'PRICES', 'PASSIVE', 'CROWDS']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('TOP PAIR'));
+    await tester.pump();
+    expect(find.text('Tap PRICES next'), findsOneWidget);
+    await tester.tap(find.text('PRICES'));
+    await tester.pump();
+    expect(find.text('Tap PASSIVE next'), findsOneWidget);
+    await tester.tap(find.text('PASSIVE'));
+    await tester.pump();
+    expect(find.text('Tap CROWDS next'), findsOneWidget);
+    await tester.tap(find.text('CROWDS'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
