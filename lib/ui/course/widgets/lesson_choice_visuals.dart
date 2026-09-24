@@ -190,10 +190,13 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Leak repair: tap seat-frequency notes on densified felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
-  if (activity.id == 'act-03-08-02-jump-table' ||
-      activity.id == 'act-03-08-02-jump-class' ||
+  if (activity.id == 'act-03-08-02-jump-table') {
+    // S3 jump: tap pot + effective on densified felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
+  if (activity.id == 'act-03-08-02-jump-class' ||
       activity.id == 'act-03-08-02-jump-leak') {
-    // S3 jump: track / class / price on felt tiles.
+    // S3 jump: class / price on felt tiles (still refining).
     return SelectIdentifyPresentation.handCategoryTap;
   }
   if (activity.id.startsWith('act-04-01-01-') &&

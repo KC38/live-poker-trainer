@@ -364,6 +364,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Seat enters most pots — tap what you note.',
       'act-03-08-01-checkpoint' =>
           'Two seats, different frequencies — tap the note.',
+      'act-03-08-02-jump-table' =>
+          'Pot 16, shorter 40bb — tap what you track first.',
       'act-04-06-01-guided' =>
           'Seat calls 7 of 9 preflops — tap the observation.',
       'act-04-06-02-guided' =>
@@ -716,6 +718,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-03-07-01-unguided' ||
             widget.activity.id == 'act-03-07-01-checkpoint' ||
             widget.activity.id == 'act-03-08-01-checkpoint' ||
+            widget.activity.id == 'act-03-08-02-jump-table' ||
             widget.activity.id == 'act-04-06-01-guided' ||
             widget.activity.id == 'act-04-06-02-guided' ||
             widget.activity.id == 'act-04-06-02-scaffolded' ||
