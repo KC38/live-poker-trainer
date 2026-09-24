@@ -4293,8 +4293,8 @@ void main() {
         ),
       );
       expect(find.byType(ThreeBetFourBetSprDemo), findsOneWidget);
-      // Rex cue below the felt — not a second footer inside the demo.
-      expect(find.text('Tap 3-Bet, 4-Bet, and Depth.'), findsOneWidget);
+      expect(find.text('Tap 3BET next'), findsOneWidget);
+      expect(find.text('Tap 3-Bet, 4-Bet, and Depth.'), findsNothing);
       expect(find.text('Tap 3-Bet, 4-Bet, and Depth'), findsNothing);
       expect(
         find.text('Raised pots shrink ranges — depth decides commitment'),
@@ -4303,10 +4303,14 @@ void main() {
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['3BET', '4BET', 'DEPTH']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
+      await tester.tap(find.text('3BET'));
+      await tester.pump();
+      expect(find.text('Tap 4BET next'), findsOneWidget);
+      await tester.tap(find.text('4BET'));
+      await tester.pump();
+      expect(find.text('Tap DEPTH next'), findsOneWidget);
+      await tester.tap(find.text('DEPTH'));
+      await tester.pump();
       expect(feltAck, 1);
       controller.dispose();
     },
