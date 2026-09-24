@@ -248,6 +248,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Observe: tap participation note on felt tiles.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-04-06-01-scaffolded') {
+    // Observe: tap sticky calls vs folds-a-lot on densified river felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id == 'act-04-06-02-guided') {
     // Meet Calling Station: tap Station vs Nit on sticky evidence felt.
     return SelectIdentifyPresentation.tableRegionTap;
