@@ -3018,14 +3018,20 @@ void main() {
       ),
     );
     expect(find.byType(VsNitsDemo), findsOneWidget);
-    expect(find.text('Tap Steal, Credit, and Explode.'), findsOneWidget);
+    expect(find.text('Tap STEAL next'), findsOneWidget);
+    expect(find.text('Tap Steal, Credit, and Explode.'), findsNothing);
+    expect(find.text('Tap Steal, Credit, and Explode'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['STEAL', 'CREDIT', 'EXPLODE']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('STEAL'));
+    await tester.pump();
+    expect(find.text('Tap CREDIT next'), findsOneWidget);
+    await tester.tap(find.text('CREDIT'));
+    await tester.pump();
+    expect(find.text('Tap EXPLODE next'), findsOneWidget);
+    await tester.tap(find.text('EXPLODE'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
