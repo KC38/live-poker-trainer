@@ -2609,8 +2609,23 @@ void main() {
       find.text('Tap Pot, Stacks, Button, and Who Acts.'),
       findsNothing,
     );
+    expect(
+      find.text('Pot · stacks · button · who acts'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(TableReadDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
     await tester.tap(find.text('POT'));
     await tester.pump();
@@ -2624,6 +2639,15 @@ void main() {
     await tester.tap(find.text('WHO ACTS'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Pot · stacks · button · who acts'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(TableReadDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
