@@ -6315,7 +6315,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive turn card — tap brick, scare, or always-change',
       semanticsStatic: 'Turn brick scare outcomes',
       caption: scene.caption ?? 'Missed c-bet · turn blank?',
-      cueLabel: 'Tap Brick or Scare.',
+      cueLabel: 'Tap Brick.',
+      guideRegion: LessonTableRegion.turnBrick,
       phases: [
         (
           region: LessonTableRegion.turnBrick,
@@ -6358,6 +6359,7 @@ class LessonTableContext extends StatelessWidget {
       semanticsStatic: 'Turn scare plan outcomes',
       caption: scene.caption ?? 'Air bluff · turn completes draws',
       cueLabel: 'Tap Give up.',
+      guideRegion: LessonTableRegion.turnGiveUp,
       phases: [
         (
           region: LessonTableRegion.turnGiveUp,
@@ -11253,6 +11255,7 @@ class LessonTableContext extends StatelessWidget {
     >
     phases,
     String? cueLabel,
+    LessonTableRegion? guideRegion,
   }) {
     Widget phase({
       required LessonTableRegion region,
@@ -11260,8 +11263,11 @@ class LessonTableContext extends StatelessWidget {
       required String detail,
       required Widget visual,
       required bool highlighted,
+      required bool densify,
     }) {
       final selected = selectedRegion == region;
+      final iconVisual =
+          densify ? Transform.scale(scale: 1.35, child: visual) : visual;
       return Expanded(
         child: _TappableRegion(
           label: title,
@@ -11273,17 +11279,23 @@ class LessonTableContext extends StatelessWidget {
                   ? () => onRegionTap!(LessonTableTapTarget(region))
                   : null,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(4, 10, 4, 10),
+            padding: EdgeInsets.fromLTRB(
+              4,
+              densify ? 16 : 10,
+              4,
+              densify ? 16 : 10,
+            ),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                visual,
-                const SizedBox(height: 6),
+                iconVisual,
+                SizedBox(height: densify ? 8 : 6),
                 Text(
                   title,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.manrope(
                     color: AppColors.cream,
-                    fontSize: 12,
+                    fontSize: densify ? 14 : 12,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
@@ -11293,7 +11305,7 @@ class LessonTableContext extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: GoogleFonts.manrope(
                     color: AppColors.slate,
-                    fontSize: 10,
+                    fontSize: densify ? 12 : 10,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -11312,7 +11324,7 @@ class LessonTableContext extends StatelessWidget {
         .toList(growable: false);
     final showSpotCards = hero.isNotEmpty || board.isNotEmpty;
     // Grow interactive outcome felts on tall phones even without SoftPulse
-    // (unguided must densify without pulsing a spoiler tile).
+    // (unguided/checkpoint densify without pulsing a spoiler tile).
     final expandTeach =
         selectedRegion == null && enabled && _interactive;
     final invitePulse = showSoftPulse && expandTeach;
@@ -11323,143 +11335,160 @@ class LessonTableContext extends StatelessWidget {
 
     return Builder(
       builder: (context) {
-        // Spot-card draws (board + holes + actions) need a taller shell so
-        // the teach felt eats the tall-phone void below the action row.
+        // Spot-card outcome draws need a taller shell so the teach felt
+        // eats the tall-phone navy void below the tile row.
         final minFelt =
             expandTeach
                 ? MediaQuery.sizeOf(context).height *
-                    (showSpotCards ? 0.52 : 0.40)
+                    (showSpotCards ? 0.58 : 0.40)
                 : null;
         return _feltShell(
-      semanticsLabel: _interactive ? semanticsInteractive : semanticsStatic,
-      minHeight: minFelt,
-      centerChild: expandTeach,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment:
-            expandTeach ? MainAxisAlignment.center : MainAxisAlignment.start,
-        children: [
-          if (showSpotCards) ...[
-            if (scene.villainSeatCount > 0) ...[
-              Text(
-                'Them',
-                style: GoogleFonts.manrope(
-                  color: AppColors.slate,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0.6,
-                ),
-              ),
-              const SizedBox(height: 4),
-              const _FaceDownPair(),
-              const SizedBox(height: 8),
-            ],
-            if (board.isNotEmpty) ...[
-              Text(
-                'BOARD · shared',
-                style: GoogleFonts.manrope(
-                  color: AppColors.slate,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0.6,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var i = 0; i < board.length; i++) ...[
-                    if (i > 0) const SizedBox(width: 6),
-                    MiniCard(card: board[i], size: MiniCardSize.small),
-                  ],
-                ],
-              ),
-              const SizedBox(height: 8),
-            ],
-            if (hero.isNotEmpty) ...[
-              Text(
-                caption,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.manrope(
-                  color: AppColors.gold,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'You',
-                style: GoogleFonts.manrope(
-                  color: AppColors.slate,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0.6,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var i = 0; i < hero.length; i++) ...[
-                    if (i > 0) const SizedBox(width: 6),
-                    MiniCard(card: hero[i], size: MiniCardSize.small),
-                  ],
-                ],
-              ),
-              const SizedBox(height: 10),
-            ],
-          ] else ...[
-            Text(
-              caption,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: expandTeach ? 12 : 11,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 10),
-          ],
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          semanticsLabel:
+              _interactive ? semanticsInteractive : semanticsStatic,
+          minHeight: minFelt,
+          centerChild: expandTeach,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment:
+                expandTeach
+                    ? MainAxisAlignment.center
+                    : MainAxisAlignment.start,
             children: [
-              for (var i = 0; i < phases.length; i++) ...[
-                if (i > 0) const SizedBox(width: 6),
-                phase(
-                  region: phases[i].region,
-                  title: phases[i].title,
-                  detail: phases[i].detail,
-                  visual: phases[i].visual,
-                  highlighted: invitePulse,
+              if (showSpotCards) ...[
+                if (scene.villainSeatCount > 0) ...[
+                  Text(
+                    'Them',
+                    style: GoogleFonts.manrope(
+                      color: AppColors.slate,
+                      fontSize: expandTeach ? 11 : 10,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.6,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  const _FaceDownPair(),
+                  SizedBox(height: expandTeach ? 10 : 8),
+                ],
+                if (board.isNotEmpty) ...[
+                  Text(
+                    'BOARD · shared',
+                    style: GoogleFonts.manrope(
+                      color: AppColors.slate,
+                      fontSize: expandTeach ? 11 : 10,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.6,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (var i = 0; i < board.length; i++) ...[
+                        if (i > 0) const SizedBox(width: 6),
+                        MiniCard(
+                          card: board[i],
+                          size: MiniCardSize.small,
+                        ),
+                      ],
+                    ],
+                  ),
+                  SizedBox(height: expandTeach ? 10 : 8),
+                ],
+                if (hero.isNotEmpty) ...[
+                  Text(
+                    caption,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.manrope(
+                      color: AppColors.gold,
+                      fontSize: expandTeach ? 13 : 11,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'You',
+                    style: GoogleFonts.manrope(
+                      color: AppColors.slate,
+                      fontSize: expandTeach ? 11 : 10,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.6,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (var i = 0; i < hero.length; i++) ...[
+                        if (i > 0) const SizedBox(width: 6),
+                        MiniCard(
+                          card: hero[i],
+                          size: MiniCardSize.small,
+                        ),
+                      ],
+                    ],
+                  ),
+                  SizedBox(height: expandTeach ? 14 : 10),
+                ],
+              ] else ...[
+                Text(
+                  caption,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.slate,
+                    fontSize: expandTeach ? 12 : 11,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 10),
+              ],
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  for (var i = 0; i < phases.length; i++) ...[
+                    if (i > 0) const SizedBox(width: 6),
+                    phase(
+                      region: phases[i].region,
+                      title: phases[i].title,
+                      detail: phases[i].detail,
+                      visual: phases[i].visual,
+                      densify: expandTeach,
+                      // SoftPulse only the teach target — never all tiles.
+                      highlighted:
+                          invitePulse &&
+                          (guideRegion == null ||
+                              phases[i].region == guideRegion),
+                    ),
+                  ],
+                ],
+              ),
+              if (cue != null) ...[
+                const SizedBox(height: 14),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.feltDark.withValues(alpha: 0.65),
+                    borderRadius: BorderRadius.circular(999),
+                    border: Border.all(
+                      color: AppColors.gold.withValues(alpha: 0.45),
+                    ),
+                  ),
+                  child: Text(
+                    cue,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.manrope(
+                      color: AppColors.gold,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
               ],
             ],
           ),
-          if (cue != null) ...[
-            const SizedBox(height: 14),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              decoration: BoxDecoration(
-                color: AppColors.feltDark.withValues(alpha: 0.65),
-                borderRadius: BorderRadius.circular(999),
-                border: Border.all(
-                  color: AppColors.gold.withValues(alpha: 0.45),
-                ),
-              ),
-              child: Text(
-                cue,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.manrope(
-                  color: AppColors.gold,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ],
-        ],
-      ),
         );
       },
     );

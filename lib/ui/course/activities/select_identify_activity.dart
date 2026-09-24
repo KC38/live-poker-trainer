@@ -353,7 +353,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-03-03-01-checkpoint' =>
           'Nut flush draw, deep and sticky — tap Implied.',
       'act-03-05-01-guided' =>
-          'Dry ace flop, blank three — tap brick or scare.',
+          'Dry ace flop, blank three — tap Brick.',
       'act-03-05-01-checkpoint' =>
           'Air bluff meets a draw-completing queen — tap the plan.',
       'act-04-06-01-guided' =>
@@ -975,7 +975,7 @@ class _HandCategoryTapActivity extends StatelessWidget {
         'act-03-03-01-checkpoint' =>
           'Nut flush draw, deep and sticky — tap Implied.',
         'act-03-05-01-guided' =>
-          'Dry ace flop, blank three — tap brick or scare.',
+          'Dry ace flop, blank three — tap Brick.',
         'act-03-05-01-checkpoint' =>
           'Air bluff meets a draw-completing queen — tap the plan.',
         'act-03-06-01-checkpoint' =>
