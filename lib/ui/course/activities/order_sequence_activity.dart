@@ -420,18 +420,17 @@ class OrderSequenceActivity extends StatelessWidget {
                 isSeatOrderSequenceActivity(activity)) ...[
               Builder(
                 builder: (context) {
-                  // Tall-phone teach: pack tray+palette, then scale to fill
-                  // densified felt. Seat packs stay narrow+tall (2-col densify
-                  // chips) so BoxFit.contain can grow into navy void — a
-                  // full-width pin letterboxes a short 3-seat row.
+                  // Tall-phone teach: pack tray+palette, then scale to fill.
+                  // Full-width packs letterbox short/wide content — seat packs
+                  // stay 2-col densify width; street packs use ~72% width so
+                  // the 2x2 board-card grid can grow into the 0.58 felt.
                   final densify = true;
                   final isStreet = isStreetSequenceActivity(activity);
                   final feltHeight =
                       MediaQuery.sizeOf(context).height * 0.58;
+                  final screenW = MediaQuery.sizeOf(context).width;
                   final packWidth =
-                      isStreet
-                          ? MediaQuery.sizeOf(context).width - 48
-                          : (132.0 * 2) + 16;
+                      isStreet ? (screenW - 48) * 0.72 : (132.0 * 2) + 16;
                   final nextId =
                       showGuidance &&
                               !locked &&
@@ -566,8 +565,6 @@ class OrderSequenceActivity extends StatelessWidget {
                       children: [
                         Expanded(
                           child: FittedBox(
-                            // contain so sparse seat/street palettes scale up
-                            // into the densified felt (not letterboxed navy).
                             fit: BoxFit.contain,
                             alignment: Alignment.center,
                             child: SizedBox(
