@@ -350,6 +350,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Pot 20, bet 10 — tap how many chips to call.',
       'act-03-03-01-unguided' =>
           'Getting 3:1 with real outs — tap what you do.',
+      'act-03-03-01-checkpoint' =>
+          'Nut flush draw, deep and sticky — tap the edge.',
       'act-04-06-01-guided' =>
           'Seat calls 7 of 9 preflops — tap the observation.',
       'act-04-06-02-guided' =>
@@ -695,6 +697,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-03-01-01-checkpoint' ||
             widget.activity.id == 'act-03-03-01-scaffolded' ||
             widget.activity.id == 'act-03-03-01-unguided' ||
+            widget.activity.id == 'act-03-03-01-checkpoint' ||
             widget.activity.id == 'act-04-06-01-guided' ||
             widget.activity.id == 'act-04-06-02-guided' ||
             widget.activity.id == 'act-04-06-02-scaffolded' ||
