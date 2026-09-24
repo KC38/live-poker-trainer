@@ -372,6 +372,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Gutshot vs a 2x pot bet — tap the fix.',
       'act-04-01-01-guided' =>
           'UTG opens at 1/2 — tap the range shape.',
+      'act-04-01-01-scaffolded' =>
+          'BTN open, BB 3-bet, BTN calls — tap who is stronger.',
       'act-04-06-01-guided' =>
           'Seat calls 7 of 9 preflops — tap the observation.',
       'act-04-06-02-guided' =>
@@ -728,6 +730,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-03-08-02-jump-class' ||
             widget.activity.id == 'act-03-08-02-jump-leak' ||
             widget.activity.id == 'act-04-01-01-guided' ||
+            widget.activity.id == 'act-04-01-01-scaffolded' ||
             widget.activity.id == 'act-04-06-01-guided' ||
             widget.activity.id == 'act-04-06-02-guided' ||
             widget.activity.id == 'act-04-06-02-scaffolded' ||
