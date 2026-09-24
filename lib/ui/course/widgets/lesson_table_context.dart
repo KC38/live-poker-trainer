@@ -3448,7 +3448,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         villainCodes: ['6s', '5h'],
         villainSeatCount: 0,
         highlight: LessonTableHighlight.none,
-        caption: 'Showdown · who wins?',
+        caption: 'Your holes',
       );
     case 'act-01-02-01-explain-ladder':
       return null;
