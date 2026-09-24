@@ -6802,7 +6802,7 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('section jump family taps Suited ace with holes on felt', (
+  testWidgets('section jump family taps Suited ace on densified felt', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -6822,12 +6822,21 @@ void main() {
     );
     expect(
       resolveSelectIdentifyPresentation(activity),
-      SelectIdentifyPresentation.handCategoryTap,
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.jumpFamilyOutcomes,
     );
     expect(resolveLessonTableScene(activity)?.heroCodes, ['Ah', '5h']);
     expect(
-      resolveHandExample(id: 'j2-sa', label: 'Suited ace')?.codes,
-      ['Ah', '9h'],
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.jumpFamilySuitedAce,
+        choices: activity.choices,
+      ),
+      'j2-sa',
     );
 
     final controller = LessonActivityController(activity: activity);
