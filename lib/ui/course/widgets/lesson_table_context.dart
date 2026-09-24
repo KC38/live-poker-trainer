@@ -2296,12 +2296,14 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
     case 'act-04-01-01-guided':
       return const LessonTableScene(
         layout: LessonTableLayout.rangesGuidedOutcomes,
+        villainSeatCount: 0,
         highlight: LessonTableHighlight.none,
         caption: '1/2 · UTG opens',
       );
     case 'act-04-01-01-scaffolded':
       return const LessonTableScene(
         layout: LessonTableLayout.rangesScaffoldedOutcomes,
+        villainSeatCount: 0,
         highlight: LessonTableHighlight.none,
         caption: 'BTN open · BB 3-bet · BTN calls',
       );
