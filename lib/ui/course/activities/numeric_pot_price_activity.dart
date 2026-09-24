@@ -7,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
-import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 /// Numeric pot/price/outs entry with unit label.
@@ -52,55 +51,12 @@ class _NumericPotPriceActivityState extends State<NumericPotPriceActivity> {
     return value.toString();
   }
 
-  String _coachFor(CourseActivity activity) {
-    return switch (activity.id) {
-      'act-02-05-01-guided-convert' =>
-        '200 chips at 1/2 — type the stack in big blinds.',
-      'act-02-05-01-checkpoint-200' =>
-        '1000 chips at 2/5 — type the buy-in in big blinds.',
-      _ => 'Type the amount in chips — match the bet to call.',
-    };
-  }
-
-  LessonActionSpot? _spotFor(CourseActivity activity) {
-    return switch (activity.id) {
-      'act-02-05-01-guided-convert' => const LessonActionSpot(
-        heroCodes: ['Ah', 'Kd'],
-        potLabel: 'Blinds 1/2',
-        stackLabel: '200 chips',
-        villainLine: 'Big blinds = chips ÷ BB',
-        streetLabel: 'Stack depth · convert',
-        facingBet: false,
-        feltStatusLine: '200 ÷ 2 = ? bb',
-      ),
-      'act-02-05-01-checkpoint-200' => const LessonActionSpot(
-        heroCodes: ['Ah', 'Kd'],
-        potLabel: 'Blinds 2/5',
-        stackLabel: '1000 chips',
-        villainLine: 'Big blinds = chips ÷ BB',
-        streetLabel: 'Buy-in · convert',
-        facingBet: false,
-        feltStatusLine: '1000 ÷ 5 = ? bb',
-      ),
-      _ => null,
-    };
-  }
-
-  String _entryHintFor(CourseActivity activity) {
-    return switch (activity.id) {
-      'act-02-05-01-guided-convert' || 'act-02-05-01-checkpoint-200' =>
-        'Type big blinds, then Check.',
-      _ => 'Type the amount, then Check.',
-    };
-  }
-
   @override
   Widget build(BuildContext context) {
     final locked =
         widget.controller.submitting || widget.controller.lastResult != null;
     final unit = widget.activity.numericUnit ?? 'chips';
-    final spot = _spotFor(widget.activity);
-    final coach = _coachFor(widget.activity);
+    final coach = 'Type the amount in chips — match the bet to call.';
     final showCoach = widget.showGuidance && !locked;
     final question =
         widget.activity.numericQuestion ??
@@ -111,21 +67,16 @@ class _NumericPotPriceActivityState extends State<NumericPotPriceActivity> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (showCoach) RexCoachLine(text: coach),
-        if (spot != null) ...[
-          const SizedBox(height: 12),
-          LessonActionTable(spot: spot),
-        ] else ...[
-          const SizedBox(height: 12),
-          Text(
-            question,
-            style: GoogleFonts.manrope(
-              color: AppColors.cream,
-              fontSize: 17,
-              fontWeight: FontWeight.w700,
-              height: 1.35,
-            ),
+        const SizedBox(height: 12),
+        Text(
+          question,
+          style: GoogleFonts.manrope(
+            color: AppColors.cream,
+            fontSize: 17,
+            fontWeight: FontWeight.w700,
+            height: 1.35,
           ),
-        ],
+        ),
         const SizedBox(height: 14),
         Semantics(
           textField: true,
@@ -164,19 +115,6 @@ class _NumericPotPriceActivityState extends State<NumericPotPriceActivity> {
             },
           ),
         ),
-        if (spot != null && !locked)
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: Text(
-              _entryHintFor(widget.activity),
-              textAlign: TextAlign.center,
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
       ],
     );
   }

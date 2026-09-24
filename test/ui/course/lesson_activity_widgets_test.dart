@@ -7857,24 +7857,48 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('s2 bb convert guided shows chips felt and convert coach', (
+  testWidgets('s2 bb convert guided taps 100bb on densified chips÷BB felt', (
     tester,
   ) async {
     final activity = CourseActivity(
       id: 'act-02-05-01-guided-convert',
       order: 2,
       stage: ActivityStage.guided,
-      renderer: ActivityRenderer.numericPotPrice,
+      renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Convert 200 chips at 1/2 into big blinds.',
       acceptedGrades: const [SoftGrade.recommended],
-      numericQuestion: 'Blinds 1/2. You have 200 chips. How many big blinds?',
-      numericUnit: 'bb',
+      prompt: 'Blinds 1/2. You have 200 chips. How many big blinds?',
+      choices: const [
+        CourseChoice(id: 'bb-100', label: '100bb'),
+        CourseChoice(id: 'bb-50', label: '50bb'),
+        CourseChoice(id: 'bb-200', label: '200bb'),
+      ],
     );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.bbConvertOutcomes,
+    );
+    expect(resolveLessonTableScene(activity)?.caption, 'Chips 200 · BB 2');
+    expect(resolveLessonTableScene(activity)?.villainSeatCount, 0);
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.bbConvertCorrect,
+        choices: activity.choices,
+      ),
+      'bb-100',
+    );
+
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
       _wrap(
-        NumericPotPriceActivity(
+        SelectIdentifyActivity(
           activity: activity,
           controller: controller,
           showGuidance: true,
@@ -7882,25 +7906,90 @@ void main() {
       ),
     );
     expect(
-      find.text('200 chips at 1/2 — type the stack in big blinds.'),
+      find.text('200 chips at 1/2 — tap the stack in big blinds.'),
       findsOneWidget,
-    );
-    expect(find.textContaining('Stack depth · convert'), findsOneWidget);
-    expect(find.text('200 chips'), findsOneWidget);
-    expect(find.text('Blinds 1/2'), findsOneWidget);
-    expect(find.text('200 ÷ 2 = ? bb'), findsOneWidget);
-    expect(find.text('Type big blinds, then Check.'), findsOneWidget);
-    expect(
-      find.text('Type the amount in chips — match the bet to call.'),
-      findsNothing,
     );
     expect(
       find.text('Blinds 1/2. You have 200 chips. How many big blinds?'),
       findsNothing,
     );
-    await tester.enterText(find.byType(TextField), '100');
+    expect(find.text('Chips 200 · BB 2'), findsOneWidget);
+    expect(find.text('Them'), findsNothing);
+    expect(find.text('Chips'), findsOneWidget);
+    expect(find.text('BB'), findsOneWidget);
+    expect(find.text('÷'), findsOneWidget);
+    expect(find.text('100bb'), findsOneWidget);
+    expect(find.text('Tap 100bb.'), findsOneWidget);
+    expect(find.byType(TextField), findsNothing);
+    await tester.tap(find.text('100bb'));
     await tester.pump();
-    expect(controller.draft.numericValue, 100);
+    expect(controller.draft.choiceId, 'bb-100');
+    controller.dispose();
+  });
+
+  testWidgets('s2 bb convert checkpoint taps 200bb on densified 1000÷5 felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-05-01-checkpoint-200',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Convert a 1000 chip buy-in at 2/5 to big blinds.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Blinds 2/5. You buy in for 1000 chips. Stack in big blinds?',
+      choices: const [
+        CourseChoice(id: 'bb-200', label: '200bb'),
+        CourseChoice(id: 'bb-100', label: '100bb'),
+        CourseChoice(id: 'bb-500', label: '500bb'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.bbConvertOutcomes,
+    );
+    expect(resolveLessonTableScene(activity)?.caption, 'Chips 1000 · BB 5');
+    expect(resolveLessonTableScene(activity)?.villainSeatCount, 0);
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.bbConvertCorrect,
+        choices: activity.choices,
+      ),
+      'bb-200',
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(
+      find.text('1000 chips at 2/5 — tap the buy-in in big blinds.'),
+      findsOneWidget,
+    );
+    expect(find.text('Chips 1000 · BB 5'), findsOneWidget);
+    expect(find.text('Them'), findsNothing);
+    expect(find.text('1000'), findsWidgets);
+    expect(find.text('5'), findsWidgets);
+    expect(find.text('200bb'), findsOneWidget);
+    expect(find.byType(TextField), findsNothing);
+    // Checkpoint: no SoftPulse spoiler cue.
+    expect(find.text('Tap 200bb.'), findsNothing);
+    await tester.tap(find.text('200bb'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'bb-200');
     controller.dispose();
   });
 

@@ -140,6 +140,11 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Jump: tap the effective (shorter) stack on the felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-02-05-01-guided-convert' ||
+      activity.id == 'act-02-05-01-checkpoint-200') {
+    // BB convert: tap stack-in-bb tiles on densified chips÷BB felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id == 'act-02-05-01-scaffolded-eff' ||
       activity.id == 'act-02-05-01-unguided-depth') {
     // Effective stacks: tap shorter stack / shove-depth tiles on felt.
