@@ -1966,7 +1966,7 @@ class _OpenRangeDemoState extends State<OpenRangeDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -2106,7 +2106,7 @@ class _VsOpenResponseDemoState extends State<VsOpenResponseDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextResponse;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -2251,7 +2251,7 @@ class _BbStackDepthDemoState extends State<BbStackDepthDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -2392,7 +2392,7 @@ class _TableHabitsDemoState extends State<TableHabitsDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextHabit;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -2539,7 +2539,7 @@ class _FullRingDemoState extends State<FullRingDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -2680,7 +2680,7 @@ class _TableReadDemoState extends State<TableReadDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -2827,7 +2827,7 @@ class _FlopLabelDemoState extends State<FlopLabelDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextLabel;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -2973,7 +2973,7 @@ class _OutsPriceDemoState extends State<OutsPriceDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -3116,7 +3116,7 @@ class _FlopLinesDemoState extends State<FlopLinesDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextLine;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -3263,7 +3263,7 @@ class _TurnStoryDemoState extends State<TurnStoryDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -3410,7 +3410,7 @@ class _RiverBinaryDemoState extends State<RiverBinaryDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -3557,7 +3557,7 @@ class _MultiwayPlanDemoState extends State<MultiwayPlanDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -3698,7 +3698,7 @@ class _CommonLeaksDemoState extends State<CommonLeaksDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextLeak;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -3844,7 +3844,7 @@ class _RangeUpdateDemoState extends State<RangeUpdateDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -4012,7 +4012,7 @@ class _ThreeBetSqueezeDemoState extends State<ThreeBetSqueezeDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -4128,7 +4128,7 @@ class _MultiStreetPlanDemoState extends State<MultiStreetPlanDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -4272,7 +4272,7 @@ class _SizingLanguageDemoState extends State<SizingLanguageDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -4412,7 +4412,7 @@ class _SprDepthDemoState extends State<SprDepthDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -4552,7 +4552,7 @@ class _PlayerObserveDemoState extends State<PlayerObserveDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -4692,7 +4692,7 @@ class _CallingStationDemoState extends State<CallingStationDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -4832,7 +4832,7 @@ class _VsStationDemoState extends State<VsStationDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -4972,7 +4972,7 @@ class _TightSeatsDemoState extends State<TightSeatsDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -5116,7 +5116,7 @@ class _NitModelDemoState extends State<NitModelDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -5256,7 +5256,7 @@ class _VsNitsDemoState extends State<VsNitsDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -5534,7 +5534,7 @@ class _ManiacModelDemoState extends State<ManiacModelDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -5674,7 +5674,7 @@ class _VsManiacsDemoState extends State<VsManiacsDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -5814,7 +5814,7 @@ class _VsTagsDemoState extends State<VsTagsDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -5952,7 +5952,7 @@ class _VsLagsDemoState extends State<VsLagsDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -6091,7 +6091,7 @@ class _ObservationCertaintyDemoState extends State<ObservationCertaintyDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -6242,7 +6242,7 @@ class _ExploitEvidenceDemoState extends State<ExploitEvidenceDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt = expandTeach
         ? MediaQuery.sizeOf(context).height * 0.38
         : null;
@@ -6386,7 +6386,7 @@ class _MultiwayNutsDemoState extends State<MultiwayNutsDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
     final child = ConstrainedBox(
@@ -6526,7 +6526,7 @@ class _DeepStacksDemoState extends State<DeepStacksDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
     final child = ConstrainedBox(
@@ -6666,7 +6666,7 @@ class _ImpliedOddsDemoState extends State<ImpliedOddsDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
     final child = ConstrainedBox(
@@ -6806,7 +6806,7 @@ class _ThinValueDemoState extends State<ThinValueDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
     final child = ConstrainedBox(
@@ -6945,7 +6945,7 @@ class _LineStoriesDemoState extends State<LineStoriesDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
     final child = ConstrainedBox(
@@ -7085,7 +7085,7 @@ class _RangeRewriteDemoState extends State<RangeRewriteDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
     final child = ConstrainedBox(
@@ -7225,7 +7225,7 @@ class _TimingCluesDemoState extends State<TimingCluesDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
     final child = ConstrainedBox(
@@ -7365,7 +7365,7 @@ class _TablesChangeDemoState extends State<TablesChangeDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
     final child = ConstrainedBox(

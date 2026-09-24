@@ -47,7 +47,7 @@ class _LagModelDemoState extends State<LagModelDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
     final child = ConstrainedBox(

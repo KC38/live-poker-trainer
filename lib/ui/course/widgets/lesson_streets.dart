@@ -70,7 +70,7 @@ class _StreetsTimelineDemoState extends State<StreetsTimelineDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextStreet;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.42 : null;
     final child = ConstrainedBox(
@@ -563,7 +563,7 @@ class _ActionOrderDemoState extends State<ActionOrderDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextCorrect;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.40 : null;
     final child = ConstrainedBox(
