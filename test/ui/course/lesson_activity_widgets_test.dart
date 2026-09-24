@@ -7002,7 +7002,7 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('s3 flop-class scaffolded taps nut flush draw on felt', (
+  testWidgets('s3 flop-class scaffolded taps Draw on densified felt', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -7022,12 +7022,25 @@ void main() {
     );
     expect(
       resolveSelectIdentifyPresentation(activity),
-      SelectIdentifyPresentation.handCategoryTap,
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.flopClassScaffoldedOutcomes,
     );
     expect(resolveLessonTableScene(activity)?.heroCodes, ['Ah', '9h']);
     expect(
       resolveLessonTableScene(activity)?.boardCodes,
       ['Jh', '8h', '3c'],
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.flopClassNfd,
+        choices: activity.choices,
+      ),
+      'nfd',
     );
 
     final controller = LessonActivityController(activity: activity);
@@ -7048,9 +7061,10 @@ void main() {
       find.text('Board Jh 8h 3c. You hold Ah 9h. Class?'),
       findsNothing,
     );
-    expect(find.text('Strong draw — nut flush draw'), findsNothing);
-    expect(find.text('Draw — nut flush'), findsOneWidget);
-    await tester.tap(find.text('Draw — nut flush'));
+    expect(find.text('Draw'), findsOneWidget);
+    expect(find.text('Nut flush'), findsOneWidget);
+    expect(find.text('Tap Draw.'), findsOneWidget);
+    await tester.tap(find.text('Draw'));
     await tester.pump();
     expect(controller.draft.choiceId, 'nfd');
     controller.dispose();
