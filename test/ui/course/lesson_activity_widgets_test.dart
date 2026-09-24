@@ -4466,8 +4466,8 @@ void main() {
         ),
       );
       expect(find.byType(TagModelDemo), findsOneWidget);
-      // Rex cue below the felt — not a second footer inside the demo.
-      expect(find.text('Tap Tight, Aggro, and Model.'), findsOneWidget);
+      expect(find.text('Tap TIGHT next'), findsOneWidget);
+      expect(find.text('Tap Tight, Aggro, and Model.'), findsNothing);
       expect(find.text('Tap Tight, Aggro, and Model'), findsNothing);
       expect(
         find.text('Tight in, aggressive after — a working model'),
@@ -4476,10 +4476,14 @@ void main() {
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['TIGHT', 'AGGRO', 'MODEL']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
+      await tester.tap(find.text('TIGHT'));
+      await tester.pump();
+      expect(find.text('Tap AGGRO next'), findsOneWidget);
+      await tester.tap(find.text('AGGRO'));
+      await tester.pump();
+      expect(find.text('Tap MODEL next'), findsOneWidget);
+      await tester.tap(find.text('MODEL'));
+      await tester.pump();
       expect(feltAck, 1);
       controller.dispose();
     },
