@@ -10146,7 +10146,9 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('s4 plan checkpoint taps branching plan on felt', (tester) async {
+  testWidgets('s4 plan checkpoint taps Branches on densified felt', (
+    tester,
+  ) async {
     final activity = CourseActivity(
       id: 'act-04-03-01-checkpoint',
       order: 5,
@@ -10167,7 +10169,20 @@ void main() {
     );
     expect(
       resolveSelectIdentifyPresentation(activity),
-      SelectIdentifyPresentation.handCategoryTap,
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.planCheckpointOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.planBranches,
+        choices: activity.choices,
+      ),
+      'branches',
     );
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
@@ -10183,8 +10198,9 @@ void main() {
       find.text('You have a flop plan — tap the turn branches.'),
       findsOneWidget,
     );
-    expect(find.text('Brick → barrel · flush → abort'), findsOneWidget);
-    await tester.tap(find.text('Brick → barrel · flush → abort'));
+    expect(find.text('Branches'), findsOneWidget);
+    expect(find.text('Brick · flush'), findsOneWidget);
+    await tester.tap(find.text('Branches'));
     await tester.pump();
     expect(controller.draft.choiceId, 'branches');
     controller.dispose();

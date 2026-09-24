@@ -219,8 +219,8 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-04-03-01-checkpoint') {
-    // Multi-street plan: tap the branching plan on felt.
-    return SelectIdentifyPresentation.handCategoryTap;
+    // Multi-street plan: tap brick/flush branches on densified felt.
+    return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-04-04-01-unguided') {
     // Sizing: nearby soft grades vs exactness / junk sizes.
