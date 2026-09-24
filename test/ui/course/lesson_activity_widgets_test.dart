@@ -2497,14 +2497,20 @@ void main() {
       ),
     );
     expect(find.byType(RangeUpdateDemo), findsOneWidget);
-    expect(find.text('Tap One Hand, Range, and Update.'), findsOneWidget);
+    expect(find.text('Tap ONE HAND next'), findsOneWidget);
+    expect(find.text('Tap One Hand, Range, and Update.'), findsNothing);
+    expect(find.text('Tap One Hand, Range, and Update'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['ONE HAND', 'RANGE', 'UPDATE']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('ONE HAND'));
+    await tester.pump();
+    expect(find.text('Tap RANGE next'), findsOneWidget);
+    await tester.tap(find.text('RANGE'));
+    await tester.pump();
+    expect(find.text('Tap UPDATE next'), findsOneWidget);
+    await tester.tap(find.text('UPDATE'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });

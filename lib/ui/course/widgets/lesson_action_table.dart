@@ -3541,8 +3541,16 @@ class _RangeUpdateDemoState extends State<RangeUpdateDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in RangeUpdateDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -3571,34 +3579,42 @@ class _RangeUpdateDemoState extends State<RangeUpdateDemo> {
               for (var i = 0; i < RangeUpdateDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: RangeUpdateDemo.points[i].label,
-                    caption: RangeUpdateDemo.points[i].caption,
-                    color: RangeUpdateDemo.points[i].color,
-                    selected: _tapped.contains(RangeUpdateDemo.points[i].label),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(RangeUpdateDemo.points[i].label)
-                            : null,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == RangeUpdateDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: RangeUpdateDemo.points[i].label,
+                      caption: RangeUpdateDemo.points[i].caption,
+                      color: RangeUpdateDemo.points[i].color,
+                      selected:
+                          _tapped.contains(RangeUpdateDemo.points[i].label),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(RangeUpdateDemo.points[i].label)
+                              : null,
+                    ),
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues the three taps — no duplicate footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Never one hand · know a range · then update',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Never one hand · know a range · then update'
+                    : 'Tap ${next.label} next')
+                : 'Never one hand · know a range · then update',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
