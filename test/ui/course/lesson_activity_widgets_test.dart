@@ -18575,6 +18575,19 @@ await tester.tap(find.text('STRONGER'));
     );
     expect(find.byType(BestFiveCardPicker), findsOneWidget);
     expect(
+      find.byKey(const ValueKey('best-five-picker-felt')),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byKey(const ValueKey('best-five-picker-felt'))).height,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
+    expect(
       find.text('Only five cards count — tap the ones that play.'),
       findsOneWidget,
     );

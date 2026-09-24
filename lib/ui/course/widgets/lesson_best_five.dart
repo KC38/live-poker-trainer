@@ -148,7 +148,10 @@ class _BestFiveDemoState extends State<BestFiveDemo> {
     final feltHeight =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
     final next = _nextCode;
-    final cardSize = expandTeach ? MiniCardSize.hero : MiniCardSize.small;
+    // Width-capped FittedBox.contain left tiny cards in green void — scale
+    // hero/board rows and spaceEvenly so the densified felt fills vertically.
+    final heroScale = expandTeach ? 1.85 : 1.0;
+    final boardScale = expandTeach ? 1.4 : 1.0;
     final cueLabel = () {
       if (!widget.interactive) return 'Highlighted = the five that count';
       if (next == null) return 'Five play · two leftovers';
@@ -158,50 +161,39 @@ class _BestFiveDemoState extends State<BestFiveDemo> {
         return 'Tap $next';
       }
     }();
-    final cards = Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          'You',
-          style: GoogleFonts.manrope(
-            color: AppColors.cream,
-            fontSize: expandTeach ? 13 : 11,
-            fontWeight: FontWeight.w700,
+
+    Widget labeledRow({
+      required String label,
+      required List<String> codes,
+      required double cardScale,
+    }) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            label,
+            style: GoogleFonts.manrope(
+              color: AppColors.cream,
+              fontSize: expandTeach ? 14 : 11,
+              fontWeight: FontWeight.w700,
+            ),
           ),
-        ),
-        SizedBox(height: expandTeach ? 10 : 6),
-        _DemoRow(
-          codes: BestFiveDemo.hero,
-          playing: BestFiveDemo.playing,
-          tapped: _tapped,
-          nextCode: next,
-          interactive: widget.interactive,
-          enabled: widget.enabled,
-          cardSize: cardSize,
-          onCardTap: _onCardTap,
-        ),
-        SizedBox(height: expandTeach ? 18 : 12),
-        Text(
-          'Board',
-          style: GoogleFonts.manrope(
-            color: AppColors.cream,
-            fontSize: expandTeach ? 13 : 11,
-            fontWeight: FontWeight.w700,
+          SizedBox(height: expandTeach ? 12 : 6),
+          _DemoRow(
+            codes: codes,
+            playing: BestFiveDemo.playing,
+            tapped: _tapped,
+            nextCode: next,
+            interactive: widget.interactive,
+            enabled: widget.enabled,
+            cardSize: expandTeach ? MiniCardSize.hero : MiniCardSize.small,
+            cardScale: cardScale,
+            onCardTap: _onCardTap,
           ),
-        ),
-        SizedBox(height: expandTeach ? 10 : 6),
-        _DemoRow(
-          codes: BestFiveDemo.board,
-          playing: BestFiveDemo.playing,
-          tapped: _tapped,
-          nextCode: next,
-          interactive: widget.interactive,
-          enabled: widget.enabled,
-          cardSize: cardSize,
-          onCardTap: _onCardTap,
-        ),
-      ],
-    );
+        ],
+      );
+    }
+
     final cue = Text(
       cueLabel,
       textAlign: TextAlign.center,
@@ -226,25 +218,71 @@ class _BestFiveDemoState extends State<BestFiveDemo> {
             fontWeight: FontWeight.w700,
           ),
         ),
-        if (!expandTeach) const SizedBox(height: 12),
-        expandTeach
-            ? Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: FittedBox(
-                  // contain (not scaleDown) so hero cards fill the densified
-                  // felt instead of sitting tiny in green void.
-                  fit: BoxFit.contain,
+        if (!expandTeach) ...[
+          const SizedBox(height: 12),
+          labeledRow(
+            label: 'You',
+            codes: BestFiveDemo.hero,
+            cardScale: 1.0,
+          ),
+          const SizedBox(height: 12),
+          labeledRow(
+            label: 'Board',
+            codes: BestFiveDemo.board,
+            cardScale: 1.0,
+          ),
+          const SizedBox(height: 12),
+        ] else
+          Expanded(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                // Tall Pro felt: big cards + spaceEvenly fill. Short test
+                // viewports: keep compact + scaleDown so we never overflow.
+                final roomy = constraints.maxHeight >= 300;
+                final hScale = roomy ? heroScale : 1.15;
+                final bScale = roomy ? boardScale : 1.0;
+                final spread = Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    labeledRow(
+                      label: 'You',
+                      codes: BestFiveDemo.hero,
+                      cardScale: hScale,
+                    ),
+                    labeledRow(
+                      label: 'Board',
+                      codes: BestFiveDemo.board,
+                      cardScale: bScale,
+                    ),
+                  ],
+                );
+                if (roomy) return spread;
+                return FittedBox(
+                  fit: BoxFit.scaleDown,
                   alignment: Alignment.center,
                   child: SizedBox(
                     width: MediaQuery.sizeOf(context).width - 48,
-                    child: cards,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        labeledRow(
+                          label: 'You',
+                          codes: BestFiveDemo.hero,
+                          cardScale: hScale,
+                        ),
+                        const SizedBox(height: 16),
+                        labeledRow(
+                          label: 'Board',
+                          codes: BestFiveDemo.board,
+                          cardScale: bScale,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ),
-            )
-            : cards,
-        if (!expandTeach) const SizedBox(height: 12),
+                );
+              },
+            ),
+          ),
         cue,
       ],
     );
@@ -285,6 +323,7 @@ class _DemoRow extends StatelessWidget {
     required this.interactive,
     required this.enabled,
     required this.cardSize,
+    required this.cardScale,
     required this.onCardTap,
   });
 
@@ -295,13 +334,15 @@ class _DemoRow extends StatelessWidget {
   final bool interactive;
   final bool enabled;
   final MiniCardSize cardSize;
+  final double cardScale;
   final ValueChanged<String> onCardTap;
 
   @override
   Widget build(BuildContext context) {
+    final gap = cardSize == MiniCardSize.hero ? 10.0 * cardScale.clamp(1.0, 1.5) : 6.0;
     return Wrap(
-      spacing: cardSize == MiniCardSize.hero ? 10 : 6,
-      runSpacing: cardSize == MiniCardSize.hero ? 10 : 6,
+      spacing: gap,
+      runSpacing: gap,
       alignment: WrapAlignment.center,
       children: [
         for (final code in codes)
@@ -323,6 +364,7 @@ class _DemoRow extends StatelessWidget {
               enabled: interactive && enabled && playing.contains(code),
               dimmed: !playing.contains(code),
               size: cardSize,
+              scale: cardScale,
               onPressed:
                   interactive && playing.contains(code)
                       ? () => onCardTap(code)
@@ -414,6 +456,7 @@ class SelectableBestFiveCard extends StatelessWidget {
     this.highlighted = false,
     this.dimmed = false,
     this.size = MiniCardSize.small,
+    this.scale = 1,
     this.onPressed,
   });
 
@@ -423,6 +466,7 @@ class SelectableBestFiveCard extends StatelessWidget {
   final bool highlighted;
   final bool dimmed;
   final MiniCardSize size;
+  final double scale;
   final VoidCallback? onPressed;
 
   @override
@@ -440,14 +484,15 @@ class SelectableBestFiveCard extends StatelessWidget {
             ? AppColors.gold.withValues(alpha: 0.75)
             : AppColors.slateDark.withValues(alpha: 0.7);
     final radius = size == MiniCardSize.hero ? 10.0 : 8.0;
+    final pad = (size == MiniCardSize.hero ? 4.0 : 3.0) * scale.clamp(1.0, 1.4);
     final child = AnimatedOpacity(
       duration: const Duration(milliseconds: 140),
       opacity: dimmed && !selected ? 0.38 : 1,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 140),
-        padding: EdgeInsets.all(size == MiniCardSize.hero ? 4 : 3),
+        padding: EdgeInsets.all(pad),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(radius),
+          borderRadius: BorderRadius.circular(radius * scale.clamp(1.0, 1.3)),
           border: Border.all(
             color: border,
             width: selected ? 2.4 : highlighted ? 2 : 1,
@@ -462,10 +507,10 @@ class SelectableBestFiveCard extends StatelessWidget {
         child:
             card == null
                 ? SizedBox(
-                  width: size.dimensions.width,
-                  height: size.dimensions.height,
+                  width: size.dimensions.width * scale,
+                  height: size.dimensions.height * scale,
                 )
-                : MiniCard(card: card, size: size),
+                : MiniCard(card: card, size: size, scale: scale),
       ),
     );
     if (onPressed == null) return child;
@@ -610,9 +655,96 @@ class _BestFiveCardPickerState extends State<BestFiveCardPicker> {
   @override
   Widget build(BuildContext context) {
     final spot = widget.spot;
+    // Teach picker: fill tall-phone felt like BestFiveDemo SoftPulse.
+    final densify = true;
+    final feltHeight =
+        densify ? MediaQuery.sizeOf(context).height * 0.58 : null;
+    final heroScale = densify ? 1.85 : 1.0;
+    final boardScale = densify ? 1.4 : 1.0;
+
+    Widget statusLine() {
+      final status = () {
+        if (widget.controller.lastResult != null) return '';
+        if (widget.controller.submitting) return 'Checking…';
+        if (_selected.length == 5) {
+          return mapBestFiveSelectionToChoiceId(
+                    selected: _selected,
+                    spot: spot,
+                    choices: widget.activity.choices,
+                  ) !=
+                  null
+              ? 'Checking…'
+              : 'Five tapped — try a stronger five.';
+        }
+        // Rex already says tap the ones that play — keep a quiet count.
+        return '${_selected.length}/5 selected';
+      }();
+      if (status.isEmpty) return const SizedBox.shrink();
+      return Text(
+        status,
+        textAlign: TextAlign.center,
+        style: GoogleFonts.manrope(
+          color: AppColors.slate,
+          fontSize: densify ? 15 : 13,
+          fontWeight: FontWeight.w600,
+        ),
+      );
+    }
+
+    Widget labeledRow({
+      required String label,
+      required List<String> codes,
+      required double cardScale,
+      required double gap,
+    }) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.manrope(
+              color:
+                  label.startsWith('BOARD')
+                      ? AppColors.cream.withValues(alpha: 0.7)
+                      : AppColors.cream,
+              fontSize: densify ? (label.startsWith('BOARD') ? 12 : 14) : 12,
+              fontWeight: FontWeight.w700,
+              letterSpacing: label.startsWith('BOARD') ? 0.7 : 0,
+            ),
+          ),
+          SizedBox(height: densify ? 12 : 8),
+          Wrap(
+            spacing: gap,
+            runSpacing: gap,
+            alignment: WrapAlignment.center,
+            children: [
+              for (final code in codes)
+                SelectableBestFiveCard(
+                  key: ValueKey<String>('best-five-$code'),
+                  code: code,
+                  selected: _selected.contains(code),
+                  enabled: !widget.locked,
+                  size: MiniCardSize.hero,
+                  scale: cardScale,
+                  onPressed: () => _toggle(code),
+                ),
+            ],
+          ),
+        ],
+      );
+    }
+
     return Container(
+      key: const ValueKey('best-five-picker-felt'),
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      height: feltHeight,
+      padding: EdgeInsets.fromLTRB(
+        12,
+        densify ? 18 : 14,
+        12,
+        densify ? 18 : 14,
+      ),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           begin: Alignment.topCenter,
@@ -625,93 +757,60 @@ class _BestFiveCardPickerState extends State<BestFiveCardPicker> {
         ),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            'You',
-            textAlign: TextAlign.center,
-            style: GoogleFonts.manrope(
-              color: AppColors.cream,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+          Expanded(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final roomy = constraints.maxHeight >= 300;
+                final hScale = roomy ? heroScale : 1.15;
+                final bScale = roomy ? boardScale : 1.0;
+                final cards = Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    labeledRow(
+                      label: 'You',
+                      codes: spot.heroCodes,
+                      cardScale: hScale,
+                      gap: roomy ? 14 : 10,
+                    ),
+                    labeledRow(
+                      label: 'BOARD · shared',
+                      codes: spot.boardCodes,
+                      cardScale: bScale,
+                      gap: roomy ? 10 : 8,
+                    ),
+                  ],
+                );
+                if (roomy) return cards;
+                return FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    width: MediaQuery.sizeOf(context).width - 48,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        labeledRow(
+                          label: 'You',
+                          codes: spot.heroCodes,
+                          cardScale: hScale,
+                          gap: 10,
+                        ),
+                        const SizedBox(height: 16),
+                        labeledRow(
+                          label: 'BOARD · shared',
+                          codes: spot.boardCodes,
+                          cardScale: bScale,
+                          gap: 8,
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
           ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            alignment: WrapAlignment.center,
-            children: [
-              for (final code in spot.heroCodes)
-                SelectableBestFiveCard(
-                  key: ValueKey<String>('best-five-$code'),
-                  code: code,
-                  selected: _selected.contains(code),
-                  enabled: !widget.locked,
-                  size: MiniCardSize.hero,
-                  onPressed: () => _toggle(code),
-                ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'BOARD · shared',
-            textAlign: TextAlign.center,
-            style: GoogleFonts.manrope(
-              color: AppColors.cream.withValues(alpha: 0.7),
-              fontSize: 10,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 0.7,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            alignment: WrapAlignment.center,
-            children: [
-              for (final code in spot.boardCodes)
-                SelectableBestFiveCard(
-                  key: ValueKey<String>('best-five-$code'),
-                  code: code,
-                  selected: _selected.contains(code),
-                  enabled: !widget.locked,
-                  size: MiniCardSize.hero,
-                  onPressed: () => _toggle(code),
-                ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          Builder(
-            builder: (context) {
-              final status = () {
-                if (widget.controller.lastResult != null) return '';
-                if (widget.controller.submitting) return 'Checking…';
-                if (_selected.length == 5) {
-                  return mapBestFiveSelectionToChoiceId(
-                            selected: _selected,
-                            spot: spot,
-                            choices: widget.activity.choices,
-                          ) !=
-                          null
-                      ? 'Checking…'
-                      : 'Five tapped — try a stronger five.';
-                }
-                // Rex already says tap the ones that play — keep a quiet count.
-                return '${_selected.length}/5 selected';
-              }();
-              if (status.isEmpty) return const SizedBox.shrink();
-              return Text(
-                status,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.manrope(
-                  color: AppColors.slate,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                ),
-              );
-            },
-          ),
+          statusLine(),
         ],
       ),
     );
