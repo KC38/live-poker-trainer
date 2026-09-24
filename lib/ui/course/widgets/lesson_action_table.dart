@@ -3171,8 +3171,16 @@ class _RiverBinaryDemoState extends State<RiverBinaryDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in RiverBinaryDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -3203,39 +3211,47 @@ class _RiverBinaryDemoState extends State<RiverBinaryDemo> {
                 for (var col = 0; col < 2; col++) ...[
                   if (col > 0) const SizedBox(width: 8),
                   Expanded(
-                    child: _DemoActionCard(
-                      label: RiverBinaryDemo.points[row * 2 + col].label,
-                      caption: RiverBinaryDemo.points[row * 2 + col].caption,
-                      color: RiverBinaryDemo.points[row * 2 + col].color,
-                      selected: _tapped.contains(
-                        RiverBinaryDemo.points[row * 2 + col].label,
+                    child: _DemoSoftPulse(
+                      active:
+                          widget.interactive &&
+                          widget.enabled &&
+                          next?.label ==
+                              RiverBinaryDemo.points[row * 2 + col].label,
+                      child: _DemoActionCard(
+                        label: RiverBinaryDemo.points[row * 2 + col].label,
+                        caption: RiverBinaryDemo.points[row * 2 + col].caption,
+                        color: RiverBinaryDemo.points[row * 2 + col].color,
+                        selected: _tapped.contains(
+                          RiverBinaryDemo.points[row * 2 + col].label,
+                        ),
+                        enabled: widget.interactive && widget.enabled,
+                        onPressed:
+                            widget.interactive
+                                ? () => _onTap(
+                                  RiverBinaryDemo.points[row * 2 + col].label,
+                                )
+                                : null,
                       ),
-                      enabled: widget.interactive && widget.enabled,
-                      onPressed:
-                          widget.interactive
-                              ? () => _onTap(
-                                RiverBinaryDemo.points[row * 2 + col].label,
-                              )
-                              : null,
                     ),
                   ),
                 ],
               ],
             ),
           ],
-          // Interactive: Rex already cues the four taps — no duplicate footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Value · bluff · bluff-catch · fold',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Value · bluff · bluff-catch · fold'
+                    : 'Tap ${next.label} next')
+                : 'Value · bluff · bluff-catch · fold',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
