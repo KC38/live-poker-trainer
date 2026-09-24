@@ -4236,8 +4236,8 @@ void main() {
         ),
       );
       expect(find.byType(MixedStrategyDemo), findsOneWidget);
-      // Rex cue below the felt — not a second footer inside the demo.
-      expect(find.text('Tap Mix, Purpose, and Strong.'), findsOneWidget);
+      expect(find.text('Tap MIX next'), findsOneWidget);
+      expect(find.text('Tap Mix, Purpose, and Strong.'), findsNothing);
       expect(find.text('Tap Mix, Purpose, and Strong'), findsNothing);
       expect(
         find.text('Frequency with a purpose — not coin-flip'),
@@ -4246,10 +4246,14 @@ void main() {
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['MIX', 'PURPOSE', 'STRONG']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
+      await tester.tap(find.text('MIX'));
+      await tester.pump();
+      expect(find.text('Tap PURPOSE next'), findsOneWidget);
+      await tester.tap(find.text('PURPOSE'));
+      await tester.pump();
+      expect(find.text('Tap STRONG next'), findsOneWidget);
+      await tester.tap(find.text('STRONG'));
+      await tester.pump();
       expect(feltAck, 1);
       controller.dispose();
     },
