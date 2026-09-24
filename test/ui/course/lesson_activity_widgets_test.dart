@@ -833,6 +833,18 @@ void main() {
     expect(find.text('Tap Preflop'), findsOneWidget);
     expect(find.text('Tap each street from preflop to river'), findsNothing);
     expect(find.text('Tap each street from preflop to river.'), findsNothing);
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('streets-timeline-felt')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
     await tester.tap(find.text('PREFLOP'));
     await tester.pump();
     expect(find.text('Tap Flop'), findsOneWidget);
@@ -845,6 +857,14 @@ void main() {
     await tester.tap(find.text('RIVER'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(find.text('Preflop → flop → turn → river'), findsOneWidget);
+    expect(
+      tester
+          .getSize(find.byKey(const ValueKey('streets-timeline-felt')))
+          .height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
