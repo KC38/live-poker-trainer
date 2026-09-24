@@ -37,8 +37,16 @@ class _Capstone4betDemoState extends State<Capstone4betDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in Capstone4betDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -67,34 +75,42 @@ class _Capstone4betDemoState extends State<Capstone4betDemo> {
               for (var i = 0; i < Capstone4betDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _Capstone4betTile(
-                    label: Capstone4betDemo.points[i].label,
-                    caption: Capstone4betDemo.points[i].caption,
-                    color: Capstone4betDemo.points[i].color,
-                    selected: _tapped.contains(
-                      Capstone4betDemo.points[i].label,
+                  child: _FourBetSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == Capstone4betDemo.points[i].label,
+                    child: _Capstone4betTile(
+                      label: Capstone4betDemo.points[i].label,
+                      caption: Capstone4betDemo.points[i].caption,
+                      color: Capstone4betDemo.points[i].color,
+                      selected: _tapped.contains(
+                        Capstone4betDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed: widget.interactive
+                          ? () => _onTap(Capstone4betDemo.points[i].label)
+                          : null,
                     ),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed: widget.interactive
-                        ? () => _onTap(Capstone4betDemo.points[i].label)
-                        : null,
                   ),
                 ),
               ],
             ],
           ),
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Short SPR — commit clean, fold ego',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Short SPR — commit clean, fold ego'
+                    : 'Tap ${next.label} next')
+                : 'Short SPR — commit clean, fold ego',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
@@ -159,5 +175,74 @@ class _Capstone4betTile extends StatelessWidget {
     );
     if (!enabled || onPressed == null) return child;
     return GestureDetector(onTap: onPressed, child: child);
+  }
+}
+
+class _FourBetSoftPulse extends StatefulWidget {
+  const _FourBetSoftPulse({required this.active, required this.child});
+
+  final bool active;
+  final Widget child;
+
+  @override
+  State<_FourBetSoftPulse> createState() => _FourBetSoftPulseState();
+}
+
+class _FourBetSoftPulseState extends State<_FourBetSoftPulse>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+    if (widget.active) {
+      _pulse.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _FourBetSoftPulse oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.active && !_pulse.isAnimating) {
+      _pulse.repeat(reverse: true);
+    } else if (!widget.active && _pulse.isAnimating) {
+      _pulse.stop();
+      _pulse.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.active) return widget.child;
+    return AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final glow = 0.22 + (_pulse.value * 0.38);
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.gold.withValues(alpha: glow),
+                blurRadius: 10 + (_pulse.value * 8),
+                spreadRadius: 0.5 + (_pulse.value * 1.2),
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
+      child: widget.child,
+    );
   }
 }
