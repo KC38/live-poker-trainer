@@ -6118,8 +6118,16 @@ class _LineStoriesDemoState extends State<LineStoriesDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in LineStoriesDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -6148,34 +6156,44 @@ class _LineStoriesDemoState extends State<LineStoriesDemo> {
               for (var i = 0; i < LineStoriesDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 6),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: LineStoriesDemo.points[i].label,
-                    caption: LineStoriesDemo.points[i].caption,
-                    color: LineStoriesDemo.points[i].color,
-                    selected: _tapped.contains(LineStoriesDemo.points[i].label),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(LineStoriesDemo.points[i].label)
-                            : null,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == LineStoriesDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: LineStoriesDemo.points[i].label,
+                      caption: LineStoriesDemo.points[i].caption,
+                      color: LineStoriesDemo.points[i].color,
+                      selected: _tapped.contains(
+                        LineStoriesDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () =>
+                                  _onTap(LineStoriesDemo.points[i].label)
+                              : null,
+                    ),
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues the four taps — no duplicate footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Each line updates the story',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Each line updates the story'
+                    : 'Tap ${next.label} next')
+                : 'Each line updates the story',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );

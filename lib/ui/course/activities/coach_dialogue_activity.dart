@@ -480,6 +480,7 @@ class CoachDialogueActivity extends StatelessWidget {
             visual.kind != CoachDialogueVisualKind.deepStacks &&
             visual.kind != CoachDialogueVisualKind.impliedOdds &&
             visual.kind != CoachDialogueVisualKind.thinValue &&
+            visual.kind != CoachDialogueVisualKind.lineStories &&
             visual.kind != CoachDialogueVisualKind.leakReviewBook &&
             visual.kind != CoachDialogueVisualKind.capstoneSrp &&
             visual.kind != CoachDialogueVisualKind.capstone3bet &&

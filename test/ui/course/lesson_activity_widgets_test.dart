@@ -3538,14 +3538,23 @@ void main() {
       ),
     );
     expect(find.byType(LineStoriesDemo), findsOneWidget);
-    expect(find.text('Tap X/R, Probe, Delay, and Donk.'), findsOneWidget);
+    expect(find.text('Tap X/R next'), findsOneWidget);
+    expect(find.text('Tap X/R, Probe, Delay, and Donk.'), findsNothing);
+    expect(find.text('Tap X/R, Probe, Delay, and Donk'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['X/R', 'PROBE', 'DELAY', 'DONK']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('X/R'));
+    await tester.pump();
+    expect(find.text('Tap PROBE next'), findsOneWidget);
+    await tester.tap(find.text('PROBE'));
+    await tester.pump();
+    expect(find.text('Tap DELAY next'), findsOneWidget);
+    await tester.tap(find.text('DELAY'));
+    await tester.pump();
+    expect(find.text('Tap DONK next'), findsOneWidget);
+    await tester.tap(find.text('DONK'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
