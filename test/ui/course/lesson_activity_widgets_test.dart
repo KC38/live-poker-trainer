@@ -9638,6 +9638,9 @@ await tester.tap(find.text('STRONGER'));
     expect(find.byType(LessonActionDock), findsOneWidget);
     expect(find.text('Worst hand vs a raise — tap Fold.'), findsOneWidget);
     expect(find.textContaining('72o'), findsNothing);
+    // SoftPulse the Fold dock so teach-by-doing matches Rex.
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'fold-72');
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'fold-72');
@@ -9690,6 +9693,8 @@ await tester.tap(find.text('STRONGER'));
     expect(find.text('CHECK'), findsOneWidget);
     expect(find.text('CALL (off)'), findsOneWidget);
     expect(find.text('CHECK FREE'), findsNothing);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'check-free');
     final handle = tester.ensureSemantics();
     expect(find.bySemanticsLabel('Check free'), findsOneWidget);
     await tester.tap(find.bySemanticsLabel('Check free'));
