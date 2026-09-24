@@ -60,60 +60,91 @@ class _StreetsTimelineDemoState extends State<StreetsTimelineDemo> {
     }
   }
 
+  String? get _nextStreet {
+    for (final street in StreetsTimelineDemo.streets) {
+      if (!_tapped.contains(street.title)) return street.title;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final child = Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.feltLight, AppColors.feltDark],
-        ),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: AppColors.feltBorder.withValues(alpha: 0.85),
-        ),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'Four streets of a hand',
-            style: GoogleFonts.manrope(
-              color: AppColors.slate,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-            ),
+    final next = _nextStreet;
+    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final minFelt =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.42 : null;
+    final child = ConstrainedBox(
+      constraints:
+          minFelt != null
+              ? BoxConstraints(minHeight: minFelt)
+              : const BoxConstraints(),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+        alignment: minFelt != null ? Alignment.center : null,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [AppColors.feltLight, AppColors.feltDark],
           ),
-          const SizedBox(height: 12),
-          for (var i = 0; i < StreetsTimelineDemo.streets.length; i++) ...[
-            if (i > 0) const SizedBox(height: 8),
-            _StreetLane(
-              title: StreetsTimelineDemo.streets[i].title,
-              detail: StreetsTimelineDemo.streets[i].detail,
-              boardCodes: StreetsTimelineDemo.streets[i].board,
-              step: i + 1,
-              selected: _tapped.contains(StreetsTimelineDemo.streets[i].title),
-              enabled: widget.interactive && widget.enabled,
-              onPressed:
-                  widget.interactive
-                      ? () => _onTap(StreetsTimelineDemo.streets[i].title)
-                      : null,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: AppColors.feltBorder.withValues(alpha: 0.85),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Four streets of a hand',
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 12),
+            for (var i = 0; i < StreetsTimelineDemo.streets.length; i++) ...[
+              if (i > 0) const SizedBox(height: 8),
+              _SoftPulseTarget(
+                active:
+                    widget.interactive &&
+                    widget.enabled &&
+                    next == StreetsTimelineDemo.streets[i].title,
+                child: _StreetLane(
+                  title: StreetsTimelineDemo.streets[i].title,
+                  detail: StreetsTimelineDemo.streets[i].detail,
+                  boardCodes: StreetsTimelineDemo.streets[i].board,
+                  step: i + 1,
+                  selected: _tapped.contains(
+                    StreetsTimelineDemo.streets[i].title,
+                  ),
+                  enabled: widget.interactive && widget.enabled,
+                  onPressed:
+                      widget.interactive
+                          ? () =>
+                              _onTap(StreetsTimelineDemo.streets[i].title)
+                          : null,
+                ),
+              ),
+            ],
+            const SizedBox(height: 12),
+            Text(
+              widget.interactive
+                  ? (next == null
+                      ? 'Preflop → flop → turn → river'
+                      : 'Tap ${next[0]}${next.substring(1).toLowerCase()}')
+                  : 'Match bets to leave each street',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: expandTeach ? 14 : 12,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ],
-          const SizedBox(height: 12),
-          Text(
-            widget.interactive
-                ? 'Tap each street from preflop to river'
-                : 'Match bets to leave each street',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ],
+        ),
       ),
     );
     if (widget.interactive) return child;
