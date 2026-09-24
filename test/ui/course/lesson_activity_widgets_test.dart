@@ -9542,7 +9542,7 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('s3 jump leak taps fold-price tile on gutshot felt', (
+  testWidgets('s3 jump leak taps Fold on densified gutshot felt', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -9562,6 +9562,23 @@ void main() {
         ),
       ],
     );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.jumpLeakPriceOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.jumpLeakFoldPrice,
+        choices: activity.choices,
+      ),
+      'j3-foldprice',
+    );
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
       _wrap(
@@ -9572,8 +9589,13 @@ void main() {
         ),
       ),
     );
-    expect(find.text('Fold — price is wrong'), findsOneWidget);
-    await tester.tap(find.text('Fold — price is wrong'));
+    expect(
+      find.text('Gutshot vs a 2x pot bet — tap the fix.'),
+      findsOneWidget,
+    );
+    expect(find.text('Fold'), findsOneWidget);
+    expect(find.text('Price wrong'), findsOneWidget);
+    await tester.tap(find.text('Fold'));
     await tester.pump();
     expect(controller.draft.choiceId, 'j3-foldprice');
     controller.dispose();
