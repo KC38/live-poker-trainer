@@ -6237,8 +6237,16 @@ class _RangeRewriteDemoState extends State<RangeRewriteDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in RangeRewriteDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -6267,34 +6275,44 @@ class _RangeRewriteDemoState extends State<RangeRewriteDemo> {
               for (var i = 0; i < RangeRewriteDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: RangeRewriteDemo.points[i].label,
-                    caption: RangeRewriteDemo.points[i].caption,
-                    color: RangeRewriteDemo.points[i].color,
-                    selected: _tapped.contains(RangeRewriteDemo.points[i].label),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(RangeRewriteDemo.points[i].label)
-                            : null,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == RangeRewriteDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: RangeRewriteDemo.points[i].label,
+                      caption: RangeRewriteDemo.points[i].caption,
+                      color: RangeRewriteDemo.points[i].color,
+                      selected: _tapped.contains(
+                        RangeRewriteDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () =>
+                                  _onTap(RangeRewriteDemo.points[i].label)
+                              : null,
+                    ),
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues the three taps — no duplicate footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Each action rewrites the range',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Each action rewrites the range'
+                    : 'Tap ${next.label} next')
+                : 'Each action rewrites the range',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
