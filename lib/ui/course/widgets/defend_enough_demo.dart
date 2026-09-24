@@ -37,8 +37,16 @@ class _DefendEnoughDemoState extends State<DefendEnoughDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in DefendEnoughDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -67,35 +75,42 @@ class _DefendEnoughDemoState extends State<DefendEnoughDemo> {
               for (var i = 0; i < DefendEnoughDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DefendTile(
-                    label: DefendEnoughDemo.points[i].label,
-                    caption: DefendEnoughDemo.points[i].caption,
-                    color: DefendEnoughDemo.points[i].color,
-                    selected: _tapped.contains(
-                      DefendEnoughDemo.points[i].label,
+                  child: _DefendSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == DefendEnoughDemo.points[i].label,
+                    child: _DefendTile(
+                      label: DefendEnoughDemo.points[i].label,
+                      caption: DefendEnoughDemo.points[i].caption,
+                      color: DefendEnoughDemo.points[i].color,
+                      selected: _tapped.contains(
+                        DefendEnoughDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed: widget.interactive
+                          ? () => _onTap(DefendEnoughDemo.points[i].label)
+                          : null,
                     ),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed: widget.interactive
-                        ? () => _onTap(DefendEnoughDemo.points[i].label)
-                        : null,
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues Defend / Bluff / Enough — no dupe footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Defend better hands — skip fake %',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Defend better hands — skip fake %'
+                    : 'Tap ${next.label} next')
+                : 'Defend better hands — skip fake %',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
@@ -174,3 +189,73 @@ class _DefendTile extends StatelessWidget {
     );
   }
 }
+
+class _DefendSoftPulse extends StatefulWidget {
+  const _DefendSoftPulse({required this.active, required this.child});
+
+  final bool active;
+  final Widget child;
+
+  @override
+  State<_DefendSoftPulse> createState() => _DefendSoftPulseState();
+}
+
+class _DefendSoftPulseState extends State<_DefendSoftPulse>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+    if (widget.active) {
+      _pulse.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _DefendSoftPulse oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.active && !_pulse.isAnimating) {
+      _pulse.repeat(reverse: true);
+    } else if (!widget.active && _pulse.isAnimating) {
+      _pulse.stop();
+      _pulse.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.active) return widget.child;
+    return AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final glow = 0.22 + (_pulse.value * 0.38);
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.gold.withValues(alpha: glow),
+                blurRadius: 10 + (_pulse.value * 8),
+                spreadRadius: 0.5 + (_pulse.value * 1.2),
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
+      child: widget.child,
+    );
+  }
+}
+
