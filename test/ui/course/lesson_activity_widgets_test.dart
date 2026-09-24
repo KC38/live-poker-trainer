@@ -2654,14 +2654,20 @@ void main() {
       ),
     );
     expect(find.byType(SizingLanguageDemo), findsOneWidget);
-    expect(find.text('Tap Value, Pressure, and Size.'), findsOneWidget);
+    expect(find.text('Tap VALUE next'), findsOneWidget);
+    expect(find.text('Tap Value, Pressure, and Size.'), findsNothing);
+    expect(find.text('Tap Value, Pressure, and Size'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['VALUE', 'PRESSURE', 'SIZE']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('VALUE'));
+    await tester.pump();
+    expect(find.text('Tap PRESSURE next'), findsOneWidget);
+    await tester.tap(find.text('PRESSURE'));
+    await tester.pump();
+    expect(find.text('Tap SIZE next'), findsOneWidget);
+    await tester.tap(find.text('SIZE'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
@@ -9570,6 +9576,8 @@ void main() {
     );
     expect(find.textContaining('Flop · dry · top pair'), findsOneWidget);
     expect(find.text('BET 10'), findsOneWidget);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'half');
     await tester.tap(find.text('BET 10'));
     await tester.pump();
     expect(controller.draft.choiceId, 'half');
@@ -9611,6 +9619,8 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('BET 30-40'), findsOneWidget);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'big');
     await tester.tap(find.text('BET 30-40'));
     await tester.pump();
     expect(controller.draft.choiceId, 'big');
