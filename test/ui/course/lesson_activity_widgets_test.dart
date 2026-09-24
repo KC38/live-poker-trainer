@@ -16476,11 +16476,21 @@ void main() {
     );
     expect(
       resolveSelectIdentifyPresentation(spot),
-      SelectIdentifyPresentation.handCategoryTap,
+      SelectIdentifyPresentation.tableRegionTap,
     );
+    expect(isTableRegionTapActivity(spot), isTrue);
     final scene = resolveLessonTableScene(spot);
+    expect(scene?.layout, LessonTableLayout.handRankSpotOutcomes);
     expect(scene?.heroCodes, ['Ac', '3d']);
     expect(scene?.boardCodes, ['Kc', '9c', '4c', '7c', '2s']);
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: spot.id,
+        region: LessonTableRegion.handRankFlush,
+        choices: spot.choices,
+      ),
+      'cat-flush',
+    );
     expect(resolveHandExample(id: 'cat-flush')?.codes, [
       'Ac',
       'Kc',
@@ -16622,9 +16632,7 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('hand category tap selects flush tile for scaffolded spot', (
-    tester,
-  ) async {
+  testWidgets('hand ranks spot taps Flush on densified felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-01-02-01-scaffolded-spot',
       order: 3,
@@ -16640,6 +16648,24 @@ void main() {
         CourseChoice(id: 'cat-straight', label: 'Straight'),
       ],
     );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.handRankSpotOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.handRankFlush,
+        choices: activity.choices,
+      ),
+      'cat-flush',
+    );
+
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
       _wrap(
@@ -16650,15 +16676,21 @@ void main() {
         ),
       ),
     );
-    expect(find.byType(HandExampleTile), findsNWidgets(3));
-    expect(find.byType(LessonTableContext), findsOneWidget);
     expect(
-      find.textContaining('Look at the board and your holes'),
+      find.text('Board and holes show five clubs — tap what you made.'),
       findsOneWidget,
     );
-    expect(find.textContaining('Board Kc'), findsNothing);
-    // SoftPulse invite is active on category tiles (not a prose footer quiz).
-    expect(find.text('Tap the hand category you made.'), findsOneWidget);
+    expect(find.text('Tap what you made.'), findsNothing);
+    expect(find.byType(HandExampleTile), findsNothing);
+    expect(find.text('Flush'), findsOneWidget);
+    expect(find.text('Five clubs'), findsOneWidget);
+    expect(find.text('Tap Flush.'), findsOneWidget);
+    expect(find.text('One pair'), findsOneWidget);
+    expect(find.text('Straight'), findsOneWidget);
+    expect(
+      find.textContaining('Look at the board and your holes'),
+      findsNothing,
+    );
 
     await tester.tap(find.text('Flush'));
     await tester.pump();
