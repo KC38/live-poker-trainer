@@ -314,6 +314,15 @@ enum LessonTableRegion {
   /// S4 ranges checkpoint distractor: pick randomly.
   rangesRandomPick,
 
+  /// S4 plan checkpoint: brick/flush branches (correct).
+  planBranches,
+
+  /// S4 plan checkpoint distractor: wait for vibes.
+  planVibes,
+
+  /// S4 plan checkpoint distractor: only this street.
+  planOneStreet,
+
   /// Verbal action: raise stands (binding).
   verbalRaiseStands,
 
@@ -1478,6 +1487,9 @@ enum LessonTableLayout {
   /// S4 ranges checkpoint: advice follows reads.
   rangesCheckpointOutcomes,
 
+  /// S4 plan checkpoint: turn branches vs vibes.
+  planCheckpointOutcomes,
+
   /// Thin-value checkpoint: read-driven line vs coin flip.
   thinValueReadOutcomes,
 
@@ -2358,6 +2370,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-04-03-01-checkpoint':
       return const LessonTableScene(
+        layout: LessonTableLayout.planCheckpointOutcomes,
         heroCodes: ['Ah', 'Kd'],
         boardCodes: ['As', '7c', '2d'],
         villainSeatCount: 1,
@@ -3706,6 +3719,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.rangesRandomPick => pick('random'),
         _ => null,
       };
+    case 'act-04-03-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.planBranches => pick('branches'),
+        LessonTableRegion.planVibes => pick('vibes'),
+        LessonTableRegion.planOneStreet => pick('one-street'),
+        _ => null,
+      };
     case 'act-03-01-01-scaffolded':
       // Preflop open: UTG is left of the BB (earlyPosition on the felt).
       return switch (region) {
@@ -4788,6 +4808,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-04-01-01-scaffolded' ||
       activity.id == 'act-04-01-01-unguided' ||
       activity.id == 'act-04-01-01-checkpoint' ||
+      activity.id == 'act-04-03-01-checkpoint' ||
       activity.id == 'act-04-06-01-guided' ||
       activity.id == 'act-04-06-02-guided' ||
       activity.id == 'act-04-06-02-scaffolded' ||
@@ -5096,6 +5117,8 @@ class LessonTableContext extends StatelessWidget {
           _buildRangesUnguidedOutcomes(),
       LessonTableLayout.rangesCheckpointOutcomes =>
           _buildRangesCheckpointOutcomes(),
+      LessonTableLayout.planCheckpointOutcomes =>
+          _buildPlanCheckpointOutcomes(),
       LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
       LessonTableLayout.tableReadMattersOutcomes =>
           _buildTableReadMattersOutcomes(),
@@ -7096,6 +7119,47 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Unpredictable',
           visual: const Icon(
             Icons.casino_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPlanCheckpointOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive multi-street plan — tap branches, vibes, or one street',
+      semanticsStatic: 'Plan checkpoint outcomes',
+      caption: scene.caption ?? 'Flop plan ready — name the turn branches',
+      phases: [
+        (
+          region: LessonTableRegion.planBranches,
+          title: 'Branches',
+          detail: 'Brick · flush',
+          visual: const Icon(
+            Icons.account_tree_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.planVibes,
+          title: 'Vibes',
+          detail: 'Each street',
+          visual: const Icon(
+            Icons.auto_awesome_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.planOneStreet,
+          title: 'One street',
+          detail: 'Stop here',
+          visual: const Icon(
+            Icons.looks_one_outlined,
             color: AppColors.slate,
             size: 24,
           ),
