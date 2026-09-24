@@ -7750,6 +7750,14 @@ await tester.tap(find.text('STRONGER'));
     await tester.tap(find.text('PREFLOP'));
     await tester.pump();
     expect(controller.draft.orderedIds, ['st-pre']);
+    // Mid-build: 3 leftovers — lone TURN centers under FLOP/RIVER (no empty void).
+    final flopCenter = tester.getCenter(find.text('FLOP'));
+    final riverCenter = tester.getCenter(find.text('RIVER'));
+    final turnCenter = tester.getCenter(find.text('TURN'));
+    expect(
+      turnCenter.dx,
+      moreOrLessEquals((flopCenter.dx + riverCenter.dx) / 2, epsilon: 24),
+    );
     await tester.tap(find.text('FLOP'));
     await tester.pump();
     expect(controller.draft.orderedIds, ['st-pre', 'st-flop']);
