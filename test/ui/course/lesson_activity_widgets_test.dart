@@ -9719,6 +9719,74 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets(
+    's4 ranges checkpoint taps Read drives on densified same-board felt',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-04-01-01-checkpoint',
+        order: 5,
+        stage: ActivityStage.checkpoint,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 45,
+        accessibilityText:
+            'Recommendations change only when the read/range changes.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Same board. Same hero hand. Different villain lines. Result?',
+        choices: const [
+          CourseChoice(
+            id: 'read-drives',
+            label: 'Advice may change when the range changes',
+          ),
+          CourseChoice(
+            id: 'always-same',
+            label: 'Always do the same thing forever',
+          ),
+          CourseChoice(
+            id: 'random',
+            label: 'Pick randomly for unpredictability',
+          ),
+        ],
+      );
+      expect(
+        resolveSelectIdentifyPresentation(activity),
+        SelectIdentifyPresentation.tableRegionTap,
+      );
+      expect(isTableRegionTapActivity(activity), isTrue);
+      expect(
+        resolveLessonTableScene(activity)?.layout,
+        LessonTableLayout.rangesCheckpointOutcomes,
+      );
+      expect(
+        mapTableRegionToChoiceId(
+          activityId: activity.id,
+          region: LessonTableRegion.rangesReadDrives,
+          choices: activity.choices,
+        ),
+        'read-drives',
+      );
+      final controller = LessonActivityController(activity: activity);
+      await tester.pumpWidget(
+        _wrap(
+          SelectIdentifyActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+          ),
+        ),
+      );
+      expect(
+        find.text('Same board, different villain lines — tap what changes.'),
+        findsOneWidget,
+      );
+      expect(find.text('Read drives'), findsOneWidget);
+      expect(find.text('Advice shifts'), findsOneWidget);
+      await tester.tap(find.text('Read drives'));
+      await tester.pump();
+      expect(controller.draft.choiceId, 'read-drives');
+      controller.dispose();
+    },
+  );
+
   testWidgets('s4 ranges unguided taps Keep range on densified bet-twice felt', (
     tester,
   ) async {

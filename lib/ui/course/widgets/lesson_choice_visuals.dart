@@ -214,10 +214,9 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Ranges: tap keep weighted range on densified bet-twice felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
-  if (activity.id == 'act-04-01-01-checkpoint' &&
-      activity.renderer == ActivityRenderer.selectIdentify) {
-    // Ranges: checkpoint still on category tiles (refining).
-    return SelectIdentifyPresentation.handCategoryTap;
+  if (activity.id == 'act-04-01-01-checkpoint') {
+    // Ranges: tap read-drives advice on densified same-board felt.
+    return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-04-03-01-checkpoint') {
     // Multi-street plan: tap the branching plan on felt.

@@ -305,6 +305,15 @@ enum LessonTableRegion {
   /// S4 ranges unguided distractor: ignore betting pattern.
   rangesIgnoreAction,
 
+  /// S4 ranges checkpoint: advice follows range changes (correct).
+  rangesReadDrives,
+
+  /// S4 ranges checkpoint distractor: always same forever.
+  rangesAlwaysSame,
+
+  /// S4 ranges checkpoint distractor: pick randomly.
+  rangesRandomPick,
+
   /// Verbal action: raise stands (binding).
   verbalRaiseStands,
 
@@ -1466,6 +1475,9 @@ enum LessonTableLayout {
   /// S4 ranges unguided: exact-hand vs weighted range.
   rangesUnguidedOutcomes,
 
+  /// S4 ranges checkpoint: advice follows reads.
+  rangesCheckpointOutcomes,
+
   /// Thin-value checkpoint: read-driven line vs coin flip.
   thinValueReadOutcomes,
 
@@ -2330,6 +2342,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-04-01-01-checkpoint':
       return const LessonTableScene(
+        layout: LessonTableLayout.rangesCheckpointOutcomes,
         heroCodes: ['Qh', 'Qd'],
         boardCodes: ['Qc', '7s', '2d'],
         villainSeatCount: 1,
@@ -3686,6 +3699,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.rangesIgnoreAction => pick('ignore-action'),
         _ => null,
       };
+    case 'act-04-01-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.rangesReadDrives => pick('read-drives'),
+        LessonTableRegion.rangesAlwaysSame => pick('always-same'),
+        LessonTableRegion.rangesRandomPick => pick('random'),
+        _ => null,
+      };
     case 'act-03-01-01-scaffolded':
       // Preflop open: UTG is left of the BB (earlyPosition on the felt).
       return switch (region) {
@@ -4767,6 +4787,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-04-01-01-guided' ||
       activity.id == 'act-04-01-01-scaffolded' ||
       activity.id == 'act-04-01-01-unguided' ||
+      activity.id == 'act-04-01-01-checkpoint' ||
       activity.id == 'act-04-06-01-guided' ||
       activity.id == 'act-04-06-02-guided' ||
       activity.id == 'act-04-06-02-scaffolded' ||
@@ -5073,6 +5094,8 @@ class LessonTableContext extends StatelessWidget {
           _buildRangesScaffoldedOutcomes(),
       LessonTableLayout.rangesUnguidedOutcomes =>
           _buildRangesUnguidedOutcomes(),
+      LessonTableLayout.rangesCheckpointOutcomes =>
+          _buildRangesCheckpointOutcomes(),
       LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
       LessonTableLayout.tableReadMattersOutcomes =>
           _buildTableReadMattersOutcomes(),
@@ -7032,6 +7055,47 @@ class LessonTableContext extends StatelessWidget {
           detail: 'No update',
           visual: const Icon(
             Icons.visibility_off_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRangesCheckpointOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive range advice — tap read drives, always same, or random',
+      semanticsStatic: 'Ranges checkpoint outcomes',
+      caption: scene.caption ?? 'Same board · different villain lines',
+      phases: [
+        (
+          region: LessonTableRegion.rangesReadDrives,
+          title: 'Read drives',
+          detail: 'Advice shifts',
+          visual: const Icon(
+            Icons.alt_route,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.rangesAlwaysSame,
+          title: 'Always same',
+          detail: 'Forever',
+          visual: const Icon(
+            Icons.lock_outline,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.rangesRandomPick,
+          title: 'Random',
+          detail: 'Unpredictable',
+          visual: const Icon(
+            Icons.casino_outlined,
             color: AppColors.slate,
             size: 24,
           ),
