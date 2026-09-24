@@ -2593,7 +2593,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllHabitsTapped: onTableHabitsAcknowledge,
         ),
         CoachDialogueVisualKind.fullRing => FullRingDemo(
-          interactive: onFullRingAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPointsTapped: onFullRingAcknowledge,
         ),
