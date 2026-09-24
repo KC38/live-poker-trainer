@@ -18757,7 +18757,16 @@ await tester.tap(find.text('STRONGER'));
     );
 
     final boardCards = find.byWidgetPredicate(
-      (w) => w is MiniCard && w.size == MiniCardSize.small,
+      (w) =>
+          w is MiniCard &&
+          (w.size == MiniCardSize.hero || w.size == MiniCardSize.small),
+    );
+    // SoftPulse board teach uses hero-sized board cards.
+    expect(
+      find.byWidgetPredicate(
+        (w) => w is MiniCard && w.size == MiniCardSize.hero,
+      ),
+      findsAtLeastNWidgets(5),
     );
     expect(boardCards, findsAtLeastNWidgets(5));
     await tester.tap(boardCards.first);
