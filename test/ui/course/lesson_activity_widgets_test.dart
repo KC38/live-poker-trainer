@@ -153,18 +153,19 @@ void main() {
     expect(find.text('Rex'), findsWidgets);
     expect(find.text('Tap your cards'), findsOneWidget);
     expect(find.text('Tap your two cards on the felt.'), findsNothing);
-    // Solo hero teach expands felt into the tall-phone void (~42% height).
-    final felt = find.byWidgetPredicate(
-      (w) =>
-          w is Container &&
-          w.decoration is BoxDecoration &&
-          (w.decoration! as BoxDecoration).gradient != null,
-    );
-    expect(felt, findsWidgets);
-    final feltH = tester.getSize(felt.first).height;
-    expect(feltH, greaterThanOrEqualTo(tester.view.physicalSize.height /
+    // Solo hero teach fills tall-phone void (~58% height).
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('hole-cards-felt')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
             tester.view.devicePixelRatio *
-            0.35));
+            0.58,
+        epsilon: 1,
+      ),
+    );
     controller.dispose();
   });
 
@@ -372,6 +373,19 @@ void main() {
     await tester.pump(const Duration(milliseconds: 450));
     await tester.pump(const Duration(milliseconds: 450));
 
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('hole-cards-felt')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
+
     final heroRail = find.byWidgetPredicate(
       (w) => w is MiniCard && w.size == MiniCardSize.hero,
     );
@@ -379,6 +393,11 @@ void main() {
     await tester.tap(heroRail.first);
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears SoftPulse / region tap — densified shell must stay filled.
+    expect(
+      tester.getSize(find.byKey(const ValueKey('hole-cards-felt'))).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
