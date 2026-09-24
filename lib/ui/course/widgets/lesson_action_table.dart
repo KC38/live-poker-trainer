@@ -4427,8 +4427,9 @@ class _SprDepthDemoState extends State<SprDepthDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled;
+    // Tall-phone teach: eat the navy void under SPR / LOW / HIGH.
     final minFelt = expandTeach
-        ? MediaQuery.sizeOf(context).height * 0.38
+        ? MediaQuery.sizeOf(context).height * 0.55
         : null;
     final child = ConstrainedBox(
       constraints: minFelt != null
@@ -4436,7 +4437,12 @@ class _SprDepthDemoState extends State<SprDepthDemo> {
           : const BoxConstraints(),
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+        padding: EdgeInsets.fromLTRB(
+          12,
+          expandTeach ? 22 : 14,
+          12,
+          expandTeach ? 22 : 14,
+        ),
         alignment: minFelt != null ? Alignment.center : null,
         decoration: BoxDecoration(
           gradient: const LinearGradient(
@@ -4451,20 +4457,22 @@ class _SprDepthDemoState extends State<SprDepthDemo> {
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment:
+              expandTeach ? MainAxisAlignment.center : MainAxisAlignment.start,
           children: [
             Text(
               'Stack-to-pot ratio',
               style: GoogleFonts.manrope(
                 color: AppColors.slate,
-                fontSize: 12,
+                fontSize: expandTeach ? 14 : 12,
                 fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: expandTeach ? 22 : 14),
             Row(
               children: [
                 for (var i = 0; i < SprDepthDemo.points.length; i++) ...[
-                  if (i > 0) const SizedBox(width: 8),
+                  if (i > 0) SizedBox(width: expandTeach ? 10 : 8),
                   Expanded(
                     child: _DemoSoftPulse(
                       active:
@@ -4475,6 +4483,7 @@ class _SprDepthDemoState extends State<SprDepthDemo> {
                         label: SprDepthDemo.points[i].label,
                         caption: SprDepthDemo.points[i].caption,
                         color: SprDepthDemo.points[i].color,
+                        densify: expandTeach,
                         selected: _tapped.contains(
                           SprDepthDemo.points[i].label,
                         ),
@@ -4488,9 +4497,13 @@ class _SprDepthDemoState extends State<SprDepthDemo> {
                 ],
               ],
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: expandTeach ? 22 : 14),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              width: expandTeach ? double.infinity : null,
+              padding: EdgeInsets.symmetric(
+                horizontal: expandTeach ? 16 : 14,
+                vertical: expandTeach ? 12 : 8,
+              ),
               decoration: BoxDecoration(
                 color: AppColors.feltDark.withValues(alpha: 0.65),
                 borderRadius: BorderRadius.circular(20),
@@ -4507,7 +4520,7 @@ class _SprDepthDemoState extends State<SprDepthDemo> {
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
-                  fontSize: expandTeach ? 14 : 12,
+                  fontSize: expandTeach ? 15 : 12,
                   fontWeight: FontWeight.w700,
                 ),
               ),
