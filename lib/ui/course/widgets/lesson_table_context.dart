@@ -263,6 +263,15 @@ enum LessonTableRegion {
   /// Hand-ranks scaffolded spot distractor: straight.
   handRankStraight,
 
+  /// Hand-ranks showdown: you win (correct).
+  handRankYouWin,
+
+  /// Hand-ranks showdown distractor: they win.
+  handRankTheyWin,
+
+  /// Hand-ranks showdown distractor: chop.
+  handRankChop,
+
   /// Turn guided: blank turn is a brick (correct).
   turnBrick,
 
@@ -1603,6 +1612,9 @@ enum LessonTableLayout {
 
   /// Hand ranks scaffolded: Flush / One pair / Straight on river spot.
   handRankSpotOutcomes,
+
+  /// Hand ranks checkpoint: You / Them / Chop on densified showdown felt.
+  handRankShowdownOutcomes,
 
   /// Turn guided: brick vs scare vs always-change.
   turnBrickScareOutcomes,
@@ -3430,12 +3442,13 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
     case 'act-01-02-01-checkpoint-winner':
       // Same board: you make the club flush; they make 9-high straight.
       return const LessonTableScene(
+        layout: LessonTableLayout.handRankShowdownOutcomes,
         heroCodes: ['Ac', 'Kc'],
         boardCodes: ['9c', '8h', '7d', '4c', '2c'],
         villainCodes: ['6s', '5h'],
         villainSeatCount: 0,
         highlight: LessonTableHighlight.none,
-        caption: 'You',
+        caption: 'Showdown · who wins?',
       );
     case 'act-01-02-01-explain-ladder':
       return null;
@@ -3619,11 +3632,10 @@ String? mapTableRegionToChoiceId({
         _ => null,
       };
     case 'act-01-02-01-checkpoint-winner':
-      // Tap You / Them on the felt (chop stays a dock tile).
       return switch (region) {
-        LessonTableRegion.hero => pick('you-win'),
-        LessonTableRegion.villain => pick('they-win'),
-        LessonTableRegion.board => pick('split'),
+        LessonTableRegion.handRankYouWin => pick('you-win'),
+        LessonTableRegion.handRankTheyWin => pick('they-win'),
+        LessonTableRegion.handRankChop => pick('split'),
         _ => null,
       };
     case 'act-01-02-02-scaffolded-kicker':
@@ -5080,6 +5092,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-02-02-01-checkpoint-trash' ||
       activity.id == 'act-02-07-02-jump-family' ||
       activity.id == 'act-01-02-01-scaffolded-spot' ||
+      activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-03-01-01-guided' ||
       activity.id == 'act-03-01-01-scaffolded' ||
       activity.id == 'act-03-01-01-unguided' ||
@@ -5410,6 +5423,8 @@ class LessonTableContext extends StatelessWidget {
           _buildHandFamilyCheckpointOutcomes(),
       LessonTableLayout.jumpFamilyOutcomes => _buildJumpFamilyOutcomes(),
       LessonTableLayout.handRankSpotOutcomes => _buildHandRankSpotOutcomes(),
+      LessonTableLayout.handRankShowdownOutcomes =>
+          _buildHandRankShowdownOutcomes(),
       LessonTableLayout.turnBrickScareOutcomes => _buildTurnBrickScareOutcomes(),
       LessonTableLayout.turnScarePlanOutcomes => _buildTurnScarePlanOutcomes(),
       LessonTableLayout.riverJobOutcomes => _buildRiverJobOutcomes(),
@@ -7234,6 +7249,58 @@ class LessonTableContext extends StatelessWidget {
           title: 'Straight',
           detail: 'Five in a row',
           visual: miniRow(const ['9h', '8d', '7c']),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHandRankShowdownOutcomes() {
+    Widget miniPair(String a, String b) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          MiniCard(
+            card: CardModel.fromCode(a),
+            size: MiniCardSize.tiny,
+          ),
+          const SizedBox(width: 2),
+          MiniCard(
+            card: CardModel.fromCode(b),
+            size: MiniCardSize.tiny,
+          ),
+        ],
+      );
+    }
+
+    // Checkpoint: densify without SoftPulse spoiler on the correct seat.
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive showdown — tap You, Them, or Chop',
+      semanticsStatic: 'Hand ranks showdown outcomes',
+      caption: scene.caption ?? 'Showdown · who wins?',
+      phases: [
+        (
+          region: LessonTableRegion.handRankYouWin,
+          title: 'You',
+          detail: 'Club flush',
+          visual: miniPair('Ac', 'Kc'),
+        ),
+        (
+          region: LessonTableRegion.handRankTheyWin,
+          title: 'Them',
+          detail: 'Straight?',
+          visual: miniPair('6s', '5h'),
+        ),
+        (
+          region: LessonTableRegion.handRankChop,
+          title: 'Chop',
+          detail: 'Split pot?',
+          visual: const Icon(
+            Icons.call_split,
+            color: AppColors.slate,
+            size: 24,
+          ),
         ),
       ],
     );
@@ -13063,9 +13130,13 @@ class LessonTableContext extends StatelessWidget {
     final board = scene.boardCodes
         .map(CardModel.fromCode)
         .toList(growable: false);
+    final villainFaceUp = scene.villainCodes
+        .map(CardModel.fromCode)
+        .toList(growable: false);
     final showSpotCards =
         hero.isNotEmpty ||
         board.isNotEmpty ||
+        villainFaceUp.isNotEmpty ||
         scene.villainSeatCount > 0;
     // Grow interactive outcome felts on tall phones even without SoftPulse
     // (unguided/checkpoint densify without pulsing a spoiler tile).
@@ -13099,7 +13170,31 @@ class LessonTableContext extends StatelessWidget {
                     : MainAxisAlignment.start,
             children: [
               if (showSpotCards) ...[
-                if (scene.villainSeatCount > 0) ...[
+                if (villainFaceUp.isNotEmpty) ...[
+                  Text(
+                    'Them',
+                    style: GoogleFonts.manrope(
+                      color: AppColors.slate,
+                      fontSize: expandTeach ? 11 : 10,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.6,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (var i = 0; i < villainFaceUp.length; i++) ...[
+                        if (i > 0) const SizedBox(width: 6),
+                        MiniCard(
+                          card: villainFaceUp[i],
+                          size: MiniCardSize.small,
+                        ),
+                      ],
+                    ],
+                  ),
+                  SizedBox(height: expandTeach ? 10 : 8),
+                ] else if (scene.villainSeatCount > 0) ...[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
