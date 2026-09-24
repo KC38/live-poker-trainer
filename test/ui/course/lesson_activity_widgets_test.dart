@@ -7963,9 +7963,27 @@ await tester.tap(find.text('STRONGER'));
       findsNothing,
     );
     expect(find.text('Bets matched'), findsWidgets);
+    expect(find.byKey(const ValueKey('street-end-felt')), findsOneWidget);
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('street-end-felt')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
     await tester.tap(find.text('Bets matched').first);
     await tester.pump();
     expect(controller.draft.choiceId, 'matched');
+    // Densified shell stays filled after the tap.
+    expect(
+      tester.getSize(find.byKey(const ValueKey('street-end-felt'))).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
