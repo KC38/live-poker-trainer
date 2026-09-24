@@ -1674,13 +1674,13 @@ class _PassiveActionsDemoState extends State<PassiveActionsDemo> {
   @override
   Widget build(BuildContext context) {
     final expandTeach = widget.interactive && widget.enabled;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -1720,20 +1720,19 @@ class _PassiveActionsDemoState extends State<PassiveActionsDemo> {
                           !_tapped.contains(PassiveActionsDemo.actions[i].$1) &&
                           // Pulse only the next untapped button in order.
                           PassiveActionsDemo.actions
-                                  .take(i)
-                                  .every((a) => _tapped.contains(a.$1)),
+                              .take(i)
+                              .every((a) => _tapped.contains(a.$1)),
                       child: _DemoActionCard(
                         label: PassiveActionsDemo.actions[i].$1,
                         caption: PassiveActionsDemo.actions[i].$2,
                         color: PassiveActionsDemo.actions[i].$3,
-                        selected:
-                            _tapped.contains(PassiveActionsDemo.actions[i].$1),
+                        selected: _tapped.contains(
+                          PassiveActionsDemo.actions[i].$1,
+                        ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () =>
-                                    _onTap(PassiveActionsDemo.actions[i].$1)
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(PassiveActionsDemo.actions[i].$1)
+                            : null,
                       ),
                     ),
                   ),
@@ -1823,13 +1822,13 @@ class _AggressiveActionsDemoState extends State<AggressiveActionsDemo> {
   @override
   Widget build(BuildContext context) {
     final expandTeach = widget.interactive && widget.enabled;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -1859,9 +1858,11 @@ class _AggressiveActionsDemoState extends State<AggressiveActionsDemo> {
             const SizedBox(height: 14),
             Row(
               children: [
-                for (var i = 0;
-                    i < AggressiveActionsDemo.actions.length;
-                    i++) ...[
+                for (
+                  var i = 0;
+                  i < AggressiveActionsDemo.actions.length;
+                  i++
+                ) ...[
                   if (i > 0) const SizedBox(width: 8),
                   Expanded(
                     child: _DemoSoftPulse(
@@ -1882,12 +1883,9 @@ class _AggressiveActionsDemoState extends State<AggressiveActionsDemo> {
                           AggressiveActionsDemo.actions[i].$1,
                         ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () => _onTap(
-                                  AggressiveActionsDemo.actions[i].$1,
-                                )
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(AggressiveActionsDemo.actions[i].$1)
+                            : null,
                       ),
                     ),
                   ),
@@ -1969,13 +1967,13 @@ class _OpenRangeDemoState extends State<OpenRangeDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -2017,13 +2015,13 @@ class _OpenRangeDemoState extends State<OpenRangeDemo> {
                         label: OpenRangeDemo.points[i].label,
                         caption: OpenRangeDemo.points[i].caption,
                         color: OpenRangeDemo.points[i].color,
-                        selected:
-                            _tapped.contains(OpenRangeDemo.points[i].label),
+                        selected: _tapped.contains(
+                          OpenRangeDemo.points[i].label,
+                        ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () => _onTap(OpenRangeDemo.points[i].label)
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(OpenRangeDemo.points[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -2043,8 +2041,8 @@ class _OpenRangeDemoState extends State<OpenRangeDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Early tight · button wider · live opens ~3x'
-                        : 'Tap ${next.label} next')
+                          ? 'Early tight · button wider · live opens ~3x'
+                          : 'Tap ${next.label} next')
                     : 'Early tight · button wider · live opens ~3x',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -2062,7 +2060,6 @@ class _OpenRangeDemoState extends State<OpenRangeDemo> {
     return ExcludeSemantics(child: child);
   }
 }
-
 
 /// Explain-step demo: fold / call / 3-bet responses versus an open.
 class VsOpenResponseDemo extends StatefulWidget {
@@ -2110,13 +2107,13 @@ class _VsOpenResponseDemoState extends State<VsOpenResponseDemo> {
   Widget build(BuildContext context) {
     final next = _nextResponse;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -2146,7 +2143,11 @@ class _VsOpenResponseDemoState extends State<VsOpenResponseDemo> {
             const SizedBox(height: 14),
             Row(
               children: [
-                for (var i = 0; i < VsOpenResponseDemo.responses.length; i++) ...[
+                for (
+                  var i = 0;
+                  i < VsOpenResponseDemo.responses.length;
+                  i++
+                ) ...[
                   if (i > 0) const SizedBox(width: 8),
                   Expanded(
                     child: _DemoSoftPulse(
@@ -2158,17 +2159,14 @@ class _VsOpenResponseDemoState extends State<VsOpenResponseDemo> {
                         label: VsOpenResponseDemo.responses[i].label,
                         caption: VsOpenResponseDemo.responses[i].caption,
                         color: VsOpenResponseDemo.responses[i].color,
-                        selected:
-                            _tapped.contains(
-                              VsOpenResponseDemo.responses[i].label,
-                            ),
+                        selected: _tapped.contains(
+                          VsOpenResponseDemo.responses[i].label,
+                        ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () => _onTap(
-                                  VsOpenResponseDemo.responses[i].label,
-                                )
-                                : null,
+                        onPressed: widget.interactive
+                            ? () =>
+                                  _onTap(VsOpenResponseDemo.responses[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -2188,8 +2186,8 @@ class _VsOpenResponseDemoState extends State<VsOpenResponseDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Weak fold · playable call · strong 3-bet'
-                        : 'Tap ${next.label} next')
+                          ? 'Weak fold · playable call · strong 3-bet'
+                          : 'Tap ${next.label} next')
                     : 'Weak fold · playable call · strong 3-bet',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -2207,7 +2205,6 @@ class _VsOpenResponseDemoState extends State<VsOpenResponseDemo> {
     return ExcludeSemantics(child: child);
   }
 }
-
 
 /// Explain-step demo: count stacks in BB; shorter stack sets the ceiling.
 class BbStackDepthDemo extends StatefulWidget {
@@ -2255,13 +2252,13 @@ class _BbStackDepthDemoState extends State<BbStackDepthDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -2303,14 +2300,13 @@ class _BbStackDepthDemoState extends State<BbStackDepthDemo> {
                         label: BbStackDepthDemo.points[i].label,
                         caption: BbStackDepthDemo.points[i].caption,
                         color: BbStackDepthDemo.points[i].color,
-                        selected:
-                            _tapped.contains(BbStackDepthDemo.points[i].label),
+                        selected: _tapped.contains(
+                          BbStackDepthDemo.points[i].label,
+                        ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () =>
-                                    _onTap(BbStackDepthDemo.points[i].label)
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(BbStackDepthDemo.points[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -2330,8 +2326,8 @@ class _BbStackDepthDemoState extends State<BbStackDepthDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Count in BB · shorter stack caps the pot'
-                        : 'Tap ${next.label} next')
+                          ? 'Count in BB · shorter stack caps the pot'
+                          : 'Tap ${next.label} next')
                     : 'Count in BB · shorter stack caps the pot',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -2349,7 +2345,6 @@ class _BbStackDepthDemoState extends State<BbStackDepthDemo> {
     return ExcludeSemantics(child: child);
   }
 }
-
 
 /// Explain-step demo: live-table habits (watch, say, cover, wait).
 class TableHabitsDemo extends StatefulWidget {
@@ -2398,13 +2393,13 @@ class _TableHabitsDemoState extends State<TableHabitsDemo> {
   Widget build(BuildContext context) {
     final next = _nextHabit;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -2454,12 +2449,11 @@ class _TableHabitsDemoState extends State<TableHabitsDemo> {
                             TableHabitsDemo.habits[row * 2 + col].label,
                           ),
                           enabled: widget.interactive && widget.enabled,
-                          onPressed:
-                              widget.interactive
-                                  ? () => _onTap(
-                                    TableHabitsDemo.habits[row * 2 + col].label,
-                                  )
-                                  : null,
+                          onPressed: widget.interactive
+                              ? () => _onTap(
+                                  TableHabitsDemo.habits[row * 2 + col].label,
+                                )
+                              : null,
                         ),
                       ),
                     ),
@@ -2480,8 +2474,8 @@ class _TableHabitsDemoState extends State<TableHabitsDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Watch · say · cover · wait your turn'
-                        : 'Tap ${next.label} next')
+                          ? 'Watch · say · cover · wait your turn'
+                          : 'Tap ${next.label} next')
                     : 'Watch · say · cover · wait your turn',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -2499,7 +2493,6 @@ class _TableHabitsDemoState extends State<TableHabitsDemo> {
     return ExcludeSemantics(child: child);
   }
 }
-
 
 /// Explain-step demo: nine-max uses the same rules; position still matters.
 class FullRingDemo extends StatefulWidget {
@@ -2547,13 +2540,13 @@ class _FullRingDemoState extends State<FullRingDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -2595,13 +2588,13 @@ class _FullRingDemoState extends State<FullRingDemo> {
                         label: FullRingDemo.points[i].label,
                         caption: FullRingDemo.points[i].caption,
                         color: FullRingDemo.points[i].color,
-                        selected:
-                            _tapped.contains(FullRingDemo.points[i].label),
+                        selected: _tapped.contains(
+                          FullRingDemo.points[i].label,
+                        ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () => _onTap(FullRingDemo.points[i].label)
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(FullRingDemo.points[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -2621,8 +2614,8 @@ class _FullRingDemoState extends State<FullRingDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Nine seats · same rules · position still matters'
-                        : 'Tap ${next.label} next')
+                          ? 'Nine seats · same rules · position still matters'
+                          : 'Tap ${next.label} next')
                     : 'Nine seats · same rules · position still matters',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -2640,7 +2633,6 @@ class _FullRingDemoState extends State<FullRingDemo> {
     return ExcludeSemantics(child: child);
   }
 }
-
 
 /// Explain-step demo: read pot, stacks, button, and who acts before cards.
 class TableReadDemo extends StatefulWidget {
@@ -2689,13 +2681,13 @@ class _TableReadDemoState extends State<TableReadDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -2744,12 +2736,11 @@ class _TableReadDemoState extends State<TableReadDemo> {
                             TableReadDemo.points[row * 2 + col].label,
                           ),
                           enabled: widget.interactive && widget.enabled,
-                          onPressed:
-                              widget.interactive
-                                  ? () => _onTap(
-                                    TableReadDemo.points[row * 2 + col].label,
-                                  )
-                                  : null,
+                          onPressed: widget.interactive
+                              ? () => _onTap(
+                                  TableReadDemo.points[row * 2 + col].label,
+                                )
+                              : null,
                         ),
                       ),
                     ),
@@ -2770,8 +2761,8 @@ class _TableReadDemoState extends State<TableReadDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Pot · stacks · button · who acts'
-                        : 'Tap ${next.label} next')
+                          ? 'Pot · stacks · button · who acts'
+                          : 'Tap ${next.label} next')
                     : 'Pot · stacks · button · who acts',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -2789,7 +2780,6 @@ class _TableReadDemoState extends State<TableReadDemo> {
     return ExcludeSemantics(child: child);
   }
 }
-
 
 /// Explain-step demo: label the flop as made, draw, SDV, or air.
 class FlopLabelDemo extends StatefulWidget {
@@ -2838,13 +2828,13 @@ class _FlopLabelDemoState extends State<FlopLabelDemo> {
   Widget build(BuildContext context) {
     final next = _nextLabel;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -2893,12 +2883,11 @@ class _FlopLabelDemoState extends State<FlopLabelDemo> {
                             FlopLabelDemo.labels[row * 2 + col].label,
                           ),
                           enabled: widget.interactive && widget.enabled,
-                          onPressed:
-                              widget.interactive
-                                  ? () => _onTap(
-                                    FlopLabelDemo.labels[row * 2 + col].label,
-                                  )
-                                  : null,
+                          onPressed: widget.interactive
+                              ? () => _onTap(
+                                  FlopLabelDemo.labels[row * 2 + col].label,
+                                )
+                              : null,
                         ),
                       ),
                     ),
@@ -2919,8 +2908,8 @@ class _FlopLabelDemoState extends State<FlopLabelDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Made · draw · showdown value · air'
-                        : 'Tap ${next.label} next')
+                          ? 'Made · draw · showdown value · air'
+                          : 'Tap ${next.label} next')
                     : 'Made · draw · showdown value · air',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -2938,7 +2927,6 @@ class _FlopLabelDemoState extends State<FlopLabelDemo> {
     return ExcludeSemantics(child: child);
   }
 }
-
 
 /// Explain-step demo: clean outs, dirty outs, and pricing the call.
 class OutsPriceDemo extends StatefulWidget {
@@ -2986,13 +2974,13 @@ class _OutsPriceDemoState extends State<OutsPriceDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -3034,13 +3022,13 @@ class _OutsPriceDemoState extends State<OutsPriceDemo> {
                         label: OutsPriceDemo.points[i].label,
                         caption: OutsPriceDemo.points[i].caption,
                         color: OutsPriceDemo.points[i].color,
-                        selected:
-                            _tapped.contains(OutsPriceDemo.points[i].label),
+                        selected: _tapped.contains(
+                          OutsPriceDemo.points[i].label,
+                        ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () => _onTap(OutsPriceDemo.points[i].label)
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(OutsPriceDemo.points[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -3060,8 +3048,8 @@ class _OutsPriceDemoState extends State<OutsPriceDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Clean outs · dirty outs · price the call'
-                        : 'Tap ${next.label} next')
+                          ? 'Clean outs · dirty outs · price the call'
+                          : 'Tap ${next.label} next')
                     : 'Clean outs · dirty outs · price the call',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -3079,7 +3067,6 @@ class _OutsPriceDemoState extends State<OutsPriceDemo> {
     return ExcludeSemantics(child: child);
   }
 }
-
 
 /// Explain-step demo: flop line menu (value through raise) — one plan.
 class FlopLinesDemo extends StatefulWidget {
@@ -3130,13 +3117,13 @@ class _FlopLinesDemoState extends State<FlopLinesDemo> {
   Widget build(BuildContext context) {
     final next = _nextLine;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -3185,12 +3172,11 @@ class _FlopLinesDemoState extends State<FlopLinesDemo> {
                             FlopLinesDemo.lines[row * 3 + col].label,
                           ),
                           enabled: widget.interactive && widget.enabled,
-                          onPressed:
-                              widget.interactive
-                                  ? () => _onTap(
-                                    FlopLinesDemo.lines[row * 3 + col].label,
-                                  )
-                                  : null,
+                          onPressed: widget.interactive
+                              ? () => _onTap(
+                                  FlopLinesDemo.lines[row * 3 + col].label,
+                                )
+                              : null,
                         ),
                       ),
                     ),
@@ -3211,8 +3197,8 @@ class _FlopLinesDemoState extends State<FlopLinesDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Value · c-bet · check · call · fold · raise'
-                        : 'Tap ${next.label} next')
+                          ? 'Value · c-bet · check · call · fold · raise'
+                          : 'Tap ${next.label} next')
                     : 'Value · c-bet · check · call · fold · raise',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -3230,7 +3216,6 @@ class _FlopLinesDemoState extends State<FlopLinesDemo> {
     return ExcludeSemantics(child: child);
   }
 }
-
 
 /// Explain-step demo: turn brick vs change; barrel or delay with intent.
 class TurnStoryDemo extends StatefulWidget {
@@ -3279,13 +3264,13 @@ class _TurnStoryDemoState extends State<TurnStoryDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -3334,12 +3319,11 @@ class _TurnStoryDemoState extends State<TurnStoryDemo> {
                             TurnStoryDemo.points[row * 2 + col].label,
                           ),
                           enabled: widget.interactive && widget.enabled,
-                          onPressed:
-                              widget.interactive
-                                  ? () => _onTap(
-                                    TurnStoryDemo.points[row * 2 + col].label,
-                                  )
-                                  : null,
+                          onPressed: widget.interactive
+                              ? () => _onTap(
+                                  TurnStoryDemo.points[row * 2 + col].label,
+                                )
+                              : null,
                         ),
                       ),
                     ),
@@ -3360,8 +3344,8 @@ class _TurnStoryDemoState extends State<TurnStoryDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Brick · change · barrel · delay with intent'
-                        : 'Tap ${next.label} next')
+                          ? 'Brick · change · barrel · delay with intent'
+                          : 'Tap ${next.label} next')
                     : 'Brick · change · barrel · delay with intent',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -3379,7 +3363,6 @@ class _TurnStoryDemoState extends State<TurnStoryDemo> {
     return ExcludeSemantics(child: child);
   }
 }
-
 
 /// Explain-step demo: river is binary — value, bluff, catch, or fold.
 class RiverBinaryDemo extends StatefulWidget {
@@ -3428,13 +3411,13 @@ class _RiverBinaryDemoState extends State<RiverBinaryDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -3477,18 +3460,18 @@ class _RiverBinaryDemoState extends State<RiverBinaryDemo> {
                                 RiverBinaryDemo.points[row * 2 + col].label,
                         child: _DemoActionCard(
                           label: RiverBinaryDemo.points[row * 2 + col].label,
-                          caption: RiverBinaryDemo.points[row * 2 + col].caption,
+                          caption:
+                              RiverBinaryDemo.points[row * 2 + col].caption,
                           color: RiverBinaryDemo.points[row * 2 + col].color,
                           selected: _tapped.contains(
                             RiverBinaryDemo.points[row * 2 + col].label,
                           ),
                           enabled: widget.interactive && widget.enabled,
-                          onPressed:
-                              widget.interactive
-                                  ? () => _onTap(
-                                    RiverBinaryDemo.points[row * 2 + col].label,
-                                  )
-                                  : null,
+                          onPressed: widget.interactive
+                              ? () => _onTap(
+                                  RiverBinaryDemo.points[row * 2 + col].label,
+                                )
+                              : null,
                         ),
                       ),
                     ),
@@ -3509,8 +3492,8 @@ class _RiverBinaryDemoState extends State<RiverBinaryDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Value · bluff · bluff-catch · fold'
-                        : 'Tap ${next.label} next')
+                          ? 'Value · bluff · bluff-catch · fold'
+                          : 'Tap ${next.label} next')
                     : 'Value · bluff · bluff-catch · fold',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -3528,8 +3511,6 @@ class _RiverBinaryDemoState extends State<RiverBinaryDemo> {
     return ExcludeSemantics(child: child);
   }
 }
-
-
 
 /// Explain-step demo: multiway adjustments (stronger / fewer bluffs / nuts).
 class MultiwayPlanDemo extends StatefulWidget {
@@ -3577,13 +3558,13 @@ class _MultiwayPlanDemoState extends State<MultiwayPlanDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -3625,13 +3606,13 @@ class _MultiwayPlanDemoState extends State<MultiwayPlanDemo> {
                         label: MultiwayPlanDemo.points[i].label,
                         caption: MultiwayPlanDemo.points[i].caption,
                         color: MultiwayPlanDemo.points[i].color,
-                        selected:
-                            _tapped.contains(MultiwayPlanDemo.points[i].label),
+                        selected: _tapped.contains(
+                          MultiwayPlanDemo.points[i].label,
+                        ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () => _onTap(MultiwayPlanDemo.points[i].label)
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(MultiwayPlanDemo.points[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -3651,8 +3632,8 @@ class _MultiwayPlanDemoState extends State<MultiwayPlanDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Stronger value · fewer bluffs · chase nuts'
-                        : 'Tap ${next.label} next')
+                          ? 'Stronger value · fewer bluffs · chase nuts'
+                          : 'Tap ${next.label} next')
                     : 'Stronger value · fewer bluffs · chase nuts',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -3670,7 +3651,6 @@ class _MultiwayPlanDemoState extends State<MultiwayPlanDemo> {
     return ExcludeSemantics(child: child);
   }
 }
-
 
 /// Explain-step demo: four common live leaks to recognize and avoid.
 class CommonLeaksDemo extends StatefulWidget {
@@ -3719,13 +3699,13 @@ class _CommonLeaksDemoState extends State<CommonLeaksDemo> {
   Widget build(BuildContext context) {
     final next = _nextLeak;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -3774,12 +3754,11 @@ class _CommonLeaksDemoState extends State<CommonLeaksDemo> {
                             CommonLeaksDemo.leaks[row * 2 + col].label,
                           ),
                           enabled: widget.interactive && widget.enabled,
-                          onPressed:
-                              widget.interactive
-                                  ? () => _onTap(
-                                    CommonLeaksDemo.leaks[row * 2 + col].label,
-                                  )
-                                  : null,
+                          onPressed: widget.interactive
+                              ? () => _onTap(
+                                  CommonLeaksDemo.leaks[row * 2 + col].label,
+                                )
+                              : null,
                         ),
                       ),
                     ),
@@ -3800,8 +3779,8 @@ class _CommonLeaksDemoState extends State<CommonLeaksDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Top pair · bad prices · passive calls · bluff crowds'
-                        : 'Tap ${next.label} next')
+                          ? 'Top pair · bad prices · passive calls · bluff crowds'
+                          : 'Tap ${next.label} next')
                     : 'Top pair · bad prices · passive calls · bluff crowds',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -3819,7 +3798,6 @@ class _CommonLeaksDemoState extends State<CommonLeaksDemo> {
     return ExcludeSemantics(child: child);
   }
 }
-
 
 /// Explain-step demo: think in ranges, then update — not one hand.
 class RangeUpdateDemo extends StatefulWidget {
@@ -3867,13 +3845,13 @@ class _RangeUpdateDemoState extends State<RangeUpdateDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -3915,13 +3893,13 @@ class _RangeUpdateDemoState extends State<RangeUpdateDemo> {
                         label: RangeUpdateDemo.points[i].label,
                         caption: RangeUpdateDemo.points[i].caption,
                         color: RangeUpdateDemo.points[i].color,
-                        selected:
-                            _tapped.contains(RangeUpdateDemo.points[i].label),
+                        selected: _tapped.contains(
+                          RangeUpdateDemo.points[i].label,
+                        ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () => _onTap(RangeUpdateDemo.points[i].label)
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(RangeUpdateDemo.points[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -3941,8 +3919,8 @@ class _RangeUpdateDemoState extends State<RangeUpdateDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Never one hand · know a range · then update'
-                        : 'Tap ${next.label} next')
+                          ? 'Never one hand · know a range · then update'
+                          : 'Tap ${next.label} next')
                     : 'Never one hand · know a range · then update',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -3961,7 +3939,6 @@ class _RangeUpdateDemoState extends State<RangeUpdateDemo> {
   }
 }
 
-
 /// Explain-step demo: 3-bets define ranges; squeezes punish multiway flats.
 class ThreeBetSqueezeDemo extends StatefulWidget {
   /// Creates the demo.
@@ -3979,7 +3956,11 @@ class ThreeBetSqueezeDemo extends StatefulWidget {
   static const points = <({String label, String caption, Color color})>[
     (label: '3-BET', caption: 'Reopen the pot', color: AppColors.gold),
     (label: 'RANGES', caption: 'Defines both sides', color: AppColors.cream),
-    (label: 'SQUEEZE', caption: 'Punish multiway flats', color: AppColors.danger),
+    (
+      label: 'SQUEEZE',
+      caption: 'Punish multiway flats',
+      color: AppColors.danger,
+    ),
   ];
 
   @override
@@ -4032,13 +4013,13 @@ class _ThreeBetSqueezeDemoState extends State<ThreeBetSqueezeDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -4084,11 +4065,9 @@ class _ThreeBetSqueezeDemoState extends State<ThreeBetSqueezeDemo> {
                           ThreeBetSqueezeDemo.points[i].label,
                         ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () =>
-                                    _onTap(ThreeBetSqueezeDemo.points[i].label)
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(ThreeBetSqueezeDemo.points[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -4108,8 +4087,8 @@ class _ThreeBetSqueezeDemoState extends State<ThreeBetSqueezeDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? '3-bets define ranges · squeezes punish flats'
-                        : 'Tap ${next.label} next')
+                          ? '3-bets define ranges · squeezes punish flats'
+                          : 'Tap ${next.label} next')
                     : '3-bets define ranges · squeezes punish flats',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -4150,13 +4129,13 @@ class _MultiStreetPlanDemoState extends State<MultiStreetPlanDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -4202,12 +4181,9 @@ class _MultiStreetPlanDemoState extends State<MultiStreetPlanDemo> {
                           MultiStreetPlanDemo.points[i].label,
                         ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () => _onTap(
-                                      MultiStreetPlanDemo.points[i].label,
-                                    )
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(MultiStreetPlanDemo.points[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -4227,8 +4203,8 @@ class _MultiStreetPlanDemoState extends State<MultiStreetPlanDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Flop choice answers turn and river'
-                        : 'Tap ${next.label} next')
+                          ? 'Flop choice answers turn and river'
+                          : 'Tap ${next.label} next')
                     : 'Flop choice answers turn and river',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -4263,7 +4239,11 @@ class SizingLanguageDemo extends StatefulWidget {
 
   static const points = <({String label, String caption, Color color})>[
     (label: 'VALUE', caption: 'Looks like value', color: AppColors.gold),
-    (label: 'PRESSURE', caption: 'Looks like pressure', color: AppColors.danger),
+    (
+      label: 'PRESSURE',
+      caption: 'Looks like pressure',
+      color: AppColors.danger,
+    ),
     (label: 'SIZE', caption: 'Says which story', color: AppColors.cream),
   ];
 
@@ -4293,13 +4273,13 @@ class _SizingLanguageDemoState extends State<SizingLanguageDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -4345,10 +4325,9 @@ class _SizingLanguageDemoState extends State<SizingLanguageDemo> {
                           SizingLanguageDemo.points[i].label,
                         ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () => _onTap(SizingLanguageDemo.points[i].label)
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(SizingLanguageDemo.points[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -4368,8 +4347,8 @@ class _SizingLanguageDemoState extends State<SizingLanguageDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Value looks like value · pressure looks like pressure'
-                        : 'Tap ${next.label} next')
+                          ? 'Value looks like value · pressure looks like pressure'
+                          : 'Tap ${next.label} next')
                     : 'Value looks like value · pressure looks like pressure',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -4434,13 +4413,13 @@ class _SprDepthDemoState extends State<SprDepthDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -4486,10 +4465,9 @@ class _SprDepthDemoState extends State<SprDepthDemo> {
                           SprDepthDemo.points[i].label,
                         ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () => _onTap(SprDepthDemo.points[i].label)
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(SprDepthDemo.points[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -4509,8 +4487,8 @@ class _SprDepthDemoState extends State<SprDepthDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Low SPR: commit · High SPR: maneuver'
-                        : 'Tap ${next.label} next')
+                          ? 'Low SPR: commit · High SPR: maneuver'
+                          : 'Tap ${next.label} next')
                     : 'Low SPR: commit · High SPR: maneuver',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -4575,13 +4553,13 @@ class _PlayerObserveDemoState extends State<PlayerObserveDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -4627,11 +4605,9 @@ class _PlayerObserveDemoState extends State<PlayerObserveDemo> {
                           PlayerObserveDemo.points[i].label,
                         ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () =>
-                                    _onTap(PlayerObserveDemo.points[i].label)
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(PlayerObserveDemo.points[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -4651,8 +4627,8 @@ class _PlayerObserveDemoState extends State<PlayerObserveDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Count samples before you tag'
-                        : 'Tap ${next.label} next')
+                          ? 'Count samples before you tag'
+                          : 'Tap ${next.label} next')
                     : 'Count samples before you tag',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -4717,13 +4693,13 @@ class _CallingStationDemoState extends State<CallingStationDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -4769,12 +4745,9 @@ class _CallingStationDemoState extends State<CallingStationDemo> {
                           CallingStationDemo.points[i].label,
                         ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () => _onTap(
-                                      CallingStationDemo.points[i].label,
-                                    )
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(CallingStationDemo.points[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -4794,8 +4767,8 @@ class _CallingStationDemoState extends State<CallingStationDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'High participation · low folding'
-                        : 'Tap ${next.label} next')
+                          ? 'High participation · low folding'
+                          : 'Tap ${next.label} next')
                     : 'High participation · low folding',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -4860,13 +4833,13 @@ class _VsStationDemoState extends State<VsStationDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -4908,12 +4881,13 @@ class _VsStationDemoState extends State<VsStationDemo> {
                         label: VsStationDemo.points[i].label,
                         caption: VsStationDemo.points[i].caption,
                         color: VsStationDemo.points[i].color,
-                        selected: _tapped.contains(VsStationDemo.points[i].label),
+                        selected: _tapped.contains(
+                          VsStationDemo.points[i].label,
+                        ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () => _onTap(VsStationDemo.points[i].label)
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(VsStationDemo.points[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -4933,8 +4907,8 @@ class _VsStationDemoState extends State<VsStationDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Value wider · bluff less · cite calling'
-                        : 'Tap ${next.label} next')
+                          ? 'Value wider · bluff less · cite calling'
+                          : 'Tap ${next.label} next')
                     : 'Value wider · bluff less · cite calling',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -4952,8 +4926,6 @@ class _VsStationDemoState extends State<VsStationDemo> {
     return ExcludeSemantics(child: child);
   }
 }
-
-
 
 /// Explain-step demo: tight seats rarely enter; when they do, they mean it.
 class TightSeatsDemo extends StatefulWidget {
@@ -5001,13 +4973,13 @@ class _TightSeatsDemoState extends State<TightSeatsDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -5053,10 +5025,9 @@ class _TightSeatsDemoState extends State<TightSeatsDemo> {
                           TightSeatsDemo.points[i].label,
                         ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () => _onTap(TightSeatsDemo.points[i].label)
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(TightSeatsDemo.points[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -5076,8 +5047,8 @@ class _TightSeatsDemoState extends State<TightSeatsDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Rare entries · when they do, they mean it'
-                        : 'Tap ${next.label} next')
+                          ? 'Rare entries · when they do, they mean it'
+                          : 'Tap ${next.label} next')
                     : 'Rare entries · when they do, they mean it',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -5113,7 +5084,11 @@ class NitModelDemo extends StatefulWidget {
   static const points = <({String label, String caption, Color color})>[
     (label: 'NIT', caption: 'Working label', color: AppColors.gold),
     (label: 'NARROW', caption: 'Rarely enters', color: AppColors.cream),
-    (label: 'RESPECT', caption: 'Heavy action means it', color: AppColors.danger),
+    (
+      label: 'RESPECT',
+      caption: 'Heavy action means it',
+      color: AppColors.danger,
+    ),
   ];
 
   @override
@@ -5142,13 +5117,13 @@ class _NitModelDemoState extends State<NitModelDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -5190,12 +5165,13 @@ class _NitModelDemoState extends State<NitModelDemo> {
                         label: NitModelDemo.points[i].label,
                         caption: NitModelDemo.points[i].caption,
                         color: NitModelDemo.points[i].color,
-                        selected: _tapped.contains(NitModelDemo.points[i].label),
+                        selected: _tapped.contains(
+                          NitModelDemo.points[i].label,
+                        ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () => _onTap(NitModelDemo.points[i].label)
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(NitModelDemo.points[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -5215,8 +5191,8 @@ class _NitModelDemoState extends State<NitModelDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Narrow entry · respect heavy action'
-                        : 'Tap ${next.label} next')
+                          ? 'Narrow entry · respect heavy action'
+                          : 'Tap ${next.label} next')
                     : 'Narrow entry · respect heavy action',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -5281,13 +5257,13 @@ class _VsNitsDemoState extends State<VsNitsDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -5331,10 +5307,9 @@ class _VsNitsDemoState extends State<VsNitsDemo> {
                         color: VsNitsDemo.points[i].color,
                         selected: _tapped.contains(VsNitsDemo.points[i].label),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () => _onTap(VsNitsDemo.points[i].label)
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(VsNitsDemo.points[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -5354,8 +5329,8 @@ class _VsNitsDemoState extends State<VsNitsDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Steal more · give credit when they explode'
-                        : 'Tap ${next.label} next')
+                          ? 'Steal more · give credit when they explode'
+                          : 'Tap ${next.label} next')
                     : 'Steal more · give credit when they explode',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -5420,13 +5395,13 @@ class _ExtremeEntryDemoState extends State<ExtremeEntryDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -5472,11 +5447,9 @@ class _ExtremeEntryDemoState extends State<ExtremeEntryDemo> {
                           ExtremeEntryDemo.points[i].label,
                         ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () =>
-                                    _onTap(ExtremeEntryDemo.points[i].label)
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(ExtremeEntryDemo.points[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -5496,8 +5469,8 @@ class _ExtremeEntryDemoState extends State<ExtremeEntryDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Raise and barrel · count calmly'
-                        : 'Tap ${next.label} next')
+                          ? 'Raise and barrel · count calmly'
+                          : 'Tap ${next.label} next')
                     : 'Raise and barrel · count calmly',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -5562,13 +5535,13 @@ class _ManiacModelDemoState extends State<ManiacModelDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -5610,14 +5583,13 @@ class _ManiacModelDemoState extends State<ManiacModelDemo> {
                         label: ManiacModelDemo.points[i].label,
                         caption: ManiacModelDemo.points[i].caption,
                         color: ManiacModelDemo.points[i].color,
-                        selected:
-                            _tapped.contains(ManiacModelDemo.points[i].label),
+                        selected: _tapped.contains(
+                          ManiacModelDemo.points[i].label,
+                        ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () =>
-                                    _onTap(ManiacModelDemo.points[i].label)
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(ManiacModelDemo.points[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -5637,8 +5609,8 @@ class _ManiacModelDemoState extends State<ManiacModelDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Extreme entry · aggression · a model'
-                        : 'Tap ${next.label} next')
+                          ? 'Extreme entry · aggression · a model'
+                          : 'Tap ${next.label} next')
                     : 'Extreme entry · aggression · a model',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -5656,7 +5628,6 @@ class _ManiacModelDemoState extends State<ManiacModelDemo> {
     return ExcludeSemantics(child: child);
   }
 }
-
 
 /// Wider / hang / ego tiles for versus-maniacs explain demos.
 class VsManiacsDemo extends StatefulWidget {
@@ -5704,13 +5675,13 @@ class _VsManiacsDemoState extends State<VsManiacsDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -5756,11 +5727,9 @@ class _VsManiacsDemoState extends State<VsManiacsDemo> {
                           VsManiacsDemo.points[i].label,
                         ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () =>
-                                    _onTap(VsManiacsDemo.points[i].label)
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(VsManiacsDemo.points[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -5780,8 +5749,8 @@ class _VsManiacsDemoState extends State<VsManiacsDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Call wider · let them hang · no ego'
-                        : 'Tap ${next.label} next')
+                          ? 'Call wider · let them hang · no ego'
+                          : 'Tap ${next.label} next')
                     : 'Call wider · let them hang · no ego',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -5846,13 +5815,13 @@ class _VsTagsDemoState extends State<VsTagsDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -5894,15 +5863,11 @@ class _VsTagsDemoState extends State<VsTagsDemo> {
                         label: VsTagsDemo.points[i].label,
                         caption: VsTagsDemo.points[i].caption,
                         color: VsTagsDemo.points[i].color,
-                        selected: _tapped.contains(
-                          VsTagsDemo.points[i].label,
-                        ),
+                        selected: _tapped.contains(VsTagsDemo.points[i].label),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () =>
-                                    _onTap(VsTagsDemo.points[i].label)
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(VsTagsDemo.points[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -5922,8 +5887,8 @@ class _VsTagsDemoState extends State<VsTagsDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Respect heat · steal less · no light XR'
-                        : 'Tap ${next.label} next')
+                          ? 'Respect heat · steal less · no light XR'
+                          : 'Tap ${next.label} next')
                     : 'Respect heat · steal less · no light XR',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -5988,13 +5953,13 @@ class _VsLagsDemoState extends State<VsLagsDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -6036,15 +6001,11 @@ class _VsLagsDemoState extends State<VsLagsDemo> {
                         label: VsLagsDemo.points[i].label,
                         caption: VsLagsDemo.points[i].caption,
                         color: VsLagsDemo.points[i].color,
-                        selected: _tapped.contains(
-                          VsLagsDemo.points[i].label,
-                        ),
+                        selected: _tapped.contains(VsLagsDemo.points[i].label),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () =>
-                                    _onTap(VsLagsDemo.points[i].label)
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(VsLagsDemo.points[i].label)
+                            : null,
                       ),
                     ),
                   ),
@@ -6064,8 +6025,8 @@ class _VsLagsDemoState extends State<VsLagsDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Trap more · call wider · fancy less'
-                        : 'Tap ${next.label} next')
+                          ? 'Trap more · call wider · fancy less'
+                          : 'Tap ${next.label} next')
                     : 'Trap more · call wider · fancy less',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -6131,13 +6092,13 @@ class _ObservationCertaintyDemoState extends State<ObservationCertaintyDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled && next != null;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
     final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -6167,9 +6128,11 @@ class _ObservationCertaintyDemoState extends State<ObservationCertaintyDemo> {
             const SizedBox(height: 14),
             Row(
               children: [
-                for (var i = 0;
-                    i < ObservationCertaintyDemo.points.length;
-                    i++) ...[
+                for (
+                  var i = 0;
+                  i < ObservationCertaintyDemo.points.length;
+                  i++
+                ) ...[
                   if (i > 0) const SizedBox(width: 8),
                   Expanded(
                     child: _DemoSoftPulse(
@@ -6186,12 +6149,11 @@ class _ObservationCertaintyDemoState extends State<ObservationCertaintyDemo> {
                           ObservationCertaintyDemo.points[i].label,
                         ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed:
-                            widget.interactive
-                                ? () => _onTap(
-                                      ObservationCertaintyDemo.points[i].label,
-                                    )
-                                : null,
+                        onPressed: widget.interactive
+                            ? () => _onTap(
+                                ObservationCertaintyDemo.points[i].label,
+                              )
+                            : null,
                       ),
                     ),
                   ),
@@ -6211,8 +6173,8 @@ class _ObservationCertaintyDemoState extends State<ObservationCertaintyDemo> {
               child: Text(
                 widget.interactive
                     ? (next == null
-                        ? 'Samples and showdowns grow confidence'
-                        : 'Tap ${next.label} next')
+                          ? 'Samples and showdowns grow confidence'
+                          : 'Tap ${next.label} next')
                     : 'Samples and showdowns grow confidence',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
@@ -6248,7 +6210,11 @@ class ExploitEvidenceDemo extends StatefulWidget {
   static const points = <({String label, String caption, Color color})>[
     (label: 'CARDS', caption: 'Same holdings', color: AppColors.gold),
     (label: 'SEATS', caption: 'Different types', color: AppColors.cream),
-    (label: 'EVIDENCE', caption: 'Exploits need proof', color: AppColors.danger),
+    (
+      label: 'EVIDENCE',
+      caption: 'Exploits need proof',
+      color: AppColors.danger,
+    ),
   ];
 
   @override
@@ -6276,73 +6242,94 @@ class _ExploitEvidenceDemoState extends State<ExploitEvidenceDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final child = Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.feltLight, AppColors.feltDark],
-        ),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'Exploits need evidence',
-            style: GoogleFonts.manrope(
-              color: AppColors.slate,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-            ),
+    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final minFelt = expandTeach
+        ? MediaQuery.sizeOf(context).height * 0.38
+        : null;
+    final child = ConstrainedBox(
+      constraints: minFelt != null
+          ? BoxConstraints(minHeight: minFelt)
+          : const BoxConstraints(),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+        alignment: minFelt != null ? Alignment.center : null,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [AppColors.feltLight, AppColors.feltDark],
           ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              for (var i = 0; i < ExploitEvidenceDemo.points.length; i++) ...[
-                if (i > 0) const SizedBox(width: 8),
-                Expanded(
-                  child: _DemoSoftPulse(
-                    active:
-                        widget.interactive &&
-                        widget.enabled &&
-                        next?.label == ExploitEvidenceDemo.points[i].label,
-                    child: _DemoActionCard(
-                      label: ExploitEvidenceDemo.points[i].label,
-                      caption: ExploitEvidenceDemo.points[i].caption,
-                      color: ExploitEvidenceDemo.points[i].color,
-                      selected: _tapped.contains(
-                        ExploitEvidenceDemo.points[i].label,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: AppColors.feltBorder.withValues(alpha: 0.85),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Exploits need evidence',
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                for (var i = 0; i < ExploitEvidenceDemo.points.length; i++) ...[
+                  if (i > 0) const SizedBox(width: 8),
+                  Expanded(
+                    child: _DemoSoftPulse(
+                      active:
+                          widget.interactive &&
+                          widget.enabled &&
+                          next?.label == ExploitEvidenceDemo.points[i].label,
+                      child: _DemoActionCard(
+                        label: ExploitEvidenceDemo.points[i].label,
+                        caption: ExploitEvidenceDemo.points[i].caption,
+                        color: ExploitEvidenceDemo.points[i].color,
+                        selected: _tapped.contains(
+                          ExploitEvidenceDemo.points[i].label,
+                        ),
+                        enabled: widget.interactive && widget.enabled,
+                        onPressed: widget.interactive
+                            ? () => _onTap(ExploitEvidenceDemo.points[i].label)
+                            : null,
                       ),
-                      enabled: widget.interactive && widget.enabled,
-                      onPressed:
-                          widget.interactive
-                              ? () =>
-                                  _onTap(ExploitEvidenceDemo.points[i].label)
-                              : null,
                     ),
                   ),
-                ),
+                ],
               ],
-            ],
-          ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? (next == null
-                    ? 'Same cards · different seats · evidence'
-                    : 'Tap ${next.label} next')
-                : 'Same cards · different seats · evidence',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+            const SizedBox(height: 14),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.feltDark.withValues(alpha: 0.65),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: AppColors.gold.withValues(alpha: 0.45),
+                ),
+              ),
+              child: Text(
+                widget.interactive
+                    ? (next == null
+                          ? 'Same cards · different seats · evidence'
+                          : 'Tap ${next.label} next')
+                    : 'Same cards · different seats · evidence',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.manrope(
+                  color: AppColors.gold,
+                  fontSize: expandTeach ? 14 : 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
     if (widget.interactive) return child;
@@ -6367,7 +6354,11 @@ class MultiwayNutsDemo extends StatefulWidget {
   static const points = <({String label, String caption, Color color})>[
     (label: 'NUTTED', caption: 'Hands go up', color: AppColors.gold),
     (label: 'AIR', caption: 'Hands go down', color: AppColors.cream),
-    (label: 'DOMINATION', caption: 'Hurts more multiway', color: AppColors.danger),
+    (
+      label: 'DOMINATION',
+      caption: 'Hurts more multiway',
+      color: AppColors.danger,
+    ),
   ];
 
   @override
@@ -6432,14 +6423,13 @@ class _MultiwayNutsDemoState extends State<MultiwayNutsDemo> {
                       label: MultiwayNutsDemo.points[i].label,
                       caption: MultiwayNutsDemo.points[i].caption,
                       color: MultiwayNutsDemo.points[i].color,
-                      selected:
-                          _tapped.contains(MultiwayNutsDemo.points[i].label),
+                      selected: _tapped.contains(
+                        MultiwayNutsDemo.points[i].label,
+                      ),
                       enabled: widget.interactive && widget.enabled,
-                      onPressed:
-                          widget.interactive
-                              ? () =>
-                                  _onTap(MultiwayNutsDemo.points[i].label)
-                              : null,
+                      onPressed: widget.interactive
+                          ? () => _onTap(MultiwayNutsDemo.points[i].label)
+                          : null,
                     ),
                   ),
                 ),
@@ -6450,8 +6440,8 @@ class _MultiwayNutsDemoState extends State<MultiwayNutsDemo> {
           Text(
             widget.interactive
                 ? (next == null
-                    ? 'Nutted up · air down · domination hurts'
-                    : 'Tap ${next.label} next')
+                      ? 'Nutted up · air down · domination hurts'
+                      : 'Tap ${next.label} next')
                 : 'Nutted up · air down · domination hurts',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
@@ -6550,14 +6540,13 @@ class _DeepStacksDemoState extends State<DeepStacksDemo> {
                       label: DeepStacksDemo.points[i].label,
                       caption: DeepStacksDemo.points[i].caption,
                       color: DeepStacksDemo.points[i].color,
-                      selected:
-                          _tapped.contains(DeepStacksDemo.points[i].label),
+                      selected: _tapped.contains(
+                        DeepStacksDemo.points[i].label,
+                      ),
                       enabled: widget.interactive && widget.enabled,
-                      onPressed:
-                          widget.interactive
-                              ? () =>
-                                  _onTap(DeepStacksDemo.points[i].label)
-                              : null,
+                      onPressed: widget.interactive
+                          ? () => _onTap(DeepStacksDemo.points[i].label)
+                          : null,
                     ),
                   ),
                 ),
@@ -6568,8 +6557,8 @@ class _DeepStacksDemoState extends State<DeepStacksDemo> {
           Text(
             widget.interactive
                 ? (next == null
-                    ? 'More room to realize · and to lose'
-                    : 'Tap ${next.label} next')
+                      ? 'More room to realize · and to lose'
+                      : 'Tap ${next.label} next')
                 : 'More room to realize · and to lose',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
@@ -6585,7 +6574,6 @@ class _DeepStacksDemoState extends State<DeepStacksDemo> {
     return ExcludeSemantics(child: child);
   }
 }
-
 
 /// Implied / reverse / second tiles for implied-odds explain demos.
 class ImpliedOddsDemo extends StatefulWidget {
@@ -6673,11 +6661,9 @@ class _ImpliedOddsDemoState extends State<ImpliedOddsDemo> {
                         ImpliedOddsDemo.points[i].label,
                       ),
                       enabled: widget.interactive && widget.enabled,
-                      onPressed:
-                          widget.interactive
-                              ? () =>
-                                  _onTap(ImpliedOddsDemo.points[i].label)
-                              : null,
+                      onPressed: widget.interactive
+                          ? () => _onTap(ImpliedOddsDemo.points[i].label)
+                          : null,
                     ),
                   ),
                 ),
@@ -6688,8 +6674,8 @@ class _ImpliedOddsDemoState extends State<ImpliedOddsDemo> {
           Text(
             widget.interactive
                 ? (next == null
-                    ? 'Future money · reverse when second-best'
-                    : 'Tap ${next.label} next')
+                      ? 'Future money · reverse when second-best'
+                      : 'Tap ${next.label} next')
                 : 'Future money · reverse when second-best',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
@@ -6788,15 +6774,11 @@ class _ThinValueDemoState extends State<ThinValueDemo> {
                       label: ThinValueDemo.points[i].label,
                       caption: ThinValueDemo.points[i].caption,
                       color: ThinValueDemo.points[i].color,
-                      selected: _tapped.contains(
-                        ThinValueDemo.points[i].label,
-                      ),
+                      selected: _tapped.contains(ThinValueDemo.points[i].label),
                       enabled: widget.interactive && widget.enabled,
-                      onPressed:
-                          widget.interactive
-                              ? () =>
-                                  _onTap(ThinValueDemo.points[i].label)
-                              : null,
+                      onPressed: widget.interactive
+                          ? () => _onTap(ThinValueDemo.points[i].label)
+                          : null,
                     ),
                   ),
                 ),
@@ -6807,8 +6789,8 @@ class _ThinValueDemoState extends State<ThinValueDemo> {
           Text(
             widget.interactive
                 ? (next == null
-                    ? 'Thin value needs calls · catches need barrels'
-                    : 'Tap ${next.label} next')
+                      ? 'Thin value needs calls · catches need barrels'
+                      : 'Tap ${next.label} next')
                 : 'Thin value needs calls · catches need barrels',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
@@ -6912,11 +6894,9 @@ class _LineStoriesDemoState extends State<LineStoriesDemo> {
                         LineStoriesDemo.points[i].label,
                       ),
                       enabled: widget.interactive && widget.enabled,
-                      onPressed:
-                          widget.interactive
-                              ? () =>
-                                  _onTap(LineStoriesDemo.points[i].label)
-                              : null,
+                      onPressed: widget.interactive
+                          ? () => _onTap(LineStoriesDemo.points[i].label)
+                          : null,
                     ),
                   ),
                 ),
@@ -6927,8 +6907,8 @@ class _LineStoriesDemoState extends State<LineStoriesDemo> {
           Text(
             widget.interactive
                 ? (next == null
-                    ? 'Each line updates the story'
-                    : 'Tap ${next.label} next')
+                      ? 'Each line updates the story'
+                      : 'Tap ${next.label} next')
                 : 'Each line updates the story',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
@@ -7031,11 +7011,9 @@ class _RangeRewriteDemoState extends State<RangeRewriteDemo> {
                         RangeRewriteDemo.points[i].label,
                       ),
                       enabled: widget.interactive && widget.enabled,
-                      onPressed:
-                          widget.interactive
-                              ? () =>
-                                  _onTap(RangeRewriteDemo.points[i].label)
-                              : null,
+                      onPressed: widget.interactive
+                          ? () => _onTap(RangeRewriteDemo.points[i].label)
+                          : null,
                     ),
                   ),
                 ),
@@ -7046,8 +7024,8 @@ class _RangeRewriteDemoState extends State<RangeRewriteDemo> {
           Text(
             widget.interactive
                 ? (next == null
-                    ? 'Each action rewrites the range'
-                    : 'Tap ${next.label} next')
+                      ? 'Each action rewrites the range'
+                      : 'Tap ${next.label} next')
                 : 'Each action rewrites the range',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
@@ -7150,11 +7128,9 @@ class _TimingCluesDemoState extends State<TimingCluesDemo> {
                         TimingCluesDemo.points[i].label,
                       ),
                       enabled: widget.interactive && widget.enabled,
-                      onPressed:
-                          widget.interactive
-                              ? () =>
-                                  _onTap(TimingCluesDemo.points[i].label)
-                              : null,
+                      onPressed: widget.interactive
+                          ? () => _onTap(TimingCluesDemo.points[i].label)
+                          : null,
                     ),
                   ),
                 ),
@@ -7165,8 +7141,8 @@ class _TimingCluesDemoState extends State<TimingCluesDemo> {
           Text(
             widget.interactive
                 ? (next == null
-                    ? 'Small updates only'
-                    : 'Tap ${next.label} next')
+                      ? 'Small updates only'
+                      : 'Tap ${next.label} next')
                 : 'Small updates only',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
@@ -7269,11 +7245,9 @@ class _TablesChangeDemoState extends State<TablesChangeDemo> {
                         TablesChangeDemo.points[i].label,
                       ),
                       enabled: widget.interactive && widget.enabled,
-                      onPressed:
-                          widget.interactive
-                              ? () =>
-                                  _onTap(TablesChangeDemo.points[i].label)
-                              : null,
+                      onPressed: widget.interactive
+                          ? () => _onTap(TablesChangeDemo.points[i].label)
+                          : null,
                     ),
                   ),
                 ),
@@ -7284,8 +7258,8 @@ class _TablesChangeDemoState extends State<TablesChangeDemo> {
           Text(
             widget.interactive
                 ? (next == null
-                    ? 'Update when the table shifts'
-                    : 'Tap ${next.label} next')
+                      ? 'Update when the table shifts'
+                      : 'Tap ${next.label} next')
                 : 'Update when the table shifts',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
@@ -7301,7 +7275,6 @@ class _TablesChangeDemoState extends State<TablesChangeDemo> {
     return ExcludeSemantics(child: child);
   }
 }
-
 
 class _DemoSoftPulse extends StatefulWidget {
   const _DemoSoftPulse({required this.active, required this.child});
@@ -7391,16 +7364,16 @@ class _DemoActionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final borderColor =
-        selected ? AppColors.gold : color.withValues(alpha: 0.9);
+    final borderColor = selected
+        ? AppColors.gold
+        : color.withValues(alpha: 0.9);
     final child = AnimatedContainer(
       duration: const Duration(milliseconds: 140),
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
       decoration: BoxDecoration(
-        color:
-            selected
-                ? AppColors.gold.withValues(alpha: 0.28)
-                : color.withValues(alpha: 0.35),
+        color: selected
+            ? AppColors.gold.withValues(alpha: 0.28)
+            : color.withValues(alpha: 0.35),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: borderColor, width: selected ? 2 : 1),
       ),
@@ -7741,9 +7714,7 @@ class LessonActionDock extends StatelessWidget {
                 final unavailableLook =
                     !identifyUnavailable &&
                     ((_isCheck(choice) && facingBet) ||
-                        (_isCall(choice) &&
-                            !facingBet &&
-                            !_isLimp(choice)) ||
+                        (_isCall(choice) && !facingBet && !_isLimp(choice)) ||
                         _callExceedsStack(choice, heroStackAmount) ||
                         (_isBet(choice) && facingBet) ||
                         (_isRaise(choice) && !facingBet && hasBetChoice));
@@ -7790,7 +7761,8 @@ class _DockButton extends StatelessWidget {
     if (unavailableLook) {
       return AppColors.slateDark.withValues(alpha: 0.55);
     }
-    if (action.startsWith('FOLD')) return AppColors.danger.withValues(alpha: 0.4);
+    if (action.startsWith('FOLD'))
+      return AppColors.danger.withValues(alpha: 0.4);
     if (action.startsWith('ALL')) {
       return AppColors.danger.withValues(alpha: 0.45);
     }
@@ -7820,41 +7792,42 @@ class _DockButton extends StatelessWidget {
     final authoredWords = authored.split(RegExp(r'\s+'));
     // Prefer multi-word teaching labels (Raise to 6, See flop, Jam 100bb).
     // Keep Check/Fold chrome short even when content adds a caption word.
-    final preferAuthoredLabel = authoredWords.length >= 2 &&
+    final preferAuthoredLabel =
+        authoredWords.length >= 2 &&
         authoredWords.first != 'CHECK' &&
         authoredWords.first != 'FOLD';
-    final short =
-        unavailableLook
-            ? switch (action.split(' ').first) {
-              'CALL' => 'CALL (off)',
-              'BET' => 'BET (off)',
-              'RAISE' => 'RAISE (off)',
-              _ => 'CHECK (off)',
-            }
-            : preferAuthoredLabel
-            ? authored
-            : action.startsWith('ALL')
-            ? (authored.contains('12') ? 'ALL-IN 12' : 'ALL-IN')
-            : switch (action.split(' ').first) {
-              'FOLD' => 'FOLD',
-              'CHECK' => 'CHECK',
-              // Keep limp chrome explicit — CALL alone hides the teachable
-              // mistake of limping first-in.
-              'CALL' =>
-                authored.startsWith('LIMP')
-                    ? authored
-                    : authored.startsWith('CALL')
-                    ? authored
-                    : 'CALL',
-              'RAISE' => authored.startsWith('RAISE') ? authored : 'RAISE',
-              'BET' => authored.startsWith('BET') ? authored : 'BET',
-              _ => authored,
-            };
+    final short = unavailableLook
+        ? switch (action.split(' ').first) {
+            'CALL' => 'CALL (off)',
+            'BET' => 'BET (off)',
+            'RAISE' => 'RAISE (off)',
+            _ => 'CHECK (off)',
+          }
+        : preferAuthoredLabel
+        ? authored
+        : action.startsWith('ALL')
+        ? (authored.contains('12') ? 'ALL-IN 12' : 'ALL-IN')
+        : switch (action.split(' ').first) {
+            'FOLD' => 'FOLD',
+            'CHECK' => 'CHECK',
+            // Keep limp chrome explicit — CALL alone hides the teachable
+            // mistake of limping first-in.
+            'CALL' =>
+              authored.startsWith('LIMP')
+                  ? authored
+                  : authored.startsWith('CALL')
+                  ? authored
+                  : 'CALL',
+            'RAISE' => authored.startsWith('RAISE') ? authored : 'RAISE',
+            'BET' => authored.startsWith('BET') ? authored : 'BET',
+            _ => authored,
+          };
     return Semantics(
       button: true,
       selected: selected,
       excludeSemantics: true,
-      label: choice.accessibilityText ??
+      label:
+          choice.accessibilityText ??
           [if (choice.action != null) choice.action!, choice.label].join(' '),
       child: Material(
         color: _fill,
@@ -7868,10 +7841,7 @@ class _DockButton extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: _border,
-                width: selected ? 2.2 : 1.4,
-              ),
+              border: Border.all(color: _border, width: selected ? 2.2 : 1.4),
             ),
             child: Text(
               short,
@@ -7883,8 +7853,7 @@ class _DockButton extends StatelessWidget {
                 fontWeight: FontWeight.w900,
                 fontSize: 13,
                 height: 1.15,
-                decoration:
-                    unavailableLook ? TextDecoration.lineThrough : null,
+                decoration: unavailableLook ? TextDecoration.lineThrough : null,
                 decorationColor: AppColors.slate,
               ),
             ),
