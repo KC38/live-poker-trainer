@@ -37,8 +37,16 @@ class _Capstone3betDemoState extends State<Capstone3betDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in Capstone3betDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -67,35 +75,42 @@ class _Capstone3betDemoState extends State<Capstone3betDemo> {
               for (var i = 0; i < Capstone3betDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _Capstone3betTile(
-                    label: Capstone3betDemo.points[i].label,
-                    caption: Capstone3betDemo.points[i].caption,
-                    color: Capstone3betDemo.points[i].color,
-                    selected: _tapped.contains(
-                      Capstone3betDemo.points[i].label,
+                  child: _ThreeBetSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == Capstone3betDemo.points[i].label,
+                    child: _Capstone3betTile(
+                      label: Capstone3betDemo.points[i].label,
+                      caption: Capstone3betDemo.points[i].caption,
+                      color: Capstone3betDemo.points[i].color,
+                      selected: _tapped.contains(
+                        Capstone3betDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed: widget.interactive
+                          ? () => _onTap(Capstone3betDemo.points[i].label)
+                          : null,
                     ),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed: widget.interactive
-                        ? () => _onTap(Capstone3betDemo.points[i].label)
-                        : null,
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues SPR / Continue / Close — no dupe footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Short prompts — plan by SPR, then close clean',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Short prompts — plan by SPR, then close clean'
+                    : 'Tap ${next.label} next')
+                : 'Short prompts — plan by SPR, then close clean',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
@@ -160,5 +175,74 @@ class _Capstone3betTile extends StatelessWidget {
     );
     if (!enabled || onPressed == null) return child;
     return GestureDetector(onTap: onPressed, child: child);
+  }
+}
+
+class _ThreeBetSoftPulse extends StatefulWidget {
+  const _ThreeBetSoftPulse({required this.active, required this.child});
+
+  final bool active;
+  final Widget child;
+
+  @override
+  State<_ThreeBetSoftPulse> createState() => _ThreeBetSoftPulseState();
+}
+
+class _ThreeBetSoftPulseState extends State<_ThreeBetSoftPulse>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+    if (widget.active) {
+      _pulse.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _ThreeBetSoftPulse oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.active && !_pulse.isAnimating) {
+      _pulse.repeat(reverse: true);
+    } else if (!widget.active && _pulse.isAnimating) {
+      _pulse.stop();
+      _pulse.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.active) return widget.child;
+    return AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final glow = 0.22 + (_pulse.value * 0.38);
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.gold.withValues(alpha: glow),
+                blurRadius: 10 + (_pulse.value * 8),
+                spreadRadius: 0.5 + (_pulse.value * 1.2),
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
+      child: widget.child,
+    );
   }
 }
