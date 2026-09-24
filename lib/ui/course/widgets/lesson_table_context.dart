@@ -13491,17 +13491,32 @@ class LessonTableContext extends StatelessWidget {
         ),
       );
       return Expanded(
-        child: _TappableRegion(
-          label: title,
-          selected: selected,
-          highlighted: highlighted,
-          enabled: enabled && _interactive,
-          onTap:
-              _interactive
-                  ? () => onRegionTap!(LessonTableTapTarget(region))
-                  : null,
-          child: densify ? SizedBox.expand(child: tileBody) : tileBody,
-        ),
+        child: densify
+            ? SizedBox.expand(
+              child: _TappableRegion(
+                label: title,
+                selected: selected,
+                highlighted: highlighted,
+                enabled: enabled && _interactive,
+                expand: true,
+                onTap:
+                    _interactive
+                        ? () => onRegionTap!(LessonTableTapTarget(region))
+                        : null,
+                child: tileBody,
+              ),
+            )
+            : _TappableRegion(
+              label: title,
+              selected: selected,
+              highlighted: highlighted,
+              enabled: enabled && _interactive,
+              onTap:
+                  _interactive
+                      ? () => onRegionTap!(LessonTableTapTarget(region))
+                      : null,
+              child: tileBody,
+            ),
       );
     }
 
@@ -13566,13 +13581,12 @@ class LessonTableContext extends StatelessWidget {
           semanticsLabel:
               _interactive ? semanticsInteractive : semanticsStatic,
           height: feltHeight,
-          centerChild: expandTeach,
+          // Fixed-height teach shells fill via Expanded phase row — do not
+          // center-shrink the column (that reintroduces green voids).
+          centerChild: false,
           child: Column(
             mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
-            mainAxisAlignment:
-                expandTeach
-                    ? MainAxisAlignment.spaceEvenly
-                    : MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               if (header != null) ...[
                 header!,
@@ -14024,6 +14038,7 @@ class _TappableRegion extends StatefulWidget {
     required this.selected,
     required this.enabled,
     this.highlighted = false,
+    this.expand = false,
     this.onTap,
   });
 
@@ -14032,6 +14047,8 @@ class _TappableRegion extends StatefulWidget {
   final bool selected;
   final bool enabled;
   final bool highlighted;
+  /// When true, fill the parent (densified outcome tiles).
+  final bool expand;
   final VoidCallback? onTap;
 
   @override
@@ -14095,12 +14112,16 @@ class _TappableRegionState extends State<_TappableRegion>
         : Colors.transparent;
 
     final framed = Stack(
+      fit: widget.expand ? StackFit.expand : StackFit.loose,
       clipBehavior: Clip.none,
       alignment: Alignment.center,
       children: [
         AnimatedContainer(
           duration: const Duration(milliseconds: 180),
           curve: Curves.easeOut,
+          width: widget.expand ? double.infinity : null,
+          height: widget.expand ? double.infinity : null,
+          alignment: Alignment.center,
           decoration: BoxDecoration(
             color: staticFill,
             borderRadius: BorderRadius.circular(12),
