@@ -476,6 +476,7 @@ class CoachDialogueActivity extends StatelessWidget {
             visual.kind != CoachDialogueVisualKind.vsManiacs &&
             visual.kind != CoachDialogueVisualKind.observationCertainty &&
             visual.kind != CoachDialogueVisualKind.exploitEvidence &&
+            visual.kind != CoachDialogueVisualKind.multiwayNuts &&
             visual.kind != CoachDialogueVisualKind.leakReviewBook &&
             visual.kind != CoachDialogueVisualKind.capstoneSrp &&
             visual.kind != CoachDialogueVisualKind.capstone3bet &&
