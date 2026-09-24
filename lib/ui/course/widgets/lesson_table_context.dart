@@ -455,6 +455,18 @@ enum LessonTableRegion {
   /// Observe scaffolded distractor: they fold too much.
   observeFoldsAlot,
 
+  /// Observe unguided: low confidence (correct).
+  observeLowConf,
+
+  /// Observe unguided distractor: certain forever.
+  observeSureForever,
+
+  /// Observe checkpoint: evidence bundle (correct).
+  observeBundle,
+
+  /// Observe checkpoint distractor: insult.
+  observeInsult,
+
   /// Calling Station label (correct for sticky-call evidence).
   playerTypeStation,
 
@@ -1459,6 +1471,12 @@ enum LessonTableLayout {
 
   /// Observe sticky scaffolded: sticky calls vs folds-a-lot.
   observeStickyOutcomes,
+
+  /// Observe sticky unguided: low confidence vs certain forever.
+  observeConfidenceOutcomes,
+
+  /// Observe sticky checkpoint: evidence bundle vs insult.
+  observeBundleOutcomes,
 
   /// Meet Calling Station: Station vs Nit label tiles on sticky evidence.
   playerTypeStationOutcomes,
@@ -2561,6 +2579,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-04-06-01-unguided':
       return const LessonTableScene(
+        layout: LessonTableLayout.observeConfidenceOutcomes,
         heroCodes: ['Jh', 'Td'],
         boardCodes: ['As', '7c', '2d', '9h', '3s'],
         villainSeatCount: 1,
@@ -2569,9 +2588,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-04-06-01-checkpoint':
       return const LessonTableScene(
-        layout: LessonTableLayout.positionLabels,
-        seatCount: 6,
-        buttonSeat: 3,
+        layout: LessonTableLayout.observeBundleOutcomes,
+        villainSeatCount: 0,
         highlight: LessonTableHighlight.none,
         caption: 'Bundle the evidence before labeling',
       );
@@ -3991,6 +4009,18 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.observeFoldsAlot => pick('folds-alot'),
         _ => null,
       };
+    case 'act-04-06-01-unguided':
+      return switch (region) {
+        LessonTableRegion.observeLowConf => pick('low-conf'),
+        LessonTableRegion.observeSureForever => pick('sure'),
+        _ => null,
+      };
+    case 'act-04-06-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.observeBundle => pick('bundle'),
+        LessonTableRegion.observeInsult => pick('insult'),
+        _ => null,
+      };
     case 'act-04-06-02-guided':
       return switch (region) {
         LessonTableRegion.playerTypeStation => pick('pt-station'),
@@ -5058,6 +5088,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-04-04-01-unguided' ||
       activity.id == 'act-04-06-01-guided' ||
       activity.id == 'act-04-06-01-scaffolded' ||
+      activity.id == 'act-04-06-01-unguided' ||
+      activity.id == 'act-04-06-01-checkpoint' ||
       activity.id == 'act-04-06-02-guided' ||
       activity.id == 'act-04-06-02-scaffolded' ||
       activity.id == 'act-04-06-02-unguided' ||
@@ -5395,6 +5427,10 @@ class LessonTableContext extends StatelessWidget {
           _buildObserveParticipationOutcomes(),
       LessonTableLayout.observeStickyOutcomes =>
           _buildObserveStickyOutcomes(),
+      LessonTableLayout.observeConfidenceOutcomes =>
+          _buildObserveConfidenceOutcomes(),
+      LessonTableLayout.observeBundleOutcomes =>
+          _buildObserveBundleOutcomes(),
       LessonTableLayout.playerTypeStationOutcomes =>
           _buildPlayerTypeStationOutcomes(),
       LessonTableLayout.labelModelOutcomes => _buildLabelModelOutcomes(),
@@ -8067,6 +8103,68 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Opposite',
           visual: const Icon(
             Icons.logout,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildObserveConfidenceOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive observe — tap low confidence or certain forever',
+      semanticsStatic: 'Observe confidence outcomes',
+      caption: scene.caption ?? 'One dramatic river call',
+      phases: [
+        (
+          region: LessonTableRegion.observeLowConf,
+          title: 'Low conf.',
+          detail: 'Need samples',
+          visual: const Icon(
+            Icons.hourglass_empty,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.observeSureForever,
+          title: 'Certain',
+          detail: 'Forever',
+          visual: const Icon(
+            Icons.lock_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildObserveBundleOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive observe — tap evidence bundle or insult',
+      semanticsStatic: 'Observe bundle outcomes',
+      caption: scene.caption ?? 'Bundle the evidence before labeling',
+      phases: [
+        (
+          region: LessonTableRegion.observeBundle,
+          title: 'Bundle',
+          detail: 'Many hands',
+          visual: const Icon(
+            Icons.folder_open,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.observeInsult,
+          title: 'Insult',
+          detail: 'Bad person?',
+          visual: const Icon(
+            Icons.mood_bad_outlined,
             color: AppColors.slate,
             size: 24,
           ),

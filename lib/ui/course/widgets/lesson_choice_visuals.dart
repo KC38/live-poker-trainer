@@ -252,6 +252,14 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Observe: tap sticky calls vs folds-a-lot on densified river felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-04-06-01-unguided') {
+    // Observe: tap low confidence vs certain forever on densified felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
+  if (activity.id == 'act-04-06-01-checkpoint') {
+    // Observe: tap evidence bundle vs insult on densified felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id == 'act-04-06-02-guided') {
     // Meet Calling Station: tap Station vs Nit on sticky evidence felt.
     return SelectIdentifyPresentation.tableRegionTap;
@@ -552,8 +560,8 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
   }
   if (activity.id.startsWith('act-04-06-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
-    // Observe sticky callers: tap notes on seat evidence felt.
-    return SelectIdentifyPresentation.handCategoryTap;
+    // Observe sticky callers: all densified steps handled above.
+    return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-01-02-01-checkpoint-winner' ||
       activity.id == 'act-01-02-02-scaffolded-kicker') {
