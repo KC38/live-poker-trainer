@@ -2567,7 +2567,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllStepsTapped: onToyHandAcknowledge,
         ),
         CoachDialogueVisualKind.actionOrder => ActionOrderDemo(
-          interactive: onActionOrderAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllSeatsTapped: onActionOrderAcknowledge,
         ),
