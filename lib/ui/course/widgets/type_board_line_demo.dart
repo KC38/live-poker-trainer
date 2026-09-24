@@ -38,8 +38,16 @@ class _TypeBoardLineDemoState extends State<TypeBoardLineDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in TypeBoardLineDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -68,35 +76,42 @@ class _TypeBoardLineDemoState extends State<TypeBoardLineDemo> {
               for (var i = 0; i < TypeBoardLineDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 6),
                 Expanded(
-                  child: _TypeBoardLineTile(
-                    label: TypeBoardLineDemo.points[i].label,
-                    caption: TypeBoardLineDemo.points[i].caption,
-                    color: TypeBoardLineDemo.points[i].color,
-                    selected: _tapped.contains(
-                      TypeBoardLineDemo.points[i].label,
+                  child: _TypeSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == TypeBoardLineDemo.points[i].label,
+                    child: _TypeBoardLineTile(
+                      label: TypeBoardLineDemo.points[i].label,
+                      caption: TypeBoardLineDemo.points[i].caption,
+                      color: TypeBoardLineDemo.points[i].color,
+                      selected: _tapped.contains(
+                        TypeBoardLineDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed: widget.interactive
+                          ? () => _onTap(TypeBoardLineDemo.points[i].label)
+                          : null,
                     ),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed: widget.interactive
-                        ? () => _onTap(TypeBoardLineDemo.points[i].label)
-                        : null,
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues Type / Board / Line / Size — no dupe footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'One coherent action from all four inputs',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'One coherent action from all four inputs'
+                    : 'Tap ${next.label} next')
+                : 'One coherent action from all four inputs',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
@@ -161,5 +176,74 @@ class _TypeBoardLineTile extends StatelessWidget {
     );
     if (!enabled || onPressed == null) return child;
     return GestureDetector(onTap: onPressed, child: child);
+  }
+}
+
+class _TypeSoftPulse extends StatefulWidget {
+  const _TypeSoftPulse({required this.active, required this.child});
+
+  final bool active;
+  final Widget child;
+
+  @override
+  State<_TypeSoftPulse> createState() => _TypeSoftPulseState();
+}
+
+class _TypeSoftPulseState extends State<_TypeSoftPulse>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+    if (widget.active) {
+      _pulse.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _TypeSoftPulse oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.active && !_pulse.isAnimating) {
+      _pulse.repeat(reverse: true);
+    } else if (!widget.active && _pulse.isAnimating) {
+      _pulse.stop();
+      _pulse.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.active) return widget.child;
+    return AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final glow = 0.22 + (_pulse.value * 0.38);
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.gold.withValues(alpha: glow),
+                blurRadius: 10 + (_pulse.value * 8),
+                spreadRadius: 0.5 + (_pulse.value * 1.2),
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
+      child: widget.child,
+    );
   }
 }

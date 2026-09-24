@@ -17418,7 +17418,8 @@ void main() {
         ),
       );
       expect(find.byType(TypeBoardLineDemo), findsOneWidget);
-      expect(find.text('Tap Type, Board, Line, and Size.'), findsOneWidget);
+      expect(find.text('Tap TYPE next'), findsOneWidget);
+      expect(find.text('Tap Type, Board, Line, and Size.'), findsNothing);
       expect(find.text('Tap Type, Board, Line, and Size'), findsNothing);
       expect(
         find.text('One coherent action from all four inputs'),
@@ -17427,10 +17428,17 @@ void main() {
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['TYPE', 'BOARD', 'LINE', 'SIZE']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
+      await tester.tap(find.text('TYPE'));
+      await tester.pump();
+      expect(find.text('Tap BOARD next'), findsOneWidget);
+      await tester.tap(find.text('BOARD'));
+      await tester.pump();
+      expect(find.text('Tap LINE next'), findsOneWidget);
+      await tester.tap(find.text('LINE'));
+      await tester.pump();
+      expect(find.text('Tap SIZE next'), findsOneWidget);
+      await tester.tap(find.text('SIZE'));
+      await tester.pump();
       expect(feltAck, 1);
       controller.dispose();
     },
