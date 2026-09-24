@@ -8538,7 +8538,7 @@ void main() {
       ),
     );
     expect(
-      find.text('Dry ace flop, blank three — tap brick or scare.'),
+      find.text('Dry ace flop, blank three — tap Brick.'),
       findsOneWidget,
     );
     expect(
