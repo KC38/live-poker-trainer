@@ -3750,14 +3750,20 @@ void main() {
       ),
     );
     expect(find.byType(GuardrailsDemo), findsOneWidget);
-    expect(find.text('Tap Quit, Guard, and First.'), findsOneWidget);
+    expect(find.text('Tap QUIT next'), findsOneWidget);
+    expect(find.text('Tap Quit, Guard, and First.'), findsNothing);
+    expect(find.text('Tap Quit, Guard, and First'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['QUIT', 'GUARD', 'FIRST']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('QUIT'));
+    await tester.pump();
+    expect(find.text('Tap GUARD next'), findsOneWidget);
+    await tester.tap(find.text('GUARD'));
+    await tester.pump();
+    expect(find.text('Tap FIRST next'), findsOneWidget);
+    await tester.tap(find.text('FIRST'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
@@ -11750,8 +11756,9 @@ void main() {
       ),
     );
     expect(find.byType(GuardrailsDemo), findsOneWidget);
-    // Rex cue below the felt — not a second footer inside the demo.
-    expect(find.text('Tap Quit, Guard, and First.'), findsOneWidget);
+    // SoftPulse cue on the felt — not a bulk coach footer or static footer dupe.
+    expect(find.text('Tap QUIT next'), findsOneWidget);
+    expect(find.text('Tap Quit, Guard, and First.'), findsNothing);
     expect(find.text('Tap Quit, Guard, and First'), findsNothing);
     expect(find.text('Know when to quit'), findsNothing);
     controller.dispose();
