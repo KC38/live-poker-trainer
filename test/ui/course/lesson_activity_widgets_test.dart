@@ -2769,8 +2769,23 @@ void main() {
     expect(find.text('Tap CLEAN next'), findsOneWidget);
     expect(find.text('Tap Clean, Dirty, and Price'), findsNothing);
     expect(find.text('Tap Clean, Dirty, and Price.'), findsNothing);
+    expect(
+      find.text('Clean outs · dirty outs · price the call'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(OutsPriceDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
     await tester.tap(find.text('CLEAN'));
     await tester.pump();
@@ -2781,6 +2796,15 @@ void main() {
     await tester.tap(find.text('PRICE'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Clean outs · dirty outs · price the call'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(OutsPriceDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
