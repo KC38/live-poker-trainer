@@ -95,8 +95,16 @@ class LessonActivityController extends ChangeNotifier {
     // Ignore stale taps from a just-replaced activity (e.g. Continue rebound
     // the controller to scaffolded while a guided SoftPulse onPressed still
     // fires with the previous choice id).
-    final known = _activity.choices.any((c) => c.id == choiceId);
-    if (!known) {
+    // Authored multi-step hands keep choices on the active hand step, not
+    // the top-level activity.choices list.
+    final knownTopLevel = _activity.choices.any((c) => c.id == choiceId);
+    final steps = _activity.handSteps;
+    final knownHandStep =
+        steps.isNotEmpty &&
+        steps[_draft.handStepIndex.clamp(0, steps.length - 1)].choices.any(
+          (c) => c.id == choiceId,
+        );
+    if (!knownTopLevel && !knownHandStep) {
       assert(() {
         debugPrint(
           'LessonActivityController: ignore unknown choiceId=$choiceId '
