@@ -18743,7 +18743,9 @@ void main() {
         ),
       );
       expect(find.byType(CapstoneLimpedDemo), findsOneWidget);
+      expect(find.text('Tap NUTS next'), findsOneWidget);
       expect(find.text('Tap Nuts, Value, and Thin.'), findsNothing);
+      expect(find.text('Tap Nuts, Value, and Thin'), findsNothing);
       expect(
         find.text('Limped multiway — value thick, bluffs thin'),
         findsNothing,
@@ -18751,10 +18753,14 @@ void main() {
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['NUTS', 'VALUE', 'THIN']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
+      await tester.tap(find.text('NUTS'));
+      await tester.pump();
+      expect(find.text('Tap VALUE next'), findsOneWidget);
+      await tester.tap(find.text('VALUE'));
+      await tester.pump();
+      expect(find.text('Tap THIN next'), findsOneWidget);
+      await tester.tap(find.text('THIN'));
+      await tester.pump();
       expect(feltAck, 1);
       controller.dispose();
     },
