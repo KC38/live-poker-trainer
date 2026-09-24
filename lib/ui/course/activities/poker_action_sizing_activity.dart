@@ -229,6 +229,8 @@ String? _guidedPulseChoiceId({
     'act-03-06-01-scaffolded' => 'bluff',
     'act-03-07-01-guided' => 'check-2p',
     'act-03-07-01-scaffolded' => 'mw-check',
+    'act-04-02-01-guided' => '3bet-qq',
+    'act-04-02-01-scaffolded' => 'fold-72',
     _ => null,
   };
 }
@@ -311,7 +313,7 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     'act-04-02-01-scaffolded' =>
       '72o faces a BB 3-bet — tap Fold.',
     'act-04-02-01-unguided' =>
-      'UTG open, two callers, AKo in BB — tap a squeeze.',
+      'UTG open, two callers, AKo in BB — tap Fold, Call, or Squeeze.',
     'act-04-02-01-checkpoint' =>
       'KK vs a live open to 6 — tap a 3-bet size.',
     'act-04-03-01-scaffolded' =>
