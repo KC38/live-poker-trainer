@@ -9811,6 +9811,10 @@ await tester.tap(find.text('STRONGER'));
     expect(find.text('Pot is open to a bet'), findsOneWidget);
     expect(find.text('RAISE (off)'), findsOneWidget);
     expect(find.text('CALL (off)'), findsNothing);
+    expect(
+      tester.widget<LessonActionDock>(find.byType(LessonActionDock)).pulseChoiceId,
+      'bet-half',
+    );
     var autoSubmits = 0;
     betController.onAutoSubmit = () => autoSubmits += 1;
     await tester.tap(find.text('BET 5'));
@@ -9848,6 +9852,10 @@ await tester.tap(find.text('STRONGER'));
     expect(find.text('Villain bets 5'), findsOneWidget);
     expect(find.text('BET (off)'), findsOneWidget);
     expect(find.text('CHECK (off)'), findsNothing);
+    expect(
+      tester.widget<LessonActionDock>(find.byType(LessonActionDock)).pulseChoiceId,
+      'raise-15',
+    );
     await tester.tap(find.text('RAISE TO 15'));
     await tester.pump();
     expect(raiseController.draft.choiceId, 'raise-15');
