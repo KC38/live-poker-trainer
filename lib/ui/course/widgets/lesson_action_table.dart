@@ -464,7 +464,7 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         villainLine: 'UTG opens · 2 callers',
         streetLabel: 'Preflop · BB · AKo',
         facingBet: true,
-        feltStatusLine: 'Multiway — squeeze AK',
+        feltStatusLine: 'Multiway — AKo in BB',
       );
     case 'act-04-02-01-checkpoint':
       return const LessonActionSpot(

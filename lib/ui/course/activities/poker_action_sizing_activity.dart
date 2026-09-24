@@ -313,7 +313,7 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     'act-04-02-01-scaffolded' =>
       '72o faces a BB 3-bet — tap Fold.',
     'act-04-02-01-unguided' =>
-      'UTG open, two callers, AKo in BB — tap Fold, Call, or Squeeze.',
+      'UTG open, two callers, AKo in BB — tap Fold, Limp behind, or Squeeze.',
     'act-04-02-01-checkpoint' =>
       'KK vs a live open to 6 — tap a 3-bet size.',
     'act-04-03-01-scaffolded' =>
