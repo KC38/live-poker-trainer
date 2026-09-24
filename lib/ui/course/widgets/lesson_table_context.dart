@@ -227,6 +227,15 @@ enum LessonTableRegion {
   /// Hand-family scaffolded distractor: offsuit trash.
   handFamilyScTrash,
 
+  /// Hand-family unguided: suited connector (correct).
+  handFamilyUgSc,
+
+  /// Hand-family unguided distractor: offsuit connector.
+  handFamilyUgOffsuitConn,
+
+  /// Hand-family unguided distractor: offsuit trash.
+  handFamilyUgTrash,
+
   /// Turn guided: blank turn is a brick (correct).
   turnBrick,
 
@@ -1529,6 +1538,9 @@ enum LessonTableLayout {
   /// Hand-family scaffolded: broadway vs pair vs trash.
   handFamilyScaffoldedOutcomes,
 
+  /// Hand-family unguided: suited connector vs offsuit vs trash.
+  handFamilyUnguidedOutcomes,
+
   /// Turn guided: brick vs scare vs always-change.
   turnBrickScareOutcomes,
 
@@ -2214,9 +2226,10 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-02-02-01-unguided-sc':
       return const LessonTableScene(
+        layout: LessonTableLayout.handFamilyUnguidedOutcomes,
         heroCodes: ['7h', '6h'],
         villainSeatCount: 0,
-        highlight: LessonTableHighlight.hero,
+        highlight: LessonTableHighlight.none,
         caption: 'Your holes',
       );
     case 'act-02-02-01-checkpoint-trash':
@@ -3726,6 +3739,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.handFamilyScTrash => pick('hf-trash'),
         _ => null,
       };
+    case 'act-02-02-01-unguided-sc':
+      return switch (region) {
+        LessonTableRegion.handFamilyUgSc => pick('hf-sc'),
+        LessonTableRegion.handFamilyUgOffsuitConn => pick('hf-offsuit-conn'),
+        LessonTableRegion.handFamilyUgTrash => pick('hf-trash'),
+        _ => null,
+      };
     case 'act-03-03-01-guided':
       return switch (region) {
         LessonTableRegion.outsCleanAces => pick('outs-3'),
@@ -4950,6 +4970,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-02-07-02-jump-stack' ||
       activity.id == 'act-02-02-01-guided-pair' ||
       activity.id == 'act-02-02-01-scaffolded-broadway' ||
+      activity.id == 'act-02-02-01-unguided-sc' ||
       activity.id == 'act-03-01-01-guided' ||
       activity.id == 'act-03-01-01-scaffolded' ||
       activity.id == 'act-03-01-01-unguided' ||
@@ -5271,6 +5292,8 @@ class LessonTableContext extends StatelessWidget {
           _buildHandFamilyGuidedOutcomes(),
       LessonTableLayout.handFamilyScaffoldedOutcomes =>
           _buildHandFamilyScaffoldedOutcomes(),
+      LessonTableLayout.handFamilyUnguidedOutcomes =>
+          _buildHandFamilyUnguidedOutcomes(),
       LessonTableLayout.turnBrickScareOutcomes => _buildTurnBrickScareOutcomes(),
       LessonTableLayout.turnScarePlanOutcomes => _buildTurnScarePlanOutcomes(),
       LessonTableLayout.riverJobOutcomes => _buildRiverJobOutcomes(),
@@ -6897,6 +6920,53 @@ class LessonTableContext extends StatelessWidget {
         ),
         (
           region: LessonTableRegion.handFamilyScTrash,
+          title: 'Offsuit trash',
+          detail: 'Weak offsuit',
+          visual: miniPair('7c', '2d'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHandFamilyUnguidedOutcomes() {
+    Widget miniPair(String a, String b) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          MiniCard(
+            card: CardModel.fromCode(a),
+            size: MiniCardSize.tiny,
+          ),
+          const SizedBox(width: 2),
+          MiniCard(
+            card: CardModel.fromCode(b),
+            size: MiniCardSize.tiny,
+          ),
+        ],
+      );
+    }
+
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive hand family — tap Suited connector, Offsuit connector, or trash',
+      semanticsStatic: 'Hand family unguided outcomes',
+      caption: scene.caption ?? 'Your holes',
+      phases: [
+        (
+          region: LessonTableRegion.handFamilyUgSc,
+          title: 'Suited conn',
+          detail: 'Connected suited',
+          visual: miniPair('7h', '6h'),
+        ),
+        (
+          region: LessonTableRegion.handFamilyUgOffsuitConn,
+          title: 'Offsuit conn',
+          detail: 'Connected only',
+          visual: miniPair('7h', '6d'),
+        ),
+        (
+          region: LessonTableRegion.handFamilyUgTrash,
           title: 'Offsuit trash',
           detail: 'Weak offsuit',
           visual: miniPair('7c', '2d'),
