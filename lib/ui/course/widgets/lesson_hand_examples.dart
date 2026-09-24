@@ -1052,63 +1052,86 @@ class _HandFamiliesDemoState extends State<HandFamiliesDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextFamily;
-    final child = Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.feltLight, AppColors.feltDark],
-        ),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'Starting-hand families',
-            style: GoogleFonts.manrope(
-              color: AppColors.slate,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-            ),
+    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final minFelt =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.40 : null;
+    final child = ConstrainedBox(
+      constraints:
+          minFelt != null
+              ? BoxConstraints(minHeight: minFelt)
+              : const BoxConstraints(),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+        alignment: minFelt != null ? Alignment.center : null,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [AppColors.feltLight, AppColors.feltDark],
           ),
-          const SizedBox(height: 12),
-          for (var i = 0; i < HandFamiliesDemo.families.length; i++) ...[
-            if (i > 0) const SizedBox(height: 8),
-            _SoftPulseTarget(
-              active:
-                  widget.interactive &&
-                  widget.enabled &&
-                  next?.id == HandFamiliesDemo.families[i].id,
-              child: HandExampleTile(
-                example: HandFamiliesDemo.families[i],
-                selected: _tapped.contains(HandFamiliesDemo.families[i].id),
-                enabled: widget.interactive && widget.enabled,
-                compact: true,
-                onPressed:
-                    widget.interactive
-                        ? () => _onTap(HandFamiliesDemo.families[i])
-                        : null,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: AppColors.feltBorder.withValues(alpha: 0.85),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Starting-hand families',
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 12),
+            for (var i = 0; i < HandFamiliesDemo.families.length; i++) ...[
+              if (i > 0) const SizedBox(height: 8),
+              _SoftPulseTarget(
+                active:
+                    widget.interactive &&
+                    widget.enabled &&
+                    next?.id == HandFamiliesDemo.families[i].id,
+                child: HandExampleTile(
+                  example: HandFamiliesDemo.families[i],
+                  selected: _tapped.contains(HandFamiliesDemo.families[i].id),
+                  enabled: widget.interactive && widget.enabled,
+                  compact: true,
+                  onPressed:
+                      widget.interactive
+                          ? () => _onTap(HandFamiliesDemo.families[i])
+                          : null,
+                ),
+              ),
+            ],
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.feltDark.withValues(alpha: 0.65),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: AppColors.gold.withValues(alpha: 0.45),
+                ),
+              ),
+              child: Text(
+                widget.interactive
+                    ? (next == null
+                        ? 'Pairs · broadways · suited aces · connectors'
+                        : 'Tap ${next.title} next')
+                    : 'Pairs · broadways · suited aces · connectors',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.manrope(
+                  color: AppColors.gold,
+                  fontSize: expandTeach ? 14 : 12,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ],
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? (next == null
-                    ? 'Pairs · broadways · suited aces · connectors'
-                    : 'Tap ${next.title} next')
-                : 'Pairs · broadways · suited aces · connectors',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+        ),
       ),
     );
     if (widget.interactive) return child;
@@ -1166,15 +1189,15 @@ class _SoftPulseTargetState extends State<_SoftPulseTarget>
     return AnimatedBuilder(
       animation: _pulse,
       builder: (context, child) {
-        final glow = 0.22 + (_pulse.value * 0.38);
+        final glow = 0.4 + (_pulse.value * 0.55);
         return DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
             boxShadow: [
               BoxShadow(
-                color: AppColors.gold.withValues(alpha: glow * 0.55),
-                blurRadius: 10 + (_pulse.value * 6),
-                spreadRadius: 0.4,
+                color: AppColors.gold.withValues(alpha: glow * 0.65),
+                blurRadius: 12 + (10 * _pulse.value),
+                spreadRadius: 1 + (2 * _pulse.value),
               ),
             ],
           ),
