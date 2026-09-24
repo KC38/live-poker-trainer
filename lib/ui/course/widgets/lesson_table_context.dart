@@ -296,6 +296,15 @@ enum LessonTableRegion {
   /// S4 ranges scaffolded distractor: identical ranges.
   rangesIdentical,
 
+  /// S4 ranges unguided: too exact vs weighted range (correct).
+  rangesTooExact,
+
+  /// S4 ranges unguided distractor: exact hands always knowable.
+  rangesFineExact,
+
+  /// S4 ranges unguided distractor: ignore betting pattern.
+  rangesIgnoreAction,
+
   /// Verbal action: raise stands (binding).
   verbalRaiseStands,
 
@@ -1454,6 +1463,9 @@ enum LessonTableLayout {
   /// S4 ranges scaffolded: who is stronger after 3-bet.
   rangesScaffoldedOutcomes,
 
+  /// S4 ranges unguided: exact-hand vs weighted range.
+  rangesUnguidedOutcomes,
+
   /// Thin-value checkpoint: read-driven line vs coin flip.
   thinValueReadOutcomes,
 
@@ -2309,6 +2321,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-04-01-01-unguided':
       return const LessonTableScene(
+        layout: LessonTableLayout.rangesUnguidedOutcomes,
         heroCodes: ['Ah', 'Kd'],
         boardCodes: ['As', '7c', '2d', 'Kh'],
         villainSeatCount: 1,
@@ -3666,6 +3679,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.rangesIdentical => pick('equal'),
         _ => null,
       };
+    case 'act-04-01-01-unguided':
+      return switch (region) {
+        LessonTableRegion.rangesTooExact => pick('too-exact'),
+        LessonTableRegion.rangesFineExact => pick('fine-exact'),
+        LessonTableRegion.rangesIgnoreAction => pick('ignore-action'),
+        _ => null,
+      };
     case 'act-03-01-01-scaffolded':
       // Preflop open: UTG is left of the BB (earlyPosition on the felt).
       return switch (region) {
@@ -4746,6 +4766,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-08-02-jump-leak' ||
       activity.id == 'act-04-01-01-guided' ||
       activity.id == 'act-04-01-01-scaffolded' ||
+      activity.id == 'act-04-01-01-unguided' ||
       activity.id == 'act-04-06-01-guided' ||
       activity.id == 'act-04-06-02-guided' ||
       activity.id == 'act-04-06-02-scaffolded' ||
@@ -5050,6 +5071,8 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.rangesGuidedOutcomes => _buildRangesGuidedOutcomes(),
       LessonTableLayout.rangesScaffoldedOutcomes =>
           _buildRangesScaffoldedOutcomes(),
+      LessonTableLayout.rangesUnguidedOutcomes =>
+          _buildRangesUnguidedOutcomes(),
       LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
       LessonTableLayout.tableReadMattersOutcomes =>
           _buildTableReadMattersOutcomes(),
@@ -6961,6 +6984,54 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Identical',
           visual: const Icon(
             Icons.compare_arrows,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRangesUnguidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive over-precision — tap keep range, exact always, or ignore',
+      semanticsStatic: 'Ranges unguided outcomes',
+      caption: scene.caption ?? 'Villain bet flop + turn',
+      phases: [
+        (
+          region: LessonTableRegion.rangesTooExact,
+          title: 'Keep range',
+          detail: 'Weighted',
+          visual: const Icon(
+            Icons.stacked_bar_chart,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.rangesFineExact,
+          title: 'Exact OK',
+          detail: 'Always knowable',
+          visual: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (final code in const ['Ah', 'Kd']) ...[
+                MiniCard(
+                  card: CardModel.fromCode(code),
+                  size: MiniCardSize.tiny,
+                ),
+                const SizedBox(width: 2),
+              ],
+            ],
+          ),
+        ),
+        (
+          region: LessonTableRegion.rangesIgnoreAction,
+          title: 'Ignore bets',
+          detail: 'No update',
+          visual: const Icon(
+            Icons.visibility_off_outlined,
             color: AppColors.slate,
             size: 24,
           ),

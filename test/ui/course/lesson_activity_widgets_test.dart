@@ -9719,7 +9719,7 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('s4 ranges unguided taps too-exact on bet-twice felt', (
+  testWidgets('s4 ranges unguided taps Keep range on densified bet-twice felt', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -9746,6 +9746,23 @@ void main() {
         ),
       ],
     );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.rangesUnguidedOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.rangesTooExact,
+        choices: activity.choices,
+      ),
+      'too-exact',
+    );
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
       _wrap(
@@ -9756,8 +9773,13 @@ void main() {
         ),
       ),
     );
-    expect(find.text('Too exact — keep a range'), findsOneWidget);
-    await tester.tap(find.text('Too exact — keep a range'));
+    expect(
+      find.text('They bet twice — you pinned Exactly AK. Tap the problem.'),
+      findsOneWidget,
+    );
+    expect(find.text('Keep range'), findsOneWidget);
+    expect(find.text('Weighted'), findsOneWidget);
+    await tester.tap(find.text('Keep range'));
     await tester.pump();
     expect(controller.draft.choiceId, 'too-exact');
     controller.dispose();
