@@ -9392,6 +9392,9 @@ void main() {
       find.text('Heads-up with TPTK on a dry flop. Checked to you.'),
       findsNothing,
     );
+    expect(find.text('Tap your action on the dock.'), findsNothing);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'flop-bet');
     await tester.tap(find.text('BET'));
     await tester.pump();
     expect(controller.draft.choiceId, 'flop-bet');
@@ -9434,6 +9437,8 @@ void main() {
     );
     expect(find.textContaining('Turn · four hearts · air'), findsOneWidget);
     expect(find.text('CHECK'), findsOneWidget);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'abort');
     await tester.tap(find.text('CHECK'));
     await tester.pump();
     expect(controller.draft.choiceId, 'abort');
