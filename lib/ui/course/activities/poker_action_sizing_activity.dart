@@ -204,22 +204,26 @@ class PokerActionSizingActivity extends StatelessWidget {
   }
 }
 
-/// Soft-pulse the authored recommended dock choice on guided open/fold.
+/// Soft-pulse the authored recommended dock choice on guided (and
+/// coach-named scaffolded) flop-line spots.
 String? _guidedPulseChoiceId({
   required CourseActivity activity,
   required bool showGuidance,
   required String? selected,
   required bool locked,
 }) {
-  if (!showGuidance ||
-      locked ||
-      selected != null ||
-      activity.stage != ActivityStage.guided) {
+  if (!showGuidance || locked || selected != null) {
+    return null;
+  }
+  if (activity.stage != ActivityStage.guided &&
+      activity.stage != ActivityStage.scaffolded) {
     return null;
   }
   return switch (activity.id) {
     'act-02-03-01-guided-utg' => 'fold',
     'act-02-04-01-guided-fold' => 'fold-j3',
+    'act-03-04-01-guided' => 'bet-tp',
+    'act-03-04-01-scaffolded' => 'cbet',
     _ => null,
   };
 }
