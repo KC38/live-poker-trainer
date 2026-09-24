@@ -48,9 +48,11 @@ class _ToyHandRunDemoState extends State<ToyHandRunDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextIndex;
-    final expandTeach = widget.interactive && widget.enabled;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.40 : null;
+    // Keep densify after the last step while Continue shows — locking
+    // `enabled` false must not collapse the teach shell into navy void.
+    final expandTeach = widget.interactive;
+    final feltHeight =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
     final lanes = <(String, String, Widget)>[
       (
         'BLINDS',
@@ -68,84 +70,116 @@ class _ToyHandRunDemoState extends State<ToyHandRunDemo> {
         const _PotEndChip(),
       ),
     ];
-    final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-        alignment: minFelt != null ? Alignment.center : null,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.feltLight, AppColors.feltDark],
-          ),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.feltBorder.withValues(alpha: 0.85),
-          ),
+
+    Widget laneAt(int i) {
+      return _SoftPulseTarget(
+        active:
+            widget.interactive && widget.enabled && next == i,
+        child: _RunLane(
+          step: i + 1,
+          title: lanes[i].$1,
+          detail: lanes[i].$2,
+          visual: lanes[i].$3,
+          selected: _tapped.contains(lanes[i].$1),
+          enabled: widget.interactive && widget.enabled,
+          onPressed:
+              widget.interactive ? () => _onTap(lanes[i].$1) : null,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'One short hand',
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 12),
-            for (var i = 0; i < lanes.length; i++) ...[
-              if (i > 0) const SizedBox(height: 8),
-              _SoftPulseTarget(
-                active:
-                    widget.interactive &&
-                    widget.enabled &&
-                    next == i,
-                child: _RunLane(
-                  step: i + 1,
-                  title: lanes[i].$1,
-                  detail: lanes[i].$2,
-                  visual: lanes[i].$3,
-                  selected: _tapped.contains(lanes[i].$1),
-                  enabled: widget.interactive && widget.enabled,
-                  onPressed:
-                      widget.interactive ? () => _onTap(lanes[i].$1) : null,
-                ),
-              ),
-            ],
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.feltDark.withValues(alpha: 0.65),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: AppColors.gold.withValues(alpha: 0.45),
-                ),
-              ),
-              child: Text(
-                widget.interactive
-                    ? (next == null
-                        ? 'Blinds · You act · Ending'
-                        : 'Tap ${_cueLabels[next]}')
-                    : 'Blinds post, you act, then finish',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.manrope(
-                  color: AppColors.gold,
-                  fontSize: expandTeach ? 14 : 12,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ],
+      );
+    }
+
+    final runLanes = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (var i = 0; i < lanes.length; i++) ...[
+          if (i > 0) SizedBox(height: expandTeach ? 10 : 8),
+          laneAt(i),
+        ],
+      ],
+    );
+    final cue = Container(
+      width: expandTeach ? double.infinity : null,
+      padding: EdgeInsets.symmetric(
+        horizontal: expandTeach ? 18 : 14,
+        vertical: expandTeach ? 14 : 8,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.feltDark.withValues(alpha: 0.65),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: AppColors.gold.withValues(alpha: 0.45),
         ),
       ),
+      child: Text(
+        widget.interactive
+            ? (next == null
+                ? 'Blinds · You act · Ending'
+                : 'Tap ${_cueLabels[next]}')
+            : 'Blinds post, you act, then finish',
+        textAlign: TextAlign.center,
+        style: GoogleFonts.manrope(
+          color: AppColors.gold,
+          fontSize: expandTeach ? 16 : 12,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+    final body = Column(
+      mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisAlignment:
+          expandTeach
+              ? MainAxisAlignment.spaceEvenly
+              : MainAxisAlignment.start,
+      children: [
+        Text(
+          'One short hand',
+          style: GoogleFonts.manrope(
+            color: AppColors.slate,
+            fontSize: expandTeach ? 15 : 12,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        if (!expandTeach) const SizedBox(height: 12),
+        expandTeach
+            ? Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: SizedBox(
+                    width: MediaQuery.sizeOf(context).width - 48,
+                    child: runLanes,
+                  ),
+                ),
+              ),
+            )
+            : runLanes,
+        if (!expandTeach) const SizedBox(height: 12),
+        cue,
+      ],
+    );
+    final child = Container(
+      key: const ValueKey('toy-hand-felt'),
+      width: double.infinity,
+      height: feltHeight,
+      padding: EdgeInsets.fromLTRB(
+        12,
+        expandTeach ? 18 : 14,
+        12,
+        expandTeach ? 18 : 14,
+      ),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.feltBorder.withValues(alpha: 0.85),
+        ),
+      ),
+      child: body,
     );
     if (widget.interactive) return child;
     return ExcludeSemantics(child: child);
