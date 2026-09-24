@@ -1116,87 +1116,124 @@ class _HandFamiliesDemoState extends State<HandFamiliesDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextFamily;
-    final expandTeach = widget.interactive && widget.enabled;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.40 : null;
-    final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-        alignment: minFelt != null ? Alignment.center : null,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.feltLight, AppColors.feltDark],
-          ),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.feltBorder.withValues(alpha: 0.85),
-          ),
+    // Keep densify after the last family while Continue shows — locking
+    // `enabled` false must not collapse the teach shell into navy void.
+    final expandTeach = widget.interactive;
+    final feltHeight =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+
+    Widget familyAt(int i) {
+      return _SoftPulseTarget(
+        active:
+            widget.interactive &&
+            widget.enabled &&
+            next?.id == HandFamiliesDemo.families[i].id,
+        child: HandExampleTile(
+          example: HandFamiliesDemo.families[i],
+          selected: _tapped.contains(HandFamiliesDemo.families[i].id),
+          enabled: widget.interactive && widget.enabled,
+          compact: true,
+          onPressed:
+              widget.interactive
+                  ? () => _onTap(HandFamiliesDemo.families[i])
+                  : null,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Starting-hand families',
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 12),
-            for (var i = 0; i < HandFamiliesDemo.families.length; i++) ...[
-              if (i > 0) const SizedBox(height: 8),
-              _SoftPulseTarget(
-                active:
-                    widget.interactive &&
-                    widget.enabled &&
-                    next?.id == HandFamiliesDemo.families[i].id,
-                child: HandExampleTile(
-                  example: HandFamiliesDemo.families[i],
-                  selected: _tapped.contains(HandFamiliesDemo.families[i].id),
-                  enabled: widget.interactive && widget.enabled,
-                  compact: true,
-                  onPressed:
-                      widget.interactive
-                          ? () => _onTap(HandFamiliesDemo.families[i])
-                          : null,
-                ),
-              ),
-            ],
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.feltDark.withValues(alpha: 0.65),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: AppColors.gold.withValues(alpha: 0.45),
-                ),
-              ),
-              child: Text(
-                widget.interactive
-                    ? (next == null
-                        ? 'Pairs · broadways · suited aces · connectors'
-                        : 'Tap ${next.title} next')
-                    : 'Pairs · broadways · suited aces · connectors',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.manrope(
-                  color: AppColors.gold,
-                  fontSize: expandTeach ? 14 : 12,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ],
+      );
+    }
+
+    final families = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (var i = 0; i < HandFamiliesDemo.families.length; i++) ...[
+          if (i > 0) SizedBox(height: expandTeach ? 10 : 8),
+          // Intrinsic card tiles — FittedBox parent scales when densified.
+          familyAt(i),
+        ],
+      ],
+    );
+    final cue = Container(
+      width: expandTeach ? double.infinity : null,
+      padding: EdgeInsets.symmetric(
+        horizontal: expandTeach ? 18 : 14,
+        vertical: expandTeach ? 14 : 8,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.feltDark.withValues(alpha: 0.65),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: AppColors.gold.withValues(alpha: 0.45),
         ),
       ),
+      child: Text(
+        widget.interactive
+            ? (next == null
+                ? 'Pairs · broadways · suited aces · connectors'
+                : 'Tap ${next.title} next')
+            : 'Pairs · broadways · suited aces · connectors',
+        textAlign: TextAlign.center,
+        style: GoogleFonts.manrope(
+          color: AppColors.gold,
+          fontSize: expandTeach ? 16 : 12,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+    final body = Column(
+      mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisAlignment:
+          expandTeach
+              ? MainAxisAlignment.spaceEvenly
+              : MainAxisAlignment.start,
+      children: [
+        Text(
+          'Starting-hand families',
+          style: GoogleFonts.manrope(
+            color: AppColors.slate,
+            fontSize: expandTeach ? 15 : 12,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        if (!expandTeach) const SizedBox(height: 12),
+        expandTeach
+            ? Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: SizedBox(
+                    width: MediaQuery.sizeOf(context).width - 48,
+                    child: families,
+                  ),
+                ),
+              ),
+            )
+            : families,
+        if (!expandTeach) const SizedBox(height: 12),
+        cue,
+      ],
+    );
+    final child = Container(
+      key: const ValueKey('hand-families-felt'),
+      width: double.infinity,
+      height: feltHeight,
+      padding: EdgeInsets.fromLTRB(
+        12,
+        expandTeach ? 18 : 14,
+        12,
+        expandTeach ? 18 : 14,
+      ),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.feltBorder.withValues(alpha: 0.85),
+        ),
+      ),
+      child: body,
     );
     if (widget.interactive) return child;
     return ExcludeSemantics(child: child);
