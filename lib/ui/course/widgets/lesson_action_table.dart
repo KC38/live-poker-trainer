@@ -3339,106 +3339,137 @@ class _FlopLinesDemoState extends State<FlopLinesDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextLine;
-    final expandTeach = widget.interactive && widget.enabled;
-    final minFelt = expandTeach
-        ? MediaQuery.sizeOf(context).height * 0.38
-        : null;
-    final child = ConstrainedBox(
-      constraints: minFelt != null
-          ? BoxConstraints(minHeight: minFelt)
-          : const BoxConstraints(),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-        alignment: minFelt != null ? Alignment.center : null,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.feltLight, AppColors.feltDark],
-          ),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.feltBorder.withValues(alpha: 0.85),
+    // Keep densify after the last tap while Continue shows — locking
+    // `enabled` false must not collapse the teach shell into navy void.
+    final expandTeach = widget.interactive;
+    // Tall-phone teach: fixed felt + stretched 2×3 tiles (minHeight alone
+    // leaves sparse green under VALUE / C-BET / CHECK / CALL / FOLD / RAISE).
+    final feltHeight =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+
+    Widget lineTile(int index) {
+      final line = FlopLinesDemo.lines[index];
+      return Expanded(
+        child: _DemoSoftPulse(
+          active:
+              widget.interactive &&
+              widget.enabled &&
+              next?.label == line.label,
+          child: _DemoActionCard(
+            label: line.label,
+            caption: line.caption,
+            color: line.color,
+            densify: expandTeach,
+            selected: _tapped.contains(line.label),
+            enabled: widget.interactive && widget.enabled,
+            onPressed:
+                widget.interactive ? () => _onTap(line.label) : null,
           ),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Flop lines — pick one plan',
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 14),
-            for (var row = 0; row < 2; row++) ...[
-              if (row > 0) const SizedBox(height: 8),
-              Row(
-                children: [
-                  for (var col = 0; col < 3; col++) ...[
-                    if (col > 0) const SizedBox(width: 8),
-                    Expanded(
-                      child: _DemoSoftPulse(
-                        active:
-                            widget.interactive &&
-                            widget.enabled &&
-                            next?.label ==
-                                FlopLinesDemo.lines[row * 3 + col].label,
-                        child: _DemoActionCard(
-                          label: FlopLinesDemo.lines[row * 3 + col].label,
-                          caption: FlopLinesDemo.lines[row * 3 + col].caption,
-                          color: FlopLinesDemo.lines[row * 3 + col].color,
-                          selected: _tapped.contains(
-                            FlopLinesDemo.lines[row * 3 + col].label,
-                          ),
-                          enabled: widget.interactive && widget.enabled,
-                          onPressed: widget.interactive
-                              ? () => _onTap(
-                                  FlopLinesDemo.lines[row * 3 + col].label,
-                                )
-                              : null,
-                        ),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ],
-            const SizedBox(height: 14),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.feltDark.withValues(alpha: 0.65),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: AppColors.gold.withValues(alpha: 0.45),
-                ),
-              ),
-              child: Text(
-                widget.interactive
-                    ? (next == null
-                          ? 'Value · c-bet · check · call · fold · raise'
-                          : 'Tap ${next.label} next')
-                    : 'Value · c-bet · check · call · fold · raise',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.manrope(
-                  color: AppColors.gold,
-                  fontSize: expandTeach ? 14 : 12,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
+      );
+    }
+
+    Widget lineRow(int row) {
+      return Row(
+        crossAxisAlignment: expandTeach
+            ? CrossAxisAlignment.stretch
+            : CrossAxisAlignment.center,
+        children: [
+          for (var col = 0; col < 3; col++) ...[
+            if (col > 0) SizedBox(width: expandTeach ? 12 : 8),
+            lineTile(row * 3 + col),
           ],
+        ],
+      );
+    }
+
+    final tiles = Column(
+      mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
+      children: [
+        expandTeach ? Expanded(child: lineRow(0)) : lineRow(0),
+        SizedBox(height: expandTeach ? 12 : 8),
+        expandTeach ? Expanded(child: lineRow(1)) : lineRow(1),
+      ],
+    );
+    final cue = Container(
+      width: expandTeach ? double.infinity : null,
+      padding: EdgeInsets.symmetric(
+        horizontal: expandTeach ? 18 : 14,
+        vertical: expandTeach ? 14 : 8,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.feltDark.withValues(alpha: 0.65),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.gold.withValues(alpha: 0.45)),
+      ),
+      child: Text(
+        widget.interactive
+            ? (next == null
+                ? 'Value · c-bet · check · call · fold · raise'
+                : 'Tap ${next.label} next')
+            : 'Value · c-bet · check · call · fold · raise',
+        textAlign: TextAlign.center,
+        style: GoogleFonts.manrope(
+          color: AppColors.gold,
+          fontSize: expandTeach ? 16 : 12,
+          fontWeight: FontWeight.w700,
         ),
       ),
+    );
+    final body = Column(
+      mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisAlignment: expandTeach
+          ? MainAxisAlignment.spaceEvenly
+          : MainAxisAlignment.start,
+      children: [
+        Text(
+          'Flop lines — pick one plan',
+          style: GoogleFonts.manrope(
+            color: AppColors.slate,
+            fontSize: expandTeach ? 15 : 12,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        if (!expandTeach) const SizedBox(height: 14),
+        expandTeach
+            ? Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: tiles,
+                ),
+              )
+            : tiles,
+        if (!expandTeach) const SizedBox(height: 14),
+        cue,
+      ],
+    );
+    final child = Container(
+      width: double.infinity,
+      height: feltHeight,
+      padding: EdgeInsets.fromLTRB(
+        12,
+        expandTeach ? 18 : 14,
+        12,
+        expandTeach ? 18 : 14,
+      ),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.feltBorder.withValues(alpha: 0.85),
+        ),
+      ),
+      child: body,
     );
     if (widget.interactive) return child;
     return ExcludeSemantics(child: child);
   }
 }
+
 
 /// Explain-step demo: turn brick vs change; barrel or delay with intent.
 class TurnStoryDemo extends StatefulWidget {

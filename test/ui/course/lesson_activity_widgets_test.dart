@@ -2846,10 +2846,25 @@ void main() {
     expect(find.text('Tap VALUE next'), findsOneWidget);
     expect(find.text('Tap each flop line once.'), findsNothing);
     expect(find.text('Tap each flop line once'), findsNothing);
+    expect(
+      find.text('Value · c-bet · check · call · fold · raise'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(FlopLinesDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
-    await tester.tap(find.text('VALUE'));
+await tester.tap(find.text('VALUE'));
     await tester.pump();
     expect(find.text('Tap C-BET next'), findsOneWidget);
     await tester.tap(find.text('C-BET'));
@@ -2867,6 +2882,15 @@ void main() {
     await tester.tap(find.text('RAISE'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Value · c-bet · check · call · fold · raise'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(FlopLinesDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
