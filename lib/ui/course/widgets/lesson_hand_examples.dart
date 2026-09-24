@@ -258,21 +258,23 @@ LessonHandExample? resolveHandExample({
         codes: [],
       );
     case 'outs-3':
+      // Ah is in hero's hand — remaining aces are the clean outs.
       return const LessonHandExample(
         id: 'outs-3',
-        title: '3 — the aces',
-        codes: [],
+        title: 'Remaining aces',
+        codes: ['As', 'Ad', 'Ac'],
       );
     case 'outs-6':
+      // Spoiler trap: queens are dirty (pair under king-high).
       return const LessonHandExample(
         id: 'outs-6',
-        title: '6 — aces + queens',
-        codes: [],
+        title: 'Aces + queens',
+        codes: ['As', 'Ad', 'Qs', 'Qd'],
       );
     case 'outs-0':
       return const LessonHandExample(
         id: 'outs-0',
-        title: '0 — never improve',
+        title: 'No clean outs',
         codes: [],
       );
     case 'call-draw':
