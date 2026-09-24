@@ -37,8 +37,16 @@ class _EquityRealizeDemoState extends State<EquityRealizeDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in EquityRealizeDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -67,35 +75,42 @@ class _EquityRealizeDemoState extends State<EquityRealizeDemo> {
               for (var i = 0; i < EquityRealizeDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _EquityRealizeTile(
-                    label: EquityRealizeDemo.points[i].label,
-                    caption: EquityRealizeDemo.points[i].caption,
-                    color: EquityRealizeDemo.points[i].color,
-                    selected: _tapped.contains(
-                      EquityRealizeDemo.points[i].label,
+                  child: _EquityRealizeSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == EquityRealizeDemo.points[i].label,
+                    child: _EquityRealizeTile(
+                      label: EquityRealizeDemo.points[i].label,
+                      caption: EquityRealizeDemo.points[i].caption,
+                      color: EquityRealizeDemo.points[i].color,
+                      selected: _tapped.contains(
+                        EquityRealizeDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed: widget.interactive
+                          ? () => _onTap(EquityRealizeDemo.points[i].label)
+                          : null,
                     ),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed: widget.interactive
-                        ? () => _onTap(EquityRealizeDemo.points[i].label)
-                        : null,
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues Equity / Cash / Pos — no dupe footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Position decides realization',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Position decides realization'
+                    : 'Tap ${next.label} next')
+                : 'Position decides realization',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
@@ -171,6 +186,76 @@ class _EquityRealizeTile extends StatelessWidget {
           child: child,
         ),
       ),
+    );
+  }
+}
+
+class _EquityRealizeSoftPulse extends StatefulWidget {
+  const _EquityRealizeSoftPulse({required this.active, required this.child});
+
+  final bool active;
+  final Widget child;
+
+  @override
+  State<_EquityRealizeSoftPulse> createState() =>
+      _EquityRealizeSoftPulseState();
+}
+
+class _EquityRealizeSoftPulseState extends State<_EquityRealizeSoftPulse>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+    if (widget.active) {
+      _pulse.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _EquityRealizeSoftPulse oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.active && !_pulse.isAnimating) {
+      _pulse.repeat(reverse: true);
+    } else if (!widget.active && _pulse.isAnimating) {
+      _pulse.stop();
+      _pulse.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.active) return widget.child;
+    return AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final glow = 0.22 + (_pulse.value * 0.38);
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.gold.withValues(alpha: glow),
+                blurRadius: 10 + (_pulse.value * 8),
+                spreadRadius: 0.5 + (_pulse.value * 1.2),
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
+      child: widget.child,
     );
   }
 }

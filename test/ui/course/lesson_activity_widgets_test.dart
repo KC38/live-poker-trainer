@@ -3855,17 +3855,21 @@ void main() {
         ),
       );
       expect(find.byType(EquityRealizeDemo), findsOneWidget);
-      // Rex cue below the felt — not a second footer inside the demo.
-      expect(find.text('Tap Equity, Cash, and Pos.'), findsOneWidget);
+      expect(find.text('Tap EQUITY next'), findsOneWidget);
+      expect(find.text('Tap Equity, Cash, and Pos.'), findsNothing);
       expect(find.text('Tap Equity, Cash, and Pos'), findsNothing);
       expect(find.text('Position decides realization'), findsNothing);
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['EQUITY', 'CASH', 'POS']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
+      await tester.tap(find.text('EQUITY'));
+      await tester.pump();
+      expect(find.text('Tap CASH next'), findsOneWidget);
+      await tester.tap(find.text('CASH'));
+      await tester.pump();
+      expect(find.text('Tap POS next'), findsOneWidget);
+      await tester.tap(find.text('POS'));
+      await tester.pump();
       expect(feltAck, 1);
       controller.dispose();
     },
