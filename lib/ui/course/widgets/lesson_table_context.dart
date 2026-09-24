@@ -14056,14 +14056,17 @@ class LessonTableContext extends StatelessWidget {
     final feltHeight =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
     // Solo explain can go larger; multi-rail guided still needs a bump.
-    // Board-chop teach: board is the hero visual — keep holes readable, not dominant.
+    // Board-chop teach: board is the hero visual — holes stay secondary.
     final heroScale =
         boardTeach
-            ? 1.15
+            ? 1.0
             : expandTeach
             ? (soloHero ? 1.85 : 1.4)
             : 1.0;
-    final boardScale = boardTeach ? 1.85 : (expandTeach ? 1.25 : 1.0);
+    // Board SoftPulse uses hero footprint so five shared cards dominate.
+    final boardCardSize =
+        boardTeach ? MiniCardSize.hero : MiniCardSize.small;
+    final boardScale = boardTeach ? 1.05 : (expandTeach ? 1.25 : 1.0);
 
     final heroTile = _TappableRegion(
       label: 'Your hole cards ${hero.map((c) => c.display).join(' ')}',
@@ -14187,7 +14190,9 @@ class LessonTableContext extends StatelessWidget {
           children: [
             Expanded(
               child: FittedBox(
-                fit: BoxFit.scaleDown,
+                // Contain scales UP on tall phones so SoftPulse rails fill
+                // the densified shell (scaleDown left a sparse green void).
+                fit: BoxFit.contain,
                 child: SizedBox(
                   width: MediaQuery.sizeOf(context).width - 48,
                   child: content,
@@ -14316,7 +14321,7 @@ class LessonTableContext extends StatelessWidget {
                     if (i > 0) SizedBox(width: boardTeach ? 8 : 4),
                     MiniCard(
                       card: board[i],
-                      size: MiniCardSize.small,
+                      size: boardCardSize,
                       scale: boardScale,
                     ),
                   ],
@@ -14335,15 +14340,21 @@ class LessonTableContext extends StatelessWidget {
                     boardTeach
                         ? AppColors.gold
                         : AppColors.cream.withValues(alpha: 0.7),
-                fontSize: boardTeach ? 14 : (expandTeach ? 12 : 10),
+                fontSize: boardTeach ? 15 : (expandTeach ? 12 : 10),
                 fontWeight: FontWeight.w800,
                 letterSpacing: 0.7,
               ),
             ),
           ),
+          // Board SoftPulse: cue sits under the teach target, not under You.
+          if (boardTeach && inviteCue != null) ...[
+            SizedBox(height: expandTeach ? 10 : 8),
+            inviteCue,
+            SizedBox(height: expandTeach ? 12 : 8),
+          ],
         ],
         heroTile,
-        if (inviteCue != null) ...[
+        if (!boardTeach && inviteCue != null) ...[
           SizedBox(height: expandTeach ? 14 : 10),
           inviteCue,
         ],
@@ -14380,7 +14391,9 @@ class LessonTableContext extends StatelessWidget {
           children: [
             Expanded(
               child: FittedBox(
-                fit: BoxFit.scaleDown,
+                // Contain scales UP so multi-rail SoftPulse (board-chop /
+                // find-holes) fills the densified shell on Pro.
+                fit: BoxFit.contain,
                 child: SizedBox(
                   width: MediaQuery.sizeOf(context).width - 48,
                   child: rails,
