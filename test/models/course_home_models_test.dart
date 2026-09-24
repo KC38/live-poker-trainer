@@ -208,6 +208,32 @@ void main() {
     expect(snap.nextLessonId, 'lesson-a');
   });
 
+  test('dangling profile.resume without openAttempt is not shown', () {
+    final snap = buildCourseHomeSnapshot(
+      catalog: catalog,
+      flags: _enabledFlags(),
+      available: true,
+      profile: const CourseProfileView(
+        lifetimeXp: 40,
+        currentStreak: 3,
+        acceptedAccuracy: 0.9,
+        completedLessonIds: ['lesson-a', 'lesson-b'],
+        masteryByLessonId: {'lesson-a': 0.9, 'lesson-b': 0.9},
+        catalogVersion: '2.0.0',
+        resume: CourseResumePointer(
+          attemptId: 'stale-att',
+          lessonId: 'lesson-b',
+          activityId: 'act-b-last',
+          activityIndex: 4,
+        ),
+        recommendedLessonId: 'lesson-c',
+      ),
+    );
+    expect(snap.resume, isNull);
+    expect(snap.nodes[1].state, isNot(CourseNodeState.active));
+    expect(snap.nextLessonId, 'lesson-c');
+  });
+
   test('disabled and stale catalog statuses are recoverable messages', () {
     final disabled = buildCourseHomeSnapshot(
       catalog: catalog,

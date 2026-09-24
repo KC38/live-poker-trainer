@@ -21,6 +21,7 @@ import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/providers/course_flags_provider.dart';
+import 'package:live_poker_trainer/providers/course_home_provider.dart';
 import 'package:live_poker_trainer/providers/course_progress_provider.dart';
 import 'package:live_poker_trainer/providers/onboarding_provider.dart';
 import 'package:live_poker_trainer/providers/profile_provider.dart';
@@ -293,6 +294,11 @@ class _AgentUiBootstrapState extends ConsumerState<_AgentUiBootstrap> {
           ),
           (route) => route.isFirst,
         );
+        // Match HomeScreen._openLesson — refresh after the runner pops so
+        // Resume cannot stick on a just-completed lesson.
+        if (mounted) {
+          unawaited(ref.read(courseHomeProvider.notifier).refresh());
+        }
       },
     );
   }
