@@ -3249,10 +3249,25 @@ await tester.tap(find.text('ONE HAND'));
     expect(find.text('Tap 3-BET next'), findsOneWidget);
     expect(find.text('Tap 3-Bet, Ranges, and Squeeze.'), findsNothing);
     expect(find.text('Tap 3-Bet, Ranges, and Squeeze'), findsNothing);
+    expect(
+      find.text('3-bets define ranges · squeezes punish flats'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(ThreeBetSqueezeDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
-    await tester.tap(find.text('3-BET'));
+await tester.tap(find.text('3-BET'));
     await tester.pump();
     expect(find.text('Tap RANGES next'), findsOneWidget);
     await tester.tap(find.text('RANGES'));
@@ -3261,6 +3276,15 @@ await tester.tap(find.text('ONE HAND'));
     await tester.tap(find.text('SQUEEZE'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('3-bets define ranges · squeezes punish flats'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(ThreeBetSqueezeDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
