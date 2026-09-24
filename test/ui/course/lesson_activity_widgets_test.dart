@@ -278,9 +278,26 @@ void main() {
     expect(find.text('Tap the dealer button'), findsOneWidget);
     // In-felt cue owns the tip — no duplicate gold footer.
     expect(find.text('Tap the dealer button on the table.'), findsNothing);
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('blinds-seats-felt')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
     await tester.tap(find.text('D'));
     await tester.pump();
     expect(feltAck, 1);
+    // Densified shell must stay filled after acknowledge (Continue phase).
+    expect(
+      tester.getSize(find.byKey(const ValueKey('blinds-seats-felt'))).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
@@ -322,6 +339,18 @@ void main() {
       findsNothing,
     );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('position-labels-felt')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
     // Soft-pulse runs while guidance is on — taps must still land on BTN.
     await tester.pump(const Duration(milliseconds: 450));
@@ -334,6 +363,13 @@ void main() {
     );
     await tester.pump();
     expect(feltAck, 1);
+    // Densified shell must stay filled after acknowledge (Continue phase).
+    expect(
+      tester
+          .getSize(find.byKey(const ValueKey('position-labels-felt')))
+          .height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
