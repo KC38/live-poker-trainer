@@ -3226,14 +3226,20 @@ void main() {
       ),
     );
     expect(find.byType(ObservationCertaintyDemo), findsOneWidget);
-    expect(find.text('Tap Observe, Samples, and Showdowns.'), findsOneWidget);
+    expect(find.text('Tap OBSERVE next'), findsOneWidget);
+    expect(find.text('Tap Observe, Samples, and Showdowns.'), findsNothing);
+    expect(find.text('Tap Observe, Samples, and Showdowns'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['OBSERVE', 'SAMPLES', 'SHOWDOWNS']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('OBSERVE'));
+    await tester.pump();
+    expect(find.text('Tap SAMPLES next'), findsOneWidget);
+    await tester.tap(find.text('SAMPLES'));
+    await tester.pump();
+    expect(find.text('Tap SHOWDOWNS next'), findsOneWidget);
+    await tester.tap(find.text('SHOWDOWNS'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
