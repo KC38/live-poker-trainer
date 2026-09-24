@@ -236,6 +236,15 @@ enum LessonTableRegion {
   /// Multiway unguided distractor: Q6o any seat.
   mwSpecQ6o,
 
+  /// Multiway checkpoint: note high participation (correct).
+  mwObsNote,
+
+  /// Multiway checkpoint distractor: ignore seat history.
+  mwObsIgnore,
+
+  /// Multiway checkpoint distractor: insult personality.
+  mwObsInsult,
+
   /// Verbal action: raise stands (binding).
   verbalRaiseStands,
 
@@ -1373,6 +1382,9 @@ enum LessonTableLayout {
   /// Multiway unguided: pick speculative hand.
   multiwaySpecOutcomes,
 
+  /// Multiway checkpoint: note high participation.
+  multiwayObserveOutcomes,
+
   /// Thin-value checkpoint: read-driven line vs coin flip.
   thinValueReadOutcomes,
 
@@ -2175,6 +2187,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-03-07-01-checkpoint':
       return const LessonTableScene(
+        layout: LessonTableLayout.multiwayObserveOutcomes,
         villainSeatCount: 0,
         highlight: LessonTableHighlight.none,
         caption: 'Seat enters 8 of last 10 pots',
@@ -3534,6 +3547,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.mwSpecQ6o => pick('q6o'),
         _ => null,
       };
+    case 'act-03-07-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.mwObsNote => pick('obs-many'),
+        LessonTableRegion.mwObsIgnore => pick('obs-ignore'),
+        LessonTableRegion.mwObsInsult => pick('obs-label'),
+        _ => null,
+      };
     case 'act-03-01-01-scaffolded':
       // Preflop open: UTG is left of the BB (earlyPosition on the felt).
       return switch (region) {
@@ -4607,6 +4627,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-05-01-checkpoint' ||
       activity.id == 'act-03-06-01-checkpoint' ||
       activity.id == 'act-03-07-01-unguided' ||
+      activity.id == 'act-03-07-01-checkpoint' ||
       activity.id == 'act-04-06-01-guided' ||
       activity.id == 'act-04-06-02-guided' ||
       activity.id == 'act-04-06-02-scaffolded' ||
@@ -4899,6 +4920,8 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.turnScarePlanOutcomes => _buildTurnScarePlanOutcomes(),
       LessonTableLayout.riverJobOutcomes => _buildRiverJobOutcomes(),
       LessonTableLayout.multiwaySpecOutcomes => _buildMultiwaySpecOutcomes(),
+      LessonTableLayout.multiwayObserveOutcomes =>
+          _buildMultiwayObserveOutcomes(),
       LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
       LessonTableLayout.tableReadMattersOutcomes =>
           _buildTableReadMattersOutcomes(),
@@ -6505,20 +6528,63 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.mwSpecSc,
           title: '76s · IP',
-          detail: 'Nut potential',
+          detail: 'In position',
           visual: holes('7h', '6h'),
         ),
         (
           region: LessonTableRegion.mwSpecKto,
           title: 'KTo · OOP',
-          detail: 'Dominated',
+          detail: 'Out of position',
           visual: holes('Kd', 'Tc'),
         ),
         (
           region: LessonTableRegion.mwSpecQ6o,
           title: 'Q6o · any',
-          detail: 'Trashy',
+          detail: 'Any seat',
           visual: holes('Qh', '6d'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMultiwayObserveOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive seat note — tap note, ignore, or insult',
+      semanticsStatic: 'Multiway observe outcomes',
+      caption: scene.caption ?? 'Seat enters 8 of last 10 pots',
+      cueLabel: 'Tap Note.',
+      guideRegion: LessonTableRegion.mwObsNote,
+      phases: [
+        (
+          region: LessonTableRegion.mwObsNote,
+          title: 'Note it',
+          detail: 'Play many',
+          visual: const Icon(
+            Icons.visibility_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.mwObsIgnore,
+          title: 'Ignore',
+          detail: 'Seat history',
+          visual: const Icon(
+            Icons.visibility_off_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.mwObsInsult,
+          title: 'Insult',
+          detail: 'Personality',
+          visual: const Icon(
+            Icons.mood_bad_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
         ),
       ],
     );
@@ -11488,17 +11554,13 @@ class LessonTableContext extends StatelessWidget {
             children: [
               if (showSpotCards) ...[
                 if (scene.villainSeatCount > 0) ...[
-                  Text(
-                    'Them',
-                    style: GoogleFonts.manrope(
-                      color: AppColors.slate,
-                      fontSize: expandTeach ? 11 : 10,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.6,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      for (var i = 0; i < scene.villainSeatCount; i++)
+                        const _FaceDownPair(),
+                    ],
                   ),
-                  const SizedBox(height: 4),
-                  const _FaceDownPair(),
                   SizedBox(height: expandTeach ? 10 : 8),
                 ],
                 if (board.isNotEmpty) ...[

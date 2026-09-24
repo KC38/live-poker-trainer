@@ -9088,7 +9088,7 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('76s · IP'), findsOneWidget);
-    expect(find.text('Nut potential'), findsOneWidget);
+    expect(find.text('In position'), findsOneWidget);
     await tester.tap(find.text('76s · IP'));
     await tester.pump();
     expect(controller.draft.choiceId, 'sc');
@@ -9121,6 +9121,23 @@ void main() {
         ),
       ],
     );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.multiwayObserveOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.mwObsNote,
+        choices: activity.choices,
+      ),
+      'obs-many',
+    );
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
       _wrap(
@@ -9135,8 +9152,9 @@ void main() {
       find.text('Seat enters most pots — tap what you note.'),
       findsOneWidget,
     );
-    expect(find.text('Note — they play many'), findsOneWidget);
-    await tester.tap(find.text('Note — they play many'));
+    expect(find.text('Note it'), findsOneWidget);
+    expect(find.text('Play many'), findsOneWidget);
+    await tester.tap(find.text('Note it'));
     await tester.pump();
     expect(controller.draft.choiceId, 'obs-many');
     controller.dispose();

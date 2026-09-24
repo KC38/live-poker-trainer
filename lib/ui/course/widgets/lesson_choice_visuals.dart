@@ -183,8 +183,8 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-03-07-01-checkpoint') {
-    // Multiway: tap the observation tile.
-    return SelectIdentifyPresentation.handCategoryTap;
+    // Multiway: tap Note / Ignore / Insult on densified felt.
+    return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-03-08-01-checkpoint') {
     // Leak repair: tap the seat-note tile.
