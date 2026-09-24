@@ -6324,9 +6324,26 @@ await tester.tap(find.text('STRONGER'));
     );
 
     expect(find.text('Before deal'), findsOneWidget);
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('blinds-timing-felt')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
     await tester.tap(find.text('Before deal'));
     await tester.pump();
     expect(controller.draft.choiceId, 'before-deal');
+    // Densified shell stays filled through Checking…
+    expect(
+      tester.getSize(find.byKey(const ValueKey('blinds-timing-felt'))).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 

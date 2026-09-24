@@ -5487,7 +5487,7 @@ class LessonTableContext extends StatelessWidget {
     return switch (scene.layout) {
       LessonTableLayout.blindsSeats => _buildBlindsSeats(context),
       LessonTableLayout.positionLabels => _buildPositionLabels(context),
-      LessonTableLayout.blindsTiming => _buildBlindsTiming(),
+      LessonTableLayout.blindsTiming => _buildBlindsTiming(context),
       LessonTableLayout.streetEndPhases => _buildStreetEndPhases(),
       LessonTableLayout.potFoldWinOutcomes => _buildPotFoldWinOutcomes(),
       LessonTableLayout.potShowdownOutcomes => _buildPotShowdownOutcomes(),
@@ -6213,45 +6213,57 @@ class LessonTableContext extends StatelessWidget {
     );
   }
 
-  Widget _buildBlindsTiming() {
+  Widget _buildBlindsTiming(BuildContext context) {
+    final densifyShell = true;
+    final feltHeight = MediaQuery.sizeOf(context).height * 0.58;
+
     Widget phase({
       required LessonTableRegion region,
       required String title,
       required String detail,
       required Widget visual,
+      bool pulse = false,
     }) {
       final selected = selectedRegion == region;
       return Expanded(
         child: _TappableRegion(
           label: title,
           selected: selected,
+          highlighted: pulse && !selected,
           enabled: enabled && _interactive,
+          expand: densifyShell,
           onTap:
               _interactive
                   ? () => onRegionTap!(LessonTableTapTarget(region))
                   : null,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(6, 8, 6, 8),
+            padding: EdgeInsets.fromLTRB(
+              densifyShell ? 10 : 6,
+              densifyShell ? 14 : 8,
+              densifyShell ? 10 : 6,
+              densifyShell ? 14 : 8,
+            ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 visual,
-                const SizedBox(height: 6),
+                SizedBox(height: densifyShell ? 12 : 6),
                 Text(
                   title,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.manrope(
                     color: AppColors.cream,
-                    fontSize: 12,
+                    fontSize: densifyShell ? 15 : 12,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: densifyShell ? 4 : 2),
                 Text(
                   detail,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.manrope(
                     color: AppColors.slate,
-                    fontSize: 10,
+                    fontSize: densifyShell ? 12 : 10,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -6262,21 +6274,28 @@ class LessonTableContext extends StatelessWidget {
       );
     }
 
+    final pulseBefore =
+        showSoftPulse && selectedRegion == null && selectedSeatIndex == null;
+
     return _feltShell(
+      key: const ValueKey('blinds-timing-felt'),
       semanticsLabel:
           _interactive
               ? 'Interactive hand timing — when blinds post'
               : 'Hand timing phases',
+      height: feltHeight,
+      centerChild: densifyShell,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           phase(
             region: LessonTableRegion.beforeDeal,
             title: 'Before deal',
             detail: 'Blinds in',
-            visual: const _BlindChipStack(amount: 2),
+            pulse: pulseBefore,
+            visual: const _BlindChipStack(amount: 2, densify: true),
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 10),
           phase(
             region: LessonTableRegion.afterFlop,
             title: 'After flop',
@@ -6287,14 +6306,14 @@ class LessonTableContext extends StatelessWidget {
                 for (final code in const ['Qs', 'Jh', '2c']) ...[
                   MiniCard(
                     card: CardModel.fromCode(code),
-                    size: MiniCardSize.tiny,
+                    size: MiniCardSize.small,
                   ),
-                  const SizedBox(width: 2),
+                  const SizedBox(width: 3),
                 ],
               ],
             ),
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 10),
           phase(
             region: LessonTableRegion.showdown,
             title: 'Showdown',
@@ -6302,9 +6321,9 @@ class LessonTableContext extends StatelessWidget {
             visual: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CardBack(size: MiniCardSize.tiny),
-                SizedBox(width: 2),
-                CardBack(size: MiniCardSize.tiny),
+                CardBack(size: MiniCardSize.small),
+                SizedBox(width: 3),
+                CardBack(size: MiniCardSize.small),
               ],
             ),
           ),
