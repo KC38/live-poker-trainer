@@ -920,7 +920,7 @@ class _HandRankLadderDemoState extends State<HandRankLadderDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextRung;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.40 : null;
     final child = ConstrainedBox(
@@ -1077,7 +1077,7 @@ class _HandFamiliesDemoState extends State<HandFamiliesDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextFamily;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.40 : null;
     final child = ConstrainedBox(

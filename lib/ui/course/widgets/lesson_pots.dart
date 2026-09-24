@@ -48,7 +48,7 @@ class _WinningPathsDemoState extends State<WinningPathsDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextIndex;
-    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final expandTeach = widget.interactive && widget.enabled;
     final minFelt =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.40 : null;
     final lanes = <(String, String, Widget)>[
