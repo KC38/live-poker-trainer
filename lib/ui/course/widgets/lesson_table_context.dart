@@ -5827,6 +5827,7 @@ class LessonTableContext extends StatelessWidget {
   }
 
   Widget _feltShell({
+    Key? key,
     required Widget child,
     required String semanticsLabel,
     double? minHeight,
@@ -5836,6 +5837,7 @@ class LessonTableContext extends StatelessWidget {
     return Semantics(
       label: semanticsLabel,
       child: Container(
+        key: key,
         width: double.infinity,
         height: height,
         constraints:
@@ -13819,18 +13821,21 @@ class LessonTableContext extends StatelessWidget {
         scene.showDealerChip;
     // Solo hero teach (S1 explain) — grow felt into the tall-phone void so
     // navy empty space becomes green felt with centered hole cards.
+    // Keep densify after the hero tap while Continue shows — coach clears
+    // SoftPulse / onRegionTap on lock; densify must not depend on those.
     final expandTeach =
-        pulseHero &&
+        scene.highlight == LessonTableHighlight.hero &&
         board.isEmpty &&
         !showVillainRail &&
         !scene.showMuck;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.42 : null;
+    final feltHeight =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
     final heroScale = expandTeach ? 1.35 : 1.0;
 
     return _feltShell(
+      key: const ValueKey('hole-cards-felt'),
       semanticsLabel: _semanticsLabel(hero, board, villainFaceUp),
-      minHeight: minFelt,
+      height: feltHeight,
       centerChild: expandTeach,
       child: Padding(
         padding: EdgeInsets.symmetric(
