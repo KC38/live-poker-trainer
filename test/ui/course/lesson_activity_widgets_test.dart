@@ -3697,14 +3697,20 @@ void main() {
       ),
     );
     expect(find.byType(TablesChangeDemo), findsOneWidget);
-    expect(find.text('Tap Stuck, Tilted, and Gears.'), findsOneWidget);
+    expect(find.text('Tap STUCK next'), findsOneWidget);
+    expect(find.text('Tap Stuck, Tilted, and Gears.'), findsNothing);
+    expect(find.text('Tap Stuck, Tilted, and Gears'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['STUCK', 'TILTED', 'GEARS']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('STUCK'));
+    await tester.pump();
+    expect(find.text('Tap TILTED next'), findsOneWidget);
+    await tester.tap(find.text('TILTED'));
+    await tester.pump();
+    expect(find.text('Tap GEARS next'), findsOneWidget);
+    await tester.tap(find.text('GEARS'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
