@@ -1774,6 +1774,62 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('hand-families unguided taps Suited conn on densified felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-02-01-unguided-sc',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Look at 76s on the felt — tap Suited connector.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Name the family for your holes.',
+      choices: const [
+        CourseChoice(id: 'hf-sc', label: 'Suited connector'),
+        CourseChoice(id: 'hf-offsuit-conn', label: 'Offsuit connector'),
+        CourseChoice(id: 'hf-trash', label: 'Offsuit trash'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.handFamilyUnguidedOutcomes,
+    );
+    expect(resolveLessonTableScene(activity)?.heroCodes, ['7h', '6h']);
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.handFamilyUgSc,
+        choices: activity.choices,
+      ),
+      'hf-sc',
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(find.text('Look at your holes — tap the family.'), findsOneWidget);
+    expect(find.text('Suited conn'), findsOneWidget);
+    expect(find.text('Tap Suited conn.'), findsNothing);
+    await tester.tap(find.text('Suited conn'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'hf-sc');
+    controller.dispose();
+  });
+
   test('hand-families identify steps use classify-on-felt presentation', () {
     expect(
       resolveSelectIdentifyPresentation(
@@ -1811,8 +1867,25 @@ void main() {
       ),
       SelectIdentifyPresentation.tableRegionTap,
     );
+    expect(
+      resolveSelectIdentifyPresentation(
+        CourseActivity(
+          id: 'act-02-02-01-unguided-sc',
+          order: 4,
+          stage: ActivityStage.unguided,
+          renderer: ActivityRenderer.selectIdentify,
+          estimatedSeconds: 40,
+          accessibilityText: 'classify',
+          acceptedGrades: const [SoftGrade.recommended],
+          prompt: 'Name the family for your holes.',
+          choices: const [
+            CourseChoice(id: 'hf-sc', label: 'Suited connector'),
+          ],
+        ),
+      ),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
     for (final id in const [
-      'act-02-02-01-unguided-sc',
       'act-02-02-01-checkpoint-trash',
     ]) {
       final activity = CourseActivity(
