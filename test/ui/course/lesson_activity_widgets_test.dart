@@ -2966,14 +2966,20 @@ void main() {
       ),
     );
     expect(find.byType(NitModelDemo), findsOneWidget);
-    expect(find.text('Tap Nit, Narrow, and Respect.'), findsOneWidget);
+    expect(find.text('Tap NIT next'), findsOneWidget);
+    expect(find.text('Tap Nit, Narrow, and Respect.'), findsNothing);
+    expect(find.text('Tap Nit, Narrow, and Respect'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['NIT', 'NARROW', 'RESPECT']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('NIT'));
+    await tester.pump();
+    expect(find.text('Tap NARROW next'), findsOneWidget);
+    await tester.tap(find.text('NARROW'));
+    await tester.pump();
+    expect(find.text('Tap RESPECT next'), findsOneWidget);
+    await tester.tap(find.text('RESPECT'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
