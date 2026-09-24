@@ -2501,7 +2501,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onRegionTap: onRegionTap,
         ),
         CoachDialogueVisualKind.suitsRanks => _SuitsRanksDemo(
-          interactive: onSuitAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllSuitsTapped: onSuitAcknowledge,
         ),
@@ -3179,147 +3181,176 @@ class _SuitsRanksDemoState extends State<_SuitsRanksDemo>
         break;
       }
     }
-    final minFelt =
-        widget.interactive && widget.enabled && remaining > 0
-            ? MediaQuery.sizeOf(context).height * 0.38
-            : null;
-    return ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(14, 16, 14, 16),
-        alignment: minFelt != null ? Alignment.center : null,
-        decoration: BoxDecoration(
-          color: AppColors.feltLight.withValues(alpha: 0.88),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.feltBorder.withValues(alpha: 0.55),
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (widget.interactive) ...[
-              Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                alignment: WrapAlignment.center,
-                children: [
-                  for (final token in _suits)
-                    AnimatedBuilder(
-                      animation: _pulse,
-                      builder: (context, child) {
-                        // Pulse only the next untapped suit — teach-by-doing
-                        // order, not a bulk glow on every remaining tile.
-                        final needsPulse =
-                            widget.enabled &&
-                            nextSuit == token &&
-                            remaining > 0;
-                        final glow =
-                            needsPulse ? 0.45 + (_pulse.value * 0.55) : 0.0;
-                        return DecoratedBox(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow:
-                                glow > 0
-                                    ? [
-                                      BoxShadow(
-                                        color: AppColors.gold.withValues(
-                                          alpha: 0.34 * glow,
-                                        ),
-                                        blurRadius: 12 + (8 * _pulse.value),
-                                        spreadRadius: 1 + (2 * _pulse.value),
-                                      ),
-                                    ]
-                                    : null,
-                          ),
-                          child: child,
-                        );
-                      },
-                      child: SuitTapTile(
-                        token: token,
-                        selected: _tapped.contains(token),
-                        enabled: widget.enabled,
-                        onPressed: () => _onSuitTap(token),
-                      ),
-                    ),
-                ],
-              ),
-              if (widget.enabled && remaining > 0 && nextSuit != null) ...[
-                const SizedBox(height: 12),
-                Text(
-                  'Tap ${nextSuit.label}',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.manrope(
-                    color: AppColors.gold,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '${_tapped.length} of ${_suits.length} suits',
-                  style: GoogleFonts.manrope(
-                    color: AppColors.goldMuted,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-            ] else
-              const SuitGlyphRow(tokens: _suits, glyphSize: 34),
-            const SizedBox(height: 14),
-            AnimatedOpacity(
-              duration: const Duration(milliseconds: 220),
-              opacity: widget.interactive && !ranksReady ? 0.42 : 1,
-              child: Column(
-                children: [
-                  Text(
-                    'Thirteen ranks — ace high',
-                    style: GoogleFonts.manrope(
-                      color: AppColors.cream,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Wrap(
-                    spacing: 6,
-                    runSpacing: 6,
-                    alignment: WrapAlignment.center,
-                    children: [
-                      for (final rank in _ranks)
-                        Container(
-                          width: 28,
-                          height: 34,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: AppColors.cream.withValues(
-                              alpha:
-                                  widget.interactive && !ranksReady ? 0.55 : 1,
+    // Keep densify after the last suit while Continue shows — locking
+    // `enabled` false must not collapse the teach shell into navy void.
+    final expandTeach = widget.interactive;
+    final feltHeight =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+
+    final suitTiles = Wrap(
+      spacing: expandTeach ? 12 : 10,
+      runSpacing: expandTeach ? 12 : 10,
+      alignment: WrapAlignment.center,
+      children: [
+        for (final token in _suits)
+          AnimatedBuilder(
+            animation: _pulse,
+            builder: (context, child) {
+              // Pulse only the next untapped suit — teach-by-doing
+              // order, not a bulk glow on every remaining tile.
+              final needsPulse =
+                  widget.enabled && nextSuit == token && remaining > 0;
+              final glow = needsPulse ? 0.45 + (_pulse.value * 0.55) : 0.0;
+              return DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow:
+                      glow > 0
+                          ? [
+                            BoxShadow(
+                              color: AppColors.gold.withValues(
+                                alpha: 0.34 * glow,
+                              ),
+                              blurRadius: 12 + (8 * _pulse.value),
+                              spreadRadius: 1 + (2 * _pulse.value),
                             ),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text(
-                            rank,
-                            style: GoogleFonts.manrope(
-                              color: AppColors.bgDark,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ],
-              ),
+                          ]
+                          : null,
+                ),
+                child: child,
+              );
+            },
+            child: SuitTapTile(
+              token: token,
+              selected: _tapped.contains(token),
+              enabled: widget.enabled,
+              onPressed: () => _onSuitTap(token),
             ),
+          ),
+      ],
+    );
+
+    final suitCue = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (widget.enabled && remaining > 0 && nextSuit != null) ...[
+          Text(
+            'Tap ${nextSuit.label}',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: expandTeach ? 16 : 14,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '${_tapped.length} of ${_suits.length} suits',
+            style: GoogleFonts.manrope(
+              color: AppColors.goldMuted,
+              fontSize: expandTeach ? 13 : 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ] else if (ranksReady) ...[
+          Text(
+            'Four suits · thirteen ranks',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: expandTeach ? 16 : 14,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ],
+    );
+
+    final ranksBlock = AnimatedOpacity(
+      duration: const Duration(milliseconds: 220),
+      opacity: widget.interactive && !ranksReady ? 0.42 : 1,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Thirteen ranks — ace high',
+            style: GoogleFonts.manrope(
+              color: AppColors.cream,
+              fontSize: expandTeach ? 15 : 13,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          SizedBox(height: expandTeach ? 12 : 10),
+          Wrap(
+            spacing: expandTeach ? 8 : 6,
+            runSpacing: expandTeach ? 8 : 6,
+            alignment: WrapAlignment.center,
+            children: [
+              for (final rank in _ranks)
+                Container(
+                  width: expandTeach ? 32 : 28,
+                  height: expandTeach ? 38 : 34,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: AppColors.cream.withValues(
+                      alpha: widget.interactive && !ranksReady ? 0.55 : 1,
+                    ),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    rank,
+                    style: GoogleFonts.manrope(
+                      color: AppColors.bgDark,
+                      fontSize: expandTeach ? 14 : 13,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+
+    final body = Column(
+      mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisAlignment:
+          expandTeach
+              ? MainAxisAlignment.spaceEvenly
+              : MainAxisAlignment.start,
+      children: [
+        if (widget.interactive) ...[
+          suitTiles,
+          if (!expandTeach && widget.enabled && remaining > 0) ...[
+            const SizedBox(height: 12),
+            suitCue,
           ],
+          if (expandTeach) suitCue,
+        ] else
+          const SuitGlyphRow(tokens: _suits, glyphSize: 34),
+        if (!expandTeach) const SizedBox(height: 14),
+        ranksBlock,
+      ],
+    );
+
+    return Container(
+      key: const ValueKey('suits-ranks-felt'),
+      width: double.infinity,
+      height: feltHeight,
+      padding: EdgeInsets.fromLTRB(
+        expandTeach ? 18 : 14,
+        expandTeach ? 18 : 16,
+        expandTeach ? 18 : 14,
+        expandTeach ? 18 : 16,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.feltLight.withValues(alpha: 0.88),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.feltBorder.withValues(alpha: 0.55),
         ),
       ),
+      child: body,
     );
   }
 }
