@@ -11169,7 +11169,11 @@ class LessonTableContext extends StatelessWidget {
 
     return _feltShell(
       semanticsLabel: _semanticsLabel(hero, board, villainFaceUp),
-      child: Column(
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: pulseHero || pulseBoard ? 8 : 0,
+        ),
+        child: Column(
         children: [
           if (showVillainRail) ...[
             Row(
@@ -11313,7 +11317,7 @@ class LessonTableContext extends StatelessWidget {
                     )
                     : null,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Column(
                 children: [
                   Text(
@@ -11325,13 +11329,13 @@ class LessonTableContext extends StatelessWidget {
                       letterSpacing: 0.8,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 6),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       for (var i = 0; i < hero.length; i++) ...[
-                        if (i > 0) const SizedBox(width: 6),
+                        if (i > 0) const SizedBox(width: 8),
                         MiniCard(card: hero[i], size: MiniCardSize.hero),
                       ],
                     ],
@@ -11340,6 +11344,18 @@ class LessonTableContext extends StatelessWidget {
               ),
             ),
           ),
+          if (pulseHero) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Tap your cards',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
           if (scene.showMuck) ...[
             const SizedBox(height: 8),
             _TappableRegion(
@@ -11356,6 +11372,7 @@ class LessonTableContext extends StatelessWidget {
             ),
           ],
         ],
+        ),
       ),
     );
   }
