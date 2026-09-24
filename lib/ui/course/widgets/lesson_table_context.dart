@@ -13839,7 +13839,123 @@ class LessonTableContext extends StatelessWidget {
         !scene.showMuck;
     final feltHeight =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
-    final heroScale = expandTeach ? 1.35 : 1.0;
+    // Solo-hero teach: fill the densified felt — tiny cards in a tall green
+    // shell read as sparse navy-adjacent void.
+    final heroScale = expandTeach ? 1.85 : 1.0;
+
+    final heroTile = _TappableRegion(
+      label: 'Your hole cards ${hero.map((c) => c.display).join(' ')}',
+      selected: selectedRegion == LessonTableRegion.hero,
+      highlighted: pulseHero,
+      enabled: enabled && _interactive,
+      onTap:
+          _interactive
+              ? () => onRegionTap!(
+                const LessonTableTapTarget(LessonTableRegion.hero),
+              )
+              : null,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: expandTeach ? 18 : 10,
+          vertical: expandTeach ? 18 : 10,
+        ),
+        child: Column(
+          children: [
+            Text(
+              scene.caption ?? 'You',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: expandTeach ? 15 : 11,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.8,
+              ),
+            ),
+            SizedBox(height: expandTeach ? 12 : 6),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (var i = 0; i < hero.length; i++) ...[
+                  if (i > 0) SizedBox(width: expandTeach ? 14 : 8),
+                  MiniCard(
+                    card: hero[i],
+                    size: MiniCardSize.hero,
+                    scale: heroScale,
+                  ),
+                ],
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+    final inviteCue =
+        pulseHero
+            ? Text(
+              'Tap your cards',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: expandTeach ? 16 : 12,
+                fontWeight: FontWeight.w700,
+              ),
+            )
+            : null;
+    final doneCue =
+        expandTeach &&
+                (selectedRegion == LessonTableRegion.hero || !enabled)
+            ? Text(
+              'Yours alone — nobody else sees them',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            )
+            : null;
+
+    // Solo densify: stretch cards + cue through the fixed felt (FittedBox
+    // avoids overflow on short test viewports).
+    if (expandTeach &&
+        board.isEmpty &&
+        !showVillainRail &&
+        !scene.showMuck) {
+      final content = Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          heroTile,
+          if (inviteCue != null) ...[
+            const SizedBox(height: 16),
+            inviteCue,
+          ],
+          if (doneCue != null) ...[
+            const SizedBox(height: 16),
+            doneCue,
+          ],
+        ],
+      );
+      return _feltShell(
+        key: const ValueKey('hole-cards-felt'),
+        semanticsLabel: _semanticsLabel(hero, board, villainFaceUp),
+        height: feltHeight,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Expanded(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: SizedBox(
+                  width: MediaQuery.sizeOf(context).width - 48,
+                  child: content,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
 
     return _feltShell(
       key: const ValueKey('hole-cards-felt'),
@@ -13985,60 +14101,10 @@ class LessonTableContext extends StatelessWidget {
               ),
             ),
           ],
-          _TappableRegion(
-            label: 'Your hole cards ${hero.map((c) => c.display).join(' ')}',
-            selected: selectedRegion == LessonTableRegion.hero,
-            highlighted: pulseHero,
-            enabled: enabled && _interactive,
-            onTap:
-                _interactive
-                    ? () => onRegionTap!(
-                      const LessonTableTapTarget(LessonTableRegion.hero),
-                    )
-                    : null,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: Column(
-                children: [
-                  Text(
-                    scene.caption ?? 'You',
-                    style: GoogleFonts.manrope(
-                      color: AppColors.gold,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.8,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      for (var i = 0; i < hero.length; i++) ...[
-                        if (i > 0) const SizedBox(width: 8),
-                        MiniCard(
-                          card: hero[i],
-                          size: MiniCardSize.hero,
-                          scale: heroScale,
-                        ),
-                      ],
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          if (pulseHero) ...[
+          heroTile,
+          if (inviteCue != null) ...[
             const SizedBox(height: 10),
-            Text(
-              'Tap your cards',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: expandTeach ? 14 : 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
+            inviteCue,
           ],
           if (scene.showMuck) ...[
             const SizedBox(height: 8),
