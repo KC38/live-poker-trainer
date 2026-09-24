@@ -70,82 +70,113 @@ class _StreetsTimelineDemoState extends State<StreetsTimelineDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextStreet;
-    final expandTeach = widget.interactive && widget.enabled;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.42 : null;
-    final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-        alignment: minFelt != null ? Alignment.center : null,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.feltLight, AppColors.feltDark],
+    // Keep densify after the last street while Continue shows — locking
+    // `enabled` false must not collapse the teach shell into navy void.
+    final expandTeach = widget.interactive;
+    final feltHeight =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+
+    Widget laneAt(int i) {
+      return _SoftPulseTarget(
+        active:
+            widget.interactive &&
+            widget.enabled &&
+            next == StreetsTimelineDemo.streets[i].title,
+        child: _StreetLane(
+          title: StreetsTimelineDemo.streets[i].title,
+          detail: StreetsTimelineDemo.streets[i].detail,
+          boardCodes: StreetsTimelineDemo.streets[i].board,
+          step: i + 1,
+          selected: _tapped.contains(
+            StreetsTimelineDemo.streets[i].title,
           ),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.feltBorder.withValues(alpha: 0.85),
+          enabled: widget.interactive && widget.enabled,
+          onPressed:
+              widget.interactive
+                  ? () => _onTap(StreetsTimelineDemo.streets[i].title)
+                  : null,
+        ),
+      );
+    }
+
+    final lanes = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (var i = 0; i < StreetsTimelineDemo.streets.length; i++) ...[
+          if (i > 0) SizedBox(height: expandTeach ? 10 : 8),
+          laneAt(i),
+        ],
+      ],
+    );
+    final cue = Text(
+      widget.interactive
+          ? (next == null
+              ? 'Preflop → flop → turn → river'
+              : 'Tap ${next[0]}${next.substring(1).toLowerCase()}')
+          : 'Match bets to leave each street',
+      textAlign: TextAlign.center,
+      style: GoogleFonts.manrope(
+        color: AppColors.gold,
+        fontSize: expandTeach ? 16 : 12,
+        fontWeight: FontWeight.w700,
+      ),
+    );
+    final body = Column(
+      mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisAlignment:
+          expandTeach
+              ? MainAxisAlignment.spaceEvenly
+              : MainAxisAlignment.start,
+      children: [
+        Text(
+          'Four streets of a hand',
+          style: GoogleFonts.manrope(
+            color: AppColors.slate,
+            fontSize: expandTeach ? 15 : 12,
+            fontWeight: FontWeight.w700,
           ),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Four streets of a hand',
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 12),
-            for (var i = 0; i < StreetsTimelineDemo.streets.length; i++) ...[
-              if (i > 0) const SizedBox(height: 8),
-              _SoftPulseTarget(
-                active:
-                    widget.interactive &&
-                    widget.enabled &&
-                    next == StreetsTimelineDemo.streets[i].title,
-                child: _StreetLane(
-                  title: StreetsTimelineDemo.streets[i].title,
-                  detail: StreetsTimelineDemo.streets[i].detail,
-                  boardCodes: StreetsTimelineDemo.streets[i].board,
-                  step: i + 1,
-                  selected: _tapped.contains(
-                    StreetsTimelineDemo.streets[i].title,
+        if (!expandTeach) const SizedBox(height: 12),
+        expandTeach
+            ? Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: SizedBox(
+                    width: MediaQuery.sizeOf(context).width - 48,
+                    child: lanes,
                   ),
-                  enabled: widget.interactive && widget.enabled,
-                  onPressed:
-                      widget.interactive
-                          ? () =>
-                              _onTap(StreetsTimelineDemo.streets[i].title)
-                          : null,
                 ),
               ),
-            ],
-            const SizedBox(height: 12),
-            Text(
-              widget.interactive
-                  ? (next == null
-                      ? 'Preflop → flop → turn → river'
-                      : 'Tap ${next[0]}${next.substring(1).toLowerCase()}')
-                  : 'Match bets to leave each street',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: expandTeach ? 14 : 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
+            )
+            : lanes,
+        if (!expandTeach) const SizedBox(height: 12),
+        cue,
+      ],
+    );
+    final child = Container(
+      key: const ValueKey('streets-timeline-felt'),
+      width: double.infinity,
+      height: feltHeight,
+      padding: EdgeInsets.fromLTRB(
+        12,
+        expandTeach ? 18 : 14,
+        12,
+        expandTeach ? 18 : 14,
+      ),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.feltBorder.withValues(alpha: 0.85),
         ),
       ),
+      child: body,
     );
     if (widget.interactive) return child;
     return ExcludeSemantics(child: child);
