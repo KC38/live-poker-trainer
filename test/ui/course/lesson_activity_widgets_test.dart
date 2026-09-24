@@ -3909,17 +3909,21 @@ void main() {
         ),
       );
       expect(find.byType(CappedUncappedDemo), findsOneWidget);
-      // Rex cue below the felt — not a second footer inside the demo.
-      expect(find.text('Tap Capped, Uncapped, and Nuts.'), findsOneWidget);
+      expect(find.text('Tap CAPPED next'), findsOneWidget);
+      expect(find.text('Tap Capped, Uncapped, and Nuts.'), findsNothing);
       expect(find.text('Tap Capped, Uncapped, and Nuts'), findsNothing);
       expect(find.text('Nuts unlikely vs still live'), findsNothing);
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['CAPPED', 'UNCAPPED', 'NUTS']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
+      await tester.tap(find.text('CAPPED'));
+      await tester.pump();
+      expect(find.text('Tap UNCAPPED next'), findsOneWidget);
+      await tester.tap(find.text('UNCAPPED'));
+      await tester.pump();
+      expect(find.text('Tap NUTS next'), findsOneWidget);
+      await tester.tap(find.text('NUTS'));
+      await tester.pump();
       expect(feltAck, 1);
       controller.dispose();
     },
