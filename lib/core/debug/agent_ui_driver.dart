@@ -159,6 +159,11 @@ final class AgentUiDriver {
       if (_isShortLessonCta(needleLower) && lower != needleLower) {
         return;
       }
+      // SoftPulse / action-tile needles must match exactly — "value" must not
+      // hit home-map "lesson: thin value and bluff-catches".
+      if (_isShortSoftPulseLabel(needleLower) && lower != needleLower) {
+        return;
+      }
       // Felt seat captions: allow "You (AQ)" / "Your hole cards …" but never
       // mid-sentence "…where you left off…".
       if (_isShortSeatLabel(needleLower) &&
@@ -355,6 +360,33 @@ bool _isShortLessonCta(String needleLower) {
     'back',
   };
   return ctas.contains(needleLower);
+}
+
+/// SoftPulse explain tiles and short action labels that must match exactly.
+bool _isShortSoftPulseLabel(String needleLower) {
+  const labels = {
+    'value',
+    'c-bet',
+    'cbet',
+    'call',
+    'fold',
+    'raise',
+    'clean',
+    'dirty',
+    'price',
+    'thin',
+    'catch',
+    'barrels',
+    'brick',
+    'change',
+    'barrel',
+    'delay',
+    'jam',
+    'quit',
+    'guard',
+    'first',
+  };
+  return labels.contains(needleLower);
 }
 
 /// Felt seat needles that must not fuzzy-match mid-sentence copy.
