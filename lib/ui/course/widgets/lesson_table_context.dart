@@ -6113,6 +6113,10 @@ class LessonTableContext extends StatelessWidget {
       };
     }
 
+    // Keep densify after the BTN tap while Continue shows — SoftPulse /
+    // selection clear on lock must not collapse the teach shell.
+    final densifyShell = scene.highlight == LessonTableHighlight.button;
+
     Widget seatChip(int seat) {
       final role = roleOf(seat);
       final selected =
@@ -6123,6 +6127,7 @@ class LessonTableContext extends StatelessWidget {
         selected: selected,
         highlighted: pulseRole(role),
         quietBlindPostCaptions: scene.quietBlindPostCaptions,
+        densify: densifyShell,
         enabled: enabled && _interactive,
         onTap: _interactive
             ? () => onRegionTap!(
@@ -6132,9 +6137,6 @@ class LessonTableContext extends StatelessWidget {
       );
     }
 
-    // Keep densify after the BTN tap while Continue shows — SoftPulse /
-    // selection clear on lock must not collapse the teach shell.
-    final densifyShell = scene.highlight == LessonTableHighlight.button;
     final inviteCue =
         showInviteCue &&
         showSoftPulse &&
@@ -6154,15 +6156,29 @@ class LessonTableContext extends StatelessWidget {
               ? 'Nine-handed table showing UTG, mid, late, button, and blinds'
               : 'Six-max table showing EP, HJ, CO, button, and blinds'),
       height: feltHeight,
-      centerChild: densifyShell,
+      // Fixed-height teach shells fill via Expanded seat rows — do not
+      // center-shrink the column (that reintroduces navy voids).
+      centerChild: false,
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: densifyShell ? MainAxisSize.max : MainAxisSize.min,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [for (final s in topRow) seatChip(s)],
-          ),
-          const SizedBox(height: 6),
+          densifyShell
+              ? Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    for (var i = 0; i < topRow.length; i++) ...[
+                      if (i > 0) const SizedBox(width: 8),
+                      Expanded(child: seatChip(topRow[i])),
+                    ],
+                  ],
+                ),
+              )
+              : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [for (final s in topRow) seatChip(s)],
+              ),
+          SizedBox(height: densifyShell ? 10 : 6),
           Text(
             scene.caption ?? 'EP · HJ · CO · BTN · SB · BB',
             textAlign: TextAlign.center,
@@ -6172,11 +6188,23 @@ class LessonTableContext extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),
           ),
-          const SizedBox(height: 6),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [for (final s in bottomRow) seatChip(s)],
-          ),
+          SizedBox(height: densifyShell ? 10 : 6),
+          densifyShell
+              ? Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    for (var i = 0; i < bottomRow.length; i++) ...[
+                      if (i > 0) const SizedBox(width: 8),
+                      Expanded(child: seatChip(bottomRow[i])),
+                    ],
+                  ],
+                ),
+              )
+              : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [for (final s in bottomRow) seatChip(s)],
+              ),
           if (inviteCue) ...[
             const SizedBox(height: 12),
             Text(
@@ -14660,6 +14688,7 @@ class _PositionSeatChip extends StatelessWidget {
     required this.enabled,
     required this.onTap,
     this.quietBlindPostCaptions = false,
+    this.densify = false,
   });
 
   final LessonTableRegion role;
@@ -14668,6 +14697,7 @@ class _PositionSeatChip extends StatelessWidget {
   final bool enabled;
   final VoidCallback? onTap;
   final bool quietBlindPostCaptions;
+  final bool densify;
 
   String get _code => switch (role) {
         LessonTableRegion.button => 'BTN',
@@ -14703,36 +14733,75 @@ class _PositionSeatChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final codeSize = densify ? 20.0 : 15.0;
+    final subSize = densify ? 13.0 : 10.0;
+    final pad = densify ? 14.0 : 6.0;
+    final body = Padding(
+      padding: EdgeInsets.fromLTRB(8, pad, 8, pad),
+      child: densify
+          ? LayoutBuilder(
+            builder: (context, constraints) {
+              final column = Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    _code,
+                    style: GoogleFonts.manrope(
+                      color: AppColors.gold,
+                      fontSize: codeSize,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    _subtitle,
+                    style: GoogleFonts.manrope(
+                      color: AppColors.slate,
+                      fontSize: subSize,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              );
+              if (constraints.maxHeight < 56) {
+                return Center(
+                  child: FittedBox(fit: BoxFit.scaleDown, child: column),
+                );
+              }
+              return Center(child: column);
+            },
+          )
+          : Column(
+            children: [
+              Text(
+                _code,
+                style: GoogleFonts.manrope(
+                  color: AppColors.gold,
+                  fontSize: codeSize,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                _subtitle,
+                style: GoogleFonts.manrope(
+                  color: AppColors.slate,
+                  fontSize: subSize,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+    );
     return _TappableRegion(
       label: _a11y,
       selected: selected,
       highlighted: highlighted,
       enabled: enabled,
+      expand: densify,
       onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 6, 8, 6),
-        child: Column(
-          children: [
-            Text(
-              _code,
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 15,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              _subtitle,
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
-        ),
-      ),
+      child: densify ? SizedBox.expand(child: body) : body,
     );
   }
 }
