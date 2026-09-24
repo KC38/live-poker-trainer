@@ -254,6 +254,15 @@ enum LessonTableRegion {
   /// S2 jump family distractor: offsuit trash.
   jumpFamilyTrash,
 
+  /// Hand-ranks scaffolded spot: flush (correct).
+  handRankFlush,
+
+  /// Hand-ranks scaffolded spot distractor: one pair.
+  handRankPair,
+
+  /// Hand-ranks scaffolded spot distractor: straight.
+  handRankStraight,
+
   /// Turn guided: blank turn is a brick (correct).
   turnBrick,
 
@@ -1591,6 +1600,9 @@ enum LessonTableLayout {
 
   /// S2 jump: suited ace vs pair vs trash.
   jumpFamilyOutcomes,
+
+  /// Hand ranks scaffolded: Flush / One pair / Straight on river spot.
+  handRankSpotOutcomes,
 
   /// Turn guided: brick vs scare vs always-change.
   turnBrickScareOutcomes,
@@ -3408,11 +3420,12 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-01-02-01-scaffolded-spot':
       return const LessonTableScene(
+        layout: LessonTableLayout.handRankSpotOutcomes,
         heroCodes: ['Ac', '3d'],
         boardCodes: ['Kc', '9c', '4c', '7c', '2s'],
         villainSeatCount: 0,
         highlight: LessonTableHighlight.none,
-        caption: 'You',
+        caption: 'River · your holes',
       );
     case 'act-01-02-01-checkpoint-winner':
       // Same board: you make the club flush; they make 9-high straight.
@@ -3812,6 +3825,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.jumpFamilySuitedAce => pick('j2-sa'),
         LessonTableRegion.jumpFamilyPair => pick('j2-pair'),
         LessonTableRegion.jumpFamilyTrash => pick('j2-trash'),
+        _ => null,
+      };
+    case 'act-01-02-01-scaffolded-spot':
+      return switch (region) {
+        LessonTableRegion.handRankFlush => pick('cat-flush'),
+        LessonTableRegion.handRankPair => pick('cat-pair'),
+        LessonTableRegion.handRankStraight => pick('cat-straight'),
         _ => null,
       };
     case 'act-03-03-01-guided':
@@ -5059,6 +5079,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-02-02-01-unguided-sc' ||
       activity.id == 'act-02-02-01-checkpoint-trash' ||
       activity.id == 'act-02-07-02-jump-family' ||
+      activity.id == 'act-01-02-01-scaffolded-spot' ||
       activity.id == 'act-03-01-01-guided' ||
       activity.id == 'act-03-01-01-scaffolded' ||
       activity.id == 'act-03-01-01-unguided' ||
@@ -5388,6 +5409,7 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.handFamilyCheckpointOutcomes =>
           _buildHandFamilyCheckpointOutcomes(),
       LessonTableLayout.jumpFamilyOutcomes => _buildJumpFamilyOutcomes(),
+      LessonTableLayout.handRankSpotOutcomes => _buildHandRankSpotOutcomes(),
       LessonTableLayout.turnBrickScareOutcomes => _buildTurnBrickScareOutcomes(),
       LessonTableLayout.turnScarePlanOutcomes => _buildTurnScarePlanOutcomes(),
       LessonTableLayout.riverJobOutcomes => _buildRiverJobOutcomes(),
@@ -7164,6 +7186,54 @@ class LessonTableContext extends StatelessWidget {
           title: 'Offsuit trash',
           detail: 'Weak offsuit',
           visual: miniPair('7c', '2d'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHandRankSpotOutcomes() {
+    Widget miniRow(List<String> codes) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (var i = 0; i < codes.length; i++) ...[
+            if (i > 0) const SizedBox(width: 2),
+            MiniCard(
+              card: CardModel.fromCode(codes[i]),
+              size: MiniCardSize.tiny,
+            ),
+          ],
+        ],
+      );
+    }
+
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive hand category — tap Flush, One pair, or Straight',
+      semanticsStatic: 'Hand ranks spot outcomes',
+      caption: scene.caption ?? 'River · your holes',
+      cueLabel: 'Tap Flush.',
+      guideRegion: LessonTableRegion.handRankFlush,
+      phases: [
+        (
+          region: LessonTableRegion.handRankFlush,
+          title: 'Flush',
+          detail: 'Five clubs',
+          // Ace-high clubs matching this spot's made hand.
+          visual: miniRow(const ['Ac', 'Kc', '9c']),
+        ),
+        (
+          region: LessonTableRegion.handRankPair,
+          title: 'One pair',
+          detail: 'Matching ranks',
+          visual: miniRow(const ['Kh', 'Kd']),
+        ),
+        (
+          region: LessonTableRegion.handRankStraight,
+          title: 'Straight',
+          detail: 'Five in a row',
+          visual: miniRow(const ['9h', '8d', '7c']),
         ),
       ],
     );

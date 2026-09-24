@@ -88,7 +88,8 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-01-02-01-scaffolded-spot') {
-    return SelectIdentifyPresentation.handCategoryTap;
+    // Hand ranks spot: tap Flush / One pair / Straight on densified felt.
+    return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-02-07-02-jump-family') {
     // Jump: tap Suited ace / Pocket pair / Trash on densified holes felt.
