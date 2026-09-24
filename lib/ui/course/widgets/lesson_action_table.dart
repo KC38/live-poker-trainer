@@ -7714,80 +7714,100 @@ class LessonActionTable extends StatelessWidget {
           ),
           child: Column(
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              if (spot.streetLabel != null)
-                Text(
-                  spot.streetLabel!,
-                  style: GoogleFonts.manrope(
-                    color: AppColors.slate,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              if (spot.villainLine != null)
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.bgDark.withValues(alpha: 0.45),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    spot.villainLine!,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.manrope(
-                      color: AppColors.cream,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _PotChip(label: spot.potLabel),
-                  if (spot.stackLabel != null)
-                    _PotChip(label: spot.stackLabel!),
-                ],
-              ),
-              if (board.isNotEmpty)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    for (var i = 0; i < board.length; i++) ...[
-                      if (i > 0) const SizedBox(width: 6),
-                      MiniCard(card: board[i], size: cardSize),
-                    ],
-                  ],
-                ),
+              // Header cluster — street / villain / pot hug the top of the teach felt.
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    'You',
-                    style: GoogleFonts.manrope(
-                      color: AppColors.cream,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
+                  if (spot.streetLabel != null)
+                    Text(
+                      spot.streetLabel!,
+                      style: GoogleFonts.manrope(
+                        color: AppColors.slate,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 6),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  if (spot.streetLabel != null && spot.villainLine != null)
+                    const SizedBox(height: 10),
+                  if (spot.villainLine != null)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.bgDark.withValues(alpha: 0.45),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        spot.villainLine!,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.manrope(
+                          color: AppColors.cream,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  const SizedBox(height: 12),
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 8,
+                    runSpacing: 8,
                     children: [
-                      for (var i = 0; i < hero.length; i++) ...[
-                        if (i > 0) const SizedBox(width: 8),
-                        MiniCard(card: hero[i], size: cardSize),
-                      ],
+                      _PotChip(label: spot.potLabel),
+                      if (spot.stackLabel != null)
+                        _PotChip(label: spot.stackLabel!),
                     ],
                   ),
                 ],
               ),
+              const Spacer(flex: 1),
+              // Cards cluster — board + holes own the middle of the felt.
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (board.isNotEmpty)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        for (var i = 0; i < board.length; i++) ...[
+                          if (i > 0) const SizedBox(width: 6),
+                          MiniCard(card: board[i], size: cardSize),
+                        ],
+                      ],
+                    ),
+                  if (board.isNotEmpty && hero.isNotEmpty)
+                    const SizedBox(height: 14),
+                  if (hero.isNotEmpty)
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'You',
+                          style: GoogleFonts.manrope(
+                            color: AppColors.cream,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            for (var i = 0; i < hero.length; i++) ...[
+                              if (i > 0) const SizedBox(width: 8),
+                              MiniCard(card: hero[i], size: cardSize),
+                            ],
+                          ],
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+              const Spacer(flex: 1),
+              // Status cue hugs the bottom edge above the dock.
               if (spot.feltStatusLine != null)
                 statusLine(spot.feltStatusLine!)
               else if (spot.facingBet)
