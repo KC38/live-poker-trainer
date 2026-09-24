@@ -27,6 +27,9 @@ class _ScriptedCourseService extends CourseService {
 
   final CourseCatalog catalog;
 
+  /// Last lessonId passed to [startLesson] (for prefix-resolve assertions).
+  String? lastStartedLessonId;
+
   List<CourseActivity> get activities =>
       catalog.activitiesForLesson(kFirstCourseLessonId);
 
@@ -46,6 +49,7 @@ class _ScriptedCourseService extends CourseService {
     required String startRequestId,
     String timezone = 'UTC',
   }) async {
+    lastStartedLessonId = lessonId;
     if (lessonId != kFirstCourseLessonId) {
       throw const CourseServiceException('Unknown lesson', code: 'not-found');
     }
@@ -293,6 +297,33 @@ void main() {
     }
     expect(find.text('Could not start the lesson'), findsOneWidget);
     expect(find.text('Retry'), findsOneWidget);
+  });
+
+  testWidgets('truncated openlesson prefix starts with canonical lesson id', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _app(
+        LessonRunnerScreen(
+          lessonId: 'lesson-01-01-01',
+          courseService: service,
+          startRequestId: 'start_prefix',
+        ),
+        catalog: catalog,
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+    for (
+      var i = 0;
+      i < 40 && service.lastStartedLessonId == null;
+      i++
+    ) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(service.lastStartedLessonId, kFirstCourseLessonId);
+    expect(find.text('Could not start the lesson'), findsNothing);
+    expect(find.text('Tap your cards'), findsOneWidget);
   });
 
   testWidgets('hung startLesson surfaces retry instead of empty spinner', (

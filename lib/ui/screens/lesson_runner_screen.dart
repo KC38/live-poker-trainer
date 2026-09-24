@@ -148,19 +148,22 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         code: 'not-found',
       );
     }
+    // Prefix openlesson ids resolve in the catalog; the backend only knows
+    // the canonical full lesson id.
+    final lessonId = lesson.id;
     final draft = ref.read(onboardingControllerProvider);
     await _service.initializeProfile(
       catalogVersion: catalog.catalogVersion,
       experienceBand: draft.experienceBand?.wireValue,
       dailyGoalMinutes: draft.dailyGoalMinutes,
-      recommendedLessonId: draft.recommendedLessonId ?? widget.lessonId,
+      recommendedLessonId: draft.recommendedLessonId ?? lessonId,
     );
     final started = await _service.startLesson(
-      lessonId: widget.lessonId,
+      lessonId: lessonId,
       catalogVersion: catalog.catalogVersion,
       startRequestId: _startRequestId,
     );
-    final activities = catalog.activitiesForLesson(widget.lessonId);
+    final activities = catalog.activitiesForLesson(lessonId);
     final current = activities.firstWhere(
       (a) => a.id == started.resume.activityId,
       orElse: () => activities.first,
@@ -177,7 +180,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       unawaited(
         ref
             .read(analyticsServiceProvider)
-            .logLesson(lessonId: widget.lessonId, phase: 'started'),
+            .logLesson(lessonId: lessonId, phase: 'started'),
       );
     }
     if (started.attempt.isReadyToComplete(activities.length)) {
@@ -412,15 +415,18 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     }
     if (!mounted) return;
     try {
+      final lessonId =
+          _lesson?.id ?? catalog.lessonById(widget.lessonId)?.id;
+      if (lessonId == null) return;
       final started = await _service.startLesson(
-        lessonId: widget.lessonId,
+        lessonId: lessonId,
         catalogVersion: catalog.catalogVersion,
         startRequestId: CourseService.newRequestKey('resync'),
       );
       if (!mounted) return;
       final activities =
           _activities.isEmpty
-              ? catalog.activitiesForLesson(widget.lessonId)
+              ? catalog.activitiesForLesson(lessonId)
               : _activities;
       final current = activities.firstWhere(
         (a) => a.id == started.resume.activityId,
