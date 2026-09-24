@@ -37,8 +37,16 @@ class _LiveWarmupPrepDemoState extends State<LiveWarmupPrepDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in LiveWarmupPrepDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -67,34 +75,42 @@ class _LiveWarmupPrepDemoState extends State<LiveWarmupPrepDemo> {
               for (var i = 0; i < LiveWarmupPrepDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _LiveWarmupPrepTile(
-                    label: LiveWarmupPrepDemo.points[i].label,
-                    caption: LiveWarmupPrepDemo.points[i].caption,
-                    color: LiveWarmupPrepDemo.points[i].color,
-                    selected: _tapped.contains(
-                      LiveWarmupPrepDemo.points[i].label,
+                  child: _WarmupSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == LiveWarmupPrepDemo.points[i].label,
+                    child: _LiveWarmupPrepTile(
+                      label: LiveWarmupPrepDemo.points[i].label,
+                      caption: LiveWarmupPrepDemo.points[i].caption,
+                      color: LiveWarmupPrepDemo.points[i].color,
+                      selected: _tapped.contains(
+                        LiveWarmupPrepDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed: widget.interactive
+                          ? () => _onTap(LiveWarmupPrepDemo.points[i].label)
+                          : null,
                     ),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed: widget.interactive
-                        ? () => _onTap(LiveWarmupPrepDemo.points[i].label)
-                        : null,
                   ),
                 ),
               ],
             ],
           ),
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Short checklist, then one coached hand',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Short checklist, then one coached hand'
+                    : 'Tap ${next.label} next')
+                : 'Short checklist, then one coached hand',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
@@ -126,7 +142,7 @@ class _LiveWarmupPrepTile extends StatelessWidget {
         selected ? AppColors.gold : color.withValues(alpha: 0.9);
     final child = AnimatedContainer(
       duration: const Duration(milliseconds: 140),
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
       decoration: BoxDecoration(
         color: selected
             ? AppColors.gold.withValues(alpha: 0.28)
@@ -140,7 +156,7 @@ class _LiveWarmupPrepTile extends StatelessWidget {
             label,
             style: GoogleFonts.manrope(
               color: AppColors.cream,
-              fontSize: 10,
+              fontSize: 12,
               fontWeight: FontWeight.w900,
             ),
           ),
@@ -150,7 +166,7 @@ class _LiveWarmupPrepTile extends StatelessWidget {
             textAlign: TextAlign.center,
             style: GoogleFonts.manrope(
               color: AppColors.cream.withValues(alpha: 0.9),
-              fontSize: 9,
+              fontSize: 10,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -159,5 +175,74 @@ class _LiveWarmupPrepTile extends StatelessWidget {
     );
     if (!enabled || onPressed == null) return child;
     return GestureDetector(onTap: onPressed, child: child);
+  }
+}
+
+class _WarmupSoftPulse extends StatefulWidget {
+  const _WarmupSoftPulse({required this.active, required this.child});
+
+  final bool active;
+  final Widget child;
+
+  @override
+  State<_WarmupSoftPulse> createState() => _WarmupSoftPulseState();
+}
+
+class _WarmupSoftPulseState extends State<_WarmupSoftPulse>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+    if (widget.active) {
+      _pulse.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _WarmupSoftPulse oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.active && !_pulse.isAnimating) {
+      _pulse.repeat(reverse: true);
+    } else if (!widget.active && _pulse.isAnimating) {
+      _pulse.stop();
+      _pulse.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.active) return widget.child;
+    return AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final glow = 0.22 + (_pulse.value * 0.38);
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.gold.withValues(alpha: glow),
+                blurRadius: 10 + (_pulse.value * 8),
+                spreadRadius: 0.5 + (_pulse.value * 1.2),
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
+      child: widget.child,
+    );
   }
 }
