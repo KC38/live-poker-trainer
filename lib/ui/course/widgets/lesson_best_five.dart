@@ -359,6 +359,7 @@ class _DemoRow extends StatelessWidget {
                   playing.contains(codes[i]) &&
                   codes[i] == nextCode,
               child: SelectableBestFiveCard(
+                key: ValueKey<String>('best-five-${codes[i]}'),
                 code: codes[i],
                 selected:
                     interactive
