@@ -4609,8 +4609,16 @@ class _NitModelDemoState extends State<NitModelDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in NitModelDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -4639,34 +4647,41 @@ class _NitModelDemoState extends State<NitModelDemo> {
               for (var i = 0; i < NitModelDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: NitModelDemo.points[i].label,
-                    caption: NitModelDemo.points[i].caption,
-                    color: NitModelDemo.points[i].color,
-                    selected: _tapped.contains(NitModelDemo.points[i].label),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(NitModelDemo.points[i].label)
-                            : null,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == NitModelDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: NitModelDemo.points[i].label,
+                      caption: NitModelDemo.points[i].caption,
+                      color: NitModelDemo.points[i].color,
+                      selected: _tapped.contains(NitModelDemo.points[i].label),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(NitModelDemo.points[i].label)
+                              : null,
+                    ),
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues the three taps — no duplicate footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Narrow entry · respect heavy action',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Narrow entry · respect heavy action'
+                    : 'Tap ${next.label} next')
+                : 'Narrow entry · respect heavy action',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
