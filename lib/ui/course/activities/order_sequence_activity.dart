@@ -400,8 +400,10 @@ class OrderSequenceActivity extends StatelessWidget {
                       children: [
                         Expanded(
                           child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            alignment: Alignment.topCenter,
+                            // contain (not scaleDown) so completed orders still
+                            // fill the densified felt after remaining tiles clear.
+                            fit: BoxFit.contain,
+                            alignment: Alignment.center,
                             child: SizedBox(
                               width: MediaQuery.sizeOf(context).width - 48,
                               child: body,
