@@ -149,9 +149,13 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Flop class: tap Draw / Made / SDV on densified felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-03-02-01-unguided') {
+    // Flop class: tap Air / SDV / Made on densified multiway felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-03-02-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
-    // Flop class unguided / checkpoint: bottom tiles for now.
+    // Flop class checkpoint: bottom tiles for now.
     return SelectIdentifyPresentation.handCategoryTap;
   }
   if (activity.id == 'act-03-03-01-guided') {

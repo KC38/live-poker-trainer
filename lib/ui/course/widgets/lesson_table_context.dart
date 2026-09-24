@@ -290,6 +290,15 @@ enum LessonTableRegion {
   /// Flop-class scaffolded distractor: showdown value.
   flopClassSdv,
 
+  /// Flop-class unguided: air multiway (correct).
+  flopClassAirMw,
+
+  /// Flop-class unguided distractor: playable SDV.
+  flopClassSdvMw,
+
+  /// Flop-class unguided distractor: made hand.
+  flopClassMadeMw,
+
   /// S3 jump leak: fold bad price (correct).
   jumpLeakFoldPrice,
 
@@ -1505,6 +1514,9 @@ enum LessonTableLayout {
   /// Flop-class scaffolded: Draw / Made / SDV with board + holes.
   flopClassScaffoldedOutcomes,
 
+  /// Flop-class unguided: Air / SDV / Made multiway.
+  flopClassUnguidedOutcomes,
+
   /// S3 jump: fold bad price vs call any draw.
   jumpLeakPriceOutcomes,
 
@@ -2249,6 +2261,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-03-02-01-unguided':
       return const LessonTableScene(
+        layout: LessonTableLayout.flopClassUnguidedOutcomes,
         heroCodes: ['5h', '4h'],
         boardCodes: ['Qc', '7d', '2s'],
         villainSeatCount: 2,
@@ -3738,6 +3751,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.flopClassSdv => pick('sdv'),
         _ => null,
       };
+    case 'act-03-02-01-unguided':
+      return switch (region) {
+        LessonTableRegion.flopClassAirMw => pick('air'),
+        LessonTableRegion.flopClassSdvMw => pick('sdv-54'),
+        LessonTableRegion.flopClassMadeMw => pick('made-54'),
+        _ => null,
+      };
     case 'act-03-08-02-jump-leak':
       return switch (region) {
         LessonTableRegion.jumpLeakFoldPrice => pick('j3-foldprice'),
@@ -4854,6 +4874,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-01-01-checkpoint' ||
       activity.id == 'act-03-02-01-guided' ||
       activity.id == 'act-03-02-01-scaffolded' ||
+      activity.id == 'act-03-02-01-unguided' ||
       activity.id == 'act-03-03-01-scaffolded' ||
       activity.id == 'act-03-03-01-unguided' ||
       activity.id == 'act-03-03-01-checkpoint' ||
@@ -5175,6 +5196,8 @@ class LessonTableContext extends StatelessWidget {
           _buildFlopClassGuidedOutcomes(),
       LessonTableLayout.flopClassScaffoldedOutcomes =>
           _buildFlopClassScaffoldedOutcomes(),
+      LessonTableLayout.flopClassUnguidedOutcomes =>
+          _buildFlopClassUnguidedOutcomes(),
       LessonTableLayout.jumpLeakPriceOutcomes =>
           _buildJumpLeakPriceOutcomes(),
       LessonTableLayout.rangesGuidedOutcomes => _buildRangesGuidedOutcomes(),
@@ -7059,6 +7082,48 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Ace-high now',
           visual: const Icon(
             Icons.balance,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFlopClassUnguidedOutcomes() {
+    // No SoftPulse cue — unguided finds the air class without a guide tile.
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive flop class — tap Air, SDV, or Made',
+      semanticsStatic: 'Flop class unguided outcomes',
+      caption: scene.caption ?? 'Flop · multiway',
+      phases: [
+        (
+          region: LessonTableRegion.flopClassAirMw,
+          title: 'Air',
+          detail: 'Little equity',
+          visual: const Icon(
+            Icons.air,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.flopClassSdvMw,
+          title: 'SDV',
+          detail: 'Five-high?',
+          visual: const Icon(
+            Icons.balance,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.flopClassMadeMw,
+          title: 'Made',
+          detail: 'Paired?',
+          visual: const Icon(
+            Icons.workspace_premium_outlined,
             color: AppColors.slate,
             size: 24,
           ),

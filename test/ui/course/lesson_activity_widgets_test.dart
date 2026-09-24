@@ -7070,6 +7070,66 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s3 flop-class unguided taps Air on densified multiway felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-03-02-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'No pair and almost no draw — air.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Board Qc 7d 2s. You hold 5h 4h multiway. Class?',
+      choices: const [
+        CourseChoice(id: 'air', label: 'Air — little equity, no pair'),
+        CourseChoice(id: 'sdv-54', label: 'Playable showdown value'),
+        CourseChoice(id: 'made-54', label: 'Made hand'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final scene = resolveLessonTableScene(activity);
+    expect(scene?.layout, LessonTableLayout.flopClassUnguidedOutcomes);
+    expect(scene?.heroCodes, ['5h', '4h']);
+    expect(scene?.boardCodes, ['Qc', '7d', '2s']);
+    expect(scene?.villainSeatCount, 2);
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.flopClassAirMw,
+        choices: activity.choices,
+      ),
+      'air',
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(
+      find.text('No pair, almost no draw multiway — tap the class.'),
+      findsOneWidget,
+    );
+    expect(find.text('Air'), findsOneWidget);
+    expect(find.text('Little equity'), findsOneWidget);
+    expect(find.text('Tap Air.'), findsNothing);
+    await tester.tap(find.text('Air'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'air');
+    controller.dispose();
+  });
+
   testWidgets('s3 outs guided taps 3 clean aces on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-03-03-01-guided',
