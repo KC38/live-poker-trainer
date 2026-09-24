@@ -770,26 +770,36 @@ class _StreetTileGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget cell(CourseChoice item) {
+      return _SoftPulseTarget(
+        active: nextId != null && item.id == nextId,
+        child: StreetOrderTile(
+          label: item.label,
+          enabled: !locked,
+          expand: true,
+          onPressed: locked ? null : () => onPick(item.id),
+        ),
+      );
+    }
+
     Widget row(List<CourseChoice> slice) {
+      if (slice.isEmpty) return const SizedBox.shrink();
+      // One leftover: center a half-width tile — never leave an empty Expanded
+      // void beside TURN (mid-build after Preflop is placed).
+      if (slice.length == 1) {
+        return Row(
+          children: [
+            const Spacer(),
+            Expanded(flex: 2, child: cell(slice.first)),
+            const Spacer(),
+          ],
+        );
+      }
       return Row(
         children: [
           for (var i = 0; i < slice.length; i++) ...[
             if (i > 0) const SizedBox(width: 8),
-            Expanded(
-              child: _SoftPulseTarget(
-                active: nextId != null && slice[i].id == nextId,
-                child: StreetOrderTile(
-                  label: slice[i].label,
-                  enabled: !locked,
-                  expand: true,
-                  onPressed: locked ? null : () => onPick(slice[i].id),
-                ),
-              ),
-            ),
-          ],
-          for (var i = slice.length; i < 2; i++) ...[
-            if (i > 0 || slice.isNotEmpty) const SizedBox(width: 8),
-            const Expanded(child: SizedBox()),
+            Expanded(child: cell(slice[i])),
           ],
         ],
       );
