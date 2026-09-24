@@ -8157,6 +8157,54 @@ await tester.tap(find.text('STRONGER'));
     controller.dispose();
   });
 
+  testWidgets('toy hand checkpoint drops dock tap footer under Rex', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-06-01-checkpoint-finish',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 70,
+      accessibilityText: 'checkpoint',
+      acceptedGrades: const [SoftGrade.recommended],
+      handSteps: const [
+        CourseHandStep(
+          id: 'step-01-06-cp-open',
+          street: 'preflop',
+          prompt: 'Button with KQo. CO folds.',
+          choices: [
+            CourseChoice(id: 'open-kq', label: 'Raise to 6', action: 'RAISE'),
+            CourseChoice(id: 'fold-kq', label: 'Fold', action: 'FOLD'),
+            CourseChoice(id: 'limp-kq', label: 'Limp', action: 'CALL'),
+          ],
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        AuthoredMultiStepActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(
+      find.text('Finish a short button hand without freezing.'),
+      findsOneWidget,
+    );
+    // Rex owns the cue — no third Tap your action on the dock. footer.
+    expect(find.text('Tap your action on the dock.'), findsNothing);
+    expect(find.text('What happened? Tap below.'), findsNothing);
+    expect(find.text('RAISE TO 6'), findsOneWidget);
+    await tester.tap(find.text('RAISE TO 6'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'open-kq');
+    controller.dispose();
+  });
+
   testWidgets('jump check legal docks Check live so identify is not spoiled', (
     tester,
   ) async {
