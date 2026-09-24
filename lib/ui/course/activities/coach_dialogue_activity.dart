@@ -2774,7 +2774,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
             onAllPointsTapped: onObservationCertaintyAcknowledge,
           ),
         CoachDialogueVisualKind.exploitEvidence => ExploitEvidenceDemo(
-          interactive: onExploitEvidenceAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPointsTapped: onExploitEvidenceAcknowledge,
         ),
