@@ -6117,6 +6117,54 @@ await tester.tap(find.text('STRONGER'));
     controller.dispose();
   });
 
+  testWidgets('guided find-holes SoftPulse densifies multi-rail felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-01-01-guided-find-holes',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap the two private hole cards in front of you.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap your hole cards on the table.',
+      choices: const [
+        CourseChoice(id: 'choice-hero-holes', label: 'Ah Kd in front of you'),
+        CourseChoice(id: 'choice-board', label: 'The flop cards in the middle'),
+        CourseChoice(
+          id: 'choice-villain',
+          label: 'Face-down cards at another seat',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Tap your cards'), findsOneWidget);
+    expect(find.text('Tap your hole cards on the table.'), findsNothing);
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('hole-cards-felt')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
+    controller.dispose();
+  });
+
   testWidgets('Button and blinds guided tap selects dealer button on felt', (
     tester,
   ) async {
