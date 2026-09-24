@@ -3330,14 +3330,20 @@ void main() {
       ),
     );
     expect(find.byType(MultiwayNutsDemo), findsOneWidget);
-    expect(find.text('Tap Nutted, Air, and Domination.'), findsOneWidget);
+    expect(find.text('Tap NUTTED next'), findsOneWidget);
+    expect(find.text('Tap Nutted, Air, and Domination.'), findsNothing);
+    expect(find.text('Tap Nutted, Air, and Domination'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['NUTTED', 'AIR', 'DOMINATION']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('NUTTED'));
+    await tester.pump();
+    expect(find.text('Tap AIR next'), findsOneWidget);
+    await tester.tap(find.text('AIR'));
+    await tester.pump();
+    expect(find.text('Tap DOMINATION next'), findsOneWidget);
+    await tester.tap(find.text('DOMINATION'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
