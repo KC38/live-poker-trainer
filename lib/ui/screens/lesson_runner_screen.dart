@@ -802,50 +802,54 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                             const SizedBox(height: 10),
                             RexCoachLine(text: hint.text, label: 'Hint'),
                           ],
-                          if (controller.lastResult != null) ...[
-                            const SizedBox(height: 12),
-                            LessonFeedbackSheet(
-                              result: controller.lastResult!,
-                              betterChoiceLabel: _labelForChoice(
-                                activity,
-                                controller.lastResult!.betterChoiceId,
-                              ),
-                              // Sticky footer owns Continue / Try again so
-                              // CTAs stay reachable on short viewports.
-                              showActions: false,
-                              onContinue: _continueAfterFeedback,
-                              onRetry:
-                                  controller.lastResult!.accepted
-                                      ? null
-                                      : () {
-                                        controller.clearFeedbackForRetry();
-                                        setState(() {});
-                                      },
-                            ),
-                          ],
                         ],
                       );
                     },
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
               AnimatedBuilder(
                 animation: controller,
                 builder: (context, _) {
                   final result = controller.lastResult;
                   if (result != null) {
-                    return _FeedbackFooter(
-                      result: result,
-                      completing: _completing || _advancingActivity,
-                      onContinue: _continueAfterFeedback,
-                      onRetry:
-                          result.accepted
-                              ? null
-                              : () {
-                                controller.clearFeedbackForRetry();
-                                setState(() {});
-                              },
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(height: 10),
+                        LessonFeedbackSheet(
+                          result: result,
+                          betterChoiceLabel: _labelForChoice(
+                            activity,
+                            result.betterChoiceId,
+                          ),
+                          // Docked with Continue / Try again so the sheet
+                          // and CTAs hug — no empty Expanded gap.
+                          showActions: false,
+                          onContinue: _continueAfterFeedback,
+                          onRetry:
+                              result.accepted
+                                  ? null
+                                  : () {
+                                    controller.clearFeedbackForRetry();
+                                    setState(() {});
+                                  },
+                        ),
+                        const SizedBox(height: 10),
+                        _FeedbackFooter(
+                          result: result,
+                          completing: _completing || _advancingActivity,
+                          onContinue: _continueAfterFeedback,
+                          onRetry:
+                              result.accepted
+                                  ? null
+                                  : () {
+                                    controller.clearFeedbackForRetry();
+                                    setState(() {});
+                                  },
+                        ),
+                      ],
                     );
                   }
                   // Prefer live controller activity so advance never uses a
