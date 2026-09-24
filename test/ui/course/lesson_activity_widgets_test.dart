@@ -853,19 +853,18 @@ void main() {
       ),
     );
     expect(find.byType(WinningPathsDemo), findsOneWidget);
-    // Felt embeds the tap hint — no duplicate gold line under the demo.
-    expect(
-      find.text('Tap Fold win, Showdown, and Side pot'),
-      findsOneWidget,
-    );
-    expect(
-      find.text('Tap Fold win, Showdown, and Side pot.'),
-      findsNothing,
-    );
-    for (final title in ['FOLD WIN', 'SHOWDOWN', 'SIDE POT']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    // Sequential SoftPulse cue — one next path at a time.
+    expect(find.text('Tap Fold win'), findsOneWidget);
+    expect(find.text('Tap Fold win, Showdown, and Side pot'), findsNothing);
+    expect(find.text('Tap Fold win, Showdown, and Side pot.'), findsNothing);
+    await tester.tap(find.text('FOLD WIN'));
+    await tester.pump();
+    expect(find.text('Tap Showdown'), findsOneWidget);
+    await tester.tap(find.text('SHOWDOWN'));
+    await tester.pump();
+    expect(find.text('Tap Side pot'), findsOneWidget);
+    await tester.tap(find.text('SIDE POT'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
@@ -901,10 +900,10 @@ void main() {
         ),
       ),
     );
-    expect(
-      find.text('Tap Fold win, Showdown, and Side pot'),
-      findsOneWidget,
-    );
+    // In-felt sequential SoftPulse cue; outer bulk _TapHint suppressed.
+    expect(find.text('Tap Fold win'), findsOneWidget);
+    expect(find.text('Tap Fold win, Showdown, and Side pot'), findsNothing);
+    expect(find.text('Tap Fold win, Showdown, and Side pot.'), findsNothing);
     controller.finishSubmit(
       SubmitCourseStepResult(
         attemptId: 'a1',
@@ -927,10 +926,8 @@ void main() {
       ),
     );
     await tester.pump();
-    expect(
-      find.text('Tap Fold win, Showdown, and Side pot'),
-      findsNothing,
-    );
+    expect(find.text('Tap Fold win'), findsNothing);
+    expect(find.text('Tap Fold win, Showdown, and Side pot'), findsNothing);
     expect(
       find.text('Folds, showdown, or side pots decide it'),
       findsOneWidget,
