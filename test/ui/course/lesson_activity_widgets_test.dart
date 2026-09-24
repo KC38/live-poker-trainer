@@ -3382,14 +3382,20 @@ void main() {
       ),
     );
     expect(find.byType(DeepStacksDemo), findsOneWidget);
-    expect(find.text('Tap Deep, Realize, and Stack.'), findsOneWidget);
+    expect(find.text('Tap DEEP next'), findsOneWidget);
+    expect(find.text('Tap Deep, Realize, and Stack.'), findsNothing);
+    expect(find.text('Tap Deep, Realize, and Stack'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['DEEP', 'REALIZE', 'STACK']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('DEEP'));
+    await tester.pump();
+    expect(find.text('Tap REALIZE next'), findsOneWidget);
+    await tester.tap(find.text('REALIZE'));
+    await tester.pump();
+    expect(find.text('Tap STACK next'), findsOneWidget);
+    await tester.tap(find.text('STACK'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
