@@ -16992,7 +16992,8 @@ void main() {
         ),
       );
       expect(find.byType(StackDepthPlansDemo), findsOneWidget);
-      expect(find.text('Tap Short, Deep, and Effective.'), findsOneWidget);
+      expect(find.text('Tap SHORT next'), findsOneWidget);
+      expect(find.text('Tap Short, Deep, and Effective.'), findsNothing);
       expect(find.text('Tap Short, Deep, and Effective'), findsNothing);
       expect(
         find.text('Effective stack rewrites the plan every hand'),
@@ -17001,10 +17002,14 @@ void main() {
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['SHORT', 'DEEP', 'EFFECTIVE']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
+      await tester.tap(find.text('SHORT'));
+      await tester.pump();
+      expect(find.text('Tap DEEP next'), findsOneWidget);
+      await tester.tap(find.text('DEEP'));
+      await tester.pump();
+      expect(find.text('Tap EFFECTIVE next'), findsOneWidget);
+      await tester.tap(find.text('EFFECTIVE'));
+      await tester.pump();
       expect(feltAck, 1);
       controller.dispose();
     },
