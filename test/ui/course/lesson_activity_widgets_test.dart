@@ -3802,16 +3802,21 @@ void main() {
       ),
     );
     expect(find.byType(RangeAdvantageDemo), findsOneWidget);
-    expect(find.text('Tap Range, Nut, and Advantage.'), findsOneWidget);
+    expect(find.text('Tap RANGE next'), findsOneWidget);
+    expect(find.text('Tap Range, Nut, and Advantage.'), findsNothing);
     expect(find.text('Tap Range, Nut, and Advantage'), findsNothing);
     expect(find.text('More strong hands overall'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['RANGE', 'NUT', 'ADVANTAGE']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('RANGE'));
+    await tester.pump();
+    expect(find.text('Tap NUT next'), findsOneWidget);
+    await tester.tap(find.text('NUT'));
+    await tester.pump();
+    expect(find.text('Tap ADVANTAGE next'), findsOneWidget);
+    await tester.tap(find.text('ADVANTAGE'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
