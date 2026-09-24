@@ -7655,56 +7655,68 @@ class LessonActionTable extends StatelessWidget {
       } catch (_) {}
     }
 
-    final minFelt = MediaQuery.sizeOf(context).height * 0.42;
+    // Tall-phone teach: fill under Rex before the dock (fixed height so
+    // cards/status space evenly without a navy void / center-shrink sparse felt).
+    final feltHeight = MediaQuery.sizeOf(context).height * 0.50;
+    const cardSize = MiniCardSize.hero;
 
-    return ConstrainedBox(
-      constraints: BoxConstraints(minHeight: minFelt),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(12, 12, 12, 14),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.feltLight, AppColors.feltDark],
-          ),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.feltBorder.withValues(alpha: 0.85),
-          ),
+    Widget statusLine(String text, {Color color = AppColors.gold}) {
+      return Text(
+        text,
+        textAlign: TextAlign.center,
+        style: GoogleFonts.manrope(
+          color: color,
+          fontSize: 13,
+          fontWeight: FontWeight.w700,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
+      );
+    }
+
+    return Container(
+      width: double.infinity,
+      height: feltHeight,
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.feltBorder.withValues(alpha: 0.85),
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
           if (spot.streetLabel != null)
             Text(
               spot.streetLabel!,
               style: GoogleFonts.manrope(
                 color: AppColors.slate,
-                fontSize: 11,
+                fontSize: 13,
                 fontWeight: FontWeight.w700,
               ),
             ),
-          if (spot.villainLine != null) ...[
-            const SizedBox(height: 8),
+          if (spot.villainLine != null)
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
                 color: AppColors.bgDark.withValues(alpha: 0.45),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
                 spot.villainLine!,
+                textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.cream,
-                  fontSize: 13,
+                  fontSize: 14,
                   fontWeight: FontWeight.w700,
                 ),
               ),
             ),
-          ],
-          const SizedBox(height: 12),
           Wrap(
             alignment: WrapAlignment.center,
             spacing: 8,
@@ -7714,94 +7726,56 @@ class LessonActionTable extends StatelessWidget {
               if (spot.stackLabel != null) _PotChip(label: spot.stackLabel!),
             ],
           ),
-          if (board.isNotEmpty) ...[
-            const SizedBox(height: 12),
+          if (board.isNotEmpty)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 for (var i = 0; i < board.length; i++) ...[
-                  if (i > 0) const SizedBox(width: 4),
-                  MiniCard(card: board[i], size: MiniCardSize.small),
+                  if (i > 0) const SizedBox(width: 6),
+                  MiniCard(card: board[i], size: cardSize),
                 ],
               ],
             ),
-          ],
-          const SizedBox(height: 12),
-          Text(
-            'You',
-            style: GoogleFonts.manrope(
-              color: AppColors.cream,
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              for (var i = 0; i < hero.length; i++) ...[
-                if (i > 0) const SizedBox(width: 6),
-                MiniCard(card: hero[i], size: MiniCardSize.small),
-              ],
+              Text(
+                'You',
+                style: GoogleFonts.manrope(
+                  color: AppColors.cream,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (var i = 0; i < hero.length; i++) ...[
+                    if (i > 0) const SizedBox(width: 8),
+                    MiniCard(card: hero[i], size: cardSize),
+                  ],
+                ],
+              ),
             ],
           ),
-          if (spot.feltStatusLine != null) ...[
-            const SizedBox(height: 8),
-            Text(
-              spot.feltStatusLine!,
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ] else if (spot.facingBet) ...[
-            const SizedBox(height: 8),
-            Text(
-              'A bet faces you',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ] else if (spot.openPot) ...[
-            const SizedBox(height: 8),
-            Text(
+          if (spot.feltStatusLine != null)
+            statusLine(spot.feltStatusLine!)
+          else if (spot.facingBet)
+            statusLine('A bet faces you')
+          else if (spot.openPot)
+            statusLine(
               // Preflop first-in is an open-raise; postflop open is a bet.
               spot.streetLabel?.toLowerCase().contains('preflop') == true
                   ? 'First in — open the pot'
                   : 'Pot is open to a bet',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ] else if (spot.streetLabel?.toLowerCase().contains('hand over') ==
-              true) ...[
-            const SizedBox(height: 8),
-            Text(
-              'Uncontested — stack the chips',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ] else ...[
-            const SizedBox(height: 8),
-            Text(
-              'No bet to match',
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
+            )
+          else if (spot.streetLabel?.toLowerCase().contains('hand over') ==
+              true)
+            statusLine('Uncontested — stack the chips')
+          else
+            statusLine('No bet to match', color: AppColors.slate),
         ],
-        ),
       ),
     );
   }
