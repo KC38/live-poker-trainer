@@ -234,6 +234,8 @@ String? _guidedPulseChoiceId({
     return null;
   }
   return switch (activity.id) {
+    'act-01-03-01-guided-fold' => 'fold-72',
+    'act-01-03-01-scaffolded-check' => 'check-free',
     'act-02-03-01-guided-utg' => 'fold',
     'act-02-04-01-guided-fold' => 'fold-j3',
     'act-03-04-01-guided' => 'bet-tp',
