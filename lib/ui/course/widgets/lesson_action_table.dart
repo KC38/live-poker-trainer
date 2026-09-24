@@ -2546,71 +2546,94 @@ class _FullRingDemoState extends State<FullRingDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final child = Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.feltLight, AppColors.feltDark],
-        ),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'Full ring, same game',
-            style: GoogleFonts.manrope(
-              color: AppColors.slate,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-            ),
+    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final minFelt =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+    final child = ConstrainedBox(
+      constraints:
+          minFelt != null
+              ? BoxConstraints(minHeight: minFelt)
+              : const BoxConstraints(),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+        alignment: minFelt != null ? Alignment.center : null,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [AppColors.feltLight, AppColors.feltDark],
           ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              for (var i = 0; i < FullRingDemo.points.length; i++) ...[
-                if (i > 0) const SizedBox(width: 8),
-                Expanded(
-                  child: _DemoSoftPulse(
-                    active:
-                        widget.interactive &&
-                        widget.enabled &&
-                        next?.label == FullRingDemo.points[i].label,
-                    child: _DemoActionCard(
-                      label: FullRingDemo.points[i].label,
-                      caption: FullRingDemo.points[i].caption,
-                      color: FullRingDemo.points[i].color,
-                      selected:
-                          _tapped.contains(FullRingDemo.points[i].label),
-                      enabled: widget.interactive && widget.enabled,
-                      onPressed:
-                          widget.interactive
-                              ? () => _onTap(FullRingDemo.points[i].label)
-                              : null,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: AppColors.feltBorder.withValues(alpha: 0.85),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Full ring, same game',
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                for (var i = 0; i < FullRingDemo.points.length; i++) ...[
+                  if (i > 0) const SizedBox(width: 8),
+                  Expanded(
+                    child: _DemoSoftPulse(
+                      active:
+                          widget.interactive &&
+                          widget.enabled &&
+                          next?.label == FullRingDemo.points[i].label,
+                      child: _DemoActionCard(
+                        label: FullRingDemo.points[i].label,
+                        caption: FullRingDemo.points[i].caption,
+                        color: FullRingDemo.points[i].color,
+                        selected:
+                            _tapped.contains(FullRingDemo.points[i].label),
+                        enabled: widget.interactive && widget.enabled,
+                        onPressed:
+                            widget.interactive
+                                ? () => _onTap(FullRingDemo.points[i].label)
+                                : null,
+                      ),
                     ),
                   ),
-                ),
+                ],
               ],
-            ],
-          ),
-          const SizedBox(height: 10),
-          Text(
-            widget.interactive
-                ? (next == null
-                    ? 'Nine seats · same rules · position still matters'
-                    : 'Tap ${next.label} next')
-                : 'Nine seats · same rules · position still matters',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+            const SizedBox(height: 14),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.feltDark.withValues(alpha: 0.65),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: AppColors.gold.withValues(alpha: 0.45),
+                ),
+              ),
+              child: Text(
+                widget.interactive
+                    ? (next == null
+                        ? 'Nine seats · same rules · position still matters'
+                        : 'Tap ${next.label} next')
+                    : 'Nine seats · same rules · position still matters',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.manrope(
+                  color: AppColors.gold,
+                  fontSize: expandTeach ? 14 : 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
     if (widget.interactive) return child;
