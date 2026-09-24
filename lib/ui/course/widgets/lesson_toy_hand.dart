@@ -28,6 +28,7 @@ class ToyHandRunDemo extends StatefulWidget {
 class _ToyHandRunDemoState extends State<ToyHandRunDemo> {
   final Set<String> _tapped = <String>{};
   static const _titles = ['BLINDS', 'YOU ACT', 'ENDING'];
+  static const _cueLabels = ['Blinds', 'You act', 'Ending'];
 
   void _onTap(String title) {
     if (!widget.enabled || widget.onAllStepsTapped == null) return;
@@ -37,8 +38,19 @@ class _ToyHandRunDemoState extends State<ToyHandRunDemo> {
     }
   }
 
+  int? get _nextIndex {
+    for (var i = 0; i < _titles.length; i++) {
+      if (!_tapped.contains(_titles[i])) return i;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextIndex;
+    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final minFelt =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.40 : null;
     final lanes = <(String, String, Widget)>[
       (
         'BLINDS',
@@ -56,71 +68,159 @@ class _ToyHandRunDemoState extends State<ToyHandRunDemo> {
         const _PotEndChip(),
       ),
     ];
-    final child = Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.feltLight, AppColors.feltDark],
-        ),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: AppColors.feltBorder.withValues(alpha: 0.85),
-        ),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'One short hand',
-            style: GoogleFonts.manrope(
-              color: AppColors.slate,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-            ),
+    final child = ConstrainedBox(
+      constraints:
+          minFelt != null
+              ? BoxConstraints(minHeight: minFelt)
+              : const BoxConstraints(),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+        alignment: minFelt != null ? Alignment.center : null,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [AppColors.feltLight, AppColors.feltDark],
           ),
-          const SizedBox(height: 12),
-          for (var i = 0; i < lanes.length; i++) ...[
-            if (i > 0) const SizedBox(height: 8),
-            _RunLane(
-              step: i + 1,
-              title: lanes[i].$1,
-              detail: lanes[i].$2,
-              visual: lanes[i].$3,
-              selected: _tapped.contains(lanes[i].$1),
-              enabled: widget.interactive && widget.enabled,
-              onPressed:
-                  widget.interactive ? () => _onTap(lanes[i].$1) : null,
-            ),
-          ],
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            decoration: BoxDecoration(
-              color: AppColors.feltDark.withValues(alpha: 0.65),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: AppColors.gold.withValues(alpha: 0.45),
-              ),
-            ),
-            child: Text(
-              widget.interactive
-                  ? 'Tap Blinds, You act, and Ending'
-                  : 'Blinds post, you act, then finish',
-              textAlign: TextAlign.center,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: AppColors.feltBorder.withValues(alpha: 0.85),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'One short hand',
               style: GoogleFonts.manrope(
-                color: AppColors.gold,
+                color: AppColors.slate,
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: 12),
+            for (var i = 0; i < lanes.length; i++) ...[
+              if (i > 0) const SizedBox(height: 8),
+              _SoftPulseTarget(
+                active:
+                    widget.interactive &&
+                    widget.enabled &&
+                    next == i,
+                child: _RunLane(
+                  step: i + 1,
+                  title: lanes[i].$1,
+                  detail: lanes[i].$2,
+                  visual: lanes[i].$3,
+                  selected: _tapped.contains(lanes[i].$1),
+                  enabled: widget.interactive && widget.enabled,
+                  onPressed:
+                      widget.interactive ? () => _onTap(lanes[i].$1) : null,
+                ),
+              ),
+            ],
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.feltDark.withValues(alpha: 0.65),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: AppColors.gold.withValues(alpha: 0.45),
+                ),
+              ),
+              child: Text(
+                widget.interactive
+                    ? (next == null
+                        ? 'Blinds · You act · Ending'
+                        : 'Tap ${_cueLabels[next]}')
+                    : 'Blinds post, you act, then finish',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.manrope(
+                  color: AppColors.gold,
+                  fontSize: expandTeach ? 14 : 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
     if (widget.interactive) return child;
     return ExcludeSemantics(child: child);
+  }
+}
+
+/// Soft gold pulse around the next toy-hand step lane.
+class _SoftPulseTarget extends StatefulWidget {
+  const _SoftPulseTarget({required this.active, required this.child});
+
+  final bool active;
+  final Widget child;
+
+  @override
+  State<_SoftPulseTarget> createState() => _SoftPulseTargetState();
+}
+
+class _SoftPulseTargetState extends State<_SoftPulseTarget>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+    if (widget.active) {
+      _pulse.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _SoftPulseTarget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.active && !_pulse.isAnimating) {
+      _pulse.repeat(reverse: true);
+    } else if (!widget.active && _pulse.isAnimating) {
+      _pulse.stop();
+      _pulse.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.active) {
+      return widget.child;
+    }
+    return AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final glow = 0.4 + (_pulse.value * 0.55);
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.gold.withValues(alpha: glow * 0.65),
+                blurRadius: 12 + (10 * _pulse.value),
+                spreadRadius: 1 + (2 * _pulse.value),
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
+      child: widget.child,
+    );
   }
 }
 
