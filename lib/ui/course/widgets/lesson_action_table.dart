@@ -5079,8 +5079,16 @@ class _VsManiacsDemoState extends State<VsManiacsDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in VsManiacsDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -5109,34 +5117,43 @@ class _VsManiacsDemoState extends State<VsManiacsDemo> {
               for (var i = 0; i < VsManiacsDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: VsManiacsDemo.points[i].label,
-                    caption: VsManiacsDemo.points[i].caption,
-                    color: VsManiacsDemo.points[i].color,
-                    selected: _tapped.contains(VsManiacsDemo.points[i].label),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(VsManiacsDemo.points[i].label)
-                            : null,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == VsManiacsDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: VsManiacsDemo.points[i].label,
+                      caption: VsManiacsDemo.points[i].caption,
+                      color: VsManiacsDemo.points[i].color,
+                      selected:
+                          _tapped.contains(VsManiacsDemo.points[i].label),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () =>
+                                  _onTap(VsManiacsDemo.points[i].label)
+                              : null,
+                    ),
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues the three taps — no duplicate footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Call wider · let them hang · no ego',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Call wider · let them hang · no ego'
+                    : 'Tap ${next.label} next')
+                : 'Call wider · let them hang · no ego',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
