@@ -3086,16 +3086,20 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
     case 'act-06-09-01-guided':
       return const LessonTableScene(
         layout: LessonTableLayout.threeBetCommitOutcomes,
+        // Conceptual mindset — no accidental face-down Them seats.
+        villainSeatCount: 0,
         caption: '100bb 4-bet pot. Flop top pair. Default mindset?',
       );
     case 'act-06-09-01-unguided':
       return const LessonTableScene(
         layout: LessonTableLayout.threeBetEgoOutcomes,
+        villainSeatCount: 0,
         caption: 'Light 4-bet bluff with no blockers for ego?',
       );
     case 'act-06-09-01-checkpoint':
       return const LessonTableScene(
         layout: LessonTableLayout.threeBetSprOutcomes,
+        villainSeatCount: 0,
         caption: 'Depth change in 3-bet pots mainly changes?',
       );
     case 'act-06-10-01-scaffolded':
@@ -5826,14 +5830,18 @@ class LessonTableContext extends StatelessWidget {
     required Widget child,
     required String semanticsLabel,
     double? minHeight,
+    double? height,
     bool centerChild = false,
   }) {
     return Semantics(
       label: semanticsLabel,
       child: Container(
         width: double.infinity,
+        height: height,
         constraints:
-            minHeight != null ? BoxConstraints(minHeight: minHeight) : null,
+            height == null && minHeight != null
+                ? BoxConstraints(minHeight: minHeight)
+                : null,
         alignment: centerChild ? Alignment.center : null,
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 8),
         decoration: BoxDecoration(
@@ -11191,12 +11199,52 @@ class LessonTableContext extends StatelessWidget {
   }
 
   Widget _buildThreeBetCommitOutcomes() {
+    Widget depthChip(String label, {required bool gold}) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color:
+              gold
+                  ? AppColors.gold.withValues(alpha: 0.22)
+                  : AppColors.feltDark.withValues(alpha: 0.55),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color:
+                gold
+                    ? AppColors.gold.withValues(alpha: 0.75)
+                    : AppColors.feltBorder.withValues(alpha: 0.7),
+          ),
+        ),
+        child: Text(
+          label,
+          style: GoogleFonts.manrope(
+            color: gold ? AppColors.gold : AppColors.cream,
+            fontSize: 13,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+      );
+    }
+
     return _buildOutcomePhases(
       semanticsInteractive:
           'Interactive 4-bet mindset — tap high commit vs 300bb deep',
       semanticsStatic: '3-bet commit outcomes',
       caption:
           scene.caption ?? '100bb 4-bet pot. Flop top pair. Default mindset?',
+      cueLabel: 'Tap High commit.',
+      guideRegion: LessonTableRegion.threeBetHighCommit,
+      minHeightFactor: 0.55,
+      header: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          depthChip('100bb', gold: true),
+          const SizedBox(width: 8),
+          depthChip('4-bet pot', gold: false),
+          const SizedBox(width: 8),
+          depthChip('Top pair', gold: false),
+        ],
+      ),
       phases: [
         (
           region: LessonTableRegion.threeBetHighCommit,
@@ -11205,7 +11253,7 @@ class LessonTableContext extends StatelessWidget {
           visual: const Icon(
             Icons.lock_outline,
             color: AppColors.gold,
-            size: 24,
+            size: 32,
           ),
         ),
         (
@@ -11215,7 +11263,7 @@ class LessonTableContext extends StatelessWidget {
           visual: const Icon(
             Icons.layers_outlined,
             color: AppColors.danger,
-            size: 24,
+            size: 32,
           ),
         ),
       ],
@@ -11229,6 +11277,9 @@ class LessonTableContext extends StatelessWidget {
       semanticsStatic: '3-bet ego outcomes',
       caption:
           scene.caption ?? 'Light 4-bet bluff with no blockers for ego?',
+      cueLabel: 'Tap Avoid ego.',
+      guideRegion: LessonTableRegion.threeBetAvoidEgo,
+      minHeightFactor: 0.55,
       phases: [
         (
           region: LessonTableRegion.threeBetAvoidEgo,
@@ -11237,7 +11288,7 @@ class LessonTableContext extends StatelessWidget {
           visual: const Icon(
             Icons.block,
             color: AppColors.gold,
-            size: 24,
+            size: 32,
           ),
         ),
         (
@@ -11247,7 +11298,7 @@ class LessonTableContext extends StatelessWidget {
           visual: const Icon(
             Icons.flash_on_outlined,
             color: AppColors.danger,
-            size: 24,
+            size: 32,
           ),
         ),
       ],
@@ -11261,6 +11312,9 @@ class LessonTableContext extends StatelessWidget {
       semanticsStatic: '3-bet SPR outcomes',
       caption:
           scene.caption ?? 'Depth change in 3-bet pots mainly changes?',
+      cueLabel: 'Tap SPR / commit.',
+      guideRegion: LessonTableRegion.threeBetSprCommit,
+      minHeightFactor: 0.55,
       phases: [
         (
           region: LessonTableRegion.threeBetSprCommit,
@@ -11269,7 +11323,7 @@ class LessonTableContext extends StatelessWidget {
           visual: const Icon(
             Icons.straighten,
             color: AppColors.gold,
-            size: 24,
+            size: 32,
           ),
         ),
         (
@@ -11279,7 +11333,7 @@ class LessonTableContext extends StatelessWidget {
           visual: const Icon(
             Icons.palette_outlined,
             color: AppColors.danger,
-            size: 24,
+            size: 32,
           ),
         ),
       ],
@@ -13400,7 +13454,42 @@ class LessonTableContext extends StatelessWidget {
     }) {
       final selected = selectedRegion == region;
       final iconVisual =
-          densify ? Transform.scale(scale: 1.35, child: visual) : visual;
+          densify ? Transform.scale(scale: 1.45, child: visual) : visual;
+      final tileBody = Padding(
+        padding: EdgeInsets.fromLTRB(
+          4,
+          densify ? 22 : 10,
+          4,
+          densify ? 22 : 10,
+        ),
+        child: Column(
+          mainAxisSize: densify ? MainAxisSize.max : MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            iconVisual,
+            SizedBox(height: densify ? 10 : 6),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.cream,
+                fontSize: densify ? 16 : 12,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            SizedBox(height: densify ? 4 : 2),
+            Text(
+              detail,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: densify ? 13 : 10,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      );
       return Expanded(
         child: _TappableRegion(
           label: title,
@@ -13411,40 +13500,7 @@ class LessonTableContext extends StatelessWidget {
               _interactive
                   ? () => onRegionTap!(LessonTableTapTarget(region))
                   : null,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(
-              4,
-              densify ? 16 : 10,
-              4,
-              densify ? 16 : 10,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                iconVisual,
-                SizedBox(height: densify ? 8 : 6),
-                Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.manrope(
-                    color: AppColors.cream,
-                    fontSize: densify ? 14 : 12,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  detail,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.manrope(
-                    color: AppColors.slate,
-                    fontSize: densify ? 12 : 10,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          child: densify ? SizedBox.expand(child: tileBody) : tileBody,
         ),
       );
     }
@@ -13479,25 +13535,48 @@ class LessonTableContext extends StatelessWidget {
         // eats the tall-phone navy void below the tile row.
         final factor =
             minHeightFactor ?? (showSpotCards || header != null ? 0.58 : 0.40);
-        final minFelt =
+        final feltHeight =
             expandTeach
                 ? MediaQuery.sizeOf(context).height * factor
                 : null;
+        final phaseRow = Row(
+          crossAxisAlignment:
+              expandTeach
+                  ? CrossAxisAlignment.stretch
+                  : CrossAxisAlignment.start,
+          children: [
+            for (var i = 0; i < phases.length; i++) ...[
+              if (i > 0) SizedBox(width: expandTeach ? 10 : 6),
+              phase(
+                region: phases[i].region,
+                title: phases[i].title,
+                detail: phases[i].detail,
+                visual: phases[i].visual,
+                densify: expandTeach,
+                // SoftPulse only the teach target — never all tiles.
+                highlighted:
+                    invitePulse &&
+                    (guideRegion == null ||
+                        phases[i].region == guideRegion),
+              ),
+            ],
+          ],
+        );
         return _feltShell(
           semanticsLabel:
               _interactive ? semanticsInteractive : semanticsStatic,
-          minHeight: minFelt,
+          height: feltHeight,
           centerChild: expandTeach,
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
             mainAxisAlignment:
                 expandTeach
-                    ? MainAxisAlignment.center
+                    ? MainAxisAlignment.spaceEvenly
                     : MainAxisAlignment.start,
             children: [
               if (header != null) ...[
                 header!,
-                SizedBox(height: expandTeach ? 14 : 10),
+                if (!expandTeach) SizedBox(height: 10),
               ],
               if (showSpotCards) ...[
                 if (villainFaceUp.isNotEmpty) ...[
@@ -13523,7 +13602,7 @@ class LessonTableContext extends StatelessWidget {
                       ],
                     ],
                   ),
-                  SizedBox(height: expandTeach ? 10 : 8),
+                  if (!expandTeach) SizedBox(height: 8),
                 ] else if (scene.villainSeatCount > 0) ...[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -13532,7 +13611,7 @@ class LessonTableContext extends StatelessWidget {
                         const _FaceDownPair(),
                     ],
                   ),
-                  SizedBox(height: expandTeach ? 10 : 8),
+                  if (!expandTeach) SizedBox(height: 8),
                 ],
                 if (board.isNotEmpty) ...[
                   Text(
@@ -13557,7 +13636,7 @@ class LessonTableContext extends StatelessWidget {
                       ],
                     ],
                   ),
-                  SizedBox(height: expandTeach ? 10 : 8),
+                  if (!expandTeach) SizedBox(height: 8),
                 ],
                 if (hero.isNotEmpty) ...[
                   Text(
@@ -13592,7 +13671,7 @@ class LessonTableContext extends StatelessWidget {
                       ],
                     ],
                   ),
-                  SizedBox(height: expandTeach ? 14 : 10),
+                  if (!expandTeach) const SizedBox(height: 10),
                 ] else ...[
                   Text(
                     caption,
@@ -13603,7 +13682,7 @@ class LessonTableContext extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  SizedBox(height: expandTeach ? 14 : 10),
+                  if (!expandTeach) const SizedBox(height: 10),
                 ],
               ] else ...[
                 Text(
@@ -13615,30 +13694,18 @@ class LessonTableContext extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 10),
+                if (!expandTeach) const SizedBox(height: 10),
               ],
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  for (var i = 0; i < phases.length; i++) ...[
-                    if (i > 0) const SizedBox(width: 6),
-                    phase(
-                      region: phases[i].region,
-                      title: phases[i].title,
-                      detail: phases[i].detail,
-                      visual: phases[i].visual,
-                      densify: expandTeach,
-                      // SoftPulse only the teach target — never all tiles.
-                      highlighted:
-                          invitePulse &&
-                          (guideRegion == null ||
-                              phases[i].region == guideRegion),
+              expandTeach
+                  ? Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: phaseRow,
                     ),
-                  ],
-                ],
-              ),
+                  )
+                  : phaseRow,
               if (cue != null) ...[
-                const SizedBox(height: 14),
+                if (!expandTeach) const SizedBox(height: 14),
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(
