@@ -7227,6 +7227,19 @@ await tester.tap(find.text('STRONGER'));
     );
     expect(find.byType(SuitTapPicker), findsOneWidget);
     expect(find.text('Hearts, diamonds, clubs, spades'), findsNothing);
+    expect(find.text('Tap suits to build your answer.'), findsNothing);
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('suit-tap-picker-felt')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
     var autoSubmits = 0;
     controller.onAutoSubmit = () => autoSubmits += 1;
@@ -7284,7 +7297,7 @@ await tester.tap(find.text('STRONGER'));
     await tester.tap(find.text('Hearts'));
     await tester.pump();
     expect(
-      find.text('Keep tapping — include every real suit.'),
+      find.text('1 of 4 real suits — skip decoys.'),
       findsOneWidget,
     );
 
@@ -7292,7 +7305,8 @@ await tester.tap(find.text('STRONGER'));
     controller.bindActivity(guided);
     await tester.pump();
     expect(controller.draft.choiceId, isNull);
-    expect(find.text('Tap suits to build your answer.'), findsOneWidget);
+    // Rex owns empty-state cue — no duplicate footer after resume.
+    expect(find.text('Tap suits to build your answer.'), findsNothing);
     expect(find.byType(SuitTapPicker), findsOneWidget);
 
     await tester.tap(find.text('Hearts'));

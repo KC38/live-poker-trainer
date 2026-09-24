@@ -1791,7 +1791,8 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
   String _statusLine() {
     if (widget.controller.lastResult != null) return '';
     if (widget.controller.submitting) return 'Checking…';
-    if (_selected.isEmpty) return 'Tap suits to build your answer.';
+    // Rex owns the empty-state cue — no duplicate "tap suits…" footer.
+    if (_selected.isEmpty) return '';
     final hasAllReal = _selected.containsAll(const {
       LessonSuitToken.hearts,
       LessonSuitToken.diamonds,
@@ -1809,46 +1810,74 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
       animation: widget.controller,
       builder: (context, _) {
         final status = _statusLine();
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        final feltHeight = MediaQuery.sizeOf(context).height * 0.58;
+        final tiles = Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          alignment: WrapAlignment.center,
           children: [
-            Container(
-              padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-              decoration: BoxDecoration(
-                color: AppColors.feltLight.withValues(alpha: 0.88),
-                borderRadius: BorderRadius.circular(18),
-                border: Border.all(
-                  color: AppColors.feltBorder.withValues(alpha: 0.55),
-                ),
+            for (final token in _palette)
+              SuitTapTile(
+                token: token,
+                selected: _selected.contains(token),
+                enabled: !widget.locked,
+                onPressed: () => _toggle(token),
               ),
-              child: Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                alignment: WrapAlignment.center,
-                children: [
-                  for (final token in _palette)
-                    SuitTapTile(
-                      token: token,
-                      selected: _selected.contains(token),
-                      enabled: !widget.locked,
-                      onPressed: () => _toggle(token),
-                    ),
-                ],
-              ),
+          ],
+        );
+        final statusText =
+            status.isEmpty
+                ? null
+                : Text(
+                  status,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.gold,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                );
+        final content = Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            tiles,
+            if (statusText != null) ...[
+              const SizedBox(height: 16),
+              statusText,
+            ],
+          ],
+        );
+        return Container(
+          key: const ValueKey('suit-tap-picker-felt'),
+          width: double.infinity,
+          height: feltHeight,
+          padding: const EdgeInsets.fromLTRB(12, 18, 12, 18),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [AppColors.feltLight, AppColors.feltDark],
             ),
-            if (status.isNotEmpty) ...[
-              const SizedBox(height: 12),
-              Text(
-                status,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.manrope(
-                  color: AppColors.slate,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: AppColors.feltBorder.withValues(alpha: 0.85),
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: SizedBox(
+                    width: MediaQuery.sizeOf(context).width - 48,
+                    child: content,
+                  ),
                 ),
               ),
             ],
-          ],
+          ),
         );
       },
     );
