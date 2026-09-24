@@ -2930,12 +2930,27 @@ await tester.tap(find.text('VALUE'));
     );
     expect(find.byType(TurnStoryDemo), findsOneWidget);
     expect(find.text('Tap BRICK next'), findsOneWidget);
-    expect(find.text('Tap Brick, Change, Barrel, and Delay.'), findsNothing);
     expect(find.text('Tap Brick, Change, Barrel, and Delay'), findsNothing);
+    expect(find.text('Tap Brick, Change, Barrel, and Delay.'), findsNothing);
+    expect(
+      find.text('Brick · change · barrel · delay with intent'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(TurnStoryDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
-    await tester.tap(find.text('BRICK'));
+await tester.tap(find.text('BRICK'));
     await tester.pump();
     expect(find.text('Tap CHANGE next'), findsOneWidget);
     await tester.tap(find.text('CHANGE'));
@@ -2947,6 +2962,15 @@ await tester.tap(find.text('VALUE'));
     await tester.tap(find.text('DELAY'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Brick · change · barrel · delay with intent'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(TurnStoryDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
