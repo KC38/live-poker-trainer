@@ -13991,6 +13991,56 @@ void main() {
     );
   });
 
+  testWidgets(
+    'vs-lags explain taps Call Trap Fancy less instead of Continue',
+    (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-12-03-explain',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText: 'Versus LAG: trap more, call wider, fancy less.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text: 'Versus LAG: trap more, call wider, fancy less.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    expect(find.byType(VsLagsDemo), findsOneWidget);
+    expect(find.text('Tap CALL next'), findsOneWidget);
+    expect(find.text('Tap Call, Trap, and Fancy less.'), findsNothing);
+    expect(find.text('Tap Call, Trap, and Fancy less'), findsNothing);
+    expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    expect(isTableRegionTapActivity(activity), isTrue);
+
+    await tester.tap(find.text('CALL'));
+    await tester.pump();
+    expect(find.text('Tap TRAP next'), findsOneWidget);
+    await tester.tap(find.text('TRAP'));
+    await tester.pump();
+    expect(find.text('Tap FANCY LESS next'), findsOneWidget);
+    await tester.tap(find.text('FANCY LESS'));
+    await tester.pump();
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
   testWidgets('s6 adjust lag guided docks Call on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-06-12-03-guided',
