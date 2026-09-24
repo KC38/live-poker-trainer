@@ -5916,10 +5916,12 @@ class LessonTableContext extends StatelessWidget {
 
     // Keep densify after the seat tap while Continue shows — SoftPulse /
     // selection clear on lock must not collapse the teach shell.
-    // Interactive checkpoints (highlight.none) also densify — teach-by-doing
-    // without SoftPulse spoilers still needs a filled felt, not navy void.
+    // Interactive checkpoints (highlight.none) densify for teach-by-doing;
+    // selectedRegion/seat keep the shell filled after onRegionTap clears on lock.
     final densifyShell =
         _interactive ||
+        selectedRegion != null ||
+        selectedSeatIndex != null ||
         scene.highlight == LessonTableHighlight.button ||
         scene.highlight == LessonTableHighlight.smallBlind ||
         scene.highlight == LessonTableHighlight.bigBlind;
