@@ -281,6 +281,15 @@ enum LessonTableRegion {
   /// Flop-class guided distractor: air.
   flopClassAir,
 
+  /// Flop-class scaffolded: nut flush draw (correct).
+  flopClassNfd,
+
+  /// Flop-class scaffolded distractor: made top pair.
+  flopClassFakeMade,
+
+  /// Flop-class scaffolded distractor: showdown value.
+  flopClassSdv,
+
   /// S3 jump leak: fold bad price (correct).
   jumpLeakFoldPrice,
 
@@ -1493,6 +1502,9 @@ enum LessonTableLayout {
   /// Flop-class guided: Made / Draw / Air with board + holes.
   flopClassGuidedOutcomes,
 
+  /// Flop-class scaffolded: Draw / Made / SDV with board + holes.
+  flopClassScaffoldedOutcomes,
+
   /// S3 jump: fold bad price vs call any draw.
   jumpLeakPriceOutcomes,
 
@@ -2228,6 +2240,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-03-02-01-scaffolded':
       return const LessonTableScene(
+        layout: LessonTableLayout.flopClassScaffoldedOutcomes,
         heroCodes: ['Ah', '9h'],
         boardCodes: ['Jh', '8h', '3c'],
         villainSeatCount: 0,
@@ -3718,6 +3731,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.flopClassAir => pick('air-tp'),
         _ => null,
       };
+    case 'act-03-02-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.flopClassNfd => pick('nfd'),
+        LessonTableRegion.flopClassFakeMade => pick('made-aj'),
+        LessonTableRegion.flopClassSdv => pick('sdv'),
+        _ => null,
+      };
     case 'act-03-08-02-jump-leak':
       return switch (region) {
         LessonTableRegion.jumpLeakFoldPrice => pick('j3-foldprice'),
@@ -4833,6 +4853,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-01-01-unguided' ||
       activity.id == 'act-03-01-01-checkpoint' ||
       activity.id == 'act-03-02-01-guided' ||
+      activity.id == 'act-03-02-01-scaffolded' ||
       activity.id == 'act-03-03-01-scaffolded' ||
       activity.id == 'act-03-03-01-unguided' ||
       activity.id == 'act-03-03-01-checkpoint' ||
@@ -5152,6 +5173,8 @@ class LessonTableContext extends StatelessWidget {
           _buildJumpFlopClassOutcomes(),
       LessonTableLayout.flopClassGuidedOutcomes =>
           _buildFlopClassGuidedOutcomes(),
+      LessonTableLayout.flopClassScaffoldedOutcomes =>
+          _buildFlopClassScaffoldedOutcomes(),
       LessonTableLayout.jumpLeakPriceOutcomes =>
           _buildJumpLeakPriceOutcomes(),
       LessonTableLayout.rangesGuidedOutcomes => _buildRangesGuidedOutcomes(),
@@ -6993,6 +7016,49 @@ class LessonTableContext extends StatelessWidget {
           detail: 'No equity',
           visual: const Icon(
             Icons.air,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFlopClassScaffoldedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive flop class — tap Draw, Made, or showdown value',
+      semanticsStatic: 'Flop class scaffolded outcomes',
+      caption: scene.caption ?? 'Flop · nut flush draw',
+      cueLabel: 'Tap Draw.',
+      guideRegion: LessonTableRegion.flopClassNfd,
+      phases: [
+        (
+          region: LessonTableRegion.flopClassNfd,
+          title: 'Draw',
+          detail: 'Nut flush',
+          visual: const Icon(
+            Icons.waterfall_chart,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.flopClassFakeMade,
+          title: 'Made',
+          detail: 'Top pair?',
+          visual: const Icon(
+            Icons.workspace_premium_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.flopClassSdv,
+          title: 'SDV',
+          detail: 'Ace-high now',
+          visual: const Icon(
+            Icons.balance,
             color: AppColors.slate,
             size: 24,
           ),
