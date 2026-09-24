@@ -440,6 +440,15 @@ enum LessonTableRegion {
   /// S4 sizing unguided distractor: 1-chip bets fine.
   sizingTinyOk,
 
+  /// BB convert: correct chips ÷ BB result.
+  bbConvertCorrect,
+
+  /// BB convert distractor: too low in big blinds.
+  bbConvertLow,
+
+  /// BB convert distractor: too high in big blinds.
+  bbConvertHigh,
+
   /// SPR guided: correct ratio (80 ÷ 20 = 4).
   sprRatioFour,
 
@@ -1685,6 +1694,9 @@ enum LessonTableLayout {
   /// S4 sizing unguided: soft band vs exactness.
   sizingUnguidedOutcomes,
 
+  /// S2 BB convert: tap stack in big blinds from chips÷BB.
+  bbConvertOutcomes,
+
   /// S4 SPR guided: tap SPR 4 / 2 / 8 from stack÷pot.
   sprGuidedOutcomes,
 
@@ -2335,6 +2347,20 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         layout: LessonTableLayout.effectiveStackOutcomes,
         caption: 'You 120bb · Villain 55bb',
+      );
+    case 'act-02-05-01-guided-convert':
+      return const LessonTableScene(
+        layout: LessonTableLayout.bbConvertOutcomes,
+        villainSeatCount: 0,
+        highlight: LessonTableHighlight.none,
+        caption: 'Chips 200 · BB 2',
+      );
+    case 'act-02-05-01-checkpoint-200':
+      return const LessonTableScene(
+        layout: LessonTableLayout.bbConvertOutcomes,
+        villainSeatCount: 0,
+        highlight: LessonTableHighlight.none,
+        caption: 'Chips 1000 · BB 5',
       );
     case 'act-02-05-01-scaffolded-eff':
       return const LessonTableScene(
@@ -3812,6 +3838,20 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.effectiveStackSum => pick('j2-175'),
         _ => null,
       };
+    case 'act-02-05-01-guided-convert':
+      return switch (region) {
+        LessonTableRegion.bbConvertCorrect => pick('bb-100'),
+        LessonTableRegion.bbConvertLow => pick('bb-50'),
+        LessonTableRegion.bbConvertHigh => pick('bb-200'),
+        _ => null,
+      };
+    case 'act-02-05-01-checkpoint-200':
+      return switch (region) {
+        LessonTableRegion.bbConvertCorrect => pick('bb-200'),
+        LessonTableRegion.bbConvertLow => pick('bb-100'),
+        LessonTableRegion.bbConvertHigh => pick('bb-500'),
+        _ => null,
+      };
     case 'act-02-05-01-scaffolded-eff':
       return switch (region) {
         LessonTableRegion.effectiveStackShort => pick('eff-60'),
@@ -5123,6 +5163,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id.startsWith('act-02-01-01-') ||
       activity.id == 'act-02-01-02-unguided-wait' ||
       activity.id == 'act-02-01-02-checkpoint-full' ||
+      activity.id == 'act-02-05-01-guided-convert' ||
+      activity.id == 'act-02-05-01-checkpoint-200' ||
       activity.id == 'act-02-05-01-scaffolded-eff' ||
       activity.id == 'act-02-05-01-unguided-depth' ||
       activity.id.startsWith('act-02-06-01-') ||
@@ -5505,6 +5547,7 @@ class LessonTableContext extends StatelessWidget {
           _buildPlanCheckpointOutcomes(),
       LessonTableLayout.sizingUnguidedOutcomes =>
           _buildSizingUnguidedOutcomes(),
+      LessonTableLayout.bbConvertOutcomes => _buildBbConvertOutcomes(),
       LessonTableLayout.sprGuidedOutcomes => _buildSprGuidedOutcomes(),
       LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
       LessonTableLayout.tableReadMattersOutcomes =>
@@ -8205,6 +8248,95 @@ class LessonTableContext extends StatelessWidget {
             color: AppColors.slate,
             size: 24,
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBbConvertOutcomes() {
+    final caption = scene.caption ?? 'Chips 200 · BB 2';
+    final match = RegExp(
+      r'Chips\s+(\d+)\s*·\s*BB\s+(\d+)',
+      caseSensitive: false,
+    ).firstMatch(caption);
+    final chips = match?.group(1) ?? '200';
+    final bb = match?.group(2) ?? '2';
+    final chipsN = int.tryParse(chips) ?? 200;
+    final bbN = int.tryParse(bb) ?? 2;
+    // Guided: 200/2 → 100bb · 50bb · 200bb
+    // Checkpoint: 1000/5 → 200bb · 100bb · 500bb
+    final isCheckpointBuyIn = chipsN == 1000 && bbN == 5;
+    final correctBb = isCheckpointBuyIn ? 200 : 100;
+    final lowBb = isCheckpointBuyIn ? 100 : 50;
+    final highBb = isCheckpointBuyIn ? 500 : 200;
+
+    Widget chipsBbChip({
+      required String value,
+      required String label,
+      required bool gold,
+    }) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _PotChipDot(label: value, gold: gold),
+          const SizedBox(height: 6),
+          Text(
+            label,
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 11,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.4,
+            ),
+          ),
+        ],
+      );
+    }
+
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive BB convert — tap the stack in big blinds',
+      semanticsStatic: 'BB convert outcomes',
+      caption: caption,
+      cueLabel: 'Tap ${correctBb}bb.',
+      guideRegion: LessonTableRegion.bbConvertCorrect,
+      minHeightFactor: 0.55,
+      header: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          chipsBbChip(value: chips, label: 'Chips', gold: true),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18),
+            child: Text(
+              '÷',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 28,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ),
+          chipsBbChip(value: bb, label: 'BB', gold: false),
+        ],
+      ),
+      phases: [
+        (
+          region: LessonTableRegion.bbConvertCorrect,
+          title: '${correctBb}bb',
+          detail: 'Chips ÷ BB',
+          visual: _PotChipDot(label: '$correctBb', gold: true),
+        ),
+        (
+          region: LessonTableRegion.bbConvertLow,
+          title: '${lowBb}bb',
+          detail: 'Too low?',
+          visual: _PotChipDot(label: '$lowBb', gold: false),
+        ),
+        (
+          region: LessonTableRegion.bbConvertHigh,
+          title: '${highBb}bb',
+          detail: 'Too high?',
+          visual: _PotChipDot(label: '$highBb', gold: false),
         ),
       ],
     );

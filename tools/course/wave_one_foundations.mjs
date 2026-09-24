@@ -1727,14 +1727,19 @@ export function buildSectionTwo() {
               dialogue("act-02-05-01-explain-bb", 1,
                 "Count stacks in big blinds. The shorter stack sets the ceiling.",
                 {objectives: ["Convert chips to big blinds"]}),
-              numericAct({
+              selectAct({
                 id: "act-02-05-01-guided-convert", order: 2, stage: "guided",
-                question: "Blinds 1/2. You have 200 chips. How many big blinds?",
+                prompt: "Blinds 1/2. You have 200 chips. How many big blinds?",
                 a11y: "Convert 200 chips at 1/2 into big blinds.",
                 objectives: ["Convert chips to big blinds"],
-                unit: "bb", min: 100, max: 100,
-                okFeedback: "200 / 2 = 100 big blinds.",
-                missFeedback: "Divide your chips by the big blind.",
+                choices: [
+                  choice("bb-100", "100bb", "recommended",
+                    "200 / 2 = 100 big blinds."),
+                  choice("bb-50", "50bb", "clear_mistake",
+                    "Divide your chips by the big blind.", {betterChoiceId: "bb-100"}),
+                  choice("bb-200", "200bb", "clear_mistake",
+                    "Divide your chips by the big blind.", {betterChoiceId: "bb-100"}),
+                ],
               }),
               selectAct({
                 id: "act-02-05-01-scaffolded-eff", order: 3, stage: "scaffolded",
@@ -1768,18 +1773,23 @@ export function buildSectionTwo() {
                     {betterChoiceId: "depth-50"}),
                 ],
               }),
-              numericAct({
+              selectAct({
                 id: "act-02-05-01-checkpoint-200", order: 5, stage: "checkpoint",
-                question: "Blinds 2/5. You buy in for 1000 chips. Stack in big blinds?",
+                prompt: "Blinds 2/5. You buy in for 1000 chips. Stack in big blinds?",
                 a11y: "Convert a 1000 chip buy-in at 2/5 to big blinds.",
                 objectives: [
                   "Convert chips to big blinds",
                   "Sense 50bb vs 100bb vs 200bb depth",
                 ],
-                unit: "bb", min: 200, max: 200,
-                okFeedback: "1000 / 5 = 200 big blinds — deep.",
-                missFeedback: "Divide buy-in by the big blind (5).",
                 lifeLoss: true,
+                choices: [
+                  choice("bb-200", "200bb", "recommended",
+                    "1000 / 5 = 200 big blinds — deep."),
+                  choice("bb-100", "100bb", "clear_mistake",
+                    "Divide buy-in by the big blind (5).", {betterChoiceId: "bb-200"}),
+                  choice("bb-500", "500bb", "clear_mistake",
+                    "Divide buy-in by the big blind (5).", {betterChoiceId: "bb-200"}),
+                ],
               }),
             ],
           }),

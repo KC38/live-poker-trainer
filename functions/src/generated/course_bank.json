@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "36c7b859a4921b33fabb5891da4b73225a5a1ffbcb664eb019955ae4c06192de",
+  "contentChecksum": "f2e7b4917ff96b7e62bb54cd489ca3c760471f7e3e17c3e9ce9fd6c8cb8b3d48",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -4373,7 +4373,7 @@
                   "id": "act-02-05-01-guided-convert",
                   "order": 2,
                   "stage": "guided",
-                  "renderer": "numeric_pot_price",
+                  "renderer": "select_identify",
                   "estimatedSeconds": 40,
                   "accessibilityText": "Convert 200 chips at 1/2 into big blinds.",
                   "acceptedGrades": [
@@ -4385,20 +4385,38 @@
                   "objectives": [
                     "Convert chips to big blinds"
                   ],
-                  "numericPrompt": {
-                    "question": "Blinds 1/2. You have 200 chips. How many big blinds?",
-                    "unit": "bb",
-                    "acceptedMin": 100,
-                    "acceptedMax": 100,
-                    "grading": {
-                      "grade": "recommended",
-                      "feedback": "200 / 2 = 100 big blinds."
+                  "prompt": "Blinds 1/2. You have 200 chips. How many big blinds?",
+                  "choices": [
+                    {
+                      "id": "bb-100",
+                      "label": "100bb",
+                      "accessibilityText": "100bb",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "200 / 2 = 100 big blinds."
+                      }
                     },
-                    "missGrading": {
-                      "grade": "clear_mistake",
-                      "feedback": "Divide your chips by the big blind."
+                    {
+                      "id": "bb-50",
+                      "label": "50bb",
+                      "accessibilityText": "50bb",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Divide your chips by the big blind.",
+                        "betterChoiceId": "bb-100"
+                      }
+                    },
+                    {
+                      "id": "bb-200",
+                      "label": "200bb",
+                      "accessibilityText": "200bb",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Divide your chips by the big blind.",
+                        "betterChoiceId": "bb-100"
+                      }
                     }
-                  }
+                  ]
                 },
                 {
                   "id": "act-02-05-01-scaffolded-eff",
@@ -4501,8 +4519,8 @@
                   "id": "act-02-05-01-checkpoint-200",
                   "order": 5,
                   "stage": "checkpoint",
-                  "renderer": "numeric_pot_price",
-                  "estimatedSeconds": 40,
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
                   "accessibilityText": "Convert a 1000 chip buy-in at 2/5 to big blinds.",
                   "acceptedGrades": [
                     "recommended",
@@ -4514,20 +4532,38 @@
                     "Convert chips to big blinds",
                     "Sense 50bb vs 100bb vs 200bb depth"
                   ],
-                  "numericPrompt": {
-                    "question": "Blinds 2/5. You buy in for 1000 chips. Stack in big blinds?",
-                    "unit": "bb",
-                    "acceptedMin": 200,
-                    "acceptedMax": 200,
-                    "grading": {
-                      "grade": "recommended",
-                      "feedback": "1000 / 5 = 200 big blinds — deep."
+                  "prompt": "Blinds 2/5. You buy in for 1000 chips. Stack in big blinds?",
+                  "choices": [
+                    {
+                      "id": "bb-200",
+                      "label": "200bb",
+                      "accessibilityText": "200bb",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "1000 / 5 = 200 big blinds — deep."
+                      }
                     },
-                    "missGrading": {
-                      "grade": "clear_mistake",
-                      "feedback": "Divide buy-in by the big blind (5)."
+                    {
+                      "id": "bb-100",
+                      "label": "100bb",
+                      "accessibilityText": "100bb",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Divide buy-in by the big blind (5).",
+                        "betterChoiceId": "bb-200"
+                      }
+                    },
+                    {
+                      "id": "bb-500",
+                      "label": "500bb",
+                      "accessibilityText": "500bb",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Divide buy-in by the big blind (5).",
+                        "betterChoiceId": "bb-200"
+                      }
                     }
-                  }
+                  ]
                 }
               ]
             }
@@ -23407,23 +23443,27 @@
     "act-02-05-01-guided-convert": {
       "activityId": "act-02-05-01-guided-convert",
       "stage": "guided",
-      "renderer": "numeric_pot_price",
+      "renderer": "select_identify",
       "acceptedGrades": [
         "recommended",
         "strong",
         "reasonable"
       ],
       "lifeLossEligible": false,
-      "numericPrompt": {
-        "acceptedMin": 100,
-        "acceptedMax": 100,
-        "grading": {
+      "choiceGrading": {
+        "bb-100": {
           "grade": "recommended",
           "feedback": "200 / 2 = 100 big blinds."
         },
-        "missGrading": {
+        "bb-50": {
           "grade": "clear_mistake",
-          "feedback": "Divide your chips by the big blind."
+          "feedback": "Divide your chips by the big blind.",
+          "betterChoiceId": "bb-100"
+        },
+        "bb-200": {
+          "grade": "clear_mistake",
+          "feedback": "Divide your chips by the big blind.",
+          "betterChoiceId": "bb-100"
         }
       }
     },
@@ -23483,23 +23523,27 @@
     "act-02-05-01-checkpoint-200": {
       "activityId": "act-02-05-01-checkpoint-200",
       "stage": "checkpoint",
-      "renderer": "numeric_pot_price",
+      "renderer": "select_identify",
       "acceptedGrades": [
         "recommended",
         "strong",
         "reasonable"
       ],
       "lifeLossEligible": true,
-      "numericPrompt": {
-        "acceptedMin": 200,
-        "acceptedMax": 200,
-        "grading": {
+      "choiceGrading": {
+        "bb-200": {
           "grade": "recommended",
           "feedback": "1000 / 5 = 200 big blinds — deep."
         },
-        "missGrading": {
+        "bb-100": {
           "grade": "clear_mistake",
-          "feedback": "Divide buy-in by the big blind (5)."
+          "feedback": "Divide buy-in by the big blind (5).",
+          "betterChoiceId": "bb-200"
+        },
+        "bb-500": {
+          "grade": "clear_mistake",
+          "feedback": "Divide buy-in by the big blind (5).",
+          "betterChoiceId": "bb-200"
         }
       }
     },

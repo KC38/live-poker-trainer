@@ -350,6 +350,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Look at your holes — tap the family.',
       'act-02-02-01-checkpoint-trash' =>
           'Early seat with junk — tap the family.',
+      'act-02-05-01-guided-convert' =>
+          '200 chips at 1/2 — tap the stack in big blinds.',
+      'act-02-05-01-checkpoint-200' =>
+          '1000 chips at 2/5 — tap the buy-in in big blinds.',
       'act-02-05-01-scaffolded-eff' =>
           'You 150bb, villain 60bb — tap the effective stack.',
       'act-02-05-01-unguided-depth' =>
@@ -755,6 +759,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-02-07-01-checkpoint-habit' ||
             widget.activity.id == 'act-02-07-02-jump-pos' ||
             widget.activity.id == 'act-02-07-02-jump-stack' ||
+            widget.activity.id == 'act-02-05-01-guided-convert' ||
+            widget.activity.id == 'act-02-05-01-checkpoint-200' ||
             widget.activity.id == 'act-02-05-01-scaffolded-eff' ||
             widget.activity.id == 'act-02-05-01-unguided-depth' ||
             widget.activity.id == 'act-02-02-01-guided-pair' ||
