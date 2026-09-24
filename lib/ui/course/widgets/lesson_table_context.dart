@@ -2601,6 +2601,13 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.none,
         caption: 'Stack 80bb · Pot 20bb',
       );
+    case 'act-04-10-02-jump-spr':
+      return const LessonTableScene(
+        layout: LessonTableLayout.sprGuidedOutcomes,
+        villainSeatCount: 0,
+        highlight: LessonTableHighlight.none,
+        caption: 'Stack 60bb · Pot 15bb',
+      );
     case 'act-04-05-01-checkpoint':
       return const LessonTableScene(
         heroCodes: ['Ah', 'Kd'],
@@ -4035,6 +4042,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.sprRatioEight => pick('spr-8'),
         _ => null,
       };
+    case 'act-04-10-02-jump-spr':
+      return switch (region) {
+        LessonTableRegion.sprRatioFour => pick('spr-4'),
+        LessonTableRegion.sprRatioTwo => pick('spr-2'),
+        LessonTableRegion.sprRatioEight => pick('spr-8'),
+        _ => null,
+      };
     case 'act-03-01-01-scaffolded':
       // Preflop open: UTG is left of the BB (earlyPosition on the felt).
       return switch (region) {
@@ -5151,6 +5165,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-04-03-01-checkpoint' ||
       activity.id == 'act-04-04-01-unguided' ||
       activity.id == 'act-04-05-01-guided' ||
+      activity.id == 'act-04-10-02-jump-spr' ||
       activity.id == 'act-04-06-01-guided' ||
       activity.id == 'act-04-06-01-scaffolded' ||
       activity.id == 'act-04-06-01-unguided' ||
@@ -8196,6 +8211,14 @@ class LessonTableContext extends StatelessWidget {
   }
 
   Widget _buildSprGuidedOutcomes() {
+    final caption = scene.caption ?? 'Stack 80bb · Pot 20bb';
+    final match = RegExp(
+      r'Stack\s+(\d+)bb\s*·\s*Pot\s+(\d+)bb',
+      caseSensitive: false,
+    ).firstMatch(caption);
+    final stack = match?.group(1) ?? '80';
+    final pot = match?.group(2) ?? '20';
+
     Widget stackPotChip({
       required String value,
       required String label,
@@ -8223,14 +8246,14 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive:
           'Interactive SPR — tap 4, 2, or 8 from stack divided by pot',
       semanticsStatic: 'SPR guided outcomes',
-      caption: scene.caption ?? 'Stack 80bb · Pot 20bb',
+      caption: caption,
       cueLabel: 'Tap SPR 4.',
       guideRegion: LessonTableRegion.sprRatioFour,
       minHeightFactor: 0.55,
       header: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          stackPotChip(value: '80', label: 'Stack', gold: true),
+          stackPotChip(value: stack, label: 'Stack', gold: true),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18),
             child: Text(
@@ -8242,7 +8265,7 @@ class LessonTableContext extends StatelessWidget {
               ),
             ),
           ),
-          stackPotChip(value: '20', label: 'Pot', gold: false),
+          stackPotChip(value: pot, label: 'Pot', gold: false),
         ],
       ),
       phases: [

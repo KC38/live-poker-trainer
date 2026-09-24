@@ -1877,15 +1877,20 @@ export function buildSectionFour() {
                     "Never.", {action: "FOLD", betterChoiceId: "j4-3bet"})
                 ],
               }),
-              numericAct({
+              selectAct({
                 id: "act-04-10-02-jump-spr", order: 3, stage: "jump_test",
-                question: "Stack 60bb, pot 15bb. SPR?",
+                prompt: "Stack 60bb, pot 15bb. SPR?",
                 a11y: "Jump: SPR 4.",
                 objectives: ["Confirm sizing and SPR"],
                 lifeLoss: true,
-                unit: "ratio", min: 4, max: 4,
-                okFeedback: "60/15 = 4.",
-                missFeedback: "Divide stack by pot.",
+                choices: [
+                  choice("spr-4", "4", "recommended",
+                    "60/15 = 4."),
+                  choice("spr-2", "2", "clear_mistake",
+                    "Divide stack by pot.", {betterChoiceId: "spr-4"}),
+                  choice("spr-8", "8", "clear_mistake",
+                    "Divide stack by pot.", {betterChoiceId: "spr-4"})
+                ],
               }),
               actionAct({
                 id: "act-04-10-02-jump-size", order: 4, stage: "jump_test",

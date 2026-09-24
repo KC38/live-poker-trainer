@@ -11590,7 +11590,7 @@
                   "id": "act-04-10-02-jump-spr",
                   "order": 3,
                   "stage": "jump_test",
-                  "renderer": "numeric_pot_price",
+                  "renderer": "select_identify",
                   "estimatedSeconds": 40,
                   "accessibilityText": "Jump: SPR 4.",
                   "acceptedGrades": [
@@ -11602,20 +11602,38 @@
                   "objectives": [
                     "Confirm sizing and SPR"
                   ],
-                  "numericPrompt": {
-                    "question": "Stack 60bb, pot 15bb. SPR?",
-                    "unit": "ratio",
-                    "acceptedMin": 4,
-                    "acceptedMax": 4,
-                    "grading": {
-                      "grade": "recommended",
-                      "feedback": "60/15 = 4."
+                  "prompt": "Stack 60bb, pot 15bb. SPR?",
+                  "choices": [
+                    {
+                      "id": "spr-4",
+                      "label": "4",
+                      "accessibilityText": "4",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "60/15 = 4."
+                      }
                     },
-                    "missGrading": {
-                      "grade": "clear_mistake",
-                      "feedback": "Divide stack by pot."
+                    {
+                      "id": "spr-2",
+                      "label": "2",
+                      "accessibilityText": "2",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Divide stack by pot.",
+                        "betterChoiceId": "spr-4"
+                      }
+                    },
+                    {
+                      "id": "spr-8",
+                      "label": "8",
+                      "accessibilityText": "8",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Divide stack by pot.",
+                        "betterChoiceId": "spr-4"
+                      }
                     }
-                  }
+                  ]
                 },
                 {
                   "id": "act-04-10-02-jump-size",

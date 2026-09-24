@@ -7804,6 +7804,59 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 jump spr taps SPR 4 on densified 60÷15 felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-04-10-02-jump-spr',
+      order: 3,
+      stage: ActivityStage.jumpTest,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Jump: SPR 4.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Stack 60bb, pot 15bb. SPR?',
+      choices: const [
+        CourseChoice(id: 'spr-4', label: '4'),
+        CourseChoice(id: 'spr-2', label: '2'),
+        CourseChoice(id: 'spr-8', label: '8'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.sprGuidedOutcomes,
+    );
+    expect(resolveLessonTableScene(activity)?.caption, 'Stack 60bb · Pot 15bb');
+    expect(resolveLessonTableScene(activity)?.villainSeatCount, 0);
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(find.text('Stack 60 into pot 15 — tap the SPR.'), findsOneWidget);
+    expect(find.text('Stack 60bb · Pot 15bb'), findsOneWidget);
+    expect(find.text('Them'), findsNothing);
+    expect(find.text('60'), findsWidgets);
+    expect(find.text('15'), findsWidgets);
+    expect(find.text('SPR 4'), findsOneWidget);
+    expect(find.byType(TextField), findsNothing);
+    // Jump test: no SoftPulse spoiler cue.
+    expect(find.text('Tap SPR 4.'), findsNothing);
+    await tester.tap(find.text('SPR 4'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'spr-4');
+    controller.dispose();
+  });
+
   testWidgets('s2 bb convert guided shows chips felt and convert coach', (
     tester,
   ) async {

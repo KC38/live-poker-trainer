@@ -257,6 +257,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // SPR: tap 4 / 2 / 8 on densified stack÷pot felt (no type-in).
     return SelectIdentifyPresentation.tableRegionTap;
   }
+  if (activity.id == 'act-04-10-02-jump-spr') {
+    // S4 jump SPR: tap 4 / 2 / 8 on densified stack÷pot felt (no type-in).
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id == 'act-04-06-01-guided') {
     // Observe: tap participation note on felt tiles.
     return SelectIdentifyPresentation.tableRegionTap;

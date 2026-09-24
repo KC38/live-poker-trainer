@@ -410,6 +410,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Two value sizes both get calls — tap the grading idea.',
       'act-04-05-01-guided' =>
           'Effective 80 into pot 20 — tap the SPR.',
+      'act-04-10-02-jump-spr' =>
+          'Stack 60 into pot 15 — tap the SPR.',
       'act-04-06-01-guided' =>
           'Seat calls 7 of 9 preflops — tap the observation.',
       'act-04-06-01-scaffolded' =>
@@ -791,6 +793,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-04-03-01-checkpoint' ||
             widget.activity.id == 'act-04-04-01-unguided' ||
             widget.activity.id == 'act-04-05-01-guided' ||
+            widget.activity.id == 'act-04-10-02-jump-spr' ||
             widget.activity.id == 'act-04-06-01-guided' ||
             widget.activity.id == 'act-04-06-01-scaffolded' ||
             widget.activity.id == 'act-04-06-01-unguided' ||

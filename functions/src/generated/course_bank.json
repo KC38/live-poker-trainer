@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "da642e4cc85b6889673790b7b6746db6d4b8620f069c8d88999dccf872bf5290",
+  "contentChecksum": "36c7b859a4921b33fabb5891da4b73225a5a1ffbcb664eb019955ae4c06192de",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -11591,7 +11591,7 @@
                   "id": "act-04-10-02-jump-spr",
                   "order": 3,
                   "stage": "jump_test",
-                  "renderer": "numeric_pot_price",
+                  "renderer": "select_identify",
                   "estimatedSeconds": 40,
                   "accessibilityText": "Jump: SPR 4.",
                   "acceptedGrades": [
@@ -11603,20 +11603,38 @@
                   "objectives": [
                     "Confirm sizing and SPR"
                   ],
-                  "numericPrompt": {
-                    "question": "Stack 60bb, pot 15bb. SPR?",
-                    "unit": "ratio",
-                    "acceptedMin": 4,
-                    "acceptedMax": 4,
-                    "grading": {
-                      "grade": "recommended",
-                      "feedback": "60/15 = 4."
+                  "prompt": "Stack 60bb, pot 15bb. SPR?",
+                  "choices": [
+                    {
+                      "id": "spr-4",
+                      "label": "4",
+                      "accessibilityText": "4",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "60/15 = 4."
+                      }
                     },
-                    "missGrading": {
-                      "grade": "clear_mistake",
-                      "feedback": "Divide stack by pot."
+                    {
+                      "id": "spr-2",
+                      "label": "2",
+                      "accessibilityText": "2",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Divide stack by pot.",
+                        "betterChoiceId": "spr-4"
+                      }
+                    },
+                    {
+                      "id": "spr-8",
+                      "label": "8",
+                      "accessibilityText": "8",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Divide stack by pot.",
+                        "betterChoiceId": "spr-4"
+                      }
                     }
-                  }
+                  ]
                 },
                 {
                   "id": "act-04-10-02-jump-size",
@@ -26590,23 +26608,27 @@
     "act-04-10-02-jump-spr": {
       "activityId": "act-04-10-02-jump-spr",
       "stage": "jump_test",
-      "renderer": "numeric_pot_price",
+      "renderer": "select_identify",
       "acceptedGrades": [
         "recommended",
         "strong",
         "reasonable"
       ],
       "lifeLossEligible": true,
-      "numericPrompt": {
-        "acceptedMin": 4,
-        "acceptedMax": 4,
-        "grading": {
+      "choiceGrading": {
+        "spr-4": {
           "grade": "recommended",
           "feedback": "60/15 = 4."
         },
-        "missGrading": {
+        "spr-2": {
           "grade": "clear_mistake",
-          "feedback": "Divide stack by pot."
+          "feedback": "Divide stack by pot.",
+          "betterChoiceId": "spr-4"
+        },
+        "spr-8": {
+          "grade": "clear_mistake",
+          "feedback": "Divide stack by pot.",
+          "betterChoiceId": "spr-4"
         }
       }
     },
