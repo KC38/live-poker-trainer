@@ -272,6 +272,12 @@ enum LessonTableRegion {
   /// S3 jump class distractor: air.
   jumpClassAir,
 
+  /// S3 jump leak: fold bad price (correct).
+  jumpLeakFoldPrice,
+
+  /// S3 jump leak distractor: call any draw.
+  jumpLeakCallLucky,
+
   /// Verbal action: raise stands (binding).
   verbalRaiseStands,
 
@@ -1421,6 +1427,9 @@ enum LessonTableLayout {
   /// S3 jump: flop class Draw / Made / Air.
   jumpFlopClassOutcomes,
 
+  /// S3 jump: fold bad price vs call any draw.
+  jumpLeakPriceOutcomes,
+
   /// Thin-value checkpoint: read-driven line vs coin flip.
   thinValueReadOutcomes,
 
@@ -2253,6 +2262,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-03-08-02-jump-leak':
       return const LessonTableScene(
+        layout: LessonTableLayout.jumpLeakPriceOutcomes,
         heroCodes: ['Jh', 'Td'],
         boardCodes: ['As', '7c', '2d'],
         villainSeatCount: 1,
@@ -3614,6 +3624,12 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.jumpClassAir => pick('j3-air'),
         _ => null,
       };
+    case 'act-03-08-02-jump-leak':
+      return switch (region) {
+        LessonTableRegion.jumpLeakFoldPrice => pick('j3-foldprice'),
+        LessonTableRegion.jumpLeakCallLucky => pick('j3-callprice'),
+        _ => null,
+      };
     case 'act-03-01-01-scaffolded':
       // Preflop open: UTG is left of the BB (earlyPosition on the felt).
       return switch (region) {
@@ -4691,6 +4707,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-08-01-checkpoint' ||
       activity.id == 'act-03-08-02-jump-table' ||
       activity.id == 'act-03-08-02-jump-class' ||
+      activity.id == 'act-03-08-02-jump-leak' ||
       activity.id == 'act-04-06-01-guided' ||
       activity.id == 'act-04-06-02-guided' ||
       activity.id == 'act-04-06-02-scaffolded' ||
@@ -4990,6 +5007,8 @@ class LessonTableContext extends StatelessWidget {
           _buildJumpTableTrackOutcomes(),
       LessonTableLayout.jumpFlopClassOutcomes =>
           _buildJumpFlopClassOutcomes(),
+      LessonTableLayout.jumpLeakPriceOutcomes =>
+          _buildJumpLeakPriceOutcomes(),
       LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
       LessonTableLayout.tableReadMattersOutcomes =>
           _buildTableReadMattersOutcomes(),
@@ -6775,6 +6794,39 @@ class LessonTableContext extends StatelessWidget {
           detail: 'No equity',
           visual: const Icon(
             Icons.air,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildJumpLeakPriceOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive price leak — tap fold wrong price or call any draw',
+      semanticsStatic: 'Jump leak price outcomes',
+      caption: scene.caption ?? 'Gutshot · pot 10 · bet 20',
+      cueLabel: 'Tap Fold.',
+      guideRegion: LessonTableRegion.jumpLeakFoldPrice,
+      phases: [
+        (
+          region: LessonTableRegion.jumpLeakFoldPrice,
+          title: 'Fold',
+          detail: 'Price wrong',
+          visual: const Icon(
+            Icons.cancel_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.jumpLeakCallLucky,
+          title: 'Call',
+          detail: 'Any draw',
+          visual: const Icon(
+            Icons.check_circle_outline,
             color: AppColors.slate,
             size: 24,
           ),

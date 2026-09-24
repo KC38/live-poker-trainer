@@ -199,8 +199,8 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-03-08-02-jump-leak') {
-    // S3 jump: price on felt tiles (still refining).
-    return SelectIdentifyPresentation.handCategoryTap;
+    // S3 jump: tap Fold wrong price on densified gutshot felt.
+    return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id.startsWith('act-04-01-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
