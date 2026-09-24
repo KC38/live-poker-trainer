@@ -231,7 +231,8 @@ void main() {
     await tester.pump();
     await tester.pump();
 
-    expect(find.text('Tap your hole cards on the table.'), findsOneWidget);
+    expect(find.text('Tap your hole cards on the table.'), findsNothing);
+    expect(find.text('Tap your cards'), findsWidgets);
     expect(find.byType(MiniCard), findsWidgets);
     // Table taps auto-submit — no Check dock.
     expect(find.widgetWithText(FilledButton, 'Check'), findsNothing);
@@ -386,10 +387,12 @@ void main() {
     await tester.pump();
     expect(find.text('Caught up to your saved progress.'), findsOneWidget);
     // Resync lands on the guided hole-card step (server cursor).
-    expect(find.text('Tap your hole cards on the table.'), findsOneWidget);
+    // Felt-first SoftPulse owns the cue — no duplicate prompt/footer.
+    expect(find.text('Tap your hole cards on the table.'), findsNothing);
+    expect(find.text('Tap your cards'), findsWidgets);
     // Auto-submit table taps — Check is gone.
     expect(find.widgetWithText(FilledButton, 'Check'), findsNothing);
-    expect(find.text('Tap the answer on the table.'), findsOneWidget);
+    expect(find.text('Tap the answer on the table.'), findsNothing);
   });
 
   testWidgets('order-sequence lessons hide the Check dock', (tester) async {

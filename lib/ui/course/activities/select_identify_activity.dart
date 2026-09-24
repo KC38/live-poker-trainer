@@ -749,6 +749,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         // Felt + Rex already teach — skip near-duplicate prompt dumps on
         // street / pot / position felt quizzes (and hide Rex under Nice!).
         final feltFirstSelect =
+            widget.activity.id.startsWith('act-01-01-01-') ||
             widget.activity.id.startsWith('act-01-04-01-') ||
             widget.activity.id.startsWith('act-01-05-01-') ||
             widget.activity.id.startsWith('act-02-01-01-') ||
