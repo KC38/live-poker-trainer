@@ -7263,7 +7263,12 @@ void main() {
     );
     expect(
       resolveSelectIdentifyPresentation(activity),
-      SelectIdentifyPresentation.handCategoryTap,
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.outsImpliedOutcomes,
     );
     expect(
       resolveLessonTableScene(activity)?.caption,
@@ -7271,6 +7276,14 @@ void main() {
     );
     expect(resolveLessonTableScene(activity)?.heroCodes, ['Ah', 'Qh']);
     expect(resolveLessonTableScene(activity)?.boardCodes, ['Kh', '7h', '2c']);
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.outsImpliedPay,
+        choices: activity.choices,
+      ),
+      'implied-yes',
+    );
 
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
@@ -7296,8 +7309,10 @@ void main() {
       find.text('Implied odds improve — they pay when you hit'),
       findsNothing,
     );
-    expect(find.text('Implied — they pay when you hit'), findsOneWidget);
-    await tester.tap(find.text('Implied — they pay when you hit'));
+    expect(find.text('Implied — they pay when you hit'), findsNothing);
+    expect(find.text('Implied'), findsOneWidget);
+    expect(find.text('They pay hit'), findsOneWidget);
+    await tester.tap(find.text('Implied'));
     await tester.pump();
     expect(controller.draft.choiceId, 'implied-yes');
     controller.dispose();

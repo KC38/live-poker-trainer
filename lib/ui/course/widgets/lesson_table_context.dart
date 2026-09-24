@@ -191,6 +191,15 @@ enum LessonTableRegion {
   /// Draw-price distractor: auto-raise every draw.
   drawPriceRaise,
 
+  /// Outs checkpoint: implied odds — they pay when you hit (correct).
+  outsImpliedPay,
+
+  /// Outs checkpoint distractor: depth never changes price.
+  outsImpliedDepthNever,
+
+  /// Outs checkpoint distractor: fold every nut flush draw.
+  outsImpliedFoldNfd,
+
   /// Verbal action: raise stands (binding).
   verbalRaiseStands,
 
@@ -1313,6 +1322,9 @@ enum LessonTableLayout {
   /// Implied-odds checkpoint: when IO rise.
   impliedOddsRiseOutcomes,
 
+  /// Outs checkpoint: implied edge vs depth-never / fold-NFD.
+  outsImpliedOutcomes,
+
   /// Thin-value checkpoint: read-driven line vs coin flip.
   thinValueReadOutcomes,
 
@@ -2072,6 +2084,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-03-03-01-checkpoint':
       return const LessonTableScene(
+        layout: LessonTableLayout.outsImpliedOutcomes,
         heroCodes: ['Ah', 'Qh'],
         boardCodes: ['Kh', '7h', '2c'],
         villainSeatCount: 1,
@@ -3434,6 +3447,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.drawPriceRaise => pick('raise-auto'),
         _ => null,
       };
+    case 'act-03-03-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.outsImpliedPay => pick('implied-yes'),
+        LessonTableRegion.outsImpliedDepthNever => pick('implied-no'),
+        LessonTableRegion.outsImpliedFoldNfd => pick('fold-nfd'),
+        _ => null,
+      };
     case 'act-03-01-01-scaffolded':
       // Preflop open: UTG is left of the BB (earlyPosition on the felt).
       return switch (region) {
@@ -4502,6 +4522,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-01-01-checkpoint' ||
       activity.id == 'act-03-03-01-scaffolded' ||
       activity.id == 'act-03-03-01-unguided' ||
+      activity.id == 'act-03-03-01-checkpoint' ||
       activity.id == 'act-04-06-01-guided' ||
       activity.id == 'act-04-06-02-guided' ||
       activity.id == 'act-04-06-02-scaffolded' ||
@@ -4789,6 +4810,7 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.potMultiwayOutcomes => _buildPotMultiwayOutcomes(),
       LessonTableLayout.callPriceOutcomes => _buildCallPriceOutcomes(),
       LessonTableLayout.drawPriceOutcomes => _buildDrawPriceOutcomes(),
+      LessonTableLayout.outsImpliedOutcomes => _buildOutsImpliedOutcomes(),
       LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
       LessonTableLayout.tableReadMattersOutcomes =>
           _buildTableReadMattersOutcomes(),
@@ -6192,6 +6214,48 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Every draw',
           visual: const Icon(
             Icons.north_east,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildOutsImpliedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive implied odds — tap the edge of the nut flush draw',
+      semanticsStatic: 'Outs implied odds outcomes',
+      caption: scene.caption ?? '200bb · pot bet · sticky caller',
+      cueLabel: 'Tap the implied-odds edge.',
+      phases: [
+        (
+          region: LessonTableRegion.outsImpliedPay,
+          title: 'Implied',
+          detail: 'They pay hit',
+          visual: const Icon(
+            Icons.trending_up,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.outsImpliedDepthNever,
+          title: 'Depth never',
+          detail: 'Price fixed',
+          visual: const Icon(
+            Icons.horizontal_rule,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.outsImpliedFoldNfd,
+          title: 'Fold NFD',
+          detail: 'Always fold',
+          visual: const Icon(
+            Icons.cancel_outlined,
             color: AppColors.slate,
             size: 24,
           ),
@@ -11147,6 +11211,20 @@ class LessonTableContext extends StatelessWidget {
             expandTeach ? MainAxisAlignment.center : MainAxisAlignment.start,
         children: [
           if (showSpotCards) ...[
+            if (scene.villainSeatCount > 0) ...[
+              Text(
+                'Them',
+                style: GoogleFonts.manrope(
+                  color: AppColors.slate,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.6,
+                ),
+              ),
+              const SizedBox(height: 4),
+              const _FaceDownPair(),
+              const SizedBox(height: 8),
+            ],
             if (board.isNotEmpty) ...[
               Text(
                 'BOARD · shared',

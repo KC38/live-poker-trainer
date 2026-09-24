@@ -163,8 +163,8 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-03-03-01-checkpoint') {
-    // Outs: deep NFD spot — tap the implied-odds edge on category tiles.
-    return SelectIdentifyPresentation.handCategoryTap;
+    // Outs: deep NFD — tap implied-odds edge on the felt.
+    return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-03-05-01-guided' ||
       activity.id == 'act-03-05-01-checkpoint') {
