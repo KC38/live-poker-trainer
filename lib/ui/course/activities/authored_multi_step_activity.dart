@@ -165,19 +165,13 @@ class AuthoredMultiStepActivity extends StatelessWidget {
                   ),
                   Builder(
                     builder: (context) {
-                      // Outcome tiles (Won pot / Must flop) are not poker actions.
-                      final outcomeAsk = step.choices.every(
-                        (c) => c.action == null || c.action!.isEmpty,
-                      );
                       final status = () {
                         if (controller.lastResult != null) return '';
                         if (controller.submitting) return 'Checking…';
                         if (selected == null) {
-                          // Rex already cues the dock — SoftPulse highlights it.
-                          if (showGuidance) return '';
-                          return outcomeAsk
-                              ? 'What happened? Tap below.'
-                              : 'Tap your action on the dock.';
+                          // Rex already cues the dock — SoftPulse (guided) or
+                          // the dock itself teaches. No third "tap…" line.
+                          return '';
                         }
                         return 'Checking…';
                       }();
