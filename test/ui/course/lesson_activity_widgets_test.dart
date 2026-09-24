@@ -3174,14 +3174,20 @@ void main() {
       ),
     );
     expect(find.byType(VsManiacsDemo), findsOneWidget);
-    expect(find.text('Tap Wider, Hang, and Ego.'), findsOneWidget);
+    expect(find.text('Tap WIDER next'), findsOneWidget);
+    expect(find.text('Tap Wider, Hang, and Ego.'), findsNothing);
+    expect(find.text('Tap Wider, Hang, and Ego'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['WIDER', 'HANG', 'EGO']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('WIDER'));
+    await tester.pump();
+    expect(find.text('Tap HANG next'), findsOneWidget);
+    await tester.tap(find.text('HANG'));
+    await tester.pump();
+    expect(find.text('Tap EGO next'), findsOneWidget);
+    await tester.tap(find.text('EGO'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
