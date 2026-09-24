@@ -2651,12 +2651,14 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllPointsTapped: onSprAcknowledge,
         ),
         CoachDialogueVisualKind.playerObserve => PlayerObserveDemo(
-          interactive: onPlayerObserveAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPointsTapped: onPlayerObserveAcknowledge,
         ),
         CoachDialogueVisualKind.callingStation => CallingStationDemo(
-          interactive: onCallingStationAcknowledge != null,
+          interactive: true,
           enabled: enabled,
           onAllPointsTapped: onCallingStationAcknowledge,
         ),
