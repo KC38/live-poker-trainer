@@ -152,7 +152,7 @@ class _BestFiveDemoState extends State<BestFiveDemo> {
     // hero/board rows and spaceEvenly so the densified felt fills vertically.
     // Board stays ≤~1.2 so five hero cards fit one row on Pro width.
     final heroScale = expandTeach ? 1.85 : 1.0;
-    final boardScale = expandTeach ? 1.2 : 1.0;
+    final boardScale = expandTeach ? 1.35 : 1.0;
     final cueLabel = () {
       if (!widget.interactive) return 'Highlighted = the five that count';
       if (next == null) return 'Five play · two leftovers';
@@ -235,53 +235,26 @@ class _BestFiveDemoState extends State<BestFiveDemo> {
           const SizedBox(height: 12),
         ] else
           Expanded(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                // Tall Pro felt: big cards + spaceEvenly fill. Short test
-                // viewports: keep compact + scaleDown so we never overflow.
-                final roomy = constraints.maxHeight >= 300;
-                final hScale = roomy ? heroScale : 1.15;
-                final bScale = roomy ? boardScale : 1.0;
-                final spread = Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    labeledRow(
-                      label: 'You',
-                      codes: BestFiveDemo.hero,
-                      cardScale: hScale,
-                    ),
-                    labeledRow(
-                      label: 'Board',
-                      codes: BestFiveDemo.board,
-                      cardScale: bScale,
-                    ),
-                  ],
-                );
-                if (roomy) return spread;
-                return FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.center,
-                  child: SizedBox(
-                    width: MediaQuery.sizeOf(context).width - 48,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        labeledRow(
-                          label: 'You',
-                          codes: BestFiveDemo.hero,
-                          cardScale: hScale,
-                        ),
-                        const SizedBox(height: 16),
-                        labeledRow(
-                          label: 'Board',
-                          codes: BestFiveDemo.board,
-                          cardScale: bScale,
-                        ),
-                      ],
-                    ),
+            child: FittedBox(
+              // Pack rails tight, then contain scales UP to fill densified
+              // height — spaceEvenly left empty green between You/Board.
+              fit: BoxFit.contain,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  labeledRow(
+                    label: 'You',
+                    codes: BestFiveDemo.hero,
+                    cardScale: heroScale,
                   ),
-                );
-              },
+                  const SizedBox(height: 14),
+                  labeledRow(
+                    label: 'Board',
+                    codes: BestFiveDemo.board,
+                    cardScale: boardScale,
+                  ),
+                ],
+              ),
             ),
           ),
         cue,
@@ -671,7 +644,8 @@ class _BestFiveCardPickerState extends State<BestFiveCardPicker> {
     final feltHeight =
         densify ? MediaQuery.sizeOf(context).height * 0.58 : null;
     final heroScale = densify ? 1.85 : 1.0;
-    final boardScale = densify ? 1.2 : 1.0;
+    // Board must stay readable as five-across — slightly under hero scale.
+    final boardScale = densify ? 1.35 : 1.0;
 
     Widget statusLine() {
       final status = () {
@@ -776,55 +750,28 @@ class _BestFiveCardPickerState extends State<BestFiveCardPicker> {
       child: Column(
         children: [
           Expanded(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final roomy = constraints.maxHeight >= 300;
-                final hScale = roomy ? heroScale : 1.15;
-                final bScale = roomy ? boardScale : 1.0;
-                final cards = Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    labeledRow(
-                      label: 'You',
-                      codes: spot.heroCodes,
-                      cardScale: hScale,
-                      gap: roomy ? 14 : 10,
-                    ),
-                    labeledRow(
-                      label: 'BOARD · shared',
-                      codes: spot.boardCodes,
-                      cardScale: bScale,
-                      gap: roomy ? 10 : 8,
-                    ),
-                  ],
-                );
-                if (roomy) return cards;
-                return FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.center,
-                  child: SizedBox(
-                    width: MediaQuery.sizeOf(context).width - 48,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        labeledRow(
-                          label: 'You',
-                          codes: spot.heroCodes,
-                          cardScale: hScale,
-                          gap: 10,
-                        ),
-                        const SizedBox(height: 16),
-                        labeledRow(
-                          label: 'BOARD · shared',
-                          codes: spot.boardCodes,
-                          cardScale: bScale,
-                          gap: 8,
-                        ),
-                      ],
-                    ),
+            child: FittedBox(
+              // Pack You + Board, then contain scales UP to fill densified
+              // height (spaceEvenly left sparse green voids on Pro).
+              fit: BoxFit.contain,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  labeledRow(
+                    label: 'You',
+                    codes: spot.heroCodes,
+                    cardScale: heroScale,
+                    gap: 14,
                   ),
-                );
-              },
+                  const SizedBox(height: 14),
+                  labeledRow(
+                    label: 'BOARD · shared',
+                    codes: spot.boardCodes,
+                    cardScale: boardScale,
+                    gap: 10,
+                  ),
+                ],
+              ),
             ),
           ),
           statusLine(),
