@@ -2844,7 +2844,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllPointsTapped: onWidePressureAcknowledge,
         ),
         CoachDialogueVisualKind.preflopFlopPlan => PreflopFlopPlanDemo(
-          interactive: onPreflopFlopPlanAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPointsTapped: onPreflopFlopPlanAcknowledge,
         ),
