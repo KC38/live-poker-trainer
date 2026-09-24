@@ -5909,6 +5909,13 @@ class LessonTableContext extends StatelessWidget {
       };
     }
 
+    // Keep densify after the seat tap while Continue shows — SoftPulse /
+    // selection clear on lock must not collapse the teach shell.
+    final densifyShell =
+        scene.highlight == LessonTableHighlight.button ||
+        scene.highlight == LessonTableHighlight.smallBlind ||
+        scene.highlight == LessonTableHighlight.bigBlind;
+
     Widget seatChip(int seat) {
       final role = roleOf(seat);
       final selected =
@@ -5921,6 +5928,7 @@ class LessonTableContext extends StatelessWidget {
         showRoleLabels: scene.showRoleLabels,
         selected: selected,
         highlighted: pulseRole(role),
+        densify: densifyShell,
         enabled: enabled && _interactive,
         onTap:
             _interactive
@@ -5931,12 +5939,6 @@ class LessonTableContext extends StatelessWidget {
       );
     }
 
-    // Keep densify after the seat tap while Continue shows — SoftPulse /
-    // selection clear on lock must not collapse the teach shell.
-    final densifyShell =
-        scene.highlight == LessonTableHighlight.button ||
-        scene.highlight == LessonTableHighlight.smallBlind ||
-        scene.highlight == LessonTableHighlight.bigBlind;
     final inviteCue =
         showSoftPulse &&
         selectedRegion == null &&
@@ -5959,46 +5961,102 @@ class LessonTableContext extends StatelessWidget {
               : 'Poker table showing dealer button and blinds',
       height: feltHeight,
       centerChild: densifyShell,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (topRow.isNotEmpty)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [for (final s in topRow) seatChip(s)],
-            ),
-          const SizedBox(height: 8),
-          Text(
-            scene.caption ??
-                (scene.numberSeats
-                    ? 'Button is seat $button · tap the small blind'
-                    : 'Clockwise: button → small blind → big blind'),
-            textAlign: TextAlign.center,
-            style: GoogleFonts.manrope(
-              color: AppColors.slate,
-              fontSize: densifyShell ? 13 : 11,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [for (final s in bottomRow) seatChip(s)],
-          ),
-          if (inviteCue && cueLabel != null) ...[
-            const SizedBox(height: 12),
-            Text(
-              cueLabel,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: densifyShell ? 16 : 14,
-                fontWeight: FontWeight.w700,
+      child:
+          densifyShell
+              ? Column(
+                children: [
+                  if (topRow.isNotEmpty)
+                    Expanded(
+                      flex: 2,
+                      child: Row(
+                        children: [
+                          for (var i = 0; i < topRow.length; i++) ...[
+                            if (i > 0) const SizedBox(width: 8),
+                            Expanded(child: seatChip(topRow[i])),
+                          ],
+                        ],
+                      ),
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Text(
+                      scene.caption ??
+                          (scene.numberSeats
+                              ? 'Button is seat $button · tap the small blind'
+                              : 'Clockwise: button → small blind → big blind'),
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.manrope(
+                        color: AppColors.slate,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 5,
+                    child: Row(
+                      children: [
+                        for (var i = 0; i < bottomRow.length; i++) ...[
+                          if (i > 0) const SizedBox(width: 10),
+                          Expanded(child: seatChip(bottomRow[i])),
+                        ],
+                      ],
+                    ),
+                  ),
+                  if (inviteCue && cueLabel != null) ...[
+                    const SizedBox(height: 10),
+                    Text(
+                      cueLabel,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.manrope(
+                        color: AppColors.gold,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ],
+              )
+              : Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (topRow.isNotEmpty)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [for (final s in topRow) seatChip(s)],
+                    ),
+                  const SizedBox(height: 8),
+                  Text(
+                    scene.caption ??
+                        (scene.numberSeats
+                            ? 'Button is seat $button · tap the small blind'
+                            : 'Clockwise: button → small blind → big blind'),
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.manrope(
+                      color: AppColors.slate,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [for (final s in bottomRow) seatChip(s)],
+                  ),
+                  if (inviteCue && cueLabel != null) ...[
+                    const SizedBox(height: 12),
+                    Text(
+                      cueLabel,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.manrope(
+                        color: AppColors.gold,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ],
               ),
-            ),
-          ],
-        ],
-      ),
     );
   }
 
@@ -14427,6 +14485,7 @@ class _BlindsSeatChip extends StatelessWidget {
     required this.highlighted,
     required this.enabled,
     required this.onTap,
+    this.densify = false,
   });
 
   final int seatIndex;
@@ -14437,6 +14496,7 @@ class _BlindsSeatChip extends StatelessWidget {
   final bool highlighted;
   final bool enabled;
   final VoidCallback? onTap;
+  final bool densify;
 
   String? get _title {
     if (numberSeats) return 'Seat $seatIndex';
@@ -14462,80 +14522,99 @@ class _BlindsSeatChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final title = _title;
+    final face = Column(
+      mainAxisSize: densify ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        if (title != null) ...[
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: densify ? 13 : 10,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          SizedBox(height: densify ? 8 : 4),
+        ],
+        switch (role) {
+          LessonTableRegion.button => _DealerChipBadge(densify: densify),
+          LessonTableRegion.smallBlind =>
+            _BlindChipStack(amount: 1, densify: densify),
+          LessonTableRegion.bigBlind =>
+            _BlindChipStack(amount: 2, densify: densify),
+          _ => _EmptySeatMark(densify: densify),
+        },
+        // Role letter badges (D/SB/BB) only when teaching names explicitly —
+        // never on identify taps where they would print the answer.
+        if (showRoleLabels &&
+            numberSeats &&
+            role != LessonTableRegion.emptySeat) ...[
+          SizedBox(height: densify ? 8 : 4),
+          Text(
+            switch (role) {
+              LessonTableRegion.button => 'D',
+              LessonTableRegion.smallBlind => 'SB',
+              LessonTableRegion.bigBlind => 'BB',
+              _ => '',
+            },
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: densify ? 14 : 10,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ],
+      ],
+    );
     return _TappableRegion(
       label: _a11y,
       selected: selected,
       highlighted: highlighted,
       enabled: enabled,
+      expand: densify,
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(6, 6, 6, 6),
-        child: Column(
-          children: [
-            if (title != null) ...[
-              Text(
-                title,
-                style: GoogleFonts.manrope(
-                  color: AppColors.slate,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 4),
-            ],
-            switch (role) {
-              LessonTableRegion.button => const _DealerChipBadge(),
-              LessonTableRegion.smallBlind => const _BlindChipStack(amount: 1),
-              LessonTableRegion.bigBlind => const _BlindChipStack(amount: 2),
-              _ => const _EmptySeatMark(),
-            },
-            // Role letter badges (D/SB/BB) only when teaching names explicitly —
-            // never on identify taps where they would print the answer.
-            if (showRoleLabels &&
-                numberSeats &&
-                role != LessonTableRegion.emptySeat) ...[
-              const SizedBox(height: 4),
-              Text(
-                switch (role) {
-                  LessonTableRegion.button => 'D',
-                  LessonTableRegion.smallBlind => 'SB',
-                  LessonTableRegion.bigBlind => 'BB',
-                  _ => '',
-                },
-                style: GoogleFonts.manrope(
-                  color: AppColors.gold,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ],
-          ],
+        padding: EdgeInsets.fromLTRB(
+          densify ? 8 : 6,
+          densify ? 10 : 6,
+          densify ? 8 : 6,
+          densify ? 10 : 6,
         ),
+        child: densify
+            ? SizedBox.expand(
+                child: FittedBox(fit: BoxFit.scaleDown, child: face),
+              )
+            : face,
       ),
     );
   }
 }
 
 class _DealerChipBadge extends StatelessWidget {
-  const _DealerChipBadge();
+  const _DealerChipBadge({this.densify = false});
+
+  final bool densify;
 
   @override
   Widget build(BuildContext context) {
+    final size = densify ? 56.0 : 32.0;
     return Container(
-      width: 32,
-      height: 32,
+      width: size,
+      height: size,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: AppColors.cream,
-        border: Border.all(color: AppColors.bgDark, width: 2),
+        border: Border.all(color: AppColors.bgDark, width: densify ? 3 : 2),
       ),
       child: Text(
         'D',
         style: GoogleFonts.manrope(
           color: AppColors.bgDark,
           fontWeight: FontWeight.w900,
-          fontSize: 14,
+          fontSize: densify ? 24 : 14,
         ),
       ),
     );
@@ -14543,36 +14622,44 @@ class _DealerChipBadge extends StatelessWidget {
 }
 
 class _BlindChipStack extends StatelessWidget {
-  const _BlindChipStack({required this.amount});
+  const _BlindChipStack({required this.amount, this.densify = false});
 
   final int amount;
+  final bool densify;
 
   @override
   Widget build(BuildContext context) {
+    final chip = densify ? 48.0 : 28.0;
+    final step = densify ? 7.0 : 4.0;
+    final boxH = densify ? 56.0 : 32.0;
+    final boxW = densify ? 56.0 : 36.0;
     return SizedBox(
-      height: 32,
-      width: 36,
+      height: boxH,
+      width: boxW,
       child: Stack(
         alignment: Alignment.center,
         children: [
           for (var i = 0; i < amount; i++)
             Positioned(
-              top: (amount - 1 - i) * 4.0,
+              top: (amount - 1 - i) * step,
               child: Container(
-                width: 28,
-                height: 28,
+                width: chip,
+                height: chip,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: i == amount - 1 ? AppColors.gold : AppColors.goldMuted,
-                  border: Border.all(color: AppColors.bgDark, width: 1.5),
+                  border: Border.all(
+                    color: AppColors.bgDark,
+                    width: densify ? 2 : 1.5,
+                  ),
                 ),
                 child: Text(
                   '$amount',
                   style: GoogleFonts.manrope(
                     color: AppColors.bgDark,
                     fontWeight: FontWeight.w900,
-                    fontSize: 11,
+                    fontSize: densify ? 18 : 11,
                   ),
                 ),
               ),
@@ -14614,20 +14701,23 @@ class _PotChipDot extends StatelessWidget {
 }
 
 class _EmptySeatMark extends StatelessWidget {
-  const _EmptySeatMark();
+  const _EmptySeatMark({this.densify = false});
+
+  final bool densify;
 
   @override
   Widget build(BuildContext context) {
+    final size = densify ? 48.0 : 32.0;
     return Container(
-      width: 32,
-      height: 32,
+      width: size,
+      height: size,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: AppColors.feltDark.withValues(alpha: 0.55),
         border: Border.all(
           color: AppColors.slateDark.withValues(alpha: 0.8),
-          width: 1.5,
+          width: densify ? 2 : 1.5,
         ),
       ),
       child: Text(
@@ -14635,7 +14725,7 @@ class _EmptySeatMark extends StatelessWidget {
         style: GoogleFonts.manrope(
           color: AppColors.slate,
           fontWeight: FontWeight.w800,
-          fontSize: 18,
+          fontSize: densify ? 28 : 18,
         ),
       ),
     );

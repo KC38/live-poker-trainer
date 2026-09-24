@@ -298,6 +298,9 @@ void main() {
       tester.getSize(find.byKey(const ValueKey('blinds-seats-felt'))).height,
       moreOrLessEquals(teachHeight, epsilon: 1),
     );
+    // Role chips grow to fill densified felt — not the old 32px badges.
+    final dealer = tester.getSize(find.text('D').first);
+    expect(dealer.height, greaterThanOrEqualTo(20));
     controller.dispose();
   });
 
