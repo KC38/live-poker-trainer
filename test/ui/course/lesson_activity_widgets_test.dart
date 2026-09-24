@@ -43,6 +43,7 @@ import 'package:live_poker_trainer/ui/course/widgets/capstone_limped_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/capstone_4bet_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/live_warmup_prep_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lag_model_demo.dart';
+import 'package:live_poker_trainer/ui/course/widgets/wide_pressure_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
@@ -14659,6 +14660,64 @@ void main() {
       CoachDialogueVisualKind.widePressure,
     );
   });
+
+  testWidgets(
+    's6 lag observe explain taps Wide Pressure Sample instead of Continue',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-06-12-01-explain',
+        order: 1,
+        stage: ActivityStage.explain,
+        renderer: ActivityRenderer.coachDialogue,
+        estimatedSeconds: 30,
+        accessibilityText:
+            'Before labels: wide entry plus pressure that still has a plan. Count samples.',
+        acceptedGrades: const [SoftGrade.recommended],
+        objectives: const ['Note wide entry'],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'm',
+            kind: 'dialogue',
+            text:
+                'Before labels: wide entry plus pressure that still has a plan. Count samples.',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      var feltAck = 0;
+      await tester.pumpWidget(
+        _wrap(
+          CoachDialogueActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+            onFeltAcknowledge: () => feltAck += 1,
+          ),
+        ),
+      );
+      expect(find.byType(WidePressureDemo), findsOneWidget);
+      expect(find.text('Tap WIDE next'), findsOneWidget);
+      expect(find.text('Tap Wide, Pressure, and Sample.'), findsNothing);
+      expect(find.text('Tap Wide, Pressure, and Sample'), findsNothing);
+      expect(
+        find.text('Wide in · pressure on · count samples'),
+        findsNothing,
+      );
+      expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+      expect(isTableRegionTapActivity(activity), isTrue);
+
+      await tester.tap(find.text('WIDE'));
+      await tester.pump();
+      expect(find.text('Tap PRESSURE next'), findsOneWidget);
+      await tester.tap(find.text('PRESSURE'));
+      await tester.pump();
+      expect(find.text('Tap SAMPLE next'), findsOneWidget);
+      await tester.tap(find.text('SAMPLE'));
+      await tester.pump();
+      expect(feltAck, 1);
+      controller.dispose();
+    },
+  );
 
   testWidgets('s6 lag observe guided taps Wide + pressure on felt', (tester) async {
     final activity = CourseActivity(
