@@ -18444,7 +18444,9 @@ void main() {
         ),
       );
       expect(find.byType(CapstoneMultiwayDeepDemo), findsOneWidget);
+      expect(find.text('Tap NUTS next'), findsOneWidget);
       expect(find.text('Tap Nuts, Deep, and No-bluff.'), findsNothing);
+      expect(find.text('Tap Nuts, Deep, and No-bluff'), findsNothing);
       expect(
         find.text('Deep multiway — chase nuts, skip light bluffs'),
         findsNothing,
@@ -18452,10 +18454,14 @@ void main() {
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['NUTS', 'DEEP', 'NO-BLUFF']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
+      await tester.tap(find.text('NUTS'));
+      await tester.pump();
+      expect(find.text('Tap DEEP next'), findsOneWidget);
+      await tester.tap(find.text('DEEP'));
+      await tester.pump();
+      expect(find.text('Tap NO-BLUFF next'), findsOneWidget);
+      await tester.tap(find.text('NO-BLUFF'));
+      await tester.pump();
       expect(feltAck, 1);
       controller.dispose();
     },
