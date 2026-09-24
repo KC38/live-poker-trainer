@@ -4274,107 +4274,112 @@ class _SizingLanguageDemoState extends State<SizingLanguageDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled;
-    // Tall-phone teach: eat the navy void under the language tiles.
-    final minFelt = expandTeach
-        ? MediaQuery.sizeOf(context).height * 0.55
-        : null;
-    final child = ConstrainedBox(
-      constraints: minFelt != null
-          ? BoxConstraints(minHeight: minFelt)
-          : const BoxConstraints(),
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.fromLTRB(
-          12,
-          expandTeach ? 22 : 14,
-          12,
-          expandTeach ? 22 : 14,
-        ),
-        alignment: minFelt != null ? Alignment.center : null,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.feltLight, AppColors.feltDark],
+    // Tall-phone teach: fixed felt + stretched tiles under SIZE / VALUE /
+    // PRESSURE (minHeight alone leaves sparse green).
+    final feltHeight =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+    final tiles = Row(
+      crossAxisAlignment:
+          expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
+      children: [
+        for (var i = 0; i < SizingLanguageDemo.points.length; i++) ...[
+          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          Expanded(
+            child: _DemoSoftPulse(
+              active:
+                  widget.interactive &&
+                  widget.enabled &&
+                  next?.label == SizingLanguageDemo.points[i].label,
+              child: _DemoActionCard(
+                label: SizingLanguageDemo.points[i].label,
+                caption: SizingLanguageDemo.points[i].caption,
+                color: SizingLanguageDemo.points[i].color,
+                densify: expandTeach,
+                selected: _tapped.contains(SizingLanguageDemo.points[i].label),
+                enabled: widget.interactive && widget.enabled,
+                onPressed: widget.interactive
+                    ? () => _onTap(SizingLanguageDemo.points[i].label)
+                    : null,
+              ),
+            ),
           ),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.feltBorder.withValues(alpha: 0.85),
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment:
-              expandTeach ? MainAxisAlignment.center : MainAxisAlignment.start,
-          children: [
-            Text(
-              'Size is language',
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: expandTeach ? 14 : 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            SizedBox(height: expandTeach ? 22 : 14),
-            Row(
-              children: [
-                for (var i = 0; i < SizingLanguageDemo.points.length; i++) ...[
-                  if (i > 0) SizedBox(width: expandTeach ? 10 : 8),
-                  Expanded(
-                    child: _DemoSoftPulse(
-                      active:
-                          widget.interactive &&
-                          widget.enabled &&
-                          next?.label == SizingLanguageDemo.points[i].label,
-                      child: _DemoActionCard(
-                        label: SizingLanguageDemo.points[i].label,
-                        caption: SizingLanguageDemo.points[i].caption,
-                        color: SizingLanguageDemo.points[i].color,
-                        densify: expandTeach,
-                        selected: _tapped.contains(
-                          SizingLanguageDemo.points[i].label,
-                        ),
-                        enabled: widget.interactive && widget.enabled,
-                        onPressed: widget.interactive
-                            ? () => _onTap(SizingLanguageDemo.points[i].label)
-                            : null,
-                      ),
-                    ),
-                  ),
-                ],
-              ],
-            ),
-            SizedBox(height: expandTeach ? 22 : 14),
-            Container(
-              width: expandTeach ? double.infinity : null,
-              padding: EdgeInsets.symmetric(
-                horizontal: expandTeach ? 16 : 14,
-                vertical: expandTeach ? 12 : 8,
-              ),
-              decoration: BoxDecoration(
-                color: AppColors.feltDark.withValues(alpha: 0.65),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: AppColors.gold.withValues(alpha: 0.45),
-                ),
-              ),
-              child: Text(
-                widget.interactive
-                    ? (next == null
-                          ? 'Value looks like value · pressure looks like pressure'
-                          : 'Tap ${next.label} next')
-                    : 'Value looks like value · pressure looks like pressure',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.manrope(
-                  color: AppColors.gold,
-                  fontSize: expandTeach ? 15 : 12,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ],
+        ],
+      ],
+    );
+    final cue = Container(
+      width: expandTeach ? double.infinity : null,
+      padding: EdgeInsets.symmetric(
+        horizontal: expandTeach ? 18 : 14,
+        vertical: expandTeach ? 14 : 8,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.feltDark.withValues(alpha: 0.65),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.gold.withValues(alpha: 0.45)),
+      ),
+      child: Text(
+        widget.interactive
+            ? (next == null
+                  ? 'Value looks like value · pressure looks like pressure'
+                  : 'Tap ${next.label} next')
+            : 'Value looks like value · pressure looks like pressure',
+        textAlign: TextAlign.center,
+        style: GoogleFonts.manrope(
+          color: AppColors.gold,
+          fontSize: expandTeach ? 16 : 12,
+          fontWeight: FontWeight.w700,
         ),
       ),
+    );
+    final body = Column(
+      mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisAlignment:
+          expandTeach
+              ? MainAxisAlignment.spaceEvenly
+              : MainAxisAlignment.start,
+      children: [
+        Text(
+          'Size is language',
+          style: GoogleFonts.manrope(
+            color: AppColors.slate,
+            fontSize: expandTeach ? 15 : 12,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        if (!expandTeach) const SizedBox(height: 14),
+        expandTeach
+            ? Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: tiles,
+              ),
+            )
+            : tiles,
+        if (!expandTeach) const SizedBox(height: 14),
+        cue,
+      ],
+    );
+    final child = Container(
+      width: double.infinity,
+      height: feltHeight,
+      padding: EdgeInsets.fromLTRB(
+        12,
+        expandTeach ? 18 : 14,
+        12,
+        expandTeach ? 18 : 14,
+      ),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.feltBorder.withValues(alpha: 0.85),
+        ),
+      ),
+      child: body,
     );
     if (widget.interactive) return child;
     return ExcludeSemantics(child: child);
@@ -4427,107 +4432,112 @@ class _SprDepthDemoState extends State<SprDepthDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled;
-    // Tall-phone teach: eat the navy void under SPR / LOW / HIGH.
-    final minFelt = expandTeach
-        ? MediaQuery.sizeOf(context).height * 0.55
-        : null;
-    final child = ConstrainedBox(
-      constraints: minFelt != null
-          ? BoxConstraints(minHeight: minFelt)
-          : const BoxConstraints(),
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.fromLTRB(
-          12,
-          expandTeach ? 22 : 14,
-          12,
-          expandTeach ? 22 : 14,
-        ),
-        alignment: minFelt != null ? Alignment.center : null,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.feltLight, AppColors.feltDark],
+    // Tall-phone teach: fixed felt + stretched tiles (minHeight alone leaves
+    // sparse green under SPR / LOW / HIGH).
+    final feltHeight =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+    final tiles = Row(
+      crossAxisAlignment:
+          expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
+      children: [
+        for (var i = 0; i < SprDepthDemo.points.length; i++) ...[
+          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          Expanded(
+            child: _DemoSoftPulse(
+              active:
+                  widget.interactive &&
+                  widget.enabled &&
+                  next?.label == SprDepthDemo.points[i].label,
+              child: _DemoActionCard(
+                label: SprDepthDemo.points[i].label,
+                caption: SprDepthDemo.points[i].caption,
+                color: SprDepthDemo.points[i].color,
+                densify: expandTeach,
+                selected: _tapped.contains(SprDepthDemo.points[i].label),
+                enabled: widget.interactive && widget.enabled,
+                onPressed: widget.interactive
+                    ? () => _onTap(SprDepthDemo.points[i].label)
+                    : null,
+              ),
+            ),
           ),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.feltBorder.withValues(alpha: 0.85),
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment:
-              expandTeach ? MainAxisAlignment.center : MainAxisAlignment.start,
-          children: [
-            Text(
-              'Stack-to-pot ratio',
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: expandTeach ? 14 : 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            SizedBox(height: expandTeach ? 22 : 14),
-            Row(
-              children: [
-                for (var i = 0; i < SprDepthDemo.points.length; i++) ...[
-                  if (i > 0) SizedBox(width: expandTeach ? 10 : 8),
-                  Expanded(
-                    child: _DemoSoftPulse(
-                      active:
-                          widget.interactive &&
-                          widget.enabled &&
-                          next?.label == SprDepthDemo.points[i].label,
-                      child: _DemoActionCard(
-                        label: SprDepthDemo.points[i].label,
-                        caption: SprDepthDemo.points[i].caption,
-                        color: SprDepthDemo.points[i].color,
-                        densify: expandTeach,
-                        selected: _tapped.contains(
-                          SprDepthDemo.points[i].label,
-                        ),
-                        enabled: widget.interactive && widget.enabled,
-                        onPressed: widget.interactive
-                            ? () => _onTap(SprDepthDemo.points[i].label)
-                            : null,
-                      ),
-                    ),
-                  ),
-                ],
-              ],
-            ),
-            SizedBox(height: expandTeach ? 22 : 14),
-            Container(
-              width: expandTeach ? double.infinity : null,
-              padding: EdgeInsets.symmetric(
-                horizontal: expandTeach ? 16 : 14,
-                vertical: expandTeach ? 12 : 8,
-              ),
-              decoration: BoxDecoration(
-                color: AppColors.feltDark.withValues(alpha: 0.65),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: AppColors.gold.withValues(alpha: 0.45),
-                ),
-              ),
-              child: Text(
-                widget.interactive
-                    ? (next == null
-                          ? 'Low SPR: commit · High SPR: maneuver'
-                          : 'Tap ${next.label} next')
-                    : 'Low SPR: commit · High SPR: maneuver',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.manrope(
-                  color: AppColors.gold,
-                  fontSize: expandTeach ? 15 : 12,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ],
+        ],
+      ],
+    );
+    final cue = Container(
+      width: expandTeach ? double.infinity : null,
+      padding: EdgeInsets.symmetric(
+        horizontal: expandTeach ? 18 : 14,
+        vertical: expandTeach ? 14 : 8,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.feltDark.withValues(alpha: 0.65),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.gold.withValues(alpha: 0.45)),
+      ),
+      child: Text(
+        widget.interactive
+            ? (next == null
+                  ? 'Low SPR: commit · High SPR: maneuver'
+                  : 'Tap ${next.label} next')
+            : 'Low SPR: commit · High SPR: maneuver',
+        textAlign: TextAlign.center,
+        style: GoogleFonts.manrope(
+          color: AppColors.gold,
+          fontSize: expandTeach ? 16 : 12,
+          fontWeight: FontWeight.w700,
         ),
       ),
+    );
+    final body = Column(
+      mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisAlignment:
+          expandTeach
+              ? MainAxisAlignment.spaceEvenly
+              : MainAxisAlignment.start,
+      children: [
+        Text(
+          'Stack-to-pot ratio',
+          style: GoogleFonts.manrope(
+            color: AppColors.slate,
+            fontSize: expandTeach ? 15 : 12,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        if (!expandTeach) const SizedBox(height: 14),
+        expandTeach
+            ? Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: tiles,
+              ),
+            )
+            : tiles,
+        if (!expandTeach) const SizedBox(height: 14),
+        cue,
+      ],
+    );
+    final child = Container(
+      width: double.infinity,
+      height: feltHeight,
+      padding: EdgeInsets.fromLTRB(
+        12,
+        expandTeach ? 18 : 14,
+        12,
+        expandTeach ? 18 : 14,
+      ),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.feltBorder.withValues(alpha: 0.85),
+        ),
+      ),
+      child: body,
     );
     if (widget.interactive) return child;
     return ExcludeSemantics(child: child);
@@ -7580,42 +7590,47 @@ class _DemoActionCard extends StatelessWidget {
     final borderColor = selected
         ? AppColors.gold
         : color.withValues(alpha: 0.9);
-    final child = AnimatedContainer(
+    final card = AnimatedContainer(
       duration: const Duration(milliseconds: 140),
+      width: densify ? double.infinity : null,
       padding: EdgeInsets.symmetric(
-        vertical: densify ? 20 : 12,
-        horizontal: densify ? 8 : 6,
+        vertical: densify ? 24 : 12,
+        horizontal: densify ? 10 : 6,
       ),
+      alignment: Alignment.center,
       decoration: BoxDecoration(
         color: selected
             ? AppColors.gold.withValues(alpha: 0.28)
             : color.withValues(alpha: 0.35),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: borderColor, width: selected ? 2 : 1),
+        borderRadius: BorderRadius.circular(densify ? 16 : 12),
+        border: Border.all(color: borderColor, width: selected ? 2.5 : 1),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             label,
             style: GoogleFonts.manrope(
               color: AppColors.cream,
-              fontSize: densify ? 15 : 13,
+              fontSize: densify ? 18 : 13,
               fontWeight: FontWeight.w900,
             ),
           ),
-          SizedBox(height: densify ? 6 : 4),
+          SizedBox(height: densify ? 10 : 4),
           Text(
             caption,
             textAlign: TextAlign.center,
             style: GoogleFonts.manrope(
               color: AppColors.slate,
-              fontSize: densify ? 12 : 11,
+              fontSize: densify ? 13 : 11,
               fontWeight: FontWeight.w600,
             ),
           ),
         ],
       ),
     );
+    final child = densify ? SizedBox.expand(child: card) : card;
     if (onPressed == null) return child;
     return Semantics(
       button: true,
@@ -7625,7 +7640,7 @@ class _DemoActionCard extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: enabled ? onPressed : null,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(densify ? 16 : 12),
           child: child,
         ),
       ),
