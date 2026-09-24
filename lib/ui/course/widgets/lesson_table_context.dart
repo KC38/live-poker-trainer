@@ -449,6 +449,12 @@ enum LessonTableRegion {
   /// Observe sticky distractor: label archetype too early.
   observeLabelNow,
 
+  /// Observe scaffolded: sticky calls (correct).
+  observeStickyCalls,
+
+  /// Observe scaffolded distractor: they fold too much.
+  observeFoldsAlot,
+
   /// Calling Station label (correct for sticky-call evidence).
   playerTypeStation,
 
@@ -1450,6 +1456,9 @@ enum LessonTableLayout {
 
   /// Observe sticky: high / low participation / label-now tiles.
   observeParticipationOutcomes,
+
+  /// Observe sticky scaffolded: sticky calls vs folds-a-lot.
+  observeStickyOutcomes,
 
   /// Meet Calling Station: Station vs Nit label tiles on sticky evidence.
   playerTypeStationOutcomes,
@@ -2543,6 +2552,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-04-06-01-scaffolded':
       return const LessonTableScene(
+        layout: LessonTableLayout.observeStickyOutcomes,
         heroCodes: ['Qh', '9d'],
         boardCodes: ['Kc', '9s', '3h', '2d', '7c'],
         villainSeatCount: 1,
@@ -3975,6 +3985,12 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.observeLabelNow => pick('label-now'),
         _ => null,
       };
+    case 'act-04-06-01-scaffolded':
+      return switch (region) {
+        LessonTableRegion.observeStickyCalls => pick('sticky'),
+        LessonTableRegion.observeFoldsAlot => pick('folds-alot'),
+        _ => null,
+      };
     case 'act-04-06-02-guided':
       return switch (region) {
         LessonTableRegion.playerTypeStation => pick('pt-station'),
@@ -5041,6 +5057,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-04-03-01-checkpoint' ||
       activity.id == 'act-04-04-01-unguided' ||
       activity.id == 'act-04-06-01-guided' ||
+      activity.id == 'act-04-06-01-scaffolded' ||
       activity.id == 'act-04-06-02-guided' ||
       activity.id == 'act-04-06-02-scaffolded' ||
       activity.id == 'act-04-06-02-unguided' ||
@@ -5376,6 +5393,8 @@ class LessonTableContext extends StatelessWidget {
           _buildTableReadMattersOutcomes(),
       LessonTableLayout.observeParticipationOutcomes =>
           _buildObserveParticipationOutcomes(),
+      LessonTableLayout.observeStickyOutcomes =>
+          _buildObserveStickyOutcomes(),
       LessonTableLayout.playerTypeStationOutcomes =>
           _buildPlayerTypeStationOutcomes(),
       LessonTableLayout.labelModelOutcomes => _buildLabelModelOutcomes(),
@@ -8015,6 +8034,39 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Too soon',
           visual: const Icon(
             Icons.sell_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildObserveStickyOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive observe — tap sticky calls or folds too much',
+      semanticsStatic: 'Observe sticky outcomes',
+      caption: scene.caption ?? 'Called three streets · second pair ×2',
+      cueLabel: 'Tap Sticky.',
+      guideRegion: LessonTableRegion.observeStickyCalls,
+      phases: [
+        (
+          region: LessonTableRegion.observeStickyCalls,
+          title: 'Sticky',
+          detail: 'Low folding',
+          visual: const Icon(
+            Icons.handshake_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.observeFoldsAlot,
+          title: 'Folds a lot',
+          detail: 'Opposite',
+          visual: const Icon(
+            Icons.logout,
             color: AppColors.slate,
             size: 24,
           ),

@@ -10918,6 +10918,63 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 observe sticky scaffolded taps Sticky on densified felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-06-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Low folding / sticky calls.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Same seat calls three streets with second pair twice tonight. Note?',
+      choices: const [
+        CourseChoice(id: 'sticky', label: 'Sticky calls — low folding'),
+        CourseChoice(id: 'folds-alot', label: 'They fold too much'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.observeStickyOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.observeStickyCalls,
+        choices: activity.choices,
+      ),
+      'sticky',
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Second pair called three streets twice — tap the note.'),
+      findsOneWidget,
+    );
+    expect(find.text('Sticky'), findsOneWidget);
+    expect(find.text('Tap Sticky.'), findsOneWidget);
+    await tester.tap(find.text('Sticky'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'sticky');
+    controller.dispose();
+  });
+
   testWidgets('s4 meet station guided taps Station on sticky evidence felt', (
     tester,
   ) async {
