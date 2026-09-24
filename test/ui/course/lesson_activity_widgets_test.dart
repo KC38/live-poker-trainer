@@ -10975,6 +10975,118 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 observe sticky unguided taps Low conf. on densified felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-06-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'One sample is weak confidence.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'One dramatic call. How confident is a type label?',
+      choices: const [
+        CourseChoice(id: 'low-conf', label: 'Low confidence — need samples'),
+        CourseChoice(id: 'sure', label: 'Certain forever'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.observeConfidenceOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.observeLowConf,
+        choices: activity.choices,
+      ),
+      'low-conf',
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(
+      find.text('One dramatic call — tap how confident the label is.'),
+      findsOneWidget,
+    );
+    expect(find.text('Low conf.'), findsOneWidget);
+    await tester.tap(find.text('Low conf.'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'low-conf');
+    controller.dispose();
+  });
+
+  testWidgets('s4 observe sticky checkpoint taps Bundle on densified felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-06-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Bundle evidence before labeling.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Best pre-label note bundle?',
+      choices: const [
+        CourseChoice(id: 'bundle', label: 'Many hands · rarely folds'),
+        CourseChoice(id: 'insult', label: 'They are a bad person'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.observeBundleOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.observeBundle,
+        choices: activity.choices,
+      ),
+      'bundle',
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(
+      find.text('Before you label — tap the evidence bundle.'),
+      findsOneWidget,
+    );
+    expect(find.text('Bundle'), findsOneWidget);
+    await tester.tap(find.text('Bundle'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'bundle');
+    controller.dispose();
+  });
+
   testWidgets('s4 meet station guided taps Station on sticky evidence felt', (
     tester,
   ) async {

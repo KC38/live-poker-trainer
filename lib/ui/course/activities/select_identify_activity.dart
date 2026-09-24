@@ -406,6 +406,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Seat calls 7 of 9 preflops — tap the observation.',
       'act-04-06-01-scaffolded' =>
           'Second pair called three streets twice — tap the note.',
+      'act-04-06-01-unguided' =>
+          'One dramatic call — tap how confident the label is.',
+      'act-04-06-01-checkpoint' =>
+          'Before you label — tap the evidence bundle.',
       'act-04-06-02-guided' =>
           'Sticky second pair calls — tap the working label.',
       'act-04-06-02-scaffolded' =>
@@ -777,6 +781,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-04-04-01-unguided' ||
             widget.activity.id == 'act-04-06-01-guided' ||
             widget.activity.id == 'act-04-06-01-scaffolded' ||
+            widget.activity.id == 'act-04-06-01-unguided' ||
+            widget.activity.id == 'act-04-06-01-checkpoint' ||
             widget.activity.id == 'act-04-06-02-guided' ||
             widget.activity.id == 'act-04-06-02-scaffolded' ||
             widget.activity.id == 'act-04-06-02-unguided' ||
