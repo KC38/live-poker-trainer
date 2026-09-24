@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "41a287a4cc3f68b9b589839c5aaf44b232a44f8104d7ee7112c2e4243296c6c6",
+  "contentChecksum": "da642e4cc85b6889673790b7b6746db6d4b8620f069c8d88999dccf872bf5290",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -6790,7 +6790,7 @@
                   "choices": [
                     {
                       "id": "bluff",
-                      "label": "Bluff flush",
+                      "label": "Bluff the completed flush",
                       "accessibilityText": "Bluff the completed flush",
                       "grading": {
                         "grade": "recommended",
@@ -6801,7 +6801,7 @@
                     },
                     {
                       "id": "giveup",
-                      "label": "Give up",
+                      "label": "Give up — never bluff rivers",
                       "accessibilityText": "Give up — never bluff rivers",
                       "grading": {
                         "grade": "questionable",
@@ -6811,7 +6811,7 @@
                     },
                     {
                       "id": "tiny",
-                      "label": "Joke 1 chip",
+                      "label": "Bet 1 chip as a joke",
                       "accessibilityText": "Bet 1 chip as a joke",
                       "grading": {
                         "grade": "clear_mistake",
@@ -7254,7 +7254,7 @@
                   "choices": [
                     {
                       "id": "careful",
-                      "label": "Fold",
+                      "label": "Fold or keep the pot small",
                       "accessibilityText": "Fold or keep the pot small",
                       "grading": {
                         "grade": "recommended",
@@ -7264,7 +7264,7 @@
                     },
                     {
                       "id": "stack",
-                      "label": "Jam stacks",
+                      "label": "Jam for stacks",
                       "accessibilityText": "Jam for stacks",
                       "grading": {
                         "grade": "clear_mistake",
@@ -7275,7 +7275,7 @@
                     },
                     {
                       "id": "call-down",
-                      "label": "Call forever",
+                      "label": "Silent call-down forever",
                       "accessibilityText": "Silent call-down forever",
                       "grading": {
                         "grade": "questionable",
@@ -7367,7 +7367,7 @@
                     },
                     {
                       "id": "float-air",
-                      "label": "Float call",
+                      "label": "Call to keep them honest",
                       "accessibilityText": "Call to keep them honest",
                       "grading": {
                         "grade": "clear_mistake",
@@ -7378,7 +7378,7 @@
                     },
                     {
                       "id": "bluff-crowd",
-                      "label": "Bluff raise",
+                      "label": "Raise as a bluff",
                       "accessibilityText": "Raise as a bluff",
                       "grading": {
                         "grade": "clear_mistake",
@@ -8831,7 +8831,7 @@
                   "id": "act-04-05-01-guided",
                   "order": 2,
                   "stage": "guided",
-                  "renderer": "numeric_pot_price",
+                  "renderer": "select_identify",
                   "estimatedSeconds": 40,
                   "accessibilityText": "SPR is 4.",
                   "acceptedGrades": [
@@ -8843,20 +8843,38 @@
                   "objectives": [
                     "Estimate stack-to-pot ratio"
                   ],
-                  "numericPrompt": {
-                    "question": "Effective stack 80bb, pot 20bb. SPR?",
-                    "unit": "ratio",
-                    "acceptedMin": 4,
-                    "acceptedMax": 4,
-                    "grading": {
-                      "grade": "recommended",
-                      "feedback": "80 / 20 = 4."
+                  "prompt": "Effective stack 80bb, pot 20bb. SPR?",
+                  "choices": [
+                    {
+                      "id": "spr-4",
+                      "label": "4",
+                      "accessibilityText": "4",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "80 / 20 = 4."
+                      }
                     },
-                    "missGrading": {
-                      "grade": "clear_mistake",
-                      "feedback": "Divide stack by pot: 80/20 = 4."
+                    {
+                      "id": "spr-2",
+                      "label": "2",
+                      "accessibilityText": "2",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Divide stack by pot: 80/20 = 4.",
+                        "betterChoiceId": "spr-4"
+                      }
+                    },
+                    {
+                      "id": "spr-8",
+                      "label": "8",
+                      "accessibilityText": "8",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Divide stack by pot: 80/20 = 4.",
+                        "betterChoiceId": "spr-4"
+                      }
                     }
-                  }
+                  ]
                 },
                 {
                   "id": "act-04-05-01-scaffolded",
@@ -25357,23 +25375,27 @@
     "act-04-05-01-guided": {
       "activityId": "act-04-05-01-guided",
       "stage": "guided",
-      "renderer": "numeric_pot_price",
+      "renderer": "select_identify",
       "acceptedGrades": [
         "recommended",
         "strong",
         "reasonable"
       ],
       "lifeLossEligible": false,
-      "numericPrompt": {
-        "acceptedMin": 4,
-        "acceptedMax": 4,
-        "grading": {
+      "choiceGrading": {
+        "spr-4": {
           "grade": "recommended",
           "feedback": "80 / 20 = 4."
         },
-        "missGrading": {
+        "spr-2": {
           "grade": "clear_mistake",
-          "feedback": "Divide stack by pot: 80/20 = 4."
+          "feedback": "Divide stack by pot: 80/20 = 4.",
+          "betterChoiceId": "spr-4"
+        },
+        "spr-8": {
+          "grade": "clear_mistake",
+          "feedback": "Divide stack by pot: 80/20 = 4.",
+          "betterChoiceId": "spr-4"
         }
       }
     },
