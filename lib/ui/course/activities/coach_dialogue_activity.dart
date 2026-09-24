@@ -2872,7 +2872,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllPointsTapped: onPotTypePlansAcknowledge,
         ),
         CoachDialogueVisualKind.huVsMultiway => HuVsMultiwayDemo(
-          interactive: onHuVsMultiwayAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPointsTapped: onHuVsMultiwayAcknowledge,
         ),
