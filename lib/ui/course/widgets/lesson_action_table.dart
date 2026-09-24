@@ -4841,8 +4841,16 @@ class _ExtremeEntryDemoState extends State<ExtremeEntryDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in ExtremeEntryDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -4871,36 +4879,44 @@ class _ExtremeEntryDemoState extends State<ExtremeEntryDemo> {
               for (var i = 0; i < ExtremeEntryDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: ExtremeEntryDemo.points[i].label,
-                    caption: ExtremeEntryDemo.points[i].caption,
-                    color: ExtremeEntryDemo.points[i].color,
-                    selected: _tapped.contains(
-                      ExtremeEntryDemo.points[i].label,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == ExtremeEntryDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: ExtremeEntryDemo.points[i].label,
+                      caption: ExtremeEntryDemo.points[i].caption,
+                      color: ExtremeEntryDemo.points[i].color,
+                      selected: _tapped.contains(
+                        ExtremeEntryDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () =>
+                                  _onTap(ExtremeEntryDemo.points[i].label)
+                              : null,
                     ),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(ExtremeEntryDemo.points[i].label)
-                            : null,
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues the three taps — no duplicate footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Raise and barrel · count calmly',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Raise and barrel · count calmly'
+                    : 'Tap ${next.label} next')
+                : 'Raise and barrel · count calmly',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
