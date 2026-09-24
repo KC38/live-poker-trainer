@@ -437,7 +437,7 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     'act-07-08-01-guided' =>
       'Wet board · Maniac overbet — tap Call.',
     'act-07-08-01-scaffolded' =>
-      'Dry board · Nit tiny bet — tap Raise as a bluff candidate.',
+      'Dry board · Nit tiny bet — tap Raise.',
     'act-07-08-01-unguided' =>
       'TAG pots river · second pair — tap Fold.',
     _ => null,

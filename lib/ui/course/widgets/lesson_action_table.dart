@@ -7990,6 +7990,16 @@ class _DockButton extends StatelessWidget {
         authoredWords.length >= 2 &&
         authoredWords.first != 'CHECK' &&
         authoredWords.first != 'FOLD';
+    // Drop filler words so "Raise as a bluff candidate" → RAISE BLUFF on
+    // the dock (Rex still carries the full teach sentence).
+    const fillers = {'AS', 'A', 'AN', 'THE', 'TO', 'OF', 'FOR', 'ON', 'IN'};
+    final compactAuthored = () {
+      final kept =
+          authoredWords.where((w) => !fillers.contains(w)).toList(growable: false);
+      if (kept.isEmpty) return authored;
+      if (kept.length <= 2) return kept.join(' ');
+      return kept.take(2).join(' ');
+    }();
     final short = unavailableLook
         ? switch (action.split(' ').first) {
             'CALL' => 'CALL (off)',
@@ -7998,7 +8008,7 @@ class _DockButton extends StatelessWidget {
             _ => 'CHECK (off)',
           }
         : preferAuthoredLabel
-        ? authored
+        ? compactAuthored
         : action.startsWith('ALL')
         ? (authored.contains('12') ? 'ALL-IN 12' : 'ALL-IN')
         : switch (action.split(' ').first) {
@@ -8010,11 +8020,12 @@ class _DockButton extends StatelessWidget {
               authored.startsWith('LIMP')
                   ? authored
                   : authored.startsWith('CALL')
-                  ? authored
+                  ? compactAuthored
                   : 'CALL',
-            'RAISE' => authored.startsWith('RAISE') ? authored : 'RAISE',
-            'BET' => authored.startsWith('BET') ? authored : 'BET',
-            _ => authored,
+            'RAISE' =>
+              authored.startsWith('RAISE') ? compactAuthored : 'RAISE',
+            'BET' => authored.startsWith('BET') ? compactAuthored : 'BET',
+            _ => compactAuthored,
           };
     return Semantics(
       button: true,
