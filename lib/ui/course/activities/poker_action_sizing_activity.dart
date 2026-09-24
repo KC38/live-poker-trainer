@@ -84,9 +84,9 @@ class PokerActionSizingActivity extends StatelessWidget {
                   ),
                 ),
               ],
-              const SizedBox(height: 14),
+              const SizedBox(height: 10),
               LessonActionTable(spot: spot),
-              const SizedBox(height: 14),
+              const SizedBox(height: 10),
               LessonActionDock(
                 choices: activity.choices,
                 selectedId: selected,
