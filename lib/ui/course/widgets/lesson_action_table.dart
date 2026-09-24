@@ -2486,102 +2486,130 @@ class _TableHabitsDemoState extends State<TableHabitsDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextHabit;
-    final expandTeach = widget.interactive && widget.enabled;
-    final minFelt = expandTeach
-        ? MediaQuery.sizeOf(context).height * 0.38
-        : null;
-    final child = ConstrainedBox(
-      constraints: minFelt != null
-          ? BoxConstraints(minHeight: minFelt)
-          : const BoxConstraints(),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-        alignment: minFelt != null ? Alignment.center : null,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.feltLight, AppColors.feltDark],
-          ),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.feltBorder.withValues(alpha: 0.85),
+    // Keep densify after the last tap while Continue shows — locking
+    // `enabled` false must not collapse the teach shell into navy void.
+    final expandTeach = widget.interactive;
+    // Tall-phone teach: fixed felt + stretched 2×2 tiles (minHeight alone
+    // leaves sparse green under WATCH / SAY / COVER / WAIT).
+    final feltHeight =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+
+    Widget habitTile(int index) {
+      final habit = TableHabitsDemo.habits[index];
+      return Expanded(
+        child: _DemoSoftPulse(
+          active:
+              widget.interactive &&
+              widget.enabled &&
+              next?.label == habit.label,
+          child: _DemoActionCard(
+            label: habit.label,
+            caption: habit.caption,
+            color: habit.color,
+            densify: expandTeach,
+            selected: _tapped.contains(habit.label),
+            enabled: widget.interactive && widget.enabled,
+            onPressed:
+                widget.interactive ? () => _onTap(habit.label) : null,
           ),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Live-table habits',
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 14),
-            for (var row = 0; row < 2; row++) ...[
-              if (row > 0) const SizedBox(height: 8),
-              Row(
-                children: [
-                  for (var col = 0; col < 2; col++) ...[
-                    if (col > 0) const SizedBox(width: 8),
-                    Expanded(
-                      child: _DemoSoftPulse(
-                        active:
-                            widget.interactive &&
-                            widget.enabled &&
-                            next?.label ==
-                                TableHabitsDemo.habits[row * 2 + col].label,
-                        child: _DemoActionCard(
-                          label: TableHabitsDemo.habits[row * 2 + col].label,
-                          caption:
-                              TableHabitsDemo.habits[row * 2 + col].caption,
-                          color: TableHabitsDemo.habits[row * 2 + col].color,
-                          selected: _tapped.contains(
-                            TableHabitsDemo.habits[row * 2 + col].label,
-                          ),
-                          enabled: widget.interactive && widget.enabled,
-                          onPressed: widget.interactive
-                              ? () => _onTap(
-                                  TableHabitsDemo.habits[row * 2 + col].label,
-                                )
-                              : null,
-                        ),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ],
-            const SizedBox(height: 14),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.feltDark.withValues(alpha: 0.65),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: AppColors.gold.withValues(alpha: 0.45),
-                ),
-              ),
-              child: Text(
-                widget.interactive
-                    ? (next == null
-                          ? 'Watch · say · cover · wait your turn'
-                          : 'Tap ${next.label} next')
-                    : 'Watch · say · cover · wait your turn',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.manrope(
-                  color: AppColors.gold,
-                  fontSize: expandTeach ? 14 : 12,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ],
+      );
+    }
+
+    Widget habitRow(int row) {
+      return Row(
+        crossAxisAlignment: expandTeach
+            ? CrossAxisAlignment.stretch
+            : CrossAxisAlignment.center,
+        children: [
+          habitTile(row * 2),
+          SizedBox(width: expandTeach ? 12 : 8),
+          habitTile(row * 2 + 1),
+        ],
+      );
+    }
+
+    final tiles = Column(
+      mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
+      children: [
+        expandTeach ? Expanded(child: habitRow(0)) : habitRow(0),
+        SizedBox(height: expandTeach ? 12 : 8),
+        expandTeach ? Expanded(child: habitRow(1)) : habitRow(1),
+      ],
+    );
+    final cue = Container(
+      width: expandTeach ? double.infinity : null,
+      padding: EdgeInsets.symmetric(
+        horizontal: expandTeach ? 18 : 14,
+        vertical: expandTeach ? 14 : 8,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.feltDark.withValues(alpha: 0.65),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.gold.withValues(alpha: 0.45)),
+      ),
+      child: Text(
+        widget.interactive
+            ? (next == null
+                ? 'Watch · say · cover · wait your turn'
+                : 'Tap ${next.label} next')
+            : 'Watch · say · cover · wait your turn',
+        textAlign: TextAlign.center,
+        style: GoogleFonts.manrope(
+          color: AppColors.gold,
+          fontSize: expandTeach ? 16 : 12,
+          fontWeight: FontWeight.w700,
         ),
       ),
+    );
+    final body = Column(
+      mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisAlignment: expandTeach
+          ? MainAxisAlignment.spaceEvenly
+          : MainAxisAlignment.start,
+      children: [
+        Text(
+          'Live-table habits',
+          style: GoogleFonts.manrope(
+            color: AppColors.slate,
+            fontSize: expandTeach ? 15 : 12,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        if (!expandTeach) const SizedBox(height: 14),
+        expandTeach
+            ? Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: tiles,
+                ),
+              )
+            : tiles,
+        if (!expandTeach) const SizedBox(height: 14),
+        cue,
+      ],
+    );
+    final child = Container(
+      width: double.infinity,
+      height: feltHeight,
+      padding: EdgeInsets.fromLTRB(
+        12,
+        expandTeach ? 18 : 14,
+        12,
+        expandTeach ? 18 : 14,
+      ),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.feltBorder.withValues(alpha: 0.85),
+        ),
+      ),
+      child: body,
     );
     if (widget.interactive) return child;
     return ExcludeSemantics(child: child);
@@ -7738,30 +7766,58 @@ class _DemoActionCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(densify ? 16 : 12),
         border: Border.all(color: borderColor, width: selected ? 2.5 : 1),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            label,
-            style: GoogleFonts.manrope(
-              color: AppColors.cream,
-              fontSize: densify ? 18 : 13,
-              fontWeight: FontWeight.w900,
+      child: densify
+          ? FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    label,
+                    style: GoogleFonts.manrope(
+                      color: AppColors.cream,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    caption,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.manrope(
+                      color: AppColors.slate,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  label,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.cream,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  caption,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.slate,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
-          ),
-          SizedBox(height: densify ? 10 : 4),
-          Text(
-            caption,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.manrope(
-              color: AppColors.slate,
-              fontSize: densify ? 13 : 11,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
     );
     final child = densify ? SizedBox.expand(child: card) : card;
     if (onPressed == null) return child;

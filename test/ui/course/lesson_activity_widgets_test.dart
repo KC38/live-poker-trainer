@@ -2446,8 +2446,23 @@ void main() {
     expect(find.text('Tap WATCH next'), findsOneWidget);
     expect(find.text('Tap Watch, Say, Cover, and Wait'), findsNothing);
     expect(find.text('Tap Watch, Say, Cover, and Wait.'), findsNothing);
+    expect(
+      find.text('Watch · say · cover · wait your turn'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(TableHabitsDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
     await tester.tap(find.text('WATCH'));
     await tester.pump();
@@ -2461,6 +2476,15 @@ void main() {
     await tester.tap(find.text('WAIT'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Watch · say · cover · wait your turn'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(TableHabitsDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
