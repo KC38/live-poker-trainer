@@ -166,10 +166,13 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Outs: deep NFD — tap Implied on the felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
-  if (activity.id == 'act-03-05-01-guided' ||
-      activity.id == 'act-03-05-01-checkpoint') {
-    // Turn: see flop+turn board, tap brick / scare / plan tiles.
-    return SelectIdentifyPresentation.handCategoryTap;
+  if (activity.id == 'act-03-05-01-guided') {
+    // Turn: tap Brick / Scare / Always-change on the board felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
+  if (activity.id == 'act-03-05-01-checkpoint') {
+    // Turn: tap Give up / Jam / Ignore on the scare felt.
+    return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-03-06-01-checkpoint') {
     // River: see medium one-pair spot, tap the job (catch vs value vs air).

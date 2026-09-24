@@ -200,6 +200,24 @@ enum LessonTableRegion {
   /// Outs checkpoint distractor: fold every nut flush draw.
   outsImpliedFoldNfd,
 
+  /// Turn guided: blank turn is a brick (correct).
+  turnBrick,
+
+  /// Turn guided distractor: major scare.
+  turnScare,
+
+  /// Turn guided distractor: every turn changes everything.
+  turnAlwaysChange,
+
+  /// Turn checkpoint: give up on scare (correct).
+  turnGiveUp,
+
+  /// Turn checkpoint distractor: always jam larger.
+  turnAutoJam,
+
+  /// Turn checkpoint distractor: treat every turn as brick.
+  turnIgnoreBrick,
+
   /// Verbal action: raise stands (binding).
   verbalRaiseStands,
 
@@ -1325,6 +1343,12 @@ enum LessonTableLayout {
   /// Outs checkpoint: implied edge vs depth-never / fold-NFD.
   outsImpliedOutcomes,
 
+  /// Turn guided: brick vs scare vs always-change.
+  turnBrickScareOutcomes,
+
+  /// Turn checkpoint: give up vs jam vs ignore.
+  turnScarePlanOutcomes,
+
   /// Thin-value checkpoint: read-driven line vs coin flip.
   thinValueReadOutcomes,
 
@@ -2093,6 +2117,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-03-05-01-guided':
       return const LessonTableScene(
+        layout: LessonTableLayout.turnBrickScareOutcomes,
         heroCodes: ['Ah', 'Kd'],
         boardCodes: ['As', '7d', '2c', '3h'],
         villainSeatCount: 0,
@@ -2101,6 +2126,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-03-05-01-checkpoint':
       return const LessonTableScene(
+        layout: LessonTableLayout.turnScarePlanOutcomes,
         heroCodes: ['Jh', '9d'],
         boardCodes: ['Kc', '8d', '3s', 'Qh'],
         villainSeatCount: 0,
@@ -3454,6 +3480,20 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.outsImpliedFoldNfd => pick('fold-nfd'),
         _ => null,
       };
+    case 'act-03-05-01-guided':
+      return switch (region) {
+        LessonTableRegion.turnBrick => pick('brick'),
+        LessonTableRegion.turnScare => pick('scare'),
+        LessonTableRegion.turnAlwaysChange => pick('always-change'),
+        _ => null,
+      };
+    case 'act-03-05-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.turnGiveUp => pick('give-up'),
+        LessonTableRegion.turnAutoJam => pick('auto-jam'),
+        LessonTableRegion.turnIgnoreBrick => pick('ignore'),
+        _ => null,
+      };
     case 'act-03-01-01-scaffolded':
       // Preflop open: UTG is left of the BB (earlyPosition on the felt).
       return switch (region) {
@@ -4523,6 +4563,8 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-03-01-scaffolded' ||
       activity.id == 'act-03-03-01-unguided' ||
       activity.id == 'act-03-03-01-checkpoint' ||
+      activity.id == 'act-03-05-01-guided' ||
+      activity.id == 'act-03-05-01-checkpoint' ||
       activity.id == 'act-04-06-01-guided' ||
       activity.id == 'act-04-06-02-guided' ||
       activity.id == 'act-04-06-02-scaffolded' ||
@@ -4811,6 +4853,8 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.callPriceOutcomes => _buildCallPriceOutcomes(),
       LessonTableLayout.drawPriceOutcomes => _buildDrawPriceOutcomes(),
       LessonTableLayout.outsImpliedOutcomes => _buildOutsImpliedOutcomes(),
+      LessonTableLayout.turnBrickScareOutcomes => _buildTurnBrickScareOutcomes(),
+      LessonTableLayout.turnScarePlanOutcomes => _buildTurnScarePlanOutcomes(),
       LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
       LessonTableLayout.tableReadMattersOutcomes =>
           _buildTableReadMattersOutcomes(),
@@ -6256,6 +6300,91 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Always fold',
           visual: const Icon(
             Icons.cancel_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+
+  Widget _buildTurnBrickScareOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive turn card — tap brick, scare, or always-change',
+      semanticsStatic: 'Turn brick scare outcomes',
+      caption: scene.caption ?? 'Missed c-bet · turn blank?',
+      cueLabel: 'Tap Brick or Scare.',
+      phases: [
+        (
+          region: LessonTableRegion.turnBrick,
+          title: 'Brick',
+          detail: 'Rarely helps',
+          visual: const Icon(
+            Icons.crop_square_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.turnScare,
+          title: 'Scare',
+          detail: 'Major card',
+          visual: const Icon(
+            Icons.warning_amber_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.turnAlwaysChange,
+          title: 'Always change',
+          detail: 'Every turn',
+          visual: const Icon(
+            Icons.sync_alt,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTurnScarePlanOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive turn plan — tap give up, jam, or ignore',
+      semanticsStatic: 'Turn scare plan outcomes',
+      caption: scene.caption ?? 'Air bluff · turn completes draws',
+      cueLabel: 'Tap Give up.',
+      phases: [
+        (
+          region: LessonTableRegion.turnGiveUp,
+          title: 'Give up',
+          detail: 'Card hurts air',
+          visual: const Icon(
+            Icons.flag_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.turnAutoJam,
+          title: 'Jam larger',
+          detail: 'Always',
+          visual: const Icon(
+            Icons.flash_on,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.turnIgnoreBrick,
+          title: 'Ignore',
+          detail: 'Treat as brick',
+          visual: const Icon(
+            Icons.remove_red_eye_outlined,
             color: AppColors.slate,
             size: 24,
           ),

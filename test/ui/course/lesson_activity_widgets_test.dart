@@ -8508,11 +8508,24 @@ void main() {
     );
     expect(
       resolveSelectIdentifyPresentation(activity),
-      SelectIdentifyPresentation.handCategoryTap,
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.turnBrickScareOutcomes,
     );
     expect(
       resolveLessonTableScene(activity)?.boardCodes,
       ['As', '7d', '2c', '3h'],
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.turnBrick,
+        choices: activity.choices,
+      ),
+      'brick',
     );
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
@@ -8534,8 +8547,10 @@ void main() {
       ),
       findsNothing,
     );
-    expect(find.text('Brick — rarely helps'), findsOneWidget);
-    await tester.tap(find.text('Brick — rarely helps'));
+    expect(find.text('Brick — rarely helps'), findsNothing);
+    expect(find.text('Brick'), findsOneWidget);
+    expect(find.text('Rarely helps'), findsOneWidget);
+    await tester.tap(find.text('Brick'));
     await tester.pump();
     expect(controller.draft.choiceId, 'brick');
     controller.dispose();
@@ -8673,7 +8688,20 @@ void main() {
     );
     expect(
       resolveSelectIdentifyPresentation(activity),
-      SelectIdentifyPresentation.handCategoryTap,
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.turnScarePlanOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.turnGiveUp,
+        choices: activity.choices,
+      ),
+      'give-up',
     );
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
@@ -8695,8 +8723,10 @@ void main() {
       ),
       findsNothing,
     );
-    expect(find.text('Give up — card hurts air'), findsOneWidget);
-    await tester.tap(find.text('Give up — card hurts air'));
+    expect(find.text('Give up — card hurts air'), findsNothing);
+    expect(find.text('Give up'), findsOneWidget);
+    expect(find.text('Card hurts air'), findsOneWidget);
+    await tester.tap(find.text('Give up'));
     await tester.pump();
     expect(controller.draft.choiceId, 'give-up');
     controller.dispose();
