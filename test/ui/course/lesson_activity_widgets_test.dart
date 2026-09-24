@@ -2602,14 +2602,20 @@ void main() {
       ),
     );
     expect(find.byType(MultiStreetPlanDemo), findsOneWidget);
-    expect(find.text('Tap Flop, Turn, and River.'), findsOneWidget);
+    expect(find.text('Tap FLOP next'), findsOneWidget);
+    expect(find.text('Tap Flop, Turn, and River.'), findsNothing);
+    expect(find.text('Tap Flop, Turn, and River'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['FLOP', 'TURN', 'RIVER']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('FLOP'));
+    await tester.pump();
+    expect(find.text('Tap TURN next'), findsOneWidget);
+    await tester.tap(find.text('TURN'));
+    await tester.pump();
+    expect(find.text('Tap RIVER next'), findsOneWidget);
+    await tester.tap(find.text('RIVER'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
