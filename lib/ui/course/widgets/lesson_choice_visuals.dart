@@ -178,9 +178,12 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // River: tap Catch / Thin shove / Pure bluff on the spot felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
-  if (activity.id == 'act-03-07-01-unguided' ||
-      activity.id == 'act-03-07-01-checkpoint') {
-    // Multiway: tap the speculative hand / observation tile.
+  if (activity.id == 'act-03-07-01-unguided') {
+    // Multiway: tap speculative hole cards on densified felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
+  if (activity.id == 'act-03-07-01-checkpoint') {
+    // Multiway: tap the observation tile.
     return SelectIdentifyPresentation.handCategoryTap;
   }
   if (activity.id == 'act-03-08-01-checkpoint') {

@@ -9058,7 +9058,20 @@ void main() {
     );
     expect(
       resolveSelectIdentifyPresentation(activity),
-      SelectIdentifyPresentation.handCategoryTap,
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.multiwaySpecOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.mwSpecSc,
+        choices: activity.choices,
+      ),
+      'sc',
     );
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
@@ -9074,8 +9087,9 @@ void main() {
       find.text('Deep multiway — tap the better speculative hand.'),
       findsOneWidget,
     );
-    expect(find.text('Suited connector · IP'), findsOneWidget);
-    await tester.tap(find.text('Suited connector · IP'));
+    expect(find.text('76s · IP'), findsOneWidget);
+    expect(find.text('Nut potential'), findsOneWidget);
+    await tester.tap(find.text('76s · IP'));
     await tester.pump();
     expect(controller.draft.choiceId, 'sc');
     controller.dispose();
