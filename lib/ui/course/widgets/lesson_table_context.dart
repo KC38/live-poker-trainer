@@ -13828,20 +13828,15 @@ class LessonTableContext extends StatelessWidget {
         villainFaceUp.isNotEmpty ||
         scene.villainSeatCount > 0 ||
         scene.showDealerChip;
-    // Solo hero teach (S1 explain) — grow felt into the tall-phone void so
-    // navy empty space becomes green felt with centered hole cards.
-    // Keep densify after the hero tap while Continue shows — coach clears
-    // SoftPulse / onRegionTap on lock; densify must not depend on those.
-    final expandTeach =
-        scene.highlight == LessonTableHighlight.hero &&
-        board.isEmpty &&
-        !showVillainRail &&
-        !scene.showMuck;
+    // Hero SoftPulse teach (explain + guided find-holes) — grow felt into
+    // the tall-phone navy void. Keep densify after the hero tap / lock.
+    final soloHero =
+        board.isEmpty && !showVillainRail && !scene.showMuck;
+    final expandTeach = scene.highlight == LessonTableHighlight.hero;
     final feltHeight =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
-    // Solo-hero teach: fill the densified felt — tiny cards in a tall green
-    // shell read as sparse navy-adjacent void.
-    final heroScale = expandTeach ? 1.85 : 1.0;
+    // Solo explain can go larger; multi-rail guided still needs a bump.
+    final heroScale = expandTeach ? (soloHero ? 1.85 : 1.4) : 1.0;
 
     final heroTile = _TappableRegion(
       label: 'Your hole cards ${hero.map((c) => c.display).join(' ')}',
@@ -13917,10 +13912,7 @@ class LessonTableContext extends StatelessWidget {
 
     // Solo densify: stretch cards + cue through the fixed felt (FittedBox
     // avoids overflow on short test viewports).
-    if (expandTeach &&
-        board.isEmpty &&
-        !showVillainRail &&
-        !scene.showMuck) {
+    if (expandTeach && soloHero) {
       final content = Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -13957,28 +13949,65 @@ class LessonTableContext extends StatelessWidget {
       );
     }
 
-    return _feltShell(
-      key: const ValueKey('hole-cards-felt'),
-      semanticsLabel: _semanticsLabel(hero, board, villainFaceUp),
-      height: feltHeight,
-      centerChild: expandTeach,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: pulseHero || pulseBoard ? 8 : 0,
-        ),
-        child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment:
-            expandTeach ? MainAxisAlignment.center : MainAxisAlignment.start,
-        children: [
-          if (showVillainRail) ...[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                if (villainFaceUp.isNotEmpty)
+    final rails = Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        if (showVillainRail) ...[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              if (villainFaceUp.isNotEmpty)
+                _TappableRegion(
+                  label:
+                      'Them ${villainFaceUp.map((c) => c.display).join(' ')}',
+                  selected: selectedRegion == LessonTableRegion.villain,
+                  enabled: enabled && _interactive,
+                  onTap:
+                      _interactive
+                          ? () => onRegionTap!(
+                            const LessonTableTapTarget(
+                              LessonTableRegion.villain,
+                            ),
+                          )
+                          : null,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 6,
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Them',
+                          style: GoogleFonts.manrope(
+                            color: AppColors.slate,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.8,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            for (var i = 0; i < villainFaceUp.length; i++) ...[
+                              if (i > 0) const SizedBox(width: 6),
+                              MiniCard(
+                                card: villainFaceUp[i],
+                                size: MiniCardSize.small,
+                              ),
+                            ],
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              else
+                for (var i = 0; i < scene.villainSeatCount; i++)
                   _TappableRegion(
-                    label:
-                        'Them ${villainFaceUp.map((c) => c.display).join(' ')}',
+                    label: 'Them — other seat face-down cards',
                     selected: selectedRegion == LessonTableRegion.villain,
                     enabled: enabled && _interactive,
                     onTap:
@@ -13989,140 +14018,129 @@ class LessonTableContext extends StatelessWidget {
                               ),
                             )
                             : null,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 6,
-                      ),
-                      child: Column(
-                        children: [
-                          Text(
-                            'Them',
-                            style: GoogleFonts.manrope(
-                              color: AppColors.slate,
-                              fontSize: 11,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0.8,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              for (var i = 0; i < villainFaceUp.length; i++) ...[
-                                if (i > 0) const SizedBox(width: 6),
-                                MiniCard(
-                                  card: villainFaceUp[i],
-                                  size: MiniCardSize.small,
-                                ),
-                              ],
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                else
-                  for (var i = 0; i < scene.villainSeatCount; i++)
-                    _TappableRegion(
-                      label: 'Them — other seat face-down cards',
-                      selected: selectedRegion == LessonTableRegion.villain,
-                      enabled: enabled && _interactive,
-                      onTap:
-                          _interactive
-                              ? () => onRegionTap!(
-                                const LessonTableTapTarget(
-                                  LessonTableRegion.villain,
-                                ),
-                              )
-                              : null,
-                      child: const _FaceDownPair(),
-                    ),
-                if (scene.showDealerChip)
-                  _TappableRegion(
-                    label: 'Dealer',
-                    selected: selectedRegion == LessonTableRegion.dealer,
-                    enabled: enabled && _interactive,
-                    onTap:
-                        _interactive
-                            ? () => onRegionTap!(
-                              const LessonTableTapTarget(
-                                LessonTableRegion.dealer,
-                              ),
-                            )
-                            : null,
-                    child: const _DealerChip(),
+                    child: const _FaceDownPair(),
                   ),
-              ],
-            ),
-            const SizedBox(height: 8),
-          ],
-          if (board.isNotEmpty) ...[
-            _TappableRegion(
-              label: 'Board ${board.map((c) => c.display).join(' ')}',
-              selected: selectedRegion == LessonTableRegion.board,
-              highlighted: pulseBoard,
-              enabled: enabled && _interactive,
-              onTap:
-                  _interactive
-                      ? () => onRegionTap!(
-                        const LessonTableTapTarget(LessonTableRegion.board),
-                      )
-                      : null,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 6,
+              if (scene.showDealerChip)
+                _TappableRegion(
+                  label: 'Dealer',
+                  selected: selectedRegion == LessonTableRegion.dealer,
+                  enabled: enabled && _interactive,
+                  onTap:
+                      _interactive
+                          ? () => onRegionTap!(
+                            const LessonTableTapTarget(
+                              LessonTableRegion.dealer,
+                            ),
+                          )
+                          : null,
+                  child: const _DealerChip(),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    for (var i = 0; i < board.length; i++) ...[
-                      if (i > 0) const SizedBox(width: 4),
-                      MiniCard(card: board[i], size: MiniCardSize.small),
-                    ],
-                  ],
-                ),
-              ),
-            ),
-            // Teach vocabulary at the moment of use (Duolingo-style label).
-            Padding(
-              padding: const EdgeInsets.only(bottom: 6),
-              child: Text(
-                'BOARD · shared',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.manrope(
-                  color: AppColors.cream.withValues(alpha: 0.7),
-                  fontSize: 10,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0.7,
-                ),
-              ),
-            ),
-          ],
-          heroTile,
-          if (inviteCue != null) ...[
-            const SizedBox(height: 10),
-            inviteCue,
-          ],
-          if (scene.showMuck) ...[
-            const SizedBox(height: 8),
-            _TappableRegion(
-              label: 'Muck pile',
-              selected: selectedRegion == LessonTableRegion.muck,
-              enabled: enabled && _interactive,
-              onTap:
-                  _interactive
-                      ? () => onRegionTap!(
-                        const LessonTableTapTarget(LessonTableRegion.muck),
-                      )
-                      : null,
-              child: const _MuckPile(),
-            ),
-          ],
+            ],
+          ),
+          SizedBox(height: expandTeach ? 12 : 8),
         ],
+        if (board.isNotEmpty) ...[
+          _TappableRegion(
+            label: 'Board ${board.map((c) => c.display).join(' ')}',
+            selected: selectedRegion == LessonTableRegion.board,
+            highlighted: pulseBoard,
+            enabled: enabled && _interactive,
+            onTap:
+                _interactive
+                    ? () => onRegionTap!(
+                      const LessonTableTapTarget(LessonTableRegion.board),
+                    )
+                    : null,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 6,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  for (var i = 0; i < board.length; i++) ...[
+                    if (i > 0) const SizedBox(width: 4),
+                    MiniCard(card: board[i], size: MiniCardSize.small),
+                  ],
+                ],
+              ),
+            ),
+          ),
+          // Teach vocabulary at the moment of use (Duolingo-style label).
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Text(
+              'BOARD · shared',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.cream.withValues(alpha: 0.7),
+                fontSize: expandTeach ? 12 : 10,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.7,
+              ),
+            ),
+          ),
+        ],
+        heroTile,
+        if (inviteCue != null) ...[
+          SizedBox(height: expandTeach ? 14 : 10),
+          inviteCue,
+        ],
+        if (doneCue != null) ...[
+          const SizedBox(height: 14),
+          doneCue,
+        ],
+        if (scene.showMuck) ...[
+          const SizedBox(height: 8),
+          _TappableRegion(
+            label: 'Muck pile',
+            selected: selectedRegion == LessonTableRegion.muck,
+            enabled: enabled && _interactive,
+            onTap:
+                _interactive
+                    ? () => onRegionTap!(
+                      const LessonTableTapTarget(LessonTableRegion.muck),
+                    )
+                    : null,
+            child: const _MuckPile(),
+          ),
+        ],
+      ],
+    );
+
+    if (expandTeach) {
+      return _feltShell(
+        key: const ValueKey('hole-cards-felt'),
+        semanticsLabel: _semanticsLabel(hero, board, villainFaceUp),
+        height: feltHeight,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Expanded(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: SizedBox(
+                  width: MediaQuery.sizeOf(context).width - 48,
+                  child: rails,
+                ),
+              ),
+            ),
+          ],
         ),
+      );
+    }
+
+    return _feltShell(
+      key: const ValueKey('hole-cards-felt'),
+      semanticsLabel: _semanticsLabel(hero, board, villainFaceUp),
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: pulseHero || pulseBoard ? 8 : 0,
+        ),
+        child: rails,
       ),
     );
   }
