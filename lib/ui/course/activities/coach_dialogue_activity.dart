@@ -2776,7 +2776,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllPointsTapped: onEquityRealizeAcknowledge,
         ),
         CoachDialogueVisualKind.cappedUncapped => CappedUncappedDemo(
-          interactive: onCappedUncappedAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPointsTapped: onCappedUncappedAcknowledge,
         ),
