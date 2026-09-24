@@ -404,6 +404,8 @@ bool _isShortSoftPulseLabel(String needleLower) {
     'ego 4-bet',
     'spr / commit',
     'felt suits',
+    'small c-bet',
+    'jam forever',
   };
   return labels.contains(needleLower);
 }

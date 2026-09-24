@@ -60,6 +60,8 @@ void main() {
       'ego 4-bet',
       'spr / commit',
       'felt suits',
+      'small c-bet',
+      'jam forever',
     ];
     for (final label in labels) {
       expect(agentTapLabelMatches(label, label), isTrue, reason: label);
