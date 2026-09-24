@@ -4481,8 +4481,23 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Tap IMPLIED next'), findsOneWidget);
     expect(find.text('Tap Implied, Reverse, and Second.'), findsNothing);
     expect(find.text('Tap Implied, Reverse, and Second'), findsNothing);
+    expect(
+      find.text('Future money · reverse when second-best'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(ImpliedOddsDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
     await tester.tap(find.text('IMPLIED'));
     await tester.pump();
@@ -4493,6 +4508,15 @@ await tester.tap(find.text('NIT'));
     await tester.tap(find.text('SECOND'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Future money · reverse when second-best'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(ImpliedOddsDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
