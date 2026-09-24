@@ -296,6 +296,20 @@ class OrderSequenceActivity extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
+                if (showGuidance &&
+                    !locked &&
+                    ordered.length < activity.sequenceItems.length) ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    'Tap ${activity.sequenceItems[ordered.length].label}',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.manrope(
+                      color: AppColors.gold,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 8),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -951,15 +965,15 @@ class _SoftPulseTargetState extends State<_SoftPulseTarget>
     return AnimatedBuilder(
       animation: _pulse,
       builder: (context, child) {
-        final glow = 0.25 + (_pulse.value * 0.4);
+        final glow = 0.4 + (_pulse.value * 0.55);
         return DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: AppColors.gold.withValues(alpha: glow * 0.55),
-                blurRadius: 10 + (8 * _pulse.value),
-                spreadRadius: 0.5,
+                color: AppColors.gold.withValues(alpha: glow * 0.65),
+                blurRadius: 12 + (10 * _pulse.value),
+                spreadRadius: 1 + (2 * _pulse.value),
               ),
             ],
           ),
