@@ -94,9 +94,13 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Jump: see Ah5h on felt, tap the starting-hand family tile.
     return SelectIdentifyPresentation.handCategoryTap;
   }
+  if (activity.id == 'act-02-02-01-guided-pair') {
+    // Hand families: tap Pocket pair / Suited ace / Broadway on densified felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
   if (activity.id.startsWith('act-02-02-01-') &&
       activity.renderer == ActivityRenderer.selectIdentify) {
-    // Hand families: see holes on felt → tap the family name.
+    // Hand families scaffolded / unguided / checkpoint: bottom tiles for now.
     return SelectIdentifyPresentation.handCategoryTap;
   }
   if (activity.id == 'act-01-02-02-unguided-board') {

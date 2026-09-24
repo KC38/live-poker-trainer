@@ -209,6 +209,15 @@ enum LessonTableRegion {
   /// Outs guided distractor: no clean outs.
   outsNoClean,
 
+  /// Hand-family guided: pocket pair (correct).
+  handFamilyPair,
+
+  /// Hand-family guided distractor: suited ace.
+  handFamilySuitedAce,
+
+  /// Hand-family guided distractor: broadway.
+  handFamilyBroadway,
+
   /// Turn guided: blank turn is a brick (correct).
   turnBrick,
 
@@ -1505,6 +1514,9 @@ enum LessonTableLayout {
   /// Outs guided: remaining aces vs dirty queens vs none.
   outsGuidedCountOutcomes,
 
+  /// Hand-family guided: pocket pair vs suited ace vs broadway.
+  handFamilyGuidedOutcomes,
+
   /// Turn guided: brick vs scare vs always-change.
   turnBrickScareOutcomes,
 
@@ -2174,9 +2186,10 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-02-02-01-guided-pair':
       return const LessonTableScene(
+        layout: LessonTableLayout.handFamilyGuidedOutcomes,
         heroCodes: ['8h', '8c'],
         villainSeatCount: 0,
-        highlight: LessonTableHighlight.hero,
+        highlight: LessonTableHighlight.none,
         caption: 'Your holes',
       );
     case 'act-02-02-01-scaffolded-broadway':
@@ -3686,6 +3699,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.potChipsTwelve => pick('pot-12'),
         _ => null,
       };
+    case 'act-02-02-01-guided-pair':
+      return switch (region) {
+        LessonTableRegion.handFamilyPair => pick('hf-pair'),
+        LessonTableRegion.handFamilySuitedAce => pick('hf-suited-ace'),
+        LessonTableRegion.handFamilyBroadway => pick('hf-broadway'),
+        _ => null,
+      };
     case 'act-03-03-01-guided':
       return switch (region) {
         LessonTableRegion.outsCleanAces => pick('outs-3'),
@@ -4908,6 +4928,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-02-07-01-checkpoint-habit' ||
       activity.id == 'act-02-07-02-jump-pos' ||
       activity.id == 'act-02-07-02-jump-stack' ||
+      activity.id == 'act-02-02-01-guided-pair' ||
       activity.id == 'act-03-01-01-guided' ||
       activity.id == 'act-03-01-01-scaffolded' ||
       activity.id == 'act-03-01-01-unguided' ||
@@ -5225,6 +5246,8 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.outsImpliedOutcomes => _buildOutsImpliedOutcomes(),
       LessonTableLayout.outsGuidedCountOutcomes =>
           _buildOutsGuidedCountOutcomes(),
+      LessonTableLayout.handFamilyGuidedOutcomes =>
+          _buildHandFamilyGuidedOutcomes(),
       LessonTableLayout.turnBrickScareOutcomes => _buildTurnBrickScareOutcomes(),
       LessonTableLayout.turnScarePlanOutcomes => _buildTurnScarePlanOutcomes(),
       LessonTableLayout.riverJobOutcomes => _buildRiverJobOutcomes(),
@@ -6756,6 +6779,55 @@ class LessonTableContext extends StatelessWidget {
             color: AppColors.slate,
             size: 24,
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHandFamilyGuidedOutcomes() {
+    Widget miniPair(String a, String b) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          MiniCard(
+            card: CardModel.fromCode(a),
+            size: MiniCardSize.tiny,
+          ),
+          const SizedBox(width: 2),
+          MiniCard(
+            card: CardModel.fromCode(b),
+            size: MiniCardSize.tiny,
+          ),
+        ],
+      );
+    }
+
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive hand family — tap Pocket pair, Suited ace, or Broadway',
+      semanticsStatic: 'Hand family guided outcomes',
+      caption: scene.caption ?? 'Your holes',
+      cueLabel: 'Tap Pocket pair.',
+      guideRegion: LessonTableRegion.handFamilyPair,
+      phases: [
+        (
+          region: LessonTableRegion.handFamilyPair,
+          title: 'Pocket pair',
+          detail: 'Matching ranks',
+          visual: miniPair('8h', '8c'),
+        ),
+        (
+          region: LessonTableRegion.handFamilySuitedAce,
+          title: 'Suited ace',
+          detail: 'Ace + suited',
+          visual: miniPair('Ah', '9h'),
+        ),
+        (
+          region: LessonTableRegion.handFamilyBroadway,
+          title: 'Broadway',
+          detail: 'Ten or better',
+          visual: miniPair('As', 'Kd'),
         ),
       ],
     );
