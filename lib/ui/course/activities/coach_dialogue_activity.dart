@@ -2525,7 +2525,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllRungsTapped: onLadderAcknowledge,
         ),
         CoachDialogueVisualKind.bestFive => BestFiveDemo(
-          interactive: onBestFiveAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPlayingTapped: onBestFiveAcknowledge,
         ),

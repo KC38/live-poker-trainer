@@ -487,20 +487,16 @@ void main() {
       find.text('Tap each highlighted card — those five count'),
       findsOneWidget,
     );
-    // Tall-phone teach felt expands into the navy void.
-    final felt = find.byWidgetPredicate(
-      (w) =>
-          w is Container &&
-          w.decoration is BoxDecoration &&
-          (w.decoration! as BoxDecoration).gradient != null,
-    );
-    expect(felt, findsWidgets);
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('best-five-felt')))
+        .height;
     expect(
-      tester.getSize(felt.first).height,
-      greaterThanOrEqualTo(
+      teachHeight,
+      moreOrLessEquals(
         tester.view.physicalSize.height /
             tester.view.devicePixelRatio *
-            0.32,
+            0.58,
+        epsilon: 1,
       ),
     );
     // No duplicate gold hint under the felt (demo embeds the instruction).
@@ -525,6 +521,12 @@ void main() {
       await tester.pump();
     }
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(find.text('Five play · two leftovers'), findsOneWidget);
+    expect(
+      tester.getSize(find.byKey(const ValueKey('best-five-felt'))).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
