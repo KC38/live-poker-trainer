@@ -7987,6 +7987,61 @@ await tester.tap(find.text('STRONGER'));
     controller.dispose();
   });
 
+  testWidgets('postflop checkpoint densifies blinds seats without SoftPulse', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-04-01-checkpoint-postflop',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'postflop',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Postflop — tap who acts first.',
+      choices: const [
+        CourseChoice(id: 'sb-first', label: 'SB'),
+        CourseChoice(id: 'btn-first', label: 'BTN'),
+        CourseChoice(id: 'bb-first-always', label: 'BB'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(find.text('Postflop — tap who acts first.'), findsOneWidget);
+    expect(find.byKey(const ValueKey('blinds-seats-felt')), findsOneWidget);
+    // Checkpoint must not SoftPulse the answer.
+    expect(find.text('Tap the small blind'), findsNothing);
+    expect(find.text('Tap the dealer button'), findsNothing);
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('blinds-seats-felt')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
+    await tester.tap(find.text('1').first);
+    await tester.pump();
+    expect(controller.draft.choiceId, 'sb-first');
+    expect(
+      tester.getSize(find.byKey(const ValueKey('blinds-seats-felt'))).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
+    controller.dispose();
+  });
+
   testWidgets('toy hand guided step opens on action dock', (tester) async {
     final activity = CourseActivity(
       id: 'act-01-06-01-guided-steps',
