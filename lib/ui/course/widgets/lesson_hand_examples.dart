@@ -910,8 +910,16 @@ class _HandRankLadderDemoState extends State<HandRankLadderDemo> {
     }
   }
 
+  LessonHandExample? get _nextRung {
+    for (final rung in HandRankLadderDemo.rungs) {
+      if (!_tapped.contains(rung.id)) return rung;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextRung;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -945,15 +953,33 @@ class _HandRankLadderDemoState extends State<HandRankLadderDemo> {
               ),
               const SizedBox(height: 6),
             ],
-            HandExampleTile(
-              example: HandRankLadderDemo.rungs[i],
-              selected: _tapped.contains(HandRankLadderDemo.rungs[i].id),
-              enabled: widget.interactive && widget.enabled,
-              compact: true,
-              onPressed:
-                  widget.interactive
-                      ? () => _onRungTap(HandRankLadderDemo.rungs[i])
-                      : null,
+            _SoftPulseTarget(
+              active:
+                  widget.interactive &&
+                  widget.enabled &&
+                  next?.id == HandRankLadderDemo.rungs[i].id,
+              child: HandExampleTile(
+                example: HandRankLadderDemo.rungs[i],
+                selected: _tapped.contains(HandRankLadderDemo.rungs[i].id),
+                enabled: widget.interactive && widget.enabled,
+                compact: true,
+                onPressed:
+                    widget.interactive
+                        ? () => _onRungTap(HandRankLadderDemo.rungs[i])
+                        : null,
+              ),
+            ),
+          ],
+          if (widget.interactive && widget.enabled && next != null) ...[
+            const SizedBox(height: 12),
+            Text(
+              'Tap ${next.title}',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
           ],
         ],

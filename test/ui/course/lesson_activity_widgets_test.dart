@@ -356,15 +356,18 @@ void main() {
       ),
     );
     expect(find.byType(HandRankLadderDemo), findsOneWidget);
-    expect(find.text('Tap each rung from high card to flush.'), findsOneWidget);
+    expect(find.text('Tap High card'), findsOneWidget);
+    expect(find.text('Tap each rung from high card to flush.'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
 
     await tester.tap(find.text('High card'));
     await tester.pump();
     expect(feltAck, 0);
+    expect(find.text('Tap One pair'), findsOneWidget);
     await tester.tap(find.text('One pair'));
     await tester.pump();
     expect(feltAck, 0);
+    expect(find.text('Tap Flush'), findsOneWidget);
     await tester.tap(find.text('Flush'));
     await tester.pump();
     expect(feltAck, 1);
