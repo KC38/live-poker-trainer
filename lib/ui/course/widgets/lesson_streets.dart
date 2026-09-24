@@ -361,8 +361,7 @@ class StreetOrderTile extends StatelessWidget {
               ),
             ),
             child: Column(
-              // Shrink-wrap so densify FittedBox can scale the pack; MainAxisSize.max
-              // inside Expanded rows overflows when the felt is tall.
+              // Shrink-wrap so densify FittedBox can scale the pack.
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (badge != null)
