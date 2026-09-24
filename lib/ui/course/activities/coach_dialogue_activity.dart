@@ -2830,7 +2830,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllPointsTapped: onTagModelAcknowledge,
         ),
         CoachDialogueVisualKind.lagModel => LagModelDemo(
-          interactive: onLagModelAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPointsTapped: onLagModelAcknowledge,
         ),
