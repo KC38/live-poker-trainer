@@ -3070,14 +3070,20 @@ void main() {
       ),
     );
     expect(find.byType(ExtremeEntryDemo), findsOneWidget);
-    expect(find.text('Tap Raise, Barrel, and Count.'), findsOneWidget);
+    expect(find.text('Tap RAISE next'), findsOneWidget);
+    expect(find.text('Tap Raise, Barrel, and Count.'), findsNothing);
+    expect(find.text('Tap Raise, Barrel, and Count'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['RAISE', 'BARREL', 'COUNT']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('RAISE'));
+    await tester.pump();
+    expect(find.text('Tap BARREL next'), findsOneWidget);
+    await tester.tap(find.text('BARREL'));
+    await tester.pump();
+    expect(find.text('Tap COUNT next'), findsOneWidget);
+    await tester.tap(find.text('COUNT'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
