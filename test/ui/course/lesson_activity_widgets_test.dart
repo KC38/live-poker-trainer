@@ -4706,8 +4706,20 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Tap ACTION next'), findsOneWidget);
     expect(find.text('Tap Action, Rewrite, and Update.'), findsNothing);
     expect(find.text('Tap Action, Rewrite, and Update'), findsNothing);
+    expect(find.text('Each action rewrites the range'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(RangeRewriteDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
     await tester.tap(find.text('ACTION'));
     await tester.pump();
@@ -4718,6 +4730,12 @@ await tester.tap(find.text('NIT'));
     await tester.tap(find.text('UPDATE'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(find.text('Each action rewrites the range'), findsOneWidget);
+    expect(
+      tester.getSize(find.byType(RangeRewriteDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
