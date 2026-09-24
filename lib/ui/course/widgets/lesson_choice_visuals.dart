@@ -194,9 +194,12 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // S3 jump: tap pot + effective on densified felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
-  if (activity.id == 'act-03-08-02-jump-class' ||
-      activity.id == 'act-03-08-02-jump-leak') {
-    // S3 jump: class / price on felt tiles (still refining).
+  if (activity.id == 'act-03-08-02-jump-class') {
+    // S3 jump: tap Draw / Made / Air on densified combo-draw felt.
+    return SelectIdentifyPresentation.tableRegionTap;
+  }
+  if (activity.id == 'act-03-08-02-jump-leak') {
+    // S3 jump: price on felt tiles (still refining).
     return SelectIdentifyPresentation.handCategoryTap;
   }
   if (activity.id.startsWith('act-04-01-01-') &&
