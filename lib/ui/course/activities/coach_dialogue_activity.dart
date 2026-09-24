@@ -2614,7 +2614,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllLabelsTapped: onFlopLabelAcknowledge,
         ),
         CoachDialogueVisualKind.outsPrice => OutsPriceDemo(
-          interactive: onOutsPriceAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPointsTapped: onOutsPriceAcknowledge,
         ),
