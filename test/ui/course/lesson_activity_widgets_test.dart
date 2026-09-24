@@ -7350,12 +7350,29 @@ await tester.tap(find.text('STRONGER'));
     );
     expect(find.byType(HoleCardChoiceButton), findsNWidgets(3));
     expect(find.byType(MiniCard), findsAtLeastNWidgets(6));
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('hole-card-felt-tray')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
     var autoSubmits = 0;
     controller.onAutoSubmit = () => autoSubmits += 1;
     await tester.tap(find.byType(HoleCardChoiceButton).first);
     await tester.pump();
     expect(controller.draft.choiceId, 'suited-ah-kh');
     expect(autoSubmits, 1);
+    // Densified shell stays filled through Checking…
+    expect(
+      tester.getSize(find.byKey(const ValueKey('hole-card-felt-tray'))).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 

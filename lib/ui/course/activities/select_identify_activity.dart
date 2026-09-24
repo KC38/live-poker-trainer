@@ -1902,8 +1902,59 @@ class _HoleCardFeltTray extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final feltHeight = MediaQuery.sizeOf(context).height * 0.58;
+    final header = Text(
+      'TAP A HAND',
+      textAlign: TextAlign.center,
+      style: GoogleFonts.manrope(
+        color: AppColors.cream.withValues(alpha: 0.78),
+        fontSize: 12,
+        fontWeight: FontWeight.w800,
+        letterSpacing: 1.1,
+      ),
+    );
+    final rows = <Widget>[
+      for (var i = 0; i < activity.choices.length; i++)
+        _FamilySoftPulse(
+          active:
+              showGuidance &&
+              activity.stage == ActivityStage.guided &&
+              i == 0 &&
+              selectedId == null &&
+              !locked,
+          child: HoleCardChoiceButton(
+            codes: parseCardCodes(activity.choices[i].label),
+            accessibilityText: activity.choices[i].accessibilityText,
+            selected: selectedId == activity.choices[i].id,
+            highlighted:
+                showGuidance &&
+                activity.stage == ActivityStage.guided &&
+                i == 0 &&
+                selectedId == null,
+            densify: true,
+            enabled: !locked,
+            onPressed:
+                locked ? null : () => onSelect(activity.choices[i].id),
+          ),
+        ),
+    ];
+    final content = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        header,
+        const SizedBox(height: 16),
+        for (var i = 0; i < rows.length; i++) ...[
+          if (i > 0) const SizedBox(height: 14),
+          rows[i],
+        ],
+      ],
+    );
     return Container(
-      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+      key: const ValueKey('hole-card-felt-tray'),
+      width: double.infinity,
+      height: feltHeight,
+      padding: const EdgeInsets.fromLTRB(14, 18, 14, 18),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           begin: Alignment.topCenter,
@@ -1911,38 +1962,21 @@ class _HoleCardFeltTray extends StatelessWidget {
           colors: [AppColors.feltLight, AppColors.feltDark],
         ),
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.55)),
+        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text(
-            'TAP A HAND',
-            textAlign: TextAlign.center,
-            style: GoogleFonts.manrope(
-              color: AppColors.cream.withValues(alpha: 0.72),
-              fontSize: 10,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 1.0,
+          Expanded(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: SizedBox(
+                width: MediaQuery.sizeOf(context).width - 48,
+                child: content,
+              ),
             ),
           ),
-          const SizedBox(height: 12),
-          for (var i = 0; i < activity.choices.length; i++) ...[
-            if (i > 0) const SizedBox(height: 10),
-            HoleCardChoiceButton(
-              codes: parseCardCodes(activity.choices[i].label),
-              accessibilityText: activity.choices[i].accessibilityText,
-              selected: selectedId == activity.choices[i].id,
-              highlighted:
-                  showGuidance &&
-                  activity.stage == ActivityStage.guided &&
-                  i == 0 &&
-                  selectedId == null,
-              enabled: !locked,
-              onPressed:
-                  locked ? null : () => onSelect(activity.choices[i].id),
-            ),
-          ],
         ],
       ),
     );
