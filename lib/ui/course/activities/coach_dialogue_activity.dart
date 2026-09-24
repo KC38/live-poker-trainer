@@ -3419,6 +3419,8 @@ class _PositionLabelsDemo extends StatelessWidget {
       ),
       enabled: enabled,
       showSoftPulse: showSoftPulse,
+      // SoftPulse + Rex own the cue — no Tap BTN footer stack.
+      showInviteCue: false,
       onRegionTap: onRegionTap,
     );
   }

@@ -336,7 +336,8 @@ void main() {
       ),
     );
     expect(find.byType(LessonTableContext), findsOneWidget);
-    expect(find.text('Tap BTN — the latest seat'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no Tap BTN footer stack.
+    expect(find.text('Tap BTN — the latest seat'), findsNothing);
     expect(
       find.text('Tap the button (BTN) — the latest seat.'),
       findsNothing,
