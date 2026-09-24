@@ -14045,15 +14045,25 @@ class LessonTableContext extends StatelessWidget {
         villainFaceUp.isNotEmpty ||
         scene.villainSeatCount > 0 ||
         scene.showDealerChip;
-    // Hero SoftPulse teach (explain + guided find-holes) — grow felt into
-    // the tall-phone navy void. Keep densify after the hero tap / lock.
+    // Hero SoftPulse teach (explain + guided find-holes) and board SoftPulse
+    // (unguided chop) — grow felt into the tall-phone navy void. Keep densify
+    // after the teach tap / lock.
     final soloHero =
         board.isEmpty && !showVillainRail && !scene.showMuck;
-    final expandTeach = scene.highlight == LessonTableHighlight.hero;
+    final boardTeach = scene.highlight == LessonTableHighlight.board;
+    final expandTeach =
+        scene.highlight == LessonTableHighlight.hero || boardTeach;
     final feltHeight =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
     // Solo explain can go larger; multi-rail guided still needs a bump.
-    final heroScale = expandTeach ? (soloHero ? 1.85 : 1.4) : 1.0;
+    // Board-chop teach: board is the hero visual — keep holes readable, not dominant.
+    final heroScale =
+        boardTeach
+            ? 1.15
+            : expandTeach
+            ? (soloHero ? 1.85 : 1.4)
+            : 1.0;
+    final boardScale = boardTeach ? 1.85 : (expandTeach ? 1.25 : 1.0);
 
     final heroTile = _TappableRegion(
       label: 'Your hole cards ${hero.map((c) => c.display).join(' ')}',
@@ -14076,7 +14086,7 @@ class LessonTableContext extends StatelessWidget {
             Text(
               scene.caption ?? 'You',
               style: GoogleFonts.manrope(
-                color: AppColors.gold,
+                color: boardTeach ? AppColors.slate : AppColors.gold,
                 fontSize: expandTeach ? 15 : 11,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 0.8,
@@ -14112,12 +14122,35 @@ class LessonTableContext extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
             )
+            : pulseBoard
+            ? Text(
+              'Tap the board',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: expandTeach ? 16 : 12,
+                fontWeight: FontWeight.w700,
+              ),
+            )
             : null;
     final doneCue =
         expandTeach &&
+                !boardTeach &&
                 (selectedRegion == LessonTableRegion.hero || !enabled)
             ? Text(
               'Yours alone — nobody else sees them',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            )
+            : expandTeach &&
+                boardTeach &&
+                (selectedRegion == LessonTableRegion.board || !enabled)
+            ? Text(
+              'Board plays — everyone chops',
               textAlign: TextAlign.center,
               style: GoogleFonts.manrope(
                 color: AppColors.gold,
@@ -14189,9 +14222,9 @@ class LessonTableContext extends StatelessWidget {
                           )
                           : null,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 6,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: expandTeach ? 12 : 8,
+                      vertical: expandTeach ? 10 : 6,
                     ),
                     child: Column(
                       children: [
@@ -14199,20 +14232,22 @@ class LessonTableContext extends StatelessWidget {
                           'Them',
                           style: GoogleFonts.manrope(
                             color: AppColors.slate,
-                            fontSize: 11,
+                            fontSize: expandTeach ? 14 : 11,
                             fontWeight: FontWeight.w800,
                             letterSpacing: 0.8,
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        SizedBox(height: expandTeach ? 8 : 4),
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             for (var i = 0; i < villainFaceUp.length; i++) ...[
-                              if (i > 0) const SizedBox(width: 6),
+                              if (i > 0)
+                                SizedBox(width: expandTeach ? 10 : 6),
                               MiniCard(
                                 card: villainFaceUp[i],
                                 size: MiniCardSize.small,
+                                scale: expandTeach ? 1.35 : 1.0,
                               ),
                             ],
                           ],
@@ -14235,7 +14270,7 @@ class LessonTableContext extends StatelessWidget {
                               ),
                             )
                             : null,
-                    child: const _FaceDownPair(),
+                    child: _FaceDownPair(densify: expandTeach),
                   ),
               if (scene.showDealerChip)
                 _TappableRegion(
@@ -14254,7 +14289,7 @@ class LessonTableContext extends StatelessWidget {
                 ),
             ],
           ),
-          SizedBox(height: expandTeach ? 12 : 8),
+          SizedBox(height: expandTeach ? 16 : 8),
         ],
         if (board.isNotEmpty) ...[
           _TappableRegion(
@@ -14269,17 +14304,21 @@ class LessonTableContext extends StatelessWidget {
                     )
                     : null,
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 8,
-                vertical: 6,
+              padding: EdgeInsets.symmetric(
+                horizontal: boardTeach ? 14 : 8,
+                vertical: boardTeach ? 14 : 6,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   for (var i = 0; i < board.length; i++) ...[
-                    if (i > 0) const SizedBox(width: 4),
-                    MiniCard(card: board[i], size: MiniCardSize.small),
+                    if (i > 0) SizedBox(width: boardTeach ? 8 : 4),
+                    MiniCard(
+                      card: board[i],
+                      size: MiniCardSize.small,
+                      scale: boardScale,
+                    ),
                   ],
                 ],
               ),
@@ -14287,13 +14326,16 @@ class LessonTableContext extends StatelessWidget {
           ),
           // Teach vocabulary at the moment of use (Duolingo-style label).
           Padding(
-            padding: const EdgeInsets.only(bottom: 6),
+            padding: EdgeInsets.only(bottom: expandTeach ? 10 : 6),
             child: Text(
               'BOARD · shared',
               textAlign: TextAlign.center,
               style: GoogleFonts.manrope(
-                color: AppColors.cream.withValues(alpha: 0.7),
-                fontSize: expandTeach ? 12 : 10,
+                color:
+                    boardTeach
+                        ? AppColors.gold
+                        : AppColors.cream.withValues(alpha: 0.7),
+                fontSize: boardTeach ? 14 : (expandTeach ? 12 : 10),
                 fontWeight: FontWeight.w800,
                 letterSpacing: 0.7,
               ),
@@ -14892,28 +14934,31 @@ class _EmptySeatMark extends StatelessWidget {
 }
 
 class _FaceDownPair extends StatelessWidget {
-  const _FaceDownPair();
+  const _FaceDownPair({this.densify = false});
+
+  final bool densify;
 
   @override
   Widget build(BuildContext context) {
+    final cardSize = densify ? MiniCardSize.small : MiniCardSize.tiny;
     return Column(
       children: [
         Text(
           'Them',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
-            fontSize: 10,
+            fontSize: densify ? 14 : 10,
             fontWeight: FontWeight.w700,
             letterSpacing: 0.6,
           ),
         ),
-        const SizedBox(height: 4),
-        const Row(
+        SizedBox(height: densify ? 8 : 4),
+        Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CardBack(size: MiniCardSize.tiny),
-            SizedBox(width: 3),
-            CardBack(size: MiniCardSize.tiny),
+            CardBack(size: cardSize),
+            SizedBox(width: densify ? 6 : 3),
+            CardBack(size: cardSize),
           ],
         ),
       ],
