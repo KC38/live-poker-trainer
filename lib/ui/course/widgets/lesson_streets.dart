@@ -594,106 +594,130 @@ class _ActionOrderDemoState extends State<ActionOrderDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextCorrect;
-    final expandTeach = widget.interactive && widget.enabled;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.40 : null;
-    final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-        alignment: minFelt != null ? Alignment.center : null,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.feltLight, AppColors.feltDark],
+    // Keep densify after the last seat while Continue shows — locking
+    // `enabled` false must not collapse the teach shell into navy void.
+    final expandTeach = widget.interactive;
+    final feltHeight =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+    final seats = Wrap(
+      spacing: expandTeach ? 12 : 8,
+      runSpacing: expandTeach ? 12 : 8,
+      alignment: WrapAlignment.center,
+      children: [
+        for (final seat in _palette)
+          _SoftPulseTarget(
+            active:
+                widget.interactive &&
+                widget.enabled &&
+                next == seat.label,
+            child: SeatOrderTile(
+              label: seat.label,
+              badge:
+                  _ordered.contains(seat.label)
+                      ? '${_ordered.indexOf(seat.label) + 1}'
+                      : null,
+              selected: _ordered.contains(seat.label),
+              emphasizeDealer: false,
+              enabled:
+                  widget.interactive &&
+                  widget.enabled &&
+                  !_ordered.contains(seat.label),
+              onPressed:
+                  widget.interactive ? () => _onTap(seat.label) : null,
+            ),
           ),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.feltBorder.withValues(alpha: 0.85),
+      ],
+    );
+    final cue = Container(
+      width: expandTeach ? double.infinity : null,
+      padding: EdgeInsets.symmetric(
+        horizontal: expandTeach ? 18 : 14,
+        vertical: expandTeach ? 14 : 8,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.feltDark.withValues(alpha: 0.65),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: AppColors.gold.withValues(alpha: 0.45),
+        ),
+      ),
+      child: Text(
+        widget.interactive
+            ? (next == null ? 'UTG → HJ → BTN' : 'Tap $next next')
+            : 'Left of BB preflop · left of button postflop',
+        textAlign: TextAlign.center,
+        style: GoogleFonts.manrope(
+          color: AppColors.gold,
+          fontSize: expandTeach ? 16 : 12,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+    final content = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          'Preflop order after the blinds',
+          style: GoogleFonts.manrope(
+            color: AppColors.slate,
+            fontSize: expandTeach ? 15 : 12,
+            fontWeight: FontWeight.w700,
           ),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        SizedBox(height: expandTeach ? 14 : 12),
+        seats,
+        SizedBox(height: expandTeach ? 12 : 10),
+        Text(
+          'Postflop starts left of the button',
+          style: GoogleFonts.manrope(
+            color: AppColors.slate,
+            fontSize: expandTeach ? 14 : 12,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        SizedBox(height: expandTeach ? 14 : 12),
+        cue,
+      ],
+    );
+    final body = expandTeach
+        ? Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Text(
-              'Preflop order after the blinds',
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              alignment: WrapAlignment.center,
-              children: [
-                for (final seat in _palette)
-                  _SoftPulseTarget(
-                    active:
-                        widget.interactive &&
-                        widget.enabled &&
-                        next == seat.label,
-                    child: SeatOrderTile(
-                      label: seat.label,
-                      badge:
-                          _ordered.contains(seat.label)
-                              ? '${_ordered.indexOf(seat.label) + 1}'
-                              : null,
-                      selected: _ordered.contains(seat.label),
-                      emphasizeDealer: false,
-                      enabled:
-                          widget.interactive &&
-                          widget.enabled &&
-                          !_ordered.contains(seat.label),
-                      onPressed:
-                          widget.interactive
-                              ? () => _onTap(seat.label)
-                              : null,
-                    ),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Postflop starts left of the button',
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.feltDark.withValues(alpha: 0.65),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: AppColors.gold.withValues(alpha: 0.45),
-                ),
-              ),
-              child: Text(
-                widget.interactive
-                    ? (next == null ? 'UTG → HJ → BTN' : 'Tap $next next')
-                    : 'Left of BB preflop · left of button postflop',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.manrope(
-                  color: AppColors.gold,
-                  fontSize: expandTeach ? 14 : 12,
-                  fontWeight: FontWeight.w700,
+            Expanded(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: SizedBox(
+                  width: MediaQuery.sizeOf(context).width - 48,
+                  child: content,
                 ),
               ),
             ),
           ],
+        )
+        : content;
+    final child = Container(
+      key: const ValueKey('action-order-felt'),
+      width: double.infinity,
+      height: feltHeight,
+      padding: EdgeInsets.fromLTRB(
+        12,
+        expandTeach ? 18 : 14,
+        12,
+        expandTeach ? 18 : 14,
+      ),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.feltBorder.withValues(alpha: 0.85),
         ),
       ),
+      child: body,
     );
     if (widget.interactive) return child;
     return ExcludeSemantics(child: child);
