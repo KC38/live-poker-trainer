@@ -2240,8 +2240,23 @@ void main() {
     expect(find.text('Tap FOLD next'), findsOneWidget);
     expect(find.text('Tap Fold, Call, and 3-Bet'), findsNothing);
     expect(find.text('Tap Fold, Call, and 3-Bet.'), findsNothing);
+    expect(
+      find.text('Weak fold · playable call · strong 3-bet'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(VsOpenResponseDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
     await tester.tap(find.text('FOLD'));
     await tester.pump();
@@ -2252,6 +2267,15 @@ void main() {
     await tester.tap(find.text('3-BET'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Weak fold · playable call · strong 3-bet'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(VsOpenResponseDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
