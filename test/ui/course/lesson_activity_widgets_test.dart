@@ -1096,6 +1096,18 @@ void main() {
     expect(find.text('Tap Blinds'), findsOneWidget);
     expect(find.text('Tap Blinds, You act, and Ending'), findsNothing);
     expect(find.text('Tap Blinds, You act, and Ending.'), findsNothing);
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('toy-hand-felt')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
     await tester.tap(find.text('BLINDS'));
     await tester.pump();
     expect(find.text('Tap You act'), findsOneWidget);
@@ -1105,6 +1117,12 @@ void main() {
     await tester.tap(find.text('ENDING'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(find.text('Blinds · You act · Ending'), findsOneWidget);
+    expect(
+      tester.getSize(find.byKey(const ValueKey('toy-hand-felt'))).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
