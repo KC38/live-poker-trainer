@@ -278,6 +278,15 @@ enum LessonTableRegion {
   /// S3 jump leak distractor: call any draw.
   jumpLeakCallLucky,
 
+  /// S4 ranges guided: stronger narrower UTG (correct).
+  rangesStrongNarrow,
+
+  /// S4 ranges guided distractor: any two cards.
+  rangesAnyTwo,
+
+  /// S4 ranges guided distractor: exactly AK.
+  rangesExactAk,
+
   /// Verbal action: raise stands (binding).
   verbalRaiseStands,
 
@@ -1430,6 +1439,9 @@ enum LessonTableLayout {
   /// S3 jump: fold bad price vs call any draw.
   jumpLeakPriceOutcomes,
 
+  /// S4 ranges guided: UTG open shape.
+  rangesGuidedOutcomes,
+
   /// Thin-value checkpoint: read-driven line vs coin flip.
   thinValueReadOutcomes,
 
@@ -2271,10 +2283,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-04-01-01-guided':
       return const LessonTableScene(
-        layout: LessonTableLayout.positionLabels,
-        highlight: LessonTableHighlight.earlyPosition,
-        seatCount: 9,
-        buttonSeat: 7,
+        layout: LessonTableLayout.rangesGuidedOutcomes,
+        highlight: LessonTableHighlight.none,
         caption: '1/2 · UTG opens',
       );
     case 'act-04-01-01-scaffolded':
@@ -3630,6 +3640,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.jumpLeakCallLucky => pick('j3-callprice'),
         _ => null,
       };
+    case 'act-04-01-01-guided':
+      return switch (region) {
+        LessonTableRegion.rangesStrongNarrow => pick('strong-narrow'),
+        LessonTableRegion.rangesAnyTwo => pick('any-two'),
+        LessonTableRegion.rangesExactAk => pick('exact-ak'),
+        _ => null,
+      };
     case 'act-03-01-01-scaffolded':
       // Preflop open: UTG is left of the BB (earlyPosition on the felt).
       return switch (region) {
@@ -4708,6 +4725,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-08-02-jump-table' ||
       activity.id == 'act-03-08-02-jump-class' ||
       activity.id == 'act-03-08-02-jump-leak' ||
+      activity.id == 'act-04-01-01-guided' ||
       activity.id == 'act-04-06-01-guided' ||
       activity.id == 'act-04-06-02-guided' ||
       activity.id == 'act-04-06-02-scaffolded' ||
@@ -5009,6 +5027,7 @@ class LessonTableContext extends StatelessWidget {
           _buildJumpFlopClassOutcomes(),
       LessonTableLayout.jumpLeakPriceOutcomes =>
           _buildJumpLeakPriceOutcomes(),
+      LessonTableLayout.rangesGuidedOutcomes => _buildRangesGuidedOutcomes(),
       LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
       LessonTableLayout.tableReadMattersOutcomes =>
           _buildTableReadMattersOutcomes(),
@@ -6829,6 +6848,56 @@ class LessonTableContext extends StatelessWidget {
             Icons.check_circle_outline,
             color: AppColors.slate,
             size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRangesGuidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive UTG range — tap stronger-narrower, any two, or exact AK',
+      semanticsStatic: 'Ranges guided outcomes',
+      caption: scene.caption ?? '1/2 · UTG opens',
+      cueLabel: 'Tap Stronger / narrower.',
+      guideRegion: LessonTableRegion.rangesStrongNarrow,
+      phases: [
+        (
+          region: LessonTableRegion.rangesStrongNarrow,
+          title: 'Strong narrow',
+          detail: 'UTG opens',
+          visual: const Icon(
+            Icons.filter_list,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.rangesAnyTwo,
+          title: 'Any two',
+          detail: 'Too wide',
+          visual: const Icon(
+            Icons.all_inclusive,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.rangesExactAk,
+          title: 'Exact AK',
+          detail: 'One hand',
+          visual: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (final code in const ['Ah', 'Kd']) ...[
+                MiniCard(
+                  card: CardModel.fromCode(code),
+                  size: MiniCardSize.tiny,
+                ),
+                const SizedBox(width: 2),
+              ],
+            ],
           ),
         ),
       ],
