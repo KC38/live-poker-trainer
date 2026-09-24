@@ -2565,7 +2565,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllFamiliesTapped: onHandFamiliesAcknowledge,
         ),
         CoachDialogueVisualKind.openRange => OpenRangeDemo(
-          interactive: onOpenRangeAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPointsTapped: onOpenRangeAcknowledge,
         ),
