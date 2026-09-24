@@ -5760,8 +5760,16 @@ class _DeepStacksDemoState extends State<DeepStacksDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in DeepStacksDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -5790,34 +5798,43 @@ class _DeepStacksDemoState extends State<DeepStacksDemo> {
               for (var i = 0; i < DeepStacksDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: DeepStacksDemo.points[i].label,
-                    caption: DeepStacksDemo.points[i].caption,
-                    color: DeepStacksDemo.points[i].color,
-                    selected: _tapped.contains(DeepStacksDemo.points[i].label),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(DeepStacksDemo.points[i].label)
-                            : null,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == DeepStacksDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: DeepStacksDemo.points[i].label,
+                      caption: DeepStacksDemo.points[i].caption,
+                      color: DeepStacksDemo.points[i].color,
+                      selected:
+                          _tapped.contains(DeepStacksDemo.points[i].label),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () =>
+                                  _onTap(DeepStacksDemo.points[i].label)
+                              : null,
+                    ),
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues the three taps — no duplicate footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'More room to realize · and to lose',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'More room to realize · and to lose'
+                    : 'Tap ${next.label} next')
+                : 'More room to realize · and to lose',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
