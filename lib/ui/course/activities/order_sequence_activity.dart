@@ -75,10 +75,14 @@ bool ordersStrongestFirst(CourseActivity activity) {
 
 /// Whether Rex already owns the tap-order instruction for [activity].
 bool coachOwnsOrderHint(CourseActivity activity) {
+  final rankMode =
+      activity.sequenceItems.isNotEmpty &&
+      activity.sequenceItems.every((item) => _rankOnly.hasMatch(item.label));
   return isStreetSequenceActivity(activity) ||
       isSeatOrderSequenceActivity(activity) ||
       ordersStrongestFirst(activity) ||
-      isHandExampleSequenceActivity(activity);
+      isHandExampleSequenceActivity(activity) ||
+      rankMode;
 }
 
 /// Empty tray hint for compare/order builders.
@@ -485,95 +489,152 @@ class OrderSequenceActivity extends StatelessWidget {
                 ),
               ),
             ] else ...[
-              if (!showCoach && !locked) ...[
-                Text(
-                  ordered.isEmpty ? 'Build your order' : 'Your order',
-                  style: GoogleFonts.manrope(
-                    color: AppColors.slate,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 8),
-              ],
-              Semantics(
-                label:
-                    'Current order: ${ordered.isEmpty ? 'empty' : ordered.join(', ')}',
-                child: _RankChipOrderSlots(
-                  ordered: ordered,
-                  total: activity.sequenceItems.length,
-                  strongestFirst: strongestFirst,
-                  rankMode: _rankMode,
-                  labelFor: _labelFor,
-                  locked: locked,
-                  emptyHint: trayHint,
-                ),
-              ),
-              if (statusLine.isNotEmpty) ...[
-                const SizedBox(height: 10),
-                Text(
-                  statusLine,
-                  style: GoogleFonts.manrope(
-                    color: AppColors.slate,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-              if (remaining.isNotEmpty) ...[
-                const SizedBox(height: 14),
-                Text(
-                  'Tap to place',
-                  style: GoogleFonts.manrope(
-                    color: AppColors.slate,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    for (var i = 0; i < remaining.length; i++)
-                      if (_rankMode)
-                        _SoftPulseTarget(
-                          active:
-                              showGuidance &&
-                              !locked &&
-                              ordered.length <
-                                  activity.sequenceItems.length &&
-                              remaining[i].id ==
-                                  activity.sequenceItems[ordered.length].id,
-                          child: _RankTile(
-                            label: remaining[i].label,
-                            onPressed:
-                                locked
-                                    ? null
-                                    : () => appendOrderedId(
-                                      controller: controller,
-                                      activity: activity,
-                                      ordered: ordered,
-                                      id: remaining[i].id,
-                                    ),
+              Builder(
+                builder: (context) {
+                  final densify = _rankMode;
+                  final feltHeight =
+                      densify
+                          ? MediaQuery.sizeOf(context).height * 0.58
+                          : null;
+                  final body = Column(
+                    mainAxisSize:
+                        densify ? MainAxisSize.min : MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (!showCoach && !locked) ...[
+                        Text(
+                          ordered.isEmpty ? 'Build your order' : 'Your order',
+                          style: GoogleFonts.manrope(
+                            color: AppColors.slate,
+                            fontSize: densify ? 15 : 12,
+                            fontWeight: FontWeight.w700,
                           ),
-                        )
-                      else
-                        ActionChip(
-                          onPressed:
-                              locked
-                                  ? null
-                                  : () => appendOrderedId(
-                                    controller: controller,
-                                    activity: activity,
-                                    ordered: ordered,
-                                    id: remaining[i].id,
-                                  ),
-                          label: Text(remaining[i].label),
                         ),
-                  ],
-                ),
-              ],
+                        SizedBox(height: densify ? 12 : 8),
+                      ],
+                      Semantics(
+                        label:
+                            'Current order: ${ordered.isEmpty ? 'empty' : ordered.join(', ')}',
+                        child: _RankChipOrderSlots(
+                          ordered: ordered,
+                          total: activity.sequenceItems.length,
+                          strongestFirst: strongestFirst,
+                          rankMode: _rankMode,
+                          labelFor: _labelFor,
+                          locked: locked,
+                          emptyHint: trayHint,
+                        ),
+                      ),
+                      if (statusLine.isNotEmpty) ...[
+                        SizedBox(height: densify ? 14 : 10),
+                        Text(
+                          statusLine,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.manrope(
+                            color: AppColors.gold,
+                            fontSize: densify ? 16 : 12,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                      if (remaining.isNotEmpty) ...[
+                        SizedBox(height: densify ? 18 : 14),
+                        // SoftPulse + Rex own the cue — skip duplicate "Tap to place".
+                        if (!showCoach || !showGuidance) ...[
+                          Text(
+                            'Tap to place',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.manrope(
+                              color: AppColors.slate,
+                              fontSize: densify ? 14 : 12,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          SizedBox(height: densify ? 12 : 8),
+                        ],
+                        Wrap(
+                          spacing: densify ? 12 : 8,
+                          runSpacing: densify ? 12 : 8,
+                          alignment: WrapAlignment.center,
+                          children: [
+                            for (var i = 0; i < remaining.length; i++)
+                              if (_rankMode)
+                                _SoftPulseTarget(
+                                  active:
+                                      showGuidance &&
+                                      !locked &&
+                                      ordered.length <
+                                          activity.sequenceItems.length &&
+                                      remaining[i].id ==
+                                          activity
+                                              .sequenceItems[ordered.length]
+                                              .id,
+                                  child: _RankTile(
+                                    label: remaining[i].label,
+                                    onPressed:
+                                        locked
+                                            ? null
+                                            : () => appendOrderedId(
+                                              controller: controller,
+                                              activity: activity,
+                                              ordered: ordered,
+                                              id: remaining[i].id,
+                                            ),
+                                  ),
+                                )
+                              else
+                                ActionChip(
+                                  onPressed:
+                                      locked
+                                          ? null
+                                          : () => appendOrderedId(
+                                            controller: controller,
+                                            activity: activity,
+                                            ordered: ordered,
+                                            id: remaining[i].id,
+                                          ),
+                                  label: Text(remaining[i].label),
+                                ),
+                          ],
+                        ),
+                      ],
+                    ],
+                  );
+                  if (!densify) return body;
+                  return Container(
+                    key: const ValueKey('rank-order-felt'),
+                    width: double.infinity,
+                    height: feltHeight,
+                    padding: const EdgeInsets.fromLTRB(12, 18, 12, 18),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [AppColors.feltLight, AppColors.feltDark],
+                      ),
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(
+                        color: AppColors.feltBorder.withValues(alpha: 0.85),
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: SizedBox(
+                              width: MediaQuery.sizeOf(context).width - 48,
+                              child: body,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ],
             if (ordered.isNotEmpty && !locked) ...[
               const SizedBox(height: 8),

@@ -18169,16 +18169,36 @@ await tester.tap(find.text('STRONGER'));
         ),
       ),
     );
-    expect(find.text('Tap lowest first'), findsOneWidget);
-    expect(find.text('Tap low → high'), findsOneWidget);
-    await tester.tap(find.text('2'));
+    expect(find.text('Order these ranks from lowest to highest.'), findsOneWidget);
+    // Rex + SoftPulse own the cue — no duplicate status / Tap to place.
+    expect(find.text('Tap lowest first'), findsNothing);
+    expect(find.text('Tap low → high'), findsNothing);
+    expect(find.text('Tap to place'), findsNothing);
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('rank-order-felt')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
+    await tester.tap(find.text('2').last);
     await tester.pump();
-    await tester.tap(find.text('3'));
+    await tester.tap(find.text('3').last);
     await tester.pump();
-    await tester.tap(find.text('4'));
+    await tester.tap(find.text('4').last);
     await tester.pump();
     expect(controller.draft.orderedIds, ['r2', 'r3', 'r4']);
     expect(find.text('Checking…'), findsOneWidget);
+    // Densified shell stays filled through Checking…
+    expect(
+      tester.getSize(find.byKey(const ValueKey('rank-order-felt'))).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
