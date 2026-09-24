@@ -6789,7 +6789,7 @@
                   "choices": [
                     {
                       "id": "bluff",
-                      "label": "Bluff the completed flush",
+                      "label": "Bluff flush",
                       "accessibilityText": "Bluff the completed flush",
                       "grading": {
                         "grade": "recommended",
@@ -6800,7 +6800,7 @@
                     },
                     {
                       "id": "giveup",
-                      "label": "Give up — never bluff rivers",
+                      "label": "Give up",
                       "accessibilityText": "Give up — never bluff rivers",
                       "grading": {
                         "grade": "questionable",
@@ -6810,7 +6810,7 @@
                     },
                     {
                       "id": "tiny",
-                      "label": "Bet 1 chip as a joke",
+                      "label": "Joke 1 chip",
                       "accessibilityText": "Bet 1 chip as a joke",
                       "grading": {
                         "grade": "clear_mistake",

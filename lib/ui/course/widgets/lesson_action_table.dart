@@ -346,8 +346,9 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         feltStatusLine: 'Brick river — get paid',
       );
     case 'act-03-06-01-scaffolded':
+      // Offsuit non-hearts: hero missed the flush; river paints the story.
       return const LessonActionSpot(
-        heroCodes: ['9h', '8h'],
+        heroCodes: ['9s', '8s'],
         boardCodes: ['Kh', '7h', '2c', '3d', 'Ah'],
         potLabel: 'Pot 40',
         villainLine: 'Checked to you',
