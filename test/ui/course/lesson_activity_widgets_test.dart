@@ -189,23 +189,40 @@ void main() {
       objectives: const ['Name the four suits'],
     );
     final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
     await tester.pumpWidget(
       _wrap(
         CoachDialogueActivity(
           activity: activity,
           controller: controller,
           showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
         ),
       ),
     );
-    expect(find.byType(SuitGlyphRow), findsOneWidget);
+    await tester.pump();
+    expect(find.byType(SuitTapTile), findsNWidgets(4));
     expect(find.text('Thirteen ranks — ace high'), findsOneWidget);
     expect(find.byType(MiniCard), findsNothing);
+    expect(find.text('Tap Hearts'), findsOneWidget);
+    expect(find.text('0 of 4 suits'), findsOneWidget);
+    // In-felt cue owns the tip — no duplicate gold footer.
+    expect(find.text('Tap each of the four suits.'), findsNothing);
     expect(
       find.text('Tap Continue when you have looked at your two cards.'),
       findsNothing,
     );
-    expect(find.text('Tap each of the four suits.'), findsOneWidget);
+
+    await tester.tap(find.text('Hearts'));
+    await tester.pump();
+    expect(find.text('Tap Diamonds'), findsOneWidget);
+    await tester.tap(find.text('Diamonds'));
+    await tester.pump();
+    await tester.tap(find.text('Clubs'));
+    await tester.pump();
+    await tester.tap(find.text('Spades'));
+    await tester.pump();
+    expect(feltAck, 1);
     controller.dispose();
   });
 

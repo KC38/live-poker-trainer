@@ -441,6 +441,7 @@ class CoachDialogueActivity extends StatelessWidget {
             // or Rex already names the tiles (no duplicate gold footer).
             visual.kind != CoachDialogueVisualKind.bestFive &&
             visual.kind != CoachDialogueVisualKind.holeCards &&
+            visual.kind != CoachDialogueVisualKind.suitsRanks &&
             visual.kind != CoachDialogueVisualKind.passiveActions &&
             visual.kind != CoachDialogueVisualKind.aggressiveActions &&
             visual.kind != CoachDialogueVisualKind.streetsTimeline &&
@@ -3028,116 +3029,153 @@ class _SuitsRanksDemoState extends State<_SuitsRanksDemo>
   Widget build(BuildContext context) {
     final remaining = _suits.length - _tapped.length;
     final ranksReady = remaining <= 0;
-    return Container(
-      padding: const EdgeInsets.fromLTRB(14, 16, 14, 16),
-      decoration: BoxDecoration(
-        color: AppColors.feltLight.withValues(alpha: 0.88),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.55)),
-      ),
-      child: Column(
-        children: [
-          if (widget.interactive) ...[
-            Wrap(
-              spacing: 10,
-              runSpacing: 10,
-              alignment: WrapAlignment.center,
-              children: [
-                for (final token in _suits)
-                  AnimatedBuilder(
-                    animation: _pulse,
-                    builder: (context, child) {
-                      final needsPulse =
-                          widget.enabled &&
-                          !_tapped.contains(token) &&
-                          remaining > 0;
-                      final glow = needsPulse ? 0.35 + (_pulse.value * 0.45) : 0.0;
-                      return DecoratedBox(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow:
-                              glow > 0
-                                  ? [
-                                    BoxShadow(
-                                      color: AppColors.gold.withValues(
-                                        alpha: 0.22 * glow,
+    LessonSuitToken? nextSuit;
+    for (final token in _suits) {
+      if (!_tapped.contains(token)) {
+        nextSuit = token;
+        break;
+      }
+    }
+    final minFelt =
+        widget.interactive && widget.enabled && remaining > 0
+            ? MediaQuery.sizeOf(context).height * 0.38
+            : null;
+    return ConstrainedBox(
+      constraints:
+          minFelt != null
+              ? BoxConstraints(minHeight: minFelt)
+              : const BoxConstraints(),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(14, 16, 14, 16),
+        alignment: minFelt != null ? Alignment.center : null,
+        decoration: BoxDecoration(
+          color: AppColors.feltLight.withValues(alpha: 0.88),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: AppColors.feltBorder.withValues(alpha: 0.55),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (widget.interactive) ...[
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                alignment: WrapAlignment.center,
+                children: [
+                  for (final token in _suits)
+                    AnimatedBuilder(
+                      animation: _pulse,
+                      builder: (context, child) {
+                        // Pulse only the next untapped suit — teach-by-doing
+                        // order, not a bulk glow on every remaining tile.
+                        final needsPulse =
+                            widget.enabled &&
+                            nextSuit == token &&
+                            remaining > 0;
+                        final glow =
+                            needsPulse ? 0.45 + (_pulse.value * 0.55) : 0.0;
+                        return DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow:
+                                glow > 0
+                                    ? [
+                                      BoxShadow(
+                                        color: AppColors.gold.withValues(
+                                          alpha: 0.34 * glow,
+                                        ),
+                                        blurRadius: 12 + (8 * _pulse.value),
+                                        spreadRadius: 1 + (2 * _pulse.value),
                                       ),
-                                      blurRadius: 10 + (6 * _pulse.value),
-                                    ),
-                                  ]
-                                  : null,
-                        ),
-                        child: child,
-                      );
-                    },
-                    child: SuitTapTile(
-                      token: token,
-                      selected: _tapped.contains(token),
-                      enabled: widget.enabled,
-                      onPressed: () => _onSuitTap(token),
+                                    ]
+                                    : null,
+                          ),
+                          child: child,
+                        );
+                      },
+                      child: SuitTapTile(
+                        token: token,
+                        selected: _tapped.contains(token),
+                        enabled: widget.enabled,
+                        onPressed: () => _onSuitTap(token),
+                      ),
                     ),
-                  ),
-              ],
-            ),
-            if (widget.enabled && remaining > 0) ...[
-              const SizedBox(height: 10),
-              Text(
-                '${_tapped.length} of ${_suits.length} suits',
-                style: GoogleFonts.manrope(
-                  color: AppColors.goldMuted,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                ),
+                ],
               ),
-            ],
-          ] else
-            const SuitGlyphRow(tokens: _suits, glyphSize: 34),
-          const SizedBox(height: 14),
-          AnimatedOpacity(
-            duration: const Duration(milliseconds: 220),
-            opacity: widget.interactive && !ranksReady ? 0.42 : 1,
-            child: Column(
-              children: [
+              if (widget.enabled && remaining > 0 && nextSuit != null) ...[
+                const SizedBox(height: 12),
                 Text(
-                  'Thirteen ranks — ace high',
+                  'Tap ${nextSuit.label}',
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.manrope(
-                    color: AppColors.cream,
-                    fontSize: 13,
+                    color: AppColors.gold,
+                    fontSize: 14,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 10),
-                Wrap(
-                  spacing: 6,
-                  runSpacing: 6,
-                  alignment: WrapAlignment.center,
-                  children: [
-                    for (final rank in _ranks)
-                      Container(
-                        width: 28,
-                        height: 34,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: AppColors.cream.withValues(
-                            alpha: widget.interactive && !ranksReady ? 0.55 : 1,
-                          ),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          rank,
-                          style: GoogleFonts.manrope(
-                            color: AppColors.bgDark,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ),
-                  ],
+                const SizedBox(height: 4),
+                Text(
+                  '${_tapped.length} of ${_suits.length} suits',
+                  style: GoogleFonts.manrope(
+                    color: AppColors.goldMuted,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ],
+            ] else
+              const SuitGlyphRow(tokens: _suits, glyphSize: 34),
+            const SizedBox(height: 14),
+            AnimatedOpacity(
+              duration: const Duration(milliseconds: 220),
+              opacity: widget.interactive && !ranksReady ? 0.42 : 1,
+              child: Column(
+                children: [
+                  Text(
+                    'Thirteen ranks — ace high',
+                    style: GoogleFonts.manrope(
+                      color: AppColors.cream,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    alignment: WrapAlignment.center,
+                    children: [
+                      for (final rank in _ranks)
+                        Container(
+                          width: 28,
+                          height: 34,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: AppColors.cream.withValues(
+                              alpha:
+                                  widget.interactive && !ranksReady ? 0.55 : 1,
+                            ),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            rank,
+                            style: GoogleFonts.manrope(
+                              color: AppColors.bgDark,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
