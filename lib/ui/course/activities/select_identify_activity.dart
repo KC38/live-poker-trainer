@@ -356,6 +356,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Dry ace flop, blank three — tap Brick.',
       'act-03-05-01-checkpoint' =>
           'Air bluff meets a draw-completing queen — tap the plan.',
+      'act-03-06-01-checkpoint' =>
+          'Medium one pair faces a big bet — tap the river job.',
       'act-04-06-01-guided' =>
           'Seat calls 7 of 9 preflops — tap the observation.',
       'act-04-06-02-guided' =>
@@ -704,6 +706,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-03-03-01-checkpoint' ||
             widget.activity.id == 'act-03-05-01-guided' ||
             widget.activity.id == 'act-03-05-01-checkpoint' ||
+            widget.activity.id == 'act-03-06-01-checkpoint' ||
             widget.activity.id == 'act-04-06-01-guided' ||
             widget.activity.id == 'act-04-06-02-guided' ||
             widget.activity.id == 'act-04-06-02-scaffolded' ||
