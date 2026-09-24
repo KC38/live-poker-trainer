@@ -2385,14 +2385,23 @@ void main() {
       ),
     );
     expect(find.byType(RiverBinaryDemo), findsOneWidget);
-    expect(find.text('Tap Value, Bluff, Catch, and Fold.'), findsOneWidget);
+    expect(find.text('Tap VALUE next'), findsOneWidget);
+    expect(find.text('Tap Value, Bluff, Catch, and Fold.'), findsNothing);
+    expect(find.text('Tap Value, Bluff, Catch, and Fold'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['VALUE', 'BLUFF', 'CATCH', 'FOLD']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('VALUE'));
+    await tester.pump();
+    expect(find.text('Tap BLUFF next'), findsOneWidget);
+    await tester.tap(find.text('BLUFF'));
+    await tester.pump();
+    expect(find.text('Tap CATCH next'), findsOneWidget);
+    await tester.tap(find.text('CATCH'));
+    await tester.pump();
+    expect(find.text('Tap FOLD next'), findsOneWidget);
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
