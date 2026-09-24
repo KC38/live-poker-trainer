@@ -2518,7 +2518,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onRegionTap: onRegionTap,
         ),
         CoachDialogueVisualKind.handLadder => HandRankLadderDemo(
-          interactive: onLadderAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllRungsTapped: onLadderAcknowledge,
         ),

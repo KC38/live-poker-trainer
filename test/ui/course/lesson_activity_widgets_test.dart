@@ -416,7 +416,20 @@ void main() {
     expect(find.byType(HandRankLadderDemo), findsOneWidget);
     expect(find.text('Tap High card'), findsOneWidget);
     expect(find.text('Tap each rung from high card to flush.'), findsNothing);
+    expect(find.text('High card → pair → flush'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('hand-ladder-felt')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
     await tester.tap(find.text('High card'));
     await tester.pump();
@@ -429,6 +442,12 @@ void main() {
     await tester.tap(find.text('Flush'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(find.text('High card → pair → flush'), findsOneWidget);
+    expect(
+      tester.getSize(find.byKey(const ValueKey('hand-ladder-felt'))).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
