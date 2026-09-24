@@ -7240,6 +7240,10 @@ await tester.tap(find.text('STRONGER'));
         epsilon: 1,
       ),
     );
+    // Densified tiles fill the felt — not the old 64×76 chips.
+    final tileSize = tester.getSize(find.byType(SuitTapTile).first);
+    expect(tileSize.height, greaterThan(90));
+    expect(tileSize.width, greaterThan(60));
 
     var autoSubmits = 0;
     controller.onAutoSubmit = () => autoSubmits += 1;
@@ -7257,6 +7261,11 @@ await tester.tap(find.text('STRONGER'));
     await tester.pump();
     expect(controller.draft.choiceId, 'suits-full');
     expect(autoSubmits, 1);
+    // Densified shell stays filled through Checking…
+    expect(
+      tester.getSize(find.byKey(const ValueKey('suit-tap-picker-felt'))).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
