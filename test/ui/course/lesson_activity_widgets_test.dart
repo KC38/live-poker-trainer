@@ -18741,6 +18741,20 @@ await tester.tap(find.text('STRONGER'));
     expect(find.text('Chop — board plays'), findsNothing);
     // Rex already owns the cue — no third status line.
     expect(find.text('Tap the answer on the table.'), findsNothing);
+    // SoftPulse invite under the board + densified felt (~58% height).
+    expect(find.text('Tap the board'), findsOneWidget);
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('hole-cards-felt')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
     final boardCards = find.byWidgetPredicate(
       (w) => w is MiniCard && w.size == MiniCardSize.small,
@@ -18749,6 +18763,12 @@ await tester.tap(find.text('STRONGER'));
     await tester.tap(boardCards.first);
     await tester.pump();
     expect(controller.draft.choiceId, 'chop-broadway');
+    expect(find.text('Board plays — everyone chops'), findsOneWidget);
+    // Densified shell must stay filled after the board tap.
+    expect(
+      tester.getSize(find.byKey(const ValueKey('hole-cards-felt'))).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
 
     controller.finishSubmit(
       _result(
@@ -18760,6 +18780,10 @@ await tester.tap(find.text('STRONGER'));
     await tester.pump();
     expect(find.text('Checking…'), findsNothing);
     expect(find.text('Tap the answer on the table.'), findsNothing);
+    expect(
+      tester.getSize(find.byKey(const ValueKey('hole-cards-felt'))).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
