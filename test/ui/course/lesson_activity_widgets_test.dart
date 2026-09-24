@@ -429,7 +429,7 @@ void main() {
     await tester.tap(heroRail.first);
     await tester.pump();
     expect(feltAck, 1);
-    // Lock clears SoftPulse / region tap — densified shell must stay filled.
+    // Densified shell must stay filled after acknowledge.
     expect(
       tester.getSize(find.byKey(const ValueKey('hole-cards-felt'))).height,
       moreOrLessEquals(teachHeight, epsilon: 1),
