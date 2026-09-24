@@ -4372,8 +4372,16 @@ class _VsStationDemoState extends State<VsStationDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in VsStationDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -4402,16 +4410,22 @@ class _VsStationDemoState extends State<VsStationDemo> {
               for (var i = 0; i < VsStationDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: VsStationDemo.points[i].label,
-                    caption: VsStationDemo.points[i].caption,
-                    color: VsStationDemo.points[i].color,
-                    selected: _tapped.contains(VsStationDemo.points[i].label),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(VsStationDemo.points[i].label)
-                            : null,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == VsStationDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: VsStationDemo.points[i].label,
+                      caption: VsStationDemo.points[i].caption,
+                      color: VsStationDemo.points[i].color,
+                      selected: _tapped.contains(VsStationDemo.points[i].label),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(VsStationDemo.points[i].label)
+                              : null,
+                    ),
                   ),
                 ),
               ],
@@ -4420,7 +4434,9 @@ class _VsStationDemoState extends State<VsStationDemo> {
           const SizedBox(height: 10),
           Text(
             widget.interactive
-                ? 'Tap Value, Bluffs, and Cite'
+                ? (next == null
+                    ? 'Value wider · bluff less · cite calling'
+                    : 'Tap ${next.label} next')
                 : 'Value wider · bluff less · cite calling',
             style: GoogleFonts.manrope(
               color: AppColors.gold,
