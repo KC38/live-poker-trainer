@@ -49,8 +49,9 @@ class _TypeBoardLineDemoState extends State<TypeBoardLineDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled;
+    // Tall-phone teach: eat the navy void under the four-factor row.
     final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.55 : null;
     final child = ConstrainedBox(
       constraints:
           minFelt != null
@@ -58,7 +59,12 @@ class _TypeBoardLineDemoState extends State<TypeBoardLineDemo> {
               : const BoxConstraints(),
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+        padding: EdgeInsets.fromLTRB(
+          12,
+          expandTeach ? 22 : 14,
+          12,
+          expandTeach ? 22 : 14,
+        ),
         alignment: minFelt != null ? Alignment.center : null,
         decoration: BoxDecoration(
           gradient: const LinearGradient(
@@ -73,20 +79,22 @@ class _TypeBoardLineDemoState extends State<TypeBoardLineDemo> {
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment:
+              expandTeach ? MainAxisAlignment.center : MainAxisAlignment.start,
           children: [
             Text(
               'Type × board × line × size',
               style: GoogleFonts.manrope(
                 color: AppColors.slate,
-                fontSize: 12,
+                fontSize: expandTeach ? 14 : 12,
                 fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: expandTeach ? 22 : 14),
             Row(
               children: [
                 for (var i = 0; i < TypeBoardLineDemo.points.length; i++) ...[
-                  if (i > 0) const SizedBox(width: 6),
+                  if (i > 0) SizedBox(width: expandTeach ? 8 : 6),
                   Expanded(
                     child: _TypeSoftPulse(
                       active:
@@ -97,6 +105,7 @@ class _TypeBoardLineDemoState extends State<TypeBoardLineDemo> {
                         label: TypeBoardLineDemo.points[i].label,
                         caption: TypeBoardLineDemo.points[i].caption,
                         color: TypeBoardLineDemo.points[i].color,
+                        densify: expandTeach,
                         selected: _tapped.contains(
                           TypeBoardLineDemo.points[i].label,
                         ),
@@ -110,9 +119,13 @@ class _TypeBoardLineDemoState extends State<TypeBoardLineDemo> {
                 ],
               ],
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: expandTeach ? 22 : 14),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              width: expandTeach ? double.infinity : null,
+              padding: EdgeInsets.symmetric(
+                horizontal: expandTeach ? 16 : 14,
+                vertical: expandTeach ? 12 : 8,
+              ),
               decoration: BoxDecoration(
                 color: AppColors.feltDark.withValues(alpha: 0.65),
                 borderRadius: BorderRadius.circular(20),
@@ -129,7 +142,7 @@ class _TypeBoardLineDemoState extends State<TypeBoardLineDemo> {
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
-                  fontSize: expandTeach ? 14 : 12,
+                  fontSize: expandTeach ? 15 : 12,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -148,6 +161,7 @@ class _TypeBoardLineTile extends StatelessWidget {
     required this.label,
     required this.caption,
     required this.color,
+    this.densify = false,
     this.selected = false,
     this.enabled = false,
     this.onPressed,
@@ -156,6 +170,7 @@ class _TypeBoardLineTile extends StatelessWidget {
   final String label;
   final String caption;
   final Color color;
+  final bool densify;
   final bool selected;
   final bool enabled;
   final VoidCallback? onPressed;
@@ -166,7 +181,10 @@ class _TypeBoardLineTile extends StatelessWidget {
         selected ? AppColors.gold : color.withValues(alpha: 0.9);
     final child = AnimatedContainer(
       duration: const Duration(milliseconds: 140),
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+      padding: EdgeInsets.symmetric(
+        vertical: densify ? 20 : 12,
+        horizontal: densify ? 6 : 4,
+      ),
       decoration: BoxDecoration(
         color: selected
             ? AppColors.gold.withValues(alpha: 0.28)
@@ -180,17 +198,17 @@ class _TypeBoardLineTile extends StatelessWidget {
             label,
             style: GoogleFonts.manrope(
               color: AppColors.cream,
-              fontSize: 11,
+              fontSize: densify ? 13 : 11,
               fontWeight: FontWeight.w900,
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: densify ? 6 : 4),
           Text(
             caption,
             textAlign: TextAlign.center,
             style: GoogleFonts.manrope(
               color: AppColors.cream.withValues(alpha: 0.9),
-              fontSize: 9,
+              fontSize: densify ? 11 : 9,
               fontWeight: FontWeight.w600,
             ),
           ),
