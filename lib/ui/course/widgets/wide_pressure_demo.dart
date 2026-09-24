@@ -37,8 +37,16 @@ class _WidePressureDemoState extends State<WidePressureDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in WidePressureDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -67,35 +75,42 @@ class _WidePressureDemoState extends State<WidePressureDemo> {
               for (var i = 0; i < WidePressureDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _WidePressureTile(
-                    label: WidePressureDemo.points[i].label,
-                    caption: WidePressureDemo.points[i].caption,
-                    color: WidePressureDemo.points[i].color,
-                    selected: _tapped.contains(
-                      WidePressureDemo.points[i].label,
+                  child: _WideSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == WidePressureDemo.points[i].label,
+                    child: _WidePressureTile(
+                      label: WidePressureDemo.points[i].label,
+                      caption: WidePressureDemo.points[i].caption,
+                      color: WidePressureDemo.points[i].color,
+                      selected: _tapped.contains(
+                        WidePressureDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed: widget.interactive
+                          ? () => _onTap(WidePressureDemo.points[i].label)
+                          : null,
                     ),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed: widget.interactive
-                        ? () => _onTap(WidePressureDemo.points[i].label)
-                        : null,
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues Wide / Pressure / Sample.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Wide in · pressure on · count samples',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Wide in · pressure on · count samples'
+                    : 'Tap ${next.label} next')
+                : 'Wide in · pressure on · count samples',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
@@ -165,6 +180,75 @@ class _WidePressureTile extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _WideSoftPulse extends StatefulWidget {
+  const _WideSoftPulse({required this.active, required this.child});
+
+  final bool active;
+  final Widget child;
+
+  @override
+  State<_WideSoftPulse> createState() => _WideSoftPulseState();
+}
+
+class _WideSoftPulseState extends State<_WideSoftPulse>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+    if (widget.active) {
+      _pulse.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _WideSoftPulse oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.active && !_pulse.isAnimating) {
+      _pulse.repeat(reverse: true);
+    } else if (!widget.active && _pulse.isAnimating) {
+      _pulse.stop();
+      _pulse.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.active) return widget.child;
+    return AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final glow = 0.22 + (_pulse.value * 0.38);
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.gold.withValues(alpha: glow),
+                blurRadius: 10 + (_pulse.value * 8),
+                spreadRadius: 0.5 + (_pulse.value * 1.2),
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
+      child: widget.child,
     );
   }
 }
