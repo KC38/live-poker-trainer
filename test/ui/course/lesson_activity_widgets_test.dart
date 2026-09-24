@@ -226,6 +226,45 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('button explain SoftPulse cue sits on the felt', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-01-01-03-explain-button',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText: 'Button marks the dealer. Blinds sit left of it.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text: 'Button marks the dealer. Blinds sit left of it.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
+    await tester.pumpWidget(
+      _wrap(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(find.text('Tap the dealer button'), findsOneWidget);
+    // In-felt cue owns the tip — no duplicate gold footer.
+    expect(find.text('Tap the dealer button on the table.'), findsNothing);
+    await tester.tap(find.text('D'));
+    await tester.pump();
+    expect(feltAck, 1);
+    controller.dispose();
+  });
+
   testWidgets('position explain taps BTN on felt instead of Continue', (
     tester,
   ) async {

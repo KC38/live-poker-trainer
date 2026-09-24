@@ -443,6 +443,7 @@ class CoachDialogueActivity extends StatelessWidget {
             visual.kind != CoachDialogueVisualKind.holeCards &&
             visual.kind != CoachDialogueVisualKind.suitsRanks &&
             visual.kind != CoachDialogueVisualKind.handLadder &&
+            visual.kind != CoachDialogueVisualKind.dealerButton &&
             visual.kind != CoachDialogueVisualKind.passiveActions &&
             visual.kind != CoachDialogueVisualKind.aggressiveActions &&
             visual.kind != CoachDialogueVisualKind.streetsTimeline &&
