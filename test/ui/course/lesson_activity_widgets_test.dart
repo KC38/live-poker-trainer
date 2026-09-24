@@ -2810,14 +2810,20 @@ void main() {
       ),
     );
     expect(find.byType(CallingStationDemo), findsOneWidget);
-    expect(find.text('Tap Station, High, and Low.'), findsOneWidget);
+    expect(find.text('Tap STATION next'), findsOneWidget);
+    expect(find.text('Tap Station, High, and Low.'), findsNothing);
+    expect(find.text('Tap Station, High, and Low'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['STATION', 'HIGH', 'LOW']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('STATION'));
+    await tester.pump();
+    expect(find.text('Tap HIGH next'), findsOneWidget);
+    await tester.tap(find.text('HIGH'));
+    await tester.pump();
+    expect(find.text('Tap LOW next'), findsOneWidget);
+    await tester.tap(find.text('LOW'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
