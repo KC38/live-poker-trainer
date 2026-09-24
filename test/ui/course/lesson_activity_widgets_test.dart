@@ -2862,14 +2862,20 @@ void main() {
       ),
     );
     expect(find.byType(VsStationDemo), findsOneWidget);
-    expect(find.text('Tap Value, Bluffs, and Cite.'), findsOneWidget);
+    expect(find.text('Tap VALUE next'), findsOneWidget);
+    expect(find.text('Tap Value, Bluffs, and Cite.'), findsNothing);
+    expect(find.text('Tap Value, Bluffs, and Cite'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['VALUE', 'BLUFFS', 'CITE']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('VALUE'));
+    await tester.pump();
+    expect(find.text('Tap BLUFFS next'), findsOneWidget);
+    await tester.tap(find.text('BLUFFS'));
+    await tester.pump();
+    expect(find.text('Tap CITE next'), findsOneWidget);
+    await tester.tap(find.text('CITE'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
