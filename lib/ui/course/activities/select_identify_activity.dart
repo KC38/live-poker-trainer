@@ -1043,57 +1043,16 @@ class _HandCategoryTapActivity extends StatelessWidget {
               LessonTableContext(scene: scene),
             ],
             const SizedBox(height: 14),
-            for (var i = 0; i < activity.choices.length; i++) ...[
-              if (i > 0) const SizedBox(height: 10),
-              Builder(
-                builder: (context) {
-                  final choice = activity.choices[i];
-                  final example =
-                      resolveHandExample(id: choice.id, label: choice.label) ??
-                      LessonHandExample(
-                        id: choice.id,
-                        title: choice.label,
-                        codes: const [],
-                      );
-                  final pulseNext =
-                      showGuidance &&
-                      activity.stage == ActivityStage.guided &&
-                      i == 0 &&
-                      selected == null &&
-                      !locked &&
-                      (activity.id.startsWith('act-02-02-01-') ||
-                          activity.id == 'act-03-02-01-guided' ||
-                          activity.id == 'act-03-05-01-guided');
-                  // Invite SoftPulse on every tile (no correct-answer spoiler)
-                  // until the learner picks one — S1 categories + outs count.
-                  final invitePulse =
-                      showGuidance &&
-                      selected == null &&
-                      !locked &&
-                      (activity.id.startsWith('act-01-02-01-') ||
-                          activity.id == 'act-03-03-01-guided');
-                  return _FamilySoftPulse(
-                    active: pulseNext || invitePulse,
-                    child: HandExampleTile(
-                      example: example,
-                      selected: selected == choice.id,
-                      enabled: !locked,
-                      compact: true,
-                      onPressed:
-                          locked
-                              ? null
-                              : () => controller.selectChoice(
-                                choice.id,
-                                autoSubmit: true,
-                              ),
-                    ),
-                  );
-                },
-              ),
-            ],
-            const SizedBox(height: 12),
             Builder(
               builder: (context) {
+                final densifyOuts =
+                    activity.id == 'act-03-03-01-guided' &&
+                    !locked &&
+                    selected == null;
+                final minFelt =
+                    densifyOuts
+                        ? MediaQuery.sizeOf(context).height * 0.34
+                        : null;
                 final status = () {
                   if (controller.lastResult != null) return '';
                   if (controller.submitting) return 'Checking…';
@@ -1139,14 +1098,125 @@ class _HandCategoryTapActivity extends StatelessWidget {
                   }
                   return 'Checking…';
                 }();
-                if (status.isEmpty) return const SizedBox.shrink();
-                return Text(
-                  status,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.manrope(
-                    color: AppColors.slate,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
+                final tiles = <Widget>[
+                  for (var i = 0; i < activity.choices.length; i++) ...[
+                    if (i > 0) const SizedBox(height: 10),
+                    Builder(
+                      builder: (context) {
+                        final choice = activity.choices[i];
+                        final example =
+                            resolveHandExample(
+                              id: choice.id,
+                              label: choice.label,
+                            ) ??
+                            LessonHandExample(
+                              id: choice.id,
+                              title: choice.label,
+                              codes: const [],
+                            );
+                        final pulseNext =
+                            showGuidance &&
+                            activity.stage == ActivityStage.guided &&
+                            i == 0 &&
+                            selected == null &&
+                            !locked &&
+                            (activity.id.startsWith('act-02-02-01-') ||
+                                activity.id == 'act-03-02-01-guided' ||
+                                activity.id == 'act-03-05-01-guided');
+                        final invitePulse =
+                            showGuidance &&
+                            selected == null &&
+                            !locked &&
+                            (activity.id.startsWith('act-01-02-01-') ||
+                                activity.id == 'act-03-03-01-guided');
+                        return _FamilySoftPulse(
+                          active: pulseNext || invitePulse,
+                          child: HandExampleTile(
+                            example: example,
+                            selected: selected == choice.id,
+                            enabled: !locked,
+                            compact: true,
+                            expand: densifyOuts,
+                            onPressed:
+                                locked
+                                    ? null
+                                    : () => controller.selectChoice(
+                                      choice.id,
+                                      autoSubmit: true,
+                                    ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ];
+                final statusWidget =
+                    status.isEmpty
+                        ? const SizedBox.shrink()
+                        : (densifyOuts
+                            ? Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 14,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.feltDark.withValues(
+                                  alpha: 0.65,
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: AppColors.gold.withValues(alpha: 0.45),
+                                ),
+                              ),
+                              child: Text(
+                                status,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.manrope(
+                                  color: AppColors.gold,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            )
+                            : Text(
+                              status,
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.manrope(
+                                color: AppColors.slate,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ));
+                final column = Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    ...tiles,
+                    if (status.isNotEmpty) ...[
+                      const SizedBox(height: 12),
+                      statusWidget,
+                    ],
+                  ],
+                );
+                if (minFelt == null) return column;
+                return ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: minFelt),
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [AppColors.feltLight, AppColors.feltDark],
+                      ),
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(
+                        color: AppColors.feltBorder.withValues(alpha: 0.85),
+                      ),
+                    ),
+                    child: column,
                   ),
                 );
               },
