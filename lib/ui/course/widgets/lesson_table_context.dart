@@ -245,6 +245,15 @@ enum LessonTableRegion {
   /// Multiway checkpoint distractor: insult personality.
   mwObsInsult,
 
+  /// Leak checkpoint: note seat frequencies (correct).
+  leakSeatNotes,
+
+  /// Leak checkpoint distractor: invent life stories.
+  leakSeatStories,
+
+  /// Leak checkpoint distractor: treat every seat the same.
+  leakSeatSame,
+
   /// Verbal action: raise stands (binding).
   verbalRaiseStands,
 
@@ -1385,6 +1394,9 @@ enum LessonTableLayout {
   /// Multiway checkpoint: note high participation.
   multiwayObserveOutcomes,
 
+  /// Leak checkpoint: seat frequency notes.
+  leakSeatNoteOutcomes,
+
   /// Thin-value checkpoint: read-driven line vs coin flip.
   thinValueReadOutcomes,
 
@@ -2194,6 +2206,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-03-08-01-checkpoint':
       return const LessonTableScene(
+        layout: LessonTableLayout.leakSeatNoteOutcomes,
         villainSeatCount: 2,
         highlight: LessonTableHighlight.none,
         caption: 'Seat A raises a lot · Seat B rarely enters',
@@ -3554,6 +3567,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.mwObsInsult => pick('obs-label'),
         _ => null,
       };
+    case 'act-03-08-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.leakSeatNotes => pick('notes'),
+        LessonTableRegion.leakSeatStories => pick('guess'),
+        LessonTableRegion.leakSeatSame => pick('same'),
+        _ => null,
+      };
     case 'act-03-01-01-scaffolded':
       // Preflop open: UTG is left of the BB (earlyPosition on the felt).
       return switch (region) {
@@ -4628,6 +4648,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-06-01-checkpoint' ||
       activity.id == 'act-03-07-01-unguided' ||
       activity.id == 'act-03-07-01-checkpoint' ||
+      activity.id == 'act-03-08-01-checkpoint' ||
       activity.id == 'act-04-06-01-guided' ||
       activity.id == 'act-04-06-02-guided' ||
       activity.id == 'act-04-06-02-scaffolded' ||
@@ -4922,6 +4943,7 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.multiwaySpecOutcomes => _buildMultiwaySpecOutcomes(),
       LessonTableLayout.multiwayObserveOutcomes =>
           _buildMultiwayObserveOutcomes(),
+      LessonTableLayout.leakSeatNoteOutcomes => _buildLeakSeatNoteOutcomes(),
       LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
       LessonTableLayout.tableReadMattersOutcomes =>
           _buildTableReadMattersOutcomes(),
@@ -6582,6 +6604,49 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Personality',
           visual: const Icon(
             Icons.mood_bad_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLeakSeatNoteOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive seat frequencies — tap notes, stories, or same',
+      semanticsStatic: 'Leak seat note outcomes',
+      caption: scene.caption ?? 'Seat A raises a lot · Seat B rarely enters',
+      cueLabel: 'Tap Notes.',
+      guideRegion: LessonTableRegion.leakSeatNotes,
+      phases: [
+        (
+          region: LessonTableRegion.leakSeatNotes,
+          title: 'Note freqs',
+          detail: 'A high · B low',
+          visual: const Icon(
+            Icons.notes_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.leakSeatStories,
+          title: 'Invent',
+          detail: 'Life stories',
+          visual: const Icon(
+            Icons.auto_stories_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.leakSeatSame,
+          title: 'Same',
+          detail: 'Ignore seats',
+          visual: const Icon(
+            Icons.people_outline,
             color: AppColors.slate,
             size: 24,
           ),

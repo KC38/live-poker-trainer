@@ -9177,13 +9177,13 @@ void main() {
       choices: const [
         CourseChoice(
           id: 'careful',
-          label: 'Fold or keep the pot small',
+          label: 'Fold',
           action: 'FOLD',
         ),
-        CourseChoice(id: 'stack', label: 'Jam for stacks', action: 'ALL_IN'),
+        CourseChoice(id: 'stack', label: 'Jam stacks', action: 'ALL_IN'),
         CourseChoice(
           id: 'call-down',
-          label: 'Silent call-down forever',
+          label: 'Call forever',
           action: 'CALL',
         ),
       ],
@@ -9204,6 +9204,8 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('FOLD'), findsOneWidget);
+    expect(find.text('JAM STACKS'), findsOneWidget);
+    expect(find.text('CALL FOREVER'), findsOneWidget);
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'careful');
@@ -9263,12 +9265,12 @@ void main() {
         CourseChoice(id: 'fold-air', label: 'Fold', action: 'FOLD'),
         CourseChoice(
           id: 'float-air',
-          label: 'Call to keep them honest',
+          label: 'Float call',
           action: 'CALL',
         ),
         CourseChoice(
           id: 'bluff-crowd',
-          label: 'Raise as a bluff',
+          label: 'Bluff raise',
           action: 'RAISE',
         ),
       ],
@@ -9284,6 +9286,8 @@ void main() {
       ),
     );
     expect(find.text('Air multiway vs a bet — tap Fold.'), findsOneWidget);
+    expect(find.text('FLOAT CALL'), findsOneWidget);
+    expect(find.text('BLUFF RAISE'), findsOneWidget);
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'fold-air');
@@ -9317,7 +9321,20 @@ void main() {
     );
     expect(
       resolveSelectIdentifyPresentation(activity),
-      SelectIdentifyPresentation.handCategoryTap,
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.leakSeatNoteOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.leakSeatNotes,
+        choices: activity.choices,
+      ),
+      'notes',
     );
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
@@ -9333,8 +9350,9 @@ void main() {
       find.text('Two seats, different frequencies — tap the note.'),
       findsOneWidget,
     );
-    expect(find.text('A raises a lot · B plays few'), findsOneWidget);
-    await tester.tap(find.text('A raises a lot · B plays few'));
+    expect(find.text('Note freqs'), findsOneWidget);
+    expect(find.text('A high · B low'), findsOneWidget);
+    await tester.tap(find.text('Note freqs'));
     await tester.pump();
     expect(controller.draft.choiceId, 'notes');
     controller.dispose();
