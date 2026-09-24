@@ -15647,6 +15647,7 @@ void main() {
         ),
       );
       expect(find.byType(TurnMapDemo), findsOneWidget);
+      expect(find.text('Tap BARREL next'), findsOneWidget);
       expect(find.text('Tap Barrel, Give-up, and Map.'), findsNothing);
       expect(find.text('Tap Barrel, Give-up, and Map'), findsNothing);
       expect(
@@ -15656,10 +15657,14 @@ void main() {
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['BARREL', 'GIVE-UP', 'MAP']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
+      await tester.tap(find.text('BARREL'));
+      await tester.pump();
+      expect(find.text('Tap GIVE-UP next'), findsOneWidget);
+      await tester.tap(find.text('GIVE-UP'));
+      await tester.pump();
+      expect(find.text('Tap MAP next'), findsOneWidget);
+      await tester.tap(find.text('MAP'));
+      await tester.pump();
       expect(feltAck, 1);
       controller.dispose();
     },

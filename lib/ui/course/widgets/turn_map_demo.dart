@@ -37,8 +37,16 @@ class _TurnMapDemoState extends State<TurnMapDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in TurnMapDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -67,33 +75,40 @@ class _TurnMapDemoState extends State<TurnMapDemo> {
               for (var i = 0; i < TurnMapDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _TurnMapTile(
-                    label: TurnMapDemo.points[i].label,
-                    caption: TurnMapDemo.points[i].caption,
-                    color: TurnMapDemo.points[i].color,
-                    selected: _tapped.contains(TurnMapDemo.points[i].label),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed: widget.interactive
-                        ? () => _onTap(TurnMapDemo.points[i].label)
-                        : null,
+                  child: _TurnMapSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == TurnMapDemo.points[i].label,
+                    child: _TurnMapTile(
+                      label: TurnMapDemo.points[i].label,
+                      caption: TurnMapDemo.points[i].caption,
+                      color: TurnMapDemo.points[i].color,
+                      selected: _tapped.contains(TurnMapDemo.points[i].label),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed: widget.interactive
+                          ? () => _onTap(TurnMapDemo.points[i].label)
+                          : null,
+                    ),
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues Continue / Give-up / Map — no dupe footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'List continue and give-up cards before you bet',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'List continue and give-up cards before you bet'
+                    : 'Tap ${next.label} next')
+                : 'List continue and give-up cards before you bet',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
@@ -158,5 +173,74 @@ class _TurnMapTile extends StatelessWidget {
     );
     if (!enabled || onPressed == null) return child;
     return GestureDetector(onTap: onPressed, child: child);
+  }
+}
+
+class _TurnMapSoftPulse extends StatefulWidget {
+  const _TurnMapSoftPulse({required this.active, required this.child});
+
+  final bool active;
+  final Widget child;
+
+  @override
+  State<_TurnMapSoftPulse> createState() => _TurnMapSoftPulseState();
+}
+
+class _TurnMapSoftPulseState extends State<_TurnMapSoftPulse>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+    if (widget.active) {
+      _pulse.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _TurnMapSoftPulse oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.active && !_pulse.isAnimating) {
+      _pulse.repeat(reverse: true);
+    } else if (!widget.active && _pulse.isAnimating) {
+      _pulse.stop();
+      _pulse.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.active) return widget.child;
+    return AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final glow = 0.22 + (_pulse.value * 0.38);
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.gold.withValues(alpha: glow),
+                blurRadius: 10 + (_pulse.value * 8),
+                spreadRadius: 0.5 + (_pulse.value * 1.2),
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
+      child: widget.child,
+    );
   }
 }
