@@ -869,7 +869,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                     selected == null &&
                     !locked &&
                     ((widget.showGuidance &&
-                            widget.activity.stage == ActivityStage.guided) ||
+                            (widget.activity.stage == ActivityStage.guided ||
+                                widget.activity.stage ==
+                                    ActivityStage.scaffolded)) ||
                         widget.activity.id == 'act-01-02-02-unguided-board'),
                 enabled: !locked,
                 onRegionTap:
