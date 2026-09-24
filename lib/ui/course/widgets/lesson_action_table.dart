@@ -7696,10 +7696,120 @@ class LessonActionTable extends StatelessWidget {
             bounded
                 ? constraints.maxHeight
                 : MediaQuery.sizeOf(context).height * 0.55;
+        // Spacers need spare vertical room; short test shells pack tight.
+        final breathe = feltHeight >= 420;
+
+        Widget sceneStatus() {
+          if (spot.feltStatusLine != null) {
+            return statusLine(spot.feltStatusLine!);
+          }
+          if (spot.facingBet) return statusLine('A bet faces you');
+          if (spot.openPot) {
+            return statusLine(
+              // Preflop first-in is an open-raise; postflop open is a bet.
+              spot.streetLabel?.toLowerCase().contains('preflop') == true
+                  ? 'First in — open the pot'
+                  : 'Pot is open to a bet',
+            );
+          }
+          if (spot.streetLabel?.toLowerCase().contains('hand over') == true) {
+            return statusLine('Uncontested — stack the chips');
+          }
+          return statusLine('No bet to match', color: AppColors.slate);
+        }
+
+        final scene = Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (spot.streetLabel != null)
+              Text(
+                spot.streetLabel!,
+                style: GoogleFonts.manrope(
+                  color: AppColors.slate,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            if (spot.streetLabel != null && spot.villainLine != null)
+              const SizedBox(height: 10),
+            if (spot.villainLine != null)
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.bgDark.withValues(alpha: 0.45),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  spot.villainLine!,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.cream,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            const SizedBox(height: 12),
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                _PotChip(label: spot.potLabel),
+                if (spot.stackLabel != null) _PotChip(label: spot.stackLabel!),
+              ],
+            ),
+            const SizedBox(height: 16),
+            if (board.isNotEmpty)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (var i = 0; i < board.length; i++) ...[
+                    if (i > 0) const SizedBox(width: 6),
+                    MiniCard(card: board[i], size: cardSize),
+                  ],
+                ],
+              ),
+            if (board.isNotEmpty && hero.isNotEmpty) const SizedBox(height: 14),
+            if (hero.isNotEmpty)
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'You',
+                    style: GoogleFonts.manrope(
+                      color: AppColors.cream,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (var i = 0; i < hero.length; i++) ...[
+                        if (i > 0) const SizedBox(width: 8),
+                        MiniCard(card: hero[i], size: cardSize),
+                      ],
+                    ],
+                  ),
+                ],
+              ),
+            const SizedBox(height: 14),
+            sceneStatus(),
+          ],
+        );
 
         return Container(
           width: double.infinity,
-          height: feltHeight,
+          height: bounded ? feltHeight : null,
+          constraints:
+              bounded
+                  ? null
+                  : BoxConstraints(minHeight: feltHeight),
           padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
@@ -7712,120 +7822,17 @@ class LessonActionTable extends StatelessWidget {
               color: AppColors.feltBorder.withValues(alpha: 0.85),
             ),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              // Header cluster — street / villain / pot hug the top of the teach felt.
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (spot.streetLabel != null)
-                    Text(
-                      spot.streetLabel!,
-                      style: GoogleFonts.manrope(
-                        color: AppColors.slate,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  if (spot.streetLabel != null && spot.villainLine != null)
-                    const SizedBox(height: 10),
-                  if (spot.villainLine != null)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.bgDark.withValues(alpha: 0.45),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        spot.villainLine!,
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.manrope(
-                          color: AppColors.cream,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  const SizedBox(height: 12),
-                  Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: 8,
-                    runSpacing: 8,
+          child:
+              breathe
+                  ? Column(
+                    mainAxisSize: MainAxisSize.max,
                     children: [
-                      _PotChip(label: spot.potLabel),
-                      if (spot.stackLabel != null)
-                        _PotChip(label: spot.stackLabel!),
+                      const Spacer(flex: 2),
+                      scene,
+                      const Spacer(flex: 2),
                     ],
-                  ),
-                ],
-              ),
-              const Spacer(flex: 1),
-              // Cards cluster — board + holes own the middle of the felt.
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (board.isNotEmpty)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        for (var i = 0; i < board.length; i++) ...[
-                          if (i > 0) const SizedBox(width: 6),
-                          MiniCard(card: board[i], size: cardSize),
-                        ],
-                      ],
-                    ),
-                  if (board.isNotEmpty && hero.isNotEmpty)
-                    const SizedBox(height: 14),
-                  if (hero.isNotEmpty)
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'You',
-                          style: GoogleFonts.manrope(
-                            color: AppColors.cream,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            for (var i = 0; i < hero.length; i++) ...[
-                              if (i > 0) const SizedBox(width: 8),
-                              MiniCard(card: hero[i], size: cardSize),
-                            ],
-                          ],
-                        ),
-                      ],
-                    ),
-                ],
-              ),
-              const Spacer(flex: 1),
-              // Status cue hugs the bottom edge above the dock.
-              if (spot.feltStatusLine != null)
-                statusLine(spot.feltStatusLine!)
-              else if (spot.facingBet)
-                statusLine('A bet faces you')
-              else if (spot.openPot)
-                statusLine(
-                  // Preflop first-in is an open-raise; postflop open is a bet.
-                  spot.streetLabel?.toLowerCase().contains('preflop') == true
-                      ? 'First in — open the pot'
-                      : 'Pot is open to a bet',
-                )
-              else if (spot.streetLabel?.toLowerCase().contains('hand over') ==
-                  true)
-                statusLine('Uncontested — stack the chips')
-              else
-                statusLine('No bet to match', color: AppColors.slate),
-            ],
-          ),
+                  )
+                  : scene,
         );
       },
     );
