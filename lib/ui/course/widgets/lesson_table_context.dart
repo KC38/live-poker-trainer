@@ -6357,9 +6357,9 @@ class LessonTableContext extends StatelessWidget {
                   : null,
           child: Padding(
             padding: EdgeInsets.fromLTRB(
-              densifyShell ? 10 : 6,
+              densifyShell ? 8 : 6,
               densifyShell ? 14 : 8,
-              densifyShell ? 10 : 6,
+              densifyShell ? 8 : 6,
               densifyShell ? 14 : 8,
             ),
             child: Column(
@@ -6370,6 +6370,8 @@ class LessonTableContext extends StatelessWidget {
                 Text(
                   title,
                   textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.manrope(
                     color: AppColors.cream,
                     fontSize: densifyShell ? 15 : 12,
@@ -6380,6 +6382,8 @@ class LessonTableContext extends StatelessWidget {
                 Text(
                   detail,
                   textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.manrope(
                     color: AppColors.slate,
                     fontSize: densifyShell ? 12 : 10,
@@ -6410,25 +6414,29 @@ class LessonTableContext extends StatelessWidget {
             detail: 'Action equal',
             visual: const _BlindChipStack(amount: 3, densify: true),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           phase(
             region: LessonTableRegion.streetFlopDealt,
             title: 'Flop appears',
             detail: 'Deal only',
-            visual: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                for (final code in const ['Qs', 'Jh', '2c']) ...[
-                  MiniCard(
-                    card: CardModel.fromCode(code),
-                    size: MiniCardSize.small,
-                  ),
-                  const SizedBox(width: 3),
+            visual: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (final code in const ['Qs', 'Jh', '2c']) ...[
+                    MiniCard(
+                      card: CardModel.fromCode(code),
+                      size: MiniCardSize.small,
+                    ),
+                    const SizedBox(width: 2),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           phase(
             region: LessonTableRegion.streetSomeoneFolds,
             title: 'Someone folds',
