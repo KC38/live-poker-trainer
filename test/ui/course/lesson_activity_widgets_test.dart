@@ -7182,10 +7182,23 @@ void main() {
     );
     expect(
       resolveSelectIdentifyPresentation(activity),
-      SelectIdentifyPresentation.handCategoryTap,
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.drawPriceOutcomes,
     );
     expect(resolveLessonTableScene(activity)?.caption,
         'Pot 20 · bet 10 · ~8 clean outs');
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.drawPriceCall,
+        choices: activity.choices,
+      ),
+      'call-draw',
+    );
 
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
@@ -7211,8 +7224,10 @@ void main() {
       find.text('Call — price is acceptable with outs'),
       findsNothing,
     );
-    expect(find.text('Call — priced in'), findsOneWidget);
-    await tester.tap(find.text('Call — priced in'));
+    expect(find.text('Call — priced in'), findsNothing);
+    expect(find.text('Call'), findsOneWidget);
+    expect(find.text('Priced in'), findsOneWidget);
+    await tester.tap(find.text('Call'));
     await tester.pump();
     expect(controller.draft.choiceId, 'call-draw');
     controller.dispose();

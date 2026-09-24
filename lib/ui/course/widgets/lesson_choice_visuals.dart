@@ -159,8 +159,8 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-03-03-01-unguided') {
-    // Outs: tap Call / Fold / Raise category tiles (choice ids native).
-    return SelectIdentifyPresentation.handCategoryTap;
+    // Outs: tap Call / Fold / Raise on the draw-price felt.
+    return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-03-03-01-checkpoint') {
     // Outs: deep NFD spot — tap the implied-odds edge on category tiles.
