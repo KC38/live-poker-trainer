@@ -1065,8 +1065,15 @@ class _HandCategoryTapActivity extends StatelessWidget {
                           activity.id == 'act-03-02-01-guided' ||
                           activity.id == 'act-03-03-01-guided' ||
                           activity.id == 'act-03-05-01-guided');
+                  // S1 hand-category: invite SoftPulse on every tile (no
+                  // correct-answer spoiler) until the learner picks one.
+                  final invitePulse =
+                      showGuidance &&
+                      selected == null &&
+                      !locked &&
+                      activity.id.startsWith('act-01-02-01-');
                   return _FamilySoftPulse(
-                    active: pulseNext,
+                    active: pulseNext || invitePulse,
                     child: HandExampleTile(
                       example: example,
                       selected: selected == choice.id,
