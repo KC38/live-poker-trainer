@@ -426,6 +426,7 @@ class SeatOrderTile extends StatelessWidget {
     this.selected = false,
     this.enabled = true,
     this.emphasizeDealer = true,
+    this.densify = false,
     this.onPressed,
   });
 
@@ -437,6 +438,9 @@ class SeatOrderTile extends StatelessWidget {
   /// Gold dealer-chip chrome on BTN. Turn off in order quizzes so BTN is not
   /// mistaken for the next tap target.
   final bool emphasizeDealer;
+
+  /// Tall-phone SoftPulse pack: larger chip so FittedBox contain can fill felt.
+  final bool densify;
   final VoidCallback? onPressed;
 
   String get _caption {
@@ -461,6 +465,12 @@ class SeatOrderTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isBtn = emphasizeDealer && label.toUpperCase() == 'BTN';
+    final tileW = densify ? 132.0 : 96.0;
+    final chip = densify ? 56.0 : 36.0;
+    final labelSize = densify ? 15.0 : 11.0;
+    final captionSize = densify ? 13.0 : 11.0;
+    final badgeSize = densify ? 13.0 : 11.0;
+    final radius = densify ? 18.0 : 14.0;
     return Semantics(
       button: true,
       selected: selected,
@@ -469,15 +479,20 @@ class SeatOrderTile extends StatelessWidget {
         color: selected
             ? AppColors.gold.withValues(alpha: 0.22)
             : AppColors.feltDark.withValues(alpha: 0.85),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(radius),
         child: InkWell(
           onTap: enabled ? onPressed : null,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(radius),
           child: Container(
-            width: 96,
-            padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
+            width: tileW,
+            padding: EdgeInsets.fromLTRB(
+              densify ? 12 : 8,
+              densify ? 16 : 12,
+              densify ? 12 : 8,
+              densify ? 16 : 12,
+            ),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(radius),
               border: Border.all(
                 color: selected ? AppColors.gold : AppColors.feltBorder,
                 width: selected ? 2 : 1.2,
@@ -491,13 +506,13 @@ class SeatOrderTile extends StatelessWidget {
                     badge!,
                     style: GoogleFonts.manrope(
                       color: AppColors.gold,
-                      fontSize: 11,
+                      fontSize: badgeSize,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
                 Container(
-                  width: 36,
-                  height: 36,
+                  width: chip,
+                  height: chip,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -506,23 +521,24 @@ class SeatOrderTile extends StatelessWidget {
                         : AppColors.surfaceMuted.withValues(alpha: 0.55),
                     border: Border.all(
                       color: isBtn ? AppColors.gold : AppColors.slate,
+                      width: densify ? 1.6 : 1,
                     ),
                   ),
                   child: Text(
                     label.toUpperCase(),
                     style: GoogleFonts.manrope(
                       color: AppColors.cream,
-                      fontSize: 11,
+                      fontSize: labelSize,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
                 ),
-                const SizedBox(height: 6),
+                SizedBox(height: densify ? 10 : 6),
                 Text(
                   _caption,
                   style: GoogleFonts.manrope(
                     color: AppColors.slate,
-                    fontSize: 11,
+                    fontSize: captionSize,
                     fontWeight: FontWeight.w700,
                   ),
                 ),

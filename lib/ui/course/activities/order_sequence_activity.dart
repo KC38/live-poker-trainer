@@ -421,12 +421,17 @@ class OrderSequenceActivity extends StatelessWidget {
               Builder(
                 builder: (context) {
                   // Tall-phone teach: pack tray+palette, then scale to fill
-                  // densified felt (contain — not width-pinned scaleDown).
+                  // densified felt. Seat packs stay narrow+tall (2-col densify
+                  // chips) so BoxFit.contain can grow into navy void — a
+                  // full-width pin letterboxes a short 3-seat row.
                   final densify = true;
+                  final isStreet = isStreetSequenceActivity(activity);
                   final feltHeight =
                       MediaQuery.sizeOf(context).height * 0.58;
                   final packWidth =
-                      MediaQuery.sizeOf(context).width - 48;
+                      isStreet
+                          ? MediaQuery.sizeOf(context).width - 48
+                          : (132.0 * 2) + 16;
                   final nextId =
                       showGuidance &&
                               !locked &&
@@ -434,7 +439,7 @@ class OrderSequenceActivity extends StatelessWidget {
                           ? activity.sequenceItems[ordered.length].id
                           : null;
                   final palette =
-                      isStreetSequenceActivity(activity)
+                      isStreet
                           ? _StreetTileGrid(
                             items: remaining,
                             locked: locked,
@@ -447,31 +452,18 @@ class OrderSequenceActivity extends StatelessWidget {
                                   id: id,
                                 ),
                           )
-                          : Wrap(
-                            spacing: densify ? 12 : 8,
-                            runSpacing: densify ? 12 : 8,
-                            alignment: WrapAlignment.center,
-                            children: [
-                              for (final item in remaining)
-                                _SoftPulseTarget(
-                                  active:
-                                      nextId != null && item.id == nextId,
-                                  child: SeatOrderTile(
-                                    label: item.label,
-                                    emphasizeDealer: false,
-                                    enabled: !locked,
-                                    onPressed:
-                                        locked
-                                            ? null
-                                            : () => appendOrderedId(
-                                              controller: controller,
-                                              activity: activity,
-                                              ordered: ordered,
-                                              id: item.id,
-                                            ),
-                                  ),
+                          : _SeatTileGrid(
+                            items: remaining,
+                            locked: locked,
+                            nextId: nextId,
+                            densify: densify,
+                            onPick:
+                                (id) => appendOrderedId(
+                                  controller: controller,
+                                  activity: activity,
+                                  ordered: ordered,
+                                  id: id,
                                 ),
-                            ],
                           );
                   final body = Column(
                     mainAxisSize: MainAxisSize.min,
@@ -479,7 +471,7 @@ class OrderSequenceActivity extends StatelessWidget {
                     children: [
                       Text(
                         ordered.isEmpty
-                            ? (isStreetSequenceActivity(activity)
+                            ? (isStreet
                                 ? 'Your street order'
                                 : 'Your seat order')
                             : 'Your order',
@@ -495,8 +487,8 @@ class OrderSequenceActivity extends StatelessWidget {
                         label:
                             'Current order: ${ordered.isEmpty ? 'empty' : ordered.join(', ')}',
                         child: Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
+                          spacing: densify && !isStreet ? 12 : 8,
+                          runSpacing: densify && !isStreet ? 12 : 8,
                           alignment: WrapAlignment.center,
                           children: [
                             if (ordered.isEmpty)
@@ -510,7 +502,7 @@ class OrderSequenceActivity extends StatelessWidget {
                               )
                             else
                               for (var i = 0; i < ordered.length; i++)
-                                if (isStreetSequenceActivity(activity))
+                                if (isStreet)
                                   StreetOrderTile(
                                     label: _labelFor(ordered[i]),
                                     badge: '${i + 1}',
@@ -523,6 +515,7 @@ class OrderSequenceActivity extends StatelessWidget {
                                     badge: '${i + 1}',
                                     selected: true,
                                     enabled: false,
+                                    densify: densify,
                                   ),
                           ],
                         ),
@@ -547,9 +540,7 @@ class OrderSequenceActivity extends StatelessWidget {
                   );
                   return Container(
                     key: ValueKey(
-                      isStreetSequenceActivity(activity)
-                          ? 'street-order-felt'
-                          : 'seat-order-felt',
+                      isStreet ? 'street-order-felt' : 'seat-order-felt',
                     ),
                     width: double.infinity,
                     height: feltHeight,
@@ -810,9 +801,73 @@ class _StreetTileGrid extends StatelessWidget {
     final top = items.take(2).toList(growable: false);
     final bottom = items.skip(2).toList(growable: false);
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         if (top.isNotEmpty) row(top),
         if (bottom.isNotEmpty) ...[const SizedBox(height: 8), row(bottom)],
+      ],
+    );
+  }
+}
+
+/// Two-column densify pack for seat SoftPulse (taller than a single Wrap row).
+class _SeatTileGrid extends StatelessWidget {
+  const _SeatTileGrid({
+    required this.items,
+    required this.locked,
+    required this.onPick,
+    required this.densify,
+    this.nextId,
+  });
+
+  final List<CourseChoice> items;
+  final bool locked;
+  final ValueChanged<String> onPick;
+  final bool densify;
+  final String? nextId;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget cell(CourseChoice item) {
+      return _SoftPulseTarget(
+        active: nextId != null && item.id == nextId,
+        child: SeatOrderTile(
+          label: item.label,
+          emphasizeDealer: false,
+          densify: densify,
+          enabled: !locked,
+          onPressed: locked ? null : () => onPick(item.id),
+        ),
+      );
+    }
+
+    if (items.isEmpty) return const SizedBox.shrink();
+    final top = items.take(2).toList(growable: false);
+    final bottom = items.skip(2).toList(growable: false);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            for (var i = 0; i < top.length; i++) ...[
+              if (i > 0) SizedBox(width: densify ? 16 : 8),
+              cell(top[i]),
+            ],
+          ],
+        ),
+        if (bottom.isNotEmpty) ...[
+          SizedBox(height: densify ? 16 : 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              for (var i = 0; i < bottom.length; i++) ...[
+                if (i > 0) SizedBox(width: densify ? 16 : 8),
+                cell(bottom[i]),
+              ],
+            ],
+          ),
+        ],
       ],
     );
   }

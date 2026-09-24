@@ -7837,6 +7837,9 @@ await tester.tap(find.text('STRONGER'));
         epsilon: 1,
       ),
     );
+    // Densify chips are larger than the compact 96px seat tiles.
+    final utgTile = tester.getSize(find.text('Early').first);
+    expect(utgTile.width, greaterThanOrEqualTo(50));
     await tester.tap(find.text('UTG').first);
     await tester.pump();
     expect(controller.draft.orderedIds, ['utg']);
