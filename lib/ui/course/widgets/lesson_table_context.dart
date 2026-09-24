@@ -8196,6 +8196,29 @@ class LessonTableContext extends StatelessWidget {
   }
 
   Widget _buildSprGuidedOutcomes() {
+    Widget stackPotChip({
+      required String value,
+      required String label,
+      required bool gold,
+    }) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _PotChipDot(label: value, gold: gold),
+          const SizedBox(height: 6),
+          Text(
+            label,
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 11,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.4,
+            ),
+          ),
+        ],
+      );
+    }
+
     return _buildOutcomePhases(
       semanticsInteractive:
           'Interactive SPR — tap 4, 2, or 8 from stack divided by pot',
@@ -8203,6 +8226,25 @@ class LessonTableContext extends StatelessWidget {
       caption: scene.caption ?? 'Stack 80bb · Pot 20bb',
       cueLabel: 'Tap SPR 4.',
       guideRegion: LessonTableRegion.sprRatioFour,
+      minHeightFactor: 0.55,
+      header: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          stackPotChip(value: '80', label: 'Stack', gold: true),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18),
+            child: Text(
+              '÷',
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 28,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ),
+          stackPotChip(value: '20', label: 'Pot', gold: false),
+        ],
+      ),
       phases: [
         (
           region: LessonTableRegion.sprRatioFour,
@@ -13182,6 +13224,10 @@ class LessonTableContext extends StatelessWidget {
     phases,
     String? cueLabel,
     LessonTableRegion? guideRegion,
+    /// Override tall-phone felt fraction (default 0.58 with spot cards, else 0.40).
+    double? minHeightFactor,
+    /// Optional teach strip above the caption (e.g. Stack ÷ Pot chips).
+    Widget? header,
   }) {
     Widget phase({
       required LessonTableRegion region,
@@ -13270,10 +13316,11 @@ class LessonTableContext extends StatelessWidget {
       builder: (context) {
         // Spot-card outcome draws need a taller shell so the teach felt
         // eats the tall-phone navy void below the tile row.
+        final factor =
+            minHeightFactor ?? (showSpotCards || header != null ? 0.58 : 0.40);
         final minFelt =
             expandTeach
-                ? MediaQuery.sizeOf(context).height *
-                    (showSpotCards ? 0.58 : 0.40)
+                ? MediaQuery.sizeOf(context).height * factor
                 : null;
         return _feltShell(
           semanticsLabel:
@@ -13287,6 +13334,10 @@ class LessonTableContext extends StatelessWidget {
                     ? MainAxisAlignment.center
                     : MainAxisAlignment.start,
             children: [
+              if (header != null) ...[
+                header!,
+                SizedBox(height: expandTeach ? 14 : 10),
+              ],
               if (showSpotCards) ...[
                 if (villainFaceUp.isNotEmpty) ...[
                   Text(

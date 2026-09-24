@@ -7792,6 +7792,9 @@ void main() {
     expect(find.text('Effective stack 80bb, pot 20bb. SPR?'), findsNothing);
     expect(find.text('Stack 80bb · Pot 20bb'), findsOneWidget);
     expect(find.text('Them'), findsNothing);
+    expect(find.text('Stack'), findsOneWidget);
+    expect(find.text('Pot'), findsOneWidget);
+    expect(find.text('÷'), findsOneWidget);
     expect(find.text('SPR 4'), findsOneWidget);
     expect(find.text('Tap SPR 4.'), findsOneWidget);
     expect(find.byType(TextField), findsNothing);
