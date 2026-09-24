@@ -1830,6 +1830,64 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('hand-families checkpoint taps Offsuit trash on densified felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-02-01-checkpoint-trash',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Look at 72o early — tap Offsuit trash.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Name the family for your holes.',
+      choices: const [
+        CourseChoice(id: 'hf-trash', label: 'Offsuit trash'),
+        CourseChoice(id: 'hf-pair', label: 'Pocket pair'),
+        CourseChoice(id: 'hf-suited-ace', label: 'Suited ace'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.handFamilyCheckpointOutcomes,
+    );
+    expect(resolveLessonTableScene(activity)?.heroCodes, ['7c', '2d']);
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.handFamilyCpTrash,
+        choices: activity.choices,
+      ),
+      'hf-trash',
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(
+      find.text('Early seat with junk — tap the family.'),
+      findsOneWidget,
+    );
+    expect(find.text('Offsuit trash'), findsOneWidget);
+    await tester.tap(find.text('Offsuit trash'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'hf-trash');
+    controller.dispose();
+  });
+
   test('hand-families identify steps use classify-on-felt presentation', () {
     expect(
       resolveSelectIdentifyPresentation(
@@ -1885,30 +1943,24 @@ void main() {
       ),
       SelectIdentifyPresentation.tableRegionTap,
     );
-    for (final id in const [
-      'act-02-02-01-checkpoint-trash',
-    ]) {
-      final activity = CourseActivity(
-        id: id,
-        order: 2,
-        stage: ActivityStage.guided,
-        renderer: ActivityRenderer.selectIdentify,
-        estimatedSeconds: 40,
-        accessibilityText: 'classify',
-        acceptedGrades: const [SoftGrade.recommended],
-        prompt: 'Name the family for your holes.',
-        choices: const [
-          CourseChoice(id: 'hf-pair', label: 'Pocket pair'),
-          CourseChoice(id: 'hf-trash', label: 'Offsuit trash'),
-        ],
-      );
-      expect(
-        resolveSelectIdentifyPresentation(activity),
-        SelectIdentifyPresentation.handCategoryTap,
-        reason: id,
-      );
-      expect(resolveLessonTableScene(activity), isNotNull, reason: id);
-    }
+    expect(
+      resolveSelectIdentifyPresentation(
+        CourseActivity(
+          id: 'act-02-02-01-checkpoint-trash',
+          order: 5,
+          stage: ActivityStage.checkpoint,
+          renderer: ActivityRenderer.selectIdentify,
+          estimatedSeconds: 40,
+          accessibilityText: 'classify',
+          acceptedGrades: const [SoftGrade.recommended],
+          prompt: 'Name the family for your holes.',
+          choices: const [
+            CourseChoice(id: 'hf-trash', label: 'Offsuit trash'),
+          ],
+        ),
+      ),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
     expect(
       resolveLessonTableScene(
         CourseActivity(

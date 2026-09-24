@@ -106,10 +106,9 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     // Hand families: tap Suited connector / Offsuit connector / Trash on felt.
     return SelectIdentifyPresentation.tableRegionTap;
   }
-  if (activity.id.startsWith('act-02-02-01-') &&
-      activity.renderer == ActivityRenderer.selectIdentify) {
-    // Hand families checkpoint: bottom tiles for now.
-    return SelectIdentifyPresentation.handCategoryTap;
+  if (activity.id == 'act-02-02-01-checkpoint-trash') {
+    // Hand families: tap Offsuit trash / Pair / Suited ace on densified felt.
+    return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-01-02-02-unguided-board') {
     // Board-plays chop: tap the felt (board / you / them), not text tiles.

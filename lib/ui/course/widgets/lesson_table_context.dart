@@ -236,6 +236,15 @@ enum LessonTableRegion {
   /// Hand-family unguided distractor: offsuit trash.
   handFamilyUgTrash,
 
+  /// Hand-family checkpoint: offsuit trash (correct).
+  handFamilyCpTrash,
+
+  /// Hand-family checkpoint distractor: pocket pair.
+  handFamilyCpPair,
+
+  /// Hand-family checkpoint distractor: suited ace.
+  handFamilyCpSuitedAce,
+
   /// Turn guided: blank turn is a brick (correct).
   turnBrick,
 
@@ -1541,6 +1550,9 @@ enum LessonTableLayout {
   /// Hand-family unguided: suited connector vs offsuit vs trash.
   handFamilyUnguidedOutcomes,
 
+  /// Hand-family checkpoint: trash vs pair vs suited ace.
+  handFamilyCheckpointOutcomes,
+
   /// Turn guided: brick vs scare vs always-change.
   turnBrickScareOutcomes,
 
@@ -2234,9 +2246,10 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-02-02-01-checkpoint-trash':
       return const LessonTableScene(
+        layout: LessonTableLayout.handFamilyCheckpointOutcomes,
         heroCodes: ['7c', '2d'],
         villainSeatCount: 0,
-        highlight: LessonTableHighlight.hero,
+        highlight: LessonTableHighlight.none,
         caption: 'Your holes · early position',
       );
     case 'act-02-07-02-jump-stack':
@@ -3746,6 +3759,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.handFamilyUgTrash => pick('hf-trash'),
         _ => null,
       };
+    case 'act-02-02-01-checkpoint-trash':
+      return switch (region) {
+        LessonTableRegion.handFamilyCpTrash => pick('hf-trash'),
+        LessonTableRegion.handFamilyCpPair => pick('hf-pair'),
+        LessonTableRegion.handFamilyCpSuitedAce => pick('hf-suited-ace'),
+        _ => null,
+      };
     case 'act-03-03-01-guided':
       return switch (region) {
         LessonTableRegion.outsCleanAces => pick('outs-3'),
@@ -4971,6 +4991,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-02-02-01-guided-pair' ||
       activity.id == 'act-02-02-01-scaffolded-broadway' ||
       activity.id == 'act-02-02-01-unguided-sc' ||
+      activity.id == 'act-02-02-01-checkpoint-trash' ||
       activity.id == 'act-03-01-01-guided' ||
       activity.id == 'act-03-01-01-scaffolded' ||
       activity.id == 'act-03-01-01-unguided' ||
@@ -5294,6 +5315,8 @@ class LessonTableContext extends StatelessWidget {
           _buildHandFamilyScaffoldedOutcomes(),
       LessonTableLayout.handFamilyUnguidedOutcomes =>
           _buildHandFamilyUnguidedOutcomes(),
+      LessonTableLayout.handFamilyCheckpointOutcomes =>
+          _buildHandFamilyCheckpointOutcomes(),
       LessonTableLayout.turnBrickScareOutcomes => _buildTurnBrickScareOutcomes(),
       LessonTableLayout.turnScarePlanOutcomes => _buildTurnScarePlanOutcomes(),
       LessonTableLayout.riverJobOutcomes => _buildRiverJobOutcomes(),
@@ -6970,6 +6993,53 @@ class LessonTableContext extends StatelessWidget {
           title: 'Offsuit trash',
           detail: 'Weak offsuit',
           visual: miniPair('7c', '2d'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHandFamilyCheckpointOutcomes() {
+    Widget miniPair(String a, String b) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          MiniCard(
+            card: CardModel.fromCode(a),
+            size: MiniCardSize.tiny,
+          ),
+          const SizedBox(width: 2),
+          MiniCard(
+            card: CardModel.fromCode(b),
+            size: MiniCardSize.tiny,
+          ),
+        ],
+      );
+    }
+
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive hand family — tap Offsuit trash, Pocket pair, or Suited ace',
+      semanticsStatic: 'Hand family checkpoint outcomes',
+      caption: scene.caption ?? 'Your holes · early position',
+      phases: [
+        (
+          region: LessonTableRegion.handFamilyCpTrash,
+          title: 'Offsuit trash',
+          detail: 'Fold early',
+          visual: miniPair('7c', '2d'),
+        ),
+        (
+          region: LessonTableRegion.handFamilyCpPair,
+          title: 'Pocket pair',
+          detail: 'Matching ranks?',
+          visual: miniPair('8h', '8c'),
+        ),
+        (
+          region: LessonTableRegion.handFamilyCpSuitedAce,
+          title: 'Suited ace',
+          detail: 'Ace + suited?',
+          visual: miniPair('Ah', '9h'),
         ),
       ],
     );
