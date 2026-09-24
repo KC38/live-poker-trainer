@@ -58,8 +58,6 @@ class _NumericPotPriceActivityState extends State<NumericPotPriceActivity> {
         '200 chips at 1/2 — type the stack in big blinds.',
       'act-02-05-01-checkpoint-200' =>
         '1000 chips at 2/5 — type the buy-in in big blinds.',
-      'act-04-05-01-guided' =>
-        'Effective 80 into pot 20 — type the SPR.',
       'act-04-10-02-jump-spr' =>
         'Stack 60bb, pot 15bb — type the SPR.',
       _ => 'Type the amount in chips — match the bet to call.',
@@ -86,15 +84,6 @@ class _NumericPotPriceActivityState extends State<NumericPotPriceActivity> {
         facingBet: false,
         feltStatusLine: '1000 ÷ 5 = ? bb',
       ),
-      'act-04-05-01-guided' => const LessonActionSpot(
-        heroCodes: ['Ah', 'Kd'],
-        potLabel: 'Pot 20bb',
-        stackLabel: 'Stack 80bb',
-        villainLine: 'Effective stack vs pot',
-        streetLabel: 'Preflop · SPR check',
-        facingBet: false,
-        feltStatusLine: 'SPR = stack ÷ pot',
-      ),
       'act-04-10-02-jump-spr' => const LessonActionSpot(
         heroCodes: ['Ah', 'Kd'],
         potLabel: 'Pot 15bb',
@@ -112,7 +101,7 @@ class _NumericPotPriceActivityState extends State<NumericPotPriceActivity> {
     return switch (activity.id) {
       'act-02-05-01-guided-convert' || 'act-02-05-01-checkpoint-200' =>
         'Type big blinds, then Check.',
-      'act-04-05-01-guided' || 'act-04-10-02-jump-spr' =>
+      'act-04-10-02-jump-spr' =>
         'Type SPR, then Check.',
       _ => 'Type the amount, then Check.',
     };

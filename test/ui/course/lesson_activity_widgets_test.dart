@@ -7737,22 +7737,47 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('s4 spr guided shows stack/pot felt and SPR coach', (tester) async {
+  testWidgets('s4 spr guided taps SPR 4 on densified stack÷pot felt', (
+    tester,
+  ) async {
     final activity = CourseActivity(
       id: 'act-04-05-01-guided',
       order: 2,
       stage: ActivityStage.guided,
-      renderer: ActivityRenderer.numericPotPrice,
+      renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'SPR is 4.',
       acceptedGrades: const [SoftGrade.recommended],
-      numericQuestion: 'Effective stack 80bb, pot 20bb. SPR?',
-      numericUnit: 'ratio',
+      prompt: 'Effective stack 80bb, pot 20bb. SPR?',
+      choices: const [
+        CourseChoice(id: 'spr-4', label: '4'),
+        CourseChoice(id: 'spr-2', label: '2'),
+        CourseChoice(id: 'spr-8', label: '8'),
+      ],
     );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.sprGuidedOutcomes,
+    );
+    expect(resolveLessonTableScene(activity)?.caption, 'Stack 80bb · Pot 20bb');
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.sprRatioFour,
+        choices: activity.choices,
+      ),
+      'spr-4',
+    );
+
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
       _wrap(
-        NumericPotPriceActivity(
+        SelectIdentifyActivity(
           activity: activity,
           controller: controller,
           showGuidance: true,
@@ -7760,24 +7785,17 @@ void main() {
       ),
     );
     expect(
-      find.text('Effective 80 into pot 20 — type the SPR.'),
+      find.text('Effective 80 into pot 20 — tap the SPR.'),
       findsOneWidget,
     );
-    expect(find.textContaining('Preflop · SPR check'), findsOneWidget);
-    expect(find.text('Stack 80bb'), findsOneWidget);
-    expect(find.text('Pot 20bb'), findsOneWidget);
-    expect(find.text('SPR = stack ÷ pot'), findsOneWidget);
-    expect(
-      find.text('Type the amount in chips — match the bet to call.'),
-      findsNothing,
-    );
-    expect(
-      find.text('Effective stack 80bb, pot 20bb. SPR?'),
-      findsNothing,
-    );
-    await tester.enterText(find.byType(TextField), '4');
+    expect(find.text('Effective stack 80bb, pot 20bb. SPR?'), findsNothing);
+    expect(find.text('Stack 80bb · Pot 20bb'), findsOneWidget);
+    expect(find.text('SPR 4'), findsOneWidget);
+    expect(find.text('Tap SPR 4.'), findsOneWidget);
+    expect(find.byType(TextField), findsNothing);
+    await tester.tap(find.text('SPR 4'));
     await tester.pump();
-    expect(controller.draft.numericValue, 4);
+    expect(controller.draft.choiceId, 'spr-4');
     controller.dispose();
   });
 

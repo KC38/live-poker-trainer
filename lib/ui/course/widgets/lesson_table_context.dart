@@ -440,6 +440,15 @@ enum LessonTableRegion {
   /// S4 sizing unguided distractor: 1-chip bets fine.
   sizingTinyOk,
 
+  /// SPR guided: correct ratio (80 ÷ 20 = 4).
+  sprRatioFour,
+
+  /// SPR guided distractor: half (2).
+  sprRatioTwo,
+
+  /// SPR guided distractor: too high (8).
+  sprRatioEight,
+
   /// Verbal action: raise stands (binding).
   verbalRaiseStands,
 
@@ -1676,6 +1685,9 @@ enum LessonTableLayout {
   /// S4 sizing unguided: soft band vs exactness.
   sizingUnguidedOutcomes,
 
+  /// S4 SPR guided: tap SPR 4 / 2 / 8 from stack÷pot.
+  sprGuidedOutcomes,
+
   /// Thin-value checkpoint: read-driven line vs coin flip.
   thinValueReadOutcomes,
 
@@ -2581,6 +2593,12 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         villainSeatCount: 1,
         highlight: LessonTableHighlight.none,
         caption: 'Two value sizes · same story',
+      );
+    case 'act-04-05-01-guided':
+      return const LessonTableScene(
+        layout: LessonTableLayout.sprGuidedOutcomes,
+        highlight: LessonTableHighlight.none,
+        caption: 'Stack 80bb · Pot 20bb',
       );
     case 'act-04-05-01-checkpoint':
       return const LessonTableScene(
@@ -4009,6 +4027,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.sizingTinyOk => pick('random-size'),
         _ => null,
       };
+    case 'act-04-05-01-guided':
+      return switch (region) {
+        LessonTableRegion.sprRatioFour => pick('spr-4'),
+        LessonTableRegion.sprRatioTwo => pick('spr-2'),
+        LessonTableRegion.sprRatioEight => pick('spr-8'),
+        _ => null,
+      };
     case 'act-03-01-01-scaffolded':
       // Preflop open: UTG is left of the BB (earlyPosition on the felt).
       return switch (region) {
@@ -5124,6 +5149,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-04-01-01-checkpoint' ||
       activity.id == 'act-04-03-01-checkpoint' ||
       activity.id == 'act-04-04-01-unguided' ||
+      activity.id == 'act-04-05-01-guided' ||
       activity.id == 'act-04-06-01-guided' ||
       activity.id == 'act-04-06-01-scaffolded' ||
       activity.id == 'act-04-06-01-unguided' ||
@@ -5463,6 +5489,7 @@ class LessonTableContext extends StatelessWidget {
           _buildPlanCheckpointOutcomes(),
       LessonTableLayout.sizingUnguidedOutcomes =>
           _buildSizingUnguidedOutcomes(),
+      LessonTableLayout.sprGuidedOutcomes => _buildSprGuidedOutcomes(),
       LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
       LessonTableLayout.tableReadMattersOutcomes =>
           _buildTableReadMattersOutcomes(),
@@ -8162,6 +8189,37 @@ class LessonTableContext extends StatelessWidget {
             color: AppColors.slate,
             size: 24,
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSprGuidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive SPR — tap 4, 2, or 8 from stack divided by pot',
+      semanticsStatic: 'SPR guided outcomes',
+      caption: scene.caption ?? 'Stack 80bb · Pot 20bb',
+      cueLabel: 'Tap SPR 4.',
+      guideRegion: LessonTableRegion.sprRatioFour,
+      phases: [
+        (
+          region: LessonTableRegion.sprRatioFour,
+          title: 'SPR 4',
+          detail: 'Stack ÷ pot',
+          visual: const _PotChipDot(label: '4', gold: true),
+        ),
+        (
+          region: LessonTableRegion.sprRatioTwo,
+          title: 'SPR 2',
+          detail: 'Too low?',
+          visual: const _PotChipDot(label: '2', gold: false),
+        ),
+        (
+          region: LessonTableRegion.sprRatioEight,
+          title: 'SPR 8',
+          detail: 'Too high?',
+          visual: const _PotChipDot(label: '8', gold: false),
         ),
       ],
     );

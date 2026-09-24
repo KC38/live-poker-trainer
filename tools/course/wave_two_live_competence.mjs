@@ -1050,14 +1050,19 @@ export function buildSectionFour() {
               dialogue("act-04-05-01-explain", 1,
                 "SPR = effective stack / pot. Low SPR: commit. High SPR: maneuver.",
                 {objectives: ["Estimate stack-to-pot ratio"]}),
-              numericAct({
+              selectAct({
                 id: "act-04-05-01-guided", order: 2, stage: "guided",
-                question: "Effective stack 80bb, pot 20bb. SPR?",
+                prompt: "Effective stack 80bb, pot 20bb. SPR?",
                 a11y: "SPR is 4.",
                 objectives: ["Estimate stack-to-pot ratio"],
-                unit: "ratio", min: 4, max: 4,
-                okFeedback: "80 / 20 = 4.",
-                missFeedback: "Divide stack by pot: 80/20 = 4.",
+                choices: [
+                  choice("spr-4", "4", "recommended",
+                    "80 / 20 = 4."),
+                  choice("spr-2", "2", "clear_mistake",
+                    "Divide stack by pot: 80/20 = 4.", {betterChoiceId: "spr-4"}),
+                  choice("spr-8", "8", "clear_mistake",
+                    "Divide stack by pot: 80/20 = 4.", {betterChoiceId: "spr-4"})
+                ],
               }),
               actionAct({
                 id: "act-04-05-01-scaffolded", order: 3, stage: "scaffolded",
