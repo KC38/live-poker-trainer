@@ -263,6 +263,15 @@ enum LessonTableRegion {
   /// S3 jump distractor: only table talk.
   jumpTrackTalk,
 
+  /// S3 jump class: combo draw (correct).
+  jumpClassDraw,
+
+  /// S3 jump class distractor: made two pair.
+  jumpClassMade,
+
+  /// S3 jump class distractor: air.
+  jumpClassAir,
+
   /// Verbal action: raise stands (binding).
   verbalRaiseStands,
 
@@ -1409,6 +1418,9 @@ enum LessonTableLayout {
   /// S3 jump: track pot + effective vs holes/talk.
   jumpTableTrackOutcomes,
 
+  /// S3 jump: flop class Draw / Made / Air.
+  jumpFlopClassOutcomes,
+
   /// Thin-value checkpoint: read-driven line vs coin flip.
   thinValueReadOutcomes,
 
@@ -2232,6 +2244,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-03-08-02-jump-class':
       return const LessonTableScene(
+        layout: LessonTableLayout.jumpFlopClassOutcomes,
         heroCodes: ['Jd', 'Td'],
         boardCodes: ['Qd', '9d', '3c'],
         villainSeatCount: 0,
@@ -3594,6 +3607,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.jumpTrackTalk => pick('j3-chat'),
         _ => null,
       };
+    case 'act-03-08-02-jump-class':
+      return switch (region) {
+        LessonTableRegion.jumpClassDraw => pick('j3-draw'),
+        LessonTableRegion.jumpClassMade => pick('j3-made'),
+        LessonTableRegion.jumpClassAir => pick('j3-air'),
+        _ => null,
+      };
     case 'act-03-01-01-scaffolded':
       // Preflop open: UTG is left of the BB (earlyPosition on the felt).
       return switch (region) {
@@ -4670,6 +4690,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-07-01-checkpoint' ||
       activity.id == 'act-03-08-01-checkpoint' ||
       activity.id == 'act-03-08-02-jump-table' ||
+      activity.id == 'act-03-08-02-jump-class' ||
       activity.id == 'act-04-06-01-guided' ||
       activity.id == 'act-04-06-02-guided' ||
       activity.id == 'act-04-06-02-scaffolded' ||
@@ -4967,6 +4988,8 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.leakSeatNoteOutcomes => _buildLeakSeatNoteOutcomes(),
       LessonTableLayout.jumpTableTrackOutcomes =>
           _buildJumpTableTrackOutcomes(),
+      LessonTableLayout.jumpFlopClassOutcomes =>
+          _buildJumpFlopClassOutcomes(),
       LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
       LessonTableLayout.tableReadMattersOutcomes =>
           _buildTableReadMattersOutcomes(),
@@ -6709,6 +6732,49 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Skip stacks',
           visual: const Icon(
             Icons.chat_bubble_outline,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildJumpFlopClassOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive flop class — tap Draw, Made, or Air',
+      semanticsStatic: 'Jump flop class outcomes',
+      caption: scene.caption ?? 'Flop · class?',
+      cueLabel: 'Tap Draw.',
+      guideRegion: LessonTableRegion.jumpClassDraw,
+      phases: [
+        (
+          region: LessonTableRegion.jumpClassDraw,
+          title: 'Draw',
+          detail: 'OESD + flush',
+          visual: const Icon(
+            Icons.waterfall_chart,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.jumpClassMade,
+          title: 'Made',
+          detail: 'Two pair?',
+          visual: const Icon(
+            Icons.workspace_premium_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.jumpClassAir,
+          title: 'Air',
+          detail: 'No equity',
+          visual: const Icon(
+            Icons.air,
             color: AppColors.slate,
             size: 24,
           ),

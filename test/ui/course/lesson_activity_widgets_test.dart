@@ -9413,7 +9413,9 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('s3 jump class taps draw tile on combo-draw felt', (tester) async {
+  testWidgets('s3 jump class taps Draw on densified combo-draw felt', (
+    tester,
+  ) async {
     final activity = CourseActivity(
       id: 'act-03-08-02-jump-class',
       order: 2,
@@ -9432,6 +9434,23 @@ void main() {
         CourseChoice(id: 'j3-air', label: 'Air'),
       ],
     );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.jumpFlopClassOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.jumpClassDraw,
+        choices: activity.choices,
+      ),
+      'j3-draw',
+    );
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
       _wrap(
@@ -9442,8 +9461,13 @@ void main() {
         ),
       ),
     );
-    expect(find.text('Draw — OESD + flush'), findsOneWidget);
-    await tester.tap(find.text('Draw — OESD + flush'));
+    expect(
+      find.text('Qd9d3c with JdTd — tap the flop class.'),
+      findsOneWidget,
+    );
+    expect(find.text('Draw'), findsOneWidget);
+    expect(find.text('OESD + flush'), findsOneWidget);
+    await tester.tap(find.text('Draw'));
     await tester.pump();
     expect(controller.draft.choiceId, 'j3-draw');
     controller.dispose();
