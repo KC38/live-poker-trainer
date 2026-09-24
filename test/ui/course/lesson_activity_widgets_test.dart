@@ -6912,9 +6912,54 @@ void main() {
       findsNothing,
     );
     expect(find.text('55bb'), findsOneWidget);
+    // Jump stage: SoftPulse off — no spoiler cue.
+    expect(find.text('Tap 55bb.'), findsNothing);
+    expect(find.text('Tap your answer on the felt.'), findsNothing);
     await tester.tap(find.text('55bb'));
     await tester.pump();
     expect(controller.draft.choiceId, 'j2-55');
+    controller.dispose();
+  });
+
+  testWidgets('s2 scaffolded eff SoftPulse guides only 60bb', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-02-05-01-scaffolded-eff',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Choose the shorter stack as effective.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'You have 150bb. Villain has 60bb. Effective stack?',
+      choices: const [
+        CourseChoice(id: 'eff-60', label: '60bb'),
+        CourseChoice(id: 'eff-150', label: '150bb'),
+        CourseChoice(id: 'eff-210', label: '210bb'),
+      ],
+    );
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.effectiveStack150Outcomes,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('You 150bb, villain 60bb — tap the effective stack.'),
+      findsOneWidget,
+    );
+    expect(find.text('Tap 60bb.'), findsOneWidget);
+    expect(find.text('Tap your answer on the felt.'), findsNothing);
+    await tester.tap(find.text('60bb'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'eff-60');
     controller.dispose();
   });
 
