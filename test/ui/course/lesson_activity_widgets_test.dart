@@ -15712,6 +15712,13 @@ void main() {
       find.text('AK c-bet · Q72r — tap Aces & blanks.'),
       findsOneWidget,
     );
+    expect(find.text('BOARD · shared'), findsOneWidget);
+    expect(find.text('You'), findsOneWidget);
+    expect(resolveLessonTableScene(activity)?.heroCodes, ['Ah', 'Kd']);
+    expect(
+      resolveLessonTableScene(activity)?.boardCodes,
+      ['Qs', '7h', '2c'],
+    );
     await tester.tap(find.text('Aces & blanks'));
     await tester.pump();
     expect(controller.draft.choiceId, 'ok');

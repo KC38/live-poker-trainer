@@ -2824,12 +2824,16 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
     case 'act-07-02-01-guided':
       return const LessonTableScene(
         layout: LessonTableLayout.turnMapGuidedOutcomes,
-        caption: 'AK c-bet · Q72r — good turn continue?',
+        heroCodes: ['Ah', 'Kd'],
+        boardCodes: ['Qs', '7h', '2c'],
+        caption: 'Flop · c-bet · map continues',
       );
     case 'act-07-02-01-scaffolded':
       return const LessonTableScene(
         layout: LessonTableLayout.turnMapScaffoldedOutcomes,
-        caption: 'Gutshot · brick raise — map says?',
+        heroCodes: ['9h', '8h'],
+        boardCodes: ['Kh', '7c', '2d', '3s'],
+        caption: 'Gutshot · brick · raise',
       );
     case 'act-07-02-01-unguided':
       return const LessonTableScene(
@@ -10995,12 +10999,14 @@ class LessonTableContext extends StatelessWidget {
       required String title,
       required String detail,
       required Widget visual,
+      required bool highlighted,
     }) {
       final selected = selectedRegion == region;
       return Expanded(
         child: _TappableRegion(
           label: title,
           selected: selected,
+          highlighted: highlighted,
           enabled: enabled && _interactive,
           onTap:
               _interactive
@@ -11038,20 +11044,85 @@ class LessonTableContext extends StatelessWidget {
       );
     }
 
+    final hero = scene.heroCodes
+        .map(CardModel.fromCode)
+        .toList(growable: false);
+    final board = scene.boardCodes
+        .map(CardModel.fromCode)
+        .toList(growable: false);
+    final showSpotCards = hero.isNotEmpty || board.isNotEmpty;
+
     return _feltShell(
       semanticsLabel: _interactive ? semanticsInteractive : semanticsStatic,
       child: Column(
         children: [
-          Text(
-            caption,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.manrope(
-              color: AppColors.slate,
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
+          if (showSpotCards) ...[
+            if (board.isNotEmpty) ...[
+              Text(
+                'BOARD · shared',
+                style: GoogleFonts.manrope(
+                  color: AppColors.slate,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.6,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (var i = 0; i < board.length; i++) ...[
+                    if (i > 0) const SizedBox(width: 6),
+                    MiniCard(card: board[i], size: MiniCardSize.small),
+                  ],
+                ],
+              ),
+              const SizedBox(height: 8),
+            ],
+            if (hero.isNotEmpty) ...[
+              Text(
+                caption,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.manrope(
+                  color: AppColors.gold,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'You',
+                style: GoogleFonts.manrope(
+                  color: AppColors.slate,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.6,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (var i = 0; i < hero.length; i++) ...[
+                    if (i > 0) const SizedBox(width: 6),
+                    MiniCard(card: hero[i], size: MiniCardSize.small),
+                  ],
+                ],
+              ),
+              const SizedBox(height: 10),
+            ],
+          ] else ...[
+            Text(
+              caption,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-          ),
-          const SizedBox(height: 6),
+            const SizedBox(height: 6),
+          ],
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -11062,6 +11133,8 @@ class LessonTableContext extends StatelessWidget {
                   title: phases[i].title,
                   detail: phases[i].detail,
                   visual: phases[i].visual,
+                  highlighted:
+                      showSoftPulse && selectedRegion == null && i == 0,
                 ),
               ],
             ],
