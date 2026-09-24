@@ -323,6 +323,15 @@ enum LessonTableRegion {
   /// S4 plan checkpoint distractor: only this street.
   planOneStreet,
 
+  /// S4 sizing unguided: nearby sizes soft-grade (correct).
+  sizingSoftBand,
+
+  /// S4 sizing unguided distractor: only one chip count.
+  sizingOneOnly,
+
+  /// S4 sizing unguided distractor: 1-chip bets fine.
+  sizingTinyOk,
+
   /// Verbal action: raise stands (binding).
   verbalRaiseStands,
 
@@ -1490,6 +1499,9 @@ enum LessonTableLayout {
   /// S4 plan checkpoint: turn branches vs vibes.
   planCheckpointOutcomes,
 
+  /// S4 sizing unguided: soft band vs exactness.
+  sizingUnguidedOutcomes,
+
   /// Thin-value checkpoint: read-driven line vs coin flip.
   thinValueReadOutcomes,
 
@@ -2379,6 +2391,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-04-04-01-unguided':
       return const LessonTableScene(
+        layout: LessonTableLayout.sizingUnguidedOutcomes,
         heroCodes: ['Qh', 'Qd'],
         boardCodes: ['Kc', '7s', '2d'],
         villainSeatCount: 1,
@@ -3726,6 +3739,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.planOneStreet => pick('one-street'),
         _ => null,
       };
+    case 'act-04-04-01-unguided':
+      return switch (region) {
+        LessonTableRegion.sizingSoftBand => pick('soft'),
+        LessonTableRegion.sizingOneOnly => pick('one-only'),
+        LessonTableRegion.sizingTinyOk => pick('random-size'),
+        _ => null,
+      };
     case 'act-03-01-01-scaffolded':
       // Preflop open: UTG is left of the BB (earlyPosition on the felt).
       return switch (region) {
@@ -4809,6 +4829,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-04-01-01-unguided' ||
       activity.id == 'act-04-01-01-checkpoint' ||
       activity.id == 'act-04-03-01-checkpoint' ||
+      activity.id == 'act-04-04-01-unguided' ||
       activity.id == 'act-04-06-01-guided' ||
       activity.id == 'act-04-06-02-guided' ||
       activity.id == 'act-04-06-02-scaffolded' ||
@@ -5119,6 +5140,8 @@ class LessonTableContext extends StatelessWidget {
           _buildRangesCheckpointOutcomes(),
       LessonTableLayout.planCheckpointOutcomes =>
           _buildPlanCheckpointOutcomes(),
+      LessonTableLayout.sizingUnguidedOutcomes =>
+          _buildSizingUnguidedOutcomes(),
       LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
       LessonTableLayout.tableReadMattersOutcomes =>
           _buildTableReadMattersOutcomes(),
@@ -7160,6 +7183,43 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Stop here',
           visual: const Icon(
             Icons.looks_one_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSizingUnguidedOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive sizing grades — tap soft band, one-only, or tiny ok',
+      semanticsStatic: 'Sizing unguided outcomes',
+      caption: scene.caption ?? 'Two value sizes · same story',
+      phases: [
+        (
+          region: LessonTableRegion.sizingSoftBand,
+          title: 'Soft band',
+          detail: 'Nearby OK',
+          visual: const Icon(
+            Icons.straighten,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.sizingOneOnly,
+          title: 'One count',
+          detail: 'Exact only',
+          visual: const _PotChipDot(label: '1', gold: false),
+        ),
+        (
+          region: LessonTableRegion.sizingTinyOk,
+          title: '1-chip OK',
+          detail: 'Any size',
+          visual: const Icon(
+            Icons.circle_outlined,
             color: AppColors.slate,
             size: 24,
           ),

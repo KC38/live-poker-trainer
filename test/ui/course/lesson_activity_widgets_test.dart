@@ -10146,6 +10146,63 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('s4 sizing unguided taps Soft band on densified felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-04-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Nearby sizes earn soft grades.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Two value sizes both get worse hands to call. Grading idea?',
+      choices: const [
+        CourseChoice(id: 'soft', label: 'Nearby sizes both soft-grade'),
+        CourseChoice(id: 'one-only', label: 'Only one chip count is correct'),
+        CourseChoice(id: 'random-size', label: 'Even 1-chip bets are fine'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.sizingUnguidedOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.sizingSoftBand,
+        choices: activity.choices,
+      ),
+      'soft',
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Two value sizes both get calls — tap the grading idea.'),
+      findsOneWidget,
+    );
+    expect(find.text('Soft band'), findsOneWidget);
+    expect(find.text('Nearby OK'), findsOneWidget);
+    await tester.tap(find.text('Soft band'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'soft');
+    controller.dispose();
+  });
+
   testWidgets('s4 plan checkpoint taps Branches on densified felt', (
     tester,
   ) async {
