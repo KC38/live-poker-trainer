@@ -94,6 +94,8 @@ class AuthoredMultiStepActivity extends StatelessWidget {
       ('act-01-06-01-scaffolded-multi', 'step-01-06-flop-cbet') => 'cbet',
       ('act-01-06-02-jump-hand', 'j-hand-open') => 'j-open',
       ('act-01-06-02-jump-hand', 'j-hand-end') => 'j-yes',
+      ('act-04-03-01-guided', 'step-flop-tp') => 'flop-bet',
+      ('act-04-03-01-guided', 'step-turn-tp') => 'turn-bet',
       _ => null,
     };
   }
@@ -162,6 +164,8 @@ class AuthoredMultiStepActivity extends StatelessWidget {
                     if (controller.lastResult != null) return '';
                     if (controller.submitting) return 'Checking…';
                     if (selected == null) {
+                      // Rex already cues the dock — SoftPulse highlights it.
+                      if (showGuidance) return '';
                       return outcomeAsk
                           ? 'What happened? Tap below.'
                           : 'Tap your action on the dock.';
