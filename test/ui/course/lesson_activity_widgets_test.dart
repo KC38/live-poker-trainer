@@ -7732,6 +7732,19 @@ await tester.tap(find.text('STRONGER'));
     expect(find.text('Build order here'), findsOneWidget);
     expect(find.text('Tap streets below first → last'), findsNothing);
     expect(find.text('Tap next'), findsNothing);
+    expect(find.byKey(const ValueKey('street-order-felt')), findsOneWidget);
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('street-order-felt')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
     // SoftPulse the chronological next street — Preflop first, not Flop.
     expect(controller.draft.orderedIds, isEmpty);
     await tester.tap(find.text('PREFLOP'));
@@ -7750,6 +7763,10 @@ await tester.tap(find.text('STRONGER'));
       'st-turn',
       'st-river',
     ]);
+    expect(
+      tester.getSize(find.byKey(const ValueKey('street-order-felt'))).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.finishSubmit(
       SubmitCourseStepResult(
         attemptId: 'a1',
@@ -7773,6 +7790,60 @@ await tester.tap(find.text('STRONGER'));
     await tester.pump();
     expect(find.text('Tap the streets from first to last.'), findsNothing);
     expect(find.text('Checking…'), findsNothing);
+    controller.dispose();
+  });
+
+  testWidgets('seat order densifies SoftPulse felt on tall phones', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-04-01-scaffolded-order',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.orderSequence,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap seats in the order they act.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap seats in the order they act.',
+      sequenceItems: const [
+        CourseChoice(id: 'utg', label: 'UTG'),
+        CourseChoice(id: 'hj', label: 'HJ'),
+        CourseChoice(id: 'btn', label: 'BTN'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        OrderSequenceActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.byKey(const ValueKey('seat-order-felt')), findsOneWidget);
+    expect(find.text('UTG'), findsWidgets);
+    expect(find.text('HJ'), findsWidgets);
+    expect(find.text('BTN'), findsWidgets);
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('seat-order-felt')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
+    await tester.tap(find.text('UTG').first);
+    await tester.pump();
+    expect(controller.draft.orderedIds, ['utg']);
+    expect(
+      tester.getSize(find.byKey(const ValueKey('seat-order-felt'))).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 

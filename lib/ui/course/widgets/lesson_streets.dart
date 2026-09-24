@@ -361,6 +361,9 @@ class StreetOrderTile extends StatelessWidget {
               ),
             ),
             child: Column(
+              // Shrink-wrap so densify FittedBox can scale the pack; MainAxisSize.max
+              // inside Expanded rows overflows when the felt is tall.
+              mainAxisSize: MainAxisSize.min,
               children: [
                 if (badge != null)
                   Text(
@@ -382,6 +385,7 @@ class StreetOrderTile extends StatelessWidget {
                 const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     const CardBack(size: MiniCardSize.tiny),
                     const SizedBox(width: 2),
@@ -480,6 +484,7 @@ class SeatOrderTile extends StatelessWidget {
               ),
             ),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 if (badge != null)
                   Text(
