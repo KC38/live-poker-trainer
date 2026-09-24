@@ -5998,8 +5998,16 @@ class _ThinValueDemoState extends State<ThinValueDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in ThinValueDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -6028,34 +6036,44 @@ class _ThinValueDemoState extends State<ThinValueDemo> {
               for (var i = 0; i < ThinValueDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: ThinValueDemo.points[i].label,
-                    caption: ThinValueDemo.points[i].caption,
-                    color: ThinValueDemo.points[i].color,
-                    selected: _tapped.contains(ThinValueDemo.points[i].label),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(ThinValueDemo.points[i].label)
-                            : null,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == ThinValueDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: ThinValueDemo.points[i].label,
+                      caption: ThinValueDemo.points[i].caption,
+                      color: ThinValueDemo.points[i].color,
+                      selected: _tapped.contains(
+                        ThinValueDemo.points[i].label,
+                      ),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () =>
+                                  _onTap(ThinValueDemo.points[i].label)
+                              : null,
+                    ),
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues the three taps — no duplicate footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Thin value needs calls · catches need barrels',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Thin value needs calls · catches need barrels'
+                    : 'Tap ${next.label} next')
+                : 'Thin value needs calls · catches need barrels',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
