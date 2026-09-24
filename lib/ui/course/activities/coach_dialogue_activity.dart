@@ -2586,7 +2586,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllPointsTapped: onBbStackAcknowledge,
         ),
         CoachDialogueVisualKind.tableHabits => TableHabitsDemo(
-          interactive: onTableHabitsAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllHabitsTapped: onTableHabitsAcknowledge,
         ),
