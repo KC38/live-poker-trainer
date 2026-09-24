@@ -6863,6 +6863,40 @@ await tester.tap(find.text('STRONGER'));
     expect(
       resolveLessonTableScene(
         CourseActivity(
+          id: 'act-01-05-01-unguided-pot',
+          order: 4,
+          stage: ActivityStage.unguided,
+          renderer: ActivityRenderer.selectIdentify,
+          estimatedSeconds: 40,
+          accessibilityText: 'pot size',
+          acceptedGrades: const [SoftGrade.recommended],
+          choices: const [
+            CourseChoice(id: 'pot-9', label: '9 chips'),
+          ],
+        ),
+      )?.villainSeatCount,
+      0,
+    );
+    expect(
+      resolveLessonTableScene(
+        CourseActivity(
+          id: 'act-01-05-01-checkpoint-side',
+          order: 5,
+          stage: ActivityStage.checkpoint,
+          renderer: ActivityRenderer.selectIdentify,
+          estimatedSeconds: 40,
+          accessibilityText: 'side pot',
+          acceptedGrades: const [SoftGrade.recommended],
+          choices: const [
+            CourseChoice(id: 'side-exists', label: 'Side pot'),
+          ],
+        ),
+      )?.villainSeatCount,
+      0,
+    );
+    expect(
+      resolveLessonTableScene(
+        CourseActivity(
           id: 'act-01-05-01-guided-fold-win',
           order: 2,
           stage: ActivityStage.guided,
@@ -8250,6 +8284,60 @@ await tester.tap(find.text('STRONGER'));
     await tester.tap(find.text('Take pot').first);
     await tester.pump();
     expect(controller.draft.choiceId, 'no-show');
+    controller.dispose();
+  });
+
+  testWidgets('how pots unguided pot densifies without decoy Them', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-05-01-unguided-pot',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'pot size',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Blinds 1/2. BTN opens to 6. Tap the pot before blinds act.',
+      choices: const [
+        CourseChoice(id: 'pot-9', label: '9 chips'),
+        CourseChoice(id: 'pot-7', label: '7 chips'),
+        CourseChoice(id: 'pot-12', label: '12 chips'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(
+      find.text('Blinds plus the open — tap the chip total.'),
+      findsOneWidget,
+    );
+    // No decoy face-down villain — chip tiles own the felt.
+    expect(find.text('Them'), findsNothing);
+    expect(find.text('9 chips'), findsWidgets);
+    expect(find.text('Tap your answer on the felt.'), findsNothing);
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('outcome-phases-felt')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
+    await tester.tap(find.text('9 chips').first);
+    await tester.pump();
+    expect(controller.draft.choiceId, 'pot-9');
     controller.dispose();
   });
 
