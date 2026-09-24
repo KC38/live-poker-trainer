@@ -336,6 +336,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Effective stack is the shorter one — tap it.',
       'act-02-02-01-guided-pair' =>
           'Matching ranks in the hole — tap the family.',
+      'act-02-02-01-scaffolded-broadway' =>
+          'Both cards ten-or-better — tap the family.',
       'act-02-05-01-scaffolded-eff' =>
           'You 150bb, villain 60bb — tap the effective stack.',
       'act-02-05-01-unguided-depth' =>
@@ -734,6 +736,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             widget.activity.id == 'act-02-05-01-scaffolded-eff' ||
             widget.activity.id == 'act-02-05-01-unguided-depth' ||
             widget.activity.id == 'act-02-02-01-guided-pair' ||
+            widget.activity.id == 'act-02-02-01-scaffolded-broadway' ||
             widget.activity.id == 'act-03-01-01-guided' ||
             widget.activity.id == 'act-03-01-01-scaffolded' ||
             widget.activity.id == 'act-03-01-01-unguided' ||
