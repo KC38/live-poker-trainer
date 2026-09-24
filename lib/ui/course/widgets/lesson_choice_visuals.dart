@@ -175,8 +175,8 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-03-06-01-checkpoint') {
-    // River: see medium one-pair spot, tap the job (catch vs value vs air).
-    return SelectIdentifyPresentation.handCategoryTap;
+    // River: tap Catch / Thin shove / Pure bluff on the spot felt.
+    return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-03-07-01-unguided' ||
       activity.id == 'act-03-07-01-checkpoint') {

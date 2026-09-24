@@ -218,6 +218,15 @@ enum LessonTableRegion {
   /// Turn checkpoint distractor: treat every turn as brick.
   turnIgnoreBrick,
 
+  /// River checkpoint: bluff-catch or fold (correct).
+  riverJobCatch,
+
+  /// River checkpoint distractor: always thin-value shove.
+  riverJobValue,
+
+  /// River checkpoint distractor: pure bluff with one pair.
+  riverJobAir,
+
   /// Verbal action: raise stands (binding).
   verbalRaiseStands,
 
@@ -1349,6 +1358,9 @@ enum LessonTableLayout {
   /// Turn checkpoint: give up vs jam vs ignore.
   turnScarePlanOutcomes,
 
+  /// River checkpoint: catch vs thin value vs air.
+  riverJobOutcomes,
+
   /// Thin-value checkpoint: read-driven line vs coin flip.
   thinValueReadOutcomes,
 
@@ -2135,6 +2147,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-03-06-01-checkpoint':
       return const LessonTableScene(
+        layout: LessonTableLayout.riverJobOutcomes,
         heroCodes: ['Ah', '9d'],
         boardCodes: ['As', '7c', '2d', 'Kh', '3s'],
         villainSeatCount: 1,
@@ -3494,6 +3507,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.turnIgnoreBrick => pick('ignore'),
         _ => null,
       };
+    case 'act-03-06-01-checkpoint':
+      return switch (region) {
+        LessonTableRegion.riverJobCatch => pick('role-catch'),
+        LessonTableRegion.riverJobValue => pick('role-value'),
+        LessonTableRegion.riverJobAir => pick('role-air'),
+        _ => null,
+      };
     case 'act-03-01-01-scaffolded':
       // Preflop open: UTG is left of the BB (earlyPosition on the felt).
       return switch (region) {
@@ -4565,6 +4585,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-03-01-checkpoint' ||
       activity.id == 'act-03-05-01-guided' ||
       activity.id == 'act-03-05-01-checkpoint' ||
+      activity.id == 'act-03-06-01-checkpoint' ||
       activity.id == 'act-04-06-01-guided' ||
       activity.id == 'act-04-06-02-guided' ||
       activity.id == 'act-04-06-02-scaffolded' ||
@@ -4855,6 +4876,7 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.outsImpliedOutcomes => _buildOutsImpliedOutcomes(),
       LessonTableLayout.turnBrickScareOutcomes => _buildTurnBrickScareOutcomes(),
       LessonTableLayout.turnScarePlanOutcomes => _buildTurnScarePlanOutcomes(),
+      LessonTableLayout.riverJobOutcomes => _buildRiverJobOutcomes(),
       LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
       LessonTableLayout.tableReadMattersOutcomes =>
           _buildTableReadMattersOutcomes(),
@@ -6387,6 +6409,49 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Treat as brick',
           visual: const Icon(
             Icons.remove_red_eye_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRiverJobOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive river job — tap catch, thin value, or air',
+      semanticsStatic: 'River job outcomes',
+      caption: scene.caption ?? 'Medium one pair · big river bet',
+      cueLabel: 'Tap Catch.',
+      guideRegion: LessonTableRegion.riverJobCatch,
+      phases: [
+        (
+          region: LessonTableRegion.riverJobCatch,
+          title: 'Catch / fold',
+          detail: 'Not thin value',
+          visual: const Icon(
+            Icons.back_hand_outlined,
+            color: AppColors.gold,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.riverJobValue,
+          title: 'Thin shove',
+          detail: 'Always value',
+          visual: const Icon(
+            Icons.trending_up,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.riverJobAir,
+          title: 'Pure bluff',
+          detail: 'With one pair',
+          visual: const Icon(
+            Icons.air,
             color: AppColors.slate,
             size: 24,
           ),

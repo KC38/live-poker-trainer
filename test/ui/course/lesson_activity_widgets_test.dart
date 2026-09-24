@@ -8905,7 +8905,20 @@ void main() {
     );
     expect(
       resolveSelectIdentifyPresentation(activity),
-      SelectIdentifyPresentation.handCategoryTap,
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.riverJobOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.riverJobCatch,
+        choices: activity.choices,
+      ),
+      'role-catch',
     );
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
@@ -8927,8 +8940,9 @@ void main() {
       ),
       findsNothing,
     );
-    expect(find.text('Bluff-catch or fold'), findsOneWidget);
-    await tester.tap(find.text('Bluff-catch or fold'));
+    expect(find.text('Catch / fold'), findsOneWidget);
+    expect(find.text('Not thin value'), findsOneWidget);
+    await tester.tap(find.text('Catch / fold'));
     await tester.pump();
     expect(controller.draft.choiceId, 'role-catch');
     controller.dispose();
