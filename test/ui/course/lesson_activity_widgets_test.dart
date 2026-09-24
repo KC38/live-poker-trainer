@@ -20322,6 +20322,10 @@ await tester.tap(find.text('STRONGER'));
         ),
       );
       expect(find.byType(TypeBoardLineDemo), findsOneWidget);
+      expect(find.text('TYPE'), findsOneWidget);
+      expect(find.text('BOARD'), findsOneWidget);
+      expect(find.text('LINE'), findsOneWidget);
+      expect(find.text('SIZE'), findsOneWidget);
       expect(find.text('Tap TYPE next'), findsOneWidget);
       expect(find.text('Tap Type, Board, Line, and Size.'), findsNothing);
       expect(find.text('Tap Type, Board, Line, and Size'), findsNothing);
@@ -20331,6 +20335,8 @@ await tester.tap(find.text('STRONGER'));
       );
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
+      // Densify tiles stay one-line labels (no BOAR/D wrap overflow).
+      expect(tester.takeException(), isNull);
 
       await tester.tap(find.text('TYPE'));
       await tester.pump();
@@ -20344,6 +20350,7 @@ await tester.tap(find.text('STRONGER'));
       await tester.tap(find.text('SIZE'));
       await tester.pump();
       expect(feltAck, 1);
+      expect(tester.takeException(), isNull);
       controller.dispose();
     },
   );
