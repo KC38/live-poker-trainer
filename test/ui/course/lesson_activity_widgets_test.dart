@@ -7793,8 +7793,9 @@ await tester.tap(find.text('STRONGER'));
     expect(find.text('Your order (empty)'), findsNothing);
     expect(find.text('Tap strongest first'), findsNothing);
     expect(find.text('Tap strong → weak'), findsNothing);
-    expect(find.text('Tap to place'), findsOneWidget);
-    expect(find.text('Tap Flush'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no Tap to place / Tap LABEL stack.
+    expect(find.text('Tap to place'), findsNothing);
+    expect(find.text('Tap Flush'), findsNothing);
     expect(find.text('Flush'), findsOneWidget);
     expect(find.text('Straight'), findsOneWidget);
     expect(find.text('Two pair'), findsOneWidget);
@@ -18164,22 +18165,40 @@ await tester.tap(find.text('STRONGER'));
         ),
       ),
     );
-    // Rex owns "Tap weakest to strongest" — tray uses Tap LABEL SoftPulse cue.
+    // Rex owns "Tap weakest to strongest" — SoftPulse owns the next tile.
     expect(find.text('Tap weakest to strongest.'), findsOneWidget);
-    expect(find.text('Tap High card'), findsOneWidget);
+    expect(find.text('Tap to place'), findsNothing);
+    expect(find.text('Tap High card'), findsNothing);
     expect(find.byType(HandExampleTile), findsNWidgets(3));
     expect(find.byType(ActionChip), findsNothing);
+    final teachHeight = tester
+        .getSize(find.byKey(const ValueKey('hand-order-felt')))
+        .height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
     await tester.tap(find.text('High card'));
     await tester.pump();
-    expect(find.text('Tap One pair'), findsOneWidget);
+    expect(find.text('Tap One pair'), findsNothing);
     await tester.tap(find.text('One pair'));
     await tester.pump();
-    expect(find.text('Tap Flush'), findsOneWidget);
+    expect(find.text('Tap Flush'), findsNothing);
     await tester.tap(find.text('Flush'));
     await tester.pump();
     expect(controller.draft.orderedIds, ['hr-high', 'hr-pair', 'hr-flush']);
     expect(find.text('Checking…'), findsOneWidget);
+    // Densified shell stays filled through Checking…
+    expect(
+      tester.getSize(find.byKey(const ValueKey('hand-order-felt'))).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     // Mid-submit: ignore re-taps / duplicate appends.
     appendOrderedId(
       controller: controller,

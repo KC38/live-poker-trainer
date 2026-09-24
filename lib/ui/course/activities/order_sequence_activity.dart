@@ -257,106 +257,162 @@ class OrderSequenceActivity extends StatelessWidget {
             ],
             const SizedBox(height: 10),
             if (_handMode) ...[
-              if (!showCoach && !locked) ...[
-                Text(
-                  ordered.isEmpty ? 'Build your order' : 'Your order',
-                  style: GoogleFonts.manrope(
-                    color: AppColors.slate,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 8),
-              ],
-              Semantics(
-                label:
-                    'Current order: ${ordered.isEmpty ? 'empty' : ordered.join(', ')}',
-                child: _HandOrderSlotColumn(
-                  ordered: ordered,
-                  total: activity.sequenceItems.length,
-                  strongestFirst: strongestFirst,
-                  labelFor: _labelFor,
-                  locked: locked,
-                ),
-              ),
-              if (statusLine.isNotEmpty) ...[
-                const SizedBox(height: 10),
-                Text(
-                  statusLine,
-                  style: GoogleFonts.manrope(
-                    color: AppColors.slate,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-              if (remaining.isNotEmpty) ...[
-                const SizedBox(height: 14),
-                Text(
-                  'Tap to place',
-                  style: GoogleFonts.manrope(
-                    color: AppColors.slate,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                if (showGuidance &&
-                    !locked &&
-                    ordered.length < activity.sequenceItems.length) ...[
-                  const SizedBox(height: 6),
-                  Text(
-                    'Tap ${activity.sequenceItems[ordered.length].label}',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.manrope(
-                      color: AppColors.gold,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
-                const SizedBox(height: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    for (var i = 0; i < remaining.length; i++) ...[
-                      if (i > 0) const SizedBox(height: 8),
-                      _SoftPulseTarget(
-                        active:
-                            showGuidance &&
-                            !locked &&
-                            ordered.length < activity.sequenceItems.length &&
-                            remaining[i].id ==
-                                activity.sequenceItems[ordered.length].id,
-                        child: HandExampleTile(
-                          example:
-                              resolveHandExample(
-                                id: remaining[i].id,
-                                label: remaining[i].label,
-                              ) ??
-                              LessonHandExample(
-                                id: remaining[i].id,
-                                title: remaining[i].label,
-                                codes: const [],
-                              ),
-                          selected: false,
-                          enabled: !locked,
-                          compact: false,
-                          expand: true,
-                          onPressed:
-                              locked
-                                  ? null
-                                  : () => appendOrderedId(
-                                    controller: controller,
-                                    activity: activity,
-                                    ordered: ordered,
-                                    id: remaining[i].id,
-                                  ),
+              Builder(
+                builder: (context) {
+                  const densify = true;
+                  final feltHeight =
+                      MediaQuery.sizeOf(context).height * 0.58;
+                  final coachOwnsCue = showCoach && showGuidance;
+                  final body = Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (!showCoach && !locked) ...[
+                        Text(
+                          ordered.isEmpty ? 'Build your order' : 'Your order',
+                          style: GoogleFonts.manrope(
+                            color: AppColors.slate,
+                            fontSize: densify ? 15 : 12,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        SizedBox(height: densify ? 12 : 8),
+                      ],
+                      Semantics(
+                        label:
+                            'Current order: ${ordered.isEmpty ? 'empty' : ordered.join(', ')}',
+                        child: _HandOrderSlotColumn(
+                          ordered: ordered,
+                          total: activity.sequenceItems.length,
+                          strongestFirst: strongestFirst,
+                          labelFor: _labelFor,
+                          locked: locked,
                         ),
                       ),
+                      if (statusLine.isNotEmpty) ...[
+                        SizedBox(height: densify ? 14 : 10),
+                        Text(
+                          statusLine,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.manrope(
+                            color: AppColors.gold,
+                            fontSize: densify ? 16 : 12,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                      if (remaining.isNotEmpty) ...[
+                        SizedBox(height: densify ? 18 : 14),
+                        // SoftPulse + Rex own the cue — skip Tap to place / Tap X.
+                        if (!coachOwnsCue) ...[
+                          Text(
+                            'Tap to place',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.manrope(
+                              color: AppColors.slate,
+                              fontSize: densify ? 14 : 12,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          if (showGuidance &&
+                              !locked &&
+                              ordered.length <
+                                  activity.sequenceItems.length) ...[
+                            const SizedBox(height: 6),
+                            Text(
+                              'Tap ${activity.sequenceItems[ordered.length].label}',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.manrope(
+                                color: AppColors.gold,
+                                fontSize: densify ? 15 : 14,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                          SizedBox(height: densify ? 12 : 8),
+                        ],
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            for (var i = 0; i < remaining.length; i++) ...[
+                              if (i > 0) SizedBox(height: densify ? 10 : 8),
+                              _SoftPulseTarget(
+                                active:
+                                    showGuidance &&
+                                    !locked &&
+                                    ordered.length <
+                                        activity.sequenceItems.length &&
+                                    remaining[i].id ==
+                                        activity
+                                            .sequenceItems[ordered.length]
+                                            .id,
+                                child: HandExampleTile(
+                                  example:
+                                      resolveHandExample(
+                                        id: remaining[i].id,
+                                        label: remaining[i].label,
+                                      ) ??
+                                      LessonHandExample(
+                                        id: remaining[i].id,
+                                        title: remaining[i].label,
+                                        codes: const [],
+                                      ),
+                                  selected: false,
+                                  enabled: !locked,
+                                  compact: false,
+                                  expand: true,
+                                  onPressed:
+                                      locked
+                                          ? null
+                                          : () => appendOrderedId(
+                                            controller: controller,
+                                            activity: activity,
+                                            ordered: ordered,
+                                            id: remaining[i].id,
+                                          ),
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ],
                     ],
-                  ],
-                ),
-              ],
+                  );
+                  return Container(
+                    key: const ValueKey('hand-order-felt'),
+                    width: double.infinity,
+                    height: feltHeight,
+                    padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [AppColors.feltLight, AppColors.feltDark],
+                      ),
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(
+                        color: AppColors.feltBorder.withValues(alpha: 0.85),
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.topCenter,
+                            child: SizedBox(
+                              width: MediaQuery.sizeOf(context).width - 48,
+                              child: body,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ] else if (isStreetSequenceActivity(activity) ||
                 isSeatOrderSequenceActivity(activity)) ...[
               Container(
