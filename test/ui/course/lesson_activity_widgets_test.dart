@@ -1157,8 +1157,8 @@ void main() {
       ),
     );
     expect(find.byType(ToyHandRunDemo), findsOneWidget);
-    // Sequential SoftPulse cue — one next step at a time.
-    expect(find.text('Tap Blinds'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no Tap Blinds footer stack.
+    expect(find.text('Tap Blinds'), findsNothing);
     expect(find.text('Tap Blinds, You act, and Ending'), findsNothing);
     expect(find.text('Tap Blinds, You act, and Ending.'), findsNothing);
     final teachHeight = tester
@@ -1175,10 +1175,10 @@ void main() {
     );
     await tester.tap(find.text('BLINDS'));
     await tester.pump();
-    expect(find.text('Tap You act'), findsOneWidget);
+    expect(find.text('Tap You act'), findsNothing);
     await tester.tap(find.text('YOU ACT'));
     await tester.pump();
-    expect(find.text('Tap Ending'), findsOneWidget);
+    expect(find.text('Tap Ending'), findsNothing);
     await tester.tap(find.text('ENDING'));
     await tester.pump();
     expect(feltAck, 1);
@@ -1221,8 +1221,8 @@ void main() {
         ),
       ),
     );
-    // In-felt sequential SoftPulse cue; outer bulk _TapHint suppressed.
-    expect(find.text('Tap Blinds'), findsOneWidget);
+    // SoftPulse + Rex own the cue; outer bulk _TapHint suppressed.
+    expect(find.text('Tap Blinds'), findsNothing);
     expect(find.text('Tap Blinds, You act, and Ending'), findsNothing);
     expect(find.text('Tap Blinds, You act, and Ending.'), findsNothing);
     controller.finishSubmit(
@@ -1249,7 +1249,8 @@ void main() {
     await tester.pump();
     expect(find.text('Tap Blinds'), findsNothing);
     expect(find.text('Tap Blinds, You act, and Ending'), findsNothing);
-    expect(find.text('Blinds post, you act, then finish'), findsOneWidget);
+    // Locked under Nice! — summary pill, not the mid-teach Tap cue.
+    expect(find.text('Blinds · You act · Ending'), findsOneWidget);
     controller.dispose();
   });
 

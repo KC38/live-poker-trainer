@@ -28,7 +28,6 @@ class ToyHandRunDemo extends StatefulWidget {
 class _ToyHandRunDemoState extends State<ToyHandRunDemo> {
   final Set<String> _tapped = <String>{};
   static const _titles = ['BLINDS', 'YOU ACT', 'ENDING'];
-  static const _cueLabels = ['Blinds', 'You act', 'Ending'];
 
   void _onTap(String title) {
     if (!widget.enabled || widget.onAllStepsTapped == null) return;
@@ -82,6 +81,7 @@ class _ToyHandRunDemoState extends State<ToyHandRunDemo> {
           visual: lanes[i].$3,
           selected: _tapped.contains(lanes[i].$1),
           enabled: widget.interactive && widget.enabled,
+          densify: expandTeach,
           onPressed:
               widget.interactive ? () => _onTap(lanes[i].$1) : null,
         ),
@@ -89,46 +89,50 @@ class _ToyHandRunDemoState extends State<ToyHandRunDemo> {
     }
 
     final runLanes = Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
       children: [
         for (var i = 0; i < lanes.length; i++) ...[
           if (i > 0) SizedBox(height: expandTeach ? 10 : 8),
-          laneAt(i),
+          if (expandTeach) Expanded(child: laneAt(i)) else laneAt(i),
         ],
       ],
     );
-    final cue = Container(
-      width: expandTeach ? double.infinity : null,
-      padding: EdgeInsets.symmetric(
-        horizontal: expandTeach ? 18 : 14,
-        vertical: expandTeach ? 14 : 8,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.feltDark.withValues(alpha: 0.65),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.gold.withValues(alpha: 0.45),
-        ),
-      ),
-      child: Text(
-        widget.interactive
-            ? (next == null
-                ? 'Blinds · You act · Ending'
-                : 'Tap ${_cueLabels[next]}')
-            : 'Blinds post, you act, then finish',
-        textAlign: TextAlign.center,
-        style: GoogleFonts.manrope(
-          color: AppColors.gold,
-          fontSize: expandTeach ? 16 : 12,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-    );
+    // SoftPulse + Rex own the next-step cue while teaching. Show a summary
+    // after all taps (or once locked under Nice! / Continue).
+    final showCue = !widget.interactive || next == null || !widget.enabled;
+    final cue =
+        !showCue
+            ? null
+            : Container(
+              width: expandTeach ? double.infinity : null,
+              padding: EdgeInsets.symmetric(
+                horizontal: expandTeach ? 18 : 14,
+                vertical: expandTeach ? 14 : 8,
+              ),
+              decoration: BoxDecoration(
+                color: AppColors.feltDark.withValues(alpha: 0.65),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: AppColors.gold.withValues(alpha: 0.45),
+                ),
+              ),
+              child: Text(
+                widget.interactive
+                    ? 'Blinds · You act · Ending'
+                    : 'Blinds post, you act, then finish',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.manrope(
+                  color: AppColors.gold,
+                  fontSize: expandTeach ? 16 : 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            );
     final body = Column(
       mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
       mainAxisAlignment:
           expandTeach
-              ? MainAxisAlignment.spaceEvenly
+              ? MainAxisAlignment.start
               : MainAxisAlignment.start,
       children: [
         Text(
@@ -144,18 +148,14 @@ class _ToyHandRunDemoState extends State<ToyHandRunDemo> {
             ? Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: SizedBox(
-                    width: MediaQuery.sizeOf(context).width - 48,
-                    child: runLanes,
-                  ),
-                ),
+                child: runLanes,
               ),
             )
             : runLanes,
-        if (!expandTeach) const SizedBox(height: 12),
-        cue,
+        if (cue != null) ...[
+          if (!expandTeach) const SizedBox(height: 12),
+          cue,
+        ],
       ],
     );
     final child = Container(
@@ -266,6 +266,7 @@ class _RunLane extends StatelessWidget {
     required this.visual,
     this.selected = false,
     this.enabled = false,
+    this.densify = false,
     this.onPressed,
   });
 
@@ -275,14 +276,21 @@ class _RunLane extends StatelessWidget {
   final Widget visual;
   final bool selected;
   final bool enabled;
+  final bool densify;
   final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
     final border =
         selected ? AppColors.gold : AppColors.feltBorder.withValues(alpha: 0.7);
+    final pad = densify ? 16.0 : 10.0;
+    final titleSize = densify ? 16.0 : 13.0;
+    final detailSize = densify ? 13.0 : 11.0;
+    final stepSize = densify ? 32.0 : 26.0;
     final lane = Container(
-      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      width: densify ? double.infinity : null,
+      padding: EdgeInsets.fromLTRB(pad, pad, pad, pad),
+      alignment: densify ? Alignment.centerLeft : null,
       decoration: BoxDecoration(
         color:
             selected
@@ -294,8 +302,8 @@ class _RunLane extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 26,
-            height: 26,
+            width: stepSize,
+            height: stepSize,
             alignment: Alignment.center,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
@@ -306,37 +314,79 @@ class _RunLane extends StatelessWidget {
               '$step',
               style: GoogleFonts.manrope(
                 color: AppColors.gold,
-                fontSize: 12,
+                fontSize: densify ? 14 : 12,
                 fontWeight: FontWeight.w900,
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: densify ? 14 : 10),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: GoogleFonts.manrope(
-                    color: AppColors.cream,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w900,
-                  ),
+            child: densify
+                ? LayoutBuilder(
+                  builder: (context, constraints) {
+                    final column = Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: GoogleFonts.manrope(
+                            color: AppColors.cream,
+                            fontSize: titleSize,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                        Text(
+                          detail,
+                          style: GoogleFonts.manrope(
+                            color: AppColors.slate,
+                            fontSize: detailSize,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    );
+                    if (constraints.maxHeight < 48) {
+                      return Align(
+                        alignment: Alignment.centerLeft,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerLeft,
+                          child: column,
+                        ),
+                      );
+                    }
+                    return Align(
+                      alignment: Alignment.centerLeft,
+                      child: column,
+                    );
+                  },
+                )
+                : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: GoogleFonts.manrope(
+                        color: AppColors.cream,
+                        fontSize: titleSize,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    Text(
+                      detail,
+                      style: GoogleFonts.manrope(
+                        color: AppColors.slate,
+                        fontSize: detailSize,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  detail,
-                  style: GoogleFonts.manrope(
-                    color: AppColors.slate,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
           ),
-          const SizedBox(width: 8),
-          visual,
+          SizedBox(width: densify ? 12 : 8),
+          densify ? Transform.scale(scale: 1.35, child: visual) : visual,
         ],
       ),
     );
