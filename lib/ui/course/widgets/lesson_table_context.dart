@@ -13455,40 +13455,84 @@ class LessonTableContext extends StatelessWidget {
       final selected = selectedRegion == region;
       final iconVisual =
           densify ? Transform.scale(scale: 1.45, child: visual) : visual;
+      // Tall densify tiles: spaceEvenly so icon/title/detail fill the stretch
+      // instead of clustering mid-tile. Short shells (tiny test viewports /
+      // crowded spot cards) scale down via FittedBox to avoid overflow.
       final tileBody = Padding(
         padding: EdgeInsets.fromLTRB(
           4,
-          densify ? 22 : 10,
+          densify ? 16 : 10,
           4,
-          densify ? 22 : 10,
+          densify ? 16 : 10,
         ),
-        child: Column(
-          mainAxisSize: densify ? MainAxisSize.max : MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            iconVisual,
-            SizedBox(height: densify ? 10 : 6),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.manrope(
-                color: AppColors.cream,
-                fontSize: densify ? 16 : 12,
-                fontWeight: FontWeight.w800,
-              ),
+        child: densify
+            ? LayoutBuilder(
+              builder: (context, constraints) {
+                final spread = constraints.maxHeight >= 120;
+                final column = Column(
+                  mainAxisSize: spread ? MainAxisSize.max : MainAxisSize.min,
+                  mainAxisAlignment:
+                      spread
+                          ? MainAxisAlignment.spaceEvenly
+                          : MainAxisAlignment.center,
+                  children: [
+                    iconVisual,
+                    if (!spread) const SizedBox(height: 6),
+                    Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.manrope(
+                        color: AppColors.cream,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    if (!spread) const SizedBox(height: 2),
+                    Text(
+                      detail,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.manrope(
+                        color: AppColors.slate,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                );
+                if (spread) return column;
+                return FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: column,
+                );
+              },
+            )
+            : Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                iconVisual,
+                const SizedBox(height: 6),
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.cream,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  detail,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.slate,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: densify ? 4 : 2),
-            Text(
-              detail,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: densify ? 13 : 10,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
       );
       return Expanded(
         child: densify
