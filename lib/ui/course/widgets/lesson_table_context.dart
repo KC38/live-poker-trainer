@@ -254,6 +254,15 @@ enum LessonTableRegion {
   /// Leak checkpoint distractor: treat every seat the same.
   leakSeatSame,
 
+  /// S3 jump: track pot + effective stack (correct).
+  jumpTrackPotEff,
+
+  /// S3 jump distractor: only hole cards.
+  jumpTrackHoles,
+
+  /// S3 jump distractor: only table talk.
+  jumpTrackTalk,
+
   /// Verbal action: raise stands (binding).
   verbalRaiseStands,
 
@@ -1397,6 +1406,9 @@ enum LessonTableLayout {
   /// Leak checkpoint: seat frequency notes.
   leakSeatNoteOutcomes,
 
+  /// S3 jump: track pot + effective vs holes/talk.
+  jumpTableTrackOutcomes,
+
   /// Thin-value checkpoint: read-driven line vs coin flip.
   thinValueReadOutcomes,
 
@@ -2213,7 +2225,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
     case 'act-03-08-02-jump-table':
       return const LessonTableScene(
-        villainSeatCount: 1,
+        layout: LessonTableLayout.jumpTableTrackOutcomes,
+        villainSeatCount: 0,
         highlight: LessonTableHighlight.none,
         caption: 'Pot 16 · shorter stack 40bb',
       );
@@ -3574,6 +3587,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.leakSeatSame => pick('same'),
         _ => null,
       };
+    case 'act-03-08-02-jump-table':
+      return switch (region) {
+        LessonTableRegion.jumpTrackPotEff => pick('j3-track'),
+        LessonTableRegion.jumpTrackHoles => pick('j3-ignore'),
+        LessonTableRegion.jumpTrackTalk => pick('j3-chat'),
+        _ => null,
+      };
     case 'act-03-01-01-scaffolded':
       // Preflop open: UTG is left of the BB (earlyPosition on the felt).
       return switch (region) {
@@ -4649,6 +4669,7 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-07-01-unguided' ||
       activity.id == 'act-03-07-01-checkpoint' ||
       activity.id == 'act-03-08-01-checkpoint' ||
+      activity.id == 'act-03-08-02-jump-table' ||
       activity.id == 'act-04-06-01-guided' ||
       activity.id == 'act-04-06-02-guided' ||
       activity.id == 'act-04-06-02-scaffolded' ||
@@ -4944,6 +4965,8 @@ class LessonTableContext extends StatelessWidget {
       LessonTableLayout.multiwayObserveOutcomes =>
           _buildMultiwayObserveOutcomes(),
       LessonTableLayout.leakSeatNoteOutcomes => _buildLeakSeatNoteOutcomes(),
+      LessonTableLayout.jumpTableTrackOutcomes =>
+          _buildJumpTableTrackOutcomes(),
       LessonTableLayout.verbalBindingOutcomes => _buildVerbalBindingOutcomes(),
       LessonTableLayout.tableReadMattersOutcomes =>
           _buildTableReadMattersOutcomes(),
@@ -6647,6 +6670,45 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Ignore seats',
           visual: const Icon(
             Icons.people_outline,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildJumpTableTrackOutcomes() {
+    return _buildOutcomePhases(
+      semanticsInteractive:
+          'Interactive table track — tap pot and effective, holes, or talk',
+      semanticsStatic: 'Jump table track outcomes',
+      caption: scene.caption ?? 'Pot 16 · shorter stack 40bb',
+      cueLabel: 'Tap pot + effective.',
+      guideRegion: LessonTableRegion.jumpTrackPotEff,
+      phases: [
+        (
+          region: LessonTableRegion.jumpTrackPotEff,
+          title: 'Pot + 40bb',
+          detail: 'Price frame',
+          visual: const _PotChipDot(label: '16', gold: true),
+        ),
+        (
+          region: LessonTableRegion.jumpTrackHoles,
+          title: 'Holes only',
+          detail: 'Ignore table',
+          visual: const Icon(
+            Icons.style_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
+        ),
+        (
+          region: LessonTableRegion.jumpTrackTalk,
+          title: 'Talk only',
+          detail: 'Skip stacks',
+          visual: const Icon(
+            Icons.chat_bubble_outline,
             color: AppColors.slate,
             size: 24,
           ),

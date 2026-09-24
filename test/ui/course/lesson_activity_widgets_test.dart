@@ -9358,7 +9358,7 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('s3 jump table taps pot+eff tile on felt', (tester) async {
+  testWidgets('s3 jump table taps pot+eff on densified felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-03-08-02-jump-table',
       order: 1,
@@ -9376,7 +9376,20 @@ void main() {
     );
     expect(
       resolveSelectIdentifyPresentation(activity),
-      SelectIdentifyPresentation.handCategoryTap,
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.jumpTableTrackOutcomes,
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.jumpTrackPotEff,
+        choices: activity.choices,
+      ),
+      'j3-track',
     );
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
@@ -9388,8 +9401,13 @@ void main() {
         ),
       ),
     );
-    expect(find.text('Pot + effective 40bb'), findsOneWidget);
-    await tester.tap(find.text('Pot + effective 40bb'));
+    expect(
+      find.text('Pot 16, shorter 40bb — tap what you track first.'),
+      findsOneWidget,
+    );
+    expect(find.text('Pot + 40bb'), findsOneWidget);
+    expect(find.text('Price frame'), findsOneWidget);
+    await tester.tap(find.text('Pot + 40bb'));
     await tester.pump();
     expect(controller.draft.choiceId, 'j3-track');
     controller.dispose();
