@@ -8395,7 +8395,7 @@ class LessonTableContext extends StatelessWidget {
       caption: caption,
       cueLabel: 'Tap SPR 4.',
       guideRegion: LessonTableRegion.sprRatioFour,
-      minHeightFactor: 0.55,
+      minHeightFactor: 0.58,
       header: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -14100,38 +14100,46 @@ class _TappableRegionState extends State<_TappableRegion>
   Widget build(BuildContext context) {
     // Keep InkWell's child tree stable across pulse ticks. Glow paints in an
     // IgnorePointer overlay so the soft pulse never steals / cancels taps.
+    // Densified tiles need a visible fill + forced expand — transparent
+    // InkWell/Material shrink leaves sparse green under SPR / outcome rows.
     final staticBorder = widget.selected
         ? AppColors.gold
         : widget.highlighted
         ? AppColors.gold.withValues(alpha: 0.55)
+        : widget.expand
+        ? AppColors.cream.withValues(alpha: 0.32)
         : Colors.transparent;
     final staticFill = widget.selected
         ? AppColors.gold.withValues(alpha: 0.22)
         : widget.highlighted
-        ? AppColors.gold.withValues(alpha: 0.1)
+        ? AppColors.gold.withValues(alpha: 0.14)
+        : widget.expand
+        ? AppColors.feltDark.withValues(alpha: 0.58)
         : Colors.transparent;
+
+    final tile = AnimatedContainer(
+      duration: const Duration(milliseconds: 180),
+      curve: Curves.easeOut,
+      width: widget.expand ? double.infinity : null,
+      height: widget.expand ? double.infinity : null,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: staticFill,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: staticBorder,
+          width: widget.selected ? 2.4 : 1.8,
+        ),
+      ),
+      child: widget.child,
+    );
 
     final framed = Stack(
       fit: widget.expand ? StackFit.expand : StackFit.loose,
       clipBehavior: Clip.none,
       alignment: Alignment.center,
       children: [
-        AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          curve: Curves.easeOut,
-          width: widget.expand ? double.infinity : null,
-          height: widget.expand ? double.infinity : null,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: staticFill,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: staticBorder,
-              width: widget.selected ? 2.4 : 1.8,
-            ),
-          ),
-          child: widget.child,
-        ),
+        if (widget.expand) Positioned.fill(child: tile) else tile,
         if (widget.highlighted && !widget.selected)
           Positioned.fill(
             child: IgnorePointer(
@@ -14162,21 +14170,23 @@ class _TappableRegionState extends State<_TappableRegion>
       ],
     );
 
-    if (widget.onTap == null) return framed;
+    final hitTarget = widget.onTap == null
+        ? framed
+        : Semantics(
+          button: true,
+          selected: widget.selected,
+          label: widget.label,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: widget.enabled ? widget.onTap : null,
+              borderRadius: BorderRadius.circular(12),
+              child: framed,
+            ),
+          ),
+        );
 
-    return Semantics(
-      button: true,
-      selected: widget.selected,
-      label: widget.label,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: widget.enabled ? widget.onTap : null,
-          borderRadius: BorderRadius.circular(12),
-          child: framed,
-        ),
-      ),
-    );
+    return widget.expand ? SizedBox.expand(child: hitTarget) : hitTarget;
   }
 }
 
