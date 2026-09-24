@@ -2600,7 +2600,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllPointsTapped: onFullRingAcknowledge,
         ),
         CoachDialogueVisualKind.tableRead => TableReadDemo(
-          interactive: onTableReadAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPointsTapped: onTableReadAcknowledge,
         ),
