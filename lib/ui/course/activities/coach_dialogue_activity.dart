@@ -2684,7 +2684,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllPointsTapped: onSizingLanguageAcknowledge,
         ),
         CoachDialogueVisualKind.sprDepth => SprDepthDemo(
-          interactive: onSprAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPointsTapped: onSprAcknowledge,
         ),
