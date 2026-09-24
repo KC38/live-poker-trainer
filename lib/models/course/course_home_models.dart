@@ -285,9 +285,9 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
   final completed = profile?.completedLessonIds.toSet() ?? <String>{};
   final mastery = profile?.masteryByLessonId ?? const <String, double>{};
   final reviews = reviewLessonIds.toSet();
-  final activeLessonId =
-      openAttempt?.lessonId ??
-      (profile?.resume != null ? profile!.resume!.lessonId : null);
+  // Only a live open attempt is resumable. Dangling profile.resume after
+  // complete would restart the finished lesson at activity 0.
+  final activeLessonId = openAttempt?.lessonId;
   final startsOpen = flags.courseStartsEnabled;
   final lessonTitles = <String, String>{};
   for (final section in catalog.sections) {
@@ -410,10 +410,7 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
             activityId: openAttempt.currentActivityId,
             activityIndex: openAttempt.activityIndex,
           )
-          : (profile?.resume != null &&
-                  activeLessonId == profile!.resume!.lessonId
-              ? profile.resume
-              : null);
+          : null;
 
   return CourseHomeSnapshot(
     status: CourseHomeLoadStatus.ready,
