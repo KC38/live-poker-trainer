@@ -4683,6 +4683,17 @@ void main() {
       );
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
+      final teachHeight =
+          tester.getSize(find.byType(MixedStrategyDemo)).height;
+      expect(
+        teachHeight,
+        moreOrLessEquals(
+          tester.view.physicalSize.height /
+              tester.view.devicePixelRatio *
+              0.58,
+          epsilon: 1,
+        ),
+      );
 
       await tester.tap(find.text('MIX'));
       await tester.pump();
@@ -4693,6 +4704,15 @@ void main() {
       await tester.tap(find.text('STRONG'));
       await tester.pump();
       expect(feltAck, 1);
+      // Lock clears enabled / ack — densified shell must stay filled.
+      expect(
+        find.text('Frequency with a purpose — not coin-flip'),
+        findsOneWidget,
+      );
+      expect(
+        tester.getSize(find.byType(MixedStrategyDemo)).height,
+        moreOrLessEquals(teachHeight, epsilon: 1),
+      );
       controller.dispose();
     },
   );
