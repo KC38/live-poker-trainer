@@ -2816,7 +2816,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllPointsTapped: onLineStoriesAcknowledge,
         ),
         CoachDialogueVisualKind.rangeRewrite => RangeRewriteDemo(
-          interactive: onRangeRewriteAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPointsTapped: onRangeRewriteAcknowledge,
         ),
