@@ -600,6 +600,21 @@ void main() {
     expect(find.text('Tap Bet'), findsOneWidget);
     expect(find.text('Tap Bet, Raise, and All-in'), findsNothing);
     expect(find.text('Tap Bet, Raise, and All-in.'), findsNothing);
+    expect(
+      find.text('Bet · Raise · All-in — your three aggressives'),
+      findsNothing,
+    );
+    final teachHeight =
+        tester.getSize(find.byType(AggressiveActionsDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
     await tester.tap(find.text('BET'));
     await tester.pump();
     expect(find.text('Tap Raise'), findsOneWidget);
@@ -608,6 +623,15 @@ void main() {
     await tester.tap(find.text('ALL-IN'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Bet · Raise · All-in — your three aggressives'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(AggressiveActionsDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
