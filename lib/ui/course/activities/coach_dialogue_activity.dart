@@ -2851,7 +2851,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllPointsTapped: onPreflopFlopPlanAcknowledge,
         ),
         CoachDialogueVisualKind.turnMap => TurnMapDemo(
-          interactive: onTurnMapAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPointsTapped: onTurnMapAcknowledge,
         ),
