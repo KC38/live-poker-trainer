@@ -3941,14 +3941,20 @@ void main() {
       ),
     );
     expect(find.byType(MultiwayPlanDemo), findsOneWidget);
-    expect(find.text('Tap Stronger, Fewer, and Nuts.'), findsOneWidget);
+    expect(find.text('Tap STRONGER next'), findsOneWidget);
+    expect(find.text('Tap Stronger, Fewer, and Nuts.'), findsNothing);
+    expect(find.text('Tap Stronger, Fewer, and Nuts'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['STRONGER', 'FEWER', 'NUTS']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('STRONGER'));
+    await tester.pump();
+    expect(find.text('Tap FEWER next'), findsOneWidget);
+    await tester.tap(find.text('FEWER'));
+    await tester.pump();
+    expect(find.text('Tap NUTS next'), findsOneWidget);
+    await tester.tap(find.text('NUTS'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
