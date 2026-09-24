@@ -2724,7 +2724,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllPointsTapped: onNitModelAcknowledge,
         ),
         CoachDialogueVisualKind.vsNits => VsNitsDemo(
-          interactive: onVsNitsAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPointsTapped: onVsNitsAcknowledge,
         ),

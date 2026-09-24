@@ -3885,8 +3885,23 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Tap STEAL next'), findsOneWidget);
     expect(find.text('Tap Steal, Credit, and Explode.'), findsNothing);
     expect(find.text('Tap Steal, Credit, and Explode'), findsNothing);
+    expect(
+      find.text('Steal more · give credit when they explode'),
+      findsNothing,
+    );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
+    final teachHeight =
+        tester.getSize(find.byType(VsNitsDemo)).height;
+    expect(
+      teachHeight,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
 
     await tester.tap(find.text('STEAL'));
     await tester.pump();
@@ -3897,6 +3912,15 @@ await tester.tap(find.text('NIT'));
     await tester.tap(find.text('EXPLODE'));
     await tester.pump();
     expect(feltAck, 1);
+    // Lock clears enabled / ack — densified shell must stay filled.
+    expect(
+      find.text('Steal more · give credit when they explode'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byType(VsNitsDemo)).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 
