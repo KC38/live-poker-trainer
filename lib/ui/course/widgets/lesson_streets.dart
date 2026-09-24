@@ -563,83 +563,105 @@ class _ActionOrderDemoState extends State<ActionOrderDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextCorrect;
-    final child = Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.feltLight, AppColors.feltDark],
-        ),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: AppColors.feltBorder.withValues(alpha: 0.85),
-        ),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'Preflop order after the blinds',
-            style: GoogleFonts.manrope(
-              color: AppColors.slate,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-            ),
+    final expandTeach = widget.interactive && widget.enabled && next != null;
+    final minFelt =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.40 : null;
+    final child = ConstrainedBox(
+      constraints:
+          minFelt != null
+              ? BoxConstraints(minHeight: minFelt)
+              : const BoxConstraints(),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+        alignment: minFelt != null ? Alignment.center : null,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [AppColors.feltLight, AppColors.feltDark],
           ),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            alignment: WrapAlignment.center,
-            children: [
-              for (final seat in _palette)
-                _SoftPulseTarget(
-                  active:
-                      widget.interactive &&
-                      widget.enabled &&
-                      next == seat.label,
-                  child: SeatOrderTile(
-                    label: seat.label,
-                    badge:
-                        _ordered.contains(seat.label)
-                            ? '${_ordered.indexOf(seat.label) + 1}'
-                            : null,
-                    selected: _ordered.contains(seat.label),
-                    emphasizeDealer: false,
-                    enabled:
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: AppColors.feltBorder.withValues(alpha: 0.85),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Preflop order after the blinds',
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              alignment: WrapAlignment.center,
+              children: [
+                for (final seat in _palette)
+                  _SoftPulseTarget(
+                    active:
                         widget.interactive &&
                         widget.enabled &&
-                        !_ordered.contains(seat.label),
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(seat.label)
-                            : null,
+                        next == seat.label,
+                    child: SeatOrderTile(
+                      label: seat.label,
+                      badge:
+                          _ordered.contains(seat.label)
+                              ? '${_ordered.indexOf(seat.label) + 1}'
+                              : null,
+                      selected: _ordered.contains(seat.label),
+                      emphasizeDealer: false,
+                      enabled:
+                          widget.interactive &&
+                          widget.enabled &&
+                          !_ordered.contains(seat.label),
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(seat.label)
+                              : null,
+                    ),
                   ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Postflop starts left of the button',
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.feltDark.withValues(alpha: 0.65),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: AppColors.gold.withValues(alpha: 0.45),
                 ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Text(
-            'Postflop starts left of the button',
-            style: GoogleFonts.manrope(
-              color: AppColors.slate,
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
+              ),
+              child: Text(
+                widget.interactive
+                    ? (next == null ? 'UTG → HJ → BTN' : 'Tap $next next')
+                    : 'Left of BB preflop · left of button postflop',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.manrope(
+                  color: AppColors.gold,
+                  fontSize: expandTeach ? 14 : 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            widget.interactive
-                ? (next == null ? 'UTG → HJ → BTN' : 'Tap $next next')
-                : 'Left of BB preflop · left of button postflop',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
     if (widget.interactive) return child;
@@ -697,15 +719,15 @@ class _SoftPulseTargetState extends State<_SoftPulseTarget>
     return AnimatedBuilder(
       animation: _pulse,
       builder: (context, child) {
-        final glow = 0.22 + (_pulse.value * 0.38);
+        final glow = 0.4 + (_pulse.value * 0.55);
         return DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
             boxShadow: [
               BoxShadow(
-                color: AppColors.gold.withValues(alpha: glow * 0.55),
-                blurRadius: 10 + (_pulse.value * 6),
-                spreadRadius: 0.4,
+                color: AppColors.gold.withValues(alpha: glow * 0.65),
+                blurRadius: 12 + (10 * _pulse.value),
+                spreadRadius: 1 + (2 * _pulse.value),
               ),
             ],
           ),
