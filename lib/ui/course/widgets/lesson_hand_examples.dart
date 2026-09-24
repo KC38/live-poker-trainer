@@ -950,19 +950,20 @@ class _HandRankLadderDemoState extends State<HandRankLadderDemo> {
     }
 
     final rungs = Column(
-      mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisSize: MainAxisSize.min,
       children: [
         for (var i = 0; i < HandRankLadderDemo.rungs.length; i++) ...[
           if (i > 0) ...[
-            SizedBox(height: expandTeach ? 4 : 6),
+            SizedBox(height: expandTeach ? 8 : 6),
             Icon(
               Icons.arrow_downward_rounded,
               color: AppColors.gold.withValues(alpha: 0.75),
               size: expandTeach ? 20 : 18,
             ),
-            SizedBox(height: expandTeach ? 4 : 6),
+            SizedBox(height: expandTeach ? 8 : 6),
           ],
-          expandTeach ? Expanded(child: rungAt(i)) : rungAt(i),
+          // Intrinsic card tiles — FittedBox parent scales when densified.
+          rungAt(i),
         ],
       ],
     );
@@ -1010,8 +1011,14 @@ class _HandRankLadderDemoState extends State<HandRankLadderDemo> {
         expandTeach
             ? Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: rungs,
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: SizedBox(
+                    width: MediaQuery.sizeOf(context).width - 48,
+                    child: rungs,
+                  ),
+                ),
               ),
             )
             : rungs,
