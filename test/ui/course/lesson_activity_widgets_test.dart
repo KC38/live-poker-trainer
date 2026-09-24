@@ -6934,7 +6934,7 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('s3 flop-class guided taps Made with board and holes on felt', (
+  testWidgets('s3 flop-class guided taps Made on densified felt', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -6954,12 +6954,25 @@ void main() {
     );
     expect(
       resolveSelectIdentifyPresentation(activity),
-      SelectIdentifyPresentation.handCategoryTap,
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.flopClassGuidedOutcomes,
     );
     expect(resolveLessonTableScene(activity)?.heroCodes, ['Kh', 'Qh']);
     expect(
       resolveLessonTableScene(activity)?.boardCodes,
       ['Ks', '9d', '2c'],
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.flopClassMade,
+        choices: activity.choices,
+      ),
+      'made-tp',
     );
 
     final controller = LessonActivityController(activity: activity);
@@ -6980,9 +6993,10 @@ void main() {
       find.text('Board Ks 9d 2c. You hold Kh Qh. Class?'),
       findsNothing,
     );
-    expect(find.text('Made hand — top pair'), findsNothing);
-    expect(find.text('Made — top pair'), findsOneWidget);
-    await tester.tap(find.text('Made — top pair'));
+    expect(find.text('Made'), findsOneWidget);
+    expect(find.text('Top pair'), findsOneWidget);
+    expect(find.text('Tap Made.'), findsOneWidget);
+    await tester.tap(find.text('Made'));
     await tester.pump();
     expect(controller.draft.choiceId, 'made-tp');
     controller.dispose();
