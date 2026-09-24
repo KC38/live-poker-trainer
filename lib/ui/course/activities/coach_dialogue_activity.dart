@@ -2932,7 +2932,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllPointsTapped: onCapstoneLimpedAcknowledge,
         ),
         CoachDialogueVisualKind.capstone4bet => Capstone4betDemo(
-          interactive: onCapstone4betAcknowledge != null,
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           onAllPointsTapped: onCapstone4betAcknowledge,
         ),
