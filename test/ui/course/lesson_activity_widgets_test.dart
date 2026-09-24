@@ -14877,7 +14877,8 @@ void main() {
         ),
       );
       expect(find.byType(LagModelDemo), findsOneWidget);
-      expect(find.text('Tap Wide, Pressure, and Model.'), findsOneWidget);
+      expect(find.text('Tap WIDE next'), findsOneWidget);
+      expect(find.text('Tap Wide, Pressure, and Model.'), findsNothing);
       expect(find.text('Tap Wide, Pressure, and Model'), findsNothing);
       expect(
         find.text('Wide in, pressure on — a working model'),
@@ -14886,10 +14887,14 @@ void main() {
       expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
       expect(isTableRegionTapActivity(activity), isTrue);
 
-      for (final title in ['WIDE', 'PRESSURE', 'MODEL']) {
-        await tester.tap(find.text(title));
-        await tester.pump();
-      }
+      await tester.tap(find.text('WIDE'));
+      await tester.pump();
+      expect(find.text('Tap PRESSURE next'), findsOneWidget);
+      await tester.tap(find.text('PRESSURE'));
+      await tester.pump();
+      expect(find.text('Tap MODEL next'), findsOneWidget);
+      await tester.tap(find.text('MODEL'));
+      await tester.pump();
       expect(feltAck, 1);
       controller.dispose();
     },
