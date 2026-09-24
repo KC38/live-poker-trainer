@@ -14196,12 +14196,10 @@ class LessonTableContext extends StatelessWidget {
             Expanded(
               child: FittedBox(
                 // Contain scales UP on tall phones so SoftPulse rails fill
-                // the densified shell (scaleDown left a sparse green void).
+                // the densified shell. Do not wrap in a full-width SizedBox —
+                // that pins scale at 1.0 and letterboxes empty green.
                 fit: BoxFit.contain,
-                child: SizedBox(
-                  width: MediaQuery.sizeOf(context).width - 48,
-                  child: content,
-                ),
+                child: content,
               ),
             ),
           ],
@@ -14398,12 +14396,10 @@ class LessonTableContext extends StatelessWidget {
             Expanded(
               child: FittedBox(
                 // Contain scales UP so multi-rail SoftPulse (board-chop /
-                // find-holes) fills the densified shell on Pro.
+                // find-holes) fills the densified shell on Pro. Avoid a
+                // full-width SizedBox — it pins scale≈1 and leaves green voids.
                 fit: BoxFit.contain,
-                child: SizedBox(
-                  width: MediaQuery.sizeOf(context).width - 48,
-                  child: rails,
-                ),
+                child: rails,
               ),
             ),
           ],
