@@ -45,10 +45,7 @@ final class AgentUiDriver {
     }
     if (normalized.startsWith('openlesson:') ||
         normalized.startsWith('open_lesson:')) {
-      final id =
-          cmd
-              .substring(cmd.indexOf(':') + 1)
-              .trim();
+      final id = cmd.substring(cmd.indexOf(':') + 1).trim();
       if (id.isEmpty) return;
       await _openLesson?.call(id);
       debugPrint('AgentUiDriver: openLesson "$id"');
@@ -152,32 +149,7 @@ final class AgentUiDriver {
       required bool fromSemantics,
     }) {
       final lower = text.toLowerCase().trim();
-      if (lower.isEmpty) return;
-      if (lower != needleLower && !lower.contains(needleLower)) return;
-      // Short lesson CTAs must not fuzzy-match home-map lesson titles
-      // (e.g. Check → "Fold, check, call" / Continue → "…continue…").
-      if (_isShortLessonCta(needleLower) && lower != needleLower) {
-        return;
-      }
-      // SoftPulse / action-tile needles must match exactly — "value" must not
-      // hit home-map "lesson: thin value and bluff-catches".
-      if (_isShortSoftPulseLabel(needleLower) && lower != needleLower) {
-        return;
-      }
-      // Felt seat captions: allow "You (AQ)" / "Your hole cards …" but never
-      // mid-sentence "…where you left off…".
-      if (_isShortSeatLabel(needleLower) &&
-          !_seatLabelMatches(needleLower, lower)) {
-        return;
-      }
-      // Avoid "continue on home" stealing a plain "continue" tap when an
-      // exact Continue dock exists — handled by exact sort, but also skip
-      // home-nav labels when the needle is a short CTA word.
-      if (needleLower == 'continue' &&
-          lower != 'continue' &&
-          lower.contains('home')) {
-        return;
-      }
+      if (!agentTapLabelMatches(needleLower, lower)) return;
       final ro = element.renderObject;
       if (ro is! RenderBox || !ro.hasSize || !ro.attached) return;
 
@@ -346,6 +318,42 @@ final class AgentUiDriver {
     // Allow the framework to settle selection / auto-submit.
     await Future<void>.delayed(const Duration(milliseconds: 50));
   }
+}
+
+/// Whether visible [label] text is an allowable agent tap for [needle].
+///
+/// Short lesson CTAs and SoftPulse tiles must match exactly so a dock word
+/// cannot hit a longer title ("Check" vs "Fold, check, call", "value" vs
+/// "thin value"). You/Them may match a leading seat caption ("You (AQ)",
+/// "Your hole cards") but not a mid-sentence mention.
+bool agentTapLabelMatches(String needle, String label) {
+  final needleLower = needle.toLowerCase().trim();
+  final lower = label.toLowerCase().trim();
+  if (needleLower.isEmpty || lower.isEmpty) return false;
+  if (lower != needleLower && !lower.contains(needleLower)) return false;
+  // Short lesson CTAs must not fuzzy-match home-map lesson titles
+  // (e.g. Check → "Fold, check, call" / Continue → "…continue…").
+  if (_isShortLessonCta(needleLower) && lower != needleLower) return false;
+  // SoftPulse / action-tile needles must match exactly — "value" must not
+  // hit home-map "lesson: thin value and bluff-catches".
+  if (_isShortSoftPulseLabel(needleLower) && lower != needleLower) {
+    return false;
+  }
+  // Felt seat captions: allow "You (AQ)" / "Your hole cards …" but never
+  // mid-sentence "…where you left off…".
+  if (_isShortSeatLabel(needleLower) &&
+      !_seatLabelMatches(needleLower, lower)) {
+    return false;
+  }
+  // Avoid "continue on home" stealing a plain "continue" tap when an
+  // exact Continue dock exists — handled by exact sort, but also skip
+  // home-nav labels when the needle is a short CTA word.
+  if (needleLower == 'continue' &&
+      lower != 'continue' &&
+      lower.contains('home')) {
+    return false;
+  }
+  return true;
 }
 
 /// True for short bottom-dock / feedback CTA labels that must match exactly.
