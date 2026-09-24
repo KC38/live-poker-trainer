@@ -7623,20 +7623,28 @@ class LessonActionTable extends StatelessWidget {
       } catch (_) {}
     }
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 14),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.feltLight, AppColors.feltDark],
+    final minFelt = MediaQuery.sizeOf(context).height * 0.42;
+
+    return ConstrainedBox(
+      constraints: BoxConstraints(minHeight: minFelt),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(12, 12, 12, 14),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [AppColors.feltLight, AppColors.feltDark],
+          ),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: AppColors.feltBorder.withValues(alpha: 0.85),
+          ),
         ),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
-      ),
-      child: Column(
-        children: [
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
           if (spot.streetLabel != null)
             Text(
               spot.streetLabel!,
@@ -7761,6 +7769,7 @@ class LessonActionTable extends StatelessWidget {
             ),
           ],
         ],
+        ),
       ),
     );
   }
