@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 
-/// Value / Bluff / Hold tiles for river composition explain demos.
+/// Value / bluff / hold tiles for river composition explain demos.
 class RiverCompositionDemo extends StatefulWidget {
   /// Creates the demo.
   const RiverCompositionDemo({
@@ -47,95 +47,115 @@ class _RiverCompositionDemoState extends State<RiverCompositionDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
-    final expandTeach = widget.interactive && widget.enabled;
-    final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
-    final child = ConstrainedBox(
-      constraints:
-          minFelt != null
-              ? BoxConstraints(minHeight: minFelt)
-              : const BoxConstraints(),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-        alignment: minFelt != null ? Alignment.center : null,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.feltLight, AppColors.feltDark],
+    // Keep densify after the last tap while Continue shows — locking
+    // `enabled` false must not collapse the teach shell into navy void.
+    final expandTeach = widget.interactive;
+    // Tall-phone teach: fixed felt + stretched tiles (minHeight alone leaves
+    // sparse green under VALUE / BLUFF / HOLD).
+    final feltHeight =
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+    final tiles = Row(
+      crossAxisAlignment:
+          expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
+      children: [
+        for (var i = 0; i < RiverCompositionDemo.points.length; i++) ...[
+          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          Expanded(
+            child: _RiverCompositionSoftPulse(
+              active:
+                  widget.interactive &&
+                  widget.enabled &&
+                  next?.label == RiverCompositionDemo.points[i].label,
+              child: _RiverCompositionTile(
+                label: RiverCompositionDemo.points[i].label,
+                caption: RiverCompositionDemo.points[i].caption,
+                color: RiverCompositionDemo.points[i].color,
+                densify: expandTeach,
+                selected: _tapped.contains(RiverCompositionDemo.points[i].label),
+                enabled: widget.interactive && widget.enabled,
+                onPressed: widget.interactive
+                    ? () => _onTap(RiverCompositionDemo.points[i].label)
+                    : null,
+              ),
+            ),
           ),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.feltBorder.withValues(alpha: 0.85),
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'River composition',
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 14),
-            Row(
-              children: [
-                for (var i = 0; i < RiverCompositionDemo.points.length; i++) ...[
-                  if (i > 0) const SizedBox(width: 8),
-                  Expanded(
-                    child: _RiverCompSoftPulse(
-                      active:
-                          widget.interactive &&
-                          widget.enabled &&
-                          next?.label == RiverCompositionDemo.points[i].label,
-                      child: _RiverCompositionTile(
-                        label: RiverCompositionDemo.points[i].label,
-                        caption: RiverCompositionDemo.points[i].caption,
-                        color: RiverCompositionDemo.points[i].color,
-                        selected: _tapped.contains(
-                          RiverCompositionDemo.points[i].label,
-                        ),
-                        enabled: widget.interactive && widget.enabled,
-                        onPressed: widget.interactive
-                            ? () => _onTap(RiverCompositionDemo.points[i].label)
-                            : null,
-                      ),
-                    ),
-                  ),
-                ],
-              ],
-            ),
-            const SizedBox(height: 14),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.feltDark.withValues(alpha: 0.65),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: AppColors.gold.withValues(alpha: 0.45),
-                ),
-              ),
-              child: Text(
-                widget.interactive
-                    ? (next == null
-                        ? 'Value needs calls · bluffs need folds · check trash'
-                        : 'Tap ${next.label} next')
-                    : 'Value needs calls · bluffs need folds · check trash',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.manrope(
-                  color: AppColors.gold,
-                  fontSize: expandTeach ? 14 : 12,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ],
+        ],
+      ],
+    );
+    final cue = Container(
+      width: expandTeach ? double.infinity : null,
+      padding: EdgeInsets.symmetric(
+        horizontal: expandTeach ? 18 : 14,
+        vertical: expandTeach ? 14 : 8,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.feltDark.withValues(alpha: 0.65),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.gold.withValues(alpha: 0.45)),
+      ),
+      child: Text(
+        widget.interactive
+            ? (next == null
+                ? 'Value needs calls · bluffs need folds · check trash'
+                : 'Tap ${next.label} next')
+            : 'Value needs calls · bluffs need folds · check trash',
+        textAlign: TextAlign.center,
+        style: GoogleFonts.manrope(
+          color: AppColors.gold,
+          fontSize: expandTeach ? 16 : 12,
+          fontWeight: FontWeight.w700,
         ),
       ),
+    );
+    final body = Column(
+      mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisAlignment:
+          expandTeach
+              ? MainAxisAlignment.spaceEvenly
+              : MainAxisAlignment.start,
+      children: [
+        Text(
+          'River composition',
+          style: GoogleFonts.manrope(
+            color: AppColors.slate,
+            fontSize: expandTeach ? 15 : 12,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        if (!expandTeach) const SizedBox(height: 14),
+        expandTeach
+            ? Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: tiles,
+              ),
+            )
+            : tiles,
+        if (!expandTeach) const SizedBox(height: 14),
+        cue,
+      ],
+    );
+    final child = Container(
+      width: double.infinity,
+      height: feltHeight,
+      padding: EdgeInsets.fromLTRB(
+        12,
+        expandTeach ? 18 : 14,
+        12,
+        expandTeach ? 18 : 14,
+      ),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.feltLight, AppColors.feltDark],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.feltBorder.withValues(alpha: 0.85),
+        ),
+      ),
+      child: body,
     );
     if (widget.interactive) return child;
     return ExcludeSemantics(child: child);
@@ -147,6 +167,7 @@ class _RiverCompositionTile extends StatelessWidget {
     required this.label,
     required this.caption,
     required this.color,
+    this.densify = false,
     this.selected = false,
     this.enabled = false,
     this.onPressed,
@@ -155,6 +176,7 @@ class _RiverCompositionTile extends StatelessWidget {
   final String label;
   final String caption;
   final Color color;
+  final bool densify;
   final bool selected;
   final bool enabled;
   final VoidCallback? onPressed;
@@ -163,55 +185,75 @@ class _RiverCompositionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final borderColor =
         selected ? AppColors.gold : color.withValues(alpha: 0.9);
-    final child = AnimatedContainer(
+    final card = AnimatedContainer(
       duration: const Duration(milliseconds: 140),
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
+      width: densify ? double.infinity : null,
+      padding: EdgeInsets.symmetric(
+        vertical: densify ? 24 : 12,
+        horizontal: densify ? 10 : 6,
+      ),
+      alignment: Alignment.center,
       decoration: BoxDecoration(
         color: selected
             ? AppColors.gold.withValues(alpha: 0.28)
             : color.withValues(alpha: 0.35),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: borderColor, width: selected ? 2 : 1),
+        borderRadius: BorderRadius.circular(densify ? 16 : 12),
+        border: Border.all(color: borderColor, width: selected ? 2.5 : 1),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             label,
             style: GoogleFonts.manrope(
               color: AppColors.cream,
-              fontSize: 12,
+              fontSize: densify ? 18 : 12,
               fontWeight: FontWeight.w900,
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: densify ? 10 : 4),
           Text(
             caption,
             textAlign: TextAlign.center,
             style: GoogleFonts.manrope(
               color: AppColors.cream.withValues(alpha: 0.9),
-              fontSize: 10,
+              fontSize: densify ? 13 : 10,
               fontWeight: FontWeight.w600,
             ),
           ),
         ],
       ),
     );
-    if (!enabled || onPressed == null) return child;
-    return GestureDetector(onTap: onPressed, child: child);
+    final child = densify ? SizedBox.expand(child: card) : card;
+    if (onPressed == null) return child;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: enabled ? onPressed : null,
+          borderRadius: BorderRadius.circular(densify ? 16 : 12),
+          child: child,
+        ),
+      ),
+    );
   }
 }
 
-class _RiverCompSoftPulse extends StatefulWidget {
-  const _RiverCompSoftPulse({required this.active, required this.child});
+class _RiverCompositionSoftPulse extends StatefulWidget {
+  const _RiverCompositionSoftPulse({required this.active, required this.child});
 
   final bool active;
   final Widget child;
 
   @override
-  State<_RiverCompSoftPulse> createState() => _RiverCompSoftPulseState();
+  State<_RiverCompositionSoftPulse> createState() => _RiverCompositionSoftPulseState();
 }
 
-class _RiverCompSoftPulseState extends State<_RiverCompSoftPulse>
+class _RiverCompositionSoftPulseState extends State<_RiverCompositionSoftPulse>
     with SingleTickerProviderStateMixin {
   late final AnimationController _pulse;
 
@@ -228,7 +270,7 @@ class _RiverCompSoftPulseState extends State<_RiverCompSoftPulse>
   }
 
   @override
-  void didUpdateWidget(covariant _RiverCompSoftPulse oldWidget) {
+  void didUpdateWidget(covariant _RiverCompositionSoftPulse oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.active && !_pulse.isAnimating) {
       _pulse.repeat(reverse: true);
