@@ -7079,7 +7079,7 @@ void main() {
       ),
     );
     expect(
-      find.text('King-high board. Tap how many clean outs you have.'),
+      find.text('King-high board. Tap the remaining aces — your clean outs.'),
       findsOneWidget,
     );
     expect(
@@ -7089,8 +7089,10 @@ void main() {
       findsNothing,
     );
     expect(find.text('About 3 — the aces'), findsNothing);
-    expect(find.text('3 — the aces'), findsOneWidget);
-    await tester.tap(find.text('3 — the aces'));
+    expect(find.text('3 — the aces'), findsNothing);
+    expect(find.text('Remaining aces'), findsOneWidget);
+    expect(find.text('Tap the remaining aces.'), findsOneWidget);
+    await tester.tap(find.text('Remaining aces'));
     await tester.pump();
     expect(controller.draft.choiceId, 'outs-3');
     controller.dispose();

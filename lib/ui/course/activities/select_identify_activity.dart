@@ -957,7 +957,7 @@ class _HandCategoryTapActivity extends StatelessWidget {
         'act-03-02-01-checkpoint' =>
           'Eight or queen completes — tap the class.',
         'act-03-03-01-guided' =>
-          'King-high board. Tap how many clean outs you have.',
+          'King-high board. Tap the remaining aces — your clean outs.',
         'act-03-03-01-unguided' =>
           'Getting 3:1 with real outs — tap what you do.',
         'act-03-03-01-checkpoint' =>
@@ -1063,15 +1063,15 @@ class _HandCategoryTapActivity extends StatelessWidget {
                       !locked &&
                       (activity.id.startsWith('act-02-02-01-') ||
                           activity.id == 'act-03-02-01-guided' ||
-                          activity.id == 'act-03-03-01-guided' ||
                           activity.id == 'act-03-05-01-guided');
-                  // S1 hand-category: invite SoftPulse on every tile (no
-                  // correct-answer spoiler) until the learner picks one.
+                  // Invite SoftPulse on every tile (no correct-answer spoiler)
+                  // until the learner picks one — S1 categories + outs count.
                   final invitePulse =
                       showGuidance &&
                       selected == null &&
                       !locked &&
-                      activity.id.startsWith('act-01-02-01-');
+                      (activity.id.startsWith('act-01-02-01-') ||
+                          activity.id == 'act-03-03-01-guided');
                   return _FamilySoftPulse(
                     active: pulseNext || invitePulse,
                     child: HandExampleTile(
@@ -1104,7 +1104,7 @@ class _HandCategoryTapActivity extends StatelessWidget {
                         : activity.id.startsWith('act-03-02-01-')
                         ? 'Tap the flop class.'
                         : activity.id == 'act-03-03-01-guided'
-                        ? 'Tap your clean-out count.'
+                        ? 'Tap the remaining aces.'
                         : activity.id == 'act-03-03-01-unguided'
                         ? 'Tap Call, Fold, or Raise.'
                         : activity.id == 'act-03-03-01-checkpoint'
