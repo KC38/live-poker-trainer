@@ -7732,11 +7732,24 @@ await tester.tap(find.text('STRONGER'));
     expect(find.text('Build order here'), findsOneWidget);
     expect(find.text('Tap streets below first → last'), findsNothing);
     expect(find.text('Tap next'), findsNothing);
+    // SoftPulse the chronological next street — Preflop first, not Flop.
+    expect(controller.draft.orderedIds, isEmpty);
     await tester.tap(find.text('PREFLOP'));
     await tester.pump();
+    expect(controller.draft.orderedIds, ['st-pre']);
     await tester.tap(find.text('FLOP'));
     await tester.pump();
     expect(controller.draft.orderedIds, ['st-pre', 'st-flop']);
+    await tester.tap(find.text('TURN'));
+    await tester.pump();
+    await tester.tap(find.text('RIVER'));
+    await tester.pump();
+    expect(controller.draft.orderedIds, [
+      'st-pre',
+      'st-flop',
+      'st-turn',
+      'st-river',
+    ]);
     controller.finishSubmit(
       SubmitCourseStepResult(
         attemptId: 'a1',

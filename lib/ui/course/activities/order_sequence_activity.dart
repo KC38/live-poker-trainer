@@ -502,6 +502,13 @@ class OrderSequenceActivity extends StatelessWidget {
                       _StreetTileGrid(
                         items: remaining,
                         locked: locked,
+                        nextId:
+                            showGuidance &&
+                                    !locked &&
+                                    ordered.length <
+                                        activity.sequenceItems.length
+                                ? activity.sequenceItems[ordered.length].id
+                                : null,
                         onPick:
                             (id) => appendOrderedId(
                               controller: controller,
@@ -728,11 +735,14 @@ class _StreetTileGrid extends StatelessWidget {
     required this.items,
     required this.locked,
     required this.onPick,
+    this.nextId,
   });
 
   final List<CourseChoice> items;
   final bool locked;
   final ValueChanged<String> onPick;
+  /// SoftPulse the next correct street in chronological order (guided).
+  final String? nextId;
 
   @override
   Widget build(BuildContext context) {
@@ -742,11 +752,14 @@ class _StreetTileGrid extends StatelessWidget {
           for (var i = 0; i < slice.length; i++) ...[
             if (i > 0) const SizedBox(width: 8),
             Expanded(
-              child: StreetOrderTile(
-                label: slice[i].label,
-                enabled: !locked,
-                expand: true,
-                onPressed: locked ? null : () => onPick(slice[i].id),
+              child: _SoftPulseTarget(
+                active: nextId != null && slice[i].id == nextId,
+                child: StreetOrderTile(
+                  label: slice[i].label,
+                  enabled: !locked,
+                  expand: true,
+                  onPressed: locked ? null : () => onPick(slice[i].id),
+                ),
               ),
             ),
           ],
