@@ -5197,8 +5197,16 @@ class _VsTagsDemoState extends State<VsTagsDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in VsTagsDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -5227,34 +5235,41 @@ class _VsTagsDemoState extends State<VsTagsDemo> {
               for (var i = 0; i < VsTagsDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: VsTagsDemo.points[i].label,
-                    caption: VsTagsDemo.points[i].caption,
-                    color: VsTagsDemo.points[i].color,
-                    selected: _tapped.contains(VsTagsDemo.points[i].label),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(VsTagsDemo.points[i].label)
-                            : null,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == VsTagsDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: VsTagsDemo.points[i].label,
+                      caption: VsTagsDemo.points[i].caption,
+                      color: VsTagsDemo.points[i].color,
+                      selected: _tapped.contains(VsTagsDemo.points[i].label),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(VsTagsDemo.points[i].label)
+                              : null,
+                    ),
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues Credit / Tighter / No light.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Respect heat · steal less · no light XR',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Respect heat · steal less · no light XR'
+                    : 'Tap ${next.label} next')
+                : 'Respect heat · steal less · no light XR',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
