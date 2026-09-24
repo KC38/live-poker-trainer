@@ -6132,6 +6132,7 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive: 'Interactive call price — tap chips to call',
       semanticsStatic: 'Call price outcomes',
       caption: scene.caption ?? 'Pot 20 · villain bets 10',
+      cueLabel: 'Tap how many chips to call.',
       phases: [
         (
           region: LessonTableRegion.callChipsTwenty,
@@ -11055,6 +11056,7 @@ class LessonTableContext extends StatelessWidget {
       })
     >
     phases,
+    String? cueLabel,
   }) {
     Widget phase({
       required LessonTableRegion region,
@@ -11075,7 +11077,7 @@ class LessonTableContext extends StatelessWidget {
                   ? () => onRegionTap!(LessonTableTapTarget(region))
                   : null,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
+            padding: const EdgeInsets.fromLTRB(4, 10, 4, 10),
             child: Column(
               children: [
                 visual,
@@ -11113,10 +11115,27 @@ class LessonTableContext extends StatelessWidget {
         .map(CardModel.fromCode)
         .toList(growable: false);
     final showSpotCards = hero.isNotEmpty || board.isNotEmpty;
+    // Grow outcome-tile felts on tall phones; SoftPulse invites every tile
+    // (not only index 0) so call-price traps aren't falsely highlighted.
+    final expandTeach =
+        showSoftPulse && selectedRegion == null && enabled && _interactive;
+    final cue =
+        expandTeach
+            ? (cueLabel ?? 'Tap your answer on the felt.')
+            : null;
 
-    return _feltShell(
+    return Builder(
+      builder: (context) {
+        final minFelt =
+            expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+        return _feltShell(
       semanticsLabel: _interactive ? semanticsInteractive : semanticsStatic,
+      minHeight: minFelt,
+      centerChild: expandTeach,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment:
+            expandTeach ? MainAxisAlignment.center : MainAxisAlignment.start,
         children: [
           if (showSpotCards) ...[
             if (board.isNotEmpty) ...[
@@ -11179,11 +11198,11 @@ class LessonTableContext extends StatelessWidget {
               textAlign: TextAlign.center,
               style: GoogleFonts.manrope(
                 color: AppColors.slate,
-                fontSize: 11,
+                fontSize: expandTeach ? 12 : 11,
                 fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 10),
           ],
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -11195,14 +11214,38 @@ class LessonTableContext extends StatelessWidget {
                   title: phases[i].title,
                   detail: phases[i].detail,
                   visual: phases[i].visual,
-                  highlighted:
-                      showSoftPulse && selectedRegion == null && i == 0,
+                  highlighted: expandTeach,
                 ),
               ],
             ],
           ),
+          if (cue != null) ...[
+            const SizedBox(height: 14),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: AppColors.feltDark.withValues(alpha: 0.65),
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(
+                  color: AppColors.gold.withValues(alpha: 0.45),
+                ),
+              ),
+              child: Text(
+                cue,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.manrope(
+                  color: AppColors.gold,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
         ],
       ),
+        );
+      },
     );
   }
 

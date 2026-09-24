@@ -7147,6 +7147,7 @@ void main() {
       findsNothing,
     );
     expect(find.text('10 chips'), findsOneWidget);
+    expect(find.text('Tap how many chips to call.'), findsOneWidget);
     await tester.tap(find.text('10 chips'));
     await tester.pump();
     expect(controller.draft.choiceId, 'call-10');
