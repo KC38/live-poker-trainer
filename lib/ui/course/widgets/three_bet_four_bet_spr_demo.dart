@@ -48,8 +48,9 @@ class _ThreeBetFourBetSprDemoState extends State<ThreeBetFourBetSprDemo> {
   Widget build(BuildContext context) {
     final next = _nextPoint;
     final expandTeach = widget.interactive && widget.enabled;
+    // Tall-phone teach: eat the navy void under 3BET / 4BET / DEPTH.
     final minFelt =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+        expandTeach ? MediaQuery.sizeOf(context).height * 0.55 : null;
     final child = ConstrainedBox(
       constraints:
           minFelt != null
@@ -57,7 +58,12 @@ class _ThreeBetFourBetSprDemoState extends State<ThreeBetFourBetSprDemo> {
               : const BoxConstraints(),
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+        padding: EdgeInsets.fromLTRB(
+          12,
+          expandTeach ? 22 : 14,
+          12,
+          expandTeach ? 22 : 14,
+        ),
         alignment: minFelt != null ? Alignment.center : null,
         decoration: BoxDecoration(
           gradient: const LinearGradient(
@@ -72,48 +78,61 @@ class _ThreeBetFourBetSprDemoState extends State<ThreeBetFourBetSprDemo> {
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment:
+              expandTeach
+                  ? MainAxisAlignment.center
+                  : MainAxisAlignment.start,
           children: [
             Text(
               '3-bet / 4-bet SPR',
               style: GoogleFonts.manrope(
                 color: AppColors.slate,
-                fontSize: 12,
+                fontSize: expandTeach ? 14 : 12,
                 fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: expandTeach ? 22 : 14),
             Row(
               children: [
-                for (var i = 0; i < ThreeBetFourBetSprDemo.points.length; i++) ...[
-                  if (i > 0) const SizedBox(width: 8),
+                for (var i = 0;
+                    i < ThreeBetFourBetSprDemo.points.length;
+                    i++) ...[
+                  if (i > 0) SizedBox(width: expandTeach ? 10 : 8),
                   Expanded(
                     child: _SprSoftPulse(
                       active:
                           widget.interactive &&
                           widget.enabled &&
-                          next?.label == ThreeBetFourBetSprDemo.points[i].label,
+                          next?.label ==
+                              ThreeBetFourBetSprDemo.points[i].label,
                       child: _SprTile(
                         label: ThreeBetFourBetSprDemo.points[i].label,
                         caption: ThreeBetFourBetSprDemo.points[i].caption,
                         color: ThreeBetFourBetSprDemo.points[i].color,
+                        densify: expandTeach,
                         selected: _tapped.contains(
                           ThreeBetFourBetSprDemo.points[i].label,
                         ),
                         enabled: widget.interactive && widget.enabled,
-                        onPressed: widget.interactive
-                            ? () => _onTap(
+                        onPressed:
+                            widget.interactive
+                                ? () => _onTap(
                                   ThreeBetFourBetSprDemo.points[i].label,
                                 )
-                            : null,
+                                : null,
                       ),
                     ),
                   ),
                 ],
               ],
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: expandTeach ? 22 : 14),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              width: expandTeach ? double.infinity : null,
+              padding: EdgeInsets.symmetric(
+                horizontal: expandTeach ? 16 : 14,
+                vertical: expandTeach ? 12 : 8,
+              ),
               decoration: BoxDecoration(
                 color: AppColors.feltDark.withValues(alpha: 0.65),
                 borderRadius: BorderRadius.circular(20),
@@ -130,7 +149,7 @@ class _ThreeBetFourBetSprDemoState extends State<ThreeBetFourBetSprDemo> {
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
-                  fontSize: expandTeach ? 14 : 12,
+                  fontSize: expandTeach ? 15 : 12,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -149,6 +168,7 @@ class _SprTile extends StatelessWidget {
     required this.label,
     required this.caption,
     required this.color,
+    this.densify = false,
     this.selected = false,
     this.enabled = false,
     this.onPressed,
@@ -157,6 +177,7 @@ class _SprTile extends StatelessWidget {
   final String label;
   final String caption;
   final Color color;
+  final bool densify;
   final bool selected;
   final bool enabled;
   final VoidCallback? onPressed;
@@ -167,11 +188,15 @@ class _SprTile extends StatelessWidget {
         selected ? AppColors.gold : color.withValues(alpha: 0.9);
     final child = AnimatedContainer(
       duration: const Duration(milliseconds: 140),
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
+      padding: EdgeInsets.symmetric(
+        vertical: densify ? 20 : 12,
+        horizontal: densify ? 8 : 6,
+      ),
       decoration: BoxDecoration(
-        color: selected
-            ? AppColors.gold.withValues(alpha: 0.28)
-            : color.withValues(alpha: 0.35),
+        color:
+            selected
+                ? AppColors.gold.withValues(alpha: 0.28)
+                : color.withValues(alpha: 0.35),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: borderColor, width: selected ? 2 : 1),
       ),
@@ -181,17 +206,17 @@ class _SprTile extends StatelessWidget {
             label,
             style: GoogleFonts.manrope(
               color: AppColors.cream,
-              fontSize: 12,
+              fontSize: densify ? 15 : 12,
               fontWeight: FontWeight.w900,
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: densify ? 6 : 4),
           Text(
             caption,
             textAlign: TextAlign.center,
             style: GoogleFonts.manrope(
               color: AppColors.cream.withValues(alpha: 0.9),
-              fontSize: 10,
+              fontSize: densify ? 12 : 10,
               fontWeight: FontWeight.w600,
             ),
           ),
