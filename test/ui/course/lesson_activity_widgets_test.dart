@@ -2758,14 +2758,20 @@ void main() {
       ),
     );
     expect(find.byType(PlayerObserveDemo), findsOneWidget);
-    expect(find.text('Tap Enters, Calls, and Folds.'), findsOneWidget);
+    expect(find.text('Tap ENTERS next'), findsOneWidget);
+    expect(find.text('Tap Enters, Calls, and Folds.'), findsNothing);
+    expect(find.text('Tap Enters, Calls, and Folds'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['ENTERS', 'CALLS', 'FOLDS']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('ENTERS'));
+    await tester.pump();
+    expect(find.text('Tap CALLS next'), findsOneWidget);
+    await tester.tap(find.text('CALLS'));
+    await tester.pump();
+    expect(find.text('Tap FOLDS next'), findsOneWidget);
+    await tester.tap(find.text('FOLDS'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
