@@ -2706,14 +2706,20 @@ void main() {
       ),
     );
     expect(find.byType(SprDepthDemo), findsOneWidget);
-    expect(find.text('Tap SPR, Low, and High.'), findsOneWidget);
+    expect(find.text('Tap SPR next'), findsOneWidget);
+    expect(find.text('Tap SPR, Low, and High.'), findsNothing);
+    expect(find.text('Tap SPR, Low, and High'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
-    for (final title in ['SPR', 'LOW', 'HIGH']) {
-      await tester.tap(find.text(title));
-      await tester.pump();
-    }
+    await tester.tap(find.text('SPR'));
+    await tester.pump();
+    expect(find.text('Tap LOW next'), findsOneWidget);
+    await tester.tap(find.text('LOW'));
+    await tester.pump();
+    expect(find.text('Tap HIGH next'), findsOneWidget);
+    await tester.tap(find.text('HIGH'));
+    await tester.pump();
     expect(feltAck, 1);
     controller.dispose();
   });
@@ -9700,6 +9706,8 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('COMMIT FOR STACKS'), findsOneWidget);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'commit');
     await tester.tap(find.text('COMMIT FOR STACKS'));
     await tester.pump();
     expect(controller.draft.choiceId, 'commit');

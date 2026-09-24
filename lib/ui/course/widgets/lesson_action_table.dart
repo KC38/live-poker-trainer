@@ -4017,8 +4017,16 @@ class _SprDepthDemoState extends State<SprDepthDemo> {
     }
   }
 
+  ({String label, String caption, Color color})? get _nextPoint {
+    for (final point in SprDepthDemo.points) {
+      if (!_tapped.contains(point.label)) return point;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final next = _nextPoint;
     final child = Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -4047,34 +4055,41 @@ class _SprDepthDemoState extends State<SprDepthDemo> {
               for (var i = 0; i < SprDepthDemo.points.length; i++) ...[
                 if (i > 0) const SizedBox(width: 8),
                 Expanded(
-                  child: _DemoActionCard(
-                    label: SprDepthDemo.points[i].label,
-                    caption: SprDepthDemo.points[i].caption,
-                    color: SprDepthDemo.points[i].color,
-                    selected: _tapped.contains(SprDepthDemo.points[i].label),
-                    enabled: widget.interactive && widget.enabled,
-                    onPressed:
-                        widget.interactive
-                            ? () => _onTap(SprDepthDemo.points[i].label)
-                            : null,
+                  child: _DemoSoftPulse(
+                    active:
+                        widget.interactive &&
+                        widget.enabled &&
+                        next?.label == SprDepthDemo.points[i].label,
+                    child: _DemoActionCard(
+                      label: SprDepthDemo.points[i].label,
+                      caption: SprDepthDemo.points[i].caption,
+                      color: SprDepthDemo.points[i].color,
+                      selected: _tapped.contains(SprDepthDemo.points[i].label),
+                      enabled: widget.interactive && widget.enabled,
+                      onPressed:
+                          widget.interactive
+                              ? () => _onTap(SprDepthDemo.points[i].label)
+                              : null,
+                    ),
                   ),
                 ),
               ],
             ],
           ),
-          // Interactive: Rex already cues the three taps — no duplicate footer.
-          if (!widget.interactive) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Low SPR: commit · High SPR: maneuver',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 10),
+          Text(
+            widget.interactive
+                ? (next == null
+                    ? 'Low SPR: commit · High SPR: maneuver'
+                    : 'Tap ${next.label} next')
+                : 'Low SPR: commit · High SPR: maneuver',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
