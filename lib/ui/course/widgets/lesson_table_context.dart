@@ -11130,8 +11130,13 @@ class LessonTableContext extends StatelessWidget {
 
     return Builder(
       builder: (context) {
+        // Spot-card draws (board + holes + actions) need a taller shell so
+        // the teach felt eats the tall-phone void below the action row.
         final minFelt =
-            expandTeach ? MediaQuery.sizeOf(context).height * 0.38 : null;
+            expandTeach
+                ? MediaQuery.sizeOf(context).height *
+                    (showSpotCards ? 0.52 : 0.40)
+                : null;
         return _feltShell(
       semanticsLabel: _interactive ? semanticsInteractive : semanticsStatic,
       minHeight: minFelt,
