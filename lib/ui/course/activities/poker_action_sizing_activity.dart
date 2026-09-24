@@ -68,75 +68,89 @@ class PokerActionSizingActivity extends StatelessWidget {
             );
 
         if (tableMode) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (showCoach) RexCoachLine(text: coach),
-              if (showPrompt) ...[
-                const SizedBox(height: 12),
-                Text(
-                  activity.prompt!,
+          final dock = LessonActionDock(
+            choices: activity.choices,
+            selectedId: selected,
+            enabled: !locked,
+            identifyUnavailable: spot.identifyUnavailable,
+            facingBet: spot.facingBet,
+            heroStackAmount: spot.heroStackAmount,
+            pulseChoiceId: _guidedPulseChoiceId(
+              activity: activity,
+              showGuidance: showGuidance,
+              selected: selected,
+              locked: locked,
+            ),
+            onSelect: (id) => controller.selectChoice(id, autoSubmit: true),
+          );
+          final status = Builder(
+            builder: (context) {
+              final text = () {
+                if (controller.lastResult != null) return '';
+                if (controller.submitting) return 'Checking…';
+                if (selected == null) {
+                  // Rex already cues the dock — no third "tap…" line.
+                  if (showCoach) return '';
+                  // Felt + Rex already name open pots — avoid a third
+                  // "tap Bet" line under the dock.
+                  return spot.identifyUnavailable
+                      ? 'Tap the illegal action.'
+                      : spot.stackLabel != null
+                      ? 'Tap All-in, Call, or Fold on the dock.'
+                      : 'Tap your action on the dock.';
+                }
+                return 'Checking…';
+              }();
+              if (text.isEmpty) return const SizedBox.shrink();
+              return Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Text(
+                  text,
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.manrope(
-                    color: AppColors.cream,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w700,
-                    height: 1.3,
+                    color: AppColors.slate,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-              ],
-              const SizedBox(height: 10),
-              LessonActionTable(spot: spot),
-              const SizedBox(height: 10),
-              LessonActionDock(
-                choices: activity.choices,
-                selectedId: selected,
-                enabled: !locked,
-                identifyUnavailable: spot.identifyUnavailable,
-                facingBet: spot.facingBet,
-                heroStackAmount: spot.heroStackAmount,
-                pulseChoiceId: _guidedPulseChoiceId(
-                  activity: activity,
-                  showGuidance: showGuidance,
-                  selected: selected,
-                  locked: locked,
-                ),
-                onSelect:
-                    (id) => controller.selectChoice(id, autoSubmit: true),
-              ),
-              Builder(
-                builder: (context) {
-                  final status = () {
-                    if (controller.lastResult != null) return '';
-                    if (controller.submitting) return 'Checking…';
-                    if (selected == null) {
-                      // Rex already cues the dock — no third "tap…" line.
-                      if (showCoach) return '';
-                      // Felt + Rex already name open pots — avoid a third
-                      // "tap Bet" line under the dock.
-                      return spot.identifyUnavailable
-                          ? 'Tap the illegal action.'
-                          : spot.stackLabel != null
-                          ? 'Tap All-in, Call, or Fold on the dock.'
-                          : 'Tap your action on the dock.';
-                    }
-                    return 'Checking…';
-                  }();
-                  if (status.isEmpty) return const SizedBox.shrink();
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Text(
-                      status,
-                      textAlign: TextAlign.center,
+              );
+            },
+          );
+          // Expanded table fills Rex→dock when the runner gives a bounded
+          // height; widget tests (scroll wrap) keep a fixed-height felt.
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final fill =
+                  constraints.hasBoundedHeight &&
+                  constraints.maxHeight.isFinite;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: fill ? MainAxisSize.max : MainAxisSize.min,
+                children: [
+                  if (showCoach) RexCoachLine(text: coach),
+                  if (showPrompt) ...[
+                    const SizedBox(height: 12),
+                    Text(
+                      activity.prompt!,
                       style: GoogleFonts.manrope(
-                        color: AppColors.slate,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
+                        color: AppColors.cream,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                        height: 1.3,
                       ),
                     ),
-                  );
-                },
-              ),
-            ],
+                  ],
+                  const SizedBox(height: 10),
+                  if (fill)
+                    Expanded(child: LessonActionTable(spot: spot))
+                  else
+                    LessonActionTable(spot: spot),
+                  const SizedBox(height: 10),
+                  dock,
+                  status,
+                ],
+              );
+            },
           );
         }
 

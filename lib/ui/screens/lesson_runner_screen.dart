@@ -771,41 +771,77 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
               ],
               const SizedBox(height: 4),
               Expanded(
-                child: SingleChildScrollView(
-                  // No artificial minHeight — short steps hug the top.
-                  child: AnimatedBuilder(
-                    animation: controller,
-                    builder: (context, _) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 220),
-                            switchInCurve: Curves.easeOut,
-                            switchOutCurve: Curves.easeIn,
-                            child: KeyedSubtree(
-                              key: ValueKey<String>(activity.id),
-                              child: activityRegistry.build(
-                                activity: activity,
-                                controller: controller,
-                                showGuidance: showGuidance,
-                                onFeltAcknowledge:
-                                    isTableRegionTapActivity(activity) &&
-                                            activity.renderer ==
-                                                ActivityRenderer.coachDialogue
-                                        ? _submit
-                                        : null,
-                              ),
+                child: Builder(
+                  builder: (context) {
+                    // Teach docks: fill Rex→footer with felt (no scroll void).
+                    // SoftPulse explains keep scroll so fixed felts hug the top.
+                    final fillFelt = isLessonActionTableActivity(activity);
+                    final feltAck =
+                        isTableRegionTapActivity(activity) &&
+                                activity.renderer ==
+                                    ActivityRenderer.coachDialogue
+                            ? _submit
+                            : null;
+                    final body = AnimatedBuilder(
+                      animation: controller,
+                      builder: (context, _) {
+                        final activityPane = AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 220),
+                          switchInCurve: Curves.easeOut,
+                          switchOutCurve: Curves.easeIn,
+                          layoutBuilder:
+                              fillFelt
+                                  ? (currentChild, previousChildren) {
+                                    return Stack(
+                                      fit: StackFit.expand,
+                                      alignment: Alignment.topCenter,
+                                      children: <Widget>[
+                                        ...previousChildren,
+                                        if (currentChild != null) currentChild,
+                                      ],
+                                    );
+                                  }
+                                  : AnimatedSwitcher.defaultLayoutBuilder,
+                          child: KeyedSubtree(
+                            key: ValueKey<String>(activity.id),
+                            child: activityRegistry.build(
+                              activity: activity,
+                              controller: controller,
+                              showGuidance: showGuidance,
+                              onFeltAcknowledge: feltAck,
                             ),
                           ),
-                          if (controller.hintVisible && hint != null) ...[
-                            const SizedBox(height: 10),
-                            RexCoachLine(text: hint.text, label: 'Hint'),
+                        );
+                        final hintLine =
+                            controller.hintVisible && hint != null
+                                ? <Widget>[
+                                  const SizedBox(height: 10),
+                                  RexCoachLine(
+                                    text: hint!.text,
+                                    label: 'Hint',
+                                  ),
+                                ]
+                                : const <Widget>[];
+                        if (!fillFelt) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [activityPane, ...hintLine],
+                          );
+                        }
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(child: activityPane),
+                            ...hintLine,
                           ],
-                        ],
-                      );
-                    },
-                  ),
+                        );
+                      },
+                    );
+                    if (!fillFelt) {
+                      return SingleChildScrollView(child: body);
+                    }
+                    return body;
+                  },
                 ),
               ),
               AnimatedBuilder(
