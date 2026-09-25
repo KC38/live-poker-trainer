@@ -4976,7 +4976,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(TimingCluesDemo), findsOneWidget);
-    expect(find.text('Tap TIMING next'), findsOneWidget);
+    expect(find.text('Tap TIMING next'), findsNothing);
     expect(find.text('Tap Timing, Sizing, and Clues.'), findsNothing);
     expect(find.text('Tap Timing, Sizing, and Clues'), findsNothing);
     expect(find.text('Small updates only'), findsNothing);
@@ -4996,10 +4996,10 @@ await tester.tap(find.text('NIT'));
 
     await tester.tap(find.text('TIMING'));
     await tester.pump();
-    expect(find.text('Tap SIZING next'), findsOneWidget);
+    expect(find.text('Tap SIZING next'), findsNothing);
     await tester.tap(find.text('SIZING'));
     await tester.pump();
-    expect(find.text('Tap CLUES next'), findsOneWidget);
+    expect(find.text('Tap CLUES next'), findsNothing);
     await tester.tap(find.text('CLUES'));
     await tester.pump();
     expect(feltAck, 1);
