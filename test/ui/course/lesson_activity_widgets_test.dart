@@ -8680,7 +8680,8 @@ await tester.tap(find.text('STRONGER'));
       find.text('You 150bb, villain 60bb — tap the effective stack.'),
       findsOneWidget,
     );
-    expect(find.text('Tap 60bb.'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no Tap 60bb footer mid-teach.
+    expect(find.text('Tap 60bb.'), findsNothing);
     expect(find.text('Tap your answer on the felt.'), findsNothing);
     await tester.tap(find.text('60bb'));
     await tester.pump();
