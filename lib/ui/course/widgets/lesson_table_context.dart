@@ -13589,6 +13589,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive live warm-up — tap Full list or Random plan',
       semanticsStatic: 'Live warm-up guided outcomes',
       caption: scene.caption ?? 'Warm-up checklist must include?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Full list.
+      guideRegion: LessonTableRegion.liveWarmupFullList,
       phases: [
         (
           region: LessonTableRegion.liveWarmupFullList,
@@ -13596,7 +13598,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Stacks · pot · types · map',
           visual: const Icon(
             Icons.checklist,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13620,6 +13622,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive live warm-up — tap Defaults + exploits or Forget',
       semanticsStatic: 'Live warm-up scaffolded outcomes',
       caption: scene.caption ?? 'Carry into Live?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Defaults + exploits.
+      guideRegion: LessonTableRegion.liveWarmupDefaults,
       phases: [
         (
           region: LessonTableRegion.liveWarmupDefaults,
@@ -13627,7 +13631,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Course carry-over',
           visual: const Icon(
             Icons.school_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13637,7 +13641,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Blank slate',
           visual: const Icon(
             Icons.delete_outline,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13651,6 +13655,7 @@ class LessonTableContext extends StatelessWidget {
           'Interactive live warm-up — tap Live cash NLH or Other games',
       semanticsStatic: 'Live warm-up unguided outcomes',
       caption: scene.caption ?? 'Scope reminder?',
+      // No SoftPulse on unguided — still don’t gold-icon Live cash NLH.
       phases: [
         (
           region: LessonTableRegion.liveWarmupCashScope,
@@ -13658,7 +13663,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'This product scope',
           visual: const Icon(
             Icons.payments_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13682,6 +13687,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive live warm-up — tap One hand or Mash buttons',
       semanticsStatic: 'Live warm-up checkpoint outcomes',
       caption: scene.caption ?? 'Warm-up goal?',
+      // SoftPulse + Rex own the cue — don’t gold-tip One hand.
+      guideRegion: LessonTableRegion.liveWarmupOneHand,
       phases: [
         (
           region: LessonTableRegion.liveWarmupOneHand,
@@ -13689,7 +13696,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Load · then execute',
           visual: const Icon(
             Icons.play_circle_outline,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13699,7 +13706,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Skip checklist',
           visual: const Icon(
             Icons.touch_app_outlined,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),

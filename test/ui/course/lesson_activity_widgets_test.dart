@@ -24190,7 +24190,7 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Warm-up checklist — tap Full list.'), findsOneWidget);
+    expect(find.text('Warm-up checklist — pick what belongs.'), findsOneWidget);
     await tester.tap(find.text('Full list'));
     await tester.pump();
     expect(controller.draft.choiceId, 'list');
@@ -24229,7 +24229,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Carry into Live — tap Defaults + exploits.'),
+      find.text('Carry into Live — pick what travels.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Defaults + exploits'));
@@ -24270,7 +24270,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Scope reminder — tap Live cash NLH.'),
+      find.text('Scope reminder — pick the product lane.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Live cash NLH'));
@@ -24313,7 +24313,7 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Warm-up goal — tap One hand.'), findsOneWidget);
+    expect(find.text('Warm-up goal — pick the finish line.'), findsOneWidget);
     await tester.tap(find.text('One hand'));
     await tester.pump();
     expect(controller.draft.choiceId, 'one');

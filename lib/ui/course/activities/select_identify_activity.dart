@@ -794,14 +794,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Baseline — don’t gold-tip the tile.
       'act-07-09-01-checkpoint' =>
           'Default book purpose — pick the role.',
+      // SoftPulse owns Full list — don’t gold-tip the tile.
       'act-07-11-01-guided' =>
-          'Warm-up checklist — tap Full list.',
+          'Warm-up checklist — pick what belongs.',
+      // SoftPulse owns Defaults + exploits — don’t gold-tip the tile.
       'act-07-11-01-scaffolded' =>
-          'Carry into Live — tap Defaults + exploits.',
+          'Carry into Live — pick what travels.',
+      // Unguided: name the habit; don’t tip Live cash NLH.
       'act-07-11-01-unguided' =>
-          'Scope reminder — tap Live cash NLH.',
+          'Scope reminder — pick the product lane.',
+      // SoftPulse owns One hand — don’t gold-tip the tile.
       'act-07-11-01-checkpoint' =>
-          'Warm-up goal — tap One hand.',
+          'Warm-up goal — pick the finish line.',
       'act-07-12-01-cs' =>
           'Sticky calls — tap Station value.',
       'act-07-12-01-nit' =>
