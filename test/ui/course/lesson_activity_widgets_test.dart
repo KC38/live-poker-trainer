@@ -3046,7 +3046,7 @@ void main() {
       ),
     );
     expect(find.byType(FlopLinesDemo), findsOneWidget);
-    expect(find.text('Tap VALUE next'), findsOneWidget);
+    expect(find.text('Tap VALUE next'), findsNothing);
     expect(find.text('Tap each flop line once.'), findsNothing);
     expect(find.text('Tap each flop line once'), findsNothing);
     expect(
@@ -3069,19 +3069,19 @@ void main() {
 
 await tester.tap(find.text('VALUE'));
     await tester.pump();
-    expect(find.text('Tap C-BET next'), findsOneWidget);
+    expect(find.text('Tap C-BET next'), findsNothing);
     await tester.tap(find.text('C-BET'));
     await tester.pump();
-    expect(find.text('Tap CHECK next'), findsOneWidget);
+    expect(find.text('Tap CHECK next'), findsNothing);
     await tester.tap(find.text('CHECK'));
     await tester.pump();
-    expect(find.text('Tap CALL next'), findsOneWidget);
+    expect(find.text('Tap CALL next'), findsNothing);
     await tester.tap(find.text('CALL'));
     await tester.pump();
-    expect(find.text('Tap FOLD next'), findsOneWidget);
+    expect(find.text('Tap FOLD next'), findsNothing);
     await tester.tap(find.text('FOLD'));
     await tester.pump();
-    expect(find.text('Tap RAISE next'), findsOneWidget);
+    expect(find.text('Tap RAISE next'), findsNothing);
     await tester.tap(find.text('RAISE'));
     await tester.pump();
     expect(feltAck, 1);
