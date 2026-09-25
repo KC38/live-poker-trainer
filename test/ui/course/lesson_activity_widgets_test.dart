@@ -5337,7 +5337,7 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Tap Implied, Reverse, and Second.'), findsNothing);
     expect(find.text('Tap Implied, Reverse, and Second'), findsNothing);
     expect(
-      find.text('Future money · reverse when second-best'),
+      find.text('Implied · reverse · second'),
       findsNothing,
     );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
@@ -5365,7 +5365,7 @@ await tester.tap(find.text('NIT'));
     expect(feltAck, 1);
     // Lock clears enabled / ack — densified shell must stay filled.
     expect(
-      find.text('Future money · reverse when second-best'),
+      find.text('Implied · reverse · second'),
       findsOneWidget,
     );
     expect(

@@ -7693,9 +7693,10 @@ class ImpliedOddsDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'IMPLIED', caption: 'Future money', color: AppColors.gold),
-    (label: 'REVERSE', caption: 'Future losses', color: AppColors.cream),
-    (label: 'SECOND', caption: 'Second-best sting', color: AppColors.danger),
+    // Structural — Rex owns “future money / future losses / second-best.”
+    (label: 'IMPLIED', caption: 'They pay later', color: AppColors.gold),
+    (label: 'REVERSE', caption: 'You pay later', color: AppColors.cream),
+    (label: 'SECOND', caption: 'Trap improves', color: AppColors.danger),
   ];
 
   @override
@@ -7778,7 +7779,7 @@ class _ImpliedOddsDemoState extends State<ImpliedOddsDemo> {
                 ),
               ),
               child: Text(
-                'Future money · reverse when second-best',
+                'Implied · reverse · second',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
