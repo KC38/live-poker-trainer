@@ -3900,11 +3900,23 @@ await tester.tap(find.text('VALUE'));
       ),
     );
     expect(find.byType(RangeUpdateDemo), findsOneWidget);
+    expect(find.text('You never know it'), findsNothing);
+    expect(find.text('What they can have'), findsNothing);
+    expect(find.text('Each action revises'), findsNothing);
+    expect(find.text('Ranges, not one hand'), findsNothing);
+    expect(find.text('Single combo'), findsOneWidget);
+    expect(find.text('Possible set'), findsOneWidget);
+    expect(find.text('Revise on action'), findsOneWidget);
+    expect(find.text('Three range moves'), findsOneWidget);
     expect(find.text('Tap ONE HAND next'), findsNothing);
     expect(find.text('Tap One Hand, Range, and Update'), findsNothing);
     expect(find.text('Tap One Hand, Range, and Update.'), findsNothing);
     expect(
       find.text('Never one hand · know a range · then update'),
+      findsNothing,
+    );
+    expect(
+      find.text('One hand · range · update'),
       findsNothing,
     );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
@@ -3921,7 +3933,7 @@ await tester.tap(find.text('VALUE'));
       ),
     );
 
-await tester.tap(find.text('ONE HAND'));
+    await tester.tap(find.text('ONE HAND'));
     await tester.pump();
     expect(find.text('Tap RANGE next'), findsNothing);
     await tester.tap(find.text('RANGE'));
@@ -3933,6 +3945,10 @@ await tester.tap(find.text('ONE HAND'));
     // Lock clears enabled / ack — densified shell must stay filled.
     expect(
       find.text('Never one hand · know a range · then update'),
+      findsNothing,
+    );
+    expect(
+      find.text('One hand · range · update'),
       findsOneWidget,
     );
     expect(
