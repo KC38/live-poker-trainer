@@ -494,7 +494,7 @@ void main() {
         epsilon: 1,
       ),
     );
-
+    expect(tester.takeException(), isNull);
     await tester.tap(find.text('High card'));
     await tester.pump();
     expect(feltAck, 0);
@@ -506,6 +506,7 @@ void main() {
     await tester.tap(find.text('Flush'));
     await tester.pump();
     expect(feltAck, 1);
+    expect(tester.takeException(), isNull);
     // Lock clears enabled / ack — densified shell must stay filled.
     expect(find.text('High card → pair → flush'), findsOneWidget);
     expect(
