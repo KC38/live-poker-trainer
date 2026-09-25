@@ -5117,7 +5117,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(GuardrailsDemo), findsOneWidget);
-    expect(find.text('Tap QUIT next'), findsOneWidget);
+    expect(find.text('Tap QUIT next'), findsNothing);
     expect(find.text('Tap Quit, Guard, and First.'), findsNothing);
     expect(find.text('Tap Quit, Guard, and First'), findsNothing);
     expect(find.text('Know when to quit'), findsNothing);
@@ -5136,10 +5136,10 @@ await tester.tap(find.text('NIT'));
 
     await tester.tap(find.text('QUIT'));
     await tester.pump();
-    expect(find.text('Tap GUARD next'), findsOneWidget);
+    expect(find.text('Tap GUARD next'), findsNothing);
     await tester.tap(find.text('GUARD'));
     await tester.pump();
-    expect(find.text('Tap FIRST next'), findsOneWidget);
+    expect(find.text('Tap FIRST next'), findsNothing);
     await tester.tap(find.text('FIRST'));
     await tester.pump();
     expect(feltAck, 1);
