@@ -502,14 +502,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Enter + barrel — don’t gold-tip the tile.
       'act-04-08-01-checkpoint' =>
           'Before you label — constant entry with merciless barrels.',
+      // SoftPulse owns Maniac — don’t gold-tip the tile.
       'act-04-08-02-guided' =>
-          'Opens 60%, barrels light — tap the working label.',
+          'Opens 60%, barrels light — a wide, relentless aggressor label fits.',
+      // SoftPulse owns Maniac — don’t gold-tip the tile.
       'act-04-08-02-unguided' =>
-          'Light 3-bets, never gives up — tap the label.',
+          'Light 3-bets, never gives up — wild pressure fits better than sticky calling.',
+      // SoftPulse owns Three types — don’t gold-tip the tile.
       'act-04-08-02-checkpoint' =>
-          'Legal mix now — tap the introduced types.',
+          'Legal mix now — Station, Nit, and Maniac are on the board.',
+      // SoftPulse owns Wide bets — don’t gold-tip the tile.
       'act-04-08-03-checkpoint' =>
-          'Maniac barrels — tap why you call wider.',
+          'Maniac barrels — their betting range is simply too wide.',
       'act-04-09-01-guided' =>
           'One huge bluff — tap what you know.',
       'act-04-09-01-scaffolded' =>
