@@ -5762,7 +5762,7 @@ await tester.tap(find.text('STRONGER'));
         ),
       );
       expect(find.byType(MixedStrategyDemo), findsOneWidget);
-      expect(find.text('Tap MIX next'), findsOneWidget);
+      expect(find.text('Tap MIX next'), findsNothing);
       expect(find.text('Tap Mix, Purpose, and Strong.'), findsNothing);
       expect(find.text('Tap Mix, Purpose, and Strong'), findsNothing);
       expect(
@@ -5785,10 +5785,10 @@ await tester.tap(find.text('STRONGER'));
 
       await tester.tap(find.text('MIX'));
       await tester.pump();
-      expect(find.text('Tap PURPOSE next'), findsOneWidget);
+      expect(find.text('Tap PURPOSE next'), findsNothing);
       await tester.tap(find.text('PURPOSE'));
       await tester.pump();
-      expect(find.text('Tap STRONG next'), findsOneWidget);
+      expect(find.text('Tap STRONG next'), findsNothing);
       await tester.tap(find.text('STRONG'));
       await tester.pump();
       expect(feltAck, 1);
