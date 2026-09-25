@@ -2420,7 +2420,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.earlyPosition,
         seatCount: 9,
         buttonSeat: 7,
-        caption: 'Nine-handed · button seat 7 · tap who opens',
+        // Structural spot — Rex owns the “tap who acts first” SoftPulse cue.
+        caption: 'Nine-handed · button seat 7',
       );
     case 'act-03-01-01-unguided':
       return const LessonTableScene(
@@ -7095,18 +7096,22 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive: 'Interactive pot size — tap the chip total',
       semanticsStatic: 'Multiway pot size outcomes',
       caption: scene.caption ?? '1/2 · UTG opens · callers',
+      // SoftPulse + Rex own the cue — no math spoiler / gold tip on 21.
+      cueLabel: '',
+      guideRegion: LessonTableRegion.potChipsTwentyOne,
       phases: [
         (
           region: LessonTableRegion.potChipsEighteen,
           title: '18 chips',
-          detail: 'Miss a blind',
+          detail: 'Short',
           visual: const _PotChipDot(label: '18', gold: false),
         ),
         (
           region: LessonTableRegion.potChipsTwentyOne,
           title: '21 chips',
-          detail: '1+2+6+6+6',
-          visual: const _PotChipDot(label: '21', gold: true),
+          // Structural — not “1+2+6+6+6” answering the pot for the learner.
+          detail: 'Full pot',
+          visual: const _PotChipDot(label: '21', gold: false),
         ),
         (
           region: LessonTableRegion.potChipsTwelve,
@@ -8711,6 +8716,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive verbal action — tap whether the raise stands',
       semanticsStatic: 'Verbal declaration outcomes',
       caption: scene.caption ?? 'You said "raise"',
+      // SoftPulse + Rex own the cue — no gold tip on the correct tile.
+      cueLabel: '',
+      guideRegion: LessonTableRegion.verbalRaiseStands,
       phases: [
         (
           region: LessonTableRegion.verbalRaiseStands,
@@ -8718,7 +8726,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Binding',
           visual: const Icon(
             Icons.record_voice_over_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -8752,12 +8760,15 @@ class LessonTableContext extends StatelessWidget {
           'Interactive table read — tap effective stack and pot',
       semanticsStatic: 'Table-read what matters outcomes',
       caption: scene.caption ?? 'Hero 140bb · Villain 55bb · pot 18',
+      // SoftPulse + Rex own the cue — no gold tip on effective.
+      cueLabel: '',
+      guideRegion: LessonTableRegion.tableMatterEffAndPot,
       phases: [
         (
           region: LessonTableRegion.tableMatterEffAndPot,
           title: '55bb + pot',
           detail: 'Effective',
-          visual: const _PotChipDot(label: '55', gold: true),
+          visual: const _PotChipDot(label: '55', gold: false),
         ),
         (
           region: LessonTableRegion.tableMatterHeroOnly,

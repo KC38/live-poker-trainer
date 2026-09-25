@@ -2835,7 +2835,8 @@ class TableReadDemo extends StatefulWidget {
     (label: 'POT', caption: 'Size the prize', color: AppColors.gold),
     (label: 'STACKS', caption: 'Depth in BB', color: AppColors.cream),
     (label: 'BUTTON', caption: 'Who has position', color: AppColors.slate),
-    (label: 'WHO ACTS', caption: 'Words count live', color: AppColors.danger),
+    // Structural — Rex owns “Words count live” (verbal binding is later).
+    (label: 'WHO ACTS', caption: 'Whose turn', color: AppColors.danger),
   ];
 
   @override

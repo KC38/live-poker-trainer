@@ -3267,6 +3267,9 @@ void main() {
     // SoftPulse + Rex own the teach verb — no duplicate Read… felt title.
     expect(find.text('Read the table before cards'), findsNothing);
     expect(find.text('Four table reads'), findsOneWidget);
+    // Structural SoftPulse captions — not Rex’s “Words count live” paraphrase.
+    expect(find.text('Whose turn'), findsOneWidget);
+    expect(find.text('Words count live'), findsNothing);
     expect(
       find.text('Pot · stacks · button · who acts'),
       findsNothing,
@@ -9312,6 +9315,9 @@ await tester.tap(find.text('STRONGER'));
       findsNothing,
     );
     expect(find.text('21 chips'), findsOneWidget);
+    // SoftPulse must not spoil the pot math / gold-tip the answer.
+    expect(find.text('1+2+6+6+6'), findsNothing);
+    expect(find.text('Full pot'), findsOneWidget);
     await tester.tap(find.text('21 chips'));
     await tester.pump();
     expect(controller.draft.choiceId, 'pot-21');
@@ -9370,6 +9376,12 @@ await tester.tap(find.text('STRONGER'));
       find.text(
         'Nine-handed. Dealer button is on seat 7. Who acts first preflop?',
       ),
+      findsNothing,
+    );
+    // Felt caption is structural — Rex owns the SoftPulse teach verb.
+    expect(find.text('Nine-handed · button seat 7'), findsOneWidget);
+    expect(
+      find.text('Nine-handed · button seat 7 · tap who opens'),
       findsNothing,
     );
     expect(find.text('Seat left of the big blind (UTG)'), findsNothing);
