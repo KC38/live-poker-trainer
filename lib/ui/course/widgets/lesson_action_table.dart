@@ -5163,9 +5163,10 @@ class PlayerObserveDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'ENTERS', caption: 'Who plays pots', color: AppColors.gold),
-    (label: 'CALLS', caption: 'Who sticks around', color: AppColors.cream),
-    (label: 'FOLDS', caption: 'Who gives up', color: AppColors.danger),
+    // Structural — Rex owns “who enters / calls / folds” and “count samples.”
+    (label: 'ENTERS', caption: 'Pots joined', color: AppColors.gold),
+    (label: 'CALLS', caption: 'Sticks to bets', color: AppColors.cream),
+    (label: 'FOLDS', caption: 'Leaves pots', color: AppColors.danger),
   ];
 
   @override
@@ -5248,7 +5249,8 @@ class _PlayerObserveDemoState extends State<PlayerObserveDemo> {
                 ),
               ),
               child: Text(
-                'Count samples before you tag',
+                // Match SoftPulse titles — don’t echo Rex’s “count samples.”
+                'Enters · calls · folds',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
