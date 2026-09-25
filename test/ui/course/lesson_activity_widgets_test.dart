@@ -3993,11 +3993,21 @@ await tester.tap(find.text('VALUE'));
       ),
     );
     expect(find.byType(ThreeBetSqueezeDemo), findsOneWidget);
+    expect(find.text('Defines both sides'), findsNothing);
+    expect(find.text('Punish multiway flats'), findsNothing);
+    expect(find.text('3-bets and squeezes'), findsNothing);
+    expect(find.text('Shape both sides'), findsOneWidget);
+    expect(find.text('Isolate the open'), findsOneWidget);
+    expect(find.text('Three pot reopeners'), findsOneWidget);
     expect(find.text('Tap 3-BET next'), findsNothing);
     expect(find.text('Tap 3-Bet, Ranges, and Squeeze.'), findsNothing);
     expect(find.text('Tap 3-Bet, Ranges, and Squeeze'), findsNothing);
     expect(
       find.text('3-bets define ranges · squeezes punish flats'),
+      findsNothing,
+    );
+    expect(
+      find.text('3-bet · ranges · squeeze'),
       findsNothing,
     );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
@@ -4014,7 +4024,7 @@ await tester.tap(find.text('VALUE'));
       ),
     );
 
-await tester.tap(find.text('3-BET'));
+    await tester.tap(find.text('3-BET'));
     await tester.pump();
     expect(find.text('Tap RANGES next'), findsNothing);
     await tester.tap(find.text('RANGES'));
@@ -4026,6 +4036,10 @@ await tester.tap(find.text('3-BET'));
     // Lock clears enabled / ack — densified shell must stay filled.
     expect(
       find.text('3-bets define ranges · squeezes punish flats'),
+      findsNothing,
+    );
+    expect(
+      find.text('3-bet · ranges · squeeze'),
       findsOneWidget,
     );
     expect(
