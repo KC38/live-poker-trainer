@@ -5975,7 +5975,7 @@ await tester.tap(find.text('STRONGER'));
         ),
       );
       expect(find.byType(SelectiveAggressionDemo), findsOneWidget);
-      expect(find.text('Tap TIGHT next'), findsOneWidget);
+      expect(find.text('Tap TIGHT next'), findsNothing);
       expect(find.text('Tap Tight, Barrel, and Sample.'), findsNothing);
       expect(find.text('Tap Tight, Barrel, and Sample'), findsNothing);
       expect(
@@ -5987,10 +5987,10 @@ await tester.tap(find.text('STRONGER'));
 
       await tester.tap(find.text('TIGHT'));
       await tester.pump();
-      expect(find.text('Tap BARREL next'), findsOneWidget);
+      expect(find.text('Tap BARREL next'), findsNothing);
       await tester.tap(find.text('BARREL'));
       await tester.pump();
-      expect(find.text('Tap SAMPLE next'), findsOneWidget);
+      expect(find.text('Tap SAMPLE next'), findsNothing);
       await tester.tap(find.text('SAMPLE'));
       await tester.pump();
       expect(feltAck, 1);
