@@ -4425,6 +4425,8 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(ObservationCertaintyDemo), findsOneWidget);
+    expect(find.text('Three confidence checks'), findsOneWidget);
+    expect(find.text('Observation ≠ certainty'), findsNothing);
     expect(find.text('Tap OBSERVE next'), findsNothing);
     expect(find.text('Tap Observe, Samples, and Showdowns.'), findsNothing);
     expect(find.text('Tap Observe, Samples, and Showdowns'), findsNothing);
@@ -4723,6 +4725,8 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(ImpliedOddsDemo), findsOneWidget);
+    expect(find.text('Three odds stories'), findsOneWidget);
+    expect(find.text('Implied Odds'), findsNothing);
     expect(find.text('Tap IMPLIED next'), findsNothing);
     expect(find.text('Tap Implied, Reverse, and Second.'), findsNothing);
     expect(find.text('Tap Implied, Reverse, and Second'), findsNothing);
@@ -4875,6 +4879,8 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(LineStoriesDemo), findsOneWidget);
+    expect(find.text('Four line updates'), findsOneWidget);
+    expect(find.text('Lines mean ranges'), findsNothing);
     expect(find.text('Tap X/R next'), findsNothing);
     expect(find.text('Tap X/R, Probe, Delay, and Donk.'), findsNothing);
     expect(find.text('Tap X/R, Probe, Delay, and Donk'), findsNothing);
@@ -5018,6 +5024,8 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(TimingCluesDemo), findsOneWidget);
+    expect(find.text('Three soft clues'), findsOneWidget);
+    expect(find.text('Clues, not mind-reading'), findsNothing);
     expect(find.text('Tap TIMING next'), findsNothing);
     expect(find.text('Tap Timing, Sizing, and Clues.'), findsNothing);
     expect(find.text('Tap Timing, Sizing, and Clues'), findsNothing);
@@ -5088,6 +5096,8 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(TablesChangeDemo), findsOneWidget);
+    expect(find.text('Three table gears'), findsOneWidget);
+    expect(find.text('Tables change'), findsNothing);
     expect(find.text('Tap STUCK next'), findsNothing);
     expect(find.text('Tap Stuck, Tilted, and Gears.'), findsNothing);
     expect(find.text('Tap Stuck, Tilted, and Gears'), findsNothing);

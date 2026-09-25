@@ -7052,7 +7052,8 @@ class _ObservationCertaintyDemoState extends State<ObservationCertaintyDemo> {
               : MainAxisAlignment.start,
       children: [
         Text(
-          'Observation ≠ certainty',
+          // Structural label — Rex owns “Observation ≠ certainty” in the dock.
+          'Three confidence checks',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: expandTeach ? 15 : 12,
@@ -7724,7 +7725,8 @@ class _ImpliedOddsDemoState extends State<ImpliedOddsDemo> {
               : MainAxisAlignment.start,
       children: [
         Text(
-          'Implied Odds',
+          // Structural label — Rex owns “Implied odds” teach in the dock.
+          'Three odds stories',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: expandTeach ? 15 : 12,
@@ -8072,7 +8074,8 @@ class _LineStoriesDemoState extends State<LineStoriesDemo> {
           : MainAxisAlignment.start,
       children: [
         Text(
-          'Lines mean ranges',
+          // Structural label — Rex owns “Lines mean ranges” in the dock.
+          'Four line updates',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: expandTeach ? 15 : 12,
@@ -8404,7 +8407,8 @@ class _TimingCluesDemoState extends State<TimingCluesDemo> {
               : MainAxisAlignment.start,
       children: [
         Text(
-          'Clues, not mind-reading',
+          // Structural label — Rex owns clues / mind-reading teach in the dock.
+          'Three soft clues',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: expandTeach ? 15 : 12,
@@ -8570,7 +8574,8 @@ class _TablesChangeDemoState extends State<TablesChangeDemo> {
               : MainAxisAlignment.start,
       children: [
         Text(
-          'Tables change',
+          // Structural label — Rex owns “Tables change” in the dock.
+          'Three table gears',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: expandTeach ? 15 : 12,
