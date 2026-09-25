@@ -709,14 +709,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns LAG — don’t gold-tip the tile.
       'act-06-13-02-cp-lag' =>
           'Wide entry, sustained pressure — pick the label.',
+      // SoftPulse owns Plan is sick — don’t gold-tip the tile.
       'act-07-01-01-guided' =>
-          'AQo 3-bet · 872tt — tap Plan is sick.',
+          'AQo 3-bet · 872tt — pick the plan update.',
+      // SoftPulse owns Value continues — don’t gold-tip the tile.
       'act-07-01-01-scaffolded' =>
-          'BTN steal KTo · KT2r — tap Value continues.',
+          'BTN steal KTo · KT2r — pick the plan update.',
+      // Unguided: name the habit; don’t tip Name the thesis.
       'act-07-01-01-unguided' =>
-          'Best habit — tap Name the thesis.',
+          'Best habit — pick what to do before flop act.',
+      // SoftPulse owns Abandon quickly — don’t gold-tip the tile.
       'act-07-01-01-checkpoint' =>
-          'Dead plan — tap Abandon quickly.',
+          'Dead plan — pick the response.',
       'act-07-02-01-guided' =>
           'AK c-bet · Q72r — tap Aces & blanks.',
       'act-07-02-01-scaffolded' =>

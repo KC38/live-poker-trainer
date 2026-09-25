@@ -20643,8 +20643,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('AQo 3-bet · 872tt — tap Plan is sick.'),
+      find.text('AQo 3-bet · 872tt — pick the plan update.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('AQo 3-bet · 872tt — tap Plan is sick.'),
+      findsNothing,
     );
     await tester.tap(find.text('Plan is sick'));
     await tester.pump();
@@ -20681,8 +20685,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('BTN steal KTo · KT2r — tap Value continues.'),
+      find.text('BTN steal KTo · KT2r — pick the plan update.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('BTN steal KTo · KT2r — tap Value continues.'),
+      findsNothing,
     );
     await tester.tap(find.text('Value continues'));
     await tester.pump();
@@ -20722,8 +20730,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Best habit — tap Name the thesis.'),
+      find.text('Best habit — pick what to do before flop act.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Best habit — tap Name the thesis.'),
+      findsNothing,
     );
     await tester.tap(find.text('Name the thesis'));
     await tester.pump();
@@ -20760,8 +20772,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Dead plan — tap Abandon quickly.'),
+      find.text('Dead plan — pick the response.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Dead plan — tap Abandon quickly.'),
+      findsNothing,
     );
     await tester.tap(find.text('Abandon quickly'));
     await tester.pump();

@@ -12642,6 +12642,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive preflop-to-flop — tap Plan is sick or Still jam',
       semanticsStatic: 'Preflop-to-flop guided outcomes',
       caption: scene.caption ?? 'AQo 3-bet · flop 872tt — update?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Plan is sick.
+      guideRegion: LessonTableRegion.preflopFlopPlanSick,
       phases: [
         (
           region: LessonTableRegion.preflopFlopPlanSick,
@@ -12649,7 +12651,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Give up more',
           visual: const Icon(
             Icons.heart_broken_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12659,7 +12661,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Every street',
           visual: const Icon(
             Icons.bolt_outlined,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12673,6 +12675,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive preflop-to-flop — tap Value continues or Auto-fold',
       semanticsStatic: 'Preflop-to-flop scaffolded outcomes',
       caption: scene.caption ?? 'BTN steal KTo · flop KT2r — update?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Value continues.
+      guideRegion: LessonTableRegion.preflopFlopValueContinues,
       phases: [
         (
           region: LessonTableRegion.preflopFlopValueContinues,
@@ -12680,7 +12684,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Thesis improved',
           visual: const Icon(
             Icons.trending_up,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12704,6 +12708,7 @@ class LessonTableContext extends StatelessWidget {
           'Interactive preflop-to-flop — tap Name the thesis or Wing it',
       semanticsStatic: 'Preflop-to-flop unguided outcomes',
       caption: scene.caption ?? 'Best habit before acting the flop?',
+      // No SoftPulse on unguided — still don’t gold-icon Name the thesis.
       phases: [
         (
           region: LessonTableRegion.preflopFlopNameThesis,
@@ -12711,7 +12716,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Before flop act',
           visual: const Icon(
             Icons.edit_note_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12735,6 +12740,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive preflop-to-flop — tap Abandon quickly or Force the old line',
       semanticsStatic: 'Preflop-to-flop checkpoint outcomes',
       caption: scene.caption ?? 'Dead plan response?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Abandon quickly.
+      guideRegion: LessonTableRegion.preflopFlopAbandon,
       phases: [
         (
           region: LessonTableRegion.preflopFlopAbandon,
@@ -12742,7 +12749,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Sunk cost dies',
           visual: const Icon(
             Icons.exit_to_app,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12752,7 +12759,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Leak',
           visual: const Icon(
             Icons.push_pin_outlined,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
