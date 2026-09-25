@@ -4083,11 +4083,21 @@ await tester.tap(find.text('VALUE'));
       ),
     );
     expect(find.byType(MultiStreetPlanDemo), findsOneWidget);
+    expect(find.text('Choose with a plan'), findsNothing);
+    expect(find.text('Know your next bet'), findsNothing);
+    expect(find.text('Finish the story'), findsNothing);
+    expect(find.text('Start the line'), findsOneWidget);
+    expect(find.text('Next street ready'), findsOneWidget);
+    expect(find.text('Close the line'), findsOneWidget);
     expect(find.text('Tap FLOP next'), findsNothing);
     expect(find.text('Tap Flop, Turn, and River.'), findsNothing);
     expect(find.text('Tap Flop, Turn, and River'), findsNothing);
     expect(
       find.text('Flop choice answers turn and river'),
+      findsNothing,
+    );
+    expect(
+      find.text('Flop · turn · river'),
       findsNothing,
     );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
@@ -4104,7 +4114,7 @@ await tester.tap(find.text('VALUE'));
       ),
     );
 
-await tester.tap(find.text('FLOP'));
+    await tester.tap(find.text('FLOP'));
     await tester.pump();
     expect(find.text('Tap TURN next'), findsNothing);
     await tester.tap(find.text('TURN'));
@@ -4116,6 +4126,10 @@ await tester.tap(find.text('FLOP'));
     // Lock clears enabled / ack — densified shell must stay filled.
     expect(
       find.text('Flop choice answers turn and river'),
+      findsNothing,
+    );
+    expect(
+      find.text('Flop · turn · river'),
       findsOneWidget,
     );
     expect(
