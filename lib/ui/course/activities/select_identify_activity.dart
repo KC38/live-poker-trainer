@@ -9,6 +9,7 @@ import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_outs_picker.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
@@ -61,6 +62,16 @@ class SelectIdentifyActivity extends StatelessWidget {
     }
     if (presentation == SelectIdentifyPresentation.bestFiveCardTap) {
       return _BestFiveCardTapActivity(
+        key: ValueKey<String>(
+          '${activity.id}-${controller.bindGeneration}',
+        ),
+        activity: activity,
+        controller: controller,
+        showGuidance: showGuidance,
+      );
+    }
+    if (presentation == SelectIdentifyPresentation.outsCleanAcesTap) {
+      return _OutsCleanAcesTapActivity(
         key: ValueKey<String>(
           '${activity.id}-${controller.bindGeneration}',
         ),
@@ -159,6 +170,8 @@ class SelectIdentifyActivity extends StatelessWidget {
         'Look at both hands — tap who wins.',
       SelectIdentifyPresentation.bestFiveCardTap =>
         'Tap the five cards that play in your best hand.',
+      SelectIdentifyPresentation.outsCleanAcesTap =>
+        'King-high board. Tap the remaining aces — your clean outs.',
       SelectIdentifyPresentation.text =>
         hasScene
             ? 'Look at the table, then pick the answer that matches.'
@@ -207,6 +220,7 @@ class SelectIdentifyActivity extends StatelessWidget {
       case SelectIdentifyPresentation.handCategoryTap:
       case SelectIdentifyPresentation.showdownTap:
       case SelectIdentifyPresentation.bestFiveCardTap:
+      case SelectIdentifyPresentation.outsCleanAcesTap:
       case SelectIdentifyPresentation.text:
         return LessonChoiceButton(
           label: choice.label,
@@ -1648,6 +1662,48 @@ class _BestFiveCardTapActivity extends StatelessWidget {
               controller: controller,
               spot: spot,
               locked: locked,
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _OutsCleanAcesTapActivity extends StatelessWidget {
+  const _OutsCleanAcesTapActivity({
+    super.key,
+    required this.activity,
+    required this.controller,
+    required this.showGuidance,
+  });
+
+  final CourseActivity activity;
+  final LessonActivityController controller;
+  final bool showGuidance;
+
+  static const _coach =
+      'King-high board. Tap the remaining aces — your clean outs.';
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, _) {
+        final locked = controller.submitting || controller.lastResult != null;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (!locked) RexCoachLine(text: _coach),
+            const SizedBox(height: 14),
+            OutsCleanAcesPicker(
+              key: ValueKey<String>(
+                '${activity.id}-${controller.bindGeneration}',
+              ),
+              activity: activity,
+              controller: controller,
+              locked: locked,
+              showGuidance: showGuidance,
             ),
           ],
         );
