@@ -4881,7 +4881,7 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Tap Maniac, Entry, and Aggro.'), findsNothing);
     expect(find.text('Tap Maniac, Entry, and Aggro'), findsNothing);
     expect(
-      find.text('Extreme entry · aggression · a model'),
+      find.text('Maniac · entry · aggro'),
       findsNothing,
     );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
@@ -4909,7 +4909,7 @@ await tester.tap(find.text('NIT'));
     expect(feltAck, 1);
     // Lock clears enabled / ack — densified shell must stay filled.
     expect(
-      find.text('Extreme entry · aggression · a model'),
+      find.text('Maniac · entry · aggro'),
       findsOneWidget,
     );
     expect(
