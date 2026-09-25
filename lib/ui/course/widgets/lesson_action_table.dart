@@ -4155,31 +4155,35 @@ class _CommonLeaksDemoState extends State<CommonLeaksDemo> {
         expandTeach ? Expanded(child: leakRow(1)) : leakRow(1),
       ],
     );
-    final cue = Container(
-      width: expandTeach ? double.infinity : null,
-      padding: EdgeInsets.symmetric(
-        horizontal: expandTeach ? 18 : 14,
-        vertical: expandTeach ? 14 : 8,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.feltDark.withValues(alpha: 0.65),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.gold.withValues(alpha: 0.45)),
-      ),
-      child: Text(
-        widget.interactive
-            ? (next == null
-                ? 'Top pair · bad prices · passive calls · bluff crowds'
-                : 'Tap ${next.label} next')
-            : 'Top pair · bad prices · passive calls · bluff crowds',
-        textAlign: TextAlign.center,
-        style: GoogleFonts.manrope(
-          color: AppColors.gold,
-          fontSize: expandTeach ? 16 : 12,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-    );
+    // SoftPulse + Rex own the next-tile cue while teaching. Show a summary
+    // after all taps (or once locked under Nice! / Continue).
+    final showCue = !widget.interactive || next == null || !widget.enabled;
+    final cue =
+        !showCue
+            ? null
+            : Container(
+              width: expandTeach ? double.infinity : null,
+              padding: EdgeInsets.symmetric(
+                horizontal: expandTeach ? 18 : 14,
+                vertical: expandTeach ? 14 : 8,
+              ),
+              decoration: BoxDecoration(
+                color: AppColors.feltDark.withValues(alpha: 0.65),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: AppColors.gold.withValues(alpha: 0.45),
+                ),
+              ),
+              child: Text(
+                'Top pair · bad prices · passive calls · bluff crowds',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.manrope(
+                  color: AppColors.gold,
+                  fontSize: expandTeach ? 16 : 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            );
     final body = Column(
       mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
       mainAxisAlignment: expandTeach
@@ -4203,8 +4207,10 @@ class _CommonLeaksDemoState extends State<CommonLeaksDemo> {
                 ),
               )
             : tiles,
-        if (!expandTeach) const SizedBox(height: 14),
-        cue,
+        if (cue != null) ...[
+          if (!expandTeach) const SizedBox(height: 14),
+          cue,
+        ],
       ],
     );
     final child = Container(
