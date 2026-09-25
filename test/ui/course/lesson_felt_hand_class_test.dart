@@ -67,7 +67,7 @@ void main() {
       'act-03-06-01-unguided': (HandClass.topPair, 'quiet line'),
       'act-03-08-01-guided': (HandClass.topPair, 'Weak TPTK'),
       'act-03-08-01-unguided': (HandClass.air, 'Air'),
-      'act-03-08-02-jump-river': (HandClass.strongMade, 'Top two'),
+      'act-03-08-02-jump-river': (HandClass.strongMade, 'brick'),
     };
 
     for (final entry in expected.entries) {

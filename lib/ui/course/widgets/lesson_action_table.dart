@@ -438,9 +438,10 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Ah', 'Kh', '7h'],
         potLabel: 'Pot 20',
         villainLine: 'Someone bets · 4-way',
+        // Structural — don’t tip Fold air on the felt.
         streetLabel: 'Flop · Air · Wet',
         facingBet: true,
-        feltStatusLine: 'Crowd — fold air',
+        feltStatusLine: 'Facing a bet · 4-way',
       );
     case 'act-03-08-02-jump-river':
       return const LessonActionSpot(
@@ -448,10 +449,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['As', 'Kc', '7d', '2h', '3c'],
         potLabel: 'Pot 28',
         villainLine: 'Checked to you',
-        streetLabel: 'River · Brick · Top two',
+        // Structural — don’t tip value / Top two on the felt.
+        streetLabel: 'River · brick',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Brick river — get paid',
+        feltStatusLine: 'Checked to you',
       );
     case 'act-04-02-01-guided':
       return const LessonActionSpot(

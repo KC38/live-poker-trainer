@@ -2560,7 +2560,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.jumpTableTrackOutcomes,
         villainSeatCount: 0,
         highlight: LessonTableHighlight.none,
-        caption: 'Pot 16 · shorter stack 40bb',
+        // Structural — Rex owns pot/40bb SoftPulse cue.
+        caption: 'Table frame',
       );
     case 'act-03-08-02-jump-class':
       return const LessonTableScene(
@@ -7999,14 +8000,15 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive:
           'Interactive table track — tap pot and effective, holes, or talk',
       semanticsStatic: 'Jump table track outcomes',
-      caption: scene.caption ?? 'Pot 16 · shorter stack 40bb',
+      caption: scene.caption ?? 'Table frame',
       // SoftPulse + Rex own the cue — no Tap footer.
       cueLabel: '',
       guideRegion: LessonTableRegion.jumpTrackPotEff,
       phases: [
         (
           region: LessonTableRegion.jumpTrackPotEff,
-          title: 'Pot + 40bb',
+          // Structural — Rex owns “Pot 16 / 40bb”; don’t echo on the tile.
+          title: 'Pot · effective',
           detail: 'Price frame',
           visual: const _PotChipDot(label: '16', gold: true),
         ),

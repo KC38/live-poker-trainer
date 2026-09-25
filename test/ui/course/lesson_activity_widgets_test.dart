@@ -12537,9 +12537,12 @@ await tester.tap(find.text('NIT'));
       find.text('Pot 16, shorter 40bb — tap what you track first.'),
       findsOneWidget,
     );
-    expect(find.text('Pot + 40bb'), findsOneWidget);
+    expect(find.text('Pot 16 · shorter stack 40bb'), findsNothing);
+    expect(find.text('Pot + 40bb'), findsNothing);
+    expect(find.text('Table frame'), findsOneWidget);
+    expect(find.text('Pot · effective'), findsOneWidget);
     expect(find.text('Price frame'), findsOneWidget);
-    await tester.tap(find.text('Pot + 40bb'));
+    await tester.tap(find.text('Pot · effective'));
     await tester.pump();
     expect(controller.draft.choiceId, 'j3-track');
     controller.dispose();
@@ -12635,6 +12638,8 @@ await tester.tap(find.text('NIT'));
       find.text('Air four-way on a wet flop — tap Fold.'),
       findsOneWidget,
     );
+    expect(find.text('Crowd — fold air'), findsNothing);
+    expect(find.text('Facing a bet · 4-way'), findsOneWidget);
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'j3-fold');
@@ -12668,6 +12673,10 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.text('BET VALUE'), findsOneWidget);
+    expect(find.text('River · Brick · Top two'), findsNothing);
+    expect(find.text('Brick river — get paid'), findsNothing);
+    expect(find.text('River · brick'), findsOneWidget);
+    expect(find.text('Checked to you'), findsWidgets);
     await tester.tap(find.text('BET VALUE'));
     await tester.pump();
     expect(controller.draft.choiceId, 'j3-val');
