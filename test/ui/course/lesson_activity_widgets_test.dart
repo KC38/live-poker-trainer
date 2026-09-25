@@ -3753,7 +3753,7 @@ await tester.tap(find.text('SPR'));
       ),
     );
     expect(find.byType(PlayerObserveDemo), findsOneWidget);
-    expect(find.text('Tap ENTERS next'), findsOneWidget);
+    expect(find.text('Tap ENTERS next'), findsNothing);
     expect(find.text('Tap Enters, Calls, and Folds.'), findsNothing);
     expect(find.text('Tap Enters, Calls, and Folds'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
@@ -3761,10 +3761,10 @@ await tester.tap(find.text('SPR'));
 
     await tester.tap(find.text('ENTERS'));
     await tester.pump();
-    expect(find.text('Tap CALLS next'), findsOneWidget);
+    expect(find.text('Tap CALLS next'), findsNothing);
     await tester.tap(find.text('CALLS'));
     await tester.pump();
-    expect(find.text('Tap FOLDS next'), findsOneWidget);
+    expect(find.text('Tap FOLDS next'), findsNothing);
     await tester.tap(find.text('FOLDS'));
     await tester.pump();
     expect(feltAck, 1);
