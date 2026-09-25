@@ -8810,18 +8810,22 @@ class LessonTableContext extends StatelessWidget {
           'Interactive observe — tap the participation note',
       semanticsStatic: 'Observe participation outcomes',
       caption: scene.caption ?? 'Seat calls 7 of 9 preflops',
+      // SoftPulse + Rex own the cue — no Tap footer / gold-tip fraction.
+      cueLabel: '',
+      guideRegion: LessonTableRegion.observeHighParticipation,
       phases: [
         (
           region: LessonTableRegion.observeHighParticipation,
+          // Structural — don’t tip High with matching “7 of 9” on the tile.
           title: 'High part.',
-          detail: '7 of 9',
-          visual: const _PotChipDot(label: '7/9', gold: true),
+          detail: 'Many pots',
+          visual: const _PotChipDot(label: 'HI', gold: true),
         ),
         (
           region: LessonTableRegion.observeLowParticipation,
           title: 'Low part.',
           detail: 'Rare pots',
-          visual: const _PotChipDot(label: '2/9', gold: false),
+          visual: const _PotChipDot(label: 'LO', gold: false),
         ),
         (
           region: LessonTableRegion.observeLabelNow,
