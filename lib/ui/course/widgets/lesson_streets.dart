@@ -745,15 +745,7 @@ class _ActionOrderDemoState extends State<ActionOrderDemo> {
               ),
             )
             : seats,
-        if (!expandTeach) const SizedBox(height: 10),
-        Text(
-          'Postflop starts left of the button',
-          style: GoogleFonts.manrope(
-            color: AppColors.slate,
-            fontSize: expandTeach ? 14 : 12,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        // SoftPulse + Rex own postflop teach — no felt line echoing Rex.
         if (cue != null) ...[
           if (!expandTeach) const SizedBox(height: 12),
           cue,
