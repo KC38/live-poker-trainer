@@ -478,14 +478,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Few + heat — don’t gold-tip the tile.
       'act-04-07-01-checkpoint' =>
           'Before you label — few hands with heavy action when involved.',
+      // SoftPulse owns Nit — don’t gold-tip the tile.
       'act-04-07-02-guided' =>
-          'Rare entry, large 3-bets — tap the working label.',
+          'Rare entry, large 3-bets — a narrow, strong-when-involved label fits.',
+      // SoftPulse owns Nit — don’t gold-tip the tile.
       'act-04-07-02-unguided' =>
-          'Folds forever, then explodes — tap the label.',
+          'Folds forever, then explodes — narrow heat fits better than wild aggression.',
+      // SoftPulse owns Working model — don’t gold-tip the tile.
       'act-04-07-02-checkpoint' =>
-          'Treat Nit as a working model — tap it.',
+          'Treat Nit as evidence with sample limits — temporary, not an insult.',
+      // SoftPulse owns Strong range — don’t gold-tip the tile.
       'act-04-07-03-checkpoint' =>
-          'Nit check-raises — tap why you respect it.',
+          'Nit check-raises — their raise range is usually strong.',
       'act-04-08-01-guided' =>
           'Raises 12 of 15 — tap the observation.',
       'act-04-08-01-scaffolded' =>

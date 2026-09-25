@@ -20709,7 +20709,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s4 meet nit guided taps Nit on felt', (tester) async {
+  testWidgets('s4 meet nit guided SoftPulse Nit — no gold tip', (tester) async {
     final activity = CourseActivity(
       id: 'act-04-07-02-guided',
       order: 2,
@@ -20736,13 +20736,152 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Rare entry, large 3-bets — tap the working label.'),
+      find.text(
+        'Rare entry, large 3-bets — a narrow, strong-when-involved label fits.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Rare entry, large 3-bets — tap the working label.'),
+      findsNothing,
     );
     expect(find.text('Nit'), findsOneWidget);
     await tester.tap(find.text('Nit'));
     await tester.pump();
     expect(controller.draft.choiceId, 'pt-nit');
+    controller.dispose();
+  });
+
+  testWidgets('s4 meet nit unguided SoftPulse Nit — no gold tip', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-04-07-02-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.playerReadClassify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Nit.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Seat folds forever, then check-raises a triple barrel. Label?',
+      choices: const [
+        CourseChoice(id: 'nit2', label: 'Nit'),
+        CourseChoice(id: 'maniac-n', label: 'Maniac'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Folds forever, then explodes — narrow heat fits better than wild aggression.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Folds forever, then explodes — tap the label.'),
+      findsNothing,
+    );
+    expect(find.text('Nit'), findsOneWidget);
+    await tester.tap(find.text('Nit'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'nit2');
+    controller.dispose();
+  });
+
+  testWidgets('s4 meet nit checkpoint SoftPulse Working model — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-07-02-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Working model with sample limits.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Nit is best treated as?',
+      choices: const [
+        CourseChoice(id: 'model-n', label: 'A working model with sample limits'),
+        CourseChoice(id: 'insult-n', label: 'An insult'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Treat Nit as evidence with sample limits — temporary, not an insult.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Treat Nit as a working model — tap it.'),
+      findsNothing,
+    );
+    expect(find.text('Working model'), findsOneWidget);
+    await tester.tap(find.text('Working model'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'model-n');
+    controller.dispose();
+  });
+
+  testWidgets('s4 adjust nit checkpoint SoftPulse Strong range — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-07-03-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Range is strong when they raise.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Why respect a Nit check-raise?',
+      choices: const [
+        CourseChoice(id: 'cite-strong', label: 'Range is strong when they raise'),
+        CourseChoice(id: 'cite-fear', label: 'Nits are scary people'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Nit check-raises — their raise range is usually strong.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Nit check-raises — tap why you respect it.'),
+      findsNothing,
+    );
+    expect(find.text('Strong range'), findsOneWidget);
+    await tester.tap(find.text('Strong range'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'cite-strong');
     controller.dispose();
   });
 
