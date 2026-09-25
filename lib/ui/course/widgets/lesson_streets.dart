@@ -146,12 +146,16 @@ class _StreetsTimelineDemoState extends State<StreetsTimelineDemo> {
             ? Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                // Pack densified lanes, then scale up into the felt — fills
-                // tall-phone green (scaleDown left a navy/green void).
+                // Pack densified lanes into a wide intrinsic shell, then
+                // contain-scale into the felt — fills tall-phone green
+                // without RIVER overflowing at phone width.
                 child: FittedBox(
                   fit: BoxFit.contain,
                   child: SizedBox(
-                    width: MediaQuery.sizeOf(context).width - 48,
+                    width: max(
+                      MediaQuery.sizeOf(context).width - 48,
+                      420,
+                    ),
                     child: lanes,
                   ),
                 ),
@@ -284,22 +288,30 @@ class _StreetLane extends StatelessWidget {
           ),
           SizedBox(width: densify ? 10 : 8),
           Expanded(
-            child: Row(
-              children: [
-                CardBack(size: cardSize),
-                SizedBox(width: densify ? 3 : 2),
-                CardBack(size: cardSize),
-                if (boardCodes.isNotEmpty) ...[
-                  SizedBox(width: densify ? 10 : 8),
-                  for (var i = 0; i < boardCodes.length; i++) ...[
-                    if (i > 0) SizedBox(width: densify ? 3 : 2),
-                    MiniCard(
-                      card: CardModel.fromCode(boardCodes[i]),
-                      size: cardSize,
-                    ),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CardBack(size: cardSize),
+                    SizedBox(width: densify ? 3 : 2),
+                    CardBack(size: cardSize),
+                    if (boardCodes.isNotEmpty) ...[
+                      SizedBox(width: densify ? 10 : 8),
+                      for (var i = 0; i < boardCodes.length; i++) ...[
+                        if (i > 0) SizedBox(width: densify ? 3 : 2),
+                        MiniCard(
+                          card: CardModel.fromCode(boardCodes[i]),
+                          size: cardSize,
+                        ),
+                      ],
+                    ],
                   ],
-                ],
-              ],
+                ),
+              ),
             ),
           ),
         ],

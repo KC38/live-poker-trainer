@@ -918,6 +918,8 @@ void main() {
     // can fill tall-phone green (scaleDown left a void above PREFLOP).
     final preflop = tester.getSize(find.text('PREFLOP'));
     expect(preflop.height, greaterThanOrEqualTo(16));
+    // Densified RIVER must not paint a RenderFlex overflow (7 small cards).
+    expect(tester.takeException(), isNull);
     await tester.tap(find.text('PREFLOP'));
     await tester.pump();
     expect(find.text('Tap Flop'), findsNothing);
@@ -930,6 +932,7 @@ void main() {
     await tester.tap(find.text('RIVER'));
     await tester.pump();
     expect(feltAck, 1);
+    expect(tester.takeException(), isNull);
     // Lock clears enabled / ack — densified shell must stay filled.
     expect(find.text('Preflop → flop → turn → river'), findsOneWidget);
     expect(
