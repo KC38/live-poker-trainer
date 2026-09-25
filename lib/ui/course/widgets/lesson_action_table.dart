@@ -4505,9 +4505,10 @@ class MultiStreetPlanDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'FLOP', caption: 'Choose with a plan', color: AppColors.gold),
-    (label: 'TURN', caption: 'Know your next bet', color: AppColors.cream),
-    (label: 'RIVER', caption: 'Finish the story', color: AppColors.danger),
+    // Structural — Rex owns “what do I do on turn and river?”
+    (label: 'FLOP', caption: 'Start the line', color: AppColors.gold),
+    (label: 'TURN', caption: 'Next street ready', color: AppColors.cream),
+    (label: 'RIVER', caption: 'Close the line', color: AppColors.danger),
   ];
 
   @override
@@ -4735,7 +4736,8 @@ class _MultiStreetPlanDemoState extends State<MultiStreetPlanDemo> {
                 ),
               ),
               child: Text(
-                'Flop choice answers turn and river',
+                // Match SoftPulse titles — don’t echo Rex’s “what do I do.”
+                'Flop · turn · river',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
@@ -4752,6 +4754,7 @@ class _MultiStreetPlanDemoState extends State<MultiStreetPlanDemo> {
               : MainAxisAlignment.start,
       children: [
         Text(
+          // Structural label — Rex owns multi-street copy in the dock.
           'Plan every street',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
