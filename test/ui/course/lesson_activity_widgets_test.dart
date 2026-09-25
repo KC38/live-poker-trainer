@@ -19408,7 +19408,7 @@ await tester.tap(find.text('STRONGER'));
         ),
       );
       expect(find.byType(TurnMapDemo), findsOneWidget);
-      expect(find.text('Tap BARREL next'), findsOneWidget);
+      expect(find.text('Tap BARREL next'), findsNothing);
       expect(find.text('Tap Barrel, Give-up, and Map.'), findsNothing);
       expect(find.text('Tap Barrel, Give-up, and Map'), findsNothing);
       expect(
@@ -19420,10 +19420,10 @@ await tester.tap(find.text('STRONGER'));
 
       await tester.tap(find.text('BARREL'));
       await tester.pump();
-      expect(find.text('Tap GIVE-UP next'), findsOneWidget);
+      expect(find.text('Tap GIVE-UP next'), findsNothing);
       await tester.tap(find.text('GIVE-UP'));
       await tester.pump();
-      expect(find.text('Tap MAP next'), findsOneWidget);
+      expect(find.text('Tap MAP next'), findsNothing);
       await tester.tap(find.text('MAP'));
       await tester.pump();
       expect(feltAck, 1);
