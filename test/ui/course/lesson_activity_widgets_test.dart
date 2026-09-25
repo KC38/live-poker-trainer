@@ -14771,13 +14771,74 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Maniac barrels river — tap Call with top pair.'),
+      find.text(
+        'Maniac barrels river · top pair — catch wide aggression.',
+      ),
       findsOneWidget,
     );
+    expect(
+      find.text('Maniac barrels river — tap Call with top pair.'),
+      findsNothing,
+    );
     expect(find.text('CALL'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no third gold felt status.
+    expect(find.text('Maniac bets too wide'), findsNothing);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'call-wider');
     await tester.tap(find.text('CALL'));
     await tester.pump();
     expect(controller.draft.choiceId, 'call-wider');
+    controller.dispose();
+  });
+
+  testWidgets('s4 adjust maniac scaffolded SoftPulse Bet value — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-08-03-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Bet value; they call light.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Maniac checks to you. You have top two. Action?',
+      choices: const [
+        CourseChoice(id: 'val-m', label: 'Bet value', action: 'BET'),
+        CourseChoice(
+          id: 'trap-always',
+          label: 'Check back always to trap',
+          action: 'CHECK',
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Maniac checks · top two — they call light.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Maniac checks · top two — tap Bet value.'),
+      findsNothing,
+    );
+    expect(find.text('BET VALUE'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no third gold felt status.
+    expect(find.text('They call light — bet value'), findsNothing);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'val-m');
+    await tester.tap(find.text('BET VALUE'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'val-m');
     controller.dispose();
   });
 
