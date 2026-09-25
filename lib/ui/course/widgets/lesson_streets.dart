@@ -470,7 +470,9 @@ class SeatOrderTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isBtn = emphasizeDealer && label.toUpperCase() == 'BTN';
-    final tileW = densify ? double.infinity : 96.0;
+    // Fixed densify footprint — FittedBox.contain scales the pack into the
+    // teach shell. Avoid infinity/max-size (unbounded Wrap parents break).
+    final tileW = densify ? 132.0 : 96.0;
     final chip = densify ? 64.0 : 36.0;
     final labelSize = densify ? 16.0 : 11.0;
     final captionSize = densify ? 13.0 : 11.0;
@@ -490,7 +492,6 @@ class SeatOrderTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(radius),
           child: Container(
             width: tileW,
-            alignment: densify ? Alignment.center : null,
             padding: EdgeInsets.fromLTRB(
               densify ? 12 : 8,
               densify ? 18 : 12,
@@ -505,11 +506,7 @@ class SeatOrderTile extends StatelessWidget {
               ),
             ),
             child: Column(
-              mainAxisSize: densify ? MainAxisSize.max : MainAxisSize.min,
-              mainAxisAlignment:
-                  densify
-                      ? MainAxisAlignment.spaceEvenly
-                      : MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 if (badge != null)
                   Text(
@@ -543,7 +540,7 @@ class SeatOrderTile extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (!densify) const SizedBox(height: 6),
+                SizedBox(height: densify ? 10 : 6),
                 Text(
                   _caption,
                   style: GoogleFonts.manrope(
@@ -631,35 +628,32 @@ class _ActionOrderDemoState extends State<ActionOrderDemo> {
     final feltHeight =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
     final seats = Row(
-      crossAxisAlignment:
-          expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         for (var i = 0; i < _palette.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
-          Expanded(
-            child: _SoftPulseTarget(
-              active:
+          _SoftPulseTarget(
+            active:
+                widget.interactive &&
+                widget.enabled &&
+                next == _palette[i].label,
+            child: SeatOrderTile(
+              label: _palette[i].label,
+              badge:
+                  _ordered.contains(_palette[i].label)
+                      ? '${_ordered.indexOf(_palette[i].label) + 1}'
+                      : null,
+              selected: _ordered.contains(_palette[i].label),
+              emphasizeDealer: false,
+              densify: expandTeach,
+              enabled:
                   widget.interactive &&
                   widget.enabled &&
-                  next == _palette[i].label,
-              child: SeatOrderTile(
-                label: _palette[i].label,
-                badge:
-                    _ordered.contains(_palette[i].label)
-                        ? '${_ordered.indexOf(_palette[i].label) + 1}'
-                        : null,
-                selected: _ordered.contains(_palette[i].label),
-                emphasizeDealer: false,
-                densify: expandTeach,
-                enabled:
-                    widget.interactive &&
-                    widget.enabled &&
-                    !_ordered.contains(_palette[i].label),
-                onPressed:
-                    widget.interactive
-                        ? () => _onTap(_palette[i].label)
-                        : null,
-              ),
+                  !_ordered.contains(_palette[i].label),
+              onPressed:
+                  widget.interactive
+                      ? () => _onTap(_palette[i].label)
+                      : null,
             ),
           ),
         ],
@@ -716,7 +710,12 @@ class _ActionOrderDemoState extends State<ActionOrderDemo> {
             ? Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                child: seats,
+                // Pack densified seats, then scale up into the felt — fills
+                // tall-phone green without unbounded-max tile layout.
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: seats,
+                ),
               ),
             )
             : seats,
