@@ -646,14 +646,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Tight · plan · give — don’t gold-tip the tile.
       'act-06-11-01-checkpoint' =>
           'Best pre-label note bundle — pick the evidence pack.',
+      // SoftPulse owns TAG — don’t gold-tip the tile.
       'act-06-11-02-guided' =>
-          'Folds most, 3-bets strong — tap TAG.',
+          'Folds most, 3-bets strong — pick the label.',
+      // SoftPulse owns Selective vs extreme — don’t gold-tip the tile.
       'act-06-11-02-scaffolded' =>
-          'TAG versus Maniac — tap Selective vs extreme.',
+          'TAG versus Maniac — pick the difference.',
+      // Unguided: name the type; don’t tip TAG.
       'act-06-11-02-unguided' =>
-          'Opens tight, selective c-bets — tap TAG.',
+          'Opens tight, selective c-bets — pick the label.',
+      // SoftPulse owns Working model — don’t gold-tip the tile.
       'act-06-11-02-checkpoint' =>
-          'TAG is a working model — tap Working model.',
+          'TAG is a label from frequencies — pick how to treat it.',
       'act-06-11-03-checkpoint' =>
           'Versus TAG — tap Selective + disciplined.',
       'act-06-12-01-guided' =>
