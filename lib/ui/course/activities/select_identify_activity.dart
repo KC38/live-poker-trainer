@@ -321,8 +321,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         'Same cards — later seats play stronger.',
       'act-02-01-02-unguided-wait' =>
           'Action is on UTG — you are on the button. Stay quiet until it reaches you.',
+      // SoftPulse-quiet: ask who closes — don't tip “last seat” = BTN.
       'act-02-01-02-checkpoint-full' =>
-          'Six-max flop, everyone in — last seat still closes action.',
+          'Six-max flop, everyone in — pick who acts last.',
       // Unguided densify — pick when the street ends; SoftPulse stays quiet.
       'act-01-04-01-unguided-end' =>
         'Betting is live — pick when this street ends.',

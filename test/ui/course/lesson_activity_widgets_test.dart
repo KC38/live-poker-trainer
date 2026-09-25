@@ -9615,6 +9615,49 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
+  testWidgets('SoftPulse-quiet acting checkpoint uses pick-who-acts-last cue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-01-02-checkpoint-full',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Six-max flop everyone in — who acts last?',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Six-max flop · everyone in · who acts last?',
+      choices: const [
+        CourseChoice(id: 'last-btn', label: 'BTN'),
+        CourseChoice(id: 'last-bb', label: 'BB'),
+        CourseChoice(id: 'last-utg', label: 'UTG'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(
+      find.text('Six-max flop, everyone in — pick who acts last.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Six-max flop, everyone in — last seat still closes action.'),
+      findsNothing,
+    );
+    final table = tester.widget<LessonTableContext>(
+      find.byType(LessonTableContext),
+    );
+    expect(table.showSoftPulse, isFalse);
+    controller.dispose();
+  });
+
   testWidgets('section jump family taps Suited ace on densified felt', (
     tester,
   ) async {
