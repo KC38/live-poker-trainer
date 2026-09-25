@@ -547,14 +547,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Uncapped — don’t gold-tip the tile.
       'act-05-06-01-checkpoint' =>
           'XR then bet then shove — pressure stays uncapped.',
+      // SoftPulse owns Soft evidence — don’t gold-tip the tile.
       'act-05-07-01-guided' =>
-          'Instant shove — tap Soft evidence.',
+          'Instant shove — a clue, not proof of nuts or air.',
+      // SoftPulse owns Weaker / blocking — don’t gold-tip the tile.
       'act-05-07-01-scaffolded' =>
-          'Tiny flop bet — tap Weaker / blocking.',
+          'Tiny flop bet into a huge pot — often weak or blocking.',
+      // SoftPulse owns Reject — don’t gold-tip the tile.
       'act-05-07-01-unguided' =>
-          'Look-left tell — tap Reject.',
+          'Look-left magic tell — don’t treat folklore as proof.',
+      // SoftPulse owns Tiny update — don’t gold-tip the tile.
       'act-05-07-01-checkpoint' =>
-          'Best use of timing — tap Tiny update.',
+          'Live timing — nudge confidence beside stronger reads.',
       'act-05-08-01-guided' =>
           'Lost two buy-ins — tap Stuck / tilted.',
       'act-05-08-01-scaffolded' =>

@@ -16200,7 +16200,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s5 timing guided taps Soft evidence on shove felt', (
+  testWidgets('s5 timing guided SoftPulse Soft evidence — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -16233,8 +16233,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Instant shove — tap Soft evidence.'),
+      find.text('Instant shove — a clue, not proof of nuts or air.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Instant shove — tap Soft evidence.'),
+      findsNothing,
     );
     expect(find.text('Soft evidence'), findsWidgets);
     await tester.tap(find.text('Soft evidence').first);
@@ -16243,7 +16247,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s5 timing scaffolded taps Weaker / blocking on sizing felt', (
+  testWidgets('s5 timing scaffold SoftPulse Weaker — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -16272,8 +16276,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Tiny flop bet — tap Weaker / blocking.'),
+      find.text(
+        'Tiny flop bet into a huge pot — often weak or blocking.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Tiny flop bet — tap Weaker / blocking.'),
+      findsNothing,
     );
     await tester.tap(find.text('Weaker / blocking'));
     await tester.pump();
@@ -16281,7 +16291,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s5 timing unguided taps Reject on magic-tell felt', (
+  testWidgets('s5 timing unguided SoftPulse Reject — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -16309,14 +16319,20 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Look-left tell — tap Reject.'), findsOneWidget);
+    expect(
+      find.text(
+        'Look-left magic tell — don’t treat folklore as proof.',
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('Look-left tell — tap Reject.'), findsNothing);
     await tester.tap(find.text('Reject'));
     await tester.pump();
     expect(controller.draft.choiceId, 'reject');
     controller.dispose();
   });
 
-  testWidgets('s5 timing checkpoint taps Tiny update on evidence felt', (
+  testWidgets('s5 timing checkpoint SoftPulse Tiny update — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -16346,8 +16362,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Best use of timing — tap Tiny update.'),
+      find.text('Live timing — nudge confidence beside stronger reads.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Best use of timing — tap Tiny update.'),
+      findsNothing,
     );
     await tester.tap(find.text('Tiny update'));
     await tester.pump();
