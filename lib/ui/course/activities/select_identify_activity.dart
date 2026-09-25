@@ -782,14 +782,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'No type evidence — tap Baseline.',
       'act-07-08-01-checkpoint' =>
           'Integrated decision — tap All four.',
+      // SoftPulse owns Specific note — don’t gold-tip the tile.
       'act-07-09-01-guided' =>
-          'Best leak note — tap Specific note.',
+          'Best leak note — pick the useful shape.',
+      // SoftPulse owns Written range — don’t gold-tip the tile.
       'act-07-09-01-scaffolded' =>
-          'BTN vs unknown BB — tap Written range.',
+          'BTN vs unknown BB — pick the default source.',
+      // Unguided: name the habit; don’t tip On a schedule.
       'act-07-09-01-unguided' =>
-          'Review the book — tap On a schedule.',
+          'Review the book — pick when to do it.',
+      // SoftPulse owns Baseline — don’t gold-tip the tile.
       'act-07-09-01-checkpoint' =>
-          'Default book purpose — tap Baseline.',
+          'Default book purpose — pick the role.',
       'act-07-11-01-guided' =>
           'Warm-up checklist — tap Full list.',
       'act-07-11-01-scaffolded' =>

@@ -13457,6 +13457,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive leak review — tap Specific note or Vague',
       semanticsStatic: 'Leak-review guided outcomes',
       caption: scene.caption ?? 'Best leak note?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Specific note.
+      guideRegion: LessonTableRegion.leakReviewSpecific,
       phases: [
         (
           region: LessonTableRegion.leakReviewSpecific,
@@ -13464,7 +13466,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Actionable fix',
           visual: const Icon(
             Icons.edit_note,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13488,6 +13490,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive leak review — tap Written range or Mood says',
       semanticsStatic: 'Leak-review scaffolded outcomes',
       caption: scene.caption ?? 'Default BTN vs unknown BB open?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Written range.
+      guideRegion: LessonTableRegion.leakReviewWrittenRange,
       phases: [
         (
           region: LessonTableRegion.leakReviewWrittenRange,
@@ -13495,7 +13499,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'From your book',
           visual: const Icon(
             Icons.menu_book_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13505,7 +13509,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'No default',
           visual: const Icon(
             Icons.mood,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13519,6 +13523,7 @@ class LessonTableContext extends StatelessWidget {
           'Interactive leak review — tap On a schedule or Never',
       semanticsStatic: 'Leak-review unguided outcomes',
       caption: scene.caption ?? 'When to review the book?',
+      // No SoftPulse on unguided — still don’t gold-icon On a schedule.
       phases: [
         (
           region: LessonTableRegion.leakReviewOnSchedule,
@@ -13526,7 +13531,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'After sessions',
           visual: const Icon(
             Icons.event_repeat,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13550,6 +13555,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive leak review — tap Baseline or Replace all',
       semanticsStatic: 'Leak-review checkpoint outcomes',
       caption: scene.caption ?? 'Default book purpose?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Baseline.
+      guideRegion: LessonTableRegion.leakReviewBaseline,
       phases: [
         (
           region: LessonTableRegion.leakReviewBaseline,
@@ -13557,7 +13564,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Before exploits',
           visual: const Icon(
             Icons.foundation,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
