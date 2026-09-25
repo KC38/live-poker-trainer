@@ -1991,7 +1991,7 @@ void main() {
       ),
     );
     expect(
-      find.text('Matching ranks in the hole — tap the family.'),
+      find.text('Matching ranks in the hole — both cards share a rank.'),
       findsOneWidget,
     );
     expect(find.text('Name the family for your holes.'), findsNothing);
@@ -2052,7 +2052,7 @@ void main() {
       ),
     );
     expect(
-      find.text('Both cards ten-or-better — tap the family.'),
+      find.text('Both cards ten-or-better — high-card broadway strength shows up.'),
       findsOneWidget,
     );
     expect(find.text('Broadway'), findsOneWidget);
@@ -2110,7 +2110,7 @@ void main() {
         ),
       ),
     );
-    expect(find.text('Look at your holes — tap the family.'), findsOneWidget);
+    expect(find.text('Look at your holes — pick the family that fits.'), findsOneWidget);
     expect(find.text('Suited conn'), findsOneWidget);
     expect(find.text('Tap Suited conn.'), findsNothing);
     await tester.tap(find.text('Suited conn'));
@@ -2167,7 +2167,7 @@ void main() {
       ),
     );
     expect(
-      find.text('Early seat with junk — tap the family.'),
+      find.text('Early seat with junk — weak trash rarely belongs in the open.'),
       findsOneWidget,
     );
     expect(find.text('Offsuit trash'), findsOneWidget);
@@ -9301,7 +9301,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Look at your holes — tap the family they belong to.'),
+      find.text('Look at your holes — pick the family they belong to.'),
       findsOneWidget,
     );
     expect(find.text('Ah 5h belongs to which family?'), findsNothing);
