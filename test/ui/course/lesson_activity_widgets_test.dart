@@ -17155,7 +17155,9 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s6 equity guided taps In position on felt', (tester) async {
+  testWidgets('s6 equity guided SoftPulse In position — no gold tip', (
+    tester,
+  ) async {
     final activity = CourseActivity(
       id: 'act-06-02-01-guided',
       order: 2,
@@ -17181,14 +17183,20 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Same draw — tap In position.'), findsOneWidget);
+    expect(
+      find.text(
+        'Same draw — equity realizes better when you act last.',
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('Same draw — tap In position.'), findsNothing);
     await tester.tap(find.text('In position'));
     await tester.pump();
     expect(controller.draft.choiceId, 'ip');
     controller.dispose();
   });
 
-  testWidgets('s6 equity scaffolded taps Discount / fold on felt', (
+  testWidgets('s6 equity scaffold SoftPulse Discount — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -17217,8 +17225,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Weak SDV OOP — tap Discount / fold.'),
+      find.text(
+        'Weak showdown value OOP vs dual barrels — tighten continues.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Weak SDV OOP — tap Discount / fold.'),
+      findsNothing,
     );
     await tester.tap(find.text('Discount / fold'));
     await tester.pump();
@@ -17226,7 +17240,9 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s6 equity unguided taps Fold equity on felt', (tester) async {
+  testWidgets('s6 equity unguided SoftPulse Fold equity — no gold tip', (
+    tester,
+  ) async {
     final activity = CourseActivity(
       id: 'act-06-02-01-unguided',
       order: 4,
@@ -17252,14 +17268,20 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Nut draw XR — tap Fold equity.'), findsOneWidget);
+    expect(
+      find.text(
+        'Nut draw check-raise — pressure folds plus your outs.',
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('Nut draw XR — tap Fold equity.'), findsNothing);
     await tester.tap(find.text('Fold equity'));
     await tester.pump();
     expect(controller.draft.choiceId, 'realize');
     controller.dispose();
   });
 
-  testWidgets('s6 equity checkpoint taps Position + initiative on felt', (
+  testWidgets('s6 equity checkpoint SoftPulse Position — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -17288,8 +17310,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Realization rises with — tap Position + initiative.'),
+      find.text(
+        'Equity realization climbs with position and initiative.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Realization rises with — tap Position + initiative.'),
+      findsNothing,
     );
     await tester.tap(find.text('Position + initiative'));
     await tester.pump();
