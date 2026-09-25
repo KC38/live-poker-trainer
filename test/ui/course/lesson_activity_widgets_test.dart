@@ -9526,7 +9526,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Blinds plus three 6s — tap the pot total.'),
+      find.text('Blinds plus three 6s — add every contribution into the pot.'),
       findsOneWidget,
     );
     expect(
@@ -9588,7 +9588,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Preflop — tap who acts first (left of the BB).'),
+      find.text('Preflop — first to act sits left of the big blind.'),
       findsOneWidget,
     );
     expect(
@@ -9664,7 +9664,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('You said raise. Tap what counts at a live table.'),
+      find.text('You said raise — pick what counts at a live table.'),
       findsOneWidget,
     );
     expect(
@@ -9731,7 +9731,7 @@ await tester.tap(find.text('NIT'));
     );
     expect(
       find.text(
-        'Shorter stack caps the matchup — tap what matters with the pot.',
+        'Shorter stack caps the matchup — track effective stack with the pot.',
       ),
       findsOneWidget,
     );
