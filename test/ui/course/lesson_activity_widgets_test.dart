@@ -9002,7 +9002,8 @@ await tester.tap(find.text('STRONGER'));
     );
     expect(find.text('Made'), findsOneWidget);
     expect(find.text('Top pair'), findsOneWidget);
-    expect(find.text('Tap Made.'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no Tap footer mid-teach.
+    expect(find.text('Tap Made.'), findsNothing);
     await tester.tap(find.text('Made'));
     await tester.pump();
     expect(controller.draft.choiceId, 'made-tp');
@@ -9070,7 +9071,8 @@ await tester.tap(find.text('STRONGER'));
     );
     expect(find.text('Draw'), findsOneWidget);
     expect(find.text('Nut flush'), findsOneWidget);
-    expect(find.text('Tap Draw.'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no Tap footer mid-teach.
+    expect(find.text('Tap Draw.'), findsNothing);
     await tester.tap(find.text('Draw'));
     await tester.pump();
     expect(controller.draft.choiceId, 'nfd');
@@ -9259,7 +9261,8 @@ await tester.tap(find.text('STRONGER'));
     );
     expect(find.text('Remaining aces'), findsOneWidget);
     expect(find.text('Clean outs'), findsOneWidget);
-    expect(find.text('Tap the remaining aces.'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no Tap footer mid-teach.
+    expect(find.text('Tap the remaining aces.'), findsNothing);
     await tester.tap(find.text('Remaining aces'));
     await tester.pump();
     expect(controller.draft.choiceId, 'outs-3');
@@ -9315,7 +9318,8 @@ await tester.tap(find.text('STRONGER'));
       findsNothing,
     );
     expect(find.text('10 chips'), findsOneWidget);
-    expect(find.text('Tap how many chips to call.'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no Tap footer mid-teach.
+    expect(find.text('Tap how many chips to call.'), findsNothing);
     await tester.tap(find.text('10 chips'));
     await tester.pump();
     expect(controller.draft.choiceId, 'call-10');
@@ -9567,7 +9571,8 @@ await tester.tap(find.text('STRONGER'));
     expect(find.text('Pot'), findsOneWidget);
     expect(find.text('÷'), findsOneWidget);
     expect(find.text('SPR 4'), findsOneWidget);
-    expect(find.text('Tap SPR 4.'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no Tap footer mid-teach.
+    expect(find.text('Tap SPR 4.'), findsNothing);
     expect(find.byType(TextField), findsNothing);
     await tester.tap(find.text('SPR 4'));
     await tester.pump();
@@ -12918,7 +12923,8 @@ await tester.tap(find.text('STRONGER'));
       findsOneWidget,
     );
     expect(find.text('Sticky'), findsOneWidget);
-    expect(find.text('Tap Sticky.'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no Tap footer mid-teach.
+    expect(find.text('Tap Sticky.'), findsNothing);
     await tester.tap(find.text('Sticky'));
     await tester.pump();
     expect(controller.draft.choiceId, 'sticky');
@@ -18733,7 +18739,8 @@ await tester.tap(find.text('STRONGER'));
     expect(find.byType(HandExampleTile), findsNothing);
     expect(find.text('Flush'), findsOneWidget);
     expect(find.text('Five clubs'), findsOneWidget);
-    expect(find.text('Tap Flush.'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no Tap footer mid-teach.
+    expect(find.text('Tap Flush.'), findsNothing);
     expect(find.text('One pair'), findsOneWidget);
     expect(find.text('Straight'), findsOneWidget);
     expect(

@@ -7083,7 +7083,8 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive: 'Interactive call price — tap chips to call',
       semanticsStatic: 'Call price outcomes',
       caption: scene.caption ?? 'Pot 20 · villain bets 10',
-      cueLabel: 'Tap how many chips to call.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       phases: [
         (
           region: LessonTableRegion.callChipsTwenty,
@@ -7113,7 +7114,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive draw price — tap call, fold, or raise',
       semanticsStatic: 'Draw price outcomes',
       caption: scene.caption ?? 'Pot 20 · bet 10 · outs',
-      cueLabel: 'Tap Call, Fold, or Raise.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       phases: [
         (
           region: LessonTableRegion.drawPriceCall,
@@ -7155,7 +7157,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive implied odds — tap Implied',
       semanticsStatic: 'Outs implied odds outcomes',
       caption: scene.caption ?? '200bb · pot bet · sticky caller',
-      cueLabel: 'Tap Implied.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       phases: [
         (
           region: LessonTableRegion.outsImpliedPay,
@@ -7213,7 +7216,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive clean outs — tap remaining aces, aces+queens, or none',
       semanticsStatic: 'Outs guided count outcomes',
       caption: scene.caption ?? 'Flop · clean outs?',
-      cueLabel: 'Tap the remaining aces.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.outsCleanAces,
       phases: [
         (
@@ -7505,7 +7509,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive hand category — tap Flush, One pair, or Straight',
       semanticsStatic: 'Hand ranks spot outcomes',
       caption: scene.caption ?? 'River · your holes',
-      cueLabel: 'Tap Flush.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.handRankFlush,
       phases: [
         (
@@ -7643,7 +7648,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive turn card — tap brick, scare, or always-change',
       semanticsStatic: 'Turn brick scare outcomes',
       caption: scene.caption ?? 'Missed c-bet · turn blank?',
-      cueLabel: 'Tap Brick.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.turnBrick,
       phases: [
         (
@@ -7686,7 +7692,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive turn plan — tap give up, jam, or ignore',
       semanticsStatic: 'Turn scare plan outcomes',
       caption: scene.caption ?? 'Air bluff · turn completes draws',
-      cueLabel: 'Tap Give up.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.turnGiveUp,
       phases: [
         (
@@ -7729,7 +7736,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive river job — tap catch, thin value, or air',
       semanticsStatic: 'River job outcomes',
       caption: scene.caption ?? 'Medium one pair · big river bet',
-      cueLabel: 'Tap Catch.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.riverJobCatch,
       phases: [
         (
@@ -7783,7 +7791,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive speculative hand — tap suited connector, KTo, or Q6o',
       semanticsStatic: 'Multiway speculative outcomes',
       caption: scene.caption ?? 'Multiway · deep · pick the speculative',
-      cueLabel: 'Tap 76s.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.mwSpecSc,
       phases: [
         (
@@ -7814,7 +7823,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive seat note — tap note, ignore, or insult',
       semanticsStatic: 'Multiway observe outcomes',
       caption: scene.caption ?? 'Seat enters 8 of last 10 pots',
-      cueLabel: 'Tap Note.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.mwObsNote,
       phases: [
         (
@@ -7857,7 +7867,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive seat frequencies — tap notes, stories, or same',
       semanticsStatic: 'Leak seat note outcomes',
       caption: scene.caption ?? 'Seat A raises a lot · Seat B rarely enters',
-      cueLabel: 'Tap Notes.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.leakSeatNotes,
       phases: [
         (
@@ -7900,7 +7911,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive table track — tap pot and effective, holes, or talk',
       semanticsStatic: 'Jump table track outcomes',
       caption: scene.caption ?? 'Pot 16 · shorter stack 40bb',
-      cueLabel: 'Tap pot + effective.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.jumpTrackPotEff,
       phases: [
         (
@@ -7939,7 +7951,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive flop class — tap Draw, Made, or Air',
       semanticsStatic: 'Jump flop class outcomes',
       caption: scene.caption ?? 'Flop · class?',
-      cueLabel: 'Tap Draw.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.jumpClassDraw,
       phases: [
         (
@@ -7982,7 +7995,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive flop class — tap Made, Draw, or Air',
       semanticsStatic: 'Flop class guided outcomes',
       caption: scene.caption ?? 'Flop · your holes',
-      cueLabel: 'Tap Made.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.flopClassMade,
       phases: [
         (
@@ -8025,7 +8039,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive flop class — tap Draw, Made, or showdown value',
       semanticsStatic: 'Flop class scaffolded outcomes',
       caption: scene.caption ?? 'Flop · nut flush draw',
-      cueLabel: 'Tap Draw.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.flopClassNfd,
       phases: [
         (
@@ -8152,7 +8167,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive price leak — tap fold wrong price or call any draw',
       semanticsStatic: 'Jump leak price outcomes',
       caption: scene.caption ?? 'Gutshot · pot 10 · bet 20',
-      cueLabel: 'Tap Fold.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.jumpLeakFoldPrice,
       phases: [
         (
@@ -8185,7 +8201,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive UTG range — tap stronger-narrower, any two, or exact AK',
       semanticsStatic: 'Ranges guided outcomes',
       caption: scene.caption ?? '1/2 · UTG opens',
-      cueLabel: 'Tap Stronger / narrower.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.rangesStrongNarrow,
       phases: [
         (
@@ -8235,7 +8252,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive 3-bet ranges — tap BB stronger, BTN call, or identical',
       semanticsStatic: 'Ranges scaffolded outcomes',
       caption: scene.caption ?? 'BTN open · BB 3-bet · BTN calls',
-      cueLabel: 'Tap BB 3-bet.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.rangesBbStronger,
       phases: [
         (
@@ -8484,7 +8502,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive BB convert — tap the stack in big blinds',
       semanticsStatic: 'BB convert outcomes',
       caption: caption,
-      cueLabel: 'Tap ${correctBb}bb.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.bbConvertCorrect,
       minHeightFactor: 0.55,
       header: Row(
@@ -8565,7 +8584,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive SPR — tap 4, 2, or 8 from stack divided by pot',
       semanticsStatic: 'SPR guided outcomes',
       caption: caption,
-      cueLabel: 'Tap SPR 4.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.sprRatioFour,
       minHeightFactor: 0.58,
       header: Row(
@@ -8722,7 +8742,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive observe — tap sticky calls or folds too much',
       semanticsStatic: 'Observe sticky outcomes',
       caption: scene.caption ?? 'Called three streets · second pair ×2',
-      cueLabel: 'Tap Sticky.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.observeStickyCalls,
       phases: [
         (
@@ -11404,7 +11425,8 @@ class LessonTableContext extends StatelessWidget {
       semanticsStatic: '3-bet commit outcomes',
       caption:
           scene.caption ?? '100bb 4-bet pot. Flop top pair. Default mindset?',
-      cueLabel: 'Tap High commit.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.threeBetHighCommit,
       minHeightFactor: 0.55,
       header: Row(
@@ -11449,7 +11471,8 @@ class LessonTableContext extends StatelessWidget {
       semanticsStatic: '3-bet ego outcomes',
       caption:
           scene.caption ?? 'Light 4-bet bluff with no blockers for ego?',
-      cueLabel: 'Tap Avoid ego.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.threeBetAvoidEgo,
       minHeightFactor: 0.55,
       phases: [
@@ -11484,7 +11507,8 @@ class LessonTableContext extends StatelessWidget {
       semanticsStatic: '3-bet SPR outcomes',
       caption:
           scene.caption ?? 'Depth change in 3-bet pots mainly changes?',
-      cueLabel: 'Tap SPR / commit.',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.threeBetSprCommit,
       minHeightFactor: 0.55,
       phases: [
