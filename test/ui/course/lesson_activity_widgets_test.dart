@@ -16559,7 +16559,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s5 discipline guided taps Stop / move down on felt', (
+  testWidgets('s5 discipline guided SoftPulse Stop — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -16588,8 +16588,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Hit stop-loss — tap Stop / move down.'),
+      find.text(
+        'Hit a planned stop-loss — leave or move down, don’t chase.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Hit stop-loss — tap Stop / move down.'),
+      findsNothing,
     );
     await tester.tap(find.text('Stop / move down'));
     await tester.pump();
@@ -16597,7 +16603,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s5 discipline scaffolded taps Decline on felt', (
+  testWidgets('s5 discipline scaffold SoftPulse Decline — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -16625,14 +16631,18 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('2/5 opens — tap Decline.'), findsOneWidget);
+    expect(
+      find.text('2/5 opens with a 1/2 bankroll — stay inside the plan.'),
+      findsOneWidget,
+    );
+    expect(find.text('2/5 opens — tap Decline.'), findsNothing);
     await tester.tap(find.text('Decline'));
     await tester.pump();
     expect(controller.draft.choiceId, 'decline');
     controller.dispose();
   });
 
-  testWidgets('s5 discipline unguided taps Cash out on felt', (
+  testWidgets('s5 discipline unguided SoftPulse Cash out — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -16661,8 +16671,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Tired and up small — tap Cash out.'),
+      find.text(
+        'Tired and up small while the table gets wild — bank the win.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Tired and up small — tap Cash out.'),
+      findsNothing,
     );
     await tester.tap(find.text('Cash out'));
     await tester.pump();
@@ -16670,7 +16686,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s5 discipline checkpoint taps Your edge on felt', (
+  testWidgets('s5 discipline checkpoint SoftPulse Your edge — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -16699,8 +16715,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Session discipline — tap Your edge.'),
+      find.text('Session discipline is part of how you keep an edge.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Session discipline — tap Your edge.'),
+      findsNothing,
     );
     await tester.tap(find.text('Your edge'));
     await tester.pump();

@@ -568,14 +568,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Fresh samples — don’t gold-tip the tile.
       'act-05-08-01-checkpoint' =>
           'Dynamic reads stay temporary — keep sampling the seat.',
+      // SoftPulse owns Stop / move down — don’t gold-tip the tile.
       'act-05-09-01-guided' =>
-          'Hit stop-loss — tap Stop / move down.',
+          'Hit a planned stop-loss — leave or move down, don’t chase.',
+      // SoftPulse owns Decline — don’t gold-tip the tile.
       'act-05-09-01-scaffolded' =>
-          '2/5 opens — tap Decline.',
+          '2/5 opens with a 1/2 bankroll — stay inside the plan.',
+      // SoftPulse owns Cash out — don’t gold-tip the tile.
       'act-05-09-01-unguided' =>
-          'Tired and up small — tap Cash out.',
+          'Tired and up small while the table gets wild — bank the win.',
+      // SoftPulse owns Your edge — don’t gold-tip the tile.
       'act-05-09-01-checkpoint' =>
-          'Session discipline — tap Your edge.',
+          'Session discipline is part of how you keep an edge.',
       'act-05-09-02-cp-multi' =>
           'Four-way pot — pick the multiway priority.',
       'act-05-09-02-cp-tell' =>
