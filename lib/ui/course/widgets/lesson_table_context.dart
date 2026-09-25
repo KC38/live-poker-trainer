@@ -6997,26 +6997,27 @@ class LessonTableContext extends StatelessWidget {
           'Interactive effective stack — tap the shorter stack',
       semanticsStatic: 'Effective stack outcomes',
       caption: scene.caption ?? 'You 120bb · Villain 55bb',
-      // SoftPulse + Rex own the cue — no Tap 55bb footer.
+      // Jump densify — no SoftPulse spoiler / Tap footer on the correct tile.
       cueLabel: '',
-      guideRegion: LessonTableRegion.effectiveStackShort,
       phases: [
         (
           region: LessonTableRegion.effectiveStackShort,
           title: '55bb',
-          detail: 'Shorter',
-          visual: const _PotChipDot(label: '55', gold: true),
+          // Structural seat label — not “Shorter” answering the jump.
+          detail: 'Villain',
+          // Jump: no gold tip on the correct tile.
+          visual: const _PotChipDot(label: '55', gold: false),
         ),
         (
           region: LessonTableRegion.effectiveStackHero,
           title: '120bb',
-          detail: 'Your stack',
+          detail: 'You',
           visual: const _PotChipDot(label: '120', gold: false),
         ),
         (
           region: LessonTableRegion.effectiveStackSum,
           title: '175bb',
-          detail: 'Added up',
+          detail: 'Sum',
           visual: const _PotChipDot(label: '175', gold: false),
         ),
       ],

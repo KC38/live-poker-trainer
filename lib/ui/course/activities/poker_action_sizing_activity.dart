@@ -303,7 +303,8 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     'act-02-04-01-checkpoint-aq' =>
       'Strong suited broadway in the CO — tap your action.',
     'act-02-07-02-jump-vs' =>
-      'Aces in the big blind vs an open — tap your action.',
+      // Jump: seat + facing line — cards already show AA (no “Aces” tip).
+      'Big blind vs an open — tap your action.',
     'act-03-04-01-guided' =>
       'Top pair top kicker checked to you — tap a value bet.',
     'act-03-04-01-scaffolded' =>
