@@ -7355,11 +7355,12 @@ class MultiwayNutsDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'NUTTED', caption: 'Hands go up', color: AppColors.gold),
-    (label: 'AIR', caption: 'Hands go down', color: AppColors.cream),
+    // Structural — Rex owns “nutted up / air down / domination hurts.”
+    (label: 'NUTTED', caption: 'Prefer strong', color: AppColors.gold),
+    (label: 'AIR', caption: 'Cut speculative', color: AppColors.cream),
     (
       label: 'DOMINATION',
-      caption: 'Hurts more multiway',
+      caption: 'Second-best dies',
       color: AppColors.danger,
     ),
   ];
@@ -7444,7 +7445,7 @@ class _MultiwayNutsDemoState extends State<MultiwayNutsDemo> {
                 ),
               ),
               child: Text(
-                'Nutted up · air down · domination hurts',
+                'Nutted · air · domination',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
