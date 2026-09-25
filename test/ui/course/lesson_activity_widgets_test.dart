@@ -3212,7 +3212,7 @@ await tester.tap(find.text('BRICK'));
       ),
     );
     expect(find.byType(RiverBinaryDemo), findsOneWidget);
-    expect(find.text('Tap VALUE next'), findsOneWidget);
+    expect(find.text('Tap VALUE next'), findsNothing);
     expect(find.text('Tap Value, Bluff, Catch, and Fold'), findsNothing);
     expect(find.text('Tap Value, Bluff, Catch, and Fold.'), findsNothing);
     expect(
@@ -3235,13 +3235,13 @@ await tester.tap(find.text('BRICK'));
 
 await tester.tap(find.text('VALUE'));
     await tester.pump();
-    expect(find.text('Tap BLUFF next'), findsOneWidget);
+    expect(find.text('Tap BLUFF next'), findsNothing);
     await tester.tap(find.text('BLUFF'));
     await tester.pump();
-    expect(find.text('Tap CATCH next'), findsOneWidget);
+    expect(find.text('Tap CATCH next'), findsNothing);
     await tester.tap(find.text('CATCH'));
     await tester.pump();
-    expect(find.text('Tap FOLD next'), findsOneWidget);
+    expect(find.text('Tap FOLD next'), findsNothing);
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(feltAck, 1);
