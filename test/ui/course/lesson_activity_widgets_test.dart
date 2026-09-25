@@ -4906,7 +4906,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(RangeRewriteDemo), findsOneWidget);
-    expect(find.text('Tap ACTION next'), findsOneWidget);
+    expect(find.text('Tap ACTION next'), findsNothing);
     expect(find.text('Tap Action, Rewrite, and Update.'), findsNothing);
     expect(find.text('Tap Action, Rewrite, and Update'), findsNothing);
     expect(find.text('Each action rewrites the range'), findsNothing);
@@ -4926,10 +4926,10 @@ await tester.tap(find.text('NIT'));
 
     await tester.tap(find.text('ACTION'));
     await tester.pump();
-    expect(find.text('Tap REWRITE next'), findsOneWidget);
+    expect(find.text('Tap REWRITE next'), findsNothing);
     await tester.tap(find.text('REWRITE'));
     await tester.pump();
-    expect(find.text('Tap UPDATE next'), findsOneWidget);
+    expect(find.text('Tap UPDATE next'), findsNothing);
     await tester.tap(find.text('UPDATE'));
     await tester.pump();
     expect(feltAck, 1);
