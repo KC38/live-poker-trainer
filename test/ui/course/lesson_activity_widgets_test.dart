@@ -4161,7 +4161,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(ExtremeEntryDemo), findsOneWidget);
-    expect(find.text('Tap RAISE next'), findsOneWidget);
+    expect(find.text('Tap RAISE next'), findsNothing);
     expect(find.text('Tap Raise, Barrel, and Count.'), findsNothing);
     expect(find.text('Tap Raise, Barrel, and Count'), findsNothing);
     expect(find.text('Raise and barrel · count calmly'), findsNothing);
@@ -4181,10 +4181,10 @@ await tester.tap(find.text('NIT'));
 
     await tester.tap(find.text('RAISE'));
     await tester.pump();
-    expect(find.text('Tap BARREL next'), findsOneWidget);
+    expect(find.text('Tap BARREL next'), findsNothing);
     await tester.tap(find.text('BARREL'));
     await tester.pump();
-    expect(find.text('Tap COUNT next'), findsOneWidget);
+    expect(find.text('Tap COUNT next'), findsNothing);
     await tester.tap(find.text('COUNT'));
     await tester.pump();
     expect(feltAck, 1);
