@@ -22073,7 +22073,7 @@ await tester.tap(find.text('STRONGER'));
         ),
       );
       expect(find.byType(CapstoneLimpedDemo), findsOneWidget);
-      expect(find.text('Tap NUTS next'), findsOneWidget);
+      expect(find.text('Tap NUTS next'), findsNothing);
       expect(find.text('Tap Nuts, Value, and Thin.'), findsNothing);
       expect(find.text('Tap Nuts, Value, and Thin'), findsNothing);
       expect(
@@ -22095,10 +22095,10 @@ await tester.tap(find.text('STRONGER'));
 
       await tester.tap(find.text('NUTS'));
       await tester.pump();
-      expect(find.text('Tap VALUE next'), findsOneWidget);
+      expect(find.text('Tap VALUE next'), findsNothing);
       await tester.tap(find.text('VALUE'));
       await tester.pump();
-      expect(find.text('Tap THIN next'), findsOneWidget);
+      expect(find.text('Tap THIN next'), findsNothing);
       await tester.tap(find.text('THIN'));
       await tester.pump();
       expect(feltAck, 1);
