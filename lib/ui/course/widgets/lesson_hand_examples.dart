@@ -892,6 +892,12 @@ class HandRankLadderDemo extends StatefulWidget {
       title: 'One pair',
       codes: ['Qh', 'Qd', 'Jc', '8s', '4h'],
     ),
+    // Rex names "Flush beats straight" — SoftPulse must show that rung.
+    LessonHandExample(
+      id: 'demo-straight',
+      title: 'Straight',
+      codes: ['9h', '8d', '7c', '6s', '5h'],
+    ),
     LessonHandExample(
       id: 'demo-flush',
       title: 'Flush',
@@ -927,8 +933,8 @@ class _HandRankLadderDemoState extends State<HandRankLadderDemo> {
     // Keep densify after the last rung while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
-    // Tall-phone teach: fixed felt + stretched rungs (minHeight alone leaves
-    // sparse green under High card → One pair → Flush).
+    // Tall-phone teach: fixed felt + FittedBox rungs (minHeight alone leaves
+    // sparse green under High card → pair → straight → Flush).
     final feltHeight =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
 
@@ -987,11 +993,11 @@ class _HandRankLadderDemoState extends State<HandRankLadderDemo> {
                 border: Border.all(color: AppColors.gold.withValues(alpha: 0.45)),
               ),
               child: Text(
-                'High card → pair → flush',
+                'High card → pair → straight → flush',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
-                  fontSize: expandTeach ? 16 : 12,
+                  fontSize: expandTeach ? 15 : 12,
                   fontWeight: FontWeight.w700,
                 ),
               ),

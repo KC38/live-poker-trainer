@@ -462,13 +462,15 @@ void main() {
       stage: ActivityStage.explain,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
-      accessibilityText: 'Pair beats high card. Flush beats a pair.',
+      accessibilityText:
+          'Pair beats high card. Flush beats straight. Remember the ladder.',
       acceptedGrades: const [SoftGrade.recommended],
       coachMedia: const [
         CoachMediaRef(
           id: 'm',
           kind: 'dialogue',
-          text: 'Pair beats high card. Flush beats a pair.',
+          text:
+              'Pair beats high card. Flush beats straight. Remember the ladder.',
         ),
       ],
     );
@@ -487,7 +489,8 @@ void main() {
     expect(find.byType(HandRankLadderDemo), findsOneWidget);
     expect(find.text('Tap High card'), findsNothing);
     expect(find.text('Tap each rung from high card to flush.'), findsNothing);
-    expect(find.text('High card → pair → flush'), findsNothing);
+    expect(find.text('High card → pair → straight → flush'), findsNothing);
+    expect(find.text('Straight'), findsOneWidget);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     final teachHeight = tester
         .getSize(find.byKey(const ValueKey('hand-ladder-felt')))
@@ -509,13 +512,16 @@ void main() {
     await tester.tap(find.text('One pair'));
     await tester.pump();
     expect(feltAck, 0);
+    await tester.tap(find.text('Straight'));
+    await tester.pump();
+    expect(feltAck, 0);
     expect(find.text('Tap Flush'), findsNothing);
     await tester.tap(find.text('Flush'));
     await tester.pump();
     expect(feltAck, 1);
     expect(tester.takeException(), isNull);
     // Lock clears enabled / ack — densified shell must stay filled.
-    expect(find.text('High card → pair → flush'), findsOneWidget);
+    expect(find.text('High card → pair → straight → flush'), findsOneWidget);
     expect(
       tester.getSize(find.byKey(const ValueKey('hand-ladder-felt'))).height,
       moreOrLessEquals(teachHeight, epsilon: 1),
