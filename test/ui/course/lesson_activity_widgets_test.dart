@@ -1052,6 +1052,11 @@ void main() {
         epsilon: 1,
       ),
     );
+    // Densify titles grow past the compact 12px footprint so contain can
+    // fill tall-phone green (scaleDown left a void above FOLD WIN).
+    final foldWin = tester.getSize(find.text('FOLD WIN'));
+    expect(foldWin.height, greaterThanOrEqualTo(16));
+    expect(tester.takeException(), isNull);
     await tester.tap(find.text('FOLD WIN'));
     await tester.pump();
     expect(find.text('Tap Showdown'), findsNothing);
@@ -1061,6 +1066,7 @@ void main() {
     await tester.tap(find.text('SIDE POT'));
     await tester.pump();
     expect(feltAck, 1);
+    expect(tester.takeException(), isNull);
     // Lock clears enabled / ack — densified shell must stay filled.
     expect(find.text('Fold win · Showdown · Side pot'), findsOneWidget);
     expect(
