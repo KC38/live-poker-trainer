@@ -20508,7 +20508,7 @@ await tester.tap(find.text('STRONGER'));
         ),
       );
       expect(find.byType(SameCardsTypesDemo), findsOneWidget);
-      expect(find.text('Tap CARDS next'), findsOneWidget);
+      expect(find.text('Tap CARDS next'), findsNothing);
       expect(find.text('Tap Cards, Models, and Cite.'), findsNothing);
       expect(find.text('Tap Cards, Models, and Cite'), findsNothing);
       expect(
@@ -20520,10 +20520,10 @@ await tester.tap(find.text('STRONGER'));
 
       await tester.tap(find.text('CARDS'));
       await tester.pump();
-      expect(find.text('Tap MODELS next'), findsOneWidget);
+      expect(find.text('Tap MODELS next'), findsNothing);
       await tester.tap(find.text('MODELS'));
       await tester.pump();
-      expect(find.text('Tap CITE next'), findsOneWidget);
+      expect(find.text('Tap CITE next'), findsNothing);
       await tester.tap(find.text('CITE'));
       await tester.pump();
       expect(feltAck, 1);
