@@ -8950,11 +8950,15 @@ class LessonTableContext extends StatelessWidget {
           'Interactive player type — tap Calling Station or Nit',
       semanticsStatic: 'Calling Station vs Nit outcomes',
       caption: scene.caption ?? 'Called three streets · second pair',
+      // SoftPulse + Rex own the cue — no Tap footer / sticky-calls echo.
+      cueLabel: '',
+      guideRegion: LessonTableRegion.playerTypeStation,
       phases: [
         (
           region: LessonTableRegion.playerTypeStation,
+          // Structural — Rex owns “sticky calls” Station tell.
           title: 'Station',
-          detail: 'Sticky calls',
+          detail: 'Calls down',
           visual: const Icon(
             Icons.people_outline,
             color: AppColors.gold,
