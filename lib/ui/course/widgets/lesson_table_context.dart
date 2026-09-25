@@ -13395,6 +13395,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive same-cards types — tap Baseline or Guess type',
       semanticsStatic: 'Same-cards checkpoint outcomes',
       caption: scene.caption ?? 'No type evidence yet. Default?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Baseline.
+      guideRegion: LessonTableRegion.sameCardsBaseline,
       phases: [
         (
           region: LessonTableRegion.sameCardsBaseline,
@@ -13402,14 +13404,14 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Exploit needs evidence',
           visual: const Icon(
             Icons.balance,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
         (
           region: LessonTableRegion.sameCardsGuess,
           title: 'Guess type',
-          detail: 'Overfit',
+          detail: 'Assume a label',
           visual: const Icon(
             Icons.casino_outlined,
             color: AppColors.slate,
@@ -13426,6 +13428,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive type-board-line — tap All four or Cards only',
       semanticsStatic: 'Type-board-line checkpoint outcomes',
       caption: scene.caption ?? 'Integrated decision uses?',
+      // SoftPulse + Rex own the cue — don’t gold-tip All four.
+      guideRegion: LessonTableRegion.typeBoardAllFour,
       phases: [
         (
           region: LessonTableRegion.typeBoardAllFour,
@@ -13433,7 +13437,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Type · board · line · size',
           visual: const Icon(
             Icons.hub_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),

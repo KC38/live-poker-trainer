@@ -778,10 +778,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Every hand — don’t gold-tip the tile.
       'act-07-06-01-checkpoint' =>
           'Stack depth — pick how often to check.',
+      // SoftPulse owns Baseline — don’t gold-tip the tile.
       'act-07-07-01-checkpoint' =>
-          'No type evidence — tap Baseline.',
+          'No type evidence — pick the default.',
+      // SoftPulse owns All four — don’t gold-tip the tile.
       'act-07-08-01-checkpoint' =>
-          'Integrated decision — tap All four.',
+          'Integrated decision — pick the input set.',
       // SoftPulse owns Specific note — don’t gold-tip the tile.
       'act-07-09-01-guided' =>
           'Best leak note — pick the useful shape.',

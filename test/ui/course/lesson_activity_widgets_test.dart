@@ -22087,7 +22087,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('No type evidence — tap Baseline.'),
+      find.text('No type evidence — pick the default.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Baseline'));
@@ -22319,7 +22319,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Integrated decision — tap All four.'),
+      find.text('Integrated decision — pick the input set.'),
       findsOneWidget,
     );
     await tester.tap(find.text('All four'));
