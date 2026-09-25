@@ -9735,6 +9735,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive jump — tap station value or bluff more',
       semanticsStatic: 'Station jump exploit outcomes',
       caption: scene.caption ?? 'Sticky caller three streets',
+      // SoftPulse + Rex own the cue — don’t gold-tip Value more.
+      guideRegion: LessonTableRegion.jumpStationValue,
       phases: [
         (
           region: LessonTableRegion.jumpStationValue,
@@ -9742,14 +9744,15 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Bluff less',
           visual: const Icon(
             Icons.savings_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
         (
           region: LessonTableRegion.jumpStationBluff,
           title: 'Bluff more',
-          detail: 'Wrong exploit',
+          // Neutral line — don’t label the tile “Wrong …”.
+          detail: 'Thin river bluffs',
           visual: const Icon(
             Icons.whatshot_outlined,
             color: AppColors.slate,
@@ -9766,6 +9769,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive jump — tap respect heat or bluff-catch light',
       semanticsStatic: 'Nit jump exploit outcomes',
       caption: scene.caption ?? 'Tiny range · huge check-raise',
+      // SoftPulse + Rex own the cue — don’t gold-tip Respect.
+      guideRegion: LessonTableRegion.jumpNitRespect,
       phases: [
         (
           region: LessonTableRegion.jumpNitRespect,
@@ -9773,14 +9778,15 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Steal elsewhere',
           visual: const Icon(
             Icons.shield_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
         (
           region: LessonTableRegion.jumpNitBluffCatch,
           title: 'Catch light',
-          detail: 'Wrong vs heat',
+          // Neutral line — don’t label the tile “Wrong …”.
+          detail: 'Hero-call the XR',
           visual: const Icon(
             Icons.pan_tool_outlined,
             color: AppColors.slate,
@@ -9797,6 +9803,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive jump — tap call wider or fold all one-pair',
       semanticsStatic: 'Maniac jump exploit outcomes',
       caption: scene.caption ?? 'Barrels forever · you have top pair',
+      // SoftPulse + Rex own the cue — don’t gold-tip Call wider.
+      guideRegion: LessonTableRegion.jumpManiacCall,
       phases: [
         (
           region: LessonTableRegion.jumpManiacCall,
@@ -9804,7 +9812,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'No ego raise',
           visual: const Icon(
             Icons.handshake_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
