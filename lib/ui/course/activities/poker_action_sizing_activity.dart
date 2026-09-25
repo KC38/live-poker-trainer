@@ -275,6 +275,9 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     // Adjust vs Station: SoftPulse the plan; Rex names the model, not the dock.
     'act-04-06-03-guided' => 'thin-val',
     'act-04-06-03-scaffolded' => 'give-up',
+    // Adjust vs Nit: SoftPulse the plan; Rex names the model, not the dock.
+    'act-04-07-03-guided' => 'steal',
+    'act-04-07-03-scaffolded' => 'fold-mid',
     // Thin value / bluff-catch: SoftPulse the plan; Rex names the model.
     'act-05-04-01-guided' => 'tv',
     'act-05-04-01-scaffolded' => 'call-m',
@@ -456,13 +459,16 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Missed draw · same station — no fold equity on air.',
     // Unguided: list legal lines; don’t tip Keep it cautious alone.
     'act-04-06-03-unguided' =>
-      'Same hand · unknown seat — tap cautious or thin-value.',
+      'Same hand · unknown seat — pick cautious or thin-value.',
+    // SoftPulse owns Open / steal — don’t gold-tip the dock.
     'act-04-07-03-guided' =>
-      'Nit in the BB — tap Open / steal with K9o.',
+      'Nit in the BB · K9o on button — they overfold blinds.',
+    // SoftPulse owns Fold — don’t gold-tip the dock.
     'act-04-07-03-scaffolded' =>
-      'Nit check-raises middle pair — tap Fold.',
+      'Nit check-raises middle pair — their heat is usually strong.',
+    // Unguided: name the model; list legal lines without SoftPulse.
     'act-04-07-03-unguided' =>
-      'Unknown BB with K9o — tap Tighter.',
+      'Unknown BB with K9o — pick Tighter baseline or Always steal.',
     'act-04-08-03-guided' =>
       'Maniac barrels river — tap Call with top pair.',
     'act-04-08-03-scaffolded' =>
