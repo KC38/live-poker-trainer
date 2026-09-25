@@ -18039,7 +18039,7 @@ await tester.tap(find.text('STRONGER'));
         ),
       );
       expect(find.byType(LagModelDemo), findsOneWidget);
-      expect(find.text('Tap WIDE next'), findsOneWidget);
+      expect(find.text('Tap WIDE next'), findsNothing);
       expect(find.text('Tap Wide, Pressure, and Model.'), findsNothing);
       expect(find.text('Tap Wide, Pressure, and Model'), findsNothing);
       expect(
@@ -18051,10 +18051,10 @@ await tester.tap(find.text('STRONGER'));
 
       await tester.tap(find.text('WIDE'));
       await tester.pump();
-      expect(find.text('Tap PRESSURE next'), findsOneWidget);
+      expect(find.text('Tap PRESSURE next'), findsNothing);
       await tester.tap(find.text('PRESSURE'));
       await tester.pump();
-      expect(find.text('Tap MODEL next'), findsOneWidget);
+      expect(find.text('Tap MODEL next'), findsNothing);
       await tester.tap(find.text('MODEL'));
       await tester.pump();
       expect(feltAck, 1);
