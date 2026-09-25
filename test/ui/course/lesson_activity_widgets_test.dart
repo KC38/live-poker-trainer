@@ -3525,7 +3525,7 @@ await tester.tap(find.text('3-BET'));
       ),
     );
     expect(find.byType(MultiStreetPlanDemo), findsOneWidget);
-    expect(find.text('Tap FLOP next'), findsOneWidget);
+    expect(find.text('Tap FLOP next'), findsNothing);
     expect(find.text('Tap Flop, Turn, and River.'), findsNothing);
     expect(find.text('Tap Flop, Turn, and River'), findsNothing);
     expect(
@@ -3548,10 +3548,10 @@ await tester.tap(find.text('3-BET'));
 
 await tester.tap(find.text('FLOP'));
     await tester.pump();
-    expect(find.text('Tap TURN next'), findsOneWidget);
+    expect(find.text('Tap TURN next'), findsNothing);
     await tester.tap(find.text('TURN'));
     await tester.pump();
-    expect(find.text('Tap RIVER next'), findsOneWidget);
+    expect(find.text('Tap RIVER next'), findsNothing);
     await tester.tap(find.text('RIVER'));
     await tester.pump();
     expect(feltAck, 1);
