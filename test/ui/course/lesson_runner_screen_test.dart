@@ -398,6 +398,37 @@ void main() {
     expect(find.text('Tap the answer on the table.'), findsNothing);
   });
 
+  testWidgets('stale submit on the same step stays silent', (tester) async {
+    tester.view.physicalSize = const Size(390, 1200);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final stale = _SameStepStaleCourseService(catalog);
+    await tester.pumpWidget(
+      _app(
+        LessonRunnerScreen(
+          lessonId: kFirstCourseLessonId,
+          courseService: stale,
+          startRequestId: 'start_same_step',
+        ),
+        catalog: catalog,
+      ),
+    );
+    await _pumpUntil(tester, find.text('Tap your cards'));
+
+    final heroRail = find.byWidgetPredicate(
+      (w) => w is MiniCard && w.size == MiniCardSize.hero,
+    );
+    await tester.tap(heroRail.first);
+    await tester.pump();
+    await tester.pump();
+
+    expect(stale.startCount, 2);
+    expect(find.text('Caught up to your saved progress.'), findsNothing);
+    expect(find.textContaining('Stale activity'), findsNothing);
+    expect(find.text('Tap your cards'), findsOneWidget);
+  });
+
   testWidgets('order-sequence lessons hide the Check dock', (tester) async {
     tester.view.physicalSize = const Size(390, 1200);
     tester.view.devicePixelRatio = 1;
@@ -804,6 +835,75 @@ class _AnonymousAuthService implements AuthService {
 
   @override
   Future<void> signOut() async {}
+}
+
+/// Stale submit whose resume pointer stays on the activity already showing.
+class _SameStepStaleCourseService extends CourseService {
+  _SameStepStaleCourseService(this.catalog) : super();
+
+  final CourseCatalog catalog;
+  var startCount = 0;
+
+  List<CourseActivity> get activities =>
+      catalog.activitiesForLesson(kFirstCourseLessonId);
+
+  @override
+  Future<void> initializeProfile({
+    required String catalogVersion,
+    String timezone = 'UTC',
+    String? experienceBand,
+    int? dailyGoalMinutes,
+    String? recommendedLessonId,
+  }) async {}
+
+  @override
+  Future<StartCourseLessonResult> startLesson({
+    required String lessonId,
+    required String catalogVersion,
+    required String startRequestId,
+    String timezone = 'UTC',
+  }) async {
+    startCount += 1;
+    final activity = activities.first;
+    return StartCourseLessonResult(
+      attempt: CourseAttemptSnapshot(
+        attemptId: 'attempt-same',
+        lessonId: lessonId,
+        catalogVersion: catalogVersion,
+        status: 'in_progress',
+        activityIndex: 0,
+        currentActivityId: activity.id,
+        livesRemaining: 3,
+        livesMax: 3,
+        acceptedCount: 0,
+        scoredCount: 0,
+        stepCount: 0,
+      ),
+      resume: CourseResumePointer(
+        attemptId: 'attempt-same',
+        lessonId: lessonId,
+        activityId: activity.id,
+        activityIndex: 0,
+      ),
+      duplicate: startCount > 1,
+    );
+  }
+
+  @override
+  Future<SubmitCourseStepResult> submitStep({
+    required String attemptId,
+    required String activityId,
+    required String idempotencyKey,
+    String? catalogVersion,
+    String? choiceId,
+    List<String>? orderedIds,
+    double? numericValue,
+  }) async {
+    throw const CourseServiceException(
+      'Stale activity. Resume the lesson and retry.',
+      code: 'aborted',
+    );
+  }
 }
 
 /// First explain felt-tap is rejected as stale; resume points at guided.

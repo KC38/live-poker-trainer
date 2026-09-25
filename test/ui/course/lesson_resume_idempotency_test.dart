@@ -8,6 +8,8 @@ import 'package:live_poker_trainer/services/firestore/course_service.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   test('idempotency key is stable across retries for one answer', () {
     UniqueKeySeed.reset();
     final activity = CourseActivity(
@@ -323,6 +325,107 @@ void main() {
     expect(controller.draft.choiceId, isNull);
     expect(controller.draft.handStepIndex, 1);
     expect(controller.pendingIdempotencyKey, isNull);
+    controller.dispose();
+  });
+
+  test('selectChoice accepts the active hand-step id and ignores others', () {
+    final activity = CourseActivity(
+      id: 'multi',
+      order: 1,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 40,
+      accessibilityText: 'multi',
+      acceptedGrades: const [SoftGrade.recommended],
+      handSteps: const [
+        CourseHandStep(
+          id: 'flop',
+          street: 'flop',
+          prompt: 'Flop',
+          choices: [
+            CourseChoice(id: 'check', label: 'Check'),
+            CourseChoice(id: 'bet', label: 'Bet'),
+          ],
+        ),
+        CourseHandStep(
+          id: 'turn',
+          street: 'turn',
+          prompt: 'Turn',
+          choices: [CourseChoice(id: 'raise', label: 'Raise')],
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    var autoSubmits = 0;
+    controller.onAutoSubmit = () => autoSubmits += 1;
+
+    // Top-level choices are empty; a later-street id must not sneak through.
+    controller.selectChoice('raise', autoSubmit: true);
+    expect(controller.draft.choiceId, isNull);
+    expect(autoSubmits, 0);
+
+    controller.selectChoice('bet', autoSubmit: true);
+    expect(controller.draft.choiceId, 'bet');
+    expect(autoSubmits, 1);
+
+    controller.setHandStepIndex(1);
+    expect(controller.draft.choiceId, isNull);
+    controller.selectChoice('bet', autoSubmit: true);
+    expect(controller.draft.choiceId, isNull);
+    expect(autoSubmits, 1);
+    controller.selectChoice('raise', autoSubmit: true);
+    expect(controller.draft.choiceId, 'raise');
+    expect(controller.draft.handStepIndex, 1);
+    expect(autoSubmits, 2);
+
+    // Lookup clamps to the last authored step when the index runs past it.
+    controller.setHandStepIndex(9);
+    controller.selectChoice('check', autoSubmit: true);
+    expect(controller.draft.choiceId, isNull);
+    expect(autoSubmits, 2);
+    controller.selectChoice('raise');
+    expect(controller.draft.choiceId, 'raise');
+    expect(controller.draft.handStepIndex, 9);
+
+    controller.beginSubmit('k');
+    controller.selectChoice('raise', autoSubmit: true);
+    expect(autoSubmits, 2);
+    controller.dispose();
+  });
+
+  test('selectChoice ignores a choice id from the previous activity', () {
+    final guided = CourseActivity(
+      id: 'guided',
+      order: 1,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 30,
+      accessibilityText: 'guided',
+      acceptedGrades: const [SoftGrade.recommended],
+      choices: const [CourseChoice(id: 'old-raise', label: 'Raise')],
+    );
+    final next = CourseActivity(
+      id: 'scaffolded',
+      order: 2,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 30,
+      accessibilityText: 'next',
+      acceptedGrades: const [SoftGrade.recommended],
+      choices: const [CourseChoice(id: 'new-call', label: 'Call')],
+    );
+    final controller = LessonActivityController(activity: guided);
+    controller.bindActivity(next);
+    var autoSubmits = 0;
+    controller.onAutoSubmit = () => autoSubmits += 1;
+
+    controller.selectChoice('old-raise', autoSubmit: true);
+    expect(controller.draft.hasAnswer, isFalse);
+    expect(autoSubmits, 0);
+
+    controller.selectChoice('new-call', autoSubmit: true);
+    expect(controller.draft.choiceId, 'new-call');
+    expect(autoSubmits, 1);
     controller.dispose();
   });
 
