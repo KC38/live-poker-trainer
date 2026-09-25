@@ -10052,7 +10052,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('King-high board. Tap the remaining aces — your clean outs.'),
+      find.text('King-high board — count only outs that make the best hand.'),
       findsOneWidget,
     );
     expect(
@@ -10064,7 +10064,7 @@ await tester.tap(find.text('NIT'));
     // Teach-by-doing: SoftPulse individual ace cards — not MCQ titles.
     expect(find.text('Remaining aces'), findsNothing);
     expect(find.text('Aces + queens'), findsNothing);
-    expect(find.text('Tap every remaining ace'), findsOneWidget);
+    expect(find.text('Select every clean out'), findsOneWidget);
     await tester.tap(find.byKey(const ValueKey('outs-ace-As')));
     await tester.pump();
     expect(controller.draft.choiceId, isNull);
@@ -10149,7 +10149,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Pot 20, bet 10 — tap how many chips to call.'),
+      find.text('Pot 20, bet 10 — the call equals the bet in front of you.'),
       findsOneWidget,
     );
     expect(
@@ -10225,7 +10225,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Getting 3:1 with real outs — tap what you do.'),
+      find.text('Getting 3:1 with real outs — pick Call, Fold, or Raise.'),
       findsOneWidget,
     );
     expect(find.text('Pot 20 · bet 10'), findsOneWidget);
@@ -10315,7 +10315,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Nut flush draw, deep and sticky — tap Implied.'),
+      find.text('Nut flush draw, deep and sticky — future payoffs can justify the price.'),
       findsOneWidget,
     );
     expect(
