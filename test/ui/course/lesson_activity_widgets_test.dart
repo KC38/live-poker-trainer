@@ -775,7 +775,8 @@ void main() {
         CoachMediaRef(
           id: 'm',
           kind: 'dialogue',
-          text: 'Bet opens the betting. Raise reopens it. All-in is just size-capped.',
+          text:
+              'Three chip-pushing buttons — SoftPulse walks each role.',
         ),
       ],
     );
@@ -791,7 +792,7 @@ void main() {
     );
     expect(
       find.text(
-        'Bet opens the betting. Raise reopens it. All-in is just size-capped.',
+        'Three chip-pushing buttons — SoftPulse walks each role.',
       ),
       findsOneWidget,
     );
@@ -801,7 +802,7 @@ void main() {
         activityId: activity.id,
         grade: SoftGrade.recommended,
         feedback:
-            'Bet opens the betting. Raise reopens it. All-in is just size-capped.',
+            'Three chip-pushing buttons — SoftPulse walks each role.',
         accepted: true,
         lifeLost: false,
         livesRemaining: 3,
@@ -820,7 +821,7 @@ void main() {
     // Feedback sheet is owned by the runner — activity itself must drop Rex.
     expect(
       find.text(
-        'Bet opens the betting. Raise reopens it. All-in is just size-capped.',
+        'Three chip-pushing buttons — SoftPulse walks each role.',
       ),
       findsNothing,
     );
@@ -855,7 +856,7 @@ void main() {
         ),
       ),
     );
-    expect(find.text('The pot is open — tap a bet size.'), findsOneWidget);
+    expect(find.text('The pot is open — pick a value size.'), findsOneWidget);
     // SoftPulse + Rex own the cue — no third "tap…" line under the dock.
     expect(find.text('Tap your action on the dock.'), findsNothing);
     expect(find.text('Tap Bet to open the pot.'), findsNothing);
@@ -882,7 +883,7 @@ void main() {
       ),
     );
     await tester.pump();
-    expect(find.text('The pot is open — tap a bet size.'), findsNothing);
+    expect(find.text('The pot is open — pick a value size.'), findsNothing);
     controller.dispose();
   });
 
