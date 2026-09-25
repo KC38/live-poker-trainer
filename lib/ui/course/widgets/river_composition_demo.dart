@@ -17,9 +17,10 @@ class RiverCompositionDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'VALUE', caption: 'They call worse', color: AppColors.gold),
-    (label: 'BLUFF', caption: 'They fold better', color: AppColors.cream),
-    (label: 'HOLD', caption: 'No story', color: AppColors.danger),
+    // Structural — Rex owns “call worse / fold better / check trash.”
+    (label: 'VALUE', caption: 'Needs calls', color: AppColors.gold),
+    (label: 'BLUFF', caption: 'Needs folds', color: AppColors.cream),
+    (label: 'HOLD', caption: 'Check trash', color: AppColors.danger),
   ];
 
   @override
@@ -206,30 +207,60 @@ class _RiverCompositionTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(densify ? 16 : 12),
         border: Border.all(color: borderColor, width: selected ? 2.5 : 1),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            label,
-            style: GoogleFonts.manrope(
-              color: AppColors.cream,
-              fontSize: densify ? 18 : 12,
-              fontWeight: FontWeight.w900,
+      child: densify
+          ? FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    label,
+                    style: GoogleFonts.manrope(
+                      color: AppColors.cream,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    caption,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.manrope(
+                      // SoftPulse densify tints are light — cream keeps
+                      // captions legible on gold / cream / danger tiles.
+                      color: AppColors.cream.withValues(alpha: 0.82),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  label,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.cream,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  caption,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.cream.withValues(alpha: 0.9),
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
-          ),
-          SizedBox(height: densify ? 10 : 4),
-          Text(
-            caption,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.manrope(
-              color: AppColors.cream.withValues(alpha: 0.9),
-              fontSize: densify ? 13 : 10,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
     );
     final child = densify ? SizedBox.expand(child: card) : card;
     if (onPressed == null) return child;
