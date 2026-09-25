@@ -11241,8 +11241,12 @@ await tester.tap(find.text('NIT'));
     expect(find.byType(LessonActionTable), findsOneWidget);
     expect(find.byType(LessonActionDock), findsOneWidget);
     expect(
-      find.text('Suited broadway UTG — tap Open to 6.'),
+      find.text('Suited broadway UTG — open for value first in.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Suited broadway UTG — tap Open to 6.'),
+      findsNothing,
     );
     // SoftPulse + Rex own the cue — no third felt gold status line.
     expect(find.text('First in — open the pot'), findsNothing);
@@ -11286,8 +11290,14 @@ await tester.tap(find.text('NIT'));
     );
     expect(find.byType(LessonActionTable), findsOneWidget);
     expect(
-      find.text('Pair on the button vs a small open — tap Call.'),
+      find.text(
+        'Pair on the button vs a small open — continue in position.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Pair on the button vs a small open — tap Call.'),
+      findsNothing,
     );
     // SoftPulse + Rex own the cue — no third felt gold status line.
     expect(find.text('A bet faces you'), findsNothing);
@@ -11335,8 +11345,16 @@ await tester.tap(find.text('NIT'));
     expect(find.byType(LessonActionTable), findsOneWidget);
     expect(find.byType(LessonActionDock), findsOneWidget);
     expect(
-      find.text('CO open faces you on the button — tap Fold, Call, or 3-bet.'),
+      find.text(
+        'CO open faces you on the button — pick Fold, Call, or 3-bet.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text(
+        'CO open faces you on the button — tap Fold, Call, or 3-bet.',
+      ),
+      findsNothing,
     );
     expect(find.text('Full ring. Decide versus a cutoff open.'), findsNothing);
     expect(find.text('Hand lab — tap the action you would take live.'), findsNothing);
@@ -11380,7 +11398,8 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(LessonActionTable), findsOneWidget);
-    expect(find.text('UTG first in — tap Fold or Open.'), findsOneWidget);
+    expect(find.text('UTG first in — pick Fold or Open.'), findsOneWidget);
+    expect(find.text('UTG first in — tap Fold or Open.'), findsNothing);
     expect(find.text('Trash UTG — tap Fold or Open.'), findsNothing);
     expect(find.text('UTG with 72o. Action?'), findsNothing);
     // Jump: structural felt only — no “trash folds” answer tip.
@@ -11424,8 +11443,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Big blind vs an open — tap your action.'),
+      find.text('Big blind vs an open — pick your action.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Big blind vs an open — tap your action.'),
+      findsNothing,
     );
     expect(
       find.text('Aces in the big blind vs an open — tap your action.'),

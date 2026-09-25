@@ -318,17 +318,18 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     'act-01-03-02-scaffolded-raise' => 'They bet — pick how you charge.',
     'act-01-03-02-unguided-allin' => 'Short vs a big bet — pick what you can put in.',
     'act-01-03-02-checkpoint-names' => 'The pot is open — pick the first chips.',
+    // SoftPulse owns Open to 6 — don’t gold-tip the dock.
     'act-02-07-01-guided-ep' =>
-      'Suited broadway UTG — tap Open to 6.',
+      'Suited broadway UTG — open for value first in.',
+    // SoftPulse owns Call — don’t gold-tip the dock.
     'act-02-07-01-scaffolded-vs' =>
-      'Pair on the button vs a small open — tap Call.',
-    // Unguided: name the spot, not the answer.
+      'Pair on the button vs a small open — continue in position.',
+    // Unguided: name the spot; list legal lines without SoftPulse.
     'act-02-07-01-unguided-lab' =>
-      'CO open faces you on the button — tap Fold, Call, or 3-bet.',
-    // Jump: name the spot, not the answer.
+      'CO open faces you on the button — pick Fold, Call, or 3-bet.',
     // Jump: name the seat, not the answer.
     'act-02-07-02-jump-open' =>
-      'UTG first in — tap Fold or Open.',
+      'UTG first in — pick Fold or Open.',
     'act-02-03-01-guided-utg' =>
       'Trash UTG — pick how you leave.',
     'act-02-03-01-scaffolded-qq' =>
@@ -351,7 +352,7 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Strong suited broadway in the CO — pick your line.',
     'act-02-07-02-jump-vs' =>
       // Jump: seat + facing line — cards already show AA (no “Aces” tip).
-      'Big blind vs an open — tap your action.',
+      'Big blind vs an open — pick your action.',
     'act-03-04-01-guided' =>
       'Top pair top kicker checked to you — tap a value bet.',
     'act-03-04-01-scaffolded' =>
