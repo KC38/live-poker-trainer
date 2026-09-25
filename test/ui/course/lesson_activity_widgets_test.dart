@@ -4175,11 +4175,21 @@ await tester.tap(find.text('VALUE'));
     expect(find.byType(SizingLanguageDemo), findsOneWidget);
     expect(find.text('Three size stories'), findsOneWidget);
     expect(find.text('Size is language'), findsNothing);
+    expect(find.text('Looks like value'), findsNothing);
+    expect(find.text('Looks like pressure'), findsNothing);
+    expect(find.text('Says which story'), findsNothing);
+    expect(find.text('Get paid honestly'), findsOneWidget);
+    expect(find.text('Force folds'), findsOneWidget);
+    expect(find.text('Pick the story'), findsOneWidget);
     expect(find.text('Tap VALUE next'), findsNothing);
     expect(find.text('Tap Value, Pressure, and Size'), findsNothing);
     expect(find.text('Tap Value, Pressure, and Size.'), findsNothing);
     expect(
       find.text('Value looks like value · pressure looks like pressure'),
+      findsNothing,
+    );
+    expect(
+      find.text('Value · pressure · size'),
       findsNothing,
     );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
@@ -4196,7 +4206,7 @@ await tester.tap(find.text('VALUE'));
       ),
     );
 
-await tester.tap(find.text('VALUE'));
+    await tester.tap(find.text('VALUE'));
     await tester.pump();
     expect(find.text('Tap PRESSURE next'), findsNothing);
     await tester.tap(find.text('PRESSURE'));
@@ -4208,6 +4218,10 @@ await tester.tap(find.text('VALUE'));
     // Lock clears enabled / ack — densified shell must stay filled.
     expect(
       find.text('Value looks like value · pressure looks like pressure'),
+      findsNothing,
+    );
+    expect(
+      find.text('Value · pressure · size'),
       findsOneWidget,
     );
     expect(
