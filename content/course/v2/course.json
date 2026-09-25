@@ -2856,7 +2856,7 @@
                   "stage": "jump_test",
                   "renderer": "order_sequence",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Jump test: UTG then HJ then BTN.",
+                  "accessibilityText": "Jump test: pick seats in the order they act.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2866,7 +2866,7 @@
                   "objectives": [
                     "Confirm acting order"
                   ],
-                  "prompt": "Preflop order after blinds: first three to act.",
+                  "prompt": "Pick seats in the order they act.",
                   "sequenceItems": [
                     {
                       "id": "j-utg",

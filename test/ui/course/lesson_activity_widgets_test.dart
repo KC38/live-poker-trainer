@@ -9155,15 +9155,109 @@ await tester.tap(find.text('NIT'));
         AuthoredMultiStepActivity(
           activity: activity,
           controller: controller,
-          showGuidance: true,
+          showGuidance: false,
         ),
       ),
     );
     expect(find.textContaining('Preflop · Button'), findsOneWidget);
+    expect(
+      find.text('Button with ATs — folds to you. Pick Raise to 6 or Fold.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Jump check — open the button, then take the blinds.'),
+      findsNothing,
+    );
     expect(find.text('RAISE TO 6'), findsOneWidget);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, isNull);
     await tester.tap(find.text('RAISE TO 6'));
     await tester.pump();
     expect(controller.draft.choiceId, 'j-open');
+    controller.dispose();
+  });
+
+  testWidgets('SoftPulse-quiet jump hand end uses pick cue without SoftPulse', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-06-02-jump-hand',
+      order: 4,
+      stage: ActivityStage.jumpTest,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 70,
+      accessibilityText: 'hand',
+      acceptedGrades: const [SoftGrade.recommended],
+      handSteps: const [
+        CourseHandStep(
+          id: 'j-hand-end',
+          street: 'preflop',
+          prompt: 'Blinds fold. What happened?',
+          choices: [
+            CourseChoice(id: 'j-yes', label: 'Won pot'),
+            CourseChoice(id: 'j-no', label: 'Need showdown'),
+          ],
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        AuthoredMultiStepActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(
+      find.text('Blinds folded — pick Won pot or Need showdown.'),
+      findsOneWidget,
+    );
+    expect(find.text('Hand over · blinds folded'), findsNothing);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, isNull);
+    await tester.tap(find.text('WON POT'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'j-yes');
+    controller.dispose();
+  });
+
+  testWidgets('SoftPulse-quiet jump order uses pick cue without SoftPulse', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-06-02-jump-order',
+      order: 2,
+      stage: ActivityStage.jumpTest,
+      renderer: ActivityRenderer.orderSequence,
+      estimatedSeconds: 40,
+      accessibilityText: 'Jump test: pick seats in the order they act.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Pick seats in the order they act.',
+      sequenceItems: const [
+        CourseChoice(id: 'j-utg', label: 'UTG'),
+        CourseChoice(id: 'j-hj', label: 'HJ'),
+        CourseChoice(id: 'j-btn', label: 'BTN'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        OrderSequenceActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(find.text('Pick seats in the order they act.'), findsOneWidget);
+    expect(
+      find.text('Preflop order after blinds: first three to act.'),
+      findsNothing,
+    );
+    expect(find.text('Tap to place'), findsNothing);
+    expect(find.byKey(const ValueKey('seat-order-felt')), findsOneWidget);
     controller.dispose();
   });
 

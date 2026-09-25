@@ -1210,8 +1210,8 @@ export function buildSectionOne() {
               }),
               sequenceAct({
                 id: "act-01-06-02-jump-order", order: 2, stage: "jump_test",
-                prompt: "Preflop order after blinds: first three to act.",
-                a11y: "Jump test: UTG then HJ then BTN.",
+                prompt: "Pick seats in the order they act.",
+                a11y: "Jump test: pick seats in the order they act.",
                 objectives: ["Confirm acting order"],
                 lifeLoss: true,
                 items: [
