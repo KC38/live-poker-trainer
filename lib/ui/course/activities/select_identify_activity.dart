@@ -334,16 +334,21 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'You are short all-in. Tap what is true.',
       'act-01-02-02-unguided-board' =>
           'Both checked down — tap who takes the pot.',
+      // SoftPulse owns Cover + wait — don’t gold-tip the tile.
       'act-02-07-01-checkpoint-habit' =>
-          'Cards uncovered and action left — tap the safe habit.',
+          'Cards uncovered and action left — cover up and wait your turn.',
+      // SoftPulse owns Watch first — don’t gold-tip the tile.
       'act-02-06-01-guided-follow' =>
-          'Two seats act before you — tap what you do first.',
+          'Two seats act before you — watch them finish before you decide.',
+      // SoftPulse owns verbal raise — don’t gold-tip the tile.
       'act-02-06-01-scaffolded-verbal' =>
-          'You want to raise — tap the clearest live announce.',
+          'You want to raise — say the amount clearly so the table hears it.',
+      // SoftPulse owns Chip on cards — don’t gold-tip the tile.
       'act-02-06-01-unguided-protect' =>
-          'Cards near the muck — tap how you protect them.',
+          'Cards near the muck — keep something on them so they stay yours.',
+      // SoftPulse owns Out of turn — don’t gold-tip the tile.
       'act-02-06-01-checkpoint-oot' =>
-          'You raised early — tap what went wrong.',
+          'You raised early — action was still two seats left.',
       'act-02-07-02-jump-pos' =>
           'Tap the seat right before the button.',
       'act-02-07-02-jump-family' =>

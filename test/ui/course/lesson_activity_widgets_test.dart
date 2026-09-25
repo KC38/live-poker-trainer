@@ -2971,7 +2971,7 @@ void main() {
       ),
     );
     expect(
-      find.text('Two seats act before you — tap what you do first.'),
+      find.text('Two seats act before you — watch them finish before you decide.'),
       findsOneWidget,
     );
     // SoftPulse + Rex own the cue — felt caption stays structural.
@@ -3022,7 +3022,7 @@ void main() {
         ),
       );
       expect(
-        find.text('Cards near the muck — tap how you protect them.'),
+        find.text('Cards near the muck — keep something on them so they stay yours.'),
         findsOneWidget,
       );
       // Structural felt caption — no muck/discard echo of Rex.
@@ -9165,7 +9165,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Cards uncovered and action left — tap the safe habit.'),
+      find.text('Cards uncovered and action left — cover up and wait your turn.'),
       findsOneWidget,
     );
     expect(
