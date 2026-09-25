@@ -13310,8 +13310,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Queens on the button vs a CO open — tap a 3-bet.'),
+      find.text(
+        'Queens on the button vs a CO open — reopen for value.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Queens on the button vs a CO open — tap a 3-bet.'),
+      findsNothing,
     );
     expect(find.text('3-BET TO ~18'), findsOneWidget);
     final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
@@ -13352,8 +13358,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('72o faces a BB 3-bet — tap Fold.'),
+      find.text(
+        '72o faces a BB 3-bet — leave without defending trash.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('72o faces a BB 3-bet — tap Fold.'),
+      findsNothing,
     );
     expect(find.text('FOLD'), findsOneWidget);
     final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
@@ -13399,9 +13411,15 @@ await tester.tap(find.text('NIT'));
     );
     expect(
       find.text(
-        'UTG open, two callers, AKo in BB — tap Fold, Limp behind, or Squeeze.',
+        'UTG open, two callers, AKo in BB — pick Fold, Limp behind, or Squeeze.',
       ),
       findsOneWidget,
+    );
+    expect(
+      find.text(
+        'UTG open, two callers, AKo in BB — tap Fold, Limp behind, or Squeeze.',
+      ),
+      findsNothing,
     );
     expect(
       find.text(
@@ -13421,6 +13439,53 @@ await tester.tap(find.text('NIT'));
     await tester.tap(find.text('SQUEEZE TO ~20'));
     await tester.pump();
     expect(controller.draft.choiceId, 'squeeze');
+    controller.dispose();
+  });
+
+  testWidgets('s4 3bet checkpoint SoftPulse 3-bet to 18 — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-02-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 40,
+      accessibilityText: 'Pick a live 3-bet size with kings.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Open to 6. You have KK. Pick a 3-bet size.',
+      choices: const [
+        CourseChoice(id: 'size-18', label: '3-bet to 18', action: 'RAISE'),
+        CourseChoice(id: 'size-tiny', label: 'Min-raise to 10', action: 'RAISE'),
+        CourseChoice(id: 'size-call', label: 'Call', action: 'CALL'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('KK vs a live open to 6 — pick a value 3-bet size.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('KK vs a live open to 6 — tap a 3-bet size.'),
+      findsNothing,
+    );
+    // SoftPulse + Rex own the cue — no size spoiler on the felt.
+    expect(find.text('Pick a live 3-bet size'), findsNothing);
+    expect(find.text('3-BET TO 18'), findsOneWidget);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'size-18');
+    await tester.tap(find.text('3-BET TO 18'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'size-18');
     controller.dispose();
   });
 
