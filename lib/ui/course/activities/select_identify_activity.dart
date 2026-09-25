@@ -598,12 +598,15 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns No fake EV — don’t gold-tip the tile.
       'act-06-06-01-checkpoint' =>
           'Solver EV quotes — pick the course stance.',
+      // SoftPulse owns Strong catchers — don’t gold-tip the tile.
       'act-06-07-01-guided' =>
-          'Facing a river bet — tap Strong catchers.',
+          'Facing a river bet — pick quality continues.',
+      // Unguided: name the stance; don’t tip Intuition.
       'act-06-07-01-unguided' =>
-          'MDF numbers — tap Intuition.',
+          'MDF numbers — pick how this course uses them.',
+      // SoftPulse owns Punish over-bluffs — don’t gold-tip the tile.
       'act-06-07-01-checkpoint' =>
-          'Minimum defense goal — tap Punish over-bluffs.',
+          'Minimum defense goal — pick what you protect.',
       'act-06-08-01-scaffolded' =>
           'Vs Calling Station — tap Less bluff.',
       'act-06-08-01-unguided' =>

@@ -274,6 +274,8 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     'act-06-04-01-scaffolded' => 'mid',
     // Overbets geometric scaffold — SoftPulse owns pot-ish turn size.
     'act-06-05-01-scaffolded' => 'mid',
+    // Min-defense scaffold — SoftPulse owns Fold trash.
+    'act-06-07-01-scaffolded' => 'fold',
     'act-06-09-01-scaffolded' => 'small',
     // Mix-five: SoftPulse the plan; Rex names the model, not the dock label.
     'act-06-13-01-guided' => 'cs',
@@ -455,8 +457,9 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // SoftPulse owns the dock — don’t gold-tip Bet ~20 (or its amount).
     'act-06-05-01-scaffolded' =>
       'Half-pot flop checked — keep geometric pressure.',
+    // SoftPulse owns the dock — don’t gold-tip Fold.
     'act-06-07-01-scaffolded' =>
-      'Third pair scary river — tap Fold.',
+      'Third pair scary river — trash with no blockers.',
     'act-06-08-01-guided' =>
       'Flopped set — tap Check.',
     'act-06-09-01-scaffolded' =>
