@@ -22418,7 +22418,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Best leak note — tap Specific note.'),
+      find.text('Best leak note — pick the useful shape.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Specific note'));
@@ -22459,7 +22459,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('BTN vs unknown BB — tap Written range.'),
+      find.text('BTN vs unknown BB — pick the default source.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Written range'));
@@ -22495,7 +22495,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Review the book — tap On a schedule.'),
+      find.text('Review the book — pick when to do it.'),
       findsOneWidget,
     );
     await tester.tap(find.text('On a schedule'));
@@ -22535,7 +22535,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Default book purpose — tap Baseline.'),
+      find.text('Default book purpose — pick the role.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Baseline'));
