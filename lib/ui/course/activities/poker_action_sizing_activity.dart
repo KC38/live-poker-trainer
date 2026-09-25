@@ -292,6 +292,9 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     'act-06-13-01-scaffolded' => 'nit',
     // River composition guided — SoftPulse owns Value bet.
     'act-07-03-01-guided' => 'val',
+    // Same cards × type: SoftPulse the plan; Rex names the model, not the dock.
+    'act-07-07-01-guided' => 'bet',
+    'act-07-07-01-scaffolded' => 'fold',
     _ => null,
   };
 }
@@ -507,12 +510,15 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // Unguided: list legal lines; don’t tip Call alone.
     'act-06-13-01-unguided' =>
       'Same cards · LAG barrels — tap Call or Fold.',
+    // SoftPulse owns the dock — don’t gold-tip Bet for value.
     'act-07-07-01-guided' =>
-      'Flop top pair · Station check — tap Bet for value.',
+      'Flop top pair · Station check — extract vs wide calls.',
+    // SoftPulse owns the dock — don’t gold-tip Fold.
     'act-07-07-01-scaffolded' =>
-      'Same top pair · TAG check-raises — tap Fold.',
+      'Same top pair · TAG check-raises — respect selective heat.',
+    // Unguided: name the model; don’t tip Call alone.
     'act-07-07-01-unguided' =>
-      'Same top pair · LAG barrels — tap Call.',
+      'Same top pair · LAG barrels — defend vs wide pressure.',
     'act-07-08-01-guided' =>
       'Wet board · Maniac overbet — tap Call.',
     'act-07-08-01-scaffolded' =>
