@@ -4476,11 +4476,12 @@ class ThreeBetSqueezeDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
+    // Structural — Rex owns “define ranges” / “punish multiway.”
     (label: '3-BET', caption: 'Reopen the pot', color: AppColors.gold),
-    (label: 'RANGES', caption: 'Defines both sides', color: AppColors.cream),
+    (label: 'RANGES', caption: 'Shape both sides', color: AppColors.cream),
     (
       label: 'SQUEEZE',
-      caption: 'Punish multiway flats',
+      caption: 'Isolate the open',
       color: AppColors.danger,
     ),
   ];
@@ -4589,7 +4590,8 @@ class _ThreeBetSqueezeDemoState extends State<ThreeBetSqueezeDemo> {
                 ),
               ),
               child: Text(
-                '3-bets define ranges · squeezes punish flats',
+                // Match SoftPulse titles — don’t echo Rex’s “define / punish.”
+                '3-bet · ranges · squeeze',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
@@ -4606,7 +4608,8 @@ class _ThreeBetSqueezeDemoState extends State<ThreeBetSqueezeDemo> {
               : MainAxisAlignment.start,
       children: [
         Text(
-          '3-bets and squeezes',
+          // Structural label — Rex owns 3-bet / squeeze copy in the dock.
+          'Three pot reopeners',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: expandTeach ? 15 : 12,
