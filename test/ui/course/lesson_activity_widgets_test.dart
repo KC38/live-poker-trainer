@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/course/activities/authored_multi_step_activity.dart';
@@ -2958,6 +2959,129 @@ void main() {
     expect(controller.draft.choiceId, 'watch');
     controller.dispose();
   });
+
+  testWidgets(
+    'live-habits unguided protect — no SoftPulse spoilers or gold tip',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-02-06-01-unguided-protect',
+        order: 4,
+        stage: ActivityStage.unguided,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Protect hole cards with a chip or hand.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Your cards sit near the muck. Best habit?',
+        choices: const [
+          CourseChoice(
+            id: 'chip-on-cards',
+            label: 'Keep a chip or hand on your cards',
+          ),
+          CourseChoice(
+            id: 'spread-out',
+            label: 'Spread them face-up for the camera',
+          ),
+          CourseChoice(
+            id: 'leave-loose',
+            label: 'Leave them loose near the dealer',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      await tester.pumpWidget(
+        _wrap(
+          SelectIdentifyActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: false,
+          ),
+        ),
+      );
+      expect(
+        find.text('Cards near the muck — tap how you protect them.'),
+        findsOneWidget,
+      );
+      // Structural felt caption — no muck/discard echo of Rex.
+      expect(find.text('Holes near the discard pile'), findsNothing);
+      expect(find.text('Live table · your holes'), findsOneWidget);
+      // Tile details must not answer or tip the habit.
+      expect(find.text('Protected'), findsNothing);
+      expect(find.text('Camera bait'), findsNothing);
+      expect(find.text('Near muck'), findsNothing);
+      expect(find.text('Chip on cards'), findsOneWidget);
+      expect(find.text('On top'), findsOneWidget);
+      expect(find.text('Face up'), findsOneWidget);
+      expect(find.text('No chip'), findsOneWidget);
+      // No gold tip icon on the correct tile.
+      final tipIcons = tester.widgetList<Icon>(
+        find.byIcon(Icons.monetization_on_outlined),
+      );
+      expect(tipIcons, isNotEmpty);
+      for (final icon in tipIcons) {
+        expect(icon.color, AppColors.slate);
+      }
+      await tester.tap(find.text('Chip on cards'));
+      await tester.pump();
+      expect(controller.draft.choiceId, 'chip-on-cards');
+      controller.dispose();
+    },
+  );
+
+  testWidgets(
+    'live-habits checkpoint OOT — no SoftPulse spoilers or gold tip',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-02-06-01-checkpoint-oot',
+        order: 5,
+        stage: ActivityStage.checkpoint,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 45,
+        accessibilityText: 'Recognize acting out of turn.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt:
+            'Action is two seats left. You toss in a raise early. Problem?',
+        choices: const [
+          CourseChoice(id: 'oot-bad', label: 'You acted out of turn'),
+          CourseChoice(
+            id: 'oot-fine',
+            label: 'Acting early is fine if you are faster',
+          ),
+          CourseChoice(
+            id: 'oot-dealer',
+            label: 'The dealer should have stopped you',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      await tester.pumpWidget(
+        _wrap(
+          SelectIdentifyActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: false,
+          ),
+        ),
+      );
+      expect(find.text('Your mistake'), findsNothing);
+      expect(find.text('Always reward'), findsNothing);
+      expect(find.text('Blame them'), findsNothing);
+      expect(find.text('Out of turn'), findsOneWidget);
+      expect(find.text('Too soon'), findsOneWidget);
+      expect(find.text('Faster OK?'), findsOneWidget);
+      expect(find.text('Not you?'), findsOneWidget);
+      final tipIcons = tester.widgetList<Icon>(
+        find.byIcon(Icons.warning_amber_outlined),
+      );
+      expect(tipIcons, isNotEmpty);
+      for (final icon in tipIcons) {
+        expect(icon.color, AppColors.slate);
+      }
+      await tester.tap(find.text('Out of turn'));
+      await tester.pump();
+      expect(controller.draft.choiceId, 'oot-bad');
+      controller.dispose();
+    },
+  );
 
 
   testWidgets('full-ring explain taps Nine Same Position instead of Continue', (
