@@ -9428,7 +9428,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('You 150bb, villain 60bb — tap the effective stack.'),
+      find.text('You 150bb, villain 60bb — the shorter stack caps the matchup.'),
       findsOneWidget,
     );
     // SoftPulse + Rex own the cue — no Tap 60bb footer mid-teach.
@@ -9471,7 +9471,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Tap the depth that plays closest to a shove game.'),
+      find.text('Pick the depth that plays closest to a shove game.'),
       findsOneWidget,
     );
     // Felt + tile captions stay structural — no Rex / answer echo.
@@ -10538,7 +10538,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('200 chips at 1/2 — tap the stack in big blinds.'),
+      find.text('200 chips at 1/2 — divide chips by the big blind.'),
       findsOneWidget,
     );
     expect(
@@ -10608,7 +10608,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('1000 chips at 2/5 — tap the buy-in in big blinds.'),
+      find.text('1000 chips at 2/5 — buy-in counted in big blinds.'),
       findsOneWidget,
     );
     expect(find.text('Chips 1000 · BB 5'), findsOneWidget);
