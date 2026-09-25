@@ -2889,7 +2889,7 @@ void main() {
       ),
     );
     expect(find.byType(FlopLabelDemo), findsOneWidget);
-    expect(find.text('Tap MADE next'), findsOneWidget);
+    expect(find.text('Tap MADE next'), findsNothing);
     expect(find.text('Tap Made, Draw, SDV, and Air'), findsNothing);
     expect(find.text('Tap Made, Draw, SDV, and Air.'), findsNothing);
     expect(
@@ -2912,13 +2912,13 @@ void main() {
 
     await tester.tap(find.text('MADE'));
     await tester.pump();
-    expect(find.text('Tap DRAW next'), findsOneWidget);
+    expect(find.text('Tap DRAW next'), findsNothing);
     await tester.tap(find.text('DRAW'));
     await tester.pump();
-    expect(find.text('Tap SDV next'), findsOneWidget);
+    expect(find.text('Tap SDV next'), findsNothing);
     await tester.tap(find.text('SDV'));
     await tester.pump();
-    expect(find.text('Tap AIR next'), findsOneWidget);
+    expect(find.text('Tap AIR next'), findsNothing);
     await tester.tap(find.text('AIR'));
     await tester.pump();
     expect(feltAck, 1);
