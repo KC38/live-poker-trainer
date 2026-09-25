@@ -284,6 +284,9 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     // Adjust vs TAG: SoftPulse the plan; Rex names the model, not the dock.
     'act-06-11-03-guided' => 'fold',
     'act-06-11-03-scaffolded' => 'fold-k9',
+    // Adjust vs LAG: SoftPulse the plan; Rex names the model, not the dock.
+    'act-06-12-03-guided' => 'call',
+    'act-06-12-03-scaffolded' => 'trap',
     // Mix-five: SoftPulse the plan; Rex names the model, not the dock label.
     'act-06-13-01-guided' => 'cs',
     'act-06-13-01-scaffolded' => 'nit',
@@ -485,10 +488,12 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // Unguided: name the model; don’t tip Check.
     'act-06-11-03-unguided' =>
       'River thin vs TAG who rarely calls — need their calls.',
+    // SoftPulse owns the dock — don’t gold-tip Call.
     'act-06-12-03-guided' =>
-      'LAG barrels river · second pair — tap Call.',
+      'LAG barrels river · second pair — widen defense vs pressure.',
+    // SoftPulse owns the dock — don’t gold-tip Trap / induce.
     'act-06-12-03-scaffolded' =>
-      'Top set vs LAG — tap Trap / induce.',
+      'Top set vs LAG — let wide pressure hang themselves.',
     'act-07-03-01-guided' =>
       'Thick value vs station — tap Value bet.',
     // SoftPulse owns the dock target — don’t gold-tip Bet thin value / Fold.

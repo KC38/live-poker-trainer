@@ -18526,8 +18526,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('LAG barrels river · second pair — tap Call.'),
+      find.text(
+        'LAG barrels river · second pair — widen defense vs pressure.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('LAG barrels river · second pair — tap Call.'),
+      findsNothing,
     );
     expect(find.text('CALL'), findsOneWidget);
     await tester.tap(find.text('CALL'));
@@ -18563,8 +18569,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Top set vs LAG — tap Trap / induce.'),
+      find.text('Top set vs LAG — let wide pressure hang themselves.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Top set vs LAG — tap Trap / induce.'),
+      findsNothing,
     );
     expect(find.text('TRAP / INDUCE'), findsOneWidget);
     await tester.tap(find.text('TRAP / INDUCE'));
@@ -18607,9 +18617,15 @@ await tester.tap(find.text('NIT'));
     );
     expect(
       find.text(
-        'Inventing triple-barrel bluffs into a LAG — tap Usually avoid.',
+        'Inventing triple-barrel bluffs into a LAG — pick the discipline.',
       ),
       findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Inventing triple-barrel bluffs into a LAG — tap Usually avoid.',
+      ),
+      findsNothing,
     );
     await tester.tap(find.text('Usually avoid'));
     await tester.pump();
@@ -18650,8 +18666,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('LAG exploit cites — tap Wide + pressure.'),
+      find.text('LAG exploit cites — pick the cite.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('LAG exploit cites — tap Wide + pressure.'),
+      findsNothing,
     );
     await tester.tap(find.text('Wide + pressure'));
     await tester.pump();
