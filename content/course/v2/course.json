@@ -954,7 +954,7 @@
                   "objectives": [
                     "Compare two finished hands"
                   ],
-                  "prompt": "Tap strongest to weakest.",
+                  "prompt": "Pick strongest to weakest.",
                   "sequenceItems": [
                     {
                       "id": "fh",
@@ -2809,7 +2809,7 @@
                   "stage": "jump_test",
                   "renderer": "compare_rank",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Jump test: tap strongest hand first, then weaker.",
+                  "accessibilityText": "Jump test: pick strongest hand first, then weaker.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2819,7 +2819,7 @@
                   "objectives": [
                     "Confirm hand ranking"
                   ],
-                  "prompt": "Tap strongest hand first, then weaker.",
+                  "prompt": "Pick strongest hand first, then weaker.",
                   "sequenceItems": [
                     {
                       "id": "j-flush",
@@ -2913,7 +2913,7 @@
                   "objectives": [
                     "Confirm legal action"
                   ],
-                  "prompt": "A bet faces you. Tap the action you cannot take.",
+                  "prompt": "A bet faces you. Pick the action you cannot take.",
                   "choices": [
                     {
                       "id": "j-check",
