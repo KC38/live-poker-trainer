@@ -2673,6 +2673,83 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('vs-open unguided hides hand-strength felt spoiler', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-04-01-unguided-3bet',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Value three-bet kings.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'BTN opens to 6. You have KK in the small blind. Action?',
+      choices: const [
+        CourseChoice(id: '3bet-kk', label: '3-bet to 18', action: 'RAISE'),
+        CourseChoice(id: 'call-kk', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'fold-kk', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Kings in the small blind vs a button open — tap Fold, Call, or 3-bet.',
+      ),
+      findsOneWidget,
+    );
+    // Cards + villain line teach — no gold strength spoiler.
+    expect(find.text('Premium vs a button open'), findsNothing);
+    expect(find.text('A bet faces you'), findsOneWidget);
+    controller.dispose();
+  });
+
+  testWidgets('vs-open checkpoint hides hand-strength felt spoiler', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-04-01-checkpoint-aq',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Value three-bet ace-queen suited.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'HJ opens to 6. You have AQs on the CO. Action?',
+      choices: const [
+        CourseChoice(id: '3bet-aqs', label: '3-bet to 18', action: 'RAISE'),
+        CourseChoice(id: 'call-aqs', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'fold-aqs', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Strong suited broadway in the CO — tap your action.'),
+      findsOneWidget,
+    );
+    expect(find.text('Strong suited broadway'), findsNothing);
+    expect(find.text('A bet faces you'), findsOneWidget);
+    controller.dispose();
+  });
+
 
   testWidgets('bb-stack explain taps Chips→BB Shorter Depth instead of Continue', (
     tester,
