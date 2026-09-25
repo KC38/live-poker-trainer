@@ -2223,6 +2223,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         seatCount: 6,
         buttonSeat: 3,
         showRoleLabels: false,
+        // SoftPulse + Rex own "find the button" — no clockwise SoftPulse caption.
+        caption: 'Dealer button — D chip',
       );
     case 'act-01-01-03-scaffolded-blinds':
       return const LessonTableScene(
@@ -2231,6 +2233,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         seatCount: 6,
         buttonSeat: 3,
         showRoleLabels: false,
+        caption: 'Big blind posts 2',
       );
     case 'act-01-01-03-unguided-when':
       return const LessonTableScene(

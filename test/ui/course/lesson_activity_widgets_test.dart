@@ -6281,6 +6281,12 @@ await tester.tap(find.text('STRONGER'));
     expect(find.text('Tap the dealer button on the table.'), findsNothing);
     expect(find.text('Tap the dealer button'), findsNothing);
     expect(find.text('Tap the answer on the table.'), findsNothing);
+    // Guided finds the D chip — not the SoftPulse clockwise teach line.
+    expect(
+      find.text('Clockwise: button → small blind → big blind'),
+      findsNothing,
+    );
+    expect(find.text('Dealer button — D chip'), findsOneWidget);
     expect(find.byType(LessonTableContext), findsOneWidget);
     expect(find.text('The seat with the D chip'), findsNothing);
     // Identify steps hide role word labels — chips alone teach.
