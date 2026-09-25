@@ -381,14 +381,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'You said raise. Tap what counts at a live table.',
       'act-03-01-01-checkpoint' =>
           'Shorter stack caps the matchup — tap what matters with the pot.',
+      // SoftPulse owns Made — don’t gold-tip the tile.
       'act-03-02-01-guided' =>
-          'Board pairs your king — tap the flop class.',
+          'Board pairs your king — that hits strong right now.',
+      // SoftPulse owns Draw — don’t gold-tip the tile.
       'act-03-02-01-scaffolded' =>
-          'Two hearts on board with the nut heart — tap the class.',
+          'Two hearts on board with the nut heart — you need runout more than showdown now.',
+      // SoftPulse owns Air — don’t gold-tip the tile.
       'act-03-02-01-unguided' =>
-          'No pair, almost no draw multiway — tap the class.',
+          'No pair, almost no draw multiway — equity is thin here.',
+      // SoftPulse owns Draw — don’t gold-tip the tile.
       'act-03-02-01-checkpoint' =>
-          'Eight or queen completes — tap the class.',
+          'Eight or queen completes — your hand needs the right runout.',
       'act-03-03-01-guided' =>
           'King-high board. Tap the remaining aces — your clean outs.',
       'act-03-03-01-scaffolded' =>
@@ -1241,13 +1245,13 @@ class _HandCategoryTapActivity extends StatelessWidget {
         'act-02-02-01-checkpoint-trash' =>
           'Early seat with junk — tap the family.',
         'act-03-02-01-guided' =>
-          'Board pairs your king — tap the flop class.',
+          'Board pairs your king — that hits strong right now.',
         'act-03-02-01-scaffolded' =>
-          'Two hearts on board with the nut heart — tap the class.',
+          'Two hearts on board with the nut heart — you need runout more than showdown now.',
         'act-03-02-01-unguided' =>
-          'No pair, almost no draw multiway — tap the class.',
+          'No pair, almost no draw multiway — equity is thin here.',
         'act-03-02-01-checkpoint' =>
-          'Eight or queen completes — tap the class.',
+          'Eight or queen completes — your hand needs the right runout.',
         'act-03-03-01-guided' =>
           'King-high board. Tap the remaining aces — your clean outs.',
         'act-03-03-01-unguided' =>

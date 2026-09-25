@@ -9801,7 +9801,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Board pairs your king — tap the flop class.'),
+      find.text('Board pairs your king — that hits strong right now.'),
       findsOneWidget,
     );
     expect(
@@ -9872,7 +9872,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Two hearts on board with the nut heart — tap the class.'),
+      find.text('Two hearts on board with the nut heart — you need runout more than showdown now.'),
       findsOneWidget,
     );
     expect(
@@ -9941,7 +9941,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('No pair, almost no draw multiway — tap the class.'),
+      find.text('No pair, almost no draw multiway — equity is thin here.'),
       findsOneWidget,
     );
     expect(find.text('Air'), findsOneWidget);
@@ -10001,7 +10001,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Eight or queen completes — tap the class.'),
+      find.text('Eight or queen completes — your hand needs the right runout.'),
       findsOneWidget,
     );
     expect(find.text('Draw'), findsOneWidget);
