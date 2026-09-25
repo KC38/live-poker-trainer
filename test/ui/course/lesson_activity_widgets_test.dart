@@ -4833,7 +4833,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(LineStoriesDemo), findsOneWidget);
-    expect(find.text('Tap X/R next'), findsOneWidget);
+    expect(find.text('Tap X/R next'), findsNothing);
     expect(find.text('Tap X/R, Probe, Delay, and Donk.'), findsNothing);
     expect(find.text('Tap X/R, Probe, Delay, and Donk'), findsNothing);
     expect(find.text('Each line updates the story'), findsNothing);
@@ -4853,13 +4853,13 @@ await tester.tap(find.text('NIT'));
 
     await tester.tap(find.text('X/R'));
     await tester.pump();
-    expect(find.text('Tap PROBE next'), findsOneWidget);
+    expect(find.text('Tap PROBE next'), findsNothing);
     await tester.tap(find.text('PROBE'));
     await tester.pump();
-    expect(find.text('Tap DELAY next'), findsOneWidget);
+    expect(find.text('Tap DELAY next'), findsNothing);
     await tester.tap(find.text('DELAY'));
     await tester.pump();
-    expect(find.text('Tap DONK next'), findsOneWidget);
+    expect(find.text('Tap DONK next'), findsNothing);
     await tester.tap(find.text('DONK'));
     await tester.pump();
     expect(feltAck, 1);
