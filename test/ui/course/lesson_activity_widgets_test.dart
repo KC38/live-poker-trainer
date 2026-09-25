@@ -895,8 +895,8 @@ void main() {
       ),
     );
     expect(find.byType(StreetsTimelineDemo), findsOneWidget);
-    // Sequential SoftPulse cue — one next street at a time.
-    expect(find.text('Tap Preflop'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no Tap Preflop footer mid-teach.
+    expect(find.text('Tap Preflop'), findsNothing);
     expect(find.text('Tap each street from preflop to river'), findsNothing);
     expect(find.text('Tap each street from preflop to river.'), findsNothing);
     final teachHeight = tester
@@ -913,13 +913,13 @@ void main() {
     );
     await tester.tap(find.text('PREFLOP'));
     await tester.pump();
-    expect(find.text('Tap Flop'), findsOneWidget);
+    expect(find.text('Tap Flop'), findsNothing);
     await tester.tap(find.text('FLOP'));
     await tester.pump();
-    expect(find.text('Tap Turn'), findsOneWidget);
+    expect(find.text('Tap Turn'), findsNothing);
     await tester.tap(find.text('TURN'));
     await tester.pump();
-    expect(find.text('Tap River'), findsOneWidget);
+    expect(find.text('Tap River'), findsNothing);
     await tester.tap(find.text('RIVER'));
     await tester.pump();
     expect(feltAck, 1);
@@ -965,7 +965,7 @@ void main() {
       ),
     );
     // Interactive felt embeds the only tap cue.
-    expect(find.text('Tap Preflop'), findsOneWidget);
+    expect(find.text('Tap Preflop'), findsNothing);
     expect(find.text('Tap each street from preflop to river'), findsNothing);
     controller.finishSubmit(
       SubmitCourseStepResult(
@@ -990,7 +990,7 @@ void main() {
     );
     await tester.pump();
     expect(find.text('Tap each street from preflop to river'), findsNothing);
-    expect(find.text('Match bets to leave each street'), findsOneWidget);
+    expect(find.text('Preflop → flop → turn → river'), findsOneWidget);
     controller.dispose();
   });
 
