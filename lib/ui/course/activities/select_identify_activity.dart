@@ -373,14 +373,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'You 150bb, villain 60bb — tap the effective stack.',
       'act-02-05-01-unguided-depth' =>
           'Tap the depth that plays closest to a shove game.',
+      // SoftPulse owns 21 chips — don’t gold-tip the tile.
       'act-03-01-01-guided' =>
-          'Blinds plus three 6s — tap the pot total.',
+          'Blinds plus three 6s — add every contribution into the pot.',
+      // SoftPulse owns UTG — don’t gold-tip the seat.
       'act-03-01-01-scaffolded' =>
-          'Preflop — tap who acts first (left of the BB).',
+          'Preflop — first to act sits left of the big blind.',
+      // SoftPulse owns Raise stands — don’t gold-tip the tile.
       'act-03-01-01-unguided' =>
-          'You said raise. Tap what counts at a live table.',
+          'You said raise — pick what counts at a live table.',
+      // SoftPulse owns 55bb + pot — don’t gold-tip the tile.
       'act-03-01-01-checkpoint' =>
-          'Shorter stack caps the matchup — tap what matters with the pot.',
+          'Shorter stack caps the matchup — track effective stack with the pot.',
       // SoftPulse owns Made — don’t gold-tip the tile.
       'act-03-02-01-guided' =>
           'Board pairs your king — your hole king connects for immediate value.',
