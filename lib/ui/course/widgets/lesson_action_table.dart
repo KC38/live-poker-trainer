@@ -1833,19 +1833,8 @@ class _AggressiveActionsDemoState extends State<AggressiveActionsDemo> {
   }
 
   String get _statusCue {
-    final remaining = AggressiveActionsDemo.actions
-        .where((a) => !_tapped.contains(a.$1))
-        .map((a) {
-          final raw = a.$1;
-          if (raw == 'ALL-IN') return 'All-in';
-          return raw[0] + raw.substring(1).toLowerCase();
-        })
-        .toList();
-    if (remaining.isEmpty || !widget.interactive) {
-      return 'Bet · Raise · All-in — your three aggressives';
-    }
-    // Sequential SoftPulse cue — one next action at a time.
-    return 'Tap ${remaining.first}';
+    // SoftPulse + Rex own the next-button cue while teaching.
+    return 'Bet · Raise · All-in — your three aggressives';
   }
 
   @override
@@ -1857,6 +1846,13 @@ class _AggressiveActionsDemoState extends State<AggressiveActionsDemo> {
     // sparse green under BET / RAISE / ALL-IN).
     final feltHeight =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+    String? next;
+    for (final action in AggressiveActionsDemo.actions) {
+      if (!_tapped.contains(action.$1)) {
+        next = action.$1;
+        break;
+      }
+    }
     final tiles = Row(
       crossAxisAlignment:
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
@@ -1890,27 +1886,33 @@ class _AggressiveActionsDemoState extends State<AggressiveActionsDemo> {
         ],
       ],
     );
-    final cue = Container(
-      width: expandTeach ? double.infinity : null,
-      padding: EdgeInsets.symmetric(
-        horizontal: expandTeach ? 18 : 14,
-        vertical: expandTeach ? 14 : 8,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.feltDark.withValues(alpha: 0.65),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.gold.withValues(alpha: 0.45)),
-      ),
-      child: Text(
-        _statusCue,
-        textAlign: TextAlign.center,
-        style: GoogleFonts.manrope(
-          color: AppColors.gold,
-          fontSize: expandTeach ? 16 : 12,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-    );
+    // SoftPulse + Rex own the next-button cue while teaching. Show a summary
+    // after all taps (or once locked under Nice! / Continue).
+    final showCue = !widget.interactive || next == null || !widget.enabled;
+    final cue =
+        !showCue
+            ? null
+            : Container(
+              width: expandTeach ? double.infinity : null,
+              padding: EdgeInsets.symmetric(
+                horizontal: expandTeach ? 18 : 14,
+                vertical: expandTeach ? 14 : 8,
+              ),
+              decoration: BoxDecoration(
+                color: AppColors.feltDark.withValues(alpha: 0.65),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: AppColors.gold.withValues(alpha: 0.45)),
+              ),
+              child: Text(
+                _statusCue,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.manrope(
+                  color: AppColors.gold,
+                  fontSize: expandTeach ? 16 : 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            );
     final body = Column(
       mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
       mainAxisAlignment:
@@ -1935,8 +1937,10 @@ class _AggressiveActionsDemoState extends State<AggressiveActionsDemo> {
               ),
             )
             : tiles,
-        if (!expandTeach) const SizedBox(height: 14),
-        cue,
+        if (cue != null) ...[
+          if (!expandTeach) const SizedBox(height: 14),
+          cue,
+        ],
       ],
     );
     final child = Container(
