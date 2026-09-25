@@ -14861,8 +14861,8 @@ await tester.tap(find.text('STRONGER'));
       ),
     );
     expect(find.byType(GuardrailsDemo), findsOneWidget);
-    // SoftPulse cue on the felt — not a bulk coach footer or static footer dupe.
-    expect(find.text('Tap QUIT next'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no Tap QUIT next / bulk coach footer dupe.
+    expect(find.text('Tap QUIT next'), findsNothing);
     expect(find.text('Tap Quit, Guard, and First.'), findsNothing);
     expect(find.text('Tap Quit, Guard, and First'), findsNothing);
     expect(find.text('Know when to quit'), findsNothing);
