@@ -6848,9 +6848,10 @@ class VsLagsDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'CALL', caption: 'Call wider', color: AppColors.gold),
-    (label: 'TRAP', caption: 'Trap more', color: AppColors.cream),
-    (label: 'FANCY LESS', caption: 'Invent less', color: AppColors.danger),
+    // Structural — Rex owns “trap more / call wider / invent fewer fancy.”
+    (label: 'CALL', caption: 'Widen defense', color: AppColors.gold),
+    (label: 'TRAP', caption: 'Slow-play value', color: AppColors.cream),
+    (label: 'FANCY LESS', caption: 'Skip hero bluffs', color: AppColors.danger),
   ];
 
   @override
@@ -6933,7 +6934,7 @@ class _VsLagsDemoState extends State<VsLagsDemo> {
                 ),
               ),
               child: Text(
-                'Trap more · call wider · fancy less',
+                'Call · trap · fancy less',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
