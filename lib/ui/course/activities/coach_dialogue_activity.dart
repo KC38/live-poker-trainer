@@ -1605,7 +1605,8 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.streetsTimeline,
     );
   }
-  if (blob.contains('bet opens') ||
+  if (blob.contains('three chip-pushing') ||
+      blob.contains('bet opens') ||
       blob.contains('raise reopens') ||
       blob.contains('all-in is just') ||
       blob.contains('size-capped')) {
