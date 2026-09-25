@@ -405,9 +405,10 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['As', '9c', '7d'],
         potLabel: 'Pot 40',
         villainLine: 'Raise · reraise multiway',
+        // Structural — don’t tip Fold / weak kicker on the felt.
         streetLabel: 'Flop · Weak TPTK · Heat',
         facingBet: true,
-        feltStatusLine: 'Weak kicker — do not stack',
+        feltStatusLine: 'Facing raise · multiway',
       );
     case 'act-03-08-01-scaffolded':
       return const LessonActionSpot(
@@ -415,9 +416,10 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['As', '7c', '2d'],
         potLabel: 'Pot 12',
         villainLine: 'Bets 18',
+        // Structural — don’t tip Fold / terrible price on the felt.
         streetLabel: 'Flop · Gutshot only',
         facingBet: true,
-        feltStatusLine: 'Four outs · terrible price',
+        feltStatusLine: 'Facing a bet',
       );
     case 'act-03-08-01-unguided':
       return const LessonActionSpot(
@@ -425,9 +427,10 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Kc', '7s', '2d'],
         potLabel: 'Pot 24',
         villainLine: 'Someone bets · 4-way',
+        // Structural — don’t tip Fold on the felt.
         streetLabel: 'Flop · Air · Crowd',
         facingBet: true,
-        feltStatusLine: 'No pair, no draw — fold',
+        feltStatusLine: 'Facing a bet · 4-way',
       );
     case 'act-03-08-02-jump-mw':
       return const LessonActionSpot(
@@ -4115,10 +4118,11 @@ class CommonLeaksDemo extends StatefulWidget {
   final VoidCallback? onAllLeaksTapped;
 
   static const leaks = <({String label, String caption, Color color})>[
-    (label: 'TOP PAIR', caption: 'Worshipping one pair', color: AppColors.gold),
-    (label: 'PRICES', caption: 'Chase bad prices', color: AppColors.cream),
-    (label: 'PASSIVE', caption: 'Call too soft', color: AppColors.slate),
-    (label: 'CROWDS', caption: 'Bluff multiway', color: AppColors.danger),
+    // Structural — Rex owns “worship” / “chase bad prices” / “call too passive.”
+    (label: 'TOP PAIR', caption: 'Overplay pairs', color: AppColors.gold),
+    (label: 'PRICES', caption: 'Ignore odds', color: AppColors.cream),
+    (label: 'PASSIVE', caption: 'Never raise', color: AppColors.slate),
+    (label: 'CROWDS', caption: 'Spew multiway', color: AppColors.danger),
   ];
 
   @override
@@ -4217,7 +4221,8 @@ class _CommonLeaksDemoState extends State<CommonLeaksDemo> {
                 ),
               ),
               child: Text(
-                'Top pair · bad prices · passive calls · bluff crowds',
+                // Match SoftPulse titles — don’t echo Rex’s leak list.
+                'Top pair · prices · passive · crowds',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
@@ -4233,6 +4238,7 @@ class _CommonLeaksDemoState extends State<CommonLeaksDemo> {
           : MainAxisAlignment.start,
       children: [
         Text(
+          // Structural label — Rex owns leak copy in the dock.
           'Common live leaks',
           style: GoogleFonts.manrope(
             color: AppColors.slate,

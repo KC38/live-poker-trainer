@@ -3804,11 +3804,23 @@ await tester.tap(find.text('VALUE'));
       ),
     );
     expect(find.byType(CommonLeaksDemo), findsOneWidget);
+    expect(find.text('Worshipping one pair'), findsNothing);
+    expect(find.text('Chase bad prices'), findsNothing);
+    expect(find.text('Call too soft'), findsNothing);
+    expect(find.text('Bluff multiway'), findsNothing);
+    expect(find.text('Overplay pairs'), findsOneWidget);
+    expect(find.text('Ignore odds'), findsOneWidget);
+    expect(find.text('Never raise'), findsOneWidget);
+    expect(find.text('Spew multiway'), findsOneWidget);
     expect(find.text('Tap TOP PAIR next'), findsNothing);
     expect(find.text('Tap each common leak once.'), findsNothing);
     expect(find.text('Tap each common leak once'), findsNothing);
     expect(
       find.text('Top pair · bad prices · passive calls · bluff crowds'),
+      findsNothing,
+    );
+    expect(
+      find.text('Top pair · prices · passive · crowds'),
       findsNothing,
     );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
@@ -3825,7 +3837,7 @@ await tester.tap(find.text('VALUE'));
       ),
     );
 
-await tester.tap(find.text('TOP PAIR'));
+    await tester.tap(find.text('TOP PAIR'));
     await tester.pump();
     expect(find.text('Tap PRICES next'), findsNothing);
     await tester.tap(find.text('PRICES'));
@@ -3840,6 +3852,10 @@ await tester.tap(find.text('TOP PAIR'));
     // Lock clears enabled / ack — densified shell must stay filled.
     expect(
       find.text('Top pair · bad prices · passive calls · bluff crowds'),
+      findsNothing,
+    );
+    expect(
+      find.text('Top pair · prices · passive · crowds'),
       findsOneWidget,
     );
     expect(
@@ -12313,6 +12329,8 @@ await tester.tap(find.text('NIT'));
       find.text('Weak top pair in a raise-reraise pot — tap Fold.'),
       findsOneWidget,
     );
+    expect(find.text('Weak kicker — do not stack'), findsNothing);
+    expect(find.text('Facing raise · multiway'), findsOneWidget);
     expect(find.text('FOLD'), findsOneWidget);
     expect(find.text('JAM STACKS'), findsOneWidget);
     expect(find.text('CALL FOREVER'), findsOneWidget);
@@ -12351,6 +12369,8 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.text('Gutshot vs an overbet — tap Fold.'), findsOneWidget);
+    expect(find.text('Four outs · terrible price'), findsNothing);
+    expect(find.text('Facing a bet'), findsOneWidget);
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'fold-gut');
@@ -12396,6 +12416,8 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.text('Air multiway vs a bet — tap Fold.'), findsOneWidget);
+    expect(find.text('No pair, no draw — fold'), findsNothing);
+    expect(find.text('Facing a bet · 4-way'), findsOneWidget);
     expect(find.text('FLOAT CALL'), findsOneWidget);
     expect(find.text('BLUFF RAISE'), findsOneWidget);
     await tester.tap(find.text('FOLD'));
