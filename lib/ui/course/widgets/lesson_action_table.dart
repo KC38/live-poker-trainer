@@ -8549,6 +8549,7 @@ class TablesChangeDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
+    // Structural — Rex owns “stuck / tilted / gears — update.”
     (label: 'STUCK', caption: 'Same old gear', color: AppColors.gold),
     (label: 'TILTED', caption: 'Emotion leak', color: AppColors.cream),
     (label: 'GEARS', caption: 'Shifting play', color: AppColors.danger),
@@ -8634,7 +8635,7 @@ class _TablesChangeDemoState extends State<TablesChangeDemo> {
                 ),
               ),
               child: Text(
-                'Update when the table shifts',
+                'Stuck · tilted · gears',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
