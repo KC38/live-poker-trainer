@@ -15185,13 +15185,112 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Four-way flop — tap the best continue.'),
+      find.text('Four-way flop — prefer nutted equity over air.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Four-way flop — tap the best continue.'),
+      findsNothing,
     );
     expect(find.text('Nut FD'), findsOneWidget);
     await tester.tap(find.text('Nut FD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'nfd');
+    controller.dispose();
+  });
+
+  testWidgets('s5 multiway scaffolded SoftPulse Fold — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-01-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Fold speculative suited connectors multiway OOP.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'BTN open, BB + MP call. You have 76s in SB. Action?',
+      choices: const [
+        CourseChoice(id: 'fold-76', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'call-76', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'shove-76', label: 'Jam 100bb', action: 'RAISE'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        '76s in SB multiway — medium connectors hate OOP crowds.',
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('76s in SB multiway — tap Fold.'), findsNothing);
+    expect(find.text('FOLD'), findsOneWidget);
+    // SoftPulse + Rex own the cue — felt gold status suppressed.
+    expect(find.text('OOP multiway — fold medium connectors'), findsNothing);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'fold-76');
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'fold-76');
+    controller.dispose();
+  });
+
+  testWidgets('s5 multiway unguided docks Bet value without SoftPulse', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-01-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 40,
+      accessibilityText: 'Bet for value; protect and build.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Three callers. You flop top set on a wet board. Action?',
+      choices: const [
+        CourseChoice(id: 'bet-set', label: 'Bet solid value', action: 'BET'),
+        CourseChoice(id: 'check-set', label: 'Check always', action: 'CHECK'),
+        CourseChoice(id: 'tiny', label: 'Bet 1bb', action: 'BET'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Top set wet multiway — pick Bet solid value, Check, or Tiny.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Top set wet multiway — tap Bet solid value.'),
+      findsNothing,
+    );
+    expect(find.text('BET SOLID VALUE'), findsOneWidget);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, isNull);
+    await tester.tap(find.text('BET SOLID VALUE'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'bet-set');
     controller.dispose();
   });
 
