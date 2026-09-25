@@ -7151,13 +7151,13 @@ class LessonTableContext extends StatelessWidget {
           'Interactive draw price — tap call, fold, or raise',
       semanticsStatic: 'Draw price outcomes',
       caption: scene.caption ?? 'Pot 20 · bet 10 · outs',
-      // SoftPulse + Rex own the cue — no Tap footer.
+      // SoftPulse + Rex own the cue — no Tap footer / spoiler captions.
       cueLabel: '',
       phases: [
         (
           region: LessonTableRegion.drawPriceCall,
           title: 'Call',
-          detail: 'Priced in',
+          detail: ' ',
           visual: const Icon(
             Icons.check_circle_outline,
             color: AppColors.gold,
@@ -7167,7 +7167,7 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.drawPriceFold,
           title: 'Fold',
-          detail: 'No made hand',
+          detail: ' ',
           visual: const Icon(
             Icons.cancel_outlined,
             color: AppColors.slate,
@@ -7177,7 +7177,7 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.drawPriceRaise,
           title: 'Raise',
-          detail: 'Every draw',
+          detail: ' ',
           visual: const Icon(
             Icons.north_east,
             color: AppColors.slate,
