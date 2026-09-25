@@ -2899,10 +2899,10 @@ void main() {
     await tester.tap(find.text('WAIT'));
     await tester.pump();
     expect(feltAck, 1);
-    // Lock clears enabled / ack — densified shell must stay filled.
+    // SoftPulse + Rex own the cue — no summary pill echoing Nice! feedback.
     expect(
       find.text('Watch · say · cover · wait your turn'),
-      findsOneWidget,
+      findsNothing,
     );
     expect(
       tester.getSize(find.byType(TableHabitsDemo)).height,

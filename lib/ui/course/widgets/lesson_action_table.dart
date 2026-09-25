@@ -2567,9 +2567,8 @@ class _TableHabitsDemoState extends State<TableHabitsDemo> {
         expandTeach ? Expanded(child: habitRow(1)) : habitRow(1),
       ],
     );
-    // SoftPulse + Rex own the next-tile cue while teaching. Show a summary
-    // after all taps (or once locked under Nice! / Continue).
-    final showCue = !widget.interactive || next == null || !widget.enabled;
+    // SoftPulse + Rex own the cue — no summary pill echoing Nice! feedback.
+    final showCue = !widget.interactive;
     final cue =
         !showCue
             ? null
