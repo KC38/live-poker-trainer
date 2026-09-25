@@ -16985,7 +16985,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s6 range-nut guided taps Preflop raiser on felt', (
+  testWidgets('s6 range-nut guided SoftPulse Preflop raiser — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -17014,8 +17014,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('A-high dry flop — tap Preflop raiser.'),
+      find.text(
+        'A-high dry flop — the preflop raiser’s range usually leads.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('A-high dry flop — tap Preflop raiser.'),
+      findsNothing,
     );
     await tester.tap(find.text('Preflop raiser'));
     await tester.pump();
@@ -17023,7 +17029,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s6 range-nut scaffolded taps Wide caller on felt', (
+  testWidgets('s6 range-nut scaffold SoftPulse Wide caller — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -17051,14 +17057,22 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Paired board — tap Wide caller.'), findsOneWidget);
+    expect(
+      find.text(
+        'Paired board — the wider defender often owns more of the nuts.',
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('Paired board — tap Wide caller.'), findsNothing);
     await tester.tap(find.text('Wide caller'));
     await tester.pump();
     expect(controller.draft.choiceId, 'caller-nuts');
     controller.dispose();
   });
 
-  testWidgets('s6 range-nut unguided docks C-bet on K72r', (tester) async {
+  testWidgets('s6 range-nut unguided C-bet — no SoftPulse gold tip', (
+    tester,
+  ) async {
     final activity = CourseActivity(
       id: 'act-06-01-01-unguided',
       order: 4,
@@ -17085,15 +17099,24 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('PFR on K72r — tap C-bet 6.'), findsOneWidget);
+    expect(
+      find.text(
+        'PFR on K72r — dry A-high favors the raiser; pick C-bet 6 or Check.',
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('PFR on K72r — tap C-bet 6.'), findsNothing);
     expect(find.text('C-BET 6'), findsOneWidget);
+    final dock =
+        tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, isNull);
     await tester.tap(find.text('C-BET 6'));
     await tester.pump();
     expect(controller.draft.choiceId, 'cbet');
     controller.dispose();
   });
 
-  testWidgets('s6 range-nut checkpoint taps Apply pressure on felt', (
+  testWidgets('s6 range-nut checkpoint SoftPulse Apply pressure — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -17121,7 +17144,11 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Advantage — tap Apply pressure.'), findsOneWidget);
+    expect(
+      find.text('When you own more value — apply selective pressure.'),
+      findsOneWidget,
+    );
+    expect(find.text('Advantage — tap Apply pressure.'), findsNothing);
     await tester.tap(find.text('Apply pressure'));
     await tester.pump();
     expect(controller.draft.choiceId, 'press');
