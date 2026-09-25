@@ -6009,9 +6009,10 @@ class VsNitsDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'STEAL', caption: 'Blinds more often', color: AppColors.gold),
-    (label: 'CREDIT', caption: 'When they fire', color: AppColors.cream),
-    (label: 'EXPLODE', caption: 'Believe the heat', color: AppColors.danger),
+    // Structural — Rex owns “steal blinds more / credit when they explode.”
+    (label: 'STEAL', caption: 'Widen opens', color: AppColors.gold),
+    (label: 'CREDIT', caption: 'Fold to heat', color: AppColors.cream),
+    (label: 'EXPLODE', caption: 'Big bets mean it', color: AppColors.danger),
   ];
 
   @override
@@ -6094,7 +6095,7 @@ class _VsNitsDemoState extends State<VsNitsDemo> {
                 ),
               ),
               child: Text(
-                'Steal more · give credit when they explode',
+                'Steal · credit · explode',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
