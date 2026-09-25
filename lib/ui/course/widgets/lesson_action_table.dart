@@ -979,7 +979,8 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         villainLine: 'Triple barrels · solid unknown',
         streetLabel: 'River · top pair weak kicker',
         facingBet: true,
-        feltStatusLine: 'No maniac read — hard fold',
+        // Structural — Rex + SoftPulse own Fold cue.
+        feltStatusLine: 'Triple barrels · solid unknown',
       );
     case 'act-06-11-03-guided':
       return const LessonActionSpot(

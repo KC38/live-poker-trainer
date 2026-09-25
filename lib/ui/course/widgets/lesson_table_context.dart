@@ -11701,6 +11701,8 @@ class LessonTableContext extends StatelessWidget {
       semanticsStatic: 'Hard-fold cooler outcomes',
       caption:
           scene.caption ?? 'KK loses to AA all-in pre. Review label?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Cooler.
+      guideRegion: LessonTableRegion.hardFoldCoolerOk,
       phases: [
         (
           region: LessonTableRegion.hardFoldCoolerOk,
@@ -11708,7 +11710,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Not a leak',
           visual: const Icon(
             Icons.ac_unit,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11718,7 +11720,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Wrong review',
           visual: const Icon(
             Icons.warning_amber_outlined,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11732,6 +11734,7 @@ class LessonTableContext extends StatelessWidget {
           'Interactive due call — tap ego call vs sound play',
       semanticsStatic: 'Hard-fold ego outcomes',
       caption: scene.caption ?? 'Calling because you are "due"?',
+      // No SoftPulse on unguided — still don’t gold-icon Ego call.
       phases: [
         (
           region: LessonTableRegion.hardFoldEgoCall,
@@ -11739,7 +11742,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Due ≠ reason',
           visual: const Icon(
             Icons.psychology_alt_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11749,7 +11752,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Not sound',
           visual: const Icon(
             Icons.check_circle_outline,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11763,6 +11766,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive big-loss review — tap cooler / mistake? vs tilt harder',
       semanticsStatic: 'Hard-fold review outcomes',
       caption: scene.caption ?? 'Review question after a big loss?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Cooler / mistake?.
+      guideRegion: LessonTableRegion.hardFoldAskReview,
       phases: [
         (
           region: LessonTableRegion.hardFoldAskReview,
@@ -11770,7 +11775,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Honest review',
           visual: const Icon(
             Icons.help_outline,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11780,7 +11785,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'No',
           visual: const Icon(
             Icons.whatshot_outlined,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),

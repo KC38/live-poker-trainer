@@ -17660,8 +17660,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('TPWK vs triple barrels — tap Fold.'),
+      find.text('TPWK vs triple barrels — no maniac read in heat.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('TPWK vs triple barrels — tap Fold.'),
+      findsNothing,
     );
     expect(find.text('FOLD'), findsOneWidget);
     expect(find.text('CALL IT OFF'), findsOneWidget);
@@ -17699,8 +17703,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('KK loses to AA all-in — tap Cooler.'),
+      find.text('KK loses to AA all-in — pick the review label.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('KK loses to AA all-in — tap Cooler.'),
+      findsNothing,
     );
     await tester.tap(find.text('Cooler'));
     await tester.pump();
@@ -17735,8 +17743,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Calling because you are "due" — tap Ego call.'),
+      find.text('Calling because you are "due" — pick the real reason.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Calling because you are "due" — tap Ego call.'),
+      findsNothing,
     );
     await tester.tap(find.text('Ego call'));
     await tester.pump();
@@ -17773,8 +17785,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Review after a big loss — tap Cooler / mistake?.'),
+      find.text('Review after a big loss — pick the honest question.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Review after a big loss — tap Cooler / mistake?.'),
+      findsNothing,
     );
     await tester.tap(find.text('Cooler / mistake?'));
     await tester.pump();
