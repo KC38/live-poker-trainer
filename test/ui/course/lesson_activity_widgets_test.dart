@@ -2916,6 +2916,9 @@ void main() {
     expect(find.text('Tap MADE next'), findsNothing);
     expect(find.text('Tap Made, Draw, SDV, and Air'), findsNothing);
     expect(find.text('Tap Made, Draw, SDV, and Air.'), findsNothing);
+    // SoftPulse + Rex own the teach verb — no duplicate Label… felt title.
+    expect(find.text('Label the flop before you bet'), findsNothing);
+    expect(find.text('Four flop classes'), findsOneWidget);
     expect(
       find.text('Made · draw · showdown value · air'),
       findsNothing,
