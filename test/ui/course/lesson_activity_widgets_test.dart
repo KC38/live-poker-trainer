@@ -21970,7 +21970,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Flop top pair · Station check — tap Bet for value.'),
+      find.text('Flop top pair · Station check — extract vs wide calls.'),
       findsOneWidget,
     );
     expect(find.text('BET FOR VALUE'), findsOneWidget);
@@ -22007,7 +22007,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Same top pair · TAG check-raises — tap Fold.'),
+      find.text('Same top pair · TAG check-raises — respect selective heat.'),
       findsOneWidget,
     );
     expect(find.text('FOLD'), findsOneWidget);
@@ -22044,7 +22044,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Same top pair · LAG barrels — tap Call.'),
+      find.text('Same top pair · LAG barrels — defend vs wide pressure.'),
       findsOneWidget,
     );
     expect(find.text('CALL'), findsOneWidget);
