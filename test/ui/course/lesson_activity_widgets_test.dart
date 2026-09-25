@@ -11573,8 +11573,14 @@ await tester.tap(find.text('NIT'));
     expect(find.byType(LessonActionTable), findsOneWidget);
     expect(find.byType(LessonActionDock), findsOneWidget);
     expect(
-      find.text('Top pair top kicker checked to you — tap a value bet.'),
+      find.text(
+        'Top pair top kicker checked to you — extract when they check.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Top pair top kicker checked to you — tap a value bet.'),
+      findsNothing,
     );
     // SoftPulse + Rex own the cue — no third gold felt status / TPTK spoiler.
     expect(find.text('Checked to you — value bet'), findsNothing);
@@ -11622,8 +11628,14 @@ await tester.tap(find.text('NIT'));
     );
     expect(find.byType(LessonActionTable), findsOneWidget);
     expect(
-      find.text('You opened; dry ace flops — tap a small c-bet.'),
+      find.text(
+        'You opened; dry ace flops — keep pressure small as PFR.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('You opened; dry ace flops — tap a small c-bet.'),
+      findsNothing,
     );
     expect(
       find.text('You opened BTN, BB called. Flop As 7d 2c. You have KQo. Action?'),
@@ -11666,8 +11678,12 @@ await tester.tap(find.text('NIT'));
     );
     expect(find.byType(LessonActionTable), findsOneWidget);
     expect(
-      find.text('Set multiway vs a bet — tap Raise, Call, or Fold.'),
+      find.text('Set multiway vs a bet — pick Raise, Call, or Fold.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Set multiway vs a bet — tap Raise, Call, or Fold.'),
+      findsNothing,
     );
     expect(
       find.text('Multiway pot. Villain bets half pot. You flopped a set. Action?'),
@@ -11716,8 +11732,14 @@ await tester.tap(find.text('NIT'));
     );
     expect(find.byType(LessonActionTable), findsOneWidget);
     expect(
-      find.text('Bottom pair vs bet and raise multiway — tap your action.'),
+      find.text(
+        'Bottom pair vs bet and raise multiway — pick your line.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Bottom pair vs bet and raise multiway — tap your action.'),
+      findsNothing,
     );
     expect(
       find.text(
