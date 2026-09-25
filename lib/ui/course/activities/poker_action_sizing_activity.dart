@@ -268,6 +268,8 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     // S5 exit checkpoint docks — SoftPulse owns the answer.
     'act-05-09-02-cp-value' => 'bet',
     'act-05-09-02-cp-catch' => 'call',
+    // Capped ranges scaffold — SoftPulse owns thin stab.
+    'act-06-03-01-scaffolded' => 'bet',
     'act-06-09-01-scaffolded' => 'small',
     // Mix-five: SoftPulse the plan; Rex names the model, not the dock label.
     'act-06-13-01-guided' => 'cs',
@@ -440,8 +442,9 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Maniac river barrel — catch wide aggression.',
     'act-06-01-01-unguided' =>
       'PFR on K72r — tap C-bet 6.',
+    // SoftPulse owns the dock — don’t gold-tip Bet thin.
     'act-06-03-01-scaffolded' =>
-      'Capped river · thin value — tap Bet thin.',
+      'Capped river · second pair — extract when they check.',
     'act-06-04-01-scaffolded' =>
       'Thin value vs station — tap Bet medium.',
     'act-06-05-01-scaffolded' =>

@@ -16466,8 +16466,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Checks turn after flop bet — tap Capped.'),
+      find.text('Checks turn after flop bet — read their range shape.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Checks turn after flop bet — tap Capped.'),
+      findsNothing,
     );
     await tester.tap(find.text('Capped'));
     await tester.pump();
@@ -16503,10 +16507,18 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Capped river · thin value — tap Bet thin.'),
+      find.text('Capped river · second pair — extract when they check.'),
       findsOneWidget,
     );
+    expect(
+      find.text('Capped river · thin value — tap Bet thin.'),
+      findsNothing,
+    );
+    expect(find.text('Cap on river — bet thin'), findsNothing);
     expect(find.text('BET THIN'), findsOneWidget);
+    final dock =
+        tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'bet');
     await tester.tap(find.text('BET THIN'));
     await tester.pump();
     expect(controller.draft.choiceId, 'bet');
@@ -16540,8 +16552,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('XR flop / bet turn / bomb — tap Uncapped.'),
+      find.text('XR flop / bet turn / bomb — read their range shape.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('XR flop / bet turn / bomb — tap Uncapped.'),
+      findsNothing,
     );
     await tester.tap(find.text('Uncapped'));
     await tester.pump();
@@ -16575,7 +16591,11 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Caps are for — tap Attack caps.'), findsOneWidget);
+    expect(
+      find.text('Caps are for — choose how you use them.'),
+      findsOneWidget,
+    );
+    expect(find.text('Caps are for — tap Attack caps.'), findsNothing);
     await tester.tap(find.text('Attack caps'));
     await tester.pump();
     expect(controller.draft.choiceId, 'attack');
