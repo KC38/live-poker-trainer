@@ -20293,7 +20293,7 @@ await tester.tap(find.text('STRONGER'));
         ),
       );
       expect(find.byType(StackDepthPlansDemo), findsOneWidget);
-      expect(find.text('Tap SHORT next'), findsOneWidget);
+      expect(find.text('Tap SHORT next'), findsNothing);
       expect(find.text('Tap Short, Deep, and Effective.'), findsNothing);
       expect(find.text('Tap Short, Deep, and Effective'), findsNothing);
       expect(
@@ -20305,10 +20305,10 @@ await tester.tap(find.text('STRONGER'));
 
       await tester.tap(find.text('SHORT'));
       await tester.pump();
-      expect(find.text('Tap DEEP next'), findsOneWidget);
+      expect(find.text('Tap DEEP next'), findsNothing);
       await tester.tap(find.text('DEEP'));
       await tester.pump();
-      expect(find.text('Tap EFFECTIVE next'), findsOneWidget);
+      expect(find.text('Tap EFFECTIVE next'), findsNothing);
       await tester.tap(find.text('EFFECTIVE'));
       await tester.pump();
       expect(feltAck, 1);
