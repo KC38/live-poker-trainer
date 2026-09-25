@@ -4306,9 +4306,10 @@ class RangeUpdateDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'ONE HAND', caption: 'You never know it', color: AppColors.danger),
-    (label: 'RANGE', caption: 'What they can have', color: AppColors.gold),
-    (label: 'UPDATE', caption: 'Each action revises', color: AppColors.cream),
+    // Structural — Rex owns “never know one hand” / “know a range” / “update.”
+    (label: 'ONE HAND', caption: 'Single combo', color: AppColors.danger),
+    (label: 'RANGE', caption: 'Possible set', color: AppColors.gold),
+    (label: 'UPDATE', caption: 'Revise on action', color: AppColors.cream),
   ];
 
   @override
@@ -4391,7 +4392,8 @@ class _RangeUpdateDemoState extends State<RangeUpdateDemo> {
                 ),
               ),
               child: Text(
-                'Never one hand · know a range · then update',
+                // Match SoftPulse titles — don’t echo Rex’s “never know.”
+                'One hand · range · update',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
@@ -4408,7 +4410,8 @@ class _RangeUpdateDemoState extends State<RangeUpdateDemo> {
               : MainAxisAlignment.start,
       children: [
         Text(
-          'Ranges, not one hand',
+          // Structural label — Rex owns range copy in the dock.
+          'Three range moves',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: expandTeach ? 15 : 12,
