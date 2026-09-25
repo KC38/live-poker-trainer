@@ -944,7 +944,8 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         villainLine: 'Bombs river · no blockers',
         streetLabel: 'River · third pair',
         facingBet: true,
-        feltStatusLine: 'Clear trash — fold',
+        // Structural — Rex + SoftPulse own Fold cue.
+        feltStatusLine: 'Bombs river · no blockers',
       );
     case 'act-06-08-01-guided':
       return const LessonActionSpot(
