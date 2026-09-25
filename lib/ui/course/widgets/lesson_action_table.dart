@@ -6512,9 +6512,10 @@ class VsManiacsDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'WIDER', caption: 'Call for value', color: AppColors.gold),
-    (label: 'HANG', caption: 'Let them fire', color: AppColors.cream),
-    (label: 'EGO', caption: 'Leave it home', color: AppColors.danger),
+    // Structural — Rex owns “call wider / hang themselves / no ego.”
+    (label: 'WIDER', caption: 'Expand calling', color: AppColors.gold),
+    (label: 'HANG', caption: 'Skip hero folds', color: AppColors.cream),
+    (label: 'EGO', caption: 'Skip revenge', color: AppColors.danger),
   ];
 
   @override
@@ -6597,7 +6598,7 @@ class _VsManiacsDemoState extends State<VsManiacsDemo> {
                 ),
               ),
               child: Text(
-                'Call wider · let them hang · no ego',
+                'Wider · hang · ego',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
