@@ -3563,10 +3563,11 @@ class TurnStoryDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'BRICK', caption: 'Story unchanged', color: AppColors.slate),
-    (label: 'CHANGE', caption: 'New story', color: AppColors.cream),
+    (label: 'BRICK', caption: 'Blank runout', color: AppColors.slate),
+    // Structural — Rex owns “change the story” / “with intent.”
+    (label: 'CHANGE', caption: 'Board shifts', color: AppColors.cream),
     (label: 'BARREL', caption: 'Fire again', color: AppColors.gold),
-    (label: 'DELAY', caption: 'Intentional pause', color: AppColors.danger),
+    (label: 'DELAY', caption: 'Hold fire', color: AppColors.danger),
   ];
 
   @override
@@ -3665,7 +3666,8 @@ class _TurnStoryDemoState extends State<TurnStoryDemo> {
                 ),
               ),
               child: Text(
-                'Brick · change · barrel · delay with intent',
+                // Match SoftPulse titles — don’t echo Rex’s “with intent.”
+                'Brick · change · barrel · delay',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,

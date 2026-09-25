@@ -3624,10 +3624,18 @@ await tester.tap(find.text('VALUE'));
     expect(find.text('Tap BRICK next'), findsNothing);
     expect(find.text('Tap Brick, Change, Barrel, and Delay'), findsNothing);
     expect(find.text('Tap Brick, Change, Barrel, and Delay.'), findsNothing);
+    // Structural SoftPulse captions — not Rex paraphrases.
+    expect(find.text('Blank runout'), findsOneWidget);
+    expect(find.text('Board shifts'), findsOneWidget);
+    expect(find.text('Hold fire'), findsOneWidget);
+    expect(find.text('Story unchanged'), findsNothing);
+    expect(find.text('New story'), findsNothing);
+    expect(find.text('Intentional pause'), findsNothing);
     expect(
       find.text('Brick · change · barrel · delay with intent'),
       findsNothing,
     );
+    expect(find.text('Brick · change · barrel · delay'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
     final teachHeight =
@@ -3642,7 +3650,7 @@ await tester.tap(find.text('VALUE'));
       ),
     );
 
-await tester.tap(find.text('BRICK'));
+    await tester.tap(find.text('BRICK'));
     await tester.pump();
     expect(find.text('Tap CHANGE next'), findsNothing);
     await tester.tap(find.text('CHANGE'));
@@ -3655,9 +3663,10 @@ await tester.tap(find.text('BRICK'));
     await tester.pump();
     expect(feltAck, 1);
     // Lock clears enabled / ack — densified shell must stay filled.
+    expect(find.text('Brick · change · barrel · delay'), findsOneWidget);
     expect(
       find.text('Brick · change · barrel · delay with intent'),
-      findsOneWidget,
+      findsNothing,
     );
     expect(
       tester.getSize(find.byType(TurnStoryDemo)).height,
