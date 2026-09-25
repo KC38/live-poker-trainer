@@ -4307,7 +4307,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(VsManiacsDemo), findsOneWidget);
-    expect(find.text('Tap WIDER next'), findsOneWidget);
+    expect(find.text('Tap WIDER next'), findsNothing);
     expect(find.text('Tap Wider, Hang, and Ego.'), findsNothing);
     expect(find.text('Tap Wider, Hang, and Ego'), findsNothing);
     expect(
@@ -4330,10 +4330,10 @@ await tester.tap(find.text('NIT'));
 
     await tester.tap(find.text('WIDER'));
     await tester.pump();
-    expect(find.text('Tap HANG next'), findsOneWidget);
+    expect(find.text('Tap HANG next'), findsNothing);
     await tester.tap(find.text('HANG'));
     await tester.pump();
-    expect(find.text('Tap EGO next'), findsOneWidget);
+    expect(find.text('Tap EGO next'), findsNothing);
     await tester.tap(find.text('EGO'));
     await tester.pump();
     expect(feltAck, 1);
