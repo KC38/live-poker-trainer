@@ -9529,6 +9529,47 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
+  testWidgets('SoftPulse-quiet position unguided CO uses pick-on-map cue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-01-01-unguided-co',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap the cutoff seat on the six-max table.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap the seat right before the button.',
+      choices: const [
+        CourseChoice(id: 'label-co', label: 'Cutoff (CO)'),
+        CourseChoice(id: 'label-hj', label: 'Hijack (HJ)'),
+        CourseChoice(id: 'label-ep', label: 'Early position'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(
+      find.text('Seat just before the button — pick it on the map.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('The seat just before the button is the cutoff.'),
+      findsNothing,
+    );
+    expect(find.text('Tap the seat right before the button.'), findsNothing);
+    expect(find.text('CO'), findsOneWidget);
+    controller.dispose();
+  });
+
   testWidgets('section jump family taps Suited ace on densified felt', (
     tester,
   ) async {

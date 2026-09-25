@@ -314,8 +314,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         'Postflop — last to act gets the information edge.',
       'act-02-01-01-scaffolded-blinds' =>
         'Forced bets every hand sit left of the button.',
+      // SoftPulse-quiet: ask on the map — don't name Cutoff as the answer.
       'act-02-01-01-unguided-co' =>
-        'The seat just before the button is the cutoff.',
+        'Seat just before the button — pick it on the map.',
       'act-02-01-01-checkpoint-edge' =>
         'Same cards — later seats play stronger.',
       'act-02-01-02-unguided-wait' =>
