@@ -183,8 +183,8 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         streetLabel: 'Preflop · UTG · 9-max',
         facingBet: false,
         openPot: true,
-        // Correct action is Fold — do not imply "open the pot".
-        feltStatusLine: 'First in — trash folds',
+        // Jump: structural only — not “trash folds” / “open the pot”.
+        feltStatusLine: 'First in · your action',
       );
     case 'act-02-03-01-guided-utg':
       return const LessonActionSpot(
