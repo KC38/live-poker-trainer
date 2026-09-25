@@ -1777,7 +1777,8 @@ void main() {
       ),
     );
     expect(find.byType(ActionOrderDemo), findsOneWidget);
-    expect(find.text('Tap UTG next'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no Tap UTG next footer stack.
+    expect(find.text('Tap UTG next'), findsNothing);
     expect(find.text('Tap each seat in preflop order'), findsNothing);
     expect(find.text('Tap UTG, then HJ, then BTN.'), findsNothing);
     expect(find.text('Tap UTG, then HJ, then BTN'), findsNothing);
@@ -1804,11 +1805,11 @@ void main() {
     await tester.tap(find.text('UTG'));
     await tester.pump();
     expect(feltAck, 0);
-    expect(find.text('Tap HJ next'), findsOneWidget);
+    expect(find.text('Tap HJ next'), findsNothing);
     await tester.tap(find.text('HJ'));
     await tester.pump();
     expect(feltAck, 0);
-    expect(find.text('Tap BTN next'), findsOneWidget);
+    expect(find.text('Tap BTN next'), findsNothing);
     await tester.tap(find.text('BTN'));
     await tester.pump();
     expect(feltAck, 1);
