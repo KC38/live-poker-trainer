@@ -470,11 +470,11 @@ class SeatOrderTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isBtn = emphasizeDealer && label.toUpperCase() == 'BTN';
-    final tileW = densify ? 132.0 : 96.0;
-    final chip = densify ? 56.0 : 36.0;
-    final labelSize = densify ? 15.0 : 11.0;
+    final tileW = densify ? double.infinity : 96.0;
+    final chip = densify ? 64.0 : 36.0;
+    final labelSize = densify ? 16.0 : 11.0;
     final captionSize = densify ? 13.0 : 11.0;
-    final badgeSize = densify ? 13.0 : 11.0;
+    final badgeSize = densify ? 14.0 : 11.0;
     final radius = densify ? 18.0 : 14.0;
     return Semantics(
       button: true,
@@ -490,11 +490,12 @@ class SeatOrderTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(radius),
           child: Container(
             width: tileW,
+            alignment: densify ? Alignment.center : null,
             padding: EdgeInsets.fromLTRB(
               densify ? 12 : 8,
-              densify ? 16 : 12,
+              densify ? 18 : 12,
               densify ? 12 : 8,
-              densify ? 16 : 12,
+              densify ? 18 : 12,
             ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(radius),
@@ -504,7 +505,11 @@ class SeatOrderTile extends StatelessWidget {
               ),
             ),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: densify ? MainAxisSize.max : MainAxisSize.min,
+              mainAxisAlignment:
+                  densify
+                      ? MainAxisAlignment.spaceEvenly
+                      : MainAxisAlignment.start,
               children: [
                 if (badge != null)
                   Text(
@@ -538,7 +543,7 @@ class SeatOrderTile extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: densify ? 10 : 6),
+                if (!densify) const SizedBox(height: 6),
                 Text(
                   _caption,
                   style: GoogleFonts.manrope(
@@ -625,33 +630,39 @@ class _ActionOrderDemoState extends State<ActionOrderDemo> {
     final expandTeach = widget.interactive;
     final feltHeight =
         expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
-    final seats = Wrap(
-      spacing: expandTeach ? 12 : 8,
-      runSpacing: expandTeach ? 12 : 8,
-      alignment: WrapAlignment.center,
+    final seats = Row(
+      crossAxisAlignment:
+          expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
-        for (final seat in _palette)
-          _SoftPulseTarget(
-            active:
-                widget.interactive &&
-                widget.enabled &&
-                next == seat.label,
-            child: SeatOrderTile(
-              label: seat.label,
-              badge:
-                  _ordered.contains(seat.label)
-                      ? '${_ordered.indexOf(seat.label) + 1}'
-                      : null,
-              selected: _ordered.contains(seat.label),
-              emphasizeDealer: false,
-              enabled:
+        for (var i = 0; i < _palette.length; i++) ...[
+          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          Expanded(
+            child: _SoftPulseTarget(
+              active:
                   widget.interactive &&
                   widget.enabled &&
-                  !_ordered.contains(seat.label),
-              onPressed:
-                  widget.interactive ? () => _onTap(seat.label) : null,
+                  next == _palette[i].label,
+              child: SeatOrderTile(
+                label: _palette[i].label,
+                badge:
+                    _ordered.contains(_palette[i].label)
+                        ? '${_ordered.indexOf(_palette[i].label) + 1}'
+                        : null,
+                selected: _ordered.contains(_palette[i].label),
+                emphasizeDealer: false,
+                densify: expandTeach,
+                enabled:
+                    widget.interactive &&
+                    widget.enabled &&
+                    !_ordered.contains(_palette[i].label),
+                onPressed:
+                    widget.interactive
+                        ? () => _onTap(_palette[i].label)
+                        : null,
+              ),
             ),
           ),
+        ],
       ],
     );
     // SoftPulse + Rex own the next-seat cue while teaching. Show a summary
@@ -685,8 +696,12 @@ class _ActionOrderDemoState extends State<ActionOrderDemo> {
                 ),
               ),
             );
-    final content = Column(
-      mainAxisSize: MainAxisSize.min,
+    final body = Column(
+      mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisAlignment:
+          expandTeach
+              ? MainAxisAlignment.spaceEvenly
+              : MainAxisAlignment.start,
       children: [
         Text(
           'Preflop order after the blinds',
@@ -696,9 +711,16 @@ class _ActionOrderDemoState extends State<ActionOrderDemo> {
             fontWeight: FontWeight.w700,
           ),
         ),
-        SizedBox(height: expandTeach ? 14 : 12),
-        seats,
-        SizedBox(height: expandTeach ? 12 : 10),
+        if (!expandTeach) const SizedBox(height: 12),
+        expandTeach
+            ? Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: seats,
+              ),
+            )
+            : seats,
+        if (!expandTeach) const SizedBox(height: 10),
         Text(
           'Postflop starts left of the button',
           style: GoogleFonts.manrope(
@@ -708,28 +730,11 @@ class _ActionOrderDemoState extends State<ActionOrderDemo> {
           ),
         ),
         if (cue != null) ...[
-          SizedBox(height: expandTeach ? 14 : 12),
+          if (!expandTeach) const SizedBox(height: 12),
           cue,
         ],
       ],
     );
-    final body = expandTeach
-        ? Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: SizedBox(
-                  width: MediaQuery.sizeOf(context).width - 48,
-                  child: content,
-                ),
-              ),
-            ),
-          ],
-        )
-        : content;
     final child = Container(
       key: const ValueKey('action-order-felt'),
       width: double.infinity,
