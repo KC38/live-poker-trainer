@@ -17829,8 +17829,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Folds most, then 3-bets / c-bets — tap Selective + plan.'),
+      find.text('Folds most, then 3-bets / c-bets — pick the note.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Folds most, then 3-bets / c-bets — tap Selective + plan.'),
+      findsNothing,
     );
     await tester.tap(find.text('Selective + plan'));
     await tester.pump();
@@ -17867,8 +17871,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Gives up on turns when called — tap Disciplined.'),
+      find.text('Gives up on turns when called — pick the observation.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Gives up on turns when called — tap Disciplined.'),
+      findsNothing,
     );
     await tester.tap(find.text('Disciplined'));
     await tester.pump();
@@ -17905,8 +17913,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Two hands of tightness — tap Keep sampling.'),
+      find.text('Two hands of tightness — pick the confidence.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Two hands of tightness — tap Keep sampling.'),
+      findsNothing,
     );
     await tester.tap(find.text('Keep sampling'));
     await tester.pump();
@@ -17943,8 +17955,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Best pre-label note bundle — tap Tight · plan · give.'),
+      find.text('Best pre-label note bundle — pick the evidence pack.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Best pre-label note bundle — tap Tight · plan · give.'),
+      findsNothing,
     );
     await tester.tap(find.text('Tight · plan · give'));
     await tester.pump();

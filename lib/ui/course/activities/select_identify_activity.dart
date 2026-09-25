@@ -634,14 +634,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Cooler / mistake? — don’t gold-tip the tile.
       'act-06-10-01-checkpoint' =>
           'Review after a big loss — pick the honest question.',
+      // SoftPulse owns Selective + plan — don’t gold-tip the tile.
       'act-06-11-01-guided' =>
-          'Folds most, then 3-bets / c-bets — tap Selective + plan.',
+          'Folds most, then 3-bets / c-bets — pick the note.',
+      // SoftPulse owns Disciplined — don’t gold-tip the tile.
       'act-06-11-01-scaffolded' =>
-          'Gives up on turns when called — tap Disciplined.',
+          'Gives up on turns when called — pick the observation.',
+      // Unguided: name the habit; don’t tip Keep sampling.
       'act-06-11-01-unguided' =>
-          'Two hands of tightness — tap Keep sampling.',
+          'Two hands of tightness — pick the confidence.',
+      // SoftPulse owns Tight · plan · give — don’t gold-tip the tile.
       'act-06-11-01-checkpoint' =>
-          'Best pre-label note bundle — tap Tight · plan · give.',
+          'Best pre-label note bundle — pick the evidence pack.',
       'act-06-11-02-guided' =>
           'Folds most, 3-bets strong — tap TAG.',
       'act-06-11-02-scaffolded' =>
