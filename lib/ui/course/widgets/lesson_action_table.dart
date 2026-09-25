@@ -3374,7 +3374,8 @@ class FlopLinesDemo extends StatefulWidget {
   static const lines = <({String label, String caption, Color color})>[
     (label: 'VALUE', caption: 'Get paid', color: AppColors.gold),
     (label: 'C-BET', caption: 'Continue story', color: AppColors.cream),
-    (label: 'CHECK', caption: 'Check back', color: AppColors.slate),
+    // Structural — Rex owns “check back” (don’t echo it on the CHECK tile).
+    (label: 'CHECK', caption: 'Pass the street', color: AppColors.slate),
     (label: 'CALL', caption: 'Realize equity', color: AppColors.cream),
     (label: 'FOLD', caption: 'Give up', color: AppColors.danger),
     (label: 'RAISE', caption: 'Apply pressure', color: AppColors.gold),
