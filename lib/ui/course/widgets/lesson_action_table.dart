@@ -552,10 +552,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Kc', '7s', '2d'],
         potLabel: 'Pot ~60 · SPR ~1',
         villainLine: '3-bet pot · short SPR',
+        // Structural — Rex owns commit SoftPulse cue; don’t gold-tip get-it-in.
         streetLabel: 'Flop · top set',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Low SPR — get it in',
+        feltStatusLine: '3-bet pot · short SPR',
       );
     case 'act-04-05-01-unguided':
       return const LessonActionSpot(
@@ -563,10 +564,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Qc', '9s', '3h'],
         potLabel: 'Pot 12 · SPR 20',
         villainLine: 'Multiway · deep stacks',
+        // Structural — don’t tip Keep pot small on the felt.
         streetLabel: 'Flop · second pair',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'High SPR — keep it small',
+        feltStatusLine: 'Multiway · deep stacks',
       );
     case 'act-04-05-01-checkpoint':
       return const LessonActionSpot(
@@ -575,9 +577,10 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         potLabel: 'Pot 40 · SPR ~1.4',
         stackLabel: 'Stacks left 55',
         villainLine: 'Opponent jams all-in',
-        streetLabel: 'Turn · commitment spot',
+        // Structural — don’t tip Weigh SPR first on the felt.
+        streetLabel: 'Turn · facing jam',
         facingBet: true,
-        feltStatusLine: 'Weigh SPR before you put it in',
+        feltStatusLine: 'Opponent jams all-in',
       );
     case 'act-04-06-03-guided':
       return const LessonActionSpot(

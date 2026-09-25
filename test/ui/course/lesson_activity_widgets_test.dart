@@ -13637,6 +13637,8 @@ await tester.tap(find.text('NIT'));
       findsOneWidget,
     );
     expect(find.text('COMMIT FOR STACKS'), findsOneWidget);
+    expect(find.text('Low SPR — get it in'), findsNothing);
+    expect(find.text('3-bet pot · short SPR'), findsWidgets);
     final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
     expect(dock.pulseChoiceId, 'commit');
     await tester.tap(find.text('COMMIT FOR STACKS'));
@@ -13683,7 +13685,10 @@ await tester.tap(find.text('NIT'));
       findsOneWidget,
     );
     expect(find.text('WEIGH SPR FIRST'), findsOneWidget);
-    expect(find.textContaining('Opponent jams'), findsOneWidget);
+    expect(find.text('Weigh SPR before you put it in'), findsNothing);
+    expect(find.text('Turn · commitment spot'), findsNothing);
+    expect(find.text('Turn · facing jam'), findsOneWidget);
+    expect(find.textContaining('Opponent jams'), findsWidgets);
     await tester.tap(find.text('WEIGH SPR FIRST'));
     await tester.pump();
     expect(controller.draft.choiceId, 'before');
