@@ -4009,7 +4009,7 @@ await tester.tap(find.text('RARE'));
       ),
     );
     expect(find.byType(NitModelDemo), findsOneWidget);
-    expect(find.text('Tap NIT next'), findsOneWidget);
+    expect(find.text('Tap NIT next'), findsNothing);
     expect(find.text('Tap Nit, Narrow, and Respect'), findsNothing);
     expect(find.text('Tap Nit, Narrow, and Respect.'), findsNothing);
     expect(
@@ -4032,10 +4032,10 @@ await tester.tap(find.text('RARE'));
 
 await tester.tap(find.text('NIT'));
     await tester.pump();
-    expect(find.text('Tap NARROW next'), findsOneWidget);
+    expect(find.text('Tap NARROW next'), findsNothing);
     await tester.tap(find.text('NARROW'));
     await tester.pump();
-    expect(find.text('Tap RESPECT next'), findsOneWidget);
+    expect(find.text('Tap RESPECT next'), findsNothing);
     await tester.tap(find.text('RESPECT'));
     await tester.pump();
     expect(feltAck, 1);
