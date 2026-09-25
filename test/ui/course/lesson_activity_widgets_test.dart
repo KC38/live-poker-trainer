@@ -9010,8 +9010,21 @@ await tester.tap(find.text('STRONGER'));
       findsOneWidget,
     );
     expect(find.text('Seat right before the button?'), findsNothing);
+    // Structural felt caption — no Rex “before the button” echo.
+    expect(find.text('Six-max · before the button'), findsNothing);
+    expect(find.text('Six-max · seat map'), findsOneWidget);
     expect(find.text('Cutoff'), findsNothing);
     expect(find.text('CO'), findsOneWidget);
+    // Tall-phone densify — fill navy void under the seat grid.
+    expect(
+      tester.getSize(find.byKey(const ValueKey('position-labels-felt'))).height,
+      moreOrLessEquals(
+        tester.view.physicalSize.height /
+            tester.view.devicePixelRatio *
+            0.58,
+        epsilon: 1,
+      ),
+    );
     await tester.tap(find.text('CO'));
     await tester.pump();
     expect(controller.draft.choiceId, 'j2-co');
