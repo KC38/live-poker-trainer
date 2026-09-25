@@ -135,14 +135,20 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
     final resetForAuthGate = destination == AppRootDestination.auth;
     _logRootScreen(analytics, _screenName(destination));
 
+    // Remount when entering saveProgress. Onboarding used to replace `/` with
+    // the lesson runner, so updating `home` alone could not surface
+    // SaveProgressScreen and LessonResult CONTINUE no-op'd on popUntil(isFirst).
+    // Do not key on every destination — loading → guestCourse must keep the
+    // shared guest navigator so an in-progress first lesson survives.
+    final identity = rootNavigatorKeyFor(
+      uid: session?.uid,
+      anonymous: session?.isAnonymous == true,
+      resetForAuthGate: resetForAuthGate,
+    );
+    final remountToken =
+        destination == AppRootDestination.saveProgress ? '-save' : '';
     return MaterialApp(
-      key: ValueKey(
-        rootNavigatorKeyFor(
-          uid: session?.uid,
-          anonymous: session?.isAnonymous == true,
-          resetForAuthGate: resetForAuthGate,
-        ),
-      ),
+      key: ValueKey('$identity$remountToken'),
       navigatorKey:
           resetForAuthGate ? _authGateNavigatorKey : _rootNavigatorKey,
       title: 'Exploitative Poker Lab',
