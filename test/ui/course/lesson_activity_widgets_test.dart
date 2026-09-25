@@ -21167,7 +21167,7 @@ await tester.tap(find.text('STRONGER'));
         ),
       );
       expect(find.byType(CapstoneSrpDemo), findsOneWidget);
-      expect(find.text('Tap PLAN next'), findsOneWidget);
+      expect(find.text('Tap PLAN next'), findsNothing);
       expect(find.text('Tap Plan, Update, and Finish.'), findsNothing);
       expect(find.text('Tap Plan, Update, and Finish'), findsNothing);
       expect(
@@ -21179,10 +21179,10 @@ await tester.tap(find.text('STRONGER'));
 
       await tester.tap(find.text('PLAN'));
       await tester.pump();
-      expect(find.text('Tap UPDATE next'), findsOneWidget);
+      expect(find.text('Tap UPDATE next'), findsNothing);
       await tester.tap(find.text('UPDATE'));
       await tester.pump();
-      expect(find.text('Tap FINISH next'), findsOneWidget);
+      expect(find.text('Tap FINISH next'), findsNothing);
       await tester.tap(find.text('FINISH'));
       await tester.pump();
       expect(feltAck, 1);
