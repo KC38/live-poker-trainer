@@ -16860,8 +16860,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Pot 20 after half-pot flop — keep geometric pressure.'),
+      find.text('Half-pot flop checked — keep geometric pressure.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Pot 20 after half-pot flop — keep geometric pressure.'),
+      findsNothing,
     );
     expect(
       find.text('Pot 20 after half-pot flop — tap Bet ~20.'),

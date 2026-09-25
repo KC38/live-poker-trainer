@@ -452,9 +452,9 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // SoftPulse owns the dock — don’t gold-tip Bet medium.
     'act-06-04-01-scaffolded' =>
       'Station checked · second pair — extract with a merged size.',
-    // SoftPulse owns the dock — don’t gold-tip Bet ~20.
+    // SoftPulse owns the dock — don’t gold-tip Bet ~20 (or its amount).
     'act-06-05-01-scaffolded' =>
-      'Pot 20 after half-pot flop — keep geometric pressure.',
+      'Half-pot flop checked — keep geometric pressure.',
     'act-06-07-01-scaffolded' =>
       'Third pair scary river — tap Fold.',
     'act-06-08-01-guided' =>
