@@ -685,10 +685,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Sample limits — don’t gold-tip the tile.
       'act-06-12-02-checkpoint' =>
           'Beside LAG label — pick what to show.',
+      // Unguided: name the habit; don’t tip Usually avoid.
       'act-06-12-03-unguided' =>
-          'Inventing triple-barrel bluffs into a LAG — tap Usually avoid.',
+          'Inventing triple-barrel bluffs into a LAG — pick the discipline.',
+      // SoftPulse owns Wide + pressure — don’t gold-tip the tile.
       'act-06-12-03-checkpoint' =>
-          'LAG exploit cites — tap Wide + pressure.',
+          'LAG exploit cites — pick the cite.',
       'act-06-13-01-checkpoint' =>
           'Selective entry + disciplined barrels — tap TAG — respect.',
       'act-06-13-02-cp-adv' =>

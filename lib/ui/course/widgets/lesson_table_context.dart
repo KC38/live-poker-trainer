@@ -12380,6 +12380,7 @@ class LessonTableContext extends StatelessWidget {
       semanticsStatic: 'LAG adjust avoid outcomes',
       caption:
           scene.caption ?? 'Inventing triple-barrel bluffs into a LAG?',
+      // No SoftPulse on unguided — still don’t gold-icon Usually avoid.
       phases: [
         (
           region: LessonTableRegion.citeLagAvoid,
@@ -12387,7 +12388,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Fancy less',
           visual: const Icon(
             Icons.block,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12411,6 +12412,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive LAG cite — tap wide + pressure or vibes',
       semanticsStatic: 'LAG adjust cite outcomes',
       caption: scene.caption ?? 'LAG exploit cites?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Wide + pressure.
+      guideRegion: LessonTableRegion.citeLagWidePressure,
       phases: [
         (
           region: LessonTableRegion.citeLagWidePressure,
@@ -12418,7 +12421,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Cite the tendency',
           visual: const Icon(
             Icons.gps_fixed,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
