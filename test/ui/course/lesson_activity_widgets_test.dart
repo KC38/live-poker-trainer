@@ -10792,6 +10792,16 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(LessonActionDock), findsOneWidget);
+    expect(
+      find.text('Big blind vs a button open — pick Fold, Call, or Jam.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Big blind vs a button open — tap Fold, Call, or Jam.'),
+      findsNothing,
+    );
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, isNull);
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'fold-bb');

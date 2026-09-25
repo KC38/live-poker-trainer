@@ -37,17 +37,17 @@ class PokerActionSizingActivity extends StatelessWidget {
         final fallback =
             feltFirstCoach ??
             (activity.id == 'act-01-06-01-unguided-lab'
-                ? 'Big blind vs a button open — tap Fold, Call, or Jam.'
+                ? 'Big blind vs a button open — pick Fold, Call, or Jam.'
                 : spot?.identifyUnavailable == true
-                ? 'A bet is out — tap the action you cannot take.'
+                ? 'A bet is out — pick the action you cannot take.'
                 : spot?.stackLabel != null
-                ? 'Short stack — tap what you can put in.'
+                ? 'Short stack — pick what you can put in.'
                 : spot?.openPot == true
-                ? 'The pot is open — tap the first chips.'
+                ? 'The pot is open — pick the first chips.'
                 : spot?.facingBet == true
-                ? 'Read the pot and the bet — tap your action.'
+                ? 'Read the pot and the bet — pick your action.'
                 : spot != null
-                ? 'Nothing to match — tap the free action.'
+                ? 'Nothing to match — pick the free action.'
                 : 'Choose the action you would take live.');
         // Felt already shows holes / villain line — never dump "72o" prompts.
         final resolved =
@@ -97,10 +97,10 @@ class PokerActionSizingActivity extends StatelessWidget {
                   // Felt + Rex already name open pots — avoid a third
                   // "tap Bet" line under the dock.
                   return spot.identifyUnavailable
-                      ? 'Tap the illegal action.'
+                      ? 'Pick the illegal action.'
                       : spot.stackLabel != null
-                      ? 'Tap All-in, Call, or Fold on the dock.'
-                      : 'Tap your action on the dock.';
+                      ? 'Pick All-in, Call, or Fold on the dock.'
+                      : 'Pick your action on the dock.';
                 }
                 return 'Checking…';
               }();
@@ -207,7 +207,7 @@ class PokerActionSizingActivity extends StatelessWidget {
                 final status = () {
                   if (controller.lastResult != null) return '';
                   if (controller.submitting) return 'Checking…';
-                  if (selected == null) return 'Tap your action.';
+                  if (selected == null) return 'Pick your action.';
                   return 'Checking…';
                 }();
                 if (status.isEmpty) return const SizedBox.shrink();
