@@ -397,10 +397,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Getting 3:1 with real outs — tap what you do.',
       'act-03-03-01-checkpoint' =>
           'Nut flush draw, deep and sticky — tap Implied.',
+      // SoftPulse owns Brick — don’t gold-tip the tile.
       'act-03-05-01-guided' =>
-          'Dry ace flop, blank three — tap Brick.',
+          'Dry ace flop, blank three — rarely helps a missed caller.',
+      // SoftPulse owns give-up — don’t gold-tip the tile.
       'act-03-05-01-checkpoint' =>
-          'Air bluff meets a draw-completing queen — tap the plan.',
+          'Air bluff meets a draw-completing queen — weigh shutting down.',
       'act-03-06-01-checkpoint' =>
           'Medium one pair faces a big bet — tap the river job.',
       'act-03-07-01-unguided' =>
@@ -1180,10 +1182,12 @@ class _HandCategoryTapActivity extends StatelessWidget {
           'Getting 3:1 with real outs — tap what you do.',
         'act-03-03-01-checkpoint' =>
           'Nut flush draw, deep and sticky — tap Implied.',
+        // SoftPulse owns Brick — don’t gold-tip the tile.
         'act-03-05-01-guided' =>
-          'Dry ace flop, blank three — tap Brick.',
+          'Dry ace flop, blank three — rarely helps a missed caller.',
+        // SoftPulse owns give-up — don’t gold-tip the tile.
         'act-03-05-01-checkpoint' =>
-          'Air bluff meets a draw-completing queen — tap the plan.',
+          'Air bluff meets a draw-completing queen — weigh shutting down.',
         'act-03-06-01-checkpoint' =>
           'Medium one pair faces a big bet — tap the river job.',
         'act-03-07-01-unguided' =>

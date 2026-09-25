@@ -11812,8 +11812,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Dry ace flop, blank three — tap Brick.'),
+      find.text(
+        'Dry ace flop, blank three — rarely helps a missed caller.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Dry ace flop, blank three — tap Brick.'),
+      findsNothing,
     );
     expect(
       find.text(
@@ -11873,8 +11879,14 @@ await tester.tap(find.text('NIT'));
     );
     expect(find.byType(LessonActionTable), findsOneWidget);
     expect(
-      find.text('TPTK on a brick turn after a call — tap a barrel.'),
+      find.text(
+        'TPTK on a brick turn after a call — keep value pressure.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('TPTK on a brick turn after a call — tap a barrel.'),
+      findsNothing,
     );
     expect(
       find.text(
@@ -11933,8 +11945,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Flush comes in; checked to you — tap delayed value.'),
+      find.text(
+        'Flush comes in; checked to you — pick delayed value or give up.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Flush comes in; checked to you — tap delayed value.'),
+      findsNothing,
     );
     // Felt is structural — don’t tip delayed value on the felt.
     expect(find.text('Draw hit — delayed value'), findsNothing);
@@ -12001,8 +12019,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Air bluff meets a draw-completing queen — tap the plan.'),
+      find.text(
+        'Air bluff meets a draw-completing queen — weigh shutting down.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Air bluff meets a draw-completing queen — tap the plan.'),
+      findsNothing,
     );
     expect(
       find.text(

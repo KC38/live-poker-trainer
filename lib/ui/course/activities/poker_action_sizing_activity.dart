@@ -365,10 +365,12 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // Checkpoint: name the spot; SoftPulse isn’t on.
     'act-03-04-01-checkpoint' =>
       'Bottom pair vs bet and raise multiway — pick your line.',
+    // SoftPulse owns barrel — don’t gold-tip the dock.
     'act-03-05-01-scaffolded' =>
-      'TPTK on a brick turn after a call — tap a barrel.',
+      'TPTK on a brick turn after a call — keep value pressure.',
+    // Unguided: name the spot; SoftPulse isn’t on.
     'act-03-05-01-unguided' =>
-      'Flush comes in; checked to you — tap delayed value.',
+      'Flush comes in; checked to you — pick delayed value or give up.',
     'act-03-06-01-guided' =>
       'Top two on a brick river — tap a value bet.',
     'act-03-06-01-scaffolded' =>
