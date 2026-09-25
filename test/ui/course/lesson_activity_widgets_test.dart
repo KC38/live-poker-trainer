@@ -5286,11 +5286,21 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(ThinValueDemo), findsOneWidget);
+    expect(find.text('Needs calls'), findsNothing);
+    expect(find.text('Bluff-catches'), findsNothing);
+    expect(find.text('Need wide barrels'), findsNothing);
+    expect(find.text('Extract light'), findsOneWidget);
+    expect(find.text('Hero call'), findsOneWidget);
+    expect(find.text('Fire multi-street'), findsOneWidget);
     expect(find.text('Tap THIN next'), findsNothing);
     expect(find.text('Tap Thin, Catch, and Barrels.'), findsNothing);
     expect(find.text('Tap Thin, Catch, and Barrels'), findsNothing);
     expect(
       find.text('Thin value needs calls · catches need barrels'),
+      findsNothing,
+    );
+    expect(
+      find.text('Thin · catch · barrels'),
       findsNothing,
     );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
@@ -5319,6 +5329,10 @@ await tester.tap(find.text('NIT'));
     // Lock clears enabled / ack — densified shell must stay filled.
     expect(
       find.text('Thin value needs calls · catches need barrels'),
+      findsNothing,
+    );
+    expect(
+      find.text('Thin · catch · barrels'),
       findsOneWidget,
     );
     expect(
@@ -14626,6 +14640,8 @@ await tester.tap(find.text('STRONGER'));
       findsOneWidget,
     );
     expect(find.text('Tap your action on the dock.'), findsNothing);
+    expect(find.text('Station pays — bet thin value'), findsNothing);
+    expect(find.text('Checked to you'), findsOneWidget);
     expect(find.text('BET THIN VALUE'), findsOneWidget);
     await tester.tap(find.text('BET THIN VALUE'));
     await tester.pump();
@@ -14671,6 +14687,8 @@ await tester.tap(find.text('STRONGER'));
       find.text('Maniac barrels second pair — tap Call.'),
       findsOneWidget,
     );
+    expect(find.text('Wide barrels — call the catch'), findsNothing);
+    expect(find.text('Facing a bet'), findsOneWidget);
     await tester.tap(find.text('CALL'));
     await tester.pump();
     expect(controller.draft.choiceId, 'call-m');
@@ -14720,6 +14738,8 @@ await tester.tap(find.text('STRONGER'));
       find.text('Nit checked · second pair — tap Check.'),
       findsOneWidget,
     );
+    expect(find.text('Nit overfolds — check back'), findsNothing);
+    expect(find.text('Checked to you'), findsOneWidget);
     expect(find.text('CHECK'), findsOneWidget);
     await tester.tap(find.text('CHECK'));
     await tester.pump();
