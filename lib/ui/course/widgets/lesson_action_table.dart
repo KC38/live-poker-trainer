@@ -4881,7 +4881,8 @@ class _SizingLanguageDemoState extends State<SizingLanguageDemo> {
               : MainAxisAlignment.start,
       children: [
         Text(
-          'Size is language',
+          // Structural label — Rex owns "Size is language" in the dock.
+          'Three size stories',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: expandTeach ? 15 : 12,
