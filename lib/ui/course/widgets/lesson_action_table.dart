@@ -251,7 +251,7 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         villainLine: 'BTN opens to 6',
         streetLabel: 'Preflop · Small blind · 1/2',
         facingBet: true,
-        feltStatusLine: 'Premium vs a button open',
+        // Rex names the spot — no gold spoiler echoing hand strength.
       );
     case 'act-02-04-01-checkpoint-aq':
       return const LessonActionSpot(
@@ -260,7 +260,7 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         villainLine: 'HJ opens to 6',
         streetLabel: 'Preflop · Cutoff · 1/2',
         facingBet: true,
-        feltStatusLine: 'Strong suited broadway',
+        // Checkpoint: cards + villain line teach; no strength spoiler.
       );
     case 'act-02-07-02-jump-vs':
       return const LessonActionSpot(
