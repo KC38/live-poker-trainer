@@ -463,8 +463,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Low — don’t gold-tip the tile.
       'act-04-06-02-checkpoint' =>
           'Only two hands so far — keep sampling before you lock a label.',
+      // SoftPulse owns Rarely folds — don’t gold-tip the tile.
       'act-04-06-03-checkpoint' =>
-          'Why cut bluffs vs a station — tap the cite.',
+          'Why cut bluffs vs a station — they almost never leave.',
       'act-04-07-01-guided' =>
           'Folded 20 of 22 — tap the observation.',
       'act-04-07-01-scaffolded' =>

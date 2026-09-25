@@ -14637,7 +14637,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s4 adjust station checkpoint taps rarely folds on felt', (
+  testWidgets('s4 adjust station checkpoint SoftPulse Rarely folds — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -14661,9 +14661,19 @@ await tester.tap(find.text('NIT'));
         SelectIdentifyActivity(
           activity: activity,
           controller: controller,
-          showGuidance: false,
+          showGuidance: true,
         ),
       ),
+    );
+    expect(
+      find.text(
+        'Why cut bluffs vs a station — they almost never leave.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Why cut bluffs vs a station — tap the cite.'),
+      findsNothing,
     );
     expect(find.text('Rarely folds'), findsOneWidget);
     await tester.tap(find.text('Rarely folds'));
