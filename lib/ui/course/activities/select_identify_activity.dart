@@ -466,14 +466,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Rarely folds — don’t gold-tip the tile.
       'act-04-06-03-checkpoint' =>
           'Why cut bluffs vs a station — they almost never leave.',
+      // SoftPulse owns Narrow — don’t gold-tip the tile.
       'act-04-07-01-guided' =>
-          'Folded 20 of 22 — tap the observation.',
+          'Folded 20 of 22 — entry looks very selective.',
+      // SoftPulse owns Strong heat — don’t gold-tip the tile.
       'act-04-07-01-scaffolded' =>
-          'Raises then barrels — tap the observation.',
+          'Raises then barrels — when they enter, heat often follows.',
+      // SoftPulse owns Wait — don’t gold-tip the tile.
       'act-04-07-01-unguided' =>
-          'Only two folds — tap whether to label.',
+          'Only two folds — sample is still too thin to lock a label.',
+      // SoftPulse owns Few + heat — don’t gold-tip the tile.
       'act-04-07-01-checkpoint' =>
-          'Before you label — tap the evidence bundle.',
+          'Before you label — few hands with heavy action when involved.',
       'act-04-07-02-guided' =>
           'Rare entry, large 3-bets — tap the working label.',
       'act-04-07-02-unguided' =>

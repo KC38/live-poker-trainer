@@ -14682,7 +14682,9 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s4 observe narrow guided taps Narrow on felt', (tester) async {
+  testWidgets('s4 observe narrow guided SoftPulse Narrow — no gold tip', (
+    tester,
+  ) async {
     final activity = CourseActivity(
       id: 'act-04-07-01-guided',
       order: 2,
@@ -14713,13 +14715,155 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Folded 20 of 22 — tap the observation.'),
+      find.text('Folded 20 of 22 — entry looks very selective.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Folded 20 of 22 — tap the observation.'),
+      findsNothing,
     );
     expect(find.text('Narrow'), findsOneWidget);
     await tester.tap(find.text('Narrow'));
     await tester.pump();
     expect(controller.draft.choiceId, 'narrow');
+    controller.dispose();
+  });
+
+  testWidgets('s4 observe narrow scaffold SoftPulse Strong heat — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-07-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Strong aggression when they enter.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'That seat finally raises and then barrels. Observation?',
+      choices: const [
+        CourseChoice(id: 'strong-aggr', label: 'Strong aggression when they enter'),
+        CourseChoice(id: 'passive', label: 'They are passive callers'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Raises then barrels — when they enter, heat often follows.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Raises then barrels — tap the observation.'),
+      findsNothing,
+    );
+    expect(find.text('Strong heat'), findsOneWidget);
+    await tester.tap(find.text('Strong heat'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'strong-aggr');
+    controller.dispose();
+  });
+
+  testWidgets('s4 observe narrow unguided SoftPulse Wait — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-07-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Sample too small.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'They folded two hands. Label them already?',
+      choices: const [
+        CourseChoice(id: 'wait', label: 'No — sample too small'),
+        CourseChoice(id: 'now', label: 'Yes — two folds is enough forever'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Only two folds — sample is still too thin to lock a label.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Only two folds — tap whether to label.'),
+      findsNothing,
+    );
+    expect(find.text('Wait'), findsOneWidget);
+    await tester.tap(find.text('Wait'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'wait');
+    controller.dispose();
+  });
+
+  testWidgets('s4 observe narrow checkpoint SoftPulse Few + heat — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-07-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Few hands; heavy action when involved.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Evidence bundle for this seat?',
+      choices: const [
+        CourseChoice(
+          id: 'bundle-nit',
+          label: 'Few hands; heavy action when involved',
+        ),
+        CourseChoice(id: 'bundle-station', label: 'Calls every street'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Before you label — few hands with heavy action when involved.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Before you label — tap the evidence bundle.'),
+      findsNothing,
+    );
+    expect(find.text('Few + heat'), findsOneWidget);
+    await tester.tap(find.text('Few + heat'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'bundle-nit');
     controller.dispose();
   });
 
