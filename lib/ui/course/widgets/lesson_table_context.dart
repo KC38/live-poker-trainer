@@ -11210,6 +11210,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive blockers — tap Ace blocker, no blockers, or fake +EV',
       semanticsStatic: 'Blockers guided outcomes',
       caption: scene.caption ?? 'River bluff on flush board — better blocker?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Ace blocker.
+      guideRegion: LessonTableRegion.blockersAce,
       phases: [
         (
           region: LessonTableRegion.blockersAce,
@@ -11245,7 +11247,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'No decimals',
           visual: const Icon(
             Icons.calculate_outlined,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11259,6 +11261,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive bluff-catch blockers — tap unblock bluffs vs block their air',
       semanticsStatic: 'Blockers unblock outcomes',
       caption: scene.caption ?? 'Bluff-catching a river bomb — prefer?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Unblock bluffs.
+      guideRegion: LessonTableRegion.blockersUnblock,
       phases: [
         (
           region: LessonTableRegion.blockersUnblock,
@@ -11266,7 +11270,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Keep their air',
           visual: const Icon(
             Icons.lock_open_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11290,6 +11294,7 @@ class LessonTableContext extends StatelessWidget {
           'Interactive blocker role — tap tweak evidence vs replace all reasoning',
       semanticsStatic: 'Blockers tweak outcomes',
       caption: scene.caption ?? 'Blockers replace?',
+      // No SoftPulse on unguided — still don’t gold-icon Tweak evidence.
       phases: [
         (
           region: LessonTableRegion.blockersTweak,
@@ -11297,7 +11302,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Not a wand',
           visual: const Icon(
             Icons.tune,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11321,6 +11326,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive solver EV stance — tap no fake EV vs invent EVs',
       semanticsStatic: 'Blockers EV outcomes',
       caption: scene.caption ?? 'Course stance on solver EV quotes?',
+      // SoftPulse + Rex own the cue — don’t gold-tip No fake EV.
+      guideRegion: LessonTableRegion.blockersNoFakeEv,
       phases: [
         (
           region: LessonTableRegion.blockersNoFakeEv,
@@ -11328,7 +11335,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Decision-linked',
           visual: const Icon(
             Icons.verified_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11338,7 +11345,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Forbidden',
           visual: const Icon(
             Icons.sentiment_very_dissatisfied_outlined,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),

@@ -16988,8 +16988,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Flush-board river bluff — tap Ace blocker.'),
+      find.text('Flush-board river bluff — pick the better blocker.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Flush-board river bluff — tap Ace blocker.'),
+      findsNothing,
     );
     await tester.tap(find.text('Ace blocker'));
     await tester.pump();
@@ -17026,8 +17030,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Bluff-catch flush bomb — tap Unblock bluffs.'),
+      find.text('Bluff-catch flush bomb — pick what you leave live.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Bluff-catch flush bomb — tap Unblock bluffs.'),
+      findsNothing,
     );
     await tester.tap(find.text('Unblock bluffs'));
     await tester.pump();
@@ -17064,8 +17072,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Blockers replace — tap Tweak evidence.'),
+      find.text('Blockers replace — pick how far they go.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Blockers replace — tap Tweak evidence.'),
+      findsNothing,
     );
     await tester.tap(find.text('Tweak evidence'));
     await tester.pump();
@@ -17102,8 +17114,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Solver EV quotes — tap No fake EV.'),
+      find.text('Solver EV quotes — pick the course stance.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Solver EV quotes — tap No fake EV.'),
+      findsNothing,
     );
     await tester.tap(find.text('No fake EV'));
     await tester.pump();
