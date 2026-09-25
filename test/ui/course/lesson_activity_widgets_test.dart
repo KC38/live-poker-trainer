@@ -10551,7 +10551,8 @@ await tester.tap(find.text('NIT'));
     expect(find.text('BB'), findsOneWidget);
     expect(find.text('÷'), findsOneWidget);
     expect(find.text('100bb'), findsOneWidget);
-    expect(find.text('Tap 100bb.'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no third "Tap 100bb" status line.
+    expect(find.text('Tap 100bb.'), findsNothing);
     expect(find.byType(TextField), findsNothing);
     await tester.tap(find.text('100bb'));
     await tester.pump();
