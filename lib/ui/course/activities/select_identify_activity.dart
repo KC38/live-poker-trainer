@@ -673,14 +673,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Wide · barrels · folds — don’t gold-tip the tile.
       'act-06-12-01-checkpoint' =>
           'Best pre-label notes — pick the evidence pack.',
+      // SoftPulse owns LAG — don’t gold-tip the tile.
       'act-06-12-02-guided' =>
-          'Opens wide, barrels often — tap LAG.',
+          'Opens wide, barrels often — pick the label.',
+      // SoftPulse owns Pressure vs passive — don’t gold-tip the tile.
       'act-06-12-02-scaffolded' =>
-          'LAG vs Station — tap Pressure vs passive.',
+          'LAG vs Station — pick the difference.',
+      // Unguided: name the type; don’t tip LAG.
       'act-06-12-02-unguided' =>
-          'Wide opens, keeps barreling — tap LAG.',
+          'Wide opens, keeps barreling — pick the label.',
+      // SoftPulse owns Sample limits — don’t gold-tip the tile.
       'act-06-12-02-checkpoint' =>
-          'Beside LAG label — tap Sample limits.',
+          'Beside LAG label — pick what to show.',
       'act-06-12-03-unguided' =>
           'Inventing triple-barrel bluffs into a LAG — tap Usually avoid.',
       'act-06-12-03-checkpoint' =>
