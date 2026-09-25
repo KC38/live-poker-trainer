@@ -4655,7 +4655,7 @@ await tester.tap(find.text('RARE'));
     expect(find.text('Tap Nit, Narrow, and Respect'), findsNothing);
     expect(find.text('Tap Nit, Narrow, and Respect.'), findsNothing);
     expect(
-      find.text('Narrow entry · respect heavy action'),
+      find.text('Nit · narrow · respect'),
       findsNothing,
     );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
@@ -4683,7 +4683,7 @@ await tester.tap(find.text('NIT'));
     expect(feltAck, 1);
     // Lock clears enabled / ack — densified shell must stay filled.
     expect(
-      find.text('Narrow entry · respect heavy action'),
+      find.text('Nit · narrow · respect'),
       findsOneWidget,
     );
     expect(

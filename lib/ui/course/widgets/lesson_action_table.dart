@@ -5837,11 +5837,12 @@ class NitModelDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
+    // Structural — Rex owns “narrow entry / respect heavy action.”
     (label: 'NIT', caption: 'Working label', color: AppColors.gold),
-    (label: 'NARROW', caption: 'Rarely enters', color: AppColors.cream),
+    (label: 'NARROW', caption: 'Seldom in pots', color: AppColors.cream),
     (
       label: 'RESPECT',
-      caption: 'Heavy action means it',
+      caption: 'Credit big bets',
       color: AppColors.danger,
     ),
   ];
@@ -5926,7 +5927,7 @@ class _NitModelDemoState extends State<NitModelDemo> {
                 ),
               ),
               child: Text(
-                'Narrow entry · respect heavy action',
+                'Nit · narrow · respect',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
