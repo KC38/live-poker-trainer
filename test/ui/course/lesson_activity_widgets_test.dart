@@ -15054,7 +15054,9 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s4 meet maniac guided taps Maniac on felt', (tester) async {
+  testWidgets('s4 meet maniac guided SoftPulse Maniac — no gold tip', (
+    tester,
+  ) async {
     final activity = CourseActivity(
       id: 'act-04-08-02-guided',
       order: 2,
@@ -15085,13 +15087,154 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Opens 60%, barrels light — tap the working label.'),
+      find.text(
+        'Opens 60%, barrels light — a wide, relentless aggressor label fits.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Opens 60%, barrels light — tap the working label.'),
+      findsNothing,
     );
     expect(find.text('Maniac'), findsOneWidget);
     await tester.tap(find.text('Maniac'));
     await tester.pump();
     expect(controller.draft.choiceId, 'pt-maniac');
+    controller.dispose();
+  });
+
+  testWidgets('s4 meet maniac unguided SoftPulse Maniac — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-08-02-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.playerReadClassify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Maniac.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Seat 3-bets light and never gives up rivers. Label?',
+      choices: const [
+        CourseChoice(id: 'maniac2', label: 'Maniac'),
+        CourseChoice(id: 'station-m', label: 'Calling Station'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Light 3-bets, never gives up — wild pressure fits better than sticky calling.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Light 3-bets, never gives up — tap the label.'),
+      findsNothing,
+    );
+    expect(find.text('Maniac'), findsOneWidget);
+    await tester.tap(find.text('Maniac'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'maniac2');
+    controller.dispose();
+  });
+
+  testWidgets('s4 meet maniac checkpoint SoftPulse Three types — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-08-02-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Calling Station, Nit, and Maniac.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Which types are legal to mix now?',
+      choices: const [
+        CourseChoice(id: 'three', label: 'Calling Station, Nit, and Maniac'),
+        CourseChoice(id: 'early', label: 'Add an unlabeled loose seat'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Legal mix now — Station, Nit, and Maniac are on the board.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Legal mix now — tap the introduced types.'),
+      findsNothing,
+    );
+    expect(find.text('Three types'), findsOneWidget);
+    await tester.tap(find.text('Three types'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'three');
+    controller.dispose();
+  });
+
+  testWidgets('s4 adjust maniac checkpoint SoftPulse Wide bets — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-08-03-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Their betting range is too wide.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Why call wider versus a Maniac?',
+      choices: const [
+        CourseChoice(id: 'cite-wide', label: 'Their betting range is too wide'),
+        CourseChoice(id: 'cite-brave', label: 'To prove bravery'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Maniac barrels — their betting range is simply too wide.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Maniac barrels — tap why you call wider.'),
+      findsNothing,
+    );
+    expect(find.text('Wide bets'), findsOneWidget);
+    await tester.tap(find.text('Wide bets'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'cite-wide');
     controller.dispose();
   });
 
