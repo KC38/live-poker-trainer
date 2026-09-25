@@ -1040,10 +1040,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Qc', 'Ts', '3h', '2d', '7c'],
         potLabel: 'Pot 28',
         villainLine: 'Calling Station · checked to you',
+        // Structural — Rex + SoftPulse own thin-value teaching.
         streetLabel: 'River · second pair',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Same cards — Station calls thin',
+        feltStatusLine: 'Same cards — Station checked',
       );
     case 'act-06-13-01-scaffolded':
       return const LessonActionSpot(
@@ -1051,9 +1052,10 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Qc', 'Ts', '3h', '2d', '7c'],
         potLabel: 'Pot 36',
         villainLine: 'Nit just check-raised',
+        // Structural — don’t tip Fold on the felt.
         streetLabel: 'River · second pair',
         facingBet: true,
-        feltStatusLine: 'Same cards — Nit heat is strong',
+        feltStatusLine: 'Same cards — Nit check-raised',
       );
     case 'act-06-13-01-unguided':
       return const LessonActionSpot(
@@ -1061,9 +1063,10 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Qc', 'Ts', '3h', '2d', '7c'],
         potLabel: 'Pot 42',
         villainLine: 'LAG barrels river',
+        // Structural — don’t tip Call on the felt.
         streetLabel: 'River · second pair',
         facingBet: true,
-        feltStatusLine: 'Same cards — LAG pressure is wide',
+        feltStatusLine: 'Same cards — LAG barrels',
       );
     case 'act-07-07-01-guided':
       return const LessonActionSpot(
