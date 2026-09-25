@@ -9801,7 +9801,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Board pairs your king — that hits strong right now.'),
+      find.text('Board pairs your king — your hole king connects for immediate value.'),
       findsOneWidget,
     );
     expect(
