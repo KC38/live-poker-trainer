@@ -3383,6 +3383,8 @@ class _DealerButtonDemo extends StatelessWidget {
       ),
       enabled: enabled,
       showSoftPulse: showSoftPulse,
+      // SoftPulse + Rex own the cue — no Tap the dealer button footer.
+      showInviteCue: false,
       onRegionTap: onRegionTap,
     );
   }
