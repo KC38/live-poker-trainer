@@ -508,10 +508,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Call wider — don’t gold-tip the tile.
       'act-04-10-02-jump-maniac' =>
           'Barrels forever, top pair — pick the line.',
+      // SoftPulse owns Nut FD — don’t gold-tip the tile.
       'act-05-01-01-guided' =>
-          'Four-way flop — tap the best continue.',
+          'Four-way flop — prefer nutted equity over air.',
+      // SoftPulse owns Nut potential — don’t gold-tip the tile.
       'act-05-01-01-checkpoint' =>
-          'Multiway priority — tap the construction rule.',
+          'Multiway construction — nutted equity over domination traps.',
       'act-05-02-01-guided' =>
           '200bb with 55 — tap why you call.',
       'act-05-02-01-unguided' =>

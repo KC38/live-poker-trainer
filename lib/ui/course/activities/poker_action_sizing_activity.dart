@@ -284,6 +284,9 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     // Same hand × type: SoftPulse the plan; Rex names the model, not the dock.
     'act-04-10-01-guided' => 'st-val',
     'act-04-10-01-scaffolded' => 'nit-fold',
+    'act-04-10-01-unguided' => 'm-call',
+    // SoftPulse owns Fold on multiway speculative SB.
+    'act-05-01-01-scaffolded' => 'fold-76',
     // Thin value / bluff-catch: SoftPulse the plan; Rex names the model.
     'act-05-04-01-guided' => 'tv',
     'act-05-04-01-scaffolded' => 'call-m',
@@ -502,10 +505,12 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // SoftPulse owns Bet 10 — don’t gold-tip the dock.
     'act-04-10-02-jump-size' =>
       'Top pair into pot 20 — pick a value size.',
+    // SoftPulse owns Fold — don’t gold-tip the dock.
     'act-05-01-01-scaffolded' =>
-      '76s in SB multiway — tap Fold.',
+      '76s in SB multiway — medium connectors hate OOP crowds.',
+    // Unguided: name the spot; list legal lines without SoftPulse.
     'act-05-01-01-unguided' =>
-      'Top set wet multiway — tap Bet solid value.',
+      'Top set wet multiway — pick Bet solid value, Check, or Tiny.',
     'act-05-02-01-scaffolded' =>
       'Deep TPWK faces huge check-raise — tap Fold.',
     'act-05-03-01-guided' =>
