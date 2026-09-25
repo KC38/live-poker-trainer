@@ -2332,11 +2332,15 @@ void main() {
     await tester.tap(find.text('LIVE 3x'));
     await tester.pump();
     expect(feltAck, 1);
-    // Lock clears enabled / ack — densified shell must stay filled.
+    // SoftPulse + Rex own the cue — no summary pill echoing Nice! feedback.
     expect(
       find.text('Early tight · button wider · live opens ~3x'),
-      findsOneWidget,
+      findsNothing,
     );
+    expect(find.text('Strong only'), findsNothing);
+    expect(find.text('Wider'), findsNothing);
+    expect(find.text('UTG–MP'), findsOneWidget);
+    expect(find.text('Last to act'), findsOneWidget);
     expect(
       tester.getSize(find.byType(OpenRangeDemo)).height,
       moreOrLessEquals(teachHeight, epsilon: 1),

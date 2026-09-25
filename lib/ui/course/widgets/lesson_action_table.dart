@@ -1985,9 +1985,10 @@ class OpenRangeDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'EARLY', caption: 'Strong only', color: AppColors.danger),
-    (label: 'BUTTON', caption: 'Wider', color: AppColors.gold),
-    (label: 'LIVE 3x', caption: 'Open to 6 @ 1/2', color: AppColors.cream),
+    // Structural seat/size labels — Rex owns “strong only / wider / ~3x”.
+    (label: 'EARLY', caption: 'UTG–MP', color: AppColors.danger),
+    (label: 'BUTTON', caption: 'Last to act', color: AppColors.gold),
+    (label: 'LIVE 3x', caption: 'Size @ 1/2', color: AppColors.cream),
   ];
 
   @override
@@ -2050,9 +2051,8 @@ class _OpenRangeDemoState extends State<OpenRangeDemo> {
         ],
       ],
     );
-    // SoftPulse + Rex own the next-tile cue while teaching. Show a summary
-    // after all taps (or once locked under Nice! / Continue).
-    final showCue = !widget.interactive || next == null || !widget.enabled;
+    // SoftPulse + Rex own the cue — no summary pill echoing Nice! feedback.
+    final showCue = !widget.interactive;
     final cue =
         !showCue
             ? null
