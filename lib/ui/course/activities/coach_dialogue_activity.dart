@@ -1678,7 +1678,9 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.handFamilies,
     );
   }
-  if (blob.contains('early: strong') ||
+  if (blob.contains('who opens') ||
+      blob.contains('softpulse walks each cue') ||
+      blob.contains('early: strong') ||
       blob.contains('button: wider') ||
       blob.contains('live opens often') ||
       (blob.contains('strong only') && blob.contains('wider'))) {

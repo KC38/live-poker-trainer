@@ -1377,7 +1377,7 @@ void main() {
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
-              'Early: strong only. Button: wider. Live opens often look like 3x.',
+              'Who opens — and how wide. SoftPulse walks each cue.',
           acceptedGrades: const [SoftGrade.recommended],
         ),
       ).kind,
@@ -2281,14 +2281,14 @@ void main() {
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
-          'Early: strong only. Button: wider. Live opens often look like 3x.',
+          'Who opens — and how wide. SoftPulse walks each cue.',
       acceptedGrades: const [SoftGrade.recommended],
       coachMedia: const [
         CoachMediaRef(
           id: 'm',
           kind: 'dialogue',
           text:
-              'Early: strong only. Button: wider. Live opens often look like 3x.',
+              'Who opens — and how wide. SoftPulse walks each cue.',
         ),
       ],
     );
@@ -2339,10 +2339,11 @@ void main() {
       find.text('Early tight · button wider · live opens ~3x'),
       findsNothing,
     );
-    expect(find.text('Strong only'), findsNothing);
-    expect(find.text('Wider'), findsNothing);
-    expect(find.text('UTG–MP'), findsOneWidget);
-    expect(find.text('Last to act'), findsOneWidget);
+    expect(find.text('Strong only'), findsOneWidget);
+    expect(find.text('Wider'), findsOneWidget);
+    expect(find.text('~3x @ 1/2'), findsOneWidget);
+    expect(find.text('UTG–MP'), findsNothing);
+    expect(find.text('Last to act'), findsNothing);
     expect(
       tester.getSize(find.byType(OpenRangeDemo)).height,
       moreOrLessEquals(teachHeight, epsilon: 1),
@@ -2386,7 +2387,7 @@ void main() {
     );
     expect(find.byType(LessonActionTable), findsOneWidget);
     expect(find.byType(LessonActionDock), findsOneWidget);
-    expect(find.text('Trash UTG — tap Fold.'), findsOneWidget);
+    expect(find.text('Trash UTG — pick how you leave.'), findsOneWidget);
     // SoftPulse + Rex own the cue — no third gold felt status.
     expect(find.text('First in — trash folds'), findsNothing);
     expect(

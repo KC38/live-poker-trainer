@@ -1558,7 +1558,7 @@ export function buildSectionTwo() {
             prereq: L020201, remediation: L020201, band: 2,
             activities: [
               dialogue("act-02-03-01-explain-open", 1,
-                "Early: strong only. Button: wider. Live opens often look like 3x.",
+                "Who opens — and how wide. SoftPulse walks each cue.",
                 {objectives: ["Fold trash from early position"]}),
               actionAct({
                 id: "act-02-03-01-guided-utg", order: 2, stage: "guided",

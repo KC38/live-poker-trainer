@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "6917b0540ad300ffa8a77a7a2c1bcff76dbcd724ef1f7e6fc0e6e093524fb218",
+  "contentChecksum": "c985e934f07bd15b0d3a300f3b82194affd8d1747b69cd825fca7c803f56d8ba",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -2916,7 +2916,7 @@
                   "stage": "explain",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Early: strong only. Button: wider. Live opens often look like 3x.",
+                  "accessibilityText": "Who opens — and how wide. SoftPulse walks each cue.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -2925,7 +2925,7 @@
                     {
                       "id": "act-02-03-01-explain-open-media",
                       "kind": "dialogue",
-                      "text": "Early: strong only. Button: wider. Live opens often look like 3x."
+                      "text": "Who opens — and how wide. SoftPulse walks each cue."
                     }
                   ],
                   "objectives": [

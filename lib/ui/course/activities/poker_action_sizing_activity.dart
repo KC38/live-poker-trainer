@@ -326,13 +326,13 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     'act-02-07-02-jump-open' =>
       'UTG first in — tap Fold or Open.',
     'act-02-03-01-guided-utg' =>
-      'Trash UTG — tap Fold.',
+      'Trash UTG — pick how you leave.',
     'act-02-03-01-scaffolded-qq' =>
-      'Premium pair UTG — tap Open to 6.',
+      'Premium pair UTG — pick a live open size.',
     'act-02-03-01-unguided-btn' =>
-      'Folds to you on the button — tap Fold, Open, or Limp.',
+      'Folds to you on the button — pick Fold, Open, or Limp.',
     'act-02-03-01-checkpoint-hj' =>
-      'Hijack first in — tap your action.',
+      'Hijack first in — pick your action.',
     'act-02-04-01-guided-fold' =>
       'Junk in the big blind vs an open — tap Fold.',
     'act-02-04-01-scaffolded-call' =>
