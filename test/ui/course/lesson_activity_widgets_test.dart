@@ -19863,7 +19863,7 @@ await tester.tap(find.text('STRONGER'));
         ),
       );
       expect(find.byType(PotTypePlansDemo), findsOneWidget);
-      expect(find.text('Tap LIMPED next'), findsOneWidget);
+      expect(find.text('Tap LIMPED next'), findsNothing);
       expect(find.text('Tap Limped, SRP, and 3-4bet.'), findsNothing);
       expect(find.text('Tap Limped, SRP, and 3-4bet'), findsNothing);
       expect(
@@ -19875,10 +19875,10 @@ await tester.tap(find.text('STRONGER'));
 
       await tester.tap(find.text('LIMPED'));
       await tester.pump();
-      expect(find.text('Tap SRP next'), findsOneWidget);
+      expect(find.text('Tap SRP next'), findsNothing);
       await tester.tap(find.text('SRP'));
       await tester.pump();
-      expect(find.text('Tap 3-4BET next'), findsOneWidget);
+      expect(find.text('Tap 3-4BET next'), findsNothing);
       await tester.tap(find.text('3-4BET'));
       await tester.pump();
       expect(feltAck, 1);
