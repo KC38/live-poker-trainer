@@ -9495,13 +9495,17 @@ await tester.tap(find.text('NIT'));
         SelectIdentifyActivity(
           activity: activity,
           controller: controller,
-          showGuidance: true,
+          showGuidance: false,
         ),
       ),
     );
     expect(
-      find.text('The seat just before the button is the cutoff.'),
+      find.text('Seat just before the button — pick it on the map.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('The seat just before the button is the cutoff.'),
+      findsNothing,
     );
     expect(find.text('Seat right before the button?'), findsNothing);
     // Structural felt caption — no Rex “before the button” echo.
