@@ -5399,7 +5399,7 @@ await tester.tap(find.text('NIT'));
         ),
       );
       expect(find.byType(PolarMergedDemo), findsOneWidget);
-      expect(find.text('Tap POLAR next'), findsOneWidget);
+      expect(find.text('Tap POLAR next'), findsNothing);
       expect(find.text('Tap Polar, Merged, and Size.'), findsNothing);
       expect(find.text('Tap Polar, Merged, and Size'), findsNothing);
       expect(find.text('Nuts/air vs medium-strong'), findsNothing);
@@ -5419,10 +5419,10 @@ await tester.tap(find.text('NIT'));
 
       await tester.tap(find.text('POLAR'));
       await tester.pump();
-      expect(find.text('Tap MERGED next'), findsOneWidget);
+      expect(find.text('Tap MERGED next'), findsNothing);
       await tester.tap(find.text('MERGED'));
       await tester.pump();
-      expect(find.text('Tap SIZE next'), findsOneWidget);
+      expect(find.text('Tap SIZE next'), findsNothing);
       await tester.tap(find.text('SIZE'));
       await tester.pump();
       expect(feltAck, 1);
