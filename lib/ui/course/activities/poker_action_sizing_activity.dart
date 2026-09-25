@@ -262,6 +262,8 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     'act-03-08-02-jump-river' => 'j3-val',
     'act-04-02-01-guided' => '3bet-qq',
     'act-04-02-01-scaffolded' => 'fold-72',
+    // SoftPulse owns 3-bet to 18 size pick.
+    'act-04-02-01-checkpoint' => 'size-18',
     'act-04-03-01-scaffolded' => 'abort',
     'act-04-04-01-guided' => 'half',
     'act-04-04-01-scaffolded' => 'big',
@@ -407,14 +409,18 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // SoftPulse owns Bet value — don’t gold-tip the dock.
     'act-03-08-02-jump-river' =>
       'Top two on a brick river — extract when they check.',
+    // SoftPulse owns 3-bet — don’t gold-tip the dock.
     'act-04-02-01-guided' =>
-      'Queens on the button vs a CO open — tap a 3-bet.',
+      'Queens on the button vs a CO open — reopen for value.',
+    // SoftPulse owns Fold — don’t gold-tip the dock.
     'act-04-02-01-scaffolded' =>
-      '72o faces a BB 3-bet — tap Fold.',
+      '72o faces a BB 3-bet — leave without defending trash.',
+    // Unguided: name the spot; list legal lines without SoftPulse.
     'act-04-02-01-unguided' =>
-      'UTG open, two callers, AKo in BB — tap Fold, Limp behind, or Squeeze.',
+      'UTG open, two callers, AKo in BB — pick Fold, Limp behind, or Squeeze.',
+    // SoftPulse owns 3-bet size — don’t gold-tip the dock.
     'act-04-02-01-checkpoint' =>
-      'KK vs a live open to 6 — tap a 3-bet size.',
+      'KK vs a live open to 6 — pick a value 3-bet size.',
     'act-04-03-01-scaffolded' =>
       'Air vs a flush turn — tap Check to shut down.',
     'act-04-03-01-unguided' =>
