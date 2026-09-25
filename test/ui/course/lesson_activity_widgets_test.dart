@@ -13916,6 +13916,8 @@ await tester.tap(find.text('NIT'));
       find.text('Before you label — tap the evidence bundle.'),
       findsOneWidget,
     );
+    expect(find.text('Bundle the evidence before labeling'), findsNothing);
+    expect(find.text('Observation notes'), findsOneWidget);
     expect(find.text('Bundle'), findsOneWidget);
     await tester.tap(find.text('Bundle'));
     await tester.pump();

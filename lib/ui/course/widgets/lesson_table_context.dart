@@ -2688,7 +2688,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.observeBundleOutcomes,
         villainSeatCount: 0,
         highlight: LessonTableHighlight.none,
-        caption: 'Bundle the evidence before labeling',
+        // Structural — Rex owns “before you label / evidence bundle.”
+        caption: 'Observation notes',
       );
     case 'act-04-06-02-guided':
       return const LessonTableScene(
@@ -8881,6 +8882,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive observe — tap low confidence or certain forever',
       semanticsStatic: 'Observe confidence outcomes',
       caption: scene.caption ?? 'One dramatic river call',
+      // SoftPulse + Rex own the cue — no Tap footer.
+      cueLabel: '',
+      guideRegion: LessonTableRegion.observeLowConf,
       phases: [
         (
           region: LessonTableRegion.observeLowConf,
@@ -8911,7 +8915,10 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive:
           'Interactive observe — tap evidence bundle or insult',
       semanticsStatic: 'Observe bundle outcomes',
-      caption: scene.caption ?? 'Bundle the evidence before labeling',
+      caption: scene.caption ?? 'Observation notes',
+      // SoftPulse + Rex own the cue — no Tap footer / Rex paraphrase caption.
+      cueLabel: '',
+      guideRegion: LessonTableRegion.observeBundle,
       phases: [
         (
           region: LessonTableRegion.observeBundle,
