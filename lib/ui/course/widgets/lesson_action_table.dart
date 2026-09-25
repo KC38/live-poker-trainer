@@ -276,10 +276,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['As', '7c', '2d'],
         potLabel: 'Pot 10',
         villainLine: 'Checked to you',
-        streetLabel: 'Flop · Heads-up · TPTK',
+        // Structural — Rex owns TPTK / value SoftPulse cue.
+        streetLabel: 'Flop · Heads-up',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Checked to you — value bet',
+        feltStatusLine: 'Checked to you',
       );
     case 'act-03-04-01-scaffolded':
       return const LessonActionSpot(
@@ -298,9 +299,10 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['7c', 'Kd', '2s'],
         potLabel: 'Pot 24',
         villainLine: 'Villain bets 12',
-        streetLabel: 'Flop · Multiway · Set',
+        // Structural — Rex owns “Set multiway”; don’t spoil Raise.
+        streetLabel: 'Flop · Multiway',
         facingBet: true,
-        feltStatusLine: 'Set multiway — build the pot',
+        feltStatusLine: 'Facing a bet',
       );
     case 'act-03-04-01-checkpoint':
       return const LessonActionSpot(
@@ -308,9 +310,10 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Ah', '7c', '2s'],
         potLabel: 'Pot 30',
         villainLine: 'Bet · raise ahead',
-        streetLabel: 'Flop · Multiway · Bottom pair',
+        // Structural — don’t tip Fold with “weak one pair.”
+        streetLabel: 'Flop · Multiway',
         facingBet: true,
-        feltStatusLine: 'Heat multiway — weak one pair',
+        feltStatusLine: 'Facing raise · multiway',
       );
     case 'act-03-05-01-scaffolded':
       return const LessonActionSpot(

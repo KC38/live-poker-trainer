@@ -57,10 +57,10 @@ void main() {
 
   test('labeled action docks classify as the street name', () {
     const expected = <String, (HandClass, String)>{
-      'act-03-04-01-guided': (HandClass.topPair, 'TPTK'),
+      'act-03-04-01-guided': (HandClass.topPair, 'Heads-up'),
       'act-03-04-01-scaffolded': (HandClass.air, 'BTN aggressor'),
-      'act-03-04-01-unguided': (HandClass.strongMade, 'Set'),
-      'act-03-04-01-checkpoint': (HandClass.weakPair, 'Bottom pair'),
+      'act-03-04-01-unguided': (HandClass.strongMade, 'Multiway'),
+      'act-03-04-01-checkpoint': (HandClass.weakPair, 'Multiway'),
       'act-03-05-01-scaffolded': (HandClass.topPair, 'TPTK'),
       'act-03-05-01-unguided': (HandClass.monster, 'Flush'),
       'act-03-06-01-guided': (HandClass.strongMade, 'Top two'),
