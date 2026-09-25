@@ -11359,6 +11359,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive min-defense continues — tap strong catchers vs any two for %',
       semanticsStatic: 'Defend guided outcomes',
       caption: scene.caption ?? 'Facing a river bet. Best continue?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Strong catchers.
+      guideRegion: LessonTableRegion.defendStrongCatchers,
       phases: [
         (
           region: LessonTableRegion.defendStrongCatchers,
@@ -11366,7 +11368,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Quality over quota',
           visual: const Icon(
             Icons.shield_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11376,7 +11378,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Frequency theater',
           visual: const Icon(
             Icons.percent,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11390,6 +11392,7 @@ class LessonTableContext extends StatelessWidget {
           'Interactive MDF stance — tap intuition vs exact percents',
       semanticsStatic: 'Defend intuition outcomes',
       caption: scene.caption ?? 'MDF numbers in this course?',
+      // No SoftPulse on unguided — still don’t gold-icon Intuition.
       phases: [
         (
           region: LessonTableRegion.defendIntuition,
@@ -11397,7 +11400,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Decision-linked',
           visual: const Icon(
             Icons.psychology_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11407,7 +11410,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Not our method',
           visual: const Icon(
             Icons.calculate_outlined,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11421,6 +11424,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive min-defense goal — tap punish over-bluffs vs never fold',
       semanticsStatic: 'Defend punish outcomes',
       caption: scene.caption ?? 'Minimum defense goal?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Punish over-bluffs.
+      guideRegion: LessonTableRegion.defendPunishOverbluffs,
       phases: [
         (
           region: LessonTableRegion.defendPunishOverbluffs,
@@ -11428,7 +11433,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Sensible continues',
           visual: const Icon(
             Icons.gavel_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11438,7 +11443,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Too wide',
           visual: const Icon(
             Icons.all_inclusive,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),

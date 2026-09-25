@@ -17154,8 +17154,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Facing a river bet — tap Strong catchers.'),
+      find.text('Facing a river bet — pick quality continues.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Facing a river bet — tap Strong catchers.'),
+      findsNothing,
     );
     await tester.tap(find.text('Strong catchers'));
     await tester.pump();
@@ -17190,8 +17194,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Third pair scary river — tap Fold.'),
+      find.text('Third pair scary river — trash with no blockers.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Third pair scary river — tap Fold.'),
+      findsNothing,
     );
     expect(find.text('FOLD'), findsOneWidget);
     expect(find.text('CALL FOR MDF'), findsOneWidget);
@@ -17228,8 +17236,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('MDF numbers — tap Intuition.'),
+      find.text('MDF numbers — pick how this course uses them.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('MDF numbers — tap Intuition.'),
+      findsNothing,
     );
     await tester.tap(find.text('Intuition'));
     await tester.pump();
@@ -17266,8 +17278,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Minimum defense goal — tap Punish over-bluffs.'),
+      find.text('Minimum defense goal — pick what you protect.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Minimum defense goal — tap Punish over-bluffs.'),
+      findsNothing,
     );
     await tester.tap(find.text('Punish over-bluffs'));
     await tester.pump();
