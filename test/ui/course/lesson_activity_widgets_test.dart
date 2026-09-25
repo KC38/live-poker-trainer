@@ -5550,14 +5550,14 @@ await tester.tap(find.text('NIT'));
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
-          'Each action rewrites the range. Keep updating.',
+          'Action · rewrite · update. Keep updating.',
       acceptedGrades: const [SoftGrade.recommended],
       coachMedia: const [
         CoachMediaRef(
           id: 'm',
           kind: 'dialogue',
           text:
-              'Each action rewrites the range. Keep updating.',
+              'Action · rewrite · update. Keep updating.',
         ),
       ],
     );
@@ -5577,7 +5577,7 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Tap ACTION next'), findsNothing);
     expect(find.text('Tap Action, Rewrite, and Update.'), findsNothing);
     expect(find.text('Tap Action, Rewrite, and Update'), findsNothing);
-    expect(find.text('Each action rewrites the range'), findsNothing);
+    expect(find.text('Action · rewrite · update'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
     final teachHeight =
@@ -5602,7 +5602,7 @@ await tester.tap(find.text('NIT'));
     await tester.pump();
     expect(feltAck, 1);
     // Lock clears enabled / ack — densified shell must stay filled.
-    expect(find.text('Each action rewrites the range'), findsOneWidget);
+    expect(find.text('Action · rewrite · update'), findsOneWidget);
     expect(
       tester.getSize(find.byType(RangeRewriteDemo)).height,
       moreOrLessEquals(teachHeight, epsilon: 1),

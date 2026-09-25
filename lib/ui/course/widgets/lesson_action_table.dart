@@ -8214,9 +8214,10 @@ class RangeRewriteDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'ACTION', caption: 'Every bet rewrites', color: AppColors.gold),
-    (label: 'REWRITE', caption: 'Range changes', color: AppColors.cream),
-    (label: 'UPDATE', caption: 'Keep doing it', color: AppColors.danger),
+    // Structural — Rex owns “each action rewrites / keep updating.”
+    (label: 'ACTION', caption: 'Bets move ranges', color: AppColors.gold),
+    (label: 'REWRITE', caption: 'Revise the set', color: AppColors.cream),
+    (label: 'UPDATE', caption: 'Stay current', color: AppColors.danger),
   ];
 
   @override
@@ -8299,7 +8300,7 @@ class _RangeRewriteDemoState extends State<RangeRewriteDemo> {
                 ),
               ),
               child: Text(
-                'Each action rewrites the range',
+                'Action · rewrite · update',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
