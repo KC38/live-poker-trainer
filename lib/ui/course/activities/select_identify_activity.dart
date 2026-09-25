@@ -721,14 +721,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Abandon quickly — don’t gold-tip the tile.
       'act-07-01-01-checkpoint' =>
           'Dead plan — pick the response.',
+      // SoftPulse owns Aces & blanks — don’t gold-tip the tile.
       'act-07-02-01-guided' =>
-          'AK c-bet · Q72r — tap Aces & blanks.',
+          'AK c-bet · Q72r — pick the continue cards.',
+      // SoftPulse owns Give up — don’t gold-tip the tile.
       'act-07-02-01-scaffolded' =>
-          'Gutshot · brick raise — tap Give up.',
+          'Gutshot · brick raise — pick the map call.',
+      // Unguided: name the habit; don’t tip Map first.
       'act-07-02-01-unguided' =>
-          'No turn idea — tap Map first.',
+          'No turn idea — pick what to do first.',
+      // SoftPulse owns Continue/kill list — don’t gold-tip the tile.
       'act-07-02-01-checkpoint' =>
-          'Turn map — tap Continue/kill list.',
+          'Turn map — pick the definition.',
       'act-07-03-01-scaffolded' =>
           'Nut flush blocker — tap Blocks strong calls.',
       'act-07-03-01-unguided' =>
