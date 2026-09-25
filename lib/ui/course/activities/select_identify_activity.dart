@@ -451,14 +451,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Bundle — don’t gold-tip the tile.
       'act-04-06-01-checkpoint' =>
           'Before you label — stack many hands that rarely fold.',
+      // SoftPulse owns Station — don’t gold-tip the tile.
       'act-04-06-02-guided' =>
-          'Sticky second pair calls — tap the working label.',
+          'Sticky second pair calls — treat them as a sticky caller for now.',
+      // SoftPulse owns Working model — don’t gold-tip the tile.
       'act-04-06-02-scaffolded' =>
-          'A player-type label is a working model — tap it.',
+          'A player-type label comes from evidence — temporary, not a soul verdict.',
+      // SoftPulse owns Station — don’t gold-tip the tile.
       'act-04-06-02-unguided' =>
-          'Limps, calls, never folds turns — tap the label.',
+          'Limps, calls, never folds turns — sticky caller fits better than wild aggression.',
+      // SoftPulse owns Low — don’t gold-tip the tile.
       'act-04-06-02-checkpoint' =>
-          'Only two hands so far — tap your confidence.',
+          'Only two hands so far — keep sampling before you lock a label.',
       'act-04-06-03-checkpoint' =>
           'Why cut bluffs vs a station — tap the cite.',
       'act-04-07-01-guided' =>

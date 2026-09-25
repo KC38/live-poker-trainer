@@ -14279,7 +14279,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s4 meet station guided taps Station on sticky evidence felt', (
+  testWidgets('s4 meet station guided SoftPulse Station — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -14312,8 +14312,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Sticky second pair calls — tap the working label.'),
+      find.text(
+        'Sticky second pair calls — treat them as a sticky caller for now.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Sticky second pair calls — tap the working label.'),
+      findsNothing,
     );
     expect(find.text('Station'), findsOneWidget);
     expect(find.text('Sticky calls'), findsNothing);
@@ -14325,7 +14331,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s4 meet station scaffolded taps working model on felt', (
+  testWidgets('s4 meet station scaffold SoftPulse Working model — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -14358,8 +14364,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('A player-type label is a working model — tap it.'),
+      find.text(
+        'A player-type label comes from evidence — temporary, not a soul verdict.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('A player-type label is a working model — tap it.'),
+      findsNothing,
     );
     expect(find.text('Working model'), findsOneWidget);
     await tester.tap(find.text('Working model'));
@@ -14368,7 +14380,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s4 meet station unguided taps Station on limp evidence felt', (
+  testWidgets('s4 meet station unguided SoftPulse Station — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -14392,9 +14404,19 @@ await tester.tap(find.text('NIT'));
         SelectIdentifyActivity(
           activity: activity,
           controller: controller,
-          showGuidance: false,
+          showGuidance: true,
         ),
       ),
+    );
+    expect(
+      find.text(
+        'Limps, calls, never folds turns — sticky caller fits better than wild aggression.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Limps, calls, never folds turns — tap the label.'),
+      findsNothing,
     );
     expect(find.text('Station'), findsOneWidget);
     await tester.tap(find.text('Station'));
@@ -14403,7 +14425,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s4 meet station checkpoint taps low confidence on felt', (
+  testWidgets('s4 meet station checkpoint SoftPulse Low — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -14427,9 +14449,19 @@ await tester.tap(find.text('NIT'));
         SelectIdentifyActivity(
           activity: activity,
           controller: controller,
-          showGuidance: false,
+          showGuidance: true,
         ),
       ),
+    );
+    expect(
+      find.text(
+        'Only two hands so far — keep sampling before you lock a label.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Only two hands so far — tap your confidence.'),
+      findsNothing,
     );
     expect(find.text('Low'), findsOneWidget);
     expect(find.text('2'), findsNothing);
