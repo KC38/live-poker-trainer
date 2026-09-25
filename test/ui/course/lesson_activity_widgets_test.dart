@@ -2725,8 +2725,8 @@ void main() {
       ),
     );
     expect(find.byType(FullRingDemo), findsOneWidget);
-    // Felt embeds the tap cue — no duplicate outer _TapHint with trailing period.
-    expect(find.text('Tap NINE next'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no mid-teach Tap NINE next footer.
+    expect(find.text('Tap NINE next'), findsNothing);
     expect(find.text('Tap Nine, Same, and Position'), findsNothing);
     expect(find.text('Tap Nine, Same, and Position.'), findsNothing);
     expect(
@@ -2749,10 +2749,10 @@ void main() {
 
     await tester.tap(find.text('NINE'));
     await tester.pump();
-    expect(find.text('Tap SAME next'), findsOneWidget);
+    expect(find.text('Tap SAME next'), findsNothing);
     await tester.tap(find.text('SAME'));
     await tester.pump();
-    expect(find.text('Tap POSITION next'), findsOneWidget);
+    expect(find.text('Tap POSITION next'), findsNothing);
     await tester.tap(find.text('POSITION'));
     await tester.pump();
     expect(feltAck, 1);
