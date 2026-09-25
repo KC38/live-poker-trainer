@@ -108,19 +108,23 @@ class _StreetsTimelineDemoState extends State<StreetsTimelineDemo> {
         ],
       ],
     );
-    final cue = Text(
-      widget.interactive
-          ? (next == null
-              ? 'Preflop → flop → turn → river'
-              : 'Tap ${next[0]}${next.substring(1).toLowerCase()}')
-          : 'Match bets to leave each street',
-      textAlign: TextAlign.center,
-      style: GoogleFonts.manrope(
-        color: AppColors.gold,
-        fontSize: expandTeach ? 16 : 12,
-        fontWeight: FontWeight.w700,
-      ),
-    );
+    // SoftPulse + Rex own the next-street cue while teaching. Show a summary
+    // after all taps (or once locked under Nice! / Continue).
+    final showCue = !widget.interactive || next == null || !widget.enabled;
+    final cue =
+        !showCue
+            ? null
+            : Text(
+              widget.interactive
+                  ? 'Preflop → flop → turn → river'
+                  : 'Match bets to leave each street',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: expandTeach ? 16 : 12,
+                fontWeight: FontWeight.w700,
+              ),
+            );
     final body = Column(
       mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
       mainAxisAlignment:
@@ -151,8 +155,10 @@ class _StreetsTimelineDemoState extends State<StreetsTimelineDemo> {
               ),
             )
             : lanes,
-        if (!expandTeach) const SizedBox(height: 12),
-        cue,
+        if (cue != null) ...[
+          if (!expandTeach) const SizedBox(height: 12),
+          cue,
+        ],
       ],
     );
     final child = Container(
