@@ -10900,11 +10900,14 @@ await tester.tap(find.text('STRONGER'));
       find.text('Suited broadway UTG — tap Open to 6.'),
       findsOneWidget,
     );
-    expect(find.text('First in — open the pot'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no third felt gold status line.
+    expect(find.text('First in — open the pot'), findsNothing);
     expect(find.text('Nine-handed. UTG with AJs. Action?'), findsNothing);
     expect(find.text('OPEN TO 6'), findsOneWidget);
     expect(find.text('LIMP'), findsOneWidget);
     expect(find.text('RAISE (off)'), findsNothing);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'open-ajs');
     await tester.tap(find.text('OPEN TO 6'));
     await tester.pump();
     expect(controller.draft.choiceId, 'open-ajs');
@@ -10942,12 +10945,15 @@ await tester.tap(find.text('STRONGER'));
       find.text('Pair on the button vs a small open — tap Call.'),
       findsOneWidget,
     );
-    expect(find.text('A bet faces you'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no third felt gold status line.
+    expect(find.text('A bet faces you'), findsNothing);
     expect(
       find.text('UTG opens to 6. You have 22 on the button. Action?'),
       findsNothing,
     );
     expect(find.text('3-BET TO 18'), findsOneWidget);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'call-22');
     await tester.tap(find.text('CALL'));
     await tester.pump();
     expect(controller.draft.choiceId, 'call-22');
