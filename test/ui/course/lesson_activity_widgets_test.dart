@@ -3132,7 +3132,7 @@ await tester.tap(find.text('VALUE'));
       ),
     );
     expect(find.byType(TurnStoryDemo), findsOneWidget);
-    expect(find.text('Tap BRICK next'), findsOneWidget);
+    expect(find.text('Tap BRICK next'), findsNothing);
     expect(find.text('Tap Brick, Change, Barrel, and Delay'), findsNothing);
     expect(find.text('Tap Brick, Change, Barrel, and Delay.'), findsNothing);
     expect(
@@ -3155,13 +3155,13 @@ await tester.tap(find.text('VALUE'));
 
 await tester.tap(find.text('BRICK'));
     await tester.pump();
-    expect(find.text('Tap CHANGE next'), findsOneWidget);
+    expect(find.text('Tap CHANGE next'), findsNothing);
     await tester.tap(find.text('CHANGE'));
     await tester.pump();
-    expect(find.text('Tap BARREL next'), findsOneWidget);
+    expect(find.text('Tap BARREL next'), findsNothing);
     await tester.tap(find.text('BARREL'));
     await tester.pump();
-    expect(find.text('Tap DELAY next'), findsOneWidget);
+    expect(find.text('Tap DELAY next'), findsNothing);
     await tester.tap(find.text('DELAY'));
     await tester.pump();
     expect(feltAck, 1);
