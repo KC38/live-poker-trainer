@@ -13743,7 +13743,10 @@ await tester.tap(find.text('NIT'));
       findsOneWidget,
     );
     expect(find.text('High part.'), findsOneWidget);
-    expect(find.text('7 of 9'), findsWidgets);
+    expect(find.text('7 of 9'), findsNothing);
+    expect(find.text('7/9'), findsNothing);
+    expect(find.text('Many pots'), findsOneWidget);
+    expect(find.text('HI'), findsOneWidget);
     await tester.tap(find.text('High part.'));
     await tester.pump();
     expect(controller.draft.choiceId, 'high-part');
