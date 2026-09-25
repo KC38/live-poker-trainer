@@ -2267,7 +2267,7 @@ void main() {
       ),
     );
     expect(find.byType(OpenRangeDemo), findsOneWidget);
-    expect(find.text('Tap EARLY next'), findsOneWidget);
+    expect(find.text('Tap EARLY next'), findsNothing);
     expect(find.text('Tap Early, Button, and Live 3x'), findsNothing);
     expect(find.text('Tap Early, Button, and Live 3x.'), findsNothing);
     expect(
@@ -2289,10 +2289,10 @@ void main() {
 
     await tester.tap(find.text('EARLY'));
     await tester.pump();
-    expect(find.text('Tap BUTTON next'), findsOneWidget);
+    expect(find.text('Tap BUTTON next'), findsNothing);
     await tester.tap(find.text('BUTTON'));
     await tester.pump();
-    expect(find.text('Tap LIVE 3x next'), findsOneWidget);
+    expect(find.text('Tap LIVE 3x next'), findsNothing);
     await tester.tap(find.text('LIVE 3x'));
     await tester.pump();
     expect(feltAck, 1);
