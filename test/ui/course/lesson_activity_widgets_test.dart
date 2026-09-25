@@ -2569,7 +2569,7 @@ void main() {
       ),
     );
     expect(find.byType(BbStackDepthDemo), findsOneWidget);
-    expect(find.text('Tap CHIPS→BB next'), findsOneWidget);
+    expect(find.text('Tap CHIPS→BB next'), findsNothing);
     expect(find.text('Tap Chips→BB, Shorter, and Depth'), findsNothing);
     expect(find.text('Tap Chips→BB, Shorter, and Depth.'), findsNothing);
     expect(
@@ -2592,10 +2592,10 @@ void main() {
 
     await tester.tap(find.text('CHIPS→BB'));
     await tester.pump();
-    expect(find.text('Tap SHORTER next'), findsOneWidget);
+    expect(find.text('Tap SHORTER next'), findsNothing);
     await tester.tap(find.text('SHORTER'));
     await tester.pump();
-    expect(find.text('Tap DEPTH next'), findsOneWidget);
+    expect(find.text('Tap DEPTH next'), findsNothing);
     await tester.tap(find.text('DEPTH'));
     await tester.pump();
     expect(feltAck, 1);
