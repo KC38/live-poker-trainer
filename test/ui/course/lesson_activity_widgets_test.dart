@@ -16918,7 +16918,7 @@ await tester.tap(find.text('STRONGER'));
       ),
     );
     expect(find.byType(VsTagsDemo), findsOneWidget);
-    expect(find.text('Tap CREDIT next'), findsOneWidget);
+    expect(find.text('Tap CREDIT next'), findsNothing);
     expect(find.text('Tap Credit, Tighter, and No light.'), findsNothing);
     expect(find.text('Tap Credit, Tighter, and No light'), findsNothing);
     expect(
@@ -16941,10 +16941,10 @@ await tester.tap(find.text('STRONGER'));
 
     await tester.tap(find.text('CREDIT'));
     await tester.pump();
-    expect(find.text('Tap TIGHTER next'), findsOneWidget);
+    expect(find.text('Tap TIGHTER next'), findsNothing);
     await tester.tap(find.text('TIGHTER'));
     await tester.pump();
-    expect(find.text('Tap NO LIGHT next'), findsOneWidget);
+    expect(find.text('Tap NO LIGHT next'), findsNothing);
     await tester.tap(find.text('NO LIGHT'));
     await tester.pump();
     expect(feltAck, 1);
