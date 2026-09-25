@@ -383,7 +383,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Shorter stack caps the matchup — tap what matters with the pot.',
       // SoftPulse owns Made — don’t gold-tip the tile.
       'act-03-02-01-guided' =>
-          'Board pairs your king — that hits strong right now.',
+          'Board pairs your king — your hole king connects for immediate value.',
       // SoftPulse owns Draw — don’t gold-tip the tile.
       'act-03-02-01-scaffolded' =>
           'Two hearts on board with the nut heart — you need runout more than showdown now.',
@@ -1245,7 +1245,7 @@ class _HandCategoryTapActivity extends StatelessWidget {
         'act-02-02-01-checkpoint-trash' =>
           'Early seat with junk — tap the family.',
         'act-03-02-01-guided' =>
-          'Board pairs your king — that hits strong right now.',
+          'Board pairs your king — your hole king connects for immediate value.',
         'act-03-02-01-scaffolded' =>
           'Two hearts on board with the nut heart — you need runout more than showdown now.',
         'act-03-02-01-unguided' =>
