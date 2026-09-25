@@ -2668,7 +2668,8 @@ class FullRingDemo extends StatefulWidget {
   static const points = <({String label, String caption, Color color})>[
     (label: 'NINE', caption: 'Full-ring seats', color: AppColors.cream),
     (label: 'SAME', caption: 'Rules unchanged', color: AppColors.slate),
-    (label: 'POSITION', caption: 'Still runs the show', color: AppColors.gold),
+    // Structural — not “Still runs the show” echoing Rex / Nice!.
+    (label: 'POSITION', caption: 'Seat edge', color: AppColors.gold),
   ];
 
   @override
@@ -2731,9 +2732,8 @@ class _FullRingDemoState extends State<FullRingDemo> {
         ],
       ],
     );
-    // SoftPulse + Rex own the next-tile cue while teaching. Show a summary
-    // after all taps (or once locked under Nice! / Continue).
-    final showCue = !widget.interactive || next == null || !widget.enabled;
+    // SoftPulse + Rex own the cue — no summary pill echoing Nice! feedback.
+    final showCue = !widget.interactive;
     final cue =
         !showCue
             ? null
