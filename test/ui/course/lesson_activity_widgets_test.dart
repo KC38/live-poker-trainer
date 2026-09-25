@@ -15326,13 +15326,64 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('200bb with 55 — tap why you call.'),
+      find.text('200bb with 55 — depth pays if they stack sets.'),
       findsOneWidget,
     );
+    expect(find.text('200bb with 55 — tap why you call.'), findsNothing);
     expect(find.text('Implied'), findsOneWidget);
     await tester.tap(find.text('Implied'));
     await tester.pump();
     expect(controller.draft.choiceId, 'impl');
+    controller.dispose();
+  });
+
+  testWidgets('s5 deep scaffolded SoftPulse Fold — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-02-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Deep stacks: fold light top pair to heavy heat.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          '250bb. Top pair weak kicker faces a huge check-raise on a wet flop. Action?',
+      choices: const [
+        CourseChoice(id: 'fold-tp', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'call-tp', label: 'Call huge', action: 'CALL'),
+        CourseChoice(id: 'jam-tp', label: 'Jam for value', action: 'RAISE'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Deep TPWK vs huge wet check-raise — depth punishes light stacks.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Deep TPWK faces huge check-raise — tap Fold.'),
+      findsNothing,
+    );
+    expect(find.text('FOLD'), findsOneWidget);
+    expect(find.text('Deep + wet + heat — fold light TP'), findsNothing);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'fold-tp');
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'fold-tp');
     controller.dispose();
   });
 
