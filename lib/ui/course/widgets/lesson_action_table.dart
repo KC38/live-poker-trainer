@@ -8381,9 +8381,10 @@ class TimingCluesDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'TIMING', caption: 'Soft evidence', color: AppColors.gold),
-    (label: 'SIZING', caption: 'Soft evidence', color: AppColors.cream),
-    (label: 'CLUES', caption: 'Not mind-reading', color: AppColors.danger),
+    // Structural — Rex owns “clues / soft evidence / small updates.”
+    (label: 'TIMING', caption: 'How fast they act', color: AppColors.gold),
+    (label: 'SIZING', caption: 'How much they bet', color: AppColors.cream),
+    (label: 'CLUES', caption: 'Nudge the model', color: AppColors.danger),
   ];
 
   @override
@@ -8466,7 +8467,7 @@ class _TimingCluesDemoState extends State<TimingCluesDemo> {
                 ),
               ),
               child: Text(
-                'Small updates only',
+                'Timing · sizing · clues',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,

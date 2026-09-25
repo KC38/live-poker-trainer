@@ -5649,7 +5649,7 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Tap TIMING next'), findsNothing);
     expect(find.text('Tap Timing, Sizing, and Clues.'), findsNothing);
     expect(find.text('Tap Timing, Sizing, and Clues'), findsNothing);
-    expect(find.text('Small updates only'), findsNothing);
+    expect(find.text('Timing · sizing · clues'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
     final teachHeight =
@@ -5674,7 +5674,7 @@ await tester.tap(find.text('NIT'));
     await tester.pump();
     expect(feltAck, 1);
     // Lock clears enabled / ack — densified shell must stay filled.
-    expect(find.text('Small updates only'), findsOneWidget);
+    expect(find.text('Timing · sizing · clues'), findsOneWidget);
     expect(
       tester.getSize(find.byType(TimingCluesDemo)).height,
       moreOrLessEquals(teachHeight, epsilon: 1),
