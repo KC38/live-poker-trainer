@@ -302,12 +302,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         'Ownership stays split — board is shared.',
       'act-01-01-03-guided-button' =>
         'Find the dealer button on the felt.',
+      // SoftPulse owns BB — don’t gold-tip the seat.
       'act-01-01-03-scaffolded-blinds' =>
-        'Blinds sit left of the button. Tap the big blind.',
+        'Blinds sit left of the button — the bigger forced bet posts two.',
       'act-01-01-03-unguided-when' =>
         'When do those forced bets go in?',
+      // SoftPulse owns SB — don’t gold-tip the seat.
       'act-01-01-03-checkpoint-layout' =>
-        'Button is marked. Tap the small blind seat.',
+        'Button is marked — first blind sits immediately left.',
       'act-02-01-01-guided-btn' =>
         'Postflop — last to act gets the information edge.',
       'act-02-01-01-scaffolded-blinds' =>
@@ -320,20 +322,27 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Action is on UTG — you are on the button. Stay quiet until it reaches you.',
       'act-02-01-02-checkpoint-full' =>
           'Six-max flop, everyone in — last seat still closes action.',
+      // Unguided densify — pick when the street ends; SoftPulse stays quiet.
       'act-01-04-01-unguided-end' =>
-        'Betting is live. Tap when this street is done.',
+        'Betting is live — pick when this street ends.',
+      // Checkpoint densify — no SoftPulse seat spoiler.
       'act-01-04-01-checkpoint-postflop' =>
-        'Postflop — tap who acts first.',
+        'Postflop — first action sits left of the button.',
+      // SoftPulse owns Take pot — don’t gold-tip the tile.
       'act-01-05-01-guided-fold-win' =>
-          'Everyone folded. Tap how you take the pot.',
+          'Everyone folded — you don’t need to show cards.',
+      // SoftPulse owns Showdown — don’t gold-tip the tile.
       'act-01-05-01-scaffolded-showdown' =>
-          'River is called. Tap what happens next.',
+          'River is called — best five decide the pot.',
+      // Unguided densify — SoftPulse stays quiet.
       'act-01-05-01-unguided-pot' =>
-          'Blinds plus the open — tap the chip total.',
+          'Blinds plus the open — pick the chip total.',
+      // Checkpoint densify — don’t gold-tip Side pot.
       'act-01-05-01-checkpoint-side' =>
-          'You are short all-in. Tap what is true.',
+          'You are short all-in while others keep betting.',
+      // SoftPulse owns the board — don’t gold-tip Chop.
       'act-01-02-02-unguided-board' =>
-          'Both checked down — tap who takes the pot.',
+          'Both checked down — broadway board plays for everyone.',
       // SoftPulse owns Cover + wait — don’t gold-tip the tile.
       'act-02-07-01-checkpoint-habit' =>
           'Cards uncovered and action left — cover up and wait your turn.',
@@ -353,12 +362,15 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'The seat just before the button is the cutoff.',
       'act-02-07-02-jump-family' =>
           'Look at your holes — pick the family they belong to.',
+      // SoftPulse owns Flush — don’t gold-tip the tile.
       'act-01-02-01-scaffolded-spot' =>
-          'Board and holes show five clubs — tap what you made.',
+          'Board and holes show five clubs — name the category.',
+      // SoftPulse owns You — don’t gold-tip the winner.
       'act-01-02-01-checkpoint-winner' =>
-          'Flush vs straight on the river — tap who wins.',
+          'Flush vs straight on the river — stronger category takes it.',
+      // SoftPulse owns You — don’t gold-tip the kicker winner.
       'act-01-02-02-scaffolded-kicker' =>
-          'Same pair of kings — tap who wins on kickers.',
+          'Same pair of kings — the higher kicker breaks the tie.',
       'act-02-07-02-jump-stack' =>
           // Jump: name the spot — not “shorter one” answering.
           'You 120bb · villain 55bb — tap effective.',
@@ -1652,15 +1664,18 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
 
   String get _coachFallback {
     if (widget.activity.id == 'act-01-02-02-scaffolded-kicker') {
-      return 'Same pair — tap who wins on kickers.';
+      // SoftPulse owns You — don’t gold-tip the kicker winner.
+      return 'Same pair of kings — the higher kicker breaks the tie.';
     }
     if (widget.activity.id == 'act-01-02-02-unguided-board') {
-      return 'Both checked down — tap who takes the pot.';
+      // SoftPulse owns the board — don’t gold-tip Chop.
+      return 'Both checked down — broadway board plays for everyone.';
     }
     if (widget.activity.id == 'act-01-02-01-checkpoint-winner') {
-      return 'Showdown — tap who wins on the felt.';
+      // SoftPulse owns You — don’t gold-tip the winner.
+      return 'Flush vs straight on the river — stronger category takes it.';
     }
-    return 'Look at both hands — tap who wins.';
+    return 'Look at both hands — stronger category takes the pot.';
   }
 
   @override
