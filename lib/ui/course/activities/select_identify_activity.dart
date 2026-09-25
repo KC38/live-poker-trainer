@@ -595,14 +595,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Apply pressure — don’t gold-tip the tile.
       'act-06-01-01-checkpoint' =>
           'When you own more value — apply selective pressure.',
+      // SoftPulse owns In position — don’t gold-tip the tile.
       'act-06-02-01-guided' =>
-          'Same draw — tap In position.',
+          'Same draw — equity realizes better when you act last.',
+      // SoftPulse owns Discount / fold — don’t gold-tip the tile.
       'act-06-02-01-scaffolded' =>
-          'Weak SDV OOP — tap Discount / fold.',
+          'Weak showdown value OOP vs dual barrels — tighten continues.',
+      // SoftPulse owns Fold equity — don’t gold-tip the tile.
       'act-06-02-01-unguided' =>
-          'Nut draw XR — tap Fold equity.',
+          'Nut draw check-raise — pressure folds plus your outs.',
+      // SoftPulse owns Position + initiative — don’t gold-tip the tile.
       'act-06-02-01-checkpoint' =>
-          'Realization rises with — tap Position + initiative.',
+          'Equity realization climbs with position and initiative.',
       'act-06-03-01-guided' =>
           'Checks turn after flop bet — read their range shape.',
       'act-06-03-01-unguided' =>
