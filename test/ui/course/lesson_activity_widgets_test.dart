@@ -3857,7 +3857,7 @@ await tester.tap(find.text('SPR'));
       ),
     );
     expect(find.byType(VsStationDemo), findsOneWidget);
-    expect(find.text('Tap VALUE next'), findsOneWidget);
+    expect(find.text('Tap VALUE next'), findsNothing);
     expect(find.text('Tap Value, Bluffs, and Cite'), findsNothing);
     expect(find.text('Tap Value, Bluffs, and Cite.'), findsNothing);
     expect(
@@ -3880,10 +3880,10 @@ await tester.tap(find.text('SPR'));
 
 await tester.tap(find.text('VALUE'));
     await tester.pump();
-    expect(find.text('Tap BLUFFS next'), findsOneWidget);
+    expect(find.text('Tap BLUFFS next'), findsNothing);
     await tester.tap(find.text('BLUFFS'));
     await tester.pump();
-    expect(find.text('Tap CITE next'), findsOneWidget);
+    expect(find.text('Tap CITE next'), findsNothing);
     await tester.tap(find.text('CITE'));
     await tester.pump();
     expect(feltAck, 1);
