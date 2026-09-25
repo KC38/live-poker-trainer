@@ -10914,6 +10914,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive capped ranges — tap capped vs uncapped',
       semanticsStatic: 'Capped range guided outcomes',
       caption: scene.caption ?? 'Checks turn after flop bet — often?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Capped.
+      guideRegion: LessonTableRegion.cappedCheckTurn,
       phases: [
         (
           region: LessonTableRegion.cappedCheckTurn,
@@ -10921,7 +10923,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Fewer nuts',
           visual: const Icon(
             Icons.vertical_align_bottom,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -10945,6 +10947,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive uncapped lines — tap uncapped vs capped air',
       semanticsStatic: 'Uncapped line outcomes',
       caption: scene.caption ?? 'XR flop, bet turn, bomb river?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Uncapped.
+      guideRegion: LessonTableRegion.uncappedXrLine,
       phases: [
         (
           region: LessonTableRegion.uncappedXrLine,
@@ -10952,7 +10956,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Nuts still live',
           visual: const Icon(
             Icons.local_fire_department,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -10976,6 +10980,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive capped ranges — tap attack caps vs auto-fold',
       semanticsStatic: 'Capped attack outcomes',
       caption: scene.caption ?? 'Caps are for?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Attack caps.
+      guideRegion: LessonTableRegion.capsAttack,
       phases: [
         (
           region: LessonTableRegion.capsAttack,
@@ -10983,7 +10989,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Thin value + bluffs',
           visual: const Icon(
             Icons.bolt,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),

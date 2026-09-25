@@ -566,11 +566,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-06-02-01-checkpoint' =>
           'Realization rises with — tap Position + initiative.',
       'act-06-03-01-guided' =>
-          'Checks turn after flop bet — tap Capped.',
+          'Checks turn after flop bet — read their range shape.',
       'act-06-03-01-unguided' =>
-          'XR flop / bet turn / bomb — tap Uncapped.',
+          'XR flop / bet turn / bomb — read their range shape.',
       'act-06-03-01-checkpoint' =>
-          'Caps are for — tap Attack caps.',
+          'Caps are for — choose how you use them.',
       'act-06-04-01-guided' =>
           'River overbet — tap Polarized.',
       'act-06-04-01-unguided' =>

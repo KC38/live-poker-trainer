@@ -907,10 +907,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Kc', '9s', '4h', '2d', '7c'],
         potLabel: 'Pot 42',
         villainLine: 'Checked turn · capped',
+        // Structural — Rex + SoftPulse own thin-value teaching.
         streetLabel: 'River · second pair',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Cap on river — bet thin',
+        feltStatusLine: 'Checked turn · capped',
       );
     case 'act-06-04-01-scaffolded':
       return const LessonActionSpot(
