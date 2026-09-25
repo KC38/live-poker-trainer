@@ -309,17 +309,17 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-01-01-03-checkpoint-layout' =>
         'Button is marked. Tap the small blind seat.',
       'act-02-01-01-guided-btn' =>
-        'Tap who acts last postflop.',
+        'Postflop — last to act gets the information edge.',
       'act-02-01-01-scaffolded-blinds' =>
-        'Tap a seat that posts a forced bet every hand.',
+        'Forced bets every hand sit left of the button.',
       'act-02-01-01-unguided-co' =>
-        'Tap the seat right before the button.',
+        'The seat just before the button is the cutoff.',
       'act-02-01-01-checkpoint-edge' =>
         'Same cards — later seats play stronger.',
       'act-02-01-02-unguided-wait' =>
-          'Action is on UTG — you are on the button. Tap what you do.',
+          'Action is on UTG — you are on the button. Stay quiet until it reaches you.',
       'act-02-01-02-checkpoint-full' =>
-          'Six-max flop, everyone in — tap who acts last.',
+          'Six-max flop, everyone in — last seat still closes action.',
       'act-01-04-01-unguided-end' =>
         'Betting is live. Tap when this street is done.',
       'act-01-04-01-checkpoint-postflop' =>
@@ -350,7 +350,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-02-06-01-checkpoint-oot' =>
           'You raised early — action was still two seats left.',
       'act-02-07-02-jump-pos' =>
-          'Tap the seat right before the button.',
+          'The seat just before the button is the cutoff.',
       'act-02-07-02-jump-family' =>
           'Look at your holes — pick the family they belong to.',
       'act-01-02-01-scaffolded-spot' =>

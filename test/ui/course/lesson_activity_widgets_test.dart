@@ -6968,7 +6968,7 @@ await tester.tap(find.text('NIT'));
       estimatedSeconds: 40,
       accessibilityText: 'Tap the button seat — last to act after the flop.',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Tap who acts last postflop.',
+      prompt: 'Postflop — last to act gets the information edge.',
       choices: const [
         CourseChoice(id: 'pos-btn', label: 'BTN'),
         CourseChoice(id: 'pos-bb', label: 'BB'),
@@ -6986,7 +6986,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
 
-    expect(find.text('Tap who acts last postflop.'), findsOneWidget);
+    expect(find.text('Postflop — last to act gets the information edge.'), findsOneWidget);
     expect(find.text('Postflop closes on the button. Tap BTN.'), findsNothing);
     expect(find.text('Tap on the felt.'), findsOneWidget);
     expect(find.text('Tap the answer on the table.'), findsNothing);
@@ -7873,7 +7873,7 @@ await tester.tap(find.text('NIT'));
       estimatedSeconds: 40,
       accessibilityText: 'Tap BTN',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Tap who acts last postflop.',
+      prompt: 'Postflop — last to act gets the information edge.',
       choices: const [
         CourseChoice(id: 'pos-btn', label: 'BTN'),
         CourseChoice(id: 'pos-bb', label: 'BB'),
@@ -7896,7 +7896,7 @@ await tester.tap(find.text('NIT'));
           estimatedSeconds: 40,
           accessibilityText: 'forced',
           acceptedGrades: const [SoftGrade.recommended],
-          prompt: 'Tap a seat that posts a forced bet every hand.',
+          prompt: 'Forced bets every hand sit left of the button.',
           choices: const [
             CourseChoice(id: 'sb-bb', label: 'SB or BB'),
             CourseChoice(id: 'btn-bb', label: 'BTN'),
@@ -9228,7 +9228,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Tap the seat right before the button.'),
+      find.text('The seat just before the button is the cutoff.'),
       findsOneWidget,
     );
     expect(find.text('Seat right before the button?'), findsNothing);
