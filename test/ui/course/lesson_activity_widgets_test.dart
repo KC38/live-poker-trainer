@@ -14094,6 +14094,9 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.text('Low'), findsOneWidget);
+    expect(find.text('2'), findsNothing);
+    expect(find.text('LO'), findsOneWidget);
+    expect(find.text('Keep sampling'), findsOneWidget);
     await tester.tap(find.text('Low'));
     await tester.pump();
     expect(controller.draft.choiceId, 'low');
