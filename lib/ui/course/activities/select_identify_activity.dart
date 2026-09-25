@@ -514,12 +514,15 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Nut potential — don’t gold-tip the tile.
       'act-05-01-01-checkpoint' =>
           'Multiway construction — nutted equity over domination traps.',
+      // SoftPulse owns Implied — don’t gold-tip the tile.
       'act-05-02-01-guided' =>
-          '200bb with 55 — tap why you call.',
+          '200bb with 55 — depth pays if they stack sets.',
+      // SoftPulse owns Map plans — don’t gold-tip the tile.
       'act-05-02-01-unguided' =>
-          'SPR ~12 — tap your first job.',
+          'SPR ~12 — map turn and river before you commit.',
+      // SoftPulse owns Position / implied — don’t gold-tip the tile.
       'act-05-02-01-checkpoint' =>
-          'Deep cash play — tap what it rewards.',
+          'Deep cash — position, implied odds, disciplined folds.',
       'act-05-03-01-checkpoint' =>
           'Implied odds — tap when they rise most.',
       'act-05-04-01-checkpoint' =>

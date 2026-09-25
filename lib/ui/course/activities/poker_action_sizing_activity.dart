@@ -287,6 +287,8 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     'act-04-10-01-unguided' => 'm-call',
     // SoftPulse owns Fold on multiway speculative SB.
     'act-05-01-01-scaffolded' => 'fold-76',
+    // SoftPulse owns Fold on deep TPWK vs heat.
+    'act-05-02-01-scaffolded' => 'fold-tp',
     // Thin value / bluff-catch: SoftPulse the plan; Rex names the model.
     'act-05-04-01-guided' => 'tv',
     'act-05-04-01-scaffolded' => 'call-m',
@@ -511,8 +513,9 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // Unguided: name the spot; list legal lines without SoftPulse.
     'act-05-01-01-unguided' =>
       'Top set wet multiway — pick Bet solid value, Check, or Tiny.',
+    // SoftPulse owns Fold — don’t gold-tip the dock.
     'act-05-02-01-scaffolded' =>
-      'Deep TPWK faces huge check-raise — tap Fold.',
+      'Deep TPWK vs huge wet check-raise — depth punishes light stacks.',
     'act-05-03-01-guided' =>
       'Deep gutshot vs Station — tap Call.',
     'act-05-03-01-scaffolded' =>
