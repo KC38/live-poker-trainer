@@ -13002,6 +13002,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive pot type — tap Nut potential or Pure air',
       semanticsStatic: 'Pot-type guided outcomes',
       caption: scene.caption ?? 'Multiway limped pot — priority?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Nut potential.
+      guideRegion: LessonTableRegion.potTypeNutPotential,
       phases: [
         (
           region: LessonTableRegion.potTypeNutPotential,
@@ -13009,7 +13011,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Strong made hands',
           visual: const Icon(
             Icons.workspace_premium_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13019,7 +13021,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Always stab',
           visual: const Icon(
             Icons.air,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13033,6 +13035,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive pot type — tap C-bet maps or Never bet',
       semanticsStatic: 'Pot-type scaffolded outcomes',
       caption: scene.caption ?? 'HU SRP IP — default weapon?',
+      // SoftPulse + Rex own the cue — don’t gold-tip C-bet maps.
+      guideRegion: LessonTableRegion.potTypeCbetMaps,
       phases: [
         (
           region: LessonTableRegion.potTypeCbetMaps,
@@ -13040,7 +13044,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'With turn plans',
           visual: const Icon(
             Icons.map_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13064,6 +13068,7 @@ class LessonTableContext extends StatelessWidget {
           'Interactive pot type — tap Higher commitment or 300bb deep',
       semanticsStatic: 'Pot-type unguided outcomes',
       caption: scene.caption ?? '4-bet pot 100bb — mindset?',
+      // No SoftPulse on unguided — still don’t gold-icon Higher commitment.
       phases: [
         (
           region: LessonTableRegion.potTypeHigherCommit,
@@ -13071,7 +13076,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Fewer spewy bluffs',
           visual: const Icon(
             Icons.lock_outline,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13081,7 +13086,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Wrong depth',
           visual: const Icon(
             Icons.swap_vert,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13095,6 +13100,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive pot type — tap Ranges and SPR or Nothing material',
       semanticsStatic: 'Pot-type checkpoint outcomes',
       caption: scene.caption ?? 'Pot type changes?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Ranges and SPR.
+      guideRegion: LessonTableRegion.potTypeRangesSpr,
       phases: [
         (
           region: LessonTableRegion.potTypeRangesSpr,
@@ -13102,7 +13109,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Both matter',
           visual: const Icon(
             Icons.tune,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),

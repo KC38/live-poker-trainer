@@ -21332,7 +21332,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Multiway limped — tap Nut potential.'),
+      find.text('Multiway limped — pick the priority.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Nut potential'));
@@ -21370,7 +21370,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('HU SRP IP — tap C-bet maps.'),
+      find.text('HU SRP IP — pick the default weapon.'),
       findsOneWidget,
     );
     await tester.tap(find.text('C-bet maps'));
@@ -21411,7 +21411,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('4-bet 100bb — tap Higher commitment.'),
+      find.text('4-bet 100bb — pick the mindset.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Higher commitment'));
@@ -21449,7 +21449,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Pot type — tap Ranges and SPR.'),
+      find.text('Pot type — pick what changes.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Ranges and SPR'));
