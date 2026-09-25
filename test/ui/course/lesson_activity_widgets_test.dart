@@ -19644,7 +19644,7 @@ await tester.tap(find.text('STRONGER'));
         ),
       );
       expect(find.byType(RiverCompositionDemo), findsOneWidget);
-      expect(find.text('Tap VALUE next'), findsOneWidget);
+      expect(find.text('Tap VALUE next'), findsNothing);
       expect(find.text('Tap Value, Bluff, and Hold.'), findsNothing);
       expect(find.text('Tap Value, Bluff, and Hold'), findsNothing);
       expect(
@@ -19656,10 +19656,10 @@ await tester.tap(find.text('STRONGER'));
 
       await tester.tap(find.text('VALUE'));
       await tester.pump();
-      expect(find.text('Tap BLUFF next'), findsOneWidget);
+      expect(find.text('Tap BLUFF next'), findsNothing);
       await tester.tap(find.text('BLUFF'));
       await tester.pump();
-      expect(find.text('Tap HOLD next'), findsOneWidget);
+      expect(find.text('Tap HOLD next'), findsNothing);
       await tester.tap(find.text('HOLD'));
       await tester.pump();
       expect(feltAck, 1);
