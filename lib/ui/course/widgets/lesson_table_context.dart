@@ -7200,7 +7200,7 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.outsImpliedPay,
           title: 'Implied',
-          detail: 'They pay hit',
+          detail: ' ',
           visual: const Icon(
             Icons.trending_up,
             color: AppColors.gold,
@@ -7210,7 +7210,7 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.outsImpliedDepthNever,
           title: 'Depth never',
-          detail: 'Price fixed',
+          detail: ' ',
           visual: const Icon(
             Icons.horizontal_rule,
             color: AppColors.slate,
@@ -7220,7 +7220,7 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.outsImpliedFoldNfd,
           title: 'Fold NFD',
-          detail: 'Always fold',
+          detail: ' ',
           visual: const Icon(
             Icons.cancel_outlined,
             color: AppColors.slate,
