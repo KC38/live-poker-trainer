@@ -742,14 +742,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Value needs calls — don’t gold-tip the tile.
       'act-07-03-01-checkpoint' =>
           'River rule — pick the composition check.',
+      // SoftPulse owns Nut potential — don’t gold-tip the tile.
       'act-07-04-01-guided' =>
-          'Multiway limped — tap Nut potential.',
+          'Multiway limped — pick the priority.',
+      // SoftPulse owns C-bet maps — don’t gold-tip the tile.
       'act-07-04-01-scaffolded' =>
-          'HU SRP IP — tap C-bet maps.',
+          'HU SRP IP — pick the default weapon.',
+      // Unguided: name the spot; don’t tip Higher commitment.
       'act-07-04-01-unguided' =>
-          '4-bet 100bb — tap Higher commitment.',
+          '4-bet 100bb — pick the mindset.',
+      // SoftPulse owns Ranges and SPR — don’t gold-tip the tile.
       'act-07-04-01-checkpoint' =>
-          'Pot type — tap Ranges and SPR.',
+          'Pot type — pick what changes.',
       'act-07-05-01-guided' =>
           'Four-way river — tap Usually no.',
       'act-07-05-01-scaffolded' =>
