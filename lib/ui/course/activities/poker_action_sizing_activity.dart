@@ -465,8 +465,9 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // SoftPulse owns the dock — don’t gold-tip Check.
     'act-06-08-01-guided' =>
       'Flopped set — protect checking range sometimes.',
+    // SoftPulse owns the dock — don’t gold-tip Small c-bet.
     'act-06-09-01-scaffolded' =>
-      'Deep 3-bet miss — tap Small c-bet.',
+      'Deep 3-bet miss — keep pressure small or give up.',
     'act-06-10-01-guided' =>
       'TPWK vs triple barrels — tap Fold.',
     'act-06-11-03-guided' =>

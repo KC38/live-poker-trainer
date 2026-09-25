@@ -968,7 +968,8 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         streetLabel: 'Flop · AQo miss after 3-bet',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Deep 3-bet — small c-bet or give-up',
+        // Structural — Rex + SoftPulse own small c-bet cue.
+        feltStatusLine: 'Checked to you · 180bb deep',
       );
     case 'act-06-10-01-guided':
       return const LessonActionSpot(

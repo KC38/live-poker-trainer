@@ -616,12 +616,15 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Purpose freq — don’t gold-tip the tile.
       'act-06-08-01-checkpoint' =>
           'Best mix description — pick the course standard.',
+      // SoftPulse owns High commit — don’t gold-tip the tile.
       'act-06-09-01-guided' =>
-          '100bb 4-bet pot · top pair — tap High commit.',
+          '100bb 4-bet pot · top pair — pick the depth mindset.',
+      // Unguided SoftPulse identify — don’t tip Avoid ego.
       'act-06-09-01-unguided' =>
-          'Light 4-bet for ego — tap Avoid ego.',
+          'Light 4-bet for ego — pick the discipline.',
+      // SoftPulse owns SPR / commit — don’t gold-tip the tile.
       'act-06-09-01-checkpoint' =>
-          'Depth change in 3-bet pots — tap SPR / commit.',
+          'Depth change in 3-bet pots — pick what shifts.',
       'act-06-10-01-scaffolded' =>
           'KK loses to AA all-in — tap Cooler.',
       'act-06-10-01-unguided' =>
