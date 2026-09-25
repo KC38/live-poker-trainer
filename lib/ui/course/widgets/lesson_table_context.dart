@@ -10598,6 +10598,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive S5 exit — tap nut potential vs bluff more',
       semanticsStatic: 'S5 exit multiway outcomes',
       caption: scene.caption ?? 'Four-way pot priority?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Nut potential.
+      guideRegion: LessonTableRegion.multiwayNutsPriority,
       phases: [
         (
           region: LessonTableRegion.multiwayNutsPriority,
@@ -10605,7 +10607,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Over weak bluffs',
           visual: const Icon(
             Icons.workspace_premium_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -10629,6 +10631,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive S5 exit — tap soft evidence vs absolute nuts',
       semanticsStatic: 'S5 exit tell outcomes',
       caption: scene.caption ?? 'Instant shove proves?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Soft evidence.
+      guideRegion: LessonTableRegion.timingSoftEvidence,
       phases: [
         (
           region: LessonTableRegion.timingSoftEvidence,
@@ -10636,7 +10640,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Nothing absolute',
           visual: const Icon(
             Icons.tune,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -10660,6 +10664,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive S5 exit — tap honor stop vs chase',
       semanticsStatic: 'S5 exit stop-loss outcomes',
       caption: scene.caption ?? 'Hit stop-loss — do?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Honor stop.
+      guideRegion: LessonTableRegion.disciplineStop,
       phases: [
         (
           region: LessonTableRegion.disciplineStop,
@@ -10667,7 +10673,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Guardrails',
           visual: const Icon(
             Icons.front_hand_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),

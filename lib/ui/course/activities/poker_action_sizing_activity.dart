@@ -232,7 +232,8 @@ class PokerActionSizingActivity extends StatelessWidget {
 /// Soft-pulse dock target for guided / scaffolded teach spots (ignores lock).
 String? _guidedPulseTargetId(CourseActivity activity) {
   if (activity.stage != ActivityStage.guided &&
-      activity.stage != ActivityStage.scaffolded) {
+      activity.stage != ActivityStage.scaffolded &&
+      activity.stage != ActivityStage.checkpoint) {
     return null;
   }
   return switch (activity.id) {
@@ -264,6 +265,9 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     // Thin value / bluff-catch: SoftPulse the plan; Rex names the model.
     'act-05-04-01-guided' => 'tv',
     'act-05-04-01-scaffolded' => 'call-m',
+    // S5 exit checkpoint docks — SoftPulse owns the answer.
+    'act-05-09-02-cp-value' => 'bet',
+    'act-05-09-02-cp-catch' => 'call',
     'act-06-09-01-scaffolded' => 'small',
     // Mix-five: SoftPulse the plan; Rex names the model, not the dock label.
     'act-06-13-01-guided' => 'cs',
@@ -429,10 +433,11 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Draw faces bomb — tap Fold.',
     'act-05-08-01-unguided' =>
       'Steaming after cooler — tap Fold.',
+    // SoftPulse owns the dock — don’t gold-tip Bet thin value / Call.
     'act-05-09-02-cp-value' =>
-      'Station · second pair river — tap Bet thin value.',
+      'Station · second pair river — extract vs wide calls.',
     'act-05-09-02-cp-catch' =>
-      'Maniac river barrel — tap Call.',
+      'Maniac river barrel — catch wide aggression.',
     'act-06-01-01-unguided' =>
       'PFR on K72r — tap C-bet 6.',
     'act-06-03-01-scaffolded' =>
