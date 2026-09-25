@@ -3372,7 +3372,7 @@ await tester.tap(find.text('TOP PAIR'));
       ),
     );
     expect(find.byType(RangeUpdateDemo), findsOneWidget);
-    expect(find.text('Tap ONE HAND next'), findsOneWidget);
+    expect(find.text('Tap ONE HAND next'), findsNothing);
     expect(find.text('Tap One Hand, Range, and Update'), findsNothing);
     expect(find.text('Tap One Hand, Range, and Update.'), findsNothing);
     expect(
@@ -3395,10 +3395,10 @@ await tester.tap(find.text('TOP PAIR'));
 
 await tester.tap(find.text('ONE HAND'));
     await tester.pump();
-    expect(find.text('Tap RANGE next'), findsOneWidget);
+    expect(find.text('Tap RANGE next'), findsNothing);
     await tester.tap(find.text('RANGE'));
     await tester.pump();
-    expect(find.text('Tap UPDATE next'), findsOneWidget);
+    expect(find.text('Tap UPDATE next'), findsNothing);
     await tester.tap(find.text('UPDATE'));
     await tester.pump();
     expect(feltAck, 1);
