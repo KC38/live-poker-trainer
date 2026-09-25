@@ -222,6 +222,9 @@ class LessonActivityController extends ChangeNotifier {
     _lastResult = null;
     // New attempt at this activity gets a fresh key next submit.
     _pendingIdempotencyKey = null;
+    // Drop the missed answer so SoftPulse / felt selection can restore to
+    // the teach target (e.g. big blind after tapping the dealer).
+    _draft = ActivityDraft(handStepIndex: _draft.handStepIndex);
     notifyListeners();
   }
 

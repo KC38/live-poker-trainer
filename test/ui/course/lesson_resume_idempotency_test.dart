@@ -50,12 +50,63 @@ void main() {
         duplicate: false,
       ),
     );
-    // After a non-accepted result, clearFeedback mints a new key next time.
+    // After a non-accepted result, clearFeedback mints a new key next time
+    // and clears the missed draft so SoftPulse / felt selection can restore.
     controller.clearFeedbackForRetry();
+    expect(controller.draft.choiceId, isNull);
+    expect(controller.lastResult, isNull);
     final third = controller.ensureIdempotencyKey(
       () => CourseService.newRequestKey('step'),
     );
     expect(third, isNot(first));
+    controller.dispose();
+  });
+
+  test('clearFeedbackForRetry clears felt draft but keeps hand step', () {
+    final activity = CourseActivity(
+      id: 'a',
+      order: 1,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 30,
+      accessibilityText: 'a',
+      acceptedGrades: const [SoftGrade.recommended],
+      choices: const [
+        CourseChoice(id: 'dealer', label: 'Dealer'),
+        CourseChoice(id: 'bb', label: 'Big blind'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    controller.setHandStepIndex(2);
+    controller.selectChoice('dealer');
+    controller.beginSubmit('k');
+    controller.finishSubmit(
+      SubmitCourseStepResult(
+        attemptId: 'att',
+        activityId: 'a',
+        grade: SoftGrade.questionable,
+        feedback: 'try again',
+        accepted: false,
+        lifeLost: false,
+        livesRemaining: 3,
+        xpAwarded: 0,
+        remediationRequired: false,
+        resume: const CourseResumePointer(
+          attemptId: 'att',
+          lessonId: 'l',
+          activityId: 'a',
+          activityIndex: 0,
+        ),
+        duplicate: false,
+      ),
+    );
+    expect(controller.draft.choiceId, 'dealer');
+    controller.clearFeedbackForRetry();
+    expect(controller.draft.choiceId, isNull);
+    expect(controller.draft.handStepIndex, 2);
+    expect(controller.lastResult, isNull);
+    // SoftPulse gate: unlocked + no selection.
+    expect(controller.submitting, isFalse);
     controller.dispose();
   });
 
