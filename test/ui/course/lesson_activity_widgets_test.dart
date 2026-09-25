@@ -4421,6 +4421,17 @@ await tester.tap(find.text('VALUE'));
     expect(find.text('Tap STATION next'), findsNothing);
     expect(find.text('Tap Station, High, and Low.'), findsNothing);
     expect(find.text('Tap Station, High, and Low'), findsNothing);
+    expect(find.text('Working model'), findsNothing);
+    expect(find.text('Plays many pots'), findsNothing);
+    expect(find.text('Rarely folds'), findsNothing);
+    expect(find.text('Temp tag'), findsOneWidget);
+    expect(find.text('Often in pots'), findsOneWidget);
+    expect(find.text('Sticks to heat'), findsOneWidget);
+    expect(
+      find.text('High participation · low folding'),
+      findsNothing,
+    );
+    expect(find.text('Station · high · low'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
@@ -4433,6 +4444,11 @@ await tester.tap(find.text('VALUE'));
     await tester.tap(find.text('LOW'));
     await tester.pump();
     expect(feltAck, 1);
+    expect(
+      find.text('High participation · low folding'),
+      findsNothing,
+    );
+    expect(find.text('Station · high · low'), findsOneWidget);
     controller.dispose();
   });
 
