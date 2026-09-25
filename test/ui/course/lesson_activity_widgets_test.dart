@@ -11357,8 +11357,11 @@ await tester.tap(find.text('STRONGER'));
       find.text('Top pair top kicker checked to you — tap a value bet.'),
       findsOneWidget,
     );
-    // SoftPulse + Rex own the cue — no third gold felt status.
+    // SoftPulse + Rex own the cue — no third gold felt status / TPTK spoiler.
     expect(find.text('Checked to you — value bet'), findsNothing);
+    expect(find.text('Flop · Heads-up · TPTK'), findsNothing);
+    expect(find.text('Flop · Heads-up'), findsOneWidget);
+    expect(find.text('Checked to you'), findsWidgets);
     expect(
       find.text('Heads-up. You hold top pair top kicker. Checked to you. Action?'),
       findsNothing,
@@ -11451,6 +11454,11 @@ await tester.tap(find.text('STRONGER'));
       find.text('Multiway pot. Villain bets half pot. You flopped a set. Action?'),
       findsNothing,
     );
+    // Felt is structural — don’t spoil Raise with “build the pot” / Set label.
+    expect(find.text('Set multiway — build the pot'), findsNothing);
+    expect(find.text('Flop · Multiway · Set'), findsNothing);
+    expect(find.text('Flop · Multiway'), findsOneWidget);
+    expect(find.text('Facing a bet'), findsOneWidget);
     expect(find.text('RAISE'), findsOneWidget);
     await tester.tap(find.text('RAISE'));
     await tester.pump();
@@ -11498,6 +11506,10 @@ await tester.tap(find.text('STRONGER'));
       ),
       findsNothing,
     );
+    // Felt is structural — don’t tip Fold with “weak one pair.”
+    expect(find.text('Heat multiway — weak one pair'), findsNothing);
+    expect(find.text('Flop · Multiway · Bottom pair'), findsNothing);
+    expect(find.text('Facing raise · multiway'), findsOneWidget);
     expect(find.text('FOLD'), findsOneWidget);
     await tester.tap(find.text('FOLD'));
     await tester.pump();
