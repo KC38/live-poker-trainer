@@ -243,6 +243,8 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     'act-02-03-01-guided-utg' => 'fold',
     'act-02-04-01-guided-fold' => 'fold-j3',
     'act-02-04-01-scaffolded-call' => 'call-87s',
+    'act-02-07-01-guided-ep' => 'open-ajs',
+    'act-02-07-01-scaffolded-vs' => 'call-22',
     'act-03-04-01-guided' => 'bet-tp',
     'act-03-04-01-scaffolded' => 'cbet',
     'act-03-05-01-scaffolded' => 'barrel',
