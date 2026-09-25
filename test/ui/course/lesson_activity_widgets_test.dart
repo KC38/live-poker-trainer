@@ -5917,7 +5917,7 @@ await tester.tap(find.text('STRONGER'));
         ),
       );
       expect(find.byType(HardFoldCoolerDemo), findsOneWidget);
-      expect(find.text('Tap HARD next'), findsOneWidget);
+      expect(find.text('Tap HARD next'), findsNothing);
       expect(find.text('Tap Hard, Cooler, and Ego.'), findsNothing);
       expect(find.text('Tap Hard, Cooler, and Ego'), findsNothing);
       expect(
@@ -5929,10 +5929,10 @@ await tester.tap(find.text('STRONGER'));
 
       await tester.tap(find.text('HARD'));
       await tester.pump();
-      expect(find.text('Tap COOLER next'), findsOneWidget);
+      expect(find.text('Tap COOLER next'), findsNothing);
       await tester.tap(find.text('COOLER'));
       await tester.pump();
-      expect(find.text('Tap EGO next'), findsOneWidget);
+      expect(find.text('Tap EGO next'), findsNothing);
       await tester.tap(find.text('EGO'));
       await tester.pump();
       expect(feltAck, 1);
