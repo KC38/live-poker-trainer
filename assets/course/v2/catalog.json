@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "1db780782e8babd4da817f105633bf8bb509c4e0f846244e79524750ea15d164",
+  "contentChecksum": "2abccdfe04d0bdc7f11956a4c0869dcf7f245f710ad74d3163d1754d346f4a93",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -2172,7 +2172,7 @@
                   "stage": "jump_test",
                   "renderer": "order_sequence",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Jump test: UTG then HJ then BTN.",
+                  "accessibilityText": "Jump test: pick seats in the order they act.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2182,7 +2182,7 @@
                   "objectives": [
                     "Confirm acting order"
                   ],
-                  "prompt": "Preflop order after blinds: first three to act.",
+                  "prompt": "Pick seats in the order they act.",
                   "sequenceItems": [
                     {
                       "id": "j-utg",

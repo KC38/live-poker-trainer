@@ -41,10 +41,11 @@ class AuthoredMultiStepActivity extends StatelessWidget {
         'Blinds folded — what happened to the pot?',
       ('act-01-06-01-checkpoint-finish', _) =>
         'Finish a short button hand without freezing.',
+      // SoftPulse-quiet jump: list options with pick — no SoftPulse, no meta.
       ('act-01-06-02-jump-hand', 'j-hand-end') =>
-        'Blinds folded — what happened to the pot?',
+        'Blinds folded — pick Won pot or Need showdown.',
       ('act-01-06-02-jump-hand', _) =>
-        'Jump check — open the button, then take the blinds.',
+        'Button with ATs — folds to you. Pick Raise to 6 or Fold.',
       ('act-04-03-01-guided', 'step-flop-tp') =>
         'TPTK on a dry flop — start the multi-street plan.',
       ('act-04-03-01-guided', 'step-turn-tp') =>
