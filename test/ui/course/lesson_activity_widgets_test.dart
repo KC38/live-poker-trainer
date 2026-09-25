@@ -19168,8 +19168,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Wide opens + barrels, some folds — tap Wide + pressure.'),
+      find.text('Wide opens + barrels, some folds — pick the note.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Wide opens + barrels, some folds — tap Wide + pressure.'),
+      findsNothing,
     );
     await tester.tap(find.text('Wide + pressure'));
     await tester.pump();
@@ -19204,8 +19208,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Difference vs maniac — tap Some folds.'),
+      find.text('Difference vs maniac — pick the separation.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Difference vs maniac — tap Some folds.'),
+      findsNothing,
     );
     await tester.tap(find.text('Some folds'));
     await tester.pump();
@@ -19240,8 +19248,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('One wide open — tap Keep sampling.'),
+      find.text('One wide open — pick the confidence.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('One wide open — tap Keep sampling.'),
+      findsNothing,
     );
     await tester.tap(find.text('Keep sampling'));
     await tester.pump();
@@ -19278,8 +19290,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Best pre-label notes — tap Wide · barrels · folds.'),
+      find.text('Best pre-label notes — pick the evidence pack.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Best pre-label notes — tap Wide · barrels · folds.'),
+      findsNothing,
     );
     await tester.tap(find.text('Wide · barrels · folds'));
     await tester.pump();

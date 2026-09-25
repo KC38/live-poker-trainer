@@ -12107,6 +12107,8 @@ class LessonTableContext extends StatelessWidget {
       semanticsStatic: 'LAG observe guided outcomes',
       caption: scene.caption ??
           'Seat opens many hands and barrels often but folds some turn raises. Note?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Wide + pressure.
+      guideRegion: LessonTableRegion.lagObserveWidePressure,
       phases: [
         (
           region: LessonTableRegion.lagObserveWidePressure,
@@ -12114,7 +12116,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Evidence',
           visual: const Icon(
             Icons.visibility_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12124,7 +12126,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Opposite',
           visual: const Icon(
             Icons.lock_outlined,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12134,7 +12136,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Too soon',
           visual: const Icon(
             Icons.sell_outlined,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12148,6 +12150,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive LAG vs maniac — tap some folds or no difference',
       semanticsStatic: 'LAG observe discipline outcomes',
       caption: scene.caption ?? 'Difference brewing vs maniac?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Some folds.
+      guideRegion: LessonTableRegion.lagObserveSomeFolds,
       phases: [
         (
           region: LessonTableRegion.lagObserveSomeFolds,
@@ -12155,7 +12159,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Not mindless',
           visual: const Icon(
             Icons.rule_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12165,7 +12169,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Wrong',
           visual: const Icon(
             Icons.merge_type,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12179,6 +12183,7 @@ class LessonTableContext extends StatelessWidget {
           'Interactive sample confidence — tap keep sampling or label now',
       semanticsStatic: 'LAG observe sample outcomes',
       caption: scene.caption ?? 'Label after one wide open?',
+      // No SoftPulse on unguided — still don’t gold-icon Keep sampling.
       phases: [
         (
           region: LessonTableRegion.lagObserveKeepSampling,
@@ -12186,7 +12191,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'One hand is a note',
           visual: const Icon(
             Icons.science_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12196,7 +12201,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Too soon',
           visual: const Icon(
             Icons.verified_outlined,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12210,6 +12215,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive pre-label bundle — tap wide · barrels · folds or seem loud',
       semanticsStatic: 'LAG observe bundle outcomes',
       caption: scene.caption ?? 'Best pre-label note bundle?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Wide · barrels · folds.
+      guideRegion: LessonTableRegion.lagObserveBundle,
       phases: [
         (
           region: LessonTableRegion.lagObserveBundle,
@@ -12217,7 +12224,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Evidence',
           visual: const Icon(
             Icons.inventory_2_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12227,7 +12234,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Not evidence',
           visual: const Icon(
             Icons.volume_up_outlined,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),

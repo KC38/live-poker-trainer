@@ -661,14 +661,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Selective + disciplined — don’t gold-tip the tile.
       'act-06-11-03-checkpoint' =>
           'Versus TAG — pick the cite.',
+      // SoftPulse owns Wide + pressure — don’t gold-tip the tile.
       'act-06-12-01-guided' =>
-          'Wide opens + barrels, some folds — tap Wide + pressure.',
+          'Wide opens + barrels, some folds — pick the note.',
+      // SoftPulse owns Some folds — don’t gold-tip the tile.
       'act-06-12-01-scaffolded' =>
-          'Difference vs maniac — tap Some folds.',
+          'Difference vs maniac — pick the separation.',
+      // Unguided: name the habit; don’t tip Keep sampling.
       'act-06-12-01-unguided' =>
-          'One wide open — tap Keep sampling.',
+          'One wide open — pick the confidence.',
+      // SoftPulse owns Wide · barrels · folds — don’t gold-tip the tile.
       'act-06-12-01-checkpoint' =>
-          'Best pre-label notes — tap Wide · barrels · folds.',
+          'Best pre-label notes — pick the evidence pack.',
       'act-06-12-02-guided' =>
           'Opens wide, barrels often — tap LAG.',
       'act-06-12-02-scaffolded' =>
