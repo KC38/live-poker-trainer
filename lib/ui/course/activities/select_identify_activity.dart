@@ -171,7 +171,7 @@ class SelectIdentifyActivity extends StatelessWidget {
       SelectIdentifyPresentation.bestFiveCardTap =>
         'Tap the five cards that play in your best hand.',
       SelectIdentifyPresentation.outsCleanAcesTap =>
-        'King-high board. Tap the remaining aces — your clean outs.',
+        'King-high board — count only outs that make the best hand.',
       SelectIdentifyPresentation.text =>
         hasScene
             ? 'Look at the table, then pick the answer that matches.'
@@ -393,14 +393,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Draw — don’t gold-tip the tile.
       'act-03-02-01-checkpoint' =>
           'Eight or queen completes — your hand needs the right runout.',
+      // SoftPulse owns remaining aces — don’t gold-tip the cards.
       'act-03-03-01-guided' =>
-          'King-high board. Tap the remaining aces — your clean outs.',
+          'King-high board — count only outs that make the best hand.',
+      // SoftPulse owns Call 10 — don’t gold-tip the tile.
       'act-03-03-01-scaffolded' =>
-          'Pot 20, bet 10 — tap how many chips to call.',
+          'Pot 20, bet 10 — the call equals the bet in front of you.',
+      // SoftPulse owns Call — don’t gold-tip the tile.
       'act-03-03-01-unguided' =>
-          'Getting 3:1 with real outs — tap what you do.',
+          'Getting 3:1 with real outs — pick Call, Fold, or Raise.',
+      // SoftPulse owns Implied — don’t gold-tip the tile.
       'act-03-03-01-checkpoint' =>
-          'Nut flush draw, deep and sticky — tap Implied.',
+          'Nut flush draw, deep and sticky — future payoffs can justify the price.',
       // SoftPulse owns Brick — don’t gold-tip the tile.
       'act-03-05-01-guided' =>
           'Dry ace flop, blank three — rarely helps a missed caller.',
@@ -1253,11 +1257,11 @@ class _HandCategoryTapActivity extends StatelessWidget {
         'act-03-02-01-checkpoint' =>
           'Eight or queen completes — your hand needs the right runout.',
         'act-03-03-01-guided' =>
-          'King-high board. Tap the remaining aces — your clean outs.',
+          'King-high board — count only outs that make the best hand.',
         'act-03-03-01-unguided' =>
-          'Getting 3:1 with real outs — tap what you do.',
+          'Getting 3:1 with real outs — pick Call, Fold, or Raise.',
         'act-03-03-01-checkpoint' =>
-          'Nut flush draw, deep and sticky — tap Implied.',
+          'Nut flush draw, deep and sticky — future payoffs can justify the price.',
         // SoftPulse owns Brick — don’t gold-tip the tile.
         'act-03-05-01-guided' =>
           'Dry ace flop, blank three — rarely helps a missed caller.',
@@ -1374,13 +1378,13 @@ class _HandCategoryTapActivity extends StatelessWidget {
                             activity.id.startsWith('act-02-02-01-')
                         ? 'Tap the starting-hand family.'
                         : activity.id.startsWith('act-03-02-01-')
-                        ? 'Tap the flop class.'
+                        ? '' // SoftPulse + Rex own the cue.
                         : activity.id == 'act-03-03-01-guided'
-                        ? 'Tap the remaining aces.'
+                        ? '' // SoftPulse + Rex own the cue.
                         : activity.id == 'act-03-03-01-unguided'
-                        ? 'Tap Call, Fold, or Raise.'
+                        ? '' // Rex lists options; SoftPulse stays quiet.
                         : activity.id == 'act-03-03-01-checkpoint'
-                        ? 'Tap Implied.'
+                        ? '' // SoftPulse + Rex own the cue.
                         : activity.id == 'act-03-05-01-guided'
                         ? 'Tap brick or scare.'
                         : activity.id == 'act-03-05-01-checkpoint'
@@ -1868,7 +1872,7 @@ class _OutsCleanAcesTapActivity extends StatelessWidget {
   final bool showGuidance;
 
   static const _coach =
-      'King-high board. Tap the remaining aces — your clean outs.';
+      'King-high board — count only outs that make the best hand.';
 
   @override
   Widget build(BuildContext context) {

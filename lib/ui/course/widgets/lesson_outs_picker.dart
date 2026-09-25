@@ -259,7 +259,7 @@ class _OutsCleanAcesPickerState extends State<OutsCleanAcesPicker> {
         ),
         const SizedBox(height: 12),
         Text(
-          'Tap every remaining ace',
+          'Select every clean out',
           style: GoogleFonts.manrope(
             color: AppColors.cream,
             fontSize: 13,
