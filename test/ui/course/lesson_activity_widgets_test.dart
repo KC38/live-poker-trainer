@@ -5186,7 +5186,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(RangeAdvantageDemo), findsOneWidget);
-    expect(find.text('Tap RANGE next'), findsOneWidget);
+    expect(find.text('Tap RANGE next'), findsNothing);
     expect(find.text('Tap Range, Nut, and Advantage.'), findsNothing);
     expect(find.text('Tap Range, Nut, and Advantage'), findsNothing);
     expect(find.text('More strong hands overall'), findsNothing);
@@ -5206,10 +5206,10 @@ await tester.tap(find.text('NIT'));
 
     await tester.tap(find.text('RANGE'));
     await tester.pump();
-    expect(find.text('Tap NUT next'), findsOneWidget);
+    expect(find.text('Tap NUT next'), findsNothing);
     await tester.tap(find.text('NUT'));
     await tester.pump();
-    expect(find.text('Tap ADVANTAGE next'), findsOneWidget);
+    expect(find.text('Tap ADVANTAGE next'), findsNothing);
     await tester.tap(find.text('ADVANTAGE'));
     await tester.pump();
     expect(feltAck, 1);
