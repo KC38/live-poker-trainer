@@ -793,10 +793,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Kc', '9s', '4h', '2d', '7c'],
         potLabel: 'Pot 32',
         villainLine: 'Calling Station checked twice',
+        // Structural — Rex owns thin-value SoftPulse cue.
         streetLabel: 'River · second pair',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Station pays — bet thin value',
+        feltStatusLine: 'Checked to you',
       );
     case 'act-05-04-01-scaffolded':
       return const LessonActionSpot(
@@ -804,9 +805,10 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Kc', '9s', '4h', '2d', '7c'],
         potLabel: 'Pot 48',
         villainLine: 'Maniac barrels river',
+        // Structural — don’t tip Call / catch on the felt.
         streetLabel: 'River · second pair',
         facingBet: true,
-        feltStatusLine: 'Wide barrels — call the catch',
+        feltStatusLine: 'Facing a bet',
       );
     case 'act-05-04-01-unguided':
       return const LessonActionSpot(
@@ -814,10 +816,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Kc', '9s', '4h', '2d', '7c'],
         potLabel: 'Pot 32',
         villainLine: 'Nit checked to you',
+        // Structural — don’t tip Check back on the felt.
         streetLabel: 'River · second pair',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Nit overfolds — check back',
+        feltStatusLine: 'Checked to you',
       );
     case 'act-05-05-01-scaffolded':
       return const LessonActionSpot(
@@ -7813,9 +7816,10 @@ class ThinValueDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'THIN', caption: 'Needs calls', color: AppColors.gold),
-    (label: 'CATCH', caption: 'Bluff-catches', color: AppColors.cream),
-    (label: 'BARRELS', caption: 'Need wide barrels', color: AppColors.danger),
+    // Structural — Rex owns “needs calls” / “bluff-catches” / “wide barrels.”
+    (label: 'THIN', caption: 'Extract light', color: AppColors.gold),
+    (label: 'CATCH', caption: 'Hero call', color: AppColors.cream),
+    (label: 'BARRELS', caption: 'Fire multi-street', color: AppColors.danger),
   ];
 
   @override
@@ -7898,7 +7902,8 @@ class _ThinValueDemoState extends State<ThinValueDemo> {
                 ),
               ),
               child: Text(
-                'Thin value needs calls · catches need barrels',
+                // Match SoftPulse titles — don’t echo Rex’s “needs calls.”
+                'Thin · catch · barrels',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
@@ -7915,6 +7920,7 @@ class _ThinValueDemoState extends State<ThinValueDemo> {
               : MainAxisAlignment.start,
       children: [
         Text(
+          // Structural label — Rex owns thin-value / barrels copy in the dock.
           'Thin value & catches',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
