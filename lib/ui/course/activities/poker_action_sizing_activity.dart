@@ -68,6 +68,14 @@ class PokerActionSizingActivity extends StatelessWidget {
             );
 
         if (tableMode) {
+          final pulseChoiceId = _guidedPulseChoiceId(
+            activity: activity,
+            showGuidance: showGuidance,
+            selected: selected,
+            locked: locked,
+          );
+          // SoftPulse + Rex own the cue — hide generic felt gold status.
+          final coachOwnsCue = showCoach && pulseChoiceId != null;
           final dock = LessonActionDock(
             choices: activity.choices,
             selectedId: selected,
@@ -75,12 +83,7 @@ class PokerActionSizingActivity extends StatelessWidget {
             identifyUnavailable: spot.identifyUnavailable,
             facingBet: spot.facingBet,
             heroStackAmount: spot.heroStackAmount,
-            pulseChoiceId: _guidedPulseChoiceId(
-              activity: activity,
-              showGuidance: showGuidance,
-              selected: selected,
-              locked: locked,
-            ),
+            pulseChoiceId: pulseChoiceId,
             onSelect: (id) => controller.selectChoice(id, autoSubmit: true),
           );
           final status = Builder(
@@ -142,9 +145,17 @@ class PokerActionSizingActivity extends StatelessWidget {
                   ],
                   const SizedBox(height: 10),
                   if (fill)
-                    Expanded(child: LessonActionTable(spot: spot))
+                    Expanded(
+                      child: LessonActionTable(
+                        spot: spot,
+                        coachOwnsCue: coachOwnsCue,
+                      ),
+                    )
                   else
-                    LessonActionTable(spot: spot),
+                    LessonActionTable(
+                      spot: spot,
+                      coachOwnsCue: coachOwnsCue,
+                    ),
                   const SizedBox(height: 10),
                   dock,
                   status,

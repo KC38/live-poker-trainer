@@ -8794,9 +8794,20 @@ class _DemoActionCard extends StatelessWidget {
 /// Mini felt showing pot, optional villain bet, board, and hero holes.
 class LessonActionTable extends StatelessWidget {
   /// Creates the table.
-  const LessonActionTable({super.key, required this.spot});
+  ///
+  /// When [coachOwnsCue] is true (Rex + SoftPulse already cue the dock),
+  /// hide auto-generated gold status lines like "Pot is open to a bet" —
+  /// keep an explicit [LessonActionSpot.feltStatusLine] when authored.
+  const LessonActionTable({
+    super.key,
+    required this.spot,
+    this.coachOwnsCue = false,
+  });
 
   final LessonActionSpot spot;
+
+  /// SoftPulse + Rex own the next-action cue — suppress generic felt status.
+  final bool coachOwnsCue;
 
   @override
   Widget build(BuildContext context) {
@@ -8843,10 +8854,12 @@ class LessonActionTable extends StatelessWidget {
         final breathe = feltHeight >= 420;
         final cardScale = breathe ? 1.4 : 1.0;
 
-        Widget sceneStatus() {
+        Widget? sceneStatus() {
           if (spot.feltStatusLine != null) {
             return statusLine(spot.feltStatusLine!);
           }
+          // SoftPulse + Rex already name the move — no third gold line.
+          if (coachOwnsCue) return null;
           if (spot.facingBet) return statusLine('A bet faces you');
           if (spot.openPot) {
             return statusLine(
@@ -8967,8 +8980,10 @@ class LessonActionTable extends StatelessWidget {
             header,
             const SizedBox(height: 16),
             cards,
-            const SizedBox(height: 14),
-            status,
+            if (status != null) ...[
+              const SizedBox(height: 14),
+              status,
+            ],
           ],
         );
 
@@ -9004,7 +9019,11 @@ class LessonActionTable extends StatelessWidget {
                   ? Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [header, cards, status],
+                    children: [
+                      header,
+                      cards,
+                      if (status != null) status,
+                    ],
                   )
                   : packed,
         );

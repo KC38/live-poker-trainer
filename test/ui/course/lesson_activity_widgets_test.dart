@@ -836,8 +836,11 @@ void main() {
       ),
     );
     expect(find.text('The pot is open — tap a bet size.'), findsOneWidget);
-    expect(find.text('Tap your action on the dock.'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no third "tap…" line under the dock.
+    expect(find.text('Tap your action on the dock.'), findsNothing);
     expect(find.text('Tap Bet to open the pot.'), findsNothing);
+    // Generic felt status also suppressed while SoftPulse guides Bet 5.
+    expect(find.text('Pot is open to a bet'), findsNothing);
     controller.finishSubmit(
       SubmitCourseStepResult(
         attemptId: 'a1',
@@ -10159,7 +10162,8 @@ await tester.tap(find.text('STRONGER'));
       ),
     );
     expect(find.byType(LessonActionTable), findsOneWidget);
-    expect(find.text('Pot is open to a bet'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no generic felt gold status mid-teach.
+    expect(find.text('Pot is open to a bet'), findsNothing);
     expect(find.text('RAISE (off)'), findsOneWidget);
     expect(find.text('CALL (off)'), findsNothing);
     expect(

@@ -124,6 +124,10 @@ class AuthoredMultiStepActivity extends StatelessWidget {
         final coachText = _coachTextFor(step);
 
         if (tableMode) {
+          final pulseChoiceId =
+              locked || selected != null ? null : _pulseChoiceIdFor(step);
+          // SoftPulse + Rex own the cue — hide generic felt gold status.
+          final coachOwnsCue = !locked && pulseChoiceId != null;
           return LayoutBuilder(
             builder: (context, constraints) {
               final fill =
@@ -146,9 +150,17 @@ class AuthoredMultiStepActivity extends StatelessWidget {
                   ),
                   const SizedBox(height: 14),
                   if (fill)
-                    Expanded(child: LessonActionTable(spot: spot))
+                    Expanded(
+                      child: LessonActionTable(
+                        spot: spot,
+                        coachOwnsCue: coachOwnsCue,
+                      ),
+                    )
                   else
-                    LessonActionTable(spot: spot),
+                    LessonActionTable(
+                      spot: spot,
+                      coachOwnsCue: coachOwnsCue,
+                    ),
                   const SizedBox(height: 14),
                   LessonActionDock(
                     choices: step.choices,
@@ -156,10 +168,7 @@ class AuthoredMultiStepActivity extends StatelessWidget {
                     enabled: !locked,
                     facingBet: spot.facingBet,
                     heroStackAmount: spot.heroStackAmount,
-                    pulseChoiceId:
-                        locked || selected != null
-                            ? null
-                            : _pulseChoiceIdFor(step),
+                    pulseChoiceId: pulseChoiceId,
                     onSelect:
                         (id) => controller.selectChoice(id, autoSubmit: true),
                   ),
