@@ -305,11 +305,11 @@ String? _guidedPulseTargetId(CourseActivity activity) {
 /// Felt-first Rex lines for action spots (felt already shows cards/context).
 String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
   return switch (activity.id) {
-    'act-01-03-01-guided-fold' => 'Worst hand vs a raise — tap Fold.',
-    'act-01-03-01-scaffolded-check' => 'Nothing faces you — tap Check.',
-    'act-01-03-01-unguided-call' => 'A bet is out — tap Call to continue.',
+    'act-01-03-01-guided-fold' => 'Worst hand vs a raise — pick how you leave.',
+    'act-01-03-01-scaffolded-check' => 'Nothing faces you — pick the free action.',
+    'act-01-03-01-unguided-call' => 'A bet is out — pick how you continue.',
     'act-01-03-01-checkpoint-legal' =>
-      'A bet is out — tap the action you cannot take.',
+      'A bet is out — pick the illegal action.',
     'act-01-03-02-guided-bet' => 'The pot is open — pick a value size.',
     'act-01-03-02-scaffolded-raise' => 'They bet — pick how you charge.',
     'act-01-03-02-unguided-allin' => 'Short vs a big bet — pick what you can put in.',

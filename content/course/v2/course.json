@@ -1321,7 +1321,7 @@
                   "stage": "explain",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Fold ends your hand. Check passes. Call matches.",
+                  "accessibilityText": "Three quiet buttons — SoftPulse walks each role.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -1330,7 +1330,7 @@
                     {
                       "id": "act-01-03-01-explain-passive-media",
                       "kind": "dialogue",
-                      "text": "Fold ends your hand. Check passes. Call matches."
+                      "text": "Three quiet buttons — SoftPulse walks each role."
                     }
                   ],
                   "objectives": [
@@ -1353,7 +1353,7 @@
                   "objectives": [
                     "Fold to give up the hand"
                   ],
-                  "prompt": "Worst hand vs a raise — tap Fold.",
+                  "prompt": "Worst hand vs a raise — pick how you leave.",
                   "choices": [
                     {
                       "id": "fold-72",
@@ -1413,7 +1413,7 @@
                   "objectives": [
                     "Check when no bet faces you"
                   ],
-                  "prompt": "Nothing faces you — tap Check.",
+                  "prompt": "Nothing faces you — pick the free action.",
                   "choices": [
                     {
                       "id": "check-free",
@@ -1465,7 +1465,7 @@
                   "objectives": [
                     "Call to match the current bet"
                   ],
-                  "prompt": "A bet is out — tap Call to continue.",
+                  "prompt": "A bet is out — pick how you continue.",
                   "choices": [
                     {
                       "id": "call-5",

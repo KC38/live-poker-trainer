@@ -1614,7 +1614,8 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       kind: CoachDialogueVisualKind.aggressiveActions,
     );
   }
-  if (blob.contains('fold ends') ||
+  if (blob.contains('three quiet buttons') ||
+      blob.contains('fold ends') ||
       blob.contains('check passes') ||
       blob.contains('call matches')) {
     return const CoachDialogueVisual(

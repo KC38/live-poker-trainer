@@ -10735,7 +10735,7 @@ await tester.tap(find.text('NIT'));
           estimatedSeconds: 30,
           accessibilityText: 'Fold check call',
           acceptedGrades: const [SoftGrade.recommended],
-          prompt: 'Fold ends your hand.',
+          prompt: 'Three quiet buttons — SoftPulse walks each role.',
         ),
       ).kind,
       CoachDialogueVisualKind.passiveActions,
@@ -10824,7 +10824,7 @@ await tester.tap(find.text('NIT'));
     );
     expect(find.byType(LessonActionTable), findsOneWidget);
     expect(find.byType(LessonActionDock), findsOneWidget);
-    expect(find.text('Worst hand vs a raise — tap Fold.'), findsOneWidget);
+    expect(find.text('Worst hand vs a raise — pick how you leave.'), findsOneWidget);
     expect(find.textContaining('72o'), findsNothing);
     // SoftPulse the Fold dock so teach-by-doing matches Rex.
     final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
@@ -10903,7 +10903,7 @@ await tester.tap(find.text('NIT'));
       estimatedSeconds: 55,
       accessibilityText: 'Tap Call',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'A bet is out — tap Call to continue.',
+      prompt: 'A bet is out — pick how you continue.',
       choices: const [
         CourseChoice(id: 'call-5', label: 'Call 5', action: 'CALL'),
         CourseChoice(id: 'check-5', label: 'Check', action: 'CHECK'),
@@ -10922,7 +10922,7 @@ await tester.tap(find.text('NIT'));
     );
     expect(find.text('CHECK (off)'), findsOneWidget);
     expect(find.text('CALL 5'), findsOneWidget);
-    expect(find.text('A bet is out — tap Call to continue.'), findsOneWidget);
+    expect(find.text('A bet is out — pick how you continue.'), findsOneWidget);
     await tester.tap(find.text('CALL 5'));
     await tester.pump();
     expect(controller.draft.choiceId, 'call-5');
