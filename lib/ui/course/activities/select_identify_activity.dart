@@ -1317,14 +1317,18 @@ class _HandCategoryTapActivity extends StatelessWidget {
         // SoftPulse owns SPR 4 — don’t gold-tip the tile.
         'act-04-10-02-jump-spr' =>
           'Stack 60 into pot 15 — stack ÷ pot.',
+        // SoftPulse owns High part. — don’t gold-tip the tile.
         'act-04-06-01-guided' =>
-          'Seat calls 7 of 9 preflops — tap the observation.',
+          'Seat calls 7 of 9 preflops — participation is rolling high.',
+        // SoftPulse owns Sticky — don’t gold-tip the tile.
         'act-04-06-01-scaffolded' =>
-          'Second pair called three streets twice — tap the note.',
+          'Second pair called three streets twice — folding looks scarce.',
+        // SoftPulse owns Low conf. — don’t gold-tip the tile.
         'act-04-06-01-unguided' =>
-          'One dramatic call — tap how confident the label is.',
+          'One dramatic call — confidence stays thin until samples pile up.',
+        // SoftPulse owns Bundle — don’t gold-tip the tile.
         'act-04-06-01-checkpoint' =>
-          'Before you label — tap the evidence bundle.',
+          'Before you label — stack many hands that rarely fold.',
         _ => 'Look at the board and your holes — tap what you made.',
       };
 
