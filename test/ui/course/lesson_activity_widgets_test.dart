@@ -3083,6 +3083,64 @@ void main() {
     },
   );
 
+  testWidgets(
+    'full-ring checkpoint habit — no SoftPulse spoilers or gold tip',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-02-07-01-checkpoint-habit',
+        order: 5,
+        stage: ActivityStage.checkpoint,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 45,
+        accessibilityText: 'Cover cards and wait your turn.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Full ring. Action two seats left. Your cards are uncovered. Fix?',
+        choices: const [
+          CourseChoice(
+            id: 'cover-wait',
+            label: 'Cover your cards and wait your turn',
+          ),
+          CourseChoice(
+            id: 'act-early',
+            label: 'Announce your action early',
+          ),
+          CourseChoice(
+            id: 'leave-bare',
+            label: 'Leave the cards uncovered',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      await tester.pumpWidget(
+        _wrap(
+          SelectIdentifyActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: false,
+          ),
+        ),
+      );
+      expect(find.text('Safe'), findsNothing);
+      expect(find.text('OOT'), findsNothing);
+      expect(find.text('Flash'), findsNothing);
+      expect(find.text('Cover + wait'), findsOneWidget);
+      expect(find.text('Hand on'), findsOneWidget);
+      expect(find.text('Too soon'), findsOneWidget);
+      expect(find.text('No cover'), findsOneWidget);
+      final tipIcons = tester.widgetList<Icon>(
+        find.byIcon(Icons.back_hand_outlined),
+      );
+      expect(tipIcons, isNotEmpty);
+      for (final icon in tipIcons) {
+        expect(icon.color, AppColors.slate);
+      }
+      await tester.tap(find.text('Cover + wait'));
+      await tester.pump();
+      expect(controller.draft.choiceId, 'cover-wait');
+      controller.dispose();
+    },
+  );
+
 
   testWidgets('full-ring explain taps Nine Same Position instead of Continue', (
     tester,
