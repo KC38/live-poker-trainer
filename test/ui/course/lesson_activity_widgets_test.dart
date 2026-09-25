@@ -13978,6 +13978,8 @@ await tester.tap(find.text('NIT'));
       findsOneWidget,
     );
     expect(find.text('Station'), findsOneWidget);
+    expect(find.text('Sticky calls'), findsNothing);
+    expect(find.text('Calls down'), findsOneWidget);
     expect(find.textContaining('second pair'), findsWidgets);
     await tester.tap(find.text('Station'));
     await tester.pump();
