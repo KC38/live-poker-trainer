@@ -6032,7 +6032,7 @@ await tester.tap(find.text('STRONGER'));
         ),
       );
       expect(find.byType(TagModelDemo), findsOneWidget);
-      expect(find.text('Tap TIGHT next'), findsOneWidget);
+      expect(find.text('Tap TIGHT next'), findsNothing);
       expect(find.text('Tap Tight, Aggro, and Model.'), findsNothing);
       expect(find.text('Tap Tight, Aggro, and Model'), findsNothing);
       expect(
@@ -6044,10 +6044,10 @@ await tester.tap(find.text('STRONGER'));
 
       await tester.tap(find.text('TIGHT'));
       await tester.pump();
-      expect(find.text('Tap AGGRO next'), findsOneWidget);
+      expect(find.text('Tap AGGRO next'), findsNothing);
       await tester.tap(find.text('AGGRO'));
       await tester.pump();
-      expect(find.text('Tap MODEL next'), findsOneWidget);
+      expect(find.text('Tap MODEL next'), findsNothing);
       await tester.tap(find.text('MODEL'));
       await tester.pump();
       expect(feltAck, 1);
