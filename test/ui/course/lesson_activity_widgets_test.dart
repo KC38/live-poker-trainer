@@ -914,6 +914,10 @@ void main() {
         epsilon: 1,
       ),
     );
+    // Densify lanes grow past the compact 12px title footprint so contain
+    // can fill tall-phone green (scaleDown left a void above PREFLOP).
+    final preflop = tester.getSize(find.text('PREFLOP'));
+    expect(preflop.height, greaterThanOrEqualTo(16));
     await tester.tap(find.text('PREFLOP'));
     await tester.pump();
     expect(find.text('Tap Flop'), findsNothing);
