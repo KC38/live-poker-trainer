@@ -3815,7 +3815,7 @@
                   "stage": "explain",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Early: strong only. Button: wider. Live opens often look like 3x.",
+                  "accessibilityText": "Who opens — and how wide. SoftPulse walks each cue.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -3824,7 +3824,7 @@
                     {
                       "id": "act-02-03-01-explain-open-media",
                       "kind": "dialogue",
-                      "text": "Early: strong only. Button: wider. Live opens often look like 3x."
+                      "text": "Who opens — and how wide. SoftPulse walks each cue."
                     }
                   ],
                   "objectives": [

@@ -2021,10 +2021,10 @@ class OpenRangeDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    // Structural seat/size labels — Rex owns “strong only / wider / ~3x”.
-    (label: 'EARLY', caption: 'UTG–MP', color: AppColors.danger),
-    (label: 'BUTTON', caption: 'Last to act', color: AppColors.gold),
-    (label: 'LIVE 3x', caption: 'Size @ 1/2', color: AppColors.cream),
+    // SoftPulse + Rex own the cue; captions teach strong / wider / ~3x.
+    (label: 'EARLY', caption: 'Strong only', color: AppColors.danger),
+    (label: 'BUTTON', caption: 'Wider', color: AppColors.gold),
+    (label: 'LIVE 3x', caption: '~3x @ 1/2', color: AppColors.cream),
   ];
 
   @override
