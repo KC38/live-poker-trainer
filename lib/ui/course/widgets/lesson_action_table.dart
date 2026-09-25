@@ -956,7 +956,8 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         streetLabel: 'Flop · set of sevens',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Mix strong — check sometimes',
+        // Structural — Rex + SoftPulse own Check mix cue.
+        feltStatusLine: 'Checked to you · set',
       );
     case 'act-06-09-01-scaffolded':
       return const LessonActionSpot(

@@ -11458,6 +11458,8 @@ class LessonTableContext extends StatelessWidget {
       semanticsStatic: 'Mix station outcomes',
       caption:
           scene.caption ?? 'Versus a Calling Station, how much bluff-mixing?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Less bluff.
+      guideRegion: LessonTableRegion.mixLessBluff,
       phases: [
         (
           region: LessonTableRegion.mixLessBluff,
@@ -11465,7 +11467,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Value heavier',
           visual: const Icon(
             Icons.trending_down,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11475,7 +11477,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Ignore type',
           visual: const Icon(
             Icons.sync_alt,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11489,6 +11491,7 @@ class LessonTableContext extends StatelessWidget {
           'Interactive mix reason — tap need a reason vs always random',
       semanticsStatic: 'Mix reason outcomes',
       caption: scene.caption ?? 'Randomness for its own sake?',
+      // No SoftPulse on unguided — still don’t gold-icon Need a reason.
       phases: [
         (
           region: LessonTableRegion.mixNeedReason,
@@ -11496,7 +11499,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Frequency ≠ chaos',
           visual: const Icon(
             Icons.lightbulb_outline,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11506,7 +11509,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Coin-flip theater',
           visual: const Icon(
             Icons.casino_outlined,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11520,6 +11523,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive mix description — tap purpose freq vs chaos',
       semanticsStatic: 'Mix purpose outcomes',
       caption: scene.caption ?? 'Best mix description?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Purpose freq.
+      guideRegion: LessonTableRegion.mixPurposeFreq,
       phases: [
         (
           region: LessonTableRegion.mixPurposeFreq,
@@ -11527,7 +11532,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Course standard',
           visual: const Icon(
             Icons.balance_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11537,7 +11542,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Not a lifestyle',
           visual: const Icon(
             Icons.shuffle,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),

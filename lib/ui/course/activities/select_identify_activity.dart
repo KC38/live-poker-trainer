@@ -607,12 +607,15 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Punish over-bluffs — don’t gold-tip the tile.
       'act-06-07-01-checkpoint' =>
           'Minimum defense goal — pick what you protect.',
+      // SoftPulse owns Less bluff — don’t gold-tip the tile.
       'act-06-08-01-scaffolded' =>
-          'Vs Calling Station — tap Less bluff.',
+          'Vs Calling Station — pick the mix adjustment.',
+      // Unguided: name the rule; don’t tip Need a reason.
       'act-06-08-01-unguided' =>
-          'Randomness for its own sake — tap Need a reason.',
+          'Randomness for its own sake — pick when mix is allowed.',
+      // SoftPulse owns Purpose freq — don’t gold-tip the tile.
       'act-06-08-01-checkpoint' =>
-          'Best mix description — tap Purpose freq.',
+          'Best mix description — pick the course standard.',
       'act-06-09-01-guided' =>
           '100bb 4-bet pot · top pair — tap High commit.',
       'act-06-09-01-unguided' =>
