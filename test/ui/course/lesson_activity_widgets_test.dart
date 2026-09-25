@@ -676,10 +676,10 @@ void main() {
     await tester.tap(find.text('CALL'));
     await tester.pump();
     expect(feltAck, 1);
-    // Lock clears enabled / ack — densified shell must stay filled.
+    // SoftPulse + Rex own the cue — no summary pill echoing Nice! feedback.
     expect(
       find.text('Fold · Check · Call — your three passives'),
-      findsOneWidget,
+      findsNothing,
     );
     expect(
       tester.getSize(find.byType(PassiveActionsDemo)).height,
@@ -747,10 +747,10 @@ void main() {
     await tester.tap(find.text('ALL-IN'));
     await tester.pump();
     expect(feltAck, 1);
-    // Lock clears enabled / ack — densified shell must stay filled.
+    // SoftPulse + Rex own the cue — no summary pill echoing Nice! feedback.
     expect(
       find.text('Bet · Raise · All-in — your three aggressives'),
-      findsOneWidget,
+      findsNothing,
     );
     expect(
       tester.getSize(find.byType(AggressiveActionsDemo)).height,
