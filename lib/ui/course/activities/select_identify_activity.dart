@@ -534,7 +534,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Nit check-raises — respect their narrow heat.',
       // SoftPulse owns Polarized — don’t gold-tip the tile.
       'act-05-05-01-unguided' =>
-          'Large BB donk on dry ace — often strong or air.',
+          'Large BB donk on dry ace — usually extremes, not medium.',
       // SoftPulse owns After weakness — don’t gold-tip the tile.
       'act-05-05-01-checkpoint' =>
           'Delayed c-bet shines after they show flop weakness.',
