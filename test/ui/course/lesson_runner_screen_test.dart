@@ -4,6 +4,7 @@ library;
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,10 +13,12 @@ import 'package:live_poker_trainer/core/audio/sound_service.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
+import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/course_catalog_provider.dart';
 import 'package:live_poker_trainer/providers/onboarding_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
+import 'package:live_poker_trainer/services/auth_service.dart';
 import 'package:live_poker_trainer/services/firestore/course_service.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_result_screen.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_runner_screen.dart';
@@ -586,6 +589,221 @@ void main() {
     expect(find.byType(LessonResultScreen), findsOneWidget);
     expect(find.text('LESSON COMPLETE'), findsOneWidget);
   });
+
+  testWidgets(
+    'guest Home complete (embedded) reaches result without save-progress',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 1200);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      const lessonId = 'lesson-one-shot';
+      final tiny = _tinyCatalog(
+        lessonId: lessonId,
+        title: 'Suits and ranks',
+        activity: CourseActivity(
+          id: 'act-one',
+          order: 1,
+          stage: ActivityStage.checkpoint,
+          renderer: ActivityRenderer.selectIdentify,
+          estimatedSeconds: 20,
+          accessibilityText: 'Pick',
+          acceptedGrades: const [SoftGrade.recommended],
+          prompt: 'Look at your two cards. What do you have?',
+          choices: const [
+            CourseChoice(id: 'pocket-pair', label: 'A pocket pair'),
+            CourseChoice(id: 'suited', label: 'Suited nines'),
+          ],
+        ),
+      );
+      final service = _TinyLessonService(tiny, lessonId);
+      final onboarding = OnboardingController(null);
+      // Already past the first lesson — map opens must not re-enter save CTA.
+      await onboarding.continueLearningAsGuest();
+      final auth = _AnonymousAuthService();
+
+      final container = ProviderContainer(
+        overrides: [
+          soundServiceProvider.overrideWithValue(SoundService.silent()),
+          courseCatalogProvider.overrideWith((ref) async => tiny),
+          analyticsServiceProvider.overrideWithValue(
+            AnalyticsService(enabled: false),
+          ),
+          onboardingControllerProvider.overrideWith((ref) => onboarding),
+          authServiceProvider.overrideWithValue(auth),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: MaterialApp(
+            theme: buildPokerTheme().copyWith(
+              splashFactory: NoSplash.splashFactory,
+              highlightColor: Colors.transparent,
+            ),
+            home: LessonRunnerScreen(
+              lessonId: lessonId,
+              courseService: service,
+              startRequestId: 'start_suits',
+              embeddedInShell: true,
+            ),
+          ),
+        ),
+      );
+      await _pumpUntil(
+        tester,
+        find.text('Look at your two cards. What do you have?'),
+      );
+
+      await tester.tap(find.text('A pocket pair'));
+      await tester.pump();
+      await tester.pump();
+      expect(find.text('Nice.'), findsOneWidget);
+
+      await tester.tap(find.text('Continue'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+      await tester.pump();
+
+      expect(service.completeCalls, 1);
+      expect(find.byType(LessonResultScreen), findsOneWidget);
+      expect(find.text('LESSON COMPLETE'), findsOneWidget);
+      // Must not flip pendingSaveProgress again from a later map lesson.
+      expect(onboarding.state.pendingSaveProgress, isFalse);
+    },
+  );
+
+  testWidgets(
+    'guest later-lesson complete without shell still reaches result',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 1200);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      const lessonId = 'lesson-one-shot';
+      final tiny = _tinyCatalog(
+        lessonId: lessonId,
+        title: 'Suits and ranks',
+        activity: CourseActivity(
+          id: 'act-one',
+          order: 1,
+          stage: ActivityStage.checkpoint,
+          renderer: ActivityRenderer.selectIdentify,
+          estimatedSeconds: 20,
+          accessibilityText: 'Pick',
+          acceptedGrades: const [SoftGrade.recommended],
+          prompt: 'Tap yes.',
+          choices: const [
+            CourseChoice(id: 'yes', label: 'Yes'),
+            CourseChoice(id: 'no', label: 'No'),
+          ],
+        ),
+      );
+      final service = _TinyLessonService(tiny, lessonId);
+      final onboarding = OnboardingController(null);
+      await onboarding.continueLearningAsGuest();
+      expect(onboarding.state.firstLessonCompleted, isTrue);
+
+      final container = ProviderContainer(
+        overrides: [
+          soundServiceProvider.overrideWithValue(SoundService.silent()),
+          courseCatalogProvider.overrideWith((ref) async => tiny),
+          analyticsServiceProvider.overrideWithValue(
+            AnalyticsService(enabled: false),
+          ),
+          onboardingControllerProvider.overrideWith((ref) => onboarding),
+          authServiceProvider.overrideWithValue(_AnonymousAuthService()),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: MaterialApp(
+            theme: buildPokerTheme().copyWith(
+              splashFactory: NoSplash.splashFactory,
+              highlightColor: Colors.transparent,
+            ),
+            // Legacy path: Home used to omit embeddedInShell.
+            home: LessonRunnerScreen(
+              lessonId: lessonId,
+              courseService: service,
+              startRequestId: 'start_legacy',
+              embeddedInShell: false,
+            ),
+          ),
+        ),
+      );
+      await _pumpUntil(tester, find.text('Tap yes.'));
+      await tester.tap(find.text('Yes'));
+      await tester.pump();
+      await tester.pump();
+      await tester.tap(find.text('Continue'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 450));
+      await tester.pump();
+
+      expect(service.completeCalls, 1);
+      expect(find.byType(LessonResultScreen), findsOneWidget);
+      expect(onboarding.state.pendingSaveProgress, isFalse);
+    },
+  );
+}
+
+/// Anonymous guest auth for complete-path tests.
+class _AnonymousAuthService implements AuthService {
+  @override
+  Stream<User?> get authStateChanges => const Stream.empty();
+
+  @override
+  User? get currentUser => null;
+
+  @override
+  String? get currentUid => 'guest';
+
+  @override
+  bool get isAnonymous => true;
+
+  @override
+  Future<User> registerWithEmail({
+    required String email,
+    required String password,
+    String? displayName,
+  }) =>
+      throw UnimplementedError();
+
+  @override
+  Future<User> signInWithEmail({
+    required String email,
+    required String password,
+  }) =>
+      throw UnimplementedError();
+
+  @override
+  Future<User> signInWithGoogle() => throw UnimplementedError();
+
+  @override
+  Future<User> signInAnonymously() => throw UnimplementedError();
+
+  @override
+  Future<User> linkWithEmail({
+    required String email,
+    required String password,
+    String? displayName,
+  }) =>
+      throw UnimplementedError();
+
+  @override
+  Future<User> linkWithGoogle() => throw UnimplementedError();
+
+  @override
+  Future<void> sendPasswordResetEmail({required String email}) async {}
+
+  @override
+  Future<void> signOut() async {}
 }
 
 /// First explain felt-tap is rejected as stale; resume points at guided.
