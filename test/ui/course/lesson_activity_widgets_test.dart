@@ -3899,6 +3899,8 @@ await tester.tap(find.text('SPR'));
       ),
     );
     expect(find.byType(VsStationDemo), findsOneWidget);
+    expect(find.text('Three station plans'), findsOneWidget);
+    expect(find.text('Versus Calling Stations'), findsNothing);
     expect(find.text('Tap VALUE next'), findsNothing);
     expect(find.text('Tap Value, Bluffs, and Cite'), findsNothing);
     expect(find.text('Tap Value, Bluffs, and Cite.'), findsNothing);
@@ -4127,6 +4129,8 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(VsNitsDemo), findsOneWidget);
+    expect(find.text('Three nit plans'), findsOneWidget);
+    expect(find.text('Versus Nits'), findsNothing);
     expect(find.text('Tap STEAL next'), findsNothing);
     expect(find.text('Tap Steal, Credit, and Explode.'), findsNothing);
     expect(find.text('Tap Steal, Credit, and Explode'), findsNothing);
@@ -4203,6 +4207,8 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(ExtremeEntryDemo), findsOneWidget);
+    expect(find.text('Three aggressor marks'), findsOneWidget);
+    expect(find.text('Extreme entry'), findsNothing);
     expect(find.text('Tap RAISE next'), findsNothing);
     expect(find.text('Tap Raise, Barrel, and Count.'), findsNothing);
     expect(find.text('Tap Raise, Barrel, and Count'), findsNothing);
@@ -4349,6 +4355,8 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(VsManiacsDemo), findsOneWidget);
+    expect(find.text('Three maniac plans'), findsOneWidget);
+    expect(find.text('Versus Maniacs'), findsNothing);
     expect(find.text('Tap WIDER next'), findsNothing);
     expect(find.text('Tap Wider, Hang, and Ego.'), findsNothing);
     expect(find.text('Tap Wider, Hang, and Ego'), findsNothing);
@@ -16980,6 +16988,8 @@ await tester.tap(find.text('STRONGER'));
       ),
     );
     expect(find.byType(VsTagsDemo), findsOneWidget);
+    expect(find.text('Three TAG plans'), findsOneWidget);
+    expect(find.text('Versus TAGs'), findsNothing);
     expect(find.text('Tap CREDIT next'), findsNothing);
     expect(find.text('Tap Credit, Tighter, and No light.'), findsNothing);
     expect(find.text('Tap Credit, Tighter, and No light'), findsNothing);
@@ -17227,6 +17237,8 @@ await tester.tap(find.text('STRONGER'));
       ),
     );
     expect(find.byType(VsLagsDemo), findsOneWidget);
+    expect(find.text('Three LAG plans'), findsOneWidget);
+    expect(find.text('Versus LAGs'), findsNothing);
     expect(find.text('Tap CALL next'), findsNothing);
     expect(find.text('Tap Call, Trap, and Fancy less.'), findsNothing);
     expect(find.text('Tap Call, Trap, and Fancy less'), findsNothing);
