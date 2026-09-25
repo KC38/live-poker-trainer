@@ -1715,7 +1715,7 @@ class _PassiveActionsDemoState extends State<PassiveActionsDemo> {
     );
     // SoftPulse + Rex own the next-button cue while teaching. Show a summary
     // after all taps (or once locked under Nice! / Continue).
-    final showCue = !widget.interactive || next == null || !widget.enabled;
+    final showCue = !widget.interactive; // SoftPulse+Rex own cue; no Nice! echo
     final cue =
         !showCue
             ? null
@@ -1888,7 +1888,7 @@ class _AggressiveActionsDemoState extends State<AggressiveActionsDemo> {
     );
     // SoftPulse + Rex own the next-button cue while teaching. Show a summary
     // after all taps (or once locked under Nice! / Continue).
-    final showCue = !widget.interactive || next == null || !widget.enabled;
+    final showCue = !widget.interactive; // SoftPulse+Rex own cue; no Nice! echo
     final cue =
         !showCue
             ? null
