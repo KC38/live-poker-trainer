@@ -5670,9 +5670,10 @@ class TightSeatsDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'RARE', caption: 'Almost never enter', color: AppColors.slate),
-    (label: 'ENTER', caption: 'When they do', color: AppColors.cream),
-    (label: 'MEAN IT', caption: 'Note both', color: AppColors.gold),
+    // Structural — Rex owns “almost never enter / when they do / mean it.”
+    (label: 'RARE', caption: 'Seldom in pots', color: AppColors.slate),
+    (label: 'ENTER', caption: 'Mark the join', color: AppColors.cream),
+    (label: 'MEAN IT', caption: 'Credit strength', color: AppColors.gold),
   ];
 
   @override
@@ -5755,7 +5756,7 @@ class _TightSeatsDemoState extends State<TightSeatsDemo> {
                 ),
               ),
               child: Text(
-                'Rare entries · when they do, they mean it',
+                'Rare · enter · mean it',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
