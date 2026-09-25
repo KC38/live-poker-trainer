@@ -13133,6 +13133,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive HU vs multiway — tap Usually no or Always yes',
       semanticsStatic: 'HU vs multiway guided outcomes',
       caption: scene.caption ?? 'Four-way river — naked air bluff?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Usually no.
+      guideRegion: LessonTableRegion.huMwUsuallyNo,
       phases: [
         (
           region: LessonTableRegion.huMwUsuallyNo,
@@ -13140,7 +13142,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Someone calls',
           visual: const Icon(
             Icons.block,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13150,7 +13152,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Leak',
           visual: const Icon(
             Icons.air,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13164,6 +13166,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive HU vs multiway — tap Higher HU or Identical',
       semanticsStatic: 'HU vs multiway scaffolded outcomes',
       caption: scene.caption ?? 'HU vs nit BB — steal frequency?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Higher HU.
+      guideRegion: LessonTableRegion.huMwHigherHu,
       phases: [
         (
           region: LessonTableRegion.huMwHigherHu,
@@ -13171,7 +13175,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Exploit the nit',
           visual: const Icon(
             Icons.trending_up,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13195,6 +13199,7 @@ class LessonTableContext extends StatelessWidget {
           'Interactive HU vs multiway — tap Thicker value or Ultra-slow',
       semanticsStatic: 'HU vs multiway unguided outcomes',
       caption: scene.caption ?? 'Multiway top set — line lean?',
+      // No SoftPulse on unguided — still don’t gold-icon Thicker value.
       phases: [
         (
           region: LessonTableRegion.huMwThickerValue,
@@ -13202,7 +13207,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'And protection',
           visual: const Icon(
             Icons.workspace_premium_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13226,6 +13231,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive HU vs multiway — tap First-class input or Noise',
       semanticsStatic: 'HU vs multiway checkpoint outcomes',
       caption: scene.caption ?? 'Player count is?',
+      // SoftPulse + Rex own the cue — don’t gold-tip First-class input.
+      guideRegion: LessonTableRegion.huMwFirstClass,
       phases: [
         (
           region: LessonTableRegion.huMwFirstClass,
@@ -13233,7 +13240,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Plan with it',
           visual: const Icon(
             Icons.groups_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),

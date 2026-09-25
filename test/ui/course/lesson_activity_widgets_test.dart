@@ -21547,7 +21547,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Four-way river — tap Usually no.'),
+      find.text('Four-way river — pick the air-bluff call.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Usually no'));
@@ -21585,7 +21585,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('HU vs nit — tap Higher HU.'),
+      find.text('HU vs nit — pick the steal frequency.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Higher HU'));
@@ -21623,7 +21623,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Multiway top set — tap Thicker value.'),
+      find.text('Multiway top set — pick the line lean.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Thicker value'));
@@ -21661,7 +21661,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Player count — tap First-class input.'),
+      find.text('Player count — pick how it ranks.'),
       findsOneWidget,
     );
     await tester.tap(find.text('First-class input'));
