@@ -3353,8 +3353,15 @@ void main() {
     // SoftPulse + Rex own the teach verb — no duplicate Label… felt title.
     expect(find.text('Label the flop before you bet'), findsNothing);
     expect(find.text('Four flop classes'), findsOneWidget);
+    // Structural SoftPulse captions — not Rex’s “showdown value” paraphrase.
+    expect(find.text('Weak made'), findsOneWidget);
+    expect(find.text('Showdown value'), findsNothing);
     expect(
       find.text('Made · draw · showdown value · air'),
+      findsNothing,
+    );
+    expect(
+      find.text('Made · draw · SDV · air'),
       findsNothing,
     );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
@@ -3385,8 +3392,12 @@ void main() {
     expect(feltAck, 1);
     // Lock clears enabled / ack — densified shell must stay filled.
     expect(
-      find.text('Made · draw · showdown value · air'),
+      find.text('Made · draw · SDV · air'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Made · draw · showdown value · air'),
+      findsNothing,
     );
     expect(
       tester.getSize(find.byType(FlopLabelDemo)).height,
@@ -9590,7 +9601,9 @@ await tester.tap(find.text('STRONGER'));
       findsNothing,
     );
     expect(find.text('Made'), findsOneWidget);
-    expect(find.text('Top pair'), findsOneWidget);
+    expect(find.text('Strong now'), findsOneWidget);
+    // SoftPulse must not spoil with “Top pair” / gold tip.
+    expect(find.text('Top pair'), findsNothing);
     // SoftPulse + Rex own the cue — no Tap footer mid-teach.
     expect(find.text('Tap Made.'), findsNothing);
     await tester.tap(find.text('Made'));
@@ -9659,7 +9672,11 @@ await tester.tap(find.text('STRONGER'));
       findsNothing,
     );
     expect(find.text('Draw'), findsOneWidget);
-    expect(find.text('Nut flush'), findsOneWidget);
+    expect(find.text('Needs runout'), findsOneWidget);
+    // SoftPulse must not spoil with “Nut flush” / gold tip.
+    expect(find.text('Nut flush'), findsNothing);
+    expect(find.text('Flop · nut flush draw'), findsNothing);
+    expect(find.text('Flop · your holes'), findsOneWidget);
     // SoftPulse + Rex own the cue — no Tap footer mid-teach.
     expect(find.text('Tap Draw.'), findsNothing);
     await tester.tap(find.text('Draw'));
@@ -9720,7 +9737,8 @@ await tester.tap(find.text('STRONGER'));
       findsOneWidget,
     );
     expect(find.text('Air'), findsOneWidget);
-    expect(find.text('Little equity'), findsOneWidget);
+    expect(find.text('Empty'), findsOneWidget);
+    expect(find.text('Little equity'), findsNothing);
     expect(find.text('Tap Air.'), findsNothing);
     await tester.tap(find.text('Air'));
     await tester.pump();
@@ -9779,7 +9797,11 @@ await tester.tap(find.text('STRONGER'));
       findsOneWidget,
     );
     expect(find.text('Draw'), findsOneWidget);
-    expect(find.text('Open-ender'), findsOneWidget);
+    expect(find.text('Needs runout'), findsOneWidget);
+    // SoftPulse must not spoil with “Open-ender” on the correct tile.
+    expect(find.text('Open-ender'), findsNothing);
+    expect(find.text('Flop · open-ender'), findsNothing);
+    expect(find.text('Flop · your holes'), findsOneWidget);
     expect(find.text('Tap Draw.'), findsNothing);
     await tester.tap(find.text('Draw'));
     await tester.pump();
