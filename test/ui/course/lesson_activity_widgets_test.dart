@@ -3933,7 +3933,7 @@ await tester.tap(find.text('VALUE'));
       ),
     );
     expect(find.byType(TightSeatsDemo), findsOneWidget);
-    expect(find.text('Tap RARE next'), findsOneWidget);
+    expect(find.text('Tap RARE next'), findsNothing);
     expect(find.text('Tap Rare, Enter, and Mean It'), findsNothing);
     expect(find.text('Tap Rare, Enter, and Mean It.'), findsNothing);
     expect(
@@ -3956,10 +3956,10 @@ await tester.tap(find.text('VALUE'));
 
 await tester.tap(find.text('RARE'));
     await tester.pump();
-    expect(find.text('Tap ENTER next'), findsOneWidget);
+    expect(find.text('Tap ENTER next'), findsNothing);
     await tester.tap(find.text('ENTER'));
     await tester.pump();
-    expect(find.text('Tap MEAN IT next'), findsOneWidget);
+    expect(find.text('Tap MEAN IT next'), findsNothing);
     await tester.tap(find.text('MEAN IT'));
     await tester.pump();
     expect(feltAck, 1);
