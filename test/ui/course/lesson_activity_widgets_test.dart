@@ -14035,7 +14035,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s4 observe sticky guided taps high participation on felt', (
+  testWidgets('s4 observe sticky guided SoftPulse High part. — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -14069,8 +14069,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Seat calls 7 of 9 preflops — tap the observation.'),
+      find.text(
+        'Seat calls 7 of 9 preflops — participation is rolling high.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Seat calls 7 of 9 preflops — tap the observation.'),
+      findsNothing,
     );
     expect(find.text('High part.'), findsOneWidget);
     expect(find.text('7 of 9'), findsNothing);
@@ -14083,7 +14089,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s4 observe sticky scaffolded taps Sticky on densified felt', (
+  testWidgets('s4 observe sticky scaffold SoftPulse Sticky — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -14129,8 +14135,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Second pair called three streets twice — tap the note.'),
+      find.text(
+        'Second pair called three streets twice — folding looks scarce.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Second pair called three streets twice — tap the note.'),
+      findsNothing,
     );
     expect(find.text('Sticky'), findsOneWidget);
     // SoftPulse + Rex own the cue — no Tap footer mid-teach.
@@ -14141,7 +14153,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s4 observe sticky unguided taps Low conf. on densified felt', (
+  testWidgets('s4 observe sticky unguided SoftPulse Low conf. — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -14187,8 +14199,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('One dramatic call — tap how confident the label is.'),
+      find.text(
+        'One dramatic call — confidence stays thin until samples pile up.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('One dramatic call — tap how confident the label is.'),
+      findsNothing,
     );
     expect(find.text('Low conf.'), findsOneWidget);
     await tester.tap(find.text('Low conf.'));
@@ -14197,7 +14215,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s4 observe sticky checkpoint taps Bundle on densified felt', (
+  testWidgets('s4 observe sticky checkpoint SoftPulse Bundle — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -14243,8 +14261,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Before you label — tap the evidence bundle.'),
+      find.text(
+        'Before you label — stack many hands that rarely fold.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Before you label — tap the evidence bundle.'),
+      findsNothing,
     );
     expect(find.text('Bundle the evidence before labeling'), findsNothing);
     expect(find.text('Observation notes'), findsOneWidget);
