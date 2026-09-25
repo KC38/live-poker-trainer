@@ -205,9 +205,9 @@ void main() {
     expect(find.byType(SuitTapTile), findsNWidgets(4));
     expect(find.text('Thirteen ranks — ace high'), findsOneWidget);
     expect(find.byType(MiniCard), findsNothing);
-    expect(find.text('Tap Hearts'), findsOneWidget);
+    expect(find.text('Tap Hearts'), findsNothing);
     expect(find.text('0 of 4 suits'), findsOneWidget);
-    // In-felt cue owns the tip — no duplicate gold footer.
+    // SoftPulse + Rex own the tip — no Tap Hearts footer mid-teach.
     expect(find.text('Tap each of the four suits.'), findsNothing);
     expect(
       find.text('Tap Continue when you have looked at your two cards.'),
@@ -228,7 +228,7 @@ void main() {
 
     await tester.tap(find.text('Hearts'));
     await tester.pump();
-    expect(find.text('Tap Diamonds'), findsOneWidget);
+    expect(find.text('Tap Diamonds'), findsNothing);
     await tester.tap(find.text('Diamonds'));
     await tester.pump();
     await tester.tap(find.text('Clubs'));

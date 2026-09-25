@@ -3247,17 +3247,9 @@ class _SuitsRanksDemoState extends State<_SuitsRanksDemo>
     final suitCue = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        // SoftPulse + Rex own the next-suit cue while teaching. Keep the
+        // progress counter; show the summary after all suits are tapped.
         if (widget.enabled && remaining > 0 && nextSuit != null) ...[
-          Text(
-            'Tap ${nextSuit.label}',
-            textAlign: TextAlign.center,
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontSize: expandTeach ? 16 : 14,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 4),
           Text(
             '${_tapped.length} of ${_suits.length} suits',
             style: GoogleFonts.manrope(
