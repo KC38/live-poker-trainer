@@ -295,6 +295,8 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     // Thin value / bluff-catch: SoftPulse the plan; Rex names the model.
     'act-05-04-01-guided' => 'tv',
     'act-05-04-01-scaffolded' => 'call-m',
+    // SoftPulse owns Probe small when PFR checks.
+    'act-05-05-01-scaffolded' => 'probe',
     // S5 exit checkpoint docks — SoftPulse owns the answer.
     'act-05-09-02-cp-value' => 'bet',
     'act-05-09-02-cp-catch' => 'call',
@@ -536,8 +538,9 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // Unguided: list legal lines; don’t tip Check alone.
     'act-05-04-01-unguided' =>
       'Nit checked · second pair — pick Check or Bet thin.',
+    // SoftPulse owns Probe small — don’t gold-tip the dock.
     'act-05-05-01-scaffolded' =>
-      'PFR checks · middle pair BB — tap Probe small.',
+      'PFR checks · middle pair BB — capped ranges invite small probes.',
     'act-05-06-01-scaffolded' =>
       'Draw faces bomb — tap Fold.',
     'act-05-08-01-unguided' =>
