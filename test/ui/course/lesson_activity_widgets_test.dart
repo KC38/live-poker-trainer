@@ -15705,7 +15705,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s5 thin-value unguided docks Check back on Nit felt', (
+  testWidgets('s5 thin-value unguided lists Check/Bet thin — no SoftPulse', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -15745,8 +15745,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Nit checked · second pair — tap Check or Bet thin.'),
+      find.text('Nit checked · second pair — pick Check or Bet thin.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Nit checked · second pair — tap Check or Bet thin.'),
+      findsNothing,
     );
     expect(
       find.text('Nit checked · second pair — tap Check.'),
@@ -15764,7 +15768,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s5 thin-value checkpoint taps The line on felt', (
+  testWidgets('s5 thin-value checkpoint SoftPulse The line — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -15800,8 +15804,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Same hand, new type — tap what must change.'),
+      find.text(
+        'Same cards, different seats — let the read drive the plan.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Same hand, new type — tap what must change.'),
+      findsNothing,
     );
     expect(find.text('The line'), findsOneWidget);
     await tester.tap(find.text('The line'));
