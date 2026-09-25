@@ -542,7 +542,7 @@ void main() {
       ),
     );
     expect(find.byType(BestFiveDemo), findsOneWidget);
-    expect(find.text('Tap A♥'), findsOneWidget);
+    expect(find.text('Tap A♥'), findsNothing);
     expect(
       find.text('Tap each highlighted card — those five count'),
       findsNothing,
