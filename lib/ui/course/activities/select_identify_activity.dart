@@ -490,13 +490,16 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-04-09-01-checkpoint' =>
           'Beside a type label — tap what belongs.',
       'act-04-10-02-jump-range' =>
-          'UTG open — tap how wide the range is.',
+          'UTG open — pick the range shape.',
+      // SoftPulse owns Value more — don’t gold-tip the tile.
       'act-04-10-02-jump-station' =>
-          'Sticky three streets — tap the exploit.',
+          'Sticky three streets — pick the exploit.',
+      // SoftPulse owns Respect — don’t gold-tip the tile.
       'act-04-10-02-jump-nit' =>
-          'Tiny range, huge raise — tap the line.',
+          'Tiny range, huge raise — pick the line.',
+      // SoftPulse owns Call wider — don’t gold-tip the tile.
       'act-04-10-02-jump-maniac' =>
-          'Barrels forever, top pair — tap the line.',
+          'Barrels forever, top pair — pick the line.',
       'act-05-01-01-guided' =>
           'Four-way flop — tap the best continue.',
       'act-05-01-01-checkpoint' =>

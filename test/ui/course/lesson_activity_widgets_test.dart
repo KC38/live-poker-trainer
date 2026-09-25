@@ -14626,7 +14626,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('UTG open — tap how wide the range is.'),
+      find.text('UTG open — pick the range shape.'),
       findsOneWidget,
     );
     expect(find.text('Narrower'), findsOneWidget);
