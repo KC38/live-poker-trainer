@@ -297,6 +297,8 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     'act-05-04-01-scaffolded' => 'call-m',
     // SoftPulse owns Probe small when PFR checks.
     'act-05-05-01-scaffolded' => 'probe',
+    // SoftPulse owns Fold when draw faces a bomb.
+    'act-05-06-01-scaffolded' => 'repr',
     // S5 exit checkpoint docks — SoftPulse owns the answer.
     'act-05-09-02-cp-value' => 'bet',
     'act-05-09-02-cp-catch' => 'call',
@@ -541,8 +543,9 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // SoftPulse owns Probe small — don’t gold-tip the dock.
     'act-05-05-01-scaffolded' =>
       'PFR checks · middle pair BB — capped ranges invite small probes.',
+    // SoftPulse owns Fold — don’t gold-tip the dock.
     'act-05-06-01-scaffolded' =>
-      'Draw faces bomb — tap Fold.',
+      'Draw faces bomb — re-price when the turn bricks.',
     'act-05-08-01-unguided' =>
       'Steaming after cooler — tap Fold.',
     // SoftPulse owns the dock — don’t gold-tip Bet thin value / Call.

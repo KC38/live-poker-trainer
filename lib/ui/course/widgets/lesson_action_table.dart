@@ -856,9 +856,10 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Kh', '9h', '2c', '3d'],
         potLabel: 'Pot 40',
         villainLine: 'Bombs turn after flop call',
+        // Structural — SoftPulse + Rex own Fold.
         streetLabel: 'Turn · flush draw · brick',
         facingBet: true,
-        feltStatusLine: 'Re-price — fold the bomb',
+        feltStatusLine: 'Facing a bet',
       );
     case 'act-05-08-01-unguided':
       return const LessonActionSpot(
