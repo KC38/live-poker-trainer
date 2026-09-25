@@ -21762,7 +21762,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('35bb TPTK — tap Closer to stacking.'),
+      find.text('35bb TPTK — pick the SPR lean.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Closer to stacking'));
@@ -21800,7 +21800,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('250bb 55 — tap More attractive.'),
+      find.text('250bb 55 — pick the set-mine lean.'),
       findsOneWidget,
     );
     await tester.tap(find.text('More attractive'));
@@ -21838,7 +21838,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Hero 200 / Villain 40 — tap 40bb.'),
+      find.text('Hero 200 / Villain 40 — pick effective stack.'),
       findsOneWidget,
     );
     await tester.tap(find.text('40bb'));
@@ -21876,7 +21876,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Stack depth — tap Every hand.'),
+      find.text('Stack depth — pick how often to check.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Every hand'));

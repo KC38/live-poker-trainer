@@ -766,14 +766,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns First-class input — don’t gold-tip the tile.
       'act-07-05-01-checkpoint' =>
           'Player count — pick how it ranks.',
+      // SoftPulse owns Closer to stacking — don’t gold-tip the tile.
       'act-07-06-01-guided' =>
-          '35bb TPTK — tap Closer to stacking.',
+          '35bb TPTK — pick the SPR lean.',
+      // SoftPulse owns More attractive — don’t gold-tip the tile.
       'act-07-06-01-scaffolded' =>
-          '250bb 55 — tap More attractive.',
+          '250bb 55 — pick the set-mine lean.',
+      // Unguided: name the spot; don’t tip 40bb.
       'act-07-06-01-unguided' =>
-          'Hero 200 / Villain 40 — tap 40bb.',
+          'Hero 200 / Villain 40 — pick effective stack.',
+      // SoftPulse owns Every hand — don’t gold-tip the tile.
       'act-07-06-01-checkpoint' =>
-          'Stack depth — tap Every hand.',
+          'Stack depth — pick how often to check.',
       'act-07-07-01-checkpoint' =>
           'No type evidence — tap Baseline.',
       'act-07-08-01-checkpoint' =>
