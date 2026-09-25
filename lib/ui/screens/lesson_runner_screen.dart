@@ -575,15 +575,21 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
             .read(analyticsServiceProvider)
             .logLesson(lessonId: complete.lessonId, phase: 'completed'),
       );
-      final isAnonymous =
-          ref.read(authServiceProvider).currentUser?.isAnonymous == true;
-      if (isAnonymous && !widget.embeddedInShell) {
+      final isAnonymous = ref.read(authServiceProvider).isAnonymous;
+      final onboarding = ref.read(onboardingControllerProvider);
+      // Only the first guest lesson (onboarding / launch, not Home) should
+      // flip pendingSaveProgress. Re-entering that path from later map
+      // lessons left Continue spinning when AppRoot did not unmount us.
+      if (isAnonymous &&
+          !widget.embeddedInShell &&
+          !onboarding.firstLessonCompleted) {
         await ref
             .read(onboardingControllerProvider.notifier)
             .markFirstLessonComplete(
               lessonTitle: _lesson?.title ?? 'Lesson',
               result: complete,
-            );
+            )
+            .timeout(const Duration(seconds: 8));
         // AppRoot switches home to SaveProgressScreen via pendingSaveProgress.
         // Wait briefly for that rebuild; if this route is still mounted, fall
         // through to LessonResultScreen so Continue never spins forever.
@@ -1144,7 +1150,12 @@ class _FeedbackFooter extends StatelessWidget {
                     style: FilledButton.styleFrom(
                       backgroundColor: AppColors.gold,
                       foregroundColor: AppColors.bgDark,
-                      disabledBackgroundColor: AppColors.slateDark,
+                      // Keep gold while completing — slateDark + bgDark spinner
+                      // read as an empty disabled bar (stuck Continue).
+                      disabledBackgroundColor: AppColors.gold.withValues(
+                        alpha: 0.72,
+                      ),
+                      disabledForegroundColor: AppColors.bgDark,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
                       ),

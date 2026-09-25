@@ -141,7 +141,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     Navigator.of(context)
         .push(
           MaterialPageRoute<void>(
-            builder: (_) => LessonRunnerScreen(lessonId: lessonId),
+            // Shell map lessons must not take the guest first-lesson
+            // save-progress path — that early-return left Continue spinning
+            // forever after Suits and ranks (and every later lesson).
+            builder:
+                (_) => LessonRunnerScreen(
+                  lessonId: lessonId,
+                  embeddedInShell: true,
+                ),
           ),
         )
         .then((_) {
