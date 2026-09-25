@@ -2803,7 +2803,7 @@ void main() {
       ),
     );
     expect(find.byType(TableReadDemo), findsOneWidget);
-    expect(find.text('Tap POT next'), findsOneWidget);
+    expect(find.text('Tap POT next'), findsNothing);
     expect(
       find.text('Tap Pot, Stacks, Button, and Who Acts'),
       findsNothing,
@@ -2832,13 +2832,13 @@ void main() {
 
     await tester.tap(find.text('POT'));
     await tester.pump();
-    expect(find.text('Tap STACKS next'), findsOneWidget);
+    expect(find.text('Tap STACKS next'), findsNothing);
     await tester.tap(find.text('STACKS'));
     await tester.pump();
-    expect(find.text('Tap BUTTON next'), findsOneWidget);
+    expect(find.text('Tap BUTTON next'), findsNothing);
     await tester.tap(find.text('BUTTON'));
     await tester.pump();
-    expect(find.text('Tap WHO ACTS next'), findsOneWidget);
+    expect(find.text('Tap WHO ACTS next'), findsNothing);
     await tester.tap(find.text('WHO ACTS'));
     await tester.pump();
     expect(feltAck, 1);
