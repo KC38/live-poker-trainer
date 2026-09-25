@@ -4359,6 +4359,14 @@ await tester.tap(find.text('VALUE'));
     // SoftPulse + Rex own the teach verb — no duplicate Watch… felt title.
     expect(find.text('Watch before you label'), findsNothing);
     expect(find.text('Observation notes'), findsOneWidget);
+    expect(find.text('Who plays pots'), findsNothing);
+    expect(find.text('Who sticks around'), findsNothing);
+    expect(find.text('Who gives up'), findsNothing);
+    expect(find.text('Pots joined'), findsOneWidget);
+    expect(find.text('Sticks to bets'), findsOneWidget);
+    expect(find.text('Leaves pots'), findsOneWidget);
+    expect(find.text('Count samples before you tag'), findsNothing);
+    expect(find.text('Enters · calls · folds'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 
@@ -4371,6 +4379,8 @@ await tester.tap(find.text('VALUE'));
     await tester.tap(find.text('FOLDS'));
     await tester.pump();
     expect(feltAck, 1);
+    expect(find.text('Count samples before you tag'), findsNothing);
+    expect(find.text('Enters · calls · folds'), findsOneWidget);
     controller.dispose();
   });
 
