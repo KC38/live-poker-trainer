@@ -3601,7 +3601,7 @@ await tester.tap(find.text('FLOP'));
       ),
     );
     expect(find.byType(SizingLanguageDemo), findsOneWidget);
-    expect(find.text('Tap VALUE next'), findsOneWidget);
+    expect(find.text('Tap VALUE next'), findsNothing);
     expect(find.text('Tap Value, Pressure, and Size'), findsNothing);
     expect(find.text('Tap Value, Pressure, and Size.'), findsNothing);
     expect(
@@ -3624,10 +3624,10 @@ await tester.tap(find.text('FLOP'));
 
 await tester.tap(find.text('VALUE'));
     await tester.pump();
-    expect(find.text('Tap PRESSURE next'), findsOneWidget);
+    expect(find.text('Tap PRESSURE next'), findsNothing);
     await tester.tap(find.text('PRESSURE'));
     await tester.pump();
-    expect(find.text('Tap SIZE next'), findsOneWidget);
+    expect(find.text('Tap SIZE next'), findsNothing);
     await tester.tap(find.text('SIZE'));
     await tester.pump();
     expect(feltAck, 1);
