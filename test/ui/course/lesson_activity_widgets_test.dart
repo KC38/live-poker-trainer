@@ -5504,7 +5504,7 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Tap X/R next'), findsNothing);
     expect(find.text('Tap X/R, Probe, Delay, and Donk.'), findsNothing);
     expect(find.text('Tap X/R, Probe, Delay, and Donk'), findsNothing);
-    expect(find.text('Each line updates the story'), findsNothing);
+    expect(find.text('X/R · probe · delay · donk'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
     final teachHeight =
@@ -5532,7 +5532,7 @@ await tester.tap(find.text('NIT'));
     await tester.pump();
     expect(feltAck, 1);
     // Lock clears enabled / ack — densified shell must stay filled.
-    expect(find.text('Each line updates the story'), findsOneWidget);
+    expect(find.text('X/R · probe · delay · donk'), findsOneWidget);
     expect(
       tester.getSize(find.byType(LineStoriesDemo)).height,
       moreOrLessEquals(teachHeight, epsilon: 1),

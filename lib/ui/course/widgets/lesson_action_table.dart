@@ -8030,10 +8030,11 @@ class LineStoriesDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'X/R', caption: 'Check-raise story', color: AppColors.gold),
-    (label: 'PROBE', caption: 'Bet into checker', color: AppColors.cream),
-    (label: 'DELAY', caption: 'Hold the aggression', color: AppColors.slate),
-    (label: 'DONK', caption: 'Lead into raiser', color: AppColors.danger),
+    // Structural — Rex owns “lines mean ranges / each updates the story.”
+    (label: 'X/R', caption: 'Raise after check', color: AppColors.gold),
+    (label: 'PROBE', caption: 'Bet into check', color: AppColors.cream),
+    (label: 'DELAY', caption: 'Hold fire first', color: AppColors.slate),
+    (label: 'DONK', caption: 'Lead the raiser', color: AppColors.danger),
   ];
 
   @override
@@ -8132,7 +8133,7 @@ class _LineStoriesDemoState extends State<LineStoriesDemo> {
                 ),
               ),
               child: Text(
-                'Each line updates the story',
+                'X/R · probe · delay · donk',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
