@@ -12568,14 +12568,23 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Weak top pair in a raise-reraise pot — tap Fold.'),
+      find.text(
+        'Weak top pair in a raise-reraise pot — leave without stacking.',
+      ),
       findsOneWidget,
     );
+    expect(
+      find.text('Weak top pair in a raise-reraise pot — tap Fold.'),
+      findsNothing,
+    );
     expect(find.text('Weak kicker — do not stack'), findsNothing);
-    expect(find.text('Facing raise · multiway'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no third gold felt status.
+    expect(find.text('Facing raise · multiway'), findsNothing);
     expect(find.text('FOLD'), findsOneWidget);
     expect(find.text('JAM STACKS'), findsOneWidget);
     expect(find.text('CALL FOREVER'), findsOneWidget);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'careful');
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'careful');
@@ -12610,7 +12619,16 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Gutshot vs an overbet — tap Fold.'), findsOneWidget);
+    expect(
+      find.text(
+        'Gutshot vs an overbet — price is wrong for four outs.',
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('Gutshot vs an overbet — tap Fold.'), findsNothing);
+    // SoftPulse owns Fold.
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'fold-gut');
     expect(find.text('Four outs · terrible price'), findsNothing);
     expect(find.text('Facing a bet'), findsOneWidget);
     await tester.tap(find.text('FOLD'));
@@ -12657,7 +12675,13 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Air multiway vs a bet — tap Fold.'), findsOneWidget);
+    expect(
+      find.text(
+        'Air multiway vs a bet — leave without floating the crowd.',
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('Air multiway vs a bet — tap Fold.'), findsNothing);
     expect(find.text('No pair, no draw — fold'), findsNothing);
     expect(find.text('Facing a bet · 4-way'), findsOneWidget);
     expect(find.text('FLOAT CALL'), findsOneWidget);
@@ -12877,9 +12901,17 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Air four-way on a wet flop — tap Fold.'),
+      find.text(
+        'Air four-way on a wet flop — leave without bluffing the crowd.',
+      ),
       findsOneWidget,
     );
+    expect(
+      find.text('Air four-way on a wet flop — tap Fold.'),
+      findsNothing,
+    );
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'j3-fold');
     expect(find.text('Crowd — fold air'), findsNothing);
     expect(find.text('Facing a bet · 4-way'), findsOneWidget);
     await tester.tap(find.text('FOLD'));
@@ -12914,11 +12946,23 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    expect(
+      find.text(
+        'Top two on a brick river — extract when they check.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Top two on a brick river — tap a value bet.'),
+      findsNothing,
+    );
     expect(find.text('BET VALUE'), findsOneWidget);
     expect(find.text('River · Brick · Top two'), findsNothing);
     expect(find.text('Brick river — get paid'), findsNothing);
     expect(find.text('River · brick'), findsOneWidget);
     expect(find.text('Checked to you'), findsWidgets);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'j3-val');
     await tester.tap(find.text('BET VALUE'));
     await tester.pump();
     expect(controller.draft.choiceId, 'j3-val');
