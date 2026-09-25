@@ -14923,13 +14923,20 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Station checked · second pair — tap Bet thin value.'),
+      find.text('Station checked · second pair — extract vs wide calls.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Station checked · second pair — tap Bet thin value.'),
+      findsNothing,
     );
     expect(find.text('Tap your action on the dock.'), findsNothing);
     expect(find.text('Station pays — bet thin value'), findsNothing);
-    expect(find.text('Checked to you'), findsOneWidget);
+    // SoftPulse owns the cue — gold felt status stays hidden.
     expect(find.text('BET THIN VALUE'), findsOneWidget);
+    final dock =
+        tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'tv');
     await tester.tap(find.text('BET THIN VALUE'));
     await tester.pump();
     expect(controller.draft.choiceId, 'tv');
@@ -14971,11 +14978,19 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Maniac barrels second pair — tap Call.'),
+      find.text('Maniac barrels · second pair — catch wide aggression.'),
       findsOneWidget,
     );
+    expect(
+      find.text('Maniac barrels second pair — tap Call.'),
+      findsNothing,
+    );
     expect(find.text('Wide barrels — call the catch'), findsNothing);
-    expect(find.text('Facing a bet'), findsOneWidget);
+    // SoftPulse owns the cue — gold felt status stays hidden.
+    expect(find.text('CALL'), findsOneWidget);
+    final dock =
+        tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'call-m');
     await tester.tap(find.text('CALL'));
     await tester.pump();
     expect(controller.draft.choiceId, 'call-m');
@@ -15022,12 +15037,19 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Nit checked · second pair — tap Check.'),
+      find.text('Nit checked · second pair — tap Check or Bet thin.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Nit checked · second pair — tap Check.'),
+      findsNothing,
     );
     expect(find.text('Nit overfolds — check back'), findsNothing);
     expect(find.text('Checked to you'), findsOneWidget);
     expect(find.text('CHECK'), findsOneWidget);
+    final dock =
+        tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, isNull);
     await tester.tap(find.text('CHECK'));
     await tester.pump();
     expect(controller.draft.choiceId, 'check-nit');

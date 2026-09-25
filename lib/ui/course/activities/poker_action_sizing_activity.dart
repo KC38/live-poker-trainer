@@ -261,6 +261,9 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     // Adjust vs Station: SoftPulse the plan; Rex names the model, not the dock.
     'act-04-06-03-guided' => 'thin-val',
     'act-04-06-03-scaffolded' => 'give-up',
+    // Thin value / bluff-catch: SoftPulse the plan; Rex names the model.
+    'act-05-04-01-guided' => 'tv',
+    'act-05-04-01-scaffolded' => 'call-m',
     'act-06-09-01-scaffolded' => 'small',
     // Mix-five: SoftPulse the plan; Rex names the model, not the dock label.
     'act-06-13-01-guided' => 'cs',
@@ -412,12 +415,14 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'KJo vs Nit check-raise — tap Fold.',
     'act-05-03-01-unguided' =>
       'Non-nut FD four-way — tap Fold.',
+    // SoftPulse owns the dock — don’t gold-tip Bet thin value / Call / Check.
     'act-05-04-01-guided' =>
-      'Station checked · second pair — tap Bet thin value.',
+      'Station checked · second pair — extract vs wide calls.',
     'act-05-04-01-scaffolded' =>
-      'Maniac barrels second pair — tap Call.',
+      'Maniac barrels · second pair — catch wide aggression.',
+    // Unguided: list legal lines; don’t tip Check alone.
     'act-05-04-01-unguided' =>
-      'Nit checked · second pair — tap Check.',
+      'Nit checked · second pair — tap Check or Bet thin.',
     'act-05-05-01-scaffolded' =>
       'PFR checks · middle pair BB — tap Probe small.',
     'act-05-06-01-scaffolded' =>
