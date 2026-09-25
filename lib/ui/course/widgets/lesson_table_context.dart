@@ -2426,7 +2426,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
     case 'act-03-01-01-unguided':
       return const LessonTableScene(
         layout: LessonTableLayout.verbalBindingOutcomes,
-        caption: 'You said "raise" · live table',
+        // Structural spot — Rex owns “You said raise.”
+        caption: 'Live table · verbal action',
       );
     case 'act-03-01-01-checkpoint':
       return const LessonTableScene(
@@ -8715,7 +8716,7 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive:
           'Interactive verbal action — tap whether the raise stands',
       semanticsStatic: 'Verbal declaration outcomes',
-      caption: scene.caption ?? 'You said "raise"',
+      caption: scene.caption ?? 'Live table · verbal action',
       // SoftPulse + Rex own the cue — no gold tip on the correct tile.
       cueLabel: '',
       guideRegion: LessonTableRegion.verbalRaiseStands,
