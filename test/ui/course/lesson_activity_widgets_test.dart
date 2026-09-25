@@ -12074,8 +12074,14 @@ await tester.tap(find.text('NIT'));
     );
     expect(find.byType(LessonActionTable), findsOneWidget);
     expect(
-      find.text('Top two on a brick river — tap a value bet.'),
+      find.text(
+        'Top two on a brick river — extract when they check.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Top two on a brick river — tap a value bet.'),
+      findsNothing,
     );
     expect(
       find.text('River bricks. You have top two pair. Villain checked. Action?'),
@@ -12139,8 +12145,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('You missed; river completes the flush — tap the bluff.'),
+      find.text(
+        'You missed; river completes the flush — sell the story.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('You missed; river completes the flush — tap the bluff.'),
+      findsNothing,
     );
     expect(find.text('BLUFF FLUSH'), findsOneWidget);
     expect(find.text('GIVE UP'), findsOneWidget);
@@ -12189,8 +12201,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Weak top pair faces a quiet-line jam — tap Fold or Call.'),
+      find.text(
+        'Weak top pair faces a quiet-line jam — pick Fold or Call.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Weak top pair faces a quiet-line jam — tap Fold or Call.'),
+      findsNothing,
     );
     expect(find.text('River · Quiet line · Weak TPTK'), findsNothing);
     expect(find.text('Huge jam — weak kicker'), findsNothing);
@@ -12253,8 +12271,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Medium one pair faces a big bet — tap the river job.'),
+      find.text(
+        'Medium one pair faces a big bet — weigh the river job.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Medium one pair faces a big bet — tap the river job.'),
+      findsNothing,
     );
     expect(
       find.text(
