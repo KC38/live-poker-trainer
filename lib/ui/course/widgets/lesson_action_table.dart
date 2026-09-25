@@ -2319,8 +2319,9 @@ class BbStackDepthDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
+    // Structural captions — Rex owns “shorter sets the ceiling.”
     (label: 'CHIPS→BB', caption: '200 @ 1/2 = 100bb', color: AppColors.cream),
-    (label: 'SHORTER', caption: 'Sets the ceiling', color: AppColors.gold),
+    (label: 'SHORTER', caption: 'Min of the two', color: AppColors.gold),
     (label: 'DEPTH', caption: '50bb ≠ 200bb', color: AppColors.slate),
   ];
 
@@ -2384,9 +2385,8 @@ class _BbStackDepthDemoState extends State<BbStackDepthDemo> {
         ],
       ],
     );
-    // SoftPulse + Rex own the next-tile cue while teaching. Show a summary
-    // after all taps (or once locked under Nice! / Continue).
-    final showCue = !widget.interactive || next == null || !widget.enabled;
+    // SoftPulse + Rex own the cue — no summary pill echoing Nice! feedback.
+    final showCue = !widget.interactive;
     final cue =
         !showCue
             ? null
@@ -8764,7 +8764,9 @@ class _DemoActionCard extends StatelessWidget {
                     caption,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.manrope(
-                      color: AppColors.slate,
+                      // SoftPulse densify tints are light — slate on cream/gold
+                      // reads as muddy grey; cream keeps captions legible.
+                      color: AppColors.cream.withValues(alpha: 0.82),
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                     ),

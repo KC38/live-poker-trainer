@@ -2792,6 +2792,8 @@ void main() {
       find.text('Count in BB · shorter stack caps the pot'),
       findsNothing,
     );
+    expect(find.text('Sets the ceiling'), findsNothing);
+    expect(find.text('Min of the two'), findsOneWidget);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
     final teachHeight =
@@ -2815,11 +2817,13 @@ void main() {
     await tester.tap(find.text('DEPTH'));
     await tester.pump();
     expect(feltAck, 1);
-    // Lock clears enabled / ack — densified shell must stay filled.
+    // SoftPulse + Rex own the cue — no summary pill echoing Nice! feedback.
     expect(
       find.text('Count in BB · shorter stack caps the pot'),
-      findsOneWidget,
+      findsNothing,
     );
+    expect(find.text('Sets the ceiling'), findsNothing);
+    expect(find.text('Min of the two'), findsOneWidget);
     expect(
       tester.getSize(find.byType(BbStackDepthDemo)).height,
       moreOrLessEquals(teachHeight, epsilon: 1),
