@@ -371,12 +371,15 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // Unguided: name the spot; SoftPulse isn’t on.
     'act-03-05-01-unguided' =>
       'Flush comes in; checked to you — pick delayed value or give up.',
+    // SoftPulse owns value bet — don’t gold-tip the dock.
     'act-03-06-01-guided' =>
-      'Top two on a brick river — tap a value bet.',
+      'Top two on a brick river — extract when they check.',
+    // SoftPulse owns bluff — don’t gold-tip the dock.
     'act-03-06-01-scaffolded' =>
-      'You missed; river completes the flush — tap the bluff.',
+      'You missed; river completes the flush — sell the story.',
+    // Unguided: name the spot; list legal lines without SoftPulse.
     'act-03-06-01-unguided' =>
-      'Weak top pair faces a quiet-line jam — tap Fold or Call.',
+      'Weak top pair faces a quiet-line jam — pick Fold or Call.',
     'act-03-07-01-guided' =>
       'Second pair four ways — tap Check or Bet.',
     'act-03-07-01-scaffolded' =>

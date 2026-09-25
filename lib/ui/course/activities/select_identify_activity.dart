@@ -403,8 +403,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns give-up — don’t gold-tip the tile.
       'act-03-05-01-checkpoint' =>
           'Air bluff meets a draw-completing queen — weigh shutting down.',
+      // SoftPulse owns the river job — don’t gold-tip the tile.
       'act-03-06-01-checkpoint' =>
-          'Medium one pair faces a big bet — tap the river job.',
+          'Medium one pair faces a big bet — weigh the river job.',
       'act-03-07-01-unguided' =>
           'Deep multiway — tap the better speculative hand.',
       'act-03-07-01-checkpoint' =>
@@ -1188,8 +1189,9 @@ class _HandCategoryTapActivity extends StatelessWidget {
         // SoftPulse owns give-up — don’t gold-tip the tile.
         'act-03-05-01-checkpoint' =>
           'Air bluff meets a draw-completing queen — weigh shutting down.',
-        'act-03-06-01-checkpoint' =>
-          'Medium one pair faces a big bet — tap the river job.',
+        // SoftPulse owns the river job — don’t gold-tip the tile.
+      'act-03-06-01-checkpoint' =>
+          'Medium one pair faces a big bet — weigh the river job.',
         'act-03-07-01-unguided' =>
           'Deep multiway — tap the better speculative hand.',
         'act-03-07-01-checkpoint' =>
