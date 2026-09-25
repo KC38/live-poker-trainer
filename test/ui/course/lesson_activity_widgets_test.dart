@@ -13788,11 +13788,19 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Dry board, top pair — tap a value size into 20.'),
+      find.text(
+        'Dry board, top pair heads-up — ask for a value call into 20.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Dry board, top pair — tap a value size into 20.'),
+      findsNothing,
     );
     expect(find.textContaining('Flop · dry · top pair'), findsOneWidget);
     expect(find.text('BET 10'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no third gold felt status.
+    expect(find.text('Pick a value size'), findsNothing);
     final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
     expect(dock.pulseChoiceId, 'half');
     await tester.tap(find.text('BET 10'));
@@ -13832,10 +13840,18 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Missed draw on a scare river — tap a pressure size.'),
+      find.text(
+        'Missed draw on a scare river — sell polar pressure into 40.',
+      ),
       findsOneWidget,
     );
+    expect(
+      find.text('Missed draw on a scare river — tap a pressure size.'),
+      findsNothing,
+    );
     expect(find.text('BET 30-40'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no third gold felt status.
+    expect(find.text('Sell polar pressure'), findsNothing);
     final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
     expect(dock.pulseChoiceId, 'big');
     await tester.tap(find.text('BET 30-40'));
@@ -13844,7 +13860,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s4 sizing checkpoint docks worst value size on felt', (
+  testWidgets('s4 sizing checkpoint SoftPulse worst size — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -13874,13 +13890,21 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Strong hand for value into 30 — tap the worst size.'),
+      find.text(
+        'Strong hand for value into 30 — spot the size that doesn’t look like value.',
+      ),
       findsOneWidget,
     );
-    // Rex owns the tap verb — felt stays a structural status, not a Tap footer.
+    expect(
+      find.text('Strong hand for value into 30 — tap the worst size.'),
+      findsNothing,
+    );
+    // SoftPulse + Rex own the cue — no third gold felt status.
     expect(find.text('Tap the worst value size'), findsNothing);
-    expect(find.text('One-chip value is a mistake'), findsOneWidget);
+    expect(find.text('One-chip value is a mistake'), findsNothing);
     expect(find.text('BET 1'), findsOneWidget);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'bad-1');
     await tester.tap(find.text('BET 1'));
     await tester.pump();
     expect(controller.draft.choiceId, 'bad-1');
