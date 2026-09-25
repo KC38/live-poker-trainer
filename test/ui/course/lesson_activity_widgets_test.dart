@@ -10412,8 +10412,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Effective 80 into pot 20 — tap the SPR.'),
+      find.text('Effective 80 into pot 20 — stack ÷ pot.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Effective 80 into pot 20 — tap the SPR.'),
+      findsNothing,
     );
     expect(find.text('Effective stack 80bb, pot 20bb. SPR?'), findsNothing);
     expect(find.text('Stack 80bb · Pot 20bb'), findsOneWidget);
@@ -10469,7 +10473,8 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Stack 60 into pot 15 — tap the SPR.'), findsOneWidget);
+    expect(find.text('Stack 60 into pot 15 — stack ÷ pot.'), findsOneWidget);
+    expect(find.text('Stack 60 into pot 15 — tap the SPR.'), findsNothing);
     expect(find.text('Stack 60bb · Pot 15bb'), findsOneWidget);
     expect(find.text('Them'), findsNothing);
     expect(find.text('60'), findsWidgets);
@@ -13956,12 +13961,17 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Top set at SPR ~1 — tap Commit for stacks.'),
+      find.text('Top set at SPR ~1 — commitment territory.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Top set at SPR ~1 — tap Commit for stacks.'),
+      findsNothing,
     );
     expect(find.text('COMMIT FOR STACKS'), findsOneWidget);
     expect(find.text('Low SPR — get it in'), findsNothing);
-    expect(find.text('3-bet pot · short SPR'), findsWidgets);
+    // SoftPulse + Rex own the cue — felt gold status suppressed; villain line stays.
+    expect(find.text('3-bet pot · short SPR'), findsOneWidget);
     final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
     expect(dock.pulseChoiceId, 'commit');
     await tester.tap(find.text('COMMIT FOR STACKS'));
@@ -13970,7 +13980,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s4 spr checkpoint docks Weigh SPR first on jam felt', (
+  testWidgets('s4 spr checkpoint SoftPulse Weigh SPR — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -14004,14 +14014,21 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('About to put the rest in — tap Weigh SPR first.'),
+      find.text('About to put the rest in — depth decides commitment.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('About to put the rest in — tap Weigh SPR first.'),
+      findsNothing,
     );
     expect(find.text('WEIGH SPR FIRST'), findsOneWidget);
     expect(find.text('Weigh SPR before you put it in'), findsNothing);
     expect(find.text('Turn · commitment spot'), findsNothing);
     expect(find.text('Turn · facing jam'), findsOneWidget);
-    expect(find.textContaining('Opponent jams'), findsWidgets);
+    // SoftPulse + Rex own the cue — felt gold status suppressed; villain line stays.
+    expect(find.text('Opponent jams all-in'), findsOneWidget);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'before');
     await tester.tap(find.text('WEIGH SPR FIRST'));
     await tester.pump();
     expect(controller.draft.choiceId, 'before');

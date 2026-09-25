@@ -433,10 +433,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'You have a flop plan — map brick vs flush turns.',
       'act-04-04-01-unguided' =>
           'Two value sizes both get calls — tap the grading idea.',
+      // SoftPulse owns SPR 4 — don’t gold-tip the tile.
       'act-04-05-01-guided' =>
-          'Effective 80 into pot 20 — tap the SPR.',
+          'Effective 80 into pot 20 — stack ÷ pot.',
+      // SoftPulse owns SPR 4 — don’t gold-tip the tile.
       'act-04-10-02-jump-spr' =>
-          'Stack 60 into pot 15 — tap the SPR.',
+          'Stack 60 into pot 15 — stack ÷ pot.',
       'act-04-06-01-guided' =>
           'Seat calls 7 of 9 preflops — tap the observation.',
       'act-04-06-01-scaffolded' =>
@@ -1222,6 +1224,12 @@ class _HandCategoryTapActivity extends StatelessWidget {
           'You have a flop plan — map brick vs flush turns.',
         'act-04-04-01-unguided' =>
           'Two value sizes both get calls — tap the grading idea.',
+        // SoftPulse owns SPR 4 — don’t gold-tip the tile.
+        'act-04-05-01-guided' =>
+          'Effective 80 into pot 20 — stack ÷ pot.',
+        // SoftPulse owns SPR 4 — don’t gold-tip the tile.
+        'act-04-10-02-jump-spr' =>
+          'Stack 60 into pot 15 — stack ÷ pot.',
         'act-04-06-01-guided' =>
           'Seat calls 7 of 9 preflops — tap the observation.',
         'act-04-06-01-scaffolded' =>

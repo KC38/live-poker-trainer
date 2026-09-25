@@ -269,7 +269,9 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     'act-04-04-01-guided' => 'half',
     'act-04-04-01-scaffolded' => 'big',
     'act-04-04-01-checkpoint' => 'bad-1',
+    // SoftPulse owns Commit / Weigh SPR docks.
     'act-04-05-01-scaffolded' => 'commit',
+    'act-04-05-01-checkpoint' => 'before',
     // Adjust vs Station: SoftPulse the plan; Rex names the model, not the dock.
     'act-04-06-03-guided' => 'thin-val',
     'act-04-06-03-scaffolded' => 'give-up',
@@ -438,12 +440,15 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // SoftPulse owns the worst size — don’t gold-tip the dock.
     'act-04-04-01-checkpoint' =>
       'Strong hand for value into 30 — spot the size that doesn’t look like value.',
+    // SoftPulse owns Commit — don’t gold-tip the dock.
     'act-04-05-01-scaffolded' =>
-      'Top set at SPR ~1 — tap Commit for stacks.',
+      'Top set at SPR ~1 — commitment territory.',
+    // Unguided: name the spot; list legal lines without SoftPulse.
     'act-04-05-01-unguided' =>
-      'Second pair multiway at SPR 20 — tap Keep pot small.',
+      'Second pair multiway at SPR 20 — pick Keep pot small or Jam.',
+    // SoftPulse owns Weigh SPR — don’t gold-tip the dock.
     'act-04-05-01-checkpoint' =>
-      'About to put the rest in — tap Weigh SPR first.',
+      'About to put the rest in — depth decides commitment.',
     // SoftPulse owns the dock — don’t gold-tip Bet thin value / Give up.
     'act-04-06-03-guided' =>
       'Sticky seat · second pair river — extract vs wide calls.',
