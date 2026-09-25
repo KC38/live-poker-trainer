@@ -90,6 +90,7 @@ class _StreetsTimelineDemoState extends State<StreetsTimelineDemo> {
           selected: _tapped.contains(
             StreetsTimelineDemo.streets[i].title,
           ),
+          densify: expandTeach,
           enabled: widget.interactive && widget.enabled,
           onPressed:
               widget.interactive
@@ -103,7 +104,7 @@ class _StreetsTimelineDemoState extends State<StreetsTimelineDemo> {
       mainAxisSize: MainAxisSize.min,
       children: [
         for (var i = 0; i < StreetsTimelineDemo.streets.length; i++) ...[
-          if (i > 0) SizedBox(height: expandTeach ? 10 : 8),
+          if (i > 0) SizedBox(height: expandTeach ? 14 : 8),
           laneAt(i),
         ],
       ],
@@ -144,9 +145,11 @@ class _StreetsTimelineDemoState extends State<StreetsTimelineDemo> {
         expandTeach
             ? Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                // Pack densified lanes, then scale up into the felt — fills
+                // tall-phone green (scaleDown left a navy/green void).
                 child: FittedBox(
-                  fit: BoxFit.scaleDown,
+                  fit: BoxFit.contain,
                   child: SizedBox(
                     width: MediaQuery.sizeOf(context).width - 48,
                     child: lanes,
@@ -196,6 +199,7 @@ class _StreetLane extends StatelessWidget {
     required this.boardCodes,
     required this.step,
     this.selected = false,
+    this.densify = false,
     this.enabled = false,
     this.onPressed,
   });
@@ -205,6 +209,9 @@ class _StreetLane extends StatelessWidget {
   final List<String> boardCodes;
   final int step;
   final bool selected;
+
+  /// Tall-phone SoftPulse pack: larger lane so FittedBox contain can fill felt.
+  final bool densify;
   final bool enabled;
   final VoidCallback? onPressed;
 
@@ -212,22 +219,29 @@ class _StreetLane extends StatelessWidget {
   Widget build(BuildContext context) {
     final border =
         selected ? AppColors.gold : AppColors.feltBorder.withValues(alpha: 0.7);
+    final cardSize = densify ? MiniCardSize.small : MiniCardSize.tiny;
+    final badge = densify ? 28.0 : 22.0;
+    final titleW = densify ? 88.0 : 72.0;
+    final radius = densify ? 14.0 : 12.0;
     final lane = Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: EdgeInsets.symmetric(
+        horizontal: densify ? 12 : 10,
+        vertical: densify ? 12 : 8,
+      ),
       decoration: BoxDecoration(
         color:
             selected
                 ? AppColors.gold.withValues(alpha: 0.18)
                 : AppColors.bgDark.withValues(alpha: 0.35),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(radius),
         border: Border.all(color: border, width: selected ? 2 : 1),
       ),
       child: Row(
         children: [
           Container(
-            width: 22,
-            height: 22,
+            width: badge,
+            height: badge,
             alignment: Alignment.center,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
@@ -238,14 +252,14 @@ class _StreetLane extends StatelessWidget {
               '$step',
               style: GoogleFonts.manrope(
                 color: AppColors.gold,
-                fontSize: 11,
+                fontSize: densify ? 13 : 11,
                 fontWeight: FontWeight.w900,
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: densify ? 12 : 10),
           SizedBox(
-            width: 72,
+            width: titleW,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -253,7 +267,7 @@ class _StreetLane extends StatelessWidget {
                   title,
                   style: GoogleFonts.manrope(
                     color: AppColors.cream,
-                    fontSize: 12,
+                    fontSize: densify ? 15 : 12,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -261,27 +275,27 @@ class _StreetLane extends StatelessWidget {
                   detail,
                   style: GoogleFonts.manrope(
                     color: AppColors.slate,
-                    fontSize: 10,
+                    fontSize: densify ? 12 : 10,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: densify ? 10 : 8),
           Expanded(
             child: Row(
               children: [
-                const CardBack(size: MiniCardSize.tiny),
-                const SizedBox(width: 2),
-                const CardBack(size: MiniCardSize.tiny),
+                CardBack(size: cardSize),
+                SizedBox(width: densify ? 3 : 2),
+                CardBack(size: cardSize),
                 if (boardCodes.isNotEmpty) ...[
-                  const SizedBox(width: 8),
+                  SizedBox(width: densify ? 10 : 8),
                   for (var i = 0; i < boardCodes.length; i++) ...[
-                    if (i > 0) const SizedBox(width: 2),
+                    if (i > 0) SizedBox(width: densify ? 3 : 2),
                     MiniCard(
                       card: CardModel.fromCode(boardCodes[i]),
-                      size: MiniCardSize.tiny,
+                      size: cardSize,
                     ),
                   ],
                 ],
@@ -300,7 +314,7 @@ class _StreetLane extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: enabled ? onPressed : null,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(radius),
           child: lane,
         ),
       ),
