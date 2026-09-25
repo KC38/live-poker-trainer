@@ -16024,7 +16024,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s5 line-reading guided taps Fewer nuts on bet-check felt', (
+  testWidgets('s5 line-reading guided SoftPulse Fewer nuts — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -16056,8 +16056,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Bet flop, check turn — tap Capped.'),
+      find.text('Bet flop, check turn — range usually loses the nuts.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Bet flop, check turn — tap Capped.'),
+      findsNothing,
     );
     expect(find.text('Fewer nuts'), findsOneWidget);
     await tester.tap(find.text('Fewer nuts'));
@@ -16066,7 +16070,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s5 line-reading scaffolded docks Fold on draw-bomb felt', (
+  testWidgets('s5 line-reading scaffold SoftPulse Fold — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -16096,17 +16100,22 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Draw faces bomb — tap Fold.'),
+      find.text('Draw faces bomb — re-price when the turn bricks.'),
       findsOneWidget,
     );
+    expect(find.text('Draw faces bomb — tap Fold.'), findsNothing);
+    expect(find.text('Re-price — fold the bomb'), findsNothing);
     expect(find.text('FOLD'), findsOneWidget);
+    final dock =
+        tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'repr');
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'repr');
     controller.dispose();
   });
 
-  testWidgets('s5 line-reading unguided taps Rebuild on habit felt', (
+  testWidgets('s5 line-reading unguided SoftPulse Rebuild — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -16134,14 +16143,18 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Best habit — tap Rebuild.'), findsOneWidget);
+    expect(
+      find.text('Best habit — rebuild the story after every action.'),
+      findsOneWidget,
+    );
+    expect(find.text('Best habit — tap Rebuild.'), findsNothing);
     await tester.tap(find.text('Rebuild'));
     await tester.pump();
     expect(controller.draft.choiceId, 'update');
     controller.dispose();
   });
 
-  testWidgets('s5 line-reading checkpoint taps Uncapped on XR line felt', (
+  testWidgets('s5 line-reading checkpoint SoftPulse Uncapped — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -16174,8 +16187,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('XR / bet / shove — tap Uncapped.'),
+      find.text('XR then bet then shove — pressure stays uncapped.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('XR / bet / shove — tap Uncapped.'),
+      findsNothing,
     );
     await tester.tap(find.text('Uncapped'));
     await tester.pump();
