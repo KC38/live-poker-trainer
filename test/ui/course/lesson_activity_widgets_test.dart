@@ -5256,7 +5256,7 @@ await tester.tap(find.text('NIT'));
         ),
       );
       expect(find.byType(EquityRealizeDemo), findsOneWidget);
-      expect(find.text('Tap EQUITY next'), findsOneWidget);
+      expect(find.text('Tap EQUITY next'), findsNothing);
       expect(find.text('Tap Equity, Cash, and Pos.'), findsNothing);
       expect(find.text('Tap Equity, Cash, and Pos'), findsNothing);
       expect(find.text('Position decides realization'), findsNothing);
@@ -5276,10 +5276,10 @@ await tester.tap(find.text('NIT'));
 
       await tester.tap(find.text('EQUITY'));
       await tester.pump();
-      expect(find.text('Tap CASH next'), findsOneWidget);
+      expect(find.text('Tap CASH next'), findsNothing);
       await tester.tap(find.text('CASH'));
       await tester.pump();
-      expect(find.text('Tap POS next'), findsOneWidget);
+      expect(find.text('Tap POS next'), findsNothing);
       await tester.tap(find.text('POS'));
       await tester.pump();
       expect(feltAck, 1);
