@@ -52,6 +52,21 @@ class _FirstLessonOnboarding extends OnboardingController {
   }
 }
 
+class _SaveProgressOnboarding extends OnboardingController {
+  _SaveProgressOnboarding() : super(null) {
+    state = const OnboardingDraft(step: OnboardingStep.firstLesson);
+  }
+
+  void showSaveProgress() {
+    state = state.copyWith(
+      step: OnboardingStep.saveProgress,
+      firstLessonCompleted: true,
+      pendingSaveProgress: true,
+      lastLessonTitle: 'Your two cards',
+    );
+  }
+}
+
 /// Stand-in for [LessonRunnerScreen] after Start lesson replaces the launch CTA.
 class _InProgressFirstLesson extends StatefulWidget {
   const _InProgressFirstLesson();
@@ -228,4 +243,61 @@ void main() {
       expect(find.text('In progress: your two cards'), findsNothing);
     },
   );
+
+  testWidgets('finishing the first guest lesson remounts onto save progress', (
+    tester,
+  ) async {
+    final onboarding = _SaveProgressOnboarding();
+    final container = ProviderContainer(
+      overrides: [
+        appAuthProvider.overrideWith(
+          (ref) => const AsyncData(
+            AppAuthSnapshot(uid: 'anon-uid', isAnonymous: true),
+          ),
+        ),
+        userDocProvider.overrideWith((ref) async => null),
+        analyticsServiceProvider.overrideWithValue(
+          AnalyticsService(enabled: false),
+        ),
+        onboardingControllerProvider.overrideWith((ref) => onboarding),
+        courseFlagsRepositoryProvider.overrideWithValue(
+          _GatedFlagsRepository(Completer<void>()),
+        ),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const PokerLabApp(),
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('Start lesson'), findsOneWidget);
+
+    tester
+        .state<NavigatorState>(find.byType(Navigator))
+        .push(
+          MaterialPageRoute<void>(
+            builder: (_) => const _InProgressFirstLesson(),
+          ),
+        );
+    await tester.pumpAndSettle();
+    expect(find.text('In progress: your two cards'), findsOneWidget);
+
+    onboarding.showSaveProgress();
+    await tester.pump();
+    await tester.pump();
+
+    expect(
+      find.text('Create an account to save your progress'),
+      findsOneWidget,
+    );
+    expect(find.text('In progress: your two cards'), findsNothing);
+    expect(find.text('Start lesson'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
 }
