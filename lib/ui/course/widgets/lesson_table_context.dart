@@ -12773,6 +12773,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive turn map — tap Aces & blanks or Any card',
       semanticsStatic: 'Turn-map guided outcomes',
       caption: scene.caption ?? 'AK c-bet · Q72r — good turn continue?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Aces & blanks.
+      guideRegion: LessonTableRegion.turnMapAcesBlanks,
       phases: [
         (
           region: LessonTableRegion.turnMapAcesBlanks,
@@ -12780,7 +12782,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'With a plan',
           visual: const Icon(
             Icons.map_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12804,6 +12806,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive turn map — tap Give up or Hero-call',
       semanticsStatic: 'Turn-map scaffolded outcomes',
       caption: scene.caption ?? 'Gutshot · brick raise — map says?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Give up.
+      guideRegion: LessonTableRegion.turnMapGiveUp,
       phases: [
         (
           region: LessonTableRegion.turnMapGiveUp,
@@ -12811,7 +12815,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Map kill',
           visual: const Icon(
             Icons.stop_circle_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12821,7 +12825,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Sunk cost',
           visual: const Icon(
             Icons.psychology_alt_outlined,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12835,6 +12839,7 @@ class LessonTableContext extends StatelessWidget {
           'Interactive turn map — tap Map first or Yolo barrels',
       semanticsStatic: 'Turn-map unguided outcomes',
       caption: scene.caption ?? 'Bet flop with no turn idea?',
+      // No SoftPulse on unguided — still don’t gold-icon Map first.
       phases: [
         (
           region: LessonTableRegion.turnMapMapFirst,
@@ -12842,7 +12847,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Then bet flop',
           visual: const Icon(
             Icons.checklist_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12866,6 +12871,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive turn map — tap Continue/kill list or Invent later',
       semanticsStatic: 'Turn-map checkpoint outcomes',
       caption: scene.caption ?? 'Turn map is?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Continue/kill list.
+      guideRegion: LessonTableRegion.turnMapContinueKill,
       phases: [
         (
           region: LessonTableRegion.turnMapContinueKill,
@@ -12873,7 +12880,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Made on flop',
           visual: const Icon(
             Icons.list_alt_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12883,7 +12890,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Too late',
           visual: const Icon(
             Icons.hourglass_empty,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),

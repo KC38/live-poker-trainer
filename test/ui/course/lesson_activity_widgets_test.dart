@@ -20880,7 +20880,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('AK c-bet · Q72r — tap Aces & blanks.'),
+      find.text('AK c-bet · Q72r — pick the continue cards.'),
       findsOneWidget,
     );
     expect(find.text('BOARD · shared'), findsOneWidget);
@@ -20929,7 +20929,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Gutshot · brick raise — tap Give up.'),
+      find.text('Gutshot · brick raise — pick the map call.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Give up'));
@@ -20967,7 +20967,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('No turn idea — tap Map first.'),
+      find.text('No turn idea — pick what to do first.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Map first'));
@@ -21011,7 +21011,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Turn map — tap Continue/kill list.'),
+      find.text('Turn map — pick the definition.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Continue/kill list'));
