@@ -11605,7 +11605,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'SPR is low',
           visual: const Icon(
             Icons.lock_outline,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 32,
           ),
         ),
@@ -11615,7 +11615,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Wrong depth',
           visual: const Icon(
             Icons.layers_outlined,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 32,
           ),
         ),
@@ -11630,9 +11630,8 @@ class LessonTableContext extends StatelessWidget {
       semanticsStatic: '3-bet ego outcomes',
       caption:
           scene.caption ?? 'Light 4-bet bluff with no blockers for ego?',
-      // SoftPulse + Rex own the cue — no Tap footer.
+      // Unguided — densify only; don’t gold-icon Avoid ego.
       cueLabel: '',
-      guideRegion: LessonTableRegion.threeBetAvoidEgo,
       minHeightFactor: 0.55,
       phases: [
         (
@@ -11641,7 +11640,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Need blockers',
           visual: const Icon(
             Icons.block,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 32,
           ),
         ),
@@ -11651,7 +11650,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Style leak',
           visual: const Icon(
             Icons.flash_on_outlined,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 32,
           ),
         ),
@@ -11677,7 +11676,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Core lever',
           visual: const Icon(
             Icons.straighten,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 32,
           ),
         ),
@@ -11687,7 +11686,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Irrelevant',
           visual: const Icon(
             Icons.palette_outlined,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 32,
           ),
         ),

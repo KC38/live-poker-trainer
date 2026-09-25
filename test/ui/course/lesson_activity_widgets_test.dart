@@ -17477,8 +17477,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('100bb 4-bet pot · top pair — tap High commit.'),
+      find.text('100bb 4-bet pot · top pair — pick the depth mindset.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('100bb 4-bet pot · top pair — tap High commit.'),
+      findsNothing,
     );
     await tester.tap(find.text('High commit'));
     await tester.pump();
@@ -17525,7 +17529,11 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Deep 3-bet miss — tap Small c-bet.'), findsOneWidget);
+    expect(
+      find.text('Deep 3-bet miss — keep pressure small or give up.'),
+      findsOneWidget,
+    );
+    expect(find.text('Deep 3-bet miss — tap Small c-bet.'), findsNothing);
     expect(find.text('SMALL C-BET'), findsOneWidget);
     expect(find.text('JAM FOREVER'), findsOneWidget);
     await tester.tap(find.text('SMALL C-BET'));
@@ -17561,8 +17569,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Light 4-bet for ego — tap Avoid ego.'),
+      find.text('Light 4-bet for ego — pick the discipline.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Light 4-bet for ego — tap Avoid ego.'),
+      findsNothing,
     );
     await tester.tap(find.text('Avoid ego'));
     await tester.pump();
@@ -17599,8 +17611,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Depth change in 3-bet pots — tap SPR / commit.'),
+      find.text('Depth change in 3-bet pots — pick what shifts.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Depth change in 3-bet pots — tap SPR / commit.'),
+      findsNothing,
     );
     await tester.tap(find.text('SPR / commit'));
     await tester.pump();
