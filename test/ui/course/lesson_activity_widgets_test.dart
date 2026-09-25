@@ -2969,7 +2969,7 @@ void main() {
       ),
     );
     expect(find.byType(OutsPriceDemo), findsOneWidget);
-    expect(find.text('Tap CLEAN next'), findsOneWidget);
+    expect(find.text('Tap CLEAN next'), findsNothing);
     expect(find.text('Tap Clean, Dirty, and Price'), findsNothing);
     expect(find.text('Tap Clean, Dirty, and Price.'), findsNothing);
     expect(
@@ -2992,10 +2992,10 @@ void main() {
 
     await tester.tap(find.text('CLEAN'));
     await tester.pump();
-    expect(find.text('Tap DIRTY next'), findsOneWidget);
+    expect(find.text('Tap DIRTY next'), findsNothing);
     await tester.tap(find.text('DIRTY'));
     await tester.pump();
-    expect(find.text('Tap PRICE next'), findsOneWidget);
+    expect(find.text('Tap PRICE next'), findsNothing);
     await tester.tap(find.text('PRICE'));
     await tester.pump();
     expect(feltAck, 1);
