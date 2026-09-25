@@ -5332,9 +5332,10 @@ class CallingStationDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'STATION', caption: 'Working model', color: AppColors.gold),
-    (label: 'HIGH', caption: 'Plays many pots', color: AppColors.cream),
-    (label: 'LOW', caption: 'Rarely folds', color: AppColors.danger),
+    // Structural — Rex owns “working model / high participation / low folding.”
+    (label: 'STATION', caption: 'Temp tag', color: AppColors.gold),
+    (label: 'HIGH', caption: 'Often in pots', color: AppColors.cream),
+    (label: 'LOW', caption: 'Sticks to heat', color: AppColors.danger),
   ];
 
   @override
@@ -5417,7 +5418,8 @@ class _CallingStationDemoState extends State<CallingStationDemo> {
                 ),
               ),
               child: Text(
-                'High participation · low folding',
+                // Match SoftPulse titles — don’t echo Rex’s participation line.
+                'Station · high · low',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
