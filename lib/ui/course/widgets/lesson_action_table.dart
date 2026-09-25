@@ -3673,7 +3673,8 @@ class _TurnStoryDemoState extends State<TurnStoryDemo> {
           : MainAxisAlignment.start,
       children: [
         Text(
-          'Turn: brick or change the story',
+          // Structural label — Rex owns brick/change story in the dock.
+          'Four turn moves',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: expandTeach ? 15 : 12,
@@ -3856,7 +3857,8 @@ class _RiverBinaryDemoState extends State<RiverBinaryDemo> {
           : MainAxisAlignment.start,
       children: [
         Text(
-          'River is binary',
+          // Structural label — Rex owns "River is binary" in the dock.
+          'Four river jobs',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: expandTeach ? 15 : 12,

@@ -3165,6 +3165,8 @@ await tester.tap(find.text('VALUE'));
       ),
     );
     expect(find.byType(TurnStoryDemo), findsOneWidget);
+    expect(find.text('Four turn moves'), findsOneWidget);
+    expect(find.text('Turn: brick or change the story'), findsNothing);
     expect(find.text('Tap BRICK next'), findsNothing);
     expect(find.text('Tap Brick, Change, Barrel, and Delay'), findsNothing);
     expect(find.text('Tap Brick, Change, Barrel, and Delay.'), findsNothing);
@@ -3245,6 +3247,8 @@ await tester.tap(find.text('BRICK'));
       ),
     );
     expect(find.byType(RiverBinaryDemo), findsOneWidget);
+    expect(find.text('Four river jobs'), findsOneWidget);
+    expect(find.text('River is binary'), findsNothing);
     expect(find.text('Tap VALUE next'), findsNothing);
     expect(find.text('Tap Value, Bluff, Catch, and Fold'), findsNothing);
     expect(find.text('Tap Value, Bluff, Catch, and Fold.'), findsNothing);
