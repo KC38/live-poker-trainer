@@ -13264,6 +13264,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive stack depth — tap Closer to stacking or 250bb deep',
       semanticsStatic: 'Stack-depth guided outcomes',
       caption: scene.caption ?? '35bb TPTK vs raise — lean?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Closer to stacking.
+      guideRegion: LessonTableRegion.stackDepthCloserCommit,
       phases: [
         (
           region: LessonTableRegion.stackDepthCloserCommit,
@@ -13271,7 +13273,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'SPR is low',
           visual: const Icon(
             Icons.lock_outline,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13281,7 +13283,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Wrong depth',
           visual: const Icon(
             Icons.swap_vert,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13295,6 +13297,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive stack depth — tap More attractive or Never set-mine',
       semanticsStatic: 'Stack-depth scaffolded outcomes',
       caption: scene.caption ?? '250bb — set-mine 55?',
+      // SoftPulse + Rex own the cue — don’t gold-tip More attractive.
+      guideRegion: LessonTableRegion.stackDepthMoreAttractive,
       phases: [
         (
           region: LessonTableRegion.stackDepthMoreAttractive,
@@ -13302,7 +13306,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'With depth',
           visual: const Icon(
             Icons.trending_up,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13326,6 +13330,7 @@ class LessonTableContext extends StatelessWidget {
           'Interactive stack depth — tap 40bb or 200bb',
       semanticsStatic: 'Stack-depth unguided outcomes',
       caption: scene.caption ?? 'Hero 200bb, villain 40bb — effective?',
+      // No SoftPulse on unguided — still don’t gold-icon 40bb.
       phases: [
         (
           region: LessonTableRegion.stackDepth40bb,
@@ -13333,7 +13338,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Shorter caps',
           visual: const Icon(
             Icons.vertical_align_bottom,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13343,7 +13348,7 @@ class LessonTableContext extends StatelessWidget {
           detail: "Can't exceed",
           visual: const Icon(
             Icons.vertical_align_top,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -13357,6 +13362,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive stack depth — tap Every hand or Once per lifetime',
       semanticsStatic: 'Stack-depth checkpoint outcomes',
       caption: scene.caption ?? 'Stack depth is?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Every hand.
+      guideRegion: LessonTableRegion.stackDepthEveryHand,
       phases: [
         (
           region: LessonTableRegion.stackDepthEveryHand,
@@ -13364,7 +13371,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Recalculate',
           visual: const Icon(
             Icons.refresh,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
