@@ -265,8 +265,10 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     // SoftPulse owns 3-bet to 18 size pick.
     'act-04-02-01-checkpoint' => 'size-18',
     'act-04-03-01-scaffolded' => 'abort',
+    // SoftPulse owns value / pressure / worst-size docks.
     'act-04-04-01-guided' => 'half',
     'act-04-04-01-scaffolded' => 'big',
+    'act-04-04-01-checkpoint' => 'bad-1',
     'act-04-05-01-scaffolded' => 'commit',
     // Adjust vs Station: SoftPulse the plan; Rex names the model, not the dock.
     'act-04-06-03-guided' => 'thin-val',
@@ -425,12 +427,15 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Air vs a flush turn — tap Check to shut down.',
     'act-04-03-01-unguided' =>
       'Medium hand multiway and deep — tap Keep pot small.',
+    // SoftPulse owns value size — don’t gold-tip the dock.
     'act-04-04-01-guided' =>
-      'Dry board, top pair — tap a value size into 20.',
+      'Dry board, top pair heads-up — ask for a value call into 20.',
+    // SoftPulse owns pressure size — don’t gold-tip the dock.
     'act-04-04-01-scaffolded' =>
-      'Missed draw on a scare river — tap a pressure size.',
+      'Missed draw on a scare river — sell polar pressure into 40.',
+    // SoftPulse owns the worst size — don’t gold-tip the dock.
     'act-04-04-01-checkpoint' =>
-      'Strong hand for value into 30 — tap the worst size.',
+      'Strong hand for value into 30 — spot the size that doesn’t look like value.',
     'act-04-05-01-scaffolded' =>
       'Top set at SPR ~1 — tap Commit for stacks.',
     'act-04-05-01-unguided' =>
