@@ -6345,9 +6345,10 @@ class ManiacModelDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'MANIAC', caption: 'Working model', color: AppColors.gold),
-    (label: 'ENTRY', caption: 'Extreme frequency', color: AppColors.cream),
-    (label: 'AGGRO', caption: 'Not an insult', color: AppColors.danger),
+    // Structural — Rex owns “extreme entry / aggression / model not insult.”
+    (label: 'MANIAC', caption: 'Working label', color: AppColors.gold),
+    (label: 'ENTRY', caption: 'Often in pots', color: AppColors.cream),
+    (label: 'AGGRO', caption: 'Pressure style', color: AppColors.danger),
   ];
 
   @override
@@ -6430,7 +6431,7 @@ class _ManiacModelDemoState extends State<ManiacModelDemo> {
                 ),
               ),
               child: Text(
-                'Extreme entry · aggression · a model',
+                'Maniac · entry · aggro',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
