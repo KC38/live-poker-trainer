@@ -407,9 +407,12 @@ export function buildSectionOne() {
               dialogue("act-01-01-03-explain-button", 1,
                 "Button marks the dealer. Blinds sit left of it.",
                 {
-                  objectives: ["Locate the dealer button"],
+                  objectives: [
+                    "Locate the dealer button",
+                    "Identify the small and big blinds",
+                  ],
                   accessibilityText:
-                    "You found the button. Blinds always sit left of it.",
+                    "Clockwise from the button: small blind, then big blind.",
                 }),
               selectAct({
                 id: "act-01-01-03-guided-button", order: 2, stage: "guided",

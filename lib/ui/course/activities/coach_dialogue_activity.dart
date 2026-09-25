@@ -90,8 +90,6 @@ class CoachDialogueActivity extends StatelessWidget {
                 locked ||
                         (visual.kind != CoachDialogueVisualKind.holeCards &&
                             visual.kind !=
-                                CoachDialogueVisualKind.dealerButton &&
-                            visual.kind !=
                                 CoachDialogueVisualKind.positionLabels)
                     ? null
                     : (target) {
@@ -99,15 +97,15 @@ class CoachDialogueActivity extends StatelessWidget {
                           target.region == LessonTableRegion.hero) {
                         onFeltAcknowledge?.call();
                       } else if (visual.kind ==
-                              CoachDialogueVisualKind.dealerButton &&
-                          target.region == LessonTableRegion.button) {
-                        onFeltAcknowledge?.call();
-                      } else if (visual.kind ==
                               CoachDialogueVisualKind.positionLabels &&
                           target.region == LessonTableRegion.button) {
                         onFeltAcknowledge?.call();
                       }
                     },
+            onDealerClockwiseAcknowledge:
+                locked || visual.kind != CoachDialogueVisualKind.dealerButton
+                    ? null
+                    : onFeltAcknowledge,
             onSuitAcknowledge:
                 locked || visual.kind != CoachDialogueVisualKind.suitsRanks
                     ? null
@@ -2324,6 +2322,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
     this.enabled = false,
     this.showSoftPulse = false,
     this.onRegionTap,
+    this.onDealerClockwiseAcknowledge,
     this.onSuitAcknowledge,
     this.onLadderAcknowledge,
     this.onBestFiveAcknowledge,
@@ -2409,6 +2408,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   final bool enabled;
   final bool showSoftPulse;
   final ValueChanged<LessonTableTapTarget>? onRegionTap;
+  final VoidCallback? onDealerClockwiseAcknowledge;
   final VoidCallback? onSuitAcknowledge;
   final VoidCallback? onLadderAcknowledge;
   final VoidCallback? onBestFiveAcknowledge;
@@ -2508,9 +2508,12 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           onAllSuitsTapped: onSuitAcknowledge,
         ),
         CoachDialogueVisualKind.dealerButton => _DealerButtonDemo(
+          // Stay interactive (densified) through Continue — lock only clears
+          // the ack callback / enabled, not the teach shell.
+          interactive: true,
           enabled: enabled,
           showSoftPulse: showSoftPulse,
-          onRegionTap: onRegionTap,
+          onAllClockwiseTapped: onDealerClockwiseAcknowledge,
         ),
         CoachDialogueVisualKind.positionLabels => _PositionLabelsDemo(
           enabled: enabled,
@@ -3361,31 +3364,82 @@ class _SuitsRanksDemoState extends State<_SuitsRanksDemo>
   }
 }
 
-class _DealerButtonDemo extends StatelessWidget {
+class _DealerButtonDemo extends StatefulWidget {
   const _DealerButtonDemo({
+    this.interactive = false,
     this.enabled = false,
     this.showSoftPulse = false,
-    this.onRegionTap,
+    this.onAllClockwiseTapped,
   });
 
+  final bool interactive;
   final bool enabled;
   final bool showSoftPulse;
-  final ValueChanged<LessonTableTapTarget>? onRegionTap;
+  final VoidCallback? onAllClockwiseTapped;
+
+  static const _order = <LessonTableRegion>[
+    LessonTableRegion.button,
+    LessonTableRegion.smallBlind,
+    LessonTableRegion.bigBlind,
+  ];
+
+  @override
+  State<_DealerButtonDemo> createState() => _DealerButtonDemoState();
+}
+
+class _DealerButtonDemoState extends State<_DealerButtonDemo> {
+  final List<LessonTableRegion> _tapped = <LessonTableRegion>[];
+
+  LessonTableRegion? get _next {
+    if (_tapped.length >= _DealerButtonDemo._order.length) return null;
+    return _DealerButtonDemo._order[_tapped.length];
+  }
+
+  LessonTableHighlight get _highlight {
+    final next = _next;
+    if (next == LessonTableRegion.smallBlind) {
+      return LessonTableHighlight.smallBlind;
+    }
+    if (next == LessonTableRegion.bigBlind) {
+      return LessonTableHighlight.bigBlind;
+    }
+    // SoftPulse button while teaching; keep button highlight after lock so
+    // densifyShell stays filled under Nice! / Continue.
+    return LessonTableHighlight.button;
+  }
+
+  void _onRegionTap(LessonTableTapTarget target) {
+    if (!widget.enabled || widget.onAllClockwiseTapped == null) return;
+    final next = _next;
+    if (next == null || target.region != next) return;
+    setState(() => _tapped.add(target.region));
+    if (_tapped.length >= _DealerButtonDemo._order.length) {
+      widget.onAllClockwiseTapped!();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final next = _next;
+    // SoftPulse follows the next clockwise seat; after the last tap (or once
+    // locked under Nice!), SoftPulse clears while densify stays.
+    final pulse =
+        widget.interactive &&
+        widget.enabled &&
+        widget.showSoftPulse &&
+        next != null;
     return LessonTableContext(
-      scene: const LessonTableScene(
+      scene: LessonTableScene(
         layout: LessonTableLayout.blindsSeats,
-        highlight: LessonTableHighlight.button,
+        highlight: _highlight,
         seatCount: 6,
         buttonSeat: 3,
       ),
-      enabled: enabled,
-      showSoftPulse: showSoftPulse,
+      enabled: widget.interactive && widget.enabled,
+      showSoftPulse: pulse,
       // SoftPulse + Rex own the cue — no Tap the dealer button footer.
       showInviteCue: false,
-      onRegionTap: onRegionTap,
+      onRegionTap: widget.interactive ? _onRegionTap : null,
     );
   }
 }

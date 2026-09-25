@@ -568,7 +568,7 @@
                   "stage": "explain",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "You found the button. Blinds always sit left of it.",
+                  "accessibilityText": "Clockwise from the button: small blind, then big blind.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -581,7 +581,8 @@
                     }
                   ],
                   "objectives": [
-                    "Locate the dealer button"
+                    "Locate the dealer button",
+                    "Identify the small and big blinds"
                   ]
                 },
                 {

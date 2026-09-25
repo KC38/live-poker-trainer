@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "f2e7b4917ff96b7e62bb54cd489ca3c760471f7e3e17c3e9ce9fd6c8cb8b3d48",
+  "contentChecksum": "205754c0edcc06abfba3f68122a4da67aed50206107494ba267ac88fc04b9365",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -457,7 +457,7 @@
                   "stage": "explain",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "You found the button. Blinds always sit left of it.",
+                  "accessibilityText": "Clockwise from the button: small blind, then big blind.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -470,7 +470,8 @@
                     }
                   ],
                   "objectives": [
-                    "Locate the dealer button"
+                    "Locate the dealer button",
+                    "Identify the small and big blinds"
                   ]
                 },
                 {
