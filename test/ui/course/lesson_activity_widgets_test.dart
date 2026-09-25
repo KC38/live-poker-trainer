@@ -6162,11 +6162,21 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(MultiwayPlanDemo), findsOneWidget);
+    expect(find.text('Value up'), findsNothing);
+    expect(find.text('Bluffs down'), findsNothing);
+    expect(find.text('Not second-best'), findsNothing);
+    expect(find.text('Tighten value'), findsOneWidget);
+    expect(find.text('Cut air'), findsOneWidget);
+    expect(find.text('Chase the top'), findsOneWidget);
     expect(find.text('Tap STRONGER next'), findsNothing);
     expect(find.text('Tap Stronger, Fewer, and Nuts.'), findsNothing);
     expect(find.text('Tap Stronger, Fewer, and Nuts'), findsNothing);
     expect(
       find.text('Stronger value · fewer bluffs · chase nuts'),
+      findsNothing,
+    );
+    expect(
+      find.text('Stronger · fewer · nuts'),
       findsNothing,
     );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
@@ -6183,7 +6193,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
 
-await tester.tap(find.text('STRONGER'));
+    await tester.tap(find.text('STRONGER'));
     await tester.pump();
     expect(find.text('Tap FEWER next'), findsNothing);
     await tester.tap(find.text('FEWER'));
@@ -6195,6 +6205,10 @@ await tester.tap(find.text('STRONGER'));
     // Lock clears enabled / ack — densified shell must stay filled.
     expect(
       find.text('Stronger value · fewer bluffs · chase nuts'),
+      findsNothing,
+    );
+    expect(
+      find.text('Stronger · fewer · nuts'),
       findsOneWidget,
     );
     expect(
@@ -12079,6 +12093,8 @@ await tester.tap(find.text('STRONGER'));
       find.text('Second pair four ways — tap Check or Bet.'),
       findsOneWidget,
     );
+    expect(find.text('Four ways — not auto-value'), findsNothing);
+    expect(find.text('Checked to you · 4-way'), findsWidgets);
     expect(find.text('CHECK'), findsOneWidget);
     await tester.tap(find.text('CHECK'));
     await tester.pump();
@@ -12123,6 +12139,8 @@ await tester.tap(find.text('STRONGER'));
       find.text('Missed on a wet board with a crowd — tap Check.'),
       findsOneWidget,
     );
+    expect(find.text('Crowd left — no bluff'), findsNothing);
+    expect(find.text('Three callers behind'), findsWidgets);
     // Authored multi-word CHECK stays short chrome.
     expect(find.text('CHECK'), findsOneWidget);
     await tester.tap(find.text('CHECK'));

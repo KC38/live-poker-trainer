@@ -381,10 +381,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Kc', '7s', '2d'],
         potLabel: 'Pot 16',
         villainLine: 'Checked to you · 4-way',
+        // Structural — don’t tip Check / not auto-value on the felt.
         streetLabel: 'Flop · Multiway · Second pair',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Four ways — not auto-value',
+        feltStatusLine: 'Checked to you · 4-way',
       );
     case 'act-03-07-01-scaffolded':
       return const LessonActionSpot(
@@ -392,10 +393,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Ah', 'Kh', '9h'],
         potLabel: 'Pot 22',
         villainLine: 'Three callers behind',
+        // Structural — don’t tip no-bluff on the felt.
         streetLabel: 'Flop · Wet · Missed',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Crowd left — no bluff',
+        feltStatusLine: 'Three callers behind',
       );
     case 'act-03-08-01-guided':
       return const LessonActionSpot(
@@ -3943,9 +3945,10 @@ class MultiwayPlanDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'STRONGER', caption: 'Value up', color: AppColors.gold),
-    (label: 'FEWER', caption: 'Bluffs down', color: AppColors.slate),
-    (label: 'NUTS', caption: 'Not second-best', color: AppColors.cream),
+    // Structural — Rex owns “stronger value” / “fewer bluffs” / “not second-best.”
+    (label: 'STRONGER', caption: 'Tighten value', color: AppColors.gold),
+    (label: 'FEWER', caption: 'Cut air', color: AppColors.slate),
+    (label: 'NUTS', caption: 'Chase the top', color: AppColors.cream),
   ];
 
   @override
@@ -4028,7 +4031,8 @@ class _MultiwayPlanDemoState extends State<MultiwayPlanDemo> {
                 ),
               ),
               child: Text(
-                'Stronger value · fewer bluffs · chase nuts',
+                // Match SoftPulse titles — don’t echo Rex’s “chase nuts.”
+                'Stronger · fewer · nuts',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
@@ -4045,6 +4049,7 @@ class _MultiwayPlanDemoState extends State<MultiwayPlanDemo> {
               : MainAxisAlignment.start,
       children: [
         Text(
+          // Structural label — Rex owns multiway copy in the dock.
           'Multiway adjustments',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
