@@ -16804,8 +16804,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Best overbet river — tap Nuts / bluffs.'),
+      find.text('Best overbet river — pick the polar candidate.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Best overbet river — tap Nuts / bluffs.'),
+      findsNothing,
     );
     await tester.tap(find.text('Nuts / bluffs'));
     await tester.pump();
@@ -16856,8 +16860,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Pot 20 after half-pot flop — tap Bet ~20.'),
+      find.text('Pot 20 after half-pot flop — keep geometric pressure.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Pot 20 after half-pot flop — tap Bet ~20.'),
+      findsNothing,
     );
     expect(find.text('BET ~20'), findsOneWidget);
     await tester.tap(find.text('BET ~20'));
@@ -16893,8 +16901,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Random 3x pot medium — tap Avoid.'),
+      find.text('Random 3x pot medium — pick the disciplined line.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Random 3x pot medium — tap Avoid.'),
+      findsNothing,
     );
     await tester.tap(find.text('Avoid'));
     await tester.pump();
@@ -16931,8 +16943,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Geometric sizing helps — tap Multi-street plan.'),
+      find.text('Geometric sizing helps — pick what it links.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Geometric sizing helps — tap Multi-street plan.'),
+      findsNothing,
     );
     await tester.tap(find.text('Multi-street plan'));
     await tester.pump();
