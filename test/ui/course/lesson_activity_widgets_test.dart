@@ -21754,7 +21754,7 @@ await tester.tap(find.text('STRONGER'));
         ),
       );
       expect(find.byType(CapstoneMultiwayDeepDemo), findsOneWidget);
-      expect(find.text('Tap NUTS next'), findsOneWidget);
+      expect(find.text('Tap NUTS next'), findsNothing);
       expect(find.text('Tap Nuts, Deep, and No-bluff.'), findsNothing);
       expect(find.text('Tap Nuts, Deep, and No-bluff'), findsNothing);
       expect(
@@ -21777,10 +21777,10 @@ await tester.tap(find.text('STRONGER'));
 
       await tester.tap(find.text('NUTS'));
       await tester.pump();
-      expect(find.text('Tap DEEP next'), findsOneWidget);
+      expect(find.text('Tap DEEP next'), findsNothing);
       await tester.tap(find.text('DEEP'));
       await tester.pump();
-      expect(find.text('Tap NO-BLUFF next'), findsOneWidget);
+      expect(find.text('Tap NO-BLUFF next'), findsNothing);
       await tester.tap(find.text('NO-BLUFF'));
       await tester.pump();
       expect(feltAck, 1);
