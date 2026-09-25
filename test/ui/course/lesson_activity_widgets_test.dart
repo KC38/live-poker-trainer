@@ -20723,7 +20723,7 @@ await tester.tap(find.text('STRONGER'));
       expect(find.text('BOARD'), findsOneWidget);
       expect(find.text('LINE'), findsOneWidget);
       expect(find.text('SIZE'), findsOneWidget);
-      expect(find.text('Tap TYPE next'), findsOneWidget);
+      expect(find.text('Tap TYPE next'), findsNothing);
       expect(find.text('Tap Type, Board, Line, and Size.'), findsNothing);
       expect(find.text('Tap Type, Board, Line, and Size'), findsNothing);
       expect(
@@ -20737,13 +20737,13 @@ await tester.tap(find.text('STRONGER'));
 
       await tester.tap(find.text('TYPE'));
       await tester.pump();
-      expect(find.text('Tap BOARD next'), findsOneWidget);
+      expect(find.text('Tap BOARD next'), findsNothing);
       await tester.tap(find.text('BOARD'));
       await tester.pump();
-      expect(find.text('Tap LINE next'), findsOneWidget);
+      expect(find.text('Tap LINE next'), findsNothing);
       await tester.tap(find.text('LINE'));
       await tester.pump();
-      expect(find.text('Tap SIZE next'), findsOneWidget);
+      expect(find.text('Tap SIZE next'), findsNothing);
       await tester.tap(find.text('SIZE'));
       await tester.pump();
       expect(feltAck, 1);
