@@ -44,7 +44,7 @@ class FullTableHandLabActivity extends StatelessWidget {
       children: [
         if (showGuidance)
           const RexCoachLine(
-            text: 'Hand lab — tap the action you would take live.',
+            text: 'Hand lab — pick the action you would take live.',
           ),
         const SizedBox(height: 12),
         PokerActionSizingActivity(
