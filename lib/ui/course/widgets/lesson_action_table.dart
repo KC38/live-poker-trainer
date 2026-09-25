@@ -7014,9 +7014,10 @@ class ObservationCertaintyDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'OBSERVE', caption: 'Not certainty yet', color: AppColors.gold),
-    (label: 'SAMPLES', caption: 'Confidence grows', color: AppColors.cream),
-    (label: 'SHOWDOWNS', caption: 'Hard evidence', color: AppColors.danger),
+    // Structural — Rex owns “observation ≠ certainty / samples / showdowns.”
+    (label: 'OBSERVE', caption: 'Watch first', color: AppColors.gold),
+    (label: 'SAMPLES', caption: 'Build the count', color: AppColors.cream),
+    (label: 'SHOWDOWNS', caption: 'Cards speak', color: AppColors.danger),
   ];
 
   @override
@@ -7102,7 +7103,7 @@ class _ObservationCertaintyDemoState extends State<ObservationCertaintyDemo> {
                 ),
               ),
               child: Text(
-                'Samples and showdowns grow confidence',
+                'Observe · samples · showdowns',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,

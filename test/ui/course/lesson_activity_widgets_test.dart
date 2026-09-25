@@ -5037,7 +5037,7 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Tap Observe, Samples, and Showdowns.'), findsNothing);
     expect(find.text('Tap Observe, Samples, and Showdowns'), findsNothing);
     expect(
-      find.text('Samples and showdowns grow confidence'),
+      find.text('Observe · samples · showdowns'),
       findsNothing,
     );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
@@ -5065,7 +5065,7 @@ await tester.tap(find.text('NIT'));
     expect(feltAck, 1);
     // Lock clears enabled / ack — densified shell must stay filled.
     expect(
-      find.text('Samples and showdowns grow confidence'),
+      find.text('Observe · samples · showdowns'),
       findsOneWidget,
     );
     expect(
