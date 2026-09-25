@@ -233,7 +233,8 @@ class PokerActionSizingActivity extends StatelessWidget {
 String? _guidedPulseTargetId(CourseActivity activity) {
   if (activity.stage != ActivityStage.guided &&
       activity.stage != ActivityStage.scaffolded &&
-      activity.stage != ActivityStage.checkpoint) {
+      activity.stage != ActivityStage.checkpoint &&
+      activity.stage != ActivityStage.jumpTest) {
     return null;
   }
   return switch (activity.id) {
@@ -298,6 +299,9 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     // Type × board × line: SoftPulse the plan; Rex names the spot, not the dock.
     'act-07-08-01-guided' => 'call',
     'act-07-08-01-scaffolded' => 'raise',
+    // S4 jump docks — SoftPulse owns the answer.
+    'act-04-10-02-jump-3bet' => 'j4-3bet',
+    'act-04-10-02-jump-size' => 'j4-10',
     _ => null,
   };
 }
@@ -428,11 +432,13 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     'act-04-10-01-unguided' =>
       'Maniac barrels second pair — tap Call.',
     'act-04-10-01-checkpoint' =>
-      'BTN vs Nit BB with KTo — tap Open to 6.',
+      'BTN vs Nit BB with KTo — pick Open or Fold.',
+    // SoftPulse owns 3-bet to 18 — don’t gold-tip the dock.
     'act-04-10-02-jump-3bet' =>
-      'CO opens · KK on BTN — tap 3-bet to 18.',
+      'CO opens · KK on BTN — pick a value 3-bet.',
+    // SoftPulse owns Bet 10 — don’t gold-tip the dock.
     'act-04-10-02-jump-size' =>
-      'Top pair into pot 20 — tap Bet 10.',
+      'Top pair into pot 20 — pick a value size.',
     'act-05-01-01-scaffolded' =>
       '76s in SB multiway — tap Fold.',
     'act-05-01-01-unguided' =>
