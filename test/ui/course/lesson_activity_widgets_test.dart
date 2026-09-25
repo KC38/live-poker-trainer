@@ -2348,7 +2348,8 @@ void main() {
     expect(find.byType(LessonActionTable), findsOneWidget);
     expect(find.byType(LessonActionDock), findsOneWidget);
     expect(find.text('Trash UTG — tap Fold.'), findsOneWidget);
-    expect(find.text('First in — trash folds'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no third gold felt status.
+    expect(find.text('First in — trash folds'), findsNothing);
     expect(
       find.text('You are UTG with 72o at 1/2. What do you do?'),
       findsNothing,
@@ -2525,7 +2526,8 @@ void main() {
       find.text('Junk in the big blind vs an open — tap Fold.'),
       findsOneWidget,
     );
-    expect(find.text('Facing an open — junk folds'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no third gold felt status.
+    expect(find.text('Facing an open — junk folds'), findsNothing);
     expect(
       find.text('UTG opens to 6. You have J3o in the big blind. Action?'),
       findsNothing,
@@ -10525,6 +10527,7 @@ await tester.tap(find.text('STRONGER'));
     expect(find.byType(LessonActionTable), findsOneWidget);
     expect(find.text('Trash UTG — tap Fold or Open.'), findsOneWidget);
     expect(find.text('UTG with 72o. Action?'), findsNothing);
+    // Jump has no SoftPulse — authored felt status still guides.
     expect(find.text('First in — trash folds'), findsOneWidget);
     expect(find.text('First in — open the pot'), findsNothing);
     expect(find.text('OPEN TO 6'), findsOneWidget);
@@ -10689,7 +10692,8 @@ await tester.tap(find.text('STRONGER'));
       find.text('Top pair top kicker checked to you — tap a value bet.'),
       findsOneWidget,
     );
-    expect(find.text('Checked to you — value bet'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no third gold felt status.
+    expect(find.text('Checked to you — value bet'), findsNothing);
     expect(
       find.text('Heads-up. You hold top pair top kicker. Checked to you. Action?'),
       findsNothing,
