@@ -127,8 +127,9 @@ class AuthoredMultiStepActivity extends StatelessWidget {
         if (tableMode) {
           final pulseChoiceId =
               locked || selected != null ? null : _pulseChoiceIdFor(step);
-          // SoftPulse + Rex own the cue — hide generic felt gold status.
-          final coachOwnsCue = !locked && pulseChoiceId != null;
+          // SoftPulse and/or Rex own the cue — hide a third gold felt tip
+          // (including SoftPulse-quiet checkpoint/jump where SoftPulse is off).
+          final coachOwnsCue = !locked;
           return LayoutBuilder(
             builder: (context, constraints) {
               final fill =
