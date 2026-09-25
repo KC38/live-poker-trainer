@@ -754,14 +754,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Ranges and SPR — don’t gold-tip the tile.
       'act-07-04-01-checkpoint' =>
           'Pot type — pick what changes.',
+      // SoftPulse owns Usually no — don’t gold-tip the tile.
       'act-07-05-01-guided' =>
-          'Four-way river — tap Usually no.',
+          'Four-way river — pick the air-bluff call.',
+      // SoftPulse owns Higher HU — don’t gold-tip the tile.
       'act-07-05-01-scaffolded' =>
-          'HU vs nit — tap Higher HU.',
+          'HU vs nit — pick the steal frequency.',
+      // Unguided: name the spot; don’t tip Thicker value.
       'act-07-05-01-unguided' =>
-          'Multiway top set — tap Thicker value.',
+          'Multiway top set — pick the line lean.',
+      // SoftPulse owns First-class input — don’t gold-tip the tile.
       'act-07-05-01-checkpoint' =>
-          'Player count — tap First-class input.',
+          'Player count — pick how it ranks.',
       'act-07-06-01-guided' =>
           '35bb TPTK — tap Closer to stacking.',
       'act-07-06-01-scaffolded' =>
