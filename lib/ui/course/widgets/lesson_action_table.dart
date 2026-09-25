@@ -6680,9 +6680,10 @@ class VsTagsDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'CREDIT', caption: 'Respect raises', color: AppColors.gold),
-    (label: 'TIGHTER', caption: 'Steal less vs TAG', color: AppColors.cream),
-    (label: 'NO LIGHT', caption: 'Skip rebluff XR', color: AppColors.danger),
+    // Structural — Rex owns “respect raises / no light bluff-raises.”
+    (label: 'CREDIT', caption: 'Believe their heat', color: AppColors.gold),
+    (label: 'TIGHTER', caption: 'Narrow steals', color: AppColors.cream),
+    (label: 'NO LIGHT', caption: 'Skip fancy XR', color: AppColors.danger),
   ];
 
   @override
@@ -6765,7 +6766,7 @@ class _VsTagsDemoState extends State<VsTagsDemo> {
                 ),
               ),
               child: Text(
-                'Respect heat · steal less · no light XR',
+                'Credit · tighter · no light',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
