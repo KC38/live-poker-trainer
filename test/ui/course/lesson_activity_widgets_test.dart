@@ -9658,6 +9658,49 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
+  testWidgets('SoftPulse-quiet family checkpoint uses pick-family cue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-02-01-checkpoint-trash',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Look at seven-two offsuit on the felt — tap Offsuit trash.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Name the family for your holes.',
+      choices: const [
+        CourseChoice(id: 'hf-trash', label: 'Offsuit trash'),
+        CourseChoice(id: 'hf-pair', label: 'Pocket pair'),
+        CourseChoice(id: 'hf-suited-ace', label: 'Suited ace'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(
+      find.text('Early seat with junk — pick the family that fits.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Early seat with junk — weak trash rarely belongs in the open.'),
+      findsNothing,
+    );
+    final table = tester.widget<LessonTableContext>(
+      find.byType(LessonTableContext),
+    );
+    expect(table.showSoftPulse, isFalse);
+    controller.dispose();
+  });
+
   testWidgets('section jump family taps Suited ace on densified felt', (
     tester,
   ) async {

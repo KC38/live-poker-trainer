@@ -383,8 +383,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Both cards ten-or-better — high-card broadway strength shows up.',
       'act-02-02-01-unguided-sc' =>
           'Look at your holes — pick the family that fits.',
+      // SoftPulse-quiet: list families — don't tip trash as the answer.
       'act-02-02-01-checkpoint-trash' =>
-          'Early seat with junk — weak trash rarely belongs in the open.',
+          'Early seat with junk — pick the family that fits.',
       'act-02-05-01-guided-convert' =>
           '200 chips at 1/2 — divide chips by the big blind.',
       'act-02-05-01-checkpoint-200' =>
