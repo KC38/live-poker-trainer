@@ -1857,7 +1857,8 @@ void main() {
       ),
     );
     expect(find.byType(HandFamiliesDemo), findsOneWidget);
-    expect(find.text('Tap Pairs next'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no Tap Pairs next footer stack.
+    expect(find.text('Tap Pairs next'), findsNothing);
     expect(find.text('Tap each starting-hand family'), findsNothing);
     expect(find.text('Tap each starting-hand family.'), findsNothing);
     expect(
@@ -1881,13 +1882,13 @@ void main() {
 
     await tester.tap(find.text('Pairs'));
     await tester.pump();
-    expect(find.text('Tap Broadways next'), findsOneWidget);
+    expect(find.text('Tap Broadways next'), findsNothing);
     await tester.tap(find.text('Broadways'));
     await tester.pump();
-    expect(find.text('Tap Suited aces next'), findsOneWidget);
+    expect(find.text('Tap Suited aces next'), findsNothing);
     await tester.tap(find.text('Suited aces'));
     await tester.pump();
-    expect(find.text('Tap Connectors next'), findsOneWidget);
+    expect(find.text('Tap Connectors next'), findsNothing);
     await tester.tap(find.text('Connectors'));
     await tester.pump();
     expect(feltAck, 1);
