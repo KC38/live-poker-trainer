@@ -383,8 +383,10 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       controller.failSubmit();
       if (!mounted) return;
       if (_isStaleActivityError(error)) {
+        // Only banner when the server cursor actually jumps — silent when the
+        // mid-lesson resync lands on the same step (common race / double-tap).
         await _resyncToServerCursor(
-          notice: 'Caught up to your saved progress.',
+          noticeIfCursorJumped: 'Caught up to your saved progress.',
         );
         return;
       }
@@ -404,9 +406,10 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
   }
 
   /// Re-reads the server resume pointer and rebinds the visible activity.
-  Future<void> _resyncToServerCursor({String? notice}) async {
+  Future<void> _resyncToServerCursor({String? noticeIfCursorJumped}) async {
     final controller = _activityController;
     if (controller == null) return;
+    final priorActivityId = controller.activity.id;
     final CourseCatalog catalog;
     try {
       catalog = await ref.read(courseCatalogProvider.future);
@@ -432,6 +435,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         (a) => a.id == started.resume.activityId,
         orElse: () => activities.first,
       );
+      final jumped = current.id != priorActivityId;
       controller.bindActivity(current);
       setState(() {
         _activities = activities;
@@ -439,8 +443,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         _error = null;
         _bootstrapping = false;
       });
-      if (notice != null && mounted) {
-        _showNonBlockingNotice(notice);
+      if (jumped && noticeIfCursorJumped != null && mounted) {
+        _showNonBlockingNotice(noticeIfCursorJumped);
       }
     } catch (error) {
       if (!mounted) return;

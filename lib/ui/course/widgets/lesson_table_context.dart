@@ -2396,8 +2396,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.habitProtectOutcomes,
         heroCodes: ['Ah', 'Kd'],
         showMuck: true,
-        // Structural spot — Rex owns the muck-protect cue.
-        caption: 'Holes near the discard pile',
+        // Structural spot — Rex owns the muck-protect cue (no discard/muck echo).
+        caption: 'Live table · your holes',
       );
     case 'act-02-06-01-checkpoint-oot':
       return const LessonTableScene(
@@ -6831,7 +6831,7 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive:
           'Interactive live habit — tap how you protect hole cards',
       semanticsStatic: 'Live habit protect outcomes',
-      caption: scene.caption ?? 'Holes near the discard pile',
+      caption: scene.caption ?? 'Live table · your holes',
       // SoftPulse + Rex own the cue when guided — no Tap Chip on cards footer.
       cueLabel: '',
       guideRegion: LessonTableRegion.habitChipProtect,
@@ -6839,7 +6839,9 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.habitChipProtect,
           title: 'Chip on cards',
-          detail: 'Protected',
+          // Structural — not “Protected” answering the habit.
+          detail: 'On top',
+          // Unguided: no gold tip on the correct tile.
           visual: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -6858,7 +6860,7 @@ class LessonTableContext extends StatelessWidget {
               const SizedBox(height: 4),
               const Icon(
                 Icons.monetization_on_outlined,
-                color: AppColors.gold,
+                color: AppColors.slate,
                 size: 18,
               ),
             ],
@@ -6867,7 +6869,8 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.habitSpreadFlash,
           title: 'Spread open',
-          detail: 'Camera bait',
+          // Structural — not “Camera bait” spoiling why it is wrong.
+          detail: 'Face up',
           visual: const Icon(
             Icons.visibility_outlined,
             color: AppColors.slate,
@@ -6877,7 +6880,8 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.habitLeaveLoose,
           title: 'Leave loose',
-          detail: 'Near muck',
+          // Structural — not “Near muck” echoing Rex.
+          detail: 'No chip',
           visual: const Icon(
             Icons.delete_outline,
             color: AppColors.slate,
@@ -6901,17 +6905,20 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.habitOotProblem,
           title: 'Out of turn',
-          detail: 'Your mistake',
+          // Structural — not “Your mistake” answering the checkpoint.
+          detail: 'Too soon',
+          // Checkpoint: no gold tip on the correct tile.
           visual: const Icon(
             Icons.warning_amber_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
         (
           region: LessonTableRegion.habitOotFasterFine,
           title: 'Speed is fine',
-          detail: 'Always reward',
+          // Structural — not “Always reward” tipping the grade.
+          detail: 'Faster OK?',
           visual: const Icon(
             Icons.speed,
             color: AppColors.slate,
@@ -6921,7 +6928,8 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.habitOotDealerFault,
           title: 'Dealer fault',
-          detail: 'Blame them',
+          // Structural — not “Blame them” tipping the grade.
+          detail: 'Not you?',
           visual: const Icon(
             Icons.gavel_outlined,
             color: AppColors.slate,
