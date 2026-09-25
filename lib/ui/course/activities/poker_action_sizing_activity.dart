@@ -423,10 +423,12 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // SoftPulse owns 3-bet size — don’t gold-tip the dock.
     'act-04-02-01-checkpoint' =>
       'KK vs a live open to 6 — pick a value 3-bet size.',
+    // SoftPulse owns Check (abort) — don’t gold-tip the dock.
     'act-04-03-01-scaffolded' =>
-      'Air vs a flush turn — tap Check to shut down.',
+      'Air vs a flush turn — the bluff story just got worse.',
+    // Unguided: name the spot; list legal lines without SoftPulse.
     'act-04-03-01-unguided' =>
-      'Medium hand multiway and deep — tap Keep pot small.',
+      'Medium hand multiway and deep — pick Keep pot small or Jam.',
     // SoftPulse owns value size — don’t gold-tip the dock.
     'act-04-04-01-guided' =>
       'Dry board, top pair heads-up — ask for a value call into 20.',
