@@ -283,8 +283,9 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     'act-02-07-01-unguided-lab' =>
       'CO open faces you on the button — tap Fold, Call, or 3-bet.',
     // Jump: name the spot, not the answer.
+    // Jump: name the seat, not the answer.
     'act-02-07-02-jump-open' =>
-      'Trash UTG — tap Fold or Open.',
+      'UTG first in — tap Fold or Open.',
     'act-02-03-01-guided-utg' =>
       'Trash UTG — tap Fold.',
     'act-02-03-01-scaffolded-qq' =>

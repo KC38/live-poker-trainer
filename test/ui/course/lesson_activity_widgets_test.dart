@@ -11126,11 +11126,13 @@ await tester.tap(find.text('STRONGER'));
       ),
     );
     expect(find.byType(LessonActionTable), findsOneWidget);
-    expect(find.text('Trash UTG — tap Fold or Open.'), findsOneWidget);
+    expect(find.text('UTG first in — tap Fold or Open.'), findsOneWidget);
+    expect(find.text('Trash UTG — tap Fold or Open.'), findsNothing);
     expect(find.text('UTG with 72o. Action?'), findsNothing);
-    // Jump has no SoftPulse — authored felt status still guides.
-    expect(find.text('First in — trash folds'), findsOneWidget);
+    // Jump: structural felt only — no “trash folds” answer tip.
+    expect(find.text('First in — trash folds'), findsNothing);
     expect(find.text('First in — open the pot'), findsNothing);
+    expect(find.text('First in · your action'), findsOneWidget);
     expect(find.text('OPEN TO 6'), findsOneWidget);
     await tester.tap(find.text('FOLD'));
     await tester.pump();
