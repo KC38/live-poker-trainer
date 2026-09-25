@@ -2911,6 +2911,54 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('live-habits guided SoftPulse Watch — no Rex-echo felt caption', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-06-01-guided-follow',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Follow earlier actions before choosing yours.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Two seats act before you. What first?',
+      choices: const [
+        CourseChoice(id: 'watch', label: 'Watch what they do, then decide'),
+        CourseChoice(
+          id: 'look-away',
+          label: 'Stare at your phone until it is your turn',
+        ),
+        CourseChoice(
+          id: 'decide-now',
+          label: 'Decide your action before they act',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Two seats act before you — tap what you do first.'),
+      findsOneWidget,
+    );
+    // SoftPulse + Rex own the cue — felt caption stays structural.
+    expect(find.text('Two seats still to act · you are next'), findsNothing);
+    expect(find.text('Preflop · action above you'), findsOneWidget);
+    expect(find.text('Watch first'), findsOneWidget);
+    await tester.tap(find.text('Watch first'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'watch');
+    controller.dispose();
+  });
+
 
   testWidgets('full-ring explain taps Nine Same Position instead of Continue', (
     tester,

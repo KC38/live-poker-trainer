@@ -2381,27 +2381,31 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.habitWatchOutcomes,
         heroCodes: ['Ah', 'Kd'],
         villainSeatCount: 1,
-        caption: 'Two seats still to act · you are next',
+        // Structural spot — Rex owns “two seats act before you.”
+        caption: 'Preflop · action above you',
       );
     case 'act-02-06-01-scaffolded-verbal':
       return const LessonTableScene(
         layout: LessonTableLayout.habitVerbalOutcomes,
         heroCodes: ['Ah', 'Kd'],
-        caption: 'You want to raise · live table',
+        // Structural spot — Rex owns the raise announce cue.
+        caption: 'Live table · your turn to bet',
       );
     case 'act-02-06-01-unguided-protect':
       return const LessonTableScene(
         layout: LessonTableLayout.habitProtectOutcomes,
         heroCodes: ['Ah', 'Kd'],
         showMuck: true,
-        caption: 'Your cards sit near the muck',
+        // Structural spot — Rex owns the muck-protect cue.
+        caption: 'Holes near the discard pile',
       );
     case 'act-02-06-01-checkpoint-oot':
       return const LessonTableScene(
         layout: LessonTableLayout.habitOotOutcomes,
         heroCodes: ['Ah', 'Kd'],
         villainSeatCount: 1,
-        caption: 'Action two seats left · you tossed a raise',
+        // Structural spot — Rex owns the early-raise cue.
+        caption: 'Action still left · chips already out',
       );
     case 'act-03-01-01-guided':
       return const LessonTableScene(
@@ -6736,7 +6740,10 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive:
           'Interactive live habit — tap watch, phone, or decide early',
       semanticsStatic: 'Live habit watch outcomes',
-      caption: scene.caption ?? 'Two seats still to act',
+      caption: scene.caption ?? 'Preflop · action above you',
+      // SoftPulse + Rex own the cue — no Tap Watch first footer.
+      cueLabel: '',
+      guideRegion: LessonTableRegion.habitWatchAction,
       phases: [
         (
           region: LessonTableRegion.habitWatchAction,
@@ -6777,7 +6784,10 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive:
           'Interactive live habit — tap how you announce a raise',
       semanticsStatic: 'Live habit verbal outcomes',
-      caption: scene.caption ?? 'You want to raise',
+      caption: scene.caption ?? 'Live table · your turn to bet',
+      // SoftPulse + Rex own the cue — no Tap Say raise footer.
+      cueLabel: '',
+      guideRegion: LessonTableRegion.habitSayRaise,
       phases: [
         (
           region: LessonTableRegion.habitSayRaise,
@@ -6821,7 +6831,10 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive:
           'Interactive live habit — tap how you protect hole cards',
       semanticsStatic: 'Live habit protect outcomes',
-      caption: scene.caption ?? 'Cards near the muck',
+      caption: scene.caption ?? 'Holes near the discard pile',
+      // SoftPulse + Rex own the cue when guided — no Tap Chip on cards footer.
+      cueLabel: '',
+      guideRegion: LessonTableRegion.habitChipProtect,
       phases: [
         (
           region: LessonTableRegion.habitChipProtect,
@@ -6880,7 +6893,10 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive:
           'Interactive live habit — tap what went wrong out of turn',
       semanticsStatic: 'Live habit out-of-turn outcomes',
-      caption: scene.caption ?? 'Action still left · you tossed a raise',
+      caption: scene.caption ?? 'Action still left · chips already out',
+      // SoftPulse + Rex own the cue when guided — no Tap Out of turn footer.
+      cueLabel: '',
+      guideRegion: LessonTableRegion.habitOotProblem,
       phases: [
         (
           region: LessonTableRegion.habitOotProblem,
