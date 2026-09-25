@@ -9047,12 +9047,15 @@ class LessonTableContext extends StatelessWidget {
           'Interactive sample confidence — tap low or maximum',
       semanticsStatic: 'Sample confidence outcomes',
       caption: scene.caption ?? 'Only 2 hands tagged so far',
+      // SoftPulse + Rex own the cue — don’t gold-tip Low with matching “2”.
+      cueLabel: '',
+      guideRegion: LessonTableRegion.sampleConfidenceLow,
       phases: [
         (
           region: LessonTableRegion.sampleConfidenceLow,
           title: 'Low',
           detail: 'Keep sampling',
-          visual: const _PotChipDot(label: '2', gold: true),
+          visual: const _PotChipDot(label: 'LO', gold: true),
         ),
         (
           region: LessonTableRegion.sampleConfidenceMax,
