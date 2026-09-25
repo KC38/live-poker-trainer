@@ -873,10 +873,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Kc', '9s', '4h', '2d', '7c'],
         potLabel: 'Pot 32',
         villainLine: 'Calling Station checked twice',
+        // Structural — Rex + SoftPulse own thin-value teaching.
         streetLabel: 'River · second pair',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Station pays — bet thin value',
+        feltStatusLine: 'Checked to you',
       );
     case 'act-05-09-02-cp-catch':
       return const LessonActionSpot(
@@ -884,9 +885,10 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Kc', '9s', '4h', '2d', '7c'],
         potLabel: 'Pot 48',
         villainLine: 'Maniac barrels river',
+        // Structural — don’t tip Call / catch on the felt.
         streetLabel: 'River · second pair',
         facingBet: true,
-        feltStatusLine: 'Wide barrels — call the catch',
+        feltStatusLine: 'Facing a bet',
       );
     case 'act-06-01-01-unguided':
       return const LessonActionSpot(

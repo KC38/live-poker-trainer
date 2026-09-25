@@ -15964,7 +15964,11 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Four-way pot — tap Nut potential.'), findsOneWidget);
+    expect(
+      find.text('Four-way pot — pick the multiway priority.'),
+      findsOneWidget,
+    );
+    expect(find.text('Four-way pot — tap Nut potential.'), findsNothing);
     await tester.tap(find.text('Nut potential'));
     await tester.pump();
     expect(controller.draft.choiceId, 'nut');
@@ -16010,10 +16014,18 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Station · second pair river — tap Bet thin value.'),
+      find.text('Station · second pair river — extract vs wide calls.'),
       findsOneWidget,
     );
+    expect(
+      find.text('Station · second pair river — tap Bet thin value.'),
+      findsNothing,
+    );
+    expect(find.text('Station pays — bet thin value'), findsNothing);
     expect(find.text('BET THIN VALUE'), findsOneWidget);
+    final dock =
+        tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'bet');
     await tester.tap(find.text('BET THIN VALUE'));
     await tester.pump();
     expect(controller.draft.choiceId, 'bet');
@@ -16047,10 +16059,18 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Maniac river barrel — tap Call.'),
+      find.text('Maniac river barrel — catch wide aggression.'),
       findsOneWidget,
     );
+    expect(
+      find.text('Maniac river barrel — tap Call.'),
+      findsNothing,
+    );
+    expect(find.text('Wide barrels — call the catch'), findsNothing);
     expect(find.text('CALL'), findsOneWidget);
+    final dock =
+        tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'call');
     await tester.tap(find.text('CALL'));
     await tester.pump();
     expect(controller.draft.choiceId, 'call');
@@ -16084,8 +16104,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Instant shove — tap Soft evidence.'),
+      find.text('Instant shove — weigh what timing proves.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Instant shove — tap Soft evidence.'),
+      findsNothing,
     );
     await tester.tap(find.text('Soft evidence'));
     await tester.pump();
@@ -16119,7 +16143,11 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Hit stop-loss — tap Honor stop.'), findsOneWidget);
+    expect(
+      find.text('Hit stop-loss — honor the session guardrail.'),
+      findsOneWidget,
+    );
+    expect(find.text('Hit stop-loss — tap Honor stop.'), findsNothing);
     await tester.tap(find.text('Honor stop'));
     await tester.pump();
     expect(controller.draft.choiceId, 'stop');

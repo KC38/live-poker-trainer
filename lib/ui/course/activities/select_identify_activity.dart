@@ -546,11 +546,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-05-09-01-checkpoint' =>
           'Session discipline — tap Your edge.',
       'act-05-09-02-cp-multi' =>
-          'Four-way pot — tap Nut potential.',
+          'Four-way pot — pick the multiway priority.',
       'act-05-09-02-cp-tell' =>
-          'Instant shove — tap Soft evidence.',
+          'Instant shove — weigh what timing proves.',
       'act-05-09-02-cp-stop' =>
-          'Hit stop-loss — tap Honor stop.',
+          'Hit stop-loss — honor the session guardrail.',
       'act-06-01-01-guided' =>
           'A-high dry flop — tap Preflop raiser.',
       'act-06-01-01-scaffolded' =>
