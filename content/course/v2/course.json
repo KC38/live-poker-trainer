@@ -1321,7 +1321,7 @@
                   "stage": "explain",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Three quiet buttons — SoftPulse walks each role.",
+                  "accessibilityText": "Three quiet buttons — each has a different job.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -1330,7 +1330,7 @@
                     {
                       "id": "act-01-03-01-explain-passive-media",
                       "kind": "dialogue",
-                      "text": "Three quiet buttons — SoftPulse walks each role."
+                      "text": "Three quiet buttons — each has a different job."
                     }
                   ],
                   "objectives": [
@@ -1582,7 +1582,7 @@
                   "stage": "explain",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Three chip-pushing buttons — SoftPulse walks each role.",
+                  "accessibilityText": "Three chip-pushing buttons — each has a different job.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -1591,7 +1591,7 @@
                     {
                       "id": "act-01-03-02-explain-aggro-media",
                       "kind": "dialogue",
-                      "text": "Three chip-pushing buttons — SoftPulse walks each role."
+                      "text": "Three chip-pushing buttons — each has a different job."
                     }
                   ],
                   "objectives": [
@@ -3815,7 +3815,7 @@
                   "stage": "explain",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Who opens — and how wide. SoftPulse walks each cue.",
+                  "accessibilityText": "Who opens — and how wide. Position shapes the first action.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -3824,7 +3824,7 @@
                     {
                       "id": "act-02-03-01-explain-open-media",
                       "kind": "dialogue",
-                      "text": "Who opens — and how wide. SoftPulse walks each cue."
+                      "text": "Who opens — and how wide. Position shapes the first action."
                     }
                   ],
                   "objectives": [
