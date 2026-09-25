@@ -3634,6 +3634,8 @@ await tester.tap(find.text('FLOP'));
       ),
     );
     expect(find.byType(SizingLanguageDemo), findsOneWidget);
+    expect(find.text('Three size stories'), findsOneWidget);
+    expect(find.text('Size is language'), findsNothing);
     expect(find.text('Tap VALUE next'), findsNothing);
     expect(find.text('Tap Value, Pressure, and Size'), findsNothing);
     expect(find.text('Tap Value, Pressure, and Size.'), findsNothing);
