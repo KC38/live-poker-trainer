@@ -4491,10 +4491,17 @@ await tester.tap(find.text('VALUE'));
     expect(find.text('Tap VALUE next'), findsNothing);
     expect(find.text('Tap Value, Bluffs, and Cite'), findsNothing);
     expect(find.text('Tap Value, Bluffs, and Cite.'), findsNothing);
+    expect(find.text('Thicker value'), findsNothing);
+    expect(find.text('Fewer pure bluffs'), findsNothing);
+    expect(find.text('Their calling'), findsNothing);
+    expect(find.text('Get paid more'), findsOneWidget);
+    expect(find.text('Cut thin air'), findsOneWidget);
+    expect(find.text('Name the sample'), findsOneWidget);
     expect(
       find.text('Value wider · bluff less · cite calling'),
       findsNothing,
     );
+    expect(find.text('Value · bluffs · cite'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
     final teachHeight =
@@ -4509,7 +4516,7 @@ await tester.tap(find.text('VALUE'));
       ),
     );
 
-await tester.tap(find.text('VALUE'));
+    await tester.tap(find.text('VALUE'));
     await tester.pump();
     expect(find.text('Tap BLUFFS next'), findsNothing);
     await tester.tap(find.text('BLUFFS'));
@@ -4521,6 +4528,10 @@ await tester.tap(find.text('VALUE'));
     // Lock clears enabled / ack — densified shell must stay filled.
     expect(
       find.text('Value wider · bluff less · cite calling'),
+      findsNothing,
+    );
+    expect(
+      find.text('Value · bluffs · cite'),
       findsOneWidget,
     );
     expect(

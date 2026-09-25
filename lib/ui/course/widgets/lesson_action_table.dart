@@ -5500,9 +5500,10 @@ class VsStationDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'VALUE', caption: 'Thicker value', color: AppColors.gold),
-    (label: 'BLUFFS', caption: 'Fewer pure bluffs', color: AppColors.danger),
-    (label: 'CITE', caption: 'Their calling', color: AppColors.cream),
+    // Structural — Rex owns “thicker value / fewer pure bluffs / cite calling.”
+    (label: 'VALUE', caption: 'Get paid more', color: AppColors.gold),
+    (label: 'BLUFFS', caption: 'Cut thin air', color: AppColors.danger),
+    (label: 'CITE', caption: 'Name the sample', color: AppColors.cream),
   ];
 
   @override
@@ -5585,7 +5586,8 @@ class _VsStationDemoState extends State<VsStationDemo> {
                 ),
               ),
               child: Text(
-                'Value wider · bluff less · cite calling',
+                // Match SoftPulse titles — don’t echo Rex’s thicker/fewer line.
+                'Value · bluffs · cite',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
