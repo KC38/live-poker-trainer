@@ -10005,8 +10005,7 @@ await tester.tap(find.text('STRONGER'));
       resolveLessonTableScene(activity)?.layout,
       LessonTableLayout.drawPriceOutcomes,
     );
-    expect(resolveLessonTableScene(activity)?.caption,
-        'Pot 20 · bet 10 · ~8 clean outs');
+    expect(resolveLessonTableScene(activity)?.caption, 'Pot 20 · bet 10');
     expect(
       mapTableRegionToChoiceId(
         activityId: activity.id,
@@ -10030,6 +10029,9 @@ await tester.tap(find.text('STRONGER'));
       find.text('Getting 3:1 with real outs — tap what you do.'),
       findsOneWidget,
     );
+    expect(find.text('Pot 20 · bet 10'), findsOneWidget);
+    // Felt must not spoil the outs count answering Call.
+    expect(find.textContaining('~8 clean outs'), findsNothing);
     expect(
       find.text(
         'Pot 20, bet 10 (call 10 into 30). You have ~8 clean outs on the turn. Call?',
@@ -10127,12 +10129,13 @@ await tester.tap(find.text('STRONGER'));
       find.text('Implied odds improve — they pay when you hit'),
       findsNothing,
     );
-    expect(find.text('Implied — they pay when you hit'), findsNothing);
     expect(find.text('Implied'), findsOneWidget);
+    expect(find.text('Fold draw'), findsOneWidget);
+    // SoftPulse must not gold-tip or echo NFD on the wrong tile.
+    expect(find.text('Fold NFD'), findsNothing);
     expect(find.text('They pay hit'), findsNothing);
     expect(find.text('Price fixed'), findsNothing);
     expect(find.text('Always fold'), findsNothing);
-    expect(find.text('Implied'), findsOneWidget);
     await tester.tap(find.text('Implied'));
     await tester.pump();
     expect(controller.draft.choiceId, 'implied-yes');

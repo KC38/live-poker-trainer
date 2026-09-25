@@ -2479,7 +2479,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         boardCodes: ['Kc', '8h', '2d'],
         villainSeatCount: 0,
         highlight: LessonTableHighlight.none,
-        caption: 'Flop · clean outs?',
+        // Structural — Rex owns the clean-outs SoftPulse cue.
+        caption: 'Flop · your holes',
       );
     case 'act-03-03-01-scaffolded':
       return const LessonTableScene(
@@ -2493,7 +2494,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         boardCodes: ['Kc', '8h', '2d'],
         villainSeatCount: 0,
         highlight: LessonTableHighlight.none,
-        caption: 'Pot 20 · bet 10 · ~8 clean outs',
+        // Structural spot — Rex owns “real outs”; don’t spoil the count.
+        caption: 'Pot 20 · bet 10',
       );
     case 'act-03-03-01-checkpoint':
       return const LessonTableScene(
@@ -7240,8 +7242,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive implied odds — tap Implied',
       semanticsStatic: 'Outs implied odds outcomes',
       caption: scene.caption ?? '200bb · pot bet · sticky caller',
-      // SoftPulse + Rex own the cue — no Tap footer.
+      // SoftPulse + Rex own the cue — no gold tip / Fold-NFD hand spoiler.
       cueLabel: '',
+      guideRegion: LessonTableRegion.outsImpliedPay,
       phases: [
         (
           region: LessonTableRegion.outsImpliedPay,
@@ -7249,7 +7252,7 @@ class LessonTableContext extends StatelessWidget {
           detail: ' ',
           visual: const Icon(
             Icons.trending_up,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -7265,7 +7268,8 @@ class LessonTableContext extends StatelessWidget {
         ),
         (
           region: LessonTableRegion.outsImpliedFoldNfd,
-          title: 'Fold NFD',
+          // Structural — don’t echo “NFD” answering the draw class.
+          title: 'Fold draw',
           detail: ' ',
           visual: const Icon(
             Icons.cancel_outlined,
