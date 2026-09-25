@@ -529,12 +529,15 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns The line — don’t gold-tip the tile.
       'act-05-04-01-checkpoint' =>
           'Same cards, different seats — let the read drive the plan.',
+      // SoftPulse owns Value-heavy — don’t gold-tip the tile.
       'act-05-05-01-guided' =>
-          'Nit check-raises — tap the default read.',
+          'Nit check-raises — respect their narrow heat.',
+      // SoftPulse owns Polarized — don’t gold-tip the tile.
       'act-05-05-01-unguided' =>
-          'Large BB donk on dry ace — tap the meaning.',
+          'Large BB donk on dry ace — often strong or air.',
+      // SoftPulse owns After weakness — don’t gold-tip the tile.
       'act-05-05-01-checkpoint' =>
-          'Delayed c-bet — tap when it is best.',
+          'Delayed c-bet shines after they show flop weakness.',
       'act-05-06-01-guided' =>
           'Bet flop, check turn — tap Capped.',
       'act-05-06-01-unguided' =>

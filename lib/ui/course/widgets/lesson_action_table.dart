@@ -844,10 +844,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Kc', '9s', '3h'],
         potLabel: 'Pot 14',
         villainLine: 'PFR checks flop',
+        // Structural — SoftPulse + Rex own Probe small.
         streetLabel: 'Flop · middle pair · BB',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Capped range — probe small',
+        feltStatusLine: 'Checked to you',
       );
     case 'act-05-06-01-scaffolded':
       return const LessonActionSpot(

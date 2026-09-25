@@ -15820,7 +15820,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s5 lines guided taps Value-heavy on Nit XR felt', (
+  testWidgets('s5 lines guided SoftPulse Value-heavy — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -15852,8 +15852,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Nit check-raises — tap the default read.'),
+      find.text('Nit check-raises — respect their narrow heat.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Nit check-raises — tap the default read.'),
+      findsNothing,
     );
     expect(find.text('Value-heavy'), findsOneWidget);
     await tester.tap(find.text('Value-heavy'));
@@ -15862,7 +15866,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s5 lines scaffolded docks Probe small on BB felt', (
+  testWidgets('s5 lines scaffold SoftPulse Probe — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -15903,17 +15907,29 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('PFR checks · middle pair BB — tap Probe small.'),
+      find.text(
+        'PFR checks · middle pair BB — capped ranges invite small probes.',
+      ),
       findsOneWidget,
     );
+    expect(
+      find.text('PFR checks · middle pair BB — tap Probe small.'),
+      findsNothing,
+    );
+    expect(find.text('Capped range — probe small'), findsNothing);
     expect(find.text('PROBE SMALL'), findsOneWidget);
+    final dock =
+        tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'probe');
     await tester.tap(find.text('PROBE SMALL'));
     await tester.pump();
     expect(controller.draft.choiceId, 'probe');
     controller.dispose();
   });
 
-  testWidgets('s5 lines unguided taps Polarized on donk felt', (tester) async {
+  testWidgets('s5 lines unguided SoftPulse Polarized — no gold tip', (
+    tester,
+  ) async {
     final activity = CourseActivity(
       id: 'act-05-05-01-unguided',
       order: 4,
@@ -15943,8 +15959,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Large BB donk on dry ace — tap the meaning.'),
+      find.text('Large BB donk on dry ace — often strong or air.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Large BB donk on dry ace — tap the meaning.'),
+      findsNothing,
     );
     await tester.tap(find.text('Polarized'));
     await tester.pump();
@@ -15952,7 +15972,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s5 lines checkpoint taps After weakness on felt', (
+  testWidgets('s5 lines checkpoint SoftPulse After weakness — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -15985,8 +16005,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Delayed c-bet — tap when it is best.'),
+      find.text(
+        'Delayed c-bet shines after they show flop weakness.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Delayed c-bet — tap when it is best.'),
+      findsNothing,
     );
     await tester.tap(find.text('After weakness'));
     await tester.pump();
