@@ -18883,8 +18883,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Selective entry + disciplined barrels — tap TAG — respect.'),
+      find.text(
+        'Selective entry + disciplined barrels — pick the model + line.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Selective entry + disciplined barrels — tap TAG — respect.'),
+      findsNothing,
     );
     await tester.tap(find.text('TAG — respect'));
     await tester.pump();
@@ -18925,8 +18931,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('PFR on dry A-high — tap Range advantage.'),
+      find.text('PFR on dry A-high — pick what they often have.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('PFR on dry A-high — tap Range advantage.'),
+      findsNothing,
     );
     await tester.tap(find.text('Range advantage'));
     await tester.pump();
@@ -18960,7 +18970,11 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Check-back turn — tap More capped.'), findsOneWidget);
+    expect(
+      find.text('Check-back turn — pick how river range shifts.'),
+      findsOneWidget,
+    );
+    expect(find.text('Check-back turn — tap More capped.'), findsNothing);
     await tester.tap(find.text('More capped'));
     await tester.pump();
     expect(controller.draft.choiceId, 'cap');
@@ -18993,7 +19007,11 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('River overbet shape — tap Polarized.'), findsOneWidget);
+    expect(
+      find.text('River overbet shape — pick the range story.'),
+      findsOneWidget,
+    );
+    expect(find.text('River overbet shape — tap Polarized.'), findsNothing);
     await tester.tap(find.text('Polarized'));
     await tester.pump();
     expect(controller.draft.choiceId, 'polar');
@@ -19031,8 +19049,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Tight entry, planned barrels — tap TAG.'),
+      find.text('Tight entry, planned barrels — pick the label.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Tight entry, planned barrels — tap TAG.'),
+      findsNothing,
     );
     await tester.tap(find.text('TAG'));
     await tester.pump();
@@ -19071,8 +19093,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Wide entry, sustained pressure — tap LAG.'),
+      find.text('Wide entry, sustained pressure — pick the label.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Wide entry, sustained pressure — tap LAG.'),
+      findsNothing,
     );
     await tester.tap(find.text('LAG'));
     await tester.pump();

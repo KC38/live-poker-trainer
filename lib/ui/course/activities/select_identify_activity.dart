@@ -691,18 +691,24 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Wide + pressure — don’t gold-tip the tile.
       'act-06-12-03-checkpoint' =>
           'LAG exploit cites — pick the cite.',
+      // SoftPulse owns TAG — respect — don’t gold-tip the tile.
       'act-06-13-01-checkpoint' =>
-          'Selective entry + disciplined barrels — tap TAG — respect.',
+          'Selective entry + disciplined barrels — pick the model + line.',
+      // SoftPulse owns Range advantage — don’t gold-tip the tile.
       'act-06-13-02-cp-adv' =>
-          'PFR on dry A-high — tap Range advantage.',
+          'PFR on dry A-high — pick what they often have.',
+      // SoftPulse owns More capped — don’t gold-tip the tile.
       'act-06-13-02-cp-cap' =>
-          'Check-back turn — tap More capped.',
+          'Check-back turn — pick how river range shifts.',
+      // SoftPulse owns Polarized — don’t gold-tip the tile.
       'act-06-13-02-cp-polar' =>
-          'River overbet shape — tap Polarized.',
+          'River overbet shape — pick the range story.',
+      // SoftPulse owns TAG — don’t gold-tip the tile.
       'act-06-13-02-cp-tag' =>
-          'Tight entry, planned barrels — tap TAG.',
+          'Tight entry, planned barrels — pick the label.',
+      // SoftPulse owns LAG — don’t gold-tip the tile.
       'act-06-13-02-cp-lag' =>
-          'Wide entry, sustained pressure — tap LAG.',
+          'Wide entry, sustained pressure — pick the label.',
       'act-07-01-01-guided' =>
           'AQo 3-bet · 872tt — tap Plan is sick.',
       'act-07-01-01-scaffolded' =>
