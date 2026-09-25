@@ -310,10 +310,10 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     'act-01-03-01-unguided-call' => 'A bet is out — tap Call to continue.',
     'act-01-03-01-checkpoint-legal' =>
       'A bet is out — tap the action you cannot take.',
-    'act-01-03-02-guided-bet' => 'The pot is open — tap a bet size.',
-    'act-01-03-02-scaffolded-raise' => 'They bet — tap a raise size.',
-    'act-01-03-02-unguided-allin' => 'Short vs a big bet — tap All-in.',
-    'act-01-03-02-checkpoint-names' => 'The pot is open — tap Bet.',
+    'act-01-03-02-guided-bet' => 'The pot is open — pick a value size.',
+    'act-01-03-02-scaffolded-raise' => 'They bet — pick how you charge.',
+    'act-01-03-02-unguided-allin' => 'Short vs a big bet — pick what you can put in.',
+    'act-01-03-02-checkpoint-names' => 'The pot is open — pick the first chips.',
     'act-02-07-01-guided-ep' =>
       'Suited broadway UTG — tap Open to 6.',
     'act-02-07-01-scaffolded-vs' =>

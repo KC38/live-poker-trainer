@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "205754c0edcc06abfba3f68122a4da67aed50206107494ba267ac88fc04b9365",
+  "contentChecksum": "a9beefa3de54b3e8e66930de3b9f115054433856bbb91209957ea18ebb70221e",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -1583,7 +1583,7 @@
                   "stage": "explain",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Bet opens the betting. Raise reopens it. All-in is just size-capped.",
+                  "accessibilityText": "Three chip-pushing buttons — SoftPulse walks each role.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -1592,7 +1592,7 @@
                     {
                       "id": "act-01-03-02-explain-aggro-media",
                       "kind": "dialogue",
-                      "text": "Bet opens the betting. Raise reopens it. All-in is just size-capped."
+                      "text": "Three chip-pushing buttons — SoftPulse walks each role."
                     }
                   ],
                   "objectives": [

@@ -1582,7 +1582,7 @@
                   "stage": "explain",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Bet opens the betting. Raise reopens it. All-in is just size-capped.",
+                  "accessibilityText": "Three chip-pushing buttons — SoftPulse walks each role.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -1591,7 +1591,7 @@
                     {
                       "id": "act-01-03-02-explain-aggro-media",
                       "kind": "dialogue",
-                      "text": "Bet opens the betting. Raise reopens it. All-in is just size-capped."
+                      "text": "Three chip-pushing buttons — SoftPulse walks each role."
                     }
                   ],
                   "objectives": [

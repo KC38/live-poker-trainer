@@ -751,7 +751,7 @@ export function buildSectionOne() {
             minutes: 7,
             activities: [
               dialogue("act-01-03-02-explain-aggro", 1,
-                "Bet opens the betting. Raise reopens it. All-in is just size-capped.",
+                "Three chip-pushing buttons — SoftPulse walks each role.",
                 {objectives: ["Bet when the pot is unchecked"]}),
               actionAct({
                 id: "act-01-03-02-guided-bet", order: 2, stage: "guided",
