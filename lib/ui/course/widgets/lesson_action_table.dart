@@ -4819,13 +4819,14 @@ class SizingLanguageDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'VALUE', caption: 'Looks like value', color: AppColors.gold),
+    // Structural — Rex owns “looks like value / pressure.”
+    (label: 'VALUE', caption: 'Get paid honestly', color: AppColors.gold),
     (
       label: 'PRESSURE',
-      caption: 'Looks like pressure',
+      caption: 'Force folds',
       color: AppColors.danger,
     ),
-    (label: 'SIZE', caption: 'Says which story', color: AppColors.cream),
+    (label: 'SIZE', caption: 'Pick the story', color: AppColors.cream),
   ];
 
   @override
@@ -4908,7 +4909,8 @@ class _SizingLanguageDemoState extends State<SizingLanguageDemo> {
                 ),
               ),
               child: Text(
-                'Value looks like value · pressure looks like pressure',
+                // Match SoftPulse titles — don’t echo Rex’s “looks like.”
+                'Value · pressure · size',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
