@@ -5046,7 +5046,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(TablesChangeDemo), findsOneWidget);
-    expect(find.text('Tap STUCK next'), findsOneWidget);
+    expect(find.text('Tap STUCK next'), findsNothing);
     expect(find.text('Tap Stuck, Tilted, and Gears.'), findsNothing);
     expect(find.text('Tap Stuck, Tilted, and Gears'), findsNothing);
     expect(find.text('Update when the table shifts'), findsNothing);
@@ -5066,10 +5066,10 @@ await tester.tap(find.text('NIT'));
 
     await tester.tap(find.text('STUCK'));
     await tester.pump();
-    expect(find.text('Tap TILTED next'), findsOneWidget);
+    expect(find.text('Tap TILTED next'), findsNothing);
     await tester.tap(find.text('TILTED'));
     await tester.pump();
-    expect(find.text('Tap GEARS next'), findsOneWidget);
+    expect(find.text('Tap GEARS next'), findsNothing);
     await tester.tap(find.text('GEARS'));
     await tester.pump();
     expect(feltAck, 1);
