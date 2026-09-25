@@ -8981,6 +8981,9 @@ await tester.tap(find.text('NIT'));
       find.text('Finish a short button hand without freezing.'),
       findsOneWidget,
     );
+    // SoftPulse-quiet: Rex owns the cue — no third gold felt tip.
+    expect(find.text('Folds to you · Button'), findsNothing);
+    expect(find.text('First in — open the pot'), findsNothing);
     // Rex owns the cue — no third Tap your action on the dock. footer.
     expect(find.text('Tap your action on the dock.'), findsNothing);
     expect(find.text('What happened? Tap below.'), findsNothing);
@@ -9038,7 +9041,8 @@ await tester.tap(find.text('NIT'));
       find.text('Blinds folded — what happened to the pot?'),
       findsOneWidget,
     );
-    expect(find.text('Hand over · blinds folded'), findsOneWidget);
+    // SoftPulse-quiet: Rex owns the cue — no third gold felt tip.
+    expect(find.text('Hand over · blinds folded'), findsNothing);
     expect(find.text('Uncontested — stack the chips'), findsNothing);
     final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
     expect(dock.pulseChoiceId, isNull);
