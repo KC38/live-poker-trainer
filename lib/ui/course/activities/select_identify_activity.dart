@@ -428,8 +428,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'They bet twice — you pinned Exactly AK. Tap the problem.',
       'act-04-01-01-checkpoint' =>
           'Same board, different villain lines — tap what changes.',
+      // SoftPulse owns Branches — don’t gold-tip the tile.
       'act-04-03-01-checkpoint' =>
-          'You have a flop plan — tap the turn branches.',
+          'You have a flop plan — map brick vs flush turns.',
       'act-04-04-01-unguided' =>
           'Two value sizes both get calls — tap the grading idea.',
       'act-04-05-01-guided' =>
@@ -1216,8 +1217,9 @@ class _HandCategoryTapActivity extends StatelessWidget {
           'They bet twice — you pinned Exactly AK. Tap the problem.',
         'act-04-01-01-checkpoint' =>
           'Same board, different villain lines — tap what changes.',
+        // SoftPulse owns Branches — don’t gold-tip the tile.
         'act-04-03-01-checkpoint' =>
-          'You have a flop plan — tap the turn branches.',
+          'You have a flop plan — map brick vs flush turns.',
         'act-04-04-01-unguided' =>
           'Two value sizes both get calls — tap the grading idea.',
         'act-04-06-01-guided' =>

@@ -13582,11 +13582,19 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Air vs a flush turn — tap Check to shut down.'),
+      find.text(
+        'Air vs a flush turn — the bluff story just got worse.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Air vs a flush turn — tap Check to shut down.'),
+      findsNothing,
     );
     expect(find.textContaining('Turn · four hearts · air'), findsOneWidget);
     expect(find.text('CHECK'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no third gold felt status.
+    expect(find.text('Flush card — shut down'), findsNothing);
     final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
     expect(dock.pulseChoiceId, 'abort');
     await tester.tap(find.text('CHECK'));
@@ -13629,9 +13637,13 @@ await tester.tap(find.text('NIT'));
     );
     expect(
       find.text(
-        'Medium hand multiway and deep — tap Keep pot small.',
+        'Medium hand multiway and deep — pick Keep pot small or Jam.',
       ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Medium hand multiway and deep — tap Keep pot small.'),
+      findsNothing,
     );
     expect(find.text('KEEP POT SMALL'), findsOneWidget);
     await tester.tap(find.text('KEEP POT SMALL'));
@@ -13746,8 +13758,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('You have a flop plan — tap the turn branches.'),
+      find.text('You have a flop plan — map brick vs flush turns.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('You have a flop plan — tap the turn branches.'),
+      findsNothing,
     );
     expect(find.text('Branches'), findsOneWidget);
     expect(find.text('Brick · flush'), findsOneWidget);
