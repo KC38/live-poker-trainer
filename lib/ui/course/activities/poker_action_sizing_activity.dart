@@ -68,14 +68,14 @@ class PokerActionSizingActivity extends StatelessWidget {
             );
 
         if (tableMode) {
-          final pulseChoiceId = _guidedPulseChoiceId(
-            activity: activity,
-            showGuidance: showGuidance,
-            selected: selected,
-            locked: locked,
-          );
-          // SoftPulse + Rex own the cue — hide generic felt gold status.
-          final coachOwnsCue = showCoach && pulseChoiceId != null;
+          final pulseTarget = _guidedPulseTargetId(activity);
+          final pulseChoiceId =
+              showGuidance && !locked && selected == null
+                  ? pulseTarget
+                  : null;
+          // SoftPulse + Rex own the cue — keep felt gold status hidden under
+          // Nice! too (locked drops showCoach / SoftPulse, not ownership).
+          final coachOwnsCue = showGuidance && pulseTarget != null;
           final dock = LessonActionDock(
             choices: activity.choices,
             selectedId: selected,
@@ -229,17 +229,8 @@ class PokerActionSizingActivity extends StatelessWidget {
   }
 }
 
-/// Soft-pulse the authored recommended dock choice on guided (and
-/// coach-named scaffolded) flop-line spots.
-String? _guidedPulseChoiceId({
-  required CourseActivity activity,
-  required bool showGuidance,
-  required String? selected,
-  required bool locked,
-}) {
-  if (!showGuidance || locked || selected != null) {
-    return null;
-  }
+/// Soft-pulse dock target for guided / scaffolded teach spots (ignores lock).
+String? _guidedPulseTargetId(CourseActivity activity) {
   if (activity.stage != ActivityStage.guided &&
       activity.stage != ActivityStage.scaffolded) {
     return null;
@@ -251,6 +242,7 @@ String? _guidedPulseChoiceId({
     'act-01-03-02-scaffolded-raise' => 'raise-15',
     'act-02-03-01-guided-utg' => 'fold',
     'act-02-04-01-guided-fold' => 'fold-j3',
+    'act-02-04-01-scaffolded-call' => 'call-87s',
     'act-03-04-01-guided' => 'bet-tp',
     'act-03-04-01-scaffolded' => 'cbet',
     'act-03-05-01-scaffolded' => 'barrel',
