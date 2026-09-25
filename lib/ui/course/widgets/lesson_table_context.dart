@@ -12446,6 +12446,8 @@ class LessonTableContext extends StatelessWidget {
       semanticsStatic: 'Mix five types TAG respect outcomes',
       caption: scene.caption ??
           'Selective entry + disciplined barrels. Label + line?',
+      // SoftPulse + Rex own the cue — don’t gold-tip TAG — respect.
+      guideRegion: LessonTableRegion.mixFiveTagRespect,
       phases: [
         (
           region: LessonTableRegion.mixFiveTagRespect,
@@ -12453,7 +12455,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Cite selective',
           visual: const Icon(
             Icons.gps_fixed,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12477,6 +12479,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive S6 checkpoint — tap range advantage or no concept',
       semanticsStatic: 'S6 checkpoint range advantage outcomes',
       caption: scene.caption ?? 'PFR on dry A-high often has?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Range advantage.
+      guideRegion: LessonTableRegion.s6CpRangeAdvantage,
       phases: [
         (
           region: LessonTableRegion.s6CpRangeAdvantage,
@@ -12484,7 +12488,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'PFR owns A-high',
           visual: const Icon(
             Icons.north_east,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12508,6 +12512,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive S6 checkpoint — tap more capped or uncapped nuts',
       semanticsStatic: 'S6 checkpoint capped outcomes',
       caption: scene.caption ?? 'Check-back turn often makes river range?',
+      // SoftPulse + Rex own the cue — don’t gold-tip More capped.
+      guideRegion: LessonTableRegion.s6CpMoreCapped,
       phases: [
         (
           region: LessonTableRegion.s6CpMoreCapped,
@@ -12515,7 +12521,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Fewer nuts',
           visual: const Icon(
             Icons.vertical_align_bottom,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12539,6 +12545,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive S6 checkpoint — tap polarized or always merged',
       semanticsStatic: 'S6 checkpoint polar outcomes',
       caption: scene.caption ?? 'River overbet shape?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Polarized.
+      guideRegion: LessonTableRegion.s6CpPolarized,
       phases: [
         (
           region: LessonTableRegion.s6CpPolarized,
@@ -12546,7 +12554,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Value or bluff',
           visual: const Icon(
             Icons.swap_vert,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12569,6 +12577,8 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive: 'Interactive S6 checkpoint — tap TAG or LAG',
       semanticsStatic: 'S6 checkpoint TAG outcomes',
       caption: scene.caption ?? 'Tight entry, planned barrels. Label?',
+      // SoftPulse + Rex own the cue — don’t gold-tip TAG.
+      guideRegion: LessonTableRegion.s6CpTag,
       phases: [
         (
           region: LessonTableRegion.s6CpTag,
@@ -12576,7 +12586,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Selective + plan',
           visual: const Icon(
             Icons.gps_fixed,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12599,6 +12609,8 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive: 'Interactive S6 checkpoint — tap LAG or Nit',
       semanticsStatic: 'S6 checkpoint LAG outcomes',
       caption: scene.caption ?? 'Wide entry, sustained pressure. Label?',
+      // SoftPulse + Rex own the cue — don’t gold-tip LAG.
+      guideRegion: LessonTableRegion.s6CpLag,
       phases: [
         (
           region: LessonTableRegion.s6CpLag,
@@ -12606,7 +12618,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Wide + pressure',
           visual: const Icon(
             Icons.local_fire_department_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
