@@ -5543,7 +5543,7 @@ await tester.tap(find.text('NIT'));
         ),
       );
       expect(find.byType(BlockersDemo), findsOneWidget);
-      expect(find.text('Tap BLOCK next'), findsOneWidget);
+      expect(find.text('Tap BLOCK next'), findsNothing);
       expect(find.text('Tap Block, Use, and No EV.'), findsNothing);
       expect(find.text('Tap Block, Use, and No EV'), findsNothing);
       expect(find.text('Remove hands — skip EV decimals'), findsNothing);
@@ -5562,10 +5562,10 @@ await tester.tap(find.text('NIT'));
 
       await tester.tap(find.text('BLOCK'));
       await tester.pump();
-      expect(find.text('Tap USE next'), findsOneWidget);
+      expect(find.text('Tap USE next'), findsNothing);
       await tester.tap(find.text('USE'));
       await tester.pump();
-      expect(find.text('Tap NO EV next'), findsOneWidget);
+      expect(find.text('Tap NO EV next'), findsNothing);
       await tester.tap(find.text('NO EV'));
       await tester.pump();
       expect(feltAck, 1);
