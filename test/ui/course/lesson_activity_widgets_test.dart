@@ -18366,10 +18366,19 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('River second pair vs Calling Station — tap Bet thin value.'),
+      find.text('Same cards · Station checked — extract vs wide calls.'),
       findsOneWidget,
     );
+    expect(
+      find.text('River second pair vs Calling Station — tap Bet thin value.'),
+      findsNothing,
+    );
+    // SoftPulse owns the cue — gold felt status (incl. old spoiler) stays hidden.
+    expect(find.text('Same cards — Station calls thin'), findsNothing);
     expect(find.text('BET THIN VALUE'), findsOneWidget);
+    final guidedDock =
+        tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(guidedDock.pulseChoiceId, 'cs');
     await tester.tap(find.text('BET THIN VALUE'));
     await tester.pump();
     expect(controller.draft.choiceId, 'cs');
@@ -18403,10 +18412,19 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Same hand · Nit check-raises — tap Fold.'),
+      find.text('Same cards · Nit check-raises — respect narrow heat.'),
       findsOneWidget,
     );
+    expect(
+      find.text('Same hand · Nit check-raises — tap Fold.'),
+      findsNothing,
+    );
+    // SoftPulse owns the cue — don’t expect gold felt; spoiler must stay gone.
+    expect(find.text('Same cards — Nit heat is strong'), findsNothing);
     expect(find.text('FOLD'), findsOneWidget);
+    final scaffoldDock =
+        tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(scaffoldDock.pulseChoiceId, 'nit');
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'nit');
@@ -18440,10 +18458,19 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Same hand · LAG barrels — tap Call.'),
+      find.text('Same cards · LAG barrels — tap Call or Fold.'),
       findsOneWidget,
     );
+    expect(
+      find.text('Same hand · LAG barrels — tap Call.'),
+      findsNothing,
+    );
+    expect(find.text('Same cards — LAG barrels'), findsOneWidget);
+    expect(find.text('Same cards — LAG pressure is wide'), findsNothing);
     expect(find.text('CALL'), findsOneWidget);
+    final unguidedDock =
+        tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(unguidedDock.pulseChoiceId, isNull);
     await tester.tap(find.text('CALL'));
     await tester.pump();
     expect(controller.draft.choiceId, 'lag');

@@ -259,6 +259,9 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     'act-04-04-01-scaffolded' => 'big',
     'act-04-05-01-scaffolded' => 'commit',
     'act-06-09-01-scaffolded' => 'small',
+    // Mix-five: SoftPulse the plan; Rex names the model, not the dock label.
+    'act-06-13-01-guided' => 'cs',
+    'act-06-13-01-scaffolded' => 'nit',
     _ => null,
   };
 }
@@ -448,12 +451,14 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Top set vs LAG — tap Trap / induce.',
     'act-07-03-01-guided' =>
       'Thick value vs station — tap Value bet.',
+    // SoftPulse owns the dock target — don’t gold-tip Bet thin value / Fold.
     'act-06-13-01-guided' =>
-      'River second pair vs Calling Station — tap Bet thin value.',
+      'Same cards · Station checked — extract vs wide calls.',
     'act-06-13-01-scaffolded' =>
-      'Same hand · Nit check-raises — tap Fold.',
+      'Same cards · Nit check-raises — respect narrow heat.',
+    // Unguided: list legal lines; don’t tip Call alone.
     'act-06-13-01-unguided' =>
-      'Same hand · LAG barrels — tap Call.',
+      'Same cards · LAG barrels — tap Call or Fold.',
     'act-07-07-01-guided' =>
       'Flop top pair · Station check — tap Bet for value.',
     'act-07-07-01-scaffolded' =>
