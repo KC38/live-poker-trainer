@@ -420,19 +420,24 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Qd9d3c with JdTd — tap the flop class.',
       'act-03-08-02-jump-leak' =>
           'Gutshot vs a 2x pot bet — tap the fix.',
+      // SoftPulse owns Strong narrow — don’t gold-tip the tile.
       'act-04-01-01-guided' =>
-          'UTG opens at 1/2 — tap the range shape.',
+          'UTG opens at 1/2 — early seats usually play tighter.',
+      // SoftPulse owns BB 3-bet — don’t gold-tip the tile.
       'act-04-01-01-scaffolded' =>
-          'BTN open, BB 3-bet, BTN calls — tap who is stronger.',
+          'BTN open, BB 3-bet, BTN calls — 3-bet ranges start narrower than flatting opens.',
+      // SoftPulse owns Keep range — don’t gold-tip the tile.
       'act-04-01-01-unguided' =>
-          'They bet twice — you pinned Exactly AK. Tap the problem.',
+          'They bet twice — pinning Exactly AK collapses the range.',
+      // SoftPulse owns Read drives — don’t gold-tip the tile.
       'act-04-01-01-checkpoint' =>
-          'Same board, different villain lines — tap what changes.',
+          'Same board, different villain lines — advice follows the range, not the cards alone.',
       // SoftPulse owns Branches — don’t gold-tip the tile.
       'act-04-03-01-checkpoint' =>
           'You have a flop plan — map brick vs flush turns.',
+      // SoftPulse owns Soft band — don’t gold-tip the tile.
       'act-04-04-01-unguided' =>
-          'Two value sizes both get calls — tap the grading idea.',
+          'Two value sizes both get calls — nearby sizes can both grade soft.',
       // SoftPulse owns SPR 4 — don’t gold-tip the tile.
       'act-04-05-01-guided' =>
           'Effective 80 into pot 20 — stack ÷ pot.',
@@ -526,8 +531,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Limits — don’t gold-tip the tile.
       'act-04-09-01-checkpoint' =>
           'Beside a type label — show sample and confidence limits.',
+      // SoftPulse owns Strong narrow — don’t gold-tip the tile.
       'act-04-10-02-jump-range' =>
-          'UTG open — pick the range shape.',
+          'UTG open — early seats usually play tighter.',
       // SoftPulse owns Value more — don’t gold-tip the tile.
       'act-04-10-02-jump-station' =>
           'Sticky three streets — pick the exploit.',
@@ -1271,19 +1277,24 @@ class _HandCategoryTapActivity extends StatelessWidget {
           'Qd9d3c with JdTd — tap the flop class.',
         'act-03-08-02-jump-leak' =>
           'Gutshot vs a 2x pot bet — tap the fix.',
+        // SoftPulse owns Strong narrow — don’t gold-tip the tile.
         'act-04-01-01-guided' =>
-          'UTG opens at 1/2 — tap the range shape.',
+          'UTG opens at 1/2 — early seats usually play tighter.',
+        // SoftPulse owns BB 3-bet — don’t gold-tip the tile.
         'act-04-01-01-scaffolded' =>
-          'BTN open, BB 3-bet, BTN calls — tap who is stronger.',
+          'BTN open, BB 3-bet, BTN calls — 3-bet ranges start narrower than flatting opens.',
+        // SoftPulse owns Keep range — don’t gold-tip the tile.
         'act-04-01-01-unguided' =>
-          'They bet twice — you pinned Exactly AK. Tap the problem.',
+          'They bet twice — pinning Exactly AK collapses the range.',
+        // SoftPulse owns Read drives — don’t gold-tip the tile.
         'act-04-01-01-checkpoint' =>
-          'Same board, different villain lines — tap what changes.',
+          'Same board, different villain lines — advice follows the range, not the cards alone.',
         // SoftPulse owns Branches — don’t gold-tip the tile.
         'act-04-03-01-checkpoint' =>
           'You have a flop plan — map brick vs flush turns.',
+        // SoftPulse owns Soft band — don’t gold-tip the tile.
         'act-04-04-01-unguided' =>
-          'Two value sizes both get calls — tap the grading idea.',
+          'Two value sizes both get calls — nearby sizes can both grade soft.',
         // SoftPulse owns SPR 4 — don’t gold-tip the tile.
         'act-04-05-01-guided' =>
           'Effective 80 into pot 20 — stack ÷ pot.',
