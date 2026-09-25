@@ -2373,7 +2373,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
     case 'act-02-05-01-unguided-depth':
       return const LessonTableScene(
         layout: LessonTableLayout.stackDepthOutcomes,
-        caption: 'Which depth plays like a shove game?',
+        // Structural depths — Rex owns the shove-game cue.
+        caption: 'Common live depths',
       );
     case 'act-02-06-01-guided-follow':
       return const LessonTableScene(
@@ -7025,7 +7026,7 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive:
           'Interactive stack depth — tap the short-stack shove depth',
       semanticsStatic: 'Stack depth shove outcomes',
-      caption: scene.caption ?? 'Which depth plays like a shove game?',
+      caption: scene.caption ?? 'Common live depths',
       // SoftPulse + Rex own the cue — no Tap 50bb footer.
       cueLabel: '',
       guideRegion: LessonTableRegion.effectiveStackShort,
@@ -7033,8 +7034,10 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.effectiveStackShort,
           title: '50bb',
-          detail: 'Shove game',
-          visual: const _PotChipDot(label: '50', gold: true),
+          // Structural depth label — not “Shove game” echoing Rex / tipping.
+          detail: 'Short',
+          // Unguided: no gold tip on the correct tile.
+          visual: const _PotChipDot(label: '50', gold: false),
         ),
         (
           region: LessonTableRegion.effectiveStackHero,
