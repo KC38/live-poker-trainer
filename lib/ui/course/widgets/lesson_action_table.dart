@@ -2151,9 +2151,10 @@ class VsOpenResponseDemo extends StatefulWidget {
   final VoidCallback? onAllResponsesTapped;
 
   static const responses = <({String label, String caption, Color color})>[
-    (label: 'FOLD', caption: 'Weak hands', color: AppColors.slate),
-    (label: 'CALL', caption: 'Playable', color: AppColors.cream),
-    (label: '3-BET', caption: 'Strong / polar', color: AppColors.gold),
+    // Structural response labels — Rex owns weak/playable/strong.
+    (label: 'FOLD', caption: 'Give up', color: AppColors.slate),
+    (label: 'CALL', caption: 'Match open', color: AppColors.cream),
+    (label: '3-BET', caption: 'Reopen', color: AppColors.gold),
   ];
 
   @override
@@ -2218,9 +2219,8 @@ class _VsOpenResponseDemoState extends State<VsOpenResponseDemo> {
         ],
       ],
     );
-    // SoftPulse + Rex own the next-tile cue while teaching. Show a summary
-    // after all taps (or once locked under Nice! / Continue).
-    final showCue = !widget.interactive || next == null || !widget.enabled;
+    // SoftPulse + Rex own the cue — no summary pill echoing Nice! feedback.
+    final showCue = !widget.interactive;
     final cue =
         !showCue
             ? null

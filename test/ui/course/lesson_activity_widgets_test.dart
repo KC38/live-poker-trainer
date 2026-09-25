@@ -2502,6 +2502,14 @@ void main() {
       ),
     );
 
+    // Structural captions — Rex owns weak / playable / strong.
+    expect(find.text('Give up'), findsOneWidget);
+    expect(find.text('Match open'), findsOneWidget);
+    expect(find.text('Reopen'), findsOneWidget);
+    expect(find.text('Weak hands'), findsNothing);
+    expect(find.text('Playable'), findsNothing);
+    expect(find.text('Strong / polar'), findsNothing);
+
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(find.text('Tap CALL next'), findsNothing);
@@ -2511,11 +2519,14 @@ void main() {
     await tester.tap(find.text('3-BET'));
     await tester.pump();
     expect(feltAck, 1);
-    // Lock clears enabled / ack — densified shell must stay filled.
+    // SoftPulse + Rex own the cue — no summary pill echoing Nice! feedback.
     expect(
       find.text('Weak fold · playable call · strong 3-bet'),
-      findsOneWidget,
+      findsNothing,
     );
+    expect(find.text('Give up'), findsOneWidget);
+    expect(find.text('Match open'), findsOneWidget);
+    expect(find.text('Reopen'), findsOneWidget);
     expect(
       tester.getSize(find.byType(VsOpenResponseDemo)).height,
       moreOrLessEquals(teachHeight, epsilon: 1),
