@@ -919,10 +919,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Qc', '9s', '3h', '2d', '7c'],
         potLabel: 'Pot 36',
         villainLine: 'Calling station · checked',
+        // Structural — Rex + SoftPulse own merged-size teaching.
         streetLabel: 'River · second pair',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Station river — bet medium',
+        feltStatusLine: 'Calling station · checked',
       );
     case 'act-06-05-01-scaffolded':
       return const LessonActionSpot(

@@ -11013,6 +11013,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive polar vs merged — tap polarized vs merged',
       semanticsStatic: 'Polar merged guided outcomes',
       caption: scene.caption ?? 'River overbet usually wants?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Polarized.
+      guideRegion: LessonTableRegion.polarShape,
       phases: [
         (
           region: LessonTableRegion.polarShape,
@@ -11020,7 +11022,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Value or bluff',
           visual: const Icon(
             Icons.swap_vert,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11044,6 +11046,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive polar mismatches — tap tiny bluffs vs any size',
       semanticsStatic: 'Polar mismatch outcomes',
       caption: scene.caption ?? 'Mismatch to avoid?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Tiny bluffs.
+      guideRegion: LessonTableRegion.polarTinyBluffs,
       phases: [
         (
           region: LessonTableRegion.polarTinyBluffs,
@@ -11051,7 +11055,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Never get folds',
           visual: const Icon(
             Icons.warning_amber_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11075,6 +11079,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive merged aims — tap thin value vs only nuts',
       semanticsStatic: 'Polar merged aim outcomes',
       caption: scene.caption ?? 'Merged betting aims to?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Thin value.
+      guideRegion: LessonTableRegion.polarThinValue,
       phases: [
         (
           region: LessonTableRegion.polarThinValue,
@@ -11082,7 +11088,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Extract from worse',
           visual: const Icon(
             Icons.trending_up,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
