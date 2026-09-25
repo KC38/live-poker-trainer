@@ -3134,7 +3134,8 @@ class _FlopLabelDemoState extends State<FlopLabelDemo> {
           : MainAxisAlignment.start,
       children: [
         Text(
-          'Label the flop before you bet',
+          // SoftPulse + Rex own the teach verb — felt title is structural.
+          'Four flop classes',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: expandTeach ? 15 : 12,
