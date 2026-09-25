@@ -12630,7 +12630,8 @@ await tester.tap(find.text('NIT'));
     final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
     expect(dock.pulseChoiceId, 'fold-gut');
     expect(find.text('Four outs · terrible price'), findsNothing);
-    expect(find.text('Facing a bet'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no third gold felt status.
+    expect(find.text('Facing a bet'), findsNothing);
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'fold-gut');
@@ -12913,7 +12914,8 @@ await tester.tap(find.text('NIT'));
     final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
     expect(dock.pulseChoiceId, 'j3-fold');
     expect(find.text('Crowd — fold air'), findsNothing);
-    expect(find.text('Facing a bet · 4-way'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no third gold felt status.
+    expect(find.text('Facing a bet · 4-way'), findsNothing);
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'j3-fold');
