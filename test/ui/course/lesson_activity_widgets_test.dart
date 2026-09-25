@@ -1959,7 +1959,7 @@ void main() {
     expect(find.text('Name the family for your holes.'), findsNothing);
     expect(find.text('Pocket pair'), findsOneWidget);
     expect(find.text('Matching ranks'), findsOneWidget);
-    expect(find.text('Tap Pocket pair.'), findsOneWidget);
+    expect(find.text('Tap Pocket pair.'), findsNothing);
     await tester.tap(find.text('Pocket pair'));
     await tester.pump();
     expect(controller.draft.choiceId, 'hf-pair');
@@ -2018,7 +2018,7 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('Broadway'), findsOneWidget);
-    expect(find.text('Tap Broadway.'), findsOneWidget);
+    expect(find.text('Tap Broadway.'), findsNothing);
     await tester.tap(find.text('Broadway'));
     await tester.pump();
     expect(controller.draft.choiceId, 'hf-broadway');
