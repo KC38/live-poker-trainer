@@ -554,8 +554,9 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Station · second pair river — extract vs wide calls.',
     'act-05-09-02-cp-catch' =>
       'Maniac river barrel — catch wide aggression.',
+    // Unguided: name the spot; list legal lines without SoftPulse.
     'act-06-01-01-unguided' =>
-      'PFR on K72r — tap C-bet 6.',
+      'PFR on K72r — dry A-high favors the raiser; pick C-bet 6 or Check.',
     // SoftPulse owns the dock — don’t gold-tip Bet thin.
     'act-06-03-01-scaffolded' =>
       'Capped river · second pair — extract when they check.',

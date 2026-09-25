@@ -586,12 +586,15 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Instant shove — weigh what timing proves.',
       'act-05-09-02-cp-stop' =>
           'Hit stop-loss — honor the session guardrail.',
+      // SoftPulse owns Preflop raiser — don’t gold-tip the tile.
       'act-06-01-01-guided' =>
-          'A-high dry flop — tap Preflop raiser.',
+          'A-high dry flop — the preflop raiser’s range usually leads.',
+      // SoftPulse owns Wide caller — don’t gold-tip the tile.
       'act-06-01-01-scaffolded' =>
-          'Paired board — tap Wide caller.',
+          'Paired board — the wider defender often owns more of the nuts.',
+      // SoftPulse owns Apply pressure — don’t gold-tip the tile.
       'act-06-01-01-checkpoint' =>
-          'Advantage — tap Apply pressure.',
+          'When you own more value — apply selective pressure.',
       'act-06-02-01-guided' =>
           'Same draw — tap In position.',
       'act-06-02-01-scaffolded' =>
