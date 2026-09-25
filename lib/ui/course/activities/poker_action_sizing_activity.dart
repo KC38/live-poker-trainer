@@ -281,6 +281,9 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     // Adjust vs Maniac: SoftPulse the plan; Rex names the model, not the dock.
     'act-04-08-03-guided' => 'call-wider',
     'act-04-08-03-scaffolded' => 'val-m',
+    // Same hand × type: SoftPulse the plan; Rex names the model, not the dock.
+    'act-04-10-01-guided' => 'st-val',
+    'act-04-10-01-scaffolded' => 'nit-fold',
     // Thin value / bluff-catch: SoftPulse the plan; Rex names the model.
     'act-05-04-01-guided' => 'tv',
     'act-05-04-01-scaffolded' => 'call-m',
@@ -481,14 +484,18 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // Unguided: name the model; list legal lines without SoftPulse.
     'act-04-08-03-unguided' =>
       'Unknown river bet · weak kicker — pick Fold more or Always call.',
+    // SoftPulse owns Bet value — don’t gold-tip the dock.
     'act-04-10-01-guided' =>
-      'Station checked · second pair — tap Bet value.',
+      'Station checked · second pair — extract vs wide calls.',
+    // SoftPulse owns Fold — don’t gold-tip the dock.
     'act-04-10-01-scaffolded' =>
-      'Nit check-raises second pair — tap Fold.',
+      'Nit check-raises second pair — their heat is usually strong.',
+    // Unguided: name the model; list legal lines without SoftPulse.
     'act-04-10-01-unguided' =>
-      'Maniac barrels second pair — tap Call.',
+      'Maniac barrels second pair — pick Call, Fold, or Raise.',
+    // Checkpoint lab: name the spot.
     'act-04-10-01-checkpoint' =>
-      'BTN vs Nit BB with KTo — pick Open or Fold.',
+      'BTN vs Nit BB with KTo — steal wider when they overfold.',
     // SoftPulse owns 3-bet to 18 — don’t gold-tip the dock.
     'act-04-10-02-jump-3bet' =>
       'CO opens · KK on BTN — pick a value 3-bet.',

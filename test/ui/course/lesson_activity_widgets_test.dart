@@ -14912,13 +14912,118 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Station checked · second pair — tap Bet value.'),
+      find.text(
+        'Station checked · second pair — extract vs wide calls.',
+      ),
       findsOneWidget,
     );
+    expect(
+      find.text('Station checked · second pair — tap Bet value.'),
+      findsNothing,
+    );
     expect(find.text('BET VALUE'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no third gold felt status.
+    expect(find.text('Stations call thin value'), findsNothing);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'st-val');
     await tester.tap(find.text('BET VALUE'));
     await tester.pump();
     expect(controller.draft.choiceId, 'st-val');
+    controller.dispose();
+  });
+
+  testWidgets('s4 same-hand nit SoftPulse Fold — no gold tip', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-04-10-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Fold versus nit heat.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'Same second pair river. Versus Nit who just check-raised. Action?',
+      choices: const [
+        CourseChoice(id: 'nit-fold', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'nit-call', label: 'Call', action: 'CALL'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Nit check-raises second pair — their heat is usually strong.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Nit check-raises second pair — tap Fold.'),
+      findsNothing,
+    );
+    expect(find.text('FOLD'), findsOneWidget);
+    expect(find.text('Nit heat is usually strong'), findsNothing);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'nit-fold');
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'nit-fold');
+    controller.dispose();
+  });
+
+  testWidgets('s4 same-hand maniac unguided docks Call without SoftPulse', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-10-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Call wider versus maniac.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Same second pair. Maniac barrels river. Action?',
+      choices: const [
+        CourseChoice(id: 'm-call', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'm-fold', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'm-ego', label: 'Raise for ego', action: 'RAISE'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Maniac barrels second pair — pick Call, Fold, or Raise.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Maniac barrels second pair — tap Call.'),
+      findsNothing,
+    );
+    expect(find.text('CALL'), findsOneWidget);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, isNull);
+    await tester.tap(find.text('CALL'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'm-call');
     controller.dispose();
   });
 
@@ -14951,8 +15056,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('BTN vs Nit BB with KTo — tap Open to 6.'),
+      find.text(
+        'BTN vs Nit BB with KTo — steal wider when they overfold.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('BTN vs Nit BB with KTo — tap Open to 6.'),
+      findsNothing,
     );
     expect(find.text('OPEN TO 6'), findsOneWidget);
     await tester.tap(find.text('OPEN TO 6'));
