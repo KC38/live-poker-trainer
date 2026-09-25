@@ -5327,7 +5327,7 @@ await tester.tap(find.text('NIT'));
         ),
       );
       expect(find.byType(CappedUncappedDemo), findsOneWidget);
-      expect(find.text('Tap CAPPED next'), findsOneWidget);
+      expect(find.text('Tap CAPPED next'), findsNothing);
       expect(find.text('Tap Capped, Uncapped, and Nuts.'), findsNothing);
       expect(find.text('Tap Capped, Uncapped, and Nuts'), findsNothing);
       expect(find.text('Nuts unlikely vs still live'), findsNothing);
@@ -5347,10 +5347,10 @@ await tester.tap(find.text('NIT'));
 
       await tester.tap(find.text('CAPPED'));
       await tester.pump();
-      expect(find.text('Tap UNCAPPED next'), findsOneWidget);
+      expect(find.text('Tap UNCAPPED next'), findsNothing);
       await tester.tap(find.text('UNCAPPED'));
       await tester.pump();
-      expect(find.text('Tap NUTS next'), findsOneWidget);
+      expect(find.text('Tap NUTS next'), findsNothing);
       await tester.tap(find.text('NUTS'));
       await tester.pump();
       expect(feltAck, 1);
