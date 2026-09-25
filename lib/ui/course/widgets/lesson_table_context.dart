@@ -6960,7 +6960,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive effective stack — tap the shorter stack',
       semanticsStatic: 'Effective stack outcomes',
       caption: scene.caption ?? 'You 120bb · Villain 55bb',
-      cueLabel: 'Tap 55bb.',
+      // SoftPulse + Rex own the cue — no Tap 55bb footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.effectiveStackShort,
       phases: [
         (
@@ -6991,7 +6992,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive effective stack — tap the shorter stack',
       semanticsStatic: 'Effective stack 150 vs 60 outcomes',
       caption: scene.caption ?? 'You 150bb · Villain 60bb',
-      cueLabel: 'Tap 60bb.',
+      // SoftPulse + Rex own the cue — no Tap 60bb footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.effectiveStackShort,
       phases: [
         (
@@ -7022,7 +7024,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive stack depth — tap the short-stack shove depth',
       semanticsStatic: 'Stack depth shove outcomes',
       caption: scene.caption ?? 'Which depth plays like a shove game?',
-      cueLabel: 'Tap 50bb.',
+      // SoftPulse + Rex own the cue — no Tap 50bb footer.
+      cueLabel: '',
       guideRegion: LessonTableRegion.effectiveStackShort,
       phases: [
         (
