@@ -5264,7 +5264,7 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Tap DEEP next'), findsNothing);
     expect(find.text('Tap Deep, Realize, and Stack.'), findsNothing);
     expect(find.text('Tap Deep, Realize, and Stack'), findsNothing);
-    expect(find.text('More room to realize · and to lose'), findsNothing);
+    expect(find.text('Deep · realize · stack'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
     final teachHeight =
@@ -5289,7 +5289,7 @@ await tester.tap(find.text('NIT'));
     await tester.pump();
     expect(feltAck, 1);
     // Lock clears enabled / ack — densified shell must stay filled.
-    expect(find.text('More room to realize · and to lose'), findsOneWidget);
+    expect(find.text('Deep · realize · stack'), findsOneWidget);
     expect(
       tester.getSize(find.byType(DeepStacksDemo)).height,
       moreOrLessEquals(teachHeight, epsilon: 1),

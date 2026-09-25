@@ -7526,9 +7526,10 @@ class DeepStacksDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'DEEP', caption: 'More room to play', color: AppColors.gold),
-    (label: 'REALIZE', caption: 'Implied odds grow', color: AppColors.cream),
-    (label: 'STACK', caption: 'More room to lose', color: AppColors.danger),
+    // Structural — Rex owns "more room to realize / more room to lose."
+    (label: 'DEEP', caption: 'Wider trees', color: AppColors.gold),
+    (label: 'REALIZE', caption: 'Implied grow', color: AppColors.cream),
+    (label: 'STACK', caption: 'Risk grows too', color: AppColors.danger),
   ];
 
   @override
@@ -7611,7 +7612,7 @@ class _DeepStacksDemoState extends State<DeepStacksDemo> {
                 ),
               ),
               child: Text(
-                'More room to realize · and to lose',
+                'Deep · realize · stack',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
