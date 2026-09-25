@@ -381,8 +381,9 @@ class RecommendedStartScreen extends ConsumerWidget {
                   .read(onboardingControllerProvider.notifier)
                   .markEnteringFirstLesson();
               if (!context.mounted) return;
-              // One tap into the runner — skip the redundant launch CTA.
-              await Navigator.of(context).pushReplacement(
+              // Push (not replace) so LessonResult CONTINUE can pop back to a
+              // real first route if AppRoot has not remounted yet.
+              await Navigator.of(context).push(
                 MaterialPageRoute<void>(
                   builder:
                       (_) => LessonRunnerScreen(
@@ -413,7 +414,7 @@ class RecommendedStartScreen extends ConsumerWidget {
                     .read(onboardingControllerProvider.notifier)
                     .markEnteringFirstLesson();
                 if (!context.mounted) return;
-                await Navigator.of(context).pushReplacement(
+                await Navigator.of(context).push(
                   MaterialPageRoute<void>(
                     builder:
                         (_) => const LessonRunnerScreen(

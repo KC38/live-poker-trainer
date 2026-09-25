@@ -54,6 +54,19 @@ class _LessonResultScreenState extends State<LessonResultScreen>
     return 'Locked in. Ready for the next seat.';
   }
 
+  void _onContinue() {
+    final nav = Navigator.of(context);
+    if (!widget.standalone) {
+      nav.pop();
+      return;
+    }
+    // Guest onboarding used to [pushReplacement] the runner over `/`, leaving
+    // this screen as the sole route so [popUntil](isFirst) was a no-op. Entry
+    // now uses [Navigator.push], and [PokerLabApp] remounts on saveProgress.
+    if (!nav.canPop()) return;
+    nav.popUntil((route) => route.isFirst);
+  }
+
   @override
   Widget build(BuildContext context) {
     final result = widget.result;
@@ -207,14 +220,7 @@ class _LessonResultScreenState extends State<LessonResultScreen>
                   ),
                   const Spacer(),
                   FilledButton(
-                    onPressed: () {
-                      if (widget.standalone) {
-                        Navigator.of(context)
-                            .popUntil((route) => route.isFirst);
-                      } else {
-                        Navigator.of(context).pop();
-                      }
-                    },
+                    onPressed: _onContinue,
                     style: FilledButton.styleFrom(
                       backgroundColor: AppColors.gold,
                       foregroundColor: AppColors.bgDark,
