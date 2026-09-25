@@ -665,11 +665,11 @@ export function buildSectionOne() {
             prereq: L010202, remediation: L010202,
             activities: [
               dialogue("act-01-03-01-explain-passive", 1,
-                "Fold ends your hand. Check passes. Call matches.",
+                "Three quiet buttons — SoftPulse walks each role.",
                 {objectives: ["Fold to give up the hand"]}),
               actionAct({
                 id: "act-01-03-01-guided-fold", order: 2, stage: "guided",
-                prompt: "Worst hand vs a raise — tap Fold.",
+                prompt: "Worst hand vs a raise — pick how you leave.",
                 a11y: "Tap Fold with seven-two offsuit versus an open.",
                 objectives: ["Fold to give up the hand"],
                 hint: "Trash hands fold to raises.",
@@ -685,7 +685,7 @@ export function buildSectionOne() {
               }),
               actionAct({
                 id: "act-01-03-01-scaffolded-check", order: 3, stage: "scaffolded",
-                prompt: "Nothing faces you — tap Check.",
+                prompt: "Nothing faces you — pick the free action.",
                 a11y: "Tap Check when the action is free.",
                 objectives: ["Check when no bet faces you"],
                 choices: [
@@ -700,7 +700,7 @@ export function buildSectionOne() {
               }),
               actionAct({
                 id: "act-01-03-01-unguided-call", order: 4, stage: "unguided",
-                prompt: "A bet is out — tap Call to continue.",
+                prompt: "A bet is out — pick how you continue.",
                 a11y: "Tap Call to match a half-pot bet.",
                 objectives: ["Call to match the current bet"],
                 lifeLoss: true,
