@@ -3203,9 +3203,10 @@ class OutsPriceDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'CLEAN', caption: 'Outs that help', color: AppColors.gold),
-    (label: 'DIRTY', caption: 'Second-best risk', color: AppColors.danger),
-    (label: 'PRICE', caption: 'Is the call worth it?', color: AppColors.cream),
+    // Structural — Rex owns “Clean outs help / second-best / Price the call.”
+    (label: 'CLEAN', caption: 'Best-hand outs', color: AppColors.gold),
+    (label: 'DIRTY', caption: 'Trap improve', color: AppColors.danger),
+    (label: 'PRICE', caption: 'Pot odds', color: AppColors.cream),
   ];
 
   @override
@@ -3288,7 +3289,8 @@ class _OutsPriceDemoState extends State<OutsPriceDemo> {
                 ),
               ),
               child: Text(
-                'Clean outs · dirty outs · price the call',
+                // Match SoftPulse titles — don’t paraphrase Rex’s teach line.
+                'Clean · dirty · price',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
