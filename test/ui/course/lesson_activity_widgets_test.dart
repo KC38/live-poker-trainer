@@ -3449,7 +3449,7 @@ await tester.tap(find.text('ONE HAND'));
       ),
     );
     expect(find.byType(ThreeBetSqueezeDemo), findsOneWidget);
-    expect(find.text('Tap 3-BET next'), findsOneWidget);
+    expect(find.text('Tap 3-BET next'), findsNothing);
     expect(find.text('Tap 3-Bet, Ranges, and Squeeze.'), findsNothing);
     expect(find.text('Tap 3-Bet, Ranges, and Squeeze'), findsNothing);
     expect(
@@ -3472,10 +3472,10 @@ await tester.tap(find.text('ONE HAND'));
 
 await tester.tap(find.text('3-BET'));
     await tester.pump();
-    expect(find.text('Tap RANGES next'), findsOneWidget);
+    expect(find.text('Tap RANGES next'), findsNothing);
     await tester.tap(find.text('RANGES'));
     await tester.pump();
-    expect(find.text('Tap SQUEEZE next'), findsOneWidget);
+    expect(find.text('Tap SQUEEZE next'), findsNothing);
     await tester.tap(find.text('SQUEEZE'));
     await tester.pump();
     expect(feltAck, 1);
