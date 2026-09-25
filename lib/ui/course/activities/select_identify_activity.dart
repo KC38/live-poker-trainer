@@ -424,14 +424,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns the note — don’t gold-tip the tile.
       'act-03-07-01-checkpoint' =>
           'Seat enters most pots — weigh what you note.',
+      // SoftPulse owns Note freqs — don’t gold-tip the tile.
       'act-03-08-01-checkpoint' =>
-          'Two seats, different frequencies — tap the note.',
+          'Two seats, different frequencies — note how often each seat enters.',
+      // SoftPulse owns Pot · effective — don’t gold-tip the tile.
       'act-03-08-02-jump-table' =>
-          'Pot 16, shorter 40bb — tap what you track first.',
+          'Pot 16, shorter 40bb — start with pot and effective stack.',
+      // SoftPulse owns Draw — don’t gold-tip the tile.
       'act-03-08-02-jump-class' =>
-          'Qd9d3c with JdTd — tap the flop class.',
+          'Qd9d3c with JdTd — you need runout for both straight and flush.',
+      // SoftPulse owns Fold — don’t gold-tip the tile.
       'act-03-08-02-jump-leak' =>
-          'Gutshot vs a 2x pot bet — tap the fix.',
+          'Gutshot vs a 2x pot bet — the price is usually too steep.',
       // SoftPulse owns Strong narrow — don’t gold-tip the tile.
       'act-04-01-01-guided' =>
           'UTG opens at 1/2 — early seats usually play tighter.',
@@ -1282,13 +1286,13 @@ class _HandCategoryTapActivity extends StatelessWidget {
         'act-03-07-01-checkpoint' =>
           'Seat enters most pots — weigh what you note.',
         'act-03-08-01-checkpoint' =>
-          'Two seats, different frequencies — tap the note.',
+          'Two seats, different frequencies — note how often each seat enters.',
         'act-03-08-02-jump-table' =>
-          'Pot 16, shorter 40bb — tap what you track first.',
+          'Pot 16, shorter 40bb — start with pot and effective stack.',
         'act-03-08-02-jump-class' =>
-          'Qd9d3c with JdTd — tap the flop class.',
+          'Qd9d3c with JdTd — you need runout for both straight and flush.',
         'act-03-08-02-jump-leak' =>
-          'Gutshot vs a 2x pot bet — tap the fix.',
+          'Gutshot vs a 2x pot bet — the price is usually too steep.',
         // SoftPulse owns Strong narrow — don’t gold-tip the tile.
         'act-04-01-01-guided' =>
           'UTG opens at 1/2 — early seats usually play tighter.',
