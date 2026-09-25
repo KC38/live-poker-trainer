@@ -278,6 +278,8 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     'act-06-07-01-scaffolded' => 'fold',
     // Mix guided — SoftPulse owns Check to protect checking range.
     'act-06-08-01-guided' => 'protect',
+    // Hard folds guided — SoftPulse owns Fold TPWK.
+    'act-06-10-01-guided' => 'fold',
     'act-06-09-01-scaffolded' => 'small',
     // Mix-five: SoftPulse the plan; Rex names the model, not the dock label.
     'act-06-13-01-guided' => 'cs',
@@ -468,8 +470,9 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // SoftPulse owns the dock — don’t gold-tip Small c-bet.
     'act-06-09-01-scaffolded' =>
       'Deep 3-bet miss — keep pressure small or give up.',
+    // SoftPulse owns the dock — don’t gold-tip Fold.
     'act-06-10-01-guided' =>
-      'TPWK vs triple barrels — tap Fold.',
+      'TPWK vs triple barrels — no maniac read in heat.',
     'act-06-11-03-guided' =>
       'TAG check-raises second pair — tap Fold.',
     'act-06-11-03-scaffolded' =>

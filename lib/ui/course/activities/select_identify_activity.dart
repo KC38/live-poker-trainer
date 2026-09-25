@@ -625,12 +625,15 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns SPR / commit — don’t gold-tip the tile.
       'act-06-09-01-checkpoint' =>
           'Depth change in 3-bet pots — pick what shifts.',
+      // SoftPulse owns Cooler — don’t gold-tip the tile.
       'act-06-10-01-scaffolded' =>
-          'KK loses to AA all-in — tap Cooler.',
+          'KK loses to AA all-in — pick the review label.',
+      // Unguided: name the leak; don’t tip Ego call.
       'act-06-10-01-unguided' =>
-          'Calling because you are "due" — tap Ego call.',
+          'Calling because you are "due" — pick the real reason.',
+      // SoftPulse owns Cooler / mistake? — don’t gold-tip the tile.
       'act-06-10-01-checkpoint' =>
-          'Review after a big loss — tap Cooler / mistake?.',
+          'Review after a big loss — pick the honest question.',
       'act-06-11-01-guided' =>
           'Folds most, then 3-bets / c-bets — tap Selective + plan.',
       'act-06-11-01-scaffolded' =>
