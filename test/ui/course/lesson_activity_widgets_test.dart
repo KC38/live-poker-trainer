@@ -777,7 +777,7 @@ void main() {
           id: 'm',
           kind: 'dialogue',
           text:
-              'Three chip-pushing buttons — SoftPulse walks each role.',
+              'Three chip-pushing buttons — each has a different job.',
         ),
       ],
     );
@@ -793,7 +793,7 @@ void main() {
     );
     expect(
       find.text(
-        'Three chip-pushing buttons — SoftPulse walks each role.',
+        'Three chip-pushing buttons — each has a different job.',
       ),
       findsOneWidget,
     );
@@ -803,7 +803,7 @@ void main() {
         activityId: activity.id,
         grade: SoftGrade.recommended,
         feedback:
-            'Three chip-pushing buttons — SoftPulse walks each role.',
+            'Three chip-pushing buttons — each has a different job.',
         accepted: true,
         lifeLost: false,
         livesRemaining: 3,
@@ -822,7 +822,7 @@ void main() {
     // Feedback sheet is owned by the runner — activity itself must drop Rex.
     expect(
       find.text(
-        'Three chip-pushing buttons — SoftPulse walks each role.',
+        'Three chip-pushing buttons — each has a different job.',
       ),
       findsNothing,
     );
@@ -1378,7 +1378,7 @@ void main() {
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
-              'Who opens — and how wide. SoftPulse walks each cue.',
+              'Who opens — and how wide. Position shapes the first action.',
           acceptedGrades: const [SoftGrade.recommended],
         ),
       ).kind,
@@ -2282,14 +2282,14 @@ void main() {
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
-          'Who opens — and how wide. SoftPulse walks each cue.',
+          'Who opens — and how wide. Position shapes the first action.',
       acceptedGrades: const [SoftGrade.recommended],
       coachMedia: const [
         CoachMediaRef(
           id: 'm',
           kind: 'dialogue',
           text:
-              'Who opens — and how wide. SoftPulse walks each cue.',
+              'Who opens — and how wide. Position shapes the first action.',
         ),
       ],
     );
@@ -10782,7 +10782,7 @@ await tester.tap(find.text('NIT'));
           estimatedSeconds: 30,
           accessibilityText: 'Fold check call',
           acceptedGrades: const [SoftGrade.recommended],
-          prompt: 'Three quiet buttons — SoftPulse walks each role.',
+          prompt: 'Three quiet buttons — each has a different job.',
         ),
       ).kind,
       CoachDialogueVisualKind.passiveActions,

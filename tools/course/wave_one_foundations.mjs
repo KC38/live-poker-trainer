@@ -665,7 +665,7 @@ export function buildSectionOne() {
             prereq: L010202, remediation: L010202,
             activities: [
               dialogue("act-01-03-01-explain-passive", 1,
-                "Three quiet buttons — SoftPulse walks each role.",
+                "Three quiet buttons — each has a different job.",
                 {objectives: ["Fold to give up the hand"]}),
               actionAct({
                 id: "act-01-03-01-guided-fold", order: 2, stage: "guided",
@@ -751,7 +751,7 @@ export function buildSectionOne() {
             minutes: 7,
             activities: [
               dialogue("act-01-03-02-explain-aggro", 1,
-                "Three chip-pushing buttons — SoftPulse walks each role.",
+                "Three chip-pushing buttons — each has a different job.",
                 {objectives: ["Bet when the pot is unchecked"]}),
               actionAct({
                 id: "act-01-03-02-guided-bet", order: 2, stage: "guided",
@@ -1558,7 +1558,7 @@ export function buildSectionTwo() {
             prereq: L020201, remediation: L020201, band: 2,
             activities: [
               dialogue("act-02-03-01-explain-open", 1,
-                "Who opens — and how wide. SoftPulse walks each cue.",
+                "Who opens — and how wide. Position shapes the first action.",
                 {objectives: ["Fold trash from early position"]}),
               actionAct({
                 id: "act-02-03-01-guided-utg", order: 2, stage: "guided",
