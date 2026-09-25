@@ -1,6 +1,8 @@
 /// Example made-hand visuals for Hand ranks lesson activities.
 library;
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
@@ -1013,11 +1015,16 @@ class _HandRankLadderDemoState extends State<HandRankLadderDemo> {
         expandTeach
             ? Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                // Pack densified rungs, then contain-scale into the felt —
+                // fills tall-phone green (scaleDown left a void).
                 child: FittedBox(
-                  fit: BoxFit.scaleDown,
+                  fit: BoxFit.contain,
                   child: SizedBox(
-                    width: MediaQuery.sizeOf(context).width - 48,
+                    width: max(
+                      MediaQuery.sizeOf(context).width - 48,
+                      400,
+                    ),
                     child: rungs,
                   ),
                 ),
@@ -1203,11 +1210,16 @@ class _HandFamiliesDemoState extends State<HandFamiliesDemo> {
         expandTeach
             ? Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                // Pack densified families, then contain-scale into the felt —
+                // fills tall-phone green (scaleDown left a void).
                 child: FittedBox(
-                  fit: BoxFit.scaleDown,
+                  fit: BoxFit.contain,
                   child: SizedBox(
-                    width: MediaQuery.sizeOf(context).width - 48,
+                    width: max(
+                      MediaQuery.sizeOf(context).width - 48,
+                      400,
+                    ),
                     child: families,
                   ),
                 ),
