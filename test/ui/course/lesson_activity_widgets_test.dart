@@ -1804,6 +1804,7 @@ void main() {
     expect(find.text('Tap each seat in preflop order'), findsNothing);
     expect(find.text('Tap UTG, then HJ, then BTN.'), findsNothing);
     expect(find.text('Tap UTG, then HJ, then BTN'), findsNothing);
+    expect(find.text('Postflop starts left of the button'), findsNothing);
     expect(find.text('First'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
