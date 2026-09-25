@@ -776,9 +776,10 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Kc', '7s', '2h'],
         potLabel: 'Pot 28',
         villainLine: 'Calling Station bets 6',
+        // Structural — SoftPulse + Rex own Call / implied cue.
         streetLabel: 'Flop · gutshot + overs · 200bb',
         facingBet: true,
-        feltStatusLine: 'Station pays — call for implied',
+        feltStatusLine: 'Facing a bet',
       );
     case 'act-05-03-01-scaffolded':
       return const LessonActionSpot(
@@ -786,9 +787,10 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['As', 'Th', '8h'],
         potLabel: 'Pot 36',
         villainLine: 'Nit check-raises huge',
+        // Structural — SoftPulse + Rex own Fold / reverse-implied cue.
         streetLabel: 'Flop · KJo · A-high wet',
         facingBet: true,
-        feltStatusLine: 'Reverse implied — fold second-best',
+        feltStatusLine: 'Facing a bet',
       );
     case 'act-05-03-01-unguided':
       return const LessonActionSpot(
@@ -796,9 +798,10 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Kh', '9h', '2c'],
         potLabel: 'Pot 44',
         villainLine: 'Four-way · bet into you',
+        // Structural — don’t tip Fold on the felt.
         streetLabel: 'Flop · non-nut FD multiway',
         facingBet: true,
-        feltStatusLine: 'Dominated draw — fold the leak',
+        feltStatusLine: 'Facing a bet · 4-way',
       );
     case 'act-05-04-01-guided':
       return const LessonActionSpot(

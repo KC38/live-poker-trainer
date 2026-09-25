@@ -15428,6 +15428,7 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Tap your action on the dock.'), findsNothing);
+    expect(find.text('Station pays — call for implied'), findsNothing);
     expect(find.text('CALL'), findsOneWidget);
     final guidedDock =
         tester.widget<LessonActionDock>(find.byType(LessonActionDock));
@@ -15476,6 +15477,7 @@ await tester.tap(find.text('NIT'));
       find.text('KJo vs Nit check-raise — tap Fold.'),
       findsNothing,
     );
+    expect(find.text('Reverse implied — fold second-best'), findsNothing);
     final scaffoldDock =
         tester.widget<LessonActionDock>(find.byType(LessonActionDock));
     expect(scaffoldDock.pulseChoiceId, 'rio');
@@ -15521,6 +15523,8 @@ await tester.tap(find.text('NIT'));
       find.text('Non-nut FD four-way — tap Fold.'),
       findsNothing,
     );
+    expect(find.text('Dominated draw — fold the leak'), findsNothing);
+    expect(find.text('Facing a bet · 4-way'), findsOneWidget);
     final unguidedDock =
         tester.widget<LessonActionDock>(find.byType(LessonActionDock));
     expect(unguidedDock.pulseChoiceId, isNull);
