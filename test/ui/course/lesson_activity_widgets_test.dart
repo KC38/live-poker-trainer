@@ -3292,7 +3292,7 @@ await tester.tap(find.text('VALUE'));
       ),
     );
     expect(find.byType(CommonLeaksDemo), findsOneWidget);
-    expect(find.text('Tap TOP PAIR next'), findsOneWidget);
+    expect(find.text('Tap TOP PAIR next'), findsNothing);
     expect(find.text('Tap each common leak once.'), findsNothing);
     expect(find.text('Tap each common leak once'), findsNothing);
     expect(
@@ -3315,13 +3315,13 @@ await tester.tap(find.text('VALUE'));
 
 await tester.tap(find.text('TOP PAIR'));
     await tester.pump();
-    expect(find.text('Tap PRICES next'), findsOneWidget);
+    expect(find.text('Tap PRICES next'), findsNothing);
     await tester.tap(find.text('PRICES'));
     await tester.pump();
-    expect(find.text('Tap PASSIVE next'), findsOneWidget);
+    expect(find.text('Tap PASSIVE next'), findsNothing);
     await tester.tap(find.text('PASSIVE'));
     await tester.pump();
-    expect(find.text('Tap CROWDS next'), findsOneWidget);
+    expect(find.text('Tap CROWDS next'), findsNothing);
     await tester.tap(find.text('CROWDS'));
     await tester.pump();
     expect(feltAck, 1);
