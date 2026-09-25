@@ -14591,7 +14591,7 @@ class LessonTableContext extends StatelessWidget {
       ),
     );
     final inviteCue =
-        pulseHero
+        showInviteCue && pulseHero
             ? Text(
               'Tap your cards',
               textAlign: TextAlign.center,
@@ -14601,7 +14601,7 @@ class LessonTableContext extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
             )
-            : pulseBoard
+            : showInviteCue && pulseBoard
             ? Text(
               'Tap the board',
               textAlign: TextAlign.center,

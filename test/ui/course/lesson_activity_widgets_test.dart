@@ -152,7 +152,8 @@ void main() {
     );
     expect(find.byType(MiniCard), findsNWidgets(2));
     expect(find.text('Rex'), findsWidgets);
-    expect(find.text('Tap your cards'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no Tap your cards gold tip.
+    expect(find.text('Tap your cards'), findsNothing);
     expect(find.text('Tap your two cards on the felt.'), findsNothing);
     // Solo hero teach fills tall-phone void (~58% height).
     final teachHeight = tester
@@ -6872,7 +6873,7 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Tap your cards'), findsOneWidget);
+    expect(find.text('Tap your cards'), findsNothing);
     expect(find.text('Tap your hole cards on the table.'), findsNothing);
     final teachHeight = tester
         .getSize(find.byKey(const ValueKey('hole-cards-felt')))
@@ -22265,8 +22266,8 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Chop — board plays'), findsNothing);
     // Rex already owns the cue — no third status line.
     expect(find.text('Tap the answer on the table.'), findsNothing);
-    // SoftPulse invite under the board + densified felt (~58% height).
-    expect(find.text('Tap the board'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no Tap the board gold tip.
+    expect(find.text('Tap the board'), findsNothing);
     final teachHeight = tester
         .getSize(find.byKey(const ValueKey('hole-cards-felt')))
         .height;

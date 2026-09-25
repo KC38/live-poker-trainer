@@ -3105,6 +3105,8 @@ class _HoleCardDemo extends StatelessWidget {
         ),
         enabled: enabled,
         showSoftPulse: showSoftPulse,
+        // SoftPulse + Rex own the cue — no Tap your cards footer.
+        showInviteCue: false,
         onRegionTap: onRegionTap,
       );
     }
