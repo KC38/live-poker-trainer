@@ -1,6 +1,8 @@
 /// Felt visuals for How pots are won — fold-win, showdown, side pots.
 library;
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
@@ -56,17 +58,17 @@ class _WinningPathsDemoState extends State<WinningPathsDemo> {
       (
         'FOLD WIN',
         'Everyone folds — take it, no show',
-        const _ChipStack(label: 'POT', amount: '9'),
+        _ChipStack(label: 'POT', amount: '9', densify: expandTeach),
       ),
       (
         'SHOWDOWN',
         'Call to the end — best five wins',
-        const _ShowdownMini(),
+        _ShowdownMini(densify: expandTeach),
       ),
       (
         'SIDE POT',
         'Short all-in — main vs unmatched chips',
-        const _SidePotMini(),
+        _SidePotMini(densify: expandTeach),
       ),
     ];
 
@@ -80,6 +82,7 @@ class _WinningPathsDemoState extends State<WinningPathsDemo> {
           detail: lanes[i].$2,
           visual: lanes[i].$3,
           selected: _tapped.contains(lanes[i].$1),
+          densify: expandTeach,
           enabled: widget.interactive && widget.enabled,
           onPressed:
               widget.interactive ? () => _onTap(lanes[i].$1) : null,
@@ -91,7 +94,7 @@ class _WinningPathsDemoState extends State<WinningPathsDemo> {
       mainAxisSize: MainAxisSize.min,
       children: [
         for (var i = 0; i < lanes.length; i++) ...[
-          if (i > 0) SizedBox(height: expandTeach ? 10 : 8),
+          if (i > 0) SizedBox(height: expandTeach ? 14 : 8),
           laneAt(i),
         ],
       ],
@@ -146,11 +149,16 @@ class _WinningPathsDemoState extends State<WinningPathsDemo> {
         expandTeach
             ? Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                // Pack densified lanes, then contain-scale into the felt —
+                // fills tall-phone green (scaleDown left a void).
                 child: FittedBox(
-                  fit: BoxFit.scaleDown,
+                  fit: BoxFit.contain,
                   child: SizedBox(
-                    width: MediaQuery.sizeOf(context).width - 48,
+                    width: max(
+                      MediaQuery.sizeOf(context).width - 48,
+                      400,
+                    ),
                     child: pathLanes,
                   ),
                 ),
@@ -270,6 +278,7 @@ class _PathLane extends StatelessWidget {
     required this.detail,
     required this.visual,
     this.selected = false,
+    this.densify = false,
     this.enabled = false,
     this.onPressed,
   });
@@ -279,6 +288,9 @@ class _PathLane extends StatelessWidget {
   final String detail;
   final Widget visual;
   final bool selected;
+
+  /// Tall-phone SoftPulse pack: larger lane so FittedBox contain can fill felt.
+  final bool densify;
   final bool enabled;
   final VoidCallback? onPressed;
 
@@ -286,22 +298,27 @@ class _PathLane extends StatelessWidget {
   Widget build(BuildContext context) {
     final border =
         selected ? AppColors.gold : AppColors.feltBorder.withValues(alpha: 0.7);
+    final badge = densify ? 28.0 : 22.0;
+    final radius = densify ? 14.0 : 12.0;
     final lane = Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: EdgeInsets.symmetric(
+        horizontal: densify ? 12 : 10,
+        vertical: densify ? 12 : 8,
+      ),
       decoration: BoxDecoration(
         color:
             selected
                 ? AppColors.gold.withValues(alpha: 0.18)
                 : AppColors.bgDark.withValues(alpha: 0.35),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(radius),
         border: Border.all(color: border, width: selected ? 2 : 1),
       ),
       child: Row(
         children: [
           Container(
-            width: 22,
-            height: 22,
+            width: badge,
+            height: badge,
             alignment: Alignment.center,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
@@ -312,12 +329,12 @@ class _PathLane extends StatelessWidget {
               '$step',
               style: GoogleFonts.manrope(
                 color: AppColors.gold,
-                fontSize: 11,
+                fontSize: densify ? 13 : 11,
                 fontWeight: FontWeight.w900,
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: densify ? 12 : 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -326,7 +343,7 @@ class _PathLane extends StatelessWidget {
                   title,
                   style: GoogleFonts.manrope(
                     color: AppColors.cream,
-                    fontSize: 12,
+                    fontSize: densify ? 15 : 12,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -334,15 +351,19 @@ class _PathLane extends StatelessWidget {
                   detail,
                   style: GoogleFonts.manrope(
                     color: AppColors.slate,
-                    fontSize: 10,
+                    fontSize: densify ? 12 : 10,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 8),
-          visual,
+          SizedBox(width: densify ? 10 : 8),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerRight,
+            child: visual,
+          ),
         ],
       ),
     );
@@ -355,7 +376,7 @@ class _PathLane extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: enabled ? onPressed : null,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(radius),
           child: lane,
         ),
       ),
@@ -364,18 +385,24 @@ class _PathLane extends StatelessWidget {
 }
 
 class _ChipStack extends StatelessWidget {
-  const _ChipStack({required this.label, required this.amount});
+  const _ChipStack({
+    required this.label,
+    required this.amount,
+    this.densify = false,
+  });
 
   final String label;
   final String amount;
+  final bool densify;
 
   @override
   Widget build(BuildContext context) {
+    final chip = densify ? 44.0 : 36.0;
     return Column(
       children: [
         Container(
-          width: 36,
-          height: 36,
+          width: chip,
+          height: chip,
           alignment: Alignment.center,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
@@ -386,17 +413,17 @@ class _ChipStack extends StatelessWidget {
             amount,
             style: GoogleFonts.manrope(
               color: AppColors.cream,
-              fontSize: 12,
+              fontSize: densify ? 14 : 12,
               fontWeight: FontWeight.w900,
             ),
           ),
         ),
-        const SizedBox(height: 2),
+        SizedBox(height: densify ? 4 : 2),
         Text(
           label,
           style: GoogleFonts.manrope(
             color: AppColors.gold,
-            fontSize: 9,
+            fontSize: densify ? 11 : 9,
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -406,36 +433,41 @@ class _ChipStack extends StatelessWidget {
 }
 
 class _ShowdownMini extends StatelessWidget {
-  const _ShowdownMini();
+  const _ShowdownMini({this.densify = false});
+
+  final bool densify;
 
   @override
   Widget build(BuildContext context) {
+    final cardSize = densify ? MiniCardSize.small : MiniCardSize.tiny;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        MiniCard(card: CardModel.fromCode('Ah'), size: MiniCardSize.tiny),
-        const SizedBox(width: 2),
-        MiniCard(card: CardModel.fromCode('Kd'), size: MiniCardSize.tiny),
-        const SizedBox(width: 6),
+        MiniCard(card: CardModel.fromCode('Ah'), size: cardSize),
+        SizedBox(width: densify ? 3 : 2),
+        MiniCard(card: CardModel.fromCode('Kd'), size: cardSize),
+        SizedBox(width: densify ? 8 : 6),
         Text(
           'vs',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
-            fontSize: 10,
+            fontSize: densify ? 12 : 10,
             fontWeight: FontWeight.w700,
           ),
         ),
-        const SizedBox(width: 6),
-        MiniCard(card: CardModel.fromCode('Qs'), size: MiniCardSize.tiny),
-        const SizedBox(width: 2),
-        MiniCard(card: CardModel.fromCode('Jh'), size: MiniCardSize.tiny),
+        SizedBox(width: densify ? 8 : 6),
+        MiniCard(card: CardModel.fromCode('Qs'), size: cardSize),
+        SizedBox(width: densify ? 3 : 2),
+        MiniCard(card: CardModel.fromCode('Jh'), size: cardSize),
       ],
     );
   }
 }
 
 class _SidePotMini extends StatelessWidget {
-  const _SidePotMini();
+  const _SidePotMini({this.densify = false});
+
+  final bool densify;
 
   @override
   Widget build(BuildContext context) {
@@ -443,30 +475,31 @@ class _SidePotMini extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _miniPot(label: 'MAIN', color: AppColors.gold),
-        const SizedBox(width: 6),
+        SizedBox(width: densify ? 8 : 6),
         _miniPot(label: 'SIDE', color: AppColors.slate),
       ],
     );
   }
 
   Widget _miniPot({required String label, required Color color}) {
+    final size = densify ? 34.0 : 28.0;
     return Column(
       children: [
         Container(
-          width: 28,
-          height: 28,
+          width: size,
+          height: size,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: color.withValues(alpha: 0.3),
             border: Border.all(color: color, width: 1.5),
           ),
         ),
-        const SizedBox(height: 2),
+        SizedBox(height: densify ? 4 : 2),
         Text(
           label,
           style: GoogleFonts.manrope(
             color: color,
-            fontSize: 8,
+            fontSize: densify ? 10 : 8,
             fontWeight: FontWeight.w800,
           ),
         ),
