@@ -526,8 +526,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Depth + pay — don’t gold-tip the tile.
       'act-05-03-01-checkpoint' =>
           'Future money grows when stacks behind meet sticky callers.',
+      // SoftPulse owns The line — don’t gold-tip the tile.
       'act-05-04-01-checkpoint' =>
-          'Same hand, new type — tap what must change.',
+          'Same cards, different seats — let the read drive the plan.',
       'act-05-05-01-guided' =>
           'Nit check-raises — tap the default read.',
       'act-05-05-01-unguided' =>

@@ -535,7 +535,7 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Maniac barrels · second pair — catch wide aggression.',
     // Unguided: list legal lines; don’t tip Check alone.
     'act-05-04-01-unguided' =>
-      'Nit checked · second pair — tap Check or Bet thin.',
+      'Nit checked · second pair — pick Check or Bet thin.',
     'act-05-05-01-scaffolded' =>
       'PFR checks · middle pair BB — tap Probe small.',
     'act-05-06-01-scaffolded' =>
