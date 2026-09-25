@@ -19193,7 +19193,7 @@ await tester.tap(find.text('STRONGER'));
         ),
       );
       expect(find.byType(PreflopFlopPlanDemo), findsOneWidget);
-      expect(find.text('Tap REASON next'), findsOneWidget);
+      expect(find.text('Tap REASON next'), findsNothing);
       expect(find.text('Tap Reason, Confirm, and Cancel.'), findsNothing);
       expect(find.text('Tap Reason, Confirm, and Cancel'), findsNothing);
       expect(
@@ -19205,10 +19205,10 @@ await tester.tap(find.text('STRONGER'));
 
       await tester.tap(find.text('REASON'));
       await tester.pump();
-      expect(find.text('Tap CONFIRM next'), findsOneWidget);
+      expect(find.text('Tap CONFIRM next'), findsNothing);
       await tester.tap(find.text('CONFIRM'));
       await tester.pump();
-      expect(find.text('Tap CANCEL next'), findsOneWidget);
+      expect(find.text('Tap CANCEL next'), findsNothing);
       await tester.tap(find.text('CANCEL'));
       await tester.pump();
       expect(feltAck, 1);
