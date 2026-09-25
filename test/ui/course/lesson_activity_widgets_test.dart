@@ -278,6 +278,11 @@ void main() {
     // SoftPulse + Rex own the cue — no Tap the dealer button footer.
     expect(find.text('Tap the dealer button'), findsNothing);
     expect(find.text('Tap the dealer button on the table.'), findsNothing);
+    // Ambient empties stay mark-only — no thrice-"Seat" unfinished polish.
+    expect(find.text('Seat'), findsNothing);
+    expect(find.text('Button'), findsOneWidget);
+    expect(find.text('Small blind'), findsOneWidget);
+    expect(find.text('Big blind'), findsOneWidget);
     final teachHeight = tester
         .getSize(find.byKey(const ValueKey('blinds-seats-felt')))
         .height;

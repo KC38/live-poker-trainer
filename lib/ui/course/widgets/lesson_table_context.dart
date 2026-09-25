@@ -14885,7 +14885,13 @@ class _BlindsSeatChip extends StatelessWidget {
       LessonTableRegion.button => 'Button',
       LessonTableRegion.smallBlind => 'Small blind',
       LessonTableRegion.bigBlind => 'Big blind',
-      _ => 'Seat',
+      LessonTableRegion.earlyPosition => 'Early',
+      LessonTableRegion.hijack => 'Hijack',
+      LessonTableRegion.cutoff => 'Cutoff',
+      // Ambient empty seats stay quiet — "Seat" thrice was unfinished polish
+      // next to SoftPulse Button / blinds on the teach felt.
+      LessonTableRegion.emptySeat => null,
+      _ => null,
     };
   }
 
