@@ -601,9 +601,9 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Same cards · Station checked — extract vs wide calls.',
     'act-06-13-01-scaffolded' =>
       'Same cards · Nit check-raises — respect narrow heat.',
-    // Unguided: list legal lines; don’t tip Call alone.
+    // Unguided: name the model; list legal lines without SoftPulse.
     'act-06-13-01-unguided' =>
-      'Same cards · LAG barrels — tap Call or Fold.',
+      'Same cards · LAG barrels — defend vs wide pressure; pick Call or Fold.',
     // SoftPulse owns the dock — don’t gold-tip Bet for value.
     'act-07-07-01-guided' =>
       'Flop top pair · Station check — extract vs wide calls.',
