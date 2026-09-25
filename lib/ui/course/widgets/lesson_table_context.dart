@@ -11112,6 +11112,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive overbet candidates — tap nuts/bluffs vs top pair weak',
       semanticsStatic: 'Overbet guided outcomes',
       caption: scene.caption ?? 'Best overbet river candidate?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Nuts / bluffs.
+      guideRegion: LessonTableRegion.overbetNutsBluffs,
       phases: [
         (
           region: LessonTableRegion.overbetNutsBluffs,
@@ -11119,7 +11121,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Polar story',
           visual: const Icon(
             Icons.swap_vert,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11143,6 +11145,7 @@ class LessonTableContext extends StatelessWidget {
           'Interactive overbet discipline — tap avoid vs always fine',
       semanticsStatic: 'Overbet avoid outcomes',
       caption: scene.caption ?? 'Random 3x pot medium?',
+      // No SoftPulse on unguided — still don’t gold-icon Avoid.
       phases: [
         (
           region: LessonTableRegion.overbetAvoid,
@@ -11150,7 +11153,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Needs a story',
           visual: const Icon(
             Icons.block,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11174,6 +11177,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive geometric aims — tap multi-street plan vs look flashy',
       semanticsStatic: 'Overbet plan outcomes',
       caption: scene.caption ?? 'Geometric sizing primarily helps?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Multi-street plan.
+      guideRegion: LessonTableRegion.overbetMultiStreet,
       phases: [
         (
           region: LessonTableRegion.overbetMultiStreet,
@@ -11181,7 +11186,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Link streets',
           visual: const Icon(
             Icons.account_tree_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),

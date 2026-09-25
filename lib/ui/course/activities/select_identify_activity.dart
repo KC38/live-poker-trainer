@@ -577,12 +577,15 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Mismatch to avoid — pick the sizing leak.',
       'act-06-04-01-checkpoint' =>
           'Merged betting aims to — pick the goal.',
+      // SoftPulse owns Nuts / bluffs — don’t gold-tip the tile.
       'act-06-05-01-guided' =>
-          'Best overbet river — tap Nuts / bluffs.',
+          'Best overbet river — pick the polar candidate.',
+      // Unguided: name the leak; SoftPulse isn’t on — still don’t tip Avoid.
       'act-06-05-01-unguided' =>
-          'Random 3x pot medium — tap Avoid.',
+          'Random 3x pot medium — pick the disciplined line.',
+      // SoftPulse owns Multi-street plan — don’t gold-tip the tile.
       'act-06-05-01-checkpoint' =>
-          'Geometric sizing helps — tap Multi-street plan.',
+          'Geometric sizing helps — pick what it links.',
       'act-06-06-01-guided' =>
           'Flush-board river bluff — tap Ace blocker.',
       'act-06-06-01-scaffolded' =>
