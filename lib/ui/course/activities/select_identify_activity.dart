@@ -406,10 +406,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns the river job — don’t gold-tip the tile.
       'act-03-06-01-checkpoint' =>
           'Medium one pair faces a big bet — weigh the river job.',
+      // SoftPulse owns the speculative hand — don’t gold-tip the tile.
       'act-03-07-01-unguided' =>
-          'Deep multiway — tap the better speculative hand.',
+          'Deep multiway — pick the better speculative hand.',
+      // SoftPulse owns the note — don’t gold-tip the tile.
       'act-03-07-01-checkpoint' =>
-          'Seat enters most pots — tap what you note.',
+          'Seat enters most pots — weigh what you note.',
       'act-03-08-01-checkpoint' =>
           'Two seats, different frequencies — tap the note.',
       'act-03-08-02-jump-table' =>
@@ -1192,10 +1194,12 @@ class _HandCategoryTapActivity extends StatelessWidget {
         // SoftPulse owns the river job — don’t gold-tip the tile.
       'act-03-06-01-checkpoint' =>
           'Medium one pair faces a big bet — weigh the river job.',
+        // SoftPulse owns the speculative hand — don’t gold-tip the tile.
         'act-03-07-01-unguided' =>
-          'Deep multiway — tap the better speculative hand.',
+          'Deep multiway — pick the better speculative hand.',
+        // SoftPulse owns the note — don’t gold-tip the tile.
         'act-03-07-01-checkpoint' =>
-          'Seat enters most pots — tap what you note.',
+          'Seat enters most pots — weigh what you note.',
         'act-03-08-01-checkpoint' =>
           'Two seats, different frequencies — tap the note.',
         'act-03-08-02-jump-table' =>

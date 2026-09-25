@@ -12330,8 +12330,12 @@ await tester.tap(find.text('NIT'));
     );
     expect(find.byType(LessonActionTable), findsOneWidget);
     expect(
-      find.text('Second pair four ways — tap Check or Bet.'),
+      find.text('Second pair four ways — pot-control with a crowd.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Second pair four ways — tap Check or Bet.'),
+      findsNothing,
     );
     expect(find.text('Four ways — not auto-value'), findsNothing);
     expect(find.text('Checked to you · 4-way'), findsWidgets);
@@ -12376,8 +12380,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Missed on a wet board with a crowd — tap Check.'),
+      find.text(
+        'Missed on a wet board with a crowd — don’t stab into many.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Missed on a wet board with a crowd — tap Check.'),
+      findsNothing,
     );
     expect(find.text('Crowd left — no bluff'), findsNothing);
     expect(find.text('Three callers behind'), findsWidgets);
@@ -12434,8 +12444,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Deep multiway — tap the better speculative hand.'),
+      find.text('Deep multiway — pick the better speculative hand.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Deep multiway — tap the better speculative hand.'),
+      findsNothing,
     );
     expect(find.text('76s · IP'), findsOneWidget);
     expect(find.text('In position'), findsOneWidget);
@@ -12499,8 +12513,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Seat enters most pots — tap what you note.'),
+      find.text('Seat enters most pots — weigh what you note.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Seat enters most pots — tap what you note.'),
+      findsNothing,
     );
     expect(find.text('Note it'), findsOneWidget);
     expect(find.text('Play many'), findsOneWidget);
