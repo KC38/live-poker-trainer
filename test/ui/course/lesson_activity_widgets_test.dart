@@ -4681,7 +4681,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(ImpliedOddsDemo), findsOneWidget);
-    expect(find.text('Tap IMPLIED next'), findsOneWidget);
+    expect(find.text('Tap IMPLIED next'), findsNothing);
     expect(find.text('Tap Implied, Reverse, and Second.'), findsNothing);
     expect(find.text('Tap Implied, Reverse, and Second'), findsNothing);
     expect(
@@ -4704,10 +4704,10 @@ await tester.tap(find.text('NIT'));
 
     await tester.tap(find.text('IMPLIED'));
     await tester.pump();
-    expect(find.text('Tap REVERSE next'), findsOneWidget);
+    expect(find.text('Tap REVERSE next'), findsNothing);
     await tester.tap(find.text('REVERSE'));
     await tester.pump();
-    expect(find.text('Tap SECOND next'), findsOneWidget);
+    expect(find.text('Tap SECOND next'), findsNothing);
     await tester.tap(find.text('SECOND'));
     await tester.pump();
     expect(feltAck, 1);
