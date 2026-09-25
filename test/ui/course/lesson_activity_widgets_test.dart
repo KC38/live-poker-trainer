@@ -3533,6 +3533,9 @@ void main() {
     // SoftPulse + Rex own the teach verb — no duplicate Pick… felt title.
     expect(find.text('Flop lines — pick one plan'), findsNothing);
     expect(find.text('Six flop lines'), findsOneWidget);
+    // Structural SoftPulse caption — not Rex’s “check back” paraphrase.
+    expect(find.text('Pass the street'), findsOneWidget);
+    expect(find.text('Check back'), findsNothing);
     expect(
       find.text('Value · c-bet · check · call · fold · raise'),
       findsNothing,
