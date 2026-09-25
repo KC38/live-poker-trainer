@@ -254,6 +254,12 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     'act-03-06-01-scaffolded' => 'bluff',
     'act-03-07-01-guided' => 'check-2p',
     'act-03-07-01-scaffolded' => 'mw-check',
+    // SoftPulse owns Fold — don’t gold-tip the dock.
+    'act-03-08-01-guided' => 'careful',
+    'act-03-08-01-scaffolded' => 'fold-gut',
+    // SoftPulse owns Fold / value on S3 jump docks.
+    'act-03-08-02-jump-mw' => 'j3-fold',
+    'act-03-08-02-jump-river' => 'j3-val',
     'act-04-02-01-guided' => '3bet-qq',
     'act-04-02-01-scaffolded' => 'fold-72',
     'act-04-03-01-scaffolded' => 'abort',
@@ -386,16 +392,21 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // SoftPulse owns Check — don’t gold-tip the dock.
     'act-03-07-01-scaffolded' =>
       'Missed on a wet board with a crowd — don’t stab into many.',
+    // SoftPulse owns Fold — don’t gold-tip the dock.
     'act-03-08-01-guided' =>
-      'Weak top pair in a raise-reraise pot — tap Fold.',
+      'Weak top pair in a raise-reraise pot — leave without stacking.',
+    // SoftPulse owns Fold — don’t gold-tip the dock.
     'act-03-08-01-scaffolded' =>
-      'Gutshot vs an overbet — tap Fold.',
+      'Gutshot vs an overbet — price is wrong for four outs.',
+    // Unguided: name the spot; SoftPulse isn’t on.
     'act-03-08-01-unguided' =>
-      'Air multiway vs a bet — tap Fold.',
+      'Air multiway vs a bet — leave without floating the crowd.',
+    // SoftPulse owns Fold — don’t gold-tip the dock.
     'act-03-08-02-jump-mw' =>
-      'Air four-way on a wet flop — tap Fold.',
+      'Air four-way on a wet flop — leave without bluffing the crowd.',
+    // SoftPulse owns Bet value — don’t gold-tip the dock.
     'act-03-08-02-jump-river' =>
-      'Top two on a brick river — tap a value bet.',
+      'Top two on a brick river — extract when they check.',
     'act-04-02-01-guided' =>
       'Queens on the button vs a CO open — tap a 3-bet.',
     'act-04-02-01-scaffolded' =>
