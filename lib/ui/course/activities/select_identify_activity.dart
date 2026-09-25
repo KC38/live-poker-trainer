@@ -806,20 +806,27 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns One hand — don’t gold-tip the tile.
       'act-07-11-01-checkpoint' =>
           'Warm-up goal — pick the finish line.',
+      // SoftPulse owns Station value — don’t gold-tip the tile.
       'act-07-12-01-cs' =>
-          'Sticky calls — tap Station value.',
+          'Sticky calls — pick the label + exploit.',
+      // SoftPulse owns Nit respect — don’t gold-tip the tile.
       'act-07-12-01-nit' =>
-          'Tiny range heat — tap Nit respect.',
+          'Tiny range heat — pick the label + line.',
+      // SoftPulse owns Maniac catch — don’t gold-tip the tile.
       'act-07-12-01-maniac' =>
-          'Endless barrels — tap Maniac catch.',
+          'Endless barrels — pick the label + line.',
+      // SoftPulse owns TAG respect — don’t gold-tip the tile.
       'act-07-12-01-tag' =>
-          'Selective barrels — tap TAG respect.',
+          'Selective barrels — pick the label + line.',
+      // SoftPulse owns LAG trap — don’t gold-tip the tile.
       'act-07-12-01-lag' =>
-          'Wide pressure — tap LAG trap.',
+          'Wide pressure — pick the label + line.',
+      // SoftPulse owns Low certainty — don’t gold-tip the tile.
       'act-07-12-01-uncertain' =>
-          'Three mixed samples — tap Low certainty.',
+          'Three mixed samples — pick the confidence.',
+      // SoftPulse owns Retire model — don’t gold-tip the tile.
       'act-07-12-01-retire' =>
-          'Label flipped — tap Retire model.',
+          'Label flipped — pick the model update.',
       _ => 'Tap the answer on the table.',
     };
   }
