@@ -34,7 +34,7 @@ class AuthoredMultiStepActivity extends StatelessWidget {
       ('act-01-06-01-scaffolded-multi', 'step-01-06-bb-defend') =>
         'BB called — is the hand still alive?',
       ('act-01-06-01-scaffolded-multi', 'step-01-06-flop-cbet') =>
-        'Top pair on A72 — tap your flop action.',
+        'Top pair on A72 — charge when checked to.',
       ('act-01-06-01-scaffolded-multi', _) =>
         'Called open — confirm the flop, then act.',
       ('act-01-06-01-checkpoint-finish', 'step-01-06-cp-end') =>
@@ -46,40 +46,41 @@ class AuthoredMultiStepActivity extends StatelessWidget {
       ('act-01-06-02-jump-hand', _) =>
         'Jump check — open the button, then take the blinds.',
       ('act-04-03-01-guided', 'step-flop-tp') =>
-        'TPTK on a dry flop — tap Bet to start the plan.',
+        'TPTK on a dry flop — start the multi-street plan.',
       ('act-04-03-01-guided', 'step-turn-tp') =>
-        'Brick turn after a call — tap Bet again for value.',
+        'Brick turn after a call — keep charging for value.',
+      // Section 7 lab hands are SoftPulse-quiet (unguided) — conceptual only.
       ('act-07-10-01-hand', 'step-flop') =>
-        'BTN SRP on K72r — tap Bet.',
+        'BTN SRP on K72r — you are first in with the betting lead.',
       ('act-07-10-01-hand', 'step-turn') =>
-        'Called · paired blank — tap Barrel blanks.',
+        'Called · paired blank — keep pressure on blanks.',
       ('act-07-10-01-hand', 'step-river') =>
-        'Ace-high on 9c — tap Check.',
+        'Ace-high on 9c — no value left; pot control.',
       ('act-07-10-02-hand', 'step-3b-flop') =>
-        '3-bet pot · Q83tt — tap C-bet value.',
+        '3-bet pot · Q83tt — strong made hand with the lead.',
       ('act-07-10-02-hand', 'step-3b-turn') =>
-        'Called · blank turn — tap Continue value.',
+        'Called · blank turn — keep charging value.',
       ('act-07-10-02-hand', 'step-3b-river') =>
-        'TAG check-raises huge — tap Fold.',
+        'TAG check-raises huge — respect the size.',
       ('act-07-10-03-hand', 'step-mw-flop') =>
-        'Deep multiway · flush draw — tap Call.',
+        'Deep multiway · flush draw — price is right to continue.',
       ('act-07-10-03-hand', 'step-mw-turn') =>
-        'Turn checked · nut draw — tap Bet semi-bluff.',
+        'Turn checked · nut draw — apply pressure as a semi-bluff.',
       ('act-07-10-03-hand', 'step-mw-river') =>
-        'Missed river · two behind — tap Check.',
+        'Missed river · two behind — give up without a showdown.',
       ('act-07-10-04-hand', 'step-limp-flop') =>
-        'Limped · top pair — tap Bet value.',
+        'Limped · top pair — charge when checked to.',
       ('act-07-10-04-hand', 'step-limp-turn') =>
-        'Two callers · blank — tap Continue value.',
+        'Two callers · blank — keep extracting value.',
       ('act-07-10-04-hand', 'step-limp-river') =>
-        'Both call · thin value — tap Bet thin value.',
+        'Both call · thin value — still extract one street.',
       ('act-07-10-05-hand', 'step-4b-flop') =>
-        '4-bet pot · Q83r — tap Bet.',
+        '4-bet pot · Q83r — small pot, keep the lead.',
       ('act-07-10-05-hand', 'step-4b-turn') =>
-        'Called · blank — tap Continue / commit.',
+        'Called · blank — stacks are committed to the end.',
       ('act-07-10-05-hand', 'step-4b-river') =>
-        'Ace hits · jam — tap Fold.',
-      _ => 'Play the street — tap your action on the dock.',
+        'Ace hits · jam — behind the overcard; release.',
+      _ => 'Read the board — act on the dock.',
     };
   }
 

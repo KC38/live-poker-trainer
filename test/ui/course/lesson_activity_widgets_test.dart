@@ -8883,6 +8883,66 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
+  testWidgets('toy hand scaffolded SoftPulse c-bet uses conceptual Rex cue', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-06-01-scaffolded-multi',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 70,
+      accessibilityText: 'scaffolded',
+      acceptedGrades: const [SoftGrade.recommended],
+      handSteps: const [
+        CourseHandStep(
+          id: 'step-01-06-bb-defend',
+          street: 'preflop',
+          prompt: 'BB called your open.',
+          choices: [
+            CourseChoice(id: 'ready-flop', label: 'See flop', action: 'CALL'),
+            CourseChoice(id: 'already-over', label: 'Already over', action: 'FOLD'),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-01-06-flop-cbet',
+          street: 'flop',
+          prompt: 'Flop A72. BB checks. Action?',
+          choices: [
+            CourseChoice(id: 'cbet', label: 'Bet 6', action: 'BET'),
+            CourseChoice(id: 'check', label: 'Check', action: 'CHECK'),
+            CourseChoice(id: 'jam', label: 'Jam 100bb', action: 'RAISE'),
+          ],
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    controller.setHandStepIndex(1);
+    await tester.pumpWidget(
+      _wrap(
+        AuthoredMultiStepActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Top pair on A72 — charge when checked to.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Top pair on A72 — tap your flop action.'),
+      findsNothing,
+    );
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'cbet');
+    await tester.tap(find.text('BET 6'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'cbet');
+    controller.dispose();
+  });
+
   testWidgets('toy hand checkpoint drops dock tap footer under Rex', (
     tester,
   ) async {
@@ -13561,8 +13621,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('TPTK on a dry flop — tap Bet to start the plan.'),
+      find.text('TPTK on a dry flop — start the multi-street plan.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('TPTK on a dry flop — tap Bet to start the plan.'),
+      findsNothing,
     );
     expect(find.textContaining('Flop · A72 rainbow · TPTK'), findsOneWidget);
     expect(find.text('BET'), findsOneWidget);
@@ -24447,7 +24511,7 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('BTN SRP on K72r — tap Bet.'), findsOneWidget);
+    expect(find.text('BTN SRP on K72r — you are first in with the betting lead.'), findsOneWidget);
     expect(find.textContaining('Flop · K72r · AQ'), findsOneWidget);
     expect(find.text('BET'), findsOneWidget);
     expect(
@@ -24526,7 +24590,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Called · paired blank — tap Barrel blanks.'),
+      find.text('Called · paired blank — keep pressure on blanks.'),
       findsOneWidget,
     );
     expect(find.textContaining('Turn · K722 · AQ'), findsOneWidget);
@@ -24607,7 +24671,7 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Ace-high on 9c — tap Check.'), findsOneWidget);
+    expect(find.text('Ace-high on 9c — no value left; pot control.'), findsOneWidget);
     expect(find.textContaining('River · K7229 · ace-high'), findsOneWidget);
     expect(find.text('CHECK'), findsOneWidget);
     expect(
@@ -24745,7 +24809,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('3-bet pot · Q83tt — tap C-bet value.'),
+      find.text('3-bet pot · Q83tt — strong made hand with the lead.'),
       findsOneWidget,
     );
     expect(find.textContaining('Flop · Q83tt · AQ'), findsOneWidget);
@@ -24816,7 +24880,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Called · blank turn — tap Continue value.'),
+      find.text('Called · blank turn — keep charging value.'),
       findsOneWidget,
     );
     expect(find.textContaining('Turn · Q832 · AQ'), findsOneWidget);
@@ -24890,7 +24954,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('TAG check-raises huge — tap Fold.'),
+      find.text('TAG check-raises huge — respect the size.'),
       findsOneWidget,
     );
     expect(find.textContaining('River · Q8327 · TPTK'), findsOneWidget);
@@ -25049,7 +25113,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Deep multiway · flush draw — tap Call.'),
+      find.text('Deep multiway · flush draw — price is right to continue.'),
       findsOneWidget,
     );
     expect(find.textContaining('Flop · Jh8h2c · AQs'), findsOneWidget);
@@ -25127,7 +25191,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Turn checked · nut draw — tap Bet semi-bluff.'),
+      find.text('Turn checked · nut draw — apply pressure as a semi-bluff.'),
       findsOneWidget,
     );
     expect(find.textContaining('Turn · Jh8h2c3d · AQs'), findsOneWidget);
@@ -25205,7 +25269,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Missed river · two behind — tap Check.'),
+      find.text('Missed river · two behind — give up without a showdown.'),
       findsOneWidget,
     );
     expect(find.textContaining('River · miss · ace-high'), findsOneWidget);
@@ -25375,7 +25439,7 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Limped · top pair — tap Bet value.'), findsOneWidget);
+    expect(find.text('Limped · top pair — charge when checked to.'), findsOneWidget);
     expect(find.textContaining('Flop · Kd9c4h · AK'), findsOneWidget);
     expect(find.text('BET VALUE'), findsOneWidget);
     expect(find.text('Flop Kd 9c 4h. Checked to you. Action?'), findsNothing);
@@ -25447,7 +25511,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Two callers · blank — tap Continue value.'),
+      find.text('Two callers · blank — keep extracting value.'),
       findsOneWidget,
     );
     expect(find.textContaining('Turn · Kd9c4h2s · AK'), findsOneWidget);
@@ -25527,7 +25591,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Both call · thin value — tap Bet thin value.'),
+      find.text('Both call · thin value — still extract one street.'),
       findsOneWidget,
     );
     expect(find.textContaining('River · Kd9c4h2s8d · TPTK'), findsOneWidget);
@@ -25679,7 +25743,7 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('4-bet pot · Q83r — tap Bet.'), findsOneWidget);
+    expect(find.text('4-bet pot · Q83r — small pot, keep the lead.'), findsOneWidget);
     expect(find.textContaining('Flop · Q83r · KK'), findsOneWidget);
     expect(find.text('BET'), findsWidgets);
     expect(find.text('Flop Q83r. Action?'), findsNothing);
@@ -25751,7 +25815,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Called · blank — tap Continue / commit.'),
+      find.text('Called · blank — stacks are committed to the end.'),
       findsOneWidget,
     );
     expect(find.textContaining('Turn · Q832 · KK'), findsOneWidget);
@@ -25827,7 +25891,7 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Ace hits · jam — tap Fold.'), findsOneWidget);
+    expect(find.text('Ace hits · jam — behind the overcard; release.'), findsOneWidget);
     expect(find.textContaining('River · Q832A · KK'), findsOneWidget);
     expect(find.text('FOLD'), findsOneWidget);
     expect(
