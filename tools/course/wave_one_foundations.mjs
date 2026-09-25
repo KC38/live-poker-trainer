@@ -537,7 +537,7 @@ export function buildSectionOne() {
               sequenceAct({
                 id: "act-01-02-01-unguided-compare", order: 4, stage: "unguided",
                 renderer: "compare_rank",
-                prompt: "Tap strongest to weakest.",
+                prompt: "Pick strongest to weakest.",
                 a11y: "Tap full house, then trips, then two pair.",
                 objectives: ["Compare two finished hands"],
                 lifeLoss: true,
@@ -1195,8 +1195,8 @@ export function buildSectionOne() {
               sequenceAct({
                 id: "act-01-06-02-jump-ranks", order: 1, stage: "jump_test",
                 renderer: "compare_rank",
-                prompt: "Tap strongest hand first, then weaker.",
-                a11y: "Jump test: tap strongest hand first, then weaker.",
+                prompt: "Pick strongest hand first, then weaker.",
+                a11y: "Jump test: pick strongest hand first, then weaker.",
                 objectives: ["Confirm hand ranking"],
                 lifeLoss: true,
                 items: [
@@ -1225,7 +1225,7 @@ export function buildSectionOne() {
               }),
               actionAct({
                 id: "act-01-06-02-jump-legal", order: 3, stage: "jump_test",
-                prompt: "A bet faces you. Tap the action you cannot take.",
+                prompt: "A bet faces you. Pick the action you cannot take.",
                 a11y: "Jump test: check is illegal facing a bet.",
                 objectives: ["Confirm legal action"],
                 lifeLoss: true,

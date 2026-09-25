@@ -95,17 +95,17 @@ String emptyOrderTrayHint({
   if (coachAlreadyGuides && coachOwnsOrderHint(activity)) {
     return 'Build order here';
   }
-  if (ordersStrongestFirst(activity)) return 'Tap strongest first';
+  if (ordersStrongestFirst(activity)) return 'Pick strongest first';
   if (rankMode || isHandExampleSequenceActivity(activity)) {
-    return 'Tap lowest first';
+    return 'Pick lowest first';
   }
   if (isStreetSequenceActivity(activity)) {
-    return 'Tap streets below first → last';
+    return 'Pick streets below first → last';
   }
   if (isSeatOrderSequenceActivity(activity)) {
-    return 'Tap seats below first → last';
+    return 'Pick seats below first → last';
   }
-  return 'Tap lowest first';
+  return 'Pick lowest first';
 }
 
 /// Role caption for a numbered order slot (empty or filled).
@@ -144,10 +144,10 @@ String orderSequenceStatusLine({
   if (coachAlreadyGuides && coachOwnsOrderHint(activity)) {
     return '';
   }
-  if (rankMode) return 'Tap low → high';
-  if (ordersStrongestFirst(activity)) return 'Tap strong → weak';
-  if (isHandExampleSequenceActivity(activity)) return 'Tap low → high';
-  return 'Tap next';
+  if (rankMode) return 'Pick low → high';
+  if (ordersStrongestFirst(activity)) return 'Pick strong → weak';
+  if (isHandExampleSequenceActivity(activity)) return 'Pick low → high';
+  return 'Pick next';
 }
 
 /// Appends [id] to the order draft and auto-submits when the sequence is full.
@@ -204,16 +204,28 @@ class OrderSequenceActivity extends StatelessWidget {
         final strongestFirst = ordersStrongestFirst(activity);
         final fallback =
             _rankMode
-                ? 'Tap ranks from lowest to highest.'
+                ? (showGuidance
+                    ? 'Order ranks from lowest to highest.'
+                    : 'Pick ranks from lowest to highest.')
                 : strongestFirst
-                ? 'Tap strongest hand first, then weaker.'
+                ? (showGuidance
+                    ? 'Order from strongest to weakest.'
+                    : 'Pick strongest hand first, then weaker.')
                 : _handMode
-                ? 'Tap hands from lowest to highest.'
+                ? (showGuidance
+                    ? 'Order hands from lowest to highest.'
+                    : 'Pick hands from lowest to highest.')
                 : isStreetSequenceActivity(activity)
-                ? 'Tap streets from first to last.'
+                ? (showGuidance
+                    ? 'Order streets from first to last.'
+                    : 'Pick streets from first to last.')
                 : isSeatOrderSequenceActivity(activity)
-                ? 'Tap seats in the order they act.'
-                : 'Tap seats in the order they act.';
+                ? (showGuidance
+                    ? 'Order seats in the order they act.'
+                    : 'Pick seats in the order they act.')
+                : (showGuidance
+                    ? 'Order seats in the order they act.'
+                    : 'Pick seats in the order they act.');
         final resolved = resolveLessonCoachPrompt(
           activity: activity,
           fallback: fallback,
@@ -288,6 +300,7 @@ class OrderSequenceActivity extends StatelessWidget {
                           strongestFirst: strongestFirst,
                           labelFor: _labelFor,
                           locked: locked,
+                          softPulseNext: showGuidance,
                         ),
                       ),
                       if (statusLine.isNotEmpty) ...[
@@ -307,7 +320,7 @@ class OrderSequenceActivity extends StatelessWidget {
                         // SoftPulse + Rex own the cue — skip Tap to place / Tap X.
                         if (!coachOwnsCue) ...[
                           Text(
-                            'Tap to place',
+                            showGuidance ? 'Tap to place' : 'Pick to place',
                             textAlign: TextAlign.center,
                             style: GoogleFonts.manrope(
                               color: AppColors.slate,
@@ -613,6 +626,7 @@ class OrderSequenceActivity extends StatelessWidget {
                           labelFor: _labelFor,
                           locked: locked,
                           emptyHint: trayHint,
+                          softPulseNext: showGuidance,
                         ),
                       ),
                       if (statusLine.isNotEmpty) ...[
@@ -632,7 +646,7 @@ class OrderSequenceActivity extends StatelessWidget {
                         // SoftPulse + Rex own the cue — skip duplicate "Tap to place".
                         if (!showCoach || !showGuidance) ...[
                           Text(
-                            'Tap to place',
+                            showGuidance ? 'Tap to place' : 'Pick to place',
                             textAlign: TextAlign.center,
                             style: GoogleFonts.manrope(
                               color: AppColors.slate,
@@ -888,6 +902,7 @@ class _HandOrderSlotColumn extends StatelessWidget {
     required this.strongestFirst,
     required this.labelFor,
     required this.locked,
+    this.softPulseNext = false,
   });
 
   final List<String> ordered;
@@ -895,6 +910,9 @@ class _HandOrderSlotColumn extends StatelessWidget {
   final bool strongestFirst;
   final String Function(String id) labelFor;
   final bool locked;
+
+  /// SoftPulse the next empty slot only while teaching (SoftPulse-quiet off).
+  final bool softPulseNext;
 
   @override
   Widget build(BuildContext context) {
@@ -932,7 +950,7 @@ class _HandOrderSlotColumn extends StatelessWidget {
                 strongestFirst: strongestFirst,
                 lowToHigh: !strongestFirst,
               ),
-              isNext: !locked && i == nextIndex,
+              isNext: softPulseNext && !locked && i == nextIndex,
               tall: true,
             ),
         ],
@@ -951,6 +969,7 @@ class _RankChipOrderSlots extends StatelessWidget {
     required this.labelFor,
     required this.locked,
     required this.emptyHint,
+    this.softPulseNext = false,
   });
 
   final List<String> ordered;
@@ -960,6 +979,9 @@ class _RankChipOrderSlots extends StatelessWidget {
   final String Function(String id) labelFor;
   final bool locked;
   final String emptyHint;
+
+  /// SoftPulse the next empty slot only while teaching (SoftPulse-quiet off).
+  final bool softPulseNext;
 
   @override
   Widget build(BuildContext context) {
@@ -1001,7 +1023,7 @@ class _RankChipOrderSlots extends StatelessWidget {
                   strongestFirst: strongestFirst,
                   lowToHigh: rankMode || !strongestFirst,
                 ),
-                isNext: !locked && i == nextIndex,
+                isNext: softPulseNext && !locked && i == nextIndex,
                 tall: rankMode,
                 fallbackHint: i == 0 && ordered.isEmpty ? emptyHint : null,
               ),

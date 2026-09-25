@@ -8487,7 +8487,7 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Tap the streets from first to last.'), findsOneWidget);
     expect(find.text('Build order here'), findsOneWidget);
     expect(find.text('Tap streets below first → last'), findsNothing);
-    expect(find.text('Tap next'), findsNothing);
+    expect(find.text('Pick next'), findsNothing);
     expect(find.byKey(const ValueKey('street-order-felt')), findsOneWidget);
     final teachHeight = tester
         .getSize(find.byKey(const ValueKey('street-order-felt')))
@@ -8623,9 +8623,9 @@ await tester.tap(find.text('NIT'));
       stage: ActivityStage.jumpTest,
       renderer: ActivityRenderer.compareRank,
       estimatedSeconds: 40,
-      accessibilityText: 'Jump test: tap strongest hand first, then weaker.',
+      accessibilityText: 'Jump test: pick strongest hand first, then weaker.',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Tap strongest hand first, then weaker.',
+      prompt: 'Pick strongest hand first, then weaker.',
       sequenceItems: const [
         CourseChoice(id: 'j-flush', label: 'Flush'),
         CourseChoice(id: 'j-straight', label: 'Straight'),
@@ -8642,21 +8642,60 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Tap strongest hand first, then weaker.'), findsOneWidget);
+    expect(find.text('Pick strongest hand first, then weaker.'), findsOneWidget);
+    expect(find.text('Tap strongest hand first, then weaker.'), findsNothing);
     expect(find.textContaining('straight, two pair, flush'), findsNothing);
     // Numbered destination slots teach order — not an empty tray blob.
     expect(find.text('1 · Strongest'), findsOneWidget);
     expect(find.text('3 · Weakest'), findsOneWidget);
     expect(find.text('Build order here'), findsNothing);
     expect(find.text('Your order (empty)'), findsNothing);
-    expect(find.text('Tap strongest first'), findsNothing);
-    expect(find.text('Tap strong → weak'), findsNothing);
+    expect(find.text('Pick strongest first'), findsNothing);
+    expect(find.text('Pick strong → weak'), findsNothing);
     // SoftPulse + Rex own the cue — no Tap to place / Tap LABEL stack.
     expect(find.text('Tap to place'), findsNothing);
     expect(find.text('Tap Flush'), findsNothing);
     expect(find.text('Flush'), findsOneWidget);
     expect(find.text('Straight'), findsOneWidget);
     expect(find.text('Two pair'), findsOneWidget);
+    controller.dispose();
+  });
+
+  testWidgets('SoftPulse-quiet jump ranks uses pick cue without SoftPulse slots', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-06-02-jump-ranks',
+      order: 1,
+      stage: ActivityStage.jumpTest,
+      renderer: ActivityRenderer.compareRank,
+      estimatedSeconds: 40,
+      accessibilityText: 'Jump test: pick strongest hand first, then weaker.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Pick strongest hand first, then weaker.',
+      sequenceItems: const [
+        CourseChoice(id: 'j-flush', label: 'Flush'),
+        CourseChoice(id: 'j-straight', label: 'Straight'),
+        CourseChoice(id: 'j-two', label: 'Two pair'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        OrderSequenceActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(find.text('Pick strongest hand first, then weaker.'), findsOneWidget);
+    expect(find.text('Tap strongest hand first, then weaker.'), findsNothing);
+    expect(find.text('1 · Strongest'), findsOneWidget);
+    // SoftPulse-quiet: next slot is structural, not SoftPulse-glowing teaching.
+    // Ghost slots still render; SoftPulse pulse is gated off via softPulseNext.
+    expect(find.text('Tap to place'), findsNothing);
+    expect(find.text('Pick to place'), findsNothing);
     controller.dispose();
   });
 
@@ -8671,7 +8710,7 @@ await tester.tap(find.text('NIT'));
       estimatedSeconds: 40,
       accessibilityText: 'Tap strongest to weakest',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Tap strongest to weakest.',
+      prompt: 'Pick strongest to weakest.',
       sequenceItems: const [
         CourseChoice(id: 'hr-trips', label: 'Three of a kind'),
         CourseChoice(id: 'hr-full', label: 'Full house'),
@@ -8688,7 +8727,7 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Tap strongest to weakest.'), findsOneWidget);
+    expect(find.text('Pick strongest to weakest.'), findsOneWidget);
     expect(find.text('Tap to place'), findsNothing);
     expect(find.byKey(const ValueKey('hand-order-felt')), findsOneWidget);
     controller.dispose();
@@ -9063,7 +9102,7 @@ await tester.tap(find.text('NIT'));
       estimatedSeconds: 40,
       accessibilityText: 'legal',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'A bet faces you. Tap the action you cannot take.',
+      prompt: 'A bet faces you. Pick the action you cannot take.',
       choices: const [
         CourseChoice(id: 'j-check', label: 'Check', action: 'CHECK'),
         CourseChoice(id: 'j-call', label: 'Call', action: 'CALL'),
@@ -21929,7 +21968,7 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Order these ranks from lowest to highest.'), findsOneWidget);
     // Rex + SoftPulse own the cue — no duplicate status / Tap to place.
     expect(find.text('Tap lowest first'), findsNothing);
-    expect(find.text('Tap low → high'), findsNothing);
+    expect(find.text('Pick low → high'), findsNothing);
     expect(find.text('Tap to place'), findsNothing);
     final teachHeight = tester
         .getSize(find.byKey(const ValueKey('rank-order-felt')))
