@@ -3444,10 +3444,18 @@ void main() {
     expect(find.text('Tap CLEAN next'), findsNothing);
     expect(find.text('Tap Clean, Dirty, and Price'), findsNothing);
     expect(find.text('Tap Clean, Dirty, and Price.'), findsNothing);
+    // Structural SoftPulse captions — not Rex paraphrases.
+    expect(find.text('Best-hand outs'), findsOneWidget);
+    expect(find.text('Trap improve'), findsOneWidget);
+    expect(find.text('Pot odds'), findsOneWidget);
+    expect(find.text('Outs that help'), findsNothing);
+    expect(find.text('Second-best risk'), findsNothing);
+    expect(find.text('Is the call worth it?'), findsNothing);
     expect(
       find.text('Clean outs · dirty outs · price the call'),
       findsNothing,
     );
+    expect(find.text('Clean · dirty · price'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
     final teachHeight =
@@ -3472,9 +3480,10 @@ void main() {
     await tester.pump();
     expect(feltAck, 1);
     // Lock clears enabled / ack — densified shell must stay filled.
+    expect(find.text('Clean · dirty · price'), findsOneWidget);
     expect(
       find.text('Clean outs · dirty outs · price the call'),
-      findsOneWidget,
+      findsNothing,
     );
     expect(
       tester.getSize(find.byType(OutsPriceDemo)).height,
