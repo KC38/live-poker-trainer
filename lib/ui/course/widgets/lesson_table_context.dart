@@ -7263,7 +7263,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive hand family — tap Pocket pair, Suited ace, or Broadway',
       semanticsStatic: 'Hand family guided outcomes',
       caption: scene.caption ?? 'Your holes',
-      cueLabel: 'Tap Pocket pair.',
+      // SoftPulse + Rex own the family cue (no footer Tap…).
+      cueLabel: '',
       guideRegion: LessonTableRegion.handFamilyPair,
       phases: [
         (
@@ -7312,7 +7313,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive hand family — tap Broadway, Pocket pair, or Offsuit trash',
       semanticsStatic: 'Hand family scaffolded outcomes',
       caption: scene.caption ?? 'Your holes',
-      cueLabel: 'Tap Broadway.',
+      // SoftPulse + Rex own the family cue (no footer Tap…).
+      cueLabel: '',
       guideRegion: LessonTableRegion.handFamilyScBroadway,
       phases: [
         (
@@ -13745,6 +13747,13 @@ class LessonTableContext extends StatelessWidget {
         board.isNotEmpty ||
         villainFaceUp.isNotEmpty ||
         scene.villainSeatCount > 0;
+    // Lone hole pair (hand-family classify etc.): don't give half the felt to
+    // empty green above two cards — pack holes toward the choice dock.
+    final heroOnlySpot =
+        hero.isNotEmpty &&
+        board.isEmpty &&
+        villainFaceUp.isEmpty &&
+        scene.villainSeatCount == 0;
     // Grow interactive outcome felts on tall phones even without SoftPulse
     // (unguided/checkpoint densify without pulsing a spoiler tile).
     final expandTeach =
@@ -13813,10 +13822,14 @@ class LessonTableContext extends StatelessWidget {
               if (showSpotCards) ...[
                 if (expandTeach)
                   Expanded(
-                    flex: 5,
+                    // Hero-only: give the dock most of the felt; keep enough
+                    // band for hero-sized holes (roomy threshold below).
+                    flex: heroOnlySpot ? 3 : 5,
                     child: LayoutBuilder(
                       builder: (context, constraints) {
-                        final roomy = constraints.maxHeight >= 280;
+                        final roomy =
+                            constraints.maxHeight >=
+                            (heroOnlySpot ? 140 : 280);
                         final holeScale = roomy ? 1.35 : 1.0;
                         final boardScale = roomy ? 1.15 : 1.0;
                         Widget labeledCards({
@@ -13912,14 +13925,23 @@ class LessonTableContext extends StatelessWidget {
                         ];
                         if (roomy) {
                           return Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            // Hero-only: pack holes to the dock. Full spots
+                            // (board/villain) still spaceEvenly to fill.
+                            mainAxisAlignment:
+                                heroOnlySpot
+                                    ? MainAxisAlignment.end
+                                    : MainAxisAlignment.spaceEvenly,
                             children: rails,
                           );
                         }
                         // Short test viewports: pack + scaleDown, never overflow.
+                        // Hero-only: pin holes to the dock edge of this band.
                         return FittedBox(
                           fit: BoxFit.scaleDown,
-                          alignment: Alignment.center,
+                          alignment:
+                              heroOnlySpot
+                                  ? Alignment.bottomCenter
+                                  : Alignment.center,
                           child: SizedBox(
                             width: constraints.maxWidth,
                             child: Column(
@@ -14057,7 +14079,7 @@ class LessonTableContext extends StatelessWidget {
               ],
               expandTeach
                   ? Expanded(
-                    flex: 4,
+                    flex: heroOnlySpot ? 6 : 4,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: phaseRow,
