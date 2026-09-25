@@ -3805,7 +3805,7 @@ await tester.tap(find.text('SPR'));
       ),
     );
     expect(find.byType(CallingStationDemo), findsOneWidget);
-    expect(find.text('Tap STATION next'), findsOneWidget);
+    expect(find.text('Tap STATION next'), findsNothing);
     expect(find.text('Tap Station, High, and Low.'), findsNothing);
     expect(find.text('Tap Station, High, and Low'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
@@ -3813,10 +3813,10 @@ await tester.tap(find.text('SPR'));
 
     await tester.tap(find.text('STATION'));
     await tester.pump();
-    expect(find.text('Tap HIGH next'), findsOneWidget);
+    expect(find.text('Tap HIGH next'), findsNothing);
     await tester.tap(find.text('HIGH'));
     await tester.pump();
-    expect(find.text('Tap LOW next'), findsOneWidget);
+    expect(find.text('Tap LOW next'), findsNothing);
     await tester.tap(find.text('LOW'));
     await tester.pump();
     expect(feltAck, 1);
