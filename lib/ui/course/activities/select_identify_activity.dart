@@ -358,8 +358,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Out of turn — don’t gold-tip the tile.
       'act-02-06-01-checkpoint-oot' =>
           'You raised early — action was still two seats left.',
+      // SoftPulse-quiet jump: ask on the map — don't name Cutoff as the answer.
       'act-02-07-02-jump-pos' =>
-          'The seat just before the button is the cutoff.',
+          'Seat just before the button — pick it on the map.',
       'act-02-07-02-jump-family' =>
           'Look at your holes — pick the family they belong to.',
       // SoftPulse owns Flush — don’t gold-tip the tile.
