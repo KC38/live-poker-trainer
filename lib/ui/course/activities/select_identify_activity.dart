@@ -371,9 +371,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns You — don’t gold-tip the kicker winner.
       'act-01-02-02-scaffolded-kicker' =>
           'Same pair of kings — the higher kicker breaks the tie.',
+      // Jump densify — SoftPulse off; pick without gold-tipping 55bb.
       'act-02-07-02-jump-stack' =>
-          // Jump: name the spot — not “shorter one” answering.
-          'You 120bb · villain 55bb — tap effective.',
+          'You 120bb · villain 55bb — pick the effective stack.',
       'act-02-02-01-guided-pair' =>
           'Matching ranks in the hole — both cards share a rank.',
       'act-02-02-01-scaffolded-broadway' =>

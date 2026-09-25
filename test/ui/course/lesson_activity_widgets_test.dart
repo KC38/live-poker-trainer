@@ -9392,8 +9392,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('You 120bb · villain 55bb — tap effective.'),
+      find.text('You 120bb · villain 55bb — pick the effective stack.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('You 120bb · villain 55bb — tap effective.'),
+      findsNothing,
     );
     expect(
       find.text('Effective stack is the shorter one — tap it.'),
