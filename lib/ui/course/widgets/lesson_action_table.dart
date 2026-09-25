@@ -7276,7 +7276,7 @@ class _ExploitEvidenceDemoState extends State<ExploitEvidenceDemo> {
                 ),
               ),
               child: Text(
-                'Same cards · different seats · evidence',
+                'Cards · seats · evidence',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
