@@ -290,6 +290,8 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     // Mix-five: SoftPulse the plan; Rex names the model, not the dock label.
     'act-06-13-01-guided' => 'cs',
     'act-06-13-01-scaffolded' => 'nit',
+    // River composition guided — SoftPulse owns Value bet.
+    'act-07-03-01-guided' => 'val',
     _ => null,
   };
 }
@@ -494,8 +496,9 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // SoftPulse owns the dock — don’t gold-tip Trap / induce.
     'act-06-12-03-scaffolded' =>
       'Top set vs LAG — let wide pressure hang themselves.',
+    // SoftPulse owns the dock — don’t gold-tip Value bet.
     'act-07-03-01-guided' =>
-      'Thick value vs station — tap Value bet.',
+      'Thick value vs station — extract when they call wide.',
     // SoftPulse owns the dock target — don’t gold-tip Bet thin value / Fold.
     'act-06-13-01-guided' =>
       'Same cards · Station checked — extract vs wide calls.',
