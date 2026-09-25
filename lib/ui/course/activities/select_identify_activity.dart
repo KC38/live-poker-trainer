@@ -586,14 +586,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Multi-street plan — don’t gold-tip the tile.
       'act-06-05-01-checkpoint' =>
           'Geometric sizing helps — pick what it links.',
+      // SoftPulse owns Ace blocker — don’t gold-tip the tile.
       'act-06-06-01-guided' =>
-          'Flush-board river bluff — tap Ace blocker.',
+          'Flush-board river bluff — pick the better blocker.',
+      // SoftPulse owns Unblock bluffs — don’t gold-tip the tile.
       'act-06-06-01-scaffolded' =>
-          'Bluff-catch flush bomb — tap Unblock bluffs.',
+          'Bluff-catch flush bomb — pick what you leave live.',
+      // Unguided: name the role; don’t tip Tweak evidence.
       'act-06-06-01-unguided' =>
-          'Blockers replace — tap Tweak evidence.',
+          'Blockers replace — pick how far they go.',
+      // SoftPulse owns No fake EV — don’t gold-tip the tile.
       'act-06-06-01-checkpoint' =>
-          'Solver EV quotes — tap No fake EV.',
+          'Solver EV quotes — pick the course stance.',
       'act-06-07-01-guided' =>
           'Facing a river bet — tap Strong catchers.',
       'act-06-07-01-unguided' =>
@@ -1000,7 +1004,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                     ((widget.showGuidance &&
                             (widget.activity.stage == ActivityStage.guided ||
                                 widget.activity.stage ==
-                                    ActivityStage.scaffolded)) ||
+                                    ActivityStage.scaffolded ||
+                                widget.activity.stage ==
+                                    ActivityStage.checkpoint)) ||
                         widget.activity.id == 'act-01-02-02-unguided-board'),
                 showInviteCue: !feltFirstSelect,
                 enabled: !locked,
