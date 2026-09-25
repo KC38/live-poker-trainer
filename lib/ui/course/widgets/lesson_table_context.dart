@@ -12073,6 +12073,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive TAG cite — tap selective cite or vibes',
       semanticsStatic: 'TAG respect cite outcomes',
       caption: scene.caption ?? 'Versus TAG, cite which tendency?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Selective + disciplined.
+      guideRegion: LessonTableRegion.citeTagSelective,
       phases: [
         (
           region: LessonTableRegion.citeTagSelective,
@@ -12080,7 +12082,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Cite the tendency',
           visual: const Icon(
             Icons.gps_fixed,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),

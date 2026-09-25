@@ -18260,8 +18260,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('TAG check-raises second pair — tap Fold.'),
+      find.text('TAG check-raises second pair — respect their heat.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('TAG check-raises second pair — tap Fold.'),
+      findsNothing,
     );
     expect(find.text('FOLD'), findsOneWidget);
     await tester.tap(find.text('FOLD'));
@@ -18299,8 +18303,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('BTN vs TAG BB with K9o — tap Tighter fold.'),
+      find.text('BTN vs TAG BB with K9o — steal narrower than vs nits.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('BTN vs TAG BB with K9o — tap Tighter fold.'),
+      findsNothing,
     );
     expect(find.text('TIGHTER FOLD'), findsOneWidget);
     await tester.tap(find.text('TIGHTER FOLD'));
@@ -18336,8 +18344,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('River thin vs TAG who rarely calls — tap Check.'),
+      find.text('River thin vs TAG who rarely calls — need their calls.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('River thin vs TAG who rarely calls — tap Check.'),
+      findsNothing,
     );
     expect(find.text('CHECK'), findsOneWidget);
     await tester.tap(find.text('CHECK'));
@@ -18379,8 +18391,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Versus TAG — tap Selective + disciplined.'),
+      find.text('Versus TAG — pick the cite.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Versus TAG — tap Selective + disciplined.'),
+      findsNothing,
     );
     await tester.tap(find.text('Selective + disciplined'));
     await tester.pump();

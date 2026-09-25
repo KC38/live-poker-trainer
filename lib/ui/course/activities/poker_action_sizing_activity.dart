@@ -281,6 +281,9 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     // Hard folds guided — SoftPulse owns Fold TPWK.
     'act-06-10-01-guided' => 'fold',
     'act-06-09-01-scaffolded' => 'small',
+    // Adjust vs TAG: SoftPulse the plan; Rex names the model, not the dock.
+    'act-06-11-03-guided' => 'fold',
+    'act-06-11-03-scaffolded' => 'fold-k9',
     // Mix-five: SoftPulse the plan; Rex names the model, not the dock label.
     'act-06-13-01-guided' => 'cs',
     'act-06-13-01-scaffolded' => 'nit',
@@ -473,12 +476,15 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // SoftPulse owns the dock — don’t gold-tip Fold.
     'act-06-10-01-guided' =>
       'TPWK vs triple barrels — no maniac read in heat.',
+    // SoftPulse owns the dock — don’t gold-tip Fold.
     'act-06-11-03-guided' =>
-      'TAG check-raises second pair — tap Fold.',
+      'TAG check-raises second pair — respect their heat.',
+    // SoftPulse owns the dock — don’t gold-tip Tighter fold.
     'act-06-11-03-scaffolded' =>
-      'BTN vs TAG BB with K9o — tap Tighter fold.',
+      'BTN vs TAG BB with K9o — steal narrower than vs nits.',
+    // Unguided: name the model; don’t tip Check.
     'act-06-11-03-unguided' =>
-      'River thin vs TAG who rarely calls — tap Check.',
+      'River thin vs TAG who rarely calls — need their calls.',
     'act-06-12-03-guided' =>
       'LAG barrels river · second pair — tap Call.',
     'act-06-12-03-scaffolded' =>
