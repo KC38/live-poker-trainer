@@ -3715,8 +3715,16 @@ await tester.tap(find.text('VALUE'));
     expect(find.text('Tap VALUE next'), findsNothing);
     expect(find.text('Tap Value, Bluff, Catch, and Fold'), findsNothing);
     expect(find.text('Tap Value, Bluff, Catch, and Fold.'), findsNothing);
+    expect(find.text('Bluff-catch'), findsNothing);
+    expect(find.text('No mystery float'), findsNothing);
+    expect(find.text('Snap off air'), findsOneWidget);
+    expect(find.text('Quit weak'), findsOneWidget);
     expect(
       find.text('Value · bluff · bluff-catch · fold'),
+      findsNothing,
+    );
+    expect(
+      find.text('Value · bluff · catch · fold'),
       findsNothing,
     );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
@@ -3733,7 +3741,7 @@ await tester.tap(find.text('VALUE'));
       ),
     );
 
-await tester.tap(find.text('VALUE'));
+    await tester.tap(find.text('VALUE'));
     await tester.pump();
     expect(find.text('Tap BLUFF next'), findsNothing);
     await tester.tap(find.text('BLUFF'));
@@ -3748,6 +3756,10 @@ await tester.tap(find.text('VALUE'));
     // Lock clears enabled / ack — densified shell must stay filled.
     expect(
       find.text('Value · bluff · bluff-catch · fold'),
+      findsNothing,
+    );
+    expect(
+      find.text('Value · bluff · catch · fold'),
       findsOneWidget,
     );
     expect(
@@ -11826,6 +11838,10 @@ await tester.tap(find.text('STRONGER'));
       findsNothing,
     );
     expect(find.text('BET FOR VALUE'), findsOneWidget);
+    expect(find.text('River · Brick · Top two'), findsNothing);
+    expect(find.text('Brick river — get paid'), findsNothing);
+    expect(find.text('River · brick'), findsOneWidget);
+    expect(find.text('Checked to you'), findsWidgets);
     await tester.tap(find.text('BET FOR VALUE'));
     await tester.pump();
     expect(controller.draft.choiceId, 'val-bet');
@@ -11885,6 +11901,9 @@ await tester.tap(find.text('STRONGER'));
     expect(find.text('BLUFF FLUSH'), findsOneWidget);
     expect(find.text('GIVE UP'), findsOneWidget);
     expect(find.text('JOKE 1 CHIP'), findsOneWidget);
+    expect(find.text('River · Flush completes · Missed'), findsNothing);
+    expect(find.text('Flush hits — tell that story'), findsNothing);
+    expect(find.text('River · flush completes'), findsOneWidget);
     await tester.tap(find.text('BLUFF FLUSH'));
     await tester.pump();
     expect(controller.draft.choiceId, 'bluff');
@@ -11929,6 +11948,10 @@ await tester.tap(find.text('STRONGER'));
       find.text('Weak top pair faces a quiet-line jam — tap Fold or Call.'),
       findsOneWidget,
     );
+    expect(find.text('River · Quiet line · Weak TPTK'), findsNothing);
+    expect(find.text('Huge jam — weak kicker'), findsNothing);
+    expect(find.text('River · quiet line'), findsOneWidget);
+    expect(find.text('Jams all-in'), findsWidgets);
     expect(find.text('FOLD'), findsOneWidget);
     await tester.tap(find.text('FOLD'));
     await tester.pump();
