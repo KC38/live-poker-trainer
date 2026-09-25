@@ -355,7 +355,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-01-02-02-scaffolded-kicker' =>
           'Same pair of kings — tap who wins on kickers.',
       'act-02-07-02-jump-stack' =>
-          'Effective stack is the shorter one — tap it.',
+          // Jump: name the spot — not “shorter one” answering.
+          'You 120bb · villain 55bb — tap effective.',
       'act-02-02-01-guided-pair' =>
           'Matching ranks in the hole — tap the family.',
       'act-02-02-01-scaffolded-broadway' =>

@@ -9152,15 +9152,21 @@ await tester.tap(find.text('STRONGER'));
       ),
     );
     expect(
-      find.text('Effective stack is the shorter one — tap it.'),
+      find.text('You 120bb · villain 55bb — tap effective.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Effective stack is the shorter one — tap it.'),
+      findsNothing,
     );
     expect(
       find.text('You 120bb, villain 55bb. Effective stack?'),
       findsNothing,
     );
     expect(find.text('55bb'), findsOneWidget);
-    // Jump stage: SoftPulse off — no spoiler cue.
+    expect(find.text('Shorter'), findsNothing);
+    expect(find.text('Villain'), findsOneWidget);
+    // Jump stage: SoftPulse off — no spoiler cue / gold tip.
     expect(find.text('Tap 55bb.'), findsNothing);
     expect(find.text('Tap your answer on the felt.'), findsNothing);
     await tester.tap(find.text('55bb'));
@@ -11170,8 +11176,12 @@ await tester.tap(find.text('STRONGER'));
       ),
     );
     expect(
-      find.text('Aces in the big blind vs an open — tap your action.'),
+      find.text('Big blind vs an open — tap your action.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Aces in the big blind vs an open — tap your action.'),
+      findsNothing,
     );
     expect(
       find.text('Open to 6. You have AA in the big blind. Action?'),
