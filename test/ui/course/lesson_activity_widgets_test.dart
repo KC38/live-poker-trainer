@@ -20951,7 +20951,7 @@ await tester.tap(find.text('STRONGER'));
         ),
       );
       expect(find.byType(LeakReviewBookDemo), findsOneWidget);
-      expect(find.text('Tap LEAK next'), findsOneWidget);
+      expect(find.text('Tap LEAK next'), findsNothing);
       expect(find.text('Tap Leak, Book, and Review.'), findsNothing);
       expect(find.text('Tap Leak, Book, and Review'), findsNothing);
       expect(
@@ -20963,10 +20963,10 @@ await tester.tap(find.text('STRONGER'));
 
       await tester.tap(find.text('LEAK'));
       await tester.pump();
-      expect(find.text('Tap BOOK next'), findsOneWidget);
+      expect(find.text('Tap BOOK next'), findsNothing);
       await tester.tap(find.text('BOOK'));
       await tester.pump();
-      expect(find.text('Tap REVIEW next'), findsOneWidget);
+      expect(find.text('Tap REVIEW next'), findsNothing);
       await tester.tap(find.text('REVIEW'));
       await tester.pump();
       expect(feltAck, 1);
