@@ -2440,7 +2440,7 @@ void main() {
       ),
     );
     expect(find.byType(VsOpenResponseDemo), findsOneWidget);
-    expect(find.text('Tap FOLD next'), findsOneWidget);
+    expect(find.text('Tap FOLD next'), findsNothing);
     expect(find.text('Tap Fold, Call, and 3-Bet'), findsNothing);
     expect(find.text('Tap Fold, Call, and 3-Bet.'), findsNothing);
     expect(
@@ -2463,10 +2463,10 @@ void main() {
 
     await tester.tap(find.text('FOLD'));
     await tester.pump();
-    expect(find.text('Tap CALL next'), findsOneWidget);
+    expect(find.text('Tap CALL next'), findsNothing);
     await tester.tap(find.text('CALL'));
     await tester.pump();
-    expect(find.text('Tap 3-BET next'), findsOneWidget);
+    expect(find.text('Tap 3-BET next'), findsNothing);
     await tester.tap(find.text('3-BET'));
     await tester.pump();
     expect(feltAck, 1);
