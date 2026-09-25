@@ -22189,7 +22189,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Wet board · Maniac overbet — tap Call.'),
+      find.text('Wet board · Maniac overbet — widen defense vs pressure.'),
       findsOneWidget,
     );
     expect(find.text('CALL'), findsOneWidget);
@@ -22230,7 +22230,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Dry board · Nit tiny bet — tap Raise.'),
+      find.text('Dry board · Nit tiny bet — pressure weak lines.'),
       findsOneWidget,
     );
     expect(find.text('RAISE AS A BLUFF CANDIDATE'), findsNothing);
@@ -22273,7 +22273,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('TAG pots river · second pair — tap Fold.'),
+      find.text('TAG pots river · second pair — respect selective heat.'),
       findsOneWidget,
     );
     expect(find.text('FOLD'), findsOneWidget);
