@@ -6966,15 +6966,18 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive:
           'Interactive acting order — tap wait, open early, or flash cards',
       semanticsStatic: 'Acting order wait outcomes',
+      // SoftPulse-quiet densify — Rex owns the cue; no gold tip on Wait.
       caption: scene.caption ?? 'Action on UTG · you are on the button',
+      cueLabel: '',
       phases: [
         (
           region: LessonTableRegion.actingWaitTurn,
           title: 'Wait',
           detail: 'Your turn later',
+          // SoftPulse-quiet: slate like siblings — gold hourglass tipped Wait.
           visual: const Icon(
             Icons.hourglass_empty,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),

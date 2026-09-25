@@ -9570,6 +9570,51 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
+  testWidgets('SoftPulse-quiet acting wait keeps Wait slate without SoftPulse', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-01-02-unguided-wait',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Wait for your turn before acting.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Action is on UTG. You are on the button. What do you do?',
+      choices: const [
+        CourseChoice(id: 'wait', label: 'Wait'),
+        CourseChoice(id: 'open-now', label: 'Open now'),
+        CourseChoice(id: 'flash', label: 'Flash cards'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Action is on UTG — you are on the button. Stay quiet until it reaches you.',
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('Wait'), findsOneWidget);
+    expect(find.text('Open now'), findsOneWidget);
+    final table = tester.widget<LessonTableContext>(
+      find.byType(LessonTableContext),
+    );
+    expect(table.showSoftPulse, isFalse);
+    final waitIcon = tester.widget<Icon>(find.byIcon(Icons.hourglass_empty));
+    expect(waitIcon.color, AppColors.slate);
+    controller.dispose();
+  });
+
   testWidgets('section jump family taps Suited ace on densified felt', (
     tester,
   ) async {
