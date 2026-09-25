@@ -3677,7 +3677,7 @@ await tester.tap(find.text('VALUE'));
       ),
     );
     expect(find.byType(SprDepthDemo), findsOneWidget);
-    expect(find.text('Tap SPR next'), findsOneWidget);
+    expect(find.text('Tap SPR next'), findsNothing);
     expect(find.text('Tap SPR, Low, and High'), findsNothing);
     expect(find.text('Tap SPR, Low, and High.'), findsNothing);
     expect(
@@ -3700,10 +3700,10 @@ await tester.tap(find.text('VALUE'));
 
 await tester.tap(find.text('SPR'));
     await tester.pump();
-    expect(find.text('Tap LOW next'), findsOneWidget);
+    expect(find.text('Tap LOW next'), findsNothing);
     await tester.tap(find.text('LOW'));
     await tester.pump();
-    expect(find.text('Tap HIGH next'), findsOneWidget);
+    expect(find.text('Tap HIGH next'), findsNothing);
     await tester.tap(find.text('HIGH'));
     await tester.pump();
     expect(feltAck, 1);
