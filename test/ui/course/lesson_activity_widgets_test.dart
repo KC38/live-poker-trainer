@@ -15959,8 +15959,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Large BB donk on dry ace — often strong or air.'),
+      find.text('Large BB donk on dry ace — usually extremes, not medium.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Large BB donk on dry ace — often strong or air.'),
+      findsNothing,
     );
     expect(
       find.text('Large BB donk on dry ace — tap the meaning.'),
