@@ -525,7 +525,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Deep cash — position, implied odds, disciplined folds.',
       // SoftPulse owns Depth + pay — don’t gold-tip the tile.
       'act-05-03-01-checkpoint' =>
-          'Implied odds rise with depth and opponents who pay.',
+          'Future money grows when stacks behind meet sticky callers.',
       'act-05-04-01-checkpoint' =>
           'Same hand, new type — tap what must change.',
       'act-05-05-01-guided' =>

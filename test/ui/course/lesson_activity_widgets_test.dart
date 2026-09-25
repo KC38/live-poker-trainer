@@ -15570,8 +15570,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Implied odds rise with depth and opponents who pay.'),
+      find.text(
+        'Future money grows when stacks behind meet sticky callers.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Implied odds rise with depth and opponents who pay.'),
+      findsNothing,
     );
     expect(
       find.text('Implied odds — tap when they rise most.'),
