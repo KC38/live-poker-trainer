@@ -17999,8 +17999,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Folds most, 3-bets strong — tap TAG.'),
+      find.text('Folds most, 3-bets strong — pick the label.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Folds most, 3-bets strong — tap TAG.'),
+      findsNothing,
     );
     await tester.tap(find.text('TAG'));
     await tester.pump();
@@ -18037,8 +18041,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('TAG versus Maniac — tap Selective vs extreme.'),
+      find.text('TAG versus Maniac — pick the difference.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('TAG versus Maniac — tap Selective vs extreme.'),
+      findsNothing,
     );
     await tester.tap(find.text('Selective vs extreme'));
     await tester.pump();
@@ -18073,8 +18081,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Opens tight, selective c-bets — tap TAG.'),
+      find.text('Opens tight, selective c-bets — pick the label.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Opens tight, selective c-bets — tap TAG.'),
+      findsNothing,
     );
     await tester.tap(find.text('TAG'));
     await tester.pump();
@@ -18111,8 +18123,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('TAG is a working model — tap Working model.'),
+      find.text('TAG is a label from frequencies — pick how to treat it.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('TAG is a working model — tap Working model.'),
+      findsNothing,
     );
     await tester.tap(find.text('Working model'));
     await tester.pump();

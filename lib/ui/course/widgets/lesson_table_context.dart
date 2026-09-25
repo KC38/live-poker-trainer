@@ -11942,6 +11942,8 @@ class LessonTableContext extends StatelessWidget {
       semanticsStatic: 'TAG vs Station outcomes',
       caption: scene.caption ??
           'Folds most · 3-bets strong · barrels with a plan',
+      // SoftPulse + Rex own the cue — don’t gold-tip TAG.
+      guideRegion: LessonTableRegion.meetTagLabel,
       phases: [
         (
           region: LessonTableRegion.meetTagLabel,
@@ -11949,7 +11951,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Selective + plan',
           visual: const Icon(
             Icons.gps_fixed,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11973,6 +11975,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive TAG vs Maniac — tap selective vs extreme or identical',
       semanticsStatic: 'TAG difference outcomes',
       caption: scene.caption ?? 'TAG versus Maniac difference?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Selective vs extreme.
+      guideRegion: LessonTableRegion.meetTagSelectiveDiff,
       phases: [
         (
           region: LessonTableRegion.meetTagSelectiveDiff,
@@ -11980,7 +11984,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Discipline',
           visual: const Icon(
             Icons.compare_arrows,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11990,7 +11994,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Wrong',
           visual: const Icon(
             Icons.merge_type,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12004,6 +12008,7 @@ class LessonTableContext extends StatelessWidget {
       semanticsStatic: 'TAG vs Maniac outcomes',
       caption: scene.caption ??
           'Opens tight · folds to 3-bets · selective c-bets',
+      // No SoftPulse on unguided — still don’t gold-icon TAG.
       phases: [
         (
           region: LessonTableRegion.meetTagLabel2,
@@ -12011,7 +12016,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Tight + selective',
           visual: const Icon(
             Icons.gps_fixed,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12021,7 +12026,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Too wide',
           visual: const Icon(
             Icons.local_fire_department_outlined,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12035,6 +12040,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive label model — tap working model or insult',
       semanticsStatic: 'TAG model outcomes',
       caption: scene.caption ?? 'How to treat the TAG label',
+      // SoftPulse + Rex own the cue — don’t gold-tip Working model.
+      guideRegion: LessonTableRegion.meetTagWorkingModel,
       phases: [
         (
           region: LessonTableRegion.meetTagWorkingModel,
@@ -12042,7 +12049,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'From frequencies',
           visual: const Icon(
             Icons.science_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
