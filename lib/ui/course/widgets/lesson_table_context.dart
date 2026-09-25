@@ -12904,6 +12904,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive river composition — tap Blocks strong calls or Fake EV',
       semanticsStatic: 'River composition scaffolded outcomes',
       caption: scene.caption ?? 'Nut flush blocker — why bluff?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Blocks strong calls.
+      guideRegion: LessonTableRegion.riverCompBlocks,
       phases: [
         (
           region: LessonTableRegion.riverCompBlocks,
@@ -12911,7 +12913,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Nut flush blocker',
           visual: const Icon(
             Icons.block,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12921,7 +12923,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Sheet said +0.02',
           visual: const Icon(
             Icons.calculate_outlined,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12935,6 +12937,7 @@ class LessonTableContext extends StatelessWidget {
           'Interactive river composition — tap Check or Blast off',
       semanticsStatic: 'River composition unguided outcomes',
       caption: scene.caption ?? 'No value, no blockers, no fold equity?',
+      // No SoftPulse on unguided — still don’t gold-icon Check.
       phases: [
         (
           region: LessonTableRegion.riverCompCheck,
@@ -12942,7 +12945,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'No story',
           visual: const Icon(
             Icons.pause_circle_outline,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12952,7 +12955,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Spew',
           visual: const Icon(
             Icons.local_fire_department_outlined,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12966,6 +12969,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive river composition — tap Value needs calls or Bet every river',
       semanticsStatic: 'River composition checkpoint outcomes',
       caption: scene.caption ?? 'River composition rule?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Value needs calls.
+      guideRegion: LessonTableRegion.riverCompRule,
       phases: [
         (
           region: LessonTableRegion.riverCompRule,
@@ -12973,7 +12978,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Bluffs need folds',
           visual: const Icon(
             Icons.balance_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),

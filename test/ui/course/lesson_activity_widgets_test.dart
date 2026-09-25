@@ -21106,7 +21106,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Thick value vs station — tap Value bet.'),
+      find.text('Thick value vs station — extract when they call wide.'),
       findsOneWidget,
     );
     expect(find.text('VALUE BET'), findsOneWidget);
@@ -21152,7 +21152,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Nut flush blocker — tap Blocks strong calls.'),
+      find.text('Nut flush blocker — pick why the bluff works.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Blocks strong calls'));
@@ -21190,7 +21190,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('No story — tap Check.'),
+      find.text('No story — pick the river action.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Check'));
@@ -21231,7 +21231,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('River rule — tap Value needs calls.'),
+      find.text('River rule — pick the composition check.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Value needs calls'));
