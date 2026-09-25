@@ -352,7 +352,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-02-07-02-jump-pos' =>
           'Tap the seat right before the button.',
       'act-02-07-02-jump-family' =>
-          'Look at your holes — tap the family they belong to.',
+          'Look at your holes — pick the family they belong to.',
       'act-01-02-01-scaffolded-spot' =>
           'Board and holes show five clubs — tap what you made.',
       'act-01-02-01-checkpoint-winner' =>
@@ -363,13 +363,13 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           // Jump: name the spot — not “shorter one” answering.
           'You 120bb · villain 55bb — tap effective.',
       'act-02-02-01-guided-pair' =>
-          'Matching ranks in the hole — tap the family.',
+          'Matching ranks in the hole — both cards share a rank.',
       'act-02-02-01-scaffolded-broadway' =>
-          'Both cards ten-or-better — tap the family.',
+          'Both cards ten-or-better — high-card broadway strength shows up.',
       'act-02-02-01-unguided-sc' =>
-          'Look at your holes — tap the family.',
+          'Look at your holes — pick the family that fits.',
       'act-02-02-01-checkpoint-trash' =>
-          'Early seat with junk — tap the family.',
+          'Early seat with junk — weak trash rarely belongs in the open.',
       'act-02-05-01-guided-convert' =>
           '200 chips at 1/2 — tap the stack in big blinds.',
       'act-02-05-01-checkpoint-200' =>
@@ -1252,15 +1252,15 @@ class _HandCategoryTapActivity extends StatelessWidget {
 
   String get _coachFallback => switch (activity.id) {
         'act-02-07-02-jump-family' =>
-          'Look at your holes — tap the family they belong to.',
+          'Look at your holes — pick the family they belong to.',
         'act-02-02-01-guided-pair' =>
-          'Matching ranks in the hole — tap the family.',
+          'Matching ranks in the hole — both cards share a rank.',
         'act-02-02-01-scaffolded-broadway' =>
-          'Both cards ten-or-better — tap the family.',
+          'Both cards ten-or-better — high-card broadway strength shows up.',
         'act-02-02-01-unguided-sc' =>
-          'Look at your holes — tap the family.',
+          'Look at your holes — pick the family that fits.',
         'act-02-02-01-checkpoint-trash' =>
-          'Early seat with junk — tap the family.',
+          'Early seat with junk — weak trash rarely belongs in the open.',
         'act-03-02-01-guided' =>
           'Board pairs your king — your hole king connects for immediate value.',
         'act-03-02-01-scaffolded' =>
