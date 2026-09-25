@@ -12751,7 +12751,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Two seats, different frequencies — tap the note.'),
+      find.text('Two seats, different frequencies — note how often each seat enters.'),
       findsOneWidget,
     );
     expect(find.text('Note freqs'), findsOneWidget);
@@ -12806,7 +12806,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Pot 16, shorter 40bb — tap what you track first.'),
+      find.text('Pot 16, shorter 40bb — start with pot and effective stack.'),
       findsOneWidget,
     );
     expect(find.text('Pot 16 · shorter stack 40bb'), findsNothing);
@@ -12869,7 +12869,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Qd9d3c with JdTd — tap the flop class.'),
+      find.text('Qd9d3c with JdTd — you need runout for both straight and flush.'),
       findsOneWidget,
     );
     expect(find.text('Draw'), findsOneWidget);
@@ -13024,7 +13024,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Gutshot vs a 2x pot bet — tap the fix.'),
+      find.text('Gutshot vs a 2x pot bet — the price is usually too steep.'),
       findsOneWidget,
     );
     expect(find.text('Fold'), findsOneWidget);
