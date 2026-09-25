@@ -766,9 +766,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns First-class input — don’t gold-tip the tile.
       'act-07-05-01-checkpoint' =>
           'Player count — pick how it ranks.',
-      // SoftPulse owns Closer to stacking — don’t gold-tip the tile.
+      // SoftPulse owns Closer to stacking — don’t gold-tip the tile / SPR detail.
       'act-07-06-01-guided' =>
-          '35bb TPTK — pick the SPR lean.',
+          '35bb TPTK — pick the commit lean.',
       // SoftPulse owns More attractive — don’t gold-tip the tile.
       'act-07-06-01-scaffolded' =>
           '250bb 55 — pick the set-mine lean.',

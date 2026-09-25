@@ -210,22 +210,33 @@ class _StackDepthPlansTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            label,
-            style: GoogleFonts.manrope(
-              color: AppColors.cream,
-              fontSize: densify ? 18 : 12,
-              fontWeight: FontWeight.w900,
+          // FittedBox keeps EFFECTIVE on one line in densified SoftPulse lanes.
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              label,
+              maxLines: 1,
+              softWrap: false,
+              style: GoogleFonts.manrope(
+                color: AppColors.cream,
+                fontSize: densify ? 18 : 12,
+                fontWeight: FontWeight.w900,
+              ),
             ),
           ),
           SizedBox(height: densify ? 10 : 4),
-          Text(
-            caption,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.manrope(
-              color: AppColors.cream.withValues(alpha: 0.9),
-              fontSize: densify ? 13 : 10,
-              fontWeight: FontWeight.w600,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              caption,
+              textAlign: TextAlign.center,
+              maxLines: densify ? 1 : 2,
+              softWrap: densify ? false : true,
+              style: GoogleFonts.manrope(
+                color: AppColors.cream.withValues(alpha: 0.9),
+                fontSize: densify ? 13 : 10,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],

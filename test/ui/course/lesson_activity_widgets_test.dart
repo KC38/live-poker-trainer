@@ -21762,7 +21762,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('35bb TPTK — pick the SPR lean.'),
+      find.text('35bb TPTK — pick the commit lean.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Closer to stacking'));
