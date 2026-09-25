@@ -295,7 +295,14 @@ void main() {
         epsilon: 1,
       ),
     );
+    // SoftPulse teaches clockwise — button alone is not enough.
     await tester.tap(find.text('D'));
+    await tester.pump();
+    expect(feltAck, 0);
+    await tester.tap(find.text('Small blind'));
+    await tester.pump();
+    expect(feltAck, 0);
+    await tester.tap(find.text('Big blind'));
     await tester.pump();
     expect(feltAck, 1);
     // Densified shell must stay filled after acknowledge (Continue phase).
