@@ -4085,7 +4085,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(VsNitsDemo), findsOneWidget);
-    expect(find.text('Tap STEAL next'), findsOneWidget);
+    expect(find.text('Tap STEAL next'), findsNothing);
     expect(find.text('Tap Steal, Credit, and Explode.'), findsNothing);
     expect(find.text('Tap Steal, Credit, and Explode'), findsNothing);
     expect(
@@ -4108,10 +4108,10 @@ await tester.tap(find.text('NIT'));
 
     await tester.tap(find.text('STEAL'));
     await tester.pump();
-    expect(find.text('Tap CREDIT next'), findsOneWidget);
+    expect(find.text('Tap CREDIT next'), findsNothing);
     await tester.tap(find.text('CREDIT'));
     await tester.pump();
-    expect(find.text('Tap EXPLODE next'), findsOneWidget);
+    expect(find.text('Tap EXPLODE next'), findsNothing);
     await tester.tap(find.text('EXPLODE'));
     await tester.pump();
     expect(feltAck, 1);
