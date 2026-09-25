@@ -4459,7 +4459,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(ExploitEvidenceDemo), findsOneWidget);
-    expect(find.text('Tap CARDS next'), findsOneWidget);
+    expect(find.text('Tap CARDS next'), findsNothing);
     expect(find.text('Tap Cards, Seats, and Evidence.'), findsNothing);
     expect(find.text('Tap Cards, Seats, and Evidence'), findsNothing);
     expect(
@@ -4482,10 +4482,10 @@ await tester.tap(find.text('NIT'));
 
     await tester.tap(find.text('CARDS'));
     await tester.pump();
-    expect(find.text('Tap SEATS next'), findsOneWidget);
+    expect(find.text('Tap SEATS next'), findsNothing);
     await tester.tap(find.text('SEATS'));
     await tester.pump();
-    expect(find.text('Tap EVIDENCE next'), findsOneWidget);
+    expect(find.text('Tap EVIDENCE next'), findsNothing);
     await tester.tap(find.text('EVIDENCE'));
     await tester.pump();
     expect(feltAck, 1);
