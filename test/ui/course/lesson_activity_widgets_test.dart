@@ -8719,12 +8719,13 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Betting is live. Tap when this street is done.'), findsOneWidget);
+    expect(find.text('Betting is live — pick when this street ends.'), findsOneWidget);
     // Felt-first: authored prompt dump stays off when Rex already coaches.
     expect(
       find.text('Flop betting is live. Tap when this street ends.'),
       findsNothing,
     );
+    expect(find.text('Betting is live. Tap when this street is done.'), findsNothing);
     expect(find.text('Bets matched'), findsWidgets);
     expect(find.byKey(const ValueKey('street-end-felt')), findsOneWidget);
     final teachHeight = tester
@@ -8761,7 +8762,7 @@ await tester.tap(find.text('NIT'));
       estimatedSeconds: 40,
       accessibilityText: 'postflop',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Postflop — tap who acts first.',
+      prompt: 'Postflop — first action sits left of the button.',
       choices: const [
         CourseChoice(id: 'sb-first', label: 'SB'),
         CourseChoice(id: 'btn-first', label: 'BTN'),
@@ -8778,7 +8779,11 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Postflop — tap who acts first.'), findsOneWidget);
+    expect(
+      find.text('Postflop — first action sits left of the button.'),
+      findsOneWidget,
+    );
+    expect(find.text('Postflop — tap who acts first.'), findsNothing);
     expect(find.byKey(const ValueKey('blinds-seats-felt')), findsOneWidget);
     // Checkpoint must not SoftPulse the answer.
     expect(find.text('Tap the small blind'), findsNothing);
@@ -9027,9 +9032,16 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Everyone folded. Tap how you take the pot.'), findsOneWidget);
+    expect(
+      find.text('Everyone folded — you don’t need to show cards.'),
+      findsOneWidget,
+    );
     expect(
       find.text('You bet. Everyone folds. Tap how you take the pot.'),
+      findsNothing,
+    );
+    expect(
+      find.text('Everyone folded. Tap how you take the pot.'),
       findsNothing,
     );
     // SoftPulse Take pot; Rex owns the teach line — no footer cue stack.
@@ -9085,8 +9097,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Blinds plus the open — tap the chip total.'),
+      find.text('Blinds plus the open — pick the chip total.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Blinds plus the open — tap the chip total.'),
+      findsNothing,
     );
     // No decoy face-down villain — chip tiles own the felt.
     expect(find.text('Them'), findsNothing);
@@ -21848,8 +21864,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Board and holes show five clubs — tap what you made.'),
+      find.text('Board and holes show five clubs — name the category.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Board and holes show five clubs — tap what you made.'),
+      findsNothing,
     );
     expect(find.text('Tap what you made.'), findsNothing);
     expect(find.byType(HandExampleTile), findsNothing);
@@ -21923,8 +21943,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Flush vs straight on the river — tap who wins.'),
+      find.text('Flush vs straight on the river — stronger category takes it.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Flush vs straight on the river — tap who wins.'),
+      findsNothing,
     );
     expect(find.text('Showdown — tap who wins.'), findsNothing);
     expect(find.text('Chop the pot'), findsNothing);
@@ -22144,8 +22168,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Same pair of kings — tap who wins on kickers.'),
+      find.text('Same pair of kings — the higher kicker breaks the tie.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Same pair of kings — tap who wins on kickers.'),
+      findsNothing,
     );
     expect(find.text('Tap who wins.'), findsNothing);
     expect(find.text('Chop the pot'), findsNothing);
@@ -22191,7 +22219,7 @@ await tester.tap(find.text('NIT'));
       estimatedSeconds: 40,
       accessibilityText: 'Tap chop when the board plays',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Both checked down — tap who takes the pot.',
+      prompt: 'Both checked down — broadway board plays for everyone.',
       choices: const [
         CourseChoice(id: 'chop-broadway', label: 'Chop — both play the board'),
         CourseChoice(id: 'button-wins', label: 'Button wins automatically'),
@@ -22226,8 +22254,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Both checked down — tap who takes the pot.'),
+      find.text('Both checked down — broadway board plays for everyone.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Both checked down — tap who takes the pot.'),
+      findsNothing,
     );
     expect(find.textContaining('broadway clubs'), findsNothing);
     expect(find.text('Chop — board plays'), findsNothing);

@@ -2247,6 +2247,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         buttonSeat: 5,
         numberSeats: true,
         showRoleLabels: false,
+        // SoftPulse + Rex own first-blind — no “tap the small blind” caption.
+        caption: 'Button seat 5 · clockwise blinds',
       );
     case 'act-02-01-01-explain-pos':
     case 'act-02-01-01-guided-btn':
