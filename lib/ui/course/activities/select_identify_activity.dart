@@ -658,8 +658,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Working model — don’t gold-tip the tile.
       'act-06-11-02-checkpoint' =>
           'TAG is a label from frequencies — pick how to treat it.',
+      // SoftPulse owns Selective + disciplined — don’t gold-tip the tile.
       'act-06-11-03-checkpoint' =>
-          'Versus TAG — tap Selective + disciplined.',
+          'Versus TAG — pick the cite.',
       'act-06-12-01-guided' =>
           'Wide opens + barrels, some folds — tap Wide + pressure.',
       'act-06-12-01-scaffolded' =>
