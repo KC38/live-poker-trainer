@@ -4383,7 +4383,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(ObservationCertaintyDemo), findsOneWidget);
-    expect(find.text('Tap OBSERVE next'), findsOneWidget);
+    expect(find.text('Tap OBSERVE next'), findsNothing);
     expect(find.text('Tap Observe, Samples, and Showdowns.'), findsNothing);
     expect(find.text('Tap Observe, Samples, and Showdowns'), findsNothing);
     expect(
@@ -4406,10 +4406,10 @@ await tester.tap(find.text('NIT'));
 
     await tester.tap(find.text('OBSERVE'));
     await tester.pump();
-    expect(find.text('Tap SAMPLES next'), findsOneWidget);
+    expect(find.text('Tap SAMPLES next'), findsNothing);
     await tester.tap(find.text('SAMPLES'));
     await tester.pump();
-    expect(find.text('Tap SHOWDOWNS next'), findsOneWidget);
+    expect(find.text('Tap SHOWDOWNS next'), findsNothing);
     await tester.tap(find.text('SHOWDOWNS'));
     await tester.pump();
     expect(feltAck, 1);
