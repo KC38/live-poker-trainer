@@ -2836,6 +2836,9 @@ void main() {
       find.text('Tap Pot, Stacks, Button, and Who Acts.'),
       findsNothing,
     );
+    // SoftPulse + Rex own the teach verb — no duplicate Read… felt title.
+    expect(find.text('Read the table before cards'), findsNothing);
+    expect(find.text('Four table reads'), findsOneWidget);
     expect(
       find.text('Pot · stacks · button · who acts'),
       findsNothing,
@@ -3076,6 +3079,9 @@ void main() {
     expect(find.text('Tap VALUE next'), findsNothing);
     expect(find.text('Tap each flop line once.'), findsNothing);
     expect(find.text('Tap each flop line once'), findsNothing);
+    // SoftPulse + Rex own the teach verb — no duplicate Pick… felt title.
+    expect(find.text('Flop lines — pick one plan'), findsNothing);
+    expect(find.text('Six flop lines'), findsOneWidget);
     expect(
       find.text('Value · c-bet · check · call · fold · raise'),
       findsNothing,
@@ -3783,6 +3789,9 @@ await tester.tap(find.text('SPR'));
     expect(find.text('Tap ENTERS next'), findsNothing);
     expect(find.text('Tap Enters, Calls, and Folds.'), findsNothing);
     expect(find.text('Tap Enters, Calls, and Folds'), findsNothing);
+    // SoftPulse + Rex own the teach verb — no duplicate Watch… felt title.
+    expect(find.text('Watch before you label'), findsNothing);
+    expect(find.text('Observation notes'), findsOneWidget);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
 

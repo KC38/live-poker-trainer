@@ -2951,7 +2951,8 @@ class _TableReadDemoState extends State<TableReadDemo> {
           : MainAxisAlignment.start,
       children: [
         Text(
-          'Read the table before cards',
+          // SoftPulse + Rex own the teach verb — felt title is structural.
+          'Four table reads',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: expandTeach ? 15 : 12,
@@ -3488,7 +3489,8 @@ class _FlopLinesDemoState extends State<FlopLinesDemo> {
           : MainAxisAlignment.start,
       children: [
         Text(
-          'Flop lines — pick one plan',
+          // SoftPulse + Rex own the teach verb — felt title is structural.
+          'Six flop lines',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: expandTeach ? 15 : 12,
@@ -5211,7 +5213,8 @@ class _PlayerObserveDemoState extends State<PlayerObserveDemo> {
               : MainAxisAlignment.start,
       children: [
         Text(
-          'Watch before you label',
+          // SoftPulse + Rex own the teach verb — felt title is structural.
+          'Observation notes',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: expandTeach ? 15 : 12,
