@@ -16375,7 +16375,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s5 table-dynamics guided taps Stuck / tilted on felt', (
+  testWidgets('s5 table-dynamics guided SoftPulse Stuck — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -16407,8 +16407,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Lost two buy-ins — tap Stuck / tilted.'),
+      find.text(
+        'Lost two buy-ins — widen value and choose spots carefully.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Lost two buy-ins — tap Stuck / tilted.'),
+      findsNothing,
     );
     expect(find.text('Stuck / tilted'), findsWidgets);
     await tester.tap(find.text('Stuck / tilted').first);
@@ -16417,7 +16423,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s5 dynamics scaffolded taps Gear change on felt', (
+  testWidgets('s5 dynamics scaffold SoftPulse Gear change — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -16447,8 +16453,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Flats junk / donks — tap Gear change.'),
+      find.text(
+        'Flats junk and donks rivers — resample before trusting the old label.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Flats junk / donks — tap Gear change.'),
+      findsNothing,
     );
     await tester.tap(find.text('Gear change'));
     await tester.pump();
@@ -16456,7 +16468,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s5 table-dynamics unguided docks Fold on steaming felt', (
+  testWidgets('s5 table-dynamics unguided Fold — no SoftPulse gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -16485,17 +16497,25 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Steaming after cooler — tap Fold.'),
+      find.text(
+        'Steaming after cooler — protect the bankroll; leave without revenge.',
+      ),
       findsOneWidget,
     );
+    expect(find.text('Steaming after cooler — tap Fold.'), findsNothing);
+    expect(find.text('Steaming — fold and reset'), findsNothing);
+    expect(find.text('Next hand · after a cooler'), findsOneWidget);
     expect(find.text('FOLD'), findsOneWidget);
+    final dock =
+        tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, isNull);
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'reset');
     controller.dispose();
   });
 
-  testWidgets('s5 dynamics checkpoint taps Fresh samples on felt', (
+  testWidgets('s5 dynamics checkpoint SoftPulse Fresh samples — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -16524,8 +16544,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Dynamic reads — tap Fresh samples.'),
+      find.text(
+        'Dynamic reads stay temporary — keep sampling the seat.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Dynamic reads — tap Fresh samples.'),
+      findsNothing,
     );
     await tester.tap(find.text('Fresh samples'));
     await tester.pump();

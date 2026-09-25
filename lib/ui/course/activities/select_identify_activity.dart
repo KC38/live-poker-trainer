@@ -559,12 +559,15 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Tiny update — don’t gold-tip the tile.
       'act-05-07-01-checkpoint' =>
           'Live timing — nudge confidence beside stronger reads.',
+      // SoftPulse owns Stuck / tilted — don’t gold-tip the tile.
       'act-05-08-01-guided' =>
-          'Lost two buy-ins — tap Stuck / tilted.',
+          'Lost two buy-ins — widen value and choose spots carefully.',
+      // SoftPulse owns Gear change — don’t gold-tip the tile.
       'act-05-08-01-scaffolded' =>
-          'Flats junk / donks — tap Gear change.',
+          'Flats junk and donks rivers — resample before trusting the old label.',
+      // SoftPulse owns Fresh samples — don’t gold-tip the tile.
       'act-05-08-01-checkpoint' =>
-          'Dynamic reads — tap Fresh samples.',
+          'Dynamic reads stay temporary — keep sampling the seat.',
       'act-05-09-01-guided' =>
           'Hit stop-loss — tap Stop / move down.',
       'act-05-09-01-scaffolded' =>

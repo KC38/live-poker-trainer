@@ -867,10 +867,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Kc', '9s', '4h', '2d', '7c'],
         potLabel: 'Pot 6',
         villainLine: 'Just stacked you · next hand',
+        // Structural — don’t tip Fold on the felt.
         streetLabel: 'Next hand · steaming',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Steaming — fold and reset',
+        feltStatusLine: 'Next hand · after a cooler',
       );
     case 'act-05-09-02-cp-value':
       return const LessonActionSpot(

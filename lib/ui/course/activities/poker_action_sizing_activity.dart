@@ -546,8 +546,9 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // SoftPulse owns Fold — don’t gold-tip the dock.
     'act-05-06-01-scaffolded' =>
       'Draw faces bomb — re-price when the turn bricks.',
+    // Unguided: name the spot; list legal lines without SoftPulse.
     'act-05-08-01-unguided' =>
-      'Steaming after cooler — tap Fold.',
+      'Steaming after cooler — protect the bankroll; leave without revenge.',
     // SoftPulse owns the dock — don’t gold-tip Bet thin value / Call.
     'act-05-09-02-cp-value' =>
       'Station · second pair river — extract vs wide calls.',
