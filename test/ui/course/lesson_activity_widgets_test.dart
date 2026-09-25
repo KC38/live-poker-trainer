@@ -4579,7 +4579,7 @@ await tester.tap(find.text('VALUE'));
     expect(find.text('Tap Rare, Enter, and Mean It'), findsNothing);
     expect(find.text('Tap Rare, Enter, and Mean It.'), findsNothing);
     expect(
-      find.text('Rare entries · when they do, they mean it'),
+      find.text('Rare · enter · mean it'),
       findsNothing,
     );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
@@ -4607,7 +4607,7 @@ await tester.tap(find.text('RARE'));
     expect(feltAck, 1);
     // Lock clears enabled / ack — densified shell must stay filled.
     expect(
-      find.text('Rare entries · when they do, they mean it'),
+      find.text('Rare · enter · mean it'),
       findsOneWidget,
     );
     expect(
