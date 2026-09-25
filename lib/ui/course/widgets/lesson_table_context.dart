@@ -2513,7 +2513,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         boardCodes: ['As', '7d', '2c', '3h'],
         villainSeatCount: 0,
         highlight: LessonTableHighlight.none,
-        caption: 'Missed c-bet · turn blank?',
+        // Structural — Rex owns “blank three / Brick” SoftPulse cue.
+        caption: 'Missed c-bet · your holes',
       );
     case 'act-03-05-01-checkpoint':
       return const LessonTableScene(
@@ -7735,8 +7736,8 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive:
           'Interactive turn card — tap brick, scare, or always-change',
       semanticsStatic: 'Turn brick scare outcomes',
-      caption: scene.caption ?? 'Missed c-bet · turn blank?',
-      // SoftPulse + Rex own the cue — no Tap footer.
+      caption: scene.caption ?? 'Missed c-bet · your holes',
+      // SoftPulse + Rex own the cue — no blank tip / gold tip on Brick.
       cueLabel: '',
       guideRegion: LessonTableRegion.turnBrick,
       phases: [
@@ -7746,7 +7747,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Rarely helps',
           visual: const Icon(
             Icons.crop_square_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),

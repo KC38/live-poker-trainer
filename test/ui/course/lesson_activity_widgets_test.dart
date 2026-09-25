@@ -11592,6 +11592,9 @@ await tester.tap(find.text('STRONGER'));
     expect(find.text('Brick — rarely helps'), findsNothing);
     expect(find.text('Brick'), findsOneWidget);
     expect(find.text('Rarely helps'), findsOneWidget);
+    // SoftPulse must not spoil with “turn blank?” on the felt.
+    expect(find.text('Missed c-bet · turn blank?'), findsNothing);
+    expect(find.text('Missed c-bet · your holes'), findsOneWidget);
     await tester.tap(find.text('Brick'));
     await tester.pump();
     expect(controller.draft.choiceId, 'brick');
@@ -11647,8 +11650,13 @@ await tester.tap(find.text('STRONGER'));
       ),
       findsNothing,
     );
-    expect(find.text('BET AGAIN FOR VALUE'), findsOneWidget);
-    await tester.tap(find.text('BET AGAIN FOR VALUE'));
+    // Felt is structural — don’t tip barrel with Brick/TPTK status.
+    expect(find.text('Brick turn — still ahead'), findsNothing);
+    expect(find.text('Turn · Brick · TPTK'), findsNothing);
+    expect(find.text('Turn · your holes'), findsOneWidget);
+    // Dock compactifies long teaching labels.
+    expect(find.text('BET AGAIN'), findsOneWidget);
+    await tester.tap(find.text('BET AGAIN'));
     await tester.pump();
     expect(controller.draft.choiceId, 'barrel');
     controller.dispose();
@@ -11696,8 +11704,13 @@ await tester.tap(find.text('STRONGER'));
       find.text('Flush comes in; checked to you — tap delayed value.'),
       findsOneWidget,
     );
-    expect(find.text('BET FOR VALUE NOW'), findsOneWidget);
-    await tester.tap(find.text('BET FOR VALUE NOW'));
+    // Felt is structural — don’t tip delayed value on the felt.
+    expect(find.text('Draw hit — delayed value'), findsNothing);
+    expect(find.text('Turn · Flush completes'), findsNothing);
+    expect(find.text('Turn · hearts'), findsOneWidget);
+    // Dock compactifies long teaching labels.
+    expect(find.text('BET VALUE'), findsOneWidget);
+    await tester.tap(find.text('BET VALUE'));
     await tester.pump();
     expect(controller.draft.choiceId, 'delay-bet');
     controller.dispose();

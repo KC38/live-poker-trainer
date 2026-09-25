@@ -321,10 +321,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['As', '7d', '2c', '3h'],
         potLabel: 'Pot 20',
         villainLine: 'Called flop c-bet',
-        streetLabel: 'Turn · Brick · TPTK',
+        // Structural — Rex owns brick / barrel SoftPulse cue.
+        streetLabel: 'Turn · your holes',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Brick turn — still ahead',
+        feltStatusLine: 'Called flop c-bet',
       );
     case 'act-03-05-01-unguided':
       return const LessonActionSpot(
@@ -332,10 +333,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Kh', '7h', '2c', '3h'],
         potLabel: 'Pot 18',
         villainLine: 'Checked to you',
-        streetLabel: 'Turn · Flush completes',
+        // Structural — don’t tip delayed value on the felt.
+        streetLabel: 'Turn · hearts',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Draw hit — delayed value',
+        feltStatusLine: 'Checked to you',
       );
     case 'act-03-06-01-guided':
       return const LessonActionSpot(
