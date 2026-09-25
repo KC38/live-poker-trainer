@@ -4231,7 +4231,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(ManiacModelDemo), findsOneWidget);
-    expect(find.text('Tap MANIAC next'), findsOneWidget);
+    expect(find.text('Tap MANIAC next'), findsNothing);
     expect(find.text('Tap Maniac, Entry, and Aggro.'), findsNothing);
     expect(find.text('Tap Maniac, Entry, and Aggro'), findsNothing);
     expect(
@@ -4254,10 +4254,10 @@ await tester.tap(find.text('NIT'));
 
     await tester.tap(find.text('MANIAC'));
     await tester.pump();
-    expect(find.text('Tap ENTRY next'), findsOneWidget);
+    expect(find.text('Tap ENTRY next'), findsNothing);
     await tester.tap(find.text('ENTRY'));
     await tester.pump();
-    expect(find.text('Tap AGGRO next'), findsOneWidget);
+    expect(find.text('Tap AGGRO next'), findsNothing);
     await tester.tap(find.text('AGGRO'));
     await tester.pump();
     expect(feltAck, 1);
