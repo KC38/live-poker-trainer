@@ -14558,8 +14558,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Same hand · unknown seat — tap cautious or thin-value.'),
+      find.text('Same hand · unknown seat — pick cautious or thin-value.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Same hand · unknown seat — tap cautious or thin-value.'),
+      findsNothing,
     );
     expect(
       find.text('Same hand, unknown seat — tap Keep it cautious.'),
@@ -20014,13 +20018,72 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Nit in the BB — tap Open / steal with K9o.'),
+      find.text(
+        'Nit in the BB · K9o on button — they overfold blinds.',
+      ),
       findsOneWidget,
     );
+    expect(
+      find.text('Nit in the BB — tap Open / steal with K9o.'),
+      findsNothing,
+    );
     expect(find.text('OPEN / STEAL'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no third gold felt status.
+    expect(find.text('Steal wider vs nits'), findsNothing);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'steal');
     await tester.tap(find.text('OPEN / STEAL'));
     await tester.pump();
     expect(controller.draft.choiceId, 'steal');
+    controller.dispose();
+  });
+
+  testWidgets('s4 adjust nit scaffolded SoftPulse Fold — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-07-03-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Respect nit aggression — often fold.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Nit check-raises your c-bet. You have middle pair. Action?',
+      choices: const [
+        CourseChoice(id: 'fold-mid', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'hero-call', label: 'Hero-call forever', action: 'CALL'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Nit check-raises middle pair — their heat is usually strong.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Nit check-raises middle pair — tap Fold.'),
+      findsNothing,
+    );
+    expect(find.text('FOLD'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no third gold felt status.
+    expect(find.text('Nit heat is usually strong'), findsNothing);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'fold-mid');
+    await tester.tap(find.text('FOLD'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'fold-mid');
     controller.dispose();
   });
 
