@@ -15341,7 +15341,9 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s4 confidence guided taps One note on felt', (tester) async {
+  testWidgets('s4 update-reads guided SoftPulse One note — no gold tip', (
+    tester,
+  ) async {
     final activity = CourseActivity(
       id: 'act-04-09-01-guided',
       order: 2,
@@ -15372,13 +15374,154 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('One huge bluff — tap what you know.'),
+      find.text(
+        'One huge bluff — a single sample stays low certainty.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('One huge bluff — tap what you know.'),
+      findsNothing,
     );
     expect(find.text('One note'), findsOneWidget);
     await tester.tap(find.text('One note'));
     await tester.pump();
     expect(controller.draft.choiceId, 'one-note');
+    controller.dispose();
+  });
+
+  testWidgets('s4 update-reads scaffold SoftPulse Rise — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-09-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Rise — still revisable.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'After 30 hands of sticky calls, confidence should?',
+      choices: const [
+        CourseChoice(id: 'rise', label: 'Rise — still revisable'),
+        CourseChoice(id: 'zero', label: 'Stay at zero forever'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        '30 sticky hands — confidence rises, but stays revisable.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('30 sticky hands — tap how confidence moves.'),
+      findsNothing,
+    );
+    expect(find.text('Rise'), findsOneWidget);
+    await tester.tap(find.text('Rise'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'rise');
+    controller.dispose();
+  });
+
+  testWidgets('s4 update-reads unguided SoftPulse Update — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-09-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Update/retire the Calling Station model.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: "Former 'station' starts folding three streets. Next step?",
+      choices: const [
+        CourseChoice(id: 'update', label: 'Update/retire the Calling Station model'),
+        CourseChoice(id: 'freeze', label: 'Keep the old label forever'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Station starts folding — update or retire the old model.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Station starts folding — tap the next step.'),
+      findsNothing,
+    );
+    expect(find.text('Update'), findsOneWidget);
+    await tester.tap(find.text('Update'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'update');
+    controller.dispose();
+  });
+
+  testWidgets('s4 update-reads checkpoint SoftPulse Limits — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-09-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Sample and confidence limits.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Course should show what beside a type label?',
+      choices: const [
+        CourseChoice(id: 'limits', label: 'Sample and confidence limits'),
+        CourseChoice(id: 'destiny', label: 'Destiny and aura'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Beside a type label — show sample and confidence limits.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Beside a type label — tap what belongs.'),
+      findsNothing,
+    );
+    expect(find.text('Limits'), findsOneWidget);
+    await tester.tap(find.text('Limits'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'limits');
     controller.dispose();
   });
 

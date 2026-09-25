@@ -514,14 +514,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Wide bets — don’t gold-tip the tile.
       'act-04-08-03-checkpoint' =>
           'Maniac barrels — their betting range is simply too wide.',
+      // SoftPulse owns One note — don’t gold-tip the tile.
       'act-04-09-01-guided' =>
-          'One huge bluff — tap what you know.',
+          'One huge bluff — a single sample stays low certainty.',
+      // SoftPulse owns Rise — don’t gold-tip the tile.
       'act-04-09-01-scaffolded' =>
-          '30 sticky hands — tap how confidence moves.',
+          '30 sticky hands — confidence rises, but stays revisable.',
+      // SoftPulse owns Update — don’t gold-tip the tile.
       'act-04-09-01-unguided' =>
-          'Station starts folding — tap the next step.',
+          'Station starts folding — update or retire the old model.',
+      // SoftPulse owns Limits — don’t gold-tip the tile.
       'act-04-09-01-checkpoint' =>
-          'Beside a type label — tap what belongs.',
+          'Beside a type label — show sample and confidence limits.',
       'act-04-10-02-jump-range' =>
           'UTG open — pick the range shape.',
       // SoftPulse owns Value more — don’t gold-tip the tile.
