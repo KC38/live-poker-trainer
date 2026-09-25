@@ -353,15 +353,18 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     'act-02-07-02-jump-vs' =>
       // Jump: seat + facing line — cards already show AA (no “Aces” tip).
       'Big blind vs an open — pick your action.',
+    // SoftPulse owns value bet — don’t gold-tip the dock.
     'act-03-04-01-guided' =>
-      'Top pair top kicker checked to you — tap a value bet.',
+      'Top pair top kicker checked to you — extract when they check.',
+    // SoftPulse owns small c-bet — don’t gold-tip the dock.
     'act-03-04-01-scaffolded' =>
-      'You opened; dry ace flops — tap a small c-bet.',
-    // Unguided / checkpoint: name the spot, not the answer.
+      'You opened; dry ace flops — keep pressure small as PFR.',
+    // Unguided: name the spot; list legal lines without SoftPulse.
     'act-03-04-01-unguided' =>
-      'Set multiway vs a bet — tap Raise, Call, or Fold.',
+      'Set multiway vs a bet — pick Raise, Call, or Fold.',
+    // Checkpoint: name the spot; SoftPulse isn’t on.
     'act-03-04-01-checkpoint' =>
-      'Bottom pair vs bet and raise multiway — tap your action.',
+      'Bottom pair vs bet and raise multiway — pick your line.',
     'act-03-05-01-scaffolded' =>
       'TPTK on a brick turn after a call — tap a barrel.',
     'act-03-05-01-unguided' =>
