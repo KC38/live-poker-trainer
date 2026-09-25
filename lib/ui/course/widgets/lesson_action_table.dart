@@ -529,7 +529,7 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         streetLabel: 'Flop · strong value',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Tap the worst value size',
+        feltStatusLine: 'One-chip value is a mistake',
       );
     case 'act-04-05-01-scaffolded':
       return const LessonActionSpot(

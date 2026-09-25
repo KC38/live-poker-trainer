@@ -12794,6 +12794,9 @@ await tester.tap(find.text('STRONGER'));
       find.text('Strong hand for value into 30 — tap the worst size.'),
       findsOneWidget,
     );
+    // Rex owns the tap verb — felt stays a structural status, not a Tap footer.
+    expect(find.text('Tap the worst value size'), findsNothing);
+    expect(find.text('One-chip value is a mistake'), findsOneWidget);
     expect(find.text('BET 1'), findsOneWidget);
     await tester.tap(find.text('BET 1'));
     await tester.pump();
