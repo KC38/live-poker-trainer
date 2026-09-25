@@ -13084,7 +13084,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('BTN open, BB 3-bet, BTN calls — tap who is stronger.'),
+      find.text('BTN open, BB 3-bet, BTN calls — 3-bet ranges start narrower than flatting opens.'),
       findsOneWidget,
     );
     expect(find.text('BB 3-bet'), findsOneWidget);
@@ -13141,7 +13141,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('UTG opens at 1/2 — tap the range shape.'),
+      find.text('UTG opens at 1/2 — early seats usually play tighter.'),
       findsOneWidget,
     );
     expect(find.text('UTG opens at 1/2. Best description?'), findsNothing);
@@ -13209,7 +13209,7 @@ await tester.tap(find.text('NIT'));
         ),
       );
       expect(
-        find.text('Same board, different villain lines — tap what changes.'),
+        find.text('Same board, different villain lines — advice follows the range, not the cards alone.'),
         findsOneWidget,
       );
       expect(find.text('Read drives'), findsOneWidget);
@@ -13276,7 +13276,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('They bet twice — you pinned Exactly AK. Tap the problem.'),
+      find.text('They bet twice — pinning Exactly AK collapses the range.'),
       findsOneWidget,
     );
     expect(find.text('Keep range'), findsOneWidget);
@@ -13703,7 +13703,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Two value sizes both get calls — tap the grading idea.'),
+      find.text('Two value sizes both get calls — nearby sizes can both grade soft.'),
       findsOneWidget,
     );
     expect(find.text('Soft band'), findsOneWidget);
@@ -15785,7 +15785,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('UTG open — pick the range shape.'),
+      find.text('UTG open — early seats usually play tighter.'),
       findsOneWidget,
     );
     expect(find.text('Narrower'), findsOneWidget);
