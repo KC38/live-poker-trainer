@@ -13737,7 +13737,8 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.fiveTypeCsBluff,
           title: 'Station bluff',
-          detail: 'Wrong exploit',
+          // Neutral line — don’t label the tile “Wrong …”.
+          detail: 'Thin river bluffs',
           visual: const Icon(
             Icons.warning_amber_outlined,
             color: AppColors.slate,
@@ -13770,7 +13771,8 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.fiveTypeNitCallLight,
           title: 'Nit call light',
-          detail: 'Wrong vs heat',
+          // Neutral line — don’t label the tile “Wrong …”.
+          detail: 'Hero-call the XR',
           visual: const Icon(
             Icons.call_received,
             color: AppColors.slate,
