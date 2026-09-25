@@ -15387,7 +15387,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s5 implied-odds guided docks Call on Station felt', (
+  testWidgets('s5 implied-odds guided SoftPulse Call — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -15418,18 +15418,27 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Deep gutshot vs Station — tap Call.'),
+      find.text(
+        'Deep gutshot vs Station — sticky callers raise implied odds.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Deep gutshot vs Station — tap Call.'),
+      findsNothing,
     );
     expect(find.text('Tap your action on the dock.'), findsNothing);
     expect(find.text('CALL'), findsOneWidget);
+    final guidedDock =
+        tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(guidedDock.pulseChoiceId, 'call-io');
     await tester.tap(find.text('CALL'));
     await tester.pump();
     expect(controller.draft.choiceId, 'call-io');
     controller.dispose();
   });
 
-  testWidgets('s5 implied-odds scaffolded docks Fold on Nit RIO felt', (
+  testWidgets('s5 implied-odds scaffold SoftPulse Fold — no gold tip', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -15458,16 +15467,25 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('KJo vs Nit check-raise — tap Fold.'),
+      find.text(
+        'KJo vs Nit check-raise — reverse implied on A-high wet.',
+      ),
       findsOneWidget,
     );
+    expect(
+      find.text('KJo vs Nit check-raise — tap Fold.'),
+      findsNothing,
+    );
+    final scaffoldDock =
+        tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(scaffoldDock.pulseChoiceId, 'rio');
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'rio');
     controller.dispose();
   });
 
-  testWidgets('s5 implied-odds unguided docks Fold on non-nut FD felt', (
+  testWidgets('s5 implied-odds unguided lists Fold/Call — no SoftPulse', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -15496,16 +15514,23 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Non-nut FD four-way — tap Fold.'),
+      find.text('Non-nut FD four-way — pick Fold or Call.'),
       findsOneWidget,
     );
+    expect(
+      find.text('Non-nut FD four-way — tap Fold.'),
+      findsNothing,
+    );
+    final unguidedDock =
+        tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(unguidedDock.pulseChoiceId, isNull);
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'nonut');
     controller.dispose();
   });
 
-  testWidgets('s5 implied-odds checkpoint taps Depth + pay on felt', (
+  testWidgets('s5 implied-odds checkpoint SoftPulse Depth + pay', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -15541,8 +15566,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Implied odds — tap when they rise most.'),
+      find.text('Implied odds rise with depth and opponents who pay.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Implied odds — tap when they rise most.'),
+      findsNothing,
     );
     expect(find.text('Depth + pay'), findsOneWidget);
     await tester.tap(find.text('Depth + pay'));
