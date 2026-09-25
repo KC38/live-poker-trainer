@@ -6682,11 +6682,15 @@ class LessonTableContext extends StatelessWidget {
           'Interactive live habit — tap cover and wait, act early, or leave bare',
       semanticsStatic: 'Live habit outcomes',
       caption: scene.caption ?? 'Full ring · action still left',
+      // Checkpoint: densify only — no SoftPulse spoiler / Tap footer.
+      cueLabel: '',
       phases: [
         (
           region: LessonTableRegion.habitCoverWait,
           title: 'Cover + wait',
-          detail: 'Safe',
+          // Structural — not “Safe” answering the habit.
+          detail: 'Hand on',
+          // Checkpoint: no gold tip on the correct tile.
           visual: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -6705,7 +6709,7 @@ class LessonTableContext extends StatelessWidget {
               const SizedBox(height: 4),
               const Icon(
                 Icons.back_hand_outlined,
-                color: AppColors.gold,
+                color: AppColors.slate,
                 size: 18,
               ),
             ],
@@ -6714,7 +6718,8 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.habitActEarly,
           title: 'Act early',
-          detail: 'OOT',
+          // Structural — not “OOT” tipping the mistake label.
+          detail: 'Too soon',
           visual: const Icon(
             Icons.campaign_outlined,
             color: AppColors.slate,
@@ -6724,7 +6729,8 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.habitLeaveBare,
           title: 'Leave bare',
-          detail: 'Flash',
+          // Structural — not “Flash” tipping why it is wrong.
+          detail: 'No cover',
           visual: const Icon(
             Icons.visibility_outlined,
             color: AppColors.slate,
