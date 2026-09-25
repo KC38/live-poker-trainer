@@ -4268,8 +4268,16 @@ await tester.tap(find.text('VALUE'));
     expect(find.text('Tap SPR next'), findsNothing);
     expect(find.text('Tap SPR, Low, and High'), findsNothing);
     expect(find.text('Tap SPR, Low, and High.'), findsNothing);
+    expect(find.text('Commit'), findsNothing);
+    expect(find.text('Maneuver'), findsNothing);
+    expect(find.text('Near stack-off'), findsOneWidget);
+    expect(find.text('Room to play'), findsOneWidget);
     expect(
       find.text('Low SPR: commit · High SPR: maneuver'),
+      findsNothing,
+    );
+    expect(
+      find.text('SPR · low · high'),
       findsNothing,
     );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
@@ -4286,7 +4294,7 @@ await tester.tap(find.text('VALUE'));
       ),
     );
 
-await tester.tap(find.text('SPR'));
+    await tester.tap(find.text('SPR'));
     await tester.pump();
     expect(find.text('Tap LOW next'), findsNothing);
     await tester.tap(find.text('LOW'));
@@ -4298,6 +4306,10 @@ await tester.tap(find.text('SPR'));
     // Lock clears enabled / ack — densified shell must stay filled.
     expect(
       find.text('Low SPR: commit · High SPR: maneuver'),
+      findsNothing,
+    );
+    expect(
+      find.text('SPR · low · high'),
       findsOneWidget,
     );
     expect(

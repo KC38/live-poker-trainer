@@ -4992,9 +4992,10 @@ class SprDepthDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
+    // Structural — Rex owns “low: commit / high: maneuver.”
     (label: 'SPR', caption: 'Stack ÷ pot', color: AppColors.gold),
-    (label: 'LOW', caption: 'Commit', color: AppColors.danger),
-    (label: 'HIGH', caption: 'Maneuver', color: AppColors.cream),
+    (label: 'LOW', caption: 'Near stack-off', color: AppColors.danger),
+    (label: 'HIGH', caption: 'Room to play', color: AppColors.cream),
   ];
 
   @override
@@ -5077,7 +5078,8 @@ class _SprDepthDemoState extends State<SprDepthDemo> {
                 ),
               ),
               child: Text(
-                'Low SPR: commit · High SPR: maneuver',
+                // Match SoftPulse titles — don’t echo Rex’s commit/maneuver.
+                'SPR · low · high',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
