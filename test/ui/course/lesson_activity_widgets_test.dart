@@ -16698,7 +16698,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Bet flop, check turn — range usually loses the nuts.'),
+      find.text('Bet flop, check turn — a check-back usually means the story got weaker.'),
       findsOneWidget,
     );
     expect(
