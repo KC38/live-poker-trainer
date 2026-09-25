@@ -7081,29 +7081,64 @@ class LessonTableContext extends StatelessWidget {
   }
 
   Widget _buildCallPriceOutcomes() {
+    Widget stackLabel(String label) {
+      return Text(
+        label,
+        style: GoogleFonts.manrope(
+          color: AppColors.slate,
+          fontSize: 12,
+          fontWeight: FontWeight.w700,
+        ),
+      );
+    }
+
     return _buildOutcomePhases(
       semanticsInteractive: 'Interactive call price — tap chips to call',
       semanticsStatic: 'Call price outcomes',
       caption: scene.caption ?? 'Pot 20 · villain bets 10',
-      // SoftPulse + Rex own the cue — no Tap footer.
+      // SoftPulse + Rex own the cue — no Tap footer / spoiler captions.
       cueLabel: '',
+      guideRegion: LessonTableRegion.callChipsTen,
+      minHeightFactor: 0.55,
+      header: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const _PotChipDot(label: '20', gold: false),
+              const SizedBox(height: 6),
+              stackLabel('Pot'),
+            ],
+          ),
+          const SizedBox(width: 36),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const _PotChipDot(label: '10', gold: true),
+              const SizedBox(height: 6),
+              stackLabel('Villain bet'),
+            ],
+          ),
+        ],
+      ),
       phases: [
         (
           region: LessonTableRegion.callChipsTwenty,
-          title: '20 chips',
-          detail: 'The pot',
+          title: 'Call 20',
+          detail: 'chips',
           visual: const _PotChipDot(label: '20', gold: false),
         ),
         (
           region: LessonTableRegion.callChipsTen,
-          title: '10 chips',
-          detail: 'Match the bet',
+          title: 'Call 10',
+          detail: 'chips',
           visual: const _PotChipDot(label: '10', gold: true),
         ),
         (
           region: LessonTableRegion.callChipsThirty,
-          title: '30 chips',
-          detail: 'After you call',
+          title: 'Call 30',
+          detail: 'chips',
           visual: const _PotChipDot(label: '30', gold: false),
         ),
       ],

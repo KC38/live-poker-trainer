@@ -9414,10 +9414,14 @@ await tester.tap(find.text('STRONGER'));
       find.text('Pot is 20. Villain bets 10. How many chips to call?'),
       findsNothing,
     );
-    expect(find.text('10 chips'), findsOneWidget);
+    expect(find.text('Call 10'), findsOneWidget);
+    expect(find.text('Match the bet'), findsNothing);
+    expect(find.text('The pot'), findsNothing);
+    expect(find.text('After you call'), findsNothing);
+    expect(find.text('Villain bet'), findsOneWidget);
     // SoftPulse + Rex own the cue — no Tap footer mid-teach.
     expect(find.text('Tap how many chips to call.'), findsNothing);
-    await tester.tap(find.text('10 chips'));
+    await tester.tap(find.text('Call 10'));
     await tester.pump();
     expect(controller.draft.choiceId, 'call-10');
     controller.dispose();
