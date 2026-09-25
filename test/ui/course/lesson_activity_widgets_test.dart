@@ -20081,7 +20081,7 @@ await tester.tap(find.text('STRONGER'));
         ),
       );
       expect(find.byType(HuVsMultiwayDemo), findsOneWidget);
-      expect(find.text('Tap FEWER next'), findsOneWidget);
+      expect(find.text('Tap FEWER next'), findsNothing);
       expect(find.text('Tap Fewer, Thicker, and Widen.'), findsNothing);
       expect(find.text('Tap Fewer, Thicker, and Widen'), findsNothing);
       expect(
@@ -20093,10 +20093,10 @@ await tester.tap(find.text('STRONGER'));
 
       await tester.tap(find.text('FEWER'));
       await tester.pump();
-      expect(find.text('Tap THICKER next'), findsOneWidget);
+      expect(find.text('Tap THICKER next'), findsNothing);
       await tester.tap(find.text('THICKER'));
       await tester.pump();
-      expect(find.text('Tap WIDEN next'), findsOneWidget);
+      expect(find.text('Tap WIDEN next'), findsNothing);
       await tester.tap(find.text('WIDEN'));
       await tester.pump();
       expect(feltAck, 1);
