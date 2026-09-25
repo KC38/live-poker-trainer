@@ -5839,7 +5839,7 @@ await tester.tap(find.text('STRONGER'));
         ),
       );
       expect(find.byType(ThreeBetFourBetSprDemo), findsOneWidget);
-      expect(find.text('Tap 3BET next'), findsOneWidget);
+      expect(find.text('Tap 3BET next'), findsNothing);
       expect(find.text('Tap 3-Bet, 4-Bet, and Depth.'), findsNothing);
       expect(find.text('Tap 3-Bet, 4-Bet, and Depth'), findsNothing);
       expect(
@@ -5862,10 +5862,10 @@ await tester.tap(find.text('STRONGER'));
 
       await tester.tap(find.text('3BET'));
       await tester.pump();
-      expect(find.text('Tap 4BET next'), findsOneWidget);
+      expect(find.text('Tap 4BET next'), findsNothing);
       await tester.tap(find.text('4BET'));
       await tester.pump();
-      expect(find.text('Tap DEPTH next'), findsOneWidget);
+      expect(find.text('Tap DEPTH next'), findsNothing);
       await tester.tap(find.text('DEPTH'));
       await tester.pump();
       expect(feltAck, 1);
