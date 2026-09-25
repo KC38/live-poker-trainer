@@ -278,6 +278,9 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     // Adjust vs Nit: SoftPulse the plan; Rex names the model, not the dock.
     'act-04-07-03-guided' => 'steal',
     'act-04-07-03-scaffolded' => 'fold-mid',
+    // Adjust vs Maniac: SoftPulse the plan; Rex names the model, not the dock.
+    'act-04-08-03-guided' => 'call-wider',
+    'act-04-08-03-scaffolded' => 'val-m',
     // Thin value / bluff-catch: SoftPulse the plan; Rex names the model.
     'act-05-04-01-guided' => 'tv',
     'act-05-04-01-scaffolded' => 'call-m',
@@ -469,12 +472,15 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     // Unguided: name the model; list legal lines without SoftPulse.
     'act-04-07-03-unguided' =>
       'Unknown BB with K9o — pick Tighter baseline or Always steal.',
+    // SoftPulse owns Call — don’t gold-tip the dock.
     'act-04-08-03-guided' =>
-      'Maniac barrels river — tap Call with top pair.',
+      'Maniac barrels river · top pair — catch wide aggression.',
+    // SoftPulse owns Bet value — don’t gold-tip the dock.
     'act-04-08-03-scaffolded' =>
-      'Maniac checks · top two — tap Bet value.',
+      'Maniac checks · top two — they call light.',
+    // Unguided: name the model; list legal lines without SoftPulse.
     'act-04-08-03-unguided' =>
-      'Unknown river bet · weak kicker — tap Fold more.',
+      'Unknown river bet · weak kicker — pick Fold more or Always call.',
     'act-04-10-01-guided' =>
       'Station checked · second pair — tap Bet value.',
     'act-04-10-01-scaffolded' =>
