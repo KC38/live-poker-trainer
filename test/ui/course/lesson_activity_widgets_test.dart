@@ -4810,7 +4810,7 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Tap RAISE next'), findsNothing);
     expect(find.text('Tap Raise, Barrel, and Count.'), findsNothing);
     expect(find.text('Tap Raise, Barrel, and Count'), findsNothing);
-    expect(find.text('Raise and barrel · count calmly'), findsNothing);
+    expect(find.text('Raise · barrel · count'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
     final teachHeight =
@@ -4835,7 +4835,7 @@ await tester.tap(find.text('NIT'));
     await tester.pump();
     expect(feltAck, 1);
     // Lock clears enabled / ack — densified shell must stay filled.
-    expect(find.text('Raise and barrel · count calmly'), findsOneWidget);
+    expect(find.text('Raise · barrel · count'), findsOneWidget);
     expect(
       tester.getSize(find.byType(ExtremeEntryDemo)).height,
       moreOrLessEquals(teachHeight, epsilon: 1),

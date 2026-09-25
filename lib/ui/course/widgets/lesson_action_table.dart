@@ -6177,9 +6177,10 @@ class ExtremeEntryDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'RAISE', caption: 'Enters with aggression', color: AppColors.gold),
-    (label: 'BARREL', caption: 'Keeps firing streets', color: AppColors.danger),
-    (label: 'COUNT', caption: 'Sample calmly', color: AppColors.cream),
+    // Structural — Rex owns “raise and barrel / count calmly.”
+    (label: 'RAISE', caption: 'Opens loud', color: AppColors.gold),
+    (label: 'BARREL', caption: 'Fires streets', color: AppColors.danger),
+    (label: 'COUNT', caption: 'Track frequency', color: AppColors.cream),
   ];
 
   @override
@@ -6262,7 +6263,7 @@ class _ExtremeEntryDemoState extends State<ExtremeEntryDemo> {
                 ),
               ),
               child: Text(
-                'Raise and barrel · count calmly',
+                'Raise · barrel · count',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
