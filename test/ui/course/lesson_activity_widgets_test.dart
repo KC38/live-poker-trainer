@@ -6988,7 +6988,8 @@ await tester.tap(find.text('NIT'));
 
     expect(find.text('Postflop — last to act gets the information edge.'), findsOneWidget);
     expect(find.text('Postflop closes on the button. Tap BTN.'), findsNothing);
-    expect(find.text('Tap on the felt.'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no third "Tap on the felt" line.
+    expect(find.text('Tap on the felt.'), findsNothing);
     expect(find.text('Tap the answer on the table.'), findsNothing);
     expect(find.text('Six-max · postflop'), findsOneWidget);
     expect(find.byType(LessonTableContext), findsOneWidget);
