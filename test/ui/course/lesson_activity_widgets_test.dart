@@ -14595,6 +14595,46 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
+  testWidgets('s4 jump 3bet SoftPulse docks 3-bet to 18', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-04-10-02-jump-3bet',
+      order: 2,
+      stage: ActivityStage.jumpTest,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Jump: value 3-bet.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'CO opens 6. You have KK on BTN. Action?',
+      choices: const [
+        CourseChoice(id: 'j4-3bet', label: '3-bet to 18', action: 'RAISE'),
+        CourseChoice(id: 'j4-3bet20', label: '3-bet to 20', action: 'RAISE'),
+        CourseChoice(id: 'j4-foldkk', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('CO opens · KK on BTN — pick a value 3-bet.'),
+      findsOneWidget,
+    );
+    // SoftPulse + Rex own the cue — no third gold felt status.
+    expect(find.text('Kings — 3-bet value'), findsNothing);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'j4-3bet');
+    await tester.tap(find.text('3-BET TO 18'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'j4-3bet');
+    controller.dispose();
+  });
+
   testWidgets('s4 jump range taps Narrower on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-04-10-02-jump-range',
