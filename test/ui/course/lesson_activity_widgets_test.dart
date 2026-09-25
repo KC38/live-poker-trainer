@@ -5471,7 +5471,7 @@ await tester.tap(find.text('NIT'));
         ),
       );
       expect(find.byType(OverbetGeometryDemo), findsOneWidget);
-      expect(find.text('Tap OVERBET next'), findsOneWidget);
+      expect(find.text('Tap OVERBET next'), findsNothing);
       expect(find.text('Tap Overbet, Polar, and Geo.'), findsNothing);
       expect(find.text('Tap Overbet, Polar, and Geo'), findsNothing);
       expect(find.text('Polar story across streets'), findsNothing);
@@ -5491,10 +5491,10 @@ await tester.tap(find.text('NIT'));
 
       await tester.tap(find.text('OVERBET'));
       await tester.pump();
-      expect(find.text('Tap POLAR next'), findsOneWidget);
+      expect(find.text('Tap POLAR next'), findsNothing);
       await tester.tap(find.text('POLAR'));
       await tester.pump();
-      expect(find.text('Tap GEO next'), findsOneWidget);
+      expect(find.text('Tap GEO next'), findsNothing);
       await tester.tap(find.text('GEO'));
       await tester.pump();
       expect(feltAck, 1);
