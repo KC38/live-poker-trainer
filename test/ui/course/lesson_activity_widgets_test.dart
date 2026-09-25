@@ -17317,7 +17317,11 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Flopped set — tap Check.'), findsOneWidget);
+    expect(
+      find.text('Flopped set — protect checking range sometimes.'),
+      findsOneWidget,
+    );
+    expect(find.text('Flopped set — tap Check.'), findsNothing);
     expect(find.text('CHECK'), findsOneWidget);
     expect(find.text('ALWAYS BET'), findsOneWidget);
     await tester.tap(find.text('CHECK'));
@@ -17353,8 +17357,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Vs Calling Station — tap Less bluff.'),
+      find.text('Vs Calling Station — pick the mix adjustment.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Vs Calling Station — tap Less bluff.'),
+      findsNothing,
     );
     await tester.tap(find.text('Less bluff'));
     await tester.pump();
@@ -17389,8 +17397,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Randomness for its own sake — tap Need a reason.'),
+      find.text('Randomness for its own sake — pick when mix is allowed.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Randomness for its own sake — tap Need a reason.'),
+      findsNothing,
     );
     await tester.tap(find.text('Need a reason'));
     await tester.pump();
@@ -17425,8 +17437,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Best mix description — tap Purpose freq.'),
+      find.text('Best mix description — pick the course standard.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Best mix description — tap Purpose freq.'),
+      findsNothing,
     );
     await tester.tap(find.text('Purpose freq'));
     await tester.pump();
