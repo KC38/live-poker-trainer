@@ -36,12 +36,27 @@ import 'package:live_poker_trainer/ui/screens/onboarding_screens.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
+/// Active root navigator. Updated when the root identity changes so agent
+/// lesson launches follow the mounted navigator.
+GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 
-/// Separate navigator when the course auth gate fails closed so the guest
-/// lesson stack cannot survive on the shared [_rootNavigatorKey].
-final GlobalKey<NavigatorState> _authGateNavigatorKey =
-    GlobalKey<NavigatorState>();
+/// One navigator per root identity.
+///
+/// [MaterialApp]'s [ValueKey] remounts the app, but a reused [GlobalKey] moves
+/// the previous [Navigator] (and its route stack) into the new app. That kept
+/// the first-lesson route above Save progress, so guests never saw the
+/// account prompt and CONTINUE popped back to "Start lesson".
+final Map<String, GlobalKey<NavigatorState>> _navigatorKeysByIdentity =
+    <String, GlobalKey<NavigatorState>>{};
+
+GlobalKey<NavigatorState> _navigatorKeyForIdentity(String identity) {
+  final key = _navigatorKeysByIdentity.putIfAbsent(
+    identity,
+    GlobalKey<NavigatorState>.new,
+  );
+  _rootNavigatorKey = key;
+  return key;
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -147,10 +162,13 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
     );
     final remountToken =
         destination == AppRootDestination.saveProgress ? '-save' : '';
+    // Identity and navigator key must change together. A new [ValueKey] with
+    // the previous [GlobalKey] reparents the old lesson stack instead of
+    // showing [SaveProgressScreen].
+    final navIdentity = '$identity$remountToken';
     return MaterialApp(
-      key: ValueKey('$identity$remountToken'),
-      navigatorKey:
-          resetForAuthGate ? _authGateNavigatorKey : _rootNavigatorKey,
+      key: ValueKey(navIdentity),
+      navigatorKey: _navigatorKeyForIdentity(navIdentity),
       title: 'Exploitative Poker Lab',
       debugShowCheckedModeBanner: false,
       theme: buildPokerTheme(),
