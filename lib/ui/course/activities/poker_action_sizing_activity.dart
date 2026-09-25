@@ -337,14 +337,18 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Folds to you on the button — pick Fold, Open, or Limp.',
     'act-02-03-01-checkpoint-hj' =>
       'Hijack first in — pick your action.',
+    // SoftPulse owns Fold — don’t gold-tip the dock.
     'act-02-04-01-guided-fold' =>
-      'Junk in the big blind vs an open — tap Fold.',
+      'Junk in the big blind vs an open — leave without defending.',
+    // SoftPulse owns Call — don’t gold-tip the dock.
     'act-02-04-01-scaffolded-call' =>
-      'Suited connector on the button vs a CO open — tap Call.',
+      'Suited connector on the button vs a CO open — continue in position.',
+    // Unguided: name the spot; list legal lines without SoftPulse.
     'act-02-04-01-unguided-3bet' =>
-      'Kings in the small blind vs a button open — tap Fold, Call, or 3-bet.',
+      'Premium pair in the small blind vs a button open — pick Fold, Call, or 3-bet.',
+    // Checkpoint: name the hand class; SoftPulse isn’t on.
     'act-02-04-01-checkpoint-aq' =>
-      'Strong suited broadway in the CO — tap your action.',
+      'Strong suited broadway in the CO — pick your line.',
     'act-02-07-02-jump-vs' =>
       // Jump: seat + facing line — cards already show AA (no “Aces” tip).
       'Big blind vs an open — tap your action.',

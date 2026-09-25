@@ -2574,8 +2574,14 @@ void main() {
     expect(find.byType(LessonActionTable), findsOneWidget);
     expect(find.byType(LessonActionDock), findsOneWidget);
     expect(
-      find.text('Junk in the big blind vs an open — tap Fold.'),
+      find.text(
+        'Junk in the big blind vs an open — leave without defending.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Junk in the big blind vs an open — tap Fold.'),
+      findsNothing,
     );
     // SoftPulse + Rex own the cue — no third gold felt status.
     expect(find.text('Facing an open — junk folds'), findsNothing);
@@ -2642,8 +2648,14 @@ void main() {
       ),
     );
     expect(
-      find.text('Suited connector on the button vs a CO open — tap Call.'),
+      find.text(
+        'Suited connector on the button vs a CO open — continue in position.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Suited connector on the button vs a CO open — tap Call.'),
+      findsNothing,
     );
     // SoftPulse + Rex own the cue — no third gold felt status.
     expect(find.text('Suited connector in position'), findsNothing);
@@ -2706,9 +2718,15 @@ void main() {
     );
     expect(
       find.text(
-        'Kings in the small blind vs a button open — tap Fold, Call, or 3-bet.',
+        'Premium pair in the small blind vs a button open — pick Fold, Call, or 3-bet.',
       ),
       findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Kings in the small blind vs a button open — tap Fold, Call, or 3-bet.',
+      ),
+      findsNothing,
     );
     // Cards + villain line teach — no gold strength spoiler.
     expect(find.text('Premium vs a button open'), findsNothing);
@@ -2745,8 +2763,12 @@ void main() {
       ),
     );
     expect(
-      find.text('Strong suited broadway in the CO — tap your action.'),
+      find.text('Strong suited broadway in the CO — pick your line.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Strong suited broadway in the CO — tap your action.'),
+      findsNothing,
     );
     expect(find.text('Strong suited broadway'), findsNothing);
     expect(find.text('A bet faces you'), findsOneWidget);
