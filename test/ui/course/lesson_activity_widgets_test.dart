@@ -17855,7 +17855,7 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Tap Credit, Tighter, and No light.'), findsNothing);
     expect(find.text('Tap Credit, Tighter, and No light'), findsNothing);
     expect(
-      find.text('Respect heat · steal less · no light XR'),
+      find.text('Credit · tighter · no light'),
       findsNothing,
     );
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
@@ -17883,7 +17883,7 @@ await tester.tap(find.text('NIT'));
     expect(feltAck, 1);
     // Lock clears enabled / ack — densified shell must stay filled.
     expect(
-      find.text('Respect heat · steal less · no light XR'),
+      find.text('Credit · tighter · no light'),
       findsOneWidget,
     );
     expect(
