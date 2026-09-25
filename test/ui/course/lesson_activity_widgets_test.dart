@@ -4611,7 +4611,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(DeepStacksDemo), findsOneWidget);
-    expect(find.text('Tap DEEP next'), findsOneWidget);
+    expect(find.text('Tap DEEP next'), findsNothing);
     expect(find.text('Tap Deep, Realize, and Stack.'), findsNothing);
     expect(find.text('Tap Deep, Realize, and Stack'), findsNothing);
     expect(find.text('More room to realize · and to lose'), findsNothing);
@@ -4631,10 +4631,10 @@ await tester.tap(find.text('NIT'));
 
     await tester.tap(find.text('DEEP'));
     await tester.pump();
-    expect(find.text('Tap REALIZE next'), findsOneWidget);
+    expect(find.text('Tap REALIZE next'), findsNothing);
     await tester.tap(find.text('REALIZE'));
     await tester.pump();
-    expect(find.text('Tap STACK next'), findsOneWidget);
+    expect(find.text('Tap STACK next'), findsNothing);
     await tester.tap(find.text('STACK'));
     await tester.pump();
     expect(feltAck, 1);
