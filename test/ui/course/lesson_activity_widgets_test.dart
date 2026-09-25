@@ -16628,7 +16628,11 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('River overbet — tap Polarized.'), findsOneWidget);
+    expect(
+      find.text('River overbet — pick the betting shape.'),
+      findsOneWidget,
+    );
+    expect(find.text('River overbet — tap Polarized.'), findsNothing);
     await tester.tap(find.text('Polarized'));
     await tester.pump();
     expect(controller.draft.choiceId, 'polar');
@@ -16673,10 +16677,20 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Thin value vs station — tap Bet medium.'),
+      find.text(
+        'Station checked · second pair — extract with a merged size.',
+      ),
       findsOneWidget,
     );
+    expect(
+      find.text('Thin value vs station — tap Bet medium.'),
+      findsNothing,
+    );
+    expect(find.text('Station river — bet medium'), findsNothing);
     expect(find.text('BET MEDIUM'), findsOneWidget);
+    final dock =
+        tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'mid');
     await tester.tap(find.text('BET MEDIUM'));
     await tester.pump();
     expect(controller.draft.choiceId, 'mid');
@@ -16710,8 +16724,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Mismatch to avoid — tap Tiny bluffs.'),
+      find.text('Mismatch to avoid — pick the sizing leak.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Mismatch to avoid — tap Tiny bluffs.'),
+      findsNothing,
     );
     await tester.tap(find.text('Tiny bluffs'));
     await tester.pump();
@@ -16746,8 +16764,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Merged betting aims to — tap Thin value.'),
+      find.text('Merged betting aims to — pick the goal.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Merged betting aims to — tap Thin value.'),
+      findsNothing,
     );
     await tester.tap(find.text('Thin value'));
     await tester.pump();

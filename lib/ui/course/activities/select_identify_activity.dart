@@ -572,11 +572,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-06-03-01-checkpoint' =>
           'Caps are for — choose how you use them.',
       'act-06-04-01-guided' =>
-          'River overbet — tap Polarized.',
+          'River overbet — pick the betting shape.',
       'act-06-04-01-unguided' =>
-          'Mismatch to avoid — tap Tiny bluffs.',
+          'Mismatch to avoid — pick the sizing leak.',
       'act-06-04-01-checkpoint' =>
-          'Merged betting aims to — tap Thin value.',
+          'Merged betting aims to — pick the goal.',
       'act-06-05-01-guided' =>
           'Best overbet river — tap Nuts / bluffs.',
       'act-06-05-01-unguided' =>
