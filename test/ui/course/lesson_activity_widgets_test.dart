@@ -17165,7 +17165,7 @@ await tester.tap(find.text('STRONGER'));
       ),
     );
     expect(find.byType(VsLagsDemo), findsOneWidget);
-    expect(find.text('Tap CALL next'), findsOneWidget);
+    expect(find.text('Tap CALL next'), findsNothing);
     expect(find.text('Tap Call, Trap, and Fancy less.'), findsNothing);
     expect(find.text('Tap Call, Trap, and Fancy less'), findsNothing);
     expect(
@@ -17188,10 +17188,10 @@ await tester.tap(find.text('STRONGER'));
 
     await tester.tap(find.text('CALL'));
     await tester.pump();
-    expect(find.text('Tap TRAP next'), findsOneWidget);
+    expect(find.text('Tap TRAP next'), findsNothing);
     await tester.tap(find.text('TRAP'));
     await tester.pump();
-    expect(find.text('Tap FANCY LESS next'), findsOneWidget);
+    expect(find.text('Tap FANCY LESS next'), findsNothing);
     await tester.tap(find.text('FANCY LESS'));
     await tester.pump();
     expect(feltAck, 1);
