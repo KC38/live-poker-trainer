@@ -8796,8 +8796,8 @@ class LessonActionTable extends StatelessWidget {
   /// Creates the table.
   ///
   /// When [coachOwnsCue] is true (Rex + SoftPulse already cue the dock),
-  /// hide auto-generated gold status lines like "Pot is open to a bet" —
-  /// keep an explicit [LessonActionSpot.feltStatusLine] when authored.
+  /// hide gold felt status lines — including authored [LessonActionSpot.feltStatusLine]
+  /// that would triple-cue the same move.
   const LessonActionTable({
     super.key,
     required this.spot,
@@ -8806,7 +8806,7 @@ class LessonActionTable extends StatelessWidget {
 
   final LessonActionSpot spot;
 
-  /// SoftPulse + Rex own the next-action cue — suppress generic felt status.
+  /// SoftPulse + Rex own the next-action cue — suppress felt gold status.
   final bool coachOwnsCue;
 
   @override
@@ -8855,11 +8855,12 @@ class LessonActionTable extends StatelessWidget {
         final cardScale = breathe ? 1.4 : 1.0;
 
         Widget? sceneStatus() {
+          // SoftPulse + Rex already name the move — no third gold line
+          // (authored or auto-generated).
+          if (coachOwnsCue) return null;
           if (spot.feltStatusLine != null) {
             return statusLine(spot.feltStatusLine!);
           }
-          // SoftPulse + Rex already name the move — no third gold line.
-          if (coachOwnsCue) return null;
           if (spot.facingBet) return statusLine('A bet faces you');
           if (spot.openPot) {
             return statusLine(
