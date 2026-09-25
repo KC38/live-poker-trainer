@@ -8661,15 +8661,21 @@ class _DemoSoftPulseState extends State<_DemoSoftPulse>
     return AnimatedBuilder(
       animation: _pulse,
       builder: (context, child) {
-        final glow = 0.22 + (_pulse.value * 0.38);
+        // Match streets/path SoftPulse intensity — weak glow washed out on
+        // danger-tinted EARLY tiles (open-fold SoftPulse looked "static").
+        final glow = 0.4 + (_pulse.value * 0.55);
         return DecoratedBox(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: AppColors.gold.withValues(alpha: 0.95),
+              width: 2.5,
+            ),
             boxShadow: [
               BoxShadow(
-                color: AppColors.gold.withValues(alpha: glow * 0.55),
-                blurRadius: 10 + (_pulse.value * 6),
-                spreadRadius: 0.4,
+                color: AppColors.gold.withValues(alpha: glow * 0.65),
+                blurRadius: 12 + (10 * _pulse.value),
+                spreadRadius: 1 + (2 * _pulse.value),
               ),
             ],
           ),
