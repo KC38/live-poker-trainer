@@ -5550,14 +5550,14 @@ await tester.tap(find.text('NIT'));
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
-          'Action · rewrite · update. Keep updating.',
+          'Each action rewrites the range. Keep updating.',
       acceptedGrades: const [SoftGrade.recommended],
       coachMedia: const [
         CoachMediaRef(
           id: 'm',
           kind: 'dialogue',
           text:
-              'Action · rewrite · update. Keep updating.',
+              'Each action rewrites the range. Keep updating.',
         ),
       ],
     );
