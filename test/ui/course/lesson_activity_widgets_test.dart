@@ -9454,6 +9454,9 @@ await tester.tap(find.text('STRONGER'));
       ),
       findsNothing,
     );
+    // Felt caption is structural — Rex owns the “You said raise” SoftPulse cue.
+    expect(find.text('Live table · verbal action'), findsOneWidget);
+    expect(find.textContaining('You said "raise"'), findsNothing);
     expect(
       find.text('The raise stands — verbal is binding'),
       findsNothing,
