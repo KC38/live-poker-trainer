@@ -275,8 +275,8 @@ void main() {
       ),
     );
     await tester.pump();
-    expect(find.text('Tap the dealer button'), findsOneWidget);
-    // In-felt cue owns the tip — no duplicate gold footer.
+    // SoftPulse + Rex own the cue — no Tap the dealer button footer.
+    expect(find.text('Tap the dealer button'), findsNothing);
     expect(find.text('Tap the dealer button on the table.'), findsNothing);
     final teachHeight = tester
         .getSize(find.byKey(const ValueKey('blinds-seats-felt')))
