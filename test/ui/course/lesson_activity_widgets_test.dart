@@ -14867,7 +14867,9 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s4 observe wild guided taps Extreme on felt', (tester) async {
+  testWidgets('s4 observe wild guided SoftPulse Extreme — no gold tip', (
+    tester,
+  ) async {
     final activity = CourseActivity(
       id: 'act-04-08-01-guided',
       order: 2,
@@ -14898,13 +14900,157 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Raises 12 of 15 — tap the observation.'),
+      find.text(
+        'Raises 12 of 15 — entry and aggression are both extreme.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Raises 12 of 15 — tap the observation.'),
+      findsNothing,
     );
     expect(find.text('Extreme'), findsOneWidget);
     await tester.tap(find.text('Extreme'));
     await tester.pump();
     expect(controller.draft.choiceId, 'extreme');
+    controller.dispose();
+  });
+
+  testWidgets('s4 observe wild scaffold SoftPulse Wide heat — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-08-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Continues pressure too wide.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'They bet flop, turn, and river with weak showdowns twice. Note?',
+      choices: const [
+        CourseChoice(id: 'pressure', label: 'Continues pressure too wide'),
+        CourseChoice(id: 'passive-m', label: 'They never bet'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Barrels three streets light — pressure stays too wide.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Barrels three streets light — tap the note.'),
+      findsNothing,
+    );
+    expect(find.text('Wide heat'), findsOneWidget);
+    await tester.tap(find.text('Wide heat'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'pressure');
+    controller.dispose();
+  });
+
+  testWidgets('s4 observe wild unguided SoftPulse Frequencies — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-08-01-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Frequencies and shows — no ego story.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Best note style versus wild aggression?',
+      choices: const [
+        CourseChoice(id: 'calm', label: 'Frequencies and shows — no ego story'),
+        CourseChoice(id: 'ego', label: 'Write revenge plans'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Wild aggression — track frequencies and shows, not revenge stories.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Wild aggression — tap the note style.'),
+      findsNothing,
+    );
+    expect(find.text('Frequencies'), findsOneWidget);
+    await tester.tap(find.text('Frequencies'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'calm');
+    controller.dispose();
+  });
+
+  testWidgets('s4 observe wild checkpoint SoftPulse Enter + barrel — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-08-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Enters constantly; barrels without mercy.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Evidence bundle?',
+      choices: const [
+        CourseChoice(
+          id: 'bundle-m',
+          label: 'Enters constantly; barrels without mercy',
+        ),
+        CourseChoice(id: 'bundle-n', label: 'Almost never plays'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Before you label — constant entry with merciless barrels.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Before you label — tap the evidence bundle.'),
+      findsNothing,
+    );
+    expect(find.text('Enter + barrel'), findsOneWidget);
+    await tester.tap(find.text('Enter + barrel'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'bundle-m');
     controller.dispose();
   });
 

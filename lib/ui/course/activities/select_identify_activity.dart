@@ -490,14 +490,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Strong range — don’t gold-tip the tile.
       'act-04-07-03-checkpoint' =>
           'Nit check-raises — their raise range is usually strong.',
+      // SoftPulse owns Extreme — don’t gold-tip the tile.
       'act-04-08-01-guided' =>
-          'Raises 12 of 15 — tap the observation.',
+          'Raises 12 of 15 — entry and aggression are both extreme.',
+      // SoftPulse owns Wide heat — don’t gold-tip the tile.
       'act-04-08-01-scaffolded' =>
-          'Barrels three streets light — tap the note.',
+          'Barrels three streets light — pressure stays too wide.',
+      // SoftPulse owns Frequencies — don’t gold-tip the tile.
       'act-04-08-01-unguided' =>
-          'Wild aggression — tap the note style.',
+          'Wild aggression — track frequencies and shows, not revenge stories.',
+      // SoftPulse owns Enter + barrel — don’t gold-tip the tile.
       'act-04-08-01-checkpoint' =>
-          'Before you label — tap the evidence bundle.',
+          'Before you label — constant entry with merciless barrels.',
       'act-04-08-02-guided' =>
           'Opens 60%, barrels light — tap the working label.',
       'act-04-08-02-unguided' =>
