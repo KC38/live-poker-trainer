@@ -153,14 +153,12 @@ class _BestFiveDemoState extends State<BestFiveDemo> {
     // Board stays ≤~1.2 so five hero cards fit one row on Pro width.
     final heroScale = expandTeach ? 1.85 : 1.0;
     final boardScale = expandTeach ? 1.35 : 1.0;
+    // SoftPulse + Rex own the next-card cue while teaching. Show a summary
+    // after all taps (or once locked under Nice! / Continue).
+    final showCue = !widget.interactive || next == null || !widget.enabled;
     final cueLabel = () {
       if (!widget.interactive) return 'Highlighted = the five that count';
-      if (next == null) return 'Five play · two leftovers';
-      try {
-        return 'Tap ${CardModel.fromCode(next).display}';
-      } catch (_) {
-        return 'Tap $next';
-      }
+      return 'Five play · two leftovers';
     }();
 
     Widget labeledRow({
@@ -195,15 +193,18 @@ class _BestFiveDemoState extends State<BestFiveDemo> {
       );
     }
 
-    final cue = Text(
-      cueLabel,
-      textAlign: TextAlign.center,
-      style: GoogleFonts.manrope(
-        color: AppColors.gold,
-        fontSize: expandTeach ? 16 : 12,
-        fontWeight: FontWeight.w700,
-      ),
-    );
+    final cue =
+        !showCue
+            ? null
+            : Text(
+              cueLabel,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: expandTeach ? 16 : 12,
+                fontWeight: FontWeight.w700,
+              ),
+            );
     final body = Column(
       mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
       mainAxisAlignment:
@@ -257,7 +258,7 @@ class _BestFiveDemoState extends State<BestFiveDemo> {
               ),
             ),
           ),
-        cue,
+        if (cue != null) cue,
       ],
     );
     final child = Container(
