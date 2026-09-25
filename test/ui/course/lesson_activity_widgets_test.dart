@@ -2584,6 +2584,92 @@ void main() {
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'fold-j3');
+    controller.finishSubmit(
+      SubmitCourseStepResult(
+        attemptId: 'a1',
+        activityId: activity.id,
+        grade: SoftGrade.recommended,
+        feedback: 'No defend with J3o.',
+        accepted: true,
+        lifeLost: false,
+        livesRemaining: 3,
+        xpAwarded: 10,
+        remediationRequired: false,
+        resume: CourseResumePointer(
+          attemptId: 'a1',
+          lessonId: 'lesson-02-04-01-facing-raise',
+          activityId: activity.id,
+          activityIndex: 1,
+        ),
+        duplicate: false,
+      ),
+    );
+    await tester.pump();
+    // SoftPulse ownership persists under Nice! — no Rex-echo felt footer.
+    expect(find.text('Facing an open — junk folds'), findsNothing);
+    controller.dispose();
+  });
+
+  testWidgets('vs-open scaffolded SoftPulse Call — no Rex-echo felt footer', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-04-01-scaffolded-call',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Call with suited connectors on the button.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'CO opens to 6. You have 87s on the button. Action?',
+      choices: const [
+        CourseChoice(id: 'call-87s', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'fold-87s', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: '3bet-87s', label: '3-bet to 18', action: 'RAISE'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Suited connector on the button vs a CO open — tap Call.'),
+      findsOneWidget,
+    );
+    // SoftPulse + Rex own the cue — no third gold felt status.
+    expect(find.text('Suited connector in position'), findsNothing);
+    expect(find.text('CALL'), findsOneWidget);
+    await tester.tap(find.text('CALL'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'call-87s');
+    controller.finishSubmit(
+      SubmitCourseStepResult(
+        attemptId: 'a2',
+        activityId: activity.id,
+        grade: SoftGrade.recommended,
+        feedback: 'Playable in position.',
+        accepted: true,
+        lifeLost: false,
+        livesRemaining: 3,
+        xpAwarded: 10,
+        remediationRequired: false,
+        resume: CourseResumePointer(
+          attemptId: 'a2',
+          lessonId: 'lesson-02-04-01-facing-raise',
+          activityId: activity.id,
+          activityIndex: 2,
+        ),
+        duplicate: false,
+      ),
+    );
+    await tester.pump();
+    expect(find.text('Suited connector in position'), findsNothing);
     controller.dispose();
   });
 
