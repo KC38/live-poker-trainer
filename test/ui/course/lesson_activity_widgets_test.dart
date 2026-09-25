@@ -21472,7 +21472,7 @@ await tester.tap(find.text('STRONGER'));
         ),
       );
       expect(find.byType(Capstone3betDemo), findsOneWidget);
-      expect(find.text('Tap SPR next'), findsOneWidget);
+      expect(find.text('Tap SPR next'), findsNothing);
       expect(find.text('Tap SPR, Turn, and Close.'), findsNothing);
       expect(find.text('Tap SPR, Turn, and Close'), findsNothing);
       expect(
@@ -21484,10 +21484,10 @@ await tester.tap(find.text('STRONGER'));
 
       await tester.tap(find.text('SPR'));
       await tester.pump();
-      expect(find.text('Tap TURN next'), findsOneWidget);
+      expect(find.text('Tap TURN next'), findsNothing);
       await tester.tap(find.text('TURN'));
       await tester.pump();
-      expect(find.text('Tap CLOSE next'), findsOneWidget);
+      expect(find.text('Tap CLOSE next'), findsNothing);
       await tester.tap(find.text('CLOSE'));
       await tester.pump();
       expect(feltAck, 1);
