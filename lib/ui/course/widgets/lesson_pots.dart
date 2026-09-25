@@ -28,7 +28,6 @@ class WinningPathsDemo extends StatefulWidget {
 class _WinningPathsDemoState extends State<WinningPathsDemo> {
   final Set<String> _tapped = <String>{};
   static const _titles = ['FOLD WIN', 'SHOWDOWN', 'SIDE POT'];
-  static const _cueLabels = ['Fold win', 'Showdown', 'Side pot'];
 
   void _onTap(String title) {
     if (!widget.enabled || widget.onAllPathsTapped == null) return;
@@ -97,33 +96,37 @@ class _WinningPathsDemoState extends State<WinningPathsDemo> {
         ],
       ],
     );
-    final cue = Container(
-      width: expandTeach ? double.infinity : null,
-      padding: EdgeInsets.symmetric(
-        horizontal: expandTeach ? 18 : 14,
-        vertical: expandTeach ? 14 : 8,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.feltDark.withValues(alpha: 0.65),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.gold.withValues(alpha: 0.45),
-        ),
-      ),
-      child: Text(
-        widget.interactive
-            ? (next == null
-                ? 'Fold win · Showdown · Side pot'
-                : 'Tap ${_cueLabels[next]}')
-            : 'Folds, showdown, or side pots decide it',
-        textAlign: TextAlign.center,
-        style: GoogleFonts.manrope(
-          color: AppColors.gold,
-          fontSize: expandTeach ? 16 : 12,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-    );
+    // SoftPulse + Rex own the next-path cue while teaching. Show a summary
+    // after all taps (or once locked under Nice! / Continue).
+    final showCue = !widget.interactive || next == null || !widget.enabled;
+    final cue =
+        !showCue
+            ? null
+            : Container(
+              width: expandTeach ? double.infinity : null,
+              padding: EdgeInsets.symmetric(
+                horizontal: expandTeach ? 18 : 14,
+                vertical: expandTeach ? 14 : 8,
+              ),
+              decoration: BoxDecoration(
+                color: AppColors.feltDark.withValues(alpha: 0.65),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: AppColors.gold.withValues(alpha: 0.45),
+                ),
+              ),
+              child: Text(
+                widget.interactive
+                    ? 'Fold win · Showdown · Side pot'
+                    : 'Folds, showdown, or side pots decide it',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.manrope(
+                  color: AppColors.gold,
+                  fontSize: expandTeach ? 16 : 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            );
     final body = Column(
       mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
       mainAxisAlignment:
@@ -154,8 +157,10 @@ class _WinningPathsDemoState extends State<WinningPathsDemo> {
               ),
             )
             : pathLanes,
-        if (!expandTeach) const SizedBox(height: 12),
-        cue,
+        if (cue != null) ...[
+          if (!expandTeach) const SizedBox(height: 12),
+          cue,
+        ],
       ],
     );
     final child = Container(

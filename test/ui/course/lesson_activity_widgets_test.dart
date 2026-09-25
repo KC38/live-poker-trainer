@@ -1026,8 +1026,8 @@ void main() {
       ),
     );
     expect(find.byType(WinningPathsDemo), findsOneWidget);
-    // Sequential SoftPulse cue — one next path at a time.
-    expect(find.text('Tap Fold win'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no Tap Fold win footer mid-teach.
+    expect(find.text('Tap Fold win'), findsNothing);
     expect(find.text('Tap Fold win, Showdown, and Side pot'), findsNothing);
     expect(find.text('Tap Fold win, Showdown, and Side pot.'), findsNothing);
     final teachHeight = tester
@@ -1044,10 +1044,10 @@ void main() {
     );
     await tester.tap(find.text('FOLD WIN'));
     await tester.pump();
-    expect(find.text('Tap Showdown'), findsOneWidget);
+    expect(find.text('Tap Showdown'), findsNothing);
     await tester.tap(find.text('SHOWDOWN'));
     await tester.pump();
-    expect(find.text('Tap Side pot'), findsOneWidget);
+    expect(find.text('Tap Side pot'), findsNothing);
     await tester.tap(find.text('SIDE POT'));
     await tester.pump();
     expect(feltAck, 1);
@@ -1091,8 +1091,8 @@ void main() {
         ),
       ),
     );
-    // In-felt sequential SoftPulse cue; outer bulk _TapHint suppressed.
-    expect(find.text('Tap Fold win'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no Tap Fold win footer mid-teach.
+    expect(find.text('Tap Fold win'), findsNothing);
     expect(find.text('Tap Fold win, Showdown, and Side pot'), findsNothing);
     expect(find.text('Tap Fold win, Showdown, and Side pot.'), findsNothing);
     controller.finishSubmit(
@@ -1120,7 +1120,7 @@ void main() {
     expect(find.text('Tap Fold win'), findsNothing);
     expect(find.text('Tap Fold win, Showdown, and Side pot'), findsNothing);
     expect(
-      find.text('Folds, showdown, or side pots decide it'),
+      find.text('Fold win · Showdown · Side pot'),
       findsOneWidget,
     );
     controller.dispose();
