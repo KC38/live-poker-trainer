@@ -19427,8 +19427,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Opens wide, barrels often — tap LAG.'),
+      find.text('Opens wide, barrels often — pick the label.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Opens wide, barrels often — tap LAG.'),
+      findsNothing,
     );
     await tester.tap(find.text('LAG'));
     await tester.pump();
@@ -19465,8 +19469,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('LAG vs Station — tap Pressure vs passive.'),
+      find.text('LAG vs Station — pick the difference.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('LAG vs Station — tap Pressure vs passive.'),
+      findsNothing,
     );
     await tester.tap(find.text('Pressure vs passive'));
     await tester.pump();
@@ -19501,8 +19509,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Wide opens, keeps barreling — tap LAG.'),
+      find.text('Wide opens, keeps barreling — pick the label.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Wide opens, keeps barreling — tap LAG.'),
+      findsNothing,
     );
     await tester.tap(find.text('LAG'));
     await tester.pump();
@@ -19539,8 +19551,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Beside LAG label — tap Sample limits.'),
+      find.text('Beside LAG label — pick what to show.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Beside LAG label — tap Sample limits.'),
+      findsNothing,
     );
     await tester.tap(find.text('Sample limits'));
     await tester.pump();

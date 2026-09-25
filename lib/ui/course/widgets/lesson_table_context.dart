@@ -12248,6 +12248,8 @@ class LessonTableContext extends StatelessWidget {
       semanticsStatic: 'LAG vs TAG outcomes',
       caption: scene.caption ??
           'Opens wide · barrels often · folds some raises',
+      // SoftPulse + Rex own the cue — don’t gold-tip LAG.
+      guideRegion: LessonTableRegion.meetLagLabel,
       phases: [
         (
           region: LessonTableRegion.meetLagLabel,
@@ -12255,7 +12257,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Wide + pressure',
           visual: const Icon(
             Icons.local_fire_department_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12279,6 +12281,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive LAG vs Station — tap pressure vs passive or same exploit',
       semanticsStatic: 'LAG difference outcomes',
       caption: scene.caption ?? 'LAG versus Calling Station?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Pressure vs passive.
+      guideRegion: LessonTableRegion.meetLagPressureDiff,
       phases: [
         (
           region: LessonTableRegion.meetLagPressureDiff,
@@ -12286,7 +12290,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Different exploits',
           visual: const Icon(
             Icons.compare_arrows,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12296,7 +12300,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Wrong',
           visual: const Icon(
             Icons.merge_type,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12310,6 +12314,7 @@ class LessonTableContext extends StatelessWidget {
       semanticsStatic: 'LAG vs Nit outcomes',
       caption: scene.caption ??
           'Wide opens · 3-bets light · keeps barreling',
+      // No SoftPulse on unguided — still don’t gold-icon LAG.
       phases: [
         (
           region: LessonTableRegion.meetLagLabel2,
@@ -12317,7 +12322,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Wide + barrels',
           visual: const Icon(
             Icons.local_fire_department_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12327,7 +12332,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Opposite',
           visual: const Icon(
             Icons.lock_outlined,
-            color: AppColors.danger,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -12341,6 +12346,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive label limits — tap sample limits or destiny',
       semanticsStatic: 'LAG limits outcomes',
       caption: scene.caption ?? 'Show beside the LAG label',
+      // SoftPulse + Rex own the cue — don’t gold-tip Sample limits.
+      guideRegion: LessonTableRegion.meetLagSampleLimits,
       phases: [
         (
           region: LessonTableRegion.meetLagSampleLimits,
@@ -12348,7 +12355,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Always',
           visual: const Icon(
             Icons.science_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
