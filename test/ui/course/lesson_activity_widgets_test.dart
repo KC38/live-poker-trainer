@@ -9295,26 +9295,9 @@ await tester.tap(find.text('STRONGER'));
     );
     expect(
       resolveSelectIdentifyPresentation(activity),
-      SelectIdentifyPresentation.tableRegionTap,
+      SelectIdentifyPresentation.outsCleanAcesTap,
     );
-    expect(isTableRegionTapActivity(activity), isTrue);
-    expect(
-      resolveLessonTableScene(activity)?.layout,
-      LessonTableLayout.outsGuidedCountOutcomes,
-    );
-    expect(resolveLessonTableScene(activity)?.heroCodes, ['Ah', 'Qh']);
-    expect(
-      resolveLessonTableScene(activity)?.boardCodes,
-      ['Kc', '8h', '2d'],
-    );
-    expect(
-      mapTableRegionToChoiceId(
-        activityId: activity.id,
-        region: LessonTableRegion.outsCleanAces,
-        choices: activity.choices,
-      ),
-      'outs-3',
-    );
+    expect(isTableRegionTapActivity(activity), isFalse);
 
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
@@ -9336,13 +9319,50 @@ await tester.tap(find.text('STRONGER'));
       ),
       findsNothing,
     );
-    expect(find.text('Remaining aces'), findsOneWidget);
-    expect(find.text('Clean outs'), findsOneWidget);
-    // SoftPulse + Rex own the cue — no Tap footer mid-teach.
-    expect(find.text('Tap the remaining aces.'), findsNothing);
-    await tester.tap(find.text('Remaining aces'));
+    // Teach-by-doing: SoftPulse individual ace cards — not MCQ titles.
+    expect(find.text('Remaining aces'), findsNothing);
+    expect(find.text('Aces + queens'), findsNothing);
+    expect(find.text('Tap every remaining ace'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('outs-ace-As')));
+    await tester.pump();
+    expect(controller.draft.choiceId, isNull);
+    await tester.tap(find.byKey(const ValueKey('outs-ace-Ad')));
+    await tester.pump();
+    expect(controller.draft.choiceId, isNull);
+    await tester.tap(find.byKey(const ValueKey('outs-ace-Ac')));
     await tester.pump();
     expect(controller.draft.choiceId, 'outs-3');
+    controller.dispose();
+  });
+
+  testWidgets('s3 outs guided dirty queen submits outs-6', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-03-03-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Three remaining aces are the clean outs.',
+      acceptedGrades: const [SoftGrade.recommended],
+      choices: const [
+        CourseChoice(id: 'outs-3', label: 'About 3 — the aces'),
+        CourseChoice(id: 'outs-6', label: '6 — aces and queens'),
+        CourseChoice(id: 'outs-0', label: '0 — never improve'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    await tester.tap(find.byKey(const ValueKey('outs-ace-Qs')));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'outs-6');
     controller.dispose();
   });
 

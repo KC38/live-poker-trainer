@@ -71,6 +71,9 @@ enum SelectIdentifyPresentation {
 
   /// Tap five of seven cards that play in the made hand.
   bestFiveCardTap,
+
+  /// Tap each remaining clean-ace out card (outs guided).
+  outsCleanAcesTap,
 }
 
 /// Detects the best interactive presentation for [activity].
@@ -183,8 +186,8 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-03-03-01-guided') {
-    // Outs: tap remaining-aces / dirty / none on densified felt.
-    return SelectIdentifyPresentation.tableRegionTap;
+    // Outs: SoftPulse each remaining ace card — not a text MCQ strip.
+    return SelectIdentifyPresentation.outsCleanAcesTap;
   }
   if (activity.id == 'act-03-03-01-scaffolded') {
     // Outs: tap chips to call on the felt.

@@ -5198,7 +5198,6 @@ bool isTableRegionTapActivity(CourseActivity activity) {
       activity.id == 'act-03-02-01-scaffolded' ||
       activity.id == 'act-03-02-01-unguided' ||
       activity.id == 'act-03-02-01-checkpoint' ||
-      activity.id == 'act-03-03-01-guided' ||
       activity.id == 'act-03-03-01-scaffolded' ||
       activity.id == 'act-03-03-01-unguided' ||
       activity.id == 'act-03-03-01-checkpoint' ||
