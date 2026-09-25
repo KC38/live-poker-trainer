@@ -5549,7 +5549,8 @@ class _VsStationDemoState extends State<VsStationDemo> {
               : MainAxisAlignment.start,
       children: [
         Text(
-          'Versus Calling Stations',
+          // Structural label — Rex owns versus-station teach in the dock.
+          'Three station plans',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: expandTeach ? 15 : 12,
@@ -6053,7 +6054,8 @@ class _VsNitsDemoState extends State<VsNitsDemo> {
               : MainAxisAlignment.start,
       children: [
         Text(
-          'Versus Nits',
+          // Structural label — Rex owns versus-nit teach in the dock.
+          'Three nit plans',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: expandTeach ? 15 : 12,
@@ -6219,7 +6221,8 @@ class _ExtremeEntryDemoState extends State<ExtremeEntryDemo> {
               : MainAxisAlignment.start,
       children: [
         Text(
-          'Extreme entry',
+          // Structural label — Rex owns maniac entry teach in the dock.
+          'Three aggressor marks',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: expandTeach ? 15 : 12,
@@ -6551,7 +6554,8 @@ class _VsManiacsDemoState extends State<VsManiacsDemo> {
               : MainAxisAlignment.start,
       children: [
         Text(
-          'Versus Maniacs',
+          // Structural label — Rex owns versus-maniac teach in the dock.
+          'Three maniac plans',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: expandTeach ? 15 : 12,
@@ -6717,7 +6721,8 @@ class _VsTagsDemoState extends State<VsTagsDemo> {
               : MainAxisAlignment.start,
       children: [
         Text(
-          'Versus TAGs',
+          // Structural label — Rex owns versus-TAG teach in the dock.
+          'Three TAG plans',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: expandTeach ? 15 : 12,
@@ -6883,7 +6888,8 @@ class _VsLagsDemoState extends State<VsLagsDemo> {
               : MainAxisAlignment.start,
       children: [
         Text(
-          'Versus LAGs',
+          // Structural label — Rex owns versus-LAG teach in the dock.
+          'Three LAG plans',
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: expandTeach ? 15 : 12,
