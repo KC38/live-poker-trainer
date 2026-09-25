@@ -5721,7 +5721,7 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Tap STUCK next'), findsNothing);
     expect(find.text('Tap Stuck, Tilted, and Gears.'), findsNothing);
     expect(find.text('Tap Stuck, Tilted, and Gears'), findsNothing);
-    expect(find.text('Update when the table shifts'), findsNothing);
+    expect(find.text('Stuck · tilted · gears'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
     expect(isTableRegionTapActivity(activity), isTrue);
     final teachHeight =
@@ -5746,7 +5746,7 @@ await tester.tap(find.text('NIT'));
     await tester.pump();
     expect(feltAck, 1);
     // Lock clears enabled / ack — densified shell must stay filled.
-    expect(find.text('Update when the table shifts'), findsOneWidget);
+    expect(find.text('Stuck · tilted · gears'), findsOneWidget);
     expect(
       tester.getSize(find.byType(TablesChangeDemo)).height,
       moreOrLessEquals(teachHeight, epsilon: 1),
