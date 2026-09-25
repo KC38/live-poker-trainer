@@ -4535,7 +4535,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(MultiwayNutsDemo), findsOneWidget);
-    expect(find.text('Tap NUTTED next'), findsOneWidget);
+    expect(find.text('Tap NUTTED next'), findsNothing);
     expect(find.text('Tap Nutted, Air, and Domination.'), findsNothing);
     expect(find.text('Tap Nutted, Air, and Domination'), findsNothing);
     expect(
@@ -4558,10 +4558,10 @@ await tester.tap(find.text('NIT'));
 
     await tester.tap(find.text('NUTTED'));
     await tester.pump();
-    expect(find.text('Tap AIR next'), findsOneWidget);
+    expect(find.text('Tap AIR next'), findsNothing);
     await tester.tap(find.text('AIR'));
     await tester.pump();
-    expect(find.text('Tap DOMINATION next'), findsOneWidget);
+    expect(find.text('Tap DOMINATION next'), findsNothing);
     await tester.tap(find.text('DOMINATION'));
     await tester.pump();
     expect(feltAck, 1);
@@ -5613,7 +5613,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(MultiwayPlanDemo), findsOneWidget);
-    expect(find.text('Tap STRONGER next'), findsOneWidget);
+    expect(find.text('Tap STRONGER next'), findsNothing);
     expect(find.text('Tap Stronger, Fewer, and Nuts.'), findsNothing);
     expect(find.text('Tap Stronger, Fewer, and Nuts'), findsNothing);
     expect(
@@ -5636,10 +5636,10 @@ await tester.tap(find.text('NIT'));
 
 await tester.tap(find.text('STRONGER'));
     await tester.pump();
-    expect(find.text('Tap FEWER next'), findsOneWidget);
+    expect(find.text('Tap FEWER next'), findsNothing);
     await tester.tap(find.text('FEWER'));
     await tester.pump();
-    expect(find.text('Tap NUTS next'), findsOneWidget);
+    expect(find.text('Tap NUTS next'), findsNothing);
     await tester.tap(find.text('NUTS'));
     await tester.pump();
     expect(feltAck, 1);
