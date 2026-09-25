@@ -628,8 +628,8 @@ void main() {
       ),
     );
     expect(find.byType(PassiveActionsDemo), findsOneWidget);
-    // Sequential SoftPulse cue — one next action at a time.
-    expect(find.text('Tap Fold'), findsOneWidget);
+    // SoftPulse + Rex own the cue — no Tap Fold footer mid-teach.
+    expect(find.text('Tap Fold'), findsNothing);
     expect(find.text('Tap Fold, Check, and Call'), findsNothing);
     expect(find.text('Tap Fold, Check, and Call.'), findsNothing);
     expect(
@@ -650,10 +650,10 @@ void main() {
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(feltAck, 0);
-    expect(find.text('Tap Check'), findsOneWidget);
+    expect(find.text('Tap Check'), findsNothing);
     await tester.tap(find.text('CHECK'));
     await tester.pump();
-    expect(find.text('Tap Call'), findsOneWidget);
+    expect(find.text('Tap Call'), findsNothing);
     await tester.tap(find.text('CALL'));
     await tester.pump();
     expect(feltAck, 1);
