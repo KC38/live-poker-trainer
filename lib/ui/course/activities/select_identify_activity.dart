@@ -371,13 +371,13 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-02-02-01-checkpoint-trash' =>
           'Early seat with junk — weak trash rarely belongs in the open.',
       'act-02-05-01-guided-convert' =>
-          '200 chips at 1/2 — tap the stack in big blinds.',
+          '200 chips at 1/2 — divide chips by the big blind.',
       'act-02-05-01-checkpoint-200' =>
-          '1000 chips at 2/5 — tap the buy-in in big blinds.',
+          '1000 chips at 2/5 — buy-in counted in big blinds.',
       'act-02-05-01-scaffolded-eff' =>
-          'You 150bb, villain 60bb — tap the effective stack.',
+          'You 150bb, villain 60bb — the shorter stack caps the matchup.',
       'act-02-05-01-unguided-depth' =>
-          'Tap the depth that plays closest to a shove game.',
+          'Pick the depth that plays closest to a shove game.',
       // SoftPulse owns 21 chips — don’t gold-tip the tile.
       'act-03-01-01-guided' =>
           'Blinds plus three 6s — add every contribution into the pot.',
