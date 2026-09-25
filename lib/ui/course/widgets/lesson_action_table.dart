@@ -588,10 +588,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Qc', 'Ts', '3h', '2d', '7c'],
         potLabel: 'Pot 28',
         villainLine: 'Sticky caller · checked to you',
+        // Structural — Rex + SoftPulse own thin-value teaching.
         streetLabel: 'River · second pair',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Stations call thin value',
+        feltStatusLine: 'Sticky caller · checked to you',
       );
     case 'act-04-06-03-scaffolded':
       return const LessonActionSpot(
@@ -599,10 +600,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Kc', '2s', '2d', '9c', '3d'],
         potLabel: 'Pot 24',
         villainLine: 'Same sticky seat · brick river',
+        // Structural — don’t tip Give up on the felt.
         streetLabel: 'River · missed draw',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'No fold equity vs stations',
+        feltStatusLine: 'Same sticky seat · brick river',
       );
     case 'act-04-06-03-unguided':
       return const LessonActionSpot(
@@ -610,10 +612,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Qc', 'Ts', '3h', '2d', '7c'],
         potLabel: 'Pot 28',
         villainLine: 'Unknown · no samples yet',
+        // Structural — don’t tip Keep it cautious on the felt.
         streetLabel: 'River · second pair',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'No sticky read — stay cautious',
+        feltStatusLine: 'Unknown · no samples yet',
       );
     case 'act-04-07-03-guided':
       return const LessonActionSpot(

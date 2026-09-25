@@ -14148,13 +14148,129 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Sticky seat, second pair river — tap Bet thin value.'),
+      find.text('Sticky seat · second pair river — extract vs wide calls.'),
       findsOneWidget,
     );
+    expect(
+      find.text('Sticky seat, second pair river — tap Bet thin value.'),
+      findsNothing,
+    );
+    // SoftPulse owns the cue — gold felt spoiler stays hidden.
+    expect(find.text('Stations call thin value'), findsNothing);
     expect(find.text('BET THIN VALUE'), findsOneWidget);
+    final dock =
+        tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'thin-val');
     await tester.tap(find.text('BET THIN VALUE'));
     await tester.pump();
     expect(controller.draft.choiceId, 'thin-val');
+    controller.dispose();
+  });
+
+  testWidgets('s4 adjust station scaffolded docks Give up on river felt', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-06-03-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Give up bluffs versus stations.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Missed draw versus the same sticky seat. River brick. Action?',
+      choices: const [
+        CourseChoice(id: 'give-up', label: 'Give up', action: 'CHECK'),
+        CourseChoice(
+          id: 'bluff-station',
+          label: 'Bluff large anyway',
+          action: 'BET',
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Missed draw · same station — no fold equity on air.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Missed draw vs the same station — tap Give up.'),
+      findsNothing,
+    );
+    expect(find.text('No fold equity vs stations'), findsNothing);
+    expect(find.text('GIVE UP'), findsOneWidget);
+    final dock =
+        tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, 'give-up');
+    await tester.tap(find.text('GIVE UP'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'give-up');
+    controller.dispose();
+  });
+
+  testWidgets('s4 adjust station unguided docks cautious without SoftPulse', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-04-06-03-unguided',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Baseline is more cautious without the station read.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Same second pair. Unknown opponent with no sample. Action?',
+      choices: const [
+        CourseChoice(
+          id: 'baseline-check',
+          label: 'Keep it cautious',
+          action: 'CHECK',
+        ),
+        CourseChoice(
+          id: 'auto-thin',
+          label: 'Always thin-value strangers',
+          action: 'BET',
+        ),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        PokerActionSizingActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Same hand · unknown seat — tap cautious or thin-value.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Same hand, unknown seat — tap Keep it cautious.'),
+      findsNothing,
+    );
+    expect(find.text('Unknown · no samples yet'), findsWidgets);
+    expect(find.text('No sticky read — stay cautious'), findsNothing);
+    expect(find.text('KEEP IT CAUTIOUS'), findsOneWidget);
+    final dock =
+        tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, isNull);
+    await tester.tap(find.text('KEEP IT CAUTIOUS'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'baseline-check');
     controller.dispose();
   });
 

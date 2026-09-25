@@ -258,6 +258,9 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     'act-04-04-01-guided' => 'half',
     'act-04-04-01-scaffolded' => 'big',
     'act-04-05-01-scaffolded' => 'commit',
+    // Adjust vs Station: SoftPulse the plan; Rex names the model, not the dock.
+    'act-04-06-03-guided' => 'thin-val',
+    'act-04-06-03-scaffolded' => 'give-up',
     'act-06-09-01-scaffolded' => 'small',
     // Mix-five: SoftPulse the plan; Rex names the model, not the dock label.
     'act-06-13-01-guided' => 'cs',
@@ -365,12 +368,14 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Second pair multiway at SPR 20 — tap Keep pot small.',
     'act-04-05-01-checkpoint' =>
       'About to put the rest in — tap Weigh SPR first.',
+    // SoftPulse owns the dock — don’t gold-tip Bet thin value / Give up.
     'act-04-06-03-guided' =>
-      'Sticky seat, second pair river — tap Bet thin value.',
+      'Sticky seat · second pair river — extract vs wide calls.',
     'act-04-06-03-scaffolded' =>
-      'Missed draw vs the same station — tap Give up.',
+      'Missed draw · same station — no fold equity on air.',
+    // Unguided: list legal lines; don’t tip Keep it cautious alone.
     'act-04-06-03-unguided' =>
-      'Same hand, unknown seat — tap Keep it cautious.',
+      'Same hand · unknown seat — tap cautious or thin-value.',
     'act-04-07-03-guided' =>
       'Nit in the BB — tap Open / steal with K9o.',
     'act-04-07-03-scaffolded' =>
