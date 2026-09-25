@@ -19717,8 +19717,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Same cards · LAG barrels — tap Call or Fold.'),
+      find.text(
+        'Same cards · LAG barrels — defend vs wide pressure; pick Call or Fold.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Same cards · LAG barrels — tap Call or Fold.'),
+      findsNothing,
     );
     expect(
       find.text('Same hand · LAG barrels — tap Call.'),
