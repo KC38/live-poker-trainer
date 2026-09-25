@@ -13721,18 +13721,28 @@ class LessonTableContext extends StatelessWidget {
           'Interactive five-type final — tap Station value or Station bluff',
       semanticsStatic: 'Five-type final Calling Station outcomes',
       caption: scene.caption ?? 'Sticky calls three streets. Label + exploit?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Station value.
+      guideRegion: LessonTableRegion.fiveTypeCsValue,
       phases: [
         (
           region: LessonTableRegion.fiveTypeCsValue,
           title: 'Station value',
           detail: 'Thicker · fewer bluffs',
-          visual: const Icon(Icons.savings_outlined, color: AppColors.gold, size: 24),
+          visual: const Icon(
+            Icons.savings_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
         ),
         (
           region: LessonTableRegion.fiveTypeCsBluff,
           title: 'Station bluff',
           detail: 'Wrong exploit',
-          visual: const Icon(Icons.warning_amber_outlined, color: AppColors.danger, size: 24),
+          visual: const Icon(
+            Icons.warning_amber_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
         ),
       ],
     );
@@ -13744,18 +13754,28 @@ class LessonTableContext extends StatelessWidget {
           'Interactive five-type final — tap Nit respect or Nit call light',
       semanticsStatic: 'Five-type final Nit outcomes',
       caption: scene.caption ?? 'Tiny range, huge check-raise. Label + line?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Nit respect.
+      guideRegion: LessonTableRegion.fiveTypeNitRespect,
       phases: [
         (
           region: LessonTableRegion.fiveTypeNitRespect,
           title: 'Nit respect',
           detail: 'Steal elsewhere',
-          visual: const Icon(Icons.shield_outlined, color: AppColors.gold, size: 24),
+          visual: const Icon(
+            Icons.shield_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
         ),
         (
           region: LessonTableRegion.fiveTypeNitCallLight,
           title: 'Nit call light',
           detail: 'Wrong vs heat',
-          visual: const Icon(Icons.call_received, color: AppColors.danger, size: 24),
+          visual: const Icon(
+            Icons.call_received,
+            color: AppColors.slate,
+            size: 24,
+          ),
         ),
       ],
     );
@@ -13767,18 +13787,28 @@ class LessonTableContext extends StatelessWidget {
           'Interactive five-type final — tap Maniac catch or Maniac fold all',
       semanticsStatic: 'Five-type final Maniac outcomes',
       caption: scene.caption ?? 'Endless barrels, never folds. Label + line?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Maniac catch.
+      guideRegion: LessonTableRegion.fiveTypeManiacCatch,
       phases: [
         (
           region: LessonTableRegion.fiveTypeManiacCatch,
           title: 'Maniac catch',
           detail: 'Widen · no ego',
-          visual: const Icon(Icons.sports_handball, color: AppColors.gold, size: 24),
+          visual: const Icon(
+            Icons.sports_handball,
+            color: AppColors.slate,
+            size: 24,
+          ),
         ),
         (
           region: LessonTableRegion.fiveTypeManiacFoldAll,
           title: 'Maniac fold all',
           detail: 'Too tight',
-          visual: const Icon(Icons.block, color: AppColors.slate, size: 24),
+          visual: const Icon(
+            Icons.block,
+            color: AppColors.slate,
+            size: 24,
+          ),
         ),
       ],
     );
@@ -13792,18 +13822,28 @@ class LessonTableContext extends StatelessWidget {
       caption:
           scene.caption ??
           'Selective entry, disciplined barrels. Label + vs raise?',
+      // SoftPulse + Rex own the cue — don’t gold-tip TAG respect.
+      guideRegion: LessonTableRegion.fiveTypeTagRespect,
       phases: [
         (
           region: LessonTableRegion.fiveTypeTagRespect,
           title: 'TAG respect',
           detail: 'Steal less vs nits',
-          visual: const Icon(Icons.precision_manufacturing_outlined, color: AppColors.gold, size: 24),
+          visual: const Icon(
+            Icons.precision_manufacturing_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
         ),
         (
           region: LessonTableRegion.fiveTypeTagBluffXr,
           title: 'TAG bluff XR',
           detail: 'Light vs heat',
-          visual: const Icon(Icons.flash_on, color: AppColors.danger, size: 24),
+          visual: const Icon(
+            Icons.flash_on,
+            color: AppColors.slate,
+            size: 24,
+          ),
         ),
       ],
     );
@@ -13817,18 +13857,28 @@ class LessonTableContext extends StatelessWidget {
       caption:
           scene.caption ??
           'Wide entry, sustained pressure, some folds. Label + line?',
+      // SoftPulse + Rex own the cue — don’t gold-tip LAG trap.
+      guideRegion: LessonTableRegion.fiveTypeLagTrap,
       phases: [
         (
           region: LessonTableRegion.fiveTypeLagTrap,
           title: 'LAG trap',
           detail: 'Call wider · fancy less',
-          visual: const Icon(Icons.psychology_outlined, color: AppColors.gold, size: 24),
+          visual: const Icon(
+            Icons.psychology_outlined,
+            color: AppColors.slate,
+            size: 24,
+          ),
         ),
         (
           region: LessonTableRegion.fiveTypeLagBluffMore,
           title: 'LAG bluff more',
           detail: 'Into pressure',
-          visual: const Icon(Icons.trending_up, color: AppColors.danger, size: 24),
+          visual: const Icon(
+            Icons.trending_up,
+            color: AppColors.slate,
+            size: 24,
+          ),
         ),
       ],
     );
@@ -13840,18 +13890,28 @@ class LessonTableContext extends StatelessWidget {
           'Interactive five-type final — tap Low certainty or Max certainty',
       semanticsStatic: 'Five-type final uncertain outcomes',
       caption: scene.caption ?? 'Three mixed samples only. Confidence?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Low certainty.
+      guideRegion: LessonTableRegion.fiveTypeLowCertainty,
       phases: [
         (
           region: LessonTableRegion.fiveTypeLowCertainty,
           title: 'Low certainty',
           detail: 'Lean baseline',
-          visual: const Icon(Icons.hourglass_bottom, color: AppColors.gold, size: 24),
+          visual: const Icon(
+            Icons.hourglass_bottom,
+            color: AppColors.slate,
+            size: 24,
+          ),
         ),
         (
           region: LessonTableRegion.fiveTypeMaxCertainty,
           title: 'Max certainty',
           detail: 'Too early',
-          visual: const Icon(Icons.verified, color: AppColors.slate, size: 24),
+          visual: const Icon(
+            Icons.verified,
+            color: AppColors.slate,
+            size: 24,
+          ),
         ),
       ],
     );
@@ -13865,18 +13925,28 @@ class LessonTableContext extends StatelessWidget {
       caption:
           scene.caption ??
           'Old Calling Station now folds rivers and 3-bets light. Do?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Retire model.
+      guideRegion: LessonTableRegion.fiveTypeRetire,
       phases: [
         (
           region: LessonTableRegion.fiveTypeRetire,
           title: 'Retire model',
           detail: 'Update on evidence',
-          visual: const Icon(Icons.update, color: AppColors.gold, size: 24),
+          visual: const Icon(
+            Icons.update,
+            color: AppColors.slate,
+            size: 24,
+          ),
         ),
         (
           region: LessonTableRegion.fiveTypeFreeze,
           title: 'Freeze label',
           detail: 'Ignore flips',
-          visual: const Icon(Icons.lock_outline, color: AppColors.danger, size: 24),
+          visual: const Icon(
+            Icons.lock_outline,
+            color: AppColors.slate,
+            size: 24,
+          ),
         ),
       ],
     );

@@ -24357,7 +24357,7 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Sticky calls — tap Station value.'), findsOneWidget);
+    expect(find.text('Sticky calls — pick the label + exploit.'), findsOneWidget);
     await tester.tap(find.text('Station value'));
     await tester.pump();
     expect(controller.draft.choiceId, 'cs');
@@ -24396,7 +24396,7 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Tiny range heat — tap Nit respect.'), findsOneWidget);
+    expect(find.text('Tiny range heat — pick the label + line.'), findsOneWidget);
     await tester.tap(find.text('Nit respect'));
     await tester.pump();
     expect(controller.draft.choiceId, 'nit');
@@ -24437,7 +24437,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Endless barrels — tap Maniac catch.'),
+      find.text('Endless barrels — pick the label + line.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Maniac catch'));
@@ -24478,7 +24478,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Selective barrels — tap TAG respect.'),
+      find.text('Selective barrels — pick the label + line.'),
       findsOneWidget,
     );
     await tester.tap(find.text('TAG respect'));
@@ -24518,7 +24518,7 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Wide pressure — tap LAG trap.'), findsOneWidget);
+    expect(find.text('Wide pressure — pick the label + line.'), findsOneWidget);
     await tester.tap(find.text('LAG trap'));
     await tester.pump();
     expect(controller.draft.choiceId, 'lag');
@@ -24559,7 +24559,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Three mixed samples — tap Low certainty.'),
+      find.text('Three mixed samples — pick the confidence.'),
       findsOneWidget,
     );
     await tester.tap(find.text('Low certainty'));
@@ -24602,7 +24602,7 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Label flipped — tap Retire model.'), findsOneWidget);
+    expect(find.text('Label flipped — pick the model update.'), findsOneWidget);
     await tester.tap(find.text('Retire model'));
     await tester.pump();
     expect(controller.draft.choiceId, 'retire');
