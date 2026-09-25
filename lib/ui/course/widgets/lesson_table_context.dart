@@ -2450,7 +2450,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         boardCodes: ['Jh', '8h', '3c'],
         villainSeatCount: 0,
         highlight: LessonTableHighlight.none,
-        caption: 'Flop · nut flush draw',
+        // Structural — Rex owns the nut-heart SoftPulse cue (no “draw” spoiler).
+        caption: 'Flop · your holes',
       );
     case 'act-03-02-01-unguided':
       return const LessonTableScene(
@@ -2468,7 +2469,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         boardCodes: ['Ts', '9s', '4d'],
         villainSeatCount: 0,
         highlight: LessonTableHighlight.none,
-        caption: 'Flop · open-ender',
+        // Structural — Rex owns the open-ender SoftPulse cue.
+        caption: 'Flop · your holes',
       );
     case 'act-03-03-01-guided':
       return const LessonTableScene(
@@ -8077,17 +8079,18 @@ class LessonTableContext extends StatelessWidget {
           'Interactive flop class — tap Made, Draw, or Air',
       semanticsStatic: 'Flop class guided outcomes',
       caption: scene.caption ?? 'Flop · your holes',
-      // SoftPulse + Rex own the cue — no Tap footer.
+      // SoftPulse + Rex own the cue — no hand-name / gold tip spoilers.
       cueLabel: '',
       guideRegion: LessonTableRegion.flopClassMade,
       phases: [
         (
           region: LessonTableRegion.flopClassMade,
           title: 'Made',
-          detail: 'Top pair',
+          // Structural — not “Top pair” answering the class for the learner.
+          detail: 'Strong now',
           visual: const Icon(
             Icons.workspace_premium_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -8104,7 +8107,7 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.flopClassAir,
           title: 'Air',
-          detail: 'No equity',
+          detail: 'Empty',
           visual: const Icon(
             Icons.air,
             color: AppColors.slate,
@@ -8120,18 +8123,18 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive:
           'Interactive flop class — tap Draw, Made, or showdown value',
       semanticsStatic: 'Flop class scaffolded outcomes',
-      caption: scene.caption ?? 'Flop · nut flush draw',
-      // SoftPulse + Rex own the cue — no Tap footer.
+      caption: scene.caption ?? 'Flop · your holes',
+      // SoftPulse + Rex own the cue — no “Nut flush” / gold tip spoilers.
       cueLabel: '',
       guideRegion: LessonTableRegion.flopClassNfd,
       phases: [
         (
           region: LessonTableRegion.flopClassNfd,
           title: 'Draw',
-          detail: 'Nut flush',
+          detail: 'Needs runout',
           visual: const Icon(
             Icons.waterfall_chart,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -8148,7 +8151,7 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.flopClassSdv,
           title: 'SDV',
-          detail: 'Ace-high now',
+          detail: 'Weak now',
           visual: const Icon(
             Icons.balance,
             color: AppColors.slate,
@@ -8166,11 +8169,12 @@ class LessonTableContext extends StatelessWidget {
           'Interactive flop class — tap Air, SDV, or Made',
       semanticsStatic: 'Flop class unguided outcomes',
       caption: scene.caption ?? 'Flop · multiway',
+      cueLabel: '',
       phases: [
         (
           region: LessonTableRegion.flopClassAirMw,
           title: 'Air',
-          detail: 'Little equity',
+          detail: 'Empty',
           visual: const Icon(
             Icons.air,
             color: AppColors.slate,
@@ -8180,7 +8184,7 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.flopClassSdvMw,
           title: 'SDV',
-          detail: 'Five-high?',
+          detail: 'Weak now',
           visual: const Icon(
             Icons.balance,
             color: AppColors.slate,
@@ -8190,7 +8194,7 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.flopClassMadeMw,
           title: 'Made',
-          detail: 'Paired?',
+          detail: 'Strong now',
           visual: const Icon(
             Icons.workspace_premium_outlined,
             color: AppColors.slate,
@@ -8207,12 +8211,14 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive:
           'Interactive flop class — tap Draw, Made, or Air',
       semanticsStatic: 'Flop class checkpoint outcomes',
-      caption: scene.caption ?? 'Flop · open-ender',
+      caption: scene.caption ?? 'Flop · your holes',
+      cueLabel: '',
       phases: [
         (
           region: LessonTableRegion.flopClassOesd,
           title: 'Draw',
-          detail: 'Open-ender',
+          // Structural — not “Open-ender” answering the class.
+          detail: 'Needs runout',
           visual: const Icon(
             Icons.waterfall_chart,
             color: AppColors.slate,
@@ -8222,7 +8228,7 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.flopClassCpMade,
           title: 'Made',
-          detail: 'Top pair?',
+          detail: 'Strong now',
           visual: const Icon(
             Icons.workspace_premium_outlined,
             color: AppColors.slate,
@@ -8232,7 +8238,7 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.flopClassCpAir,
           title: 'Air',
-          detail: 'No outs?',
+          detail: 'Empty',
           visual: const Icon(
             Icons.air,
             color: AppColors.slate,

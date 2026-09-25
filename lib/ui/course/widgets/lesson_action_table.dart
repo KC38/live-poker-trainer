@@ -3019,7 +3019,8 @@ class FlopLabelDemo extends StatefulWidget {
   static const labels = <({String label, String caption, Color color})>[
     (label: 'MADE', caption: 'Already strong', color: AppColors.gold),
     (label: 'DRAW', caption: 'Need a card', color: AppColors.cream),
-    (label: 'SDV', caption: 'Showdown value', color: AppColors.slate),
+    // Structural — Rex owns “showdown value” (don’t expand SDV on the tile).
+    (label: 'SDV', caption: 'Weak made', color: AppColors.slate),
     (label: 'AIR', caption: 'Nothing yet', color: AppColors.danger),
   ];
 
@@ -3119,7 +3120,8 @@ class _FlopLabelDemoState extends State<FlopLabelDemo> {
                 ),
               ),
               child: Text(
-                'Made · draw · showdown value · air',
+                // Match SoftPulse titles — don’t expand SDV into Rex’s phrase.
+                'Made · draw · SDV · air',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
