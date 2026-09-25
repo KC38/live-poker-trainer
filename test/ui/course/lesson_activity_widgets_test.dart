@@ -4757,7 +4757,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(ThinValueDemo), findsOneWidget);
-    expect(find.text('Tap THIN next'), findsOneWidget);
+    expect(find.text('Tap THIN next'), findsNothing);
     expect(find.text('Tap Thin, Catch, and Barrels.'), findsNothing);
     expect(find.text('Tap Thin, Catch, and Barrels'), findsNothing);
     expect(
@@ -4780,10 +4780,10 @@ await tester.tap(find.text('NIT'));
 
     await tester.tap(find.text('THIN'));
     await tester.pump();
-    expect(find.text('Tap CATCH next'), findsOneWidget);
+    expect(find.text('Tap CATCH next'), findsNothing);
     await tester.tap(find.text('CATCH'));
     await tester.pump();
-    expect(find.text('Tap BARRELS next'), findsOneWidget);
+    expect(find.text('Tap BARRELS next'), findsNothing);
     await tester.tap(find.text('BARRELS'));
     await tester.pump();
     expect(feltAck, 1);
