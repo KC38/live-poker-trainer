@@ -345,10 +345,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['As', 'Kc', '7d', '2h', '3c'],
         potLabel: 'Pot 28',
         villainLine: 'Checked to you',
-        streetLabel: 'River · Brick · Top two',
+        // Structural — Rex owns brick / value SoftPulse cue.
+        streetLabel: 'River · brick',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Brick river — get paid',
+        feltStatusLine: 'Checked to you',
       );
     case 'act-03-06-01-scaffolded':
       // Offsuit non-hearts: hero missed the flush; river paints the story.
@@ -357,10 +358,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['Kh', '7h', '2c', '3d', 'Ah'],
         potLabel: 'Pot 40',
         villainLine: 'Checked to you',
-        streetLabel: 'River · Flush completes · Missed',
+        // Structural — don’t tip Missed / bluff on the felt.
+        streetLabel: 'River · flush completes',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Flush hits — tell that story',
+        feltStatusLine: 'Checked to you',
       );
     case 'act-03-06-01-unguided':
       return const LessonActionSpot(
@@ -368,9 +370,10 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         boardCodes: ['As', '9c', '7d', '2h', '3c'],
         potLabel: 'Pot 50',
         villainLine: 'Jams all-in',
-        streetLabel: 'River · Quiet line · Weak TPTK',
+        // Structural — don’t tip Weak TPTK / fold on the felt.
+        streetLabel: 'River · quiet line',
         facingBet: true,
-        feltStatusLine: 'Huge jam — weak kicker',
+        feltStatusLine: 'Jams all-in',
       );
     case 'act-03-07-01-guided':
       return const LessonActionSpot(
@@ -3753,8 +3756,9 @@ class RiverBinaryDemo extends StatefulWidget {
   static const points = <({String label, String caption, Color color})>[
     (label: 'VALUE', caption: 'Get paid', color: AppColors.gold),
     (label: 'BLUFF', caption: 'Make them fold', color: AppColors.cream),
-    (label: 'CATCH', caption: 'Bluff-catch', color: AppColors.slate),
-    (label: 'FOLD', caption: 'No mystery float', color: AppColors.danger),
+    // Structural — Rex owns “bluff-catch” / “no mystery floats.”
+    (label: 'CATCH', caption: 'Snap off air', color: AppColors.slate),
+    (label: 'FOLD', caption: 'Quit weak', color: AppColors.danger),
   ];
 
   @override
@@ -3853,7 +3857,8 @@ class _RiverBinaryDemoState extends State<RiverBinaryDemo> {
                 ),
               ),
               child: Text(
-                'Value · bluff · bluff-catch · fold',
+                // Match SoftPulse titles — don’t echo Rex’s “bluff-catch.”
+                'Value · bluff · catch · fold',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   color: AppColors.gold,
