@@ -7672,7 +7672,7 @@ await tester.tap(find.text('NIT'));
         activityId: 'act-01-06-01-guided-steps',
         stepId: 'step-01-06-flop',
       )?.feltStatusLine,
-      'Uncontested — stack the chips',
+      'Hand over · blinds folded',
     );
     expect(
       resolveToyHandStepSpot(
@@ -7693,7 +7693,7 @@ await tester.tap(find.text('NIT'));
         activityId: 'act-01-06-01-scaffolded-multi',
         stepId: 'step-01-06-flop-cbet',
       )?.feltStatusLine,
-      'Top pair — bet for value',
+      'Checked to you on A72',
     );
     expect(
       resolveLessonActionSpot(
@@ -8988,6 +8988,63 @@ await tester.tap(find.text('NIT'));
     await tester.tap(find.text('RAISE TO 6'));
     await tester.pump();
     expect(controller.draft.choiceId, 'open-kq');
+    controller.dispose();
+  });
+
+  testWidgets('toy hand SoftPulse-quiet checkpoint end keeps felt structural', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-06-01-checkpoint-finish',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 70,
+      accessibilityText: 'checkpoint',
+      acceptedGrades: const [SoftGrade.recommended],
+      handSteps: const [
+        CourseHandStep(
+          id: 'step-01-06-cp-open',
+          street: 'preflop',
+          prompt: 'Button with KQo. CO folds.',
+          choices: [
+            CourseChoice(id: 'open-kq', label: 'Raise to 6', action: 'RAISE'),
+            CourseChoice(id: 'fold-kq', label: 'Fold', action: 'FOLD'),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-01-06-cp-end',
+          street: 'showdown',
+          prompt: 'Blinds fold. What happened?',
+          choices: [
+            CourseChoice(id: 'take-down', label: 'Win blinds', action: 'CHECK'),
+            CourseChoice(id: 'force-flop', label: 'Force flop', action: 'CALL'),
+          ],
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    controller.setHandStepIndex(1);
+    await tester.pumpWidget(
+      _wrap(
+        AuthoredMultiStepActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(
+      find.text('Blinds folded — what happened to the pot?'),
+      findsOneWidget,
+    );
+    expect(find.text('Hand over · blinds folded'), findsOneWidget);
+    expect(find.text('Uncontested — stack the chips'), findsNothing);
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.pulseChoiceId, isNull);
+    await tester.tap(find.text('WIN BLINDS'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'take-down');
     controller.dispose();
   });
 

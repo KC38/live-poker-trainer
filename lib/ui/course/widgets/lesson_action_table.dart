@@ -1380,7 +1380,8 @@ LessonActionSpot? resolveToyHandStepSpot({
         streetLabel: 'Preflop · Button',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'First in — open the pot',
+        // SoftPulse owns RAISE — felt stays structural under coachOwnsCue.
+        feltStatusLine: 'Folds to you · Button',
       );
     case 'step-01-06-flop':
       return const LessonActionSpot(
@@ -1389,7 +1390,8 @@ LessonActionSpot? resolveToyHandStepSpot({
         villainLine: 'Blinds fold',
         streetLabel: 'Hand over',
         facingBet: false,
-        feltStatusLine: 'Uncontested — stack the chips',
+        // SoftPulse / Rex own take-pot — keep felt structural.
+        feltStatusLine: 'Hand over · blinds folded',
       );
     case 'step-01-06-bb-defend':
       return const LessonActionSpot(
@@ -1409,7 +1411,8 @@ LessonActionSpot? resolveToyHandStepSpot({
         streetLabel: 'Flop · A72 rainbow',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Top pair — bet for value',
+        // SoftPulse owns BET 6 — don’t gold-tip value bet on the felt.
+        feltStatusLine: 'Checked to you on A72',
       );
     case 'step-01-06-cp-open':
       return const LessonActionSpot(
@@ -1419,7 +1422,8 @@ LessonActionSpot? resolveToyHandStepSpot({
         streetLabel: 'Preflop · Button',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'First in — open the pot',
+        // SoftPulse-quiet checkpoint — structural only, no open spoiler.
+        feltStatusLine: 'Folds to you · Button',
       );
     case 'step-01-06-cp-end':
       return const LessonActionSpot(
@@ -1428,7 +1432,8 @@ LessonActionSpot? resolveToyHandStepSpot({
         villainLine: 'Both blinds fold',
         streetLabel: 'Hand over',
         facingBet: false,
-        feltStatusLine: 'Uncontested — stack the chips',
+        // SoftPulse-quiet checkpoint — Rex owns the question; felt stays quiet.
+        feltStatusLine: 'Hand over · blinds folded',
       );
     case 'j-hand-open':
       return const LessonActionSpot(
@@ -1438,7 +1443,7 @@ LessonActionSpot? resolveToyHandStepSpot({
         streetLabel: 'Preflop · Button',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'First in — open the pot',
+        feltStatusLine: 'Folds to you · Button',
       );
     case 'j-hand-end':
       return const LessonActionSpot(
@@ -1447,7 +1452,7 @@ LessonActionSpot? resolveToyHandStepSpot({
         villainLine: 'Blinds fold',
         streetLabel: 'Hand over',
         facingBet: false,
-        feltStatusLine: 'Uncontested — stack the chips',
+        feltStatusLine: 'Hand over · blinds folded',
       );
   }
   return null;
@@ -8993,7 +8998,7 @@ class LessonActionTable extends StatelessWidget {
             );
           }
           if (spot.streetLabel?.toLowerCase().contains('hand over') == true) {
-            return statusLine('Uncontested — stack the chips');
+            return statusLine('Hand over · blinds folded');
           }
           return statusLine('No bet to match', color: AppColors.slate);
         }
