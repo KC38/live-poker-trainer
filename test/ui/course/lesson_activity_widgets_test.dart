@@ -8948,6 +8948,51 @@ await tester.tap(find.text('STRONGER'));
     controller.dispose();
   });
 
+  testWidgets('s2 unguided depth hides shove spoiler captions', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-02-05-01-unguided-depth',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Identify 50bb as shallower than 100 or 200.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Which depth plays closest to a short-stack shove game?',
+      choices: const [
+        CourseChoice(id: 'depth-50', label: '50bb'),
+        CourseChoice(id: 'depth-100', label: '100bb'),
+        CourseChoice(id: 'depth-200', label: '200bb'),
+      ],
+    );
+    expect(
+      resolveLessonTableScene(activity)?.layout,
+      LessonTableLayout.stackDepthOutcomes,
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('Tap the depth that plays closest to a shove game.'),
+      findsOneWidget,
+    );
+    // Felt + tile captions stay structural — no Rex / answer echo.
+    expect(find.text('Which depth plays like a shove game?'), findsNothing);
+    expect(find.text('Shove game'), findsNothing);
+    expect(find.text('Common live depths'), findsOneWidget);
+    expect(find.text('Short'), findsOneWidget);
+    await tester.tap(find.text('50bb'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'depth-50');
+    controller.dispose();
+  });
+
   testWidgets('s3 table-read guided taps 21-chip pot on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-03-01-01-guided',
