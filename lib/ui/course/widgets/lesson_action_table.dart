@@ -7187,11 +7187,12 @@ class ExploitEvidenceDemo extends StatefulWidget {
   final VoidCallback? onAllPointsTapped;
 
   static const points = <({String label, String caption, Color color})>[
-    (label: 'CARDS', caption: 'Same holdings', color: AppColors.gold),
-    (label: 'SEATS', caption: 'Different types', color: AppColors.cream),
+    // Structural — Rex owns “same cards / different seats / evidence.”
+    (label: 'CARDS', caption: 'Equal holdings', color: AppColors.gold),
+    (label: 'SEATS', caption: 'Type differs', color: AppColors.cream),
     (
       label: 'EVIDENCE',
-      caption: 'Exploits need proof',
+      caption: 'Prove before exploit',
       color: AppColors.danger,
     ),
   ];
