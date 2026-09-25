@@ -3148,11 +3148,13 @@ void main() {
     await tester.tap(find.text('POSITION'));
     await tester.pump();
     expect(feltAck, 1);
-    // Lock clears enabled / ack — densified shell must stay filled.
+    // SoftPulse + Rex own the cue — no summary pill echoing Nice! feedback.
     expect(
       find.text('Nine seats · same rules · position still matters'),
-      findsOneWidget,
+      findsNothing,
     );
+    expect(find.text('Still runs the show'), findsNothing);
+    expect(find.text('Seat edge'), findsOneWidget);
     expect(
       tester.getSize(find.byType(FullRingDemo)).height,
       moreOrLessEquals(teachHeight, epsilon: 1),
