@@ -1015,7 +1015,8 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
       );
     case 'act-06-12-03-guided':
       return const LessonActionSpot(
-        heroCodes: ['Jh', 'Td'],
+        // Pair the board 9s — JhTd was ace-high, not second pair.
+        heroCodes: ['Jh', '9d'],
         boardCodes: ['Qc', '9s', '3h', '2d', '7c'],
         potLabel: 'Pot 42',
         villainLine: 'LAG barrels river',

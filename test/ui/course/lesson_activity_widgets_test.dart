@@ -18515,6 +18515,7 @@ await tester.tap(find.text('NIT'));
       ],
     );
     expect(isLessonActionTableActivity(activity), isTrue);
+    expect(resolveLessonActionSpot(activity)?.heroCodes, ['Jh', '9d']);
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
       _wrap(
@@ -18530,10 +18531,6 @@ await tester.tap(find.text('NIT'));
         'LAG barrels river · second pair — widen defense vs pressure.',
       ),
       findsOneWidget,
-    );
-    expect(
-      find.text('LAG barrels river · second pair — tap Call.'),
-      findsNothing,
     );
     expect(find.text('CALL'), findsOneWidget);
     await tester.tap(find.text('CALL'));
