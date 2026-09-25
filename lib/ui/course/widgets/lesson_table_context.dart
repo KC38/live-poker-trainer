@@ -2272,7 +2272,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.cutoff,
         seatCount: 6,
         buttonSeat: 3,
-        caption: 'Six-max · before the button',
+        // Structural — Rex owns “before the button.”
+        caption: 'Six-max · seat map',
       );
     case 'act-02-01-01-checkpoint-edge':
       return const LessonTableScene(
@@ -2304,7 +2305,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         highlight: LessonTableHighlight.cutoff,
         seatCount: 6,
         buttonSeat: 3,
-        caption: 'Six-max · before the button',
+        // Structural — Rex owns “before the button.”
+        caption: 'Six-max · seat map',
       );
     case 'act-02-07-02-jump-family':
       return const LessonTableScene(
@@ -6120,9 +6122,11 @@ class LessonTableContext extends StatelessWidget {
       };
     }
 
-    // Keep densify after the BTN tap while Continue shows — SoftPulse /
-    // selection clear on lock must not collapse the teach shell.
-    final densifyShell = scene.highlight == LessonTableHighlight.button;
+    // Keep densify after the seat tap while Continue shows — SoftPulse /
+    // selection clear on lock must not collapse the teach shell. Jump / CO
+    // unguided also densify (no SoftPulse spoiler — highlight is visual only
+    // when SoftPulse is off).
+    final densifyShell = _interactive;
 
     Widget seatChip(int seat) {
       final role = roleOf(seat);
