@@ -9086,6 +9086,25 @@ await tester.tap(find.text('STRONGER'));
     expect(find.text('Suited ace'), findsOneWidget);
     expect(find.text('Pocket pair'), findsOneWidget);
     expect(find.text('Offsuit trash'), findsOneWidget);
+    // Suited-ace tile uses an example (As9s), not hero Ah5h — no visual spoil.
+    expect(
+      find.byWidgetPredicate(
+        (w) =>
+            w is MiniCard &&
+            w.card.code.toLowerCase() == 'as' &&
+            w.size == MiniCardSize.tiny,
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.byWidgetPredicate(
+        (w) =>
+            w is MiniCard &&
+            w.card.code.toLowerCase() == '5h' &&
+            w.size == MiniCardSize.tiny,
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Suited ace'));
     await tester.pump();
     expect(controller.draft.choiceId, 'j2-sa');

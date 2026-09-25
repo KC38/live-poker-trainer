@@ -7543,7 +7543,8 @@ class LessonTableContext extends StatelessWidget {
           region: LessonTableRegion.jumpFamilySuitedAce,
           title: 'Suited ace',
           detail: 'Ace + suited',
-          visual: miniPair('Ah', '5h'),
+          // Example family — not hero Ah5h (that would spoil the jump).
+          visual: miniPair('As', '9s'),
         ),
         (
           region: LessonTableRegion.jumpFamilyPair,
