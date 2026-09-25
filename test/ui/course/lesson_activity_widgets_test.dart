@@ -5689,7 +5689,7 @@ await tester.tap(find.text('STRONGER'));
         ),
       );
       expect(find.byType(DefendEnoughDemo), findsOneWidget);
-      expect(find.text('Tap DEFEND next'), findsOneWidget);
+      expect(find.text('Tap DEFEND next'), findsNothing);
       expect(find.text('Tap Defend, Bluff, and Enough.'), findsNothing);
       expect(find.text('Tap Defend, Bluff, and Enough'), findsNothing);
       expect(find.text('Defend better hands — skip fake %'), findsNothing);
@@ -5709,10 +5709,10 @@ await tester.tap(find.text('STRONGER'));
 
       await tester.tap(find.text('DEFEND'));
       await tester.pump();
-      expect(find.text('Tap BLUFF next'), findsOneWidget);
+      expect(find.text('Tap BLUFF next'), findsNothing);
       await tester.tap(find.text('BLUFF'));
       await tester.pump();
-      expect(find.text('Tap ENOUGH next'), findsOneWidget);
+      expect(find.text('Tap ENOUGH next'), findsNothing);
       await tester.tap(find.text('ENOUGH'));
       await tester.pump();
       expect(feltAck, 1);
