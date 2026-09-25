@@ -575,7 +575,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           'Delayed c-bet shines after they show flop weakness.',
       // SoftPulse owns Fewer nuts / Capped — don’t gold-tip the tile.
       'act-05-06-01-guided' =>
-          'Bet flop, check turn — range usually loses the nuts.',
+          'Bet flop, check turn — a check-back usually means the story got weaker.',
       // SoftPulse owns Rebuild — don’t gold-tip the tile.
       'act-05-06-01-unguided' =>
           'Best habit — rebuild the story after every action.',
