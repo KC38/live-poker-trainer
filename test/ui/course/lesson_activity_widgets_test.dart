@@ -22695,7 +22695,7 @@ await tester.tap(find.text('STRONGER'));
         ),
       );
       expect(find.byType(LiveWarmupPrepDemo), findsOneWidget);
-      expect(find.text('Tap CHECKLIST next'), findsOneWidget);
+      expect(find.text('Tap CHECKLIST next'), findsNothing);
       expect(
         find.text('Tap Checklist, Defaults, and One hand.'),
         findsNothing,
@@ -22724,10 +22724,10 @@ await tester.tap(find.text('STRONGER'));
 
       await tester.tap(find.text('CHECKLIST'));
       await tester.pump();
-      expect(find.text('Tap DEFAULTS next'), findsOneWidget);
+      expect(find.text('Tap DEFAULTS next'), findsNothing);
       await tester.tap(find.text('DEFAULTS'));
       await tester.pump();
-      expect(find.text('Tap ONE HAND next'), findsOneWidget);
+      expect(find.text('Tap ONE HAND next'), findsNothing);
       await tester.tap(find.text('ONE HAND'));
       await tester.pump();
       expect(feltAck, 1);
