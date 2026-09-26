@@ -1275,8 +1275,9 @@ class _HandCategoryTapActivity extends StatelessWidget {
           'Both cards ten-or-better — high-card broadway strength shows up.',
         'act-02-02-01-unguided-sc' =>
           'Look at your holes — pick the family that fits.',
+        // SoftPulse-quiet: pick the family — don't tip trash as the answer.
         'act-02-02-01-checkpoint-trash' =>
-          'Early seat with junk — weak trash rarely belongs in the open.',
+          'Early seat with junk — pick the family that fits.',
         'act-03-02-01-guided' =>
           'Board pairs your king — your hole king connects for immediate value.',
         'act-03-02-01-scaffolded' =>
