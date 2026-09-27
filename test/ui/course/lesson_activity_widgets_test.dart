@@ -141,12 +141,14 @@ void main() {
       ],
     );
     final controller = LessonActivityController(activity: activity);
+    var feltAck = 0;
     await tester.pumpWidget(
       _wrap(
         CoachDialogueActivity(
           activity: activity,
           controller: controller,
           showGuidance: true,
+          onFeltAcknowledge: () => feltAck += 1,
         ),
       ),
     );
@@ -154,6 +156,9 @@ void main() {
     expect(find.text('Rex'), findsWidgets);
     // The felt has to say what to tap. Rex's sentence is not that instruction.
     expect(find.text('Tap your cards'), findsOneWidget);
+    await tester.tap(find.text('Tap your cards'));
+    await tester.pump();
+    expect(feltAck, 1);
     // Solo hero teach fills tall-phone void (~58% height).
     final teachHeight = tester
         .getSize(find.byKey(const ValueKey('hole-cards-felt')))
@@ -6822,9 +6827,9 @@ await tester.tap(find.text('NIT'));
       ),
     );
 
-    expect(find.text('Nobody else can peek at your holes.'), findsOneWidget);
-    // Felt-first: Rex owns the teach line — no duplicate prompt/footer.
-    expect(find.text('Tap the cards only you can see.'), findsNothing);
+    expect(find.text('Tap the cards only you can see.'), findsOneWidget);
+    // Felt-first: the Rex line is the tap instruction — no second prompt.
+    expect(find.text('Nobody else can peek at your holes.'), findsNothing);
     expect(find.text('Tap the answer on the table.'), findsNothing);
     expect(find.byType(LessonTableContext), findsOneWidget);
     expect(find.byType(MiniCard), findsAtLeastNWidgets(2));
@@ -6872,6 +6877,7 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    expect(find.text('Tap your two cards.'), findsOneWidget);
     expect(find.text('Tap your cards'), findsNothing);
     expect(find.text('Tap your hole cards on the table.'), findsNothing);
     final teachHeight = tester
@@ -6886,7 +6892,86 @@ await tester.tap(find.text('NIT'));
         epsilon: 1,
       ),
     );
+    await tester.tap(find.text('Tap your two cards.'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'choice-hero-holes');
     controller.dispose();
+  });
+
+  testWidgets('first-lesson instructions name the tap and submit it', (
+    tester,
+  ) async {
+    Future<void> expectInstruction({
+      required CourseActivity activity,
+      required String line,
+      required String choiceId,
+    }) async {
+      final controller = LessonActivityController(activity: activity);
+      await tester.pumpWidget(
+        _wrap(
+          SelectIdentifyActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+          ),
+        ),
+      );
+      expect(find.text(line), findsOneWidget);
+      expect(find.textContaining('holes'), findsNothing);
+      await tester.tap(find.text(line));
+      await tester.pump();
+      expect(controller.draft.choiceId, choiceId);
+      controller.dispose();
+    }
+
+    await expectInstruction(
+      activity: CourseActivity(
+        id: 'act-01-01-01-unguided-mix',
+        order: 4,
+        stage: ActivityStage.unguided,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Tap the shared cards.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Tap the community cards.',
+        choices: const [
+          CourseChoice(id: 'choice-flop', label: 'Qs Jh 2c in the middle'),
+          CourseChoice(id: 'choice-hero-again', label: 'Your Ah Kd'),
+          CourseChoice(id: 'choice-muck', label: 'Folded cards in the muck'),
+        ],
+      ),
+      line:
+          'Tap the cards in the middle. The muck is folded cards, and it is not the answer.',
+      choiceId: 'choice-flop',
+    );
+    await expectInstruction(
+      activity: CourseActivity(
+        id: 'act-01-01-01-checkpoint-table',
+        order: 5,
+        stage: ActivityStage.checkpoint,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 45,
+        accessibilityText: 'Tap your private cards.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Tap the cards that are only yours.',
+        choices: const [
+          CourseChoice(
+            id: 'choice-checkpoint-holes',
+            label: 'The two cards at your seat',
+          ),
+          CourseChoice(
+            id: 'choice-checkpoint-board',
+            label: 'Flop plus your two cards',
+          ),
+          CourseChoice(
+            id: 'choice-checkpoint-all',
+            label: 'Every face-up card you can see',
+          ),
+        ],
+      ),
+      line: 'Tap the cards that are only yours.',
+      choiceId: 'choice-checkpoint-holes',
+    );
   });
 
   testWidgets('Button and blinds guided tap selects dealer button on felt', (
