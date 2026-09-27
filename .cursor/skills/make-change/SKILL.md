@@ -10,17 +10,17 @@ description: >-
 
 The primary checkout `~/live-poker-trainer` stays untouched. 
 
-CRITICAL: Do NOT spawn or launch background subagents. Execute all steps sequentially in the current agent session.
+CRITICAL: Do NOT spawn background subagents. Execute all steps sequentially in the current agent session.
 
 ```
 Change progress:
-- [ ] 1. Worktree off origin/main and push remote ref
+- [ ] 1. Worktree off origin/main with tracking branch
 - [ ] 2. Implement, verify, validate
 - [ ] 3. Logical commits
 - [ ] 4. Review the diff
 - [ ] 5. Tests cover the change
-- [ ] 6. Push, open PR, merge to main
-- [ ] 7. Delete branch and worktree; sync primary
+- [ ] 6. Push, open PR, squash merge (keep remote branch alive)
+- [ ] 7. Dismantle worktree, sync primary main, delete branches
 - [ ] 8. Deploy Cloud Functions
 - [ ] 9. Refresh simulators if any are running
 ```
@@ -33,13 +33,15 @@ From `~/live-poker-trainer`:
 
 Determine the branch name: `feature/<slug>` or `fix/<slug>`. `<slug>` must be kebab-case (or Jira issue key like `feature/PROJ-123`).
 
-Clean up any stale references, create the worktree, and immediately push an empty commit to `origin` so Cursor's internal branch monitors do not throw ref errors:
+Ensure the primary checkout is cleanly on `main`, clean up any stale worktree/branch refs, create the worktree, and immediately push an empty commit so Cursor's internal workspace monitors do not fail:
 
 ```bash
 BRANCH="feature/<slug>"  # or fix/<slug>
 SLUG="<slug>"
 WT="$HOME/live-poker-trainer/.worktrees/$SLUG"
 
+cd ~/live-poker-trainer
+git checkout main 2>/dev/null || true
 git fetch origin main
 git worktree prune
 git branch -D "$BRANCH" 2>/dev/null || true
@@ -47,9 +49,9 @@ git push origin --delete "$BRANCH" 2>/dev/null || true
 
 git worktree add -b "$BRANCH" ".worktrees/$SLUG" origin/main
 
-# Immediately push upstream ref to avoid Cursor agent-root fetch errors
+# Immediately push upstream ref so remote ref checks pass
 cd "$WT"
-git commit --allow-empty -m "chore: start $BRANCH"
+git commit --allow-empty -m "chore: initialize $BRANCH"
 git push -u origin "$BRANCH"
 cd ~/live-poker-trainer
 ```
@@ -66,7 +68,7 @@ Copy untracked Firebase config files into the worktree:
 
 Keep the diff scoped to the request. Run targeted checks (`dart analyze`, relevant tests). Note: If `flutter pub get` encounters a lock conflict from another process, wait 5 seconds and retry.
 
-Simulator validation must show the worktree, not `origin/main`. Do not call `simulator-refresh` until after the merge.
+Simulator validation must show the worktree, not `origin/main`. Do not call `simulator-refresh` until after step 7.
 
 Use only the agent iPhone 17 Pro (`F1AE4938-D9BE-4EA1-8C98-58555A0DE62A`). Leave the user iPhone 17 (`20ACECD5-FBEE-4663-9044-E11D5F0A26FC`) alone.
 
@@ -125,14 +127,17 @@ gh pr create --title "<concise title>" --body "$(cat <<'EOF'
 - [ ] <how to verify>
 EOF
 )"
-gh pr merge --squash --delete-branch
+
+# DO NOT use --delete-branch here. Deleting the remote ref before leaving
+# the worktree causes Cursor's background ref fetcher to crash the session.
+gh pr merge --squash
 ```
 
 Never force-push `main`. If `gh` fails, stop and report.
 
 ### 7. Delete the branch and worktree, then sync primary
 
-Clean up the tmux session and log artifacts, force-remove the worktree (to bypass untracked Firebase/build artifacts), force-delete the local branch, and sync `~/live-poker-trainer`:
+Stop the tmux session, return to `~/live-poker-trainer`, force-remove the worktree directory, sync `origin/main`, and only then delete the remote and local branches:
 
 ```bash
 cd ~/live-poker-trainer
@@ -140,10 +145,18 @@ cd ~/live-poker-trainer
 tmux kill-session -t "flutter-pro-$SLUG" 2>/dev/null || true
 rm -f "/tmp/flutter-$SLUG.pid" "/tmp/flutter-$SLUG.log"
 
+# Force-remove worktree directory before deleting refs
 git worktree remove --force ".worktrees/$SLUG"
+
+# Verify primary is on main and sync latest commits
+git checkout main
+git fetch origin main
+git pull --ff-only origin main
+
+# Delete remote and local branches safely after exiting the worktree
+git push origin --delete "$BRANCH" 2>/dev/null || true
 git branch -D "$BRANCH" 2>/dev/null || true
 git fetch --prune
-git pull --ff-only origin main
 ```
 
 `git pull` only when the primary tree is clean and on `main`. If it is dirty or diverged, stop and report. Do not reset, stash, or discard those changes.
