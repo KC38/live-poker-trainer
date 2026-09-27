@@ -21,6 +21,7 @@ class LessonFeedbackSheet extends StatefulWidget {
     required this.onContinue,
     this.onRetry,
     this.betterChoiceLabel,
+    this.seatLabel,
     this.showActions = true,
   });
 
@@ -34,6 +35,10 @@ class LessonFeedbackSheet extends StatefulWidget {
   final VoidCallback onContinue;
   final VoidCallback? onRetry;
   final String? betterChoiceLabel;
+
+  /// Distinct opponent seat the learner tapped, named in miss feedback.
+  final String? seatLabel;
+
   final bool showActions;
 
   @override
@@ -46,11 +51,21 @@ class _LessonFeedbackSheetState extends State<LessonFeedbackSheet>
 
   Color get _accent {
     return switch (widget.result.grade) {
-      SoftGrade.recommended || SoftGrade.strong || SoftGrade.reasonable =>
-        AppColors.success,
+      SoftGrade.recommended ||
+      SoftGrade.strong ||
+      SoftGrade.reasonable => AppColors.success,
       SoftGrade.questionable => AppColors.warning,
       SoftGrade.clearMistake => AppColors.danger,
     };
+  }
+
+  String get _feedbackText {
+    final seat = widget.seatLabel?.trim();
+    final feedback = widget.result.feedback;
+    if (seat == null || seat.isEmpty || feedback.contains(seat)) {
+      return feedback;
+    }
+    return '$feedback That was $seat.';
   }
 
   String get _title {
@@ -115,10 +130,7 @@ class _LessonFeedbackSheetState extends State<LessonFeedbackSheet>
       child: AnimatedBuilder(
         animation: _shake,
         builder: (context, child) {
-          return Transform.translate(
-            offset: Offset(_shakeX, 0),
-            child: child,
-          );
+          return Transform.translate(offset: Offset(_shakeX, 0), child: child);
         },
         child: TweenAnimationBuilder<double>(
           tween: Tween<double>(begin: 0, end: 1),
@@ -178,7 +190,7 @@ class _LessonFeedbackSheetState extends State<LessonFeedbackSheet>
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  widget.result.feedback,
+                  _feedbackText,
                   style: GoogleFonts.manrope(
                     color: AppColors.cream,
                     fontSize: 15,

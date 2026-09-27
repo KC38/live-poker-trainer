@@ -150,18 +150,22 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
     final resetForAuthGate = destination == AppRootDestination.auth;
     _logRootScreen(analytics, _screenName(destination));
 
-    // Remount when entering saveProgress. Onboarding used to replace `/` with
-    // the lesson runner, so updating `home` alone could not surface
-    // SaveProgressScreen and LessonResult CONTINUE no-op'd on popUntil(isFirst).
-    // Do not key on every destination — loading → guestCourse must keep the
-    // shared guest navigator so an in-progress first lesson survives.
+    // Remount when the guest stack must be dropped. Updating `home` alone
+    // leaves pushed routes (Meet Rex, the first lesson) on the old navigator.
+    // `-course` stays put from Your start through the lesson so anonymous
+    // sign-in and flag reloads do not dispose an in-progress runner.
+    // `-save` / `-home` are new navigators so Save progress and Home are not
+    // covered by that lesson. Do not key on loading → guestCourse.
     final identity = rootNavigatorKeyFor(
       uid: session?.uid,
       anonymous: session?.isAnonymous == true,
       resetForAuthGate: resetForAuthGate,
     );
-    final remountToken =
-        destination == AppRootDestination.saveProgress ? '-save' : '';
+    final remountToken = rootStackToken(
+      destination: destination,
+      onboarding: onboarding,
+      anonymous: session?.isAnonymous == true,
+    );
     // Identity and navigator key must change together. A new [ValueKey] with
     // the previous [GlobalKey] reparents the old lesson stack instead of
     // showing [SaveProgressScreen].

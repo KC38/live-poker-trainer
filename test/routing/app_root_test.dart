@@ -244,4 +244,81 @@ void main() {
       AppRootDestination.welcome,
     );
   });
+
+  test('save progress is the root before anonymous sign-in lands', () {
+    expect(
+      resolveAppRoot(
+        signedIn: false,
+        anonymous: false,
+        flagsReady: true,
+        flags: enabled,
+        onboarding: const OnboardingDraft(pendingSaveProgress: true),
+      ),
+      AppRootDestination.saveProgress,
+    );
+  });
+
+  test('guest stack token drops welcome routes without restoring them', () {
+    const welcome = OnboardingDraft();
+    const start = OnboardingDraft(step: OnboardingStep.recommendedStart);
+    const lesson = OnboardingDraft(step: OnboardingStep.firstLesson);
+    const save = OnboardingDraft(
+      step: OnboardingStep.saveProgress,
+      pendingSaveProgress: true,
+      firstLessonCompleted: true,
+    );
+    const home = OnboardingDraft(
+      step: OnboardingStep.done,
+      firstLessonCompleted: true,
+    );
+
+    expect(
+      rootStackToken(
+        destination: AppRootDestination.welcome,
+        onboarding: welcome,
+        anonymous: false,
+      ),
+      '',
+    );
+    expect(
+      rootStackToken(
+        destination: AppRootDestination.guestCourse,
+        onboarding: start,
+        anonymous: false,
+      ),
+      '-course',
+    );
+    expect(
+      rootStackToken(
+        destination: AppRootDestination.guestCourse,
+        onboarding: lesson,
+        anonymous: true,
+      ),
+      '-course',
+    );
+    expect(
+      rootStackToken(
+        destination: AppRootDestination.saveProgress,
+        onboarding: save,
+        anonymous: true,
+      ),
+      '-save',
+    );
+    expect(
+      rootStackToken(
+        destination: AppRootDestination.shell,
+        onboarding: home,
+        anonymous: true,
+      ),
+      '-home',
+    );
+    expect(
+      rootStackToken(
+        destination: AppRootDestination.shell,
+        onboarding: home,
+        anonymous: false,
+      ),
+      '',
+    );
+  });
 }

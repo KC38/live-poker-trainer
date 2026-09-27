@@ -26,6 +26,8 @@ class WelcomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return _OnboardingScaffold(
+      step: 1,
+      stepCount: 4,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -88,8 +90,11 @@ class ExperienceChoiceScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final selected = ref.watch(onboardingControllerProvider).experienceBand;
     return _OnboardingScaffold(
       title: 'Your experience',
+      step: 2,
+      stepCount: 4,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -115,6 +120,7 @@ class ExperienceChoiceScreen extends ConsumerWidget {
           for (final band in ExperienceBand.values) ...[
             _ChoiceTile(
               label: band.label,
+              selected: selected == band,
               onTap: () async {
                 unawaited(
                   ref
@@ -147,8 +153,13 @@ class DailyGoalScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final selectedMinutes = ref
+        .watch(onboardingControllerProvider)
+        .dailyGoalMinutes;
     return _OnboardingScaffold(
       title: 'Daily goal',
+      step: 3,
+      stepCount: 4,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -174,6 +185,7 @@ class DailyGoalScreen extends ConsumerWidget {
           for (final minutes in kDailyGoalChoices) ...[
             _ChoiceTile(
               label: '$minutes minutes',
+              selected: selectedMinutes == minutes,
               onTap: () async {
                 unawaited(
                   ref
@@ -208,6 +220,8 @@ class RexIntroScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return _OnboardingScaffold(
       title: 'Meet Rex',
+      step: 4,
+      stepCount: 4,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -261,9 +275,9 @@ class RexIntroScreen extends ConsumerWidget {
                     lessonId: recommendation.startLessonId,
                     jumpTestOffered: recommendation.jumpTestOffered,
                   );
-              // AppRoot shows RecommendedStartScreen as home for this step —
-              // do not push a second copy (that stack is disposed on the
-              // welcome → guestCourse home swap).
+              // AppRoot remounts onto RecommendedStartScreen for this step.
+              // Do not push a second copy — the welcome stack is a different
+              // navigator and would cover Your start.
             },
             style: _primaryButton,
             child: const Text('Continue'),
@@ -323,7 +337,8 @@ class RecommendedStartScreen extends ConsumerWidget {
                   Text(
                     recommendation.jumpTestOffered
                         ? 'You asked for Regular. A published jump test is available — it never unlocks content by itself.'
-                        : recommendation.experienceBand == ExperienceBand.regularLive
+                        : recommendation.experienceBand ==
+                              ExperienceBand.regularLive
                         ? 'Regular players will get a jump test when it publishes. For now, start with the first interactive lesson.'
                         : 'A short interactive lesson. Progress is temporary until you create an account.',
                     style: GoogleFonts.manrope(
@@ -335,8 +350,7 @@ class RecommendedStartScreen extends ConsumerWidget {
                   if (!recommendation.jumpTestOffered) ...[
                     const SizedBox(height: 22),
                     const RexCoachLine(
-                      text:
-                          'These two are yours alone. Tap them on the felt next.',
+                      text: 'These two are yours alone. You will tap them in the lesson.',
                     ),
                     const SizedBox(height: 14),
                     const LessonTableContext(
@@ -347,7 +361,9 @@ class RecommendedStartScreen extends ConsumerWidget {
                         highlight: LessonTableHighlight.hero,
                         caption: 'You',
                       ),
-                      showSoftPulse: true,
+                      // Preview only. The felt is not tappable on this screen.
+                      showSoftPulse: false,
+                      showInviteCue: false,
                       enabled: false,
                     ),
                   ],
@@ -361,10 +377,9 @@ class RecommendedStartScreen extends ConsumerWidget {
                 ref
                     .read(analyticsServiceProvider)
                     .logOnboardingStep(
-                      step:
-                          recommendation.jumpTestOffered
-                              ? 'jump_test_offer'
-                              : 'start_lesson',
+                      step: recommendation.jumpTestOffered
+                          ? 'jump_test_offer'
+                          : 'start_lesson',
                     ),
               );
               if (recommendation.jumpTestOffered) {
@@ -385,11 +400,10 @@ class RecommendedStartScreen extends ConsumerWidget {
               // real first route if AppRoot has not remounted yet.
               await Navigator.of(context).push(
                 MaterialPageRoute<void>(
-                  builder:
-                      (_) => LessonRunnerScreen(
-                        lessonId: recommendation.startLessonId,
-                        embeddedInShell: false,
-                      ),
+                  builder: (_) => LessonRunnerScreen(
+                    lessonId: recommendation.startLessonId,
+                    embeddedInShell: false,
+                  ),
                 ),
               );
             },
@@ -416,11 +430,10 @@ class RecommendedStartScreen extends ConsumerWidget {
                 if (!context.mounted) return;
                 await Navigator.of(context).push(
                   MaterialPageRoute<void>(
-                    builder:
-                        (_) => const LessonRunnerScreen(
-                          lessonId: kFirstCourseLessonId,
-                          embeddedInShell: false,
-                        ),
+                    builder: (_) => const LessonRunnerScreen(
+                      lessonId: kFirstCourseLessonId,
+                      embeddedInShell: false,
+                    ),
                   ),
                 );
               },
@@ -487,11 +500,10 @@ class SaveProgressScreen extends ConsumerWidget {
               );
               Navigator.of(context).push(
                 MaterialPageRoute<void>(
-                  builder:
-                      (_) => const AuthScreen(
-                        saveProgressMode: true,
-                        initialRegisterMode: true,
-                      ),
+                  builder: (_) => const AuthScreen(
+                    saveProgressMode: true,
+                    initialRegisterMode: true,
+                  ),
                 ),
               );
             },
@@ -503,11 +515,10 @@ class SaveProgressScreen extends ConsumerWidget {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute<void>(
-                  builder:
-                      (_) => const AuthScreen(
-                        saveProgressMode: true,
-                        initialRegisterMode: false,
-                      ),
+                  builder: (_) => const AuthScreen(
+                    saveProgressMode: true,
+                    initialRegisterMode: false,
+                  ),
                 ),
               );
             },
@@ -531,13 +542,25 @@ class SaveProgressScreen extends ConsumerWidget {
 }
 
 class _OnboardingScaffold extends StatelessWidget {
-  const _OnboardingScaffold({required this.child, this.title});
+  const _OnboardingScaffold({
+    required this.child,
+    this.title,
+    this.step,
+    this.stepCount,
+  });
 
   final Widget child;
   final String? title;
 
+  /// 1-based position in the welcome → Meet Rex sequence.
+  final int? step;
+
+  final int? stepCount;
+
   @override
   Widget build(BuildContext context) {
+    final canBack = Navigator.of(context).canPop();
+    final showStep = step != null && stepCount != null;
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -554,6 +577,32 @@ class _OnboardingScaffold extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                if (canBack || showStep)
+                  Row(
+                    children: [
+                      if (canBack)
+                        IconButton(
+                          tooltip: 'Back',
+                          onPressed: () => Navigator.of(context).pop(),
+                          icon: const Icon(
+                            Icons.arrow_back,
+                            color: AppColors.cream,
+                          ),
+                        )
+                      else
+                        const SizedBox(width: 48),
+                      if (showStep)
+                        Text(
+                          'Step $step of $stepCount',
+                          style: GoogleFonts.manrope(
+                            color: AppColors.slate,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                    ],
+                  ),
+                if (canBack || showStep) const SizedBox(height: 8),
                 if (title != null)
                   Text(
                     title!,
@@ -576,16 +625,27 @@ class _OnboardingScaffold extends StatelessWidget {
 }
 
 class _ChoiceTile extends StatelessWidget {
-  const _ChoiceTile({required this.label, required this.onTap});
+  const _ChoiceTile({
+    required this.label,
+    required this.onTap,
+    this.selected = false,
+  });
 
   final String label;
   final VoidCallback onTap;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: AppColors.bgElevated,
-      borderRadius: BorderRadius.circular(14),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+        side: BorderSide(
+          color: selected ? AppColors.gold : Colors.transparent,
+          width: 1.5,
+        ),
+      ),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(14),

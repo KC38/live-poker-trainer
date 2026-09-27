@@ -9,9 +9,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
+import 'package:live_poker_trainer/models/course/onboarding_models.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/course_catalog_provider.dart';
+import 'package:live_poker_trainer/providers/course_home_provider.dart';
+import 'package:live_poker_trainer/providers/course_progress_provider.dart';
 import 'package:live_poker_trainer/providers/onboarding_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/services/firestore/course_service.dart';
@@ -581,12 +584,26 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       );
       final isAnonymous = ref.read(authServiceProvider).isAnonymous;
       final onboarding = ref.read(onboardingControllerProvider);
+      // Home and Profile read cached course state. Completion does not
+      // invalidate them, so a guest who just finished still saw NEXT on
+      // this lesson. Refresh copies that are already alive; a Home that
+      // mounts after this fetches on first build.
+      ref.invalidate(courseProgressProvider);
+      if (ref.exists(courseHomeProvider)) {
+        unawaited(ref.read(courseHomeProvider.notifier).refresh());
+      }
       // Only the first guest lesson (onboarding / launch, not Home) should
       // flip pendingSaveProgress. Re-entering that path from later map
       // lessons left Continue spinning when AppRoot did not unmount us.
+      // Step is the gate: a stale firstLessonCompleted flag must not skip
+      // the account prompt when this launch is still the onboarding lesson.
+      final onboardingLaunch =
+          onboarding.step == OnboardingStep.firstLesson ||
+          onboarding.step == OnboardingStep.recommendedStart;
       if (isAnonymous &&
           !widget.embeddedInShell &&
-          !onboarding.firstLessonCompleted) {
+          onboarding.step != OnboardingStep.done &&
+          (onboardingLaunch || !onboarding.firstLessonCompleted)) {
         await ref
             .read(onboardingControllerProvider.notifier)
             .markFirstLessonComplete(
@@ -594,11 +611,15 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
               result: complete,
             )
             .timeout(const Duration(seconds: 8));
-        // AppRoot switches home to SaveProgressScreen via pendingSaveProgress.
-        // Wait briefly for that rebuild; if this route is still mounted, fall
-        // through to LessonResultScreen so Continue never spins forever.
+        // AppRoot remounts onto SaveProgressScreen. If this route is still
+        // mounted, the prompt did not replace us — do not open the
+        // lesson-complete screen, whose CONTINUE pops onto a stale Home.
         await Future<void>.delayed(const Duration(milliseconds: 400));
         if (!mounted) return;
+        if (mounted) {
+          setState(() => _completing = false);
+        }
+        return;
       }
       if (!mounted) return;
       await Navigator.of(context).pushReplacement(
@@ -866,6 +887,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                         const SizedBox(height: 10),
                         LessonFeedbackSheet(
                           result: result,
+                          seatLabel:
+                              result.accepted ? null : controller.tappedSeatLabel,
                           betterChoiceLabel: _labelForChoice(
                             activity,
                             result.betterChoiceId,

@@ -14265,7 +14265,12 @@ class LessonTableContext extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 for (var i = 0; i < scene.villainSeatCount; i++)
-                                  const _FaceDownPair(),
+                                  _FaceDownPair(
+                                    label: faceDownSeatLabel(
+                                      index: i,
+                                      count: scene.villainSeatCount,
+                                    ),
+                                  ),
                               ],
                             ),
                           if (board.isNotEmpty)
@@ -14615,10 +14620,13 @@ class LessonTableContext extends StatelessWidget {
               ),
             )
             : null;
+    // After a tap the feedback dock owns the sentence. A disabled preview
+    // (Your start) must not look like a finished tap either.
     final doneCue =
         expandTeach &&
                 !boardTeach &&
-                (selectedRegion == LessonTableRegion.hero || !enabled)
+                enabled &&
+                selectedRegion == LessonTableRegion.hero
             ? Text(
               'Yours alone — nobody else sees them',
               textAlign: TextAlign.center,
@@ -14630,7 +14638,8 @@ class LessonTableContext extends StatelessWidget {
             )
             : expandTeach &&
                 boardTeach &&
-                (selectedRegion == LessonTableRegion.board || !enabled)
+                enabled &&
+                selectedRegion == LessonTableRegion.board
             ? Text(
               'Board plays — everyone chops',
               textAlign: TextAlign.center,
@@ -14741,18 +14750,28 @@ class LessonTableContext extends StatelessWidget {
               else
                 for (var i = 0; i < scene.villainSeatCount; i++)
                   _TappableRegion(
-                    label: 'Them — other seat face-down cards',
-                    selected: selectedRegion == LessonTableRegion.villain,
+                    label:
+                        '${faceDownSeatLabel(index: i, count: scene.villainSeatCount)} — other seat face-down cards',
+                    selected:
+                        selectedRegion == LessonTableRegion.villain &&
+                        (selectedSeatIndex == null || selectedSeatIndex == i),
                     enabled: enabled && _interactive,
                     onTap:
                         _interactive
                             ? () => onRegionTap!(
-                              const LessonTableTapTarget(
+                              LessonTableTapTarget(
                                 LessonTableRegion.villain,
+                                seatIndex: i,
                               ),
                             )
                             : null,
-                    child: _FaceDownPair(densify: expandTeach && !boardTeach),
+                    child: _FaceDownPair(
+                      label: faceDownSeatLabel(
+                        index: i,
+                        count: scene.villainSeatCount,
+                      ),
+                      densify: expandTeach && !boardTeach,
+                    ),
                   ),
               if (scene.showDealerChip)
                 _TappableRegion(
@@ -15469,10 +15488,37 @@ class _EmptySeatMark extends StatelessWidget {
   }
 }
 
+/// Visible name for a face-down opponent seat.
+///
+/// One seat can stay "Them". Several seats need distinct names so a beginner
+/// can tell them apart on the first-lesson checkpoint.
+String faceDownSeatLabel({required int index, required int count}) {
+  if (count <= 1) return 'Them';
+  return 'Opponent ${index + 1}';
+}
+
+/// Seat name to attach to miss feedback, when several opponents share the felt.
+String? seatLabelForTableTap(
+  LessonTableScene? scene,
+  LessonTableTapTarget target,
+) {
+  final index = target.seatIndex;
+  final count = scene?.villainSeatCount ?? 0;
+  if (target.region != LessonTableRegion.villain ||
+      index == null ||
+      count <= 1 ||
+      index < 0 ||
+      index >= count) {
+    return null;
+  }
+  return faceDownSeatLabel(index: index, count: count);
+}
+
 class _FaceDownPair extends StatelessWidget {
-  const _FaceDownPair({this.densify = false});
+  const _FaceDownPair({this.densify = false, this.label = 'Them'});
 
   final bool densify;
+  final String label;
 
   @override
   Widget build(BuildContext context) {
@@ -15480,7 +15526,7 @@ class _FaceDownPair extends StatelessWidget {
     return Column(
       children: [
         Text(
-          'Them',
+          label,
           style: GoogleFonts.manrope(
             color: AppColors.slate,
             fontSize: densify ? 14 : 10,

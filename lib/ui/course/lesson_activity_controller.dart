@@ -56,6 +56,9 @@ class LessonActivityController extends ChangeNotifier {
   String? _pendingIdempotencyKey;
   int _bindGeneration = 0;
 
+  /// Face-down seat the learner just tapped, when seats have distinct labels.
+  String? _tappedSeatLabel;
+
   /// Invoked when an activity selects an answer that should submit immediately
   /// (e.g. tapping a table region — teach-by-doing, no separate Check).
   VoidCallback? onAutoSubmit;
@@ -67,6 +70,9 @@ class LessonActivityController extends ChangeNotifier {
   bool get hintVisible => _hintVisible;
   int get hintRequests => _hintRequests;
   String? get pendingIdempotencyKey => _pendingIdempotencyKey;
+
+  /// Opponent seat label from the last felt tap, if the miss should name it.
+  String? get tappedSeatLabel => _tappedSeatLabel;
 
   /// Bumps when [bindActivity] runs so activity widgets can remount cleanly.
   int get bindGeneration => _bindGeneration;
@@ -86,11 +92,16 @@ class LessonActivityController extends ChangeNotifier {
     _submitting = false;
     _hintVisible = false;
     _pendingIdempotencyKey = null;
+    _tappedSeatLabel = null;
     _bindGeneration += 1;
     notifyListeners();
   }
 
-  void selectChoice(String choiceId, {bool autoSubmit = false}) {
+  void selectChoice(
+    String choiceId, {
+    bool autoSubmit = false,
+    String? seatLabel,
+  }) {
     if (_submitting || _lastResult != null) return;
     // Ignore stale taps from a just-replaced activity (e.g. Continue rebound
     // the controller to scaffolded while a guided SoftPulse onPressed still
@@ -122,6 +133,7 @@ class LessonActivityController extends ChangeNotifier {
       return true;
     }());
     _draft = _draft.copyWith(choiceId: choiceId);
+    _tappedSeatLabel = seatLabel;
     notifyListeners();
     if (autoSubmit) {
       _selectionHaptic();
@@ -154,10 +166,7 @@ class LessonActivityController extends ChangeNotifier {
   }
 
   void setHandStepIndex(int index) {
-    _draft = _draft.copyWith(
-      handStepIndex: index,
-      clearChoice: true,
-    );
+    _draft = _draft.copyWith(handStepIndex: index, clearChoice: true);
     notifyListeners();
   }
 
@@ -220,6 +229,7 @@ class LessonActivityController extends ChangeNotifier {
   void clearFeedbackForRetry() {
     if (_lastResult?.accepted == true) return;
     _lastResult = null;
+    _tappedSeatLabel = null;
     // New attempt at this activity gets a fresh key next submit.
     _pendingIdempotencyKey = null;
     // Drop the missed answer so SoftPulse / felt selection can restore to
