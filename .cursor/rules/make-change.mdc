@@ -10,14 +10,9 @@ Never edit, commit, or switch branches in `~/live-poker-trainer`.
 For a new feature, bug fix, or any other requested code change, follow
 `.cursor/skills/make-change/SKILL.md`:
 
-1. Launch one subagent.
-2. That subagent creates `.worktrees/<slug>` off `origin/main` and does the
-   work there. If `.worktrees` does not exist, create it from the primary
-   checkout. If the repository root `.gitignore` has no `.worktrees/` line,
-   add that line on the feature branch by editing the worktree's root
-   `.gitignore` (the repo's `.gitignore`, not a new file under
-   `.worktrees/`). Commit that with the change. Do not add the line when it
-   is already present.
+1. Launch one subagent with the requested change and that skill.
+2. That subagent creates `.worktrees/<slug>` off `origin/main` on
+   `feature/<slug>` or `fix/<slug>` and runs every step in the skill.
 3. After it finishes, do not resume it.
 
 Do not implement the change in the primary checkout.
