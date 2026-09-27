@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/main.dart';
+import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_flags.dart';
 import 'package:live_poker_trainer/models/course/onboarding_models.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
@@ -299,5 +300,58 @@ void main() {
     expect(find.text('In progress: your two cards'), findsNothing);
     expect(find.text('Start lesson'), findsNothing);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('recommended start drops a pushed Meet Rex route', (
+    tester,
+  ) async {
+    final onboarding = OnboardingController(null);
+    final container = ProviderContainer(
+      overrides: [
+        appAuthProvider.overrideWith(
+          (ref) => const AsyncData(AppAuthSnapshot()),
+        ),
+        userDocProvider.overrideWith((ref) async => null),
+        analyticsServiceProvider.overrideWithValue(
+          AnalyticsService(enabled: false),
+        ),
+        onboardingControllerProvider.overrideWith((ref) => onboarding),
+        courseFlagsRepositoryProvider.overrideWithValue(
+          _GatedFlagsRepository(Completer<void>()),
+        ),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const PokerLabApp(),
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+    expect(find.text('Get started'), findsOneWidget);
+
+    tester
+        .state<NavigatorState>(find.byType(Navigator))
+        .push(
+          MaterialPageRoute<void>(
+            builder: (_) => const Scaffold(body: Text('Meet Rex')),
+          ),
+        );
+    await tester.pumpAndSettle();
+    expect(find.text('Meet Rex'), findsOneWidget);
+
+    await onboarding.setRecommendation(
+      lessonId: kFirstCourseLessonId,
+      jumpTestOffered: false,
+    );
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('Meet Rex'), findsNothing);
+    expect(find.text('Your start'), findsOneWidget);
+    expect(find.text('Start lesson'), findsOneWidget);
   });
 }

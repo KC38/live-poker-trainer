@@ -14,6 +14,7 @@ import 'package:live_poker_trainer/models/live_access.dart';
 import 'package:live_poker_trainer/models/live_hand_model.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
+import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/course_catalog_provider.dart';
 import 'package:live_poker_trainer/providers/course_home_provider.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
@@ -191,6 +192,9 @@ Future<_Harness> _pump(WidgetTester tester) async {
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
+        appAuthProvider.overrideWith(
+          (ref) => const AsyncData(AppAuthSnapshot()),
+        ),
         heroIdentityProvider.overrideWithValue(const HeroIdentity()),
         courseHomeProvider.overrideWith(() => _FixedHome(_snapshot())),
         courseServiceProvider.overrideWithValue(course),

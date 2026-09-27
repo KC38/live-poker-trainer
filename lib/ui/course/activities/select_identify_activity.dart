@@ -1216,7 +1216,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                             _selectedRegion = target.region;
                             _selectedSeatIndex = target.seatIndex;
                           });
-                          widget.controller.selectChoice(mapped, autoSubmit: true);
+                          widget.controller.selectChoice(
+                            mapped,
+                            autoSubmit: true,
+                            seatLabel: seatLabelForTableTap(scene, target),
+                          );
                         },
               ),
             ],
@@ -1773,6 +1777,7 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
                           widget.controller.selectChoice(
                             mapped,
                             autoSubmit: true,
+                            seatLabel: seatLabelForTableTap(scene, target),
                           );
                         }
                         : null,

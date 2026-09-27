@@ -152,9 +152,8 @@ void main() {
     );
     expect(find.byType(MiniCard), findsNWidgets(2));
     expect(find.text('Rex'), findsWidgets);
-    // SoftPulse + Rex own the cue — no Tap your cards gold tip.
-    expect(find.text('Tap your cards'), findsNothing);
-    expect(find.text('Tap your two cards on the felt.'), findsNothing);
+    // The felt has to say what to tap. Rex's sentence is not that instruction.
+    expect(find.text('Tap your cards'), findsOneWidget);
     // Solo hero teach fills tall-phone void (~58% height).
     final teachHeight = tester
         .getSize(find.byKey(const ValueKey('hole-cards-felt')))

@@ -11,6 +11,7 @@ import 'package:live_poker_trainer/models/course/course_home_models.dart';
 import 'package:live_poker_trainer/models/course_table_return.dart';
 import 'package:live_poker_trainer/models/live_access.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
+import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/course_catalog_provider.dart';
 import 'package:live_poker_trainer/providers/course_home_provider.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
@@ -87,6 +88,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             data:
                 (snapshot) => _HomeBody(
                   snapshot: snapshot,
+                  guestSession:
+                      ref.watch(appAuthProvider).asData?.value.isAnonymous ==
+                      true,
                   onRetry:
                       () => ref.read(courseHomeProvider.notifier).refresh(),
                   onNodeTap: (node) => _onNodeTap(snapshot, node),
@@ -247,9 +251,11 @@ class _HomeBody extends StatelessWidget {
     required this.onRetry,
     required this.onNodeTap,
     required this.onResume,
+    required this.guestSession,
   });
 
   final CourseHomeSnapshot snapshot;
+  final bool guestSession;
   final VoidCallback onRetry;
   final void Function(CourseMapNode node) onNodeTap;
   final VoidCallback onResume;
@@ -299,6 +305,17 @@ class _HomeBody extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
+              if (guestSession) ...[
+                const SizedBox(height: 8),
+                Text(
+                  'Guest progress stays on this device until you create an account.',
+                  style: GoogleFonts.manrope(
+                    color: AppColors.slate,
+                    fontSize: 13,
+                    height: 1.35,
+                  ),
+                ),
+              ],
               const SizedBox(height: 16),
               CourseStatusBar(
                 streak: snapshot.streak,
@@ -309,9 +326,11 @@ class _HomeBody extends StatelessWidget {
                 const SizedBox(height: 14),
                 RexCoachCard(
                   line: snapshot.rexLine!,
+                  // The resume card is the one Resume control. Rex still says
+                  // what to do, without a second button for the same lesson.
                   onContinue:
                       snapshot.resume != null
-                          ? onResume
+                          ? null
                           : (snapshot.nextLessonId == null ||
                                   !snapshot.startsEnabled
                               ? null
@@ -320,7 +339,7 @@ class _HomeBody extends StatelessWidget {
                                 if (next == null) return;
                                 onNodeTap(next);
                               }),
-                  continueLabel: snapshot.resume != null ? 'Resume' : 'Start',
+                  continueLabel: 'Start',
                 ),
               ],
               if (snapshot.resume != null && resumeLessonTitle != null) ...[

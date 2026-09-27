@@ -3105,8 +3105,8 @@ class _HoleCardDemo extends StatelessWidget {
         ),
         enabled: enabled,
         showSoftPulse: showSoftPulse,
-        // SoftPulse + Rex own the cue — no Tap your cards footer.
-        showInviteCue: false,
+        // Rex names the cards. The felt still has to say what to tap.
+        showInviteCue: true,
         onRegionTap: onRegionTap,
       );
     }

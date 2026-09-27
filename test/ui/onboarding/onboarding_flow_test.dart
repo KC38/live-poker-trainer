@@ -7,6 +7,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_flags.dart';
 import 'package:live_poker_trainer/models/course/onboarding_models.dart';
+import 'package:live_poker_trainer/providers/analytics_provider.dart';
+import 'package:live_poker_trainer/providers/onboarding_provider.dart';
+import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/ui/screens/onboarding_screens.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,7 +49,9 @@ void main() {
                   'summary': 'Meet',
                   'objectives': ['Introduce'],
                   'prerequisites': [],
-                  'remediationLessonIds': ['lesson-04-01-01-meet-calling-station'],
+                  'remediationLessonIds': [
+                    'lesson-04-01-01-meet-calling-station',
+                  ],
                   'estimatedMinutes': 6,
                   'difficultyBand': 3,
                   'playerTypeRefs': [],
@@ -87,7 +92,9 @@ void main() {
     expect(recommendation.startLessonId, kFirstCourseLessonId);
   });
 
-  testWidgets('welcome offers get started and existing account', (tester) async {
+  testWidgets('welcome offers get started and existing account', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       ProviderScope(
         child: MaterialApp(
@@ -126,6 +133,82 @@ void main() {
     for (final minutes in kDailyGoalChoices) {
       expect(find.text('$minutes minutes'), findsOneWidget);
     }
+  });
+
+  testWidgets('onboarding steps show position and back returns one screen', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          analyticsServiceProvider.overrideWithValue(
+            AnalyticsService(enabled: false),
+          ),
+          onboardingControllerProvider.overrideWith(
+            (ref) => OnboardingController(null),
+          ),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: const WelcomeScreen(),
+        ),
+      ),
+    );
+    expect(find.text('Step 1 of 4'), findsOneWidget);
+    expect(find.byTooltip('Back'), findsNothing);
+
+    await tester.tap(find.text('Get started'));
+    await tester.pumpAndSettle();
+    expect(find.text('Your experience'), findsOneWidget);
+    expect(find.text('Step 2 of 4'), findsOneWidget);
+
+    await tester.tap(find.text('New to poker'));
+    await tester.pumpAndSettle();
+    expect(find.text('Daily goal'), findsOneWidget);
+    expect(find.text('Step 3 of 4'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Back'));
+    await tester.pumpAndSettle();
+    expect(find.text('Your experience'), findsOneWidget);
+    expect(find.text('New to poker'), findsOneWidget);
+
+    await tester.tap(find.text('Know the rules / home games'));
+    await tester.pumpAndSettle();
+    expect(find.text('Daily goal'), findsOneWidget);
+
+    await tester.tap(find.text('10 minutes'));
+    await tester.pumpAndSettle();
+    expect(find.text('Meet Rex'), findsOneWidget);
+    expect(find.text('Step 4 of 4'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Back'));
+    await tester.pumpAndSettle();
+    expect(find.text('Daily goal'), findsOneWidget);
+    expect(find.text('Meet Rex'), findsNothing);
+    expect(find.text('Home'), findsNothing);
+  });
+
+  testWidgets('your start preview does not ask for a tap on this screen', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: const RecommendedStartScreen(
+            recommendation: OnboardingRecommendation(
+              experienceBand: ExperienceBand.neverPlayed,
+              startLessonId: kFirstCourseLessonId,
+              jumpTestOffered: false,
+            ),
+          ),
+        ),
+      ),
+    );
+    expect(find.text('Start lesson'), findsOneWidget);
+    expect(find.text('Tap your cards'), findsNothing);
+    expect(find.textContaining('Tap them'), findsNothing);
+    expect(find.textContaining('in the lesson'), findsOneWidget);
   });
 
   testWidgets('save progress copy warns about temporary guest data', (

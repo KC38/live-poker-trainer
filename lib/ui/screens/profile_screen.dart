@@ -851,12 +851,12 @@ class _Figure extends StatelessWidget {
   const _Figure({
     required this.value,
     required this.label,
-    required this.detail,
+    this.detail,
   });
 
   final String value;
   final String label;
-  final String detail;
+  final String? detail;
 
   @override
   Widget build(BuildContext context) {
@@ -879,10 +879,11 @@ class _Figure extends StatelessWidget {
             color: AppColors.cream,
           ),
         ),
-        Text(
-          detail,
-          style: GoogleFonts.manrope(fontSize: 11, color: AppColors.slate),
-        ),
+        if (detail != null && detail!.isNotEmpty)
+          Text(
+            detail!,
+            style: GoogleFonts.manrope(fontSize: 11, color: AppColors.slate),
+          ),
       ],
     );
   }
@@ -1204,18 +1205,12 @@ class _CourseMetricRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(
-          child: _Figure(value: leftValue, label: leftLabel, detail: 'Course'),
-        ),
+        Expanded(child: _Figure(value: leftValue, label: leftLabel)),
         Container(width: 1, height: 46, color: AppColors.slateDark),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.only(left: 12),
-            child: _Figure(
-              value: rightValue,
-              label: rightLabel,
-              detail: 'Course',
-            ),
+            child: _Figure(value: rightValue, label: rightLabel),
           ),
         ),
       ],

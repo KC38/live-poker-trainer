@@ -5,9 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/models/course/course_session_models.dart';
+import 'package:live_poker_trainer/ui/home/course_resume_card.dart';
 import 'package:live_poker_trainer/models/course/course_flags.dart';
 import 'package:live_poker_trainer/models/course/course_home_models.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
+import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/course_home_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/ui/home/course_path_view.dart';
@@ -80,10 +83,9 @@ CourseHomeSnapshot _readySnapshot({
         unitId: 'unit-1',
         unitTitle: 'Unit One',
         isNext: false,
-        lockReason:
-            second == CourseNodeState.locked
-                ? 'Finish "Lesson A" first.'
-                : null,
+        lockReason: second == CourseNodeState.locked
+            ? 'Finish "Lesson A" first.'
+            : null,
       ),
     ],
   );
@@ -105,6 +107,9 @@ Future<void> _pumpHome(
       overrides: [
         courseHomeProvider.overrideWith(() => _FixedHome(snapshot)),
         analyticsServiceProvider.overrideWithValue(analytics),
+        appAuthProvider.overrideWith(
+          (ref) => const AsyncData(AppAuthSnapshot()),
+        ),
       ],
       child: MaterialApp(
         theme: buildPokerTheme(),
@@ -254,6 +259,37 @@ void main() {
       find.bySemanticsLabel(RegExp(r'Jump test: Lesson B, locked')),
       findsOneWidget,
     );
+  });
+
+  testWidgets('resume shows one Resume control under Rex', (tester) async {
+    final analytics = _RecordingAnalytics();
+    final snapshot = _readySnapshot();
+    await _pumpHome(
+      tester,
+      snapshot: CourseHomeSnapshot(
+        status: snapshot.status,
+        nodes: snapshot.nodes,
+        sections: snapshot.sections,
+        streak: snapshot.streak,
+        lifetimeXp: snapshot.lifetimeXp,
+        acceptedAccuracy: snapshot.acceptedAccuracy,
+        nextLessonId: snapshot.nextLessonId,
+        rexLine: 'Pick up where you left off. The table is still waiting.',
+        resume: const CourseResumePointer(
+          attemptId: 'attempt-1',
+          lessonId: 'lesson-a',
+          activityId: 'act-1',
+          activityIndex: 0,
+        ),
+      ),
+      analytics: analytics,
+    );
+
+    expect(find.byType(CourseResumeCard), findsOneWidget);
+    expect(find.text('Resume'), findsOneWidget);
+    expect(find.text('Lesson A'), findsWidgets);
+    expect(find.widgetWithText(TextButton, 'Resume'), findsNothing);
+    expect(find.widgetWithText(TextButton, 'Start'), findsNothing);
   });
 
   test('enabled flags helper still parses for snapshot mapper', () {

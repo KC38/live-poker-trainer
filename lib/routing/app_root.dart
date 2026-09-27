@@ -42,6 +42,33 @@ String rootNavigatorKeyFor({
   return identity;
 }
 
+/// Extra navigator identity so a home swap actually drops the old stack.
+///
+/// Welcome pushes (experience, daily goal, Meet Rex) share `guest`. Changing
+/// `home` to Your start does not pop that stack, so Meet Rex stayed on screen.
+/// `-course` is a new navigator for Your start and the first lesson, and it
+/// stays stable across anonymous sign-in. `-save` and `-home` are new again so
+/// returning to `guest` cannot restore the lesson over Save progress or Home.
+String rootStackToken({
+  required AppRootDestination destination,
+  required OnboardingDraft onboarding,
+  required bool anonymous,
+}) {
+  if (destination == AppRootDestination.saveProgress ||
+      onboarding.pendingSaveProgress) {
+    return '-save';
+  }
+  if (destination == AppRootDestination.shell && anonymous) {
+    return '-home';
+  }
+  if (destination == AppRootDestination.guestCourse &&
+      (onboarding.step == OnboardingStep.recommendedStart ||
+          onboarding.step == OnboardingStep.firstLesson)) {
+    return '-course';
+  }
+  return '';
+}
+
 /// Guest welcome and anonymous course entry.
 ///
 /// Requires the course kill switch and [CourseFlags.guestCourseEnabled].
@@ -70,6 +97,11 @@ AppRootDestination resolveAppRoot({
   if (!signedIn) {
     if (!flagsReady) return AppRootDestination.loading;
     if (!guestEntry) return AppRootDestination.auth;
+    // The account prompt is the root even before anonymous sign-in lands, so
+    // a finished first lesson cannot fall through to Welcome or Home.
+    if (onboarding.pendingSaveProgress) {
+      return AppRootDestination.saveProgress;
+    }
     // Once the learner leaves the welcome gate, keep the guestCourse root so
     // anonymous sign-in (during the first lesson bootstrap) does not change
     // MaterialApp.home and dispose the in-progress lesson route.
