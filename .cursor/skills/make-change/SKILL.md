@@ -39,15 +39,22 @@ Work only inside the worktree. Do not edit the primary checkout.
 
 From `~/live-poker-trainer`:
 
-If `.worktrees` does not exist, create it. If `.gitignore` has no
-`.worktrees/` entry, add one inside the worktree.
+If `.worktrees` does not exist, create it from the primary checkout.
+
+If the repository root `.gitignore` has no `.worktrees/` line, add that
+line on the feature branch by editing the worktree's root `.gitignore`
+(the repo's `.gitignore`, not a new file under `.worktrees/`). Commit
+that with the change. Do not add the line when it is already present.
 
 ```bash
 git fetch origin main
 mkdir -p .worktrees
 git worktree add -b feature/<slug> .worktrees/<slug> origin/main
-grep -qxF '.worktrees/' .worktrees/<slug>/.gitignore 2>/dev/null \
-  || echo '.worktrees/' >> .worktrees/<slug>/.gitignore
+(
+  cd .worktrees/<slug>
+  grep -qxF '.worktrees/' .gitignore 2>/dev/null \
+    || echo '.worktrees/' >> .gitignore
+)
 ```
 
 Use `fix/<slug>` for a bug fix. `<slug>` is kebab-case. The directory is
