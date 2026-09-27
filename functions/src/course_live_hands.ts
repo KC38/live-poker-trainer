@@ -225,7 +225,7 @@ const LAB_BB_DEFEND: CuratedCourseHand = {
         name: "Riley",
         archetype: "NIT",
         startingStack: 200,
-        holeCards: ["7h", "2c"],
+        holeCards: ["7h", "2s"],
         tendency: generateTendencyProfile("NIT", "lab-bb"),
       },
       {
@@ -328,12 +328,12 @@ const LAB_BTN_VS_CO: CuratedCourseHand = {
         startingStack: 200,
         holeCards: (
           [
-            ["2c", "3d"],
+            ["2h", "3d"],
             ["4c", "5d"],
-            ["6c", "7d"],
+            ["6c", "7h"],
             ["8c", "9d"],
             ["Tc", "2d"],
-            ["Jc", "3h"],
+            ["Jc", "3s"],
             ["As", "Kd"],
             ["4h", "5h"],
           ][seat - 1]
@@ -408,7 +408,7 @@ const LAB_BTN_VS_NIT: CuratedCourseHand = {
         name: "Nit BB",
         archetype: "NIT",
         startingStack: 200,
-        holeCards: ["9s", "4c"],
+        holeCards: ["9d", "4c"],
         tendency: generateTendencyProfile("NIT", "lab-nit-bb"),
       },
       {
@@ -424,7 +424,7 @@ const LAB_BTN_VS_NIT: CuratedCourseHand = {
         name: "Riley",
         archetype: "CALLING_STATION",
         startingStack: 200,
-        holeCards: ["Jh", "3c"],
+        holeCards: ["Jd", "3c"],
         tendency: generateTendencyProfile("CALLING_STATION", "lab-nit"),
       },
       {
@@ -488,7 +488,7 @@ const CALIBRATION_SRP: CuratedCourseHand = {
         name: "Sam",
         archetype: "TAG",
         startingStack: 400,
-        holeCards: ["Kd", "9c"],
+        holeCards: ["Kh", "9c"],
         tendency: generateTendencyProfile("TAG", "cal-srp"),
       },
       {

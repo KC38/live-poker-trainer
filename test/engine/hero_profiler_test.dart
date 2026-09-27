@@ -20,29 +20,27 @@ HandActionSample _hero(
   Street street,
   HandActionKind kind, {
   double amountBb = 0,
-}) =>
-    HandActionSample(
-      seat: _heroSeat,
-      street: street,
-      kind: kind,
-      isHero: true,
-      archetype: PlayerArchetype.hero,
-      amountBb: amountBb,
-    );
+}) => HandActionSample(
+  seat: _heroSeat,
+  street: street,
+  kind: kind,
+  isHero: true,
+  archetype: PlayerArchetype.hero,
+  amountBb: amountBb,
+);
 
 HandActionSample _villain(
   Street street,
   HandActionKind kind, {
   double amountBb = 0,
   PlayerArchetype archetype = PlayerArchetype.tag,
-}) =>
-    HandActionSample(
-      seat: _villainSeat,
-      street: street,
-      kind: kind,
-      archetype: archetype,
-      amountBb: amountBb,
-    );
+}) => HandActionSample(
+  seat: _villainSeat,
+  street: street,
+  kind: kind,
+  archetype: archetype,
+  amountBb: amountBb,
+);
 
 HeroHandSample _hand(
   List<HandActionSample> actions, {
@@ -63,34 +61,39 @@ HeroHandSample _hand(
 
 /// A hand the hero folds preflop without putting money in voluntarily.
 HeroHandSample _foldPreflop() => _hand([
-      _hero(Street.preflop, HandActionKind.blind, amountBb: 0.5),
-      _villain(Street.preflop, HandActionKind.raise, amountBb: 3),
-      _hero(Street.preflop, HandActionKind.fold),
-    ], netBb: -0.5);
+  _hero(Street.preflop, HandActionKind.blind, amountBb: 0.5),
+  _villain(Street.preflop, HandActionKind.raise, amountBb: 3),
+  _hero(Street.preflop, HandActionKind.fold),
+], netBb: -0.5);
 
 /// A hand the hero opens preflop and then c-bets an unraised flop.
 HeroHandSample _openAndCbet({bool cbet = true}) => _hand([
-      _hero(Street.preflop, HandActionKind.raise, amountBb: 3),
-      _villain(Street.preflop, HandActionKind.call, amountBb: 3),
-      _hero(
-        Street.flop,
-        cbet ? HandActionKind.bet : HandActionKind.check,
-        amountBb: cbet ? 4 : 0,
-      ),
-      if (cbet) _villain(Street.flop, HandActionKind.fold),
-    ], netBb: cbet ? 4 : 0);
+  _hero(Street.preflop, HandActionKind.raise, amountBb: 3),
+  _villain(Street.preflop, HandActionKind.call, amountBb: 3),
+  _hero(
+    Street.flop,
+    cbet ? HandActionKind.bet : HandActionKind.check,
+    amountBb: cbet ? 4 : 0,
+  ),
+  if (cbet) _villain(Street.flop, HandActionKind.fold),
+], netBb: cbet ? 4 : 0);
 
 /// A hand the hero limps in and calls down to showdown.
-HeroHandSample _callDownToShowdown({required bool won}) => _hand([
-      _villain(Street.preflop, HandActionKind.raise, amountBb: 3),
-      _hero(Street.preflop, HandActionKind.call, amountBb: 3),
-      _villain(Street.flop, HandActionKind.bet, amountBb: 4),
-      _hero(Street.flop, HandActionKind.call, amountBb: 4),
-      _villain(Street.turn, HandActionKind.bet, amountBb: 8),
-      _hero(Street.turn, HandActionKind.call, amountBb: 8),
-      _villain(Street.river, HandActionKind.check),
-      _hero(Street.river, HandActionKind.check),
-    ], showdown: true, won: won, netBb: won ? 15 : -15);
+HeroHandSample _callDownToShowdown({required bool won}) => _hand(
+  [
+    _villain(Street.preflop, HandActionKind.raise, amountBb: 3),
+    _hero(Street.preflop, HandActionKind.call, amountBb: 3),
+    _villain(Street.flop, HandActionKind.bet, amountBb: 4),
+    _hero(Street.flop, HandActionKind.call, amountBb: 4),
+    _villain(Street.turn, HandActionKind.bet, amountBb: 8),
+    _hero(Street.turn, HandActionKind.call, amountBb: 8),
+    _villain(Street.river, HandActionKind.check),
+    _hero(Street.river, HandActionKind.check),
+  ],
+  showdown: true,
+  won: won,
+  netBb: won ? 15 : -15,
+);
 
 void main() {
   setUp(() => _nextHandId = 1);
@@ -193,8 +196,7 @@ void main() {
   });
 
   group('small samples', () {
-    test('a rate under its minimum is withheld even though it is computed',
-        () {
+    test('a rate under its minimum is withheld even though it is computed', () {
       final metrics = HeroProfiler.compute([
         for (var i = 0; i < 4; i++) _openAndCbet(),
       ]);
@@ -283,8 +285,7 @@ void main() {
       expect(readout.explanation, contains('55'));
     });
 
-    test('loose and aggressive reads as LAG, and wilder still as a maniac',
-        () {
+    test('loose and aggressive reads as LAG, and wilder still as a maniac', () {
       expect(
         classify(hands: 200, vpipPct: 35, pfrPct: 25).style,
         PlayingStyle.lag,
@@ -292,6 +293,13 @@ void main() {
       expect(
         classify(hands: 200, vpipPct: 50, pfrPct: 40).style,
         PlayingStyle.maniac,
+      );
+    });
+
+    test('the middle band stays balanced', () {
+      expect(
+        classify(hands: 200, vpipPct: 26, pfrPct: 13).style,
+        PlayingStyle.balanced,
       );
     });
 
@@ -353,8 +361,7 @@ void main() {
 
     test('the trend only appears once there are enough hands', () {
       final few = HeroProfiler.compute([
-        for (var i = 0; i < HeroProfiler.minTrendHands - 1; i++)
-          _openAndCbet(),
+        for (var i = 0; i < HeroProfiler.minTrendHands - 1; i++) _openAndCbet(),
       ]);
       final many = HeroProfiler.compute([
         for (var i = 0; i < 60; i++) _openAndCbet(),
@@ -388,6 +395,180 @@ void main() {
 
       expect(metrics.handsPlayed, 2);
       expect(metrics.sample(HeroMetricId.vpip).made, 1);
+    });
+  });
+
+  group('street and archetype notes', () {
+    StreetTendency street({
+      Street name = Street.flop,
+      required int decisions,
+      int aggressive = 0,
+      int calls = 0,
+      int folds = 0,
+      int checks = 0,
+    }) {
+      return StreetTendency(
+        street: name,
+        decisions: decisions,
+        aggressive: aggressive,
+        calls: calls,
+        folds: folds,
+        checks: checks,
+      );
+    }
+
+    test('notes stay quiet under the sample gate and on exact boundaries', () {
+      expect(street(decisions: 11, folds: 11).note, isNull);
+      expect(
+        street(decisions: 20, folds: 10, aggressive: 6, calls: 4).note,
+        isNull,
+      );
+      expect(
+        street(decisions: 20, folds: 11, aggressive: 5, calls: 4).note,
+        'over-folding',
+        reason: '11/20 is slightly above 55% in floating point',
+      );
+      expect(street(decisions: 20, folds: 12, calls: 8).note, 'over-folding');
+      expect(street(decisions: 20, calls: 10, checks: 10).note, 'over-calling');
+      expect(
+        street(decisions: 20, aggressive: 3, checks: 17).note,
+        'too passive',
+      );
+      expect(
+        street(decisions: 20, aggressive: 4, checks: 16).note,
+        isNull,
+        reason: '20% aggression is the passive floor',
+      );
+      expect(
+        street(decisions: 20, aggressive: 13, checks: 7).note,
+        isNull,
+        reason: '65% aggression is not yet over-aggressive',
+      );
+      expect(
+        street(decisions: 20, aggressive: 14, checks: 6).note,
+        'over-aggressive',
+      );
+    });
+
+    test('preflop over-folding is a note but not a surfaced leak', () {
+      final preflop = street(
+        name: Street.preflop,
+        decisions: 20,
+        folds: 16,
+        checks: 4,
+      );
+      expect(preflop.note, 'over-folding');
+      expect(
+        HeroProfiler.leaksFor(
+          samples: const <HeroMetricId, MetricSample>{},
+          streets: [preflop],
+          archetypes: const <ArchetypeTendency>[],
+        ),
+        isEmpty,
+      );
+    });
+
+    test('exploit notes follow the archetype that was actually faced', () {
+      ArchetypeTendency vs(
+        PlayerArchetype archetype, {
+        required int decisions,
+        int aggressive = 0,
+        int calls = 0,
+        int folds = 0,
+      }) {
+        return ArchetypeTendency(
+          archetype: archetype,
+          decisions: decisions,
+          aggressive: aggressive,
+          calls: calls,
+          folds: folds,
+          netBb: 0,
+        );
+      }
+
+      expect(
+        vs(PlayerArchetype.callingStation, decisions: 9, aggressive: 9).note,
+        isNull,
+      );
+      expect(
+        vs(PlayerArchetype.callingStation, decisions: 20, aggressive: 12).note,
+        contains('bet value, not bluffs'),
+      );
+      expect(
+        vs(PlayerArchetype.callingStation, decisions: 20, aggressive: 10).note,
+        isNull,
+        reason: '50% aggression is not a bluff leak',
+      );
+      expect(
+        vs(PlayerArchetype.callingStation, decisions: 20, aggressive: 11).note,
+        contains('bet value, not bluffs'),
+        reason: '11/20 is slightly above 55% in floating point',
+      );
+      expect(
+        vs(PlayerArchetype.callingStation, decisions: 25, aggressive: 6).note,
+        contains('Value-bet them thinner'),
+      );
+      expect(
+        vs(PlayerArchetype.nit, decisions: 10, calls: 6, aggressive: 2).note,
+        contains('call a nit down too often'),
+      );
+      expect(
+        vs(PlayerArchetype.nit, decisions: 10, calls: 4, aggressive: 2).note,
+        contains('Attack their checks'),
+      );
+      expect(
+        vs(PlayerArchetype.maniac, decisions: 10, folds: 6).note,
+        contains('fold too much to a maniac'),
+      );
+      expect(
+        vs(PlayerArchetype.maniac, decisions: 10, calls: 6, folds: 2).note,
+        contains('raise your strong hands'),
+      );
+      expect(
+        vs(PlayerArchetype.lag, decisions: 10, folds: 6).note,
+        contains('Defend wider'),
+      );
+      expect(
+        vs(PlayerArchetype.tag, decisions: 10, folds: 6).note,
+        isNull,
+        reason: '60% folds is not yet avoiding the regs',
+      );
+      expect(
+        vs(PlayerArchetype.tag, decisions: 10, folds: 7).note,
+        contains('thin edges'),
+      );
+    });
+  });
+
+  group('snapshot parsing', () {
+    test('unknown style names fall back instead of throwing', () {
+      final metrics = HeroMetrics.fromJson({
+        'handsPlayed': 40,
+        'netBb': 12.5,
+        'showdowns': 3,
+        'style': {
+          'style': 'shark',
+          'confidence': 'certain',
+          'explanation': 'nope',
+          'handsPlayed': 40,
+        },
+        'samples': {
+          'vpip': {'made': 10, 'opportunities': 40},
+        },
+        'leaks': [
+          {'title': 'Limp', 'detail': 'Raise', 'severity': 0.4},
+          'not-a-map',
+        ],
+      });
+
+      expect(metrics.style.style, PlayingStyle.forming);
+      expect(metrics.style.confidence, StyleConfidence.insufficient);
+      expect(metrics.handsPlayed, 40);
+      expect(metrics.netBb, 12.5);
+      expect(metrics.leaks, hasLength(1));
+      expect(metrics.leaks.single.title, 'Limp');
+      expect(metrics.sample(HeroMetricId.vpip).made, 10);
+      expect(metrics.sample(HeroMetricId.pfr).made, 0);
     });
   });
 }
