@@ -1,28 +1,21 @@
 ---
 name: make-change
 description: >-
-  Implement a bug fix or feature in a .worktrees worktree via one subagent,
+  Implement a bug fix or feature in a .worktrees worktree directly,
   then commit, PR, merge, deploy Cloud Functions, and refresh simulators.
   Use when the user asks for a code change. Never edit ~/live-poker-trainer.
 ---
 
 # Make a change
 
-The primary checkout `~/live-poker-trainer` stays untouched. A subagent does
-the work in `.worktrees/<slug>`.
+The primary checkout `~/live-poker-trainer` stays untouched. Perform the entire
+procedure sequentially in the current agent session.
 
-## Parent
-
-Do not edit files, commit, or switch branches in `~/live-poker-trainer`.
-
-Launch one subagent with the requested change and this skill. It creates the
-worktree and runs every step below. When it returns, do not resume it.
-
-## Subagent
+Do not launch background subagents. Do not switch branches in `~/live-poker-trainer`.
 
 ```
 Change progress:
-- [ ] 1. Worktree off origin/main
+- [ ] 1. Worktree off origin/main with remote tracking branch
 - [ ] 2. Implement, verify, validate
 - [ ] 3. Logical commits
 - [ ] 4. Review the diff
@@ -33,28 +26,36 @@ Change progress:
 - [ ] 9. Refresh simulators if any are running
 ```
 
-Work only inside the worktree directory. Do not edit the primary checkout.
+Work only inside the worktree directory `.worktrees/<slug>`. Do not edit the primary checkout.
 
 ### 1. Worktree off origin/main
 
 From `~/live-poker-trainer`:
 
-Determine the branch name: `feature/<slug>` or `fix/<slug>`. `<slug>` must be kebab-case. Clean up any stale branch/worktree with the same name before creating:
+Determine the branch name: `feature/<slug>` or `fix/<slug>`. `<slug>` must be kebab-case. 
+
+Clean up any stale local branches or worktrees, create the new worktree, and push an initial empty commit to `origin` immediately so Cursor's internal workspace monitors do not fail on missing remote refs:
 
 ```bash
 BRANCH="feature/<slug>"  # or fix/<slug>
 SLUG="<slug>"
+WT="$HOME/live-poker-trainer/.worktrees/$SLUG"
 
 git fetch origin main
 git worktree prune
 git branch -D "$BRANCH" 2>/dev/null || true
 git worktree add -b "$BRANCH" ".worktrees/$SLUG" origin/main
+
+# Immediately push the branch ref to remote tracking
+cd "$WT"
+git commit --allow-empty -m "chore: initialize $BRANCH"
+git push -u origin "$BRANCH"
+cd ~/live-poker-trainer
 ```
 
 Copy untracked Firebase config files into the worktree:
 
 ```bash
-WT="$HOME/live-poker-trainer/.worktrees/$SLUG"
 [ -f lib/firebase_options.dart ] && cp lib/firebase_options.dart "$WT/lib/"
 [ -f ios/Runner/GoogleService-Info.plist ] && cp ios/Runner/GoogleService-Info.plist "$WT/ios/Runner/"
 [ -f android/app/google-services.json ] && cp android/app/google-services.json "$WT/android/app/"
@@ -81,7 +82,6 @@ If no session exists for this worktree, boot the simulator and launch Flutter in
 
 ```bash
 PRO=F1AE4938-D9BE-4EA1-8C98-58555A0DE62A
-WT="$HOME/live-poker-trainer/.worktrees/$SLUG"
 SESSION="flutter-pro-$SLUG"
 PID_FILE="/tmp/flutter-$SLUG.pid"
 LOG_FILE="/tmp/flutter-$SLUG.log"
@@ -115,7 +115,7 @@ Add or update tests covering the change. Do not merge without them.
 Inside `$WT`:
 
 ```bash
-git push -u origin HEAD
+git push origin HEAD
 gh pr create --title "<concise title>" --body "$(cat <<'EOF'
 ## Summary
 - <what / why>
