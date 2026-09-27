@@ -14502,6 +14502,37 @@ class LessonTableContext extends StatelessWidget {
     );
   }
 
+  /// Gold instruction under a SoftPulse target. Tapping the words submits
+  /// the same region as tapping the cards.
+  Widget _tapInstruction({
+    required String label,
+    required LessonTableRegion region,
+    required double fontSize,
+  }) {
+    final text = Text(
+      label,
+      textAlign: TextAlign.center,
+      style: GoogleFonts.manrope(
+        color: AppColors.gold,
+        fontSize: fontSize,
+        fontWeight: FontWeight.w700,
+      ),
+    );
+    if (!(enabled && _interactive)) return text;
+    return Semantics(
+      button: true,
+      label: label,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => onRegionTap!(LessonTableTapTarget(region)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: text,
+        ),
+      ),
+    );
+  }
+
   Widget _buildHoleCards(BuildContext context) {
     final hero = scene.heroCodes
         .map(CardModel.fromCode)
@@ -14600,24 +14631,16 @@ class LessonTableContext extends StatelessWidget {
     );
     final inviteCue =
         showInviteCue && pulseHero
-            ? Text(
-              'Tap your cards',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: expandTeach ? 16 : 12,
-                fontWeight: FontWeight.w700,
-              ),
+            ? _tapInstruction(
+              label: 'Tap your cards',
+              region: LessonTableRegion.hero,
+              fontSize: expandTeach ? 16 : 12,
             )
             : showInviteCue && pulseBoard
-            ? Text(
-              'Tap the board',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: expandTeach ? 16 : 12,
-                fontWeight: FontWeight.w700,
-              ),
+            ? _tapInstruction(
+              label: 'Tap the board',
+              region: LessonTableRegion.board,
+              fontSize: expandTeach ? 16 : 12,
             )
             : null;
     // After a tap the feedback dock owns the sentence. A disabled preview

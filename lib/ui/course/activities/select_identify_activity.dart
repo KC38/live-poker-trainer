@@ -288,18 +288,49 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
     }
   }
 
+  /// Region the written instruction names, so tapping that sentence
+  /// answers the same way as tapping the cards.
+  LessonTableRegion? get _instructionRegion => switch (widget.activity.id) {
+    'act-01-01-01-guided-find-holes' ||
+    'act-01-01-01-scaffolded-private' ||
+    'act-01-01-01-checkpoint-table' => LessonTableRegion.hero,
+    'act-01-01-01-unguided-mix' => LessonTableRegion.board,
+    _ => null,
+  };
+
+  void _submitRegion(LessonTableTapTarget target) {
+    final mapped = mapTableRegionToChoiceId(
+      activityId: widget.activity.id,
+      region: target.region,
+      seatIndex: target.seatIndex,
+      choices: widget.activity.choices,
+    );
+    if (mapped == null) return;
+    setState(() {
+      _selectedRegion = target.region;
+      _selectedSeatIndex = target.seatIndex;
+    });
+    widget.controller.selectChoice(
+      mapped,
+      autoSubmit: true,
+      seatLabel: seatLabelForTableTap(
+        resolveLessonTableScene(widget.activity),
+        target,
+      ),
+    );
+  }
+
   String get _coachText {
     final authored = widget.activity.primaryCoachLine?.text;
     if (authored != null) return authored;
     return switch (widget.activity.id) {
-      'act-01-01-01-guided-find-holes' =>
-        'Your private cards are on the felt. Find them.',
+      'act-01-01-01-guided-find-holes' => 'Tap your two cards.',
       'act-01-01-01-scaffolded-private' =>
-        'Nobody else can peek at your holes.',
+        'Tap the cards only you can see.',
       'act-01-01-01-unguided-mix' =>
-        'Everyone shares the cards in the middle.',
+        'Tap the cards in the middle. The muck is folded cards, and it is not the answer.',
       'act-01-01-01-checkpoint-table' =>
-        'Ownership stays split — board is shared.',
+        'Tap the cards that are only yours.',
       'act-01-01-03-guided-button' =>
         'Find the dealer button on the felt.',
       // SoftPulse owns BB — don’t gold-tip the seat.
@@ -1167,10 +1198,26 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             !feltFirstSelect &&
             prompt != null &&
             prompt.isNotEmpty &&            prompt.toLowerCase() != coach.trim().toLowerCase();
+        final instruction = _instructionRegion;
+        final rex = RexCoachLine(text: coach);
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (!locked) RexCoachLine(text: coach),
+            if (!locked)
+              instruction == null
+                  ? rex
+                  : Semantics(
+                    button: true,
+                    label: coach,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap:
+                          () => _submitRegion(
+                            LessonTableTapTarget(instruction),
+                          ),
+                      child: rex,
+                    ),
+                  ),
             if (showPrompt) ...[
               const SizedBox(height: 14),
               Text(
@@ -1201,27 +1248,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                         widget.activity.id == 'act-01-02-02-unguided-board'),
                 showInviteCue: !feltFirstSelect,
                 enabled: !locked,
-                onRegionTap:
-                    locked
-                        ? null
-                        : (target) {
-                          final mapped = mapTableRegionToChoiceId(
-                            activityId: widget.activity.id,
-                            region: target.region,
-                            seatIndex: target.seatIndex,
-                            choices: widget.activity.choices,
-                          );
-                          if (mapped == null) return;
-                          setState(() {
-                            _selectedRegion = target.region;
-                            _selectedSeatIndex = target.seatIndex;
-                          });
-                          widget.controller.selectChoice(
-                            mapped,
-                            autoSubmit: true,
-                            seatLabel: seatLabelForTableTap(scene, target),
-                          );
-                        },
+                onRegionTap: locked ? null : _submitRegion,
               ),
             ],
             if (!locked &&
