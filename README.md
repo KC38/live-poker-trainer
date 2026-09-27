@@ -94,7 +94,7 @@ Secrets and variables → Actions):
   `npx -y firebase-tools@15.30.2 login:ci`
 
 The same variable names work in a Cloud Agent environment secret so local
-`.cursor/skills/ship-change/scripts/deploy-functions.sh` can deploy without
+`.cursor/skills/make-change/scripts/deploy-functions.sh` can deploy without
 a browser login.
 
 Manual deploy (still requires one of those credentials):

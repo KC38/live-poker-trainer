@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-# Deploy Cloud Functions from an up-to-date main checkout.
-# Used by ship-change after merge so production matches origin/main.
+# Deploy Cloud Functions from origin/main.
+# Used by make-change after merge so production matches origin/main.
+# The detached checkout lives in ~/live-poker-trainer/.worktrees and is removed
+# afterward. It does not edit the primary working tree.
 #
 # Non-interactive auth (first match):
 #   FIREBASE_SERVICE_ACCOUNT — JSON for a GCP/Firebase service account
@@ -8,7 +10,7 @@
 #   FIREBASE_TOKEN — from `npx -y firebase-tools@15.30.2 login:ci`
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
+PRIMARY="${PRIMARY:-$HOME/live-poker-trainer}"
 NODE22_BIN="$(brew --prefix node@22 2>/dev/null)/bin"
 if [[ -d "$NODE22_BIN" ]]; then
   export PATH="$NODE22_BIN:$PATH"
@@ -34,17 +36,18 @@ if [[ -z "${GOOGLE_APPLICATION_CREDENTIALS:-}" && -z "${FIREBASE_TOKEN:-}" ]]; t
   exit 1
 fi
 
-WORKTREE="$(mktemp -d /tmp/lpt-deploy-XXXXXX)"
+mkdir -p "$PRIMARY/.worktrees"
+WORKTREE="$PRIMARY/.worktrees/deploy-$$"
 cleanup() {
   if [[ -n "$auth_file" ]]; then
     rm -f "$auth_file"
   fi
-  git -C "$ROOT" worktree remove --force "$WORKTREE" 2>/dev/null || rm -rf "$WORKTREE"
+  git -C "$PRIMARY" worktree remove --force "$WORKTREE" 2>/dev/null || rm -rf "$WORKTREE"
 }
 trap cleanup EXIT
 
-git -C "$ROOT" fetch origin
-git -C "$ROOT" worktree add --detach "$WORKTREE" origin/main
+git -C "$PRIMARY" fetch origin
+git -C "$PRIMARY" worktree add --detach "$WORKTREE" origin/main
 
 # firebase-tools <15 breaks on jose ESM during analysis; predeploy
 # `npm --prefix "$RESOURCE_DIR"` also fails under /bin/sh -c.

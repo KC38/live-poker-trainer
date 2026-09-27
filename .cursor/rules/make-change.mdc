@@ -1,0 +1,18 @@
+---
+description: Code changes go through a subagent worktree under .worktrees, never by editing ~/live-poker-trainer
+alwaysApply: true
+---
+
+# Changes go through a worktree subagent
+
+Never edit, commit, or switch branches in `~/live-poker-trainer`.
+
+For a new feature, bug fix, or any other requested code change, follow
+`.cursor/skills/make-change/SKILL.md`:
+
+1. Launch one subagent.
+2. That subagent creates `.worktrees/<slug>` off `origin/main` and does the
+   work there.
+3. After it finishes, do not resume it.
+
+Do not implement the change in the primary checkout.

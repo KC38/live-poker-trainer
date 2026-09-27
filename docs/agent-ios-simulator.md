@@ -118,10 +118,10 @@ Pid + log (agent convention):
 | `/tmp/flutter-live-poker-trainer.run.log` | Stdout; parse for Dart VM URI |
 | `/tmp/flutter-live-poker-trainer-user.pid` | User iPhone 17 session (do not steal) |
 
-After a ship merges to `main`, prefer:
+After a ship merges to `main`, refresh from `origin/main` in the primary clone (not a worktree):
 
 ```bash
-.cursor/skills/ship-change/scripts/refresh-simulator.sh
+.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh
 ```
 
 Or hot-restart an attached session: send `R` into the `flutter-pro-lessons`
@@ -160,6 +160,6 @@ xcrun simctl io F1AE4938-D9BE-4EA1-8C98-58555A0DE62A screenshot /tmp/pro.png
 
 ## Related
 
-- Dual-sim play loop: [`.cursor/skills/play-test-fix/SKILL.md`](../.cursor/skills/play-test-fix/SKILL.md)
-- Post-merge refresh: [`.cursor/skills/ship-change/simulator-refresh.md`](../.cursor/skills/ship-change/simulator-refresh.md)
-- Ship flow: [`.cursor/skills/ship-change/SKILL.md`](../.cursor/skills/ship-change/SKILL.md)
+- Boot a simulator when none is running: [`.cursor/skills/launch-simulator/SKILL.md`](../.cursor/skills/launch-simulator/SKILL.md)
+- Post-merge refresh: [`.cursor/skills/simulator-refresh/SKILL.md`](../.cursor/skills/simulator-refresh/SKILL.md)
+- Code changes: [`.cursor/skills/make-change/SKILL.md`](../.cursor/skills/make-change/SKILL.md)

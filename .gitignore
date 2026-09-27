@@ -64,3 +64,10 @@ app.*.map.json
 # Python tooling
 __pycache__/
 .venv/
+
+# Agent scratch screenshots live in .cursor/tmp/
+.cursor/tmp-*
+.cursor/tmp/
+
+# Feature worktrees created by the make-change skill
+.worktrees/

@@ -1,0 +1,24 @@
+---
+description: Store agent scratch files in .cursor/tmp and delete them after use
+alwaysApply: true
+---
+
+# Temporary files
+
+Put every agent scratch file in `.cursor/tmp/`. Delete it when the task that needed it is finished.
+
+## Where
+
+- Screenshots, OCR dumps, logs, and other scratch output go in `.cursor/tmp/`.
+- Do not write `tmp-*` files at the top of `.cursor` or elsewhere in the repo.
+- Do not commit anything under `.cursor/tmp/` (it is gitignored).
+
+## After use
+
+- Delete the files you created in `.cursor/tmp/` before ending the task.
+- Leave the folder empty when nothing in it is still needed.
+
+## Examples
+
+- Simulator screenshot: `.cursor/tmp/pro-lesson.png`, then delete it after you have read it.
+- A one-off note: `.cursor/tmp/notes.txt`, then delete it when the note is no longer needed.
