@@ -2,7 +2,47 @@
 library;
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/live_hand_model.dart';
+
+Map<String, dynamic> _seat(
+  int seat, {
+  double streetBet = 0,
+  List<String> holeCards = const [],
+}) {
+  return {
+    'seat': seat,
+    'name': seat == 0 ? 'Hero' : 'Villain $seat',
+    'archetype': seat == 0 ? 'HERO' : 'TAG',
+    'stack': 200,
+    'streetBet': streetBet,
+    'folded': false,
+    'allIn': false,
+    'holeCards': holeCards,
+  };
+}
+
+/// Minimal in-progress payload reused when only a few fields change.
+Map<String, dynamic> playingToJsonStub() {
+  return {
+    'sessionId': 'session',
+    'handId': 'hand',
+    'setupKey': 'setup',
+    'decisionId': 'flop',
+    'stateVersion': 3,
+    'smallBlind': 1,
+    'bigBlind': 2,
+    'street': 'flop',
+    'board': ['Ah', '7d', '2c'],
+    'pot': 30,
+    'buttonSeat': 0,
+    'heroSeat': 0,
+    'actorSeat': 0,
+    'status': 'playing',
+    'winnerSeats': <int>[],
+    'pots': <Map<String, dynamic>>[],
+  };
+}
 
 Map<String, dynamic> _terminalView({
   required List<Map<String, dynamic>> pots,
@@ -34,12 +74,11 @@ Map<String, dynamic> _terminalView({
           'streetBet': 0,
           'folded': false,
           'allIn': true,
-          'holeCards':
-              [
-                ['Ah', 'Ad'],
-                ['Kh', 'Kd'],
-                ['Qh', 'Qd'],
-              ][seat],
+          'holeCards': [
+            ['Ah', 'Ad'],
+            ['Kh', 'Kd'],
+            ['Qh', 'Qd'],
+          ][seat],
         },
     ],
     'legalActions': <Map<String, dynamic>>[],
@@ -92,6 +131,112 @@ void main() {
     expect(game.awardShareFor(0), 250);
     expect(game.awardShareFor(1), 250);
     expect(game.isSplitPot, isTrue);
+  });
+
+  test('odd cents in a split go to the lowest seat', () {
+    final view = LiveHandViewModel.fromJson(
+      _terminalView(
+        winnerSeats: [2, 0],
+        pots: [
+          {
+            'amount': 10.01,
+            'eligibleSeats': [0, 2],
+            'winnerSeats': [2, 0],
+          },
+        ],
+      ),
+    );
+    final game = view.toGameState(handCount: 1);
+
+    expect(game.awardShareFor(0), 5.01);
+    expect(game.awardShareFor(2), 5);
+    expect(game.awardShareFor(1), 0);
+  });
+
+  test('in-progress pots exclude street bets and heads-up button posts the small blind', () {
+    final playing = LiveHandViewModel.fromJson({
+      'sessionId': 'session',
+      'handId': 'hand',
+      'setupKey': 'setup',
+      'decisionId': 'flop',
+      'stateVersion': 3,
+      'smallBlind': 1,
+      'bigBlind': 2,
+      'street': 'flop',
+      'board': ['Ah', '7d', '2c'],
+      'pot': 30,
+      'buttonSeat': 1,
+      'heroSeat': 0,
+      'actorSeat': 0,
+      'status': 'playing',
+      'seats': [
+        _seat(0, streetBet: 8, holeCards: ['Ks', 'Kd']),
+        _seat(1, streetBet: 4, holeCards: ['Qs', 'Qd']),
+      ],
+      'legalActions': [
+        {
+          'actionId': 'CALL',
+          'kind': 'CALL',
+          'bucket': 'CALL',
+          'label': 'Call',
+          'amountTo': 8,
+        },
+      ],
+      'winnerSeats': <int>[],
+      'pots': <Map<String, dynamic>>[],
+    });
+    final game = playing.toGameState(handCount: 4);
+
+    expect(game.isHandOver, isFalse);
+    expect(game.mainPot, 18);
+    expect(game.awardedPot, 0);
+    expect(game.waitingForHero, isTrue);
+    expect(game.street, Street.flop);
+    expect(game.sbIndex, 1);
+    expect(game.bbIndex, 0);
+    expect(game.resultMessage, isNull);
+
+    final villainTurn = LiveHandViewModel.fromJson({
+      ...playingToJsonStub(),
+      'actorSeat': 1,
+      'legalActions': <Map<String, dynamic>>[],
+      'buttonSeat': 4,
+      'seats': [
+        for (var seat = 0; seat < 6; seat++)
+          _seat(seat, streetBet: seat == 4 ? 6 : 0),
+      ],
+    });
+    final waiting = villainTurn.toGameState(handCount: 1);
+    expect(waiting.waitingForHero, isFalse);
+    expect(waiting.sbIndex, 5);
+    expect(waiting.bbIndex, 0);
+    expect(waiting.mainPot, 24);
+  });
+
+  test('hero folds and unknown streets fail closed on the felt', () {
+    final folded = LiveHandViewModel.fromJson(
+      _terminalView(
+          winnerSeats: [1],
+          pots: [
+            {
+              'amount': 40,
+              'eligibleSeats': [1],
+              'winnerSeats': [1],
+            },
+          ],
+        )
+        ..['status'] = 'hero_folded'
+        ..['street'] = 'not-a-street'
+        ..['pot'] = 40,
+    );
+    final game = folded.toGameState(handCount: 1);
+
+    expect(game.isHandOver, isTrue);
+    expect(game.resultMessage, 'Hero folded');
+    expect(game.mainPot, 0);
+    expect(game.awardedPot, 40);
+    expect(game.street, Street.preflop);
+    expect(game.waitingForHero, isFalse);
   });
 
   test('coach copy marks chips and spells tendency keys', () {
@@ -230,10 +375,7 @@ void main() {
         'Chaos is an aggressive Maniac (aggression 79.8%, 3bet 15.3%) '
         'who shoves very wide.',
       ),
-      allOf(
-        contains('3-bet 15.3%'),
-        isNot(contains('3bet')),
-      ),
+      allOf(contains('3-bet 15.3%'), isNot(contains('3bet'))),
     );
     expect(
       polishCoachCopy('Blitz has 16.2 3bet frequency and shoves wide.'),
@@ -271,10 +413,7 @@ void main() {
         'Against sticky callers with high VPIP (50.8, 45.1), calling '
         'plays well postflop in position.',
       ),
-      allOf(
-        contains('VPIP (50.8%, 45.1%)'),
-        isNot(contains('(50.8, 45.1)')),
-      ),
+      allOf(contains('VPIP (50.8%, 45.1%)'), isNot(contains('(50.8, 45.1)'))),
     );
     expect(
       polishCoachCopy('Calling \$75 leaves just 73 behind into a \$378 pot.'),
@@ -321,10 +460,7 @@ void main() {
       polishCoachCopy(
         'calling stations have high showdown call (65.5-79.1%) and call flop.',
       ),
-      allOf(
-        contains('(65.5%-79.1%)'),
-        isNot(contains('(65.5-79.1%)')),
-      ),
+      allOf(contains('(65.5%-79.1%)'), isNot(contains('(65.5-79.1%)'))),
     );
     expect(
       polishCoachCopy('stations call with showdown call 65-74 often.'),
@@ -343,7 +479,9 @@ void main() {
       contains(r'$125 bb stack'),
     );
     expect(
-      polishCoachCopy('Chaos has an aggression of 76.3% and offers 8-to-1 pot odds.'),
+      polishCoachCopy(
+        'Chaos has an aggression of 76.3% and offers 8-to-1 pot odds.',
+      ),
       contains('8-to-1 pot odds'),
     );
     expect(
@@ -464,10 +602,7 @@ void main() {
       polishCoachCopy(
         'With an SPR of 0.1 and 13.9% modeled equity, checking retains flexibility.',
       ),
-      allOf(
-        contains('SPR of 0.1 and 13.9%'),
-        isNot(contains('SPR of 0.1%')),
-      ),
+      allOf(contains('SPR of 0.1 and 13.9%'), isNot(contains('SPR of 0.1%'))),
     );
     expect(
       polishCoachCopy('Opponents show extreme aggression at 87.7 and 92.9.'),
@@ -708,10 +843,7 @@ void main() {
         'Committing \$95 of your remaining \$148 stack with an SPR of 0.3 '
         'severely reduces any future street maneuverabillity.',
       ),
-      allOf(
-        contains('maneuverability'),
-        isNot(contains('maneuverabillity')),
-      ),
+      allOf(contains('maneuverability'), isNot(contains('maneuverabillity'))),
     );
     // SPR fractional digit must not be dollarized as chips-behind
     // (batch 0289 H7 live: "SPR 0.7 behind" → "SPR 0.$7 behind").
@@ -736,28 +868,19 @@ void main() {
       polishCoachCopy(
         r'Risking $160 into a $1,036 pot offers great nominal odds.',
       ),
-      allOf(
-        contains(r'a $1,036 pot'),
-        isNot(contains(r'$1,$036')),
-      ),
+      allOf(contains(r'a $1,036 pot'), isNot(contains(r'$1,$036'))),
     );
     expect(
       polishCoachCopy(
         r'Risking $160 into a 1,036 pot offers great nominal odds.',
       ),
-      allOf(
-        contains(r'a $1,036 pot'),
-        isNot(contains(r'1,$036')),
-      ),
+      allOf(contains(r'a $1,036 pot'), isNot(contains(r'1,$036'))),
     );
     expect(
       polishCoachCopy(
         r'Risking $160 into a $1,$036 pot offers great nominal odds.',
       ),
-      allOf(
-        contains(r'a $1,036 pot'),
-        isNot(contains(r'$1,$036')),
-      ),
+      allOf(contains(r'a $1,036 pot'), isNot(contains(r'$1,$036'))),
     );
     // "3-bet range (12.9)" must gain % (batch 0299 H3 live).
     expect(
