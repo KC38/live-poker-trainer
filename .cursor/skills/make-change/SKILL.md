@@ -1,21 +1,20 @@
 ---
 name: make-change
 description: >-
-  Implement a bug fix or feature in a .worktrees worktree directly,
+  Implement a bug fix or feature in a .worktrees worktree directly in this session,
   then commit, PR, merge, deploy Cloud Functions, and refresh simulators.
   Use when the user asks for a code change. Never edit ~/live-poker-trainer.
 ---
 
 # Make a change
 
-The primary checkout `~/live-poker-trainer` stays untouched. Perform the entire
-procedure sequentially in the current agent session.
+The primary checkout `~/live-poker-trainer` stays untouched. 
 
-Do not launch background subagents. Do not switch branches in `~/live-poker-trainer`.
+CRITICAL: Do NOT spawn or launch background subagents. Execute all steps sequentially in the current agent session.
 
 ```
 Change progress:
-- [ ] 1. Worktree off origin/main with remote tracking branch
+- [ ] 1. Worktree off origin/main and push remote ref
 - [ ] 2. Implement, verify, validate
 - [ ] 3. Logical commits
 - [ ] 4. Review the diff
@@ -32,9 +31,9 @@ Work only inside the worktree directory `.worktrees/<slug>`. Do not edit the pri
 
 From `~/live-poker-trainer`:
 
-Determine the branch name: `feature/<slug>` or `fix/<slug>`. `<slug>` must be kebab-case. 
+Determine the branch name: `feature/<slug>` or `fix/<slug>`. `<slug>` must be kebab-case (or Jira issue key like `feature/PROJ-123`).
 
-Clean up any stale local branches or worktrees, create the new worktree, and push an initial empty commit to `origin` immediately so Cursor's internal workspace monitors do not fail on missing remote refs:
+Clean up any stale references, create the worktree, and immediately push an empty commit to `origin` so Cursor's internal branch monitors do not throw ref errors:
 
 ```bash
 BRANCH="feature/<slug>"  # or fix/<slug>
@@ -44,11 +43,13 @@ WT="$HOME/live-poker-trainer/.worktrees/$SLUG"
 git fetch origin main
 git worktree prune
 git branch -D "$BRANCH" 2>/dev/null || true
+git push origin --delete "$BRANCH" 2>/dev/null || true
+
 git worktree add -b "$BRANCH" ".worktrees/$SLUG" origin/main
 
-# Immediately push the branch ref to remote tracking
+# Immediately push upstream ref to avoid Cursor agent-root fetch errors
 cd "$WT"
-git commit --allow-empty -m "chore: initialize $BRANCH"
+git commit --allow-empty -m "chore: start $BRANCH"
 git push -u origin "$BRANCH"
 cd ~/live-poker-trainer
 ```
