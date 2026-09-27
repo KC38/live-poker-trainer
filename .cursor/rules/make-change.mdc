@@ -12,7 +12,8 @@ For a new feature, bug fix, or any other requested code change, follow
 
 1. Launch one subagent.
 2. That subagent creates `.worktrees/<slug>` off `origin/main` and does the
-   work there.
+   work there. If `.worktrees` does not exist, create it. If `.gitignore`
+   has no `.worktrees/` entry, add one inside the worktree.
 3. After it finishes, do not resume it.
 
 Do not implement the change in the primary checkout.

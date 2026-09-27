@@ -39,9 +39,15 @@ Work only inside the worktree. Do not edit the primary checkout.
 
 From `~/live-poker-trainer`:
 
+If `.worktrees` does not exist, create it. If `.gitignore` has no
+`.worktrees/` entry, add one inside the worktree.
+
 ```bash
 git fetch origin main
+mkdir -p .worktrees
 git worktree add -b feature/<slug> .worktrees/<slug> origin/main
+grep -qxF '.worktrees/' .worktrees/<slug>/.gitignore 2>/dev/null \
+  || echo '.worktrees/' >> .worktrees/<slug>/.gitignore
 ```
 
 Use `fix/<slug>` for a bug fix. `<slug>` is kebab-case. The directory is
