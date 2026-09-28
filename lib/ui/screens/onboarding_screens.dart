@@ -708,11 +708,21 @@ class _ChoiceTile extends StatelessWidget {
 final _primaryButton = FilledButton.styleFrom(
   backgroundColor: AppColors.gold,
   foregroundColor: AppColors.bgDark,
-  minimumSize: const Size.fromHeight(52),
+  textStyle: GoogleFonts.manrope(
+    fontWeight: FontWeight.w800,
+    fontSize: 16,
+    letterSpacing: 0.2,
+  ),
+  minimumSize: const Size.fromHeight(54),
+  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
 );
 
 final _secondaryButton = OutlinedButton.styleFrom(
-  foregroundColor: AppColors.cream,
-  minimumSize: const Size.fromHeight(52),
-  side: const BorderSide(color: AppColors.slate),
+  foregroundColor: AppColors.goldBright,
+  textStyle: GoogleFonts.manrope(fontWeight: FontWeight.w700, fontSize: 15),
+  minimumSize: const Size.fromHeight(50),
+  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+  side: const BorderSide(color: AppColors.goldMuted, width: 1.2),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
 );

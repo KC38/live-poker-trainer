@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_flags.dart';
 import 'package:live_poker_trainer/models/course/onboarding_models.dart';
@@ -113,6 +114,22 @@ void main() {
     );
     expect(find.text('Get started'), findsOneWidget);
     expect(find.text('I already have an account'), findsOneWidget);
+    _expectElevatedMetrics(tester, 'Get started');
+    _expectOutlinedMetrics(tester, 'I already have an account');
+  });
+
+  testWidgets('meet rex continue uses the elevated button metrics', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: const RexIntroScreen(),
+        ),
+      ),
+    );
+    _expectElevatedMetrics(tester, 'Continue');
   });
 
   testWidgets('existing account Back returns to Welcome without signing in', (
@@ -353,6 +370,7 @@ void main() {
     expect(rail.bottom, lessThanOrEqualTo(shelf.top + 1));
     expect(shelf.bottom, lessThanOrEqualTo(button.top));
     expect(rail.bottom, lessThan(button.top));
+    _expectElevatedMetrics(tester, 'Start lesson');
   });
 
   testWidgets('save progress copy warns about temporary guest data', (
@@ -389,6 +407,43 @@ void main() {
     expect(find.text('Your two cards'), findsOneWidget);
     expect(find.text('+75 XP · streak 1'), findsOneWidget);
   });
+}
+
+void _expectElevatedMetrics(WidgetTester tester, String label) {
+  final finder = find.widgetWithText(FilledButton, label);
+  final button = tester.widget<FilledButton>(finder);
+  final states = const <WidgetState>{};
+  expect(tester.getSize(finder).height, 54);
+  expect(
+    button.style!.backgroundColor!.resolve(states),
+    AppColors.gold,
+  );
+  expect(
+    button.style!.foregroundColor!.resolve(states),
+    AppColors.bgDark,
+  );
+  final shape = button.style!.shape!.resolve(states)! as RoundedRectangleBorder;
+  expect(shape.borderRadius, BorderRadius.circular(14));
+  final textStyle = DefaultTextStyle.of(tester.element(find.text(label))).style;
+  expect(textStyle.fontSize, 16);
+  expect(textStyle.fontWeight, FontWeight.w800);
+  expect(textStyle.fontFamily, contains('Manrope'));
+}
+
+void _expectOutlinedMetrics(WidgetTester tester, String label) {
+  final finder = find.widgetWithText(OutlinedButton, label);
+  final button = tester.widget<OutlinedButton>(finder);
+  final states = const <WidgetState>{};
+  expect(tester.getSize(finder).height, 50);
+  expect(
+    button.style!.foregroundColor!.resolve(states),
+    AppColors.goldBright,
+  );
+  final side = button.style!.side!.resolve(states)!;
+  expect(side.color, AppColors.goldMuted);
+  expect(side.width, 1.2);
+  final shape = button.style!.shape!.resolve(states)! as RoundedRectangleBorder;
+  expect(shape.borderRadius, BorderRadius.circular(14));
 }
 
 class _AwardedDraft extends OnboardingController {

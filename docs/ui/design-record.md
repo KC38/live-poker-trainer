@@ -42,6 +42,8 @@ primary, cream text. Display type is Cinzel. UI type is Manrope. Data
 New controls use `Theme.of(context).colorScheme` and these metrics. Do not
 hard-code a second gold or a second radius for the same role.
 
+Onboarding primary actions use the elevated button (gold on bgDark, height 54, radius 14, Manrope 16 w800). “I already have an account” uses the outlined button (gold-bright label, gold-muted border, height 50, radius 14).
+
 ## Poker table
 
 The full table is `PokerTableScreen` (`lib/ui/screens/poker_table_screen.dart`).
