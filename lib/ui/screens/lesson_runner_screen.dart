@@ -72,6 +72,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
   /// chrome (no blank dock / full-screen spinner flash).
   bool _advancingActivity = false;
   int _acceptedStreak = 0;
+  /// Accepted-step XP granted in this session. Added to the completion bonus
+  /// so Nice work and the result screen show the lesson total.
+  int _stepXpAwarded = 0;
   /// Inline catch-up notice under the progress header (never a felt SnackBar).
   String? _resumeNotice;
   Timer? _resumeNoticeTimer;
@@ -341,6 +344,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         } else if (!result.duplicate) {
           _acceptedStreak = 0;
         }
+        if (!result.duplicate) {
+          _stepXpAwarded += result.xpAwarded;
+        }
       });
       unawaited(_playFeedbackSound(result));
       if (!result.duplicate) {
@@ -576,6 +582,22 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         );
       }().timeout(const Duration(seconds: 45));
       if (!mounted) return;
+      final shown = CompleteCourseLessonResult(
+        attemptId: complete.attemptId,
+        lessonId: complete.lessonId,
+        xpAwarded: displayedLessonXp(
+          stepXpAwarded: _stepXpAwarded,
+          completionBonus: complete.xpAwarded,
+          lessonXpFromServer: complete.lessonXpAwarded,
+        ),
+        lessonXpAwarded: complete.lessonXpAwarded,
+        mastery: complete.mastery,
+        streak: complete.streak,
+        acceptedAccuracy: complete.acceptedAccuracy,
+        liveTrainingGranted: complete.liveTrainingGranted,
+        duplicate: complete.duplicate,
+        resume: complete.resume,
+      );
       unawaited(ref.read(soundServiceProvider).win());
       unawaited(
         ref
@@ -608,7 +630,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
             .read(onboardingControllerProvider.notifier)
             .markFirstLessonComplete(
               lessonTitle: _lesson?.title ?? 'Lesson',
-              result: complete,
+              result: shown,
             )
             .timeout(const Duration(seconds: 8));
         // AppRoot remounts onto SaveProgressScreen. If this route is still
@@ -627,7 +649,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
           builder:
               (_) => LessonResultScreen(
                 lessonTitle: _lesson?.title ?? 'Lesson',
-                result: complete,
+                result: shown,
                 standalone: !widget.embeddedInShell,
               ),
         ),

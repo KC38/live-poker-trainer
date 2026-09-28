@@ -36,6 +36,16 @@ export const XP_PER_ACCEPTED_STEP = 10;
 export const XP_LESSON_COMPLETE = 25;
 export const REVIEW_DELAY_MS = 24 * 60 * 60 * 1000;
 
+/**
+ * XP one lesson grants: accepted-step awards already on the attempt,
+ * plus the completion bonus. The profile increment for completion stays
+ * [XP_LESSON_COMPLETE] so step XP is not applied twice.
+ */
+export function lessonXpTotal(stepXp: number): number {
+  const steps = Number.isFinite(stepXp) && stepXp > 0 ? stepXp : 0;
+  return steps + XP_LESSON_COMPLETE;
+}
+
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
 const RATE_LIMIT_START_MAX = 20;
 const RATE_LIMIT_SUBMIT_MAX = 60;
@@ -122,6 +132,8 @@ export interface CourseAttempt {
   masteryWeight: number;
   jumpTestPassed: boolean;
   stepCount: number;
+  /** Accepted-step XP already granted for this attempt. Not the completion bonus. */
+  xpEarned: number;
   createdAtMs?: number;
   updatedAtMs?: number;
   completedAtMs?: number | null;
@@ -164,6 +176,8 @@ export interface CompleteCourseLessonResult {
   liveTrainingGranted: boolean;
   duplicate: boolean;
   resume: CourseResumePointer | null;
+  /** Step XP plus the completion bonus. Absent on receipts written before this field. */
+  lessonXpAwarded?: number;
 }
 
 /** Parses course flags; missing/invalid docs fail closed (course disabled). */
@@ -684,6 +698,7 @@ export async function startCourseLessonForUser(options: {
       masteryWeight: 0,
       jumpTestPassed: false,
       stepCount: 0,
+      xpEarned: 0,
       createdAtMs: nowMs,
       updatedAtMs: nowMs,
       completedAtMs: null,
@@ -885,6 +900,7 @@ export async function submitCourseStepForUser(options: {
       masteryWeight,
       jumpTestPassed,
       stepCount: attempt.stepCount + 1,
+      xpEarned: attempt.xpEarned + xpAwarded,
       status: nextStatus,
       updatedAtMs: nowMs,
     };
@@ -1058,6 +1074,7 @@ export async function completeCourseLessonForUser(options: {
         attemptId,
         lessonId: attempt.lessonId,
         xpAwarded: 0,
+        lessonXpAwarded: lessonXpTotal(attempt.xpEarned),
         mastery: masteryRatio(attempt),
         streak: profile.currentStreak,
         acceptedAccuracy: profile.acceptedAccuracy,
@@ -1086,6 +1103,7 @@ export async function completeCourseLessonForUser(options: {
 
     const mastery = masteryRatio(attempt);
     const xpAwarded = XP_LESSON_COMPLETE;
+    const lessonXpAwarded = lessonXpTotal(attempt.xpEarned);
     const timezone = String(profileSnap.data()?.timezone ?? "UTC");
     const today = localDateString(nowMs, timezone);
     const streak = applyStudyDayStreak({
@@ -1196,6 +1214,7 @@ export async function completeCourseLessonForUser(options: {
       attemptId,
       lessonId: attempt.lessonId,
       xpAwarded,
+      lessonXpAwarded,
       mastery,
       streak: streak.currentStreak,
       acceptedAccuracy,
@@ -1656,6 +1675,7 @@ function attemptFromData(data: DocumentData): CourseAttempt {
     masteryWeight: Number(data.masteryWeight ?? 0),
     jumpTestPassed: data.jumpTestPassed === true,
     stepCount: Number(data.stepCount ?? 0),
+    xpEarned: Number(data.xpEarned ?? 0),
     createdAtMs: optionalNumber(data.createdAtMs),
     updatedAtMs: optionalNumber(data.updatedAtMs),
     completedAtMs: optionalNumber(data.completedAtMs) ?? null,

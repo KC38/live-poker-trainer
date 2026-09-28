@@ -175,6 +175,7 @@ class CompleteCourseLessonResult {
     required this.attemptId,
     required this.lessonId,
     required this.xpAwarded,
+    this.lessonXpAwarded,
     required this.mastery,
     required this.streak,
     required this.acceptedAccuracy,
@@ -186,6 +187,12 @@ class CompleteCourseLessonResult {
   final String attemptId;
   final String lessonId;
   final int xpAwarded;
+
+  /// Step XP plus the completion bonus, when the server recorded both.
+  ///
+  /// Null on completions from a function that only returns the bonus in
+  /// [xpAwarded].
+  final int? lessonXpAwarded;
   final double mastery;
   final int streak;
   final double acceptedAccuracy;
@@ -199,6 +206,7 @@ class CompleteCourseLessonResult {
       attemptId: json['attemptId'] as String,
       lessonId: json['lessonId'] as String,
       xpAwarded: (json['xpAwarded'] as num?)?.toInt() ?? 0,
+      lessonXpAwarded: (json['lessonXpAwarded'] as num?)?.toInt(),
       mastery: (json['mastery'] as num?)?.toDouble() ?? 0,
       streak: (json['streak'] as num?)?.toInt() ?? 0,
       acceptedAccuracy: (json['acceptedAccuracy'] as num?)?.toDouble() ?? 0,
@@ -209,4 +217,23 @@ class CompleteCourseLessonResult {
           : null,
     );
   }
+}
+
+/// XP to show for a finished lesson.
+///
+/// [completionBonus] is the completion grant in
+/// [CompleteCourseLessonResult.xpAwarded]. [stepXpAwarded] is the sum of
+/// accepted-step grants in this session. [lessonXpFromServer] is that same
+/// total when the function stored step XP on the attempt, including steps
+/// from before a resume. The larger figure is what Nice work and Home share
+/// for a guest with no earlier course XP.
+int displayedLessonXp({
+  required int stepXpAwarded,
+  required int completionBonus,
+  int? lessonXpFromServer,
+}) {
+  final local = stepXpAwarded + completionBonus;
+  final server = lessonXpFromServer;
+  if (server == null || server < local) return local;
+  return server;
 }
