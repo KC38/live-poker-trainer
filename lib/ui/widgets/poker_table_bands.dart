@@ -109,7 +109,21 @@ class PokerTableBands extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.sizeOf(context).height * heightFactor;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final wanted = MediaQuery.sizeOf(context).height * heightFactor;
+        // A bounded parent (Your start, above Start lesson) wins so the
+        // rail and shelf stay inside the column and the button sits below.
+        final height =
+            constraints.maxHeight.isFinite && constraints.maxHeight < wanted
+            ? constraints.maxHeight
+            : wanted;
+        return _column(height);
+      },
+    );
+  }
+
+  Widget _column(double height) {
     final rail = HeroRailWidget(game: game, chipDisplayMode: chipDisplayMode);
     final shelf = CoachShelfWidget(
       feedback: feedback,
