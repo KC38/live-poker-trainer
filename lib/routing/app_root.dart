@@ -124,6 +124,12 @@ AppRootDestination resolveAppRoot({
       return AppRootDestination.shell;
     }
     if (!guestEntry) return AppRootDestination.auth;
+    // Reinstall deletes onboarding_draft_v1 and keeps the anonymous keychain
+    // user. That draft is still the welcome step, so Welcome stays the root
+    // and Get started can push Your experience with a way back.
+    if (onboarding.step == OnboardingStep.welcome) {
+      return AppRootDestination.welcome;
+    }
     return AppRootDestination.guestCourse;
   }
   return AppRootDestination.shell;

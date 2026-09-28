@@ -90,6 +90,41 @@ void main() {
         flags: enabled,
         onboarding: const OnboardingDraft(),
       ),
+      AppRootDestination.welcome,
+    );
+    expect(
+      resolveAppRoot(
+        signedIn: true,
+        anonymous: true,
+        flagsReady: true,
+        flags: enabled,
+        onboarding: const OnboardingDraft(
+          step: OnboardingStep.recommendedStart,
+        ),
+      ),
+      AppRootDestination.guestCourse,
+    );
+  });
+
+  test('reinstall keeps Welcome for an anonymous user with no draft', () {
+    expect(
+      resolveAppRoot(
+        signedIn: true,
+        anonymous: true,
+        flagsReady: true,
+        flags: enabled,
+        onboarding: const OnboardingDraft(step: OnboardingStep.welcome),
+      ),
+      AppRootDestination.welcome,
+    );
+    expect(
+      resolveAppRoot(
+        signedIn: true,
+        anonymous: true,
+        flagsReady: true,
+        flags: enabled,
+        onboarding: const OnboardingDraft(step: OnboardingStep.firstLesson),
+      ),
       AppRootDestination.guestCourse,
     );
   });

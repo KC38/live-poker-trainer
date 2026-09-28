@@ -161,6 +161,18 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Your experience'), findsOneWidget);
     expect(find.text('Step 2 of 4'), findsOneWidget);
+    expect(find.byTooltip('Back'), findsOneWidget);
+    expect(find.bySemanticsLabel('Back'), findsOneWidget);
+
+    await tester.tap(find.bySemanticsLabel('Back'));
+    await tester.pumpAndSettle();
+    expect(find.text('Get started'), findsOneWidget);
+    expect(find.text('I already have an account'), findsOneWidget);
+    expect(find.text('Your experience'), findsNothing);
+
+    await tester.tap(find.text('Get started'));
+    await tester.pumpAndSettle();
+    expect(find.text('Your experience'), findsOneWidget);
 
     await tester.tap(find.text('New to poker'));
     await tester.pumpAndSettle();
