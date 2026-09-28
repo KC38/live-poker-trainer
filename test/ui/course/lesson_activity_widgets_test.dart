@@ -2,10 +2,13 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
+import 'package:live_poker_trainer/models/hero_profile_model.dart';
+import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/ui/course/activities/authored_multi_step_activity.dart';
 import 'package:live_poker_trainer/ui/course/activities/coach_dialogue_activity.dart';
 import 'package:live_poker_trainer/ui/course/activities/full_table_hand_lab_activity.dart';
@@ -55,6 +58,10 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_toy_hand.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/ui/widgets/action_dock_widget.dart';
+import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
+import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
+import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 
 CourseActivity _activity({
@@ -87,13 +94,18 @@ CourseActivity _activity({
 
 Widget _wrap(Widget child) {
   final base = buildPokerTheme();
-  return MaterialApp(
-    theme: base.copyWith(
-      // Flutter 3.47 + Impeller/SkSL mismatch crashes ink_sparkle in tests.
-      splashFactory: NoSplash.splashFactory,
-      highlightColor: Colors.transparent,
+  return ProviderScope(
+    overrides: [
+      heroIdentityProvider.overrideWithValue(const HeroIdentity()),
+    ],
+    child: MaterialApp(
+      theme: base.copyWith(
+        // Flutter 3.47 + Impeller/SkSL mismatch crashes ink_sparkle in tests.
+        splashFactory: NoSplash.splashFactory,
+        highlightColor: Colors.transparent,
+      ),
+      home: Scaffold(body: SingleChildScrollView(child: child)),
     ),
-    home: Scaffold(body: SingleChildScrollView(child: child)),
   );
 }
 
@@ -153,6 +165,11 @@ void main() {
       ),
     );
     expect(find.byType(MiniCard), findsNWidgets(2));
+    expect(find.byType(FeltTableView), findsOneWidget);
+    expect(find.byType(HeroRailWidget), findsOneWidget);
+    expect(find.byType(CoachShelfWidget), findsOneWidget);
+    expect(find.byType(ActionDockWidget), findsNothing);
+    expect(find.byType(LessonTableContext), findsNothing);
     expect(find.text('Rex'), findsWidgets);
     // The felt has to say what to tap. Rex's sentence is not that instruction.
     expect(find.text('Tap your cards'), findsOneWidget);
@@ -426,7 +443,11 @@ void main() {
         ),
       ),
     );
-    expect(find.byType(LessonTableContext), findsOneWidget);
+    expect(find.byType(LessonTableContext), findsNothing);
+    expect(find.byType(FeltTableView), findsOneWidget);
+    expect(find.byType(HeroRailWidget), findsOneWidget);
+    expect(find.byType(CoachShelfWidget), findsOneWidget);
+    expect(find.byType(ActionDockWidget), findsNothing);
 
     await tester.pump(const Duration(milliseconds: 450));
     await tester.pump(const Duration(milliseconds: 450));

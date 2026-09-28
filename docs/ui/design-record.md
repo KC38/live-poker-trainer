@@ -82,6 +82,10 @@ uses the Poker table bands (`FeltTableView`, `HeroRailWidget`,
 step. A step with no hand (welcome, a list, settings, a number with no
 cards) stays on the Theme section and does not grow a felt.
 
+Your start’s hand preview uses the Poker table bands (`FeltTableView`, `HeroRailWidget`, `CoachShelfWidget`). It does not use `LessonTableScene`.
+
+The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
+
 File one ticket per layout you still see, not one ticket per activity id.
 
 ## Asset inventory
