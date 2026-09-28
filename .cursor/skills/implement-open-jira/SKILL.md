@@ -57,6 +57,10 @@ When the ticket has the `ui` label, or it names `docs/ui/design-record.md`:
   [docs/ui/design-record.md](../../../docs/ui/design-record.md) before editing.
 - Reuse the poker-table bands and the asset slot the ticket names. Do not
   add a second table, palette, or sound for the same role.
+- When the ticket names Gamified learning or
+  `docs/ui/references/duolingo-chess/`, read
+  [PATTERNS.md](../../../docs/ui/references/duolingo-chess/PATTERNS.md)
+  and keep the poker theme. Do not copy Duolingo art into the app.
 - Update the design-record section named in the ticket in the same change
   as the widget or asset. The file must say what the ticket said it would
   say, including a `Shipped` note with the widget or asset path.

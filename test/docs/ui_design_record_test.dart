@@ -21,6 +21,8 @@ void main() {
     expect(text, contains('LessonTableScene'));
     expect(text, contains('assets/brand/logo_mark.png'));
     expect(text, contains('lounge_ambient.mp3'));
+    expect(text, contains('## Gamified learning'));
+    expect(text, contains('duolingo-chess/PATTERNS.md'));
   });
 
   test('ui walk cites the design record and the Flutter UI skill', () {
@@ -30,6 +32,16 @@ void main() {
     expect(skill, contains('flutter-ui-ux'));
     expect(skill, contains('7CB7DDCF-CBEA-414F-8A92-D490C7AAE35F'));
     expect(skill, contains('## Design record'));
+    expect(skill, contains('duolingo-chess/PATTERNS.md'));
+    expect(skill, contains('**Game loop.**'));
+    expect(
+      File('docs/ui/references/duolingo-chess/frames/001.png').existsSync(),
+      isTrue,
+    );
+    expect(
+      File('docs/ui/references/duolingo-chess/frames/130.png').existsSync(),
+      isTrue,
+    );
   });
 
   test('Flutter UI skill keeps the composition and motion rules', () {
