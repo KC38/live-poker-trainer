@@ -9,6 +9,7 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
+import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 
 /// Audio and display settings screen.
 class SettingsScreen extends ConsumerWidget {
@@ -20,6 +21,8 @@ class SettingsScreen extends ConsumerWidget {
     final settings = ref.watch(settingsProvider);
     final notifier = ref.read(settingsProvider.notifier);
     final analyticsEnabled = ref.watch(analyticsConsentProvider);
+    final anonymous =
+        ref.watch(appAuthProvider).asData?.value.isAnonymous == true;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
@@ -145,6 +148,13 @@ class SettingsScreen extends ConsumerWidget {
               style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 8),
+            if (anonymous) ...[
+              FilledButton(
+                onPressed: () => pushSaveProgressAuth(context),
+                child: const Text('Create an account'),
+              ),
+              const SizedBox(height: 8),
+            ],
             OutlinedButton(
               onPressed: () async {
                 await ref.read(authControllerProvider.notifier).signOut();

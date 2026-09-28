@@ -22,6 +22,7 @@ import 'package:live_poker_trainer/providers/course_progress_provider.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
+import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/screens/settings_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_avatar.dart';
@@ -95,7 +96,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     name: AnalyticsScreens.settings,
                   ),
                 ),
-            icon: const Icon(Icons.settings_outlined, color: AppColors.slate),
+            icon: const Icon(
+              Icons.settings_outlined,
+              semanticLabel: 'Settings',
+              color: AppColors.slate,
+            ),
           ),
         ],
       ),
@@ -134,6 +139,8 @@ class _ProfileBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final metrics = profile.metrics;
     final controller = ref.read(heroProfileControllerProvider.notifier);
+    final anonymous =
+        ref.watch(appAuthProvider).asData?.value.isAnonymous == true;
 
     return RefreshIndicator(
       color: AppColors.gold,
@@ -147,6 +154,13 @@ class _ProfileBody extends ConsumerWidget {
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 40),
         children: [
           _ProfileHeader(profile: profile),
+          if (anonymous) ...[
+            const SizedBox(height: 16),
+            FilledButton(
+              onPressed: () => pushSaveProgressAuth(context),
+              child: const Text('Create an account'),
+            ),
+          ],
           const SizedBox(height: 26),
           const _SectionTitle('Course'),
           const SizedBox(height: 4),

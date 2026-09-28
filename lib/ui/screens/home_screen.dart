@@ -21,6 +21,7 @@ import 'package:live_poker_trainer/ui/home/course_path_view.dart';
 import 'package:live_poker_trainer/ui/home/course_resume_card.dart';
 import 'package:live_poker_trainer/ui/home/course_status_bar.dart';
 import 'package:live_poker_trainer/ui/home/rex_coach_card.dart';
+import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_result_screen.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_runner_screen.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
@@ -307,12 +308,22 @@ class _HomeBody extends StatelessWidget {
               ),
               if (guestSession) ...[
                 const SizedBox(height: 8),
-                Text(
-                  'Guest progress stays on this device until you create an account.',
-                  style: GoogleFonts.manrope(
-                    color: AppColors.slate,
-                    fontSize: 13,
-                    height: 1.35,
+                TextButton(
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColors.slate,
+                    padding: EdgeInsets.zero,
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    alignment: Alignment.centerLeft,
+                  ),
+                  onPressed: () => pushSaveProgressAuth(context),
+                  child: Text(
+                    'Guest progress stays on this device until you create an account.',
+                    style: GoogleFonts.manrope(
+                      color: AppColors.slate,
+                      fontSize: 13,
+                      height: 1.35,
+                    ),
                   ),
                 ),
               ],

@@ -25,8 +25,12 @@ class AuthService {
 
   FirebaseAuth get _auth => _authOverride ?? FirebaseAuth.instance;
 
-  /// Auth state changes (null when signed out).
-  Stream<User?> get authStateChanges => _auth.authStateChanges();
+  /// Auth identity, including a link on the same uid.
+  ///
+  /// [FirebaseAuth.userChanges] emits when an anonymous user links an email,
+  /// so [User.isAnonymous] flips. [FirebaseAuth.authStateChanges] does not
+  /// emit for that link, and Home and Profile would keep offering an account.
+  Stream<User?> get authStateChanges => _auth.userChanges();
 
   /// Current Firebase user, or null.
   User? get currentUser {
