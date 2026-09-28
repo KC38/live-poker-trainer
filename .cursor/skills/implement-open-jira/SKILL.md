@@ -49,6 +49,19 @@ engineer who ships the ticket:
 - If the writeup is too vague to implement without guessing product
   behavior, comment what is missing and skip it. Do not invent scope.
 
+## UI tickets
+
+When the ticket has the `ui` label, or it names `docs/ui/design-record.md`:
+
+- Read [flutter-ui-ux](../flutter-ui-ux/SKILL.md) and
+  [docs/ui/design-record.md](../../../docs/ui/design-record.md) before editing.
+- Reuse the poker-table bands and the asset slot the ticket names. Do not
+  add a second table, palette, or sound for the same role.
+- Update the design-record section named in the ticket in the same change
+  as the widget or asset. The file must say what the ticket said it would
+  say, including a `Shipped` note with the widget or asset path.
+- The close comment names that section and quotes the sentence that landed.
+
 ## Queue
 
 1. Call `getAccessibleAtlassianResources` once and reuse `cloudId` on every

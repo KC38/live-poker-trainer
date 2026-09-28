@@ -85,6 +85,8 @@ Validate on the iPhone 17 (`20ACECD5-FBEE-4663-9044-E11D5F0A26FC`). That device 
 
 The iPhone 17 Pro (`F1AE4938-D9BE-4EA1-8C98-58555A0DE62A`) belongs to [new-user-qa](../new-user-qa/SKILL.md). Do not boot, uninstall, terminate, kill, hot-restart, screenshot, or tap it. Do not stop `flutter-pro-lessons`.
 
+The iPhone 17 Pro Max (`7CB7DDCF-CBEA-414F-8A92-D490C7AAE35F`) belongs to [ui-consistency-qa](../ui-consistency-qa/SKILL.md). Do not boot, uninstall, terminate, kill, hot-restart, screenshot, or tap it. Do not stop `flutter-ui-pro-max`.
+
 Drive the UI with `python3 tools/agent_tap.py --log "$LOG_FILE"`. The default log is the Pro session.
 
 Hot restart (`kill -USR2`) reloads the directory that `flutter run` was started from. Once the iPhone 17 session **is** that worktree, every later validation is a hot restart:

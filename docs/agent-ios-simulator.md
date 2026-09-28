@@ -3,7 +3,7 @@
 How agents should boot the Live Poker Trainer app on the Mac mini iOS simulator.
 Follow this instead of hunting for `Simulator.app` (gone on Xcode 27+).
 
-## Two skills, two phones
+## Three skills, three phones
 
 The phones run at the same time. Each skill drives only its own device.
 
@@ -11,10 +11,13 @@ The phones run at the same time. Each skill drives only its own device.
 |-------|--------|------|
 | **new-user-qa** | iPhone 17 Pro | `F1AE4938-D9BE-4EA1-8C98-58555A0DE62A` |
 | **implement-open-jira** | iPhone 17 | `20ACECD5-FBEE-4663-9044-E11D5F0A26FC` |
+| **ui-consistency-qa** | iPhone 17 Pro Max (iOS 26.5) | `7CB7DDCF-CBEA-414F-8A92-D490C7AAE35F` |
 
 Do not boot, uninstall, terminate, kill, hot-restart, screenshot, or tap the
 other skill's phone. A `flutter run` on one device is not a reason to skip
-starting the other.
+starting the other. ui-consistency-qa runs from `.worktrees/ui-main`
+on origin/main, so its `build/` stays off the Pro session in the primary
+clone.
 
 ## Xcode 27+: Device Hub (not Simulator.app)
 
@@ -102,6 +105,13 @@ LOG_FILE=/tmp/flutter-live-poker-trainer.run.log
 # PID_FILE=/tmp/flutter-live-poker-trainer-iphone17.pid
 # LOG_FILE=/tmp/flutter-live-poker-trainer-iphone17.run.log
 
+# ui-consistency-qa uses the Pro Max and its own origin/main checkout:
+# DEVICE=7CB7DDCF-CBEA-414F-8A92-D490C7AAE35F
+# CHECKOUT="$PRIMARY/.worktrees/ui-main"
+# SESSION=flutter-ui-pro-max
+# PID_FILE=/tmp/flutter-live-poker-trainer-ui.pid
+# LOG_FILE=/tmp/flutter-live-poker-trainer-ui.run.log
+
 open -a /Applications/Xcode.app/Contents/Applications/DeviceHub.app
 xcrun simctl bootstatus "$DEVICE" -b || xcrun simctl boot "$DEVICE"
 
@@ -119,6 +129,7 @@ Success markers in that session's log:
 - `Flutter run key commands.`
 - Pro: `A Dart VM Service on iPhone 17 Pro is available at: http://127.0.0.1:…`
 - iPhone 17: `A Dart VM Service on iPhone 17 is available at: http://127.0.0.1:…`
+- Pro Max: `A Dart VM Service on iPhone 17 Pro Max is available at: http://127.0.0.1:…`
 
 | File | Purpose |
 |------|---------|
@@ -128,6 +139,8 @@ Success markers in that session's log:
 | `/tmp/flutter-live-poker-trainer-iphone17.run.log` | iPhone 17 origin/main stdout. Pass `--log` |
 | `/tmp/flutter-$SLUG.pid` and `.log` | Ticket worktree session on the iPhone 17, before merge |
 | `/tmp/flutter-live-poker-trainer-user.pid` | Legacy iPhone 17 pid file. Refresh treats it as implement, and only if the process is on that device |
+| `/tmp/flutter-live-poker-trainer-ui.pid` | ui-consistency-qa Pro Max `flutter run` |
+| `/tmp/flutter-live-poker-trainer-ui.run.log` | Pro Max stdout. Pass `--log` |
 
 Refresh one role after its merge. Do not refresh both:
 
@@ -157,6 +170,12 @@ implement-open-jira (pass that phone's log, or the ticket worktree log):
 python3 tools/agent_tap.py --log /tmp/flutter-live-poker-trainer-iphone17.run.log tap --text "Continue"
 ```
 
+ui-consistency-qa (pass the Pro Max log):
+
+```bash
+python3 tools/agent_tap.py --log /tmp/flutter-live-poker-trainer-ui.run.log tap --text "Continue"
+```
+
 - The default VM URI comes from `/tmp/flutter-live-poker-trainer.run.log`.
   `--log` is required for the iPhone 17, or taps hit the Pro.
 - Isolate IDs change after hot restart — the script re-resolves each call.
@@ -168,6 +187,7 @@ python3 tools/agent_tap.py --log /tmp/flutter-live-poker-trainer-iphone17.run.lo
 ```bash
 xcrun simctl io F1AE4938-D9BE-4EA1-8C98-58555A0DE62A screenshot /tmp/pro.png
 xcrun simctl io 20ACECD5-FBEE-4663-9044-E11D5F0A26FC screenshot /tmp/iphone17.png
+xcrun simctl io 7CB7DDCF-CBEA-414F-8A92-D490C7AAE35F screenshot /tmp/pro-max.png
 ```
 
 ## Common failures

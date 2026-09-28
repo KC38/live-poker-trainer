@@ -29,6 +29,9 @@ Do not restart both.
 Pro is already up. If the Pro is shut down, launch-simulator boots it.
 A booted iPhone 17 does not block that.
 
+[ui-consistency-qa](../ui-consistency-qa/SKILL.md) is not a refresh role.
+Do not pass `qa` or `implement` for that walk. It has its own Pro Max.
+
 Always refresh from `origin/main`. Do not hot-restart a feature worktree
 and pretend it is main. make-change previews a ticket worktree with
 `flutter run` on the iPhone 17; this skill runs after that session is
