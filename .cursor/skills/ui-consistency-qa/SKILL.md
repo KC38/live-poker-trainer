@@ -2,10 +2,11 @@
 name: ui-consistency-qa
 description: >-
   Charter one iOS surface against the UI design record, file or update LPT
-  tickets for visual inconsistencies, shared poker-table reuse, and missing
-  assets, and record the path so the next run does not repeat it. Use when
-  the user runs /ui-consistency-qa or asks for a UI consistency, visual
-  polish, or design-system walk of the app.
+  tickets for visual inconsistencies, shared poker-table reuse, missing
+  assets, and learning screens that are not a game loop, and record the
+  path so the next run does not repeat it. Use when the user runs
+  /ui-consistency-qa or asks for a UI consistency, visual polish, or
+  design-system walk of the app.
 disable-model-invocation: true
 ---
 
@@ -17,13 +18,17 @@ Shipping a filed ticket is
 [/implement-open-jira](../implement-open-jira/SKILL.md).
 
 Before the first screen, read
-[flutter-ui-ux](../flutter-ui-ux/SKILL.md) and
-[docs/ui/design-record.md](../../../docs/ui/design-record.md). The Flutter
-skill is how a screen is built. The design record is what this app has
-already decided. When a sample in the Flutter skill disagrees with the
-record (button radius, elevation, palette), the record wins. A finding
-that needs a new color, control, table, or asset updates a named section
-of the record. It does not start a second visual language.
+[flutter-ui-ux](../flutter-ui-ux/SKILL.md),
+[docs/ui/design-record.md](../../../docs/ui/design-record.md), and
+[docs/ui/references/duolingo-chess/PATTERNS.md](../../../docs/ui/references/duolingo-chess/PATTERNS.md).
+The Flutter skill is how a screen is built. The design record is what
+this app has already decided. The Duolingo Chess frames are the teaching
+loop to translate: one step, the table as the hero, a mascot beat on
+right and wrong, then XP. Do not copy their green, their owl, or their
+copy. When a sample in the Flutter skill disagrees with the record
+(button radius, elevation, palette), the record wins. A finding that
+needs a new color, control, table, or asset updates a named section of
+the record. It does not start a second visual language.
 
 The journeys are [paths.md](paths.md). Coverage lives outside the git tree
 so the primary clone stays clean.
@@ -37,7 +42,7 @@ Jira call. Read each tool schema with `GetDynamicTools` before calling it.
 ```
 Session progress:
 - [ ] origin/main SHA recorded
-- [ ] Flutter UI/UX skill and design record read
+- [ ] Flutter UI/UX skill, design record, and Duolingo Chess patterns read
 - [ ] Coverage read; one due path chosen
 - [ ] That path's precondition met on the Pro Max
 - [ ] Path chartered against the design record
@@ -160,8 +165,9 @@ On each screen of the chosen path, before leaving it:
 2. **Theme.** Type, color, buttons, cards, and radius match the Theme section. Name the widget when they do not.
 3. **Table.** A hand (hole cards, board, pot, or action) uses the Poker table bands. `LessonActionSpot` and `LessonTableScene` on a hand step are findings. One ticket per layout.
 4. **Assets.** Logo, mascot, icons, motion, sound effects, and music match the Asset inventory. A missing slot is a finding. Quote the slot name.
-5. **Layout.** Clipped text, overflow, overlapping bands, or a control with no name.
-6. **Record.** The fix you would file names the design-record section it changes. A second gold, a second table, or a one-off font is not a finding to build. It is a finding to remove.
+5. **Game loop.** A lesson, Home path, or result matches Gamified learning. One job on screen, the table or path is the hero, Rex reacts on a right or wrong answer, and the lesson pays off in XP before Home. Open the cited frame in `docs/ui/references/duolingo-chess/frames/` when you are unsure what that beat looks like. A form, a text wall, or a silent exit is a finding. One ticket per missing beat, not per step that shares it.
+6. **Layout.** Clipped text, overflow, overlapping bands, or a control with no name.
+7. **Record.** The fix you would file names the design-record section it changes. A second gold, a second table, or a one-off font is not a finding to build. It is a finding to remove.
 
 Skip a nit the record does not mention and that you did not see. Skip
 strategy, grading, and coach truth. Those belong to
@@ -206,7 +212,8 @@ Open each candidate with `getJiraIssue` (`view: evidence`).
 
 - **Bug** — the screen clips, overlaps, or hides a control.
 - **Story** — the screen works, and it still breaks the design record
-  (wrong chrome, a hand off the shared table, or an empty asset slot).
+  (wrong chrome, a hand off the shared table, an empty asset slot, or a
+  learning step with no game loop).
 - Labels: `ui`, `ios`, and one area label (`onboarding`, `lesson`,
   `home`, `live-training`, `profile`, `account`). Asset-slot stories use
   the area of the screen where you saw the gap.

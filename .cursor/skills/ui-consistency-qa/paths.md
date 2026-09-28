@@ -35,7 +35,8 @@ before a lesson.
 - requires: `guest-home`
 - watch: `lib/ui/screens/home_screen.dart`, `lib/ui/home/`, `lib/ui/screens/app_shell.dart`, `lib/ui/theme/`
 
-Goal: Home status, the path, Rex, and the shell tabs match Theme. Do not
+Goal: Home status, the path, Rex, and the shell tabs match Theme and
+Gamified learning. The next lesson is a marked node on a path. Do not
 finish a lesson.
 
 1. Record the type, card, and button treatment on the status row and the next-lesson card.
@@ -49,7 +50,8 @@ finish a lesson.
 - requires: `guest-home`
 - watch: `lib/ui/screens/lesson_runner_screen.dart`, `lib/ui/course/widgets/rex_coach_line.dart`, `lib/ui/theme/`
 
-Goal: runner chrome matches Theme. The table layout belongs to
+Goal: runner chrome matches Theme and Gamified learning. One step, a thin
+progress header, and one primary button. The table layout belongs to
 `lesson-full-table`.
 
 1. Start the lesson Home is offering.
@@ -91,6 +93,7 @@ Goal: Profile and Settings match Theme. Do not sign out.
 - watch: `assets/`, `lib/core/audio/sound_service.dart`, `lib/ui/home/rex_coach_card.dart`, `lib/ui/course/widgets/rex_coach_line.dart`
 
 Goal: each asset slot is present on the screens you visit, or has one ticket.
+Rex on a lesson beat has a face and a mood, not only a sentence.
 
 1. Visit Home, one lesson step, and Settings.
 2. For logo, mascot, icons, motion, sound effects, and background music, write what you saw or heard.

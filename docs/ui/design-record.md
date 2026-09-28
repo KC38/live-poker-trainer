@@ -6,7 +6,8 @@ section. It does not invent a second button, type ramp, or table.
 
 `/ui-consistency-qa` files the tickets.
 `/implement-open-jira` updates this file in the same change as the widgets.
-Read [flutter-ui-ux](../../.cursor/skills/flutter-ui-ux/SKILL.md) before
+Read [flutter-ui-ux](../../.cursor/skills/flutter-ui-ux/SKILL.md) and the
+[Duolingo Chess patterns](references/duolingo-chess/PATTERNS.md) before
 either one.
 
 ## How a change is recorded
@@ -100,3 +101,25 @@ introduced. Reuse the path already listed. Add a row when a new file ships.
 A missing slot (Rex still text-only, a deal with no motion, a table action
 with no `SoundService` call) is a ticket that names the slot. The walk does
 not generate the file. The implementer adds it and fills the row.
+
+## Gamified learning
+
+Lessons teach like a game. The loop is
+[Duolingo Chess](references/duolingo-chess/PATTERNS.md): one step, the
+board as the hero, a mascot beat when the answer lands, then a payoff.
+Frames are in `docs/ui/references/duolingo-chess/frames/`. Use the pattern.
+Do not copy their palette, owl, or words.
+
+| Beat | What the screen does |
+| --- | --- |
+| Step | One prompt, the poker table or the choice, one primary button. Progress and lives stay in a thin header. |
+| Right | Rex celebrates on the same screen. A short line says why. One continue. |
+| Wrong | Rex shows the miss. The better action is visible. Lives move. Retry or continue is one tap. |
+| Hint | A sheet over the step, not a new route. |
+| Payoff | Lesson XP and the daily goal before Home. |
+| Home | A path. The next lesson is the marked node. Rex stands on it. |
+| Section end | One ceremony: character, title, one button. |
+
+Rex on a teaching step has a face and a mood. A text-only coach line on a
+right or wrong answer is a gap in the mascot slot and in this section.
+File one ticket per missing beat.
