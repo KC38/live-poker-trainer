@@ -1,6 +1,32 @@
 /// Live Training access tier from server entitlement / course checkpoints.
 library;
 
+/// Lesson that unlocks Rex warm-ups. Matches
+/// `LIVE_WARMUP_UNLOCK_LESSON_ID` in Cloud Functions.
+const kLiveWarmUpUnlockLessonId = 'lesson-02-07-02-section-two-jump';
+
+/// Home title for [kLiveWarmUpUnlockLessonId] when the catalog is not loaded.
+const kLiveWarmUpUnlockLessonTitle = 'Section 2 jump check';
+
+/// Locked-tab sentence. [lessonTitle] is the Home lesson the learner must finish.
+String liveTrainingLockedMessage({String? lessonTitle}) {
+  final title = _unlockTitle(lessonTitle);
+  return 'Live Training is advanced. Finish $title on Home '
+      'to unlock a coached warm-up.';
+}
+
+/// Snackbar when a locked learner tries to start a table.
+String liveTrainingLockedSnack({String? lessonTitle}) {
+  final title = _unlockTitle(lessonTitle);
+  return 'Live Training unlocks after $title. Continue on Home.';
+}
+
+String _unlockTitle(String? lessonTitle) {
+  final trimmed = lessonTitle?.trim() ?? '';
+  if (trimmed.isEmpty) return kLiveWarmUpUnlockLessonTitle;
+  return trimmed;
+}
+
 /// Access level for the Live Training tab and start callables.
 enum LiveAccessTier {
   /// Before Section 2 checkpoint — tab explains and links Home.
