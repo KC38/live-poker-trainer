@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
 /// Resolves a single Rex instruction vs a duplicate prompt under the bubble.
 ///
@@ -74,29 +75,7 @@ class RexCoachLine extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 36,
-            height: 36,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.bgElevated,
-              border: Border.all(
-                color: AppColors.gold.withValues(alpha: 0.55),
-                width: 1.2,
-              ),
-            ),
-            child: Text(
-              'Rex',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 10,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 0.3,
-                height: 1,
-              ),
-            ),
-          ),
+          const RexMascot(size: 36),
           const SizedBox(width: 8),
           Expanded(
             child: Container(

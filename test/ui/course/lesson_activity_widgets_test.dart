@@ -63,6 +63,7 @@ import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
+import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
 CourseActivity _activity({
   String id = 'act-test',
@@ -170,7 +171,7 @@ void main() {
     expect(find.byType(CoachShelfWidget), findsOneWidget);
     expect(find.byType(ActionDockWidget), findsNothing);
     expect(find.byType(LessonTableContext), findsNothing);
-    expect(find.text('Rex'), findsWidgets);
+    expect(find.byType(RexMascot), findsOneWidget);
     // The felt has to say what to tap. Rex's sentence is not that instruction.
     expect(find.text('Tap your cards'), findsOneWidget);
     await tester.tap(find.text('Tap your cards'));

@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
 /// Calm Rex presence with a single coaching line.
 class RexCoachCard extends StatelessWidget {
@@ -42,24 +43,7 @@ class RexCoachCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 44,
-              height: 44,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.bgDark.withValues(alpha: 0.55),
-                border: Border.all(color: AppColors.gold.withValues(alpha: 0.5)),
-              ),
-              child: Text(
-                'R',
-                style: GoogleFonts.cinzel(
-                  color: AppColors.goldBright,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
+            const RexMascot(size: 44),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
