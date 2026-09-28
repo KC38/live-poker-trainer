@@ -238,8 +238,12 @@ class _ProfileHeader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final identity = profile.identity;
-    final style = profile.metrics.style;
+    final metrics = profile.metrics;
+    final style = metrics.style;
     final accent = style.style.color.color;
+    // Lessons do not log live hands. Style and hand count stay in Live
+    // Training until the learner has played at least one full hand.
+    final showLiveStyle = metrics.handsPlayed > 0;
 
     return _Panel(
       child: Row(
@@ -260,35 +264,37 @@ class _ProfileHeader extends ConsumerWidget {
                     color: AppColors.goldBright,
                   ),
                 ),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 6,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    _Pill(
-                      label:
-                          style.isKnown ? style.style.label : 'Style forming',
-                      color: accent,
-                    ),
-                    Text(
-                      style.confidence.label,
-                      style: GoogleFonts.jetBrainsMono(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.slate,
+                if (showLiveStyle) ...[
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 6,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      _Pill(
+                        label:
+                            style.isKnown ? style.style.label : 'Style forming',
+                        color: accent,
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  _handsLabel(profile.metrics),
-                  style: GoogleFonts.jetBrainsMono(
-                    fontSize: 11,
-                    color: AppColors.slate,
+                      Text(
+                        style.confidence.label,
+                        style: GoogleFonts.jetBrainsMono(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.slate,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
+                  const SizedBox(height: 8),
+                  Text(
+                    _handsLabel(metrics),
+                    style: GoogleFonts.jetBrainsMono(
+                      fontSize: 11,
+                      color: AppColors.slate,
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
