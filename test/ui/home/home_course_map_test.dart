@@ -58,7 +58,7 @@ CourseHomeSnapshot _readySnapshot({
     lifetimeXp: 40,
     acceptedAccuracy: 0.75,
     nextLessonId: 'lesson-a',
-    rexLine: 'You are next to act on the path. One short lesson, then move.',
+    rexLine: 'Next lesson on the path. One short lesson, then move.',
     nodes: [
       const CourseMapNode(
         lessonId: 'lesson-a',

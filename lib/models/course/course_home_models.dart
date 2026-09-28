@@ -492,6 +492,6 @@ String _rexLineFor({
     CourseNodeKind.practice =>
       'Reps beat theory. One clean decision at a time.',
     CourseNodeKind.lesson =>
-      'You are next to act on the path. One short lesson, then move.',
+      'Next lesson on the path. One short lesson, then move.',
   };
 }
