@@ -20,9 +20,11 @@ import {
   evaluateLifeAndAcceptance,
   gradeCourseResponse,
   isLessonAttemptReadyToComplete,
+  lessonXpTotal,
   localDateString,
   parseCourseFlags,
   shouldAdvanceActivityAfterSubmit,
+  XP_PER_ACCEPTED_STEP,
   type CourseFlags,
 } from "./course_session";
 
@@ -482,6 +484,13 @@ describe("lesson completion cursor", () => {
         acceptedCount: lesson.activities.length,
       }, lesson),
     ).toBe(true);
+  });
+
+  it("counts a perfect Your two cards as five step awards plus the bonus", () => {
+    expect(lesson.activities.length).toBe(5);
+    expect(lessonXpTotal(lesson.activities.length * XP_PER_ACCEPTED_STEP)).toBe(
+      75,
+    );
   });
 
   it("blocks completion during remediation", () => {

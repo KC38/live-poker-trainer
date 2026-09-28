@@ -28,6 +28,7 @@ import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/routing/app_root.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/services/analytics/crashlytics_diagnostics_sink.dart';
+import 'package:live_poker_trainer/services/guest_install.dart';
 import 'package:live_poker_trainer/services/legacy_local_data_cleanup.dart';
 import 'package:live_poker_trainer/ui/screens/app_shell.dart';
 import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
@@ -68,6 +69,7 @@ Future<void> main() async {
   );
 
   final prefs = await SharedPreferences.getInstance();
+  await markGuestInstallGeneration(prefs);
   final analyticsEnabled =
       prefs.getBool(analyticsCollectionEnabledPrefKey) ?? true;
   await applyCollectionEnabled(analyticsEnabled);
@@ -115,6 +117,23 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
   String? _lastRootScreen;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      unawaited(_reconcileGuestInstall());
+    });
+  }
+
+  Future<void> _reconcileGuestInstall() async {
+    try {
+      await ref.read(authControllerProvider.notifier).reconcileGuestInstall();
+    } catch (error, stackTrace) {
+      debugPrint('Guest install reconcile skipped: $error\n$stackTrace');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final auth = ref.watch(appAuthProvider);
     // Ensure users/{uid} exists and prefs hydrate after sign-in / cold start.
@@ -131,6 +150,9 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
       final nextSession = next.asData?.value;
       final nextUid = nextSession?.uid;
       if (prevUid == nextUid) return;
+      if (nextSession?.isAnonymous == true) {
+        unawaited(_reconcileGuestInstall());
+      }
       ref.invalidate(userDocProvider);
       ref.invalidate(userStatsProvider);
       ref.invalidate(heroProfileControllerProvider);

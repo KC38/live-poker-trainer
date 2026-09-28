@@ -12,6 +12,8 @@ import 'package:live_poker_trainer/providers/course_catalog_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
 import 'package:live_poker_trainer/services/auth_service.dart';
+import 'package:live_poker_trainer/services/guest_install.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Shared [AuthService] singleton.
 final authServiceProvider = Provider<AuthService>((ref) => AuthService());
@@ -163,12 +165,22 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
   }
 
   /// Transparent anonymous session for the first course lesson.
+  ///
+  /// A keychain user from a previous install is signed out first so a fresh
+  /// Welcome does not keep that guest's course XP.
   Future<User> ensureAnonymousSession() async {
+    await reconcileGuestInstall();
     final existing = _auth.currentUser;
-    if (existing != null) return existing;
+    if (existing != null) {
+      if (existing.isAnonymous) {
+        await _claimGuestInstall(existing.uid);
+      }
+      return existing;
+    }
     state = const AsyncValue.loading();
     try {
       final user = await _auth.signInAnonymously();
+      await _claimGuestInstall(user.uid);
       final repo = _ref.read(userRepositoryProvider);
       await repo.ensureUserDoc(
         uid: user.uid,
@@ -187,6 +199,50 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
     } catch (e, st) {
       state = AsyncValue.error(e, st);
       rethrow;
+    }
+  }
+
+  /// Signs out an anonymous user restored from a previous install.
+  ///
+  /// No-ops when Firebase or prefs are unavailable (widget tests) and when
+  /// this install already claimed the uid.
+  Future<void> reconcileGuestInstall() async {
+    final SharedPreferences prefs;
+    try {
+      prefs = await _ref.read(sharedPreferencesProvider.future);
+    } catch (_) {
+      return;
+    }
+    await markGuestInstallGeneration(prefs);
+    final user = _auth.currentUser;
+    if (user == null || !user.isAnonymous) return;
+    final draft = prefs.getString(onboardingDraftPrefsKey);
+    final action = guestInstallAction(
+      anonymous: true,
+      uid: user.uid,
+      storedInstallUid: prefs.getString(guestInstallUidKey),
+      discardRestoredAnonymous:
+          prefs.getBool(discardRestoredAnonymousKey) ?? false,
+      hasOnboardingDraft: draft != null && draft.isNotEmpty,
+    );
+    switch (action) {
+      case GuestInstallAction.keep:
+        return;
+      case GuestInstallAction.adopt:
+        await prefs.setString(guestInstallUidKey, user.uid);
+        return;
+      case GuestInstallAction.signOut:
+        await _auth.signOut();
+    }
+  }
+
+  Future<void> _claimGuestInstall(String uid) async {
+    try {
+      final prefs = await _ref.read(sharedPreferencesProvider.future);
+      await prefs.setString(guestInstallUidKey, uid);
+      await prefs.setBool(discardRestoredAnonymousKey, false);
+    } catch (_) {
+      // Prefs are unavailable. The next launch marks the install again.
     }
   }
 

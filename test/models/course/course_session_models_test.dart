@@ -98,6 +98,27 @@ void main() {
     expect(complete.resume, isNull);
     expect(complete.liveTrainingGranted, isTrue);
     expect(complete.xpAwarded, 25);
+    expect(complete.lessonXpAwarded, isNull);
+  });
+
+  test('displayed lesson XP is step awards plus the completion bonus', () {
+    expect(displayedLessonXp(stepXpAwarded: 50, completionBonus: 25), 75);
+    expect(
+      displayedLessonXp(
+        stepXpAwarded: 0,
+        completionBonus: 25,
+        lessonXpFromServer: 75,
+      ),
+      75,
+    );
+    expect(
+      displayedLessonXp(
+        stepXpAwarded: 50,
+        completionBonus: 25,
+        lessonXpFromServer: 25,
+      ),
+      75,
+    );
   });
 
   test('attempt snapshot maps remediation status', () {

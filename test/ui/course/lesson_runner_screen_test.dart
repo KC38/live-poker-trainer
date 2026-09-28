@@ -12,6 +12,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/core/audio/sound_service.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
+import 'package:live_poker_trainer/models/course/onboarding_models.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/course_catalog_provider.dart';
@@ -773,8 +774,89 @@ void main() {
       expect(service.completeCalls, 1);
       expect(find.byType(LessonResultScreen), findsOneWidget);
       expect(find.text('LESSON COMPLETE'), findsOneWidget);
+      // One accepted step (10) plus the completion bonus (25).
+      expect(find.text('+35'), findsOneWidget);
       // Must not flip pendingSaveProgress again from a later map lesson.
       expect(onboarding.state.pendingSaveProgress, isFalse);
+    },
+  );
+
+  testWidgets(
+    'first guest lesson Nice work total includes step XP and the bonus',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 1200);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      const lessonId = 'lesson-one-shot';
+      final tiny = _tinyCatalog(
+        lessonId: lessonId,
+        title: 'Your two cards',
+        activity: CourseActivity(
+          id: 'act-one',
+          order: 1,
+          stage: ActivityStage.checkpoint,
+          renderer: ActivityRenderer.selectIdentify,
+          estimatedSeconds: 20,
+          accessibilityText: 'Pick',
+          acceptedGrades: const [SoftGrade.recommended],
+          prompt: 'Look at your two cards. What do you have?',
+          choices: const [
+            CourseChoice(id: 'pocket-pair', label: 'A pocket pair'),
+            CourseChoice(id: 'suited', label: 'Suited nines'),
+          ],
+        ),
+      );
+      final service = _TinyLessonService(tiny, lessonId);
+      final onboarding = OnboardingController(null);
+      await onboarding.setStep(OnboardingStep.firstLesson);
+
+      final container = ProviderContainer(
+        overrides: [
+          soundServiceProvider.overrideWithValue(SoundService.silent()),
+          courseCatalogProvider.overrideWith((ref) async => tiny),
+          analyticsServiceProvider.overrideWithValue(
+            AnalyticsService(enabled: false),
+          ),
+          onboardingControllerProvider.overrideWith((ref) => onboarding),
+          authServiceProvider.overrideWithValue(_AnonymousAuthService()),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: MaterialApp(
+            theme: buildPokerTheme().copyWith(
+              splashFactory: NoSplash.splashFactory,
+              highlightColor: Colors.transparent,
+            ),
+            home: LessonRunnerScreen(
+              lessonId: lessonId,
+              courseService: service,
+              startRequestId: 'start_first',
+              embeddedInShell: false,
+            ),
+          ),
+        ),
+      );
+      await _pumpUntil(
+        tester,
+        find.text('Look at your two cards. What do you have?'),
+      );
+
+      await tester.tap(find.text('A pocket pair'));
+      await tester.pump();
+      await tester.pump();
+      await tester.tap(find.text('Continue'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+
+      expect(service.completeCalls, 1);
+      expect(onboarding.state.lastXpAwarded, 35);
+      expect(onboarding.state.lastStreak, 1);
+      expect(find.byType(LessonResultScreen), findsNothing);
     },
   );
 

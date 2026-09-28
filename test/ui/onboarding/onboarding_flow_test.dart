@@ -310,4 +310,31 @@ void main() {
     );
     expect(find.textContaining('can be lost'), findsOneWidget);
   });
+
+  testWidgets('Nice work shows the lesson XP total and streak', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          onboardingControllerProvider.overrideWith((ref) => _AwardedDraft()),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: const SaveProgressScreen(),
+        ),
+      ),
+    );
+    expect(find.text('Nice work'), findsOneWidget);
+    expect(find.text('Your two cards'), findsOneWidget);
+    expect(find.text('+75 XP · streak 1'), findsOneWidget);
+  });
+}
+
+class _AwardedDraft extends OnboardingController {
+  _AwardedDraft() : super(null) {
+    state = state.copyWith(
+      lastLessonTitle: 'Your two cards',
+      lastXpAwarded: 75,
+      lastStreak: 1,
+    );
+  }
 }
