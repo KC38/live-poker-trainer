@@ -7,9 +7,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/models/course/onboarding_models.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
+import 'package:live_poker_trainer/services/guest_install.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const _prefsKey = 'onboarding_draft_v1';
+const _prefsKey = onboardingDraftPrefsKey;
 
 /// Loads and persists the guest onboarding draft.
 class OnboardingController extends StateNotifier<OnboardingDraft> {
@@ -119,6 +120,6 @@ class OnboardingController extends StateNotifier<OnboardingDraft> {
 /// Onboarding draft provider.
 final onboardingControllerProvider =
     StateNotifierProvider<OnboardingController, OnboardingDraft>((ref) {
-  final prefs = ref.watch(sharedPreferencesProvider).asData?.value;
-  return OnboardingController(prefs);
-});
+      final prefs = ref.watch(sharedPreferencesProvider).asData?.value;
+      return OnboardingController(prefs);
+    });
