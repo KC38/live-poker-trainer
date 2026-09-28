@@ -96,7 +96,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     name: AnalyticsScreens.settings,
                   ),
                 ),
-            icon: const Icon(Icons.settings_outlined, color: AppColors.slate),
+            icon: const Icon(
+              Icons.settings_outlined,
+              semanticLabel: 'Settings',
+              color: AppColors.slate,
+            ),
           ),
         ],
       ),
@@ -135,6 +139,8 @@ class _ProfileBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final metrics = profile.metrics;
     final controller = ref.read(heroProfileControllerProvider.notifier);
+    final anonymous =
+        ref.watch(appAuthProvider).asData?.value.isAnonymous == true;
 
     return RefreshIndicator(
       color: AppColors.gold,
@@ -148,6 +154,13 @@ class _ProfileBody extends ConsumerWidget {
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 40),
         children: [
           _ProfileHeader(profile: profile),
+          if (anonymous) ...[
+            const SizedBox(height: 16),
+            FilledButton(
+              onPressed: () => pushSaveProgressAuth(context),
+              child: const Text('Create an account'),
+            ),
+          ],
           const SizedBox(height: 26),
           const _SectionTitle('Course'),
           const SizedBox(height: 4),
@@ -1224,19 +1237,10 @@ class _SettingsAndSignOut extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final anonymous =
-        ref.watch(appAuthProvider).asData?.value.isAnonymous == true;
     return _Panel(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (anonymous) ...[
-            FilledButton(
-              onPressed: () => pushSaveProgressAuth(context),
-              child: const Text('Create an account'),
-            ),
-            const SizedBox(height: 8),
-          ],
           OutlinedButton(
             onPressed:
                 () => Navigator.push(

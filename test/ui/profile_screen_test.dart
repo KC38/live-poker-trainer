@@ -220,6 +220,10 @@ void main() {
 
     expect(find.text('Create an account'), findsOneWidget);
     expect(find.text('Sign out'), findsOneWidget);
+    expect(
+      tester.getTopLeft(find.text('Create an account')).dy,
+      lessThan(tester.getTopLeft(find.text('Course')).dy),
+    );
 
     await tester.tap(find.text('Create an account'));
     await tester.pumpAndSettle();
