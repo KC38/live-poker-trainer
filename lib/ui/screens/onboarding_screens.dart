@@ -95,6 +95,13 @@ class ExperienceChoiceScreen extends ConsumerWidget {
       title: 'Your experience',
       step: 2,
       stepCount: 4,
+      onBack: () {
+        unawaited(
+          ref
+              .read(onboardingControllerProvider.notifier)
+              .setStep(OnboardingStep.welcome),
+        );
+      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -160,6 +167,13 @@ class DailyGoalScreen extends ConsumerWidget {
       title: 'Daily goal',
       step: 3,
       stepCount: 4,
+      onBack: () {
+        unawaited(
+          ref
+              .read(onboardingControllerProvider.notifier)
+              .setStep(OnboardingStep.experience),
+        );
+      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -222,6 +236,13 @@ class RexIntroScreen extends ConsumerWidget {
       title: 'Meet Rex',
       step: 4,
       stepCount: 4,
+      onBack: () {
+        unawaited(
+          ref
+              .read(onboardingControllerProvider.notifier)
+              .setStep(OnboardingStep.dailyGoal),
+        );
+      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -308,6 +329,13 @@ class RecommendedStartScreen extends ConsumerWidget {
         );
     return _OnboardingScaffold(
       title: 'Your start',
+      onBack: () {
+        unawaited(
+          ref
+              .read(onboardingControllerProvider.notifier)
+              .setStep(OnboardingStep.rexIntro),
+        );
+      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -550,6 +578,7 @@ class _OnboardingScaffold extends StatelessWidget {
     this.title,
     this.step,
     this.stepCount,
+    this.onBack,
   });
 
   final Widget child;
@@ -560,9 +589,16 @@ class _OnboardingScaffold extends StatelessWidget {
 
   final int? stepCount;
 
+  /// Used when this screen is the root, so [Navigator.canPop] is false.
+  ///
+  /// Pushed screens still pop. Your start is a new navigator and uses this
+  /// to rewind the stored step instead of opening Home.
+  final VoidCallback? onBack;
+
   @override
   Widget build(BuildContext context) {
-    final canBack = Navigator.of(context).canPop();
+    final canPop = Navigator.of(context).canPop();
+    final showBack = canPop || onBack != null;
     final showStep = step != null && stepCount != null;
     return Scaffold(
       body: Container(
@@ -580,13 +616,19 @@ class _OnboardingScaffold extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                if (canBack || showStep)
+                if (showBack || showStep)
                   Row(
                     children: [
-                      if (canBack)
+                      if (showBack)
                         IconButton(
                           tooltip: 'Back',
-                          onPressed: () => Navigator.of(context).pop(),
+                          onPressed: () {
+                            if (canPop) {
+                              Navigator.of(context).pop();
+                              return;
+                            }
+                            onBack?.call();
+                          },
                           icon: const Icon(
                             Icons.arrow_back,
                             semanticLabel: 'Back',
@@ -606,7 +648,7 @@ class _OnboardingScaffold extends StatelessWidget {
                         ),
                     ],
                   ),
-                if (canBack || showStep) const SizedBox(height: 8),
+                if (showBack || showStep) const SizedBox(height: 8),
                 if (title != null)
                   Text(
                     title!,

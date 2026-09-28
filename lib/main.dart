@@ -238,7 +238,14 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
             ),
           );
         }
-        return const ExperienceChoiceScreen();
+        // Back from Your start rewinds the step. The new navigator's home is
+        // that step, with the stored band and daily goal still selected.
+        return switch (onboarding.step) {
+          OnboardingStep.rexIntro => const RexIntroScreen(),
+          OnboardingStep.dailyGoal => const DailyGoalScreen(),
+          OnboardingStep.experience => const ExperienceChoiceScreen(),
+          _ => const ExperienceChoiceScreen(),
+        };
       case AppRootDestination.shell:
         // Kick off users/{uid} hydrate without blocking the shell. Cloud sync
         // stays disabled until [userDocProvider] finishes, so table-setup

@@ -66,6 +66,17 @@ String rootStackToken({
           onboarding.step == OnboardingStep.firstLesson)) {
     return '-course';
   }
+  // Rewind from Your start remounts onto the earlier step. Each step has its
+  // own navigator so Back shows that screen. The forward welcome stack stays
+  // on '' until the learner leaves Welcome.
+  if (destination == AppRootDestination.guestCourse) {
+    return switch (onboarding.step) {
+      OnboardingStep.rexIntro => '-rex',
+      OnboardingStep.dailyGoal => '-goal',
+      OnboardingStep.experience => '-experience',
+      _ => '',
+    };
+  }
   return '';
 }
 
@@ -102,11 +113,14 @@ AppRootDestination resolveAppRoot({
     if (onboarding.pendingSaveProgress) {
       return AppRootDestination.saveProgress;
     }
-    // Once the learner leaves the welcome gate, keep the guestCourse root so
-    // anonymous sign-in (during the first lesson bootstrap) does not change
-    // MaterialApp.home and dispose the in-progress lesson route.
+    // Your start, the first lesson, and the steps Back returns to stay on the
+    // guest course root. A fresh navigator per step shows Meet Rex, Daily
+    // goal, or Your experience. Welcome itself stays the signed-out home.
     if (onboarding.step == OnboardingStep.firstLesson ||
-        onboarding.step == OnboardingStep.recommendedStart) {
+        onboarding.step == OnboardingStep.recommendedStart ||
+        onboarding.step == OnboardingStep.rexIntro ||
+        onboarding.step == OnboardingStep.dailyGoal ||
+        onboarding.step == OnboardingStep.experience) {
       return AppRootDestination.guestCourse;
     }
     return AppRootDestination.welcome;
