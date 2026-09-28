@@ -64,6 +64,9 @@ class AuthService {
         message: 'Anonymous sign-in succeeded but no user was returned.',
       );
     }
+    // Firestore owner rules read request.auth. The credential can exist
+    // before that token is attached, and the first users/{uid} read is denied.
+    await user.getIdToken();
     return user;
   }
 

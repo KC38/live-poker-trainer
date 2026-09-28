@@ -86,6 +86,10 @@ final userDocProvider = FutureProvider<UserDocument?>((ref) async {
 
   final settings = ref.read(settingsProvider);
   final user = ref.read(authStateProvider).asData?.value;
+  if (user != null && user.uid == uid) {
+    // Same race as anonymous sign-in: wait until Firestore can send the token.
+    await user.getIdToken();
+  }
   final repo = ref.read(userRepositoryProvider);
   // Bound the cold-start hydrate so a hung Firestore call cannot pin the
   // root navigator on [_AuthLoadingScreen] forever (shell destination).

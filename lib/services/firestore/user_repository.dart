@@ -47,6 +47,33 @@ class UserRepository {
     final requested = HeroIdentity.sanitizeName(
       displayName ?? HeroIdentity.defaultDisplayName,
     );
+    try {
+      return await _ensureUserDocOnce(
+        uid: uid,
+        requested: requested,
+        avatarRef: avatarRef,
+        preferences: preferences,
+      );
+    } on FirebaseException catch (error) {
+      // A brand-new anonymous token can miss the first owner read. One retry
+      // is the same recovery the lesson screen used to ask the player to tap.
+      if (error.code != 'permission-denied') rethrow;
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+      return _ensureUserDocOnce(
+        uid: uid,
+        requested: requested,
+        avatarRef: avatarRef,
+        preferences: preferences,
+      );
+    }
+  }
+
+  Future<UserDocument> _ensureUserDocOnce({
+    required String uid,
+    required String requested,
+    String? avatarRef,
+    required GameSettingsModel preferences,
+  }) async {
     final now = DateTime.now().toUtc();
     // Prefer cache+server default get. Source.server-only reads have hung
     // indefinitely for some linked accounts on cold start.
