@@ -276,6 +276,36 @@ void main() {
         flags: enabled,
         onboarding: const OnboardingDraft(step: OnboardingStep.experience),
       ),
+      AppRootDestination.guestCourse,
+    );
+    expect(
+      resolveAppRoot(
+        signedIn: false,
+        anonymous: false,
+        flagsReady: true,
+        flags: enabled,
+        onboarding: const OnboardingDraft(step: OnboardingStep.dailyGoal),
+      ),
+      AppRootDestination.guestCourse,
+    );
+    expect(
+      resolveAppRoot(
+        signedIn: false,
+        anonymous: false,
+        flagsReady: true,
+        flags: enabled,
+        onboarding: const OnboardingDraft(step: OnboardingStep.rexIntro),
+      ),
+      AppRootDestination.guestCourse,
+    );
+    expect(
+      resolveAppRoot(
+        signedIn: false,
+        anonymous: false,
+        flagsReady: true,
+        flags: enabled,
+        onboarding: const OnboardingDraft(step: OnboardingStep.welcome),
+      ),
       AppRootDestination.welcome,
     );
   });
@@ -354,6 +384,30 @@ void main() {
         anonymous: false,
       ),
       '',
+    );
+    expect(
+      rootStackToken(
+        destination: AppRootDestination.guestCourse,
+        onboarding: const OnboardingDraft(step: OnboardingStep.rexIntro),
+        anonymous: false,
+      ),
+      '-rex',
+    );
+    expect(
+      rootStackToken(
+        destination: AppRootDestination.guestCourse,
+        onboarding: const OnboardingDraft(step: OnboardingStep.dailyGoal),
+        anonymous: false,
+      ),
+      '-goal',
+    );
+    expect(
+      rootStackToken(
+        destination: AppRootDestination.guestCourse,
+        onboarding: const OnboardingDraft(step: OnboardingStep.experience),
+        anonymous: false,
+      ),
+      '-experience',
     );
   });
 }
