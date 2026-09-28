@@ -21,11 +21,23 @@ session. Do not launch a subagent. Do not edit `~/live-poker-trainer`.
 
 ## Professional standard
 
-Same bar as the rest of this repo's delivery path:
+Same charter as [new-user QA](../new-user-qa/SKILL.md), applied as the
+engineer who ships the ticket:
 
 - The ticket is the spec. Read the summary, description, acceptance
   criteria, **Validate before closing**, comments, and links before any
   edit. The outcome is those checks, in the ticket's words.
+- When the ticket names a path id, that path in
+  [paths.md](../new-user-qa/paths.md) is the journey, including its
+  precondition. Do not prove the fix on a different path.
+- On the screens the ticket touches, the same six checks hold:
+  1. The step the screen is for can be finished, or you record the control that still stops it.
+  2. State this step set is still true on the next screen.
+  3. Recovery the ticket mentions matches the product.
+  4. Copy matches the code and README you read.
+  5. Layout on this phone is intact: no new clip, overflow, or unnamed control.
+  6. On a lesson or hand, the grade, the coach line, and the chip math refer to this choice and the amounts on screen.
+  A written criterion that passes while one of these fails on the same path is not done.
 - Ship the smallest change that makes every criterion true. Fix the cause.
   Leave behavior the ticket does not mention alone. No bundled fixes.
 - One ticket, one branch, one PR. Tests lock the criteria. A green suite
@@ -90,9 +102,11 @@ Otherwise run make-change in this session for this ticket only:
    `tools/agent_tap.py`. Leave the user iPhone 17
    (`20ACECD5-FBEE-4663-9044-E11D5F0A26FC`) alone. Screenshot details are in
    [docs/agent-ios-simulator.md](../../../docs/agent-ios-simulator.md).
-   Walk the ticket's own steps, including **Validate before closing**.
-   When those steps say fresh guest, uninstall and relaunch this worktree.
-   A hot restart of a signed-in session is not that check.
+   Walk the ticket's own steps, including **Validate before closing**,
+   and the six charter checks above. Meet the path precondition from
+   [paths.md](../new-user-qa/paths.md): `fresh-install` means uninstall and
+   relaunch this worktree; `guest-home` means do not uninstall. A hot
+   restart of a signed-in session is not a fresh-install check.
 5. Review `git diff origin/main...HEAD` against the ticket. Remove anything
    the criteria do not require.
 6. PR test plan is those same criteria. Merge, deploy Cloud Functions, and
@@ -110,8 +124,8 @@ report the remaining keys.
 ## Close
 
 Close a ticket only after the post-merge Pro walk succeeded and the
-closeout screenshots exist. Every acceptance criterion was checked on that
-walk.
+closeout screenshots exist. Every acceptance criterion and the six
+charter checks were checked on that walk.
 
 1. Upload each screenshot with `executeWrite` operation
    `uploadAttachmentToJiraIssue`: call with `filePath` to get
@@ -123,8 +137,8 @@ walk.
    from the upload. The comment must stand alone:
    - what shipped
    - branch name and PR URL
-   - each acceptance criterion and how it was checked on the Pro after
-     merge
+   - each acceptance criterion and the six charter checks, and how each
+     was checked on the Pro after merge
    - that the images are from that live session
    Do not put the comment on `transitionJiraIssue` `update`. That path
    drops the comment.
