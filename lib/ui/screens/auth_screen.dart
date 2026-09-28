@@ -14,8 +14,10 @@ import 'package:live_poker_trainer/providers/onboarding_provider.dart';
 void pushSaveProgressAuth(BuildContext context) {
   Navigator.of(context).push(
     MaterialPageRoute<void>(
-      builder: (_) =>
-          const AuthScreen(saveProgressMode: true, initialRegisterMode: true),
+      builder: (_) => const AuthScreen(
+        saveProgressMode: true,
+        initialRegisterMode: true,
+      ),
     ),
   );
 }
@@ -60,7 +62,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     super.dispose();
   }
 
-  bool get _busy => _resetBusy || ref.watch(authControllerProvider).isLoading;
+  bool get _busy =>
+      _resetBusy || ref.watch(authControllerProvider).isLoading;
 
   Future<void> _submitEmail() async {
     setState(() {
@@ -96,9 +99,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
         );
       }
       if (widget.saveProgressMode && mounted) {
-        await ref
-            .read(onboardingControllerProvider.notifier)
-            .clearAfterLinked();
+        await ref.read(onboardingControllerProvider.notifier).clearAfterLinked();
       }
     } catch (e) {
       if (!mounted) return;
@@ -125,7 +126,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
       if (!mounted) return;
       setState(() {
         _resetBusy = false;
-        _info = 'If an account exists for that email, we sent a reset link.';
+        _info =
+            'If an account exists for that email, we sent a reset link.';
       });
     } catch (e) {
       if (!mounted) return;
@@ -144,9 +146,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     try {
       await ref.read(authControllerProvider.notifier).signInWithGoogle();
       if (widget.saveProgressMode && mounted) {
-        await ref
-            .read(onboardingControllerProvider.notifier)
-            .clearAfterLinked();
+        await ref.read(onboardingControllerProvider.notifier).clearAfterLinked();
       }
     } catch (e) {
       if (!mounted) return;
@@ -160,13 +160,13 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
         'email-already-in-use' => 'That email already has an account.',
         'invalid-email' => 'Enter a valid email address.',
         'weak-password' => 'Use a password of at least 6 characters.',
-        'user-not-found' ||
-        'wrong-password' ||
-        'invalid-credential' => 'Email or password is incorrect.',
+        'user-not-found' || 'wrong-password' || 'invalid-credential' =>
+          'Email or password is incorrect.',
         'network-request-failed' => 'Network error — check your connection.',
         'too-many-requests' =>
           'Too many attempts. Wait a minute and try again.',
-        'missing-id-token' => 'Google Sign-In could not get an ID token. On Android, add the app SHA-1 in the Firebase console.',
+        'missing-id-token' =>
+          'Google Sign-In could not get an ID token. On Android, add the app SHA-1 in the Firebase console.',
         'credential-already-in-use' =>
           'That Google account is already linked to another user.',
         _ => error.message ?? 'Sign-in failed (${error.code}).',
@@ -185,11 +185,11 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   Widget build(BuildContext context) {
     final subtitle = widget.saveProgressMode
         ? (_registerMode
-              ? 'Create an account to keep the progress from your first lesson.'
-              : 'Sign in to transfer your guest progress to this account.')
+            ? 'Create an account to keep the progress from your first lesson.'
+            : 'Sign in to transfer your guest progress to this account.')
         : (_registerMode
-              ? 'Create an account to sync progress across devices.'
-              : 'Sign in to continue training.');
+            ? 'Create an account to sync progress across devices.'
+            : 'Sign in to continue training.');
 
     // Welcome pushes this screen. Back must return there. The signed-out
     // root has nothing to pop, so it stays without a dead Back control.
@@ -210,26 +210,30 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
               ),
             )
           : canPop
-          ? AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              leading: IconButton(
-                tooltip: 'Back',
-                icon: const Icon(
-                  Icons.arrow_back,
-                  semanticLabel: 'Back',
-                  color: AppColors.slate,
-                ),
-                onPressed: () => Navigator.of(context).maybePop(),
-              ),
-            )
-          : null,
+              ? AppBar(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  leading: IconButton(
+                    tooltip: 'Back',
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      semanticLabel: 'Back',
+                      color: AppColors.slate,
+                    ),
+                    onPressed: () => Navigator.of(context).maybePop(),
+                  ),
+                )
+              : null,
       body: Container(
         decoration: const BoxDecoration(
           gradient: RadialGradient(
             center: Alignment(0, -0.55),
             radius: 1.15,
-            colors: [Color(0xFF1A2E28), AppColors.bgMid, AppColors.bgDark],
+            colors: [
+              Color(0xFF1A2E28),
+              AppColors.bgMid,
+              AppColors.bgDark,
+            ],
             stops: [0.0, 0.45, 1.0],
           ),
         ),
@@ -297,7 +301,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
                         autofillHints: const [AutofillHints.email],
-                        decoration: const InputDecoration(labelText: 'Email'),
+                        decoration: const InputDecoration(
+                          labelText: 'Email',
+                        ),
                         validator: (v) {
                           final value = v?.trim() ?? '';
                           if (value.isEmpty || !value.contains('@')) {
@@ -381,9 +387,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                                   color: AppColors.bgDark,
                                 ),
                               )
-                            : Text(
-                                _registerMode ? 'Create account' : 'Sign in',
-                              ),
+                            : Text(_registerMode ? 'Create account' : 'Sign in'),
                       ),
                       const SizedBox(height: 12),
                       OutlinedButton.icon(
@@ -396,10 +400,10 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                         onPressed: _busy
                             ? null
                             : () => setState(() {
-                                _registerMode = !_registerMode;
-                                _error = null;
-                                _info = null;
-                              }),
+                                  _registerMode = !_registerMode;
+                                  _error = null;
+                                  _info = null;
+                                }),
                         child: Text(
                           _registerMode
                               ? 'Already have an account? Sign in'
@@ -417,3 +421,4 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     );
   }
 }
+
