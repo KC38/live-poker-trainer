@@ -121,25 +121,39 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       _error = null;
       _errorDetail = null;
     });
-    try {
-      await _bootstrapBody().timeout(widget.bootstrapTimeout);
-    } on TimeoutException {
-      if (!mounted) return;
-      setState(() {
-        _bootstrapping = false;
-        _error =
-            'Starting this lesson is taking too long. Check your connection '
-            'and retry.';
-        _errorDetail = 'TimeoutException after ${widget.bootstrapTimeout}';
-      });
-    } catch (error) {
-      if (!mounted) return;
-      setState(() {
-        _bootstrapping = false;
-        _error = _friendlyStartError(error);
-        _errorDetail = error.toString();
-      });
+    Object? failure;
+    for (var attempt = 0; attempt < 2; attempt++) {
+      try {
+        await _bootstrapBody().timeout(widget.bootstrapTimeout);
+        return;
+      } on TimeoutException {
+        if (!mounted) return;
+        setState(() {
+          _bootstrapping = false;
+          _error =
+              'Starting this lesson is taking too long. Check your connection '
+              'and retry.';
+          _errorDetail = 'TimeoutException after ${widget.bootstrapTimeout}';
+        });
+        return;
+      } catch (error) {
+        failure = error;
+        // The first anonymous Firestore read can be denied before the token
+        // is attached. One more start is what Retry did, without the player.
+        final denied = error.toString().toLowerCase().contains(
+          'permission-denied',
+        );
+        if (attempt == 0 && denied) continue;
+        break;
+      }
     }
+    if (!mounted || failure == null) return;
+    final error = failure;
+    setState(() {
+      _bootstrapping = false;
+      _error = _friendlyStartError(error);
+      _errorDetail = error.toString();
+    });
   }
 
   Future<void> _bootstrapBody() async {
@@ -209,7 +223,10 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         lower.contains('unavailable')) {
       return 'Network issue starting the lesson. Check your connection and retry.';
     }
-    if (lower.contains('permission-denied') || lower.contains('unauthenticated')) {
+    if (lower.contains('permission-denied')) {
+      return 'Missing or insufficient permissions.';
+    }
+    if (lower.contains('unauthenticated')) {
       return 'Sign-in failed before the lesson could start. Retry in a moment.';
     }
     // Prefer short CourseServiceException messages when present.

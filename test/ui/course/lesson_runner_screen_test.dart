@@ -406,6 +406,65 @@ void main() {
     expect(find.text('Tap your cards'), findsOneWidget);
   });
 
+  testWidgets('permission-denied start says missing permissions, not sign-in', (
+    tester,
+  ) async {
+    final denied = _PermissionDeniedStartCourseService(catalog);
+    await tester.pumpWidget(
+      _app(
+        LessonRunnerScreen(
+          lessonId: kFirstCourseLessonId,
+          courseService: denied,
+          startRequestId: 'start_denied',
+        ),
+        catalog: catalog,
+      ),
+    );
+    await tester.pump();
+    for (
+      var i = 0;
+      i < 40 && find.text('Could not start the lesson').evaluate().isEmpty;
+      i++
+    ) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(find.text('Could not start the lesson'), findsOneWidget);
+    expect(find.text('Missing or insufficient permissions.'), findsOneWidget);
+    expect(find.textContaining('Sign-in failed'), findsNothing);
+    expect(find.text('Retry'), findsOneWidget);
+    // Bootstrap retries the denied start once before showing the error.
+    expect(denied.startCount, 2);
+  });
+
+  testWidgets('one permission-denied start retries into the first activity', (
+    tester,
+  ) async {
+    final once = _PermissionDeniedOnceCourseService(catalog);
+    await tester.pumpWidget(
+      _app(
+        LessonRunnerScreen(
+          lessonId: kFirstCourseLessonId,
+          courseService: once,
+          startRequestId: 'start_denied_once',
+        ),
+        catalog: catalog,
+      ),
+    );
+    await tester.pump();
+    for (
+      var i = 0;
+      i < 40 && find.text('Tap your cards').evaluate().isEmpty;
+      i++
+    ) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(find.text('Tap your cards'), findsOneWidget);
+    expect(find.text('Could not start the lesson'), findsNothing);
+    expect(find.text('Retry'), findsNothing);
+    expect(find.textContaining('Sign-in failed'), findsNothing);
+    expect(once.startCount, 2);
+  });
+
   testWidgets('hung startLesson surfaces retry instead of empty spinner', (
     tester,
   ) async {
@@ -1130,6 +1189,100 @@ class _StaleThenResumeCourseService extends CourseService {
       'Stale activity. Resume the lesson and retry.',
       code: 'aborted',
     );
+  }
+}
+
+const _kPermissionDeniedDetail =
+    '[cloud_firestore/permission-denied] Missing or insufficient permissions.';
+
+StartCourseLessonResult _startedFirst(CourseCatalog catalog, String lessonId) {
+  final first = catalog.activitiesForLesson(lessonId).first;
+  return StartCourseLessonResult(
+    attempt: CourseAttemptSnapshot(
+      attemptId: 'attempt-1',
+      lessonId: lessonId,
+      catalogVersion: catalog.catalogVersion,
+      status: 'in_progress',
+      activityIndex: 0,
+      currentActivityId: first.id,
+      livesRemaining: 3,
+      livesMax: 3,
+      acceptedCount: 0,
+      scoredCount: 0,
+      stepCount: 0,
+    ),
+    resume: CourseResumePointer(
+      attemptId: 'attempt-1',
+      lessonId: lessonId,
+      activityId: first.id,
+      activityIndex: 0,
+    ),
+    duplicate: false,
+  );
+}
+
+/// Every start is a Firestore owner-rule denial.
+class _PermissionDeniedStartCourseService extends CourseService {
+  _PermissionDeniedStartCourseService(this.catalog) : super();
+
+  final CourseCatalog catalog;
+  var startCount = 0;
+
+  @override
+  Future<void> initializeProfile({
+    required String catalogVersion,
+    String timezone = 'UTC',
+    String? experienceBand,
+    int? dailyGoalMinutes,
+    String? recommendedLessonId,
+  }) async {}
+
+  @override
+  Future<StartCourseLessonResult> startLesson({
+    required String lessonId,
+    required String catalogVersion,
+    required String startRequestId,
+    String timezone = 'UTC',
+  }) async {
+    startCount += 1;
+    throw const CourseServiceException(
+      _kPermissionDeniedDetail,
+      code: 'permission-denied',
+    );
+  }
+}
+
+/// First start is denied; the automatic retry opens the lesson.
+class _PermissionDeniedOnceCourseService extends CourseService {
+  _PermissionDeniedOnceCourseService(this.catalog) : super();
+
+  final CourseCatalog catalog;
+  var startCount = 0;
+
+  @override
+  Future<void> initializeProfile({
+    required String catalogVersion,
+    String timezone = 'UTC',
+    String? experienceBand,
+    int? dailyGoalMinutes,
+    String? recommendedLessonId,
+  }) async {}
+
+  @override
+  Future<StartCourseLessonResult> startLesson({
+    required String lessonId,
+    required String catalogVersion,
+    required String startRequestId,
+    String timezone = 'UTC',
+  }) async {
+    startCount += 1;
+    if (startCount == 1) {
+      throw const CourseServiceException(
+        _kPermissionDeniedDetail,
+        code: 'permission-denied',
+      );
+    }
+    return _startedFirst(catalog, lessonId);
   }
 }
 
