@@ -143,6 +143,48 @@ void main() {
     expect(find.text('Create account'), findsOneWidget);
   });
 
+  testWidgets('save-progress close is named Close and returns', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [authServiceProvider.overrideWithValue(auth)],
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: TextButton(
+                onPressed: () => pushSaveProgressAuth(context),
+                child: const Text('Open account'),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    await tester.tap(find.text('Open account'));
+    await tester.pumpAndSettle();
+
+    expect(find.byTooltip('Close'), findsOneWidget);
+    final screen = tester.widget<AuthScreen>(find.byType(AuthScreen));
+    expect(screen.saveProgressMode, isTrue);
+    expect(screen.initialRegisterMode, isTrue);
+    expect(
+      find.text(
+        'Create an account to keep the progress from your first lesson.',
+      ),
+      findsOneWidget,
+    );
+
+    await tester.tap(find.byTooltip('Close'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AuthScreen), findsNothing);
+    expect(find.text('Open account'), findsOneWidget);
+  });
+
   testWidgets('reset failure shows a friendly error', (tester) async {
     auth.resetError = FirebaseAuthException(code: 'too-many-requests');
     await pumpAuth(tester);

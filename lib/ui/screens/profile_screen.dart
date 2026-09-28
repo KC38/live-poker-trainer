@@ -22,6 +22,7 @@ import 'package:live_poker_trainer/providers/course_progress_provider.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
+import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/screens/settings_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_avatar.dart';
@@ -1223,10 +1224,19 @@ class _SettingsAndSignOut extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final anonymous =
+        ref.watch(appAuthProvider).asData?.value.isAnonymous == true;
     return _Panel(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          if (anonymous) ...[
+            FilledButton(
+              onPressed: () => pushSaveProgressAuth(context),
+              child: const Text('Create an account'),
+            ),
+            const SizedBox(height: 8),
+          ],
           OutlinedButton(
             onPressed:
                 () => Navigator.push(

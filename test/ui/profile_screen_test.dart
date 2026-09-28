@@ -1,6 +1,7 @@
 /// Player Profile screen: the low-sample contract and identity editing.
 library;
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,8 +16,10 @@ import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/course_progress_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
+import 'package:live_poker_trainer/services/auth_service.dart';
 import 'package:live_poker_trainer/services/firestore/progress_repository.dart';
 import 'package:live_poker_trainer/services/firestore/user_repository.dart';
+import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/screens/profile_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_avatar.dart';
@@ -48,6 +51,61 @@ class _FakeUserRepository extends UserRepository {
       preferences: document.preferences,
     );
   }
+}
+
+class _IdleAuthService implements AuthService {
+  @override
+  Stream<User?> get authStateChanges => const Stream.empty();
+
+  @override
+  User? get currentUser => null;
+
+  @override
+  String? get currentUid => null;
+
+  @override
+  bool get isAnonymous => true;
+
+  @override
+  Future<User> registerWithEmail({
+    required String email,
+    required String password,
+    String? displayName,
+  }) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<User> signInWithEmail({
+    required String email,
+    required String password,
+  }) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<User> signInWithGoogle() => throw UnimplementedError();
+
+  @override
+  Future<User> signInAnonymously() => throw UnimplementedError();
+
+  @override
+  Future<User> linkWithEmail({
+    required String email,
+    required String password,
+    String? displayName,
+  }) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<User> linkWithGoogle() => throw UnimplementedError();
+
+  @override
+  Future<void> sendPasswordResetEmail({required String email}) async {}
+
+  @override
+  Future<void> signOut() async {}
 }
 
 class _FakeProgressRepository extends ProgressRepository {
@@ -115,6 +173,68 @@ void main() {
     );
     await tester.pumpAndSettle();
   }
+
+  testWidgets('a guest can open create-account and still sign out', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1200, 4200);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          authServiceProvider.overrideWithValue(_IdleAuthService()),
+          appAuthProvider.overrideWithValue(
+            const AsyncData(
+              AppAuthSnapshot(uid: 'guest', isAnonymous: true),
+            ),
+          ),
+          authUidProvider.overrideWithValue('guest'),
+          userDocProvider.overrideWith((ref) async => users.document),
+          userRepositoryProvider.overrideWithValue(users),
+          progressRepositoryProvider.overrideWithValue(progress),
+          analyticsServiceProvider.overrideWithValue(
+            AnalyticsService(enabled: false),
+          ),
+          courseProgressProvider.overrideWith(
+            (ref) async => const CourseProgress(
+              loaded: true,
+              available: false,
+              lifetimeXp: 25,
+              currentStreak: 1,
+              acceptedAccuracy: 1,
+              mastery: 0.4,
+              reviewsDue: 0,
+              currentSectionTitle: 'Cards and the table',
+            ),
+          ),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: const ProfileScreen(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Create an account'), findsOneWidget);
+    expect(find.text('Sign out'), findsOneWidget);
+
+    await tester.tap(find.text('Create an account'));
+    await tester.pumpAndSettle();
+
+    final screen = tester.widget<AuthScreen>(find.byType(AuthScreen));
+    expect(screen.saveProgressMode, isTrue);
+    expect(screen.initialRegisterMode, isTrue);
+    expect(find.byTooltip('Close'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Close'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AuthScreen), findsNothing);
+    expect(find.text('Sign out'), findsOneWidget);
+  });
 
   testWidgets('with no hands the screen withholds every rate and the style', (
     tester,

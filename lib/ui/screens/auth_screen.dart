@@ -10,6 +10,18 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/onboarding_provider.dart';
 
+/// Opens create-account so this guest can link the lesson on this device.
+void pushSaveProgressAuth(BuildContext context) {
+  Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      builder: (_) => const AuthScreen(
+        saveProgressMode: true,
+        initialRegisterMode: true,
+      ),
+    ),
+  );
+}
+
 /// Signed-out landing: create account or sign in.
 class AuthScreen extends ConsumerStatefulWidget {
   /// Creates the auth screen.
@@ -185,6 +197,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
               backgroundColor: Colors.transparent,
               elevation: 0,
               leading: IconButton(
+                tooltip: 'Close',
                 icon: const Icon(Icons.close, color: AppColors.slate),
                 onPressed: () => Navigator.of(context).maybePop(),
               ),
