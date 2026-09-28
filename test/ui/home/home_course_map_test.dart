@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/home/course_resume_card.dart';
@@ -136,6 +137,40 @@ class _FixedHome extends CourseHomeController {
   Future<CourseHomeSnapshot> build() async => snapshot;
 }
 
+void _expectHomeThemeMetrics(WidgetTester tester) {
+  for (final value in ['2', '40', '75%']) {
+    expect(
+      tester.widget<Text>(find.text(value)).style?.fontFamily,
+      contains('JetBrains'),
+    );
+  }
+  final card = tester.widget<Container>(
+    find.descendant(
+      of: find.byType(RexCoachCard),
+      matching: find.byType(Container),
+    ).first,
+  );
+  final box = card.decoration! as BoxDecoration;
+  expect(box.color, AppColors.bgElevated);
+  expect(box.borderRadius, BorderRadius.circular(16));
+  expect(box.gradient, isNull);
+  final side = (box.border! as Border).top;
+  expect(side.color, AppColors.slateDark);
+  expect(side.width, 0.5);
+  final start = find.widgetWithText(FilledButton, 'Start');
+  final button = tester.widget<FilledButton>(start);
+  final states = const <WidgetState>{};
+  expect(tester.getSize(start).height, 54);
+  expect(button.style!.backgroundColor!.resolve(states), AppColors.gold);
+  expect(button.style!.foregroundColor!.resolve(states), AppColors.bgDark);
+  final shape = button.style!.shape!.resolve(states)! as RoundedRectangleBorder;
+  expect(shape.borderRadius, BorderRadius.circular(14));
+  final textStyle = DefaultTextStyle.of(tester.element(find.text('Start'))).style;
+  expect(textStyle.fontSize, 16);
+  expect(textStyle.fontWeight, FontWeight.w800);
+  expect(textStyle.fontFamily, contains('Manrope'));
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -152,6 +187,16 @@ void main() {
     expect(find.text('Lesson A'), findsOneWidget);
     expect(find.text('NEXT'), findsOneWidget);
     expect(analytics.events, contains('home_course_view:ready'));
+    _expectHomeThemeMetrics(tester);
+  });
+
+  testWidgets('home status, Rex card, and Start match Theme', (tester) async {
+    await _pumpHome(
+      tester,
+      snapshot: _readySnapshot(),
+      analytics: _RecordingAnalytics(),
+    );
+    _expectHomeThemeMetrics(tester);
   });
 
   testWidgets('locked node tap explains prerequisite and logs', (tester) async {

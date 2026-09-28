@@ -44,6 +44,8 @@ hard-code a second gold or a second radius for the same role.
 
 Onboarding primary actions use the elevated button (gold on bgDark, height 54, radius 14, Manrope 16 w800). “I already have an account” uses the outlined button (gold-bright label, gold-muted border, height 50, radius 14).
 
+Home status values (streak, XP, accepted accuracy) use JetBrains Mono. The Rex card uses the card (`bgElevated`, radius 16, hairline `slateDark`, no elevation). Start uses the elevated button (gold on bgDark, height 54, radius 14, Manrope 16 w800).
+
 ## Poker table
 
 The full table is `PokerTableScreen` (`lib/ui/screens/poker_table_screen.dart`).

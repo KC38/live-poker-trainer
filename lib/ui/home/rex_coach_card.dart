@@ -29,16 +29,9 @@ class RexCoachCard extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              AppColors.feltDark.withValues(alpha: 0.55),
-              AppColors.bgElevated.withValues(alpha: 0.8),
-            ],
-          ),
+          color: AppColors.bgElevated,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.gold.withValues(alpha: 0.35)),
+          border: Border.all(color: AppColors.slateDark, width: 0.5),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,15 +63,27 @@ class RexCoachCard extends StatelessWidget {
                   ),
                   if (onContinue != null) ...[
                     const SizedBox(height: 10),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: TextButton(
+                    SizedBox(
+                      width: double.infinity,
+                      child: FilledButton(
                         onPressed: onContinue,
-                        style: TextButton.styleFrom(
-                          foregroundColor: AppColors.goldBright,
-                          padding: EdgeInsets.zero,
-                          minimumSize: const Size(48, 44),
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppColors.gold,
+                          foregroundColor: AppColors.bgDark,
+                          elevation: 0,
+                          textStyle: GoogleFonts.manrope(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 16,
+                            letterSpacing: 0.2,
+                          ),
+                          minimumSize: const Size.fromHeight(54),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 16,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
                         ),
                         child: Text(continueLabel),
                       ),

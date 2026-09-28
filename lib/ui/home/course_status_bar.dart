@@ -96,7 +96,7 @@ class _StatChip extends StatelessWidget {
                   value,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.manrope(
+                  style: GoogleFonts.jetBrainsMono(
                     color: AppColors.cream,
                     fontSize: 15,
                     fontWeight: FontWeight.w800,
