@@ -227,6 +227,10 @@ void main() {
     );
     await tester.pump();
     expect(find.byType(SuitTapTile), findsNWidgets(4));
+    expect(
+      tester.widget<Container>(find.byKey(const ValueKey('suits-ranks-felt'))).decoration,
+      isNull,
+    );
     expect(find.text('Thirteen ranks — ace high'), findsOneWidget);
     expect(find.byType(MiniCard), findsNothing);
     expect(find.text('Tap Hearts'), findsNothing);
