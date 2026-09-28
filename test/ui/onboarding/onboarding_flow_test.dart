@@ -18,6 +18,7 @@ import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/screens/onboarding_screens.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/action_dock_widget.dart';
+import 'package:live_poker_trainer/ui/widgets/community_cards_view.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
@@ -364,6 +365,7 @@ void main() {
       find.text('Qs Jh 2c on the flop. Your cards stay on the rail.'),
       findsOneWidget,
     );
+    await tester.pump(const Duration(milliseconds: 400));
     final rail = tester.getRect(find.byType(HeroRailWidget));
     final shelf = tester.getRect(
       find.text('Qs Jh 2c on the flop. Your cards stay on the rail.'),
@@ -372,6 +374,16 @@ void main() {
     expect(rail.bottom, lessThanOrEqualTo(shelf.top + 1));
     expect(shelf.bottom, lessThanOrEqualTo(button.top));
     expect(rail.bottom, lessThan(button.top));
+    final board = tester.getRect(find.byType(CommunityCardsView));
+    final pot = tester.getRect(find.textContaining(r'$5'));
+    final bb = tester.getRect(find.text('BB'));
+    expect(pot.overlaps(bb), isFalse, reason: 'BB covers the pot');
+    expect(board.overlaps(bb), isFalse, reason: 'BB covers the board');
+    for (final element in find.text(r'$100').evaluate()) {
+      final stack = tester.getRect(find.byWidget(element.widget));
+      expect(stack.overlaps(board), isFalse, reason: 'stack covers the board');
+      expect(stack.overlaps(pot), isFalse, reason: 'stack covers the pot');
+    }
     _expectElevatedMetrics(tester, 'Start lesson');
     expect(find.byType(RexMascot), findsOneWidget);
   });

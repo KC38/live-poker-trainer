@@ -26,6 +26,8 @@ import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 /// in a fixed order that never lets one hide another:
 ///
 /// 1. Seats claim the ring, shrinking together until no two footprints touch.
+///    Heads-up also shrinks the villain until the stack and blind puck miss
+///    the board.
 /// 2. The board takes the largest scale that no seat footprint reaches.
 /// 3. Committed chips ride inside the seat HUD. A phone has no lane between a
 ///    side seat and the board wide enough for a floating pill, so a chip aimed
@@ -85,6 +87,7 @@ class FeltTableView extends StatelessWidget {
           n,
           heroIndex,
           SeatMetrics.of(compactLayout: compact),
+          review: review,
         );
 
         final cx = w / 2;
@@ -385,35 +388,99 @@ class FeltTableView extends StatelessWidget {
     ];
   }
 
-  /// Largest seat box at which no two seats on the ring touch.
+  /// Largest seat box that keeps seats off each other and off the board.
   ///
   /// Steps down from [natural] and stops at the first clear fit. The seat HUD
   /// scales its own contents to whatever box it is handed, so a smaller box
   /// costs legibility gradually — unlike an overlap, which costs it entirely.
+  /// A short felt (Your start) used to keep the natural box and clamp it onto
+  /// the pot; the board's minimum scale cannot move a seat that already
+  /// covers the center.
   static Size _fitSeatBox(
     double width,
     double height,
     int seatCount,
     int heroIndex,
-    Size natural,
-  ) {
+    Size natural, {
+    required bool review,
+  }) {
     var box = natural;
-    for (var attempt = 0; attempt < _seatFitSteps; attempt++) {
-      final boxes =
-          _ringBoxes(width, height, seatCount, heroIndex, box)
-              .map(
-                (r) => Rect.fromLTRB(
-                  r.left,
-                  r.top,
-                  r.right,
-                  r.bottom + _badgeBand,
-                ),
-              )
-              .toList();
-      if (!_anyOverlap(boxes)) return box;
+    final steps = seatCount <= 2 ? _headsUpFitSteps : _seatFitSteps;
+    for (var attempt = 0; attempt < steps; attempt++) {
+      final missEachOther = !_anyOverlap(
+        _seatFootprints(width, height, seatCount, heroIndex, box),
+      );
+      // A full ring already shrinks until neighbours miss. Only a heads-up
+      // felt (Your start: hero on the rail, one villain opposite) was still
+      // clamping that villain onto the pot. Full tables keep the neighbour fit.
+      final missBoard =
+          seatCount > 2 ||
+          _headsUpMissesBoard(
+            width,
+            height,
+            seatCount,
+            heroIndex,
+            box,
+            review: review,
+          );
+      if (missEachOther && missBoard) return box;
       box = Size(box.width * _seatFitStep, box.height * _seatFitStep);
     }
     return box;
+  }
+
+  /// Seat boxes grown by the action-badge band, matching the neighbour fit.
+  static List<Rect> _seatFootprints(
+    double width,
+    double height,
+    int seatCount,
+    int heroIndex,
+    Size box,
+  ) {
+    return _ringBoxes(width, height, seatCount, heroIndex, box)
+        .map(
+          (r) => Rect.fromLTRB(r.left, r.top, r.right, r.bottom + _badgeBand),
+        )
+        .toList();
+  }
+
+  /// True when the villain opposite the hero, including the BB puck, misses
+  /// the board at [review].
+  static bool _headsUpMissesBoard(
+    double width,
+    double height,
+    int seatCount,
+    int heroIndex,
+    Size box, {
+    required bool review,
+  }) {
+    final grown =
+        _ringBoxes(width, height, seatCount, heroIndex, box)
+            .map(
+              (r) => Rect.fromLTRB(
+                r.left - _puckOverhang,
+                r.top - _puckOverhang,
+                r.right + _puckOverhang,
+                r.bottom + _puckOverhang,
+              ),
+            )
+            .toList();
+    final center = Offset(width / 2, height / 2);
+    final slots = [
+      for (final rect in grown)
+        _SeatSlot(index: 0, box: rect, occupied: rect),
+    ];
+    final scale = _boardScale(
+      width,
+      height,
+      box,
+      slots,
+      center,
+      review: review,
+      awarding: false,
+    );
+    final board = _boardContent(center, scale, awarding: false);
+    return !grown.any((seat) => seat.overlaps(board));
   }
 
   static bool _anyOverlap(List<Rect> rects) {
@@ -429,6 +496,10 @@ class FeltTableView extends StatelessWidget {
   /// the seat would stop being readable at arm's length.
   static const double _seatFitStep = 0.94;
   static const int _seatFitSteps = 7;
+
+  /// Extra steps for a heads-up felt, where the one villain can still cover
+  /// the pot after the neighbour fit has nothing left to separate.
+  static const int _headsUpFitSteps = 18;
 
   /// Smallest board that still reads at arm's length.
   static const double _boardScaleMin = 0.62;
