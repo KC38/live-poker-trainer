@@ -31,7 +31,18 @@ Work only inside the worktree directory `.worktrees/<slug>`. Do not edit the pri
 
 From `~/live-poker-trainer`:
 
-Determine the branch name: `feature/<slug>` or `fix/<slug>`. `<slug>` must be kebab-case (or Jira issue key like `feature/PROJ-123`).
+Determine the branch name: `feature/<slug>` or `fix/<slug>`. `<slug>` is kebab-case.
+
+When the change is a Jira ticket, `<slug>` is the issue key plus a short kebab summary, and the prefix matches the issue type (Bug → `fix`, Story or Task → `feature`):
+
+```
+SLUG="LPT-12-action-dock-clips"
+BRANCH="fix/$SLUG"
+```
+
+The worktree is `.worktrees/LPT-12-action-dock-clips`. Keep the issue key in both names. Do not name the branch from the summary alone.
+
+Otherwise `<slug>` is a short kebab description of the change.
 
 Ensure the primary checkout is cleanly on `main`, clean up any stale worktree/branch refs, create the worktree, and immediately push an empty commit so Cursor's internal workspace monitors do not fail:
 
@@ -115,7 +126,7 @@ Add or update tests covering the change. Do not merge without them.
 
 ### 6. Push, PR, merge
 
-Inside `$WT`:
+Inside `$WT`. When this change is a Jira ticket, the PR title is `LPT-12: <summary>` so the squash commit on `main` keeps the key. Commit subjects include the key.
 
 ```bash
 git push origin HEAD
