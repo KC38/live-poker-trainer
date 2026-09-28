@@ -2163,17 +2163,6 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
           width: double.infinity,
           height: feltHeight,
           padding: const EdgeInsets.fromLTRB(14, 16, 14, 16),
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [AppColors.feltLight, AppColors.feltDark],
-            ),
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(
-              color: AppColors.feltBorder.withValues(alpha: 0.85),
-            ),
-          ),
           child: Column(
             children: [
               Expanded(
