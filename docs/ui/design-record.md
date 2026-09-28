@@ -46,6 +46,14 @@ Onboarding primary actions use the elevated button (gold on bgDark, height 54, r
 
 Home status values (streak, XP, accepted accuracy) use JetBrains Mono. The Rex card uses the card (`bgElevated`, radius 16, hairline `slateDark`, no elevation). Start uses the elevated button (gold on bgDark, height 54, radius 14, Manrope 16 w800).
 
+The Settings Chip display segments ($, BB, Both) use JetBrains Mono.
+
+### Shipped
+
+Chip display segments on `SettingsScreen`
+(`lib/ui/screens/settings_screen.dart`) use JetBrains Mono. The next screen
+that labels a chip amount copies that data type.
+
 ## Poker table
 
 The full table is `PokerTableScreen` (`lib/ui/screens/poker_table_screen.dart`).

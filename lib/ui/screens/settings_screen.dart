@@ -121,7 +121,7 @@ class SettingsScreen extends ConsumerWidget {
                           : mode == ChipDisplayMode.bb
                           ? 'BB'
                           : 'Both',
-                      style: const TextStyle(fontSize: 13),
+                      style: GoogleFonts.jetBrainsMono(fontSize: 13),
                     ),
                   ),
               ],
