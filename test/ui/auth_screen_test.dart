@@ -168,6 +168,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byTooltip('Close'), findsOneWidget);
+    expect(find.bySemanticsLabel('Close'), findsOneWidget);
     final screen = tester.widget<AuthScreen>(find.byType(AuthScreen));
     expect(screen.saveProgressMode, isTrue);
     expect(screen.initialRegisterMode, isTrue);
