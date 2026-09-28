@@ -69,21 +69,28 @@ final authUidProvider = Provider<String?>((ref) {
 /// Waits for durable [SharedPreferences] first so remote table-setup / gameplay
 /// prefs are never applied to the temporary in-memory settings notifier (which
 /// is discarded when real prefs resolve).
+///
+/// Depends on [authUidProvider], not each [authStateProvider] event.
+/// [AuthService.authStateChanges] is [FirebaseAuth.userChanges], which also
+/// emits on ID-token refresh. Re-reading `users/{uid}` on those events applies
+/// stored prefs over the in-memory table setup and drops an edit whose sync
+/// has not landed yet.
 final userDocProvider = FutureProvider<UserDocument?>((ref) async {
-  final user = await ref.watch(authStateProvider.future);
-  if (user == null) return null;
+  final uid = ref.watch(authUidProvider);
+  if (uid == null) return null;
 
   // Gate on SharedPreferences so [settingsProvider] has the durable notifier.
   await ref.watch(sharedPreferencesProvider.future);
 
   final settings = ref.read(settingsProvider);
+  final user = ref.read(authStateProvider).asData?.value;
   final repo = ref.read(userRepositoryProvider);
   // Bound the cold-start hydrate so a hung Firestore call cannot pin the
   // root navigator on [_AuthLoadingScreen] forever (shell destination).
   final doc = await repo
       .ensureUserDoc(
-        uid: user.uid,
-        displayName: user.displayName,
+        uid: uid,
+        displayName: user?.uid == uid ? user?.displayName : null,
         preferences: settings,
       )
       .timeout(const Duration(seconds: 12));
