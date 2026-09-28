@@ -3,7 +3,9 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/models/coach_feedback.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
@@ -12,6 +14,10 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_outs_picker.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
+import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
+import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
+import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
+import 'package:live_poker_trainer/ui/widgets/poker_table_bands.dart';
 
 /// Multiple-choice identify activity with optional guided highlight.
 class SelectIdentifyActivity extends StatelessWidget {
@@ -130,7 +136,7 @@ class SelectIdentifyActivity extends StatelessWidget {
                 locked: locked,
               )
             else if (presentation == SelectIdentifyPresentation.holeCards)
-              _HoleCardFeltTray(
+              _HoleCardBands(
                 activity: activity,
                 selectedId: selected,
                 locked: locked,
@@ -2223,9 +2229,12 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
   }
 }
 
-/// Felt tray of hole-card choices — teach-by-tapping card faces, not prose.
-class _HoleCardFeltTray extends StatelessWidget {
-  const _HoleCardFeltTray({
+/// Hole-card choices on the poker table bands.
+///
+/// Each hand is a [HeroRailWidget]. The felt does not draw those cards, and
+/// there is no action dock: picking a hand is not a betting decision.
+class _HoleCardBands extends StatelessWidget {
+  const _HoleCardBands({
     required this.activity,
     required this.selectedId,
     required this.locked,
@@ -2241,82 +2250,82 @@ class _HoleCardFeltTray extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final feltHeight = MediaQuery.sizeOf(context).height * 0.58;
-    final header = Text(
-      'TAP A HAND',
-      textAlign: TextAlign.center,
-      style: GoogleFonts.manrope(
-        color: AppColors.cream.withValues(alpha: 0.78),
-        fontSize: 12,
-        fontWeight: FontWeight.w800,
-        letterSpacing: 1.1,
-      ),
-    );
-    final rows = <Widget>[
-      for (var i = 0; i < activity.choices.length; i++)
-        _FamilySoftPulse(
-          active:
-              showGuidance &&
-              activity.stage == ActivityStage.guided &&
-              i == 0 &&
-              selectedId == null &&
-              !locked,
-          child: HoleCardChoiceButton(
-            codes: parseCardCodes(activity.choices[i].label),
-            accessibilityText: activity.choices[i].accessibilityText,
-            selected: selectedId == activity.choices[i].id,
-            highlighted:
-                showGuidance &&
-                activity.stage == ActivityStage.guided &&
-                i == 0 &&
-                selectedId == null,
-            densify: true,
-            enabled: !locked,
-            onPressed:
-                locked ? null : () => onSelect(activity.choices[i].id),
-          ),
-        ),
-    ];
-    final content = Column(
-      mainAxisSize: MainAxisSize.min,
+    final table = lessonBandGame(heroCodes: const []);
+    final prompt = activity.prompt?.trim();
+    final message = (prompt == null || prompt.isEmpty)
+        ? 'Tap a hand.'
+        : prompt;
+    return Column(
+      key: const ValueKey('hole-card-bands'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        header,
-        const SizedBox(height: 16),
-        for (var i = 0; i < rows.length; i++) ...[
-          if (i > 0) const SizedBox(height: 14),
-          rows[i],
-        ],
-      ],
-    );
-    return Container(
-      key: const ValueKey('hole-card-felt-tray'),
-      width: double.infinity,
-      height: feltHeight,
-      padding: const EdgeInsets.fromLTRB(14, 18, 14, 18),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.feltLight, AppColors.feltDark],
-        ),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.feltBorder.withValues(alpha: 0.85)),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Expanded(
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: SizedBox(
-                width: MediaQuery.sizeOf(context).width - 48,
-                child: content,
-              ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+          child: Text(
+            table.street.label,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.jetBrainsMono(
+              color: AppColors.gold,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.2,
             ),
           ),
-        ],
+        ),
+        SizedBox(
+          height: 200,
+          child: FeltTableView(
+            game: table,
+            chipDisplayMode: ChipDisplayMode.dollars,
+          ),
+        ),
+        for (var i = 0; i < activity.choices.length; i++)
+          _choiceRail(
+            index: i,
+            choice: activity.choices[i],
+          ),
+        CoachShelfWidget(
+          feedback: CoachFeedback(message: message),
+          bigBlind: table.bigBlind,
+          chipDisplayMode: ChipDisplayMode.dollars,
+        ),
+      ],
+    );
+  }
+
+  Widget _choiceRail({required int index, required CourseChoice choice}) {
+    final codes = parseCardCodes(choice.label);
+    final selected = selectedId == choice.id;
+    final rail = HeroRailWidget(
+      game: lessonBandGame(heroCodes: codes),
+      chipDisplayMode: ChipDisplayMode.dollars,
+    );
+    return _FamilySoftPulse(
+      active:
+          showGuidance &&
+          activity.stage == ActivityStage.guided &&
+          index == 0 &&
+          selectedId == null &&
+          !locked,
+      child: Semantics(
+        button: true,
+        label: choice.label,
+        selected: selected,
+        container: true,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: locked ? null : () => onSelect(choice.id),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: selected ? AppColors.gold : Colors.transparent,
+                width: 2,
+              ),
+            ),
+            child: ExcludeSemantics(child: rail),
+          ),
+        ),
       ),
     );
   }
