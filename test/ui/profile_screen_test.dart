@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
+import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/hand_history_sample.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
+import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/models/user_document.dart';
 import 'package:live_poker_trainer/models/user_stats_model.dart';
 import 'package:live_poker_trainer/models/course/course_progress.dart';
@@ -110,6 +112,7 @@ class _IdleAuthService implements AuthService {
 
 class _FakeProgressRepository extends ProgressRepository {
   Object? failure;
+  List<HeroHandSample> samples = const [];
 
   @override
   Future<List<HeroHandSample>> loadHandSamples(
@@ -117,7 +120,7 @@ class _FakeProgressRepository extends ProgressRepository {
     int limit = 100,
   }) async {
     if (failure case final error?) throw error;
-    return const [];
+    return samples;
   }
 
   @override
@@ -247,15 +250,77 @@ void main() {
 
     expect(find.text('Profile'), findsOneWidget);
     expect(find.byTooltip('Settings'), findsOneWidget);
-    // No style is claimed, and the reason is spelled out.
-    expect(find.text('Style forming'), findsOneWidget);
-    expect(find.textContaining('0 hands logged'), findsOneWidget);
-    expect(find.textContaining('style shows up here'), findsWidgets);
+    // A lesson-only guest has no live-hand style in the header.
+    expect(find.text('Style forming'), findsNothing);
+    expect(find.text('Needs more hands'), findsNothing);
+    expect(find.text('0 hands logged'), findsNothing);
+    expect(find.text('Hero'), findsOneWidget);
+    // Course progress stays in the Course block.
+    expect(find.text('Course XP'), findsOneWidget);
+    expect(find.text('12'), findsOneWidget);
+    expect(find.text('Day streak'), findsOneWidget);
+    expect(find.text('2'), findsOneWidget);
+    expect(find.text('Accepted accuracy'), findsOneWidget);
+    expect(find.text('50%'), findsOneWidget);
+    expect(find.text('Mastery'), findsOneWidget);
+    expect(find.text('40%'), findsOneWidget);
+    // Live Training still explains that style comes from full-hand play.
+    expect(
+      find.text('Coaching record, results, and style from full-hand play.'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('style shows up here'), findsOneWidget);
     // Every rate tile renders an em dash rather than a fabricated 0%.
     expect(find.text('—'), findsWidgets);
     expect(find.textContaining('needs '), findsWidgets);
     // The default identity falls back to initials.
     expect(find.byType(ProfileAvatar), findsWidgets);
+  });
+
+  testWidgets('twenty live hands still show a style in the header', (
+    tester,
+  ) async {
+    progress.samples = [
+      for (var i = 0; i < 20; i++)
+        HeroHandSample(
+          handId: i + 1,
+          playedAt: DateTime.utc(2026, 1, 1, 12, i),
+          actions: const [
+            HandActionSample(
+              seat: 0,
+              street: Street.preflop,
+              kind: HandActionKind.blind,
+              isHero: true,
+              archetype: PlayerArchetype.hero,
+              amountBb: 0.5,
+            ),
+            HandActionSample(
+              seat: 3,
+              street: Street.preflop,
+              kind: HandActionKind.raise,
+              archetype: PlayerArchetype.tag,
+              amountBb: 3,
+            ),
+            HandActionSample(
+              seat: 0,
+              street: Street.preflop,
+              kind: HandActionKind.fold,
+              isHero: true,
+              archetype: PlayerArchetype.hero,
+            ),
+          ],
+          heroNetBb: -0.5,
+        ),
+    ];
+
+    await pumpProfile(tester);
+
+    expect(find.text('Nit'), findsOneWidget);
+    expect(find.text('Low confidence'), findsOneWidget);
+    expect(find.textContaining('20 hands logged'), findsOneWidget);
+    expect(find.text('Needs more hands'), findsNothing);
+    expect(find.text('0 hands logged'), findsNothing);
+    expect(find.textContaining('style shows up here'), findsNothing);
   });
 
   testWidgets('server hand-history errors replace cached-looking profile UI', (
