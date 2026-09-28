@@ -81,9 +81,13 @@ Keep the diff scoped to the request. Run targeted checks (`dart analyze`, releva
 
 Simulator validation must show the worktree, not `origin/main`. Do not call `simulator-refresh` until after step 7.
 
-Use only the agent iPhone 17 Pro (`F1AE4938-D9BE-4EA1-8C98-58555A0DE62A`). Leave the user iPhone 17 (`20ACECD5-FBEE-4663-9044-E11D5F0A26FC`) alone.
+Validate on the iPhone 17 (`20ACECD5-FBEE-4663-9044-E11D5F0A26FC`). That device is [implement-open-jira](../implement-open-jira/SKILL.md).
 
-Hot restart (`kill -USR2`) reloads the directory that `flutter run` was started from. Once the Pro session **is** that worktree, every later validation is a hot restart:
+The iPhone 17 Pro (`F1AE4938-D9BE-4EA1-8C98-58555A0DE62A`) belongs to [new-user-qa](../new-user-qa/SKILL.md). Do not boot, uninstall, terminate, kill, hot-restart, screenshot, or tap it. Do not stop `flutter-pro-lessons`.
+
+Drive the UI with `python3 tools/agent_tap.py --log "$LOG_FILE"`. The default log is the Pro session.
+
+Hot restart (`kill -USR2`) reloads the directory that `flutter run` was started from. Once the iPhone 17 session **is** that worktree, every later validation is a hot restart:
 
 ```bash
 PID_FILE="/tmp/flutter-$SLUG.pid"
@@ -92,23 +96,34 @@ if [ -f "$PID_FILE" ] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
 fi
 ```
 
-If no session exists for this worktree, boot the simulator and launch Flutter in a slug-scoped tmux session:
+If no session exists for this worktree, stop any flutter run already attached to the iPhone 17, then boot that simulator and launch Flutter in a slug-scoped tmux session. Leave any `flutter run -d F1AE4938-…` running.
 
 ```bash
-PRO=F1AE4938-D9BE-4EA1-8C98-58555A0DE62A
-SESSION="flutter-pro-$SLUG"
+DEVICE=20ACECD5-FBEE-4663-9044-E11D5F0A26FC
+SESSION="flutter-iphone17-$SLUG"
 PID_FILE="/tmp/flutter-$SLUG.pid"
 LOG_FILE="/tmp/flutter-$SLUG.log"
 
+while IFS= read -r pid; do
+  [[ -z "$pid" ]] && continue
+  kill "$pid" 2>/dev/null || true
+done < <(pgrep -f "flutter_tools\\.snapshot run -d ${DEVICE}" || true)
+
 open -a /Applications/Xcode.app/Contents/Applications/DeviceHub.app
-xcrun simctl bootstatus "$PRO" -b || xcrun simctl boot "$PRO"
+xcrun simctl bootstatus "$DEVICE" -b || xcrun simctl boot "$DEVICE"
 
 tmux kill-session -t "$SESSION" 2>/dev/null || true
 tmux new-session -d -s "$SESSION"
-tmux send-keys -t "$SESSION" "cd '$WT' && flutter run -d $PRO --pid-file '$PID_FILE' 2>&1 | tee '$LOG_FILE'; echo EXIT:\$?" Enter
+tmux send-keys -t "$SESSION" "cd '$WT' && flutter run -d $DEVICE --pid-file '$PID_FILE' 2>&1 | tee '$LOG_FILE'; echo EXIT:\$?" Enter
 ```
 
-Wait for `Dart VM Service on iPhone 17 Pro` in `$LOG_FILE`. Any verification screenshots belong in `$WT/.cursor/tmp/` and must be deleted after inspection.
+Wait for `Dart VM Service on iPhone 17 is` in `$LOG_FILE` (that line is the non-Pro phone). Screenshots:
+
+```bash
+xcrun simctl io "$DEVICE" screenshot "$WT/.cursor/tmp/<name>.png"
+```
+
+Delete them after inspection.
 
 ### 3. Logical commits
 
@@ -148,12 +163,12 @@ Never force-push `main`. If `gh` fails, stop and report.
 
 ### 7. Delete the branch and worktree, then sync primary
 
-Stop the tmux session, return to `~/live-poker-trainer`, force-remove the worktree directory, sync `origin/main`, and only then delete the remote and local branches:
+Stop the iPhone 17 ticket tmux session only. Do not kill `flutter-pro-lessons`. Pulling the primary clone does not restart the Pro. Return to `~/live-poker-trainer`, force-remove the ticket worktree, sync `origin/main`, and only then delete the remote and local branches. Leave `.worktrees/iphone17-main` in place:
 
 ```bash
 cd ~/live-poker-trainer
 
-tmux kill-session -t "flutter-pro-$SLUG" 2>/dev/null || true
+tmux kill-session -t "flutter-iphone17-$SLUG" 2>/dev/null || true
 rm -f "/tmp/flutter-$SLUG.pid" "/tmp/flutter-$SLUG.log"
 
 # Force-remove worktree directory before deleting refs
@@ -184,7 +199,13 @@ If none of those are set, skip the local script and report that production depen
 
 ### 9. Refresh simulators
 
-If a simulator is already running, follow [simulator-refresh](../simulator-refresh/SKILL.md). If none is booted, skip. Do not block the change on a missing simulator.
+Refresh the iPhone 17 only, from [simulator-refresh](../simulator-refresh/SKILL.md):
+
+```bash
+.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh implement
+```
+
+That leaves the iPhone 17 Pro session alone. Do not pass `qa`. If the iPhone 17 cannot boot, skip. Do not block the change on a missing simulator.
 
 ## Report
 

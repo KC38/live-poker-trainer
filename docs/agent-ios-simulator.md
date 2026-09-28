@@ -3,15 +3,18 @@
 How agents should boot the Live Poker Trainer app on the Mac mini iOS simulator.
 Follow this instead of hunting for `Simulator.app` (gone on Xcode 27+).
 
-## Dual sims (do not mix)
+## Two skills, two phones
 
-| Role | Device | UDID |
-|------|--------|------|
-| **Agent** | iPhone 17 Pro | `F1AE4938-D9BE-4EA1-8C98-58555A0DE62A` |
-| **User (human)** | iPhone 17 | `20ACECD5-FBEE-4663-9044-E11D5F0A26FC` |
+The phones run at the same time. Each skill drives only its own device.
 
-Drive, screenshot, and `ext.poker.agent` **only** on the Pro UDID unless the
-user asks otherwise.
+| Skill | Device | UDID |
+|-------|--------|------|
+| **new-user-qa** | iPhone 17 Pro | `F1AE4938-D9BE-4EA1-8C98-58555A0DE62A` |
+| **implement-open-jira** | iPhone 17 | `20ACECD5-FBEE-4663-9044-E11D5F0A26FC` |
+
+Do not boot, uninstall, terminate, kill, hot-restart, screenshot, or tap the
+other skill's phone. A `flutter run` on one device is not a reason to skip
+starting the other.
 
 ## Xcode 27+: Device Hub (not Simulator.app)
 
@@ -73,61 +76,74 @@ before `flutter run`:
 - `ios/Runner/GoogleService-Info.plist`
 - `android/app/google-services.json` (if present)
 
-## Boot Pro + run Flutter (durable)
+## Boot one phone + run Flutter (durable)
 
-Long builds belong in **tmux** so they survive agent disconnects.
+Long builds belong in **tmux** so they survive agent disconnects. Start the
+phone this skill owns. Leave the other phone's tmux session up.
 
 ```bash
 export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:$PATH"
 export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
 
-PRO=F1AE4938-D9BE-4EA1-8C98-58555A0DE62A
-PRIMARY="${PRIMARY:-$HOME/live-poker-trainer}"   # adjust if your clone path differs
+# new-user-qa
+DEVICE=F1AE4938-D9BE-4EA1-8C98-58555A0DE62A
+PRIMARY="${PRIMARY:-$HOME/live-poker-trainer}"
+CHECKOUT="$PRIMARY"
 SESSION=flutter-pro-lessons
+PID_FILE=/tmp/flutter-live-poker-trainer.pid
+LOG_FILE=/tmp/flutter-live-poker-trainer.run.log
 
-# GUI
+# implement-open-jira uses the other phone. Before merge, CHECKOUT is the
+# ticket worktree and the log is /tmp/flutter-$SLUG.log. After merge, refresh
+# uses a second origin/main checkout so the two flutter runs do not share build/:
+# DEVICE=20ACECD5-FBEE-4663-9044-E11D5F0A26FC
+# CHECKOUT="$PRIMARY/.worktrees/iphone17-main"
+# SESSION=flutter-iphone17-$SLUG
+# PID_FILE=/tmp/flutter-live-poker-trainer-iphone17.pid
+# LOG_FILE=/tmp/flutter-live-poker-trainer-iphone17.run.log
+
 open -a /Applications/Xcode.app/Contents/Applications/DeviceHub.app
+xcrun simctl bootstatus "$DEVICE" -b || xcrun simctl boot "$DEVICE"
 
-# Boot device (idempotent)
-xcrun simctl bootstatus "$PRO" -b || xcrun simctl boot "$PRO"
-
-# CocoaPods lock sync (common failure after Xcode upgrades)
-cd "$PRIMARY/ios"
+cd "$CHECKOUT/ios"
 if ! diff -q Podfile.lock Pods/Manifest.lock >/dev/null 2>&1; then
   pod install
-  # If Flutter rewrote a stub Podfile.lock (~Flutter-only), sync:
-  #   cp Pods/Manifest.lock Podfile.lock   # when Manifest is the full lock
-  # or re-run pod install after flutter pub get
 fi
 
-# Detached flutter run
 tmux has-session -t "$SESSION" 2>/dev/null || tmux new-session -d -s "$SESSION"
-tmux send-keys -t "$SESSION" "cd '$PRIMARY' && flutter run -d $PRO --pid-file /tmp/flutter-live-poker-trainer.pid 2>&1 | tee /tmp/flutter-live-poker-trainer.run.log; echo EXIT:\$?" Enter
-
-# Wait for VM service (first Xcode build can take several minutes)
-# Success markers in the log:
-#   Flutter run key commands.
-#   A Dart VM Service on iPhone 17 Pro is available at: http://127.0.0.1:...
+tmux send-keys -t "$SESSION" "cd '$CHECKOUT' && flutter run -d $DEVICE --pid-file $PID_FILE 2>&1 | tee $LOG_FILE; echo EXIT:\$?" Enter
 ```
 
-Pid + log (agent convention):
+Success markers in that session's log:
+
+- `Flutter run key commands.`
+- Pro: `A Dart VM Service on iPhone 17 Pro is available at: http://127.0.0.1:…`
+- iPhone 17: `A Dart VM Service on iPhone 17 is available at: http://127.0.0.1:…`
 
 | File | Purpose |
 |------|---------|
-| `/tmp/flutter-live-poker-trainer.pid` | Agent Pro `flutter run` |
-| `/tmp/flutter-live-poker-trainer.run.log` | Stdout; parse for Dart VM URI |
-| `/tmp/flutter-live-poker-trainer-user.pid` | User iPhone 17 session (do not steal) |
+| `/tmp/flutter-live-poker-trainer.pid` | new-user-qa Pro `flutter run` |
+| `/tmp/flutter-live-poker-trainer.run.log` | Pro stdout. `agent_tap.py` default |
+| `/tmp/flutter-live-poker-trainer-iphone17.pid` | implement-open-jira iPhone 17 `flutter run` on origin/main |
+| `/tmp/flutter-live-poker-trainer-iphone17.run.log` | iPhone 17 origin/main stdout. Pass `--log` |
+| `/tmp/flutter-$SLUG.pid` and `.log` | Ticket worktree session on the iPhone 17, before merge |
+| `/tmp/flutter-live-poker-trainer-user.pid` | Legacy iPhone 17 pid file. Refresh treats it as implement, and only if the process is on that device |
 
-After a ship merges to `main`, refresh from `origin/main` in the primary clone (not a worktree):
+Refresh one role after its merge. Do not refresh both:
 
 ```bash
-.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh
+.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh qa
+.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh implement
 ```
 
-Or hot-restart an attached session: send `R` into the `flutter-pro-lessons`
-tmux pane (`tmux send-keys -t flutter-pro-lessons R`).
+`implement` fast-forwards `.worktrees/iphone17-main` and does not pull or
+restart the primary clone. Hot-restart only that role's pane (`R` in
+`flutter-pro-lessons` for QA, or `flutter-iphone17-$SLUG` while a ticket
+worktree is on the iPhone 17).
 
 ## Drive the UI (no OS clicks required)
+
+new-user-qa (default log is the Pro):
 
 ```bash
 python3 tools/agent_tap.py openlesson --text lesson-01-01-01-your-two-cards
@@ -135,15 +151,23 @@ python3 tools/agent_tap.py tap --text "Continue"
 python3 tools/agent_tap.py tap --text "Your hole cards"
 ```
 
-- VM URI is scraped from `/tmp/flutter-live-poker-trainer.run.log`.
+implement-open-jira (pass that phone's log, or the ticket worktree log):
+
+```bash
+python3 tools/agent_tap.py --log /tmp/flutter-live-poker-trainer-iphone17.run.log tap --text "Continue"
+```
+
+- The default VM URI comes from `/tmp/flutter-live-poker-trainer.run.log`.
+  `--log` is required for the iPhone 17, or taps hit the Pro.
 - Isolate IDs change after hot restart — the script re-resolves each call.
 - Prefer **exact lesson labels** (e.g. `Your hole cards`). Broad needles like
   `Continue` can match **home course map** controls under the lesson route and
   fire lock snackbars (`Finish "…" first.`).
-- Screenshots:
+- Screenshots, one device per skill:
 
 ```bash
 xcrun simctl io F1AE4938-D9BE-4EA1-8C98-58555A0DE62A screenshot /tmp/pro.png
+xcrun simctl io 20ACECD5-FBEE-4663-9044-E11D5F0A26FC screenshot /tmp/iphone17.png
 ```
 
 ## Common failures

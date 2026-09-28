@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Drive the debug app via ext.poker.agent (tap / openlesson / type).
 
-Reads the Dart VM URI from /tmp/flutter-live-poker-trainer.run.log.
+The default log is the new-user-qa iPhone 17 Pro session. implement-open-jira
+passes --log for the iPhone 17 session so the two skills do not tap each
+other's app.
 """
 
 from __future__ import annotations
@@ -14,15 +16,18 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-LOG = Path("/tmp/flutter-live-poker-trainer.run.log")
+QA_LOG = Path("/tmp/flutter-live-poker-trainer.run.log")
+IMPLEMENT_LOG = Path("/tmp/flutter-live-poker-trainer-iphone17.run.log")
+LOG = QA_LOG
 
 
-def vm_base() -> tuple[str, str]:
-    """Return (port, token) from the Flutter run log."""
-    text = LOG.read_bytes().replace(b"\x00", b"").decode("utf-8", "replace")
+def vm_base(log: Path | None = None) -> tuple[str, str]:
+    """Return (port, token) from a Flutter run log."""
+    path = LOG if log is None else log
+    text = path.read_bytes().replace(b"\x00", b"").decode("utf-8", "replace")
     match = re.search(r"http://127\.0\.0\.1:(\d+)/([A-Za-z0-9_\-=]+)/", text)
     if not match:
-        raise SystemExit("No Dart VM URI in flutter run log yet")
+        raise SystemExit(f"No Dart VM URI in {path} yet")
     return match.group(1), match.group(2)
 
 
@@ -37,9 +42,9 @@ def isolate_id(port: str, token: str) -> str:
     return isolates[0]["id"]
 
 
-def agent(cmd: str, **extra: str) -> None:
+def agent(cmd: str, log: Path | None = None, **extra: str) -> None:
     """Invoke ext.poker.agent with cmd (+ optional text/label)."""
-    port, token = vm_base()
+    port, token = vm_base(log)
     iso = isolate_id(port, token)
     params = {"isolateId": iso, "cmd": cmd, **extra}
     query = urllib.parse.urlencode(params)
@@ -48,15 +53,30 @@ def agent(cmd: str, **extra: str) -> None:
         print(cmd, extra or "", "->", resp.read().decode())
 
 
-def main() -> None:
-    """CLI entrypoint."""
+def build_parser() -> argparse.ArgumentParser:
+    """CLI parser. The default log is the new-user-qa Pro session."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("cmd", help="Agent command (tap, openlesson, type, ...)")
     parser.add_argument("--text", default="", help="Label/text for tap/type/openlesson")
-    args = parser.parse_args()
+    parser.add_argument(
+        "--log",
+        type=Path,
+        default=QA_LOG,
+        help=(
+            "Flutter run log to read the Dart VM URI from. "
+            f"Default {QA_LOG} (new-user-qa). "
+            f"implement-open-jira uses {IMPLEMENT_LOG} or its worktree log."
+        ),
+    )
+    return parser
+
+
+def main(argv: list[str] | None = None) -> None:
+    """CLI entrypoint."""
+    args = build_parser().parse_args(argv)
     extra = {"text": args.text} if args.text else {}
-    agent(args.cmd, **extra)
+    agent(args.cmd, log=args.log, **extra)
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])

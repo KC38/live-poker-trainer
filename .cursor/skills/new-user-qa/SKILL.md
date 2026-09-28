@@ -79,9 +79,13 @@ Read [launch-simulator](../launch-simulator/SKILL.md),
 [simulator-refresh](../simulator-refresh/SKILL.md), and
 [docs/agent-ios-simulator.md](../../../docs/agent-ios-simulator.md).
 
-Drive only the agent iPhone 17 Pro
-(`F1AE4938-D9BE-4EA1-8C98-58555A0DE62A`). Leave the user iPhone 17
-(`20ACECD5-FBEE-4663-9044-E11D5F0A26FC`) alone.
+Drive only the iPhone 17 Pro
+(`F1AE4938-D9BE-4EA1-8C98-58555A0DE62A`). That device is this skill.
+
+The iPhone 17 (`20ACECD5-FBEE-4663-9044-E11D5F0A26FC`) belongs to
+[implement-open-jira](../implement-open-jira/SKILL.md). Do not boot, uninstall,
+terminate, kill, hot-restart, screenshot, or tap it. A booted iPhone 17 is
+not a reason to skip this path.
 
 Run from the primary clone `~/live-poker-trainer` on latest `origin/main`.
 `git fetch` and fast-forward only when that clone is on `main` and clean.
@@ -92,14 +96,17 @@ Record the `origin/main` SHA.
 
 Read `lib/ui/screens/onboarding_screens.dart`, `lib/routing/app_root.dart`,
 and the screens this path names so labels match this build. Drive the UI
-with `python3 tools/agent_tap.py`. Prefer exact visible labels. A broad
-needle such as `Continue` can hit a control under the current route.
+with `python3 tools/agent_tap.py` and no `--log` flag. That default reads
+`/tmp/flutter-live-poker-trainer.run.log` (this Pro). Do not pass the
+iPhone 17 log. Prefer exact visible labels. A broad needle such as
+`Continue` can hit a control under the current route.
 
 **`fresh-install`.** A hot restart keeps the container. Uninstall, then
 boot:
 
-1. Stop the Pro `flutter run` session (`flutter-pro-lessons`, pid file
+1. Stop only the Pro `flutter run` session (`flutter-pro-lessons`, pid file
    `/tmp/flutter-live-poker-trainer.pid`) when that session is this clone.
+   Do not stop `flutter-iphone17-*` or any `flutter run -d 20ACECD5-…`.
 2. `xcrun simctl uninstall F1AE4938-D9BE-4EA1-8C98-58555A0DE62A com.pokerlab.livePokerTrainer`
 3. Boot the Pro if needed and start `flutter run` from the primary clone in
    tmux, using the launch-simulator recipe (same pid file and log path).
@@ -107,8 +114,10 @@ boot:
 Wait until the log shows a Dart VM service on iPhone 17 Pro.
 
 **`guest-home`.** Do not uninstall. The app must open on Home as a guest.
-If `flutter run` is already this clone and that Home is showing, keep the
-process. Hot-restart only when the running build is behind `origin/main`.
+If `flutter run` is already this clone on the Pro and that Home is showing,
+keep the process. Hot-restart only the Pro pid
+(`/tmp/flutter-live-poker-trainer.pid`) when that build is behind
+`origin/main`. Do not signal the iPhone 17 pid.
 
 If the container is not a guest on Home:
 

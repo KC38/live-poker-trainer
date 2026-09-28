@@ -1,30 +1,34 @@
 ---
 name: launch-simulator
 description: >-
-  Boot the agent iPhone 17 Pro simulator and launch the latest origin/main
-  build when no simulator is running. Use when the user asks to launch or
-  open the simulator and nothing is booted. If a simulator is already
-  running, use simulator-refresh instead.
+  Boot the new-user-qa iPhone 17 Pro and launch the latest origin/main
+  build when that Pro is not already running. A booted iPhone 17 does not
+  count. If the Pro is already up, refresh only that device.
 ---
 
-# Launch a simulator
+# Launch the new-user-qa simulator
 
-Use this skill only when **no** iOS simulator is booted. It teaches how to
-boot the agent simulator and start the latest `origin/main` on it.
+Boot the iPhone 17 Pro and start the latest `origin/main` on it. This is
+the [new-user-qa](../new-user-qa/SKILL.md) device.
 
-If a simulator is already booted, or a simulator `flutter run` is already
-up, stop and follow [simulator-refresh](../simulator-refresh/SKILL.md).
-Do not boot another device and do not start a second `flutter run`.
+The iPhone 17 (`20ACECD5-FBEE-4663-9044-E11D5F0A26FC`) belongs to
+[implement-open-jira](../implement-open-jira/SKILL.md). A booted iPhone 17,
+or a flutter run on it, is not "a simulator is already running" for this
+skill. Do not refresh it, stop it, or skip booting the Pro because of it.
+
+If the Pro is already booted, or a Pro `flutter run` is already up, follow
+[simulator-refresh](../simulator-refresh/SKILL.md) for `qa` only.
 
 ## 1. Check
 
 ```bash
 xcrun simctl list devices booted
-pgrep -fl 'flutter_tools\.snapshot run -d' || true
+pgrep -fl 'flutter_tools\.snapshot run -d F1AE4938-D9BE-4EA1-8C98-58555A0DE62A' || true
 ```
 
-Any booted iOS simulator or a `flutter run -d <sim-udid>` → simulator-refresh.
-Continue below only when both are empty.
+The Pro booted, or `flutter run -d F1AE4938-…` → `refresh-simulator.sh qa`.
+Continue below when the Pro is shut down and no Pro flutter run exists,
+even if the iPhone 17 is in that booted list.
 
 ## 2. Latest origin/main
 
@@ -45,7 +49,7 @@ Copy gitignored Firebase files into that clone when they are missing:
 - `ios/Runner/GoogleService-Info.plist`
 - `android/app/google-services.json`
 
-## 3. Boot the agent simulator and run
+## 3. Boot the Pro and run
 
 Xcode 27 has no `Simulator.app`. Open **Device Hub**:
 
@@ -61,8 +65,8 @@ open -a /Applications/Xcode.app/Contents/Applications/DeviceHub.app
 xcrun simctl bootstatus "$PRO" -b || xcrun simctl boot "$PRO"
 ```
 
-Drive only that Pro UDID. Leave the user iPhone 17
-(`20ACECD5-FBEE-4663-9044-E11D5F0A26FC`) alone.
+Drive only that Pro UDID. Do not `simctl boot`, `uninstall`, `terminate`,
+or `flutter run -d` the iPhone 17.
 
 If `ios/Podfile.lock` and `ios/Pods/Manifest.lock` differ, `pod install` in
 `ios/` before running. Put the long `flutter run` in tmux:
@@ -74,7 +78,8 @@ tmux send-keys -t "$SESSION" "cd '$PRIMARY' && flutter run -d $PRO --pid-file /t
 
 Wait until the log shows `Dart VM Service on iPhone 17 Pro` or
 `Flutter run key commands`. The first build can take several minutes. Pid
-and log stay on those `/tmp` paths because `tools/agent_tap.py` reads them.
+and log stay on those `/tmp` paths because `tools/agent_tap.py` reads them
+by default. Do not point this session at the iPhone 17 log.
 
 Device Hub, Podfile, and Xcode failures:
 [docs/agent-ios-simulator.md](../../../docs/agent-ios-simulator.md).
