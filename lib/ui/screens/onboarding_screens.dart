@@ -586,6 +586,7 @@ class _OnboardingScaffold extends StatelessWidget {
                           onPressed: () => Navigator.of(context).pop(),
                           icon: const Icon(
                             Icons.arrow_back,
+                            semanticLabel: 'Back',
                             color: AppColors.cream,
                           ),
                         )
