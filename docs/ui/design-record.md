@@ -1,0 +1,102 @@
+# UI design record
+
+Visual contract for Live Poker Trainer. A screen matches this file, or a
+ticket names the section the change will update. Later work copies the
+section. It does not invent a second button, type ramp, or table.
+
+`/ui-consistency-qa` files the tickets.
+`/implement-open-jira` updates this file in the same change as the widgets.
+Read [flutter-ui-ux](../../.cursor/skills/flutter-ui-ux/SKILL.md) before
+either one.
+
+## How a change is recorded
+
+1. The ticket names the section below it will change, and what that section
+   should say when the change ships.
+2. The PR edits that section in the same commit as the widget, asset, or
+   theme change. The ticket text and this file say the same thing.
+3. A new pattern gets its own section before a second screen uses it.
+4. Add a `Shipped` note under the section: the widget or asset path, and
+   what the next screen must copy. Git history is the date. Do not put a
+   calendar date in this file.
+
+## Theme
+
+Source: `lib/ui/theme/app_theme.dart` (`buildPokerTheme`) and
+`lib/core/constants/colors.dart` (`AppColors`).
+
+Dark Material 3. Navy charcoal scaffold (`bgDark`), emerald felt, gold
+primary, cream text. Display type is Cinzel. UI type is Manrope. Data
+(chips, labels) is JetBrains Mono.
+
+| Control | Look |
+| --- | --- |
+| Elevated button | Gold on `bgDark`, height 54, radius 14, Manrope 16 w800 |
+| Outlined button | Gold-bright label, gold-muted border, height 50, radius 14 |
+| Card | `bgElevated`, radius 16, hairline `slateDark`, no elevation |
+| Input | Filled `bgElevated`, radius 12, gold-muted focus border |
+| Snackbar | Floating, `bgElevated`, radius 12 |
+| Page change | Cupertino on iOS, fade-forward on Android. Primary launches use `softFadeRoute` |
+
+New controls use `Theme.of(context).colorScheme` and these metrics. Do not
+hard-code a second gold or a second radius for the same role.
+
+## Poker table
+
+The full table is `PokerTableScreen` (`lib/ui/screens/poker_table_screen.dart`).
+It is a column of non-overlapping bands:
+
+1. Header
+2. Felt (`FeltTableView`) — flexible. Seats, board, pot. The hero is not drawn on the felt.
+3. Hero rail (`HeroRailWidget`) — hole cards
+4. Coach shelf (`CoachShelfWidget`)
+5. Action dock (`ActionDockWidget`) — removed, not dimmed, when the hero has no decision
+
+Above width 900 the coach moves to a side column. Band resize uses a short
+size animation (about 280ms). Chips, board, and seats stay inside the felt
+band. The dock never covers the hole cards.
+
+This column is the layout lessons reuse. Do not add another table widget.
+
+### Shipped
+
+`PokerTableScreen` is the Live Training table and the calibration warm-up
+(`HomeScreen._openCalibrationWarmUp` pushes it with `softFadeRoute`).
+
+## Lesson tables
+
+Two older layouts still draw hands inside the lesson runner:
+
+| Layout | File | What it is |
+| --- | --- | --- |
+| `LessonActionSpot` | `lib/ui/course/widgets/lesson_action_table.dart` | Mini felt plus an action dock. `isLessonActionTableActivity` turns it on per activity id. |
+| `LessonTableScene` | `lib/ui/course/widgets/lesson_table_context.dart` | Authored teaching felt (hole cards, seats, button, captions). |
+
+`FullTableHandLabActivity` still builds `PokerActionSizingActivity` and
+`LessonActionSpot`. The name is not the full table above.
+
+Contract: a lesson step that shows hole cards, a board, a pot, or an action
+uses the Poker table bands (`FeltTableView`, `HeroRailWidget`,
+`CoachShelfWidget`, `ActionDockWidget`). Retire the mini-table for that
+step. A step with no hand (welcome, a list, settings, a number with no
+cards) stays on the Theme section and does not grow a felt.
+
+File one ticket per layout you still see, not one ticket per activity id.
+
+## Asset inventory
+
+Slots are the only place a new animation, icon, sound, logo, or mascot is
+introduced. Reuse the path already listed. Add a row when a new file ships.
+
+| Slot | Current | Reuse |
+| --- | --- | --- |
+| Logo | `assets/brand/logo_mark.png` | Auth screen and Live Training hub |
+| Mascot | None. Rex is type: `RexCoachLine`, `RexCoachCard` | Any Rex mention copies this until a mascot asset is shipped |
+| Icons | Material / Cupertino. No branded icon set | Theme icon color (`slate` in the app bar) |
+| Motion | Implicit widget motion only (band resize, `AnimatedSwitcher` 220ms in the runner). No Rive or Lottie | [flutter-ui-ux](../../.cursor/skills/flutter-ui-ux/SKILL.md) durations |
+| Sound effects | `SoundService`: `deal.wav`, `chip.wav`, `knock.wav`, `fold.wav`, `win.wav` under `assets/sounds/` | Table actions call these. Do not add a second chip sound |
+| Background music | `assets/sounds/lounge_ambient.mp3` via `SoundService.startHomeBgm` | Home. Pause when leaving Home. Settings toggle is `musicEnabled` |
+
+A missing slot (Rex still text-only, a deal with no motion, a table action
+with no `SoundService` call) is a ticket that names the slot. The walk does
+not generate the file. The implementer adds it and fills the row.

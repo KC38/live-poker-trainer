@@ -14,8 +14,9 @@ flutter run
 ```
 
 **Agents / iOS simulator (Xcode 27+):** `Simulator.app` was replaced by
-**Device Hub**. `/new-user-qa` uses the iPhone 17 Pro and
-`/implement-open-jira` uses the iPhone 17, so both can run at once. Boot,
+**Device Hub**. `/new-user-qa` uses the iPhone 17 Pro,
+`/implement-open-jira` uses the iPhone 17, and `/ui-consistency-qa` uses
+the iPhone 17 Pro Max, so the walks can run at once. Boot,
 tmux, and `agent_tap` instructions:
 [docs/agent-ios-simulator.md](docs/agent-ios-simulator.md).
 
