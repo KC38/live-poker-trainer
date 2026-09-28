@@ -465,6 +465,101 @@ void main() {
     expect(once.startCount, 2);
   });
 
+  testWidgets('missing previous lesson offers that lesson, not the raw exception', (
+    tester,
+  ) async {
+    final locked = _PrerequisiteLockedCourseService(catalog);
+    await tester.pumpWidget(
+      _app(
+        LessonRunnerScreen(
+          lessonId: 'lesson-01-01-02-suits-and-ranks',
+          courseService: locked,
+          startRequestId: 'start_prereq',
+        ),
+        catalog: catalog,
+      ),
+    );
+    await tester.pump();
+    for (
+      var i = 0;
+      i < 40 &&
+          find
+              .text('Complete the previous lesson before starting this one.')
+              .evaluate()
+              .isEmpty;
+      i++
+    ) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(
+      find.text('Complete the previous lesson before starting this one.'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('CourseServiceException'), findsNothing);
+    expect(find.textContaining('failed-precondition'), findsNothing);
+    expect(find.text('Open Your two cards'), findsOneWidget);
+    expect(find.text('Retry'), findsOneWidget);
+
+    await tester.tap(find.text('Technical details'));
+    await tester.pumpAndSettle();
+    expect(
+      find.textContaining(
+        'CourseServiceException(failed-precondition): '
+        'Complete the previous lesson before starting this one.',
+      ),
+      findsOneWidget,
+    );
+
+    await tester.tap(find.text('Open Your two cards'));
+    await tester.pump();
+    for (
+      var i = 0;
+      i < 40 && find.text('Tap your cards').evaluate().isEmpty;
+      i++
+    ) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(find.text('Tap your cards'), findsOneWidget);
+    expect(find.text('Could not start the lesson'), findsWidgets);
+  });
+
+  testWidgets('retry starts the lesson after the prerequisite is complete', (
+    tester,
+  ) async {
+    final locked = _PrerequisiteLockedCourseService(catalog);
+    await tester.pumpWidget(
+      _app(
+        LessonRunnerScreen(
+          lessonId: 'lesson-01-01-02-suits-and-ranks',
+          courseService: locked,
+          startRequestId: 'start_prereq_retry',
+        ),
+        catalog: catalog,
+      ),
+    );
+    await tester.pump();
+    for (
+      var i = 0;
+      i < 40 && find.text('Retry').evaluate().isEmpty;
+      i++
+    ) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(find.text('Retry'), findsOneWidget);
+    locked.previousComplete = true;
+    await tester.tap(find.text('Retry'));
+    await tester.pump();
+    for (
+      var i = 0;
+      i < 40 && find.textContaining('Ace is high here.').evaluate().isEmpty;
+      i++
+    ) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(find.textContaining('Ace is high here.'), findsOneWidget);
+    expect(find.text('Could not start the lesson'), findsNothing);
+  });
+
   testWidgets('hung startLesson surfaces retry instead of empty spinner', (
     tester,
   ) async {
@@ -1280,6 +1375,39 @@ class _PermissionDeniedOnceCourseService extends CourseService {
       throw const CourseServiceException(
         _kPermissionDeniedDetail,
         code: 'permission-denied',
+      );
+    }
+    return _startedFirst(catalog, lessonId);
+  }
+}
+
+/// Suits and ranks stays locked until [previousComplete] is set.
+class _PrerequisiteLockedCourseService extends CourseService {
+  _PrerequisiteLockedCourseService(this.catalog) : super();
+
+  final CourseCatalog catalog;
+  var previousComplete = false;
+
+  @override
+  Future<void> initializeProfile({
+    required String catalogVersion,
+    String timezone = 'UTC',
+    String? experienceBand,
+    int? dailyGoalMinutes,
+    String? recommendedLessonId,
+  }) async {}
+
+  @override
+  Future<StartCourseLessonResult> startLesson({
+    required String lessonId,
+    required String catalogVersion,
+    required String startRequestId,
+    String timezone = 'UTC',
+  }) async {
+    if (lessonId == 'lesson-01-01-02-suits-and-ranks' && !previousComplete) {
+      throw const CourseServiceException(
+        'Complete the previous lesson before starting this one.',
+        code: 'failed-precondition',
       );
     }
     return _startedFirst(catalog, lessonId);

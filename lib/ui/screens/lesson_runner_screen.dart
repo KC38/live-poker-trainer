@@ -156,6 +156,26 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     });
   }
 
+  void _retryBootstrap() {
+    setState(() {
+      _bootstrapping = true;
+      _error = null;
+      _errorDetail = null;
+    });
+    _bootstrap();
+  }
+
+  /// The catalog lesson that must be finished before this start can succeed.
+  CourseLesson? _previousLesson() {
+    final detail = _errorDetail?.toLowerCase() ?? '';
+    if (!detail.contains('failed-precondition')) return null;
+    final catalog = ref.read(courseCatalogProvider).asData?.value;
+    if (catalog == null) return null;
+    final lesson = catalog.lessonById(widget.lessonId);
+    if (lesson == null || lesson.prerequisites.isEmpty) return null;
+    return catalog.lessonById(lesson.prerequisites.first);
+  }
+
   Future<void> _bootstrapBody() async {
     if (widget.courseService == null) {
       await ref.read(authControllerProvider.notifier).ensureAnonymousSession();
@@ -229,8 +249,11 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     if (lower.contains('unauthenticated')) {
       return 'Sign-in failed before the lesson could start. Retry in a moment.';
     }
-    // Prefer short CourseServiceException messages when present.
-    final match = RegExp(r'CourseServiceException:\s*(.+)').firstMatch(raw);
+    // toString is CourseServiceException($code): $message. The code must
+    // stay in Technical details, not in the learner sentence.
+    final match = RegExp(
+      r'CourseServiceException(?:\([^)]*\))?:\s*(.+)',
+    ).firstMatch(raw);
     if (match != null) {
       return match.group(1)!.trim();
     }
@@ -774,17 +797,33 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            FilledButton(
-              onPressed: () {
-                setState(() {
-                  _bootstrapping = true;
-                  _error = null;
-                  _errorDetail = null;
-                });
-                _bootstrap();
-              },
-              child: const Text('Retry'),
-            ),
+            if (_previousLesson() case final previous?) ...[
+              FilledButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder:
+                          (_) => LessonRunnerScreen(
+                            lessonId: previous.id,
+                            embeddedInShell: widget.embeddedInShell,
+                            courseService: widget.courseService,
+                          ),
+                    ),
+                  );
+                },
+                child: Text('Open ${previous.title}'),
+              ),
+              const SizedBox(height: 12),
+            ],
+            _errorDetail?.toLowerCase().contains('failed-precondition') == true
+                ? OutlinedButton(
+                    onPressed: _retryBootstrap,
+                    child: const Text('Retry'),
+                  )
+                : FilledButton(
+                    onPressed: _retryBootstrap,
+                    child: const Text('Retry'),
+                  ),
           ],
         ),
       );
