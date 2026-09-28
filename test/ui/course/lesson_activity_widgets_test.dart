@@ -8223,16 +8223,20 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('hole-card choices render MiniCard faces', (tester) async {
+  testWidgets('hole-card choices sit on poker table bands', (tester) async {
+    final semantics = tester.ensureSemantics();
+    await tester.binding.setSurfaceSize(const Size(800, 1400));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
     final activity = CourseActivity(
       id: 'act-01-01-02-unguided-suited',
       order: 4,
       stage: ActivityStage.unguided,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
-      accessibilityText: 'suited',
+      accessibilityText: 'Tap the hole-card pair that shares a suit.',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Which hole cards are suited?',
+      prompt: 'Tap the suited hole cards.',
       choices: const [
         CourseChoice(id: 'suited-ah-kh', label: 'Ah Kh'),
         CourseChoice(id: 'offsuit-ah-kd', label: 'Ah Kd'),
@@ -8249,32 +8253,79 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.byType(HoleCardChoiceButton), findsNWidgets(3));
-    expect(find.byType(MiniCard), findsAtLeastNWidgets(6));
+    expect(find.byType(HoleCardChoiceButton), findsNothing);
+    expect(find.byType(FeltTableView), findsOneWidget);
+    expect(find.byType(HeroRailWidget), findsNWidgets(3));
+    expect(find.byType(CoachShelfWidget), findsOneWidget);
+    expect(find.byType(ActionDockWidget), findsNothing);
+    expect(find.text('TAP A HAND'), findsNothing);
+    expect(find.byKey(const ValueKey('hole-card-bands')), findsOneWidget);
+    expect(find.byType(MiniCard), findsNWidgets(6));
+    expect(find.text('PREFLOP'), findsOneWidget);
+    expect(find.text('Tap the suited hole cards.'), findsWidgets);
     final teachHeight = tester
-        .getSize(find.byKey(const ValueKey('hole-card-felt-tray')))
+        .getSize(find.byKey(const ValueKey('hole-card-bands')))
         .height;
-    expect(
-      teachHeight,
-      moreOrLessEquals(
-        tester.view.physicalSize.height /
-            tester.view.devicePixelRatio *
-            0.58,
-        epsilon: 1,
-      ),
-    );
+    expect(teachHeight, greaterThan(400));
     var autoSubmits = 0;
     controller.onAutoSubmit = () => autoSubmits += 1;
-    await tester.tap(find.byType(HoleCardChoiceButton).first);
+    await tester.tap(find.bySemanticsLabel('Ah Kh'));
     await tester.pump();
     expect(controller.draft.choiceId, 'suited-ah-kh');
     expect(autoSubmits, 1);
-    // Densified shell stays filled through Checking…
     expect(
-      tester.getSize(find.byKey(const ValueKey('hole-card-felt-tray'))).height,
+      tester.getSize(find.byKey(const ValueKey('hole-card-bands'))).height,
       moreOrLessEquals(teachHeight, epsilon: 1),
     );
     controller.dispose();
+    semantics.dispose();
+  });
+
+  testWidgets('pocket-pair choices sit on the same hole-card bands', (
+    tester,
+  ) async {
+    final semantics = tester.ensureSemantics();
+    await tester.binding.setSurfaceSize(const Size(800, 1400));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    final activity = CourseActivity(
+      id: 'act-01-01-02-checkpoint-pair',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Tap the pocket nines among the hole-card options.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap the pocket pair.',
+      choices: const [
+        CourseChoice(id: 'pocket-pair', label: '9h 9d'),
+        CourseChoice(id: 'suited-nine', label: 'Ah Kh'),
+        CourseChoice(id: 'two-high', label: 'Ah Kd'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: false,
+        ),
+      ),
+    );
+    expect(find.byType(FeltTableView), findsOneWidget);
+    expect(find.byType(HeroRailWidget), findsNWidgets(3));
+    expect(find.byType(ActionDockWidget), findsNothing);
+    expect(find.text('TAP A HAND'), findsNothing);
+    expect(find.text('Tap the pocket pair.'), findsWidgets);
+    var autoSubmits = 0;
+    controller.onAutoSubmit = () => autoSubmits += 1;
+    await tester.tap(find.bySemanticsLabel('9h 9d'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'pocket-pair');
+    expect(autoSubmits, 1);
+    controller.dispose();
+    semantics.dispose();
   });
 
   test('appendOrderedId auto-submits only on the last sequence tap', () {

@@ -86,6 +86,8 @@ Your start’s hand preview uses the Poker table bands (`FeltTableView`, `HeroRa
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
 
+A lesson step that shows hole cards, including Suits and ranks “Tap the suited hole cards,” places those cards on HeroRailWidget inside the Poker table bands. Retire `_HoleCardFeltTray` for that step.
+
 File one ticket per layout you still see, not one ticket per activity id.
 
 ## Asset inventory
