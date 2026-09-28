@@ -286,6 +286,25 @@ void main() {
     expect(fresh.nodes[0].lockReason, contains('paused'));
     expect(fresh.rexLine, contains('paused'));
 
+    final nextLesson = buildCourseHomeSnapshot(
+      catalog: catalog,
+      flags: _enabledFlags(),
+      available: true,
+      profile: const CourseProfileView(
+        lifetimeXp: 0,
+        currentStreak: 0,
+        acceptedAccuracy: 0,
+        completedLessonIds: [],
+        masteryByLessonId: {},
+        catalogVersion: '2.0.0',
+      ),
+    );
+    expect(
+      nextLesson.rexLine,
+      'Next lesson on the path. One short lesson, then move.',
+    );
+    expect(nextLesson.rexLine, isNot(contains('next to act')));
+
     final resumed = buildCourseHomeSnapshot(
       catalog: catalog,
       flags: paused,

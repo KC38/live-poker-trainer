@@ -235,7 +235,10 @@ class RexIntroScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            'Your live-reg coach',
+            ref.watch(onboardingControllerProvider).experienceBand ==
+                    ExperienceBand.neverPlayed
+                ? 'Your coach'
+                : 'Your live-reg coach',
             style: GoogleFonts.manrope(
               color: AppColors.cream,
               fontSize: 28,

@@ -135,6 +135,76 @@ void main() {
     }
   });
 
+  testWidgets('new to poker Meet Rex says coach, not live-reg', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          analyticsServiceProvider.overrideWithValue(
+            AnalyticsService(enabled: false),
+          ),
+          onboardingControllerProvider.overrideWith(
+            (ref) => OnboardingController(null),
+          ),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: const WelcomeScreen(),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Get started'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('New to poker'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('10 minutes'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Meet Rex'), findsOneWidget);
+    expect(find.text('Your coach'), findsOneWidget);
+    expect(find.textContaining('live-reg'), findsNothing);
+    expect(
+      find.text(
+        'One short sentence at a time. No lectures — just the next decision.',
+      ),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('regular Meet Rex keeps the live-reg coach line', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          analyticsServiceProvider.overrideWithValue(
+            AnalyticsService(enabled: false),
+          ),
+          onboardingControllerProvider.overrideWith(
+            (ref) => OnboardingController(null),
+          ),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: const WelcomeScreen(),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Get started'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Regular live cash player'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('10 minutes'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Your live-reg coach'), findsOneWidget);
+    expect(
+      find.text(
+        'One short sentence at a time. No lectures — just the next decision.',
+      ),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('onboarding steps show position and back returns one screen', (
     tester,
   ) async {
