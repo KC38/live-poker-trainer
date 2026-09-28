@@ -262,6 +262,12 @@ void main() {
     expect(find.text('2'), findsOneWidget);
     expect(find.text('Accepted accuracy'), findsOneWidget);
     expect(find.text('50%'), findsOneWidget);
+    for (final value in ['12', '2', '50%']) {
+      expect(
+        tester.widget<Text>(find.text(value)).style?.fontFamily,
+        contains('JetBrains'),
+      );
+    }
     expect(find.text('Mastery'), findsOneWidget);
     expect(find.text('40%'), findsOneWidget);
     // Live Training still explains that style comes from full-hand play.
