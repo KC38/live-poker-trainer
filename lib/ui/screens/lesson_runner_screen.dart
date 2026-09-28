@@ -891,7 +891,10 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                               result.accepted ? null : controller.tappedSeatLabel,
                           betterChoiceLabel: _labelForChoice(
                             activity,
-                            result.betterChoiceId,
+                            result.betterChoiceId ??
+                                (result.accepted
+                                    ? null
+                                    : _heroRecoveryChoiceId(activity)),
                           ),
                           // Docked with Continue / Try again so the sheet
                           // and CTAs hug — no empty Expanded gap.
@@ -1009,9 +1012,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
 
   String? _labelForChoice(CourseActivity activity, String? choiceId) {
     if (choiceId == null) return null;
-    if (isTableRegionTapActivity(activity)) {
-      final short = _tableChoiceShortLabel(choiceId);
-      if (short != null) return short;
+    final recovery = tableChoiceRecoveryLabel(choiceId);
+    // Hero-card misses name the You seat even when this activity is not in
+    // the table-region id list. Other short labels stay on that list.
+    if (recovery == 'You' ||
+        (recovery != null && isTableRegionTapActivity(activity))) {
+      return recovery;
     }
     for (final choice in activity.choices) {
       if (choice.id == choiceId) return choice.label;
@@ -1023,14 +1029,34 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     }
     return choiceId;
   }
+
+  /// Hero-card choice on this activity, when a miss did not name one.
+  String? _heroRecoveryChoiceId(CourseActivity activity) {
+    for (final id in const [
+      'choice-hero-holes',
+      'choice-checkpoint-holes',
+      'choice-only-you',
+      'choice-hero-again',
+    ]) {
+      for (final choice in activity.choices) {
+        if (choice.id == id) return id;
+      }
+    }
+    return null;
+  }
 }
 
-String? _tableChoiceShortLabel(String choiceId) {
+/// Felt label for a table-region choice, used on the miss recovery line.
+///
+/// Hero-card choices use You, the seat caption on the felt. A phrase that
+/// is not on screen, such as "your hole cards", is not a recovery target.
+@visibleForTesting
+String? tableChoiceRecoveryLabel(String choiceId) {
   return switch (choiceId) {
     'choice-hero-holes' ||
     'choice-only-you' ||
     'choice-checkpoint-holes' ||
-    'choice-hero-again' => 'your hole cards',
+    'choice-hero-again' => 'You',
     'choice-board' ||
     'choice-flop' ||
     'choice-checkpoint-board' => 'the board',
@@ -1144,7 +1170,7 @@ class _FeedbackFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     final largeText = MediaQuery.textScalerOf(context).scale(1) > 1.15;
     final accepted = result.accepted;
-    final continueLabel = accepted ? 'Continue' : 'Got it';
+    const continueLabel = 'Continue';
     return DecoratedBox(
       decoration: BoxDecoration(
         border: Border(
