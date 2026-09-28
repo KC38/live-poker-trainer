@@ -7,12 +7,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_flags.dart';
 import 'package:live_poker_trainer/models/course/onboarding_models.dart';
+import 'package:live_poker_trainer/models/hero_profile_model.dart';
+import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/onboarding_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/screens/onboarding_screens.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/ui/widgets/action_dock_widget.dart';
+import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
+import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
+import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -307,6 +314,9 @@ void main() {
   ) async {
     await tester.pumpWidget(
       ProviderScope(
+        overrides: [
+          heroIdentityProvider.overrideWithValue(const HeroIdentity()),
+        ],
         child: MaterialApp(
           theme: buildPokerTheme(),
           home: const RecommendedStartScreen(
@@ -320,9 +330,15 @@ void main() {
       ),
     );
     expect(find.text('Start lesson'), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
+    expect(find.byType(HeroRailWidget), findsOneWidget);
+    expect(find.byType(CoachShelfWidget), findsOneWidget);
+    expect(find.byType(ActionDockWidget), findsNothing);
+    expect(find.byType(LessonTableContext), findsNothing);
     expect(find.text('Tap your cards'), findsNothing);
     expect(find.textContaining('Tap them'), findsNothing);
     expect(find.textContaining('in the lesson'), findsOneWidget);
+    expect(find.text('FLOP'), findsOneWidget);
   });
 
   testWidgets('save progress copy warns about temporary guest data', (

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
+import 'package:live_poker_trainer/models/coach_feedback.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
@@ -47,6 +48,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_toy_hand.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
+import 'package:live_poker_trainer/ui/widgets/poker_table_bands.dart';
 
 /// Show-stage activity: Rex speaks with a content-driven visual.
 class CoachDialogueActivity extends StatelessWidget {
@@ -2501,7 +2503,6 @@ class _CoachDialogueVisualPane extends StatelessWidget {
         CoachDialogueVisualKind.holeCards => _HoleCardDemo(
           visual: visual,
           enabled: enabled,
-          showSoftPulse: showSoftPulse,
           onRegionTap: onRegionTap,
         ),
         CoachDialogueVisualKind.suitsRanks => _SuitsRanksDemo(
@@ -3080,13 +3081,11 @@ class _HoleCardDemo extends StatelessWidget {
   const _HoleCardDemo({
     required this.visual,
     this.enabled = false,
-    this.showSoftPulse = false,
     this.onRegionTap,
   });
 
   final CoachDialogueVisual visual;
   final bool enabled;
-  final bool showSoftPulse;
   final ValueChanged<LessonTableTapTarget>? onRegionTap;
 
   @override
@@ -3096,18 +3095,21 @@ class _HoleCardDemo extends StatelessWidget {
           visual.cardCodes.length >= 2
               ? visual.cardCodes.take(2).toList(growable: false)
               : const ['Ah', 'Kd'];
-      return LessonTableContext(
-        scene: LessonTableScene(
-          heroCodes: codes,
-          villainSeatCount: 0,
-          highlight: LessonTableHighlight.hero,
-          caption: 'You',
+      final canTap = enabled && onRegionTap != null;
+      return PokerTableBands(
+        key: const ValueKey('hole-cards-felt'),
+        game: lessonBandGame(heroCodes: codes),
+        feedback: CoachFeedback(
+          message: canTap
+              ? 'Tap your cards'
+              : 'Yours alone — nobody else sees them',
         ),
-        enabled: enabled,
-        showSoftPulse: showSoftPulse,
-        // Rex names the cards. The felt still has to say what to tap.
-        showInviteCue: true,
-        onRegionTap: onRegionTap,
+        heroTapLabel: canTap ? 'Tap your cards' : null,
+        onHeroTap: canTap
+            ? () => onRegionTap!(
+                const LessonTableTapTarget(LessonTableRegion.hero),
+              )
+            : null,
       );
     }
     final codes =

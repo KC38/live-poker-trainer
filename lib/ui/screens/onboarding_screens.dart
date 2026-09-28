@@ -7,16 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/models/coach_feedback.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/onboarding_models.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/course_catalog_provider.dart';
 import 'package:live_poker_trainer/providers/course_flags_provider.dart';
 import 'package:live_poker_trainer/providers/onboarding_provider.dart';
-import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_runner_screen.dart';
+import 'package:live_poker_trainer/ui/widgets/poker_table_bands.dart';
 
 /// Signed-out value proposition with Get started / I already have an account.
 class WelcomeScreen extends ConsumerWidget {
@@ -384,18 +385,17 @@ class RecommendedStartScreen extends ConsumerWidget {
                       text: 'These two are yours alone. You will tap them in the lesson.',
                     ),
                     const SizedBox(height: 14),
-                    const LessonTableContext(
-                      scene: LessonTableScene(
-                        heroCodes: ['Ah', 'Kd'],
-                        boardCodes: ['Qs', 'Jh', '2c'],
+                    PokerTableBands(
+                      game: lessonBandGame(
+                        heroCodes: const ['Ah', 'Kd'],
+                        boardCodes: const ['Qs', 'Jh', '2c'],
                         villainSeatCount: 1,
-                        highlight: LessonTableHighlight.hero,
-                        caption: 'You',
                       ),
-                      // Preview only. The felt is not tappable on this screen.
-                      showSoftPulse: false,
-                      showInviteCue: false,
-                      enabled: false,
+                      // Preview only. The rail is not a lesson answer.
+                      feedback: const CoachFeedback(
+                        message:
+                            'Qs Jh 2c on the flop. Your cards stay on the rail.',
+                      ),
                     ),
                   ],
                 ],

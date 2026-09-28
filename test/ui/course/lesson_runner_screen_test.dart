@@ -13,10 +13,12 @@ import 'package:live_poker_trainer/core/audio/sound_service.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/models/course/onboarding_models.dart';
+import 'package:live_poker_trainer/models/hero_profile_model.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/course_catalog_provider.dart';
 import 'package:live_poker_trainer/providers/onboarding_provider.dart';
+import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/services/auth_service.dart';
@@ -151,6 +153,7 @@ Widget _app(Widget child, {required CourseCatalog catalog}) {
       onboardingControllerProvider.overrideWith(
         (ref) => OnboardingController(null),
       ),
+      heroIdentityProvider.overrideWithValue(const HeroIdentity()),
     ],
     child: MaterialApp(
       theme: base.copyWith(
