@@ -235,5 +235,11 @@ void main() {
     await tester.tap(find.byTooltip('Settings'));
     await tester.pumpAndSettle();
     expect(find.byType(SettingsScreen), findsOneWidget);
+    for (final label in [r'$', 'BB', 'Both']) {
+      expect(
+        tester.widget<Text>(find.text(label)).style?.fontFamily,
+        contains('JetBrains'),
+      );
+    }
   });
 }
