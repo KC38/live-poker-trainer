@@ -3360,13 +3360,6 @@ class _SuitsRanksDemoState extends State<_SuitsRanksDemo>
         expandTeach ? 18 : 14,
         expandTeach ? 18 : 16,
       ),
-      decoration: BoxDecoration(
-        color: AppColors.feltLight.withValues(alpha: 0.88),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: AppColors.feltBorder.withValues(alpha: 0.55),
-        ),
-      ),
       child: body,
     );
   }

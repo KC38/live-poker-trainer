@@ -710,17 +710,6 @@ class OrderSequenceActivity extends StatelessWidget {
                     width: double.infinity,
                     height: feltHeight,
                     padding: const EdgeInsets.fromLTRB(12, 18, 12, 18),
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [AppColors.feltLight, AppColors.feltDark],
-                      ),
-                      borderRadius: BorderRadius.circular(18),
-                      border: Border.all(
-                        color: AppColors.feltBorder.withValues(alpha: 0.85),
-                      ),
-                    ),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

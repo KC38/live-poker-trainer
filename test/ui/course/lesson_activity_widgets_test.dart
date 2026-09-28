@@ -227,6 +227,10 @@ void main() {
     );
     await tester.pump();
     expect(find.byType(SuitTapTile), findsNWidgets(4));
+    expect(
+      tester.widget<Container>(find.byKey(const ValueKey('suits-ranks-felt'))).decoration,
+      isNull,
+    );
     expect(find.text('Thirteen ranks — ace high'), findsOneWidget);
     expect(find.byType(MiniCard), findsNothing);
     expect(find.text('Tap Hearts'), findsNothing);
@@ -8119,6 +8123,10 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.byType(SuitTapPicker), findsOneWidget);
+    expect(
+      tester.widget<Container>(find.byKey(const ValueKey('suit-tap-picker-felt'))).decoration,
+      isNull,
+    );
     expect(find.text('Hearts, diamonds, clubs, spades'), findsNothing);
     expect(find.text('Tap suits to build your answer.'), findsNothing);
     final teachHeight = tester
@@ -22393,6 +22401,10 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(find.text('Order these ranks from lowest to highest.'), findsOneWidget);
+    expect(
+      tester.widget<Container>(find.byKey(const ValueKey('rank-order-felt'))).decoration,
+      isNull,
+    );
     // Rex + SoftPulse own the cue — no duplicate status / Tap to place.
     expect(find.text('Tap lowest first'), findsNothing);
     expect(find.text('Pick low → high'), findsNothing);
