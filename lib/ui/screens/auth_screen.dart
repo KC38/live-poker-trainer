@@ -191,6 +191,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
             ? 'Create an account to sync progress across devices.'
             : 'Sign in to continue training.');
 
+    // Welcome pushes this screen. Back must return there. The signed-out
+    // root has nothing to pop, so it stays without a dead Back control.
+    final canPop = Navigator.of(context).canPop();
     return Scaffold(
       appBar: widget.saveProgressMode
           ? AppBar(
@@ -206,7 +209,21 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                 onPressed: () => Navigator.of(context).maybePop(),
               ),
             )
-          : null,
+          : canPop
+              ? AppBar(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  leading: IconButton(
+                    tooltip: 'Back',
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      semanticLabel: 'Back',
+                      color: AppColors.slate,
+                    ),
+                    onPressed: () => Navigator.of(context).maybePop(),
+                  ),
+                )
+              : null,
       body: Container(
         decoration: const BoxDecoration(
           gradient: RadialGradient(

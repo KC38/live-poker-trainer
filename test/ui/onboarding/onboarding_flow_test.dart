@@ -10,6 +10,7 @@ import 'package:live_poker_trainer/models/course/onboarding_models.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/onboarding_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
+import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/screens/onboarding_screens.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -103,6 +104,37 @@ void main() {
         ),
       ),
     );
+    expect(find.text('Get started'), findsOneWidget);
+    expect(find.text('I already have an account'), findsOneWidget);
+  });
+
+  testWidgets('existing account Back returns to Welcome without signing in', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: const WelcomeScreen(),
+        ),
+      ),
+    );
+    await tester.tap(find.text('I already have an account'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AuthScreen), findsOneWidget);
+    expect(find.text('Sign in to continue training.'), findsOneWidget);
+    expect(find.byTooltip('Back'), findsOneWidget);
+    final fields = tester.widgetList<TextFormField>(find.byType(TextFormField));
+    expect(fields, isNotEmpty);
+    for (final field in fields) {
+      expect(field.controller?.text ?? '', isEmpty);
+    }
+
+    await tester.tap(find.byTooltip('Back'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AuthScreen), findsNothing);
     expect(find.text('Get started'), findsOneWidget);
     expect(find.text('I already have an account'), findsOneWidget);
   });
