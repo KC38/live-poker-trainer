@@ -4,7 +4,6 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/home/course_resume_card.dart';
@@ -16,6 +15,7 @@ import 'package:live_poker_trainer/providers/course_home_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/ui/home/course_path_view.dart';
 import 'package:live_poker_trainer/ui/home/rex_coach_card.dart';
+import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 import 'package:live_poker_trainer/ui/screens/home_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 
@@ -144,31 +144,21 @@ void _expectHomeThemeMetrics(WidgetTester tester) {
       contains('JetBrains'),
     );
   }
-  final card = tester.widget<Container>(
-    find.descendant(
-      of: find.byType(RexCoachCard),
-      matching: find.byType(Container),
-    ).first,
+  expect(find.byType(RexCoachCard), findsNothing);
+  expect(find.byType(RexMascot), findsOneWidget);
+  expect(find.text('NEXT'), findsOneWidget);
+  final marked = find.ancestor(
+    of: find.byType(RexMascot),
+    matching: find.byType(Column),
+  ).first;
+  expect(
+    find.descendant(of: marked, matching: find.text('NEXT')),
+    findsOneWidget,
   );
-  final box = card.decoration! as BoxDecoration;
-  expect(box.color, AppColors.bgElevated);
-  expect(box.borderRadius, BorderRadius.circular(16));
-  expect(box.gradient, isNull);
-  final side = (box.border! as Border).top;
-  expect(side.color, AppColors.slateDark);
-  expect(side.width, 0.5);
-  final start = find.widgetWithText(FilledButton, 'Start');
-  final button = tester.widget<FilledButton>(start);
-  final states = const <WidgetState>{};
-  expect(tester.getSize(start).height, 54);
-  expect(button.style!.backgroundColor!.resolve(states), AppColors.gold);
-  expect(button.style!.foregroundColor!.resolve(states), AppColors.bgDark);
-  final shape = button.style!.shape!.resolve(states)! as RoundedRectangleBorder;
-  expect(shape.borderRadius, BorderRadius.circular(14));
-  final textStyle = DefaultTextStyle.of(tester.element(find.text('Start'))).style;
-  expect(textStyle.fontSize, 16);
-  expect(textStyle.fontWeight, FontWeight.w800);
-  expect(textStyle.fontFamily, contains('Manrope'));
+  expect(
+    find.descendant(of: marked, matching: find.text('Lesson B')),
+    findsNothing,
+  );
 }
 
 void main() {
@@ -182,7 +172,8 @@ void main() {
 
     expect(find.text('Home'), findsOneWidget);
     expect(find.text('Streak'), findsOneWidget);
-    expect(find.byType(RexCoachCard), findsOneWidget);
+    expect(find.byType(RexCoachCard), findsNothing);
+    expect(find.byType(RexMascot), findsOneWidget);
     expect(find.byType(CoursePathView), findsOneWidget);
     expect(find.text('Lesson A'), findsOneWidget);
     expect(find.text('NEXT'), findsOneWidget);
@@ -190,7 +181,7 @@ void main() {
     _expectHomeThemeMetrics(tester);
   });
 
-  testWidgets('home status, Rex card, and Start match Theme', (tester) async {
+  testWidgets('Rex stands on the only marked next node', (tester) async {
     await _pumpHome(
       tester,
       snapshot: _readySnapshot(),
@@ -281,7 +272,7 @@ void main() {
     );
     expect(find.byType(HomeScreen), findsOneWidget);
     expect(find.text('Home'), findsWidgets);
-    expect(find.byType(RexCoachCard), findsOneWidget);
+    expect(find.byType(RexCoachCard), findsNothing);
     expect(find.byType(CustomScrollView), findsOneWidget);
     // Path nodes live in a lower sliver; scroll until the next node paints.
     await tester.dragUntilVisible(

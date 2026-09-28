@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_home_models.dart';
+import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
 /// Vertical winding path of course nodes.
 class CoursePathView extends StatelessWidget {
@@ -99,12 +100,23 @@ class _PathNodeRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bubble = _NodeBubble(node: node, onTap: onTap);
+    final marked = node.isNext
+        ? Column(
+            children: [
+              const RexMascot(size: 56),
+              Transform.translate(
+                offset: const Offset(0, -16),
+                child: bubble,
+              ),
+            ],
+          )
+        : bubble;
     return Column(
       children: [
         Row(
           children: [
             if (!alignLeft) const Spacer(flex: 2),
-            Expanded(flex: 5, child: bubble),
+            Expanded(flex: 5, child: marked),
             if (alignLeft) const Spacer(flex: 2),
           ],
         ),

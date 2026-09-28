@@ -333,7 +333,8 @@ class _HomeBody extends StatelessWidget {
                 lifetimeXp: snapshot.lifetimeXp,
                 acceptedAccuracy: snapshot.acceptedAccuracy,
               ),
-              if (snapshot.rexLine != null) ...[
+              if (snapshot.rexLine != null &&
+                  !snapshot.nodes.any((node) => node.isNext)) ...[
                 const SizedBox(height: 14),
                 RexCoachCard(
                   line: snapshot.rexLine!,

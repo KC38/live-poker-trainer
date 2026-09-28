@@ -132,6 +132,8 @@ Do not copy their palette, owl, or words.
 | Hint | A sheet over the step, not a new route. |
 | Payoff | Lesson XP and the daily goal before Home. |
 | Home | A path. The next lesson is the marked node. Rex stands on it. |
+
+On Home, Rex stands on the marked next-lesson node. A Rex card above the path is not that beat.
 | Section end | One ceremony: character, title, one button. |
 
 Rex on a teaching step has a face and a mood. A text-only coach line on a
