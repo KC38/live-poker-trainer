@@ -312,6 +312,8 @@ void main() {
   testWidgets('your start preview does not ask for a tap on this screen', (
     tester,
   ) async {
+    await tester.binding.setSurfaceSize(const Size(402, 874));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -339,6 +341,18 @@ void main() {
     expect(find.textContaining('Tap them'), findsNothing);
     expect(find.textContaining('in the lesson'), findsOneWidget);
     expect(find.text('FLOP'), findsOneWidget);
+    expect(
+      find.text('Qs Jh 2c on the flop. Your cards stay on the rail.'),
+      findsOneWidget,
+    );
+    final rail = tester.getRect(find.byType(HeroRailWidget));
+    final shelf = tester.getRect(
+      find.text('Qs Jh 2c on the flop. Your cards stay on the rail.'),
+    );
+    final button = tester.getRect(find.text('Start lesson'));
+    expect(rail.bottom, lessThanOrEqualTo(shelf.top + 1));
+    expect(shelf.bottom, lessThanOrEqualTo(button.top));
+    expect(rail.bottom, lessThan(button.top));
   });
 
   testWidgets('save progress copy warns about temporary guest data', (

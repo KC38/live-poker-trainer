@@ -340,68 +340,62 @@ class RecommendedStartScreen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    recommendation.jumpTestOffered
-                        ? 'Optional jump test'
-                        : 'Recommended first lesson',
-                    style: GoogleFonts.manrope(
-                      color: AppColors.gold,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 1.0,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    lesson?.title ?? 'Your two cards',
-                    style: GoogleFonts.manrope(
-                      color: AppColors.cream,
-                      fontSize: 28,
-                      fontWeight: FontWeight.w800,
-                      height: 1.2,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    recommendation.jumpTestOffered
-                        ? 'You asked for Regular. A published jump test is available — it never unlocks content by itself.'
-                        : recommendation.experienceBand ==
-                              ExperienceBand.regularLive
-                        ? 'Regular players will get a jump test when it publishes. For now, start with the first interactive lesson.'
-                        : 'A short interactive lesson. Progress is temporary until you create an account.',
-                    style: GoogleFonts.manrope(
-                      color: AppColors.slate,
-                      fontSize: 15,
-                      height: 1.45,
-                    ),
-                  ),
-                  if (!recommendation.jumpTestOffered) ...[
-                    const SizedBox(height: 22),
-                    const RexCoachLine(
-                      text: 'These two are yours alone. You will tap them in the lesson.',
-                    ),
-                    const SizedBox(height: 14),
-                    PokerTableBands(
-                      game: lessonBandGame(
-                        heroCodes: const ['Ah', 'Kd'],
-                        boardCodes: const ['Qs', 'Jh', '2c'],
-                        villainSeatCount: 1,
-                      ),
-                      // Preview only. The rail is not a lesson answer.
-                      feedback: const CoachFeedback(
-                        message:
-                            'Qs Jh 2c on the flop. Your cards stay on the rail.',
-                      ),
-                    ),
-                  ],
-                ],
-              ),
+          Text(
+            recommendation.jumpTestOffered
+                ? 'Optional jump test'
+                : 'Recommended first lesson',
+            style: GoogleFonts.manrope(
+              color: AppColors.gold,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 1.0,
             ),
           ),
+          const SizedBox(height: 12),
+          Text(
+            lesson?.title ?? 'Your two cards',
+            style: GoogleFonts.manrope(
+              color: AppColors.cream,
+              fontSize: 28,
+              fontWeight: FontWeight.w800,
+              height: 1.2,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            recommendation.jumpTestOffered
+                ? 'You asked for Regular. A published jump test is available — it never unlocks content by itself.'
+                : recommendation.experienceBand == ExperienceBand.regularLive
+                ? 'Regular players will get a jump test when it publishes. For now, start with the first interactive lesson.'
+                : 'A short interactive lesson. Progress is temporary until you create an account.',
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 15,
+              height: 1.45,
+            ),
+          ),
+          if (!recommendation.jumpTestOffered) ...[
+            const SizedBox(height: 22),
+            const RexCoachLine(
+              text:
+                  'These two are yours alone. You will tap them in the lesson.',
+            ),
+            const SizedBox(height: 14),
+            Expanded(
+              child: PokerTableBands(
+                game: lessonBandGame(
+                  heroCodes: const ['Ah', 'Kd'],
+                  boardCodes: const ['Qs', 'Jh', '2c'],
+                  villainSeatCount: 1,
+                ),
+                // Preview only. The rail is not a lesson answer.
+                feedback: const CoachFeedback(
+                  message:
+                      'Qs Jh 2c on the flop. Your cards stay on the rail.',
+                ),
+              ),
+            ),
+          ] else
+            const Spacer(),
           FilledButton(
             onPressed: () async {
               unawaited(

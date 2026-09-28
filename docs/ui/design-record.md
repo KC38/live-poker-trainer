@@ -57,6 +57,8 @@ Above width 900 the coach moves to a side column. Band resize uses a short
 size animation (about 280ms). Chips, board, and seats stay inside the felt
 band. The dock never covers the hole cards.
 
+On Your start, Start lesson is below the coach shelf. It does not cover the hero rail. The shelf shows the flop sentence for the preview hand.
+
 This column is the layout lessons reuse. Do not add another table widget.
 
 ### Shipped
