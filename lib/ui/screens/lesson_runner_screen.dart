@@ -1246,7 +1246,6 @@ class _FeedbackFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final largeText = MediaQuery.textScalerOf(context).scale(1) > 1.15;
     final accepted = result.accepted;
     const continueLabel = 'Continue';
     return DecoratedBox(
@@ -1275,7 +1274,7 @@ class _FeedbackFooter extends StatelessWidget {
                 button: true,
                 label: continueLabel,
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: largeText ? 54 : 52),
+                  constraints: const BoxConstraints(minHeight: 54),
                   child: FilledButton(
                     onPressed: completing ? null : onContinue,
                     style: FilledButton.styleFrom(
@@ -1287,6 +1286,16 @@ class _FeedbackFooter extends StatelessWidget {
                         alpha: 0.72,
                       ),
                       disabledForegroundColor: AppColors.bgDark,
+                      textStyle: GoogleFonts.manrope(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 16,
+                        letterSpacing: 0.2,
+                      ),
+                      minimumSize: const Size.fromHeight(54),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 16,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
                       ),
@@ -1305,7 +1314,8 @@ class _FeedbackFooter extends StatelessWidget {
                               continueLabel,
                               style: GoogleFonts.manrope(
                                 fontWeight: FontWeight.w800,
-                                letterSpacing: 0.4,
+                                fontSize: 16,
+                                letterSpacing: 0.2,
                               ),
                             ),
                   ),

@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/core/audio/sound_service.dart';
+import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/models/course/onboarding_models.dart';
@@ -250,6 +251,66 @@ void main() {
     expect(find.text('Try: You'), findsNothing);
     expect(find.text('Try again'), findsNothing);
     expect(find.text('Tap your two cards.'), findsOneWidget);
+  });
+
+  testWidgets('feedback Continue uses the elevated button metrics', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 1600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      _app(
+        LessonRunnerScreen(
+          lessonId: kFirstCourseLessonId,
+          courseService: service,
+          startRequestId: 'start_continue_metrics',
+        ),
+        catalog: catalog,
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+    for (
+      var i = 0;
+      i < 40 && find.text('Tap your cards').evaluate().isEmpty;
+      i++
+    ) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    final heroRail = find.byWidgetPredicate(
+      (w) => w is MiniCard && w.size == MiniCardSize.hero,
+    );
+    await tester.tap(heroRail.first);
+    await tester.pump();
+    await tester.pump();
+
+    final button = tester.widget<FilledButton>(
+      find.widgetWithText(FilledButton, 'Continue'),
+    );
+    const states = <WidgetState>{};
+    expect(
+      button.style?.minimumSize?.resolve(states),
+      const Size.fromHeight(54),
+    );
+    final shape = button.style?.shape?.resolve(states);
+    expect(shape, isA<RoundedRectangleBorder>());
+    expect(
+      (shape! as RoundedRectangleBorder).borderRadius,
+      BorderRadius.circular(14),
+    );
+    expect(button.style?.backgroundColor?.resolve(states), AppColors.gold);
+    expect(button.style?.foregroundColor?.resolve(states), AppColors.bgDark);
+    final label = tester.widget<Text>(
+      find.descendant(
+        of: find.widgetWithText(FilledButton, 'Continue'),
+        matching: find.text('Continue'),
+      ),
+    );
+    expect(label.style?.fontSize, 16);
+    expect(label.style?.fontWeight, FontWeight.w800);
+    expect(label.style?.fontFamily, contains('Manrope'));
   });
 
   testWidgets(

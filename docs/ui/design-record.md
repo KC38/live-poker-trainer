@@ -44,6 +44,8 @@ hard-code a second gold or a second radius for the same role.
 
 Onboarding primary actions use the elevated button (gold on bgDark, height 54, radius 14, Manrope 16 w800). “I already have an account” uses the outlined button (gold-bright label, gold-muted border, height 50, radius 14).
 
+Lesson feedback Continue uses the elevated button (gold on bgDark, height 54, radius 14, Manrope 16 w800).
+
 Home status values (streak, XP, accepted accuracy) use JetBrains Mono. The Rex card uses the card (`bgElevated`, radius 16, hairline `slateDark`, no elevation). Start uses the elevated button (gold on bgDark, height 54, radius 14, Manrope 16 w800).
 
 The Settings Chip display segments ($, BB, Both) use JetBrains Mono.
@@ -53,6 +55,9 @@ The Settings Chip display segments ($, BB, Both) use JetBrains Mono.
 Chip display segments on `SettingsScreen`
 (`lib/ui/screens/settings_screen.dart`) use JetBrains Mono. The next screen
 that labels a chip amount copies that data type.
+
+Lesson feedback Continue is `_FeedbackFooter` in
+`lib/ui/screens/lesson_runner_screen.dart`.
 
 ## Poker table
 
