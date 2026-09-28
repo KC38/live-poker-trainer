@@ -14,7 +14,9 @@ flutter run
 ```
 
 **Agents / iOS simulator (Xcode 27+):** `Simulator.app` was replaced by
-**Device Hub**. Full boot, tmux, Dual-sim, and `agent_tap` instructions:
+**Device Hub**. `/new-user-qa` uses the iPhone 17 Pro and
+`/implement-open-jira` uses the iPhone 17, so both can run at once. Boot,
+tmux, and `agent_tap` instructions:
 [docs/agent-ios-simulator.md](docs/agent-ios-simulator.md).
 
 The launch default is random six-max $1/$2 with a 200 BB maximum. Every hand
