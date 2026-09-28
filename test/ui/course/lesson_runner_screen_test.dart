@@ -176,6 +176,78 @@ void main() {
     service = _ScriptedCourseService(catalog);
   });
 
+  test('hero hole recovery names the You seat', () {
+    expect(tableChoiceRecoveryLabel('choice-hero-holes'), 'You');
+    expect(tableChoiceRecoveryLabel('choice-only-you'), 'You');
+    expect(tableChoiceRecoveryLabel('choice-checkpoint-holes'), 'You');
+    expect(tableChoiceRecoveryLabel('choice-hero-again'), 'You');
+  });
+
+  testWidgets('a miss says Continue and names You, not Got it', (tester) async {
+    tester.view.physicalSize = const Size(390, 1600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      _app(
+        LessonRunnerScreen(
+          lessonId: kFirstCourseLessonId,
+          courseService: service,
+          startRequestId: 'start_miss',
+        ),
+        catalog: catalog,
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+    for (
+      var i = 0;
+      i < 40 && find.text('Tap your cards').evaluate().isEmpty;
+      i++
+    ) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(find.text('Tap your cards'), findsOneWidget);
+
+    final heroRail = find.byWidgetPredicate(
+      (w) => w is MiniCard && w.size == MiniCardSize.hero,
+    );
+    await tester.tap(heroRail.first);
+    await tester.pump();
+    await tester.pump();
+    expect(find.text('Nice!'), findsOneWidget);
+    await tester.tap(find.text('Continue'));
+    await tester.pump();
+    await tester.pump();
+    await tester.pump();
+
+    final boardCards = find.byWidgetPredicate(
+      (w) => w is MiniCard && w.size == MiniCardSize.small,
+    );
+    expect(boardCards, findsAtLeastNWidgets(3));
+    await tester.tap(boardCards.first);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+
+    expect(find.text('Try: You'), findsOneWidget);
+    expect(find.text('your hole cards'), findsNothing);
+    expect(find.widgetWithText(FilledButton, 'Got it'), findsNothing);
+    expect(find.widgetWithText(FilledButton, 'Continue'), findsOneWidget);
+    expect(find.text('Try again'), findsOneWidget);
+
+    await tester.tap(heroRail.first);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+    expect(find.text('Nice!'), findsNothing);
+    expect(find.text('Try: You'), findsOneWidget);
+
+    await tester.tap(find.text('Try again'));
+    await tester.pump();
+    expect(find.text('Try: You'), findsNothing);
+    expect(find.text('Try again'), findsNothing);
+    expect(find.text('Tap your two cards.'), findsOneWidget);
+  });
+
   testWidgets(
     'explain felt tap then table tap auto-submits',
     (tester) async {

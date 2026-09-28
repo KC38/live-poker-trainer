@@ -259,7 +259,7 @@ class _LessonFeedbackSheetState extends State<LessonFeedbackSheet>
                             foregroundColor: AppColors.bgDark,
                           ),
                           child: Text(
-                            widget.result.accepted ? 'Continue' : 'Got it',
+                            'Continue',
                           ),
                         ),
                       ),
