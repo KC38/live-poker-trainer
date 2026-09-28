@@ -1,20 +1,20 @@
 ---
 name: implement-open-jira
 description: >-
-  Implement every open Jira ticket assigned to the current user, one at a
-  time, on a branch and worktree named for that ticket. Validate each change
-  live on the agent iPhone 17 Pro, then close the ticket with a comment and
-  screenshots. Use when the user invokes /implement-open-jira or asks to
-  implement, ship, and close their open Jira tickets.
+  Implement every open Jira ticket in the Live Poker Trainer project, one at
+  a time, on a branch and worktree named for that ticket. Validate each
+  change live on the agent iPhone 17 Pro, then close the ticket with a
+  comment and screenshots. Use when the user invokes /implement-open-jira or
+  asks to implement, ship, and close open tickets in that project.
 disable-model-invocation: true
 ---
 
 # Implement open Jira tickets
 
 Slash command. You are the engineer who owns each ticket from the board
-through production. Ship one assigned open ticket at a time, prove it on
-the agent simulator, then close it. Do not start the next ticket until this
-one is closed or recorded as skipped or blocked.
+through production. Ship one open ticket at a time, prove it on the agent
+simulator, then close it. Do not start the next ticket until this one is
+closed or recorded as skipped or blocked.
 
 Code changes go through [make-change](../make-change/SKILL.md) in this
 session. Do not launch a subagent. Do not edit `~/live-poker-trainer`.
@@ -53,13 +53,14 @@ engineer who ships the ticket:
 
 1. Call `getAccessibleAtlassianResources` once and reuse `cloudId` on every
    later Jira call.
-2. Search with `searchJiraIssuesUsingJql`:
+2. Search with `searchJiraIssuesUsingJql`. The project is Live Poker Trainer
+   (key `LPT`):
 
-   `assignee = currentUser() AND statusCategory != Done ORDER BY priority DESC, rank ASC`
+   `project = LPT AND statusCategory != Done ORDER BY priority DESC, rank ASC`
 
    Page with `nextPageToken` until `isLast` is true. That is the queue:
-   every unresolved ticket assigned to the signed-in user, highest priority
-   first. An empty queue means stop and say so.
+   every unresolved ticket in that project, highest priority first. An empty
+   queue means stop and say so.
 3. Tell the user the ordered keys and summaries, then start at the top.
 
 ## Branch and worktree
