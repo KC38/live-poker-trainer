@@ -95,6 +95,37 @@ HeroHandSample _callDownToShowdown({required bool won}) => _hand(
   netBb: won ? 15 : -15,
 );
 
+/// Hero opened, faced one reraise, and answered with [response].
+HeroHandSample _openFacingThreeBet(
+  HandActionKind response, {
+  PlayerArchetype archetype = PlayerArchetype.tag,
+}) => _hand([
+  _hero(Street.preflop, HandActionKind.raise, amountBb: 3),
+  _villain(
+    Street.preflop,
+    HandActionKind.raise,
+    amountBb: 10,
+    archetype: archetype,
+  ),
+  _hero(
+    Street.preflop,
+    response,
+    amountBb: response == HandActionKind.fold ? 0 : 10,
+  ),
+]);
+
+/// Hero called an open, then faced a flop continuation bet.
+HeroHandSample _facingFlopCbet({required bool fold}) => _hand([
+  _villain(Street.preflop, HandActionKind.raise, amountBb: 3),
+  _hero(Street.preflop, HandActionKind.call, amountBb: 3),
+  _villain(Street.flop, HandActionKind.bet, amountBb: 4),
+  _hero(
+    Street.flop,
+    fold ? HandActionKind.fold : HandActionKind.call,
+    amountBb: fold ? 0 : 4,
+  ),
+]);
+
 void main() {
   setUp(() => _nextHandId = 1);
 
@@ -192,6 +223,132 @@ void main() {
       expect(factor.made, 10, reason: '10 flop bets');
       expect(factor.opportunities, 20, reason: '20 postflop calls');
       expect(factor.value, closeTo(0.5, 0.01));
+    });
+  });
+
+  group('fold to a 3-bet and fold to a c-bet', () {
+    test('only the immediate answer to the first reraise is a fold to a 3-bet', () {
+      final metrics = HeroProfiler.compute([
+        for (var i = 0; i < 7; i++) _openFacingThreeBet(HandActionKind.fold),
+        for (var i = 0; i < 3; i++) _openFacingThreeBet(HandActionKind.call),
+        // A 4-bet that later folds to a 5-bet already continued against the 3-bet.
+        _hand([
+          _hero(Street.preflop, HandActionKind.raise, amountBb: 3),
+          _villain(Street.preflop, HandActionKind.raise, amountBb: 10),
+          _hero(Street.preflop, HandActionKind.raise, amountBb: 24),
+          _villain(Street.preflop, HandActionKind.raise, amountBb: 60),
+          _hero(Street.preflop, HandActionKind.fold),
+        ]),
+        // Limping, then folding to a raise, was never an open.
+        _hand([
+          _hero(Street.preflop, HandActionKind.call, amountBb: 1),
+          _villain(Street.preflop, HandActionKind.raise, amountBb: 4),
+          _hero(Street.preflop, HandActionKind.fold),
+        ]),
+        // Cold-calling a 3-bet is not the hero's own 3-bet spot.
+        _hand([
+          _villain(Street.preflop, HandActionKind.raise, amountBb: 3),
+          _villain(
+            Street.preflop,
+            HandActionKind.raise,
+            amountBb: 10,
+            archetype: PlayerArchetype.lag,
+          ),
+          _hero(Street.preflop, HandActionKind.fold),
+        ]),
+      ]);
+
+      final fold = metrics.sample(HeroMetricId.foldToThreeBet);
+      expect(fold.opportunities, 11);
+      expect(fold.made, 7);
+      expect(fold.value, closeTo(7 / 11 * 100, 0.01));
+      expect(metrics.sample(HeroMetricId.threeBet).opportunities, 0);
+      expect(
+        metrics.leaks.map((leak) => leak.title),
+        isNot(contains('Giving up to 3-bets')),
+      );
+    });
+
+    test('folding every 3-bet names the leak once ten spots are in', () {
+      // Split across archetypes so a "vs TAG" read does not hide this leak.
+      final metrics = HeroProfiler.compute([
+        for (var i = 0; i < 5; i++) _openFacingThreeBet(HandActionKind.fold),
+        for (var i = 0; i < 5; i++)
+          _openFacingThreeBet(
+            HandActionKind.fold,
+            archetype: PlayerArchetype.lag,
+          ),
+      ]);
+
+      final fold = metrics.sample(HeroMetricId.foldToThreeBet);
+      expect(fold.made, 10);
+      expect(fold.opportunities, 10);
+      expect(fold.verdict, MetricVerdict.high);
+      expect(metrics.leaks.map((leak) => leak.title), [
+        'Giving up to 3-bets',
+      ]);
+    });
+
+    test('a 70 percent fold-to-3-bet rate stays under the leak line', () {
+      final metrics = HeroProfiler.compute([
+        for (var i = 0; i < 4; i++) _openFacingThreeBet(HandActionKind.fold),
+        for (var i = 0; i < 3; i++)
+          _openFacingThreeBet(
+            HandActionKind.fold,
+            archetype: PlayerArchetype.lag,
+          ),
+        for (var i = 0; i < 2; i++) _openFacingThreeBet(HandActionKind.call),
+        _openFacingThreeBet(
+          HandActionKind.call,
+          archetype: PlayerArchetype.nit,
+        ),
+      ]);
+
+      expect(
+        metrics.sample(HeroMetricId.foldToThreeBet).value,
+        closeTo(70, 0.01),
+      );
+      expect(metrics.leaks, isEmpty);
+    });
+
+    test('folding to a donk bet is not a fold to a continuation bet', () {
+      final metrics = HeroProfiler.compute([
+        for (var i = 0; i < 7; i++) _facingFlopCbet(fold: true),
+        for (var i = 0; i < 3; i++) _facingFlopCbet(fold: false),
+        for (var i = 0; i < 10; i++)
+          _hand([
+            _hero(Street.preflop, HandActionKind.raise, amountBb: 3),
+            _villain(Street.preflop, HandActionKind.call, amountBb: 3),
+            _villain(Street.flop, HandActionKind.bet, amountBb: 4),
+            _hero(Street.flop, HandActionKind.fold),
+          ]),
+        _hand([
+          _villain(Street.preflop, HandActionKind.raise, amountBb: 3),
+          _hero(Street.preflop, HandActionKind.call, amountBb: 3),
+          _villain(Street.flop, HandActionKind.check),
+          _hero(Street.flop, HandActionKind.fold),
+        ]),
+      ]);
+
+      final fold = metrics.sample(HeroMetricId.foldToCbet);
+      expect(fold.opportunities, 10);
+      expect(fold.made, 7);
+      expect(fold.value, closeTo(70, 0.01));
+      expect(metrics.sample(HeroMetricId.cbet).opportunities, 0);
+      expect(
+        metrics.leaks.map((leak) => leak.title),
+        contains('Folding the flop too often'),
+      );
+    });
+
+    test('six folds in ten c-bet spots stay under the leak line', () {
+      final metrics = HeroProfiler.compute([
+        for (var i = 0; i < 6; i++) _facingFlopCbet(fold: true),
+        for (var i = 0; i < 4; i++) _facingFlopCbet(fold: false),
+      ]);
+
+      expect(metrics.sample(HeroMetricId.foldToCbet).value, closeTo(60, 0.01));
+      expect(metrics.leaks, isEmpty);
     });
   });
 
