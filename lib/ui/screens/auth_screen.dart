@@ -198,7 +198,11 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
               elevation: 0,
               leading: IconButton(
                 tooltip: 'Close',
-                icon: const Icon(Icons.close, color: AppColors.slate),
+                icon: const Icon(
+                  Icons.close,
+                  semanticLabel: 'Close',
+                  color: AppColors.slate,
+                ),
                 onPressed: () => Navigator.of(context).maybePop(),
               ),
             )
