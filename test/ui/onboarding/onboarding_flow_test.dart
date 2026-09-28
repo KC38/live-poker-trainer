@@ -18,6 +18,7 @@ import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/screens/onboarding_screens.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/action_dock_widget.dart';
+import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
@@ -130,6 +131,7 @@ void main() {
       ),
     );
     _expectElevatedMetrics(tester, 'Continue');
+    expect(find.byType(RexMascot), findsOneWidget);
   });
 
   testWidgets('existing account Back returns to Welcome without signing in', (
@@ -371,6 +373,7 @@ void main() {
     expect(shelf.bottom, lessThanOrEqualTo(button.top));
     expect(rail.bottom, lessThan(button.top));
     _expectElevatedMetrics(tester, 'Start lesson');
+    expect(find.byType(RexMascot), findsOneWidget);
   });
 
   testWidgets('save progress copy warns about temporary guest data', (

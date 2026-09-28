@@ -18,6 +18,7 @@ import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_runner_screen.dart';
 import 'package:live_poker_trainer/ui/widgets/poker_table_bands.dart';
+import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
 /// Signed-out value proposition with Get started / I already have an account.
 class WelcomeScreen extends ConsumerWidget {
@@ -247,6 +248,8 @@ class RexIntroScreen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          const Align(child: RexMascot(size: 128)),
+          const SizedBox(height: 16),
           Text(
             'Rex',
             style: GoogleFonts.manrope(

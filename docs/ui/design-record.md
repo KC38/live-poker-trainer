@@ -102,11 +102,13 @@ introduced. Reuse the path already listed. Add a row when a new file ships.
 | Slot | Current | Reuse |
 | --- | --- | --- |
 | Logo | `assets/brand/logo_mark.png` | Auth screen and Live Training hub |
-| Mascot | None. Rex is type: `RexCoachLine`, `RexCoachCard` | Any Rex mention copies this until a mascot asset is shipped |
+| Mascot | `assets/brand/rex_calm.png` — a face, calm mood, via `RexMascot` | Meet Rex, `RexCoachLine`, and `RexCoachCard` |
 | Icons | Material / Cupertino. No branded icon set | Theme icon color (`slate` in the app bar) |
 | Motion | Implicit widget motion only (band resize, `AnimatedSwitcher` 220ms in the runner). No Rive or Lottie | [flutter-ui-ux](../../.cursor/skills/flutter-ui-ux/SKILL.md) durations |
 | Sound effects | `SoundService`: `deal.wav`, `chip.wav`, `knock.wav`, `fold.wav`, `win.wav` under `assets/sounds/` | Table actions call these. Do not add a second chip sound |
 | Background music | `assets/sounds/lounge_ambient.mp3` via `SoundService.startHomeBgm` | Home. Pause when leaving Home. Settings toggle is `musicEnabled` |
+
+The mascot slot is a Rex image with a face and a mood. Meet Rex and the Rex line on Your start show that face. Text-only `RexCoachLine` is not the slot.
 
 A missing slot (Rex still text-only, a deal with no motion, a table action
 with no `SoundService` call) is a ticket that names the slot. The walk does
