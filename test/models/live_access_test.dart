@@ -82,4 +82,24 @@ void main() {
       expect(parsed.maxDecisions, 2);
     });
   });
+
+  test('locked copy names the Home lesson that unlocks the warm-up', () {
+    expect(
+      liveTrainingLockedMessage(),
+      'Live Training is advanced. Finish Section 2 jump check on Home '
+      'to unlock a coached warm-up.',
+    );
+    expect(
+      liveTrainingLockedMessage(),
+      isNot(contains('Section 2 checkpoint')),
+    );
+    expect(
+      liveTrainingLockedMessage(lessonTitle: 'Section 2 jump check'),
+      contains('Section 2 jump check'),
+    );
+    expect(
+      liveTrainingLockedSnack(),
+      'Live Training unlocks after Section 2 jump check. Continue on Home.',
+    );
+  });
 }

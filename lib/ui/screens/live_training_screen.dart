@@ -14,6 +14,7 @@ import 'package:live_poker_trainer/core/debug/agent_commands.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
+import 'package:live_poker_trainer/providers/course_catalog_provider.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/providers/live_access_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
@@ -85,12 +86,13 @@ class _LiveTrainingScreenState extends ConsumerState<LiveTrainingScreen> {
     final access = ref.read(liveAccessProvider).asData?.value;
     if (access != null && !access.unrestrictedAccess) {
       if (!mounted) return;
+      final unlockTitle = _warmUpUnlockTitle();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
             access.warmUpAvailable
                 ? 'Unrestricted Live Training unlocks after the Section 4 jump. Warm-ups stay on Home.'
-                : 'Live Training unlocks after the Section 2 checkpoint. Continue on Home.',
+                : liveTrainingLockedSnack(lessonTitle: unlockTitle),
           ),
         ),
       );
@@ -154,6 +156,11 @@ class _LiveTrainingScreenState extends ConsumerState<LiveTrainingScreen> {
     );
   }
 
+  String? _warmUpUnlockTitle() {
+    final catalog = ref.read(courseCatalogProvider).asData?.value;
+    return catalog?.lessonById(kLiveWarmUpUnlockLessonId)?.title;
+  }
+
   String _setupSummary(GameSettingsModel s) {
     final blinds =
         '\$${s.smallBlind % 1 == 0 ? s.smallBlind.toInt() : s.smallBlind}/'
@@ -168,6 +175,12 @@ class _LiveTrainingScreenState extends ConsumerState<LiveTrainingScreen> {
     final notifier = ref.read(settingsProvider.notifier);
     final access = ref.watch(liveAccessProvider).asData?.value;
     final gated = access != null && access.tier != LiveAccessTier.unrestricted;
+    final unlockTitle = ref
+        .watch(courseCatalogProvider)
+        .asData
+        ?.value
+        .lessonById(kLiveWarmUpUnlockLessonId)
+        ?.title;
 
     return Focus(
       autofocus: kDebugMode,
@@ -194,6 +207,7 @@ class _LiveTrainingScreenState extends ConsumerState<LiveTrainingScreen> {
                   if (gated) {
                     return _LiveAccessGate(
                       access: access,
+                      unlockLessonTitle: unlockTitle,
                       onOpenHome: widget.onOpenHome,
                       onWarmUp:
                           access.warmUpAvailable
@@ -359,9 +373,17 @@ class _LiveTrainingScreenState extends ConsumerState<LiveTrainingScreen> {
 }
 
 class _LiveAccessGate extends StatelessWidget {
-  const _LiveAccessGate({required this.access, this.onOpenHome, this.onWarmUp});
+  const _LiveAccessGate({
+    required this.access,
+    this.unlockLessonTitle,
+    this.onOpenHome,
+    this.onWarmUp,
+  });
 
   final LiveAccessSnapshot access;
+
+  /// Home lesson title that unlocks the warm-up.
+  final String? unlockLessonTitle;
   final VoidCallback? onOpenHome;
   final VoidCallback? onWarmUp;
 
@@ -381,7 +403,7 @@ class _LiveAccessGate extends StatelessWidget {
           Text(
             warm
                 ? 'Rex warm-ups are open. Random Live Training unlocks after the Section 4 jump test.'
-                : 'Live Training is advanced. Finish the Section 2 checkpoint on Home to unlock a coached warm-up.',
+                : liveTrainingLockedMessage(lessonTitle: unlockLessonTitle),
             style: GoogleFonts.manrope(
               color: AppColors.cream,
               fontSize: 16,
