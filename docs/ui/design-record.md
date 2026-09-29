@@ -466,6 +466,8 @@ your default strategy book uses the same frame: leak, book, and review
 stay in the stage, and the book quizzes stay lists. Capstone:
 single-raised pot uses the same frame: plan, update, and finish stay
 in the stage, and the three streets sit face up on the full table.
+Capstone: 3-bet pot uses the same frame: SPR, turn, and close stay in
+the stage, and the three streets sit face up on the full table.
 The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
