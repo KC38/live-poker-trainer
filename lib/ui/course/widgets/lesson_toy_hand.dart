@@ -15,11 +15,17 @@ class ToyHandRunDemo extends StatefulWidget {
     this.interactive = false,
     this.enabled = false,
     this.onAllStepsTapped,
+    this.height,
   });
 
   final bool interactive;
   final bool enabled;
   final VoidCallback? onAllStepsTapped;
+
+  /// Stage height when the lesson frame already owns the chrome.
+  ///
+  /// Null keeps the standalone teach shell at 58% of the screen.
+  final double? height;
 
   @override
   State<ToyHandRunDemo> createState() => _ToyHandRunDemoState();
@@ -51,7 +57,8 @@ class _ToyHandRunDemoState extends State<ToyHandRunDemo> {
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
     final feltHeight =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+        widget.height ??
+        (expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null);
     final lanes = <(String, String, Widget)>[
       (
         'BLINDS',

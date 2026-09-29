@@ -131,7 +131,8 @@ class PokerActionSizingActivity extends StatelessWidget {
               final framedTable =
                   LessonFrameScope.maybeOf(context) != null &&
                   activity.id.startsWith('act-01-03-01-') ||
-                  activity.id.startsWith('act-01-03-02-');
+                  activity.id.startsWith('act-01-03-02-') ||
+                  activity.id.startsWith('act-01-06-01-');
               final table =
                   framedTable
                       ? LessonTableStage(
