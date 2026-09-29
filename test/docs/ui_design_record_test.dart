@@ -51,13 +51,13 @@ void main() {
     expect(
       text,
       contains(
-        'A right answer shows Rex’s own face in a celebrating mood beside the short line. The calm portrait and the celebrating portrait are the same coach. The Asset inventory celebrate row uses that same face.',
+        'A right answer shows the same coach in a celebrating mood beside the short line. The calm drawing and the celebrating drawing are the same coach. The Asset inventory celebrate row uses that same coach.',
       ),
     );
     expect(
       text,
       contains(
-        'Rex’s own face, celebrating mood, the same coach as the calm portrait',
+        'the same coach, celebrating mood, the same coach as the calm drawing',
       ),
     );
     expect(
