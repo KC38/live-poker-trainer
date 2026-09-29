@@ -353,7 +353,8 @@ the same frame: value, bluffs, and cite stay in the stage, each
 adjustment spot sits face up on the full table, and the bluff-less
 reason stays a list. Observe narrow players uses the same frame:
 rare, enter, and mean it stay in the stage, and the entry quizzes stay
-lists. The procedure for the
+lists. Meet the Nit uses the same frame: nit, narrow, and respect stay
+in the stage, and the label quizzes stay lists. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
