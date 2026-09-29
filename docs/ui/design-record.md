@@ -375,7 +375,10 @@ stay in the stage, the continue and priority checks stay lists, and
 the connector and the set spots sit face up on the full table. Play
 150–300bb stacks with a plan uses the same frame: deep, realize, and
 stack stay in the stage, the implied, plan, and reward checks stay
-lists, and the wet-flop fold sits face up on the full table. The procedure for the
+lists, and the wet-flop fold sits face up on the full table. Implied
+and reverse odds uses the same frame: implied, reverse, and second stay
+in the stage, each price spot sits face up on the full table, and the
+rise check stays a list. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
