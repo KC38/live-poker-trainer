@@ -59,7 +59,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-03-04-01-flop-decisions' ||
       lessonId == 'lesson-03-04-01' ||
       lessonId == 'lesson-03-05-01-turn-decisions' ||
-      lessonId == 'lesson-03-05-01';
+      lessonId == 'lesson-03-05-01' ||
+      lessonId == 'lesson-03-06-01-river-decisions' ||
+      lessonId == 'lesson-03-06-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -157,6 +159,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-03-05-01-explain') {
     return 'A turn bricks or changes the story. '
         'Tap Brick, then Change, then Barrel, then Delay.';
+  }
+  if (activity.id == 'act-03-06-01-explain') {
+    return 'River is value, bluff, bluff-catch, or fold. '
+        'Tap Value, then Bluff, then Catch, then Fold.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand') &&
