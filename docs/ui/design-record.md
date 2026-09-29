@@ -306,7 +306,10 @@ the same frame: fold, call, and 3-bet stay in the stage, and each
 response sits face up on the full table. Effective stacks uses the
 same frame: chips to big blinds, the shorter stack, and depth stay
 in the stage. Live table habits uses the same frame: watch, say,
-cover, and wait stay in the stage. The procedure for the
+cover, and wait stay in the stage. Full-ring baseline hand uses the
+same frame: nine seats, the same rules, and position stay in the
+stage, and each decision sits face up on the full table. The procedure
+for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
