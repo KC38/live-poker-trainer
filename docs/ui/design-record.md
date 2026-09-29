@@ -325,7 +325,9 @@ the turn card uses the same frame: brick, change, barrel, and delay
 stay in the stage, and each turn sits face up on the full table.
 Close the river correctly uses the same frame: value, bluff, catch,
 and fold stay in the stage, and each river sits face up on the full
-table. The procedure for the
+table. Play tighter multiway uses the same frame: stronger, fewer,
+and nuts stay in the stage, and each multiway spot sits face up on
+the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
