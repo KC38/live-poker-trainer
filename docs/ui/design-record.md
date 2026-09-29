@@ -341,7 +341,9 @@ table. Plan beyond the flop uses the same frame: flop, turn, and
 river stay in the stage, and each street of the plan sits face up
 on the full table. Size with a message uses the same frame: value,
 pressure, and size stay in the stage, and each sizing spot sits face
-up on the full table. The procedure for the
+up on the full table. SPR decides commitment uses the same frame:
+SPR, low, and high stay in the stage, and each commitment spot sits
+face up on the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 

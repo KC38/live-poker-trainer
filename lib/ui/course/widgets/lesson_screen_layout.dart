@@ -75,7 +75,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-04-03-01-continuation-plans' ||
       lessonId == 'lesson-04-03-01' ||
       lessonId == 'lesson-04-04-01-sizing-communicates' ||
-      lessonId == 'lesson-04-04-01';
+      lessonId == 'lesson-04-04-01' ||
+      lessonId == 'lesson-04-05-01-spr-commitment' ||
+      lessonId == 'lesson-04-05-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -201,6 +203,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-04-04-01-explain') {
     return 'Size is language. Value looks like value. '
         'Tap Value, then Pressure, then Size.';
+  }
+  if (activity.id == 'act-04-05-01-explain') {
+    return 'SPR is stack divided by the pot. '
+        'Tap SPR, then Low, then High.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||
