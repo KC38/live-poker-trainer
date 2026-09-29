@@ -93,7 +93,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-04-08-01-observe-wild-aggressor' ||
       lessonId == 'lesson-04-08-01' ||
       lessonId == 'lesson-04-08-02-meet-maniac' ||
-      lessonId == 'lesson-04-08-02';
+      lessonId == 'lesson-04-08-02' ||
+      lessonId == 'lesson-04-08-03-adjust-maniac' ||
+      lessonId == 'lesson-04-08-03';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -255,6 +257,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-04-08-02-explain') {
     return 'Maniac means extreme entry and aggression — a model, not an insult. '
         'Tap Maniac, then Entry, then Aggro.';
+  }
+  if (activity.id == 'act-04-08-03-explain') {
+    return 'Versus maniacs: call wider for value, let them hang themselves, no ego. '
+        'Tap Wider, then Hang, then Ego.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||
