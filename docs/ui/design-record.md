@@ -421,7 +421,10 @@ stage, the station, reason, and purpose checks stay lists, and the
 set check sits face up on the full table. Navigate 3-bet and 4-bet
 pots by depth uses the same frame: 3-bet, 4-bet, and depth stay in
 the stage, the commit, ego, and SPR checks stay lists, and the missed
-AQo flop sits face up on the full table. The procedure for the
+AQo flop sits face up on the full table. Make difficult folds;
+review coolers fairly uses the same frame: hard, cooler, and ego stay
+in the stage, the cooler, ego, and review checks stay lists, and the
+weak-kicker fold sits face up on the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
