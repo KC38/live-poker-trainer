@@ -303,7 +303,9 @@ starting hand sits face up on the full table. Open or fold baseline
 uses the same frame: early, button, and live size stay in the stage,
 and each open sits face up on the full table. Versus an open uses
 the same frame: fold, call, and 3-bet stay in the stage, and each
-response sits face up on the full table. The procedure for the
+response sits face up on the full table. Effective stacks uses the
+same frame: chips to big blinds, the shorter stack, and depth stay
+in the stage. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
