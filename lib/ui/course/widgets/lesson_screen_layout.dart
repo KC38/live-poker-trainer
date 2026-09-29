@@ -19,7 +19,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-01-02-01-hand-ranks' ||
       lessonId == 'lesson-01-02-01' ||
       lessonId == 'lesson-01-02-02-best-five-kickers' ||
-      lessonId == 'lesson-01-02-02';
+      lessonId == 'lesson-01-02-02' ||
+      lessonId == 'lesson-01-03-01-fold-check-call' ||
+      lessonId == 'lesson-01-03-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -53,6 +55,9 @@ String lessonFrameSpeech(CourseActivity activity) {
   if (activity.id == 'act-01-02-02-unguided-board') {
     return 'The board is broadway. Tap the board if both play it, your '
         'cards if a higher hole card wins, or their cards if the button wins.';
+  }
+  if (activity.id == 'act-01-03-01-explain-passive') {
+    return 'Three quiet buttons. Tap Fold, then Check, then Call.';
   }
   final resolved = resolveLessonCoachPrompt(
     activity: activity,

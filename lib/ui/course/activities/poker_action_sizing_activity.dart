@@ -7,6 +7,8 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 /// Action + sizing choices styled like the live action dock.
@@ -126,6 +128,18 @@ class PokerActionSizingActivity extends StatelessWidget {
               final fill =
                   constraints.hasBoundedHeight &&
                   constraints.maxHeight.isFinite;
+              final framedTable =
+                  LessonFrameScope.maybeOf(context) != null &&
+                  activity.id.startsWith('act-01-03-01-');
+              final table =
+                  framedTable
+                      ? LessonTableStage(
+                        heroCodes: spot.heroCodes,
+                        boardCodes: spot.boardCodes,
+                        villainCount: 1,
+                        heroFaceUp: true,
+                      )
+                      : null;
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: fill ? MainAxisSize.max : MainAxisSize.min,
@@ -146,16 +160,19 @@ class PokerActionSizingActivity extends StatelessWidget {
                   const SizedBox(height: 10),
                   if (fill)
                     Expanded(
-                      child: LessonActionTable(
-                        spot: spot,
-                        coachOwnsCue: coachOwnsCue,
-                      ),
+                      child:
+                          table ??
+                          LessonActionTable(
+                            spot: spot,
+                            coachOwnsCue: coachOwnsCue,
+                          ),
                     )
                   else
-                    LessonActionTable(
-                      spot: spot,
-                      coachOwnsCue: coachOwnsCue,
-                    ),
+                    table ??
+                        LessonActionTable(
+                          spot: spot,
+                          coachOwnsCue: coachOwnsCue,
+                        ),
                   const SizedBox(height: 10),
                   dock,
                   status,
