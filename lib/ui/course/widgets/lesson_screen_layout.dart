@@ -159,7 +159,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-06-13-02-section-six-checkpoint' ||
       lessonId == 'lesson-06-13-02' ||
       lessonId == 'lesson-07-01-01-preflop-to-flop' ||
-      lessonId == 'lesson-07-01-01';
+      lessonId == 'lesson-07-01-01' ||
+      lessonId == 'lesson-07-02-01-flop-to-turn-map' ||
+      lessonId == 'lesson-07-02-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -441,6 +443,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-07-01-01-explain') {
     return 'Enter with a reason. Flop confirms or cancels. '
         'Tap Reason, then Confirm, then Cancel.';
+  }
+  if (activity.id == 'act-07-02-01-explain') {
+    return 'Flop bet needs a turn map. Continue or kill. '
+        'Tap Barrel, then Give-up, then Map.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||
