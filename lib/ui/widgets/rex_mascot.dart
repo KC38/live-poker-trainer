@@ -49,15 +49,46 @@ class RexMascot extends StatelessWidget {
       container: true,
       image: true,
       label: _label,
-      child: SizedBox(
-        width: size,
-        height: size * 1.5,
-        child: Image.asset(
-          _asset,
-          fit: BoxFit.contain,
-          excludeFromSemantics: true,
+      child: _CelebrateEntrance(
+        enabled: mood == RexMood.celebrate,
+        child: SizedBox(
+          width: size,
+          height: size * 1.5,
+          child: Image.asset(
+            _asset,
+            fit: BoxFit.contain,
+            excludeFromSemantics: true,
+          ),
         ),
       ),
+    );
+  }
+}
+
+/// Short rise-in for a right answer. It finishes, so tests can settle.
+class _CelebrateEntrance extends StatelessWidget {
+  const _CelebrateEntrance({required this.enabled, required this.child});
+
+  final bool enabled;
+  final Widget child;
+
+  static const duration = Duration(milliseconds: 420);
+
+  @override
+  Widget build(BuildContext context) {
+    if (!enabled) return child;
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0.86, end: 1),
+      duration: duration,
+      curve: Curves.easeOutBack,
+      child: child,
+      builder: (context, scale, child) {
+        return Transform.scale(
+          scale: scale,
+          alignment: Alignment.bottomCenter,
+          child: child,
+        );
+      },
     );
   }
 }
