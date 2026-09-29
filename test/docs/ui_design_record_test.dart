@@ -46,6 +46,7 @@ void main() {
       ),
     );
     expect(text, contains('lounge_ambient.mp3'));
+    expect(text, contains('## Lesson screen layout'));
     expect(text, contains('## Gamified learning'));
     expect(
       text,

@@ -12,7 +12,9 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_outs_picker.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
@@ -38,9 +40,7 @@ class SelectIdentifyActivity extends StatelessWidget {
     final presentation = resolveSelectIdentifyPresentation(activity);
     if (presentation == SelectIdentifyPresentation.tableRegionTap) {
       return _TableRegionTapActivity(
-        key: ValueKey<String>(
-          '${activity.id}-${controller.bindGeneration}',
-        ),
+        key: ValueKey<String>('${activity.id}-${controller.bindGeneration}'),
         activity: activity,
         controller: controller,
         showGuidance: showGuidance,
@@ -48,9 +48,7 @@ class SelectIdentifyActivity extends StatelessWidget {
     }
     if (presentation == SelectIdentifyPresentation.handCategoryTap) {
       return _HandCategoryTapActivity(
-        key: ValueKey<String>(
-          '${activity.id}-${controller.bindGeneration}',
-        ),
+        key: ValueKey<String>('${activity.id}-${controller.bindGeneration}'),
         activity: activity,
         controller: controller,
         showGuidance: showGuidance,
@@ -58,9 +56,7 @@ class SelectIdentifyActivity extends StatelessWidget {
     }
     if (presentation == SelectIdentifyPresentation.showdownTap) {
       return _ShowdownTapActivity(
-        key: ValueKey<String>(
-          '${activity.id}-${controller.bindGeneration}',
-        ),
+        key: ValueKey<String>('${activity.id}-${controller.bindGeneration}'),
         activity: activity,
         controller: controller,
         showGuidance: showGuidance,
@@ -68,9 +64,7 @@ class SelectIdentifyActivity extends StatelessWidget {
     }
     if (presentation == SelectIdentifyPresentation.bestFiveCardTap) {
       return _BestFiveCardTapActivity(
-        key: ValueKey<String>(
-          '${activity.id}-${controller.bindGeneration}',
-        ),
+        key: ValueKey<String>('${activity.id}-${controller.bindGeneration}'),
         activity: activity,
         controller: controller,
         showGuidance: showGuidance,
@@ -78,9 +72,7 @@ class SelectIdentifyActivity extends StatelessWidget {
     }
     if (presentation == SelectIdentifyPresentation.outsCleanAcesTap) {
       return _OutsCleanAcesTapActivity(
-        key: ValueKey<String>(
-          '${activity.id}-${controller.bindGeneration}',
-        ),
+        key: ValueKey<String>('${activity.id}-${controller.bindGeneration}'),
         activity: activity,
         controller: controller,
         showGuidance: showGuidance,
@@ -160,7 +152,10 @@ class SelectIdentifyActivity extends StatelessWidget {
     );
   }
 
-  String _coachFallback(SelectIdentifyPresentation presentation, bool hasScene) {
+  String _coachFallback(
+    SelectIdentifyPresentation presentation,
+    bool hasScene,
+  ) {
     return switch (presentation) {
       SelectIdentifyPresentation.suitTapPicker =>
         'Tap every suit that belongs in a standard deck.',
@@ -197,9 +192,10 @@ class SelectIdentifyActivity extends StatelessWidget {
         activity.stage == ActivityStage.guided &&
         index == 0 &&
         controller.draft.choiceId == null;
-    final onPressed = locked
-        ? null
-        : () => controller.selectChoice(choice.id, autoSubmit: true);
+    final onPressed =
+        locked
+            ? null
+            : () => controller.selectChoice(choice.id, autoSubmit: true);
 
     switch (presentation) {
       case SelectIdentifyPresentation.holeCards:
@@ -331,19 +327,15 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
     if (authored != null) return authored;
     return switch (widget.activity.id) {
       'act-01-01-01-guided-find-holes' => 'Tap your two cards.',
-      'act-01-01-01-scaffolded-private' =>
-        'Tap the cards only you can see.',
+      'act-01-01-01-scaffolded-private' => 'Tap the cards only you can see.',
       'act-01-01-01-unguided-mix' =>
         'Tap the cards in the middle. The muck is folded cards, and it is not the answer.',
-      'act-01-01-01-checkpoint-table' =>
-        'Tap the cards that are only yours.',
-      'act-01-01-03-guided-button' =>
-        'Find the dealer button on the felt.',
+      'act-01-01-01-checkpoint-table' => 'Tap the cards that are only yours.',
+      'act-01-01-03-guided-button' => 'Find the dealer button on the felt.',
       // SoftPulse owns BB — don’t gold-tip the seat.
       'act-01-01-03-scaffolded-blinds' =>
         'Blinds sit left of the button — the bigger forced bet posts two.',
-      'act-01-01-03-unguided-when' =>
-        'When do those forced bets go in?',
+      'act-01-01-03-unguided-when' => 'When do those forced bets go in?',
       // SoftPulse owns SB — don’t gold-tip the seat.
       'act-01-01-03-checkpoint-layout' =>
         'Button is marked — first blind sits immediately left.',
@@ -357,10 +349,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-02-01-01-checkpoint-edge' =>
         'Same cards — later seats play stronger.',
       'act-02-01-02-unguided-wait' =>
-          'Action is on UTG — you are on the button. Stay quiet until it reaches you.',
+        'Action is on UTG — you are on the button. Stay quiet until it reaches you.',
       // SoftPulse-quiet: ask who closes — don't tip “last seat” = BTN.
       'act-02-01-02-checkpoint-full' =>
-          'Six-max flop, everyone in — pick who acts last.',
+        'Six-max flop, everyone in — pick who acts last.',
       // Unguided densify — pick when the street ends; SoftPulse stays quiet.
       'act-01-04-01-unguided-end' =>
         'Betting is live — pick when this street ends.',
@@ -369,617 +361,550 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         'Postflop — first action sits left of the button.',
       // SoftPulse owns Take pot — don’t gold-tip the tile.
       'act-01-05-01-guided-fold-win' =>
-          'Everyone folded — you don’t need to show cards.',
+        'Everyone folded — you don’t need to show cards.',
       // SoftPulse owns Showdown — don’t gold-tip the tile.
       'act-01-05-01-scaffolded-showdown' =>
-          'River is called — best five decide the pot.',
+        'River is called — best five decide the pot.',
       // Unguided densify — SoftPulse stays quiet.
       'act-01-05-01-unguided-pot' =>
-          'Blinds plus the open — pick the chip total.',
+        'Blinds plus the open — pick the chip total.',
       // Checkpoint densify — don’t gold-tip Side pot.
       'act-01-05-01-checkpoint-side' =>
-          'You are short all-in while others keep betting.',
+        'You are short all-in while others keep betting.',
       // SoftPulse owns the board — don’t gold-tip Chop.
       'act-01-02-02-unguided-board' =>
-          'Both checked down — broadway board plays for everyone.',
+        'Both checked down — broadway board plays for everyone.',
       // SoftPulse owns Cover + wait — don’t gold-tip the tile.
       'act-02-07-01-checkpoint-habit' =>
-          'Cards uncovered and action left — cover up and wait your turn.',
+        'Cards uncovered and action left — cover up and wait your turn.',
       // SoftPulse owns Watch first — don’t gold-tip the tile.
       'act-02-06-01-guided-follow' =>
-          'Two seats act before you — watch them finish before you decide.',
+        'Two seats act before you — watch them finish before you decide.',
       // SoftPulse owns verbal raise — don’t gold-tip the tile.
       'act-02-06-01-scaffolded-verbal' =>
-          'You want to raise — say the amount clearly so the table hears it.',
+        'You want to raise — say the amount clearly so the table hears it.',
       // SoftPulse owns Chip on cards — don’t gold-tip the tile.
       'act-02-06-01-unguided-protect' =>
-          'Cards near the muck — keep something on them so they stay yours.',
+        'Cards near the muck — keep something on them so they stay yours.',
       // SoftPulse owns Out of turn — don’t gold-tip the tile.
       'act-02-06-01-checkpoint-oot' =>
-          'You raised early — action was still two seats left.',
+        'You raised early — action was still two seats left.',
       // SoftPulse-quiet jump: ask on the map — don't name Cutoff as the answer.
       'act-02-07-02-jump-pos' =>
-          'Seat just before the button — pick it on the map.',
+        'Seat just before the button — pick it on the map.',
       'act-02-07-02-jump-family' =>
-          'Look at your holes — pick the family they belong to.',
+        'Look at your holes — pick the family they belong to.',
       // SoftPulse owns Flush — don’t gold-tip the tile.
       'act-01-02-01-scaffolded-spot' =>
-          'Board and holes show five clubs — name the category.',
+        'Board and holes show five clubs — name the category.',
       // SoftPulse owns You — don’t gold-tip the winner.
       'act-01-02-01-checkpoint-winner' =>
-          'Flush vs straight on the river — stronger category takes it.',
+        'Flush vs straight on the river — stronger category takes it.',
       // SoftPulse owns You — don’t gold-tip the kicker winner.
       'act-01-02-02-scaffolded-kicker' =>
-          'Same pair of kings — the higher kicker breaks the tie.',
+        'Same pair of kings — the higher kicker breaks the tie.',
       // Jump densify — SoftPulse off; pick without gold-tipping 55bb.
       'act-02-07-02-jump-stack' =>
-          'You 120bb · villain 55bb — pick the effective stack.',
+        'You 120bb · villain 55bb — pick the effective stack.',
       'act-02-02-01-guided-pair' =>
-          'Matching ranks in the hole — both cards share a rank.',
+        'Matching ranks in the hole — both cards share a rank.',
       'act-02-02-01-scaffolded-broadway' =>
-          'Both cards ten-or-better — high-card broadway strength shows up.',
+        'Both cards ten-or-better — high-card broadway strength shows up.',
       'act-02-02-01-unguided-sc' =>
-          'Look at your holes — pick the family that fits.',
+        'Look at your holes — pick the family that fits.',
       // SoftPulse-quiet: list families — don't tip trash as the answer.
       'act-02-02-01-checkpoint-trash' =>
-          'Early seat with junk — pick the family that fits.',
+        'Early seat with junk — pick the family that fits.',
       'act-02-05-01-guided-convert' =>
-          '200 chips at 1/2 — divide chips by the big blind.',
+        '200 chips at 1/2 — divide chips by the big blind.',
       'act-02-05-01-checkpoint-200' =>
-          '1000 chips at 2/5 — buy-in counted in big blinds.',
+        '1000 chips at 2/5 — buy-in counted in big blinds.',
       'act-02-05-01-scaffolded-eff' =>
-          'You 150bb, villain 60bb — the shorter stack caps the matchup.',
+        'You 150bb, villain 60bb — the shorter stack caps the matchup.',
       'act-02-05-01-unguided-depth' =>
-          'Pick the depth that plays closest to a shove game.',
+        'Pick the depth that plays closest to a shove game.',
       // SoftPulse owns 21 chips — don’t gold-tip the tile.
       'act-03-01-01-guided' =>
-          'Blinds plus three 6s — add every contribution into the pot.',
+        'Blinds plus three 6s — add every contribution into the pot.',
       // SoftPulse owns UTG — don’t gold-tip the seat.
       'act-03-01-01-scaffolded' =>
-          'Preflop — first to act sits left of the big blind.',
+        'Preflop — first to act sits left of the big blind.',
       // SoftPulse owns Raise stands — don’t gold-tip the tile.
       'act-03-01-01-unguided' =>
-          'You said raise — pick what counts at a live table.',
+        'You said raise — pick what counts at a live table.',
       // SoftPulse owns 55bb + pot — don’t gold-tip the tile.
       'act-03-01-01-checkpoint' =>
-          'Shorter stack caps the matchup — track effective stack with the pot.',
+        'Shorter stack caps the matchup — track effective stack with the pot.',
       // SoftPulse owns Made — don’t gold-tip the tile.
       'act-03-02-01-guided' =>
-          'Board pairs your king — your hole king connects for immediate value.',
+        'Board pairs your king — your hole king connects for immediate value.',
       // SoftPulse owns Draw — don’t gold-tip the tile.
       'act-03-02-01-scaffolded' =>
-          'Two hearts on board with the nut heart — you need runout more than showdown now.',
+        'Two hearts on board with the nut heart — you need runout more than showdown now.',
       // SoftPulse owns Air — don’t gold-tip the tile.
       'act-03-02-01-unguided' =>
-          'No pair, almost no draw multiway — equity is thin here.',
+        'No pair, almost no draw multiway — equity is thin here.',
       // SoftPulse owns Draw — don’t gold-tip the tile.
       'act-03-02-01-checkpoint' =>
-          'Eight or queen completes — your hand needs the right runout.',
+        'Eight or queen completes — your hand needs the right runout.',
       // SoftPulse owns remaining aces — don’t gold-tip the cards.
       'act-03-03-01-guided' =>
-          'King-high board — count only outs that make the best hand.',
+        'King-high board — count only outs that make the best hand.',
       // SoftPulse owns Call 10 — don’t gold-tip the tile.
       'act-03-03-01-scaffolded' =>
-          'Pot 20, bet 10 — the call equals the bet in front of you.',
+        'Pot 20, bet 10 — the call equals the bet in front of you.',
       // SoftPulse owns Call — don’t gold-tip the tile.
       'act-03-03-01-unguided' =>
-          'Getting 3:1 with real outs — pick Call, Fold, or Raise.',
+        'Getting 3:1 with real outs — pick Call, Fold, or Raise.',
       // SoftPulse owns Implied — don’t gold-tip the tile.
       'act-03-03-01-checkpoint' =>
-          'Nut flush draw, deep and sticky — future payoffs can justify the price.',
+        'Nut flush draw, deep and sticky — future payoffs can justify the price.',
       // SoftPulse owns Brick — don’t gold-tip the tile.
       'act-03-05-01-guided' =>
-          'Dry ace flop, blank three — rarely helps a missed caller.',
+        'Dry ace flop, blank three — rarely helps a missed caller.',
       // SoftPulse owns give-up — don’t gold-tip the tile.
       'act-03-05-01-checkpoint' =>
-          'Air bluff meets a draw-completing queen — weigh shutting down.',
+        'Air bluff meets a draw-completing queen — weigh shutting down.',
       // SoftPulse owns the river job — don’t gold-tip the tile.
       'act-03-06-01-checkpoint' =>
-          'Medium one pair faces a big bet — weigh the river job.',
+        'Medium one pair faces a big bet — weigh the river job.',
       // SoftPulse owns the speculative hand — don’t gold-tip the tile.
       'act-03-07-01-unguided' =>
-          'Deep multiway — pick the better speculative hand.',
+        'Deep multiway — pick the better speculative hand.',
       // SoftPulse owns the note — don’t gold-tip the tile.
       'act-03-07-01-checkpoint' =>
-          'Seat enters most pots — weigh what you note.',
+        'Seat enters most pots — weigh what you note.',
       // SoftPulse owns Note freqs — don’t gold-tip the tile.
       'act-03-08-01-checkpoint' =>
-          'Two seats, different frequencies — note how often each seat enters.',
+        'Two seats, different frequencies — note how often each seat enters.',
       // SoftPulse owns Pot · effective — don’t gold-tip the tile.
       'act-03-08-02-jump-table' =>
-          'Pot 16, shorter 40bb — start with pot and effective stack.',
+        'Pot 16, shorter 40bb — start with pot and effective stack.',
       // SoftPulse owns Draw — don’t gold-tip the tile.
       'act-03-08-02-jump-class' =>
-          'Qd9d3c with JdTd — you need runout for both straight and flush.',
+        'Qd9d3c with JdTd — you need runout for both straight and flush.',
       // SoftPulse owns Fold — don’t gold-tip the tile.
       'act-03-08-02-jump-leak' =>
-          'Gutshot vs a 2x pot bet — the price is usually too steep.',
+        'Gutshot vs a 2x pot bet — the price is usually too steep.',
       // SoftPulse owns Strong narrow — don’t gold-tip the tile.
       'act-04-01-01-guided' =>
-          'UTG opens at 1/2 — early seats usually play tighter.',
+        'UTG opens at 1/2 — early seats usually play tighter.',
       // SoftPulse owns BB 3-bet — don’t gold-tip the tile.
       'act-04-01-01-scaffolded' =>
-          'BTN open, BB 3-bet, BTN calls — 3-bet ranges start narrower than flatting opens.',
+        'BTN open, BB 3-bet, BTN calls — 3-bet ranges start narrower than flatting opens.',
       // SoftPulse owns Keep range — don’t gold-tip the tile.
       'act-04-01-01-unguided' =>
-          'They bet twice — pinning Exactly AK collapses the range.',
+        'They bet twice — pinning Exactly AK collapses the range.',
       // SoftPulse owns Read drives — don’t gold-tip the tile.
       'act-04-01-01-checkpoint' =>
-          'Same board, different villain lines — advice follows the range, not the cards alone.',
+        'Same board, different villain lines — advice follows the range, not the cards alone.',
       // SoftPulse owns Branches — don’t gold-tip the tile.
       'act-04-03-01-checkpoint' =>
-          'You have a flop plan — map brick vs flush turns.',
+        'You have a flop plan — map brick vs flush turns.',
       // SoftPulse owns Soft band — don’t gold-tip the tile.
       'act-04-04-01-unguided' =>
-          'Two value sizes both get calls — nearby sizes can both grade soft.',
+        'Two value sizes both get calls — nearby sizes can both grade soft.',
       // SoftPulse owns SPR 4 — don’t gold-tip the tile.
-      'act-04-05-01-guided' =>
-          'Effective 80 into pot 20 — stack ÷ pot.',
+      'act-04-05-01-guided' => 'Effective 80 into pot 20 — stack ÷ pot.',
       // SoftPulse owns SPR 4 — don’t gold-tip the tile.
-      'act-04-10-02-jump-spr' =>
-          'Stack 60 into pot 15 — stack ÷ pot.',
+      'act-04-10-02-jump-spr' => 'Stack 60 into pot 15 — stack ÷ pot.',
       // SoftPulse owns High part. — don’t gold-tip the tile.
       'act-04-06-01-guided' =>
-          'Seat calls 7 of 9 preflops — participation is rolling high.',
+        'Seat calls 7 of 9 preflops — participation is rolling high.',
       // SoftPulse owns Sticky — don’t gold-tip the tile.
       'act-04-06-01-scaffolded' =>
-          'Second pair called three streets twice — folding looks scarce.',
+        'Second pair called three streets twice — folding looks scarce.',
       // SoftPulse owns Low conf. — don’t gold-tip the tile.
       'act-04-06-01-unguided' =>
-          'One dramatic call — confidence stays thin until samples pile up.',
+        'One dramatic call — confidence stays thin until samples pile up.',
       // SoftPulse owns Bundle — don’t gold-tip the tile.
       'act-04-06-01-checkpoint' =>
-          'Before you label — stack many hands that rarely fold.',
+        'Before you label — stack many hands that rarely fold.',
       // SoftPulse owns Station — don’t gold-tip the tile.
       'act-04-06-02-guided' =>
-          'Sticky second pair calls — treat them as a sticky caller for now.',
+        'Sticky second pair calls — treat them as a sticky caller for now.',
       // SoftPulse owns Working model — don’t gold-tip the tile.
       'act-04-06-02-scaffolded' =>
-          'A player-type label comes from evidence — temporary, not a soul verdict.',
+        'A player-type label comes from evidence — temporary, not a soul verdict.',
       // SoftPulse owns Station — don’t gold-tip the tile.
       'act-04-06-02-unguided' =>
-          'Limps, calls, never folds turns — sticky caller fits better than wild aggression.',
+        'Limps, calls, never folds turns — sticky caller fits better than wild aggression.',
       // SoftPulse owns Low — don’t gold-tip the tile.
       'act-04-06-02-checkpoint' =>
-          'Only two hands so far — keep sampling before you lock a label.',
+        'Only two hands so far — keep sampling before you lock a label.',
       // SoftPulse owns Rarely folds — don’t gold-tip the tile.
       'act-04-06-03-checkpoint' =>
-          'Why cut bluffs vs a station — they almost never leave.',
+        'Why cut bluffs vs a station — they almost never leave.',
       // SoftPulse owns Narrow — don’t gold-tip the tile.
-      'act-04-07-01-guided' =>
-          'Folded 20 of 22 — entry looks very selective.',
+      'act-04-07-01-guided' => 'Folded 20 of 22 — entry looks very selective.',
       // SoftPulse owns Strong heat — don’t gold-tip the tile.
       'act-04-07-01-scaffolded' =>
-          'Raises then barrels — when they enter, heat often follows.',
+        'Raises then barrels — when they enter, heat often follows.',
       // SoftPulse owns Wait — don’t gold-tip the tile.
       'act-04-07-01-unguided' =>
-          'Only two folds — sample is still too thin to lock a label.',
+        'Only two folds — sample is still too thin to lock a label.',
       // SoftPulse owns Few + heat — don’t gold-tip the tile.
       'act-04-07-01-checkpoint' =>
-          'Before you label — few hands with heavy action when involved.',
+        'Before you label — few hands with heavy action when involved.',
       // SoftPulse owns Nit — don’t gold-tip the tile.
       'act-04-07-02-guided' =>
-          'Rare entry, large 3-bets — a narrow, strong-when-involved label fits.',
+        'Rare entry, large 3-bets — a narrow, strong-when-involved label fits.',
       // SoftPulse owns Nit — don’t gold-tip the tile.
       'act-04-07-02-unguided' =>
-          'Folds forever, then explodes — narrow heat fits better than wild aggression.',
+        'Folds forever, then explodes — narrow heat fits better than wild aggression.',
       // SoftPulse owns Working model — don’t gold-tip the tile.
       'act-04-07-02-checkpoint' =>
-          'Treat Nit as evidence with sample limits — temporary, not an insult.',
+        'Treat Nit as evidence with sample limits — temporary, not an insult.',
       // SoftPulse owns Strong range — don’t gold-tip the tile.
       'act-04-07-03-checkpoint' =>
-          'Nit check-raises — their raise range is usually strong.',
+        'Nit check-raises — their raise range is usually strong.',
       // SoftPulse owns Extreme — don’t gold-tip the tile.
       'act-04-08-01-guided' =>
-          'Raises 12 of 15 — entry and aggression are both extreme.',
+        'Raises 12 of 15 — entry and aggression are both extreme.',
       // SoftPulse owns Wide heat — don’t gold-tip the tile.
       'act-04-08-01-scaffolded' =>
-          'Barrels three streets light — pressure stays too wide.',
+        'Barrels three streets light — pressure stays too wide.',
       // SoftPulse owns Frequencies — don’t gold-tip the tile.
       'act-04-08-01-unguided' =>
-          'Wild aggression — track frequencies and shows, not revenge stories.',
+        'Wild aggression — track frequencies and shows, not revenge stories.',
       // SoftPulse owns Enter + barrel — don’t gold-tip the tile.
       'act-04-08-01-checkpoint' =>
-          'Before you label — constant entry with merciless barrels.',
+        'Before you label — constant entry with merciless barrels.',
       // SoftPulse owns Maniac — don’t gold-tip the tile.
       'act-04-08-02-guided' =>
-          'Opens 60%, barrels light — a wide, relentless aggressor label fits.',
+        'Opens 60%, barrels light — a wide, relentless aggressor label fits.',
       // SoftPulse owns Maniac — don’t gold-tip the tile.
       'act-04-08-02-unguided' =>
-          'Light 3-bets, never gives up — wild pressure fits better than sticky calling.',
+        'Light 3-bets, never gives up — wild pressure fits better than sticky calling.',
       // SoftPulse owns Three types — don’t gold-tip the tile.
       'act-04-08-02-checkpoint' =>
-          'Legal mix now — Station, Nit, and Maniac are on the board.',
+        'Legal mix now — Station, Nit, and Maniac are on the board.',
       // SoftPulse owns Wide bets — don’t gold-tip the tile.
       'act-04-08-03-checkpoint' =>
-          'Maniac barrels — their betting range is simply too wide.',
+        'Maniac barrels — their betting range is simply too wide.',
       // SoftPulse owns One note — don’t gold-tip the tile.
       'act-04-09-01-guided' =>
-          'One huge bluff — a single sample stays low certainty.',
+        'One huge bluff — a single sample stays low certainty.',
       // SoftPulse owns Rise — don’t gold-tip the tile.
       'act-04-09-01-scaffolded' =>
-          '30 sticky hands — confidence rises, but stays revisable.',
+        '30 sticky hands — confidence rises, but stays revisable.',
       // SoftPulse owns Update — don’t gold-tip the tile.
       'act-04-09-01-unguided' =>
-          'Station starts folding — update or retire the old model.',
+        'Station starts folding — update or retire the old model.',
       // SoftPulse owns Limits — don’t gold-tip the tile.
       'act-04-09-01-checkpoint' =>
-          'Beside a type label — show sample and confidence limits.',
+        'Beside a type label — show sample and confidence limits.',
       // SoftPulse owns Strong narrow — don’t gold-tip the tile.
       'act-04-10-02-jump-range' =>
-          'UTG open — early seats usually play tighter.',
+        'UTG open — early seats usually play tighter.',
       // SoftPulse owns Value more — don’t gold-tip the tile.
-      'act-04-10-02-jump-station' =>
-          'Sticky three streets — pick the exploit.',
+      'act-04-10-02-jump-station' => 'Sticky three streets — pick the exploit.',
       // SoftPulse owns Respect — don’t gold-tip the tile.
-      'act-04-10-02-jump-nit' =>
-          'Tiny range, huge raise — pick the line.',
+      'act-04-10-02-jump-nit' => 'Tiny range, huge raise — pick the line.',
       // SoftPulse owns Call wider — don’t gold-tip the tile.
       'act-04-10-02-jump-maniac' =>
-          'Barrels forever, top pair — pick the line.',
+        'Barrels forever, top pair — pick the line.',
       // SoftPulse owns Nut FD — don’t gold-tip the tile.
-      'act-05-01-01-guided' =>
-          'Four-way flop — prefer nutted equity over air.',
+      'act-05-01-01-guided' => 'Four-way flop — prefer nutted equity over air.',
       // SoftPulse owns Nut potential — don’t gold-tip the tile.
       'act-05-01-01-checkpoint' =>
-          'Multiway construction — nutted equity over domination traps.',
+        'Multiway construction — nutted equity over domination traps.',
       // SoftPulse owns Implied — don’t gold-tip the tile.
-      'act-05-02-01-guided' =>
-          '200bb with 55 — depth pays if they stack sets.',
+      'act-05-02-01-guided' => '200bb with 55 — depth pays if they stack sets.',
       // SoftPulse owns Map plans — don’t gold-tip the tile.
       'act-05-02-01-unguided' =>
-          'SPR ~12 — map turn and river before you commit.',
+        'SPR ~12 — map turn and river before you commit.',
       // SoftPulse owns Position / implied — don’t gold-tip the tile.
       'act-05-02-01-checkpoint' =>
-          'Deep cash — position, implied odds, disciplined folds.',
+        'Deep cash — position, implied odds, disciplined folds.',
       // SoftPulse owns Depth + pay — don’t gold-tip the tile.
       'act-05-03-01-checkpoint' =>
-          'Future money grows when stacks behind meet sticky callers.',
+        'Future money grows when stacks behind meet sticky callers.',
       // SoftPulse owns The line — don’t gold-tip the tile.
       'act-05-04-01-checkpoint' =>
-          'Same cards, different seats — let the read drive the plan.',
+        'Same cards, different seats — let the read drive the plan.',
       // SoftPulse owns Value-heavy — don’t gold-tip the tile.
-      'act-05-05-01-guided' =>
-          'Nit check-raises — respect their narrow heat.',
+      'act-05-05-01-guided' => 'Nit check-raises — respect their narrow heat.',
       // SoftPulse owns Polarized — don’t gold-tip the tile.
       'act-05-05-01-unguided' =>
-          'Large BB donk on dry ace — usually extremes, not medium.',
+        'Large BB donk on dry ace — usually extremes, not medium.',
       // SoftPulse owns After weakness — don’t gold-tip the tile.
       'act-05-05-01-checkpoint' =>
-          'Delayed c-bet shines after they show flop weakness.',
+        'Delayed c-bet shines after they show flop weakness.',
       // SoftPulse owns Fewer nuts / Capped — don’t gold-tip the tile.
       'act-05-06-01-guided' =>
-          'Bet flop, check turn — a check-back usually means the story got weaker.',
+        'Bet flop, check turn — a check-back usually means the story got weaker.',
       // SoftPulse owns Rebuild — don’t gold-tip the tile.
       'act-05-06-01-unguided' =>
-          'Best habit — rebuild the story after every action.',
+        'Best habit — rebuild the story after every action.',
       // SoftPulse owns Uncapped — don’t gold-tip the tile.
       'act-05-06-01-checkpoint' =>
-          'XR then bet then shove — pressure stays uncapped.',
+        'XR then bet then shove — pressure stays uncapped.',
       // SoftPulse owns Soft evidence — don’t gold-tip the tile.
       'act-05-07-01-guided' =>
-          'Instant shove — a clue, not proof of nuts or air.',
+        'Instant shove — a clue, not proof of nuts or air.',
       // SoftPulse owns Weaker / blocking — don’t gold-tip the tile.
       'act-05-07-01-scaffolded' =>
-          'Tiny flop bet into a huge pot — often weak or blocking.',
+        'Tiny flop bet into a huge pot — often weak or blocking.',
       // SoftPulse owns Reject — don’t gold-tip the tile.
       'act-05-07-01-unguided' =>
-          'Look-left magic tell — don’t treat folklore as proof.',
+        'Look-left magic tell — don’t treat folklore as proof.',
       // SoftPulse owns Tiny update — don’t gold-tip the tile.
       'act-05-07-01-checkpoint' =>
-          'Live timing — nudge confidence beside stronger reads.',
+        'Live timing — nudge confidence beside stronger reads.',
       // SoftPulse owns Stuck / tilted — don’t gold-tip the tile.
       'act-05-08-01-guided' =>
-          'Lost two buy-ins — widen value and choose spots carefully.',
+        'Lost two buy-ins — widen value and choose spots carefully.',
       // SoftPulse owns Gear change — don’t gold-tip the tile.
       'act-05-08-01-scaffolded' =>
-          'Flats junk and donks rivers — resample before trusting the old label.',
+        'Flats junk and donks rivers — resample before trusting the old label.',
       // SoftPulse owns Fresh samples — don’t gold-tip the tile.
       'act-05-08-01-checkpoint' =>
-          'Dynamic reads stay temporary — keep sampling the seat.',
+        'Dynamic reads stay temporary — keep sampling the seat.',
       // SoftPulse owns Stop / move down — don’t gold-tip the tile.
       'act-05-09-01-guided' =>
-          'Hit a planned stop-loss — leave or move down, don’t chase.',
+        'Hit a planned stop-loss — leave or move down, don’t chase.',
       // SoftPulse owns Decline — don’t gold-tip the tile.
       'act-05-09-01-scaffolded' =>
-          '2/5 opens with a 1/2 bankroll — stay inside the plan.',
+        '2/5 opens with a 1/2 bankroll — stay inside the plan.',
       // SoftPulse owns Cash out — don’t gold-tip the tile.
       'act-05-09-01-unguided' =>
-          'Tired and up small while the table gets wild — bank the win.',
+        'Tired and up small while the table gets wild — bank the win.',
       // SoftPulse owns Your edge — don’t gold-tip the tile.
       'act-05-09-01-checkpoint' =>
-          'Session discipline is part of how you keep an edge.',
-      'act-05-09-02-cp-multi' =>
-          'Four-way pot — pick the multiway priority.',
-      'act-05-09-02-cp-tell' =>
-          'Instant shove — weigh what timing proves.',
-      'act-05-09-02-cp-stop' =>
-          'Hit stop-loss — honor the session guardrail.',
+        'Session discipline is part of how you keep an edge.',
+      'act-05-09-02-cp-multi' => 'Four-way pot — pick the multiway priority.',
+      'act-05-09-02-cp-tell' => 'Instant shove — weigh what timing proves.',
+      'act-05-09-02-cp-stop' => 'Hit stop-loss — honor the session guardrail.',
       // SoftPulse owns Preflop raiser — don’t gold-tip the tile.
       'act-06-01-01-guided' =>
-          'A-high dry flop — the preflop raiser’s range usually leads.',
+        'A-high dry flop — the preflop raiser’s range usually leads.',
       // SoftPulse owns Wide caller — don’t gold-tip the tile.
       'act-06-01-01-scaffolded' =>
-          'Paired board — the wider defender often owns more of the nuts.',
+        'Paired board — the wider defender often owns more of the nuts.',
       // SoftPulse owns Apply pressure — don’t gold-tip the tile.
       'act-06-01-01-checkpoint' =>
-          'When you own more value — apply selective pressure.',
+        'When you own more value — apply selective pressure.',
       // SoftPulse owns In position — don’t gold-tip the tile.
       'act-06-02-01-guided' =>
-          'Same draw — equity realizes better when you act last.',
+        'Same draw — equity realizes better when you act last.',
       // SoftPulse owns Discount / fold — don’t gold-tip the tile.
       'act-06-02-01-scaffolded' =>
-          'Weak showdown value OOP vs dual barrels — tighten continues.',
+        'Weak showdown value OOP vs dual barrels — tighten continues.',
       // SoftPulse owns Fold equity — don’t gold-tip the tile.
       'act-06-02-01-unguided' =>
-          'Nut draw check-raise — pressure folds plus your outs.',
+        'Nut draw check-raise — pressure folds plus your outs.',
       // SoftPulse owns Position + initiative — don’t gold-tip the tile.
       'act-06-02-01-checkpoint' =>
-          'Equity realization climbs with position and initiative.',
+        'Equity realization climbs with position and initiative.',
       'act-06-03-01-guided' =>
-          'Checks turn after flop bet — read their range shape.',
+        'Checks turn after flop bet — read their range shape.',
       'act-06-03-01-unguided' =>
-          'XR flop / bet turn / bomb — read their range shape.',
-      'act-06-03-01-checkpoint' =>
-          'Caps are for — choose how you use them.',
-      'act-06-04-01-guided' =>
-          'River overbet — pick the betting shape.',
-      'act-06-04-01-unguided' =>
-          'Mismatch to avoid — pick the sizing leak.',
-      'act-06-04-01-checkpoint' =>
-          'Merged betting aims to — pick the goal.',
+        'XR flop / bet turn / bomb — read their range shape.',
+      'act-06-03-01-checkpoint' => 'Caps are for — choose how you use them.',
+      'act-06-04-01-guided' => 'River overbet — pick the betting shape.',
+      'act-06-04-01-unguided' => 'Mismatch to avoid — pick the sizing leak.',
+      'act-06-04-01-checkpoint' => 'Merged betting aims to — pick the goal.',
       // SoftPulse owns Nuts / bluffs — don’t gold-tip the tile.
-      'act-06-05-01-guided' =>
-          'Best overbet river — pick the polar candidate.',
+      'act-06-05-01-guided' => 'Best overbet river — pick the polar candidate.',
       // Unguided: name the leak; SoftPulse isn’t on — still don’t tip Avoid.
       'act-06-05-01-unguided' =>
-          'Random 3x pot medium — pick the disciplined line.',
+        'Random 3x pot medium — pick the disciplined line.',
       // SoftPulse owns Multi-street plan — don’t gold-tip the tile.
       'act-06-05-01-checkpoint' =>
-          'Geometric sizing helps — pick what it links.',
+        'Geometric sizing helps — pick what it links.',
       // SoftPulse owns Ace blocker — don’t gold-tip the tile.
       'act-06-06-01-guided' =>
-          'Flush-board river bluff — pick the better blocker.',
+        'Flush-board river bluff — pick the better blocker.',
       // SoftPulse owns Unblock bluffs — don’t gold-tip the tile.
       'act-06-06-01-scaffolded' =>
-          'Bluff-catch flush bomb — pick what you leave live.',
+        'Bluff-catch flush bomb — pick what you leave live.',
       // Unguided: name the role; don’t tip Tweak evidence.
-      'act-06-06-01-unguided' =>
-          'Blockers replace — pick how far they go.',
+      'act-06-06-01-unguided' => 'Blockers replace — pick how far they go.',
       // SoftPulse owns No fake EV — don’t gold-tip the tile.
-      'act-06-06-01-checkpoint' =>
-          'Solver EV quotes — pick the course stance.',
+      'act-06-06-01-checkpoint' => 'Solver EV quotes — pick the course stance.',
       // SoftPulse owns Strong catchers — don’t gold-tip the tile.
-      'act-06-07-01-guided' =>
-          'Facing a river bet — pick quality continues.',
+      'act-06-07-01-guided' => 'Facing a river bet — pick quality continues.',
       // Unguided: name the stance; don’t tip Intuition.
       'act-06-07-01-unguided' =>
-          'MDF numbers — pick how this course uses them.',
+        'MDF numbers — pick how this course uses them.',
       // SoftPulse owns Punish over-bluffs — don’t gold-tip the tile.
       'act-06-07-01-checkpoint' =>
-          'Minimum defense goal — pick what you protect.',
+        'Minimum defense goal — pick what you protect.',
       // SoftPulse owns Less bluff — don’t gold-tip the tile.
       'act-06-08-01-scaffolded' =>
-          'Vs Calling Station — pick the mix adjustment.',
+        'Vs Calling Station — pick the mix adjustment.',
       // Unguided: name the rule; don’t tip Need a reason.
       'act-06-08-01-unguided' =>
-          'Randomness for its own sake — pick when mix is allowed.',
+        'Randomness for its own sake — pick when mix is allowed.',
       // SoftPulse owns Purpose freq — don’t gold-tip the tile.
       'act-06-08-01-checkpoint' =>
-          'Best mix description — pick the course standard.',
+        'Best mix description — pick the course standard.',
       // SoftPulse owns High commit — don’t gold-tip the tile.
       'act-06-09-01-guided' =>
-          '100bb 4-bet pot · top pair — pick the depth mindset.',
+        '100bb 4-bet pot · top pair — pick the depth mindset.',
       // Unguided SoftPulse identify — don’t tip Avoid ego.
-      'act-06-09-01-unguided' =>
-          'Light 4-bet for ego — pick the discipline.',
+      'act-06-09-01-unguided' => 'Light 4-bet for ego — pick the discipline.',
       // SoftPulse owns SPR / commit — don’t gold-tip the tile.
       'act-06-09-01-checkpoint' =>
-          'Depth change in 3-bet pots — pick what shifts.',
+        'Depth change in 3-bet pots — pick what shifts.',
       // SoftPulse owns Cooler — don’t gold-tip the tile.
       'act-06-10-01-scaffolded' =>
-          'KK loses to AA all-in — pick the review label.',
+        'KK loses to AA all-in — pick the review label.',
       // Unguided: name the leak; don’t tip Ego call.
       'act-06-10-01-unguided' =>
-          'Calling because you are "due" — pick the real reason.',
+        'Calling because you are "due" — pick the real reason.',
       // SoftPulse owns Cooler / mistake? — don’t gold-tip the tile.
       'act-06-10-01-checkpoint' =>
-          'Review after a big loss — pick the honest question.',
+        'Review after a big loss — pick the honest question.',
       // SoftPulse owns Selective + plan — don’t gold-tip the tile.
       'act-06-11-01-guided' =>
-          'Folds most, then 3-bets / c-bets — pick the note.',
+        'Folds most, then 3-bets / c-bets — pick the note.',
       // SoftPulse owns Disciplined — don’t gold-tip the tile.
       'act-06-11-01-scaffolded' =>
-          'Gives up on turns when called — pick the observation.',
+        'Gives up on turns when called — pick the observation.',
       // Unguided: name the habit; don’t tip Keep sampling.
       'act-06-11-01-unguided' =>
-          'Two hands of tightness — pick the confidence.',
+        'Two hands of tightness — pick the confidence.',
       // SoftPulse owns Tight · plan · give — don’t gold-tip the tile.
       'act-06-11-01-checkpoint' =>
-          'Best pre-label note bundle — pick the evidence pack.',
+        'Best pre-label note bundle — pick the evidence pack.',
       // SoftPulse owns TAG — don’t gold-tip the tile.
-      'act-06-11-02-guided' =>
-          'Folds most, 3-bets strong — pick the label.',
+      'act-06-11-02-guided' => 'Folds most, 3-bets strong — pick the label.',
       // SoftPulse owns Selective vs extreme — don’t gold-tip the tile.
-      'act-06-11-02-scaffolded' =>
-          'TAG versus Maniac — pick the difference.',
+      'act-06-11-02-scaffolded' => 'TAG versus Maniac — pick the difference.',
       // Unguided: name the type; don’t tip TAG.
       'act-06-11-02-unguided' =>
-          'Opens tight, selective c-bets — pick the label.',
+        'Opens tight, selective c-bets — pick the label.',
       // SoftPulse owns Working model — don’t gold-tip the tile.
       'act-06-11-02-checkpoint' =>
-          'TAG is a label from frequencies — pick how to treat it.',
+        'TAG is a label from frequencies — pick how to treat it.',
       // SoftPulse owns Selective + disciplined — don’t gold-tip the tile.
-      'act-06-11-03-checkpoint' =>
-          'Versus TAG — pick the cite.',
+      'act-06-11-03-checkpoint' => 'Versus TAG — pick the cite.',
       // SoftPulse owns Wide + pressure — don’t gold-tip the tile.
       'act-06-12-01-guided' =>
-          'Wide opens + barrels, some folds — pick the note.',
+        'Wide opens + barrels, some folds — pick the note.',
       // SoftPulse owns Some folds — don’t gold-tip the tile.
       'act-06-12-01-scaffolded' =>
-          'Difference vs maniac — pick the separation.',
+        'Difference vs maniac — pick the separation.',
       // Unguided: name the habit; don’t tip Keep sampling.
-      'act-06-12-01-unguided' =>
-          'One wide open — pick the confidence.',
+      'act-06-12-01-unguided' => 'One wide open — pick the confidence.',
       // SoftPulse owns Wide · barrels · folds — don’t gold-tip the tile.
       'act-06-12-01-checkpoint' =>
-          'Best pre-label notes — pick the evidence pack.',
+        'Best pre-label notes — pick the evidence pack.',
       // SoftPulse owns LAG — don’t gold-tip the tile.
-      'act-06-12-02-guided' =>
-          'Opens wide, barrels often — pick the label.',
+      'act-06-12-02-guided' => 'Opens wide, barrels often — pick the label.',
       // SoftPulse owns Pressure vs passive — don’t gold-tip the tile.
-      'act-06-12-02-scaffolded' =>
-          'LAG vs Station — pick the difference.',
+      'act-06-12-02-scaffolded' => 'LAG vs Station — pick the difference.',
       // Unguided: name the type; don’t tip LAG.
       'act-06-12-02-unguided' =>
-          'Wide opens, keeps barreling — pick the label.',
+        'Wide opens, keeps barreling — pick the label.',
       // SoftPulse owns Sample limits — don’t gold-tip the tile.
-      'act-06-12-02-checkpoint' =>
-          'Beside LAG label — pick what to show.',
+      'act-06-12-02-checkpoint' => 'Beside LAG label — pick what to show.',
       // Unguided: name the habit; don’t tip Usually avoid.
       'act-06-12-03-unguided' =>
-          'Inventing triple-barrel bluffs into a LAG — pick the discipline.',
+        'Inventing triple-barrel bluffs into a LAG — pick the discipline.',
       // SoftPulse owns Wide + pressure — don’t gold-tip the tile.
-      'act-06-12-03-checkpoint' =>
-          'LAG exploit cites — pick the cite.',
+      'act-06-12-03-checkpoint' => 'LAG exploit cites — pick the cite.',
       // SoftPulse owns TAG — respect — don’t gold-tip the tile.
       'act-06-13-01-checkpoint' =>
-          'Selective entry + disciplined barrels — pick the model + line.',
+        'Selective entry + disciplined barrels — pick the model + line.',
       // SoftPulse owns Range advantage — don’t gold-tip the tile.
-      'act-06-13-02-cp-adv' =>
-          'PFR on dry A-high — pick what they often have.',
+      'act-06-13-02-cp-adv' => 'PFR on dry A-high — pick what they often have.',
       // SoftPulse owns More capped — don’t gold-tip the tile.
-      'act-06-13-02-cp-cap' =>
-          'Check-back turn — pick how river range shifts.',
+      'act-06-13-02-cp-cap' => 'Check-back turn — pick how river range shifts.',
       // SoftPulse owns Polarized — don’t gold-tip the tile.
-      'act-06-13-02-cp-polar' =>
-          'River overbet shape — pick the range story.',
+      'act-06-13-02-cp-polar' => 'River overbet shape — pick the range story.',
       // SoftPulse owns TAG — don’t gold-tip the tile.
-      'act-06-13-02-cp-tag' =>
-          'Tight entry, planned barrels — pick the label.',
+      'act-06-13-02-cp-tag' => 'Tight entry, planned barrels — pick the label.',
       // SoftPulse owns LAG — don’t gold-tip the tile.
       'act-06-13-02-cp-lag' =>
-          'Wide entry, sustained pressure — pick the label.',
+        'Wide entry, sustained pressure — pick the label.',
       // SoftPulse owns Plan is sick — don’t gold-tip the tile.
-      'act-07-01-01-guided' =>
-          'AQo 3-bet · 872tt — pick the plan update.',
+      'act-07-01-01-guided' => 'AQo 3-bet · 872tt — pick the plan update.',
       // SoftPulse owns Value continues — don’t gold-tip the tile.
       'act-07-01-01-scaffolded' =>
-          'BTN steal KTo · KT2r — pick the plan update.',
+        'BTN steal KTo · KT2r — pick the plan update.',
       // Unguided: name the habit; don’t tip Name the thesis.
       'act-07-01-01-unguided' =>
-          'Best habit — pick what to do before flop act.',
+        'Best habit — pick what to do before flop act.',
       // SoftPulse owns Abandon quickly — don’t gold-tip the tile.
-      'act-07-01-01-checkpoint' =>
-          'Dead plan — pick the response.',
+      'act-07-01-01-checkpoint' => 'Dead plan — pick the response.',
       // SoftPulse owns Aces & blanks — don’t gold-tip the tile.
-      'act-07-02-01-guided' =>
-          'AK c-bet · Q72r — pick the continue cards.',
+      'act-07-02-01-guided' => 'AK c-bet · Q72r — pick the continue cards.',
       // SoftPulse owns Give up — don’t gold-tip the tile.
-      'act-07-02-01-scaffolded' =>
-          'Gutshot · brick raise — pick the map call.',
+      'act-07-02-01-scaffolded' => 'Gutshot · brick raise — pick the map call.',
       // Unguided: name the habit; don’t tip Map first.
-      'act-07-02-01-unguided' =>
-          'No turn idea — pick what to do first.',
+      'act-07-02-01-unguided' => 'No turn idea — pick what to do first.',
       // SoftPulse owns Continue/kill list — don’t gold-tip the tile.
-      'act-07-02-01-checkpoint' =>
-          'Turn map — pick the definition.',
+      'act-07-02-01-checkpoint' => 'Turn map — pick the definition.',
       // SoftPulse owns Blocks strong calls — don’t gold-tip the tile.
       'act-07-03-01-scaffolded' =>
-          'Nut flush blocker — pick why the bluff works.',
+        'Nut flush blocker — pick why the bluff works.',
       // Unguided: name the spot; don’t tip Check.
-      'act-07-03-01-unguided' =>
-          'No story — pick the river action.',
+      'act-07-03-01-unguided' => 'No story — pick the river action.',
       // SoftPulse owns Value needs calls — don’t gold-tip the tile.
-      'act-07-03-01-checkpoint' =>
-          'River rule — pick the composition check.',
+      'act-07-03-01-checkpoint' => 'River rule — pick the composition check.',
       // SoftPulse owns Nut potential — don’t gold-tip the tile.
-      'act-07-04-01-guided' =>
-          'Multiway limped — pick the priority.',
+      'act-07-04-01-guided' => 'Multiway limped — pick the priority.',
       // SoftPulse owns C-bet maps — don’t gold-tip the tile.
-      'act-07-04-01-scaffolded' =>
-          'HU SRP IP — pick the default weapon.',
+      'act-07-04-01-scaffolded' => 'HU SRP IP — pick the default weapon.',
       // Unguided: name the spot; don’t tip Higher commitment.
-      'act-07-04-01-unguided' =>
-          '4-bet 100bb — pick the mindset.',
+      'act-07-04-01-unguided' => '4-bet 100bb — pick the mindset.',
       // SoftPulse owns Ranges and SPR — don’t gold-tip the tile.
-      'act-07-04-01-checkpoint' =>
-          'Pot type — pick what changes.',
+      'act-07-04-01-checkpoint' => 'Pot type — pick what changes.',
       // SoftPulse owns Usually no — don’t gold-tip the tile.
-      'act-07-05-01-guided' =>
-          'Four-way river — pick the air-bluff call.',
+      'act-07-05-01-guided' => 'Four-way river — pick the air-bluff call.',
       // SoftPulse owns Higher HU — don’t gold-tip the tile.
-      'act-07-05-01-scaffolded' =>
-          'HU vs nit — pick the steal frequency.',
+      'act-07-05-01-scaffolded' => 'HU vs nit — pick the steal frequency.',
       // Unguided: name the spot; don’t tip Thicker value.
-      'act-07-05-01-unguided' =>
-          'Multiway top set — pick the line lean.',
+      'act-07-05-01-unguided' => 'Multiway top set — pick the line lean.',
       // SoftPulse owns First-class input — don’t gold-tip the tile.
-      'act-07-05-01-checkpoint' =>
-          'Player count — pick how it ranks.',
+      'act-07-05-01-checkpoint' => 'Player count — pick how it ranks.',
       // SoftPulse owns Closer to stacking — don’t gold-tip the tile / SPR detail.
-      'act-07-06-01-guided' =>
-          '35bb TPTK — pick the commit lean.',
+      'act-07-06-01-guided' => '35bb TPTK — pick the commit lean.',
       // SoftPulse owns More attractive — don’t gold-tip the tile.
-      'act-07-06-01-scaffolded' =>
-          '250bb 55 — pick the set-mine lean.',
+      'act-07-06-01-scaffolded' => '250bb 55 — pick the set-mine lean.',
       // Unguided: name the spot; don’t tip 40bb.
       'act-07-06-01-unguided' =>
-          'Hero 200 / Villain 40 — pick effective stack.',
+        'Hero 200 / Villain 40 — pick effective stack.',
       // SoftPulse owns Every hand — don’t gold-tip the tile.
-      'act-07-06-01-checkpoint' =>
-          'Stack depth — pick how often to check.',
+      'act-07-06-01-checkpoint' => 'Stack depth — pick how often to check.',
       // SoftPulse owns Baseline — don’t gold-tip the tile.
-      'act-07-07-01-checkpoint' =>
-          'No type evidence — pick the default.',
+      'act-07-07-01-checkpoint' => 'No type evidence — pick the default.',
       // SoftPulse owns All four — don’t gold-tip the tile.
-      'act-07-08-01-checkpoint' =>
-          'Integrated decision — pick the input set.',
+      'act-07-08-01-checkpoint' => 'Integrated decision — pick the input set.',
       // SoftPulse owns Specific note — don’t gold-tip the tile.
-      'act-07-09-01-guided' =>
-          'Best leak note — pick the useful shape.',
+      'act-07-09-01-guided' => 'Best leak note — pick the useful shape.',
       // SoftPulse owns Written range — don’t gold-tip the tile.
       'act-07-09-01-scaffolded' =>
-          'BTN vs unknown BB — pick the default source.',
+        'BTN vs unknown BB — pick the default source.',
       // Unguided: name the habit; don’t tip On a schedule.
-      'act-07-09-01-unguided' =>
-          'Review the book — pick when to do it.',
+      'act-07-09-01-unguided' => 'Review the book — pick when to do it.',
       // SoftPulse owns Baseline — don’t gold-tip the tile.
-      'act-07-09-01-checkpoint' =>
-          'Default book purpose — pick the role.',
+      'act-07-09-01-checkpoint' => 'Default book purpose — pick the role.',
       // SoftPulse owns Full list — don’t gold-tip the tile.
-      'act-07-11-01-guided' =>
-          'Warm-up checklist — pick what belongs.',
+      'act-07-11-01-guided' => 'Warm-up checklist — pick what belongs.',
       // SoftPulse owns Defaults + exploits — don’t gold-tip the tile.
-      'act-07-11-01-scaffolded' =>
-          'Carry into Live — pick what travels.',
+      'act-07-11-01-scaffolded' => 'Carry into Live — pick what travels.',
       // Unguided: name the habit; don’t tip Live cash NLH.
-      'act-07-11-01-unguided' =>
-          'Scope reminder — pick the product lane.',
+      'act-07-11-01-unguided' => 'Scope reminder — pick the product lane.',
       // SoftPulse owns One hand — don’t gold-tip the tile.
-      'act-07-11-01-checkpoint' =>
-          'Warm-up goal — pick the finish line.',
+      'act-07-11-01-checkpoint' => 'Warm-up goal — pick the finish line.',
       // SoftPulse owns Station value — don’t gold-tip the tile.
-      'act-07-12-01-cs' =>
-          'Sticky calls — pick the label + exploit.',
+      'act-07-12-01-cs' => 'Sticky calls — pick the label + exploit.',
       // SoftPulse owns Nit respect — don’t gold-tip the tile.
-      'act-07-12-01-nit' =>
-          'Tiny range heat — pick the label + line.',
+      'act-07-12-01-nit' => 'Tiny range heat — pick the label + line.',
       // SoftPulse owns Maniac catch — don’t gold-tip the tile.
-      'act-07-12-01-maniac' =>
-          'Endless barrels — pick the label + line.',
+      'act-07-12-01-maniac' => 'Endless barrels — pick the label + line.',
       // SoftPulse owns TAG respect — don’t gold-tip the tile.
-      'act-07-12-01-tag' =>
-          'Selective barrels — pick the label + line.',
+      'act-07-12-01-tag' => 'Selective barrels — pick the label + line.',
       // SoftPulse owns LAG trap — don’t gold-tip the tile.
-      'act-07-12-01-lag' =>
-          'Wide pressure — pick the label + line.',
+      'act-07-12-01-lag' => 'Wide pressure — pick the label + line.',
       // SoftPulse owns Low certainty — don’t gold-tip the tile.
-      'act-07-12-01-uncertain' =>
-          'Three mixed samples — pick the confidence.',
+      'act-07-12-01-uncertain' => 'Three mixed samples — pick the confidence.',
       // SoftPulse owns Retire model — don’t gold-tip the tile.
-      'act-07-12-01-retire' =>
-          'Label flipped — pick the model update.',
+      'act-07-12-01-retire' => 'Label flipped — pick the model update.',
       _ => 'Tap the answer on the table.',
     };
   }
@@ -1203,7 +1128,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         final showPrompt =
             !feltFirstSelect &&
             prompt != null &&
-            prompt.isNotEmpty &&            prompt.toLowerCase() != coach.trim().toLowerCase();
+            prompt.isNotEmpty &&
+            prompt.toLowerCase() != coach.trim().toLowerCase();
         final instruction = _instructionRegion;
         final rex = RexCoachLine(text: coach);
         return Column(
@@ -1218,9 +1144,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap:
-                          () => _submitRegion(
-                            LessonTableTapTarget(instruction),
-                          ),
+                          () =>
+                              _submitRegion(LessonTableTapTarget(instruction)),
                       child: rex,
                     ),
                   ),
@@ -1237,37 +1162,82 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
               ),
             ],
             if (scene != null) ...[
-              const SizedBox(height: 14),
-              LessonTableContext(
-                scene: scene,
-                selectedRegion: _selectedRegion,
-                selectedSeatIndex: _selectedSeatIndex,
-                showSoftPulse:
-                    selected == null &&
-                    !locked &&
-                    ((widget.showGuidance &&
-                            (widget.activity.stage == ActivityStage.guided ||
-                                widget.activity.stage ==
-                                    ActivityStage.scaffolded ||
-                                widget.activity.stage ==
-                                    ActivityStage.checkpoint)) ||
-                        widget.activity.id == 'act-01-02-02-unguided-board'),
-                showInviteCue: !feltFirstSelect,
-                enabled: !locked,
-                onRegionTap: locked ? null : _submitRegion,
-              ),
+              if (LessonFrameScope.maybeOf(context) != null &&
+                  widget.activity.id.startsWith('act-01-01-01-'))
+                Expanded(
+                  child: LessonTableStage(
+                    heroCodes:
+                        scene.heroCodes.isEmpty
+                            ? const ['Ah', 'Kd']
+                            : scene.heroCodes,
+                    boardCodes: scene.boardCodes,
+                    villainCount:
+                        scene.villainSeatCount < 3 ? 3 : scene.villainSeatCount,
+                    heroFaceUp: true,
+                    cue: switch (scene.highlight) {
+                      LessonTableHighlight.hero => LessonTableCue.hero,
+                      LessonTableHighlight.board => LessonTableCue.board,
+                      _ => LessonTableCue.none,
+                    },
+                    enabled: !locked,
+                    onHeroTap:
+                        locked
+                            ? null
+                            : () => _submitRegion(
+                              const LessonTableTapTarget(
+                                LessonTableRegion.hero,
+                              ),
+                            ),
+                    onVillainTap:
+                        locked
+                            ? null
+                            : (_) => _submitRegion(
+                              const LessonTableTapTarget(
+                                LessonTableRegion.villain,
+                              ),
+                            ),
+                    onBoardTap:
+                        locked
+                            ? null
+                            : () => _submitRegion(
+                              const LessonTableTapTarget(
+                                LessonTableRegion.board,
+                              ),
+                            ),
+                  ),
+                )
+              else
+                LessonTableContext(
+                  scene: scene,
+                  selectedRegion: _selectedRegion,
+                  selectedSeatIndex: _selectedSeatIndex,
+                  showSoftPulse:
+                      selected == null &&
+                      !locked &&
+                      ((widget.showGuidance &&
+                              (widget.activity.stage == ActivityStage.guided ||
+                                  widget.activity.stage ==
+                                      ActivityStage.scaffolded ||
+                                  widget.activity.stage ==
+                                      ActivityStage.checkpoint)) ||
+                          widget.activity.id == 'act-01-02-02-unguided-board'),
+                  showInviteCue: !feltFirstSelect,
+                  enabled: !locked,
+                  onRegionTap: locked ? null : _submitRegion,
+                ),
             ],
             if (!locked &&
                 (widget.controller.submitting ||
                     widget.controller.lastResult == null)) ...[
               Builder(
                 builder: (context) {
-                  final status = widget.controller.submitting
-                      ? 'Checking…'
-                      : feltFirstSelect
-                      // Rex already cues the tile — no third "tap…" line.
-                      ? (coach.isNotEmpty ? '' : 'Tap on the felt.')
-                      : 'Tap the answer on the table.';
+                  final status =
+                      widget.controller.submitting
+                          ? 'Checking…'
+                          : feltFirstSelect
+                          // Rex already cues the tile — no third "tap…" line.
+                          ? (coach.isNotEmpty ? '' : 'Tap on the felt.')
+                          : 'Tap the answer on the table.';
                   if (status.isEmpty) return const SizedBox.shrink();
                   return Padding(
                     padding: const EdgeInsets.only(top: 12),
@@ -1304,92 +1274,89 @@ class _HandCategoryTapActivity extends StatelessWidget {
   final bool showGuidance;
 
   String get _coachFallback => switch (activity.id) {
-        'act-02-07-02-jump-family' =>
-          'Look at your holes — pick the family they belong to.',
-        'act-02-02-01-guided-pair' =>
-          'Matching ranks in the hole — both cards share a rank.',
-        'act-02-02-01-scaffolded-broadway' =>
-          'Both cards ten-or-better — high-card broadway strength shows up.',
-        'act-02-02-01-unguided-sc' =>
-          'Look at your holes — pick the family that fits.',
-        // SoftPulse-quiet: pick the family — don't tip trash as the answer.
-        'act-02-02-01-checkpoint-trash' =>
-          'Early seat with junk — pick the family that fits.',
-        'act-03-02-01-guided' =>
-          'Board pairs your king — your hole king connects for immediate value.',
-        'act-03-02-01-scaffolded' =>
-          'Two hearts on board with the nut heart — you need runout more than showdown now.',
-        'act-03-02-01-unguided' =>
-          'No pair, almost no draw multiway — equity is thin here.',
-        'act-03-02-01-checkpoint' =>
-          'Eight or queen completes — your hand needs the right runout.',
-        'act-03-03-01-guided' =>
-          'King-high board — count only outs that make the best hand.',
-        'act-03-03-01-unguided' =>
-          'Getting 3:1 with real outs — pick Call, Fold, or Raise.',
-        'act-03-03-01-checkpoint' =>
-          'Nut flush draw, deep and sticky — future payoffs can justify the price.',
-        // SoftPulse owns Brick — don’t gold-tip the tile.
-        'act-03-05-01-guided' =>
-          'Dry ace flop, blank three — rarely helps a missed caller.',
-        // SoftPulse owns give-up — don’t gold-tip the tile.
-        'act-03-05-01-checkpoint' =>
-          'Air bluff meets a draw-completing queen — weigh shutting down.',
-        // SoftPulse owns the river job — don’t gold-tip the tile.
-      'act-03-06-01-checkpoint' =>
-          'Medium one pair faces a big bet — weigh the river job.',
-        // SoftPulse owns the speculative hand — don’t gold-tip the tile.
-        'act-03-07-01-unguided' =>
-          'Deep multiway — pick the better speculative hand.',
-        // SoftPulse owns the note — don’t gold-tip the tile.
-        'act-03-07-01-checkpoint' =>
-          'Seat enters most pots — weigh what you note.',
-        'act-03-08-01-checkpoint' =>
-          'Two seats, different frequencies — note how often each seat enters.',
-        'act-03-08-02-jump-table' =>
-          'Pot 16, shorter 40bb — start with pot and effective stack.',
-        'act-03-08-02-jump-class' =>
-          'Qd9d3c with JdTd — you need runout for both straight and flush.',
-        'act-03-08-02-jump-leak' =>
-          'Gutshot vs a 2x pot bet — the price is usually too steep.',
-        // SoftPulse owns Strong narrow — don’t gold-tip the tile.
-        'act-04-01-01-guided' =>
-          'UTG opens at 1/2 — early seats usually play tighter.',
-        // SoftPulse owns BB 3-bet — don’t gold-tip the tile.
-        'act-04-01-01-scaffolded' =>
-          'BTN open, BB 3-bet, BTN calls — 3-bet ranges start narrower than flatting opens.',
-        // SoftPulse owns Keep range — don’t gold-tip the tile.
-        'act-04-01-01-unguided' =>
-          'They bet twice — pinning Exactly AK collapses the range.',
-        // SoftPulse owns Read drives — don’t gold-tip the tile.
-        'act-04-01-01-checkpoint' =>
-          'Same board, different villain lines — advice follows the range, not the cards alone.',
-        // SoftPulse owns Branches — don’t gold-tip the tile.
-        'act-04-03-01-checkpoint' =>
-          'You have a flop plan — map brick vs flush turns.',
-        // SoftPulse owns Soft band — don’t gold-tip the tile.
-        'act-04-04-01-unguided' =>
-          'Two value sizes both get calls — nearby sizes can both grade soft.',
-        // SoftPulse owns SPR 4 — don’t gold-tip the tile.
-        'act-04-05-01-guided' =>
-          'Effective 80 into pot 20 — stack ÷ pot.',
-        // SoftPulse owns SPR 4 — don’t gold-tip the tile.
-        'act-04-10-02-jump-spr' =>
-          'Stack 60 into pot 15 — stack ÷ pot.',
-        // SoftPulse owns High part. — don’t gold-tip the tile.
-        'act-04-06-01-guided' =>
-          'Seat calls 7 of 9 preflops — participation is rolling high.',
-        // SoftPulse owns Sticky — don’t gold-tip the tile.
-        'act-04-06-01-scaffolded' =>
-          'Second pair called three streets twice — folding looks scarce.',
-        // SoftPulse owns Low conf. — don’t gold-tip the tile.
-        'act-04-06-01-unguided' =>
-          'One dramatic call — confidence stays thin until samples pile up.',
-        // SoftPulse owns Bundle — don’t gold-tip the tile.
-        'act-04-06-01-checkpoint' =>
-          'Before you label — stack many hands that rarely fold.',
-        _ => 'Look at the board and your holes — tap what you made.',
-      };
+    'act-02-07-02-jump-family' =>
+      'Look at your holes — pick the family they belong to.',
+    'act-02-02-01-guided-pair' =>
+      'Matching ranks in the hole — both cards share a rank.',
+    'act-02-02-01-scaffolded-broadway' =>
+      'Both cards ten-or-better — high-card broadway strength shows up.',
+    'act-02-02-01-unguided-sc' =>
+      'Look at your holes — pick the family that fits.',
+    // SoftPulse-quiet: pick the family — don't tip trash as the answer.
+    'act-02-02-01-checkpoint-trash' =>
+      'Early seat with junk — pick the family that fits.',
+    'act-03-02-01-guided' =>
+      'Board pairs your king — your hole king connects for immediate value.',
+    'act-03-02-01-scaffolded' =>
+      'Two hearts on board with the nut heart — you need runout more than showdown now.',
+    'act-03-02-01-unguided' =>
+      'No pair, almost no draw multiway — equity is thin here.',
+    'act-03-02-01-checkpoint' =>
+      'Eight or queen completes — your hand needs the right runout.',
+    'act-03-03-01-guided' =>
+      'King-high board — count only outs that make the best hand.',
+    'act-03-03-01-unguided' =>
+      'Getting 3:1 with real outs — pick Call, Fold, or Raise.',
+    'act-03-03-01-checkpoint' =>
+      'Nut flush draw, deep and sticky — future payoffs can justify the price.',
+    // SoftPulse owns Brick — don’t gold-tip the tile.
+    'act-03-05-01-guided' =>
+      'Dry ace flop, blank three — rarely helps a missed caller.',
+    // SoftPulse owns give-up — don’t gold-tip the tile.
+    'act-03-05-01-checkpoint' =>
+      'Air bluff meets a draw-completing queen — weigh shutting down.',
+    // SoftPulse owns the river job — don’t gold-tip the tile.
+    'act-03-06-01-checkpoint' =>
+      'Medium one pair faces a big bet — weigh the river job.',
+    // SoftPulse owns the speculative hand — don’t gold-tip the tile.
+    'act-03-07-01-unguided' =>
+      'Deep multiway — pick the better speculative hand.',
+    // SoftPulse owns the note — don’t gold-tip the tile.
+    'act-03-07-01-checkpoint' => 'Seat enters most pots — weigh what you note.',
+    'act-03-08-01-checkpoint' =>
+      'Two seats, different frequencies — note how often each seat enters.',
+    'act-03-08-02-jump-table' =>
+      'Pot 16, shorter 40bb — start with pot and effective stack.',
+    'act-03-08-02-jump-class' =>
+      'Qd9d3c with JdTd — you need runout for both straight and flush.',
+    'act-03-08-02-jump-leak' =>
+      'Gutshot vs a 2x pot bet — the price is usually too steep.',
+    // SoftPulse owns Strong narrow — don’t gold-tip the tile.
+    'act-04-01-01-guided' =>
+      'UTG opens at 1/2 — early seats usually play tighter.',
+    // SoftPulse owns BB 3-bet — don’t gold-tip the tile.
+    'act-04-01-01-scaffolded' =>
+      'BTN open, BB 3-bet, BTN calls — 3-bet ranges start narrower than flatting opens.',
+    // SoftPulse owns Keep range — don’t gold-tip the tile.
+    'act-04-01-01-unguided' =>
+      'They bet twice — pinning Exactly AK collapses the range.',
+    // SoftPulse owns Read drives — don’t gold-tip the tile.
+    'act-04-01-01-checkpoint' =>
+      'Same board, different villain lines — advice follows the range, not the cards alone.',
+    // SoftPulse owns Branches — don’t gold-tip the tile.
+    'act-04-03-01-checkpoint' =>
+      'You have a flop plan — map brick vs flush turns.',
+    // SoftPulse owns Soft band — don’t gold-tip the tile.
+    'act-04-04-01-unguided' =>
+      'Two value sizes both get calls — nearby sizes can both grade soft.',
+    // SoftPulse owns SPR 4 — don’t gold-tip the tile.
+    'act-04-05-01-guided' => 'Effective 80 into pot 20 — stack ÷ pot.',
+    // SoftPulse owns SPR 4 — don’t gold-tip the tile.
+    'act-04-10-02-jump-spr' => 'Stack 60 into pot 15 — stack ÷ pot.',
+    // SoftPulse owns High part. — don’t gold-tip the tile.
+    'act-04-06-01-guided' =>
+      'Seat calls 7 of 9 preflops — participation is rolling high.',
+    // SoftPulse owns Sticky — don’t gold-tip the tile.
+    'act-04-06-01-scaffolded' =>
+      'Second pair called three streets twice — folding looks scarce.',
+    // SoftPulse owns Low conf. — don’t gold-tip the tile.
+    'act-04-06-01-unguided' =>
+      'One dramatic call — confidence stays thin until samples pile up.',
+    // SoftPulse owns Bundle — don’t gold-tip the tile.
+    'act-04-06-01-checkpoint' =>
+      'Before you label — stack many hands that rarely fold.',
+    _ => 'Look at the board and your holes — tap what you made.',
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -1402,10 +1369,7 @@ class _HandCategoryTapActivity extends StatelessWidget {
         // Felt already shows the cards — never dump board/hole codes into Rex.
         final resolved =
             scene != null
-                ? (
-                  coach: _coachFallback,
-                  showPrompt: false,
-                )
+                ? (coach: _coachFallback, showPrompt: false)
                 : resolveLessonCoachPrompt(
                   activity: activity,
                   fallback: _coachFallback,
@@ -2241,9 +2205,7 @@ class _HoleCardBands extends StatelessWidget {
   Widget build(BuildContext context) {
     final table = lessonBandGame(heroCodes: const []);
     final prompt = activity.prompt?.trim();
-    final message = (prompt == null || prompt.isEmpty)
-        ? 'Tap a hand.'
-        : prompt;
+    final message = (prompt == null || prompt.isEmpty) ? 'Tap a hand.' : prompt;
     return Column(
       key: const ValueKey('hole-card-bands'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -2269,10 +2231,7 @@ class _HoleCardBands extends StatelessWidget {
           ),
         ),
         for (var i = 0; i < activity.choices.length; i++)
-          _choiceRail(
-            index: i,
-            choice: activity.choices[i],
-          ),
+          _choiceRail(index: i, choice: activity.choices[i]),
         CoachShelfWidget(
           feedback: CoachFeedback(message: message),
           bigBlind: table.bigBlind,

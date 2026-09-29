@@ -24,6 +24,8 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_progress_header.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_result_screen.dart';
@@ -68,13 +70,16 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
   String? _errorDetail;
   bool _bootstrapping = true;
   bool _completing = false;
+
   /// True while Continue is swapping to the next activity — keeps feedback
   /// chrome (no blank dock / full-screen spinner flash).
   bool _advancingActivity = false;
   int _acceptedStreak = 0;
+
   /// Accepted-step XP granted in this session. Added to the completion bonus
   /// so Nice work and the result screen show the lesson total.
   int _stepXpAwarded = 0;
+
   /// Inline catch-up notice under the progress header (never a felt SnackBar).
   String? _resumeNotice;
   Timer? _resumeNoticeTimer;
@@ -356,7 +361,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       final gradedIndex = _activities.indexWhere(
         (a) => a.id == controller.activity.id,
       );
-      final advancedActivity = result.accepted &&
+      final advancedActivity =
+          result.accepted &&
           (result.resume.activityId != controller.activity.id ||
               result.resume.activityIndex >= _activities.length);
       setState(() {
@@ -467,8 +473,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     }
     if (!mounted) return;
     try {
-      final lessonId =
-          _lesson?.id ?? catalog.lessonById(widget.lessonId)?.id;
+      final lessonId = _lesson?.id ?? catalog.lessonById(widget.lessonId)?.id;
       if (lessonId == null) return;
       final started = await _service.startLesson(
         lessonId: lessonId,
@@ -549,9 +554,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     final steps = controller.activity.handSteps;
     final stepIdx = controller.draft.handStepIndex;
     final stayedOnActivity = result.resume.activityId == controller.activity.id;
-    if (steps.length > 1 &&
-        stepIdx < steps.length - 1 &&
-        stayedOnActivity) {
+    if (steps.length > 1 && stepIdx < steps.length - 1 && stayedOnActivity) {
       controller.advanceToNextHandStep();
       setState(() {});
       return;
@@ -705,8 +708,161 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     }
   }
 
+  bool get _usesLessonFrame =>
+      isLessonScreenFrameLesson(_lesson?.id ?? widget.lessonId);
+
+  void _reportLocalMiss(String feedback) {
+    final controller = _activityController;
+    final attempt = _attempt;
+    if (controller == null || attempt == null) return;
+    controller.presentLocalMiss(
+      SubmitCourseStepResult(
+        attemptId: attempt.attemptId,
+        activityId: controller.activity.id,
+        grade: SoftGrade.clearMistake,
+        feedback: feedback,
+        accepted: false,
+        lifeLost: false,
+        livesRemaining: attempt.livesRemaining,
+        xpAwarded: 0,
+        remediationRequired: false,
+        resume: CourseResumePointer(
+          attemptId: attempt.attemptId,
+          lessonId: attempt.lessonId,
+          activityId: controller.activity.id,
+          activityIndex: attempt.activityIndex,
+        ),
+        duplicate: false,
+      ),
+    );
+  }
+
+  String _frameSpeech(LessonActivityController controller) {
+    if (controller.hintVisible) {
+      final authored =
+          controller.activity.hintMedia.isNotEmpty
+              ? controller.activity.hintMedia.first.text
+              : null;
+      final hint =
+          (authored == null || authored.trim().isEmpty)
+              ? lessonFrameHintFallback(controller.activity)
+              : authored;
+      if (hint != null && hint.trim().isNotEmpty) return hint;
+    }
+    return lessonFrameSpeech(controller.activity);
+  }
+
+  bool _frameCanHint(CourseActivity activity) {
+    if (activity.hintMedia.isNotEmpty) return true;
+    return lessonFrameHintFallback(activity) != null;
+  }
+
+  void _closeLesson() {
+    Navigator.of(context).maybePop();
+  }
+
+  Widget _buildLessonFrameBody() {
+    final onClose = _closeLesson;
+    if (_bootstrapping || _error != null) {
+      return LessonScreenLayout(
+        progress: 0,
+        livesRemaining: 3,
+        livesMax: 3,
+        onClose: onClose,
+        speech: '',
+        expression: LessonMascotExpression.thinking,
+        onUndo: () {},
+        onRedo: () {},
+        onHint: () {},
+        canUndo: false,
+        canRedo: false,
+        canHint: false,
+        stage:
+            _error != null
+                ? _buildBody()
+                : const Center(
+                  child: CircularProgressIndicator(color: AppColors.gold),
+                ),
+      );
+    }
+
+    final controller = _activityController!;
+    final attempt = _attempt!;
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, _) {
+        final activity = controller.activity;
+        final result = controller.lastResult;
+        final expression = switch (result?.accepted) {
+          null => LessonMascotExpression.thinking,
+          true => LessonMascotExpression.happy,
+          false => LessonMascotExpression.wrong,
+        };
+        return LessonScreenLayout(
+          progress: _progress,
+          livesRemaining: attempt.livesRemaining,
+          livesMax: attempt.livesMax,
+          onClose: onClose,
+          notice: _resumeNotice,
+          speech: _frameSpeech(controller),
+          expression: expression,
+          canUndo: controller.canUndo,
+          canRedo: controller.canRedo,
+          canHint: _frameCanHint(activity),
+          onUndo: controller.undoDraft,
+          onRedo: controller.redoDraft,
+          onHint: () {
+            controller.toggleHint();
+            if (!controller.hintVisible) return;
+            unawaited(
+              ref
+                  .read(analyticsServiceProvider)
+                  .logRemediation(
+                    lessonId: attempt.lessonId,
+                    activityId: activity.id,
+                    kind: 'hint',
+                  ),
+            );
+          },
+          result: result,
+          recovery:
+              result == null || result.accepted
+                  ? null
+                  : _labelForChoice(
+                    activity,
+                    result.betterChoiceId ??
+                        (result.accepted
+                            ? null
+                            : _heroRecoveryChoiceId(activity)),
+                  ),
+          onContinue: result == null ? null : _continueAfterFeedback,
+          answerBusy: _completing || _advancingActivity,
+          stage: LessonFrameScope(
+            onLocalMiss: _reportLocalMiss,
+            child: activityRegistry.build(
+              activity: activity,
+              controller: controller,
+              showGuidance: controller.showTargetCue,
+              onFeltAcknowledge:
+                  isTableRegionTapActivity(activity) &&
+                          activity.renderer == ActivityRenderer.coachDialogue
+                      ? _submit
+                      : null,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_usesLessonFrame) {
+      return Scaffold(
+        backgroundColor: AppColors.bgDark,
+        body: SafeArea(child: _buildLessonFrameBody()),
+      );
+    }
     final body = _buildBody();
     return Scaffold(
       backgroundColor: AppColors.bgDark,
@@ -767,9 +923,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                         detail != _error) ...[
                       const SizedBox(height: 16),
                       Theme(
-                        data: Theme.of(context).copyWith(
-                          dividerColor: Colors.transparent,
-                        ),
+                        data: Theme.of(
+                          context,
+                        ).copyWith(dividerColor: Colors.transparent),
                         child: ExpansionTile(
                           tilePadding: EdgeInsets.zero,
                           childrenPadding: const EdgeInsets.only(bottom: 8),
@@ -819,13 +975,13 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
             ],
             _errorDetail?.toLowerCase().contains('failed-precondition') == true
                 ? OutlinedButton(
-                    onPressed: _retryBootstrap,
-                    child: const Text('Retry'),
-                  )
+                  onPressed: _retryBootstrap,
+                  child: const Text('Retry'),
+                )
                 : FilledButton(
-                    onPressed: _retryBootstrap,
-                    child: const Text('Retry'),
-                  ),
+                  onPressed: _retryBootstrap,
+                  child: const Text('Retry'),
+                ),
           ],
         ),
       );
@@ -844,248 +1000,239 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
       child: Column(
         children: [
-              LessonProgressHeader(
-                // Prompt lives once in the activity body — avoid duplicating it.
-                progress: _progress,
-                livesRemaining: attempt.livesRemaining,
-                livesMax: attempt.livesMax,
-                acceptedStreak: _acceptedStreak,
-                hintEnabled: hint != null && !controller.hintVisible,
-                onHint:
-                    hint == null
-                        ? null
-                        : () {
-                          controller.revealHint();
-                          setState(() {});
-                          final attempt = _attempt;
-                          if (attempt == null) return;
-                          unawaited(
-                            ref
-                                .read(analyticsServiceProvider)
-                                .logRemediation(
-                                  lessonId: attempt.lessonId,
-                                  activityId: controller.activity.id,
-                                  kind: 'hint',
-                                ),
-                          );
-                        },
-              ),
-              if (_resumeNotice != null) ...[
-                const SizedBox(height: 6),
-                _ResumeCatchUpBanner(
-                  text: _resumeNotice!,
-                  onDismiss: () {
-                    _resumeNoticeTimer?.cancel();
-                    setState(() => _resumeNotice = null);
-                  },
-                ),
-              ],
-              const SizedBox(height: 4),
-              Expanded(
-                child: Builder(
-                  builder: (context) {
-                    // Teach docks: fill Rex→footer with felt (no scroll void).
-                    // SoftPulse explains keep scroll so fixed felts hug the top.
-                    final fillFelt = isLessonActionTableActivity(activity);
-                    final feltAck =
-                        isTableRegionTapActivity(activity) &&
-                                activity.renderer ==
-                                    ActivityRenderer.coachDialogue
-                            ? _submit
-                            : null;
-                    final body = AnimatedBuilder(
-                      animation: controller,
-                      builder: (context, _) {
-                        final activityPane = AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 220),
-                          switchInCurve: Curves.easeOut,
-                          switchOutCurve: Curves.easeIn,
-                          layoutBuilder:
-                              fillFelt
-                                  ? (currentChild, previousChildren) {
-                                    return Stack(
-                                      fit: StackFit.expand,
-                                      alignment: Alignment.topCenter,
-                                      children: <Widget>[
-                                        ...previousChildren,
-                                        if (currentChild != null) currentChild,
-                                      ],
-                                    );
-                                  }
-                                  : AnimatedSwitcher.defaultLayoutBuilder,
-                          child: KeyedSubtree(
-                            key: ValueKey<String>(activity.id),
-                            child: activityRegistry.build(
-                              activity: activity,
-                              controller: controller,
-                              showGuidance: showGuidance,
-                              onFeltAcknowledge: feltAck,
+          LessonProgressHeader(
+            // Prompt lives once in the activity body — avoid duplicating it.
+            progress: _progress,
+            livesRemaining: attempt.livesRemaining,
+            livesMax: attempt.livesMax,
+            acceptedStreak: _acceptedStreak,
+            hintEnabled: hint != null && !controller.hintVisible,
+            onHint:
+                hint == null
+                    ? null
+                    : () {
+                      controller.revealHint();
+                      setState(() {});
+                      final attempt = _attempt;
+                      if (attempt == null) return;
+                      unawaited(
+                        ref
+                            .read(analyticsServiceProvider)
+                            .logRemediation(
+                              lessonId: attempt.lessonId,
+                              activityId: controller.activity.id,
+                              kind: 'hint',
                             ),
-                          ),
-                        );
-                        final hintLine =
-                            controller.hintVisible && hint != null
-                                ? <Widget>[
-                                  const SizedBox(height: 10),
-                                  RexCoachLine(
-                                    text: hint!.text,
-                                    label: 'Hint',
-                                  ),
-                                ]
-                                : const <Widget>[];
-                        if (!fillFelt) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [activityPane, ...hintLine],
-                          );
-                        }
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Expanded(child: activityPane),
-                            ...hintLine,
-                          ],
-                        );
-                      },
-                    );
-                    if (!fillFelt) {
-                      return SingleChildScrollView(child: body);
-                    }
-                    return body;
-                  },
-                ),
-              ),
-              AnimatedBuilder(
-                animation: controller,
-                builder: (context, _) {
-                  final result = controller.lastResult;
-                  if (result != null) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(height: 10),
-                        LessonFeedbackSheet(
-                          result: result,
-                          seatLabel:
-                              result.accepted ? null : controller.tappedSeatLabel,
-                          betterChoiceLabel: _labelForChoice(
-                            activity,
-                            result.betterChoiceId ??
-                                (result.accepted
-                                    ? null
-                                    : _heroRecoveryChoiceId(activity)),
-                          ),
-                          // Docked with Continue / Try again so the sheet
-                          // and CTAs hug — no empty Expanded gap.
-                          showActions: false,
-                          onContinue: _continueAfterFeedback,
-                          onRetry:
-                              result.accepted
-                                  ? null
-                                  : () {
-                                    controller.clearFeedbackForRetry();
-                                    setState(() {});
-                                  },
-                        ),
-                        const SizedBox(height: 10),
-                        _FeedbackFooter(
-                          result: result,
-                          completing: _completing || _advancingActivity,
-                          onContinue: _continueAfterFeedback,
-                          onRetry:
-                              result.accepted
-                                  ? null
-                                  : () {
-                                    controller.clearFeedbackForRetry();
-                                    setState(() {});
-                                  },
-                        ),
-                      ],
-                    );
-                  }
-                  // Prefer live controller activity so advance never uses a
-                  // stale auto-submit / Undo decision for one frame.
-                  final liveActivity = controller.activity;
-                  final canSubmit = _canSubmit && !_completing;
-                  final autoSubmit =
-                      isAutoSubmitSelectIdentify(liveActivity) ||
-                      isTableRegionTapActivity(liveActivity) ||
-                      liveActivity.renderer == ActivityRenderer.orderSequence ||
-                      liveActivity.renderer == ActivityRenderer.compareRank ||
-                      liveActivity.renderer ==
-                          ActivityRenderer.pokerActionSizing ||
-                      liveActivity.renderer ==
-                          ActivityRenderer.fullTableHandLab ||
-                      liveActivity.renderer ==
-                          ActivityRenderer.authoredMultiStepHand ||
-                      liveActivity.renderer ==
-                          ActivityRenderer.playerReadClassify ||
-                      isLessonActionTableActivity(liveActivity);
-                  if (autoSubmit) {
-                    // Teach-by-doing: taps auto-submit — no Check / Undo dock.
-                    if (controller.submitting) {
-                      return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        child: Center(
-                          child: SizedBox(
-                            width: 22,
-                            height: 22,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2.4,
-                              color: AppColors.gold,
-                            ),
-                          ),
-                        ),
                       );
-                    }
-                    return const SizedBox(height: 8);
-                  }
-                  return Row(
-                    children: [
-                      if (controller.draft.hasAnswer)
-                        TextButton(
-                          onPressed:
-                              controller.submitting
-                                  ? null
-                                  : () {
-                                    controller.undoDraft();
-                                    setState(() {});
-                                  },
-                          child: const Text('Undo'),
-                        ),
-                      const Spacer(),
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minWidth: largeText ? 160 : 140,
-                          minHeight: 48,
-                        ),
-                        child: FilledButton(
-                          onPressed: canSubmit ? _submit : null,
-                          style: FilledButton.styleFrom(
-                            backgroundColor: AppColors.gold,
-                            foregroundColor: AppColors.bgDark,
-                            disabledBackgroundColor: AppColors.slateDark,
-                            disabledForegroundColor: AppColors.slate,
-                          ),
-                          child: Text(
-                            controller.submitting
-                                ? 'Checking…'
-                                : liveActivity.renderer ==
-                                    ActivityRenderer.coachDialogue
-                                ? 'Continue'
-                                : isLessonActionTableActivity(liveActivity)
-                                // Avoid colliding with dock CHECK / CHECK (off).
-                                ? 'Lock in'
-                                : 'Check',
-                          ),
+                    },
+          ),
+          if (_resumeNotice != null) ...[
+            const SizedBox(height: 6),
+            _ResumeCatchUpBanner(
+              text: _resumeNotice!,
+              onDismiss: () {
+                _resumeNoticeTimer?.cancel();
+                setState(() => _resumeNotice = null);
+              },
+            ),
+          ],
+          const SizedBox(height: 4),
+          Expanded(
+            child: Builder(
+              builder: (context) {
+                // Teach docks: fill Rex→footer with felt (no scroll void).
+                // SoftPulse explains keep scroll so fixed felts hug the top.
+                final fillFelt = isLessonActionTableActivity(activity);
+                final feltAck =
+                    isTableRegionTapActivity(activity) &&
+                            activity.renderer == ActivityRenderer.coachDialogue
+                        ? _submit
+                        : null;
+                final body = AnimatedBuilder(
+                  animation: controller,
+                  builder: (context, _) {
+                    final activityPane = AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 220),
+                      switchInCurve: Curves.easeOut,
+                      switchOutCurve: Curves.easeIn,
+                      layoutBuilder:
+                          fillFelt
+                              ? (currentChild, previousChildren) {
+                                return Stack(
+                                  fit: StackFit.expand,
+                                  alignment: Alignment.topCenter,
+                                  children: <Widget>[
+                                    ...previousChildren,
+                                    if (currentChild != null) currentChild,
+                                  ],
+                                );
+                              }
+                              : AnimatedSwitcher.defaultLayoutBuilder,
+                      child: KeyedSubtree(
+                        key: ValueKey<String>(activity.id),
+                        child: activityRegistry.build(
+                          activity: activity,
+                          controller: controller,
+                          showGuidance: showGuidance,
+                          onFeltAcknowledge: feltAck,
                         ),
                       ),
-                    ],
+                    );
+                    final hintLine =
+                        controller.hintVisible && hint != null
+                            ? <Widget>[
+                              const SizedBox(height: 10),
+                              RexCoachLine(text: hint!.text, label: 'Hint'),
+                            ]
+                            : const <Widget>[];
+                    if (!fillFelt) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [activityPane, ...hintLine],
+                      );
+                    }
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [Expanded(child: activityPane), ...hintLine],
+                    );
+                  },
+                );
+                if (!fillFelt) {
+                  return SingleChildScrollView(child: body);
+                }
+                return body;
+              },
+            ),
+          ),
+          AnimatedBuilder(
+            animation: controller,
+            builder: (context, _) {
+              final result = controller.lastResult;
+              if (result != null) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(height: 10),
+                    LessonFeedbackSheet(
+                      result: result,
+                      seatLabel:
+                          result.accepted ? null : controller.tappedSeatLabel,
+                      betterChoiceLabel: _labelForChoice(
+                        activity,
+                        result.betterChoiceId ??
+                            (result.accepted
+                                ? null
+                                : _heroRecoveryChoiceId(activity)),
+                      ),
+                      // Docked with Continue / Try again so the sheet
+                      // and CTAs hug — no empty Expanded gap.
+                      showActions: false,
+                      onContinue: _continueAfterFeedback,
+                      onRetry:
+                          result.accepted
+                              ? null
+                              : () {
+                                controller.clearFeedbackForRetry();
+                                setState(() {});
+                              },
+                    ),
+                    const SizedBox(height: 10),
+                    _FeedbackFooter(
+                      result: result,
+                      completing: _completing || _advancingActivity,
+                      onContinue: _continueAfterFeedback,
+                      onRetry:
+                          result.accepted
+                              ? null
+                              : () {
+                                controller.clearFeedbackForRetry();
+                                setState(() {});
+                              },
+                    ),
+                  ],
+                );
+              }
+              // Prefer live controller activity so advance never uses a
+              // stale auto-submit / Undo decision for one frame.
+              final liveActivity = controller.activity;
+              final canSubmit = _canSubmit && !_completing;
+              final autoSubmit =
+                  isAutoSubmitSelectIdentify(liveActivity) ||
+                  isTableRegionTapActivity(liveActivity) ||
+                  liveActivity.renderer == ActivityRenderer.orderSequence ||
+                  liveActivity.renderer == ActivityRenderer.compareRank ||
+                  liveActivity.renderer == ActivityRenderer.pokerActionSizing ||
+                  liveActivity.renderer == ActivityRenderer.fullTableHandLab ||
+                  liveActivity.renderer ==
+                      ActivityRenderer.authoredMultiStepHand ||
+                  liveActivity.renderer ==
+                      ActivityRenderer.playerReadClassify ||
+                  isLessonActionTableActivity(liveActivity);
+              if (autoSubmit) {
+                // Teach-by-doing: taps auto-submit — no Check / Undo dock.
+                if (controller.submitting) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Center(
+                      child: SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.4,
+                          color: AppColors.gold,
+                        ),
+                      ),
+                    ),
                   );
-                },
-              ),
-            ],
+                }
+                return const SizedBox(height: 8);
+              }
+              return Row(
+                children: [
+                  if (controller.draft.hasAnswer)
+                    TextButton(
+                      onPressed:
+                          controller.submitting
+                              ? null
+                              : () {
+                                controller.undoDraft();
+                                setState(() {});
+                              },
+                      child: const Text('Undo'),
+                    ),
+                  const Spacer(),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minWidth: largeText ? 160 : 140,
+                      minHeight: 48,
+                    ),
+                    child: FilledButton(
+                      onPressed: canSubmit ? _submit : null,
+                      style: FilledButton.styleFrom(
+                        backgroundColor: AppColors.gold,
+                        foregroundColor: AppColors.bgDark,
+                        disabledBackgroundColor: AppColors.slateDark,
+                        disabledForegroundColor: AppColors.slate,
+                      ),
+                      child: Text(
+                        controller.submitting
+                            ? 'Checking…'
+                            : liveActivity.renderer ==
+                                ActivityRenderer.coachDialogue
+                            ? 'Continue'
+                            : isLessonActionTableActivity(liveActivity)
+                            // Avoid colliding with dock CHECK / CHECK (off).
+                            ? 'Lock in'
+                            : 'Check',
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
       ),
     );
   }
@@ -1137,9 +1284,7 @@ String? tableChoiceRecoveryLabel(String choiceId) {
     'choice-only-you' ||
     'choice-checkpoint-holes' ||
     'choice-hero-again' => 'You',
-    'choice-board' ||
-    'choice-flop' ||
-    'choice-checkpoint-board' => 'the board',
+    'choice-board' || 'choice-flop' || 'choice-checkpoint-board' => 'the board',
     'choice-villain' ||
     'choice-whole-table' ||
     'choice-checkpoint-all' => 'other seats',
@@ -1253,9 +1398,7 @@ class _FeedbackFooter extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         border: Border(
-          top: BorderSide(
-            color: AppColors.slateDark.withValues(alpha: 0.85),
-          ),
+          top: BorderSide(color: AppColors.slateDark.withValues(alpha: 0.85)),
         ),
       ),
       child: Padding(
