@@ -86,20 +86,17 @@ void main() {
   test('locked copy names the Home lesson that unlocks the warm-up', () {
     expect(
       liveTrainingLockedMessage(),
-      'Live Training is advanced. Finish Section 2 jump check on Home '
+      'Live Training is advanced. Finish Baseline jump check on Home '
       'to unlock a coached warm-up.',
     );
+    expect(liveTrainingLockedMessage(), isNot(contains('Section 2')));
     expect(
-      liveTrainingLockedMessage(),
-      isNot(contains('Section 2 checkpoint')),
-    );
-    expect(
-      liveTrainingLockedMessage(lessonTitle: 'Section 2 jump check'),
-      contains('Section 2 jump check'),
+      liveTrainingLockedMessage(lessonTitle: 'Baseline jump check'),
+      contains('Baseline jump check'),
     );
     expect(
       liveTrainingLockedSnack(),
-      'Live Training unlocks after Section 2 jump check. Continue on Home.',
+      'Live Training unlocks after Baseline jump check. Continue on Home.',
     );
   });
 }

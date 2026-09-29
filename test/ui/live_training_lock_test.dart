@@ -65,11 +65,12 @@ void main() {
     expect(_logoMark(), findsOneWidget);
     expect(
       find.text(
-        'Live Training is advanced. Finish Section 2 jump check on Home '
+        'Live Training is advanced. Finish Baseline jump check on Home '
         'to unlock a coached warm-up.',
       ),
       findsOneWidget,
     );
+    expect(find.textContaining('Section 2'), findsNothing);
     expect(find.textContaining('Section 2 checkpoint'), findsNothing);
 
     await tester.tap(find.text('Continue on Home'));
