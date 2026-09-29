@@ -33,7 +33,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-01-06-02-section-one-jump' ||
       lessonId == 'lesson-01-06-02' ||
       lessonId == 'lesson-02-01-01-position-labels' ||
-      lessonId == 'lesson-02-01-01';
+      lessonId == 'lesson-02-01-01' ||
+      lessonId == 'lesson-02-01-02-acting-order' ||
+      lessonId == 'lesson-02-01-02';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -85,6 +87,9 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   }
   if (activity.id == 'act-02-01-01-explain-pos') {
     return 'Later seats see more. Tap the button.';
+  }
+  if (activity.id == 'act-02-01-02-explain-order') {
+    return 'Preflop starts left of the big blind. Tap EP, then HJ, then BTN.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand') &&

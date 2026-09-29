@@ -330,3 +330,51 @@ class _LessonBlindsClockwiseTableState
     );
   }
 }
+
+/// Preflop order: EP, then HJ, then the button. A wrong seat does not count.
+class LessonPreflopOrderTable extends StatefulWidget {
+  /// Creates the order stage.
+  const LessonPreflopOrderTable({
+    super.key,
+    required this.onComplete,
+    this.enabled = true,
+  });
+
+  /// The learner tapped EP, HJ, and the button in that order.
+  final VoidCallback? onComplete;
+
+  /// Taps are ignored when false.
+  final bool enabled;
+
+  @override
+  State<LessonPreflopOrderTable> createState() =>
+      _LessonPreflopOrderTableState();
+}
+
+class _LessonPreflopOrderTableState extends State<LessonPreflopOrderTable> {
+  static const _order = <int>[0, 1, lessonBlindsButtonIndex];
+
+  int _step = 0;
+
+  void _tap(int index) {
+    if (!widget.enabled || widget.onComplete == null) return;
+    if (_step >= _order.length || index != _order[_step]) return;
+    setState(() => _step += 1);
+    if (_step >= _order.length) widget.onComplete!.call();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && _step < _order.length;
+    return LessonTableStage(
+      villainCount: lessonBlindsVillainCount,
+      dealerIndex: lessonBlindsButtonIndex,
+      sbIndex: lessonBlindsSmallBlindIndex,
+      bbIndex: lessonBlindsBigBlindIndex,
+      positionLabels: true,
+      activeSeatIndex: teaching ? _order[_step] : null,
+      enabled: teaching,
+      onSeatIndexTap: _tap,
+    );
+  }
+}
