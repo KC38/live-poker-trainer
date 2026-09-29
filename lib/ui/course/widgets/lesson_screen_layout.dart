@@ -49,7 +49,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-02-07-01-baseline-full-hand' ||
       lessonId == 'lesson-02-07-01' ||
       lessonId == 'lesson-02-07-02-section-two-jump' ||
-      lessonId == 'lesson-02-07-02';
+      lessonId == 'lesson-02-07-02' ||
+      lessonId == 'lesson-03-01-01-reading-live-table' ||
+      lessonId == 'lesson-03-01-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -127,6 +129,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-02-07-01-explain-full') {
     return 'Nine seats. The rules stay the same. '
         'Tap Nine, then Same, then Position.';
+  }
+  if (activity.id == 'act-03-01-01-explain') {
+    return 'Before cards, read the table. '
+        'Tap Pot, then Stacks, then Button, then Who acts.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand') &&

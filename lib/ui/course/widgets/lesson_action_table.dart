@@ -2921,11 +2921,17 @@ class TableReadDemo extends StatefulWidget {
     this.interactive = false,
     this.enabled = false,
     this.onAllPointsTapped,
+    this.height,
   });
 
   final bool interactive;
   final bool enabled;
   final VoidCallback? onAllPointsTapped;
+
+  /// Stage height when the lesson frame already owns the chrome.
+  ///
+  /// Null keeps the standalone teach shell at 58% of the screen.
+  final double? height;
 
   static const points = <({String label, String caption, Color color})>[
     (label: 'POT', caption: 'Size the prize', color: AppColors.gold),
@@ -2966,7 +2972,8 @@ class _TableReadDemoState extends State<TableReadDemo> {
     // Tall-phone teach: fixed felt + stretched 2×2 tiles (minHeight alone
     // leaves sparse green under POT / STACKS / BUTTON / WHO ACTS).
     final feltHeight =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+        widget.height ??
+        (expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null);
 
     Widget pointTile(int index) {
       final point = TableReadDemo.points[index];

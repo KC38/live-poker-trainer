@@ -311,7 +311,9 @@ same frame: nine seats, the same rules, and position stay in the
 stage, and each decision sits face up on the full table. Baseline
 jump check uses the same frame: the seat map and the starting hand
 sit on the full table, the open and the 3-bet use that table, and
-the stack check stays a list. The procedure for the
+the stack check stays a list. Read the table first uses the same
+frame: pot, stacks, button, and who acts stay in the stage, and the
+first-to-act seat is tapped on the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
