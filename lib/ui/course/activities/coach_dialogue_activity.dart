@@ -208,6 +208,12 @@ class CoachDialogueActivity extends StatelessWidget {
             },
           );
         }
+        if (framed && visual.kind == CoachDialogueVisualKind.actionOrder) {
+          return LessonPreflopOrderTable(
+            enabled: !locked,
+            onComplete: locked ? null : onFeltAcknowledge,
+          );
+        }
         if (framed && visual.kind == CoachDialogueVisualKind.positionLabels) {
           return LessonTableStage(
             villainCount: lessonBlindsVillainCount,
