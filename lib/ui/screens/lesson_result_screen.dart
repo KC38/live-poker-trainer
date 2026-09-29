@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
+import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
 /// Shown after [completeCourseLesson] succeeds.
 class LessonResultScreen extends StatefulWidget {
@@ -114,35 +115,8 @@ class _LessonResultScreenState extends State<LessonResultScreen>
                     ),
                   ),
                   const SizedBox(height: 18),
-                  Center(
-                    child: Container(
-                      width: 72,
-                      height: 72,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.feltLight.withValues(alpha: 0.9),
-                        border: Border.all(
-                          color: AppColors.gold.withValues(alpha: 0.85),
-                          width: 2,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.success.withValues(alpha: 0.28),
-                            blurRadius: 22,
-                            spreadRadius: 1,
-                          ),
-                        ],
-                      ),
-                      child: Text(
-                        'R',
-                        style: GoogleFonts.manrope(
-                          color: AppColors.goldBright,
-                          fontSize: 28,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ),
+                  const Center(
+                    child: RexMascot(size: 72, mood: RexMood.celebrate),
                   ),
                   const SizedBox(height: 16),
                   Text(

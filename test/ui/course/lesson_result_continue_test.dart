@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_result_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
 const _complete = CompleteCourseLessonResult(
   attemptId: 'a1',
@@ -102,5 +103,46 @@ void main() {
     // Sole-route escape is handled by PokerLabApp remounting on saveProgress
     // and by onboarding pushing (not replacing) the runner.
     expect(find.text('LESSON COMPLETE'), findsOneWidget);
+  });
+
+  testWidgets('ceremony uses Rex face, not a letter R, at phone width', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(402, 874);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    Future<void> pumpResult(String title) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          child: MaterialApp(
+            theme: buildPokerTheme(),
+            home: LessonResultScreen(
+              lessonTitle: title,
+              result: _complete,
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
+    }
+
+    for (final title in ['Suits and ranks', 'Button and blinds']) {
+      await pumpResult(title);
+      expect(tester.takeException(), isNull);
+      expect(find.text('LESSON COMPLETE'), findsOneWidget);
+      expect(find.text(title), findsOneWidget);
+      expect(find.text('Clean work. That skill sticks.'), findsOneWidget);
+      expect(find.text('R'), findsNothing);
+      expect(find.widgetWithText(FilledButton, 'CONTINUE'), findsOneWidget);
+
+      final mascot = tester.widget<RexMascot>(find.byType(RexMascot));
+      expect(mascot.mood, RexMood.celebrate);
+      expect(find.bySemanticsLabel('Rex, celebrating'), findsOneWidget);
+      final image = tester.widget<Image>(find.byType(Image));
+      expect((image.image as AssetImage).assetName, RexMascot.celebrateAsset);
+    }
   });
 }
