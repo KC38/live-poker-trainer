@@ -395,7 +395,10 @@ table. Keep cash session guardrails uses the same frame: quit, guard,
 and first stay in the stage, and the discipline quizzes stay lists.
 Section 5 checkpoint uses the same frame: the multiway, tell, and stop
 checks stay lists, and the thin-value and bluff-catch spots sit face
-up on the full table. The procedure for the
+up on the full table. Spot range advantage and nut advantage uses
+the same frame: range, nut, and advantage stay in the stage, the
+dry-board, paired-board, and press checks stay lists, and the c-bet
+spot sits face up on the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 

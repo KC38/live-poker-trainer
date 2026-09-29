@@ -160,7 +160,8 @@ class PokerActionSizingActivity extends StatelessWidget {
                   (framed && activity.id.startsWith('act-05-05-01-')) ||
                   (framed && activity.id.startsWith('act-05-06-01-')) ||
                   (framed && activity.id.startsWith('act-05-08-01-')) ||
-                  (framed && activity.id.startsWith('act-05-09-02-'));
+                  (framed && activity.id.startsWith('act-05-09-02-')) ||
+                  (framed && activity.id.startsWith('act-06-01-01-'));
               final table =
                   framedTable
                       ? LessonTableStage(
