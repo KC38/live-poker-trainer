@@ -332,7 +332,10 @@ pair, prices, passive, and crowds stay in the stage, and each leak
 spot sits face up on the full table. Section 3 jump check uses the
 same frame: the table-read stays a list, the flop class and the
 bad-price draw sit face up on the full table, and the multiway fold
-and the value bet use that table. The procedure for the
+and the value bet use that table. Think in ranges uses the same
+frame: one hand, range, and update stay in the stage, and the
+bet-twice and same-board spots sit face up on the full table. The
+procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
