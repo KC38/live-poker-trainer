@@ -9,6 +9,21 @@ import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/poker_table_bands.dart';
 
+/// Six-max ring for Button and blinds. Index 3 is the dealer.
+const int lessonBlindsVillainCount = 5;
+
+/// Felt index of the dealer button on [lessonBlindsVillainCount] villains.
+const int lessonBlindsButtonIndex = 3;
+
+/// Felt index of the small blind, one seat clockwise from the button.
+const int lessonBlindsSmallBlindIndex = 4;
+
+/// Felt index of the big blind, two seats clockwise from the button.
+const int lessonBlindsBigBlindIndex = 5;
+
+/// Felt index immediately counterclockwise from the button.
+const int lessonBlindsRightOfButtonIndex = 2;
+
 /// Where the stage draws its arrows.
 enum LessonTableCue {
   /// No arrow.
@@ -32,9 +47,14 @@ class LessonTableStage extends StatelessWidget {
     this.heroFaceUp = false,
     this.cue = LessonTableCue.none,
     this.enabled = true,
+    this.dealerIndex,
+    this.sbIndex,
+    this.bbIndex,
+    this.activeSeatIndex,
     this.onHeroTap,
     this.onVillainTap,
     this.onBoardTap,
+    this.onSeatIndexTap,
   });
 
   /// Hero hole cards. Hidden until [heroFaceUp] is true.
@@ -55,6 +75,18 @@ class LessonTableStage extends StatelessWidget {
   /// Taps are ignored when false.
   final bool enabled;
 
+  /// Dealer seat. Null keeps the hero on the button.
+  final int? dealerIndex;
+
+  /// Small-blind seat. Used with [dealerIndex].
+  final int? sbIndex;
+
+  /// Big-blind seat. Used with [dealerIndex].
+  final int? bbIndex;
+
+  /// Seat that glows. Null glows nobody when [dealerIndex] is set.
+  final int? activeSeatIndex;
+
   /// Learner tapped their own cards.
   final VoidCallback? onHeroTap;
 
@@ -64,13 +96,16 @@ class LessonTableStage extends StatelessWidget {
   /// Learner tapped the community cards.
   final VoidCallback? onBoardTap;
 
+  /// Learner tapped a seat. The value is that seat's index in the hand.
+  final ValueChanged<int>? onSeatIndexTap;
+
   GameState get _game {
     final base = lessonBandGame(
       heroCodes: heroCodes,
       boardCodes: boardCodes,
       villainSeatCount: villainCount,
     );
-    const names = ['Sam', 'Jo', 'Rio', 'Max'];
+    const names = ['Sam', 'Jo', 'Rio', 'Max', 'Kai'];
     var villain = 0;
     final players = [
       for (final player in base.players)
@@ -79,7 +114,15 @@ class LessonTableStage extends StatelessWidget {
         else
           player.copyWith(name: names[villain++ % names.length]),
     ];
-    return base.copyWith(players: players);
+    final named = base.copyWith(players: players);
+    if (dealerIndex == null) return named;
+    final seats = named.players.length;
+    return named.copyWith(
+      dealerIndex: dealerIndex,
+      sbIndex: sbIndex ?? (dealerIndex! + 1) % seats,
+      bbIndex: bbIndex ?? (dealerIndex! + 2) % seats,
+      activePlayerIndex: activeSeatIndex ?? -1,
+    );
   }
 
   @override
@@ -112,6 +155,13 @@ class LessonTableStage extends StatelessWidget {
                     ? null
                     : (PlayerModel player) {
                       HapticFeedback.selectionClick();
+                      if (onSeatIndexTap != null) {
+                        final index = game.players.indexWhere(
+                          (seat) => seat.id == player.id,
+                        );
+                        if (index >= 0) onSeatIndexTap!(index);
+                        return;
+                      }
                       if (player.isHero) {
                         onHeroTap?.call();
                         return;
@@ -163,6 +213,58 @@ class _LessonPeekTableState extends State<LessonPeekTable> {
         widget.onPeek();
       },
       onVillainTap: (_) => widget.onMiss(),
+    );
+  }
+}
+
+/// Button, then small blind, then big blind. A wrong seat does not count.
+class LessonBlindsClockwiseTable extends StatefulWidget {
+  /// Creates the clockwise blinds stage.
+  const LessonBlindsClockwiseTable({
+    super.key,
+    required this.onComplete,
+    this.enabled = true,
+  });
+
+  /// The learner tapped the button, the small blind, and the big blind.
+  final VoidCallback? onComplete;
+
+  /// Taps are ignored when false.
+  final bool enabled;
+
+  @override
+  State<LessonBlindsClockwiseTable> createState() =>
+      _LessonBlindsClockwiseTableState();
+}
+
+class _LessonBlindsClockwiseTableState
+    extends State<LessonBlindsClockwiseTable> {
+  static const _order = <int>[
+    lessonBlindsButtonIndex,
+    lessonBlindsSmallBlindIndex,
+    lessonBlindsBigBlindIndex,
+  ];
+
+  int _step = 0;
+
+  void _tap(int index) {
+    if (!widget.enabled || widget.onComplete == null) return;
+    if (_step >= _order.length || index != _order[_step]) return;
+    setState(() => _step += 1);
+    if (_step >= _order.length) widget.onComplete!.call();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && _step < _order.length;
+    return LessonTableStage(
+      villainCount: lessonBlindsVillainCount,
+      dealerIndex: lessonBlindsButtonIndex,
+      sbIndex: lessonBlindsSmallBlindIndex,
+      bbIndex: lessonBlindsBigBlindIndex,
+      activeSeatIndex: teaching ? _order[_step] : null,
+      enabled: teaching,
+      onSeatIndexTap: _tap,
     );
   }
 }

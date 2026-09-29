@@ -104,6 +104,12 @@ class CoachDialogueActivity extends StatelessWidget {
             },
           );
         }
+        if (framed && visual.kind == CoachDialogueVisualKind.dealerButton) {
+          return LessonBlindsClockwiseTable(
+            enabled: !locked,
+            onComplete: locked ? null : onFeltAcknowledge,
+          );
+        }
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
