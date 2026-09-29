@@ -2212,11 +2212,17 @@ class VsOpenResponseDemo extends StatefulWidget {
     this.interactive = false,
     this.enabled = false,
     this.onAllResponsesTapped,
+    this.height,
   });
 
   final bool interactive;
   final bool enabled;
   final VoidCallback? onAllResponsesTapped;
+
+  /// Stage height when the lesson frame already owns the chrome.
+  ///
+  /// Null keeps the standalone teach shell at 58% of the screen.
+  final double? height;
 
   static const responses = <({String label, String caption, Color color})>[
     // Structural response labels — Rex owns weak/playable/strong.
@@ -2256,7 +2262,8 @@ class _VsOpenResponseDemoState extends State<VsOpenResponseDemo> {
     // Tall-phone teach: fixed felt + stretched tiles (minHeight alone leaves
     // sparse green under FOLD / CALL / 3-BET).
     final feltHeight =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+        widget.height ??
+        (expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null);
     final tiles = Row(
       crossAxisAlignment:
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
