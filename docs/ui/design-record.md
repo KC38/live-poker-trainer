@@ -386,7 +386,9 @@ donk stay in the stage, the nit, donk, and delay checks stay lists, and
 the probe spot sits face up on the full table. Street-by-street
 updates uses the same frame: action, rewrite, and update stay in the
 stage, the capped, habit, and shove checks stay lists, and the turn
-bomb sits face up on the full table. The procedure for the
+bomb sits face up on the full table. Soft timing evidence uses the
+same frame: timing, sizing, and clues stay in the stage, and the timing
+quizzes stay lists. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
