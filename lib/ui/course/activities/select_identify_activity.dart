@@ -1313,7 +1313,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
               else if (LessonFrameScope.maybeOf(context) != null &&
                   (widget.activity.id == 'act-01-05-01-guided-fold-win' ||
                       widget.activity.id ==
-                          'act-01-05-01-scaffolded-showdown'))
+                          'act-01-05-01-scaffolded-showdown' ||
+                      widget.activity.id == 'act-03-03-01-unguided' ||
+                      widget.activity.id == 'act-03-03-01-checkpoint'))
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -2263,6 +2265,24 @@ class _OutsCleanAcesTapActivity extends StatelessWidget {
       animation: controller,
       builder: (context, _) {
         final locked = controller.submitting || controller.lastResult != null;
+        if (LessonFrameScope.maybeOf(context) != null) {
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final bounded =
+                  constraints.maxHeight.isFinite ? constraints.maxHeight : null;
+              return OutsCleanAcesPicker(
+                key: ValueKey<String>(
+                  '${activity.id}-${controller.bindGeneration}',
+                ),
+                activity: activity,
+                controller: controller,
+                locked: locked,
+                showGuidance: showGuidance,
+                height: bounded,
+              );
+            },
+          );
+        }
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
