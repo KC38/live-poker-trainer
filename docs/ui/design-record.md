@@ -276,8 +276,9 @@ primary button everywhere except this dock.
 
 `LessonScreenLayout` (`lib/ui/course/widgets/lesson_screen_layout.dart`)
 is the frame. `LessonTableStage` (`lib/ui/course/widgets/lesson_table_stage.dart`)
-is the stage when the step is a hand. Your two cards uses both. The
-procedure for the next lesson is
+is the stage when the step is a hand. Your two cards uses both. Suits
+and ranks uses the same frame; its stage is the suits-and-ranks widget,
+not a felt. The procedure for the next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
 ## Gamified learning

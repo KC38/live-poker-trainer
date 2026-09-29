@@ -8,10 +8,12 @@ import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
-/// Your two cards is the first lesson on this frame.
+/// Lessons that use [LessonScreenLayout] instead of the app-bar runner.
 bool isLessonScreenFrameLesson(String lessonId) {
   return lessonId == 'lesson-01-01-01-your-two-cards' ||
-      lessonId == 'lesson-01-01-01';
+      lessonId == 'lesson-01-01-01' ||
+      lessonId == 'lesson-01-01-02-suits-and-ranks' ||
+      lessonId == 'lesson-01-01-02';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.

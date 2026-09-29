@@ -90,6 +90,20 @@ class CoachDialogueActivity extends StatelessWidget {
             },
           );
         }
+        if (framed && visual.kind == CoachDialogueVisualKind.suitsRanks) {
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final bounded =
+                  constraints.maxHeight.isFinite ? constraints.maxHeight : null;
+              return _SuitsRanksDemo(
+                interactive: true,
+                enabled: !locked,
+                onAllSuitsTapped: locked ? null : onFeltAcknowledge,
+                height: bounded,
+              );
+            },
+          );
+        }
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -3049,11 +3063,17 @@ class _SuitsRanksDemo extends StatefulWidget {
     this.interactive = false,
     this.enabled = false,
     this.onAllSuitsTapped,
+    this.height,
   });
 
   final bool interactive;
   final bool enabled;
   final VoidCallback? onAllSuitsTapped;
+
+  /// Stage height when the lesson frame already owns the chrome.
+  ///
+  /// Null keeps the standalone teach shell at 58% of the screen.
+  final double? height;
 
   @override
   State<_SuitsRanksDemo> createState() => _SuitsRanksDemoState();
@@ -3126,7 +3146,8 @@ class _SuitsRanksDemoState extends State<_SuitsRanksDemo>
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
     final feltHeight =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+        widget.height ??
+        (expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null);
 
     final suitTiles = Wrap(
       spacing: expandTeach ? 12 : 10,
