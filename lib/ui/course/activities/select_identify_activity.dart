@@ -1218,6 +1218,43 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             ],
             if (scene != null) ...[
               if (LessonFrameScope.maybeOf(context) != null &&
+                  widget.activity.id == 'act-01-02-02-unguided-board')
+                Expanded(
+                  child: LessonTableStage(
+                    heroCodes:
+                        scene.heroCodes.isEmpty
+                            ? const ['2h', '2d']
+                            : scene.heroCodes,
+                    boardCodes: scene.boardCodes,
+                    villainCount: scene.villainSeatCount < 1 ? 1 : scene.villainSeatCount,
+                    heroFaceUp: true,
+                    cue: LessonTableCue.board,
+                    enabled: !locked,
+                    onHeroTap:
+                        locked
+                            ? null
+                            : () => _submitRegion(
+                              const LessonTableTapTarget(LessonTableRegion.hero),
+                            ),
+                    onVillainTap:
+                        locked
+                            ? null
+                            : (_) => _submitRegion(
+                              const LessonTableTapTarget(
+                                LessonTableRegion.villain,
+                              ),
+                            ),
+                    onBoardTap:
+                        locked
+                            ? null
+                            : () => _submitRegion(
+                              const LessonTableTapTarget(
+                                LessonTableRegion.board,
+                              ),
+                            ),
+                  ),
+                )
+              else if (LessonFrameScope.maybeOf(context) != null &&
                   isLessonBlindsFrameActivity(widget.activity.id))
                 Expanded(
                   child: LessonTableStage(
@@ -1848,7 +1885,8 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
                 );
         final framedShowdown =
             LessonFrameScope.maybeOf(context) != null &&
-            widget.activity.id == 'act-01-02-01-checkpoint-winner';
+            (widget.activity.id == 'act-01-02-01-checkpoint-winner' ||
+                widget.activity.id == 'act-01-02-02-scaffolded-kicker');
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -2018,21 +2056,41 @@ class _BestFiveCardTapActivity extends StatelessWidget {
       animation: controller,
       builder: (context, _) {
         final locked = controller.submitting || controller.lastResult != null;
-        // Cards are on the picker — never dump hole/board codes into Rex.
+        final framed = LessonFrameScope.maybeOf(context) != null;
+        final picker = BestFiveCardPicker(
+          key: ValueKey<String>('${activity.id}-${controller.bindGeneration}'),
+          activity: activity,
+          controller: controller,
+          spot: spot,
+          locked: locked,
+        );
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             RexCoachLine(text: _coachFallback),
-            const SizedBox(height: 14),
-            BestFiveCardPicker(
-              key: ValueKey<String>(
-                '${activity.id}-${controller.bindGeneration}',
-              ),
-              activity: activity,
-              controller: controller,
-              spot: spot,
-              locked: locked,
-            ),
+            if (!framed) const SizedBox(height: 14),
+            if (framed)
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return BestFiveCardPicker(
+                      key: ValueKey<String>(
+                        '${activity.id}-${controller.bindGeneration}',
+                      ),
+                      activity: activity,
+                      controller: controller,
+                      spot: spot,
+                      locked: locked,
+                      height:
+                          constraints.maxHeight.isFinite
+                              ? constraints.maxHeight
+                              : null,
+                    );
+                  },
+                ),
+              )
+            else
+              picker,
           ],
         );
       },

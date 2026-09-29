@@ -281,8 +281,10 @@ and ranks uses the same frame; its stage is the suits-and-ranks widget,
 not a felt. Button and blinds uses the same frame; its stage is the
 full table, with the dealer button, small blind, and big blind on the
 seats. Hand ranks uses the same frame: the ladder stays the rank
-widget, and a made hand or a showdown uses the full table. The
-procedure for the next lesson is
+widget, and a made hand or a showdown uses the full table. Best five
+and kickers uses the same frame: the five-card picker stays in the
+stage, and a kicker battle or a board-plays pot uses the full table.
+The procedure for the next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
 ## Gamified learning
