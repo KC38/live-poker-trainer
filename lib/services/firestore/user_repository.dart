@@ -2,6 +2,7 @@
 library;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
 import 'package:live_poker_trainer/models/user_document.dart';
@@ -48,7 +49,7 @@ class UserRepository {
       displayName ?? HeroIdentity.defaultDisplayName,
     );
     try {
-      return await _ensureUserDocOnce(
+      return await ensureUserDocOnce(
         uid: uid,
         requested: requested,
         avatarRef: avatarRef,
@@ -58,8 +59,8 @@ class UserRepository {
       // A brand-new anonymous token can miss the first owner read. One retry
       // is the same recovery the lesson screen used to ask the player to tap.
       if (error.code != 'permission-denied') rethrow;
-      await Future<void>.delayed(const Duration(milliseconds: 300));
-      return _ensureUserDocOnce(
+      await Future<void>.delayed(permissionDeniedRetryDelay);
+      return ensureUserDocOnce(
         uid: uid,
         requested: requested,
         avatarRef: avatarRef,
@@ -68,7 +69,16 @@ class UserRepository {
     }
   }
 
-  Future<UserDocument> _ensureUserDocOnce({
+  /// Wait before the single permission-denied retry in [ensureUserDoc].
+  @visibleForTesting
+  Duration get permissionDeniedRetryDelay => const Duration(milliseconds: 300);
+
+  /// One read-or-create of `users/{uid}`.
+  ///
+  /// [ensureUserDoc] calls this, and calls it again once when Firestore
+  /// answers permission-denied. Other errors propagate immediately.
+  @visibleForTesting
+  Future<UserDocument> ensureUserDocOnce({
     required String uid,
     required String requested,
     String? avatarRef,
