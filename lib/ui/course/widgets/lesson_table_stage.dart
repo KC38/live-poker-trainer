@@ -57,6 +57,7 @@ class LessonTableStage extends StatelessWidget {
     this.onVillainTap,
     this.onBoardTap,
     this.onSeatIndexTap,
+    this.positionLabels = false,
   });
 
   /// Hero hole cards. Hidden until [heroFaceUp] is true.
@@ -104,6 +105,9 @@ class LessonTableStage extends StatelessWidget {
   /// Learner tapped a seat. The value is that seat's index in the hand.
   final ValueChanged<int>? onSeatIndexTap;
 
+  /// Rename the six-max ring EP, HJ, CO, BTN, SB, BB.
+  final bool positionLabels;
+
   GameState get _game {
     final base = lessonBandGame(
       heroCodes: heroCodes,
@@ -133,7 +137,15 @@ class LessonTableStage extends StatelessWidget {
       );
       villain += 1;
     }
-    final named = base.copyWith(players: players);
+    const positions = ['EP', 'HJ', 'CO', 'BTN', 'SB', 'BB'];
+    final seated =
+        positionLabels
+            ? [
+              for (var i = 0; i < players.length; i++)
+                players[i].copyWith(name: positions[i % positions.length]),
+            ]
+            : players;
+    final named = base.copyWith(players: seated);
     if (dealerIndex == null) return named;
     final seats = named.players.length;
     return named.copyWith(
