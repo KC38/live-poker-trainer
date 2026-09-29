@@ -451,7 +451,9 @@ value and bluffs uses the same frame: value, bluff, and hold stay in
 the stage, the blocker, empty, and rule checks stay lists, and the
 top-set value spot sits face up on the full table. Change plans by
 pot type uses the same frame: limped, SRP, and 3-4bet stay in the
-stage, and the pot-type quizzes stay lists. The procedure for the
+stage, and the pot-type quizzes stay lists. Switch gears between HU
+and multiway uses the same frame: fewer, thicker, and widen stay in
+the stage, and the player-count quizzes stay lists. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
