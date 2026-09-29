@@ -329,7 +329,10 @@ table. Play tighter multiway uses the same frame: stronger, fewer,
 and nuts stay in the stage, and each multiway spot sits face up on
 the full table. Patch the common leaks uses the same frame: top
 pair, prices, passive, and crowds stay in the stage, and each leak
-spot sits face up on the full table. The procedure for the
+spot sits face up on the full table. Section 3 jump check uses the
+same frame: the table-read stays a list, the flop class and the
+bad-price draw sit face up on the full table, and the multiway fold
+and the value bet use that table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
