@@ -6359,15 +6359,15 @@ class LessonTableContext extends StatelessWidget {
             region: LessonTableRegion.afterFlop,
             title: 'After flop',
             detail: 'Board out',
-            visual: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            visual: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 for (final code in const ['Qs', 'Jh', '2c']) ...[
+                  if (code != 'Qs') const SizedBox(height: 3),
                   MiniCard(
                     card: CardModel.fromCode(code),
                     size: MiniCardSize.small,
                   ),
-                  const SizedBox(width: 3),
                 ],
               ],
             ),
@@ -6377,11 +6377,11 @@ class LessonTableContext extends StatelessWidget {
             region: LessonTableRegion.showdown,
             title: 'Showdown',
             detail: 'Cards up',
-            visual: const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            visual: const Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 CardBack(size: MiniCardSize.small),
-                SizedBox(width: 3),
+                SizedBox(height: 3),
                 CardBack(size: MiniCardSize.small),
               ],
             ),

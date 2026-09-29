@@ -109,6 +109,12 @@ The first lesson’s hole-card explain uses that same column. Other teaching fel
 
 A lesson step that shows hole cards, including Suits and ranks “Tap the suited hole cards,” places those cards on HeroRailWidget inside the Poker table bands. Retire `_HoleCardFeltTray` for that step.
 
+A phase column on a teaching felt stacks its playing cards vertically. A horizontal row of `MiniCard` or `CardBack` widgets is not used inside an `Expanded` phase column.
+
+### Shipped
+
+Button and blinds timing stacks the flop cards and the showdown card backs vertically in `_buildBlindsTiming` (`lib/ui/course/widgets/lesson_table_context.dart`).
+
 File one ticket per layout you still see, not one ticket per activity id.
 
 ## Asset inventory
