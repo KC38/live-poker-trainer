@@ -369,7 +369,10 @@ stay lists. Same hand, different types uses the same frame: cards,
 seats, and evidence stay in the stage, and each type spot sits face up
 on the full table. Section 4 jump check uses the same frame: the
 range, SPR, and player-type checks stay lists, and the 3-bet and the
-sizing spot sit face up on the full table. The procedure for the
+sizing spot sit face up on the full table. Build multiway ranges
+with nut potential uses the same frame: nutted, air, and domination
+stay in the stage, the continue and priority checks stay lists, and
+the connector and the set spots sit face up on the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 

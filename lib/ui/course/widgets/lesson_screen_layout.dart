@@ -101,7 +101,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-04-10-01-exploit-checkpoints' ||
       lessonId == 'lesson-04-10-01' ||
       lessonId == 'lesson-04-10-02-section-four-jump-test' ||
-      lessonId == 'lesson-04-10-02';
+      lessonId == 'lesson-04-10-02' ||
+      lessonId == 'lesson-05-01-01-multiway-ranges' ||
+      lessonId == 'lesson-05-01-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -275,6 +277,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-04-10-01-explain') {
     return 'Same cards. Different seats. Exploits change only with evidence. '
         'Tap Cards, then Seats, then Evidence.';
+  }
+  if (activity.id == 'act-05-01-01-explain') {
+    return 'Multiway: nutted hands up, air down. Domination hurts more. '
+        'Tap Nutted, then Air, then Domination.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||
