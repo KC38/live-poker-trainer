@@ -83,7 +83,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-04-06-02-meet-calling-station' ||
       lessonId == 'lesson-04-06-02' ||
       lessonId == 'lesson-04-06-03-adjust-calling-station' ||
-      lessonId == 'lesson-04-06-03';
+      lessonId == 'lesson-04-06-03' ||
+      lessonId == 'lesson-04-07-01-observe-narrow-player' ||
+      lessonId == 'lesson-04-07-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -225,6 +227,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-04-06-03-explain') {
     return 'Versus stations: thicker value, fewer pure bluffs. '
         'Tap Value, then Bluffs, then Cite.';
+  }
+  if (activity.id == 'act-04-07-01-explain') {
+    return 'Some seats almost never enter. When they do, they mean it. '
+        'Tap Rare, then Enter, then Mean it.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||
