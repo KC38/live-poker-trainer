@@ -25,6 +25,7 @@ import {buildLiveSetupKey, DEFAULT_LIVE_SETUP} from "./live_setup";
 import {
   COACHING_SCHEMA_VERSION,
   LIVE_PAYLOAD_VERSION,
+  LIVE_UNSEEN_LOW_WATER,
   type CoachingRubric,
   type LiveHandDefinition,
 } from "./live_types";
@@ -206,6 +207,84 @@ describe("live session integration", () => {
     await setupRef.update({"generation.leaseExpiresAtMs": 1});
     expect(await recoverExpiredLiveGenerationLeases({db, nowMs: 2})).toBe(1);
     expect((await setupRef.get()).data()?.generation?.status).toBe("queued");
+  });
+
+  test("expired lease closes a stocked pool instead of queuing more hands", async () => {
+    const setupKey = buildLiveSetupKey(DEFAULT_LIVE_SETUP);
+    const setupRef = db.collection("liveTableSetups").doc(setupKey);
+    await setupRef.set({
+      setupKey,
+      setup: DEFAULT_LIVE_SETUP,
+      handCount: LIVE_UNSEEN_LOW_WATER + 1,
+      generation: {
+        status: "generating",
+        leaseId: "stale-lease",
+        leaseExpiresAtMs: 1,
+        requestedBatch: 10,
+      },
+    });
+    for (let index = 0; index <= LIVE_UNSEEN_LOW_WATER; index++) {
+      await setupRef.collection("hands").doc(`ready-${index}`).set({
+        status: "ready",
+        timesServed: 0,
+      });
+    }
+    const before = (await db.collection("liveGenerationJobs").get()).size;
+    expect(await recoverExpiredLiveGenerationLeases({db, nowMs: 2})).toBe(1);
+    const generation = (await setupRef.get()).data()?.generation;
+    expect(generation?.status).toBe("idle");
+    expect(generation?.leaseId).toBeNull();
+    expect((await db.collection("liveGenerationJobs").get()).size).toBe(before);
+  });
+
+  test("expired lease still refills when unserved ready hands are at low water", async () => {
+    const setupKey = buildLiveSetupKey(DEFAULT_LIVE_SETUP);
+    const setupRef = db.collection("liveTableSetups").doc(setupKey);
+    await setupRef.set({
+      setupKey,
+      setup: DEFAULT_LIVE_SETUP,
+      handCount: LIVE_UNSEEN_LOW_WATER,
+      generation: {
+        status: "generating",
+        leaseId: "stale-lease",
+        leaseExpiresAtMs: 1,
+        requestedBatch: 10,
+      },
+    });
+    for (let index = 0; index < LIVE_UNSEEN_LOW_WATER; index++) {
+      await setupRef.collection("hands").doc(`ready-${index}`).set({
+        status: "ready",
+        timesServed: 0,
+      });
+    }
+    expect(await recoverExpiredLiveGenerationLeases({db, nowMs: 2})).toBe(1);
+    expect((await setupRef.get()).data()?.generation?.status).toBe("queued");
+  });
+
+  test("a live lease stays generating when the pool is already stocked", async () => {
+    const setupKey = buildLiveSetupKey(DEFAULT_LIVE_SETUP);
+    const setupRef = db.collection("liveTableSetups").doc(setupKey);
+    await setupRef.set({
+      setupKey,
+      setup: DEFAULT_LIVE_SETUP,
+      handCount: LIVE_UNSEEN_LOW_WATER + 1,
+      generation: {
+        status: "generating",
+        leaseId: "active-lease",
+        leaseExpiresAtMs: 50,
+        requestedBatch: 10,
+      },
+    });
+    for (let index = 0; index <= LIVE_UNSEEN_LOW_WATER; index++) {
+      await setupRef.collection("hands").doc(`ready-${index}`).set({
+        status: "ready",
+        timesServed: 0,
+      });
+    }
+    expect(await recoverExpiredLiveGenerationLeases({db, nowMs: 2})).toBe(0);
+    const generation = (await setupRef.get()).data()?.generation;
+    expect(generation?.status).toBe("generating");
+    expect(generation?.leaseId).toBe("active-lease");
   });
 
   test("start retries return one allocated session", async () => {

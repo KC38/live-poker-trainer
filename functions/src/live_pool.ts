@@ -186,6 +186,17 @@ export function shouldRefillLiveUnseen(unseenRemaining: number): boolean {
   return unseenRemaining <= LIVE_UNSEEN_LOW_WATER;
 }
 
+/**
+ * An expired generation lease may start another batch only when never-served
+ * ready hands are at or below the same low-water mark. A stocked pool is
+ * closed instead, so lease recovery cannot keep minting hands.
+ */
+export function shouldContinueExpiredLiveRefill(
+  unservedReadyCount: number,
+): boolean {
+  return shouldRefillLiveUnseen(unservedReadyCount);
+}
+
 async function unseenReadyHands(
   db: Firestore,
   hands: FirebaseFirestore.CollectionReference,
@@ -306,7 +317,13 @@ export function isQueuedLiveGenerationJob(
   return data?.status === "queued";
 }
 
-/** Requeues setup leases whose job wave stopped producing heartbeats. */
+/**
+ * Requeues a stalled wave only when never-served ready hands are scarce.
+ *
+ * A wave whose lease expired while the pool is already above the low-water
+ * mark is closed. That stops the five-minute schedule from minting another
+ * batch on top of hands nobody has been dealt.
+ */
 export async function recoverExpiredLiveGenerationLeases(options: {
   db?: Firestore;
   nowMs?: number;
@@ -332,10 +349,56 @@ export async function recoverExpiredLiveGenerationLeases(options: {
     if (Number(setup.data()?.generation?.leaseExpiresAtMs ?? 0) > nowMs) {
       continue;
     }
+    const unservedReady = await unservedReadyHandCount(setup.ref);
+    if (!shouldContinueExpiredLiveRefill(unservedReady)) {
+      if (await closeStockedLiveGeneration(db, setup.ref, nowMs)) recovered++;
+      continue;
+    }
     await requestLiveRefill({db, setupKey: setup.id});
     recovered++;
   }
   return recovered;
+}
+
+/** Counts ready hands nobody has been dealt, stopping once the pool is stocked. */
+async function unservedReadyHandCount(
+  setupRef: FirebaseFirestore.DocumentReference,
+): Promise<number> {
+  const snapshot = await setupRef
+    .collection("hands")
+    .where("status", "==", "ready")
+    .where("timesServed", "==", 0)
+    .limit(LIVE_UNSEEN_LOW_WATER + 1)
+    .get();
+  return snapshot.size;
+}
+
+/**
+ * Ends a stalled wave without queuing hands when inventory is already healthy.
+ *
+ * Re-reads the lease inside the transaction so a wave that heartbeated after
+ * the scan is left alone.
+ */
+async function closeStockedLiveGeneration(
+  db: Firestore,
+  setupRef: FirebaseFirestore.DocumentReference,
+  nowMs: number,
+): Promise<boolean> {
+  return db.runTransaction(async (tx) => {
+    const fresh = await tx.get(setupRef);
+    const generation = fresh.data()?.generation ?? {};
+    const status = generation.status;
+    const stalled = status === "generating" &&
+      Number(generation.leaseExpiresAtMs ?? 0) <= nowMs;
+    if (!stalled) return false;
+    tx.update(setupRef, {
+      "generation.status": "idle",
+      "generation.leaseId": null,
+      "generation.leaseExpiresAtMs": null,
+      updatedAt: FieldValue.serverTimestamp(),
+    });
+    return true;
+  });
 }
 
 /** Generates and publishes one fully warmed hand job. */

@@ -10,6 +10,7 @@ import {
   isQueuedLiveGenerationJob,
   liveLeaseExpired,
   preparedNodeFromData,
+  shouldContinueExpiredLiveRefill,
   shouldRefillLiveUnseen,
 } from "./live_pool";
 import {selectWarmActionIds, type PreparedLiveNode} from "./live_tree";
@@ -67,6 +68,12 @@ describe("live pool policy", () => {
     expect(shouldRefillLiveUnseen(6)).toBe(false);
     expect(shouldRefillLiveUnseen(5)).toBe(true);
     expect(shouldRefillLiveUnseen(0)).toBe(true);
+  });
+
+  test("expired lease recovery refills only while unserved hands are scarce", () => {
+    expect(shouldContinueExpiredLiveRefill(6)).toBe(false);
+    expect(shouldContinueExpiredLiveRefill(5)).toBe(true);
+    expect(shouldContinueExpiredLiveRefill(0)).toBe(true);
   });
 
   test("warms passive, recommended, and standard aggressive branches", () => {
