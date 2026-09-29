@@ -127,13 +127,15 @@ introduced. Reuse the path already listed. Add a row when a new file ships.
 | --- | --- | --- |
 | Logo | `assets/brand/logo_mark.png` | Auth screen and Live Training hub |
 | Mascot | `assets/brand/rex_calm.png` — a face, calm mood, via `RexMascot` | Meet Rex, `RexCoachLine`, and `RexCoachCard` |
-| Mascot celebrate | `assets/brand/rex_celebrate.png` — Rex’s own face, celebrating mood, the same coach as the calm portrait, via `RexMascot` | Right-answer beat in `LessonFeedbackSheet` |
+| Mascot celebrate | `assets/brand/rex_celebrate.png` — Rex’s own face, celebrating mood, the same coach as the calm portrait, via `RexMascot` | Right-answer beat in `LessonFeedbackSheet` and the lesson-result ceremony |
 | Icons | Material / Cupertino. No branded icon set | Theme icon color (`slate` in the app bar) |
 | Motion | Implicit widget motion only (band resize, `AnimatedSwitcher` 220ms in the runner). No Rive or Lottie | [flutter-ui-ux](../../.cursor/skills/flutter-ui-ux/SKILL.md) durations |
 | Sound effects | `SoundService`: `deal.wav`, `chip.wav`, `knock.wav`, `fold.wav`, `win.wav` under `assets/sounds/` | Table actions call these. Do not add a second chip sound |
 | Background music | `assets/sounds/lounge_ambient.mp3` via `SoundService.startHomeBgm` | Home. Pause when leaving Home. Settings toggle is `musicEnabled` |
 
 The mascot slot is a Rex image with a face and a mood. Meet Rex and the Rex line on Your start show that face. Text-only `RexCoachLine` is not the slot.
+
+The lesson result uses `RexMascot` for the ceremony. It does not draw a letter R.
 
 A missing slot (Rex still text-only, a deal with no motion, a table action
 with no `SoundService` call) is a ticket that names the slot. The walk does
@@ -144,6 +146,8 @@ The Live Training hub shows `assets/brand/logo_mark.png` above the lock or the t
 ### Shipped
 
 The Live Training hub shows `assets/brand/logo_mark.png` in `_LiveAccessGate` and the open table entry of `LiveTrainingScreen` (`lib/ui/screens/live_training_screen.dart`). Auth uses the same file in `lib/ui/screens/auth_screen.dart`.
+
+The lesson result uses `RexMascot` for the ceremony. It does not draw a letter R. `LessonResultScreen` (`lib/ui/screens/lesson_result_screen.dart`) draws `RexMascot` with `RexMood.celebrate` (`assets/brand/rex_celebrate.png`).
 
 ## Gamified learning
 
