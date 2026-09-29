@@ -348,7 +348,10 @@ frame: enters, calls, and folds stay in the stage, the participation
 note and the observation bundle stay lists, and the sticky-call and
 low-confidence spots sit face up on the full table. Meet the Calling
 Station uses the same frame: station, high, and low stay in the stage,
-and the label quizzes stay lists. The procedure for the
+and the label quizzes stay lists. Adjust versus Calling Station uses
+the same frame: value, bluffs, and cite stay in the stage, each
+adjustment spot sits face up on the full table, and the bluff-less
+reason stays a list. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
