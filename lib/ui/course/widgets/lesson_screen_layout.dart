@@ -175,7 +175,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-07-08-01-type-board-line' ||
       lessonId == 'lesson-07-08-01' ||
       lessonId == 'lesson-07-09-01-leak-review-book' ||
-      lessonId == 'lesson-07-09-01';
+      lessonId == 'lesson-07-09-01' ||
+      lessonId == 'lesson-07-10-01-capstone-srp' ||
+      lessonId == 'lesson-07-10-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -490,9 +492,14 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
     return 'Defaults beat vibes. Write the book; review leaks. '
         'Tap Leak, then Book, then Review.';
   }
+  if (activity.id == 'act-07-10-01-explain') {
+    return 'Capstone single-raised pot. No hints. Trust your map. '
+        'Tap Plan, then Update, then Finish.';
+  }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||
-          activity.id == 'act-04-03-01-guided') &&
+          activity.id == 'act-04-03-01-guided' ||
+          activity.id == 'act-07-10-01-hand') &&
       activity.handSteps.isNotEmpty) {
     final last = activity.handSteps.length - 1;
     final index = handStepIndex < 0

@@ -3902,6 +3902,46 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('capstone SRP uses the lesson frame and the map tiles', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      _app(
+        LessonRunnerScreen(
+          lessonId: 'lesson-07-10-01-capstone-srp',
+          courseService: _PrerequisiteLockedCourseService(catalog)
+            ..previousComplete = true,
+          startRequestId: 'start_capstone_srp_frame',
+        ),
+        catalog: catalog,
+      ),
+    );
+    await tester.pump();
+    for (
+      var i = 0;
+      i < 40 && find.textContaining('Tap Plan').evaluate().isEmpty;
+      i++
+    ) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+
+    expect(find.byType(AppBar), findsNothing);
+    expect(find.text('Capstone: single-raised pot'), findsNothing);
+    expect(find.byTooltip('Close'), findsOneWidget);
+    expect(find.byIcon(Icons.favorite), findsNWidgets(3));
+    expect(find.textContaining('Tap Plan'), findsOneWidget);
+    expect(find.byTooltip('Undo'), findsOneWidget);
+    expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.text('PLAN'), findsOneWidget);
+    expect(find.text('UPDATE'), findsOneWidget);
+    expect(find.text('FINISH'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('hung startLesson surfaces retry instead of empty spinner', (
     tester,
   ) async {
