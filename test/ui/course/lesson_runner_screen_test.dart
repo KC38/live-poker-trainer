@@ -3618,6 +3618,46 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('river composition uses the lesson frame and the river tiles', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      _app(
+        LessonRunnerScreen(
+          lessonId: 'lesson-07-03-01-river-composition',
+          courseService: _PrerequisiteLockedCourseService(catalog)
+            ..previousComplete = true,
+          startRequestId: 'start_river_composition_frame',
+        ),
+        catalog: catalog,
+      ),
+    );
+    await tester.pump();
+    for (
+      var i = 0;
+      i < 40 && find.textContaining('Tap Value').evaluate().isEmpty;
+      i++
+    ) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+
+    expect(find.byType(AppBar), findsNothing);
+    expect(find.text('Compose river value and bluffs'), findsNothing);
+    expect(find.byTooltip('Close'), findsOneWidget);
+    expect(find.byIcon(Icons.favorite), findsNWidgets(3));
+    expect(find.textContaining('Tap Value'), findsOneWidget);
+    expect(find.byTooltip('Undo'), findsOneWidget);
+    expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.text('VALUE'), findsOneWidget);
+    expect(find.text('BLUFF'), findsOneWidget);
+    expect(find.text('HOLD'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('hung startLesson surfaces retry instead of empty spinner', (
     tester,
   ) async {
