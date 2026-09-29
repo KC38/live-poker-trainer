@@ -137,7 +137,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-06-07-01-minimum-defense' ||
       lessonId == 'lesson-06-07-01' ||
       lessonId == 'lesson-06-08-01-mixed-strategy' ||
-      lessonId == 'lesson-06-08-01';
+      lessonId == 'lesson-06-08-01' ||
+      lessonId == 'lesson-06-09-01-threebet-fourbet' ||
+      lessonId == 'lesson-06-09-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -379,6 +381,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-06-08-01-explain') {
     return 'Mixing is frequency with a purpose, not coin-flip theater. '
         'Tap Mix, then Purpose, then Strong.';
+  }
+  if (activity.id == 'act-06-09-01-explain') {
+    return '3-bet and 4-bet pots shrink ranges and SPR. Depth decides commitment. '
+        'Tap 3-Bet, then 4-Bet, then Depth.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||

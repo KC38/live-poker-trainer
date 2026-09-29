@@ -418,7 +418,10 @@ in the stage, the continue, intuition, and punish checks stay lists,
 and the third-pair fold sits face up on the full table. Mix with a
 reason uses the same frame: mix, purpose, and strong stay in the
 stage, the station, reason, and purpose checks stay lists, and the
-set check sits face up on the full table. The procedure for the
+set check sits face up on the full table. Navigate 3-bet and 4-bet
+pots by depth uses the same frame: 3-bet, 4-bet, and depth stay in
+the stage, the commit, ego, and SPR checks stay lists, and the missed
+AQo flop sits face up on the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
