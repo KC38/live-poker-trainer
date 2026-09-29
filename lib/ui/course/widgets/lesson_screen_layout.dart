@@ -141,7 +141,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-06-09-01-threebet-fourbet' ||
       lessonId == 'lesson-06-09-01' ||
       lessonId == 'lesson-06-10-01-difficult-folds' ||
-      lessonId == 'lesson-06-10-01';
+      lessonId == 'lesson-06-10-01' ||
+      lessonId == 'lesson-06-11-01-observe-selective' ||
+      lessonId == 'lesson-06-11-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -391,6 +393,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-06-10-01-explain') {
     return 'Hard folds save buy-ins. Coolers happen; ego call-downs are mistakes. '
         'Tap Hard, then Cooler, then Ego.';
+  }
+  if (activity.id == 'act-06-11-01-explain') {
+    return 'Before labels: who enters tight, then barrels with a plan? Count samples. '
+        'Tap Tight, then Barrel, then Sample.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||
