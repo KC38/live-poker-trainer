@@ -166,7 +166,7 @@ On each screen of the chosen path, before leaving it:
 3. **Table.** A hand (hole cards, board, pot, or action) uses the Poker table bands. `LessonActionSpot` and `LessonTableScene` on a hand step are findings. One ticket per layout.
 4. **Assets.** Logo, mascot, icons, motion, sound effects, and music match the Asset inventory. A missing slot is a finding. Quote the slot name.
 5. **Game loop.** A lesson, Home path, or result matches Gamified learning. One job on screen, the table or path is the hero, Rex reacts on a right or wrong answer, and the lesson pays off in XP before Home. Open the cited frame in `docs/ui/references/duolingo-chess/frames/` when you are unsure what that beat looks like. A form, a text wall, or a silent exit is a finding. One ticket per missing beat, not per step that shares it.
-6. **Layout.** Clipped text, overflow, overlapping bands, or a control with no name.
+6. **Layout.** Clipped text, overflow, overlapping bands, or a control with no name. An overflow stripe is a Bug, including under 2px. The ticket names the Lesson tables section and this sentence: a phase column on a teaching felt stacks its playing cards vertically.
 7. **Record.** The fix you would file names the design-record section it changes. A second gold, a second table, or a one-off font is not a finding to build. It is a finding to remove.
 
 Skip a nit the record does not mention and that you did not see. Skip

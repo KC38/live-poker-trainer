@@ -20,6 +20,7 @@ either one.
 4. Add a `Shipped` note under the section: the widget or asset path, and
    what the next screen must copy. Git history is the date. Do not put a
    calendar date in this file.
+5. A layout change that can overflow at phone width names the Lesson tables sentence it will write, and the same change includes a widget test that fails on overflow.
 
 ## Theme
 
@@ -109,11 +110,11 @@ The first lesson’s hole-card explain uses that same column. Other teaching fel
 
 A lesson step that shows hole cards, including Suits and ranks “Tap the suited hole cards,” places those cards on HeroRailWidget inside the Poker table bands. Retire `_HoleCardFeltTray` for that step.
 
-A phase column on a teaching felt stacks its playing cards vertically. A horizontal row of `MiniCard` or `CardBack` widgets is not used inside an `Expanded` phase column.
+A phase column on a teaching felt stacks its playing cards vertically. A horizontal row of `MiniCard` or `CardBack` widgets is not used inside an `Expanded` phase column. Scaling the row down with `FittedBox` is not a substitute for that rule.
 
 ### Shipped
 
-Button and blinds timing stacks the flop cards and the showdown card backs vertically in `_buildBlindsTiming` (`lib/ui/course/widgets/lesson_table_context.dart`).
+Button and blinds (LPT-36) stacks the flop cards and the showdown card backs vertically in `_buildBlindsTiming` (`lib/ui/course/widgets/lesson_table_context.dart`). The next phase column copies that vertical stack.
 
 File one ticket per layout you still see, not one ticket per activity id.
 
