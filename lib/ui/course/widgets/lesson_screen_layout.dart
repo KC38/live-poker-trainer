@@ -107,7 +107,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-05-02-01-deep-stack-play' ||
       lessonId == 'lesson-05-02-01' ||
       lessonId == 'lesson-05-03-01-implied-odds' ||
-      lessonId == 'lesson-05-03-01';
+      lessonId == 'lesson-05-03-01' ||
+      lessonId == 'lesson-05-04-01-thin-value-bluffcatch' ||
+      lessonId == 'lesson-05-04-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -293,6 +295,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-05-03-01-explain') {
     return 'Implied odds: future money. Reverse implied: future losses when second-best. '
         'Tap Implied, then Reverse, then Second.';
+  }
+  if (activity.id == 'act-05-04-01-explain') {
+    return 'Thin value needs calls. Bluff-catches need wide barrels. '
+        'Tap Thin, then Catch, then Barrels.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||

@@ -378,7 +378,9 @@ stack stay in the stage, the implied, plan, and reward checks stay
 lists, and the wet-flop fold sits face up on the full table. Implied
 and reverse odds uses the same frame: implied, reverse, and second stay
 in the stage, each price spot sits face up on the full table, and the
-rise check stays a list. The procedure for the
+rise check stays a list. Thin value and bluff-catches uses the same
+frame: thin, catch, and barrels stay in the stage, each thin-value spot
+sits face up on the full table, and the read check stays a list. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
