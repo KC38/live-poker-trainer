@@ -169,7 +169,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-07-05-01-hu-vs-multiway' ||
       lessonId == 'lesson-07-05-01' ||
       lessonId == 'lesson-07-06-01-stack-depth-plans' ||
-      lessonId == 'lesson-07-06-01';
+      lessonId == 'lesson-07-06-01' ||
+      lessonId == 'lesson-07-07-01-same-cards-types' ||
+      lessonId == 'lesson-07-07-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -471,6 +473,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-07-06-01-explain') {
     return 'Effective stack rewrites the plan every hand. '
         'Tap Short, then Deep, then Effective.';
+  }
+  if (activity.id == 'act-07-07-01-explain') {
+    return 'Same cards. Five models. Cite the tendency. '
+        'Tap Cards, then Models, then Cite.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||
