@@ -1353,7 +1353,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
               else if (LessonFrameScope.maybeOf(context) != null &&
                   (widget.activity.id.startsWith('act-02-01-01-') ||
                       widget.activity.id == 'act-02-01-02-checkpoint-full' ||
-                      widget.activity.id == 'act-02-07-02-jump-pos'))
+                      widget.activity.id == 'act-02-07-02-jump-pos' ||
+                      widget.activity.id == 'act-03-01-01-scaffolded'))
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
