@@ -285,8 +285,10 @@ widget, and a made hand or a showdown uses the full table. Best five
 and kickers uses the same frame: the five-card picker stays in the
 stage, and a kicker battle or a board-plays pot uses the full table.
 Fold, check, call uses the same frame: the three buttons stay the
-explain stage, and each action spot uses the full table. The procedure
-for the next lesson is
+explain stage, and each action spot uses the full table. Bet, raise,
+all-in uses that same frame: Bet, Raise, and All-in stay the explain
+stage, and each action spot uses the full table. The procedure for the
+next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
 ## Gamified learning
