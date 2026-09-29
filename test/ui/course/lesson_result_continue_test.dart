@@ -145,4 +145,35 @@ void main() {
       expect((image.image as AssetImage).assetName, RexMascot.celebrateAsset);
     }
   });
+
+  testWidgets('lesson result shows this lesson XP and the daily goal', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(402, 874);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: const LessonResultScreen(
+            lessonTitle: 'Suits and ranks',
+            result: _complete,
+            dailyGoalMinutes: 10,
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 600));
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('XP earned'), findsOneWidget);
+    expect(find.text('+25'), findsOneWidget);
+    expect(find.text('Daily goal'), findsOneWidget);
+    expect(find.text('10 minutes'), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'CONTINUE'), findsOneWidget);
+  });
 }

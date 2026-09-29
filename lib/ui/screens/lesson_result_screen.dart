@@ -14,11 +14,16 @@ class LessonResultScreen extends StatefulWidget {
     super.key,
     required this.lessonTitle,
     required this.result,
+    this.dailyGoalMinutes,
     this.standalone = true,
   });
 
   final String lessonTitle;
   final CompleteCourseLessonResult result;
+
+  /// Onboarding daily goal, in minutes. Null hides the row.
+  final int? dailyGoalMinutes;
+
   final bool standalone;
 
   @override
@@ -172,6 +177,13 @@ class _LessonResultScreenState extends State<LessonResultScreen>
                     label: 'XP earned',
                     value: '+${result.xpAwarded}',
                   ),
+                  if (widget.dailyGoalMinutes != null)
+                    _StatCard(
+                      icon: Icons.flag_outlined,
+                      iconColor: AppColors.gold,
+                      label: 'Daily goal',
+                      value: '${widget.dailyGoalMinutes} minutes',
+                    ),
                   _StatCard(
                     icon: Icons.workspace_premium_outlined,
                     iconColor: AppColors.success,
