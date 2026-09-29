@@ -181,7 +181,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-07-10-02-capstone-3bet' ||
       lessonId == 'lesson-07-10-02' ||
       lessonId == 'lesson-07-10-03-capstone-multiway-deep' ||
-      lessonId == 'lesson-07-10-03';
+      lessonId == 'lesson-07-10-03' ||
+      lessonId == 'lesson-07-10-04-capstone-limped' ||
+      lessonId == 'lesson-07-10-04';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -508,12 +510,17 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
     return 'Capstone multiway deep. No hints. '
         'Tap Nuts, then Deep, then No-bluff.';
   }
+  if (activity.id == 'act-07-10-04-explain') {
+    return 'Capstone limped pot. Crowded. No hints. '
+        'Tap Nuts, then Value, then Thin.';
+  }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||
           activity.id == 'act-04-03-01-guided' ||
           activity.id == 'act-07-10-01-hand' ||
           activity.id == 'act-07-10-02-hand' ||
-          activity.id == 'act-07-10-03-hand') &&
+          activity.id == 'act-07-10-03-hand' ||
+          activity.id == 'act-07-10-04-hand') &&
       activity.handSteps.isNotEmpty) {
     final last = activity.handSteps.length - 1;
     final index = handStepIndex < 0

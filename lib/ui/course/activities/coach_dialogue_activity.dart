@@ -1138,12 +1138,27 @@ class CoachDialogueActivity extends StatelessWidget {
             },
           );
         }
-        if (framed && visual.kind == CoachDialogueVisualKind.capstoneMultiwayDeep) {
+        if (framed &&
+            visual.kind == CoachDialogueVisualKind.capstoneMultiwayDeep) {
           return LayoutBuilder(
             builder: (context, constraints) {
               final bounded =
                   constraints.maxHeight.isFinite ? constraints.maxHeight : null;
               return CapstoneMultiwayDeepDemo(
+                interactive: true,
+                enabled: !locked,
+                onAllPointsTapped: locked ? null : onFeltAcknowledge,
+                height: bounded,
+              );
+            },
+          );
+        }
+        if (framed && visual.kind == CoachDialogueVisualKind.capstoneLimped) {
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final bounded =
+                  constraints.maxHeight.isFinite ? constraints.maxHeight : null;
+              return CapstoneLimpedDemo(
                 interactive: true,
                 enabled: !locked,
                 onAllPointsTapped: locked ? null : onFeltAcknowledge,
