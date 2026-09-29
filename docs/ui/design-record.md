@@ -426,7 +426,9 @@ review coolers fairly uses the same frame: hard, cooler, and ego stay
 in the stage, the cooler, ego, and review checks stay lists, and the
 weak-kicker fold sits face up on the full table. Observe selective
 aggression uses the same frame: tight, barrel, and sample stay in the
-stage, and the entry quizzes stay lists. The procedure for the
+stage, and the entry quizzes stay lists. Meet the TAG uses the same
+frame: tight, aggro, and model stay in the stage, and the label
+quizzes stay lists. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
