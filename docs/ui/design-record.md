@@ -360,7 +360,10 @@ each nit spot sits face up on the full table, and the respect reason
 stays a list. Observe wild aggressors uses the same frame: raise,
 barrel, and count stay in the stage, and the entry quizzes stay lists.
 Meet the Maniac uses the same frame: maniac, entry, and aggro stay in
-the stage, and the label quizzes stay lists. The procedure for the
+the stage, and the label quizzes stay lists. Adjust versus Maniac
+uses the same frame: wider, hang, and ego stay in the stage, each
+maniac spot sits face up on the full table, and the call-wider reason
+stays a list. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
