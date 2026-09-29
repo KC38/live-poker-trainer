@@ -365,7 +365,9 @@ uses the same frame: wider, hang, and ego stay in the stage, each
 maniac spot sits face up on the full table, and the call-wider reason
 stays a list. Confidence and samples uses the same frame: observe,
 samples, and showdowns stay in the stage, and the confidence quizzes
-stay lists. The procedure for the
+stay lists. Same hand, different types uses the same frame: cards,
+seats, and evidence stay in the stage, and each type spot sits face up
+on the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
