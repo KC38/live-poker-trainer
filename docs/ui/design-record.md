@@ -132,6 +132,12 @@ A missing slot (Rex still text-only, a deal with no motion, a table action
 with no `SoundService` call) is a ticket that names the slot. The walk does
 not generate the file. The implementer adds it and fills the row.
 
+The Live Training hub shows `assets/brand/logo_mark.png` above the lock or the table entry.
+
+### Shipped
+
+The Live Training hub shows `assets/brand/logo_mark.png` in `_LiveAccessGate` and the open table entry of `LiveTrainingScreen` (`lib/ui/screens/live_training_screen.dart`). Auth uses the same file in `lib/ui/screens/auth_screen.dart`.
+
 ## Gamified learning
 
 Lessons teach like a game. The loop is
