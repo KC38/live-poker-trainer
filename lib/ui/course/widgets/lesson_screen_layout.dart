@@ -39,7 +39,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-02-02-01-hand-families' ||
       lessonId == 'lesson-02-02-01' ||
       lessonId == 'lesson-02-03-01-open-fold' ||
-      lessonId == 'lesson-02-03-01';
+      lessonId == 'lesson-02-03-01' ||
+      lessonId == 'lesson-02-04-01-facing-raise' ||
+      lessonId == 'lesson-02-04-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -101,6 +103,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-02-03-01-explain-open') {
     return 'Early is tight. The button opens wider. '
         'Tap Early, then Button, then Live 3x.';
+  }
+  if (activity.id == 'act-02-04-01-explain-vs') {
+    return 'Weak hands fold. Playable hands call. '
+        'Tap Fold, then Call, then 3-bet.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand') &&

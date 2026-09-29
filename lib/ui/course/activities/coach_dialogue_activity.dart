@@ -242,6 +242,20 @@ class CoachDialogueActivity extends StatelessWidget {
             },
           );
         }
+        if (framed && visual.kind == CoachDialogueVisualKind.vsOpenResponse) {
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final bounded =
+                  constraints.maxHeight.isFinite ? constraints.maxHeight : null;
+              return VsOpenResponseDemo(
+                interactive: true,
+                enabled: !locked,
+                onAllResponsesTapped: locked ? null : onFeltAcknowledge,
+                height: bounded,
+              );
+            },
+          );
+        }
         if (framed && visual.kind == CoachDialogueVisualKind.positionLabels) {
           return LessonTableStage(
             villainCount: lessonBlindsVillainCount,

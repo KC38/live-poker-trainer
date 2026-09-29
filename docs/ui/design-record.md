@@ -301,7 +301,9 @@ preflop order is EP, then HJ, then BTN on that table. Hand families
 uses the same frame: the family list stays in the stage, and a
 starting hand sits face up on the full table. Open or fold baseline
 uses the same frame: early, button, and live size stay in the stage,
-and each open sits face up on the full table. The procedure for the
+and each open sits face up on the full table. Versus an open uses
+the same frame: fold, call, and 3-bet stay in the stage, and each
+response sits face up on the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
