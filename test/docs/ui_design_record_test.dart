@@ -31,6 +31,18 @@ void main() {
     expect(
       text,
       contains(
+        'A right answer shows Rex’s own face in a celebrating mood beside the short line. The calm portrait and the celebrating portrait are the same coach. The Asset inventory celebrate row uses that same face.',
+      ),
+    );
+    expect(
+      text,
+      contains(
+        'Rex’s own face, celebrating mood, the same coach as the calm portrait',
+      ),
+    );
+    expect(
+      text,
+      contains(
         'The locked Live Training hub names the Home lesson that unlocks it. It does not say Section 2.',
       ),
     );
