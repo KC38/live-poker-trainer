@@ -9,6 +9,19 @@ void main() {
   test('design record keeps the table, theme, and asset contract', () {
     final text = File('docs/ui/design-record.md').readAsStringSync();
     expect(text, contains('## How a change is recorded'));
+    expect(
+      text,
+      contains(
+        'A layout change that can overflow at phone width names the Lesson tables sentence it will write, and the same change includes a widget test that fails on overflow.',
+      ),
+    );
+    expect(
+      text,
+      contains(
+        'Scaling the row down with `FittedBox` is not a substitute for that rule.',
+      ),
+    );
+    expect(text, contains('Button and blinds (LPT-36)'));
     expect(text, contains('## Theme'));
     expect(text, contains('## Poker table'));
     expect(text, contains('## Lesson tables'));
@@ -64,6 +77,15 @@ void main() {
     expect(skill, contains('## Design record'));
     expect(skill, contains('duolingo-chess/PATTERNS.md'));
     expect(skill, contains('**Game loop.**'));
+    expect(skill, contains('An overflow stripe is a Bug, including under 2px.'));
+    expect(
+      File('.cursor/skills/implement-open-jira/SKILL.md').readAsStringSync(),
+      contains('fails on overflow'),
+    );
+    expect(
+      File('.cursor/skills/implement-open-jira/SKILL.md').readAsStringSync(),
+      contains('Button and blinds (LPT-36)'),
+    );
     expect(
       File('docs/ui/references/duolingo-chess/frames/001.png').existsSync(),
       isTrue,

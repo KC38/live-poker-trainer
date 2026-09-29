@@ -65,6 +65,10 @@ When the ticket has the `ui` label, or it names `docs/ui/design-record.md`:
   as the widget or asset. The file must say what the ticket said it would
   say, including a `Shipped` note with the widget or asset path.
 - The close comment names that section and quotes the sentence that landed.
+- A layout ticket is not done until the named design-record sentence is in
+  the same change, and a widget test pumps that phase layout at phone
+  width and fails on overflow. Button and blinds (LPT-36) is the first
+  screen. Its test is `test/ui/course/blinds_timing_felt_test.dart`.
 
 ## Queue
 
