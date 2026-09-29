@@ -24,6 +24,8 @@ import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/services/auth_service.dart';
 import 'package:live_poker_trainer/services/firestore/course_service.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_result_screen.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_runner_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
@@ -100,8 +102,9 @@ class _ScriptedCourseService extends CourseService {
         activityId == 'act-01-01-01-explain-hole-cards' ||
         choiceId == 'choice-hero-holes' ||
         choiceId == 'choice-only-you';
-    final nextIndex =
-        accepted ? (index + 1).clamp(0, activities.length - 1) : index;
+    final nextIndex = accepted
+        ? (index + 1).clamp(0, activities.length - 1)
+        : index;
     return SubmitCourseStepResult(
       attemptId: attemptId,
       activityId: activityId,
@@ -594,6 +597,58 @@ void main() {
     }
     expect(find.textContaining('Ace is high here.'), findsOneWidget);
     expect(find.text('Could not start the lesson'), findsNothing);
+  });
+
+  testWidgets('suits and ranks uses the lesson frame, not a title bar', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final locked = _PrerequisiteLockedCourseService(catalog);
+    locked.previousComplete = true;
+    await tester.pumpWidget(
+      _app(
+        LessonRunnerScreen(
+          lessonId: 'lesson-01-01-02-suits-and-ranks',
+          courseService: locked,
+          startRequestId: 'start_suits_frame',
+        ),
+        catalog: catalog,
+      ),
+    );
+    await tester.pump();
+    for (
+      var i = 0;
+      i < 40 && find.textContaining('Ace is high here.').evaluate().isEmpty;
+      i++
+    ) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+
+    expect(find.byType(AppBar), findsNothing);
+    expect(find.text('Suits and ranks'), findsNothing);
+    expect(find.byTooltip('Close'), findsOneWidget);
+    expect(find.byIcon(Icons.favorite), findsNWidgets(3));
+    expect(find.textContaining('Ace is high here.'), findsOneWidget);
+    expect(find.byTooltip('Undo'), findsOneWidget);
+    expect(find.byTooltip('Redo'), findsOneWidget);
+    expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('suits-ranks-felt')), findsOneWidget);
+    expect(find.byType(SuitTapTile), findsNWidgets(4));
+
+    final bubble = find.byKey(const ValueKey<String>('lesson-speech-bubble'));
+    final speech = find.textContaining('Ace is high here.');
+    expect(
+      tester.getTopLeft(speech).dy,
+      greaterThan(tester.getTopLeft(bubble).dy),
+    );
+    expect(
+      tester.getSize(find.byKey(const ValueKey('suits-ranks-felt'))).height,
+      lessThanOrEqualTo(tester.getSize(find.byType(LessonScreenLayout)).height),
+    );
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('hung startLesson surfaces retry instead of empty spinner', (
