@@ -202,17 +202,19 @@ class _LessonFeedbackSheetState extends State<LessonFeedbackSheet>
                   ],
                 ),
                 const SizedBox(height: 8),
-                if (widget.result.accepted)
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const RexMascot(size: 40, mood: RexMood.celebrate),
-                      const SizedBox(width: 10),
-                      Expanded(child: _feedbackLine()),
-                    ],
-                  )
-                else
-                  _feedbackLine(),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RexMascot(
+                      size: 40,
+                      mood: widget.result.accepted
+                          ? RexMood.celebrate
+                          : RexMood.think,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(child: _feedbackLine()),
+                  ],
+                ),
                 if (widget.betterChoiceLabel != null) ...[
                   const SizedBox(height: 10),
                   // Recovery chip — short learner cue for the right tap.

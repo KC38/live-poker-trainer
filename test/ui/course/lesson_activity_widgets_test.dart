@@ -22195,7 +22195,9 @@ await tester.tap(find.text('NIT'));
     await tester.pumpAndSettle();
     expect(find.text('Think again'), findsOneWidget);
     expect(find.bySemanticsLabel('Rex, celebrating'), findsNothing);
-    expect(find.byType(RexMascot), findsNothing);
+    expect(find.bySemanticsLabel('Rex, thinking'), findsOneWidget);
+    final mascot = tester.widget<RexMascot>(find.byType(RexMascot));
+    expect(mascot.mood, RexMood.think);
   });
 
   testWidgets('default Rex portrait stays the calm prompt face', (tester) async {
