@@ -115,6 +115,23 @@ void main() {
     expect(wrapped.positionLabel(1), 'BB');
   });
 
+  test('position labels replace villain names around the ring', () {
+    final game = lessonTableStageGame(
+      villainCount: lessonBlindsVillainCount,
+      positionLabels: true,
+    );
+
+    expect(game.players.map((player) => player.name), [
+      'EP',
+      'HJ',
+      'CO',
+      'BTN',
+      'SB',
+      'BB',
+    ]);
+    expect(game.hero.holeCards.map((card) => card.code), ['Ah', 'Kd']);
+  });
+
   test('explicit blinds replace the clockwise default', () {
     final game = lessonTableStageGame(
       villainCount: lessonBlindsVillainCount,

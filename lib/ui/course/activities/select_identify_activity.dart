@@ -1351,6 +1351,68 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                   ),
                 )
               else if (LessonFrameScope.maybeOf(context) != null &&
+                  widget.activity.id.startsWith('act-02-01-01-'))
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: LessonTableStage(
+                          villainCount: lessonBlindsVillainCount,
+                          dealerIndex: lessonBlindsButtonIndex,
+                          sbIndex: lessonBlindsSmallBlindIndex,
+                          bbIndex: lessonBlindsBigBlindIndex,
+                          positionLabels: true,
+                          activeSeatIndex: switch (scene.highlight) {
+                            LessonTableHighlight.button =>
+                              lessonBlindsButtonIndex,
+                            LessonTableHighlight.smallBlind =>
+                              lessonBlindsSmallBlindIndex,
+                            LessonTableHighlight.bigBlind =>
+                              lessonBlindsBigBlindIndex,
+                            LessonTableHighlight.cutoff => 2,
+                            LessonTableHighlight.hijack => 1,
+                            LessonTableHighlight.earlyPosition => 0,
+                            _ => null,
+                          },
+                          enabled: !locked,
+                          onSeatIndexTap:
+                              locked
+                                  ? null
+                                  : (index) {
+                                    final region = switch (index) {
+                                      0 => LessonTableRegion.earlyPosition,
+                                      1 => LessonTableRegion.hijack,
+                                      2 => LessonTableRegion.cutoff,
+                                      lessonBlindsButtonIndex =>
+                                        LessonTableRegion.button,
+                                      lessonBlindsSmallBlindIndex =>
+                                        LessonTableRegion.smallBlind,
+                                      lessonBlindsBigBlindIndex =>
+                                        LessonTableRegion.bigBlind,
+                                      _ => null,
+                                    };
+                                    if (region == null) return;
+                                    _submitRegion(LessonTableTapTarget(region));
+                                  },
+                        ),
+                      ),
+                      for (final choice in widget.activity.choices)
+                        if (choice.id == 'same-always')
+                          TextButton(
+                            onPressed:
+                                locked
+                                    ? null
+                                    : () => widget.controller.selectChoice(
+                                      choice.id,
+                                      autoSubmit: true,
+                                    ),
+                            child: Text(choice.label),
+                          ),
+                    ],
+                  ),
+                )
+              else if (LessonFrameScope.maybeOf(context) != null &&
                   widget.activity.id.startsWith('act-01-01-01-'))
                 Expanded(
                   child: LessonTableStage(

@@ -32,7 +32,7 @@ const int lessonBlindsRightOfButtonIndex = 2;
 /// [dealerIndex] leaves the hero on the button. Otherwise the small blind and
 /// big blind sit one and two seats clockwise from the button, unless
 /// [sbIndex] or [bbIndex] is set, and no seat glows unless [activeSeatIndex]
-/// is set.
+/// is set. [positionLabels] renames the ring EP, HJ, CO, BTN, SB, BB.
 GameState lessonTableStageGame({
   List<String> heroCodes = const ['Ah', 'Kd'],
   List<String> boardCodes = const [],
@@ -42,6 +42,7 @@ GameState lessonTableStageGame({
   int? sbIndex,
   int? bbIndex,
   int? activeSeatIndex,
+  bool positionLabels = false,
 }) {
   final base = lessonBandGame(
     heroCodes: heroCodes,
@@ -70,7 +71,14 @@ GameState lessonTableStageGame({
     );
     villain += 1;
   }
-  final named = base.copyWith(players: players);
+  const positions = ['EP', 'HJ', 'CO', 'BTN', 'SB', 'BB'];
+  final seated = positionLabels
+      ? [
+          for (var i = 0; i < players.length; i++)
+            players[i].copyWith(name: positions[i % positions.length]),
+        ]
+      : players;
+  final named = base.copyWith(players: seated);
   if (dealerIndex == null) return named;
   final seats = named.players.length;
   return named.copyWith(
@@ -113,6 +121,7 @@ class LessonTableStage extends StatelessWidget {
     this.onVillainTap,
     this.onBoardTap,
     this.onSeatIndexTap,
+    this.positionLabels = false,
   });
 
   /// Hero hole cards. Hidden until [heroFaceUp] is true.
@@ -160,6 +169,9 @@ class LessonTableStage extends StatelessWidget {
   /// Learner tapped a seat. The value is that seat's index in the hand.
   final ValueChanged<int>? onSeatIndexTap;
 
+  /// Rename the six-max ring EP, HJ, CO, BTN, SB, BB.
+  final bool positionLabels;
+
   GameState get _game => lessonTableStageGame(
     heroCodes: heroCodes,
     boardCodes: boardCodes,
@@ -169,6 +181,7 @@ class LessonTableStage extends StatelessWidget {
     sbIndex: sbIndex,
     bbIndex: bbIndex,
     activeSeatIndex: activeSeatIndex,
+    positionLabels: positionLabels,
   );
 
   @override
