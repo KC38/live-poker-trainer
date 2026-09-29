@@ -70,6 +70,42 @@ void main() {
     );
   });
 
+  test('a keychain user from another install signs out', () {
+    expect(
+      guestInstallAction(
+        anonymous: true,
+        uid: 'keychain-guest',
+        storedInstallUid: 'this-install',
+        discardRestoredAnonymous: false,
+        hasOnboardingDraft: true,
+      ),
+      GuestInstallAction.signOut,
+    );
+  });
+
+  test('an empty anonymous uid is left alone', () {
+    expect(
+      guestInstallAction(
+        anonymous: true,
+        uid: '',
+        storedInstallUid: null,
+        discardRestoredAnonymous: true,
+        hasOnboardingDraft: false,
+      ),
+      GuestInstallAction.keep,
+    );
+    expect(
+      guestInstallAction(
+        anonymous: true,
+        uid: null,
+        storedInstallUid: null,
+        discardRestoredAnonymous: true,
+        hasOnboardingDraft: false,
+      ),
+      GuestInstallAction.keep,
+    );
+  });
+
   test('a linked account is not a guest install', () {
     expect(
       guestInstallAction(
@@ -100,6 +136,33 @@ void main() {
   test('the first launch with a draft keeps the guest', () async {
     SharedPreferences.setMockInitialValues(<String, Object>{
       onboardingDraftPrefsKey: '{"step":"done"}',
+    });
+    final prefs = await SharedPreferences.getInstance();
+    await markGuestInstallGeneration(prefs);
+    expect(prefs.getBool(discardRestoredAnonymousKey), isFalse);
+  });
+
+  test('an empty draft still discards the keychain user', () async {
+    SharedPreferences.setMockInitialValues(<String, Object>{
+      onboardingDraftPrefsKey: '',
+    });
+    final prefs = await SharedPreferences.getInstance();
+    await markGuestInstallGeneration(prefs);
+    expect(prefs.getBool(discardRestoredAnonymousKey), isTrue);
+  });
+
+  test('a claimed install is not marked for discard', () async {
+    SharedPreferences.setMockInitialValues(<String, Object>{
+      guestInstallUidKey: 'this-guest',
+    });
+    final prefs = await SharedPreferences.getInstance();
+    await markGuestInstallGeneration(prefs);
+    expect(prefs.containsKey(discardRestoredAnonymousKey), isFalse);
+  });
+
+  test('an existing discard mark is left alone', () async {
+    SharedPreferences.setMockInitialValues(<String, Object>{
+      discardRestoredAnonymousKey: false,
     });
     final prefs = await SharedPreferences.getInstance();
     await markGuestInstallGeneration(prefs);

@@ -24,6 +24,7 @@ import {
   localDateString,
   parseCourseFlags,
   shouldAdvanceActivityAfterSubmit,
+  XP_LESSON_COMPLETE,
   XP_PER_ACCEPTED_STEP,
   type CourseFlags,
 } from "./course_session";
@@ -214,11 +215,11 @@ describe("soft grading and life loss", () => {
     )!;
     expect(gradeCourseResponse({
       activity: unguided,
-      numericValue: 9,
+      choiceId: "pot-9",
     })).toMatchObject({grade: "recommended", accepted: true, lifeLost: false});
     expect(gradeCourseResponse({
       activity: unguided,
-      numericValue: 3,
+      choiceId: "pot-7",
     })).toMatchObject({
       grade: "clear_mistake",
       accepted: false,
@@ -226,8 +227,13 @@ describe("soft grading and life loss", () => {
     });
     expect(gradeCourseResponse({
       activity: unguided,
-      numericValue: 9,
-    }).accepted).toBe(true);
+      choiceId: "pot-12",
+    })).toMatchObject({
+      grade: "clear_mistake",
+      accepted: false,
+      lifeLost: true,
+      betterChoiceId: "pot-9",
+    });
   });
 
   it("auto-passes explain and coach_dialogue without a client answer", () => {
@@ -490,6 +496,16 @@ describe("lesson completion cursor", () => {
     expect(lesson.activities.length).toBe(5);
     expect(lessonXpTotal(lesson.activities.length * XP_PER_ACCEPTED_STEP)).toBe(
       75,
+    );
+  });
+
+  it("drops corrupt step XP and adds the completion bonus once", () => {
+    expect(lessonXpTotal(0)).toBe(XP_LESSON_COMPLETE);
+    expect(lessonXpTotal(-10)).toBe(XP_LESSON_COMPLETE);
+    expect(lessonXpTotal(Number.NaN)).toBe(XP_LESSON_COMPLETE);
+    expect(lessonXpTotal(Number.POSITIVE_INFINITY)).toBe(XP_LESSON_COMPLETE);
+    expect(lessonXpTotal(XP_PER_ACCEPTED_STEP)).toBe(
+      XP_PER_ACCEPTED_STEP + XP_LESSON_COMPLETE,
     );
   });
 
