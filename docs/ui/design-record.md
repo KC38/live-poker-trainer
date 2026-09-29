@@ -337,7 +337,9 @@ frame: one hand, range, and update stay in the stage, and the
 bet-twice and same-board spots sit face up on the full table.
 Navigate 3-bet pots uses the same frame: 3-bet, ranges, and squeeze
 stay in the stage, and each 3-bet spot sits face up on the full
-table. The procedure for the
+table. Plan beyond the flop uses the same frame: flop, turn, and
+river stay in the stage, and each street of the plan sits face up
+on the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 

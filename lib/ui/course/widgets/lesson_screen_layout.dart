@@ -71,7 +71,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-04-01-01-ranges-not-hands' ||
       lessonId == 'lesson-04-01-01' ||
       lessonId == 'lesson-04-02-01-threebet-squeeze' ||
-      lessonId == 'lesson-04-02-01';
+      lessonId == 'lesson-04-02-01' ||
+      lessonId == 'lesson-04-03-01-continuation-plans' ||
+      lessonId == 'lesson-04-03-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -190,8 +192,13 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
     return '3-bets define ranges. Squeezes punish flats. '
         'Tap 3-bet, then Ranges, then Squeeze.';
   }
+  if (activity.id == 'act-04-03-01-explain') {
+    return 'Every flop choice needs a turn and a river. '
+        'Tap Flop, then Turn, then River.';
+  }
   if ((activity.id.startsWith('act-01-06-01-') ||
-          activity.id == 'act-01-06-02-jump-hand') &&
+          activity.id == 'act-01-06-02-jump-hand' ||
+          activity.id == 'act-04-03-01-guided') &&
       activity.handSteps.isNotEmpty) {
     final last = activity.handSteps.length - 1;
     final index = handStepIndex < 0
