@@ -151,7 +151,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-06-12-01-observe-wide-pressure' ||
       lessonId == 'lesson-06-12-01' ||
       lessonId == 'lesson-06-12-02-meet-lag' ||
-      lessonId == 'lesson-06-12-02';
+      lessonId == 'lesson-06-12-02' ||
+      lessonId == 'lesson-06-12-03-adjust-lag' ||
+      lessonId == 'lesson-06-12-03';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -421,6 +423,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-06-12-02-explain') {
     return 'LAG: wide in, pressure on — still a working model. '
         'Tap Wide, then Pressure, then Model.';
+  }
+  if (activity.id == 'act-06-12-03-explain') {
+    return 'Versus LAG: trap more, call wider, fancy less. '
+        'Tap Call, then Trap, then Fancy less.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||

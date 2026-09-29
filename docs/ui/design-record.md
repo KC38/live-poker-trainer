@@ -434,7 +434,10 @@ list, and the heat, steal, and thin-value spots sit face up on the
 full table. Observe wide sustained pressure uses the same frame: wide,
 pressure, and sample stay in the stage, and the entry quizzes stay
 lists. Meet the LAG uses the same frame: wide, pressure, and model stay
-in the stage, and the label quizzes stay lists. The procedure for the
+in the stage, and the label quizzes stay lists. Adjust versus LAG uses
+the same frame: call, trap, and fancy less stay in the stage, the
+avoid and cite checks stay lists, and the call-wider and trap spots
+sit face up on the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
