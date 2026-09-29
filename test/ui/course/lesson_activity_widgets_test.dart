@@ -18,6 +18,7 @@ import 'package:live_poker_trainer/ui/course/activities/poker_action_sizing_acti
 import 'package:live_poker_trainer/ui/course/activities/select_identify_activity.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/guardrails_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/range_advantage_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/equity_realize_demo.dart';
@@ -19158,6 +19159,53 @@ await tester.tap(find.text('NIT'));
     await tester.tap(find.text('Ace blocker'));
     await tester.pump();
     expect(controller.draft.choiceId, 'as');
+    controller.dispose();
+  });
+
+  testWidgets('s6 blockers guided frame shows the flush board', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-06-06-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Ace of the suit.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'River bluff on completed flush board. Better blocker?',
+      choices: const [
+        CourseChoice(id: 'as', label: 'Ace blocker'),
+        CourseChoice(id: 'off', label: 'No blockers'),
+        CourseChoice(id: 'ev', label: 'Fake +EV'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SizedBox(
+          height: 640,
+          child: LessonFrameScope(
+            onLocalMiss: (_) {},
+            child: SelectIdentifyActivity(
+              activity: activity,
+              controller: controller,
+              showGuidance: true,
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(
+      find.byKey(const ValueKey<String>('lesson-table-stage')),
+      findsOneWidget,
+    );
+    expect(find.text('Ace blocker'), findsOneWidget);
+    expect(find.text('Ah'), findsNothing);
+    expect(find.text('Kd'), findsNothing);
+    await tester.tap(find.text('Ace blocker'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'as');
+    expect(tester.takeException(), isNull);
     controller.dispose();
   });
 
