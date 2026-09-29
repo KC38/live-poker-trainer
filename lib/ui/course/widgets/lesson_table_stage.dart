@@ -25,6 +25,62 @@ const int lessonBlindsBigBlindIndex = 5;
 /// Felt index immediately counterclockwise from the button.
 const int lessonBlindsRightOfButtonIndex = 2;
 
+/// Hand drawn by [LessonTableStage].
+///
+/// Villains take the names Sam, Jo, Rio, Max, and Kai, then repeat. The first
+/// opponent shows [villainCodes] only when that list has two cards. A null
+/// [dealerIndex] leaves the hero on the button. Otherwise the small blind and
+/// big blind sit one and two seats clockwise from the button, unless
+/// [sbIndex] or [bbIndex] is set, and no seat glows unless [activeSeatIndex]
+/// is set.
+GameState lessonTableStageGame({
+  List<String> heroCodes = const ['Ah', 'Kd'],
+  List<String> boardCodes = const [],
+  List<String> villainCodes = const [],
+  int villainCount = 3,
+  int? dealerIndex,
+  int? sbIndex,
+  int? bbIndex,
+  int? activeSeatIndex,
+}) {
+  final base = lessonBandGame(
+    heroCodes: heroCodes,
+    boardCodes: boardCodes,
+    villainSeatCount: villainCount,
+  );
+  const names = ['Sam', 'Jo', 'Rio', 'Max', 'Kai'];
+  var villain = 0;
+  final players = <PlayerModel>[];
+  for (final player in base.players) {
+    if (player.isHero) {
+      players.add(player);
+      continue;
+    }
+    final showHoles = villain == 0 && villainCodes.length >= 2;
+    players.add(
+      player.copyWith(
+        name: names[villain % names.length],
+        holeCards: showHoles
+            ? [
+                for (final code in villainCodes.take(2))
+                  CardModel.fromCode(code),
+              ]
+            : player.holeCards,
+      ),
+    );
+    villain += 1;
+  }
+  final named = base.copyWith(players: players);
+  if (dealerIndex == null) return named;
+  final seats = named.players.length;
+  return named.copyWith(
+    dealerIndex: dealerIndex,
+    sbIndex: sbIndex ?? (dealerIndex + 1) % seats,
+    bbIndex: bbIndex ?? (dealerIndex + 2) % seats,
+    activePlayerIndex: activeSeatIndex ?? -1,
+  );
+}
+
 /// Where the stage draws its arrows.
 enum LessonTableCue {
   /// No arrow.
@@ -104,53 +160,25 @@ class LessonTableStage extends StatelessWidget {
   /// Learner tapped a seat. The value is that seat's index in the hand.
   final ValueChanged<int>? onSeatIndexTap;
 
-  GameState get _game {
-    final base = lessonBandGame(
-      heroCodes: heroCodes,
-      boardCodes: boardCodes,
-      villainSeatCount: villainCount,
-    );
-    const names = ['Sam', 'Jo', 'Rio', 'Max', 'Kai'];
-    var villain = 0;
-    final players = <PlayerModel>[];
-    for (final player in base.players) {
-      if (player.isHero) {
-        players.add(player);
-        continue;
-      }
-      final showHoles = villain == 0 && villainCodes.length >= 2;
-      players.add(
-        player.copyWith(
-          name: names[villain % names.length],
-          holeCards:
-              showHoles
-                  ? [
-                    for (final code in villainCodes.take(2))
-                      CardModel.fromCode(code),
-                  ]
-                  : player.holeCards,
-        ),
-      );
-      villain += 1;
-    }
-    final named = base.copyWith(players: players);
-    if (dealerIndex == null) return named;
-    final seats = named.players.length;
-    return named.copyWith(
-      dealerIndex: dealerIndex,
-      sbIndex: sbIndex ?? (dealerIndex! + 1) % seats,
-      bbIndex: bbIndex ?? (dealerIndex! + 2) % seats,
-      activePlayerIndex: activeSeatIndex ?? -1,
-    );
-  }
+  GameState get _game => lessonTableStageGame(
+    heroCodes: heroCodes,
+    boardCodes: boardCodes,
+    villainCodes: villainCodes,
+    villainCount: villainCount,
+    dealerIndex: dealerIndex,
+    sbIndex: sbIndex,
+    bbIndex: bbIndex,
+    activeSeatIndex: activeSeatIndex,
+  );
 
   @override
   Widget build(BuildContext context) {
     final game = _game;
     return LayoutBuilder(
       builder: (context, constraints) {
-        final height =
-            constraints.maxHeight.isFinite ? constraints.maxHeight : 360.0;
+        final height = constraints.maxHeight.isFinite
+            ? constraints.maxHeight
+            : 360.0;
         return SizedBox(
           key: const ValueKey<String>('lesson-table-stage'),
           height: height,
@@ -166,31 +194,29 @@ class LessonTableStage extends StatelessWidget {
             },
             highlightHero: cue == LessonTableCue.hero && !heroFaceUp,
             highlightBoard: cue == LessonTableCue.board,
-            onBoardTap:
-                !enabled || onBoardTap == null
-                    ? null
-                    : () {
-                      HapticFeedback.selectionClick();
-                      onBoardTap!();
-                    },
-            onSeatTap:
-                !enabled
-                    ? null
-                    : (PlayerModel player) {
-                      HapticFeedback.selectionClick();
-                      if (onSeatIndexTap != null) {
-                        final index = game.players.indexWhere(
-                          (seat) => seat.id == player.id,
-                        );
-                        if (index >= 0) onSeatIndexTap!(index);
-                        return;
-                      }
-                      if (player.isHero) {
-                        onHeroTap?.call();
-                        return;
-                      }
-                      onVillainTap?.call(player.id);
-                    },
+            onBoardTap: !enabled || onBoardTap == null
+                ? null
+                : () {
+                    HapticFeedback.selectionClick();
+                    onBoardTap!();
+                  },
+            onSeatTap: !enabled
+                ? null
+                : (PlayerModel player) {
+                    HapticFeedback.selectionClick();
+                    if (onSeatIndexTap != null) {
+                      final index = game.players.indexWhere(
+                        (seat) => seat.id == player.id,
+                      );
+                      if (index >= 0) onSeatIndexTap!(index);
+                      return;
+                    }
+                    if (player.isHero) {
+                      onHeroTap?.call();
+                      return;
+                    }
+                    onVillainTap?.call(player.id);
+                  },
           ),
         );
       },
