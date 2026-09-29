@@ -346,7 +346,9 @@ SPR, low, and high stay in the stage, and each commitment spot sits
 face up on the full table. Observe sticky callers uses the same
 frame: enters, calls, and folds stay in the stage, the participation
 note and the observation bundle stay lists, and the sticky-call and
-low-confidence spots sit face up on the full table. The procedure for the
+low-confidence spots sit face up on the full table. Meet the Calling
+Station uses the same frame: station, high, and low stay in the stage,
+and the label quizzes stay lists. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
