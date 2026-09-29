@@ -1317,7 +1317,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                       widget.activity.id == 'act-03-03-01-unguided' ||
                       widget.activity.id == 'act-03-03-01-checkpoint' ||
                       widget.activity.id == 'act-03-05-01-guided' ||
-                      widget.activity.id == 'act-03-05-01-checkpoint'))
+                      widget.activity.id == 'act-03-05-01-checkpoint' ||
+                      widget.activity.id == 'act-03-06-01-checkpoint'))
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,

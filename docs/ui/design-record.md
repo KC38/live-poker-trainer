@@ -322,8 +322,10 @@ draw sits face up on the full table. Choose a flop line uses the
 same frame: value, c-bet, check, call, fold, and raise stay in the
 stage, and each flop decision sits face up on the full table. Plan
 the turn card uses the same frame: brick, change, barrel, and delay
-stay in the stage, and each turn sits face up on the full table. The
-procedure for the
+stay in the stage, and each turn sits face up on the full table.
+Close the river correctly uses the same frame: value, bluff, catch,
+and fold stay in the stage, and each river sits face up on the full
+table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
