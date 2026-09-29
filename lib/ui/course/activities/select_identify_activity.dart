@@ -1475,8 +1475,20 @@ class _HandCategoryTapActivity extends StatelessWidget {
               ),
             ],
             if (scene != null) ...[
-              const SizedBox(height: 14),
-              LessonTableContext(scene: scene),
+              if (LessonFrameScope.maybeOf(context) != null &&
+                  activity.id == 'act-01-02-01-scaffolded-spot')
+                Expanded(
+                  child: LessonTableStage(
+                    heroCodes: scene.heroCodes,
+                    boardCodes: scene.boardCodes,
+                    villainCount: 1,
+                    heroFaceUp: true,
+                  ),
+                )
+              else ...[
+                const SizedBox(height: 14),
+                LessonTableContext(scene: scene),
+              ],
             ],
             const SizedBox(height: 14),
             Builder(
@@ -1796,6 +1808,23 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
     }
   }
 
+  void _chooseRegion(LessonTableRegion region) {
+    final scene = resolveLessonTableScene(widget.activity);
+    final target = LessonTableTapTarget(region);
+    final mapped = mapTableRegionToChoiceId(
+      activityId: widget.activity.id,
+      region: region,
+      choices: widget.activity.choices,
+    );
+    if (mapped == null) return;
+    setState(() => _selectedRegion = region);
+    widget.controller.selectChoice(
+      mapped,
+      autoSubmit: true,
+      seatLabel: scene == null ? null : seatLabelForTableTap(scene, target),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final scene = resolveLessonTableScene(widget.activity);
@@ -1817,6 +1846,9 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
                   activity: widget.activity,
                   fallback: _coachFallback,
                 );
+        final framedShowdown =
+            LessonFrameScope.maybeOf(context) != null &&
+            widget.activity.id == 'act-01-02-01-checkpoint-winner';
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -1833,7 +1865,32 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
                 ),
               ),
             ],
-            if (scene != null) ...[
+            if (framedShowdown && scene != null)
+              Expanded(
+                child: LessonTableStage(
+                  heroCodes: scene.heroCodes,
+                  boardCodes: scene.boardCodes,
+                  villainCodes: scene.villainCodes,
+                  villainCount: 1,
+                  heroFaceUp: true,
+                  enabled: !locked,
+                  onHeroTap:
+                      locked
+                          ? null
+                          : () => _chooseRegion(LessonTableRegion.handRankYouWin),
+                  onVillainTap:
+                      locked
+                          ? null
+                          : (_) => _chooseRegion(
+                            LessonTableRegion.handRankTheyWin,
+                          ),
+                  onBoardTap:
+                      locked
+                          ? null
+                          : () => _chooseRegion(LessonTableRegion.handRankChop),
+                ),
+              )
+            else if (scene != null) ...[
               const SizedBox(height: 12),
               LessonTableContext(
                 scene: scene,
@@ -1869,6 +1926,7 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
               if (i > 0) const SizedBox(height: 8),
               Builder(
                 builder: (context) {
+                  if (framedShowdown) return const SizedBox.shrink();
                   final choice = widget.activity.choices[i];
                   // Felt already teaches You vs Them — keep chop docks only.
                   if (feltInteractive &&

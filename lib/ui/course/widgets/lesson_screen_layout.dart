@@ -15,7 +15,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-01-01-02-suits-and-ranks' ||
       lessonId == 'lesson-01-01-02' ||
       lessonId == 'lesson-01-01-03-blinds-and-button' ||
-      lessonId == 'lesson-01-01-03';
+      lessonId == 'lesson-01-01-03' ||
+      lessonId == 'lesson-01-02-01-hand-ranks' ||
+      lessonId == 'lesson-01-02-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -31,6 +33,13 @@ String lessonFrameSpeech(CourseActivity activity) {
   if (activity.id == 'act-01-01-03-checkpoint-layout') {
     return 'The button has the D chip. Tap the small blind, '
         'one seat to its left.';
+  }
+  if (activity.id == 'act-01-02-01-explain-ladder') {
+    return 'Pair beats high card. Flush beats straight. Tap each rung.';
+  }
+  if (activity.id == 'act-01-02-01-checkpoint-winner') {
+    return 'Showdown. Tap your cards if the flush wins, their cards if '
+        'the straight wins, or the board to chop.';
   }
   final resolved = resolveLessonCoachPrompt(
     activity: activity,
