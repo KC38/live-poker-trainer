@@ -443,7 +443,10 @@ check stays a list, and the station, nit, and LAG spots sit face up on
 the full table. Section 6 checkpoint uses the same frame: the
 advantage, cap, polar, TAG, and LAG checks stay lists. Carry a preflop
 plan onto the flop uses the same frame: reason, confirm, and cancel
-stay in the stage, and the plan quizzes stay lists. The procedure for the
+stay in the stage, and the plan quizzes stay lists. Map turn barrels
+before you bet flop uses the same frame: barrel, give-up, and map stay
+in the stage, the no-plan and definition checks stay lists, and the
+continue and brick spots sit face up on the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
