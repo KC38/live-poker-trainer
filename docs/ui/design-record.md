@@ -484,7 +484,7 @@ Do not copy their palette, owl, or words.
 | --- | --- |
 | Step | The lesson screen layout: close, progress, hearts, one speech bubble, the stage, then undo / redo / hint. No title row. The stage is the full table only when the step is a hand. |
 | Right | The coach face turns happy. The dock says Nice! and one Continue. |
-| Wrong | The coach face turns wrong. The dock says Oops. Continue stays on the step. |
+| Wrong | The coach brings both arms in. The dock says Think again or Not quite. Continue stays on the step. |
 | Hint | Hint replaces the speech bubble until it is tapped again. |
 | Payoff | Lesson XP and the daily goal before Home. |
 | Home | A path. The next lesson is the marked node. Rex stands on it. |
@@ -505,6 +505,8 @@ File one ticket per missing beat.
 ### Shipped
 
 A right answer shows the same coach in a celebrating mood beside the short line. `LessonFeedbackSheet` (`lib/ui/course/widgets/lesson_feedback_sheet.dart`) uses `RexMascot` with `RexMood.celebrate` (`assets/brand/mascot_celebrate.png`). That drawing is the same coach as `assets/brand/mascot_idle.png`.
+
+A miss shows that coach thinking beside the short line. `LessonFeedbackSheet` uses `RexMascot` with `RexMood.think`. It does not celebrate.
 
 The locked Live Training hub names Baseline jump check in `liveTrainingLockedMessage` (`lib/models/live_access.dart`). That title is the Home node for `lesson-02-07-02-section-two-jump`.
 
