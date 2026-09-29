@@ -320,7 +320,9 @@ pay the right price uses the same frame: clean, dirty, and price
 stay in the stage, the clean aces stay a card picker, and a priced
 draw sits face up on the full table. Choose a flop line uses the
 same frame: value, c-bet, check, call, fold, and raise stay in the
-stage, and each flop decision sits face up on the full table. The
+stage, and each flop decision sits face up on the full table. Plan
+the turn card uses the same frame: brick, change, barrel, and delay
+stay in the stage, and each turn sits face up on the full table. The
 procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
