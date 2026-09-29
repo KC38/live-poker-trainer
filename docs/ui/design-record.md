@@ -433,7 +433,8 @@ tighter, and no light stay in the stage, the respect check stays a
 list, and the heat, steal, and thin-value spots sit face up on the
 full table. Observe wide sustained pressure uses the same frame: wide,
 pressure, and sample stay in the stage, and the entry quizzes stay
-lists. The procedure for the
+lists. Meet the LAG uses the same frame: wide, pressure, and model stay
+in the stage, and the label quizzes stay lists. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
