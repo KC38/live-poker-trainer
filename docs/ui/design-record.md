@@ -297,8 +297,10 @@ the full table. Section 1 jump check uses the same frame: rank and
 seat order stay lists, and the action spot and the toy hand use the
 full table. Position labels uses the same frame: the six-max seats
 are labeled on the full table. Acting order uses the same frame:
-preflop order is EP, then HJ, then BTN on that table. The procedure
-for the next lesson is
+preflop order is EP, then HJ, then BTN on that table. Hand families
+uses the same frame: the family list stays in the stage, and a
+starting hand sits face up on the full table. The procedure for the
+next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
 ## Gamified learning

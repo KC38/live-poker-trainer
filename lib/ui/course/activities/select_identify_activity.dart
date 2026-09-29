@@ -1643,12 +1643,14 @@ class _HandCategoryTapActivity extends StatelessWidget {
             ],
             if (scene != null) ...[
               if (LessonFrameScope.maybeOf(context) != null &&
-                  activity.id == 'act-01-02-01-scaffolded-spot')
+                  (activity.id == 'act-01-02-01-scaffolded-spot' ||
+                      activity.id.startsWith('act-02-02-01-')))
                 Expanded(
                   child: LessonTableStage(
                     heroCodes: scene.heroCodes,
                     boardCodes: scene.boardCodes,
-                    villainCount: 1,
+                    villainCount:
+                        activity.id.startsWith('act-02-02-01-') ? 0 : 1,
                     heroFaceUp: true,
                   ),
                 )
