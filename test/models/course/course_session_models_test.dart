@@ -101,6 +101,35 @@ void main() {
     expect(complete.lessonXpAwarded, isNull);
   });
 
+  test('complete result keeps the server lesson total', () {
+    final whole = CompleteCourseLessonResult.fromJson(<String, dynamic>{
+      'attemptId': 'att-1',
+      'lessonId': 'lesson-1',
+      'xpAwarded': 25,
+      'lessonXpAwarded': 75,
+      'mastery': 1,
+      'streak': 1,
+      'acceptedAccuracy': 1,
+      'liveTrainingGranted': false,
+      'duplicate': false,
+    });
+    final fractional = CompleteCourseLessonResult.fromJson(<String, dynamic>{
+      'attemptId': 'att-1',
+      'lessonId': 'lesson-1',
+      'xpAwarded': 25,
+      'lessonXpAwarded': 75.0,
+      'mastery': 1,
+      'streak': 1,
+      'acceptedAccuracy': 1,
+      'liveTrainingGranted': false,
+      'duplicate': true,
+    });
+    expect(whole.lessonXpAwarded, 75);
+    expect(whole.xpAwarded, 25);
+    expect(fractional.lessonXpAwarded, 75);
+    expect(fractional.duplicate, isTrue);
+  });
+
   test('displayed lesson XP is step awards plus the completion bonus', () {
     expect(displayedLessonXp(stepXpAwarded: 50, completionBonus: 25), 75);
     expect(
@@ -116,6 +145,22 @@ void main() {
         stepXpAwarded: 50,
         completionBonus: 25,
         lessonXpFromServer: 25,
+      ),
+      75,
+    );
+    expect(
+      displayedLessonXp(
+        stepXpAwarded: 20,
+        completionBonus: 25,
+        lessonXpFromServer: 75,
+      ),
+      75,
+    );
+    expect(
+      displayedLessonXp(
+        stepXpAwarded: 50,
+        completionBonus: 25,
+        lessonXpFromServer: 75,
       ),
       75,
     );
