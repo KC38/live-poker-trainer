@@ -97,7 +97,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-04-08-03-adjust-maniac' ||
       lessonId == 'lesson-04-08-03' ||
       lessonId == 'lesson-04-09-01-type-identification' ||
-      lessonId == 'lesson-04-09-01';
+      lessonId == 'lesson-04-09-01' ||
+      lessonId == 'lesson-04-10-01-exploit-checkpoints' ||
+      lessonId == 'lesson-04-10-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -267,6 +269,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-04-09-01-explain') {
     return 'Observation is not certainty. Confidence grows with samples and showdowns. '
         'Tap Observe, then Samples, then Showdowns.';
+  }
+  if (activity.id == 'act-04-10-01-explain') {
+    return 'Same cards. Different seats. Exploits change only with evidence. '
+        'Tap Cards, then Seats, then Evidence.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||
