@@ -129,7 +129,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-06-03-01-capped-uncapped' ||
       lessonId == 'lesson-06-03-01' ||
       lessonId == 'lesson-06-04-01-polar-merged' ||
-      lessonId == 'lesson-06-04-01';
+      lessonId == 'lesson-06-04-01' ||
+      lessonId == 'lesson-06-05-01-overbets-geometric' ||
+      lessonId == 'lesson-06-05-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -355,6 +357,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-06-04-01-explain') {
     return 'Polar: nuts or air. Merged: many medium-strong hands. Size accordingly. '
         'Tap Polar, then Merged, then Size.';
+  }
+  if (activity.id == 'act-06-05-01-explain') {
+    return 'Overbets need a polar story. Geometry links flop, turn, and river sizes. '
+        'Tap Overbet, then Polar, then Geo.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||
