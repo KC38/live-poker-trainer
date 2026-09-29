@@ -187,7 +187,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-07-10-05-capstone-4bet' ||
       lessonId == 'lesson-07-10-05' ||
       lessonId == 'lesson-07-11-01-live-warmup-prep' ||
-      lessonId == 'lesson-07-11-01';
+      lessonId == 'lesson-07-11-01' ||
+      lessonId == 'lesson-07-12-01-five-type-final' ||
+      lessonId == 'lesson-07-12-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
