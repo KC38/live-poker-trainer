@@ -1352,7 +1352,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                 )
               else if (LessonFrameScope.maybeOf(context) != null &&
                   (widget.activity.id.startsWith('act-02-01-01-') ||
-                      widget.activity.id == 'act-02-01-02-checkpoint-full'))
+                      widget.activity.id == 'act-02-01-02-checkpoint-full' ||
+                      widget.activity.id == 'act-02-07-02-jump-pos'))
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1364,7 +1365,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                           sbIndex: lessonBlindsSmallBlindIndex,
                           bbIndex: lessonBlindsBigBlindIndex,
                           positionLabels: true,
-                          activeSeatIndex: switch (scene.highlight) {
+                          activeSeatIndex:
+                              widget.activity.id == 'act-02-07-02-jump-pos'
+                                  ? null
+                                  : switch (scene.highlight) {
                             LessonTableHighlight.button =>
                               lessonBlindsButtonIndex,
                             LessonTableHighlight.smallBlind =>
@@ -1644,13 +1648,17 @@ class _HandCategoryTapActivity extends StatelessWidget {
             if (scene != null) ...[
               if (LessonFrameScope.maybeOf(context) != null &&
                   (activity.id == 'act-01-02-01-scaffolded-spot' ||
-                      activity.id.startsWith('act-02-02-01-')))
+                      activity.id.startsWith('act-02-02-01-') ||
+                      activity.id == 'act-02-07-02-jump-family'))
                 Expanded(
                   child: LessonTableStage(
                     heroCodes: scene.heroCodes,
                     boardCodes: scene.boardCodes,
                     villainCount:
-                        activity.id.startsWith('act-02-02-01-') ? 0 : 1,
+                        activity.id.startsWith('act-02-02-01-') ||
+                                activity.id == 'act-02-07-02-jump-family'
+                            ? 0
+                            : 1,
                     heroFaceUp: true,
                   ),
                 )
