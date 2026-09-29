@@ -29,7 +29,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-01-05-01-winning-pots' ||
       lessonId == 'lesson-01-05-01' ||
       lessonId == 'lesson-01-06-01-guided-complete-hand' ||
-      lessonId == 'lesson-01-06-01';
+      lessonId == 'lesson-01-06-01' ||
+      lessonId == 'lesson-01-06-02-section-one-jump' ||
+      lessonId == 'lesson-01-06-02';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -79,7 +81,8 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-01-06-01-explain-run') {
     return 'One short hand. Tap Blinds, then You act, then Ending.';
   }
-  if (activity.id.startsWith('act-01-06-01-') &&
+  if ((activity.id.startsWith('act-01-06-01-') ||
+          activity.id == 'act-01-06-02-jump-hand') &&
       activity.handSteps.isNotEmpty) {
     final last = activity.handSteps.length - 1;
     final index = handStepIndex < 0

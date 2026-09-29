@@ -293,7 +293,9 @@ postflop order uses the full table. How pots are won uses the same
 frame: the three paths stay in the stage, and a fold-win or a called
 river uses the full table. Play a full toy hand uses the same frame:
 the three beats stay in the stage, and each street of the hand uses
-the full table. The procedure for the next lesson is
+the full table. Section 1 jump check uses the same frame: rank and
+seat order stay lists, and the action spot and the toy hand use the
+full table. The procedure for the next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
 ## Gamified learning
