@@ -440,7 +440,8 @@ avoid and cite checks stay lists, and the call-wider and trap spots
 sit face up on the full table. Same cards, five type models uses the
 same frame: cards, seats, and evidence stay in the stage, the label
 check stays a list, and the station, nit, and LAG spots sit face up on
-the full table. The procedure for the
+the full table. Section 6 checkpoint uses the same frame: the
+advantage, cap, polar, TAG, and LAG checks stay lists. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
