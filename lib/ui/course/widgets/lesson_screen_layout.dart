@@ -173,7 +173,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-07-07-01-same-cards-types' ||
       lessonId == 'lesson-07-07-01' ||
       lessonId == 'lesson-07-08-01-type-board-line' ||
-      lessonId == 'lesson-07-08-01';
+      lessonId == 'lesson-07-08-01' ||
+      lessonId == 'lesson-07-09-01-leak-review-book' ||
+      lessonId == 'lesson-07-09-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -483,6 +485,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-07-08-01-explain') {
     return 'Type, board, line, and size. One answer. '
         'Tap Type, then Board, then Line, then Size.';
+  }
+  if (activity.id == 'act-07-09-01-explain') {
+    return 'Defaults beat vibes. Write the book; review leaks. '
+        'Tap Leak, then Book, then Review.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||
