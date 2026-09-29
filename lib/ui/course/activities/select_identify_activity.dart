@@ -1650,16 +1650,19 @@ class _HandCategoryTapActivity extends StatelessWidget {
               if (LessonFrameScope.maybeOf(context) != null &&
                   (activity.id == 'act-01-02-01-scaffolded-spot' ||
                       activity.id.startsWith('act-02-02-01-') ||
-                      activity.id == 'act-02-07-02-jump-family'))
+                      activity.id == 'act-02-07-02-jump-family' ||
+                      activity.id.startsWith('act-03-02-01-')))
                 Expanded(
                   child: LessonTableStage(
                     heroCodes: scene.heroCodes,
                     boardCodes: scene.boardCodes,
                     villainCount:
-                        activity.id.startsWith('act-02-02-01-') ||
-                                activity.id == 'act-02-07-02-jump-family'
-                            ? 0
-                            : 1,
+                        activity.id.startsWith('act-03-02-01-')
+                            ? scene.villainSeatCount
+                            : activity.id.startsWith('act-02-02-01-') ||
+                                    activity.id == 'act-02-07-02-jump-family'
+                                ? 0
+                                : 1,
                     heroFaceUp: true,
                   ),
                 )

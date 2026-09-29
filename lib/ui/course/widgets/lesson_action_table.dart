@@ -3113,11 +3113,17 @@ class FlopLabelDemo extends StatefulWidget {
     this.interactive = false,
     this.enabled = false,
     this.onAllLabelsTapped,
+    this.height,
   });
 
   final bool interactive;
   final bool enabled;
   final VoidCallback? onAllLabelsTapped;
+
+  /// Stage height when the lesson frame already owns the chrome.
+  ///
+  /// Null keeps the standalone teach shell at 58% of the screen.
+  final double? height;
 
   static const labels = <({String label, String caption, Color color})>[
     (label: 'MADE', caption: 'Already strong', color: AppColors.gold),
@@ -3158,7 +3164,8 @@ class _FlopLabelDemoState extends State<FlopLabelDemo> {
     // Tall-phone teach: fixed felt + stretched 2×2 tiles (minHeight alone
     // leaves sparse green under MADE / DRAW / SDV / AIR).
     final feltHeight =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+        widget.height ??
+        (expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null);
 
     Widget labelTile(int index) {
       final item = FlopLabelDemo.labels[index];
