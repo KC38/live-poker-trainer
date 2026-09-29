@@ -1680,11 +1680,17 @@ class PassiveActionsDemo extends StatefulWidget {
     this.interactive = false,
     this.enabled = false,
     this.onAllActionsTapped,
+    this.height,
   });
 
   final bool interactive;
   final bool enabled;
   final VoidCallback? onAllActionsTapped;
+
+  /// Stage height when the lesson frame already owns the chrome.
+  ///
+  /// Null keeps the standalone teach shell at 58% of the screen.
+  final double? height;
 
   static const actions = <(String, String, Color)>[
     ('FOLD', 'Give up', AppColors.danger),
@@ -1720,7 +1726,8 @@ class _PassiveActionsDemoState extends State<PassiveActionsDemo> {
     // Tall-phone teach: fixed felt + stretched tiles (minHeight alone leaves
     // sparse green under FOLD / CHECK / CALL).
     final feltHeight =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+        widget.height ??
+        (expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null);
     String? next;
     for (final action in PassiveActionsDemo.actions) {
       if (!_tapped.contains(action.$1)) {
