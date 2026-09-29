@@ -391,7 +391,9 @@ same frame: timing, sizing, and clues stay in the stage, and the timing
 quizzes stay lists. Live table dynamics uses the same frame: stuck,
 tilted, and gears stay in the stage, the stuck, gear, and freshness
 checks stay lists, and the steaming spot sits face up on the full
-table. The procedure for the
+table. Keep cash session guardrails uses the same frame: quit, guard,
+and first stay in the stage, and the discipline quizzes stay lists.
+The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 

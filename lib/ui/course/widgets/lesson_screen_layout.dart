@@ -117,7 +117,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-05-07-01-timing-sizing-evidence' ||
       lessonId == 'lesson-05-07-01' ||
       lessonId == 'lesson-05-08-01-table-dynamics' ||
-      lessonId == 'lesson-05-08-01';
+      lessonId == 'lesson-05-08-01' ||
+      lessonId == 'lesson-05-09-01-session-discipline' ||
+      lessonId == 'lesson-05-09-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -323,6 +325,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-05-08-01-explain') {
     return 'Tables change. Stuck, tilted, or shifting gears — update. '
         'Tap Stuck, then Tilted, then Gears.';
+  }
+  if (activity.id == 'act-05-09-01-explain') {
+    return 'Winning 1/2 includes knowing when to quit. Guardrails first. '
+        'Tap Quit, then Guard, then First.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||
