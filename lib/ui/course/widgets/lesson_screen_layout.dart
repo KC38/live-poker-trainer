@@ -53,7 +53,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-03-01-01-reading-live-table' ||
       lessonId == 'lesson-03-01-01' ||
       lessonId == 'lesson-03-02-01-flop-hand-classes' ||
-      lessonId == 'lesson-03-02-01';
+      lessonId == 'lesson-03-02-01' ||
+      lessonId == 'lesson-03-03-01-outs-and-price' ||
+      lessonId == 'lesson-03-03-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -139,6 +141,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-03-02-01-explain') {
     return 'Flop first: made, draw, showdown value, or air. '
         'Tap Made, then Draw, then SDV, then Air.';
+  }
+  if (activity.id == 'act-03-03-01-explain') {
+    return 'Clean outs help. Dirty outs trap you. '
+        'Tap Clean, then Dirty, then Price.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand') &&

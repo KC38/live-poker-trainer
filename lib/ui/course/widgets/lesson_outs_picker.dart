@@ -22,12 +22,18 @@ class OutsCleanAcesPicker extends StatefulWidget {
     required this.controller,
     required this.locked,
     this.showGuidance = true,
+    this.height,
   });
 
   final CourseActivity activity;
   final LessonActivityController controller;
   final bool locked;
   final bool showGuidance;
+
+  /// Stage height when the lesson frame already owns the chrome.
+  ///
+  /// Null keeps the standalone teach shell at 58% of the screen.
+  final double? height;
 
   /// Spot cards — hero already holds Ah.
   static const heroCodes = ['Ah', 'Qh'];
@@ -113,7 +119,8 @@ class _OutsCleanAcesPickerState extends State<OutsCleanAcesPicker> {
 
   @override
   Widget build(BuildContext context) {
-    final feltHeight = MediaQuery.sizeOf(context).height * 0.58;
+    final feltHeight =
+        widget.height ?? MediaQuery.sizeOf(context).height * 0.58;
     final next = _nextClean;
     final guide = widget.showGuidance && !widget.locked;
 

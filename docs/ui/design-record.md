@@ -315,8 +315,10 @@ the stack check stays a list. Read the table first uses the same
 frame: pot, stacks, button, and who acts stay in the stage, and the
 first-to-act seat is tapped on the full table. Name your flop class
 uses the same frame: made, draw, showdown value, and air stay in the
-stage, and each flop sits face up on the full table. The procedure
-for the
+stage, and each flop sits face up on the full table. Count outs,
+pay the right price uses the same frame: clean, dirty, and price
+stay in the stage, the clean aces stay a card picker, and a priced
+draw sits face up on the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
