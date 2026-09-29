@@ -334,8 +334,10 @@ same frame: the table-read stays a list, the flop class and the
 bad-price draw sit face up on the full table, and the multiway fold
 and the value bet use that table. Think in ranges uses the same
 frame: one hand, range, and update stay in the stage, and the
-bet-twice and same-board spots sit face up on the full table. The
-procedure for the
+bet-twice and same-board spots sit face up on the full table.
+Navigate 3-bet pots uses the same frame: 3-bet, ranges, and squeeze
+stay in the stage, and each 3-bet spot sits face up on the full
+table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
