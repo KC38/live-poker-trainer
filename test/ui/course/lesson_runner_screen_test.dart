@@ -1657,6 +1657,47 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('leak repair uses the lesson frame and the leak tiles', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      _app(
+        LessonRunnerScreen(
+          lessonId: 'lesson-03-08-01-leak-repair',
+          courseService: _PrerequisiteLockedCourseService(catalog)
+            ..previousComplete = true,
+          startRequestId: 'start_leak_repair_frame',
+        ),
+        catalog: catalog,
+      ),
+    );
+    await tester.pump();
+    for (
+      var i = 0;
+      i < 40 && find.textContaining('Tap Top pair').evaluate().isEmpty;
+      i++
+    ) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+
+    expect(find.byType(AppBar), findsNothing);
+    expect(find.text('Patch the common leaks'), findsNothing);
+    expect(find.byTooltip('Close'), findsOneWidget);
+    expect(find.byIcon(Icons.favorite), findsNWidgets(3));
+    expect(find.textContaining('Tap Top pair'), findsOneWidget);
+    expect(find.byTooltip('Undo'), findsOneWidget);
+    expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.text('TOP PAIR'), findsOneWidget);
+    expect(find.text('PRICES'), findsOneWidget);
+    expect(find.text('PASSIVE'), findsOneWidget);
+    expect(find.text('CROWDS'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('hung startLesson surfaces retry instead of empty spinner', (
     tester,
   ) async {

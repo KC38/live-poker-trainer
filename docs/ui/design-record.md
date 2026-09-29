@@ -327,7 +327,9 @@ Close the river correctly uses the same frame: value, bluff, catch,
 and fold stay in the stage, and each river sits face up on the full
 table. Play tighter multiway uses the same frame: stronger, fewer,
 and nuts stay in the stage, and each multiway spot sits face up on
-the full table. The procedure for the
+the full table. Patch the common leaks uses the same frame: top
+pair, prices, passive, and crowds stay in the stage, and each leak
+spot sits face up on the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
