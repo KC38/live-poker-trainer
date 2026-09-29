@@ -169,6 +169,8 @@ Do not copy their palette, owl, or words.
 On Home, Rex stands on the marked next-lesson node. A Rex card above the path is not that beat.
 | Section end | One ceremony: character, title, one button. |
 
+The lesson result shows this lesson’s XP and the daily goal before Home.
+
 A right answer shows Rex’s own face in a celebrating mood beside the short line. The calm portrait and the celebrating portrait are the same coach. The Asset inventory celebrate row uses that same face.
 
 The locked Live Training hub names the Home lesson that unlocks it. It does not say Section 2.
@@ -182,3 +184,5 @@ File one ticket per missing beat.
 A right answer shows Rex’s own face in a celebrating mood beside the short line. `LessonFeedbackSheet` (`lib/ui/course/widgets/lesson_feedback_sheet.dart`) uses `RexMascot` with `RexMood.celebrate` (`assets/brand/rex_celebrate.png`). That portrait is the same coach as `assets/brand/rex_calm.png`.
 
 The locked Live Training hub names Baseline jump check in `liveTrainingLockedMessage` (`lib/models/live_access.dart`). That title is the Home node for `lesson-02-07-02-section-two-jump`.
+
+The lesson result shows this lesson’s XP and the daily goal before Home. `LessonResultScreen` (`lib/ui/screens/lesson_result_screen.dart`) lists XP earned and a Daily goal row of the onboarding minutes.
