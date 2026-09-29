@@ -167,7 +167,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-07-04-01-pot-type-plans' ||
       lessonId == 'lesson-07-04-01' ||
       lessonId == 'lesson-07-05-01-hu-vs-multiway' ||
-      lessonId == 'lesson-07-05-01';
+      lessonId == 'lesson-07-05-01' ||
+      lessonId == 'lesson-07-06-01-stack-depth-plans' ||
+      lessonId == 'lesson-07-06-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -465,6 +467,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-07-05-01-explain') {
     return 'More players: fewer bluffs, thicker value. '
         'Tap Fewer, then Thicker, then Widen.';
+  }
+  if (activity.id == 'act-07-06-01-explain') {
+    return 'Effective stack rewrites the plan every hand. '
+        'Tap Short, then Deep, then Effective.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||
