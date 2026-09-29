@@ -415,7 +415,10 @@ stage, the unblock, tweak, and EV checks stay lists, and the flush
 board sits face up on the full table. Defend enough without
 frequency theater uses the same frame: defend, bluff, and enough stay
 in the stage, the continue, intuition, and punish checks stay lists,
-and the third-pair fold sits face up on the full table. The procedure for the
+and the third-pair fold sits face up on the full table. Mix with a
+reason uses the same frame: mix, purpose, and strong stay in the
+stage, the station, reason, and purpose checks stay lists, and the
+set check sits face up on the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 

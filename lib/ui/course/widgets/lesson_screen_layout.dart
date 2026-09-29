@@ -135,7 +135,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-06-06-01-blockers' ||
       lessonId == 'lesson-06-06-01' ||
       lessonId == 'lesson-06-07-01-minimum-defense' ||
-      lessonId == 'lesson-06-07-01';
+      lessonId == 'lesson-06-07-01' ||
+      lessonId == 'lesson-06-08-01-mixed-strategy' ||
+      lessonId == 'lesson-06-08-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -373,6 +375,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-06-07-01-explain') {
     return 'Defend enough that over-bluffing fails. No fake percentages. '
         'Tap Defend, then Bluff, then Enough.';
+  }
+  if (activity.id == 'act-06-08-01-explain') {
+    return 'Mixing is frequency with a purpose, not coin-flip theater. '
+        'Tap Mix, then Purpose, then Strong.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||
