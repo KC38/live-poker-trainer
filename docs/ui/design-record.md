@@ -120,7 +120,7 @@ introduced. Reuse the path already listed. Add a row when a new file ships.
 | --- | --- | --- |
 | Logo | `assets/brand/logo_mark.png` | Auth screen and Live Training hub |
 | Mascot | `assets/brand/rex_calm.png` — a face, calm mood, via `RexMascot` | Meet Rex, `RexCoachLine`, and `RexCoachCard` |
-| Mascot celebrate | `assets/brand/rex_celebrate.png` — a face, celebrating mood, via `RexMascot` | Right-answer beat in `LessonFeedbackSheet` |
+| Mascot celebrate | `assets/brand/rex_celebrate.png` — Rex’s own face, celebrating mood, the same coach as the calm portrait, via `RexMascot` | Right-answer beat in `LessonFeedbackSheet` |
 | Icons | Material / Cupertino. No branded icon set | Theme icon color (`slate` in the app bar) |
 | Motion | Implicit widget motion only (band resize, `AnimatedSwitcher` 220ms in the runner). No Rive or Lottie | [flutter-ui-ux](../../.cursor/skills/flutter-ui-ux/SKILL.md) durations |
 | Sound effects | `SoundService`: `deal.wav`, `chip.wav`, `knock.wav`, `fold.wav`, `win.wav` under `assets/sounds/` | Table actions call these. Do not add a second chip sound |
@@ -158,7 +158,7 @@ Do not copy their palette, owl, or words.
 On Home, Rex stands on the marked next-lesson node. A Rex card above the path is not that beat.
 | Section end | One ceremony: character, title, one button. |
 
-A right answer on a lesson step shows Rex’s face in a celebrating mood beside the short line. The calm portrait remains the prompt face.
+A right answer shows Rex’s own face in a celebrating mood beside the short line. The calm portrait and the celebrating portrait are the same coach. The Asset inventory celebrate row uses that same face.
 
 The locked Live Training hub names the Home lesson that unlocks it. It does not say Section 2.
 
@@ -168,6 +168,6 @@ File one ticket per missing beat.
 
 ### Shipped
 
-A right answer shows `RexMascot` (`RexMood.celebrate`, `assets/brand/rex_celebrate.png`) beside the short line in `LessonFeedbackSheet` (`lib/ui/course/widgets/lesson_feedback_sheet.dart`). The prompt stays on `assets/brand/rex_calm.png`.
+A right answer shows Rex’s own face in a celebrating mood beside the short line. `LessonFeedbackSheet` (`lib/ui/course/widgets/lesson_feedback_sheet.dart`) uses `RexMascot` with `RexMood.celebrate` (`assets/brand/rex_celebrate.png`). That portrait is the same coach as `assets/brand/rex_calm.png`.
 
 The locked Live Training hub names Baseline jump check in `liveTrainingLockedMessage` (`lib/models/live_access.dart`). That title is the Home node for `lesson-02-07-02-section-two-jump`.
