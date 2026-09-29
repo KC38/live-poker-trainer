@@ -163,7 +163,8 @@ class AuthoredMultiStepActivity extends StatelessWidget {
                                           'act-01-06-02-jump-hand' ||
                                       activity.id == 'act-04-03-01-guided' ||
                                       activity.id == 'act-07-10-01-hand' ||
-                                      activity.id == 'act-07-10-02-hand')
+                                      activity.id == 'act-07-10-02-hand' ||
+                                      activity.id == 'act-07-10-03-hand')
                               ? LessonTableStage(
                                 heroCodes: spot.heroCodes,
                                 boardCodes: spot.boardCodes,
@@ -181,7 +182,8 @@ class AuthoredMultiStepActivity extends StatelessWidget {
                                 activity.id == 'act-01-06-02-jump-hand' ||
                                 activity.id == 'act-04-03-01-guided' ||
                                 activity.id == 'act-07-10-01-hand' ||
-                                activity.id == 'act-07-10-02-hand')
+                                activity.id == 'act-07-10-02-hand' ||
+                                activity.id == 'act-07-10-03-hand')
                         ? LessonTableStage(
                           heroCodes: spot.heroCodes,
                           boardCodes: spot.boardCodes,
