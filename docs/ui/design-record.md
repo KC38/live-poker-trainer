@@ -472,6 +472,8 @@ Capstone: multiway deep uses the same frame: nuts, deep, and no-bluff
 stay in the stage, and the three streets sit face up on the full table.
 Capstone: limped pot uses the same frame: nuts, value, and thin stay
 in the stage, and the three streets sit face up on the full table.
+Capstone: 4-bet pot uses the same frame: SPR, commit, and no hero stay
+in the stage, and the three streets sit face up on the full table.
 The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
