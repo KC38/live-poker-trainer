@@ -87,7 +87,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-04-07-01-observe-narrow-player' ||
       lessonId == 'lesson-04-07-01' ||
       lessonId == 'lesson-04-07-02-meet-nit' ||
-      lessonId == 'lesson-04-07-02';
+      lessonId == 'lesson-04-07-02' ||
+      lessonId == 'lesson-04-07-03-adjust-nit' ||
+      lessonId == 'lesson-04-07-03';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -237,6 +239,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-04-07-02-explain') {
     return 'Nit means narrow entry and respect for their heavy action. '
         'Tap Nit, then Narrow, then Respect.';
+  }
+  if (activity.id == 'act-04-07-03-explain') {
+    return 'Steal more from nits. Respect it when they explode. '
+        'Tap Steal, then Credit, then Explode.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||

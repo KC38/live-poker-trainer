@@ -6203,11 +6203,17 @@ class VsNitsDemo extends StatefulWidget {
     this.interactive = false,
     this.enabled = false,
     this.onAllPointsTapped,
+    this.height,
   });
 
   final bool interactive;
   final bool enabled;
   final VoidCallback? onAllPointsTapped;
+
+  /// Stage height when the lesson frame already owns the chrome.
+  ///
+  /// Null keeps the standalone teach shell at 58% of the screen.
+  final double? height;
 
   static const points = <({String label, String caption, Color color})>[
     // Structural — Rex owns “steal blinds more / credit when they explode.”
@@ -6247,7 +6253,8 @@ class _VsNitsDemoState extends State<VsNitsDemo> {
     // Tall-phone teach: fixed felt + stretched tiles (minHeight alone leaves
     // sparse green under STEAL / CREDIT / EXPLODE).
     final feltHeight =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+        widget.height ??
+        (expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null);
     final tiles = Row(
       crossAxisAlignment:
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
