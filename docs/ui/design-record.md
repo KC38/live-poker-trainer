@@ -476,7 +476,8 @@ Capstone: 4-bet pot uses the same frame: SPR, commit, and no hero stay
 in the stage, and the three streets sit face up on the full table.
 Prep a coached Live warm-up hand uses the same frame: checklist,
 defaults, and one hand stay in the stage, and the warm-up quizzes stay
-lists. The procedure for the
+lists. Final: all five player types uses the same frame: the station,
+nit, maniac, TAG, LAG, certainty, and retire checks stay lists. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
