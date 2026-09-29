@@ -13,7 +13,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
   return lessonId == 'lesson-01-01-01-your-two-cards' ||
       lessonId == 'lesson-01-01-01' ||
       lessonId == 'lesson-01-01-02-suits-and-ranks' ||
-      lessonId == 'lesson-01-01-02';
+      lessonId == 'lesson-01-01-02' ||
+      lessonId == 'lesson-01-01-03-blinds-and-button' ||
+      lessonId == 'lesson-01-01-03';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -21,6 +23,14 @@ String lessonFrameSpeech(CourseActivity activity) {
   if (activity.id == 'act-01-01-01-explain-hole-cards') {
     return 'These two are your cards alone. Nobody else sees them. '
         'Tap your cards to peek.';
+  }
+  if (activity.id == 'act-01-01-03-explain-button') {
+    return 'Button marks the dealer. Blinds sit left of it. '
+        'Tap the button, then the small blind, then the big blind.';
+  }
+  if (activity.id == 'act-01-01-03-checkpoint-layout') {
+    return 'The button has the D chip. Tap the small blind, '
+        'one seat to its left.';
   }
   final resolved = resolveLessonCoachPrompt(
     activity: activity,

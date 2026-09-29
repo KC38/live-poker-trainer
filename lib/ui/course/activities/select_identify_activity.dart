@@ -21,6 +21,61 @@ import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/poker_table_bands.dart';
 
+bool isLessonBlindsFrameActivity(String activityId) {
+  return activityId == 'act-01-01-03-guided-button' ||
+      activityId == 'act-01-01-03-scaffolded-blinds' ||
+      activityId == 'act-01-01-03-checkpoint-layout';
+}
+
+/// Felt tap for a Button and blinds step, in the grader's region or seat.
+LessonTableTapTarget? lessonBlindsFrameTarget(String activityId, int seatIndex) {
+  switch (activityId) {
+    case 'act-01-01-03-guided-button':
+      if (seatIndex == lessonBlindsButtonIndex) {
+        return const LessonTableTapTarget(LessonTableRegion.button);
+      }
+      if (seatIndex == lessonBlindsBigBlindIndex) {
+        return const LessonTableTapTarget(LessonTableRegion.bigBlind);
+      }
+      return const LessonTableTapTarget(LessonTableRegion.emptySeat);
+    case 'act-01-01-03-scaffolded-blinds':
+      if (seatIndex == lessonBlindsBigBlindIndex) {
+        return const LessonTableTapTarget(LessonTableRegion.bigBlind);
+      }
+      if (seatIndex == lessonBlindsSmallBlindIndex) {
+        return const LessonTableTapTarget(LessonTableRegion.smallBlind);
+      }
+      if (seatIndex == lessonBlindsButtonIndex) {
+        return const LessonTableTapTarget(LessonTableRegion.button);
+      }
+      return null;
+    case 'act-01-01-03-checkpoint-layout':
+      // The numbered diagram called the small blind seat 0 and the big blind
+      // seat 1. The seat to the right of the button was seat 4.
+      if (seatIndex == lessonBlindsSmallBlindIndex) {
+        return const LessonTableTapTarget(
+          LessonTableRegion.smallBlind,
+          seatIndex: 0,
+        );
+      }
+      if (seatIndex == lessonBlindsBigBlindIndex) {
+        return const LessonTableTapTarget(
+          LessonTableRegion.bigBlind,
+          seatIndex: 1,
+        );
+      }
+      if (seatIndex == lessonBlindsRightOfButtonIndex) {
+        return const LessonTableTapTarget(
+          LessonTableRegion.emptySeat,
+          seatIndex: 4,
+        );
+      }
+      return null;
+    default:
+      return null;
+  }
+}
+
 /// Multiple-choice identify activity with optional guided highlight.
 class SelectIdentifyActivity extends StatelessWidget {
   /// Creates the activity.
@@ -1163,6 +1218,35 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             ],
             if (scene != null) ...[
               if (LessonFrameScope.maybeOf(context) != null &&
+                  isLessonBlindsFrameActivity(widget.activity.id))
+                Expanded(
+                  child: LessonTableStage(
+                    villainCount: lessonBlindsVillainCount,
+                    dealerIndex: lessonBlindsButtonIndex,
+                    sbIndex: lessonBlindsSmallBlindIndex,
+                    bbIndex: lessonBlindsBigBlindIndex,
+                    activeSeatIndex: switch (scene.highlight) {
+                      LessonTableHighlight.button => lessonBlindsButtonIndex,
+                      LessonTableHighlight.smallBlind =>
+                        lessonBlindsSmallBlindIndex,
+                      LessonTableHighlight.bigBlind =>
+                        lessonBlindsBigBlindIndex,
+                      _ => null,
+                    },
+                    enabled: !locked,
+                    onSeatIndexTap:
+                        locked
+                            ? null
+                            : (index) {
+                              final target = lessonBlindsFrameTarget(
+                                widget.activity.id,
+                                index,
+                              );
+                              if (target != null) _submitRegion(target);
+                            },
+                  ),
+                )
+              else if (LessonFrameScope.maybeOf(context) != null &&
                   widget.activity.id.startsWith('act-01-01-01-'))
                 Expanded(
                   child: LessonTableStage(

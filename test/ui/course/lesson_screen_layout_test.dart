@@ -222,6 +222,40 @@ void main() {
     expect(find.textContaining('A♥'), findsWidgets);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('blinds clockwise taps count only in button, small, big order', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(390, 500));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    var done = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildPokerTheme(),
+        home: Scaffold(
+          body: LessonBlindsClockwiseTable(onComplete: () => done += 1),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(find.byKey(const ValueKey<String>('lesson-table-stage')), findsOneWidget);
+    expect(find.text('D'), findsOneWidget);
+    expect(find.text('SB'), findsOneWidget);
+    expect(find.text('BB'), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey<String>('lesson-seat-4')));
+    await tester.pump();
+    expect(done, 0);
+
+    await tester.tap(find.byKey(const ValueKey<String>('lesson-seat-3')));
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey<String>('lesson-seat-4')));
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey<String>('lesson-seat-5')));
+    await tester.pump();
+    expect(done, 1);
+    expect(tester.takeException(), isNull);
+  });
 }
 
 void _noop() {}
