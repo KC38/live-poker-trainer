@@ -109,7 +109,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-05-03-01-implied-odds' ||
       lessonId == 'lesson-05-03-01' ||
       lessonId == 'lesson-05-04-01-thin-value-bluffcatch' ||
-      lessonId == 'lesson-05-04-01';
+      lessonId == 'lesson-05-04-01' ||
+      lessonId == 'lesson-05-05-01-lines-and-probes' ||
+      lessonId == 'lesson-05-05-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -299,6 +301,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-05-04-01-explain') {
     return 'Thin value needs calls. Bluff-catches need wide barrels. '
         'Tap Thin, then Catch, then Barrels.';
+  }
+  if (activity.id == 'act-05-05-01-explain') {
+    return 'Lines mean ranges. Check-raise, probe, delay, and donk each update the story. '
+        'Tap X/R, then Probe, then Delay, then Donk.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||
