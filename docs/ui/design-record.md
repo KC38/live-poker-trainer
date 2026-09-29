@@ -132,14 +132,14 @@ introduced. Reuse the path already listed. Add a row when a new file ships.
 | Slot | Current | Reuse |
 | --- | --- | --- |
 | Logo | `assets/brand/logo_mark.png` | Auth screen and Live Training hub |
-| Mascot | `assets/brand/rex_calm.png` — a face, calm mood, via `RexMascot` | Meet Rex, `RexCoachLine`, and `RexCoachCard` |
-| Mascot celebrate | `assets/brand/rex_celebrate.png` — Rex’s own face, celebrating mood, the same coach as the calm portrait, via `RexMascot` | Right-answer beat in `LessonFeedbackSheet` and the lesson-result ceremony |
+| Mascot | `assets/brand/mascot_idle.png` — full body, calm mood, via `RexMascot` | Meet Rex, `RexCoachLine`, and `RexCoachCard` |
+| Mascot celebrate | `assets/brand/mascot_celebrate.png` — the same coach, celebrating mood, the same coach as the calm drawing, via `RexMascot` | Right-answer beat in `LessonFeedbackSheet` and the lesson-result ceremony |
 | Icons | Material / Cupertino. No branded icon set | Theme icon color (`slate` in the app bar) |
 | Motion | Implicit widget motion only (band resize, `AnimatedSwitcher` 220ms in the runner). No Rive or Lottie | [flutter-ui-ux](../../.cursor/skills/flutter-ui-ux/SKILL.md) durations |
 | Sound effects | `SoundService`: `deal.wav`, `chip.wav`, `knock.wav`, `fold.wav`, `win.wav` under `assets/sounds/` | Table actions call these. Do not add a second chip sound |
 | Background music | `assets/sounds/lounge_ambient.mp3` via `SoundService.startHomeBgm` | Home. Pause when leaving Home. Settings toggle is `musicEnabled` |
 
-The mascot slot is a Rex image with a face and a mood. Meet Rex and the Rex line on Your start show that face. Text-only `RexCoachLine` is not the slot.
+The mascot slot is the full-body coach with a mood. Meet Rex and the Rex line on Your start show that drawing. Text-only `RexCoachLine` is not the slot.
 
 The lesson result uses `RexMascot` for the ceremony. It does not draw a letter R.
 
@@ -153,7 +153,7 @@ The Live Training hub shows `assets/brand/logo_mark.png` above the lock or the t
 
 The Live Training hub shows `assets/brand/logo_mark.png` in `_LiveAccessGate` and the open table entry of `LiveTrainingScreen` (`lib/ui/screens/live_training_screen.dart`). Auth uses the same file in `lib/ui/screens/auth_screen.dart`.
 
-The lesson result uses `RexMascot` for the ceremony. It does not draw a letter R. `LessonResultScreen` (`lib/ui/screens/lesson_result_screen.dart`) draws `RexMascot` with `RexMood.celebrate` (`assets/brand/rex_celebrate.png`).
+The lesson result uses `RexMascot` for the ceremony. It does not draw a letter R. `LessonResultScreen` (`lib/ui/screens/lesson_result_screen.dart`) draws `RexMascot` with `RexMood.celebrate` (`assets/brand/mascot_celebrate.png`).
 
 ## Lesson screen layout
 
@@ -369,7 +369,7 @@ On Home, Rex stands on the marked next-lesson node. A Rex card above the path is
 
 The lesson result shows this lesson’s XP and the daily goal before Home.
 
-A right answer shows Rex’s own face in a celebrating mood beside the short line. The calm portrait and the celebrating portrait are the same coach. The Asset inventory celebrate row uses that same face.
+A right answer shows the same coach in a celebrating mood beside the short line. The calm drawing and the celebrating drawing are the same coach. The Asset inventory celebrate row uses that same coach.
 
 The locked Live Training hub names the Home lesson that unlocks it. It does not say Section 2.
 
@@ -379,7 +379,7 @@ File one ticket per missing beat.
 
 ### Shipped
 
-A right answer shows Rex’s own face in a celebrating mood beside the short line. `LessonFeedbackSheet` (`lib/ui/course/widgets/lesson_feedback_sheet.dart`) uses `RexMascot` with `RexMood.celebrate` (`assets/brand/rex_celebrate.png`). That portrait is the same coach as `assets/brand/rex_calm.png`.
+A right answer shows the same coach in a celebrating mood beside the short line. `LessonFeedbackSheet` (`lib/ui/course/widgets/lesson_feedback_sheet.dart`) uses `RexMascot` with `RexMood.celebrate` (`assets/brand/mascot_celebrate.png`). That drawing is the same coach as `assets/brand/mascot_idle.png`.
 
 The locked Live Training hub names Baseline jump check in `liveTrainingLockedMessage` (`lib/models/live_access.dart`). That title is the Home node for `lesson-02-07-02-section-two-jump`.
 

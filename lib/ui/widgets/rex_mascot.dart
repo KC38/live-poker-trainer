@@ -1,10 +1,9 @@
-/// Rex mascot slot: one face, two moods.
+/// Rex mascot slot: one full-body coach, two moods.
 library;
 
 import 'package:flutter/material.dart';
-import 'package:live_poker_trainer/core/constants/colors.dart';
 
-/// Mood of the Rex portrait. The prompt stays calm.
+/// Mood of the Rex drawing. The prompt stays calm.
 enum RexMood {
   /// Teaching prompt.
   calm,
@@ -13,21 +12,21 @@ enum RexMood {
   celebrate,
 }
 
-/// Rex portrait for the prompt (calm) and a right answer (celebrating).
+/// Full-body Rex for the prompt (calm) and a right answer (celebrating).
 class RexMascot extends StatelessWidget {
-  /// Creates a Rex face. Defaults to the calm prompt portrait.
+  /// Creates Rex. Defaults to the calm standing drawing.
   const RexMascot({super.key, this.size = 36, this.mood = RexMood.calm});
 
   /// Asset path for the calm mood.
-  static const asset = 'assets/brand/rex_calm.png';
+  static const asset = 'assets/brand/mascot_idle.png';
 
   /// Asset path for the celebrating mood.
-  static const celebrateAsset = 'assets/brand/rex_celebrate.png';
+  static const celebrateAsset = 'assets/brand/mascot_celebrate.png';
 
-  /// Diameter of the circular portrait.
+  /// Width of the figure. Height follows the full-body drawing.
   final double size;
 
-  /// Which portrait to show.
+  /// Which drawing to show.
   final RexMood mood;
 
   String get _asset {
@@ -50,25 +49,13 @@ class RexMascot extends StatelessWidget {
       container: true,
       image: true,
       label: _label,
-      child: Container(
+      child: SizedBox(
         width: size,
-        height: size,
-        padding: const EdgeInsets.all(1.2),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: AppColors.gold.withValues(alpha: 0.55),
-            width: 1.2,
-          ),
-        ),
-        child: ClipOval(
-          child: Image.asset(
-            _asset,
-            width: size,
-            height: size,
-            fit: BoxFit.cover,
-            excludeFromSemantics: true,
-          ),
+        height: size * 1.5,
+        child: Image.asset(
+          _asset,
+          fit: BoxFit.contain,
+          excludeFromSemantics: true,
         ),
       ),
     );
