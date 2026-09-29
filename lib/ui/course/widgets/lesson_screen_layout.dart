@@ -157,7 +157,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-06-13-01-mix-five-types' ||
       lessonId == 'lesson-06-13-01' ||
       lessonId == 'lesson-06-13-02-section-six-checkpoint' ||
-      lessonId == 'lesson-06-13-02';
+      lessonId == 'lesson-06-13-02' ||
+      lessonId == 'lesson-07-01-01-preflop-to-flop' ||
+      lessonId == 'lesson-07-01-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -435,6 +437,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-06-13-01-explain') {
     return 'Five models. Same cards. Change only with evidence. '
         'Tap Cards, then Seats, then Evidence.';
+  }
+  if (activity.id == 'act-07-01-01-explain') {
+    return 'Enter with a reason. Flop confirms or cancels. '
+        'Tap Reason, then Confirm, then Cancel.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||

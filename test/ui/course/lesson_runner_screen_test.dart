@@ -3538,6 +3538,46 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('preflop flop plan uses the lesson frame and the plan tiles', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      _app(
+        LessonRunnerScreen(
+          lessonId: 'lesson-07-01-01-preflop-to-flop',
+          courseService: _PrerequisiteLockedCourseService(catalog)
+            ..previousComplete = true,
+          startRequestId: 'start_preflop_flop_plan_frame',
+        ),
+        catalog: catalog,
+      ),
+    );
+    await tester.pump();
+    for (
+      var i = 0;
+      i < 40 && find.textContaining('Tap Reason').evaluate().isEmpty;
+      i++
+    ) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+
+    expect(find.byType(AppBar), findsNothing);
+    expect(find.text('Carry a preflop plan onto the flop'), findsNothing);
+    expect(find.byTooltip('Close'), findsOneWidget);
+    expect(find.byIcon(Icons.favorite), findsNWidgets(3));
+    expect(find.textContaining('Tap Reason'), findsOneWidget);
+    expect(find.byTooltip('Undo'), findsOneWidget);
+    expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.text('REASON'), findsOneWidget);
+    expect(find.text('CONFIRM'), findsOneWidget);
+    expect(find.text('CANCEL'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('hung startLesson surfaces retry instead of empty spinner', (
     tester,
   ) async {
