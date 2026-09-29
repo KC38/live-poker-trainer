@@ -25,7 +25,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-01-03-02-bet-raise-allin' ||
       lessonId == 'lesson-01-03-02' ||
       lessonId == 'lesson-01-04-01-streets-and-order' ||
-      lessonId == 'lesson-01-04-01';
+      lessonId == 'lesson-01-04-01' ||
+      lessonId == 'lesson-01-05-01-winning-pots' ||
+      lessonId == 'lesson-01-05-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -68,6 +70,9 @@ String lessonFrameSpeech(CourseActivity activity) {
   }
   if (activity.id == 'act-01-04-01-explain-streets') {
     return 'Four streets: preflop, flop, turn, river. Tap each street.';
+  }
+  if (activity.id == 'act-01-05-01-explain-win') {
+    return 'Folds win pots early. Showdown compares hands. Tap each path.';
   }
   final resolved = resolveLessonCoachPrompt(
     activity: activity,

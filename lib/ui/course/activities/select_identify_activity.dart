@@ -1311,6 +1311,46 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                   ),
                 )
               else if (LessonFrameScope.maybeOf(context) != null &&
+                  (widget.activity.id == 'act-01-05-01-guided-fold-win' ||
+                      widget.activity.id ==
+                          'act-01-05-01-scaffolded-showdown'))
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: LessonTableStage(
+                          heroCodes:
+                              scene.heroCodes.isEmpty
+                                  ? const ['Ah', 'Kd']
+                                  : scene.heroCodes,
+                          boardCodes: scene.boardCodes,
+                          villainCount:
+                              scene.villainSeatCount < 1
+                                  ? 0
+                                  : scene.villainSeatCount,
+                          heroFaceUp: true,
+                          enabled: !locked,
+                        ),
+                      ),
+                      for (final choice in widget.activity.choices)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: TextButton(
+                            onPressed:
+                                locked
+                                    ? null
+                                    : () => widget.controller.selectChoice(
+                                      choice.id,
+                                      autoSubmit: true,
+                                    ),
+                            child: Text(choice.label),
+                          ),
+                        ),
+                    ],
+                  ),
+                )
+              else if (LessonFrameScope.maybeOf(context) != null &&
                   widget.activity.id.startsWith('act-01-01-01-'))
                 Expanded(
                   child: LessonTableStage(
