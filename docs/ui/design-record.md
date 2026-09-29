@@ -367,7 +367,9 @@ stays a list. Confidence and samples uses the same frame: observe,
 samples, and showdowns stay in the stage, and the confidence quizzes
 stay lists. Same hand, different types uses the same frame: cards,
 seats, and evidence stay in the stage, and each type spot sits face up
-on the full table. The procedure for the
+on the full table. Section 4 jump check uses the same frame: the
+range, SPR, and player-type checks stay lists, and the 3-bet and the
+sizing spot sit face up on the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
