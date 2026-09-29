@@ -141,8 +141,15 @@ void main() {
       final mascot = tester.widget<RexMascot>(find.byType(RexMascot));
       expect(mascot.mood, RexMood.celebrate);
       expect(find.bySemanticsLabel('Rex, celebrating'), findsOneWidget);
-      final image = tester.widget<Image>(find.byType(Image));
-      expect((image.image as AssetImage).assetName, RexMascot.celebrateAsset);
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is Image &&
+              widget.image is AssetImage &&
+              (widget.image as AssetImage).assetName == RexMascot.bodyAsset,
+        ),
+        findsWidgets,
+      );
     }
   });
 

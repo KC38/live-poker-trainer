@@ -22110,8 +22110,15 @@ await tester.tap(find.text('NIT'));
     expect(celebrating, findsOneWidget);
     final mascot = tester.widget<RexMascot>(find.byType(RexMascot));
     expect(mascot.mood, RexMood.celebrate);
-    final image = tester.widget<Image>(find.byType(Image));
-    expect((image.image as AssetImage).assetName, RexMascot.celebrateAsset);
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is Image &&
+            widget.image is AssetImage &&
+            (widget.image as AssetImage).assetName == RexMascot.bodyAsset,
+      ),
+      findsWidgets,
+    );
     expect(
       find.descendant(
         of: find.ancestor(of: find.text(line), matching: find.byType(Row)).first,
@@ -22147,8 +22154,15 @@ await tester.tap(find.text('NIT'));
     await tester.pumpWidget(_wrap(const RexMascot()));
     await tester.pumpAndSettle();
     expect(find.bySemanticsLabel('Rex, calm'), findsOneWidget);
-    final image = tester.widget<Image>(find.byType(Image));
-    expect((image.image as AssetImage).assetName, RexMascot.asset);
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is Image &&
+            widget.image is AssetImage &&
+            (widget.image as AssetImage).assetName == RexMascot.bodyAsset,
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('reasonable grade stays positive without life loss chrome', (
