@@ -100,9 +100,8 @@ class _ScriptedCourseService extends CourseService {
         activityId == 'act-01-01-01-explain-hole-cards' ||
         choiceId == 'choice-hero-holes' ||
         choiceId == 'choice-only-you';
-    final nextIndex = accepted
-        ? (index + 1).clamp(0, activities.length - 1)
-        : index;
+    final nextIndex =
+        accepted ? (index + 1).clamp(0, activities.length - 1) : index;
     return SubmitCourseStepResult(
       attemptId: attemptId,
       activityId: activityId,
@@ -207,17 +206,14 @@ void main() {
     await tester.pump();
     for (
       var i = 0;
-      i < 40 && find.text('Tap your cards').evaluate().isEmpty;
+      i < 40 && find.textContaining('Tap your cards').evaluate().isEmpty;
       i++
     ) {
       await tester.pump(const Duration(milliseconds: 50));
     }
-    expect(find.text('Tap your cards'), findsOneWidget);
+    expect(find.textContaining('Tap your cards'), findsOneWidget);
 
-    final heroRail = find.byWidgetPredicate(
-      (w) => w is MiniCard && w.size == MiniCardSize.hero,
-    );
-    await tester.tap(heroRail.first);
+    await tester.tap(find.byKey(const ValueKey<String>('lesson-seat-hero')));
     await tester.pump();
     await tester.pump();
     expect(find.text('Nice!'), findsOneWidget);
@@ -226,31 +222,20 @@ void main() {
     await tester.pump();
     await tester.pump();
 
-    final boardCards = find.byWidgetPredicate(
-      (w) => w is MiniCard && w.size == MiniCardSize.small,
-    );
-    expect(boardCards, findsAtLeastNWidgets(3));
-    await tester.tap(boardCards.first);
+    await tester.tap(find.byKey(const ValueKey<String>('lesson-board')));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 50));
 
     expect(find.text('Try: You'), findsOneWidget);
-    expect(find.text('your hole cards'), findsNothing);
+    expect(find.text("Oops, that's not correct"), findsOneWidget);
     expect(find.widgetWithText(FilledButton, 'Got it'), findsNothing);
     expect(find.widgetWithText(FilledButton, 'Continue'), findsOneWidget);
-    expect(find.text('Try again'), findsOneWidget);
+    expect(find.text('Try again'), findsNothing);
 
-    await tester.tap(heroRail.first);
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 50));
-    expect(find.text('Nice!'), findsNothing);
-    expect(find.text('Try: You'), findsOneWidget);
-
-    await tester.tap(find.text('Try again'));
+    await tester.tap(find.text('Continue'));
     await tester.pump();
     expect(find.text('Try: You'), findsNothing);
-    expect(find.text('Try again'), findsNothing);
-    expect(find.text('Tap your two cards.'), findsOneWidget);
+    expect(find.text("Oops, that's not correct"), findsNothing);
   });
 
   testWidgets('feedback Continue uses the elevated button metrics', (
@@ -274,15 +259,12 @@ void main() {
     await tester.pump();
     for (
       var i = 0;
-      i < 40 && find.text('Tap your cards').evaluate().isEmpty;
+      i < 40 && find.textContaining('Tap your cards').evaluate().isEmpty;
       i++
     ) {
       await tester.pump(const Duration(milliseconds: 50));
     }
-    final heroRail = find.byWidgetPredicate(
-      (w) => w is MiniCard && w.size == MiniCardSize.hero,
-    );
-    await tester.tap(heroRail.first);
+    await tester.tap(find.byKey(const ValueKey<String>('lesson-seat-hero')));
     await tester.pump();
     await tester.pump();
 
@@ -298,9 +280,9 @@ void main() {
     expect(shape, isA<RoundedRectangleBorder>());
     expect(
       (shape! as RoundedRectangleBorder).borderRadius,
-      BorderRadius.circular(14),
+      BorderRadius.circular(16),
     );
-    expect(button.style?.backgroundColor?.resolve(states), AppColors.gold);
+    expect(button.style?.backgroundColor?.resolve(states), AppColors.success);
     expect(button.style?.foregroundColor?.resolve(states), AppColors.bgDark);
     final label = tester.widget<Text>(
       find.descendant(
@@ -316,101 +298,101 @@ void main() {
   testWidgets(
     'explain felt tap then table tap auto-submits',
     (tester) async {
-    // Tall surface so the felt + feedback dock stay hit-testable without
-    // scrolling (board/hero MiniCard centers otherwise land on each other).
-    tester.view.physicalSize = const Size(390, 1600);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.reset);
+      // Tall surface so the felt + feedback dock stay hit-testable without
+      // scrolling (board/hero MiniCard centers otherwise land on each other).
+      tester.view.physicalSize = const Size(390, 1600);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(
-      _app(
-        LessonRunnerScreen(
-          lessonId: kFirstCourseLessonId,
-          courseService: service,
-          startRequestId: 'start_runner',
+      await tester.pumpWidget(
+        _app(
+          LessonRunnerScreen(
+            lessonId: kFirstCourseLessonId,
+            courseService: service,
+            startRequestId: 'start_runner',
+          ),
+          catalog: catalog,
         ),
-        catalog: catalog,
-      ),
-    );
-    await tester.pump();
-    await tester.pump();
-    for (
-      var i = 0;
-      i < 40 && find.text('Tap your cards').evaluate().isEmpty;
-      i++
-    ) {
+      );
+      await tester.pump();
+      await tester.pump();
+      for (
+        var i = 0;
+        i < 40 && find.textContaining('Tap your cards').evaluate().isEmpty;
+        i++
+      ) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
+
+      expect(find.textContaining('Tap your cards'), findsOneWidget);
+      // Explain is teach-by-doing — no Continue dock.
+      expect(find.widgetWithText(FilledButton, 'Continue'), findsNothing);
+
+      final heroRail = find.byWidgetPredicate(
+        (w) => w is MiniCard && w.size == MiniCardSize.hero,
+      );
+      expect(heroRail, findsAtLeastNWidgets(2));
+      await tester.tap(heroRail.first);
+      await tester.pump();
+      await tester.pump();
+      expect(find.text('Nice!'), findsOneWidget);
+      await tester.tap(find.text('Continue'));
+      await tester.pump();
+      // Mid-advance: feedback dock stays (lightweight button spinner), never a
+      // full-screen bootstrap spinner.
+      expect(find.text('Nice!'), findsOneWidget);
+      expect(find.widgetWithText(FilledButton, 'Check'), findsNothing);
+      expect(find.text('Undo'), findsNothing);
+      final fullScreenSpinners = find.descendant(
+        of: find.byType(SafeArea),
+        matching: find.byWidgetPredicate(
+          (w) => w is Center && w.child is CircularProgressIndicator,
+        ),
+      );
+      expect(fullScreenSpinners, findsNothing);
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.text('Tap your hole cards on the table.'), findsNothing);
+      expect(find.textContaining('Tap your cards'), findsWidgets);
+      expect(find.byType(MiniCard), findsWidgets);
+      // Table taps auto-submit — no Check dock.
+      expect(find.widgetWithText(FilledButton, 'Check'), findsNothing);
+
+      // Wrong region first — board MiniCards (small) auto-submit.
+      final boardCards = find.byWidgetPredicate(
+        (w) => w is MiniCard && w.size == MiniCardSize.small,
+      );
+      expect(boardCards, findsAtLeastNWidgets(3));
+      await tester.tap(boardCards.first);
+      await tester.pump();
       await tester.pump(const Duration(milliseconds: 50));
-    }
+      expect(find.text('Think again'), findsOneWidget);
+      expect(find.text('Try again'), findsOneWidget);
+      // Sticky footer keeps Try again reachable without scrolling the sheet.
+      await tester.tap(find.text('Try again'));
+      await tester.pump();
+      expect(find.text('Think again'), findsNothing);
+      expect(find.widgetWithText(FilledButton, 'Check'), findsNothing);
 
-    expect(find.text('Tap your cards'), findsOneWidget);
-    // Explain is teach-by-doing — no Continue dock.
-    expect(find.widgetWithText(FilledButton, 'Continue'), findsNothing);
+      // Advance with the recommended hole-card tap (hero size).
+      await tester.tap(heroRail.first);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(find.text('Nice!'), findsOneWidget);
+      await tester.tap(find.text('Continue'));
+      await tester.pump();
+      await tester.pump();
 
-    final heroRail = find.byWidgetPredicate(
-      (w) => w is MiniCard && w.size == MiniCardSize.hero,
-    );
-    expect(heroRail, findsAtLeastNWidgets(2));
-    await tester.tap(heroRail.first);
-    await tester.pump();
-    await tester.pump();
-    expect(find.text('Nice!'), findsOneWidget);
-    await tester.tap(find.text('Continue'));
-    await tester.pump();
-    // Mid-advance: feedback dock stays (lightweight button spinner), never a
-    // full-screen bootstrap spinner.
-    expect(find.text('Nice!'), findsOneWidget);
-    expect(find.widgetWithText(FilledButton, 'Check'), findsNothing);
-    expect(find.text('Undo'), findsNothing);
-    final fullScreenSpinners = find.descendant(
-      of: find.byType(SafeArea),
-      matching: find.byWidgetPredicate(
-        (w) => w is Center && w.child is CircularProgressIndicator,
-      ),
-    );
-    expect(fullScreenSpinners, findsNothing);
-    await tester.pump();
-    await tester.pump();
+      expect(find.text('Tap the cards only you can see.'), findsOneWidget);
+      expect(find.byType(MiniCard), findsWidgets);
+      expect(find.widgetWithText(FilledButton, 'Check'), findsNothing);
 
-    expect(find.text('Tap your hole cards on the table.'), findsNothing);
-    expect(find.text('Tap your cards'), findsWidgets);
-    expect(find.byType(MiniCard), findsWidgets);
-    // Table taps auto-submit — no Check dock.
-    expect(find.widgetWithText(FilledButton, 'Check'), findsNothing);
-
-    // Wrong region first — board MiniCards (small) auto-submit.
-    final boardCards = find.byWidgetPredicate(
-      (w) => w is MiniCard && w.size == MiniCardSize.small,
-    );
-    expect(boardCards, findsAtLeastNWidgets(3));
-    await tester.tap(boardCards.first);
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 50));
-    expect(find.text('Think again'), findsOneWidget);
-    expect(find.text('Try again'), findsOneWidget);
-    // Sticky footer keeps Try again reachable without scrolling the sheet.
-    await tester.tap(find.text('Try again'));
-    await tester.pump();
-    expect(find.text('Think again'), findsNothing);
-    expect(find.widgetWithText(FilledButton, 'Check'), findsNothing);
-
-    // Advance with the recommended hole-card tap (hero size).
-    await tester.tap(heroRail.first);
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 50));
-    expect(find.text('Nice!'), findsOneWidget);
-    await tester.tap(find.text('Continue'));
-    await tester.pump();
-    await tester.pump();
-
-    expect(find.text('Tap the cards only you can see.'), findsOneWidget);
-    expect(find.byType(MiniCard), findsWidgets);
-    expect(find.widgetWithText(FilledButton, 'Check'), findsNothing);
-
-    await tester.tap(heroRail.first);
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 50));
-    expect(find.text('Nice!'), findsOneWidget);
-  },
+      await tester.tap(heroRail.first);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(find.text('Nice!'), findsOneWidget);
+    },
     // Pre-existing flake on main: after Try again, hero MiniCard centers
     // hit-test the board row on this runner layout.
     skip: true,
@@ -455,16 +437,12 @@ void main() {
     );
     await tester.pump();
     await tester.pump();
-    for (
-      var i = 0;
-      i < 40 && service.lastStartedLessonId == null;
-      i++
-    ) {
+    for (var i = 0; i < 40 && service.lastStartedLessonId == null; i++) {
       await tester.pump(const Duration(milliseconds: 50));
     }
     expect(service.lastStartedLessonId, kFirstCourseLessonId);
     expect(find.text('Could not start the lesson'), findsNothing);
-    expect(find.text('Tap your cards'), findsOneWidget);
+    expect(find.textContaining('Tap your cards'), findsOneWidget);
   });
 
   testWidgets('permission-denied start says missing permissions, not sign-in', (
@@ -514,75 +492,76 @@ void main() {
     await tester.pump();
     for (
       var i = 0;
-      i < 40 && find.text('Tap your cards').evaluate().isEmpty;
+      i < 40 && find.textContaining('Tap your cards').evaluate().isEmpty;
       i++
     ) {
       await tester.pump(const Duration(milliseconds: 50));
     }
-    expect(find.text('Tap your cards'), findsOneWidget);
+    expect(find.textContaining('Tap your cards'), findsOneWidget);
     expect(find.text('Could not start the lesson'), findsNothing);
     expect(find.text('Retry'), findsNothing);
     expect(find.textContaining('Sign-in failed'), findsNothing);
     expect(once.startCount, 2);
   });
 
-  testWidgets('missing previous lesson offers that lesson, not the raw exception', (
-    tester,
-  ) async {
-    final locked = _PrerequisiteLockedCourseService(catalog);
-    await tester.pumpWidget(
-      _app(
-        LessonRunnerScreen(
-          lessonId: 'lesson-01-01-02-suits-and-ranks',
-          courseService: locked,
-          startRequestId: 'start_prereq',
+  testWidgets(
+    'missing previous lesson offers that lesson, not the raw exception',
+    (tester) async {
+      final locked = _PrerequisiteLockedCourseService(catalog);
+      await tester.pumpWidget(
+        _app(
+          LessonRunnerScreen(
+            lessonId: 'lesson-01-01-02-suits-and-ranks',
+            courseService: locked,
+            startRequestId: 'start_prereq',
+          ),
+          catalog: catalog,
         ),
-        catalog: catalog,
-      ),
-    );
-    await tester.pump();
-    for (
-      var i = 0;
-      i < 40 &&
-          find
-              .text('Complete the previous lesson before starting this one.')
-              .evaluate()
-              .isEmpty;
-      i++
-    ) {
-      await tester.pump(const Duration(milliseconds: 50));
-    }
-    expect(
-      find.text('Complete the previous lesson before starting this one.'),
-      findsOneWidget,
-    );
-    expect(find.textContaining('CourseServiceException'), findsNothing);
-    expect(find.textContaining('failed-precondition'), findsNothing);
-    expect(find.text('Open Your two cards'), findsOneWidget);
-    expect(find.text('Retry'), findsOneWidget);
+      );
+      await tester.pump();
+      for (
+        var i = 0;
+        i < 40 &&
+            find
+                .text('Complete the previous lesson before starting this one.')
+                .evaluate()
+                .isEmpty;
+        i++
+      ) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
+      expect(
+        find.text('Complete the previous lesson before starting this one.'),
+        findsOneWidget,
+      );
+      expect(find.textContaining('CourseServiceException'), findsNothing);
+      expect(find.textContaining('failed-precondition'), findsNothing);
+      expect(find.text('Open Your two cards'), findsOneWidget);
+      expect(find.text('Retry'), findsOneWidget);
 
-    await tester.tap(find.text('Technical details'));
-    await tester.pumpAndSettle();
-    expect(
-      find.textContaining(
-        'CourseServiceException(failed-precondition): '
-        'Complete the previous lesson before starting this one.',
-      ),
-      findsOneWidget,
-    );
+      await tester.tap(find.text('Technical details'));
+      await tester.pumpAndSettle();
+      expect(
+        find.textContaining(
+          'CourseServiceException(failed-precondition): '
+          'Complete the previous lesson before starting this one.',
+        ),
+        findsOneWidget,
+      );
 
-    await tester.tap(find.text('Open Your two cards'));
-    await tester.pump();
-    for (
-      var i = 0;
-      i < 40 && find.text('Tap your cards').evaluate().isEmpty;
-      i++
-    ) {
-      await tester.pump(const Duration(milliseconds: 50));
-    }
-    expect(find.text('Tap your cards'), findsOneWidget);
-    expect(find.text('Could not start the lesson'), findsWidgets);
-  });
+      await tester.tap(find.text('Open Your two cards'));
+      await tester.pump();
+      for (
+        var i = 0;
+        i < 40 && find.textContaining('Tap your cards').evaluate().isEmpty;
+        i++
+      ) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
+      expect(find.textContaining('Tap your cards'), findsOneWidget);
+      expect(find.text('Could not start the lesson'), findsWidgets);
+    },
+  );
 
   testWidgets('retry starts the lesson after the prerequisite is complete', (
     tester,
@@ -599,11 +578,7 @@ void main() {
       ),
     );
     await tester.pump();
-    for (
-      var i = 0;
-      i < 40 && find.text('Retry').evaluate().isEmpty;
-      i++
-    ) {
+    for (var i = 0; i < 40 && find.text('Retry').evaluate().isEmpty; i++) {
       await tester.pump(const Duration(milliseconds: 50));
     }
     expect(find.text('Retry'), findsOneWidget);
@@ -666,24 +641,20 @@ void main() {
     await tester.pump();
     for (
       var i = 0;
-      i < 40 && find.text('Tap your cards').evaluate().isEmpty;
+      i < 40 && find.textContaining('Tap your cards').evaluate().isEmpty;
       i++
     ) {
       await tester.pump(const Duration(milliseconds: 50));
     }
 
-    expect(find.text('Tap your cards'), findsOneWidget);
-    final heroRail = find.byWidgetPredicate(
-      (w) => w is MiniCard && w.size == MiniCardSize.hero,
-    );
-    await tester.tap(heroRail.first);
+    expect(find.textContaining('Tap your cards'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey<String>('lesson-seat-hero')));
     await tester.pump();
     await tester.pump();
     expect(find.text('Caught up to your saved progress.'), findsOneWidget);
     // Resync lands on the guided hole-card step (server cursor).
-    // Felt-first SoftPulse owns the cue — no duplicate prompt/footer.
-    expect(find.text('Tap your hole cards on the table.'), findsNothing);
-    expect(find.text('Tap your cards'), findsWidgets);
+    // The prompt is the speech bubble, once.
+    expect(find.text('Tap your hole cards on the table.'), findsOneWidget);
     // Auto-submit table taps — Check is gone.
     expect(find.widgetWithText(FilledButton, 'Check'), findsNothing);
     expect(find.text('Tap the answer on the table.'), findsNothing);
@@ -705,19 +676,16 @@ void main() {
         catalog: catalog,
       ),
     );
-    await _pumpUntil(tester, find.text('Tap your cards'));
+    await _pumpUntil(tester, find.textContaining('Tap your cards'));
 
-    final heroRail = find.byWidgetPredicate(
-      (w) => w is MiniCard && w.size == MiniCardSize.hero,
-    );
-    await tester.tap(heroRail.first);
+    await tester.tap(find.byKey(const ValueKey<String>('lesson-seat-hero')));
     await tester.pump();
     await tester.pump();
 
     expect(stale.startCount, 2);
     expect(find.text('Caught up to your saved progress.'), findsNothing);
     expect(find.textContaining('Stale activity'), findsNothing);
-    expect(find.text('Tap your cards'), findsOneWidget);
+    expect(find.textContaining('Tap your cards'), findsOneWidget);
   });
 
   testWidgets('order-sequence lessons hide the Check dock', (tester) async {
@@ -1175,15 +1143,13 @@ class _AnonymousAuthService implements AuthService {
     required String email,
     required String password,
     String? displayName,
-  }) =>
-      throw UnimplementedError();
+  }) => throw UnimplementedError();
 
   @override
   Future<User> signInWithEmail({
     required String email,
     required String password,
-  }) =>
-      throw UnimplementedError();
+  }) => throw UnimplementedError();
 
   @override
   Future<User> signInWithGoogle() => throw UnimplementedError();
@@ -1196,8 +1162,7 @@ class _AnonymousAuthService implements AuthService {
     required String email,
     required String password,
     String? displayName,
-  }) =>
-      throw UnimplementedError();
+  }) => throw UnimplementedError();
 
   @override
   Future<User> linkWithGoogle() => throw UnimplementedError();

@@ -46,6 +46,13 @@ class FeltTableView extends StatelessWidget {
     this.review = false,
     this.waitingOnSeat,
     this.onPlayerTap,
+    this.includeHero = false,
+    this.showHoleCardBacks = false,
+    this.heroCardsFaceUp = false,
+    this.highlightHero = false,
+    this.highlightBoard = false,
+    this.onSeatTap,
+    this.onBoardTap,
   });
 
   final GameState game;
@@ -68,6 +75,28 @@ class FeltTableView extends StatelessWidget {
 
   /// Opens a villain's visible modeled tendency profile.
   final ValueChanged<PlayerModel>? onPlayerTap;
+
+  /// Draw the hero on the ring. Live training leaves this false so the
+  /// hero stays on the rail below the felt.
+  final bool includeHero;
+
+  /// Two card backs on each seat that is not showing its faces.
+  final bool showHoleCardBacks;
+
+  /// Hero hole cards face up. Ignored when [showHoleCardBacks] is false.
+  final bool heroCardsFaceUp;
+
+  /// Arrows on the hero seat, the lesson cue for "tap your cards".
+  final bool highlightHero;
+
+  /// An arrow on the community cards.
+  final bool highlightBoard;
+
+  /// Tap on a seat, including the hero. Lesson stages use this.
+  final ValueChanged<PlayerModel>? onSeatTap;
+
+  /// Tap on the community cards.
+  final VoidCallback? onBoardTap;
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +125,7 @@ class FeltTableView extends StatelessWidget {
         final ry = _ringRy(h, seatBox);
 
         final seats = <Widget>[];
+        final heroLayer = <Widget>[];
         final bets = <Widget>[];
         final awards = <Widget>[];
         // Hero sits on the rail below the felt; send their share to the bottom
@@ -110,7 +140,7 @@ class FeltTableView extends StatelessWidget {
         final slots = <_SeatSlot>[];
         for (var i = 0; i < n; i++) {
           final player = game.players[i];
-          if (player.isHero) continue;
+          if (player.isHero && !includeHero) continue;
 
           // Rotate so the hero's empty ring slot is always at the bottom of
           // the felt (π/2), matching the hero rail below — even when the
@@ -166,37 +196,63 @@ class FeltTableView extends StatelessWidget {
           final isWinner = winnerIdSet.contains(player.id);
           final hasBet = player.currentBet > Money.epsilon;
 
-          seats.add(
+          final seatLayer = player.isHero ? heroLayer : seats;
+          seatLayer.add(
             Positioned(
               left: slot.box.left,
               top: slot.box.top,
               child: GestureDetector(
-                onTap:
-                    player.tendency == null
+                behavior:
+                    onSeatTap == null
+                        ? HitTestBehavior.deferToChild
+                        : HitTestBehavior.opaque,
+                key:
+                    onSeatTap == null
                         ? null
-                        : () => onPlayerTap?.call(player),
-                child: PlayerSeatWidget(
-                  player: player,
-                  bigBlind: game.bigBlind,
-                  chipDisplayMode: chipDisplayMode,
-                  isActive: game.activePlayerIndex == i && !game.isHandOver,
-                  isWinner: game.isHandOver && isWinner,
-                  isDealer: game.dealerIndex == i,
-                  isSmallBlind: game.sbIndex == i,
-                  isBigBlind: game.bbIndex == i,
-                  isWaitingOnLlm: waitingOnSeat == player.id,
-                  compact: compact,
-                  size: seatBox,
-                  showCards: game.isHandOver && !player.folded,
-                  // During collection the flying pill carries the amount.
-                  betLabel:
-                      hasBet && !collectingChips
-                          ? ChipFormat.chips(
-                            player.currentBet,
-                            game.bigBlind,
-                            chipDisplayMode,
-                          )
-                          : null,
+                        : ValueKey<String>(
+                          player.isHero
+                              ? 'lesson-seat-hero'
+                              : 'lesson-seat-${player.id}',
+                        ),
+                onTap: _seatTap(player),
+                child: Semantics(
+                  button: onSeatTap != null,
+                  label:
+                      onSeatTap == null
+                          ? null
+                          : player.isHero
+                          ? (heroCardsFaceUp
+                              ? 'Your hole cards, face up'
+                              : 'Your hole cards')
+                          : "${player.name}'s hole cards",
+                  child: PlayerSeatWidget(
+                    player: player,
+                    bigBlind: game.bigBlind,
+                    chipDisplayMode: chipDisplayMode,
+                    isActive: game.activePlayerIndex == i && !game.isHandOver,
+                    isWinner: game.isHandOver && isWinner,
+                    isDealer: game.dealerIndex == i,
+                    isSmallBlind: game.sbIndex == i,
+                    isBigBlind: game.bbIndex == i,
+                    isWaitingOnLlm: waitingOnSeat == player.id,
+                    compact: compact,
+                    size: seatBox,
+                    showCards: game.isHandOver && !player.folded,
+                    revealHoleCards:
+                        player.isHero && heroCardsFaceUp && showHoleCardBacks,
+                    showHoleBacks:
+                        showHoleCardBacks &&
+                        !(player.isHero && heroCardsFaceUp),
+                    // During collection the flying pill carries the amount.
+                    betLabel:
+                        hasBet && !collectingChips
+                            ? ChipFormat.chips(
+                              player.currentBet,
+                              game.bigBlind,
+                              chipDisplayMode,
+                            )
+                            : null,
+                  ),
                 ),
               ),
             ),
@@ -226,6 +282,21 @@ class FeltTableView extends StatelessWidget {
                   key: ValueKey('win-${player.id}-${game.handCount}'),
                   label: game.isSplitPot ? 'SPLIT' : 'WINS',
                 ),
+              ),
+            );
+          }
+        }
+
+        if (highlightHero) {
+          for (final slot in slots) {
+            final player = game.players[slot.index];
+            if (!player.isHero) continue;
+            heroLayer.add(
+              Positioned(
+                left: slot.box.left,
+                top: _clamp(slot.box.top - 26, 0, math.max(0.0, h - 24)),
+                width: slot.box.width,
+                child: const _CueArrows(count: 2),
               ),
             );
           }
@@ -292,30 +363,59 @@ class FeltTableView extends StatelessWidget {
             // cards matter more than one villain's HUD.
             ...seats,
             Center(
-              child: TweenAnimationBuilder<double>(
-                tween: Tween<double>(end: boardScale),
-                duration: const Duration(milliseconds: 280),
-                curve: Curves.easeOutCubic,
-                builder:
-                    (context, scale, _) => CommunityCardsView(
-                      community: game.community,
-                      pot: game.displayPot,
-                      street: game.street,
-                      bigBlind: game.bigBlind,
-                      chipDisplayMode: chipDisplayMode,
-                      scale: scale,
-                      awarding: awardingChips,
-                      isSplit: game.isSplitPot,
-                      resultMessage:
-                          game.isHandOver ? game.resultMessage : null,
-                    ),
+              child: GestureDetector(
+                key:
+                    onBoardTap == null
+                        ? null
+                        : const ValueKey<String>('lesson-board'),
+                behavior: HitTestBehavior.translucent,
+                onTap: onBoardTap,
+                child: Semantics(
+                  button: onBoardTap != null,
+                  label: onBoardTap == null ? null : 'Community cards',
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (highlightBoard) const _CueArrows(count: 1),
+                      TweenAnimationBuilder<double>(
+                        tween: Tween<double>(end: boardScale),
+                        duration: const Duration(milliseconds: 280),
+                        curve: Curves.easeOutCubic,
+                        builder:
+                            (context, scale, _) => CommunityCardsView(
+                              community: game.community,
+                              pot: game.displayPot,
+                              street: game.street,
+                              bigBlind: game.bigBlind,
+                              chipDisplayMode: chipDisplayMode,
+                              scale: scale,
+                              awarding: awardingChips,
+                              isSplit: game.isSplitPot,
+                              resultMessage:
+                                  game.isHandOver ? game.resultMessage : null,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
+            ...heroLayer,
             ...awards,
           ],
         );
       },
     );
+  }
+
+  VoidCallback? _seatTap(PlayerModel player) {
+    if (onSeatTap == null && (player.tendency == null || onPlayerTap == null)) {
+      return null;
+    }
+    return () {
+      onSeatTap?.call(player);
+      if (player.tendency != null) onPlayerTap?.call(player);
+    };
   }
 
   /// Collect animation ends short of dead center so chips settle on the pot
@@ -407,9 +507,10 @@ class FeltTableView extends StatelessWidget {
     var box = natural;
     final steps = seatCount <= 2 ? _headsUpFitSteps : _seatFitSteps;
     for (var attempt = 0; attempt < steps; attempt++) {
-      final missEachOther = !_anyOverlap(
-        _seatFootprints(width, height, seatCount, heroIndex, box),
-      );
+      final missEachOther =
+          !_anyOverlap(
+            _seatFootprints(width, height, seatCount, heroIndex, box),
+          );
       // A full ring already shrinks until neighbours miss. Only a heads-up
       // felt (Your start: hero on the rail, one villain opposite) was still
       // clamping that villain onto the pot. Full tables keep the neighbour fit.
@@ -467,8 +568,7 @@ class FeltTableView extends StatelessWidget {
             .toList();
     final center = Offset(width / 2, height / 2);
     final slots = [
-      for (final rect in grown)
-        _SeatSlot(index: 0, box: rect, occupied: rect),
+      for (final rect in grown) _SeatSlot(index: 0, box: rect, occupied: rect),
     ];
     final scale = _boardScale(
       width,
@@ -793,6 +893,24 @@ class _WinnerBadgeState extends State<_WinnerBadge> {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Downward arrows that mark the tap the step is teaching.
+class _CueArrows extends StatelessWidget {
+  const _CueArrows({required this.count});
+
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        for (var i = 0; i < count; i++)
+          const Icon(Icons.arrow_downward, size: 18, color: AppColors.cream),
+      ],
     );
   }
 }

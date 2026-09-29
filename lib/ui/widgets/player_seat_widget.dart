@@ -48,6 +48,8 @@ class PlayerSeatWidget extends StatelessWidget {
     this.isWinner = false,
     this.compact = false,
     this.showCards = false,
+    this.revealHoleCards = false,
+    this.showHoleBacks = false,
     this.isWaitingOnLlm = false,
     this.betLabel,
     this.size,
@@ -63,6 +65,12 @@ class PlayerSeatWidget extends StatelessWidget {
   final bool isWinner;
   final bool compact;
   final bool showCards;
+
+  /// Draw this seat's hole cards face up even before showdown.
+  final bool revealHoleCards;
+
+  /// Two card backs when the faces stay hidden.
+  final bool showHoleBacks;
 
   /// True while the server is waiting on this seat's LLM decision.
   final bool isWaitingOnLlm;
@@ -155,7 +163,8 @@ class PlayerSeatWidget extends StatelessWidget {
                     fit: BoxFit.scaleDown,
                     child: StreetBetPill(label: betLabel!, compact: compact),
                   ),
-                if (showCards && player.holeCards.isNotEmpty)
+                if ((showCards || revealHoleCards) &&
+                    player.holeCards.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 2),
                     child: Row(
@@ -169,6 +178,18 @@ class PlayerSeatWidget extends StatelessWidget {
                               size: MiniCardSize.tiny,
                             ),
                           ),
+                      ],
+                    ),
+                  )
+                else if (showHoleBacks)
+                  const Padding(
+                    padding: EdgeInsets.only(top: 2),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CardBack(size: MiniCardSize.tiny),
+                        SizedBox(width: 2),
+                        CardBack(size: MiniCardSize.tiny),
                       ],
                     ),
                   ),
@@ -199,10 +220,7 @@ class StreetBetPill extends StatelessWidget {
     return FittedBox(
       fit: BoxFit.scaleDown,
       child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: compact ? 5 : 6,
-          vertical: 1,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: compact ? 5 : 6, vertical: 1),
         decoration: BoxDecoration(
           color: AppColors.bgDark.withValues(alpha: 0.94),
           borderRadius: BorderRadius.circular(8),
@@ -262,13 +280,14 @@ class _ArchetypeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final archetype = player.archetype;
     final highlight = isWinner || isActive;
-    final ring = isWinner
-        ? AppColors.goldBright
-        : isWaitingOnLlm
+    final ring =
+        isWinner
+            ? AppColors.goldBright
+            : isWaitingOnLlm
             ? AppColors.warning
             : isActive
-                ? AppColors.goldBright
-                : accent.withValues(alpha: 0.9);
+            ? AppColors.goldBright
+            : accent.withValues(alpha: 0.9);
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeOutCubic,
@@ -279,23 +298,19 @@ class _ArchetypeCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.bgDark.withValues(alpha: 0.88),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: ring,
-          width: highlight ? 2 : 1.2,
-        ),
-        boxShadow: highlight
-            ? [
-                BoxShadow(
-                  color: (isWaitingOnLlm
-                          ? AppColors.warning
-                          : AppColors.goldBright)
-                      .withValues(
-                    alpha: isWinner ? 0.42 : 0.28,
+        border: Border.all(color: ring, width: highlight ? 2 : 1.2),
+        boxShadow:
+            highlight
+                ? [
+                  BoxShadow(
+                    color: (isWaitingOnLlm
+                            ? AppColors.warning
+                            : AppColors.goldBright)
+                        .withValues(alpha: isWinner ? 0.42 : 0.28),
+                    blurRadius: isWinner ? 14 : 10,
                   ),
-                  blurRadius: isWinner ? 14 : 10,
-                ),
-              ]
-            : null,
+                ]
+                : null,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -395,9 +410,7 @@ class _SeatWaitTimerState extends State<_SeatWaitTimer> {
   Widget build(BuildContext context) {
     final seconds = _tenths / 10;
     final label =
-        seconds < 10
-            ? seconds.toStringAsFixed(1)
-            : seconds.toStringAsFixed(0);
+        seconds < 10 ? seconds.toStringAsFixed(1) : seconds.toStringAsFixed(0);
     return Text(
       '${label}s',
       maxLines: 1,

@@ -34,8 +34,8 @@ Frames are in [frames/](frames/), capture order.
 
 | Their beat | Ours |
 | --- | --- |
-| Chessboard | Poker table bands. The felt stays the largest thing on a hand step. |
-| Oscar | Rex, with a face and a mood. Text-only Rex on a teaching step is not this loop. |
+| Chessboard | The lesson stage: the full poker table, every step. Fewer seats or a shorter board, never a second mini table. |
+| Oscar | The coach band: mascot box (104×118) and one speech bubble. Expression follows the beat (thinking, happy, wrong). |
 | Hearts | Lesson lives already on the runner. They move when the answer is wrong. |
 | Green buttons | Theme elevated button. Do not introduce a second green. |
 | XP burst | The lesson result shows XP for this lesson before Home. |

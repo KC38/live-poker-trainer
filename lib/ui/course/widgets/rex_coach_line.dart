@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
 /// Resolves a single Rex instruction vs a duplicate prompt under the bubble.
@@ -70,6 +71,9 @@ class RexCoachLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (LessonFrameScope.maybeOf(context) != null) {
+      return const SizedBox.shrink();
+    }
     return Semantics(
       label: '$label says: $text',
       child: Row(

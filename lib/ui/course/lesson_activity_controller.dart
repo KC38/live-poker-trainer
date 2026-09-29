@@ -50,6 +50,7 @@ class LessonActivityController extends ChangeNotifier {
   CourseActivity _activity;
   ActivityDraft _draft = const ActivityDraft();
   SubmitCourseStepResult? _lastResult;
+  ActivityDraft? _redoDraft;
   bool _submitting = false;
   bool _hintVisible = false;
   int _hintRequests = 0;
@@ -170,12 +171,52 @@ class LessonActivityController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// True when undo can revert a local answer or clear a miss.
+  bool get canUndo =>
+      !_submitting &&
+      _lastResult?.accepted != true &&
+      (_draft.hasAnswer || _lastResult != null);
+
+  /// True when redo can restore the draft [undoDraft] just cleared.
+  bool get canRedo => _redoDraft != null && !_submitting && _lastResult == null;
+
   /// Undo local selection before a successful accepted advance.
   void undoDraft() {
     if (_submitting) return;
     if (_lastResult != null && _lastResult!.accepted) return;
+    if (_lastResult == null && _draft.hasAnswer) {
+      _redoDraft = _draft;
+    } else {
+      _redoDraft = null;
+    }
     _draft = ActivityDraft(handStepIndex: _draft.handStepIndex);
     _lastResult = null;
+    _tappedSeatLabel = null;
+    notifyListeners();
+  }
+
+  /// Restores the draft cleared by the last [undoDraft].
+  void redoDraft() {
+    final saved = _redoDraft;
+    if (saved == null || _submitting || _lastResult != null) return;
+    _draft = saved;
+    _redoDraft = null;
+    notifyListeners();
+  }
+
+  /// Grades a miss on this device. Continue stays on the same step.
+  void presentLocalMiss(SubmitCourseStepResult result) {
+    if (_submitting || _lastResult != null) return;
+    _lastResult = result;
+    _redoDraft = null;
+    HapticFeedback.heavyImpact();
+    notifyListeners();
+  }
+
+  /// Shows or hides the hint in the speech bubble.
+  void toggleHint() {
+    _hintVisible = !_hintVisible;
+    if (_hintVisible) _hintRequests += 1;
     notifyListeners();
   }
 

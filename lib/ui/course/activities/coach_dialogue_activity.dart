@@ -47,6 +47,8 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_streets.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_toy_hand.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/poker_table_bands.dart';
 
@@ -74,459 +76,530 @@ class CoachDialogueActivity extends StatelessWidget {
       animation: controller,
       builder: (context, _) {
         final visual = resolveCoachDialogueVisual(activity);
-        final locked =
-            controller.submitting || controller.lastResult != null;
+        final locked = controller.submitting || controller.lastResult != null;
+        final framed = LessonFrameScope.maybeOf(context) != null;
+        if (framed && visual.kind == CoachDialogueVisualKind.holeCards) {
+          return LessonPeekTable(
+            enabled: !locked,
+            onPeek: () => onFeltAcknowledge?.call(),
+            onMiss: () {
+              LessonFrameScope.maybeOf(context)?.onLocalMiss(
+                'Those cards belong to someone else. '
+                'Yours are the two at your seat.',
+              );
+            },
+          );
+        }
         return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        // Nice! owns the teaching line — hide stale Rex above feedback.
-        if (!locked) RexCoachLine.fromActivity(activity),
-        if (visual.kind != CoachDialogueVisualKind.none) ...[
-          const SizedBox(height: 12),
-          _CoachDialogueVisualPane(
-            visual: visual,
-            enabled: !locked && visual.requiresFeltTap,
-            showSoftPulse:
-                showGuidance && !locked && visual.requiresFeltTap,
-            onRegionTap:
-                locked ||
-                        (visual.kind != CoachDialogueVisualKind.holeCards &&
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Nice! owns the teaching line — hide stale Rex above feedback.
+            if (!locked) RexCoachLine.fromActivity(activity),
+            if (visual.kind != CoachDialogueVisualKind.none) ...[
+              const SizedBox(height: 12),
+              _CoachDialogueVisualPane(
+                visual: visual,
+                enabled: !locked && visual.requiresFeltTap,
+                showSoftPulse:
+                    showGuidance && !locked && visual.requiresFeltTap,
+                onRegionTap:
+                    locked ||
+                            (visual.kind != CoachDialogueVisualKind.holeCards &&
+                                visual.kind !=
+                                    CoachDialogueVisualKind.positionLabels)
+                        ? null
+                        : (target) {
+                          if (visual.kind ==
+                                  CoachDialogueVisualKind.holeCards &&
+                              target.region == LessonTableRegion.hero) {
+                            onFeltAcknowledge?.call();
+                          } else if (visual.kind ==
+                                  CoachDialogueVisualKind.positionLabels &&
+                              target.region == LessonTableRegion.button) {
+                            onFeltAcknowledge?.call();
+                          }
+                        },
+                onDealerClockwiseAcknowledge:
+                    locked ||
+                            visual.kind != CoachDialogueVisualKind.dealerButton
+                        ? null
+                        : onFeltAcknowledge,
+                onSuitAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.suitsRanks
+                        ? null
+                        : onFeltAcknowledge,
+                onLadderAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.handLadder
+                        ? null
+                        : onFeltAcknowledge,
+                onBestFiveAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.bestFive
+                        ? null
+                        : onFeltAcknowledge,
+                onPassiveAcknowledge:
+                    locked ||
                             visual.kind !=
-                                CoachDialogueVisualKind.positionLabels)
-                    ? null
-                    : (target) {
-                      if (visual.kind == CoachDialogueVisualKind.holeCards &&
-                          target.region == LessonTableRegion.hero) {
-                        onFeltAcknowledge?.call();
-                      } else if (visual.kind ==
-                              CoachDialogueVisualKind.positionLabels &&
-                          target.region == LessonTableRegion.button) {
-                        onFeltAcknowledge?.call();
-                      }
-                    },
-            onDealerClockwiseAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.dealerButton
-                    ? null
-                    : onFeltAcknowledge,
-            onSuitAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.suitsRanks
-                    ? null
-                    : onFeltAcknowledge,
-            onLadderAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.handLadder
-                    ? null
-                    : onFeltAcknowledge,
-            onBestFiveAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.bestFive
-                    ? null
-                    : onFeltAcknowledge,
-            onPassiveAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.passiveActions
-                    ? null
-                    : onFeltAcknowledge,
-            onAggressiveAcknowledge:
-                locked ||
-                        visual.kind != CoachDialogueVisualKind.aggressiveActions
-                    ? null
-                    : onFeltAcknowledge,
-            onStreetsAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.streetsTimeline
-                    ? null
-                    : onFeltAcknowledge,
-            onPathsAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.winningPaths
-                    ? null
-                    : onFeltAcknowledge,
-            onToyHandAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.toyHandRun
-                    ? null
-                    : onFeltAcknowledge,
-            onActionOrderAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.actionOrder
-                    ? null
-                    : onFeltAcknowledge,
-            onHandFamiliesAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.handFamilies
-                    ? null
-                    : onFeltAcknowledge,
-            onOpenRangeAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.openRange
-                    ? null
-                    : onFeltAcknowledge,
-            onVsOpenAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.vsOpenResponse
-                    ? null
-                    : onFeltAcknowledge,
-            onBbStackAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.bbStackDepth
-                    ? null
-                    : onFeltAcknowledge,
-            onTableHabitsAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.tableHabits
-                    ? null
-                    : onFeltAcknowledge,
-            onFullRingAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.fullRing
-                    ? null
-                    : onFeltAcknowledge,
-            onTableReadAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.tableRead
-                    ? null
-                    : onFeltAcknowledge,
-            onFlopLabelAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.flopLabel
-                    ? null
-                    : onFeltAcknowledge,
-            onOutsPriceAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.outsPrice
-                    ? null
-                    : onFeltAcknowledge,
-            onFlopLinesAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.flopLines
-                    ? null
-                    : onFeltAcknowledge,
-            onTurnStoryAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.turnStory
-                    ? null
-                    : onFeltAcknowledge,
-            onRiverBinaryAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.riverBinary
-                    ? null
-                    : onFeltAcknowledge,
-            onMultiwayAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.multiwayPlan
-                    ? null
-                    : onFeltAcknowledge,
-            onCommonLeaksAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.commonLeaks
-                    ? null
-                    : onFeltAcknowledge,
-            onRangeUpdateAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.rangeUpdate
-                    ? null
-                    : onFeltAcknowledge,
-            onThreeBetSqueezeAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.threeBetSqueeze
-                    ? null
-                    : onFeltAcknowledge,
-            onMultiStreetPlanAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.multiStreetPlan
-                    ? null
-                    : onFeltAcknowledge,
-            onSizingLanguageAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.sizingLanguage
-                    ? null
-                    : onFeltAcknowledge,
-            onSprAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.sprDepth
-                    ? null
-                    : onFeltAcknowledge,
-            onPlayerObserveAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.playerObserve
-                    ? null
-                    : onFeltAcknowledge,
-            onCallingStationAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.callingStation
-                    ? null
-                    : onFeltAcknowledge,
-            onVsStationAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.vsStation
-                    ? null
-                    : onFeltAcknowledge,
-            onTightSeatsAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.tightSeats
-                    ? null
-                    : onFeltAcknowledge,
-            onNitModelAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.nitModel
-                    ? null
-                    : onFeltAcknowledge,
-            onVsNitsAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.vsNits
-                    ? null
-                    : onFeltAcknowledge,
-            onExtremeEntryAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.extremeEntry
-                    ? null
-                    : onFeltAcknowledge,
-            onManiacModelAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.maniacModel
-                    ? null
-                    : onFeltAcknowledge,
-            onVsManiacsAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.vsManiacs
-                    ? null
-                    : onFeltAcknowledge,
-            onVsTagsAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.vsTags
-                    ? null
-                    : onFeltAcknowledge,
-            onVsLagsAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.vsLags
-                    ? null
-                    : onFeltAcknowledge,
-            onObservationCertaintyAcknowledge:
-                locked ||
-                        visual.kind !=
-                            CoachDialogueVisualKind.observationCertainty
-                    ? null
-                    : onFeltAcknowledge,
-            onExploitEvidenceAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.exploitEvidence
-                    ? null
-                    : onFeltAcknowledge,
-            onMultiwayNutsAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.multiwayNuts
-                    ? null
-                    : onFeltAcknowledge,
-            onDeepStacksAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.deepStacks
-                    ? null
-                    : onFeltAcknowledge,
-            onImpliedOddsAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.impliedOdds
-                    ? null
-                    : onFeltAcknowledge,
-            onThinValueAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.thinValue
-                    ? null
-                    : onFeltAcknowledge,
-            onLineStoriesAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.lineStories
-                    ? null
-                    : onFeltAcknowledge,
-            onRangeRewriteAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.rangeRewrite
-                    ? null
-                    : onFeltAcknowledge,
-            onTimingCluesAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.timingClues
-                    ? null
-                    : onFeltAcknowledge,
-            onTablesChangeAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.tablesChange
-                    ? null
-                    : onFeltAcknowledge,
-            onGuardrailsAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.guardrails
-                    ? null
-                    : onFeltAcknowledge,
-            onRangeAdvantageAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.rangeAdvantage
-                    ? null
-                    : onFeltAcknowledge,
-            onEquityRealizeAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.equityRealize
-                    ? null
-                    : onFeltAcknowledge,
-            onCappedUncappedAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.cappedUncapped
-                    ? null
-                    : onFeltAcknowledge,
-            onPolarMergedAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.polarMerged
-                    ? null
-                    : onFeltAcknowledge,
-            onOverbetGeometryAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.overbetGeometry
-                    ? null
-                    : onFeltAcknowledge,
-            onBlockersAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.blockers
-                    ? null
-                    : onFeltAcknowledge,
-            onDefendEnoughAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.defendEnough
-                    ? null
-                    : onFeltAcknowledge,
-            onMixedStrategyAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.mixedStrategy
-                    ? null
-                    : onFeltAcknowledge,
-            onThreeBetFourBetSprAcknowledge:
-                locked ||
-                        visual.kind != CoachDialogueVisualKind.threeBetFourBetSpr
-                    ? null
-                    : onFeltAcknowledge,
-            onHardFoldCoolerAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.hardFoldCooler
-                    ? null
-                    : onFeltAcknowledge,
-            onSelectiveAggressionAcknowledge:
-                locked ||
-                        visual.kind !=
-                            CoachDialogueVisualKind.selectiveAggression
-                    ? null
-                    : onFeltAcknowledge,
-            onTagModelAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.tagModel
-                    ? null
-                    : onFeltAcknowledge,
-            onLagModelAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.lagModel
-                    ? null
-                    : onFeltAcknowledge,
-            onWidePressureAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.widePressure
-                    ? null
-                    : onFeltAcknowledge,
-            onPreflopFlopPlanAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.preflopFlopPlan
-                    ? null
-                    : onFeltAcknowledge,
-            onTurnMapAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.turnMap
-                    ? null
-                    : onFeltAcknowledge,
-            onRiverCompositionAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.riverComposition
-                    ? null
-                    : onFeltAcknowledge,
-            onPotTypePlansAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.potTypePlans
-                    ? null
-                    : onFeltAcknowledge,
-            onHuVsMultiwayAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.huVsMultiway
-                    ? null
-                    : onFeltAcknowledge,
-            onStackDepthPlansAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.stackDepthPlans
-                    ? null
-                    : onFeltAcknowledge,
-            onSameCardsTypesAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.sameCardsTypes
-                    ? null
-                    : onFeltAcknowledge,
-            onTypeBoardLineAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.typeBoardLine
-                    ? null
-                    : onFeltAcknowledge,
-            onLeakReviewBookAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.leakReviewBook
-                    ? null
-                    : onFeltAcknowledge,
-            onCapstoneSrpAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.capstoneSrp
-                    ? null
-                    : onFeltAcknowledge,
-            onCapstone3betAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.capstone3bet
-                    ? null
-                    : onFeltAcknowledge,
-            onCapstoneMultiwayDeepAcknowledge:
-                locked ||
-                        visual.kind !=
-                            CoachDialogueVisualKind.capstoneMultiwayDeep
-                    ? null
-                    : onFeltAcknowledge,
-            onCapstoneLimpedAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.capstoneLimped
-                    ? null
-                    : onFeltAcknowledge,
-            onCapstone4betAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.capstone4bet
-                    ? null
-                    : onFeltAcknowledge,
-            onLiveWarmupPrepAcknowledge:
-                locked || visual.kind != CoachDialogueVisualKind.liveWarmupPrep
-                    ? null
-                    : onFeltAcknowledge,
-          ),
-        ],
-        if (showGuidance &&
-            !locked &&
-            visual.requiresFeltTap &&
-            // These demos embed their own tap hint on the felt / chrome —
-            // or Rex already names the tiles (no duplicate gold footer).
-            visual.kind != CoachDialogueVisualKind.bestFive &&
-            visual.kind != CoachDialogueVisualKind.holeCards &&
-            visual.kind != CoachDialogueVisualKind.suitsRanks &&
-            visual.kind != CoachDialogueVisualKind.handLadder &&
-            visual.kind != CoachDialogueVisualKind.dealerButton &&
-            visual.kind != CoachDialogueVisualKind.positionLabels &&
-            visual.kind != CoachDialogueVisualKind.passiveActions &&
-            visual.kind != CoachDialogueVisualKind.aggressiveActions &&
-            visual.kind != CoachDialogueVisualKind.streetsTimeline &&
-            visual.kind != CoachDialogueVisualKind.winningPaths &&
-            visual.kind != CoachDialogueVisualKind.toyHandRun &&
-            visual.kind != CoachDialogueVisualKind.actionOrder &&
-            visual.kind != CoachDialogueVisualKind.handFamilies &&
-            visual.kind != CoachDialogueVisualKind.openRange &&
-            visual.kind != CoachDialogueVisualKind.vsOpenResponse &&
-            visual.kind != CoachDialogueVisualKind.bbStackDepth &&
-            visual.kind != CoachDialogueVisualKind.tableHabits &&
-            visual.kind != CoachDialogueVisualKind.fullRing &&
-            visual.kind != CoachDialogueVisualKind.tableRead &&
-            visual.kind != CoachDialogueVisualKind.flopLabel &&
-            visual.kind != CoachDialogueVisualKind.outsPrice &&
-            visual.kind != CoachDialogueVisualKind.flopLines &&
-            visual.kind != CoachDialogueVisualKind.turnStory &&
-            visual.kind != CoachDialogueVisualKind.riverBinary &&
-            visual.kind != CoachDialogueVisualKind.multiwayPlan &&
-            visual.kind != CoachDialogueVisualKind.commonLeaks &&
-            visual.kind != CoachDialogueVisualKind.rangeUpdate &&
-            visual.kind != CoachDialogueVisualKind.threeBetSqueeze &&
-            visual.kind != CoachDialogueVisualKind.multiStreetPlan &&
-            visual.kind != CoachDialogueVisualKind.sizingLanguage &&
-            visual.kind != CoachDialogueVisualKind.sprDepth &&
-            visual.kind != CoachDialogueVisualKind.playerObserve &&
-            visual.kind != CoachDialogueVisualKind.callingStation &&
-            visual.kind != CoachDialogueVisualKind.vsStation &&
-            visual.kind != CoachDialogueVisualKind.tightSeats &&
-            visual.kind != CoachDialogueVisualKind.nitModel &&
-            visual.kind != CoachDialogueVisualKind.vsNits &&
-            visual.kind != CoachDialogueVisualKind.extremeEntry &&
-            visual.kind != CoachDialogueVisualKind.maniacModel &&
-            visual.kind != CoachDialogueVisualKind.vsManiacs &&
-            visual.kind != CoachDialogueVisualKind.observationCertainty &&
-            visual.kind != CoachDialogueVisualKind.exploitEvidence &&
-            visual.kind != CoachDialogueVisualKind.multiwayNuts &&
-            visual.kind != CoachDialogueVisualKind.deepStacks &&
-            visual.kind != CoachDialogueVisualKind.impliedOdds &&
-            visual.kind != CoachDialogueVisualKind.thinValue &&
-            visual.kind != CoachDialogueVisualKind.lineStories &&
-            visual.kind != CoachDialogueVisualKind.rangeRewrite &&
-            visual.kind != CoachDialogueVisualKind.timingClues &&
-            visual.kind != CoachDialogueVisualKind.vsTags &&
-            visual.kind != CoachDialogueVisualKind.vsLags &&
-            visual.kind != CoachDialogueVisualKind.tablesChange &&
-            visual.kind != CoachDialogueVisualKind.guardrails &&
-            visual.kind != CoachDialogueVisualKind.rangeAdvantage &&
-            visual.kind != CoachDialogueVisualKind.equityRealize &&
-            visual.kind != CoachDialogueVisualKind.cappedUncapped &&
-            visual.kind != CoachDialogueVisualKind.polarMerged &&
-            visual.kind != CoachDialogueVisualKind.overbetGeometry &&
-            visual.kind != CoachDialogueVisualKind.blockers &&
-            visual.kind != CoachDialogueVisualKind.defendEnough &&
-            visual.kind != CoachDialogueVisualKind.mixedStrategy &&
-            visual.kind != CoachDialogueVisualKind.threeBetFourBetSpr &&
-            visual.kind != CoachDialogueVisualKind.hardFoldCooler &&
-            visual.kind != CoachDialogueVisualKind.selectiveAggression &&
-            visual.kind != CoachDialogueVisualKind.tagModel &&
-            visual.kind != CoachDialogueVisualKind.lagModel &&
-            visual.kind != CoachDialogueVisualKind.widePressure &&
-            visual.kind != CoachDialogueVisualKind.preflopFlopPlan &&
-            visual.kind != CoachDialogueVisualKind.potTypePlans &&
-            visual.kind != CoachDialogueVisualKind.huVsMultiway &&
-            visual.kind != CoachDialogueVisualKind.stackDepthPlans &&
-            visual.kind != CoachDialogueVisualKind.sameCardsTypes &&
-            visual.kind != CoachDialogueVisualKind.typeBoardLine &&
-            visual.kind != CoachDialogueVisualKind.leakReviewBook &&
-            visual.kind != CoachDialogueVisualKind.capstoneSrp &&
-            visual.kind != CoachDialogueVisualKind.capstone3bet &&
-            visual.kind !=
-                CoachDialogueVisualKind.capstoneMultiwayDeep &&
-            visual.kind != CoachDialogueVisualKind.capstoneLimped &&
-            visual.kind != CoachDialogueVisualKind.capstone4bet &&
-            visual.kind != CoachDialogueVisualKind.liveWarmupPrep &&
-            visual.kind != CoachDialogueVisualKind.turnMap &&
-            visual.kind != CoachDialogueVisualKind.riverComposition) ...[
-          const SizedBox(height: 10),
-          _TapHint(text: visual.continueHint),
-        ],
-      ],
-    );
+                                CoachDialogueVisualKind.passiveActions
+                        ? null
+                        : onFeltAcknowledge,
+                onAggressiveAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.aggressiveActions
+                        ? null
+                        : onFeltAcknowledge,
+                onStreetsAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.streetsTimeline
+                        ? null
+                        : onFeltAcknowledge,
+                onPathsAcknowledge:
+                    locked ||
+                            visual.kind != CoachDialogueVisualKind.winningPaths
+                        ? null
+                        : onFeltAcknowledge,
+                onToyHandAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.toyHandRun
+                        ? null
+                        : onFeltAcknowledge,
+                onActionOrderAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.actionOrder
+                        ? null
+                        : onFeltAcknowledge,
+                onHandFamiliesAcknowledge:
+                    locked ||
+                            visual.kind != CoachDialogueVisualKind.handFamilies
+                        ? null
+                        : onFeltAcknowledge,
+                onOpenRangeAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.openRange
+                        ? null
+                        : onFeltAcknowledge,
+                onVsOpenAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.vsOpenResponse
+                        ? null
+                        : onFeltAcknowledge,
+                onBbStackAcknowledge:
+                    locked ||
+                            visual.kind != CoachDialogueVisualKind.bbStackDepth
+                        ? null
+                        : onFeltAcknowledge,
+                onTableHabitsAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.tableHabits
+                        ? null
+                        : onFeltAcknowledge,
+                onFullRingAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.fullRing
+                        ? null
+                        : onFeltAcknowledge,
+                onTableReadAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.tableRead
+                        ? null
+                        : onFeltAcknowledge,
+                onFlopLabelAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.flopLabel
+                        ? null
+                        : onFeltAcknowledge,
+                onOutsPriceAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.outsPrice
+                        ? null
+                        : onFeltAcknowledge,
+                onFlopLinesAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.flopLines
+                        ? null
+                        : onFeltAcknowledge,
+                onTurnStoryAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.turnStory
+                        ? null
+                        : onFeltAcknowledge,
+                onRiverBinaryAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.riverBinary
+                        ? null
+                        : onFeltAcknowledge,
+                onMultiwayAcknowledge:
+                    locked ||
+                            visual.kind != CoachDialogueVisualKind.multiwayPlan
+                        ? null
+                        : onFeltAcknowledge,
+                onCommonLeaksAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.commonLeaks
+                        ? null
+                        : onFeltAcknowledge,
+                onRangeUpdateAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.rangeUpdate
+                        ? null
+                        : onFeltAcknowledge,
+                onThreeBetSqueezeAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.threeBetSqueeze
+                        ? null
+                        : onFeltAcknowledge,
+                onMultiStreetPlanAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.multiStreetPlan
+                        ? null
+                        : onFeltAcknowledge,
+                onSizingLanguageAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.sizingLanguage
+                        ? null
+                        : onFeltAcknowledge,
+                onSprAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.sprDepth
+                        ? null
+                        : onFeltAcknowledge,
+                onPlayerObserveAcknowledge:
+                    locked ||
+                            visual.kind != CoachDialogueVisualKind.playerObserve
+                        ? null
+                        : onFeltAcknowledge,
+                onCallingStationAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.callingStation
+                        ? null
+                        : onFeltAcknowledge,
+                onVsStationAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.vsStation
+                        ? null
+                        : onFeltAcknowledge,
+                onTightSeatsAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.tightSeats
+                        ? null
+                        : onFeltAcknowledge,
+                onNitModelAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.nitModel
+                        ? null
+                        : onFeltAcknowledge,
+                onVsNitsAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.vsNits
+                        ? null
+                        : onFeltAcknowledge,
+                onExtremeEntryAcknowledge:
+                    locked ||
+                            visual.kind != CoachDialogueVisualKind.extremeEntry
+                        ? null
+                        : onFeltAcknowledge,
+                onManiacModelAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.maniacModel
+                        ? null
+                        : onFeltAcknowledge,
+                onVsManiacsAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.vsManiacs
+                        ? null
+                        : onFeltAcknowledge,
+                onVsTagsAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.vsTags
+                        ? null
+                        : onFeltAcknowledge,
+                onVsLagsAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.vsLags
+                        ? null
+                        : onFeltAcknowledge,
+                onObservationCertaintyAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.observationCertainty
+                        ? null
+                        : onFeltAcknowledge,
+                onExploitEvidenceAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.exploitEvidence
+                        ? null
+                        : onFeltAcknowledge,
+                onMultiwayNutsAcknowledge:
+                    locked ||
+                            visual.kind != CoachDialogueVisualKind.multiwayNuts
+                        ? null
+                        : onFeltAcknowledge,
+                onDeepStacksAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.deepStacks
+                        ? null
+                        : onFeltAcknowledge,
+                onImpliedOddsAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.impliedOdds
+                        ? null
+                        : onFeltAcknowledge,
+                onThinValueAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.thinValue
+                        ? null
+                        : onFeltAcknowledge,
+                onLineStoriesAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.lineStories
+                        ? null
+                        : onFeltAcknowledge,
+                onRangeRewriteAcknowledge:
+                    locked ||
+                            visual.kind != CoachDialogueVisualKind.rangeRewrite
+                        ? null
+                        : onFeltAcknowledge,
+                onTimingCluesAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.timingClues
+                        ? null
+                        : onFeltAcknowledge,
+                onTablesChangeAcknowledge:
+                    locked ||
+                            visual.kind != CoachDialogueVisualKind.tablesChange
+                        ? null
+                        : onFeltAcknowledge,
+                onGuardrailsAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.guardrails
+                        ? null
+                        : onFeltAcknowledge,
+                onRangeAdvantageAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.rangeAdvantage
+                        ? null
+                        : onFeltAcknowledge,
+                onEquityRealizeAcknowledge:
+                    locked ||
+                            visual.kind != CoachDialogueVisualKind.equityRealize
+                        ? null
+                        : onFeltAcknowledge,
+                onCappedUncappedAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.cappedUncapped
+                        ? null
+                        : onFeltAcknowledge,
+                onPolarMergedAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.polarMerged
+                        ? null
+                        : onFeltAcknowledge,
+                onOverbetGeometryAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.overbetGeometry
+                        ? null
+                        : onFeltAcknowledge,
+                onBlockersAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.blockers
+                        ? null
+                        : onFeltAcknowledge,
+                onDefendEnoughAcknowledge:
+                    locked ||
+                            visual.kind != CoachDialogueVisualKind.defendEnough
+                        ? null
+                        : onFeltAcknowledge,
+                onMixedStrategyAcknowledge:
+                    locked ||
+                            visual.kind != CoachDialogueVisualKind.mixedStrategy
+                        ? null
+                        : onFeltAcknowledge,
+                onThreeBetFourBetSprAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.threeBetFourBetSpr
+                        ? null
+                        : onFeltAcknowledge,
+                onHardFoldCoolerAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.hardFoldCooler
+                        ? null
+                        : onFeltAcknowledge,
+                onSelectiveAggressionAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.selectiveAggression
+                        ? null
+                        : onFeltAcknowledge,
+                onTagModelAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.tagModel
+                        ? null
+                        : onFeltAcknowledge,
+                onLagModelAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.lagModel
+                        ? null
+                        : onFeltAcknowledge,
+                onWidePressureAcknowledge:
+                    locked ||
+                            visual.kind != CoachDialogueVisualKind.widePressure
+                        ? null
+                        : onFeltAcknowledge,
+                onPreflopFlopPlanAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.preflopFlopPlan
+                        ? null
+                        : onFeltAcknowledge,
+                onTurnMapAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.turnMap
+                        ? null
+                        : onFeltAcknowledge,
+                onRiverCompositionAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.riverComposition
+                        ? null
+                        : onFeltAcknowledge,
+                onPotTypePlansAcknowledge:
+                    locked ||
+                            visual.kind != CoachDialogueVisualKind.potTypePlans
+                        ? null
+                        : onFeltAcknowledge,
+                onHuVsMultiwayAcknowledge:
+                    locked ||
+                            visual.kind != CoachDialogueVisualKind.huVsMultiway
+                        ? null
+                        : onFeltAcknowledge,
+                onStackDepthPlansAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.stackDepthPlans
+                        ? null
+                        : onFeltAcknowledge,
+                onSameCardsTypesAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.sameCardsTypes
+                        ? null
+                        : onFeltAcknowledge,
+                onTypeBoardLineAcknowledge:
+                    locked ||
+                            visual.kind != CoachDialogueVisualKind.typeBoardLine
+                        ? null
+                        : onFeltAcknowledge,
+                onLeakReviewBookAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.leakReviewBook
+                        ? null
+                        : onFeltAcknowledge,
+                onCapstoneSrpAcknowledge:
+                    locked || visual.kind != CoachDialogueVisualKind.capstoneSrp
+                        ? null
+                        : onFeltAcknowledge,
+                onCapstone3betAcknowledge:
+                    locked ||
+                            visual.kind != CoachDialogueVisualKind.capstone3bet
+                        ? null
+                        : onFeltAcknowledge,
+                onCapstoneMultiwayDeepAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.capstoneMultiwayDeep
+                        ? null
+                        : onFeltAcknowledge,
+                onCapstoneLimpedAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.capstoneLimped
+                        ? null
+                        : onFeltAcknowledge,
+                onCapstone4betAcknowledge:
+                    locked ||
+                            visual.kind != CoachDialogueVisualKind.capstone4bet
+                        ? null
+                        : onFeltAcknowledge,
+                onLiveWarmupPrepAcknowledge:
+                    locked ||
+                            visual.kind !=
+                                CoachDialogueVisualKind.liveWarmupPrep
+                        ? null
+                        : onFeltAcknowledge,
+              ),
+            ],
+            if (showGuidance &&
+                !locked &&
+                visual.requiresFeltTap &&
+                // These demos embed their own tap hint on the felt / chrome —
+                // or Rex already names the tiles (no duplicate gold footer).
+                visual.kind != CoachDialogueVisualKind.bestFive &&
+                visual.kind != CoachDialogueVisualKind.holeCards &&
+                visual.kind != CoachDialogueVisualKind.suitsRanks &&
+                visual.kind != CoachDialogueVisualKind.handLadder &&
+                visual.kind != CoachDialogueVisualKind.dealerButton &&
+                visual.kind != CoachDialogueVisualKind.positionLabels &&
+                visual.kind != CoachDialogueVisualKind.passiveActions &&
+                visual.kind != CoachDialogueVisualKind.aggressiveActions &&
+                visual.kind != CoachDialogueVisualKind.streetsTimeline &&
+                visual.kind != CoachDialogueVisualKind.winningPaths &&
+                visual.kind != CoachDialogueVisualKind.toyHandRun &&
+                visual.kind != CoachDialogueVisualKind.actionOrder &&
+                visual.kind != CoachDialogueVisualKind.handFamilies &&
+                visual.kind != CoachDialogueVisualKind.openRange &&
+                visual.kind != CoachDialogueVisualKind.vsOpenResponse &&
+                visual.kind != CoachDialogueVisualKind.bbStackDepth &&
+                visual.kind != CoachDialogueVisualKind.tableHabits &&
+                visual.kind != CoachDialogueVisualKind.fullRing &&
+                visual.kind != CoachDialogueVisualKind.tableRead &&
+                visual.kind != CoachDialogueVisualKind.flopLabel &&
+                visual.kind != CoachDialogueVisualKind.outsPrice &&
+                visual.kind != CoachDialogueVisualKind.flopLines &&
+                visual.kind != CoachDialogueVisualKind.turnStory &&
+                visual.kind != CoachDialogueVisualKind.riverBinary &&
+                visual.kind != CoachDialogueVisualKind.multiwayPlan &&
+                visual.kind != CoachDialogueVisualKind.commonLeaks &&
+                visual.kind != CoachDialogueVisualKind.rangeUpdate &&
+                visual.kind != CoachDialogueVisualKind.threeBetSqueeze &&
+                visual.kind != CoachDialogueVisualKind.multiStreetPlan &&
+                visual.kind != CoachDialogueVisualKind.sizingLanguage &&
+                visual.kind != CoachDialogueVisualKind.sprDepth &&
+                visual.kind != CoachDialogueVisualKind.playerObserve &&
+                visual.kind != CoachDialogueVisualKind.callingStation &&
+                visual.kind != CoachDialogueVisualKind.vsStation &&
+                visual.kind != CoachDialogueVisualKind.tightSeats &&
+                visual.kind != CoachDialogueVisualKind.nitModel &&
+                visual.kind != CoachDialogueVisualKind.vsNits &&
+                visual.kind != CoachDialogueVisualKind.extremeEntry &&
+                visual.kind != CoachDialogueVisualKind.maniacModel &&
+                visual.kind != CoachDialogueVisualKind.vsManiacs &&
+                visual.kind != CoachDialogueVisualKind.observationCertainty &&
+                visual.kind != CoachDialogueVisualKind.exploitEvidence &&
+                visual.kind != CoachDialogueVisualKind.multiwayNuts &&
+                visual.kind != CoachDialogueVisualKind.deepStacks &&
+                visual.kind != CoachDialogueVisualKind.impliedOdds &&
+                visual.kind != CoachDialogueVisualKind.thinValue &&
+                visual.kind != CoachDialogueVisualKind.lineStories &&
+                visual.kind != CoachDialogueVisualKind.rangeRewrite &&
+                visual.kind != CoachDialogueVisualKind.timingClues &&
+                visual.kind != CoachDialogueVisualKind.vsTags &&
+                visual.kind != CoachDialogueVisualKind.vsLags &&
+                visual.kind != CoachDialogueVisualKind.tablesChange &&
+                visual.kind != CoachDialogueVisualKind.guardrails &&
+                visual.kind != CoachDialogueVisualKind.rangeAdvantage &&
+                visual.kind != CoachDialogueVisualKind.equityRealize &&
+                visual.kind != CoachDialogueVisualKind.cappedUncapped &&
+                visual.kind != CoachDialogueVisualKind.polarMerged &&
+                visual.kind != CoachDialogueVisualKind.overbetGeometry &&
+                visual.kind != CoachDialogueVisualKind.blockers &&
+                visual.kind != CoachDialogueVisualKind.defendEnough &&
+                visual.kind != CoachDialogueVisualKind.mixedStrategy &&
+                visual.kind != CoachDialogueVisualKind.threeBetFourBetSpr &&
+                visual.kind != CoachDialogueVisualKind.hardFoldCooler &&
+                visual.kind != CoachDialogueVisualKind.selectiveAggression &&
+                visual.kind != CoachDialogueVisualKind.tagModel &&
+                visual.kind != CoachDialogueVisualKind.lagModel &&
+                visual.kind != CoachDialogueVisualKind.widePressure &&
+                visual.kind != CoachDialogueVisualKind.preflopFlopPlan &&
+                visual.kind != CoachDialogueVisualKind.potTypePlans &&
+                visual.kind != CoachDialogueVisualKind.huVsMultiway &&
+                visual.kind != CoachDialogueVisualKind.stackDepthPlans &&
+                visual.kind != CoachDialogueVisualKind.sameCardsTypes &&
+                visual.kind != CoachDialogueVisualKind.typeBoardLine &&
+                visual.kind != CoachDialogueVisualKind.leakReviewBook &&
+                visual.kind != CoachDialogueVisualKind.capstoneSrp &&
+                visual.kind != CoachDialogueVisualKind.capstone3bet &&
+                visual.kind != CoachDialogueVisualKind.capstoneMultiwayDeep &&
+                visual.kind != CoachDialogueVisualKind.capstoneLimped &&
+                visual.kind != CoachDialogueVisualKind.capstone4bet &&
+                visual.kind != CoachDialogueVisualKind.liveWarmupPrep &&
+                visual.kind != CoachDialogueVisualKind.turnMap &&
+                visual.kind != CoachDialogueVisualKind.riverComposition) ...[
+              const SizedBox(height: 10),
+              _TapHint(text: visual.continueHint),
+            ],
+          ],
+        );
       },
     );
   }
@@ -826,8 +899,7 @@ class CoachDialogueVisual {
       useTable
           ? 'Tap your two cards on the felt.'
           : 'Tap Continue when you have looked at your two cards.',
-    CoachDialogueVisualKind.suitsRanks =>
-      'Tap each of the four suits.',
+    CoachDialogueVisualKind.suitsRanks => 'Tap each of the four suits.',
     CoachDialogueVisualKind.dealerButton =>
       'Tap the dealer button on the table.',
     CoachDialogueVisualKind.positionLabels =>
@@ -836,156 +908,95 @@ class CoachDialogueVisual {
       'Tap each rung from high card to flush.',
     CoachDialogueVisualKind.bestFive =>
       'Tap each playing card — only five of seven play.',
-    CoachDialogueVisualKind.passiveActions =>
-      'Tap Fold, Check, and Call.',
-    CoachDialogueVisualKind.aggressiveActions =>
-      'Tap Bet, Raise, and All-in.',
+    CoachDialogueVisualKind.passiveActions => 'Tap Fold, Check, and Call.',
+    CoachDialogueVisualKind.aggressiveActions => 'Tap Bet, Raise, and All-in.',
     CoachDialogueVisualKind.streetsTimeline =>
       'Tap each street from preflop to river.',
     CoachDialogueVisualKind.winningPaths =>
       'Tap Fold win, Showdown, and Side pot.',
-    CoachDialogueVisualKind.toyHandRun =>
-      'Tap Blinds, You act, and Ending.',
-    CoachDialogueVisualKind.actionOrder =>
-      'Tap each seat in preflop order.',
-    CoachDialogueVisualKind.handFamilies =>
-      'Tap each starting-hand family.',
-    CoachDialogueVisualKind.openRange =>
-      'Tap Early, Button, and Live 3x.',
-    CoachDialogueVisualKind.vsOpenResponse =>
-      'Tap Fold, Call, and 3-Bet.',
-    CoachDialogueVisualKind.bbStackDepth =>
-      'Tap Chips→BB, Shorter, and Depth.',
-    CoachDialogueVisualKind.tableHabits =>
-      'Tap Watch, Say, Cover, and Wait.',
-    CoachDialogueVisualKind.fullRing =>
-      'Tap Nine, Same, and Position.',
+    CoachDialogueVisualKind.toyHandRun => 'Tap Blinds, You act, and Ending.',
+    CoachDialogueVisualKind.actionOrder => 'Tap each seat in preflop order.',
+    CoachDialogueVisualKind.handFamilies => 'Tap each starting-hand family.',
+    CoachDialogueVisualKind.openRange => 'Tap Early, Button, and Live 3x.',
+    CoachDialogueVisualKind.vsOpenResponse => 'Tap Fold, Call, and 3-Bet.',
+    CoachDialogueVisualKind.bbStackDepth => 'Tap Chips→BB, Shorter, and Depth.',
+    CoachDialogueVisualKind.tableHabits => 'Tap Watch, Say, Cover, and Wait.',
+    CoachDialogueVisualKind.fullRing => 'Tap Nine, Same, and Position.',
     CoachDialogueVisualKind.tableRead =>
       'Tap Pot, Stacks, Button, and Who Acts.',
-    CoachDialogueVisualKind.flopLabel =>
-      'Tap Made, Draw, SDV, and Air.',
-    CoachDialogueVisualKind.outsPrice =>
-      'Tap Clean, Dirty, and Price.',
+    CoachDialogueVisualKind.flopLabel => 'Tap Made, Draw, SDV, and Air.',
+    CoachDialogueVisualKind.outsPrice => 'Tap Clean, Dirty, and Price.',
     CoachDialogueVisualKind.flopLines =>
       'Tap Value, C-bet, Check, Call, Fold, and Raise.',
     CoachDialogueVisualKind.turnStory =>
       'Tap Brick, Change, Barrel, and Delay.',
-    CoachDialogueVisualKind.riverBinary =>
-      'Tap Value, Bluff, Catch, and Fold.',
-    CoachDialogueVisualKind.multiwayPlan =>
-      'Tap Stronger, Fewer, and Nuts.',
+    CoachDialogueVisualKind.riverBinary => 'Tap Value, Bluff, Catch, and Fold.',
+    CoachDialogueVisualKind.multiwayPlan => 'Tap Stronger, Fewer, and Nuts.',
     CoachDialogueVisualKind.commonLeaks =>
       'Tap Top pair, Prices, Passive, and Crowds.',
-    CoachDialogueVisualKind.rangeUpdate =>
-      'Tap One Hand, Range, and Update.',
+    CoachDialogueVisualKind.rangeUpdate => 'Tap One Hand, Range, and Update.',
     CoachDialogueVisualKind.threeBetSqueeze =>
       'Tap 3-Bet, Ranges, and Squeeze.',
-    CoachDialogueVisualKind.multiStreetPlan =>
-      'Tap Flop, Turn, and River.',
-    CoachDialogueVisualKind.sizingLanguage =>
-      'Tap Value, Pressure, and Size.',
-    CoachDialogueVisualKind.sprDepth =>
-      'Tap SPR, Low, and High.',
-    CoachDialogueVisualKind.playerObserve =>
-      'Tap Enters, Calls, and Folds.',
-    CoachDialogueVisualKind.callingStation =>
-      'Tap Station, High, and Low.',
-    CoachDialogueVisualKind.vsStation =>
-      'Tap Value, Bluffs, and Cite.',
-    CoachDialogueVisualKind.tightSeats =>
-      'Tap Rare, Enter, and Mean It.',
-    CoachDialogueVisualKind.nitModel =>
-      'Tap Nit, Narrow, and Respect.',
-    CoachDialogueVisualKind.vsNits =>
-      'Tap Steal, Credit, and Explode.',
-    CoachDialogueVisualKind.extremeEntry =>
-      'Tap Raise, Barrel, and Count.',
-    CoachDialogueVisualKind.maniacModel =>
-      'Tap Maniac, Entry, and Aggro.',
-    CoachDialogueVisualKind.vsManiacs =>
-      'Tap Wider, Hang, and Ego.',
-    CoachDialogueVisualKind.vsTags =>
-      'Tap Credit, Tighter, and No light.',
-    CoachDialogueVisualKind.vsLags =>
-      'Tap Call, Trap, and Fancy less.',
+    CoachDialogueVisualKind.multiStreetPlan => 'Tap Flop, Turn, and River.',
+    CoachDialogueVisualKind.sizingLanguage => 'Tap Value, Pressure, and Size.',
+    CoachDialogueVisualKind.sprDepth => 'Tap SPR, Low, and High.',
+    CoachDialogueVisualKind.playerObserve => 'Tap Enters, Calls, and Folds.',
+    CoachDialogueVisualKind.callingStation => 'Tap Station, High, and Low.',
+    CoachDialogueVisualKind.vsStation => 'Tap Value, Bluffs, and Cite.',
+    CoachDialogueVisualKind.tightSeats => 'Tap Rare, Enter, and Mean It.',
+    CoachDialogueVisualKind.nitModel => 'Tap Nit, Narrow, and Respect.',
+    CoachDialogueVisualKind.vsNits => 'Tap Steal, Credit, and Explode.',
+    CoachDialogueVisualKind.extremeEntry => 'Tap Raise, Barrel, and Count.',
+    CoachDialogueVisualKind.maniacModel => 'Tap Maniac, Entry, and Aggro.',
+    CoachDialogueVisualKind.vsManiacs => 'Tap Wider, Hang, and Ego.',
+    CoachDialogueVisualKind.vsTags => 'Tap Credit, Tighter, and No light.',
+    CoachDialogueVisualKind.vsLags => 'Tap Call, Trap, and Fancy less.',
     CoachDialogueVisualKind.observationCertainty =>
       'Tap Observe, Samples, and Showdowns.',
     CoachDialogueVisualKind.exploitEvidence =>
       'Tap Cards, Seats, and Evidence.',
-    CoachDialogueVisualKind.multiwayNuts =>
-      'Tap Nutted, Air, and Domination.',
-    CoachDialogueVisualKind.deepStacks =>
-      'Tap Deep, Realize, and Stack.',
-    CoachDialogueVisualKind.impliedOdds =>
-      'Tap Implied, Reverse, and Second.',
-    CoachDialogueVisualKind.thinValue =>
-      'Tap Thin, Catch, and Barrels.',
-    CoachDialogueVisualKind.lineStories =>
-      'Tap X/R, Probe, Delay, and Donk.',
-    CoachDialogueVisualKind.rangeRewrite =>
-      'Tap Action, Rewrite, and Update.',
-    CoachDialogueVisualKind.timingClues =>
-      'Tap Timing, Sizing, and Clues.',
-    CoachDialogueVisualKind.tablesChange =>
-      'Tap Stuck, Tilted, and Gears.',
-    CoachDialogueVisualKind.guardrails =>
-      'Tap Quit, Guard, and First.',
-    CoachDialogueVisualKind.rangeAdvantage =>
-      'Tap Range, Nut, and Advantage.',
-    CoachDialogueVisualKind.equityRealize =>
-      'Tap Equity, Cash, and Pos.',
-    CoachDialogueVisualKind.cappedUncapped =>
-      'Tap Capped, Uncapped, and Nuts.',
-    CoachDialogueVisualKind.polarMerged =>
-      'Tap Polar, Merged, and Size.',
-    CoachDialogueVisualKind.overbetGeometry =>
-      'Tap Overbet, Polar, and Geo.',
-    CoachDialogueVisualKind.blockers =>
-      'Tap Block, Use, and No EV.',
-    CoachDialogueVisualKind.defendEnough =>
-      'Tap Defend, Bluff, and Enough.',
-    CoachDialogueVisualKind.mixedStrategy =>
-      'Tap Mix, Purpose, and Strong.',
+    CoachDialogueVisualKind.multiwayNuts => 'Tap Nutted, Air, and Domination.',
+    CoachDialogueVisualKind.deepStacks => 'Tap Deep, Realize, and Stack.',
+    CoachDialogueVisualKind.impliedOdds => 'Tap Implied, Reverse, and Second.',
+    CoachDialogueVisualKind.thinValue => 'Tap Thin, Catch, and Barrels.',
+    CoachDialogueVisualKind.lineStories => 'Tap X/R, Probe, Delay, and Donk.',
+    CoachDialogueVisualKind.rangeRewrite => 'Tap Action, Rewrite, and Update.',
+    CoachDialogueVisualKind.timingClues => 'Tap Timing, Sizing, and Clues.',
+    CoachDialogueVisualKind.tablesChange => 'Tap Stuck, Tilted, and Gears.',
+    CoachDialogueVisualKind.guardrails => 'Tap Quit, Guard, and First.',
+    CoachDialogueVisualKind.rangeAdvantage => 'Tap Range, Nut, and Advantage.',
+    CoachDialogueVisualKind.equityRealize => 'Tap Equity, Cash, and Pos.',
+    CoachDialogueVisualKind.cappedUncapped => 'Tap Capped, Uncapped, and Nuts.',
+    CoachDialogueVisualKind.polarMerged => 'Tap Polar, Merged, and Size.',
+    CoachDialogueVisualKind.overbetGeometry => 'Tap Overbet, Polar, and Geo.',
+    CoachDialogueVisualKind.blockers => 'Tap Block, Use, and No EV.',
+    CoachDialogueVisualKind.defendEnough => 'Tap Defend, Bluff, and Enough.',
+    CoachDialogueVisualKind.mixedStrategy => 'Tap Mix, Purpose, and Strong.',
     CoachDialogueVisualKind.threeBetFourBetSpr =>
       'Tap 3-Bet, 4-Bet, and Depth.',
-    CoachDialogueVisualKind.hardFoldCooler =>
-      'Tap Hard, Cooler, and Ego.',
+    CoachDialogueVisualKind.hardFoldCooler => 'Tap Hard, Cooler, and Ego.',
     CoachDialogueVisualKind.selectiveAggression =>
       'Tap Tight, Barrel, and Sample.',
-    CoachDialogueVisualKind.tagModel =>
-      'Tap Tight, Aggro, and Model.',
-    CoachDialogueVisualKind.lagModel =>
-      'Tap Wide, Pressure, and Model.',
-    CoachDialogueVisualKind.widePressure =>
-      'Tap Wide, Pressure, and Sample.',
+    CoachDialogueVisualKind.tagModel => 'Tap Tight, Aggro, and Model.',
+    CoachDialogueVisualKind.lagModel => 'Tap Wide, Pressure, and Model.',
+    CoachDialogueVisualKind.widePressure => 'Tap Wide, Pressure, and Sample.',
     CoachDialogueVisualKind.preflopFlopPlan =>
       'Tap Reason, Confirm, and Cancel.',
-    CoachDialogueVisualKind.turnMap =>
-      'Tap Barrel, Give-up, and Map.',
-    CoachDialogueVisualKind.riverComposition =>
-      'Tap Value, Bluff, and Hold.',
-    CoachDialogueVisualKind.potTypePlans =>
-      'Tap Limped, SRP, and 3-4bet.',
-    CoachDialogueVisualKind.huVsMultiway =>
-      'Tap Fewer, Thicker, and Widen.',
+    CoachDialogueVisualKind.turnMap => 'Tap Barrel, Give-up, and Map.',
+    CoachDialogueVisualKind.riverComposition => 'Tap Value, Bluff, and Hold.',
+    CoachDialogueVisualKind.potTypePlans => 'Tap Limped, SRP, and 3-4bet.',
+    CoachDialogueVisualKind.huVsMultiway => 'Tap Fewer, Thicker, and Widen.',
     CoachDialogueVisualKind.stackDepthPlans =>
       'Tap Short, Deep, and Effective.',
-    CoachDialogueVisualKind.sameCardsTypes =>
-      'Tap Cards, Models, and Cite.',
-    CoachDialogueVisualKind.typeBoardLine =>
-      'Tap Type, Board, Line, and Size.',
-    CoachDialogueVisualKind.leakReviewBook =>
-      'Tap Leak, Book, and Review.',
-    CoachDialogueVisualKind.capstoneSrp =>
-      'Tap Plan, Update, and Finish.',
-    CoachDialogueVisualKind.capstone3bet =>
-      'Tap SPR, Turn, and Close.',
+    CoachDialogueVisualKind.sameCardsTypes => 'Tap Cards, Models, and Cite.',
+    CoachDialogueVisualKind.typeBoardLine => 'Tap Type, Board, Line, and Size.',
+    CoachDialogueVisualKind.leakReviewBook => 'Tap Leak, Book, and Review.',
+    CoachDialogueVisualKind.capstoneSrp => 'Tap Plan, Update, and Finish.',
+    CoachDialogueVisualKind.capstone3bet => 'Tap SPR, Turn, and Close.',
     CoachDialogueVisualKind.capstoneMultiwayDeep =>
       'Tap Nuts, Deep, and No-bluff.',
-    CoachDialogueVisualKind.capstoneLimped =>
-      'Tap Nuts, Value, and Thin.',
-    CoachDialogueVisualKind.capstone4bet =>
-      'Tap SPR, Commit, and No Hero.',
+    CoachDialogueVisualKind.capstoneLimped => 'Tap Nuts, Value, and Thin.',
+    CoachDialogueVisualKind.capstone4bet => 'Tap SPR, Commit, and No Hero.',
     CoachDialogueVisualKind.liveWarmupPrep =>
       'Tap Checklist, Defaults, and One hand.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
@@ -1195,8 +1206,7 @@ class CoachDialogueVisual {
       'Polar/merged tiles: polar, merged, size',
     CoachDialogueVisualKind.overbetGeometry =>
       'Overbet/geometry tiles: overbet, polar, geo',
-    CoachDialogueVisualKind.blockers =>
-      'Blocker tiles: block, use, no EV',
+    CoachDialogueVisualKind.blockers => 'Blocker tiles: block, use, no EV',
     CoachDialogueVisualKind.defendEnough =>
       'Defend-enough tiles: defend, bluff, enough',
     CoachDialogueVisualKind.mixedStrategy =>
@@ -1207,10 +1217,8 @@ class CoachDialogueVisual {
       'Hard-fold/cooler tiles: hard, cooler, ego',
     CoachDialogueVisualKind.selectiveAggression =>
       'Selective-aggression tiles: tight, barrel, sample',
-    CoachDialogueVisualKind.tagModel =>
-      'TAG tiles: tight, aggro, model',
-    CoachDialogueVisualKind.lagModel =>
-      'LAG tiles: wide, pressure, model',
+    CoachDialogueVisualKind.tagModel => 'TAG tiles: tight, aggro, model',
+    CoachDialogueVisualKind.lagModel => 'LAG tiles: wide, pressure, model',
     CoachDialogueVisualKind.widePressure =>
       'Wide-pressure tiles: wide entry, planned barrels, count samples',
     CoachDialogueVisualKind.preflopFlopPlan =>
@@ -1257,7 +1265,9 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
         useTable: true,
       );
     case 'act-01-01-02-explain-suits':
-      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.suitsRanks);
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.suitsRanks,
+      );
     case 'act-01-01-03-explain-button':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.dealerButton,
@@ -1275,9 +1285,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
         kind: CoachDialogueVisualKind.handFamilies,
       );
     case 'act-02-03-01-explain-open':
-      return const CoachDialogueVisual(
-        kind: CoachDialogueVisualKind.openRange,
-      );
+      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.openRange);
     case 'act-02-04-01-explain-vs':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.vsOpenResponse,
@@ -1291,29 +1299,17 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
         kind: CoachDialogueVisualKind.tableHabits,
       );
     case 'act-02-07-01-explain-full':
-      return const CoachDialogueVisual(
-        kind: CoachDialogueVisualKind.fullRing,
-      );
+      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.fullRing);
     case 'act-03-01-01-explain':
-      return const CoachDialogueVisual(
-        kind: CoachDialogueVisualKind.tableRead,
-      );
+      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.tableRead);
     case 'act-03-02-01-explain':
-      return const CoachDialogueVisual(
-        kind: CoachDialogueVisualKind.flopLabel,
-      );
+      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.flopLabel);
     case 'act-03-03-01-explain':
-      return const CoachDialogueVisual(
-        kind: CoachDialogueVisualKind.outsPrice,
-      );
+      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.outsPrice);
     case 'act-03-04-01-explain':
-      return const CoachDialogueVisual(
-        kind: CoachDialogueVisualKind.flopLines,
-      );
+      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.flopLines);
     case 'act-03-05-01-explain':
-      return const CoachDialogueVisual(
-        kind: CoachDialogueVisualKind.turnStory,
-      );
+      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.turnStory);
     case 'act-03-06-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.riverBinary,
@@ -1343,9 +1339,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
         kind: CoachDialogueVisualKind.sizingLanguage,
       );
     case 'act-04-05-01-explain':
-      return const CoachDialogueVisual(
-        kind: CoachDialogueVisualKind.sprDepth,
-      );
+      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.sprDepth);
     case 'act-04-06-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.playerObserve,
@@ -1355,21 +1349,15 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
         kind: CoachDialogueVisualKind.callingStation,
       );
     case 'act-04-06-03-explain':
-      return const CoachDialogueVisual(
-        kind: CoachDialogueVisualKind.vsStation,
-      );
+      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.vsStation);
     case 'act-04-07-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.tightSeats,
       );
     case 'act-04-07-02-explain':
-      return const CoachDialogueVisual(
-        kind: CoachDialogueVisualKind.nitModel,
-      );
+      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.nitModel);
     case 'act-04-07-03-explain':
-      return const CoachDialogueVisual(
-        kind: CoachDialogueVisualKind.vsNits,
-      );
+      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.vsNits);
     case 'act-04-08-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.extremeEntry,
@@ -1379,9 +1367,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
         kind: CoachDialogueVisualKind.maniacModel,
       );
     case 'act-04-08-03-explain':
-      return const CoachDialogueVisual(
-        kind: CoachDialogueVisualKind.vsManiacs,
-      );
+      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.vsManiacs);
     case 'act-04-09-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.observationCertainty,
@@ -1403,9 +1389,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
         kind: CoachDialogueVisualKind.impliedOdds,
       );
     case 'act-05-04-01-explain':
-      return const CoachDialogueVisual(
-        kind: CoachDialogueVisualKind.thinValue,
-      );
+      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.thinValue);
     case 'act-05-05-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.lineStories,
@@ -1447,9 +1431,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
         kind: CoachDialogueVisualKind.overbetGeometry,
       );
     case 'act-06-06-01-explain':
-      return const CoachDialogueVisual(
-        kind: CoachDialogueVisualKind.blockers,
-      );
+      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.blockers);
     case 'act-06-07-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.defendEnough,
@@ -1471,25 +1453,17 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
         kind: CoachDialogueVisualKind.selectiveAggression,
       );
     case 'act-06-11-02-explain':
-      return const CoachDialogueVisual(
-        kind: CoachDialogueVisualKind.tagModel,
-      );
+      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.tagModel);
     case 'act-06-11-03-explain':
-      return const CoachDialogueVisual(
-        kind: CoachDialogueVisualKind.vsTags,
-      );
+      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.vsTags);
     case 'act-06-12-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.widePressure,
       );
     case 'act-06-12-02-explain':
-      return const CoachDialogueVisual(
-        kind: CoachDialogueVisualKind.lagModel,
-      );
+      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.lagModel);
     case 'act-06-12-03-explain':
-      return const CoachDialogueVisual(
-        kind: CoachDialogueVisualKind.vsLags,
-      );
+      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.vsLags);
     case 'act-06-13-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.exploitEvidence,
@@ -1499,9 +1473,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
         kind: CoachDialogueVisualKind.preflopFlopPlan,
       );
     case 'act-07-02-01-explain':
-      return const CoachDialogueVisual(
-        kind: CoachDialogueVisualKind.turnMap,
-      );
+      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.turnMap);
     case 'act-07-03-01-explain':
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.riverComposition,
@@ -1555,7 +1527,9 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
         kind: CoachDialogueVisualKind.liveWarmupPrep,
       );
     case 'act-01-02-01-explain-ladder':
-      return const CoachDialogueVisual(kind: CoachDialogueVisualKind.handLadder);
+      return const CoachDialogueVisual(
+        kind: CoachDialogueVisualKind.handLadder,
+      );
     case 'act-01-02-02-explain-five':
       return const CoachDialogueVisual(kind: CoachDialogueVisualKind.bestFive);
     case 'act-01-03-01-explain-passive':
@@ -1589,9 +1563,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
   if (blob.contains('one short hand') ||
       blob.contains('blinds post, you act') ||
       blob.contains('we reach an ending')) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.toyHandRun,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.toyHandRun);
   }
   if (blob.contains('folds win pots') ||
       blob.contains('showdown compares') ||
@@ -1659,9 +1631,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       blob.contains('left of the big blind') ||
       blob.contains('left of the button') ||
       blob.contains('action order after the blinds')) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.actionOrder,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.actionOrder);
   }
   // Before hole-card matching — "whole edge" contains the letters "hole".
   if (blob.contains('later seats') ||
@@ -1686,9 +1656,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       blob.contains('button: wider') ||
       blob.contains('live opens often') ||
       (blob.contains('strong only') && blob.contains('wider'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.openRange,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.openRange);
   }
   if (blob.contains('weak hands fold') ||
       blob.contains('playable hands call') ||
@@ -1712,17 +1680,13 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       blob.contains('cover your cards') ||
       blob.contains('wait your turn') ||
       (blob.contains('say your action') && blob.contains('cover'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.tableHabits,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.tableHabits);
   }
   if (blob.contains('nine seats') ||
       blob.contains('full ring') ||
       blob.contains('full-ring') ||
       (blob.contains('same rules') && blob.contains('position'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.fullRing,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.fullRing);
   }
   if (blob.contains('before cards') ||
       blob.contains('read pot') ||
@@ -1730,9 +1694,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       (blob.contains('stacks') &&
           blob.contains('button') &&
           blob.contains('who acts'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.tableRead,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.tableRead);
   }
   if (blob.contains('flop first') ||
       blob.contains('label before you bet') ||
@@ -1740,33 +1702,25 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       (blob.contains('made') &&
           blob.contains('draw') &&
           blob.contains('air'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.flopLabel,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.flopLabel);
   }
   if (blob.contains('clean outs') ||
       blob.contains('dirty outs') ||
       blob.contains('price the call') ||
       (blob.contains('second-best') && blob.contains('outs'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.outsPrice,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.outsPrice);
   }
   if (blob.contains('flop lines') ||
       blob.contains('one plan') ||
       blob.contains('c-bet') ||
       (blob.contains('check back') && blob.contains('raise'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.flopLines,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.flopLines);
   }
   if (blob.contains('turn cards') ||
       blob.contains('change the story') ||
       blob.contains('barrel or delay') ||
       (blob.contains('brick') && blob.contains('barrel'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.turnStory,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.turnStory);
   }
   // Phrase-safe river composition — value / bluff / check framing.
   // Must run before riverBinary (which also matches river+value+bluff+fold).
@@ -1780,7 +1734,8 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
               blob.contains('fold better') ||
               blob.contains('blockers') ||
               blob.contains('check trash'))) ||
-      (blob.contains('value needs calls') && blob.contains('bluffs need folds'))) {
+      (blob.contains('value needs calls') &&
+          blob.contains('bluffs need folds'))) {
     return const CoachDialogueVisual(
       kind: CoachDialogueVisualKind.riverComposition,
     );
@@ -1794,9 +1749,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
               (blob.contains('bluff') &&
                   blob.contains('fold') &&
                   blob.contains('value'))))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.riverBinary,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.riverBinary);
   }
   // HU-vs-multiway (S7) — require player-count / HU framing so we do not steal
   // vs-station "thicker value" copy.
@@ -1837,17 +1790,13 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       blob.contains('chase bad prices') ||
       blob.contains('bluff crowds') ||
       (blob.contains('call too passive') && blob.contains('leak'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.commonLeaks,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.commonLeaks);
   }
   if (blob.contains('never know one hand') ||
       blob.contains('know a range') ||
       blob.contains('then update it') ||
       (blob.contains('one hand') && blob.contains('range'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.rangeUpdate,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.rangeUpdate);
   }
   if (blob.contains('3-bets define') ||
       blob.contains('squeezes punish') ||
@@ -1886,9 +1835,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       blob.contains('stack-to-pot') ||
       blob.contains('stack to pot') ||
       (blob.contains('effective stack') && blob.contains('pot'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.sprDepth,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.sprDepth);
   }
   if (blob.contains('before labels') ||
       blob.contains('who enters pots') ||
@@ -1910,26 +1857,20 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       blob.contains('thicker value') ||
       blob.contains('cite their calling') ||
       (blob.contains('fewer pure bluffs') && blob.contains('stations'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.vsStation,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.vsStation);
   }
   // Phrase-safe tight seats — require rare-entry framing, not bare "enter".
   if (blob.contains('almost never enter') ||
       blob.contains('when they do, they mean it') ||
       (blob.contains('almost never') && blob.contains('mean it')) ||
       (blob.contains('note both') && blob.contains('never enter'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.tightSeats,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.tightSeats);
   }
   if (blob.contains('nit means') ||
       blob.contains('narrow entry') ||
       blob.contains('respect for their heavy') ||
       (blob.contains('nit') && blob.contains('heavy action'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.nitModel,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.nitModel);
   }
   // Phrase-safe vs nits — require versus/steal+explode framing, not bare "nit".
   if (blob.contains('versus nits') ||
@@ -1938,9 +1879,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       (blob.contains('steal') &&
           blob.contains('explode') &&
           blob.contains('nit'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.vsNits,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.vsNits);
   }
   if (blob.contains('raise and barrel') ||
       blob.contains('seemingly forever') ||
@@ -1954,18 +1893,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       blob.contains('not an insult') ||
       (blob.contains('maniac') && blob.contains('extreme entry')) ||
       (blob.contains('maniac') && blob.contains('aggression'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.maniacModel,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.maniacModel);
   }
   // Phrase-safe vs maniacs — require versus/hang/ego framing, not bare "maniac".
   if (blob.contains('versus maniacs') ||
       blob.contains('let them hang themselves') ||
       (blob.contains('no ego') && blob.contains('maniac')) ||
       (blob.contains('call wider') && blob.contains('maniac'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.vsManiacs,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.vsManiacs);
   }
   if (blob.contains('observation') ||
       blob.contains('certainty') ||
@@ -2006,9 +1941,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
   if (blob.contains('capstone srp') ||
       (blob.contains('trust your map') && blob.contains('no hints')) ||
       (blob.contains('full srp') && blob.contains('plan'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.capstoneSrp,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.capstoneSrp);
   }
   // Capstone 3-bet — plan by SPR, continue or kill, close without ego.
   if (blob.contains('capstone 3-bet') ||
@@ -2087,34 +2020,28 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       blob.contains('lose a stack') ||
       blob.contains('speculative implied') ||
       (blob.contains('deep') && blob.contains('realize'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.deepStacks,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.deepStacks);
   }
   // Phrase-safe implied odds — require implied/reverse framing, not bare "second-best".
   if (blob.contains('implied odds') ||
       blob.contains('reverse implied') ||
       blob.contains('future money') ||
       (blob.contains('implied') && blob.contains('second-best'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.impliedOdds,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.impliedOdds);
   }
   if (blob.contains('thin value') ||
       blob.contains('bluff-catches need') ||
       blob.contains('wide barrels') ||
       (blob.contains('sticky callers') && blob.contains('value'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.thinValue,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.thinValue);
   }
   if (blob.contains('lines mean ranges') ||
       blob.contains('check-raise, probe') ||
       blob.contains('updates the story') ||
-      (blob.contains('donk') && blob.contains('probe') && blob.contains('delay'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.lineStories,
-    );
+      (blob.contains('donk') &&
+          blob.contains('probe') &&
+          blob.contains('delay'))) {
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.lineStories);
   }
   if (blob.contains('rewrites the range') ||
       blob.contains('keep updating') ||
@@ -2128,14 +2055,14 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
   if (blob.contains('timing and sizing') ||
       blob.contains('not mind-reading') ||
       blob.contains('small updates only')) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.timingClues,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.timingClues);
   }
   // Phrase-safe tables-change — avoid bare "update" / "tilted" alone.
   if (blob.contains('tables change') ||
       blob.contains('shifting gears') ||
-      (blob.contains('stuck') && blob.contains('tilted') && blob.contains('tired'))) {
+      (blob.contains('stuck') &&
+          blob.contains('tilted') &&
+          blob.contains('tired'))) {
     return const CoachDialogueVisual(
       kind: CoachDialogueVisualKind.tablesChange,
     );
@@ -2145,9 +2072,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       blob.contains('knowing when to quit') ||
       (blob.contains('guardrails') && blob.contains('quit')) ||
       (blob.contains('winning 1/2') && blob.contains('quit'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.guardrails,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.guardrails);
   }
   // Phrase-safe range/nut advantage — never bare "range" alone.
   if (blob.contains('range advantage') ||
@@ -2191,9 +2116,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       (blob.contains('working model') &&
           (blob.contains('tag') || blob.contains('tight in'))) ||
       (blob.contains('tag:') && blob.contains('tight in'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.tagModel,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.tagModel);
   }
   // Phrase-safe vs TAG — require versus/respect/light framing.
   if (blob.contains('versus tag') ||
@@ -2201,9 +2124,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       blob.contains('do not invent light bluff') ||
       (blob.contains('respect raises') && blob.contains('tag')) ||
       (blob.contains('light bluff') && blob.contains('tag'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.vsTags,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.vsTags);
   }
   // Phrase-safe wide pressure — before bare "wide" / "barrel" alone.
   if (blob.contains('wide entry plus pressure') ||
@@ -2222,9 +2143,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       (blob.contains('working model') &&
           (blob.contains('lag') || blob.contains('wide in'))) ||
       (blob.contains('lag:') && blob.contains('wide in'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.lagModel,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.lagModel);
   }
   // Phrase-safe preflop→flop plan — reason / confirm / cancel framing.
   if (blob.contains('enter with a reason') ||
@@ -2243,12 +2162,11 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       blob.contains('continue or kill') ||
       blob.contains('map turn barrels') ||
       (blob.contains('turn map') &&
-          (blob.contains('continue') || blob.contains('give-up') ||
+          (blob.contains('continue') ||
+              blob.contains('give-up') ||
               blob.contains('give up'))) ||
       (blob.contains('continue cards') && blob.contains('give-up'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.turnMap,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.turnMap);
   }
   // Phrase-safe pot-type plans — limped / SRP / 3-4bet framing.
   if (blob.contains('pot type sets ranges') ||
@@ -2289,9 +2207,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       blob.contains('trap more, call wider') ||
       (blob.contains('trap more') && blob.contains('fancy less')) ||
       (blob.contains('call wider') && blob.contains('lag'))) {
-    return const CoachDialogueVisual(
-      kind: CoachDialogueVisualKind.vsLags,
-    );
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.vsLags);
   }
   // Phrase-safe hard folds / coolers — avoid bare "cooler" / "ego" alone.
   if (blob.contains('hard folds save buy-ins') ||
@@ -3100,16 +3016,16 @@ class _HoleCardDemo extends StatelessWidget {
         key: const ValueKey('hole-cards-felt'),
         game: lessonBandGame(heroCodes: codes),
         feedback: CoachFeedback(
-          message: canTap
-              ? 'Tap your cards'
-              : 'Yours alone — nobody else sees them',
+          message:
+              canTap ? 'Tap your cards' : 'Yours alone — nobody else sees them',
         ),
         heroTapLabel: canTap ? 'Tap your cards' : null,
-        onHeroTap: canTap
-            ? () => onRegionTap!(
-                const LessonTableTapTarget(LessonTableRegion.hero),
-              )
-            : null,
+        onHeroTap:
+            canTap
+                ? () => onRegionTap!(
+                  const LessonTableTapTarget(LessonTableRegion.hero),
+                )
+                : null,
       );
     }
     final codes =
@@ -3332,9 +3248,7 @@ class _SuitsRanksDemoState extends State<_SuitsRanksDemo>
     final body = Column(
       mainAxisSize: expandTeach ? MainAxisSize.max : MainAxisSize.min,
       mainAxisAlignment:
-          expandTeach
-              ? MainAxisAlignment.spaceEvenly
-              : MainAxisAlignment.start,
+          expandTeach ? MainAxisAlignment.spaceEvenly : MainAxisAlignment.start,
       children: [
         if (widget.interactive) ...[
           suitTiles,

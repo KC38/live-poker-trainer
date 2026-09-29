@@ -77,7 +77,9 @@ band. The dock never covers the hole cards.
 
 On Your start, Start lesson is below the coach shelf. It does not cover the hero rail. The shelf shows the flop sentence for the preview hand.
 
-This column is the layout lessons reuse. Do not add another table widget.
+This column is the live-training table. A lesson step uses the lesson
+screen layout instead: the hero sits on the felt, and the speech bubble
+replaces the coach shelf. Do not add a third table widget.
 
 ### Shipped
 
@@ -149,6 +151,121 @@ The Live Training hub shows `assets/brand/logo_mark.png` in `_LiveAccessGate` an
 
 The lesson result uses `RexMascot` for the ceremony. It does not draw a letter R. `LessonResultScreen` (`lib/ui/screens/lesson_result_screen.dart`) draws `RexMascot` with `RexMood.celebrate` (`assets/brand/rex_celebrate.png`).
 
+## Lesson screen layout
+
+Every lesson step uses the same six regions, in this order, on a phone.
+The regions do not move, swap, or collapse between steps. A step may
+leave a region quiet (fewer seats, no arrows, hint disabled). It does
+not invent a second header, a second prompt, or a second table.
+
+Your two cards (`lesson-01-01-01-your-two-cards`) is the first lesson on
+this frame. Later lessons copy `LessonScreenLayout` in
+`lib/ui/course/widgets/lesson_screen_layout.dart`. They do not build
+their own chrome.
+
+```
+┌──────────────────────────────────────┐
+│ 1  X     progress bar          ♥ ♥ ♥ │
+│ 2  [mascot]   speech bubble          │
+│ 3                                    │
+│    full poker table (the stage)      │
+│                                      │
+│ 4  undo    redo    hint              │
+└──────────────────────────────────────┘
+        ↓ replaced, after an answer, by
+┌──────────────────────────────────────┐
+│ 5  Nice!  /  Oops, that's not correct│
+│    CONTINUE                          │
+└──────────────────────────────────────┘
+```
+
+There is no lesson-title row. Duolingo's "Solve the puzzle" line is not
+copied, and the lesson title does not sit under the progress bar.
+
+### 1. Chrome
+
+One row, height 36.
+
+| Slot | What it is |
+| --- | --- |
+| Close | `X` on the left. Leaves the lesson. It is not a back chevron and it is not beside a title. |
+| Progress | The lesson bar fills the space between close and the hearts. It advances by activity, not by a second bar. |
+| Hearts | One heart per life, filled while that life remains. A miss that costs a life empties one heart. Do not replace the row with a single heart and a number. |
+
+### 2. Coach band
+
+The mascot and one speech bubble share a row directly under the chrome.
+The mascot box is 104 by 118, about the area Oscar takes on a phone
+lesson. The bubble fills the rest of the row and is at least that tall.
+
+The bubble holds the only instruction for the step. The same sentence
+is not repeated on the table, under the table, or in a second coach
+line. Your two cards' first step says: "These two are your cards alone.
+Nobody else sees them. Tap your cards to peek."
+
+The mascot is a placeholder until Rex art for these expressions ships.
+`LessonMascotExpression` picks the face:
+
+| Moment | Expression |
+| --- | --- |
+| Prompt, before an answer | Thinking |
+| Accepted answer | Happy |
+| Miss | Wrong (the disappointed face) |
+
+The answer dock does not draw a second face.
+
+### 3. Stage
+
+The stage is the full poker table: `LessonTableStage` on `FeltTableView`.
+It is the largest region. It always draws the oval, the pot, and every
+seat that this step includes. A step teaches with fewer seats or a
+shorter board. It does not switch to a mini felt, a card row, or a form.
+
+On a lesson stage the hero sits on the felt with the other seats. The
+live-training rail (`HeroRailWidget` under the felt) stays the live
+table's layout. Lesson steps do not add that rail, a street heading, or
+a coach shelf. The pot pill already names the street. The bubble already
+says the instruction.
+
+Your two cards' first step shows four seats (you and three other
+players), no board, your two cards face down, and arrows on your cards.
+Tapping your cards turns them face up. Tapping another seat's cards is
+a miss: a buzz, the wrong face, and the answer dock. Those cards stay
+face down.
+
+Later steps in that lesson keep the full table. Arrows mark the region
+the step is asking about (your cards, or the board) and are omitted
+when the step should not point.
+
+### 4. Tools
+
+Undo, redo, and hint sit in one fixed row under the stage while the
+step is unanswered. They are not in the chrome. Undo reverts the local
+answer. Redo restores the answer undo just cleared. Hint shows that
+step's hint in the speech bubble until it is tapped again. A step with
+no hint leaves the button visible and disabled.
+
+### 5. Answer dock
+
+A graded answer replaces the tool row. It does not push a new route.
+
+| Answer | Title | Button |
+| --- | --- | --- |
+| Accepted | Nice! | Continue, `AppColors.success` |
+| Miss | Oops, that's not correct | Continue, `AppColors.danger` |
+
+One short line under the title says why. Continue is the only button.
+On a miss, Continue clears the dock and stays on the same step. On an
+accepted answer, Continue advances. The gold elevated button stays the
+primary button everywhere except this dock.
+
+### Shipped
+
+`LessonScreenLayout` (`lib/ui/course/widgets/lesson_screen_layout.dart`)
+is the frame. `LessonTableStage` (`lib/ui/course/widgets/lesson_table_stage.dart`)
+is the stage. Your two cards uses both. The next lesson copies this
+frame instead of the app-bar runner.
+
 ## Gamified learning
 
 Lessons teach like a game. The loop is
@@ -159,10 +276,10 @@ Do not copy their palette, owl, or words.
 
 | Beat | What the screen does |
 | --- | --- |
-| Step | One prompt, the poker table or the choice, one primary button. Progress and lives stay in a thin header. |
-| Right | Rex celebrates on the same screen. A short line says why. One continue. |
-| Wrong | Rex shows the miss. The better action is visible. Lives move. Retry or continue is one tap. |
-| Hint | A sheet over the step, not a new route. |
+| Step | The lesson screen layout: close, progress, hearts, one speech bubble, the full table, then undo / redo / hint. No title row. |
+| Right | The coach face turns happy. The dock says Nice! and one Continue. |
+| Wrong | The coach face turns wrong. The dock says Oops. Continue stays on the step. |
+| Hint | Hint replaces the speech bubble until it is tapped again. |
 | Payoff | Lesson XP and the daily goal before Home. |
 | Home | A path. The next lesson is the marked node. Rex stands on it. |
 

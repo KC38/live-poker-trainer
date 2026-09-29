@@ -1,0 +1,625 @@
+/// Shared lesson frame: chrome, coach band, stage, tools, answer dock.
+library;
+
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/models/course/course_session_models.dart';
+import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
+
+/// Your two cards is the first lesson on this frame.
+bool isLessonScreenFrameLesson(String lessonId) {
+  return lessonId == 'lesson-01-01-01-your-two-cards' ||
+      lessonId == 'lesson-01-01-01';
+}
+
+/// The one sentence in the speech bubble. Nothing else on the step repeats it.
+String lessonFrameSpeech(CourseActivity activity) {
+  if (activity.id == 'act-01-01-01-explain-hole-cards') {
+    return 'These two are your cards alone. Nobody else sees them. '
+        'Tap your cards to peek.';
+  }
+  final resolved = resolveLessonCoachPrompt(
+    activity: activity,
+    fallback: activity.accessibilityText,
+  );
+  return resolved.coach;
+}
+
+/// Hint copy when the catalog step has no hint media.
+String? lessonFrameHintFallback(CourseActivity activity) {
+  if (activity.id == 'act-01-01-01-explain-hole-cards') {
+    return 'Your two cards are at your seat, along the bottom of the table.';
+  }
+  return null;
+}
+
+/// Face the placeholder shows. Real Rex art replaces this widget later.
+enum LessonMascotExpression {
+  /// Prompt, before an answer.
+  thinking,
+
+  /// Accepted answer.
+  happy,
+
+  /// Miss.
+  wrong,
+}
+
+/// Oscar-sized stand-in. 104 by 118 matches the coach-band area on a phone.
+class LessonMascotPlaceholder extends StatelessWidget {
+  /// Creates the placeholder for [expression].
+  const LessonMascotPlaceholder({super.key, required this.expression});
+
+  /// Width of the bust, in logical pixels.
+  static const double width = 104;
+
+  /// Height of the bust, in logical pixels.
+  static const double height = 118;
+
+  /// Which face to draw.
+  final LessonMascotExpression expression;
+
+  String get _label {
+    return switch (expression) {
+      LessonMascotExpression.thinking => 'Coach, thinking',
+      LessonMascotExpression.happy => 'Coach, happy',
+      LessonMascotExpression.wrong => 'Coach, wrong',
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      container: true,
+      image: true,
+      label: _label,
+      child: CustomPaint(
+        size: const Size(width, height),
+        painter: _MascotPlaceholderPainter(expression),
+      ),
+    );
+  }
+}
+
+class _MascotPlaceholderPainter extends CustomPainter {
+  _MascotPlaceholderPainter(this.expression);
+
+  final LessonMascotExpression expression;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final body = Paint()..color = const Color(0xFF3D4A63);
+    final skin = Paint()..color = const Color(0xFFC4A484);
+    final ink =
+        Paint()
+          ..color = const Color(0xFF1A120C)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2.2
+          ..strokeCap = StrokeCap.round;
+    final shirt = Paint()..color = const Color(0xFFE7A3B8);
+
+    final shoulder = RRect.fromRectAndRadius(
+      Rect.fromLTWH(8, size.height * 0.62, size.width - 16, size.height * 0.4),
+      const Radius.circular(18),
+    );
+    canvas.drawRRect(shoulder, shirt);
+
+    final head = Offset(size.width / 2, size.height * 0.36);
+    canvas.drawCircle(head, 28, skin);
+    canvas.drawCircle(head, 28, ink..strokeWidth = 1.4);
+
+    final hair =
+        Path()
+          ..moveTo(head.dx - 26, head.dy - 4)
+          ..quadraticBezierTo(head.dx, head.dy - 40, head.dx + 26, head.dy - 2)
+          ..quadraticBezierTo(head.dx + 18, head.dy - 18, head.dx, head.dy - 16)
+          ..quadraticBezierTo(
+            head.dx - 16,
+            head.dy - 18,
+            head.dx - 26,
+            head.dy - 4,
+          );
+    canvas.drawPath(hair, body);
+
+    final eyeY = head.dy - 2;
+    if (expression == LessonMascotExpression.wrong) {
+      canvas.drawLine(
+        Offset(head.dx - 14, eyeY),
+        Offset(head.dx - 4, eyeY + 3),
+        ink,
+      );
+      canvas.drawCircle(
+        Offset(head.dx + 10, eyeY),
+        2.4,
+        Paint()..color = ink.color,
+      );
+    } else {
+      canvas.drawCircle(
+        Offset(head.dx - 9, eyeY),
+        2.4,
+        Paint()..color = ink.color,
+      );
+      canvas.drawCircle(
+        Offset(head.dx + 9, eyeY),
+        2.4,
+        Paint()..color = ink.color,
+      );
+    }
+
+    final mouth = Path();
+    if (expression == LessonMascotExpression.happy) {
+      mouth
+        ..moveTo(head.dx - 8, head.dy + 10)
+        ..quadraticBezierTo(head.dx, head.dy + 18, head.dx + 8, head.dy + 10);
+    } else if (expression == LessonMascotExpression.wrong) {
+      mouth
+        ..moveTo(head.dx - 7, head.dy + 16)
+        ..quadraticBezierTo(head.dx, head.dy + 9, head.dx + 7, head.dy + 16);
+    } else {
+      mouth
+        ..moveTo(head.dx - 6, head.dy + 12)
+        ..lineTo(head.dx + 6, head.dy + 12);
+      final hand =
+          Path()
+            ..moveTo(head.dx + 4, head.dy + 20)
+            ..quadraticBezierTo(
+              head.dx + 16,
+              head.dy + 22,
+              head.dx + 10,
+              head.dy + 8,
+            );
+      canvas.drawPath(hand, ink);
+    }
+    canvas.drawPath(mouth, ink);
+  }
+
+  @override
+  bool shouldRepaint(covariant _MascotPlaceholderPainter oldDelegate) {
+    return oldDelegate.expression != expression;
+  }
+}
+
+/// Mascot plus the only instruction for this step.
+class LessonCoachBand extends StatelessWidget {
+  /// Creates the coach row.
+  const LessonCoachBand({
+    super.key,
+    required this.speech,
+    required this.expression,
+  });
+
+  /// Bubble copy. Empty hides the words and keeps the mascot box.
+  final String speech;
+
+  /// Face for this beat.
+  final LessonMascotExpression expression;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          LessonMascotPlaceholder(expression: expression),
+          const SizedBox(width: 8),
+          Expanded(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                minHeight: LessonMascotPlaceholder.height,
+              ),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: AppColors.bgElevated,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.slateDark),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      speech,
+                      style: GoogleFonts.manrope(
+                        color: AppColors.cream,
+                        fontSize: 15,
+                        height: 1.3,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Close, lesson progress, and one heart per life.
+class LessonChromeBar extends StatelessWidget {
+  /// Creates the chrome row.
+  const LessonChromeBar({
+    super.key,
+    required this.progress,
+    required this.livesRemaining,
+    required this.livesMax,
+    required this.onClose,
+  });
+
+  /// 0 to 1 across the lesson.
+  final double progress;
+
+  /// Hearts still filled.
+  final int livesRemaining;
+
+  /// Heart icons in the row.
+  final int livesMax;
+
+  /// Leaves the lesson.
+  final VoidCallback onClose;
+
+  @override
+  Widget build(BuildContext context) {
+    final hearts = livesMax <= 0 ? 3 : livesMax;
+    return SizedBox(
+      height: 36,
+      child: Padding(
+        padding: const EdgeInsets.only(right: 12),
+        child: Row(
+          children: [
+            IconButton(
+              tooltip: 'Close',
+              onPressed: onClose,
+              icon: const Icon(Icons.close, color: AppColors.slate),
+            ),
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(999),
+                child: LinearProgressIndicator(
+                  value: progress.clamp(0.0, 1.0),
+                  minHeight: 12,
+                  backgroundColor: AppColors.slateDark,
+                  color: AppColors.success,
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Semantics(
+              label: '$livesRemaining of $hearts lives',
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  for (var i = 0; i < hearts; i++)
+                    Icon(
+                      Icons.favorite,
+                      key: ValueKey<String>('lesson-heart-$i'),
+                      size: 22,
+                      color:
+                          i < livesRemaining
+                              ? AppColors.danger
+                              : AppColors.slateDark,
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Undo, redo, and hint. Visible only while the step is unanswered.
+class LessonToolRow extends StatelessWidget {
+  /// Creates the tool row.
+  const LessonToolRow({
+    super.key,
+    required this.onUndo,
+    required this.onRedo,
+    required this.onHint,
+    required this.canUndo,
+    required this.canRedo,
+    required this.canHint,
+  });
+
+  final VoidCallback onUndo;
+  final VoidCallback onRedo;
+  final VoidCallback onHint;
+  final bool canUndo;
+  final bool canRedo;
+  final bool canHint;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 6, 16, 10),
+      child: Row(
+        children: [
+          _ToolButton(
+            tooltip: 'Undo',
+            icon: Icons.undo,
+            onPressed: canUndo ? onUndo : null,
+          ),
+          const SizedBox(width: 10),
+          _ToolButton(
+            tooltip: 'Redo',
+            icon: Icons.redo,
+            onPressed: canRedo ? onRedo : null,
+          ),
+          const Spacer(),
+          _ToolButton(
+            tooltip: 'Hint',
+            icon: Icons.lightbulb_outline,
+            label: 'HINT',
+            onPressed: canHint ? onHint : null,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ToolButton extends StatelessWidget {
+  const _ToolButton({
+    required this.tooltip,
+    required this.icon,
+    required this.onPressed,
+    this.label,
+  });
+
+  final String tooltip;
+  final IconData icon;
+  final VoidCallback? onPressed;
+  final String? label;
+
+  @override
+  Widget build(BuildContext context) {
+    final enabled = onPressed != null;
+    final color = enabled ? AppColors.slate : AppColors.slateDark;
+    return Tooltip(
+      message: tooltip,
+      child: Semantics(
+        button: true,
+        label: tooltip,
+        child: Material(
+          color: AppColors.bgElevated,
+          borderRadius: BorderRadius.circular(14),
+          child: InkWell(
+            onTap: onPressed,
+            borderRadius: BorderRadius.circular(14),
+            child: Container(
+              height: 48,
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: AppColors.slateDark),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(icon, color: color, size: 22),
+                  if (label != null) ...[
+                    const SizedBox(width: 6),
+                    Text(
+                      label!,
+                      style: GoogleFonts.manrope(
+                        color: color,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 13,
+                        letterSpacing: 0.6,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Bottom beat that replaces the tool row after a grade.
+class LessonAnswerDock extends StatelessWidget {
+  /// Creates the dock for [result].
+  const LessonAnswerDock({
+    super.key,
+    required this.result,
+    required this.onContinue,
+    this.busy = false,
+    this.recovery,
+  });
+
+  final SubmitCourseStepResult result;
+  final VoidCallback onContinue;
+  final bool busy;
+  final String? recovery;
+
+  @override
+  Widget build(BuildContext context) {
+    final accepted = result.accepted;
+    final accent = accepted ? AppColors.success : AppColors.danger;
+    final title = accepted ? 'Nice!' : "Oops, that's not correct";
+    return Material(
+      color: AppColors.bgElevated,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              title,
+              style: GoogleFonts.manrope(
+                color: accent,
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            if (recovery != null && recovery!.trim().isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text(
+                'Try: $recovery',
+                style: GoogleFonts.manrope(
+                  color: AppColors.cream,
+                  fontSize: 15,
+                  height: 1.3,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+            if (result.feedback.trim().isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text(
+                result.feedback,
+                style: GoogleFonts.manrope(
+                  color: AppColors.cream,
+                  fontSize: 15,
+                  height: 1.3,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+            const SizedBox(height: 14),
+            FilledButton(
+              onPressed: busy ? null : onContinue,
+              style: FilledButton.styleFrom(
+                backgroundColor: accent,
+                foregroundColor: AppColors.bgDark,
+                disabledBackgroundColor: accent.withValues(alpha: 0.72),
+                minimumSize: const Size.fromHeight(54),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                textStyle: GoogleFonts.manrope(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 16,
+                  letterSpacing: 0.8,
+                ),
+              ),
+              child:
+                  busy
+                      ? const SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.4,
+                          color: AppColors.bgDark,
+                        ),
+                      )
+                      : Text(
+                        'Continue',
+                        style: GoogleFonts.manrope(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 16,
+                          letterSpacing: 0.4,
+                        ),
+                      ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// The six regions. [stage] is the only part that changes per step.
+class LessonScreenLayout extends StatelessWidget {
+  /// Creates the frame.
+  const LessonScreenLayout({
+    super.key,
+    required this.progress,
+    required this.livesRemaining,
+    required this.livesMax,
+    required this.onClose,
+    required this.speech,
+    required this.expression,
+    required this.stage,
+    required this.onUndo,
+    required this.onRedo,
+    required this.onHint,
+    required this.canUndo,
+    required this.canRedo,
+    required this.canHint,
+    this.result,
+    this.onContinue,
+    this.answerBusy = false,
+    this.recovery,
+    this.notice,
+  });
+
+  final double progress;
+  final int livesRemaining;
+  final int livesMax;
+  final VoidCallback onClose;
+  final String speech;
+  final LessonMascotExpression expression;
+  final Widget stage;
+  final VoidCallback onUndo;
+  final VoidCallback onRedo;
+  final VoidCallback onHint;
+  final bool canUndo;
+  final bool canRedo;
+  final bool canHint;
+  final SubmitCourseStepResult? result;
+  final VoidCallback? onContinue;
+  final bool answerBusy;
+
+  /// Short name of the better tap, shown under a miss.
+  final String? recovery;
+
+  /// One-line catch-up under the chrome, such as a resumed lesson.
+  final String? notice;
+
+  @override
+  Widget build(BuildContext context) {
+    final graded = result != null && onContinue != null;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        LessonChromeBar(
+          progress: progress,
+          livesRemaining: livesRemaining,
+          livesMax: livesMax,
+          onClose: onClose,
+        ),
+        if (notice != null && notice!.trim().isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
+            child: Text(
+              notice!,
+              style: GoogleFonts.manrope(
+                color: AppColors.gold,
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        LessonCoachBand(speech: speech, expression: expression),
+        Expanded(child: stage),
+        if (graded)
+          LessonAnswerDock(
+            result: result!,
+            onContinue: onContinue!,
+            busy: answerBusy,
+            recovery: recovery,
+          )
+        else
+          LessonToolRow(
+            onUndo: onUndo,
+            onRedo: onRedo,
+            onHint: onHint,
+            canUndo: canUndo,
+            canRedo: canRedo,
+            canHint: canHint,
+          ),
+      ],
+    );
+  }
+}
