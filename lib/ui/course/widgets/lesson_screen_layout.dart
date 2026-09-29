@@ -165,7 +165,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-07-03-01-river-composition' ||
       lessonId == 'lesson-07-03-01' ||
       lessonId == 'lesson-07-04-01-pot-type-plans' ||
-      lessonId == 'lesson-07-04-01';
+      lessonId == 'lesson-07-04-01' ||
+      lessonId == 'lesson-07-05-01-hu-vs-multiway' ||
+      lessonId == 'lesson-07-05-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -459,6 +461,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-07-04-01-explain') {
     return 'Pot type sets ranges and SPR. Plan accordingly. '
         'Tap Limped, then SRP, then 3-4bet.';
+  }
+  if (activity.id == 'act-07-05-01-explain') {
+    return 'More players: fewer bluffs, thicker value. '
+        'Tap Fewer, then Thicker, then Widen.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||
