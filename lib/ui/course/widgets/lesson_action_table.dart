@@ -1859,11 +1859,17 @@ class AggressiveActionsDemo extends StatefulWidget {
     this.interactive = false,
     this.enabled = false,
     this.onAllActionsTapped,
+    this.height,
   });
 
   final bool interactive;
   final bool enabled;
   final VoidCallback? onAllActionsTapped;
+
+  /// Stage height when the lesson frame already owns the chrome.
+  ///
+  /// Null keeps the standalone teach shell at 58% of the screen.
+  final double? height;
 
   static const actions = <(String, String, Color)>[
     ('BET', 'Open pot', AppColors.gold),
@@ -1899,7 +1905,8 @@ class _AggressiveActionsDemoState extends State<AggressiveActionsDemo> {
     // Tall-phone teach: fixed felt + stretched tiles (minHeight alone leaves
     // sparse green under BET / RAISE / ALL-IN).
     final feltHeight =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+        widget.height ??
+        (expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null);
     String? next;
     for (final action in AggressiveActionsDemo.actions) {
       if (!_tapped.contains(action.$1)) {
