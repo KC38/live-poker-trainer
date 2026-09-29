@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
+import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
 /// Maps server soft grades to lesson feedback chrome.
 class LessonFeedbackSheet extends StatefulWidget {
@@ -110,6 +111,18 @@ class _LessonFeedbackSheetState extends State<LessonFeedbackSheet>
     super.dispose();
   }
 
+  Widget _feedbackLine() {
+    return Text(
+      _feedbackText,
+      style: GoogleFonts.manrope(
+        color: AppColors.cream,
+        fontSize: 15,
+        height: 1.35,
+        fontWeight: FontWeight.w500,
+      ),
+    );
+  }
+
   /// Decaying left-right oscillation; zero when accepted or idle.
   double get _shakeX {
     if (widget.result.accepted) return 0;
@@ -189,15 +202,17 @@ class _LessonFeedbackSheetState extends State<LessonFeedbackSheet>
                   ],
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  _feedbackText,
-                  style: GoogleFonts.manrope(
-                    color: AppColors.cream,
-                    fontSize: 15,
-                    height: 1.35,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                if (widget.result.accepted)
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const RexMascot(size: 40, mood: RexMood.celebrate),
+                      const SizedBox(width: 10),
+                      Expanded(child: _feedbackLine()),
+                    ],
+                  )
+                else
+                  _feedbackLine(),
                 if (widget.betterChoiceLabel != null) ...[
                   const SizedBox(height: 10),
                   // Recovery chip — short learner cue for the right tap.
