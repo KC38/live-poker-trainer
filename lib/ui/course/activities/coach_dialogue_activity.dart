@@ -208,6 +208,25 @@ class CoachDialogueActivity extends StatelessWidget {
             },
           );
         }
+        if (framed && visual.kind == CoachDialogueVisualKind.positionLabels) {
+          return LessonTableStage(
+            villainCount: lessonBlindsVillainCount,
+            dealerIndex: lessonBlindsButtonIndex,
+            sbIndex: lessonBlindsSmallBlindIndex,
+            bbIndex: lessonBlindsBigBlindIndex,
+            activeSeatIndex: lessonBlindsButtonIndex,
+            positionLabels: true,
+            enabled: !locked,
+            onSeatIndexTap:
+                locked
+                    ? null
+                    : (index) {
+                      if (index == lessonBlindsButtonIndex) {
+                        onFeltAcknowledge?.call();
+                      }
+                    },
+          );
+        }
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
