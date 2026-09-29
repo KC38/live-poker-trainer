@@ -458,7 +458,10 @@ when stacks change uses the same frame: short, deep, and effective
 stay in the stage, and the depth quizzes stay lists. Replay the same
 hand versus each type uses the same frame: cards, models, and cite
 stay in the stage, the no-evidence check stays a list, and the
-station, TAG, and LAG spots sit face up on the full table. The procedure for the
+station, TAG, and LAG spots sit face up on the full table. Integrate
+type, board, line, and sizing uses the same frame: type, board, line,
+and size stay in the stage, the integration check stays a list, and
+the maniac, nit, and TAG spots sit face up on the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
