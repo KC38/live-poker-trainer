@@ -3482,11 +3482,17 @@ class FlopLinesDemo extends StatefulWidget {
     this.interactive = false,
     this.enabled = false,
     this.onAllLinesTapped,
+    this.height,
   });
 
   final bool interactive;
   final bool enabled;
   final VoidCallback? onAllLinesTapped;
+
+  /// Stage height when the lesson frame already owns the chrome.
+  ///
+  /// Null keeps the standalone teach shell at 58% of the screen.
+  final double? height;
 
   static const lines = <({String label, String caption, Color color})>[
     (label: 'VALUE', caption: 'Get paid', color: AppColors.gold),
@@ -3529,7 +3535,8 @@ class _FlopLinesDemoState extends State<FlopLinesDemo> {
     // Tall-phone teach: fixed felt + stretched 2×3 tiles (minHeight alone
     // leaves sparse green under VALUE / C-BET / CHECK / CALL / FOLD / RAISE).
     final feltHeight =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+        widget.height ??
+        (expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null);
 
     Widget lineTile(int index) {
       final line = FlopLinesDemo.lines[index];
