@@ -23,7 +23,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-01-03-01-fold-check-call' ||
       lessonId == 'lesson-01-03-01' ||
       lessonId == 'lesson-01-03-02-bet-raise-allin' ||
-      lessonId == 'lesson-01-03-02';
+      lessonId == 'lesson-01-03-02' ||
+      lessonId == 'lesson-01-04-01-streets-and-order' ||
+      lessonId == 'lesson-01-04-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -63,6 +65,9 @@ String lessonFrameSpeech(CourseActivity activity) {
   }
   if (activity.id == 'act-01-03-02-explain-aggro') {
     return 'Three chip-pushing buttons. Tap Bet, then Raise, then All-in.';
+  }
+  if (activity.id == 'act-01-04-01-explain-streets') {
+    return 'Four streets: preflop, flop, turn, river. Tap each street.';
   }
   final resolved = resolveLessonCoachPrompt(
     activity: activity,

@@ -32,11 +32,17 @@ class StreetsTimelineDemo extends StatefulWidget {
     this.interactive = false,
     this.enabled = false,
     this.onAllStreetsTapped,
+    this.height,
   });
 
   final bool interactive;
   final bool enabled;
   final VoidCallback? onAllStreetsTapped;
+
+  /// Stage height when the lesson frame already owns the chrome.
+  ///
+  /// Null keeps the standalone teach shell at 58% of the screen.
+  final double? height;
 
   static const streets = <({String title, String detail, List<String> board})>[
     (title: 'PREFLOP', detail: 'Holes only', board: <String>[]),
@@ -74,7 +80,8 @@ class _StreetsTimelineDemoState extends State<StreetsTimelineDemo> {
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
     final feltHeight =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+        widget.height ??
+        (expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null);
 
     Widget laneAt(int i) {
       return _SoftPulseTarget(

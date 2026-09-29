@@ -1255,6 +1255,33 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                   ),
                 )
               else if (LessonFrameScope.maybeOf(context) != null &&
+                  widget.activity.id == 'act-01-04-01-checkpoint-postflop')
+                Expanded(
+                  child: LessonTableStage(
+                    villainCount: lessonBlindsVillainCount,
+                    dealerIndex: lessonBlindsButtonIndex,
+                    sbIndex: lessonBlindsSmallBlindIndex,
+                    bbIndex: lessonBlindsBigBlindIndex,
+                    enabled: !locked,
+                    onSeatIndexTap:
+                        locked
+                            ? null
+                            : (index) {
+                              final region = switch (index) {
+                                lessonBlindsButtonIndex =>
+                                  LessonTableRegion.button,
+                                lessonBlindsSmallBlindIndex =>
+                                  LessonTableRegion.smallBlind,
+                                lessonBlindsBigBlindIndex =>
+                                  LessonTableRegion.bigBlind,
+                                _ => null,
+                              };
+                              if (region == null) return;
+                              _submitRegion(LessonTableTapTarget(region));
+                            },
+                  ),
+                )
+              else if (LessonFrameScope.maybeOf(context) != null &&
                   isLessonBlindsFrameActivity(widget.activity.id))
                 Expanded(
                   child: LessonTableStage(
