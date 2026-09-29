@@ -22086,6 +22086,71 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Life −1'), findsOneWidget);
   });
 
+  testWidgets('accepted feedback shows celebrating Rex beside the short line', (
+    tester,
+  ) async {
+    const line = 'Feedback for SoftGrade.recommended';
+    await tester.pumpWidget(
+      _wrap(
+        LessonFeedbackSheet(
+          result: _result(
+            grade: SoftGrade.recommended,
+            accepted: true,
+            lifeLost: false,
+          ),
+          onContinue: () {},
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Nice!'), findsOneWidget);
+    expect(find.text(line), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'Continue'), findsOneWidget);
+    final celebrating = find.bySemanticsLabel('Rex, celebrating');
+    expect(celebrating, findsOneWidget);
+    final mascot = tester.widget<RexMascot>(find.byType(RexMascot));
+    expect(mascot.mood, RexMood.celebrate);
+    final image = tester.widget<Image>(find.byType(Image));
+    expect((image.image as AssetImage).assetName, RexMascot.celebrateAsset);
+    expect(
+      find.descendant(
+        of: find.ancestor(of: find.text(line), matching: find.byType(Row)).first,
+        matching: celebrating,
+      ),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('rejected feedback does not show the celebrating face', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _wrap(
+        LessonFeedbackSheet(
+          result: _result(
+            grade: SoftGrade.questionable,
+            accepted: false,
+            lifeLost: false,
+          ),
+          onContinue: () {},
+          onRetry: () {},
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Think again'), findsOneWidget);
+    expect(find.bySemanticsLabel('Rex, celebrating'), findsNothing);
+    expect(find.byType(RexMascot), findsNothing);
+  });
+
+  testWidgets('default Rex portrait stays the calm prompt face', (tester) async {
+    await tester.pumpWidget(_wrap(const RexMascot()));
+    await tester.pumpAndSettle();
+    expect(find.bySemanticsLabel('Rex, calm'), findsOneWidget);
+    final image = tester.widget<Image>(find.byType(Image));
+    expect((image.image as AssetImage).assetName, RexMascot.asset);
+  });
+
   testWidgets('reasonable grade stays positive without life loss chrome', (
     tester,
   ) async {
@@ -22104,6 +22169,7 @@ await tester.tap(find.text('NIT'));
     await tester.pumpAndSettle();
     expect(find.text('Playable'), findsOneWidget);
     expect(find.text('Life −1'), findsNothing);
+    expect(find.bySemanticsLabel('Rex, celebrating'), findsOneWidget);
   });
 
   testWidgets('preferred recovery renders as a gold callout chip', (
