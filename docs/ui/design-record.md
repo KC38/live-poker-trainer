@@ -291,8 +291,9 @@ stage, and each action spot uses the full table. Streets and action
 order uses the same frame: the street timeline stays in the stage, and
 postflop order uses the full table. How pots are won uses the same
 frame: the three paths stay in the stage, and a fold-win or a called
-river uses the full table. The procedure for the next lesson
-is
+river uses the full table. Play a full toy hand uses the same frame:
+the three beats stay in the stage, and each street of the hand uses
+the full table. The procedure for the next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
 ## Gamified learning

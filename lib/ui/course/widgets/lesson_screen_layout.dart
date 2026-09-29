@@ -27,11 +27,13 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-01-04-01-streets-and-order' ||
       lessonId == 'lesson-01-04-01' ||
       lessonId == 'lesson-01-05-01-winning-pots' ||
-      lessonId == 'lesson-01-05-01';
+      lessonId == 'lesson-01-05-01' ||
+      lessonId == 'lesson-01-06-01-guided-complete-hand' ||
+      lessonId == 'lesson-01-06-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
-String lessonFrameSpeech(CourseActivity activity) {
+String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-01-01-01-explain-hole-cards') {
     return 'These two are your cards alone. Nobody else sees them. '
         'Tap your cards to peek.';
@@ -73,6 +75,17 @@ String lessonFrameSpeech(CourseActivity activity) {
   }
   if (activity.id == 'act-01-05-01-explain-win') {
     return 'Folds win pots early. Showdown compares hands. Tap each path.';
+  }
+  if (activity.id == 'act-01-06-01-explain-run') {
+    return 'One short hand. Tap Blinds, then You act, then Ending.';
+  }
+  if (activity.id.startsWith('act-01-06-01-') &&
+      activity.handSteps.isNotEmpty) {
+    final last = activity.handSteps.length - 1;
+    final index = handStepIndex < 0
+        ? 0
+        : (handStepIndex > last ? last : handStepIndex);
+    return activity.handSteps[index].prompt;
   }
   final resolved = resolveLessonCoachPrompt(
     activity: activity,

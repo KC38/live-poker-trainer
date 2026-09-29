@@ -7,6 +7,8 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 /// Walks authored street steps; submits the active step's choice.
@@ -154,16 +156,33 @@ class AuthoredMultiStepActivity extends StatelessWidget {
                   const SizedBox(height: 14),
                   if (fill)
                     Expanded(
-                      child: LessonActionTable(
-                        spot: spot,
-                        coachOwnsCue: coachOwnsCue,
-                      ),
+                      child:
+                          LessonFrameScope.maybeOf(context) != null &&
+                                  activity.id.startsWith('act-01-06-01-')
+                              ? LessonTableStage(
+                                heroCodes: spot.heroCodes,
+                                boardCodes: spot.boardCodes,
+                                villainCount: 1,
+                                heroFaceUp: true,
+                              )
+                              : LessonActionTable(
+                                spot: spot,
+                                coachOwnsCue: coachOwnsCue,
+                              ),
                     )
                   else
-                    LessonActionTable(
-                      spot: spot,
-                      coachOwnsCue: coachOwnsCue,
-                    ),
+                    LessonFrameScope.maybeOf(context) != null &&
+                            activity.id.startsWith('act-01-06-01-')
+                        ? LessonTableStage(
+                          heroCodes: spot.heroCodes,
+                          boardCodes: spot.boardCodes,
+                          villainCount: 1,
+                          heroFaceUp: true,
+                        )
+                        : LessonActionTable(
+                          spot: spot,
+                          coachOwnsCue: coachOwnsCue,
+                        ),
                   const SizedBox(height: 14),
                   LessonActionDock(
                     choices: step.choices,

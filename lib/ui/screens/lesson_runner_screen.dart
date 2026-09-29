@@ -749,7 +749,10 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
               : authored;
       if (hint != null && hint.trim().isNotEmpty) return hint;
     }
-    return lessonFrameSpeech(controller.activity);
+    return lessonFrameSpeech(
+      controller.activity,
+      handStepIndex: controller.draft.handStepIndex,
+    );
   }
 
   bool _frameCanHint(CourseActivity activity) {
