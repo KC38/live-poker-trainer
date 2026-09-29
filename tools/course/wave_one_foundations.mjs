@@ -2001,7 +2001,7 @@ export function buildSectionTwo() {
           }),
           lesson({
             id: L020702, order: 2,
-            title: "Section 2 jump check",
+            title: "Baseline jump check",
             summary: "Placement-style check on baseline skills.",
             objectives: [
               "Confirm position labels",

@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "2abccdfe04d0bdc7f11956a4c0869dcf7f245f710ad74d3163d1754d346f4a93",
+  "contentChecksum": "d0e23823bab7f2c0c1a6a9f355e71685decbbe35b41d67f7b6dc8a61f16c171c",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -5174,7 +5174,7 @@
             {
               "id": "lesson-02-07-02-section-two-jump",
               "order": 2,
-              "title": "Section 2 jump check",
+              "title": "Baseline jump check",
               "summary": "Placement-style check on baseline skills.",
               "objectives": [
                 "Confirm position labels",

@@ -6,7 +6,9 @@ library;
 const kLiveWarmUpUnlockLessonId = 'lesson-02-07-02-section-two-jump';
 
 /// Home title for [kLiveWarmUpUnlockLessonId] when the catalog is not loaded.
-const kLiveWarmUpUnlockLessonTitle = 'Section 2 jump check';
+///
+/// This is the path-node title. It does not say Section 2.
+const kLiveWarmUpUnlockLessonTitle = 'Baseline jump check';
 
 /// Locked-tab sentence. [lessonTitle] is the Home lesson the learner must finish.
 String liveTrainingLockedMessage({String? lessonTitle}) {

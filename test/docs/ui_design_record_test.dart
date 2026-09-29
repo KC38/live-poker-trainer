@@ -28,6 +28,12 @@ void main() {
     );
     expect(text, contains('lounge_ambient.mp3'));
     expect(text, contains('## Gamified learning'));
+    expect(
+      text,
+      contains(
+        'The locked Live Training hub names the Home lesson that unlocks it. It does not say Section 2.',
+      ),
+    );
     expect(text, contains('duolingo-chess/PATTERNS.md'));
   });
 

@@ -160,6 +160,8 @@ On Home, Rex stands on the marked next-lesson node. A Rex card above the path is
 
 A right answer on a lesson step shows Rex’s face in a celebrating mood beside the short line. The calm portrait remains the prompt face.
 
+The locked Live Training hub names the Home lesson that unlocks it. It does not say Section 2.
+
 Rex on a teaching step has a face and a mood. A text-only coach line on a
 right or wrong answer is a gap in the mascot slot and in this section.
 File one ticket per missing beat.
@@ -167,3 +169,5 @@ File one ticket per missing beat.
 ### Shipped
 
 A right answer shows `RexMascot` (`RexMood.celebrate`, `assets/brand/rex_celebrate.png`) beside the short line in `LessonFeedbackSheet` (`lib/ui/course/widgets/lesson_feedback_sheet.dart`). The prompt stays on `assets/brand/rex_calm.png`.
+
+The locked Live Training hub names Baseline jump check in `liveTrainingLockedMessage` (`lib/models/live_access.dart`). That title is the Home node for `lesson-02-07-02-section-two-jump`.
