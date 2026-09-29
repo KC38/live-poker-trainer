@@ -437,7 +437,10 @@ lists. Meet the LAG uses the same frame: wide, pressure, and model stay
 in the stage, and the label quizzes stay lists. Adjust versus LAG uses
 the same frame: call, trap, and fancy less stay in the stage, the
 avoid and cite checks stay lists, and the call-wider and trap spots
-sit face up on the full table. The procedure for the
+sit face up on the full table. Same cards, five type models uses the
+same frame: cards, seats, and evidence stay in the stage, the label
+check stays a list, and the station, nit, and LAG spots sit face up on
+the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
