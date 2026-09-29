@@ -403,7 +403,10 @@ position uses the same frame: equity, cash, and pos stay in the stage,
 and the realization quizzes stay lists. Recognize capped versus
 uncapped ranges uses the same frame: capped, uncapped, and nuts stay
 in the stage, the check-turn, bomb, and attack checks stay lists, and
-the thin-value spot sits face up on the full table. The procedure for the
+the thin-value spot sits face up on the full table. Choose polarized
+or merged betting uses the same frame: polar, merged, and size stay in
+the stage, the overbet, mismatch, and aim checks stay lists, and the
+merged-size spot sits face up on the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
