@@ -2560,11 +2560,17 @@ class TableHabitsDemo extends StatefulWidget {
     this.interactive = false,
     this.enabled = false,
     this.onAllHabitsTapped,
+    this.height,
   });
 
   final bool interactive;
   final bool enabled;
   final VoidCallback? onAllHabitsTapped;
+
+  /// Stage height when the lesson frame already owns the chrome.
+  ///
+  /// Null keeps the standalone teach shell at 58% of the screen.
+  final double? height;
 
   static const habits = <({String label, String caption, Color color})>[
     (label: 'WATCH', caption: 'Follow the action', color: AppColors.cream),
@@ -2604,7 +2610,8 @@ class _TableHabitsDemoState extends State<TableHabitsDemo> {
     // Tall-phone teach: fixed felt + stretched 2×2 tiles (minHeight alone
     // leaves sparse green under WATCH / SAY / COVER / WAIT).
     final feltHeight =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+        widget.height ??
+        (expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null);
 
     Widget habitTile(int index) {
       final habit = TableHabitsDemo.habits[index];

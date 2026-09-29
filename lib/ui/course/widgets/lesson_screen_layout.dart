@@ -43,7 +43,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-02-04-01-facing-raise' ||
       lessonId == 'lesson-02-04-01' ||
       lessonId == 'lesson-02-05-01-effective-stack' ||
-      lessonId == 'lesson-02-05-01';
+      lessonId == 'lesson-02-05-01' ||
+      lessonId == 'lesson-02-06-01-live-habits' ||
+      lessonId == 'lesson-02-06-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -113,6 +115,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-02-05-01-explain-bb') {
     return 'The shorter stack sets the ceiling. '
         'Tap Chips to BB, then Shorter, then Depth.';
+  }
+  if (activity.id == 'act-02-06-01-explain-habits') {
+    return 'Watch the action, say it, cover your cards, and wait. '
+        'Tap Watch, then Say, then Cover, then Wait.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand') &&
