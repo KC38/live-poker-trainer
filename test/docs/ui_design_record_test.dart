@@ -12,6 +12,12 @@ void main() {
     expect(text, contains('## Theme'));
     expect(text, contains('## Poker table'));
     expect(text, contains('## Lesson tables'));
+    expect(
+      text,
+      contains(
+        'A phase column on a teaching felt stacks its playing cards vertically. A horizontal row of `MiniCard` or `CardBack` widgets is not used inside an `Expanded` phase column.',
+      ),
+    );
     expect(text, contains('## Asset inventory'));
     expect(text, contains('FeltTableView'));
     expect(text, contains('HeroRailWidget'));
