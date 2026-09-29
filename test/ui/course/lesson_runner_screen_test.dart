@@ -2815,6 +2815,46 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('range advantage uses the lesson frame and the advantage tiles', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      _app(
+        LessonRunnerScreen(
+          lessonId: 'lesson-06-01-01-range-nut-advantage',
+          courseService: _PrerequisiteLockedCourseService(catalog)
+            ..previousComplete = true,
+          startRequestId: 'start_range_advantage_frame',
+        ),
+        catalog: catalog,
+      ),
+    );
+    await tester.pump();
+    for (
+      var i = 0;
+      i < 40 && find.textContaining('Tap Range').evaluate().isEmpty;
+      i++
+    ) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+
+    expect(find.byType(AppBar), findsNothing);
+    expect(find.text('Spot range advantage and nut advantage'), findsNothing);
+    expect(find.byTooltip('Close'), findsOneWidget);
+    expect(find.byIcon(Icons.favorite), findsNWidgets(3));
+    expect(find.textContaining('Tap Range'), findsOneWidget);
+    expect(find.byTooltip('Undo'), findsOneWidget);
+    expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.text('RANGE'), findsOneWidget);
+    expect(find.text('NUT'), findsOneWidget);
+    expect(find.text('ADVANTAGE'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('hung startLesson surfaces retry instead of empty spinner', (
     tester,
   ) async {
