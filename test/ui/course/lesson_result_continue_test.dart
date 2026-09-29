@@ -66,8 +66,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('LESSON COMPLETE'), findsOneWidget);
 
-    await tester.ensureVisible(find.widgetWithText(FilledButton, 'CONTINUE'));
-    await tester.tap(find.widgetWithText(FilledButton, 'CONTINUE'));
+    await tester.ensureVisible(find.widgetWithText(ElevatedButton, 'CONTINUE'));
+    await tester.tap(find.widgetWithText(ElevatedButton, 'CONTINUE'));
     await tester.pumpAndSettle();
 
     expect(find.text('LESSON COMPLETE'), findsNothing);
@@ -97,7 +97,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));
 
-    await tester.tap(find.widgetWithText(FilledButton, 'CONTINUE'));
+    await tester.tap(find.widgetWithText(ElevatedButton, 'CONTINUE'));
     await tester.pump();
 
     // Sole-route escape is handled by PokerLabApp remounting on saveProgress
@@ -136,7 +136,7 @@ void main() {
       expect(find.text(title), findsOneWidget);
       expect(find.text('Clean work. That skill sticks.'), findsOneWidget);
       expect(find.text('R'), findsNothing);
-      expect(find.widgetWithText(FilledButton, 'CONTINUE'), findsOneWidget);
+      expect(find.widgetWithText(ElevatedButton, 'CONTINUE'), findsOneWidget);
 
       final mascot = tester.widget<RexMascot>(find.byType(RexMascot));
       expect(mascot.mood, RexMood.celebrate);
@@ -174,6 +174,18 @@ void main() {
     expect(find.text('+25'), findsOneWidget);
     expect(find.text('Daily goal'), findsOneWidget);
     expect(find.text('10 minutes'), findsOneWidget);
-    expect(find.widgetWithText(FilledButton, 'CONTINUE'), findsOneWidget);
+    expect(find.widgetWithText(ElevatedButton, 'CONTINUE'), findsOneWidget);
+
+    final button = tester.widget<ElevatedButton>(
+      find.widgetWithText(ElevatedButton, 'CONTINUE'),
+    );
+    final context = tester.element(
+      find.widgetWithText(ElevatedButton, 'CONTINUE'),
+    );
+    final style =
+        button.style ?? Theme.of(context).elevatedButtonTheme.style;
+    final shape =
+        style!.shape!.resolve(const <WidgetState>{})! as RoundedRectangleBorder;
+    expect(shape.borderRadius, BorderRadius.circular(14));
   });
 }

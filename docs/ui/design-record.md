@@ -47,6 +47,8 @@ Onboarding primary actions use the elevated button (gold on bgDark, height 54, r
 
 Lesson feedback Continue uses the elevated button (gold on bgDark, height 54, radius 14, Manrope 16 w800).
 
+Lesson result CONTINUE uses the elevated button (radius 14).
+
 Home status values (streak, XP, accepted accuracy) use JetBrains Mono. The Rex card uses the card (`bgElevated`, radius 16, hairline `slateDark`, no elevation). Start uses the elevated button (gold on bgDark, height 54, radius 14, Manrope 16 w800).
 
 The Settings Chip display segments ($, BB, Both) use JetBrains Mono.
@@ -59,6 +61,8 @@ that labels a chip amount copies that data type.
 
 Lesson feedback Continue is `_FeedbackFooter` in
 `lib/ui/screens/lesson_runner_screen.dart`.
+
+Lesson result CONTINUE uses the elevated button (radius 14). `LessonResultScreen` (`lib/ui/screens/lesson_result_screen.dart`) uses `ElevatedButton`, so the Theme elevated button supplies radius 14.
 
 ## Poker table
 

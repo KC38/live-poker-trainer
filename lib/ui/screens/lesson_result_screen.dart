@@ -205,23 +205,9 @@ class _LessonResultScreenState extends State<LessonResultScreen>
                         '${(result.acceptedAccuracy * 100).clamp(0, 100).round()}%',
                   ),
                   const Spacer(),
-                  FilledButton(
+                  ElevatedButton(
                     onPressed: _onContinue,
-                    style: FilledButton.styleFrom(
-                      backgroundColor: AppColors.gold,
-                      foregroundColor: AppColors.bgDark,
-                      minimumSize: const Size.fromHeight(54),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                    child: Text(
-                      'CONTINUE',
-                      style: GoogleFonts.manrope(
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 0.8,
-                      ),
-                    ),
+                    child: const Text('CONTINUE'),
                   ),
                 ],
               ),
