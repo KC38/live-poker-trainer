@@ -110,6 +110,20 @@ class CoachDialogueActivity extends StatelessWidget {
             onComplete: locked ? null : onFeltAcknowledge,
           );
         }
+        if (framed && visual.kind == CoachDialogueVisualKind.handLadder) {
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final bounded =
+                  constraints.maxHeight.isFinite ? constraints.maxHeight : null;
+              return HandRankLadderDemo(
+                interactive: true,
+                enabled: !locked,
+                onAllRungsTapped: locked ? null : onFeltAcknowledge,
+                height: bounded,
+              );
+            },
+          );
+        }
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

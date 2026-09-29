@@ -49,6 +49,7 @@ class FeltTableView extends StatelessWidget {
     this.includeHero = false,
     this.showHoleCardBacks = false,
     this.heroCardsFaceUp = false,
+    this.faceUpPlayerIds = const {},
     this.highlightHero = false,
     this.highlightBoard = false,
     this.onSeatTap,
@@ -85,6 +86,9 @@ class FeltTableView extends StatelessWidget {
 
   /// Hero hole cards face up. Ignored when [showHoleCardBacks] is false.
   final bool heroCardsFaceUp;
+
+  /// Extra seats whose hole cards are face up, by player id.
+  final Set<int> faceUpPlayerIds;
 
   /// Arrows on the hero seat, the lesson cue for "tap your cards".
   final bool highlightHero;
@@ -239,9 +243,12 @@ class FeltTableView extends StatelessWidget {
                     size: seatBox,
                     showCards: game.isHandOver && !player.folded,
                     revealHoleCards:
-                        player.isHero && heroCardsFaceUp && showHoleCardBacks,
+                        showHoleCardBacks &&
+                        (faceUpPlayerIds.contains(player.id) ||
+                            (player.isHero && heroCardsFaceUp)),
                     showHoleBacks:
                         showHoleCardBacks &&
+                        !faceUpPlayerIds.contains(player.id) &&
                         !(player.isHero && heroCardsFaceUp),
                     // During collection the flying pill carries the amount.
                     betLabel:

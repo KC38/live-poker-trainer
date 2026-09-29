@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
+import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
@@ -43,6 +44,7 @@ class LessonTableStage extends StatelessWidget {
     super.key,
     this.heroCodes = const ['Ah', 'Kd'],
     this.boardCodes = const [],
+    this.villainCodes = const [],
     this.villainCount = 3,
     this.heroFaceUp = false,
     this.cue = LessonTableCue.none,
@@ -62,6 +64,9 @@ class LessonTableStage extends StatelessWidget {
 
   /// Community cards. Empty on a preflop step.
   final List<String> boardCodes;
+
+  /// First opponent's hole cards, shown face up when this is two codes.
+  final List<String> villainCodes;
 
   /// Other seats. The hero is always an extra seat.
   final int villainCount;
@@ -107,13 +112,27 @@ class LessonTableStage extends StatelessWidget {
     );
     const names = ['Sam', 'Jo', 'Rio', 'Max', 'Kai'];
     var villain = 0;
-    final players = [
-      for (final player in base.players)
-        if (player.isHero)
-          player
-        else
-          player.copyWith(name: names[villain++ % names.length]),
-    ];
+    final players = <PlayerModel>[];
+    for (final player in base.players) {
+      if (player.isHero) {
+        players.add(player);
+        continue;
+      }
+      final showHoles = villain == 0 && villainCodes.length >= 2;
+      players.add(
+        player.copyWith(
+          name: names[villain % names.length],
+          holeCards:
+              showHoles
+                  ? [
+                    for (final code in villainCodes.take(2))
+                      CardModel.fromCode(code),
+                  ]
+                  : player.holeCards,
+        ),
+      );
+      villain += 1;
+    }
     final named = base.copyWith(players: players);
     if (dealerIndex == null) return named;
     final seats = named.players.length;
@@ -141,6 +160,10 @@ class LessonTableStage extends StatelessWidget {
             includeHero: true,
             showHoleCardBacks: true,
             heroCardsFaceUp: heroFaceUp,
+            faceUpPlayerIds: {
+              if (heroFaceUp) 0,
+              if (villainCodes.length >= 2) 1,
+            },
             highlightHero: cue == LessonTableCue.hero && !heroFaceUp,
             highlightBoard: cue == LessonTableCue.board,
             onBoardTap:
