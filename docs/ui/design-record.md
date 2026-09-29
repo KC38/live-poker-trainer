@@ -372,7 +372,10 @@ range, SPR, and player-type checks stay lists, and the 3-bet and the
 sizing spot sit face up on the full table. Build multiway ranges
 with nut potential uses the same frame: nutted, air, and domination
 stay in the stage, the continue and priority checks stay lists, and
-the connector and the set spots sit face up on the full table. The procedure for the
+the connector and the set spots sit face up on the full table. Play
+150–300bb stacks with a plan uses the same frame: deep, realize, and
+stack stay in the stage, the implied, plan, and reward checks stay
+lists, and the wet-flop fold sits face up on the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
