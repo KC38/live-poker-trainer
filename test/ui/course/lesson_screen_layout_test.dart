@@ -15,10 +15,59 @@ void main() {
   test('design record names the six lesson regions', () {
     final text = File('docs/ui/design-record.md').readAsStringSync();
     expect(text, contains('## Lesson screen layout'));
+    expect(text, contains('lesson-screen-layout/SKILL.md'));
+    expect(
+      File('.cursor/skills/lesson-screen-layout/SKILL.md').readAsStringSync(),
+      contains('LessonScreenLayout'),
+    );
     expect(text, contains('These two are your cards alone.'));
     expect(text, contains('LessonScreenLayout'));
     expect(text, contains('LessonTableStage'));
     expect(text, contains('Oops, that\'s not correct'));
+  });
+
+  testWidgets('speech bubble top and first line stay put as copy length changes', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    const short = 'Tap.';
+    const long =
+        'These two are your cards alone. Nobody else sees them. '
+        'Tap your cards to peek. The board in the middle is shared.';
+
+    Future<({double mascot, double bubble, double text, double height})>
+    measure(String speech) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme(),
+          home: Scaffold(
+            body: LessonCoachBand(
+              speech: speech,
+              expression: LessonMascotExpression.thinking,
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      final bubble = find.byKey(const ValueKey<String>('lesson-speech-bubble'));
+      return (
+        mascot: tester.getTopLeft(find.bySemanticsLabel('Coach, thinking')).dy,
+        bubble: tester.getTopLeft(bubble).dy,
+        text: tester.getTopLeft(find.text(speech)).dy,
+        height: tester.getSize(bubble).height,
+      );
+    }
+
+    final brief = await measure(short);
+    final wordy = await measure(long);
+
+    expect(brief.bubble, brief.mascot);
+    expect(wordy.bubble, wordy.mascot);
+    expect(brief.text - brief.bubble, wordy.text - wordy.bubble);
+    expect(wordy.height, greaterThan(brief.height));
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('frame keeps close, hearts, one bubble, tools, and no title', (

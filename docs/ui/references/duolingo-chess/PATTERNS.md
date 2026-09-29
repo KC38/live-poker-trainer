@@ -34,7 +34,7 @@ Frames are in [frames/](frames/), capture order.
 
 | Their beat | Ours |
 | --- | --- |
-| Chessboard | The lesson stage: the full poker table, every step. Fewer seats or a shorter board, never a second mini table. |
+| Chessboard | The lesson stage. A hand step is the full poker table, with fewer seats or a shorter board. A step with no hand keeps the same frame and does not invent a mini table. |
 | Oscar | The coach band: mascot box (104×118) and one speech bubble. Expression follows the beat (thinking, happy, wrong). |
 | Hearts | Lesson lives already on the runner. They move when the answer is wrong. |
 | Green buttons | Theme elevated button. Do not introduce a second green. |

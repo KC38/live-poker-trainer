@@ -1,0 +1,47 @@
+---
+name: lesson-screen-layout
+description: >-
+  Lay out every lesson step on the shared frame: close, progress, hearts,
+  one coach speech bubble, one stage, then undo, redo, and hint or the
+  answer dock. Use when adding or changing a lesson screen, lesson
+  activity, lesson chrome, or lesson feedback, including steps that do
+  not show the full poker table.
+---
+
+# Lesson screen layout
+
+Every lesson step uses `LessonScreenLayout`
+(`lib/ui/course/widgets/lesson_screen_layout.dart`). The contract is
+[Lesson screen layout](../../../docs/ui/design-record.md) in the design
+record. Your two cards (`lesson-01-01-01-your-two-cards`) is the shipped
+frame. Copy it. Do not build a second header, title, coach line, or
+footer.
+
+## Regions
+
+Top to bottom. These do not move between steps or lessons.
+
+1. **Chrome.** `LessonChromeBar`. Close (`X`), the lesson progress bar, one heart per life. No lesson title. No back chevron.
+2. **Coach band.** `LessonCoachBand`. Mascot placeholder (104×118) and one speech bubble. The bubble top and the tail stay fixed on the coach's mouth. More text grows the bubble downward. The first line does not jump. The bubble is the only instruction. Do not repeat it on the stage.
+3. **Stage.** The only region that changes. See below.
+4. **Tools.** `LessonToolRow`. Undo, redo, hint, under the stage, until the step is graded. Hint text replaces the bubble until hint is tapped again. A step with no hint keeps the button and disables it.
+5. **Answer dock.** `LessonAnswerDock` replaces the tool row. Accepted: happy face, "Nice!", Continue in `AppColors.success`. Miss: wrong face, "Oops, that's not correct", Continue in `AppColors.danger`. Continue is the only button. A miss stays on the step. An accept advances.
+
+Expression is `LessonMascotExpression`: thinking before an answer, happy when accepted, wrong on a miss. The dock does not draw a second face.
+
+## Stage
+
+| The step shows | What fills the stage |
+| --- | --- |
+| Hole cards, a board, a pot, seats, or an action | `LessonTableStage`. The full oval. Fewer seats, a shorter board, or no actions, so the step can focus. Hero sits on the felt. No hero rail, no street heading, no coach shelf. |
+| No hand (suits, rank order, a number, a list) | That step's own widget, inside this same frame. Do not add a felt to match Your two cards. |
+
+Do not use a mini felt, a loose card row, `LessonTableScene`, or the app-bar runner for a new or edited step. A hand step that still uses those is a gap. Move that step onto `LessonTableStage` in the same change. A non-hand step only needs the frame; leave its teaching widget in the stage slot.
+
+## When you change a lesson
+
+1. Read the Lesson screen layout section of the design record.
+2. Put the step in `LessonScreenLayout`. Pass the speech once.
+3. Pick the stage from the table above.
+4. Keep the bubble top, the tail, and the tool row where Your two cards has them.
+5. Cover the frame in a widget test: the regions are present, and a short line and a long line keep the same bubble top and first-line inset.

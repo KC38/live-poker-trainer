@@ -204,40 +204,126 @@ class LessonCoachBand extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           LessonMascotPlaceholder(expression: expression),
-          const SizedBox(width: 8),
-          Expanded(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                minHeight: LessonMascotPlaceholder.height,
-              ),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: AppColors.bgElevated,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.slateDark),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      speech,
-                      style: GoogleFonts.manrope(
-                        color: AppColors.cream,
-                        fontSize: 15,
-                        height: 1.3,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          const SizedBox(width: 2),
+          Expanded(child: _SpeechBubble(text: speech)),
         ],
       ),
     );
   }
+}
+
+/// Rounded bubble with a tail aimed at the coach's mouth.
+///
+/// The top edge and the tail stay fixed against the mascot. A longer line
+/// grows the bubble downward. A shorter line does not lift the tail or the
+/// first line of text.
+class _SpeechBubble extends StatelessWidget {
+  const _SpeechBubble({required this.text});
+
+  final String text;
+
+  /// How far the tail tip sits from the top, lined up with the placeholder mouth.
+  static const double tailCenterY = 52;
+
+  static const double tailWidth = 12;
+  static const double tailHeight = 16;
+  static const double radius = 18;
+
+  /// Tall enough that the tail at [tailCenterY] never has to move.
+  static const double minHeight = tailCenterY + tailHeight / 2 + radius + 16;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      key: const ValueKey<String>('lesson-speech-bubble'),
+      painter: const _SpeechBubblePainter(
+        fill: AppColors.bgElevated,
+        border: AppColors.slateDark,
+        tailCenterY: tailCenterY,
+        tailWidth: tailWidth,
+        tailHeight: tailHeight,
+        radius: radius,
+      ),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: minHeight),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(tailWidth + 14, 14, 14, 14),
+          child: Text(
+            text,
+            style: GoogleFonts.manrope(
+              color: AppColors.cream,
+              fontSize: 15,
+              height: 1.3,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SpeechBubblePainter extends CustomPainter {
+  const _SpeechBubblePainter({
+    required this.fill,
+    required this.border,
+    required this.tailCenterY,
+    required this.tailWidth,
+    required this.tailHeight,
+    required this.radius,
+  });
+
+  final Color fill;
+  final Color border;
+  final double tailCenterY;
+  final double tailWidth;
+  final double tailHeight;
+  final double radius;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final path = _path(size);
+    canvas.drawPath(path, Paint()..color = fill);
+    canvas.drawPath(
+      path,
+      Paint()
+        ..color = border
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.2
+        ..strokeJoin = StrokeJoin.round,
+    );
+  }
+
+  Path _path(Size size) {
+    final left = tailWidth;
+    final right = size.width;
+    final bottom = size.height;
+    final half = tailHeight / 2;
+    // Fixed against the coach. The bubble's min height keeps this inside
+    // the corner radii, so a short or long line cannot slide the tail.
+    final tipY = tailCenterY;
+    final tailTop = tipY - half;
+    final tailBot = tipY + half;
+    final r = Radius.circular(radius);
+
+    return Path()
+      ..moveTo(left + radius, 0)
+      ..lineTo(right - radius, 0)
+      ..arcToPoint(Offset(right, radius), radius: r)
+      ..lineTo(right, bottom - radius)
+      ..arcToPoint(Offset(right - radius, bottom), radius: r)
+      ..lineTo(left + radius, bottom)
+      ..arcToPoint(Offset(left, bottom - radius), radius: r)
+      ..lineTo(left, tailBot)
+      ..lineTo(0, tipY)
+      ..lineTo(left, tailTop)
+      ..lineTo(left, radius)
+      ..arcToPoint(Offset(left + radius, 0), radius: r)
+      ..close();
+  }
+
+  @override
+  bool shouldRepaint(covariant _SpeechBubblePainter oldDelegate) => false;
 }
 
 /// Close, lesson progress, and one heart per life.
@@ -529,7 +615,11 @@ class LessonAnswerDock extends StatelessWidget {
   }
 }
 
-/// The six regions. [stage] is the only part that changes per step.
+/// The lesson frame. [stage] is the only region that changes per step.
+///
+/// Every lesson uses this widget. A hand step passes `LessonTableStage`.
+/// A step with no hand passes its own teaching widget. See
+/// `.cursor/skills/lesson-screen-layout/SKILL.md`.
 class LessonScreenLayout extends StatelessWidget {
   /// Creates the frame.
   const LessonScreenLayout({

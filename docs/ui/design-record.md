@@ -168,14 +168,14 @@ their own chrome.
 │ 1  X     progress bar          ♥ ♥ ♥ │
 │ 2  [mascot]   speech bubble          │
 │ 3                                    │
-│    full poker table (the stage)      │
+│    stage (table, or the step itself) │
 │                                      │
 │ 4  undo    redo    hint              │
 └──────────────────────────────────────┘
         ↓ replaced, after an answer, by
 ┌──────────────────────────────────────┐
 │ 5  Nice!  /  Oops, that's not correct│
-│    CONTINUE                          │
+│    Continue                          │
 └──────────────────────────────────────┘
 ```
 
@@ -196,7 +196,10 @@ One row, height 36.
 
 The mascot and one speech bubble share a row directly under the chrome.
 The mascot box is 104 by 118, about the area Oscar takes on a phone
-lesson. The bubble fills the rest of the row and is at least that tall.
+lesson. The bubble is a rounded rectangle with a tail aimed at the
+coach's mouth. A plain rectangle is not the bubble. The bubble's top
+and that tail stay in the same place on every step. More text grows
+the bubble downward. Less text does not move the tail or the first line.
 
 The bubble holds the only instruction for the step. The same sentence
 is not repeated on the table, under the table, or in a second coach
@@ -216,16 +219,22 @@ The answer dock does not draw a second face.
 
 ### 3. Stage
 
-The stage is the full poker table: `LessonTableStage` on `FeltTableView`.
-It is the largest region. It always draws the oval, the pot, and every
-seat that this step includes. A step teaches with fewer seats or a
-shorter board. It does not switch to a mini felt, a card row, or a form.
+The stage is the large middle slot. It is the only region that changes
+from step to step. Chrome, the coach band, the tools, and the answer
+dock stay put whether or not this step draws a table.
 
-On a lesson stage the hero sits on the felt with the other seats. The
+When the step shows hole cards, a board, a pot, seats, or an action,
+the stage is the full poker table: `LessonTableStage` on
+`FeltTableView`. It draws the oval and every seat this step includes.
+Fewer players, a shorter board, or no action dock is how a step focuses.
+A mini felt, a loose row of cards, or a second table widget is not the
+stage.
+
+On that table the hero sits on the felt with the other seats. The
 live-training rail (`HeroRailWidget` under the felt) stays the live
-table's layout. Lesson steps do not add that rail, a street heading, or
-a coach shelf. The pot pill already names the street. The bubble already
-says the instruction.
+table. A lesson table does not add that rail, a street heading, or a
+coach shelf. The pot pill names the street. The bubble says the
+instruction.
 
 Your two cards' first step shows four seats (you and three other
 players), no board, your two cards face down, and arrows on your cards.
@@ -233,9 +242,9 @@ Tapping your cards turns them face up. Tapping another seat's cards is
 a miss: a buzz, the wrong face, and the answer dock. Those cards stay
 face down.
 
-Later steps in that lesson keep the full table. Arrows mark the region
-the step is asking about (your cards, or the board) and are omitted
-when the step should not point.
+A step with no hand (suits, a rank order, a number, a list) still uses
+this frame. Its own widget fills the stage slot. It does not grow a
+felt, and it does not replace the frame with the old app-bar runner.
 
 ### 4. Tools
 
@@ -263,8 +272,9 @@ primary button everywhere except this dock.
 
 `LessonScreenLayout` (`lib/ui/course/widgets/lesson_screen_layout.dart`)
 is the frame. `LessonTableStage` (`lib/ui/course/widgets/lesson_table_stage.dart`)
-is the stage. Your two cards uses both. The next lesson copies this
-frame instead of the app-bar runner.
+is the stage when the step is a hand. Your two cards uses both. The
+procedure for the next lesson is
+[lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
 ## Gamified learning
 
@@ -276,7 +286,7 @@ Do not copy their palette, owl, or words.
 
 | Beat | What the screen does |
 | --- | --- |
-| Step | The lesson screen layout: close, progress, hearts, one speech bubble, the full table, then undo / redo / hint. No title row. |
+| Step | The lesson screen layout: close, progress, hearts, one speech bubble, the stage, then undo / redo / hint. No title row. The stage is the full table only when the step is a hand. |
 | Right | The coach face turns happy. The dock says Nice! and one Continue. |
 | Wrong | The coach face turns wrong. The dock says Oops. Continue stays on the step. |
 | Hint | Hint replaces the speech bubble until it is tapped again. |
