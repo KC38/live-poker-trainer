@@ -20,6 +20,12 @@ void main() {
     expect(text, contains('LessonActionSpot'));
     expect(text, contains('LessonTableScene'));
     expect(text, contains('assets/brand/logo_mark.png'));
+    expect(
+      text,
+      contains(
+        'The Live Training hub shows `assets/brand/logo_mark.png` above the lock or the table entry.',
+      ),
+    );
     expect(text, contains('lounge_ambient.mp3'));
     expect(text, contains('## Gamified learning'));
     expect(text, contains('duolingo-chess/PATTERNS.md'));

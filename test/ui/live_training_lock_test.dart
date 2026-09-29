@@ -62,6 +62,7 @@ void main() {
     expect(find.text('Start training'), findsNothing);
     expect(find.byType(PokerTableScreen), findsNothing);
     expect(find.text('Start Rex warm-up'), findsNothing);
+    expect(_logoMark(), findsOneWidget);
     expect(
       find.text(
         'Live Training is advanced. Finish Section 2 jump check on Home '
@@ -104,9 +105,19 @@ void main() {
     await tester.pump();
 
     expect(find.text('Start Rex warm-up'), findsOneWidget);
+    expect(_logoMark(), findsOneWidget);
     expect(find.text('Start training'), findsNothing);
     expect(find.byType(PokerTableScreen), findsNothing);
     expect(find.textContaining('Rex warm-ups are open'), findsOneWidget);
     expect(find.textContaining('Section 2 jump check'), findsNothing);
   });
+}
+
+Finder _logoMark() {
+  return find.byWidgetPredicate(
+    (widget) =>
+        widget is Image &&
+        widget.image is AssetImage &&
+        (widget.image as AssetImage).assetName == 'assets/brand/logo_mark.png',
+  );
 }

@@ -395,6 +395,19 @@ class _LiveAccessGate extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Image.asset(
+            'assets/brand/logo_mark.png',
+            width: 76,
+            height: 76,
+            filterQuality: FilterQuality.medium,
+            errorBuilder:
+                (_, _, _) => const Icon(
+                  Icons.style,
+                  size: 56,
+                  color: AppColors.gold,
+                ),
+          ),
+          const SizedBox(height: 14),
           Text(
             'Live Training',
             style: Theme.of(context).textTheme.displayLarge,

@@ -111,6 +111,16 @@ void main() {
     await pumpAuth(tester);
 
     expect(find.text('Forgot password?'), findsOneWidget);
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is Image &&
+            widget.image is AssetImage &&
+            (widget.image as AssetImage).assetName ==
+                'assets/brand/logo_mark.png',
+      ),
+      findsOneWidget,
+    );
 
     await tester.enterText(find.widgetWithText(TextFormField, 'Email'), '');
     await tester.tap(find.text('Forgot password?'));
