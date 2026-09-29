@@ -99,6 +99,7 @@ class BestFiveDemo extends StatefulWidget {
     this.interactive = false,
     this.enabled = false,
     this.onAllPlayingTapped,
+    this.height,
   });
 
   /// When true, the five playing cards are teach-by-doing tap targets.
@@ -109,6 +110,11 @@ class BestFiveDemo extends StatefulWidget {
 
   /// Fires once every playing card has been tapped.
   final VoidCallback? onAllPlayingTapped;
+
+  /// Stage height when the lesson frame already owns the chrome.
+  ///
+  /// Null keeps the standalone teach shell at 58% of the screen.
+  final double? height;
 
   static const hero = ['Ah', 'Kd'];
   static const board = ['As', '7c', '2d', '9h', '3s'];
@@ -146,7 +152,8 @@ class _BestFiveDemoState extends State<BestFiveDemo> {
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
     final feltHeight =
-        expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null;
+        widget.height ??
+        (expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null);
     final next = _nextCode;
     // Width-capped FittedBox.contain left tiny cards in green void — scale
     // hero/board rows and spaceEvenly so the densified felt fills vertically.
@@ -524,12 +531,16 @@ class BestFiveCardPicker extends StatefulWidget {
     required this.controller,
     required this.spot,
     required this.locked,
+    this.height,
   });
 
   final CourseActivity activity;
   final LessonActivityController controller;
   final BestFiveSpot spot;
   final bool locked;
+
+  /// Stage height when the lesson frame already owns the chrome.
+  final double? height;
 
   @override
   State<BestFiveCardPicker> createState() => _BestFiveCardPickerState();
@@ -643,7 +654,8 @@ class _BestFiveCardPickerState extends State<BestFiveCardPicker> {
     // Teach picker: fill tall-phone felt like BestFiveDemo SoftPulse.
     final densify = true;
     final feltHeight =
-        densify ? MediaQuery.sizeOf(context).height * 0.58 : null;
+        widget.height ??
+        (densify ? MediaQuery.sizeOf(context).height * 0.58 : null);
     final heroScale = densify ? 1.85 : 1.0;
     // Board must stay readable as five-across — slightly under hero scale.
     final boardScale = densify ? 1.35 : 1.0;

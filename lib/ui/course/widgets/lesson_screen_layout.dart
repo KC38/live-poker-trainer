@@ -17,7 +17,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-01-01-03-blinds-and-button' ||
       lessonId == 'lesson-01-01-03' ||
       lessonId == 'lesson-01-02-01-hand-ranks' ||
-      lessonId == 'lesson-01-02-01';
+      lessonId == 'lesson-01-02-01' ||
+      lessonId == 'lesson-01-02-02-best-five-kickers' ||
+      lessonId == 'lesson-01-02-02';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -40,6 +42,17 @@ String lessonFrameSpeech(CourseActivity activity) {
   if (activity.id == 'act-01-02-01-checkpoint-winner') {
     return 'Showdown. Tap your cards if the flush wins, their cards if '
         'the straight wins, or the board to chop.';
+  }
+  if (activity.id == 'act-01-02-02-explain-five') {
+    return 'Only five cards count. Tap each card that plays.';
+  }
+  if (activity.id == 'act-01-02-02-scaffolded-kicker') {
+    return 'Same pair of kings. Tap your cards if the queen kicker wins, '
+        'their cards if the jack wins, or the board to chop.';
+  }
+  if (activity.id == 'act-01-02-02-unguided-board') {
+    return 'The board is broadway. Tap the board if both play it, your '
+        'cards if a higher hole card wins, or their cards if the button wins.';
   }
   final resolved = resolveLessonCoachPrompt(
     activity: activity,
