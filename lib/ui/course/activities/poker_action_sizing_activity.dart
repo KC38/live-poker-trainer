@@ -128,12 +128,13 @@ class PokerActionSizingActivity extends StatelessWidget {
               final fill =
                   constraints.hasBoundedHeight &&
                   constraints.maxHeight.isFinite;
+              final framed = LessonFrameScope.maybeOf(context) != null;
               final framedTable =
-                  LessonFrameScope.maybeOf(context) != null &&
-                  activity.id.startsWith('act-01-03-01-') ||
+                  (framed && activity.id.startsWith('act-01-03-01-')) ||
                   activity.id.startsWith('act-01-03-02-') ||
                   activity.id.startsWith('act-01-06-01-') ||
-                  activity.id == 'act-01-06-02-jump-legal';
+                  activity.id == 'act-01-06-02-jump-legal' ||
+                  (framed && activity.id.startsWith('act-02-03-01-'));
               final table =
                   framedTable
                       ? LessonTableStage(

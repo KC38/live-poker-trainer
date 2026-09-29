@@ -299,7 +299,9 @@ full table. Position labels uses the same frame: the six-max seats
 are labeled on the full table. Acting order uses the same frame:
 preflop order is EP, then HJ, then BTN on that table. Hand families
 uses the same frame: the family list stays in the stage, and a
-starting hand sits face up on the full table. The procedure for the
+starting hand sits face up on the full table. Open or fold baseline
+uses the same frame: early, button, and live size stay in the stage,
+and each open sits face up on the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
