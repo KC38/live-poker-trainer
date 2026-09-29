@@ -171,7 +171,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-07-06-01-stack-depth-plans' ||
       lessonId == 'lesson-07-06-01' ||
       lessonId == 'lesson-07-07-01-same-cards-types' ||
-      lessonId == 'lesson-07-07-01';
+      lessonId == 'lesson-07-07-01' ||
+      lessonId == 'lesson-07-08-01-type-board-line' ||
+      lessonId == 'lesson-07-08-01';
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
@@ -477,6 +479,10 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-07-07-01-explain') {
     return 'Same cards. Five models. Cite the tendency. '
         'Tap Cards, then Models, then Cite.';
+  }
+  if (activity.id == 'act-07-08-01-explain') {
+    return 'Type, board, line, and size. One answer. '
+        'Tap Type, then Board, then Line, then Size.';
   }
   if ((activity.id.startsWith('act-01-06-01-') ||
           activity.id == 'act-01-06-02-jump-hand' ||
