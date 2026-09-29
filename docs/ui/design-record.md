@@ -409,7 +409,10 @@ the stage, the overbet, mismatch, and aim checks stay lists, and the
 merged-size spot sits face up on the full table. Use overbets and
 geometric pressure uses the same frame: overbet, polar, and geo stay in
 the stage, the candidate, avoid, and plan checks stay lists, and the
-geometric turn sits face up on the full table. The procedure for the
+geometric turn sits face up on the full table. Use blockers without
+solver theater uses the same frame: block, use, and no EV stay in the
+stage, the unblock, tweak, and EV checks stay lists, and the flush
+board sits face up on the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
