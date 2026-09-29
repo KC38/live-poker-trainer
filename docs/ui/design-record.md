@@ -383,7 +383,10 @@ frame: thin, catch, and barrels stay in the stage, each thin-value spot
 sits face up on the full table, and the read check stays a list.
 Advanced flop lines uses the same frame: check-raise, probe, delay, and
 donk stay in the stage, the nit, donk, and delay checks stay lists, and
-the probe spot sits face up on the full table. The procedure for the
+the probe spot sits face up on the full table. Street-by-street
+updates uses the same frame: action, rewrite, and update stay in the
+stage, the capped, habit, and shove checks stay lists, and the turn
+bomb sits face up on the full table. The procedure for the
 next lesson is
 [lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
 
