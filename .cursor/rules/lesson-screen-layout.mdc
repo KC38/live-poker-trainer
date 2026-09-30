@@ -1,18 +1,16 @@
 ---
-name: lesson-screen-layout
 description: >-
-  Lay out every lesson step on the shared frame: close, progress, hearts,
-  one coach speech bubble, one stage, then undo, redo, and hint or the
-  answer dock. Use when adding or changing a lesson screen, lesson
-  activity, lesson chrome, or lesson feedback, including steps that do
-  not show the full poker table.
+  Lay out every lesson step on the shared frame: chrome, coach bubble,
+  stage, tools or answer dock. Applies when editing lesson course UI.
+globs: lib/ui/course/**,lib/ui/screens/lesson_*.dart,lib/ui/screens/first_lesson_*.dart,test/ui/course/**
+alwaysApply: false
 ---
 
 # Lesson screen layout
 
 Every lesson step uses `LessonScreenLayout`
 (`lib/ui/course/widgets/lesson_screen_layout.dart`). The contract is
-[Lesson screen layout](../../../docs/ui/design-record.md) in the design
+[Lesson screen layout](../../docs/ui/design-record.md) in the design
 record. Your two cards (`lesson-01-01-01-your-two-cards`) is the shipped
 frame. Copy it. Do not build a second header, title, coach line, or
 footer.

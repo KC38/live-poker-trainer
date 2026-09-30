@@ -56,7 +56,7 @@ When the ticket has the `ui` label, or it names `docs/ui/design-record.md`:
 - Read [flutter-ui-ux](../flutter-ui-ux/SKILL.md) and
   [docs/ui/design-record.md](../../../docs/ui/design-record.md) before editing.
 - A lesson screen uses
-  [lesson-screen-layout](../lesson-screen-layout/SKILL.md). The frame stays
+  [lesson-screen-layout](../../rules/lesson-screen-layout.mdc). The frame stays
   the same when the step has no poker table.
 - Reuse the poker-table bands and the asset slot the ticket names. Do not
   add a second table, palette, or sound for the same role.

@@ -22,7 +22,7 @@ Before the first screen, read
 [docs/ui/design-record.md](../../../docs/ui/design-record.md), and
 [docs/ui/references/duolingo-chess/PATTERNS.md](../../../docs/ui/references/duolingo-chess/PATTERNS.md).
 A lesson step that is not on
-[lesson-screen-layout](../lesson-screen-layout/SKILL.md) is a gap, including
+[lesson-screen-layout](../../rules/lesson-screen-layout.mdc) is a gap, including
 a step that has no poker table.
 The Flutter skill is how a screen is built. The design record is what
 this app has already decided. The Duolingo Chess frames are the teaching

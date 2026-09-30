@@ -22,11 +22,14 @@ void main() {
   test('design record names the six lesson regions', () {
     final text = File('docs/ui/design-record.md').readAsStringSync();
     expect(text, contains('## Lesson screen layout'));
-    expect(text, contains('lesson-screen-layout/SKILL.md'));
-    expect(
-      File('.cursor/skills/lesson-screen-layout/SKILL.md').readAsStringSync(),
-      contains('LessonScreenLayout'),
-    );
+    expect(text, contains('lesson-screen-layout.mdc'));
+    final rule =
+        File('.cursor/rules/lesson-screen-layout.mdc').readAsStringSync();
+    expect(rule, contains('LessonScreenLayout'));
+    expect(rule, contains('alwaysApply: false'));
+    expect(rule, contains('lib/ui/course/**'));
+    expect(rule, contains('test/ui/course/**'));
+    expect(File('.cursor/skills/lesson-screen-layout/SKILL.md').existsSync(), isFalse);
     expect(text, contains('These two are your cards alone.'));
     expect(text, contains('LessonScreenLayout'));
     expect(text, contains('LessonTableStage'));
