@@ -310,6 +310,9 @@ taps Thin, Catch, and Barrels under the felt.
 Advanced flop lines uses the full poker table for every step: explain taps
 X/R, Probe, Delay, and Donk under the felt.
 
+Street-by-street updates uses the full poker table for every step: explain
+taps Action, Rewrite, and Update under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -608,9 +611,9 @@ spot sits face up on that table, and the read check stays a list.
 Advanced flop lines uses the same frame and the full table: explain taps
 X/R, Probe, Delay, and Donk under the felt, the nit, donk, and delay
 checks stay lists, and the probe spot sits face up on that table. Street-by-street
-updates uses the same frame: action, rewrite, and update stay in the
-stage, the capped, habit, and shove checks stay lists, and the turn
-bomb sits face up on the full table. Soft timing evidence uses the
+updates uses the same frame and the full table: explain taps Action,
+Rewrite, and Update under the felt, the capped, habit, and shove checks
+stay lists, and the turn bomb sits face up on that table. Soft timing evidence uses the
 same frame: timing, sizing, and clues stay in the stage, and the timing
 quizzes stay lists. Live table dynamics uses the same frame: stuck,
 tilted, and gears stay in the stage, the stuck, gear, and freshness
