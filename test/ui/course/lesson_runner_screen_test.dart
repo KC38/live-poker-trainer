@@ -3963,6 +3963,8 @@ void main() {
     expect(find.textContaining('Tap Cards'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('same-cards-types-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('CARDS'), findsOneWidget);
     expect(find.text('MODELS'), findsOneWidget);
     expect(find.text('CITE'), findsOneWidget);
