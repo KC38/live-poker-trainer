@@ -232,6 +232,9 @@ Made, Draw, SDV, and Air under the felt.
 Count outs, pay the right price uses the full poker table for every step:
 explain taps Clean, Dirty, and Price under the felt.
 
+Choose a flop line uses the full poker table for every step: explain taps
+Value, C-bet, Check, Call, Fold, and Raise under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -456,9 +459,10 @@ explain taps Made, Draw, SDV, and Air under the felt, and each flop
 sits face up on that table. Count outs, pay the right price uses the
 same frame and the full table: explain taps Clean, Dirty, and Price
 under the felt, the clean aces stay a card picker, and a priced draw
-sits face up on that table. Choose a flop line uses the
-same frame: value, c-bet, check, call, fold, and raise stay in the
-stage, and each flop decision sits face up on the full table. Plan
+sits face up on that table. Choose a flop line uses the same frame
+and the full table: explain taps Value, C-bet, Check, Call, Fold, and
+Raise under the felt, and each flop decision sits face up on that
+table. Plan
 the turn card uses the same frame: brick, change, barrel, and delay
 stay in the stage, and each turn sits face up on the full table.
 Close the river correctly uses the same frame: value, bluff, catch,

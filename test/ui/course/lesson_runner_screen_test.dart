@@ -1533,7 +1533,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('flop line uses the lesson frame and the line tiles', (
+  testWidgets('flop line uses the lesson frame and the full table', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -1567,6 +1567,8 @@ void main() {
     expect(find.textContaining('Tap Value'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('flop-lines-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('VALUE'), findsOneWidget);
     expect(find.text('C-BET'), findsOneWidget);
     expect(find.text('CHECK'), findsOneWidget);
