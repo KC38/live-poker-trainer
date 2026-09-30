@@ -1237,7 +1237,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('effective stacks uses the lesson frame and the depth tiles', (
+  testWidgets('effective stacks uses the lesson frame and the full table', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -1271,6 +1271,8 @@ void main() {
     expect(find.textContaining('Tap Chips'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('bb-stack-depth-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('CHIPS→BB'), findsOneWidget);
     expect(find.text('SHORTER'), findsOneWidget);
     expect(find.text('DEPTH'), findsOneWidget);

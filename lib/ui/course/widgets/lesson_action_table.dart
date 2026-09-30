@@ -2753,6 +2753,92 @@ class _VsOpenResponseDemoState extends State<VsOpenResponseDemo> {
 }
 
 /// Explain-step demo: count stacks in BB; shorter stack sets the ceiling.
+/// Full table: Chips→BB / Shorter / Depth teach taps under the felt.
+class LessonBbStackDepthExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonBbStackDepthExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonBbStackDepthExplainTable> createState() =>
+      _LessonBbStackDepthExplainTableState();
+}
+
+class _LessonBbStackDepthExplainTableState
+    extends State<LessonBbStackDepthExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= BbStackDepthDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('bb-stack-depth-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 1,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures.copyWith(stacks: true),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            for (var i = 0; i < BbStackDepthDemo.points.length; i++) ...[
+              if (i > 0) const SizedBox(width: 10),
+              Expanded(
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(BbStackDepthDemo.points[i].label) &&
+                      BbStackDepthDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _DemoActionCard(
+                    label: BbStackDepthDemo.points[i].label,
+                    caption: BbStackDepthDemo.points[i].caption,
+                    color: BbStackDepthDemo.points[i].color,
+                    densify: false,
+                    selected:
+                        _tapped.contains(BbStackDepthDemo.points[i].label),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(BbStackDepthDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+/// Explain-step demo: chips to BB, shorter stack, and depth.
 class BbStackDepthDemo extends StatefulWidget {
   /// Creates the demo.
   const BbStackDepthDemo({
