@@ -8735,6 +8735,98 @@ class _VsNitsDemoState extends State<VsNitsDemo> {
   }
 }
 
+/// Extreme-entry explain: RAISE / BARREL / COUNT under the full poker table.
+class LessonExtremeEntryExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonExtremeEntryExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonExtremeEntryExplainTable> createState() =>
+      _LessonExtremeEntryExplainTableState();
+}
+
+class _LessonExtremeEntryExplainTableState
+    extends State<LessonExtremeEntryExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= ExtremeEntryDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('extreme-entry-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < ExtremeEntryDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        ExtremeEntryDemo.points[i].label,
+                      ) &&
+                      ExtremeEntryDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _DemoActionCard(
+                    label: ExtremeEntryDemo.points[i].label,
+                    caption: ExtremeEntryDemo.points[i].caption,
+                    color: ExtremeEntryDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      ExtremeEntryDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  ExtremeEntryDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 /// Raise / barrel / count tiles for extreme-entry explain demos.
 class ExtremeEntryDemo extends StatefulWidget {
   /// Creates the demo.
