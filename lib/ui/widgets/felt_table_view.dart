@@ -1093,9 +1093,13 @@ class TableLayout {
     }
   }
 
-  /// Street bet position for [seat]: on the line toward the pot, just clear
-  /// of every seat. A side seat level with the board puts it under its box
-  /// instead, where it does not narrow the board.
+  /// Street bet position for [seat], kept visually tied to that seat.
+  ///
+  /// Hole cards sit above every box, so a pure walk from the pod toward the
+  /// pot runs through the seat's own cards (and its inward pucks) and pushes
+  /// the chip deep onto the felt — especially the lower-right big blind.
+  /// Prefer a home spot beside the box at pod height, then short nudges,
+  /// before walking farther in.
   static Rect _placeBet({
     required _PlacedSeat seat,
     required Size pill,
@@ -1110,6 +1114,12 @@ class TableLayout {
         r.top >= bounds.top &&
         r.bottom <= bounds.bottom &&
         !blocked.any(r.overlaps);
+
+    Rect centered(Offset c) => Rect.fromCenter(
+      center: c,
+      width: pill.width,
+      height: pill.height,
+    );
 
     final pod = seat.pod;
     final inward =
@@ -1132,36 +1142,103 @@ class TableLayout {
       return under;
     }
 
+    const gap = 3.0;
+    final puckLeft =
+        seat.pucks.isEmpty
+            ? pod.left
+            : seat.pucks.map((p) => p.rect.left).reduce(math.min);
+    final puckRight =
+        seat.pucks.isEmpty
+            ? pod.right
+            : seat.pucks.map((p) => p.rect.right).reduce(math.max);
+
+    // Side seats: sit beside the inward puck at pod height so the chip reads
+    // with the SB/BB marker instead of past the hole cards toward the pot.
+    // Top/bottom: on the pot-facing edge of the box (or past the cards).
+    final homes = <Offset>[];
+    if (inward != 0) {
+      final sideX =
+          inward < 0
+              ? puckLeft - gap - pill.width / 2
+              : puckRight + gap + pill.width / 2;
+      homes.addAll([
+        Offset(sideX, pod.center.dy),
+        Offset(sideX, pod.center.dy - 12),
+        Offset(sideX, pod.center.dy + 12),
+        Offset(sideX, pod.top + pill.height / 2),
+        Offset(sideX, pod.bottom - pill.height / 2),
+      ]);
+    } else if (seat.slot.dy < 0) {
+      homes.add(
+        Offset(pod.center.dx, pod.bottom + badge + gap + pill.height / 2),
+      );
+    } else {
+      homes.add(
+        Offset(pod.center.dx, seat.footprint.top - gap - pill.height / 2),
+      );
+    }
+
+    final nudges = <Offset>[
+      Offset.zero,
+      for (final d in [6.0, 12.0, 18.0, 24.0, 32.0, 40.0]) ...[
+        Offset(0, -d),
+        Offset(0, d),
+        Offset(-d, 0),
+        Offset(d, 0),
+        Offset(-d, -d),
+        Offset(d, -d),
+        Offset(-d, d),
+        Offset(d, d),
+      ],
+    ];
+    for (final home in homes) {
+      var anchor = home;
+      final towardPot = boardCenter - anchor;
+      if (towardPot.distance > 1) {
+        anchor += towardPot / towardPot.distance * 4;
+      }
+      for (final nudge in nudges) {
+        final r = centered(anchor + nudge);
+        if (clear(r)) return r;
+      }
+    }
+
     final from = pod.center;
     final delta = boardCenter - from;
     final dir =
         delta.distance < 1 ? const Offset(0, -1) : delta / delta.distance;
-    Rect at(double d) => Rect.fromCenter(
-      center: from + dir * d,
-      width: pill.width,
-      height: pill.height,
-    );
-    final limit = math.max(40.0, delta.distance);
-    for (var d = 20.0; d <= limit; d += 4) {
-      final r = at(d);
-      if (clear(r)) return r;
+    final perp = Offset(-dir.dy, dir.dx);
+    final limit = math.min(math.max(48.0, delta.distance * 0.45), 96.0);
+    for (var d = 24.0; d <= limit; d += 4) {
+      for (final lat in [0.0, 12.0, -12.0, 24.0, -24.0, 36.0, -36.0]) {
+        final r = centered(from + dir * d + perp * lat);
+        if (clear(r)) return r;
+      }
     }
     if (clear(under)) return under;
 
-    // Crowded short felt: the nearest clear spot anywhere on the table.
-    Rect? best;
-    var bestDistance = double.infinity;
+    // Crowded short felt: nearest clear spot, preferring seat-tied radius.
+    Rect? bestNear;
+    Rect? bestAny;
+    var bestNearDistance = double.infinity;
+    var bestAnyDistance = double.infinity;
+    final maxR2 = math.pow(math.max(pod.width, 72.0) * 1.5, 2).toDouble();
     for (var y = bounds.top; y + pill.height <= bounds.bottom; y += 6) {
       for (var x = bounds.left; x + pill.width <= bounds.right; x += 6) {
         final r = Rect.fromLTWH(x, y, pill.width, pill.height);
+        if (!clear(r)) continue;
         final distance = (r.center - from).distanceSquared;
-        if (distance < bestDistance && clear(r)) {
-          best = r;
-          bestDistance = distance;
+        if (distance < bestAnyDistance) {
+          bestAny = r;
+          bestAnyDistance = distance;
+        }
+        if (distance <= maxR2 && distance < bestNearDistance) {
+          bestNear = r;
+          bestNearDistance = distance;
         }
       }
     }
-    return best ?? at(limit * 0.6);
+    return bestNear ?? bestAny ?? under;
   }
 
   static double _clamp(double v, double lo, double hi) =>
