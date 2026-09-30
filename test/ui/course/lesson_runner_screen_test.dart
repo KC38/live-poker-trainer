@@ -3837,6 +3837,8 @@ void main() {
     expect(find.textContaining('Tap Limped'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('pot-type-plans-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('LIMPED'), findsOneWidget);
     expect(find.text('SRP'), findsOneWidget);
     expect(find.text('3-4BET'), findsOneWidget);
