@@ -4177,6 +4177,8 @@ void main() {
     expect(find.textContaining('Tap Nuts'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('capstone-multiway-deep-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('NUTS'), findsOneWidget);
     expect(find.text('DEEP'), findsOneWidget);
     expect(find.text('NO-BLUFF'), findsOneWidget);

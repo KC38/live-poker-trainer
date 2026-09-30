@@ -643,19 +643,11 @@ class CoachDialogueActivity extends StatelessWidget {
             onAllPointsTapped: locked ? null : onFeltAcknowledge,
           );
         }
-        if (framed &&
-            visual.kind == CoachDialogueVisualKind.capstoneMultiwayDeep) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final bounded =
-                  constraints.maxHeight.isFinite ? constraints.maxHeight : null;
-              return CapstoneMultiwayDeepDemo(
-                interactive: true,
-                enabled: !locked,
-                onAllPointsTapped: locked ? null : onFeltAcknowledge,
-                height: bounded,
-              );
-            },
+        if (framed && visual.kind == CoachDialogueVisualKind.capstoneMultiwayDeep) {
+          return LessonCapstoneMultiwayDeepExplainTable(
+            enabled: !locked,
+            showGuidance: showGuidance,
+            onAllPointsTapped: locked ? null : onFeltAcknowledge,
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.capstoneLimped) {
