@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="Home">
+  <!-- Felt-roof cottage with gold door  course home -->
+  <path d="M8 30 L32 10 L56 30 V54 H8 Z" fill="#1E2A3D"/>
+  <path d="M10 30 L32 12 L54 30 L48 30 L32 18 L16 30 Z" fill="#0C4A35"/>
+  <path d="M10 30 L32 12 L54 30 L48 30 L32 18 L16 30 Z" stroke="#2DB87A" stroke-width="2" stroke-linejoin="round"/>
+  <rect x="14" y="30" width="36" height="24" rx="3" fill="#F4F1EA"/>
+  <rect x="14" y="30" width="36" height="24" rx="3" stroke="#D4A84B" stroke-width="2"/>
+  <!-- Door -->
+  <rect x="26" y="38" width="12" height="16" rx="2" fill="#D4A84B"/>
+  <circle cx="35.5" cy="46" r="1.4" fill="#1A2436"/>
+  <!-- Spade chimney -->
+  <path fill="#D4A84B" d="M44 18c-3.5 4-5.5 6.2-5.5 8.5 0 1.8 1.4 3.2 3.2 3.2.7 0 1.3-.2 1.8-.5l-1.1 3.3h2.6l-1.1-3.3c.5.3 1.1.5 1.8.5 1.8 0 3.2-1.4 3.2-3.2 0-2.3-2-4.5-5.5-8.5z"/>
+  <!-- Window -->
+  <rect x="18" y="36" width="6" height="6" rx="1" fill="#3AA8B8"/>
+</svg>

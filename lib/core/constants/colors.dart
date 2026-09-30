@@ -26,6 +26,8 @@ class AppColors {
   static const Color slate = Color(0xFF8B9BB0);
   static const Color slateDark = Color(0xFF2A3548);
   static const Color cream = Color(0xFFF4F1EA);
+  /// Active bottom-nav ring (Duolingo-style cyan on dark navy).
+  static const Color navRing = Color(0xFF49C0F8);
   static const Color danger = Color(0xFFE05252);
   static const Color success = Color(0xFF2DB87A);
   static const Color warning = Color(0xFFE5A84B);

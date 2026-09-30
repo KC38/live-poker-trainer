@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="Profile">
+  <!-- Gold chip with Rex-green character  player profile -->
+  <circle cx="32" cy="32" r="26" fill="#D4A84B"/>
+  <circle cx="32" cy="32" r="26" stroke="#A67C2E" stroke-width="2.5"/>
+  <circle cx="32" cy="32" r="20" fill="none" stroke="#E8C878" stroke-width="2" stroke-dasharray="4 5"/>
+  <!-- Character head -->
+  <ellipse cx="32" cy="30" rx="12" ry="13" fill="#0C4A35"/>
+  <ellipse cx="32" cy="30" rx="12" ry="13" stroke="#2DB87A" stroke-width="1.5"/>
+  <!-- Eyes -->
+  <circle cx="27.5" cy="28" r="2.2" fill="#F4F1EA"/>
+  <circle cx="36.5" cy="28" r="2.2" fill="#F4F1EA"/>
+  <circle cx="28" cy="28.4" r="1" fill="#0A0E16"/>
+  <circle cx="37" cy="28.4" r="1" fill="#0A0E16"/>
+  <!-- Smile -->
+  <path d="M27 34 Q32 38.5 37 34" stroke="#F4F1EA" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+  <!-- Shoulders peek -->
+  <path d="M18 48 Q32 42 46 48" fill="#176F4E"/>
+</svg>
