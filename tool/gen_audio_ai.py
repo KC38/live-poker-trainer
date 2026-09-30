@@ -408,23 +408,10 @@ def polish_ambient_wav(src: pathlib.Path, dest: pathlib.Path, target_lufs: float
                 str(shaped),
             ]
         )
+        # Loop last and write it untouched: any resample after this point
+        # filters the two ends independently and reopens the seam.
         make_seamless_loop_wav(shaped, looped, xfade_sec=3.0)
-        # Stereo PCM is more reliable on iOS media players than mono beds.
-        run_ffmpeg(
-            [
-                "ffmpeg",
-                "-y",
-                "-i",
-                str(looped),
-                "-ac",
-                "2",
-                "-ar",
-                "22050",
-                "-c:a",
-                "pcm_s16le",
-                str(dest),
-            ]
-        )
+        shutil.copyfile(looped, dest)
 
 
 def mix_wavs(paths: list[pathlib.Path], dest: pathlib.Path, gains_db: list[float]) -> None:
