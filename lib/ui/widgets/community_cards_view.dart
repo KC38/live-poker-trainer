@@ -7,6 +7,7 @@ import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
+import 'package:live_poker_trainer/ui/widgets/cue_arrows.dart';
 import 'package:live_poker_trainer/ui/widgets/table_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
@@ -380,13 +381,17 @@ class _BoardCardTarget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardFace = _RevealedCard(
-      card: card,
-      width: width,
-      selected: selected,
-      highlighted: highlight,
-      dimmed: dimmed,
-      orderBadge: orderBadge,
+    final cardFace = CuePulse(
+      active: highlight && !selected,
+      borderRadius: width * 0.12,
+      child: _RevealedCard(
+        card: card,
+        width: width,
+        selected: selected,
+        highlighted: highlight,
+        dimmed: dimmed,
+        orderBadge: orderBadge,
+      ),
     );
     final column = Column(
       mainAxisSize: MainAxisSize.min,
@@ -394,11 +399,10 @@ class _BoardCardTarget extends StatelessWidget {
         if (reserveCue)
           SizedBox(
             height: 30 * scale,
-            child: highlight
-                ? Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                  color: AppColors.gold,
-                  size: 28 * scale,
+            child: highlight && !selected
+                ? Align(
+                  alignment: Alignment.topCenter,
+                  child: CueArrows(size: 20 * scale),
                 )
                 : null,
           ),

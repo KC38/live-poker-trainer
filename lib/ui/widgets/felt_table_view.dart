@@ -12,6 +12,7 @@ import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/ui/widgets/action_badge.dart';
 import 'package:live_poker_trainer/ui/widgets/community_cards_view.dart';
+import 'package:live_poker_trainer/ui/widgets/cue_arrows.dart';
 import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
@@ -58,6 +59,7 @@ class FeltTableView extends StatelessWidget {
     this.selectedHeroIndexes = const {},
     this.highlightHeroIndexes = const {},
     this.dimmedHeroIndexes = const {},
+    this.cueSeatIndex,
     this.features,
     this.heroStatus,
   });
@@ -137,6 +139,9 @@ class FeltTableView extends StatelessWidget {
 
   /// Hero hole indexes faded as leftovers.
   final Set<int> dimmedHeroIndexes;
+
+  /// Seat index in the hand that a lesson cues with a ring and an arrow.
+  final int? cueSeatIndex;
 
   /// Optional layers. Null reads [TableFeaturesScope].
   final TableFeatures? features;
@@ -226,7 +231,9 @@ class FeltTableView extends StatelessWidget {
                 bigBlind: game.bigBlind,
                 chipDisplayMode: chipDisplayMode,
                 isActive:
-                    game.activePlayerIndex == slot.index && !game.isHandOver,
+                    (game.activePlayerIndex == slot.index &&
+                        !game.isHandOver) ||
+                    cueSeatIndex == slot.index,
                 isWinner: isWinner,
                 isWaitingOnLlm: waitingOnSeat == player.id,
                 compact: layout.compact,
@@ -317,13 +324,31 @@ class FeltTableView extends StatelessWidget {
         );
       }
 
-      if (highlightHero && player.isHero) {
+      final heroCardCue =
+          player.isHero && faceUp && highlightHeroIndexes.isNotEmpty;
+      if ((highlightHero || heroCardCue) && player.isHero) {
         heroDecorations.add(
           Positioned(
             left: slot.footprint.left,
             top: _clamp(slot.footprint.top - 30, 0, math.max(0.0, h - 28)),
             width: slot.footprint.width,
-            child: const _CueArrows(count: 2),
+            child: CueArrows(count: highlightHero ? 2 : 1),
+          ),
+        );
+      }
+
+      if (cueSeatIndex == slot.index && !player.isHero) {
+        final above = slot.footprint.top >= 30;
+        decoLayer.add(
+          Positioned(
+            key: ValueKey<String>('seat-cue-${player.id}'),
+            left: slot.footprint.left,
+            top:
+                above
+                    ? slot.footprint.top - 30
+                    : _clamp(slot.footprint.bottom + 2, 0, math.max(0.0, h - 28)),
+            width: slot.footprint.width,
+            child: CueArrows(pointUp: !above),
           ),
         );
       }
@@ -403,7 +428,7 @@ class FeltTableView extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (highlightBoard && highlightBoardIndexes.isEmpty)
-                      const SizedBox(height: 30, child: _CueArrows(count: 1)),
+                      const SizedBox(height: 30, child: CueArrows()),
                     TweenAnimationBuilder<double>(
                       tween: Tween<double>(end: board.scale),
                       duration: const Duration(milliseconds: 280),
@@ -1331,87 +1356,6 @@ class _WinnerBadgeState extends State<_WinnerBadge> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-/// Bouncing gold arrows that mark the tap the step is teaching.
-class _CueArrows extends StatefulWidget {
-  const _CueArrows({required this.count});
-
-  final int count;
-
-  @override
-  State<_CueArrows> createState() => _CueArrowsState();
-}
-
-class _CueArrowsState extends State<_CueArrows>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _motion;
-  late final Animation<double> _bounce;
-
-  @override
-  void initState() {
-    super.initState();
-    _motion = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 900),
-    )..repeat(reverse: true);
-    _bounce = CurvedAnimation(parent: _motion, curve: Curves.easeInOut);
-  }
-
-  @override
-  void dispose() {
-    _motion.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _motion,
-      builder: (context, child) {
-        final dip = 2.0 + (_bounce.value * 8.0);
-        final glow = 0.35 + (_bounce.value * 0.55);
-        return Transform.translate(
-          offset: Offset(0, dip),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.goldBright.withValues(alpha: glow * 0.75),
-                  blurRadius: 10 + (8 * _bounce.value),
-                  spreadRadius: 1 + (2 * _bounce.value),
-                ),
-              ],
-            ),
-            child: child,
-          ),
-        );
-      },
-      child: Row(
-        key: const ValueKey<String>('felt-cue-arrows'),
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          for (var i = 0; i < widget.count; i++)
-            Padding(
-              padding: EdgeInsets.only(left: i == 0 ? 0 : 2),
-              child: Icon(
-                Icons.arrow_downward_rounded,
-                size: 22,
-                color: AppColors.goldBright,
-                shadows: [
-                  Shadow(
-                    color: AppColors.gold.withValues(alpha: 0.9),
-                    blurRadius: 8,
-                  ),
-                ],
-              ),
-            ),
-        ],
       ),
     );
   }

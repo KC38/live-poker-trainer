@@ -516,6 +516,12 @@ is not repeated on the table, under the table, or in a second coach
 line. Your two cards' first step says: "These two are your cards alone.
 Nobody else sees them. Tap your cards to peek."
 
+Every bubble ends by saying what to tap. `lessonFrameSpeech` folds the
+step's tap instruction into copy that only sets the scene: action and
+hand streets get "Tap your action below the table.", questions get "Tap
+the best answer.", and seat questions get "Tap that seat on the table."
+A test walks the whole catalog and fails on a bubble with no tap line.
+
 `LessonMascotExpression` picks the Rex mood:
 
 | Moment | Expression | Rex mood |
@@ -549,6 +555,12 @@ players), no board, your two cards face down, and arrows on your cards.
 Tapping your cards turns them face up. Tapping another seat's cards is
 a miss: a buzz, the wrong face, and the answer dock. Those cards stay
 face down.
+
+Those arrows are the one tap cue (`CueArrows` in
+`lib/ui/widgets/cue_arrows.dart`): bouncing, glowing gold arrows. A single
+board card or hero card also gets `CuePulse`, a breathing gold ring. A
+seat the step asks for (`cueSeatIndex`) gets the gold ring and an arrow.
+Guided steps only, since a later step's highlight can be a reference seat.
 
 Every step uses this frame and the full poker table in the stage. Tap
 table objects when the answer is on the felt. When no table object fits,
