@@ -113,7 +113,7 @@ LessonHandExample? resolveHandExample({
     case 'chop-kicker':
       return const LessonHandExample(
         id: 'chop-kicker',
-        title: 'Chop the pot',
+        title: 'Chop',
         codes: [],
       );
     case 'chop-broadway':

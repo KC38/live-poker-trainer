@@ -318,7 +318,7 @@ String _lessonFrameLine(CourseActivity activity, {int handStepIndex = 0}) {
   }
   if (activity.id == 'act-01-02-02-scaffolded-kicker') {
     return 'Same pair of kings. Tap your cards if the queen kicker wins, '
-        'their cards if the jack wins, or the board to chop.';
+        'their cards if the jack wins, or Chop if they tie.';
   }
   if (activity.id == 'act-01-02-02-unguided-board') {
     return 'The board is broadway. Tap the board if both play it, your '
