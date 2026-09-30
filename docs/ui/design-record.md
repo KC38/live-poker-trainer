@@ -289,6 +289,9 @@ Entry, and Aggro under the felt.
 Adjust versus Maniac uses the full poker table for every step: explain taps
 Wider, Hang, and Ego under the felt.
 
+Confidence and samples uses the full poker table for every step: explain taps
+Observe, Samples, and Showdowns under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -564,9 +567,9 @@ Aggro under the felt, and the label quizzes stay lists. Adjust versus
 Maniac uses the same frame and the full table: explain taps Wider, Hang,
 and Ego under the felt, each maniac spot sits face up on that table, and
 the call-wider reason stays a list. Confidence and samples uses the same
-frame: observe,
-samples, and showdowns stay in the stage, and the confidence quizzes
-stay lists. Same hand, different types uses the same frame: cards,
+frame and the full table: explain taps Observe, Samples, and Showdowns
+under the felt, and the confidence quizzes stay lists. Same hand,
+different types uses the same frame: cards,
 seats, and evidence stay in the stage, and each type spot sits face up
 on the full table. Section 4 jump check uses the same frame: the
 range, SPR, and player-type checks stay lists, and the 3-bet and the
