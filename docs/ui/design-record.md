@@ -351,8 +351,11 @@ is the stage. Your two cards uses both. Suits and ranks uses the same
 frame and the full table: one community card per suit, board ranks for
 order, and face-up seats for suited / pair. Button and blinds uses the
 same frame; its stage is the full table, with the dealer button, small
-blind, and big blind on the seats. Hand ranks uses the same frame: the ladder stays the rank
-widget, and a made hand or a showdown uses the full table. Best five
+blind, and big blind on the seats. Hand ranks uses the same frame and the
+full table: the explain ladder cycles made hands on the felt, order steps
+show a made hand on the table with category answers under the felt, the
+spot sits face up on the table, and the showdown taps You / Them on that
+table. Best five
 and kickers uses the same frame: the five-card picker stays in the
 stage, and a kicker battle or a board-plays pot uses the full table.
 Fold, check, call uses the same frame: the three buttons stay the

@@ -1770,6 +1770,9 @@ class _HandCategoryTapActivity extends StatelessWidget {
             const SizedBox(height: 14),
             Builder(
               builder: (context) {
+                final framedSpot =
+                    LessonFrameScope.maybeOf(context) != null &&
+                    activity.id == 'act-01-02-01-scaffolded-spot';
                 final densifyOuts =
                     activity.id == 'act-03-03-01-guided' &&
                     !locked &&
@@ -1819,60 +1822,94 @@ class _HandCategoryTapActivity extends StatelessWidget {
                         ? 'Tap the soft-grade idea.'
                         : activity.id.startsWith('act-04-06-01-')
                         ? 'Tap the observation note.'
+                        : framedSpot
+                        ? ''
                         : 'Tap the hand category you made.';
                   }
                   return 'Checking…';
                 }();
                 final tiles = <Widget>[
-                  for (var i = 0; i < activity.choices.length; i++) ...[
-                    if (i > 0) const SizedBox(height: 10),
-                    Builder(
-                      builder: (context) {
-                        final choice = activity.choices[i];
-                        final example =
-                            resolveHandExample(
-                              id: choice.id,
-                              label: choice.label,
-                            ) ??
-                            LessonHandExample(
-                              id: choice.id,
-                              title: choice.label,
-                              codes: const [],
-                            );
-                        final pulseNext =
-                            showGuidance &&
-                            activity.stage == ActivityStage.guided &&
-                            i == 0 &&
-                            selected == null &&
-                            !locked &&
-                            (activity.id.startsWith('act-02-02-01-') ||
-                                activity.id == 'act-03-05-01-guided');
-                        final invitePulse =
-                            showGuidance &&
-                            selected == null &&
-                            !locked &&
-                            (activity.id.startsWith('act-01-02-01-') ||
-                                activity.id == 'act-03-03-01-guided');
-                        return _FamilySoftPulse(
-                          active: pulseNext || invitePulse,
-                          child: HandExampleTile(
-                            example: example,
-                            selected: selected == choice.id,
-                            enabled: !locked,
-                            compact: true,
-                            expand: densifyOuts,
-                            onPressed:
-                                locked
-                                    ? null
-                                    : () => controller.selectChoice(
-                                      choice.id,
-                                      autoSubmit: true,
-                                    ),
+                  if (framedSpot)
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        for (var i = 0; i < activity.choices.length; i++)
+                          _FamilySoftPulse(
+                            active:
+                                showGuidance &&
+                                selected == null &&
+                                !locked &&
+                                i == 0,
+                            child: LessonChoiceButton(
+                              label: activity.choices[i].label,
+                              accessibilityText:
+                                  activity.choices[i].accessibilityText,
+                              selected: selected == activity.choices[i].id,
+                              highlighted: false,
+                              enabled: !locked,
+                              onPressed:
+                                  locked
+                                      ? null
+                                      : () => controller.selectChoice(
+                                        activity.choices[i].id,
+                                        autoSubmit: true,
+                                      ),
+                            ),
                           ),
-                        );
-                      },
-                    ),
-                  ],
+                      ],
+                    )
+                  else
+                    for (var i = 0; i < activity.choices.length; i++) ...[
+                      if (i > 0) const SizedBox(height: 10),
+                      Builder(
+                        builder: (context) {
+                          final choice = activity.choices[i];
+                          final example =
+                              resolveHandExample(
+                                id: choice.id,
+                                label: choice.label,
+                              ) ??
+                              LessonHandExample(
+                                id: choice.id,
+                                title: choice.label,
+                                codes: const [],
+                              );
+                          final pulseNext =
+                              showGuidance &&
+                              activity.stage == ActivityStage.guided &&
+                              i == 0 &&
+                              selected == null &&
+                              !locked &&
+                              (activity.id.startsWith('act-02-02-01-') ||
+                                  activity.id == 'act-03-05-01-guided');
+                          final invitePulse =
+                              showGuidance &&
+                              selected == null &&
+                              !locked &&
+                              (activity.id.startsWith('act-01-02-01-') ||
+                                  activity.id == 'act-03-03-01-guided');
+                          return _FamilySoftPulse(
+                            active: pulseNext || invitePulse,
+                            child: HandExampleTile(
+                              example: example,
+                              selected: selected == choice.id,
+                              enabled: !locked,
+                              compact: true,
+                              expand: densifyOuts,
+                              onPressed:
+                                  locked
+                                      ? null
+                                      : () => controller.selectChoice(
+                                        choice.id,
+                                        autoSubmit: true,
+                                      ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                 ];
                 final statusWidget =
                     status.isEmpty

@@ -807,3 +807,120 @@ class LessonHoleHandTable extends StatelessWidget {
     );
   }
 }
+
+/// Split a five-card made-hand example into hero holes and board.
+({List<String> heroCodes, List<String> boardCodes}) lessonMadeHandCodes(
+  List<String> codes,
+) {
+  if (codes.length <= 2) {
+    return (heroCodes: List<String>.of(codes), boardCodes: const []);
+  }
+  return (
+    heroCodes: codes.take(2).toList(growable: false),
+    boardCodes: codes.skip(2).take(5).toList(growable: false),
+  );
+}
+
+/// Features for Hand ranks made-hand demos: seats, cards, board, no blinds.
+TableFeatures get lessonHandRanksTableFeatures => const TableFeatures(
+  stacks: false,
+  pot: false,
+  street: false,
+  blinds: false,
+  positions: false,
+  bets: false,
+  actions: false,
+  opponentCards: true,
+  playerTypes: false,
+  stats: false,
+  boardSlots: false,
+);
+
+/// Full table showing one made hand (two holes + board).
+class LessonMadeHandTable extends StatelessWidget {
+  /// Creates the made-hand stage.
+  const LessonMadeHandTable({
+    super.key,
+    required this.codes,
+    this.enabled = true,
+    this.cueHero = false,
+    this.onTap,
+    this.villainCount = 2,
+  });
+
+  /// Five-card example: first two are holes, the rest are the board.
+  final List<String> codes;
+
+  final bool enabled;
+  final bool cueHero;
+  final VoidCallback? onTap;
+  final int villainCount;
+
+  @override
+  Widget build(BuildContext context) {
+    final split = lessonMadeHandCodes(codes);
+    return LessonTableStage(
+      heroCodes: split.heroCodes.isEmpty ? const ['Ah', 'Kd'] : split.heroCodes,
+      boardCodes: split.boardCodes,
+      villainCount: villainCount,
+      heroFaceUp: true,
+      enabled: enabled && onTap != null,
+      cue: cueHero ? LessonTableCue.hero : LessonTableCue.none,
+      features: lessonHandRanksTableFeatures,
+      onHeroTap: onTap,
+      onBoardTap: onTap,
+    );
+  }
+}
+
+/// Explain ladder: tap through made hands weak → strong on the full table.
+class LessonHandLadderExplainTable extends StatefulWidget {
+  /// Creates the ladder explain stage.
+  const LessonHandLadderExplainTable({
+    super.key,
+    required this.rungs,
+    required this.onComplete,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  /// Made-hand rungs in weak → strong order.
+  final List<({String id, String title, List<String> codes})> rungs;
+
+  /// Every rung has been tapped.
+  final VoidCallback? onComplete;
+
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonHandLadderExplainTable> createState() =>
+      _LessonHandLadderExplainTableState();
+}
+
+class _LessonHandLadderExplainTableState
+    extends State<LessonHandLadderExplainTable> {
+  int _step = 0;
+
+  void _advance() {
+    if (!widget.enabled || widget.onComplete == null) return;
+    if (_step >= widget.rungs.length) return;
+    setState(() => _step += 1);
+    if (_step >= widget.rungs.length) widget.onComplete!();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.rungs.isEmpty) return const SizedBox.shrink();
+    final index = _step.clamp(0, widget.rungs.length - 1);
+    final rung = widget.rungs[index];
+    final teaching = widget.enabled && _step < widget.rungs.length;
+    return LessonMadeHandTable(
+      key: ValueKey<String>('ladder-${rung.id}-$_step'),
+      codes: rung.codes,
+      enabled: teaching,
+      cueHero: widget.showGuidance && teaching,
+      onTap: teaching ? _advance : null,
+    );
+  }
+}

@@ -698,7 +698,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('hand ranks uses the lesson frame and the rank ladder', (
+  testWidgets('hand ranks uses the lesson frame and the full table', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -719,7 +719,8 @@ void main() {
     await tester.pump();
     for (
       var i = 0;
-      i < 40 && find.textContaining('Tap each rung').evaluate().isEmpty;
+      i < 40 &&
+          find.textContaining('made hand from high card').evaluate().isEmpty;
       i++
     ) {
       await tester.pump(const Duration(milliseconds: 50));
@@ -729,12 +730,12 @@ void main() {
     expect(find.text('Hand ranks'), findsNothing);
     expect(find.byTooltip('Close'), findsOneWidget);
     expect(find.byIcon(Icons.favorite), findsNWidgets(3));
-    expect(find.textContaining('Tap each rung'), findsOneWidget);
+    expect(find.textContaining('made hand from high card'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.byKey(const ValueKey('hand-ladder-felt')), findsOneWidget);
-    expect(find.text('High card'), findsOneWidget);
-    expect(find.text('Flush'), findsOneWidget);
+    expect(find.byKey(const ValueKey('lesson-table-stage')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
+    expect(find.byKey(const ValueKey('hand-ladder-felt')), findsNothing);
     expect(tester.takeException(), isNull);
   });
 

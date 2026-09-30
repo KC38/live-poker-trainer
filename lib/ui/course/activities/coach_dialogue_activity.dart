@@ -109,17 +109,14 @@ class CoachDialogueActivity extends StatelessWidget {
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.handLadder) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final bounded =
-                  constraints.maxHeight.isFinite ? constraints.maxHeight : null;
-              return HandRankLadderDemo(
-                interactive: true,
-                enabled: !locked,
-                onAllRungsTapped: locked ? null : onFeltAcknowledge,
-                height: bounded,
-              );
-            },
+          return LessonHandLadderExplainTable(
+            enabled: !locked,
+            showGuidance: showGuidance,
+            onComplete: locked ? null : onFeltAcknowledge,
+            rungs: [
+              for (final rung in HandRankLadderDemo.rungs)
+                (id: rung.id, title: rung.title, codes: rung.codes),
+            ],
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.bestFive) {
@@ -2028,7 +2025,7 @@ class CoachDialogueVisual {
     CoachDialogueVisualKind.positionLabels =>
       'Tap the button (BTN) — the latest seat.',
     CoachDialogueVisualKind.handLadder =>
-      'Tap each rung from high card to flush.',
+      'Tap each made hand from high card up to flush.',
     CoachDialogueVisualKind.bestFive =>
       'Tap each playing card — only five of seven play.',
     CoachDialogueVisualKind.passiveActions => 'Tap Fold, Check, and Call.',
