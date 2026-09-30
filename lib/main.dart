@@ -25,6 +25,8 @@ import 'package:live_poker_trainer/providers/course_home_provider.dart';
 import 'package:live_poker_trainer/providers/course_progress_provider.dart';
 import 'package:live_poker_trainer/providers/onboarding_provider.dart';
 import 'package:live_poker_trainer/providers/profile_provider.dart';
+import 'package:live_poker_trainer/providers/service_providers.dart';
+import 'package:live_poker_trainer/providers/settings_provider.dart';
 import 'package:live_poker_trainer/routing/app_root.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/services/analytics/crashlytics_diagnostics_sink.dart';
@@ -122,6 +124,9 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       unawaited(_reconcileGuestInstall());
+      // Lounge BGM from the first frame — welcome/onboarding included, not
+      // only after the guest reaches [AppShell].
+      unawaited(_syncAppBgm());
     });
   }
 
@@ -130,6 +135,19 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
       await ref.read(authControllerProvider.notifier).reconcileGuestInstall();
     } catch (error, stackTrace) {
       debugPrint('Guest install reconcile skipped: $error\n$stackTrace');
+    }
+  }
+
+  Future<void> _syncAppBgm() async {
+    if (!mounted) return;
+    final settings = ref.read(settingsProvider);
+    final sound = ref.read(soundServiceProvider);
+    await sound.unlock();
+    if (!mounted) return;
+    if (settings.musicEnabled) {
+      await sound.startHomeBgm();
+    } else {
+      await sound.stopHomeBgm();
     }
   }
 
@@ -144,6 +162,11 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
     final gate = courseFlagsForRouting(ref.watch(courseFlagsProvider));
     final flags = gate.flags;
     final flagsReady = gate.ready;
+
+    ref.listen(settingsProvider, (prev, next) {
+      if (prev?.musicEnabled == next.musicEnabled) return;
+      unawaited(_syncAppBgm());
+    });
 
     ref.listen(appAuthProvider, (prev, next) {
       final prevUid = prev?.asData?.value.uid;
