@@ -3002,6 +3002,8 @@ void main() {
     expect(find.textContaining('Tap Equity'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('equity-realize-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('EQUITY'), findsOneWidget);
     expect(find.text('CASH'), findsOneWidget);
     expect(find.text('POS'), findsOneWidget);

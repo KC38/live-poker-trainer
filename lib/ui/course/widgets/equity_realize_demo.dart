@@ -1,6 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+
+/// Equity-realize explain: EQUITY / CASH / POS under the full poker table.
+class LessonEquityRealizeExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonEquityRealizeExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonEquityRealizeExplainTable> createState() =>
+      _LessonEquityRealizeExplainTableState();
+}
+
+class _LessonEquityRealizeExplainTableState
+    extends State<LessonEquityRealizeExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= EquityRealizeDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('equity-realize-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < EquityRealizeDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _EquityRealizeSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        EquityRealizeDemo.points[i].label,
+                      ) &&
+                      EquityRealizeDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _EquityRealizeTile(
+                    label: EquityRealizeDemo.points[i].label,
+                    caption: EquityRealizeDemo.points[i].caption,
+                    color: EquityRealizeDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      EquityRealizeDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  EquityRealizeDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
 /// Equity / cash / pos tiles for equity-realize explain demos.
 class EquityRealizeDemo extends StatefulWidget {
