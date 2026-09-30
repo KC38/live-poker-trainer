@@ -11,10 +11,7 @@
 /// fold-out and showdown paths run repeatedly. Each hand plays in real time
 /// (replay pacing plus coach narration), so budget roughly 30s per hand.
 ///
-/// Note: after the hands finish, the harness may report "An animation is still
-/// running even after the widget tree was disposed" from `audioplayers`'
-/// position updater. That is a plugin teardown artifact, not an app failure —
-/// the per-hand assertions inside the loop are what guard against crashes.
+/// The per-hand assertions inside the loop are what guard against crashes.
 library;
 
 import 'package:flutter/material.dart';

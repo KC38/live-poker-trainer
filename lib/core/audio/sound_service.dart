@@ -3,104 +3,56 @@ library;
 
 import 'dart:async';
 
-import 'package:audioplayers/audioplayers.dart';
+import 'package:audio_session/audio_session.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_soloud/flutter_soloud.dart';
 
 /// Bundled table sound effects and home ambient music.
+///
+/// Playback runs on SoLoud, which loops inside its mixer at sample accuracy.
+/// Player-level looping (seek to zero on end-of-item) leaves an audible gap.
 class SoundService with WidgetsBindingObserver {
-  /// Creates a sound service backed by platform audio players.
+  /// Creates a sound service backed by the SoLoud engine.
   SoundService() : this._(bindPlatform: true);
 
-  /// No-op service for unit tests (never touches audioplayers plugins).
+  /// No-op service for unit tests (never touches native audio).
   SoundService.silent() : this._(bindPlatform: false);
 
-  SoundService._({required bool bindPlatform})
-    : _sfx = bindPlatform
-          ? AudioPlayer(playerId: 'lpt_sfx')
-          : null,
-      _bgm = bindPlatform
-          ? AudioPlayer(playerId: 'lpt_bgm')
-          : null {
+  SoundService._({required bool bindPlatform}) : _bindPlatform = bindPlatform {
     if (bindPlatform) {
-      unawaited(_configurePlayers());
       WidgetsBinding.instance.addObserver(this);
     }
   }
 
-  final AudioPlayer? _sfx;
-  final AudioPlayer? _bgm;
+  final bool _bindPlatform;
 
   bool sfxEnabled = true;
   bool musicEnabled = true;
   bool _unlocked = !kIsWeb;
-  bool _audioContextConfigured = false;
   bool _bgmWanted = false;
-  bool _bgmPlaying = false;
   bool _pausedForBackground = false;
-  int _bgmFadeGen = 0;
-  double _bgmAudibleVolume = 0;
   double _sfxVolume = 1.0;
+
+  Future<bool>? _engineReady;
+  AudioSource? _bgmSource;
+  SoundHandle? _bgmHandle;
+  final Map<SfxKind, AudioSource> _sfxSources = {};
+
+  /// Serializes BGM transitions so fades and pauses cannot interleave.
+  Future<void> _bgmOps = Future<void>.value();
 
   /// Comfortable lounge level; kept low so it never fights the brand UI.
   static const double _bgmBaseVolume = 0.28;
 
-  /// Tiny non-zero start volume — some platforms never decode a 0.0 play().
-  static const double _bgmStartVolume = 0.02;
+  static const Duration _bgmFadeIn = Duration(milliseconds: 600);
+  static const Duration _bgmFadeOut = Duration(milliseconds: 400);
 
-  /// Asset path relative to the Flutter `assets/` folder.
-  /// WAV (not MP3) so iOS/Android can loop without encoder-delay gaps.
-  static const String _bgmAsset = 'sounds/lounge_ambient.wav';
+  /// Asset key of the gapless lounge loop.
+  @visibleForTesting
+  static const String bgmAsset = 'assets/sounds/lounge_ambient.wav';
 
-  Future<void> _configurePlayers() async {
-    final bgm = _bgm;
-    final sfx = _sfx;
-    if (bgm == null || sfx == null) return;
-    try {
-      // Long looping bed needs the media player; lowLatency is for short SFX.
-      await bgm.setPlayerMode(PlayerMode.mediaPlayer);
-      await sfx.setPlayerMode(PlayerMode.lowLatency);
-      await bgm.setReleaseMode(ReleaseMode.loop);
-    } catch (error) {
-      debugPrint('SoundService player configure failed: $error');
-    }
-  }
-
-  /// Call after a user gesture to unlock audio (required on web; helpful on iOS).
-  Future<void> unlock() async {
-    _unlocked = true;
-    await _ensureAudioContext();
-  }
-
-  Future<void> _ensureAudioContext() async {
-    final sfx = _sfx;
-    final bgm = _bgm;
-    if (sfx == null || bgm == null || _audioContextConfigured) return;
-    try {
-      final ctx = AudioContext(
-        iOS: AudioContextIOS(
-          category: AVAudioSessionCategory.playback,
-          options: const {AVAudioSessionOptions.mixWithOthers},
-        ),
-        android: const AudioContextAndroid(
-          isSpeakerphoneOn: true,
-          stayAwake: false,
-          contentType: AndroidContentType.music,
-          usageType: AndroidUsageType.game,
-          audioFocus: AndroidAudioFocus.gain,
-        ),
-      );
-      await AudioPlayer.global.setAudioContext(ctx);
-      await sfx.setAudioContext(ctx);
-      await bgm.setAudioContext(ctx);
-      _audioContextConfigured = true;
-    } catch (error) {
-      debugPrint('SoundService audio context failed: $error');
-    }
-  }
-
-  /// The configured SFX level (0..1).
-  double get sfxVolume => _sfxVolume;
+  SoLoud get _soloud => SoLoud.instance;
 
   /// Whether lounge BGM is currently wanted while the app is foregrounded.
   @visibleForTesting
@@ -110,12 +62,67 @@ class SoundService with WidgetsBindingObserver {
   @visibleForTesting
   bool get pausedForBackground => _pausedForBackground;
 
+  /// The live BGM voice, when playing or paused.
+  @visibleForTesting
+  SoundHandle? get bgmHandle => _bgmHandle;
+
+  /// Starts the engine and loads bundled sounds. Safe to call repeatedly.
+  @visibleForTesting
+  Future<bool> ensureEngine() {
+    if (!_bindPlatform) return Future<bool>.value(false);
+    return _engineReady ??= _startEngine().then((ok) {
+      if (!ok) _engineReady = null;
+      return ok;
+    });
+  }
+
+  Future<bool> _startEngine() async {
+    try {
+      final session = await AudioSession.instance;
+      await session.configure(
+        const AudioSessionConfiguration(
+          avAudioSessionCategory: AVAudioSessionCategory.playback,
+          avAudioSessionCategoryOptions:
+              AVAudioSessionCategoryOptions.mixWithOthers,
+          avAudioSessionMode: AVAudioSessionMode.defaultMode,
+          androidAudioAttributes: AndroidAudioAttributes(
+            contentType: AndroidAudioContentType.music,
+            usage: AndroidAudioUsage.game,
+          ),
+          androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
+        ),
+      );
+      await session.setActive(true);
+
+      // A hot restart keeps the native engine alive; init() re-binds it.
+      await _soloud.init(bufferSize: 1024);
+      _bgmSource = await _soloud.loadAsset(bgmAsset);
+      for (final kind in SfxKind.values) {
+        _sfxSources[kind] = await _soloud.loadAsset(
+          'assets/sounds/${kind.fileName}',
+        );
+      }
+      return true;
+    } catch (error) {
+      debugPrint('SoundService engine start failed: $error');
+      _bgmSource = null;
+      _sfxSources.clear();
+      return false;
+    }
+  }
+
+  /// Call after a user gesture to unlock audio (required on web; helpful on iOS).
+  Future<void> unlock() async {
+    _unlocked = true;
+    await ensureEngine();
+  }
+
+  /// The configured SFX level (0..1).
+  double get sfxVolume => _sfxVolume;
+
   /// Sets the configured SFX level (0..1).
   Future<void> setSfxVolume(double volume) async {
     _sfxVolume = volume.clamp(0.0, 1.0);
-    try {
-      await _sfx?.setVolume(_sfxVolume);
-    } catch (_) {}
   }
 
   /// Applies the Settings music toggle; stops BGM immediately when disabled.
@@ -128,95 +135,87 @@ class SoundService with WidgetsBindingObserver {
     }
   }
 
+  Future<void> _enqueueBgm(Future<void> Function() op) {
+    final next = _bgmOps.then((_) => op()).catchError((Object error) {
+      debugPrint('SoundService BGM op failed: $error');
+    });
+    _bgmOps = next;
+    return next;
+  }
+
+  bool _voiceAlive(SoundHandle? handle) {
+    if (handle == null || !_soloud.isInitialized) return false;
+    return _soloud.getIsValidVoiceHandle(handle);
+  }
+
   /// Fades in the lounge loop when music is enabled.
-  Future<void> startHomeBgm() async {
+  Future<void> startHomeBgm() {
     _bgmWanted = true;
     _pausedForBackground = false;
-    final bgm = _bgm;
-    if (bgm == null || !musicEnabled || !_unlocked) return;
-    try {
-      await _ensureAudioContext();
-      await bgm.setReleaseMode(ReleaseMode.loop);
-      if (!_bgmPlaying) {
-        await bgm.setVolume(_bgmStartVolume);
-        _bgmAudibleVolume = _bgmStartVolume;
-        // setSource + resume is more reliable than play() for looped WAV beds.
-        await bgm.setSource(AssetSource(_bgmAsset));
-        await bgm.resume();
-        _bgmPlaying = true;
-      } else {
-        await bgm.resume();
-      }
-      await _fadeBgmTo(_bgmBaseVolume);
-    } catch (error) {
-      _bgmPlaying = false;
-      debugPrint('SoundService.startHomeBgm failed: $error');
+    return _enqueueBgm(_playOrResumeBgm);
+  }
+
+  Future<void> _playOrResumeBgm() async {
+    if (!_bgmWanted || !musicEnabled || !_unlocked) return;
+    if (!await ensureEngine()) return;
+    final source = _bgmSource;
+    if (source == null) return;
+
+    var handle = _bgmHandle;
+    if (!_voiceAlive(handle)) {
+      handle = _soloud.play(source, volume: 0, looping: true);
+      _bgmHandle = handle;
+    } else {
+      _soloud.setPause(handle!, false);
     }
+    _soloud.fadeVolume(handle, _bgmBaseVolume, _bgmFadeIn);
   }
 
   /// Fades out and pauses the lounge loop (e.g. entering Live Training).
-  Future<void> pauseHomeBgm() async {
+  Future<void> pauseHomeBgm() {
     _bgmWanted = false;
     _pausedForBackground = false;
-    final bgm = _bgm;
-    if (bgm == null || !_bgmPlaying) return;
-    try {
-      await _fadeBgmTo(0);
-      await bgm.pause();
-    } catch (_) {}
+    return _enqueueBgm(() async {
+      final handle = _bgmHandle;
+      if (!_voiceAlive(handle)) return;
+      _soloud.fadeVolume(handle!, 0, _bgmFadeOut);
+      _soloud.schedulePause(handle, _bgmFadeOut);
+    });
   }
 
   /// Resumes the lounge loop after returning from Training, if still wanted.
-  Future<void> resumeHomeBgm() async {
-    _bgmWanted = true;
-    _pausedForBackground = false;
-    final bgm = _bgm;
-    if (bgm == null || !musicEnabled || !_unlocked) return;
-    if (_bgmPlaying) {
-      try {
-        await bgm.resume();
-        await _fadeBgmTo(_bgmBaseVolume);
-      } catch (error) {
-        debugPrint('SoundService.resumeHomeBgm failed: $error');
-      }
-      return;
-    }
-    await startHomeBgm();
-  }
+  Future<void> resumeHomeBgm() => startHomeBgm();
 
   /// Stops the lounge loop completely (music toggle off / dispose).
-  Future<void> stopHomeBgm() async {
+  Future<void> stopHomeBgm() {
     _bgmWanted = false;
     _pausedForBackground = false;
-    _bgmFadeGen++;
-    _bgmPlaying = false;
-    _bgmAudibleVolume = 0;
-    try {
-      await _bgm?.stop();
-      await _bgm?.setVolume(0);
-    } catch (_) {}
+    return _enqueueBgm(() async {
+      final handle = _bgmHandle;
+      _bgmHandle = null;
+      if (!_voiceAlive(handle)) return;
+      await _soloud.stop(handle!);
+    });
   }
 
-  /// Pauses BGM when the app leaves the foreground without clearing [_bgmWanted].
-  Future<void> pauseForBackground() async {
-    if (!_bgmWanted) return;
+  /// Pauses BGM when the app leaves the foreground without clearing [bgmWanted].
+  Future<void> pauseForBackground() {
+    if (!_bgmWanted) return Future<void>.value();
     _pausedForBackground = true;
-    final bgm = _bgm;
-    if (bgm == null || !_bgmPlaying) return;
-    _bgmFadeGen++;
-    _bgmAudibleVolume = 0;
-    try {
-      await bgm.setVolume(0);
-      await bgm.pause();
-    } catch (_) {}
+    return _enqueueBgm(() async {
+      final handle = _bgmHandle;
+      if (!_voiceAlive(handle)) return;
+      _soloud.setVolume(handle!, 0);
+      _soloud.setPause(handle, true);
+    });
   }
 
   /// Resumes BGM after returning to the foreground when it was background-paused.
-  Future<void> resumeFromBackground() async {
-    if (!_pausedForBackground) return;
+  Future<void> resumeFromBackground() {
+    if (!_pausedForBackground) return Future<void>.value();
     _pausedForBackground = false;
-    if (!_bgmWanted || !musicEnabled || !_unlocked) return;
-    await resumeHomeBgm();
+    if (!_bgmWanted) return Future<void>.value();
+    return _enqueueBgm(_playOrResumeBgm);
   }
 
   @override
@@ -232,42 +231,14 @@ class SoundService with WidgetsBindingObserver {
     }
   }
 
-  Future<void> _fadeBgmTo(double target) async {
-    final bgm = _bgm;
-    if (bgm == null) {
-      _bgmAudibleVolume = target.clamp(0.0, 1.0);
-      return;
-    }
-    final gen = ++_bgmFadeGen;
-    final from = _bgmAudibleVolume;
-    const steps = 10;
-    const stepDelay = Duration(milliseconds: 40);
-    for (var step = 1; step <= steps; step++) {
-      if (gen != _bgmFadeGen) return;
-      final next = from + (target - from) * (step / steps);
-      _bgmAudibleVolume = next.clamp(0.0, 1.0);
-      try {
-        await bgm.setVolume(_bgmAudibleVolume);
-      } catch (_) {
-        return;
-      }
-      if (step < steps) {
-        await Future<void>.delayed(stepDelay);
-      }
-    }
-  }
-
   /// Plays a short table SFX if enabled.
   Future<void> playSfx(SfxKind kind) async {
-    final sfx = _sfx;
-    if (sfx == null || !sfxEnabled || !_unlocked) return;
+    if (!sfxEnabled || !_unlocked) return;
+    if (!await ensureEngine()) return;
+    final source = _sfxSources[kind];
+    if (source == null) return;
     try {
-      await _ensureAudioContext();
-      await sfx.stop();
-      await sfx.play(
-        AssetSource('sounds/${kind.fileName}'),
-        volume: _sfxVolume,
-      );
+      _soloud.play(source, volume: _sfxVolume);
     } catch (error) {
       debugPrint('SoundService.playSfx(${kind.name}) failed: $error');
     }
@@ -282,12 +253,14 @@ class SoundService with WidgetsBindingObserver {
   /// Backwards-compatible alias for the card-deal SFX.
   Future<void> card() => deal();
 
-  /// Releases players.
+  /// Stops sounds and detaches from lifecycle events.
+  ///
+  /// The SoLoud engine is process-wide and stays up for the next service.
   Future<void> dispose() async {
-    WidgetsBinding.instance.removeObserver(this);
+    if (_bindPlatform) {
+      WidgetsBinding.instance.removeObserver(this);
+    }
     await stopHomeBgm();
-    await _sfx?.dispose();
-    await _bgm?.dispose();
   }
 }
 
