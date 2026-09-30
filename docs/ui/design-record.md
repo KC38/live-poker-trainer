@@ -316,6 +316,9 @@ taps Action, Rewrite, and Update under the felt.
 Soft timing evidence uses the full poker table for every step: explain taps
 Timing, Sizing, and Clues under the felt.
 
+Live table dynamics uses the full poker table for every step: explain taps
+Stuck, Tilted, and Gears under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -618,10 +621,9 @@ updates uses the same frame and the full table: explain taps Action,
 Rewrite, and Update under the felt, the capped, habit, and shove checks
 stay lists, and the turn bomb sits face up on that table. Soft timing evidence uses the same frame and the full table: explain taps
 Timing, Sizing, and Clues under the felt, and the timing quizzes stay
-lists. Live table dynamics uses the same frame: stuck,
-tilted, and gears stay in the stage, the stuck, gear, and freshness
-checks stay lists, and the steaming spot sits face up on the full
-table. Keep cash session guardrails uses the same frame: quit, guard,
+lists. Live table dynamics uses the same frame and the full table: explain taps
+Stuck, Tilted, and Gears under the felt, the stuck, gear, and freshness
+checks stay lists, and the steaming spot sits face up on that table. Keep cash session guardrails uses the same frame: quit, guard,
 and first stay in the stage, and the discipline quizzes stay lists.
 Section 5 checkpoint uses the same frame: the multiway, tell, and stop
 checks stay lists, and the thin-value and bluff-catch spots sit face
