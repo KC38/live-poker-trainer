@@ -3547,6 +3547,102 @@ class _FullRingDemoState extends State<FullRingDemo> {
   }
 }
 
+/// Table-read explain: POT / STACKS / BUTTON / WHO ACTS under the full table.
+class LessonTableReadExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonTableReadExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonTableReadExplainTable> createState() =>
+      _LessonTableReadExplainTableState();
+}
+
+class _LessonTableReadExplainTableState
+    extends State<LessonTableReadExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= TableReadDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('table-read-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: lessonBlindsVillainCount,
+            heroFaceUp: true,
+            enabled: false,
+            dealerIndex: lessonBlindsButtonIndex,
+            sbIndex: lessonBlindsSmallBlindIndex,
+            bbIndex: lessonBlindsBigBlindIndex,
+            activeSeatIndex: lessonBlindsBigBlindIndex,
+            features: lessonPassiveActionsTableFeatures.copyWith(
+              stacks: true,
+              pot: true,
+              blinds: true,
+              positions: true,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < TableReadDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(TableReadDemo.points[i].label) &&
+                      TableReadDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _DemoActionCard(
+                    label: TableReadDemo.points[i].label,
+                    caption: TableReadDemo.points[i].caption,
+                    color: TableReadDemo.points[i].color,
+                    densify: false,
+                    selected:
+                        _tapped.contains(TableReadDemo.points[i].label),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(TableReadDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 /// Explain-step demo: read pot, stacks, button, and who acts before cards.
 class TableReadDemo extends StatefulWidget {
   /// Creates the demo.
