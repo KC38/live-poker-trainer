@@ -23347,6 +23347,36 @@ await tester.tap(find.text('NIT'));
     await tester.pump();
     expect(controller.draft.choiceId, 'you-kicker');
     expect(autoSubmits, 1);
+    expect(
+      tester.getSize(find.byKey(const ValueKey('outcome-phases-felt'))).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
+    // Graded/locked clears onRegionTap — densify must still hold for Continue.
+    controller.finishSubmit(
+      SubmitCourseStepResult(
+        attemptId: 'a1',
+        activityId: activity.id,
+        grade: SoftGrade.recommended,
+        feedback: 'Same pair; higher kicker wins.',
+        accepted: true,
+        lifeLost: false,
+        livesRemaining: 3,
+        xpAwarded: 10,
+        remediationRequired: false,
+        resume: const CourseResumePointer(
+          attemptId: 'a1',
+          lessonId: 'lesson-01-02-02-kickers',
+          activityId: 'act-01-02-02-scaffolded-kicker',
+          activityIndex: 2,
+        ),
+        duplicate: false,
+      ),
+    );
+    await tester.pump();
+    expect(
+      tester.getSize(find.byKey(const ValueKey('outcome-phases-felt'))).height,
+      moreOrLessEquals(teachHeight, epsilon: 1),
+    );
     controller.dispose();
   });
 

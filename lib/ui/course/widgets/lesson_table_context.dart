@@ -14214,11 +14214,18 @@ class LessonTableContext extends StatelessWidget {
         board.isEmpty &&
         villainFaceUp.isEmpty &&
         scene.villainSeatCount == 0;
-    // Grow interactive outcome felts on tall phones even without SoftPulse
-    // (unguided/checkpoint densify without pulsing a spoiler tile).
+    // Keep densify after the last tap while Continue shows — locking
+    // clears onRegionTap / enabled and must not collapse the teach shell
+    // into the navy void above Nice! (same contract as blinds seats).
+    // Unguided/checkpoint densify without SoftPulse still uses this path.
     final expandTeach =
-        selectedRegion == null && enabled && _interactive;
-    final invitePulse = showSoftPulse && expandTeach;
+        _interactive || selectedRegion != null || !enabled;
+    // SoftPulse only before an answer — densify stays under Nice!.
+    final invitePulse =
+        showSoftPulse &&
+        selectedRegion == null &&
+        enabled &&
+        _interactive;
     // Empty cueLabel = SoftPulse-only (no footer). Null = default footer.
     // showInviteCue false when Rex already owns the teach line (felt-first).
     final cue =
