@@ -372,6 +372,82 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('peeked hole cards stay face-up after Nice! docks', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    var peeks = 0;
+    var accepted = false;
+    late VoidCallback rebuild;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildPokerTheme(),
+        home: Scaffold(
+          body: StatefulBuilder(
+            builder: (context, setState) {
+              rebuild = () => setState(() {});
+              return LessonScreenLayout(
+                progress: 0.1,
+                livesRemaining: 5,
+                livesMax: 5,
+                onClose: _noop,
+                speech:
+                    'These two are your cards alone. Nobody else sees them. '
+                    'Tap your cards to peek.',
+                expression:
+                    accepted
+                        ? LessonMascotExpression.happy
+                        : LessonMascotExpression.thinking,
+                stage: LessonPeekTable(
+                  enabled: !accepted,
+                  onPeek: () {
+                    peeks += 1;
+                    accepted = true;
+                    rebuild();
+                  },
+                  onMiss: _noop,
+                ),
+                onUndo: _noop,
+                onRedo: _noop,
+                onHint: _noop,
+                canUndo: false,
+                canRedo: false,
+                canHint: false,
+                onContinue: accepted ? _noop : null,
+                result:
+                    accepted
+                        ? _result(
+                          accepted: true,
+                          feedback:
+                              'These two are yours alone. Nobody else sees them.',
+                        )
+                        : null,
+              );
+            },
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    final aceOfHearts = find.byWidgetPredicate(
+      (w) => w is TableCard && w.card.display == 'A♥',
+    );
+    expect(aceOfHearts, findsNothing);
+
+    await tester.tap(find.byKey(const ValueKey<String>('lesson-seat-hero')));
+    await tester.pump();
+    expect(peeks, 1);
+    expect(find.text('Nice!'), findsOneWidget);
+    expect(find.text('Continue'), findsOneWidget);
+    // Answer dock shrinks the stage and used to remount the peek table,
+    // flipping the hero holes face-down again. They must stay revealed.
+    expect(aceOfHearts, findsWidgets);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('blinds clockwise taps count only in button, small, big order', (
     tester,
   ) async {
