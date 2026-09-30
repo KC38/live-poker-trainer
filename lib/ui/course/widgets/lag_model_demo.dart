@@ -1,6 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+
+/// Meet the LAG explain: WIDE / PRESSURE / MODEL under the full poker table.
+class LessonLagModelExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonLagModelExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonLagModelExplainTable> createState() =>
+      _LessonLagModelExplainTableState();
+}
+
+class _LessonLagModelExplainTableState
+    extends State<LessonLagModelExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= LagModelDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('lag-model-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < LagModelDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _LagSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        LagModelDemo.points[i].label,
+                      ) &&
+                      LagModelDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _LagModelTile(
+                    label: LagModelDemo.points[i].label,
+                    caption: LagModelDemo.points[i].caption,
+                    color: LagModelDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      LagModelDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  LagModelDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
 /// Wide / pressure / model tiles for LAG player-type explain demos.
 class LagModelDemo extends StatefulWidget {
