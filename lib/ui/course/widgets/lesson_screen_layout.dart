@@ -859,7 +859,7 @@ class LessonChromeBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hearts = livesMax <= 0 ? 3 : livesMax;
+    final hearts = livesMax <= 0 ? 5 : livesMax;
     return SizedBox(
       height: 36,
       child: Padding(

@@ -17,6 +17,7 @@ import 'package:live_poker_trainer/providers/course_home_provider.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/services/firestore/course_service.dart';
+import 'package:live_poker_trainer/ui/course/widgets/heart_refill_sheet.dart';
 import 'package:live_poker_trainer/ui/home/course_path_view.dart';
 import 'package:live_poker_trainer/ui/home/course_section_picker.dart';
 import 'package:live_poker_trainer/ui/home/course_status_bar.dart';
@@ -175,6 +176,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     () => ref.read(courseHomeProvider.notifier).refresh(),
                 onNodeTap: (node) => _onNodeTap(snapshot, node),
                 onOpenSections: () => _openSections(snapshot),
+                onHeartsTap: () => _onHeartsTap(snapshot),
               );
             },
           ),
@@ -198,6 +200,87 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       curve: Curves.easeOutCubic,
       alignment: 0.08,
     );
+  }
+
+  Future<void> _onHeartsTap(CourseHomeSnapshot snapshot) async {
+    final action = await showHeartRefillSheet(
+      context: context,
+      livesRemaining: snapshot.hearts,
+      livesMax: snapshot.livesMax,
+      gems: snapshot.gems,
+      livesNextRefillAtMs: snapshot.livesNextRefillAtMs,
+    );
+    if (!mounted || action == null) return;
+    switch (action) {
+      case HeartRefillAction.practice:
+        final practiceId = _practiceLessonId(snapshot);
+        if (practiceId == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Complete a lesson first, then practice to earn a heart.'),
+            ),
+          );
+          return;
+        }
+        _openLesson(practiceId);
+      case HeartRefillAction.ad:
+        try {
+          final service = ref.read(courseServiceProvider);
+          final result = await watchAdAndClaimHeart(
+            context: context,
+            service: service,
+          );
+          if (!mounted) return;
+          await ref.read(courseHomeProvider.notifier).refresh();
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                result.heartsRestored > 0
+                    ? 'Heart restored! ${result.livesRemaining}/${result.livesMax}'
+                    : 'Hearts updated.',
+              ),
+            ),
+          );
+        } catch (error) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('$error')),
+          );
+        }
+      case HeartRefillAction.gems:
+        try {
+          final service = ref.read(courseServiceProvider);
+          final result = await service.refillHearts(
+            method: 'gems',
+            idempotencyKey: CourseService.newRequestKey('heart_gems'),
+          );
+          if (!mounted) return;
+          await ref.read(courseHomeProvider.notifier).refresh();
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Hearts refilled! ${result.livesRemaining}/${result.livesMax}',
+              ),
+            ),
+          );
+        } catch (error) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('$error')),
+          );
+        }
+    }
+  }
+
+  String? _practiceLessonId(CourseHomeSnapshot snapshot) {
+    for (final node in snapshot.nodes.reversed) {
+      if (node.state == CourseNodeState.completed) {
+        return node.lessonId;
+      }
+    }
+    return snapshot.resume?.lessonId ?? snapshot.nextLessonId;
   }
 
   void _onNodeTap(CourseHomeSnapshot snapshot, CourseMapNode node) {
@@ -346,6 +429,7 @@ class _HomeBody extends StatefulWidget {
     required this.onRetry,
     required this.onNodeTap,
     required this.onOpenSections,
+    required this.onHeartsTap,
     required this.focusLessonKey,
   });
 
@@ -353,6 +437,7 @@ class _HomeBody extends StatefulWidget {
   final VoidCallback onRetry;
   final void Function(CourseMapNode node) onNodeTap;
   final VoidCallback onOpenSections;
+  final VoidCallback onHeartsTap;
   final GlobalKey focusLessonKey;
 
   static final Map<String, GlobalKey> _sectionKeys = <String, GlobalKey>{};
@@ -478,6 +563,7 @@ class _HomeBodyState extends State<_HomeBody> {
             lifetimeXp: snapshot.lifetimeXp,
             acceptedAccuracy: snapshot.acceptedAccuracy,
             onCourseTap: widget.onOpenSections,
+            onHeartsTap: widget.onHeartsTap,
           ),
         ),
         if (activeUnit != null)

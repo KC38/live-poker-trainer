@@ -20,6 +20,7 @@ import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/services/firestore/course_service.dart';
 import 'package:live_poker_trainer/ui/course/activity_registry.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/heart_refill_sheet.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
@@ -769,8 +770,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     if (_bootstrapping || _error != null) {
       return LessonScreenLayout(
         progress: 0,
-        livesRemaining: 3,
-        livesMax: 3,
+        livesRemaining: 5,
+        livesMax: 5,
         onClose: onClose,
         speech: '',
         expression: LessonMascotExpression.thinking,
@@ -980,6 +981,55 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                   );
                 },
                 child: Text('Open ${previous.title}'),
+              ),
+              const SizedBox(height: 12),
+            ],
+            if (_error!.toLowerCase().contains('out of hearts')) ...[
+              FilledButton(
+                onPressed: () async {
+                  final home = ref.read(courseHomeProvider).asData?.value;
+                  final action = await showHeartRefillSheet(
+                    context: context,
+                    livesRemaining: home?.hearts ?? 0,
+                    livesMax: home?.livesMax ?? 5,
+                    gems: home?.gems ?? 0,
+                    livesNextRefillAtMs: home?.livesNextRefillAtMs,
+                  );
+                  if (!mounted || action == null) return;
+                  if (action == HeartRefillAction.gems) {
+                    try {
+                      await _service.refillHearts(
+                        method: 'gems',
+                        idempotencyKey:
+                            CourseService.newRequestKey('heart_gems'),
+                      );
+                      if (!mounted) return;
+                      _retryBootstrap();
+                    } catch (error) {
+                      if (!mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('$error')),
+                      );
+                    }
+                  } else if (action == HeartRefillAction.ad) {
+                    try {
+                      await watchAdAndClaimHeart(
+                        context: context,
+                        service: _service,
+                      );
+                      if (!mounted) return;
+                      _retryBootstrap();
+                    } catch (error) {
+                      if (!mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('$error')),
+                      );
+                    }
+                  } else if (action == HeartRefillAction.practice) {
+                    if (mounted) Navigator.of(context).maybePop();
+                  }
+                },
+                child: const Text('Restore hearts'),
               ),
               const SizedBox(height: 12),
             ],

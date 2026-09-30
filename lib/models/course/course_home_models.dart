@@ -96,7 +96,9 @@ class CourseHomeSnapshot {
     this.streak = 0,
     this.lifetimeXp = 0,
     this.gems = 0,
-    this.hearts = 3,
+    this.hearts = 5,
+    this.livesMax = 5,
+    this.livesNextRefillAtMs,
     this.acceptedAccuracy = 0,
     this.nextLessonId,
     this.resume,
@@ -116,6 +118,12 @@ class CourseHomeSnapshot {
 
   /// Remaining course hearts from the learner profile.
   final int hearts;
+
+  /// Heart ceiling from the learner profile.
+  final int livesMax;
+
+  /// Epoch ms when the next passive heart arrives.
+  final int? livesNextRefillAtMs;
   final double acceptedAccuracy;
   final String? nextLessonId;
   final CourseResumePointer? resume;
@@ -149,8 +157,9 @@ class CourseProfileView {
     required this.completedLessonIds,
     required this.masteryByLessonId,
     required this.catalogVersion,
-    this.livesRemaining = 3,
-    this.livesMax = 3,
+    this.livesRemaining = 5,
+    this.livesMax = 5,
+    this.livesNextRefillAtMs,
     this.resume,
     this.recommendedLessonId,
   });
@@ -165,6 +174,9 @@ class CourseProfileView {
 
   /// Heart ceiling on the course profile.
   final int livesMax;
+
+  /// Epoch ms when the next passive heart arrives, if any.
+  final int? livesNextRefillAtMs;
   final List<String> completedLessonIds;
   final Map<String, double> masteryByLessonId;
   final String catalogVersion;
@@ -202,9 +214,9 @@ class CourseProfileView {
         );
       }
     }
-    final livesMax = (json['livesMax'] as num?)?.toInt() ?? 3;
+    final livesMax = (json['livesMax'] as num?)?.toInt() ?? 5;
     final livesRemainingRaw = (json['livesRemaining'] as num?)?.toInt() ?? livesMax;
-    final livesRemaining = livesRemainingRaw.clamp(0, livesMax > 0 ? livesMax : 3);
+    final livesRemaining = livesRemainingRaw.clamp(0, livesMax > 0 ? livesMax : 5);
     return CourseProfileView(
       lifetimeXp: (json['lifetimeXp'] as num?)?.toInt() ?? 0,
       gems: (json['gems'] as num?)?.toInt() ?? 0,
@@ -214,7 +226,8 @@ class CourseProfileView {
       masteryByLessonId: Map.unmodifiable(mastery),
       catalogVersion: json['catalogVersion']?.toString() ?? '',
       livesRemaining: livesRemaining,
-      livesMax: livesMax > 0 ? livesMax : 3,
+      livesMax: livesMax > 0 ? livesMax : 5,
+      livesNextRefillAtMs: (json['livesNextRefillAtMs'] as num?)?.toInt(),
       resume: resume,
       recommendedLessonId: json['recommendedLessonId']?.toString(),
     );
@@ -387,7 +400,9 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
       streak: profile?.currentStreak ?? 0,
       lifetimeXp: profile?.lifetimeXp ?? 0,
       gems: profile?.gems ?? 0,
-      hearts: profile?.livesRemaining ?? 3,
+      hearts: profile?.livesRemaining ?? 5,
+      livesMax: profile?.livesMax ?? 5,
+      livesNextRefillAtMs: profile?.livesNextRefillAtMs,
       acceptedAccuracy: profile?.acceptedAccuracy ?? 0,
       rexLine:
           'No lessons published yet. Check back after the next content wave.',
@@ -443,7 +458,9 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
     streak: profile?.currentStreak ?? 0,
     lifetimeXp: profile?.lifetimeXp ?? 0,
     gems: profile?.gems ?? 0,
-    hearts: profile?.livesRemaining ?? 3,
+    hearts: profile?.livesRemaining ?? 5,
+    livesMax: profile?.livesMax ?? 5,
+    livesNextRefillAtMs: profile?.livesNextRefillAtMs,
     acceptedAccuracy: profile?.acceptedAccuracy ?? 0,
     nextLessonId: nextId,
     resume: resume,
