@@ -12045,6 +12045,98 @@ class _RangeRewriteDemoState extends State<RangeRewriteDemo> {
   }
 }
 
+/// Timing-clues explain: TIMING / SIZING / CLUES under the full poker table.
+class LessonTimingCluesExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonTimingCluesExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonTimingCluesExplainTable> createState() =>
+      _LessonTimingCluesExplainTableState();
+}
+
+class _LessonTimingCluesExplainTableState
+    extends State<LessonTimingCluesExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= TimingCluesDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('timing-clues-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < TimingCluesDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        TimingCluesDemo.points[i].label,
+                      ) &&
+                      TimingCluesDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _DemoActionCard(
+                    label: TimingCluesDemo.points[i].label,
+                    caption: TimingCluesDemo.points[i].caption,
+                    color: TimingCluesDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      TimingCluesDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  TimingCluesDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 /// Timing / sizing / clues tiles for timing-clues explain demos.
 class TimingCluesDemo extends StatefulWidget {
   /// Creates the demo.
