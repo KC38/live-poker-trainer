@@ -45,7 +45,7 @@ void main() {
         'The Live Training hub shows `assets/brand/logo_mark.svg` above the lock or the table entry.',
       ),
     );
-    expect(text, contains('lounge_ambient.mp3'));
+    expect(text, contains('lounge_ambient.wav'));
     expect(text, contains('## Lesson screen layout'));
     expect(text, contains('## Gamified learning'));
     expect(
