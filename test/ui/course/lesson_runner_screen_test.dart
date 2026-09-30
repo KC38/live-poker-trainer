@@ -1195,7 +1195,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('versus an open uses the lesson frame and the response tiles', (
+  testWidgets('versus an open uses the lesson frame and the full table', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -1229,6 +1229,8 @@ void main() {
     expect(find.textContaining('Tap Fold'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('vs-open-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('FOLD'), findsOneWidget);
     expect(find.text('CALL'), findsOneWidget);
     expect(find.text('3-BET'), findsOneWidget);
