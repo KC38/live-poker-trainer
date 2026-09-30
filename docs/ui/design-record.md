@@ -66,29 +66,82 @@ Lesson result CONTINUE uses the elevated button (radius 14). `LessonResultScreen
 
 ## Poker table
 
-The full table is `PokerTableScreen` (`lib/ui/screens/poker_table_screen.dart`).
-It is a column of non-overlapping bands:
+One table, `FeltTableView` (`lib/ui/widgets/felt_table_view.dart`), is drawn
+by Live Training, Your start, and every lesson step that shows a hand. There
+is no second table widget.
+
+The table is built for a phone held upright:
+
+- **Hero.** You sit at the bottom center, on the felt, with the largest hole
+  cards on the table (wider than a board card). Nothing covers them.
+- **Seats.** The other players take fixed slots for the player count
+  (`TableLayout.templates`, 2–9), clockwise from you. Seats straddle the rail
+  so the felt spends its area on the board. Side seats sit above or below
+  the board row, not beside it.
+- **Seat box.** One box per seat: a generic player icon, the name, and the
+  stack in large JetBrains Mono. Face-down cards tuck behind the top of the
+  box. The icon ring is colored by player type when player types are on,
+  and a type tag sits on the box's top edge.
+- **Around a seat.** Dealer, SB, and BB pucks sit beside the box, facing the
+  felt. A street bet sits on the line from the seat toward the pot, clear of
+  every seat. The action badge hangs from the bottom of the box.
+- **Center.** The pot pill (`FLOP · POT $10`) above the board, five large
+  board cards, and `Blinds $1/$2 NLH` under them (`CommunityCardsView`). The
+  board takes the largest scale that no seat, puck, or bet reaches.
+
+The Live Training screen is a column of non-overlapping bands:
 
 1. Header
-2. Felt (`FeltTableView`) — flexible. Seats, board, pot. The hero is not drawn on the felt.
-3. Hero rail (`HeroRailWidget`) — hole cards
-4. Coach shelf (`CoachShelfWidget`)
-5. Action dock (`ActionDockWidget`) — removed, not dimmed, when the hero has no decision
+2. Felt (`FeltTableView`) — flexible, with you at the bottom
+3. Coach shelf (`CoachShelfWidget`)
+4. Action dock (`ActionDockWidget`) — removed, not dimmed, when the hero has no decision
 
-Above width 900 the coach moves to a side column. Band resize uses a short
-size animation (about 280ms). Chips, board, and seats stay inside the felt
-band. The dock never covers the hole cards.
+YOUR TURN, ACTION…, and FOLDED show as a chip under your seat box. Above
+width 900 the coach moves to a side column. Band resize uses a short size
+animation (about 280ms). The coach and the dock never cover your cards.
+Once a hand is over your cards grow a little.
 
-On Your start, Start lesson is below the coach shelf. It does not cover the hero rail. The shelf shows the flop sentence for the preview hand.
+On Your start, Start lesson is below the coach shelf. The shelf shows the flop sentence for the preview hand.
 
-This column is the live-training table. A lesson step uses the lesson
-screen layout instead: the hero sits on the felt, and the speech bubble
-replaces the coach shelf. Do not add a third table widget.
+A lesson step uses the lesson screen layout instead of the coach shelf: the
+speech bubble is the instruction. Do not add a third table widget.
+
+`HeroRailWidget` no longer draws the hero on any table. It only draws the
+hand choices on the hole-card picker.
+
+### Table features
+
+`TableFeatures` (`lib/ui/widgets/table_features.dart`) turns the optional
+layers on or off: stacks, pot, street name, blinds line, position pucks,
+street bets, action badges, opponents' face-down cards, player types,
+VPIP/PFR, and empty board slots. Seats, the board, and your cards always draw.
+
+The lesson runner puts each lesson under `TableFeaturesScope` with its
+section's preset (`TableFeatures.forLessonId`):
+
+| Sections | Preset | Off |
+| --- | --- | --- |
+| 1–3 | `TableFeatures.fundamentals` | Player types, VPIP/PFR |
+| 4–7, Live Training | `TableFeatures.full` | Nothing |
+
+A step can pass its own `features` to `LessonTableStage` to hide more. A
+lesson seat shows a player type only when the step names it
+(`villainArchetypes`); a seat never shows a made-up type.
+
+### Stakes
+
+Lesson tables play `Blinds $1/$2 NLH` with 100 big blind stacks
+(`lessonSmallBlind`, `lessonBigBlind`). Preflop, the small and big blind are
+posted as bets in front of their seats, and the pot counts them. A step that
+teaches another level passes `smallBlind` and `bigBlind` to
+`LessonTableStage`; the blinds line and every amount follow.
 
 ### Shipped
 
 `PokerTableScreen` is the Live Training table and the calibration warm-up
 (`HomeScreen._openCalibrationWarmUp` pushes it with `softFadeRoute`).
+`LessonTableStage` draws the same `FeltTableView` for lessons, and
+`PokerTableBands` draws it for Your start.
 
 ## Lesson tables
 
@@ -103,18 +156,18 @@ Two older layouts still draw hands inside the lesson runner:
 `LessonActionSpot`. The name is not the full table above.
 
 Contract: a lesson step that shows hole cards, a board, a pot, or an action
-uses the Poker table bands (`FeltTableView`, `HeroRailWidget`,
-`CoachShelfWidget`, `ActionDockWidget`). Retire the mini-table for that
+uses the Poker table (`FeltTableView`, with `CoachShelfWidget` and
+`ActionDockWidget` where the step has them). Retire the mini-table for that
 step. A step with no hand (welcome, a list, settings, a number with no
 cards) stays on the Theme section and does not grow a felt.
 
 Suit taps and rank order in Suits and ranks stay on the Theme section. They do not use a felt. A felt is only for a step that shows hole cards, a board, a pot, or an action, and that step uses the Poker table bands.
 
-Your start’s hand preview uses the Poker table bands (`FeltTableView`, `HeroRailWidget`, `CoachShelfWidget`). It does not use `LessonTableScene`.
+Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
 
-A lesson step that shows hole cards, including Suits and ranks “Tap the suited hole cards,” places those cards on HeroRailWidget inside the Poker table bands. Retire `_HoleCardFeltTray` for that step.
+A lesson step that shows hole cards, including Suits and ranks “Tap the suited hole cards,” places those cards on the hero seat of the Poker table. Retire `_HoleCardFeltTray` for that step.
 
 A phase column on a teaching felt stacks its playing cards vertically. A horizontal row of `MiniCard` or `CardBack` widgets is not used inside an `Expanded` phase column. Scaling the row down with `FittedBox` is not a substitute for that rule.
 
@@ -234,11 +287,10 @@ Fewer players, a shorter board, or no action dock is how a step focuses.
 A mini felt, a loose row of cards, or a second table widget is not the
 stage.
 
-On that table the hero sits on the felt with the other seats. The
-live-training rail (`HeroRailWidget` under the felt) stays the live
-table. A lesson table does not add that rail, a street heading, or a
-coach shelf. The pot pill names the street. The bubble says the
-instruction.
+On that table the hero sits on the felt with the other seats, exactly
+as on the Live Training table. A lesson table does not add a street
+heading or a coach shelf. The pot pill names the street. The bubble says
+the instruction.
 
 Your two cards' first step shows four seats (you and three other
 players), no board, your two cards face down, and arrows on your cards.

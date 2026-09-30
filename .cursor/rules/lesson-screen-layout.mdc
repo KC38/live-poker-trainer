@@ -31,10 +31,20 @@ Expression is `LessonMascotExpression` mapped to `RexMood`: calm before an answe
 
 | The step shows | What fills the stage |
 | --- | --- |
-| Hole cards, a board, a pot, seats, or an action | `LessonTableStage`. The full oval. Fewer seats, a shorter board, or no actions, so the step can focus. Hero sits on the felt. No hero rail, no street heading, no coach shelf. |
+| Hole cards, a board, a pot, seats, or an action | `LessonTableStage`, the same table as Live Training. Fewer seats, a shorter board, or no actions, so the step can focus. Hero sits at the bottom of the felt. No street heading, no coach shelf. |
 | No hand (suits, rank order, a number, a list) | That step's own widget, inside this same frame. Do not add a felt to match Your two cards. |
 
 Do not use a mini felt, a loose card row, `LessonTableScene`, or the app-bar runner for a new or edited step. A hand step that still uses those is a gap. Move that step onto `LessonTableStage` in the same change. A non-hand step only needs the frame; leave its teaching widget in the stage slot.
+
+## Table layers and stakes
+
+The runner gives each lesson its section's `TableFeatures` preset: Sections
+1–3 leave out player types and VPIP/PFR. To hide more on one step, pass
+`features` to `LessonTableStage`; do not fork the table. Seats show a player
+type only when the step passes `villainArchetypes`.
+
+Lesson tables play `Blinds $1/$2 NLH`, with the blinds posted preflop. A step
+that teaches another level passes `smallBlind` and `bigBlind`.
 
 ## When you change a lesson
 

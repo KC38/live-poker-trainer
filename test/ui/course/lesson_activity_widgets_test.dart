@@ -64,7 +64,9 @@ import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
+import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
+import 'package:live_poker_trainer/ui/widgets/table_card.dart';
 
 CourseActivity _activity({
   String id = 'act-test',
@@ -136,6 +138,10 @@ SubmitCourseStepResult _result({
   );
 }
 
+final _heroSeat = find.byWidgetPredicate(
+  (w) => w is PlayerSeatWidget && w.player.isHero,
+);
+
 void main() {
   testWidgets('hole-card explain shows demonstration cards', (tester) async {
     final activity = CourseActivity(
@@ -166,9 +172,9 @@ void main() {
         ),
       ),
     );
-    expect(find.byType(MiniCard), findsNWidgets(2));
+    expect(find.byType(TableCard), findsNWidgets(2));
     expect(find.byType(FeltTableView), findsOneWidget);
-    expect(find.byType(HeroRailWidget), findsOneWidget);
+    expect(_heroSeat, findsOneWidget);
     expect(find.byType(CoachShelfWidget), findsOneWidget);
     expect(find.byType(ActionDockWidget), findsNothing);
     expect(find.byType(LessonTableContext), findsNothing);
@@ -451,7 +457,7 @@ void main() {
     );
     expect(find.byType(LessonTableContext), findsNothing);
     expect(find.byType(FeltTableView), findsOneWidget);
-    expect(find.byType(HeroRailWidget), findsOneWidget);
+    expect(_heroSeat, findsOneWidget);
     expect(find.byType(CoachShelfWidget), findsOneWidget);
     expect(find.byType(ActionDockWidget), findsNothing);
 
@@ -471,11 +477,12 @@ void main() {
       ),
     );
 
-    final heroRail = find.byWidgetPredicate(
-      (w) => w is MiniCard && w.size == MiniCardSize.hero,
+    final heroCards = find.descendant(
+      of: _heroSeat,
+      matching: find.byType(TableCard),
     );
-    expect(heroRail, findsAtLeastNWidgets(2));
-    await tester.tap(heroRail.first);
+    expect(heroCards, findsNWidgets(2));
+    await tester.tap(heroCards.first);
     await tester.pump();
     expect(feltAck, 1);
     // Densified shell must stay filled after acknowledge.

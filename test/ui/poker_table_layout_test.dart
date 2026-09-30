@@ -1,4 +1,4 @@
-/// Layout guards: strict band separation, plus the reclaimed action-dock band.
+/// Layout guards: the hero on the felt, strict bands, and the reclaimed dock.
 library;
 
 import 'package:flutter/material.dart';
@@ -16,11 +16,9 @@ import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
 import 'package:live_poker_trainer/ui/widgets/action_dock_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
-import 'package:live_poker_trainer/ui/widgets/community_cards_view.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
-import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
-import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
+import 'package:live_poker_trainer/ui/widgets/table_card.dart';
 
 /// The smallest screen we support (iPhone SE logical size).
 const _smallPhone = Size(320, 568);
@@ -238,11 +236,15 @@ Future<void> _settleBands(WidgetTester tester) async {
   await tester.pump(const Duration(milliseconds: 400));
 }
 
+final _heroSeat = find.byWidgetPredicate(
+  (w) => w is PlayerSeatWidget && w.player.isHero,
+);
+
 /// The union of every hero hole-card rect on screen.
 Rect _heroCardsRect(WidgetTester tester) {
   final cards = find.descendant(
-    of: find.byType(HeroRailWidget),
-    matching: find.byType(MiniCard),
+    of: _heroSeat,
+    matching: find.byType(TableCard),
   );
   expect(cards, findsNWidgets(2));
   Rect? union;
@@ -268,9 +270,15 @@ Rect _rectOf(WidgetTester tester, Finder finder) {
 
 /// Painted bounds of a felt bet chip.
 ///
-/// [_BetChip] lays out with its top-left at the anchor, then paints with a
-/// horizontal FractionalTranslation(-0.5) and a -10px vertical nudge.
+/// A resting bet is a [StreetBetPill]. A collecting [_BetChip] lays out with
+/// its top-left at the anchor, then paints with a horizontal
+/// FractionalTranslation(-0.5) and a -10px vertical nudge.
 Rect _betChipVisualRect(WidgetTester tester, Key key) {
+  final pill = find.descendant(
+    of: find.byKey(key),
+    matching: find.byType(StreetBetPill),
+  );
+  if (pill.evaluate().isNotEmpty) return _rectOf(tester, pill);
   final box = tester.getRect(find.byKey(key));
   return Rect.fromLTWH(
     box.left - box.width / 2,
@@ -279,6 +287,13 @@ Rect _betChipVisualRect(WidgetTester tester, Key key) {
     box.height,
   );
 }
+
+/// The card row, the pot pill, and the blinds line that are on screen.
+List<Rect> _boardRects(WidgetTester tester) => [
+  for (final key in const ['felt-board-row', 'felt-pot', 'felt-blinds'])
+    if (find.byKey(ValueKey<String>(key)).evaluate().isNotEmpty)
+      tester.getRect(find.byKey(ValueKey<String>(key))),
+];
 
 /// Asserts nothing the player reads on the felt is hidden behind anything else.
 ///
@@ -302,8 +317,6 @@ void _expectNoFeltCollisions(
   final chips = <int, Rect>{};
   final badges = <int, Rect>{};
   for (final player in game.players) {
-    if (player.isHero) continue;
-
     final chipKey = ValueKey('bet-${player.id}');
     if (find.byKey(chipKey).evaluate().isNotEmpty) {
       chips[player.id] = _betChipVisualRect(tester, chipKey);
@@ -317,7 +330,9 @@ void _expectNoFeltCollisions(
     }
   }
 
-  final board = _rectOf(tester, find.byType(CommunityCardsView));
+  final boardParts = _boardRects(tester);
+  final board = boardParts.reduce((a, b) => a.expandToInclude(b));
+  bool coversBoard(Rect r) => boardParts.any(r.overlaps);
   final where = '${street.label} @ ${felt.size}';
 
   chips.forEach((id, chip) {
@@ -327,7 +342,7 @@ void _expectNoFeltCollisions(
       reason: 'bet $id at $chip spills off the felt $felt ($where)',
     );
     expect(
-      chip.overlaps(board),
+      coversBoard(chip),
       isFalse,
       reason: 'bet $id at $chip covers the board $board ($where)',
     );
@@ -376,7 +391,7 @@ void _expectNoFeltCollisions(
         );
       });
       expect(
-        seat.overlaps(board),
+        coversBoard(seat),
         isFalse,
         reason: 'seat $id $seat covers the board $board ($where)',
       );
@@ -455,7 +470,7 @@ void main() {
         expect(
           coach.top,
           greaterThanOrEqualTo(heroCards.bottom - 0.5),
-          reason: 'coach shelf must sit below the hero rail',
+          reason: 'coach shelf must sit below the hero seat',
         );
       });
 
@@ -542,10 +557,10 @@ void main() {
       });
 
       testWidgets(
-        'authored non-zero hero seat keeps the bottom ring slot empty',
+        'authored non-zero hero seat still sits at the bottom center',
         (tester) async {
           // Mirrors the production screenshot: hero is SB at seat 5, button
-          // at seat 4 — without rotation a villain sat in the hero rail slot.
+          // at seat 4 — without rotation a villain took the hero's slot.
           const heroSeat = 5;
           final game = _sixMaxGame(heroSeat: heroSeat);
           await _pumpTable(
@@ -558,30 +573,21 @@ void main() {
           );
 
           final felt = _rectOf(tester, find.byType(FeltTableView));
-          final heroSlot = Offset(felt.center.dx, felt.bottom - 8);
+          final hero = _rectOf(tester, _heroSeat);
+          expect((hero.center.dx - felt.center.dx).abs(), lessThan(1));
+          expect(hero.bottom, greaterThan(felt.bottom - hero.height * 0.6));
           for (final element in find.byType(PlayerSeatWidget).evaluate()) {
+            final seat = element.widget as PlayerSeatWidget;
+            if (seat.player.isHero) continue;
             final box = element.renderObject! as RenderBox;
-            final seat = box.localToGlobal(Offset.zero) & box.size;
+            final rect = box.localToGlobal(Offset.zero) & box.size;
             expect(
-              seat.contains(heroSlot),
+              rect.overlaps(hero),
               isFalse,
-              reason:
-                  'villain seat $seat covers hero bottom slot $heroSlot '
-                  '(heroSeat=$heroSeat)',
-            );
-            // Villain centers must stay clear of the bottom-center anchor so
-            // the empty ring slot reads as "you" above the hero rail.
-            final dx = (seat.center.dx - felt.center.dx).abs();
-            final nearBottom = seat.bottom > felt.bottom - seat.height * 0.35;
-            expect(
-              nearBottom && dx < seat.width * 0.35,
-              isFalse,
-              reason:
-                  'villain at $seat sits in the hero bottom-center slot '
-                  'on felt $felt',
+              reason: 'villain seat $rect covers the hero seat $hero',
             );
           }
-          expect(find.byType(PlayerSeatWidget), findsNWidgets(5));
+          expect(find.byType(PlayerSeatWidget), findsNWidgets(6));
           expect(find.text('YOUR TURN'), findsOneWidget);
         },
       );
@@ -592,15 +598,22 @@ void main() {
           size: size,
           session: const TableSession().copyWith(game: _nineHandedGame()),
         );
-        // Hero is off the felt ring; commitment must still be readable on the
-        // rail as the same gold pill villains use.
-        expect(find.byType(StreetBetPill), findsWidgets);
-        expect(find.textContaining(r'$8'), findsWidgets);
-        final heroRail = find.byType(HeroRailWidget);
+        // The hero bets on the felt with the same gold pill villains use,
+        // between their cards and the pot.
+        final heroBet = find.byKey(const ValueKey('bet-0'));
         expect(
-          find.descendant(of: heroRail, matching: find.byType(StreetBetPill)),
+          find.descendant(of: heroBet, matching: find.byType(StreetBetPill)),
           findsOneWidget,
         );
+        expect(
+          find.descendant(of: heroBet, matching: find.text(r'$8')),
+          findsOneWidget,
+        );
+        final pill = _rectOf(
+          tester,
+          find.descendant(of: heroBet, matching: find.byType(StreetBetPill)),
+        );
+        expect(pill.bottom, lessThanOrEqualTo(_heroCardsRect(tester).top));
       });
 
       testWidgets('villain archetypes are legible words, not single letters', (
@@ -788,11 +801,7 @@ void main() {
       });
 
       testWidgets('coaching holds the dock until Continue', (tester) async {
-        await _pumpTable(
-          tester,
-          size: size,
-          session: coachHoldingSession(),
-        );
+        await _pumpTable(tester, size: size, session: coachHoldingSession());
         await _settleBands(tester);
 
         expect(find.byType(CoachShelfWidget), findsOneWidget);
@@ -819,7 +828,7 @@ void main() {
         await _pumpTable(tester, size: size, session: reviewSession());
         await _settleBands(tester);
 
-        final rail = _rectOf(tester, find.byType(HeroRailWidget));
+        final felt = _rectOf(tester, find.byType(FeltTableView));
         final heroCards = _heroCardsRect(tester);
         final coach = _rectOf(tester, find.byType(CoachShelfWidget));
 
@@ -828,7 +837,7 @@ void main() {
           isFalse,
           reason: 'coach $coach covers hero cards $heroCards in review',
         );
-        expect(coach.top, greaterThanOrEqualTo(rail.bottom - 0.5));
+        expect(coach.top, greaterThanOrEqualTo(felt.bottom - 0.5));
         expect(coach.bottom, lessThanOrEqualTo(size.height + 0.5));
         expect(heroCards.bottom, lessThanOrEqualTo(size.height));
         expect(tester.takeException(), isNull);
@@ -864,9 +873,9 @@ void main() {
           await _pumpTable(
             tester,
             size: size,
-            session: const TableSession(replaying: true).copyWith(
-              game: _nineHandedGame(),
-            ),
+            session: const TableSession(
+              replaying: true,
+            ).copyWith(game: _nineHandedGame()),
           );
           await _settleBands(tester);
 
@@ -878,31 +887,30 @@ void main() {
         },
       );
 
-      testWidgets(
-        'coach prep shows alongside a seat wait timer',
-        (tester) async {
-          final game = _nineHandedGame();
-          await _pumpTable(
-            tester,
-            size: size,
-            session: TableSession(
-              replaying: true,
-              awaitingCoach: true,
-              waitingOnSeat: game.players.firstWhere((p) => !p.isHero).id,
-            ).copyWith(game: game),
-          );
-          await _settleBands(tester);
+      testWidgets('coach prep shows alongside a seat wait timer', (
+        tester,
+      ) async {
+        final game = _nineHandedGame();
+        await _pumpTable(
+          tester,
+          size: size,
+          session: TableSession(
+            replaying: true,
+            awaitingCoach: true,
+            waitingOnSeat: game.players.firstWhere((p) => !p.isHero).id,
+          ).copyWith(game: game),
+        );
+        await _settleBands(tester);
 
-          expect(find.text('REVIEWING…'), findsOneWidget);
-          expect(find.textContaining('Grading your line'), findsOneWidget);
-          expect(find.byType(ActionDockWidget), findsNothing);
-          expect(find.text('TABLE ACTING…'), findsNothing);
-          // Seat timer ticks in tenths; allow a beat for the first label.
-          await tester.pump(const Duration(milliseconds: 150));
-          expect(find.textContaining('s'), findsWidgets);
-          expect(tester.takeException(), isNull);
-        },
-      );
+        expect(find.text('REVIEWING…'), findsOneWidget);
+        expect(find.textContaining('Grading your line'), findsOneWidget);
+        expect(find.byType(ActionDockWidget), findsNothing);
+        expect(find.text('TABLE ACTING…'), findsNothing);
+        // Seat timer ticks in tenths; allow a beat for the first label.
+        await tester.pump(const Duration(milliseconds: 150));
+        expect(find.textContaining('s'), findsWidgets);
+        expect(tester.takeException(), isNull);
+      });
     });
   });
 }

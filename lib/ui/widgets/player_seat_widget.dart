@@ -1,7 +1,8 @@
-/// Villain seat HUD — archetype-first so exploits are readable at nine seats.
+/// Seat on the felt: hole cards over one box with the icon, name, and stack.
 library;
 
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,61 +10,128 @@ import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
+import 'package:live_poker_trainer/ui/widgets/table_card.dart';
+import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
-/// Fixed seat footprints so the felt can guarantee seats never overflow their
-/// band and cover the hero rail or coach shelf.
+/// Seat geometry: the box, the hole cards above it, and the seat footprint.
 ///
-/// The box reserves room for the committed-chips pill whether or not the
-/// villain has bet, so seat geometry — and therefore every collision check on
-/// the felt — is identical on all streets.
+/// The footprint reserves the face-up card height for every seat, so the
+/// ring does not move when a hand is revealed.
+@immutable
 class SeatMetrics {
-  const SeatMetrics._();
+  const SeatMetrics._({
+    required this.pod,
+    required this.cardWidth,
+    required this.cardTuck,
+    required this.cardGap,
+    required this.scale,
+  });
 
-  /// Seat box at 7–9 seats or on a narrow phone.
-  static const Size compact = Size(78, 100);
+  /// Metrics for the hero or a villain seat.
+  ///
+  /// [compact] is the seven-to-nine seat size. [stats] adds a line to the
+  /// box for VPIP/PFR. [review] enlarges the hero's cards once the hand is
+  /// over. [scale] multiplies everything.
+  factory SeatMetrics.of({
+    required bool hero,
+    bool compact = false,
+    bool stats = false,
+    bool review = false,
+    double scale = 1,
+  }) {
+    final base =
+        hero
+            ? (compact ? const Size(124, 44) : const Size(140, 48))
+            : (compact ? const Size(92, 40) : const Size(108, 44));
+    final extra = stats && !hero ? 11.0 : 0.0;
+    return SeatMetrics._(
+      pod: Size(base.width * scale, (base.height + extra) * scale),
+      cardWidth:
+          (hero ? (compact ? 58.0 : 66.0) : (compact ? 26.0 : 30.0)) *
+          (hero && review ? _reviewGrowth : 1) *
+          scale,
+      cardTuck: hero ? 0.24 : 0.3,
+      cardGap: (hero ? 4.0 : 2.0) * scale,
+      scale: scale,
+    );
+  }
 
-  /// Seat box at 2–6 seats.
-  static const Size regular = Size(96, 114);
+  /// Hero card growth while a finished hand is reviewed.
+  static const double _reviewGrowth = 1.12;
 
-  /// Box for [compactLayout].
-  static Size of({required bool compactLayout}) =>
-      compactLayout ? compact : regular;
+  /// The seat box.
+  final Size pod;
+
+  /// Face-up hole card width.
+  final double cardWidth;
+
+  /// Share of a hole card's height hidden behind the top of the box.
+  final double cardTuck;
+
+  /// Gap between the two hole cards.
+  final double cardGap;
+
+  /// Multiplier the felt applied.
+  final double scale;
+
+  /// Face-down cards are smaller than faces on villain seats.
+  double backWidth({required bool hero}) => hero ? cardWidth : cardWidth * 0.74;
+
+  /// Face-up hole card height.
+  double get cardHeight => cardWidth * tableCardAspect;
+
+  /// Pixels of a face-up card tucked behind the box.
+  double get tuck => cardHeight * cardTuck;
+
+  /// Card height visible above the box.
+  double get cardsAbove => cardHeight - tuck;
+
+  /// Width of a face-up pair.
+  double get cardsWidth => cardWidth * 2 + cardGap;
+
+  /// Box plus cards.
+  Size get footprint =>
+      Size(math.max(pod.width, cardsWidth), pod.height + cardsAbove);
+
+  /// Where the box sits inside a footprint drawn at [footprint].
+  Rect podIn(Rect footprint) => Rect.fromLTWH(
+    footprint.center.dx - pod.width / 2,
+    footprint.bottom - pod.height,
+    pod.width,
+    pod.height,
+  );
 }
 
-/// Seat node for 2–9 player layouts.
+/// One seat: hole cards tucked behind a box with the icon, name, and stack.
 ///
-/// The archetype word is the primary label because the player has to pick an
-/// exploit from it; the villain's name is secondary.
+/// Pucks, bets, and action badges are placed by the felt around [SeatMetrics.podIn].
 class PlayerSeatWidget extends StatelessWidget {
-  /// Creates a seat widget.
+  /// Creates a seat.
   const PlayerSeatWidget({
     super.key,
     required this.player,
     required this.bigBlind,
     required this.chipDisplayMode,
     required this.isActive,
-    required this.isDealer,
-    this.isSmallBlind = false,
-    this.isBigBlind = false,
     this.isWinner = false,
     this.compact = false,
     this.showCards = false,
     this.revealHoleCards = false,
     this.showHoleBacks = false,
     this.isWaitingOnLlm = false,
-    this.betLabel,
-    this.size,
+    this.features = TableFeatures.full,
+    this.scale = 1,
+    this.review = false,
   });
 
   final PlayerModel player;
   final double bigBlind;
   final ChipDisplayMode chipDisplayMode;
   final bool isActive;
-  final bool isDealer;
-  final bool isSmallBlind;
-  final bool isBigBlind;
   final bool isWinner;
   final bool compact;
+
+  /// Showdown: draw this seat's cards face up.
   final bool showCards;
 
   /// Draw this seat's hole cards face up even before showdown.
@@ -75,177 +143,347 @@ class PlayerSeatWidget extends StatelessWidget {
   /// True while the server is waiting on this seat's LLM decision.
   final bool isWaitingOnLlm;
 
-  /// Chips this villain has committed on the current street, if any.
-  ///
-  /// Docked to the seat rather than floated toward the pot: on a phone there
-  /// is no lane between a side seat and the board wide enough for a pill, so a
-  /// floating chip inevitably lands on somebody's archetype tag or the board.
-  final String? betLabel;
+  /// Which optional layers to draw.
+  final TableFeatures features;
 
-  /// Footprint to render into, defaulting to [SeatMetrics.of].
-  ///
-  /// The felt shrinks this below the natural box on crowded tables; the HUD
-  /// scales its contents down to match rather than spilling onto a neighbour.
-  final Size? size;
+  /// Multiplier on [SeatMetrics].
+  final double scale;
+
+  /// The hand is over; the hero's cards grow.
+  final bool review;
+
+  /// Geometry this seat draws with.
+  SeatMetrics get metrics => SeatMetrics.of(
+    hero: player.isHero,
+    compact: compact,
+    stats: features.stats,
+    review: review,
+    scale: scale,
+  );
+
+  bool get _typed => features.playerTypes && !player.isHero;
 
   @override
   Widget build(BuildContext context) {
-    final size = this.size ?? SeatMetrics.of(compactLayout: compact);
-    final archetype = player.archetype;
-    final accent = archetype.color;
-    final dim = player.folded;
-
+    final m = metrics;
+    final size = m.footprint;
+    final faces = (showCards || revealHoleCards) && player.holeCards.isNotEmpty;
+    final cards =
+        faces
+            ? _faceCards(m)
+            : showHoleBacks
+            ? _backCards(m)
+            : null;
+    final pod = m.podIn(Offset.zero & size);
     return SizedBox(
       width: size.width,
       height: size.height,
       child: Opacity(
-        opacity: dim ? 0.38 : 1,
-        // A revealed showdown hand adds a card row to an already full seat,
-        // which overflowed the fixed footprint. Scaling down keeps the seat
-        // inside its band instead of bleeding into the hero rail.
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          // FittedBox hands its child unbounded width, so pin the seat to its
-          // own footprint and let only the overflowing height be scaled.
-          child: SizedBox(
-            width: size.width,
+        opacity: player.folded ? 0.4 : 1,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            if (cards != null)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: pod.height - m.tuck,
+                child: Align(
+                  alignment:
+                      _typed
+                          ? const Alignment(0.35, 1)
+                          : Alignment.bottomCenter,
+                  child: cards,
+                ),
+              ),
+            Positioned.fromRect(rect: pod, child: _box(m)),
+            if (_typed)
+              Positioned(
+                left: pod.left + 4 * scale,
+                top: pod.top - 7 * scale,
+                child: _TypeTag(archetype: player.archetype, scale: scale),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _faceCards(SeatMetrics m) => Row(
+    key: ValueKey<String>('seat-faces-${player.id}'),
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      for (var i = 0; i < player.holeCards.length && i < 2; i++) ...[
+        if (i > 0) SizedBox(width: m.cardGap),
+        TableCard(card: player.holeCards[i], width: m.cardWidth),
+      ],
+    ],
+  );
+
+  Widget _backCards(SeatMetrics m) {
+    final width = m.backWidth(hero: player.isHero);
+    return Row(
+      key: ValueKey<String>('seat-backs-${player.id}'),
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TableCardBack(width: width),
+        SizedBox(width: m.cardGap),
+        TableCardBack(width: width),
+      ],
+    );
+  }
+
+  Widget _box(SeatMetrics m) {
+    final s = scale;
+    final iconColor =
+        player.isHero
+            ? AppColors.hero
+            : features.playerTypes
+            ? player.archetype.color
+            : AppColors.slate;
+    final highlight = isWinner || isActive || isWaitingOnLlm;
+    final ring =
+        isWinner
+            ? AppColors.goldBright
+            : isWaitingOnLlm
+            ? AppColors.warning
+            : isActive
+            ? AppColors.goldBright
+            : AppColors.slateDark;
+    final iconSize = math.min(m.pod.height - 12 * s, 34 * s);
+    return AnimatedContainer(
+      key: ValueKey<String>('seat-box-${player.id}'),
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeOutCubic,
+      padding: EdgeInsets.fromLTRB(5 * s, 4 * s, 8 * s, 4 * s),
+      decoration: BoxDecoration(
+        color: AppColors.bgDark.withValues(alpha: 0.94),
+        borderRadius: BorderRadius.circular(12 * s),
+        border: Border.all(color: ring, width: highlight ? 2 : 1.2),
+        boxShadow: [
+          BoxShadow(
+            color:
+                highlight
+                    ? (isWaitingOnLlm
+                            ? AppColors.warning
+                            : AppColors.goldBright)
+                        .withValues(alpha: isWinner ? 0.45 : 0.3)
+                    : Colors.black.withValues(alpha: 0.35),
+            blurRadius: highlight ? 12 : 6,
+            offset: highlight ? Offset.zero : const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          _SeatIcon(color: iconColor, size: iconSize),
+          SizedBox(width: 6 * s),
+          Expanded(
             child: Column(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Stack(
-                  clipBehavior: Clip.none,
+                Row(
                   children: [
-                    _ArchetypeCard(
-                      player: player,
-                      accent: accent,
-                      isActive: isActive || isWaitingOnLlm,
-                      isWinner: isWinner,
-                      compact: compact,
-                      isWaitingOnLlm: isWaitingOnLlm,
+                    Expanded(
+                      child: Text(
+                        player.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.manrope(
+                          fontSize: (compact ? 10 : 11) * s,
+                          height: 1.15,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.cream.withValues(alpha: 0.82),
+                        ),
+                      ),
                     ),
-                    if (isDealer)
-                      Positioned(
-                        right: -6,
-                        top: -6,
-                        child: _Puck(label: 'D', color: AppColors.cream),
+                    if (isWaitingOnLlm) ...[
+                      SizedBox(width: 3 * s),
+                      Flexible(
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: _SeatWaitTimer(compact: compact),
+                        ),
                       ),
-                    if (isSmallBlind)
-                      Positioned(
-                        left: -6,
-                        bottom: -6,
-                        child: _Puck(label: 'SB', color: AppColors.goldMuted),
-                      ),
-                    if (isBigBlind)
-                      Positioned(
-                        right: -6,
-                        bottom: -6,
-                        child: _Puck(label: 'BB', color: AppColors.goldBright),
-                      ),
+                    ],
                   ],
                 ),
-                const SizedBox(height: 3),
-                Text(
-                  ChipFormat.chips(player.stack, bigBlind, chipDisplayMode),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.jetBrainsMono(
-                    fontSize: compact ? 10 : 11,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.goldMuted,
-                  ),
-                ),
-                SizedBox(height: betLabel == null ? 0 : 3),
-                if (betLabel != null)
-                  // A four-figure bet is wider than a nine-handed seat; shrink
-                  // the pill rather than truncate the amount or overflow onto
-                  // the neighbour.
+                if (features.stacks)
                   FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: StreetBetPill(label: betLabel!, compact: compact),
-                  ),
-                if ((showCards || revealHoleCards) &&
-                    player.holeCards.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 2),
-                    // Hero footprint can exceed a compact seat; scale the pair
-                    // to the seat width instead of overflowing the row.
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          for (final card in player.holeCards)
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 1,
-                              ),
-                              child: MiniCard(
-                                card: card,
-                                // Hero holes must read at arm's length — match
-                                // the rail / board footprint, not villain tiny.
-                                size: player.isHero
-                                    ? MiniCardSize.hero
-                                    : MiniCardSize.tiny,
-                              ),
-                            ),
-                        ],
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      ChipFormat.chips(player.stack, bigBlind, chipDisplayMode),
+                      key: ValueKey<String>('seat-stack-${player.id}'),
+                      maxLines: 1,
+                      style: GoogleFonts.jetBrainsMono(
+                        fontSize: (compact ? 13 : 15) * s,
+                        height: 1.15,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.cream,
                       ),
                     ),
-                  )
-                else if (showHoleBacks)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 2),
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CardBack(
-                            size: player.isHero
-                                ? MiniCardSize.hero
-                                : MiniCardSize.tiny,
-                          ),
-                          SizedBox(width: player.isHero ? 4 : 2),
-                          CardBack(
-                            size: player.isHero
-                                ? MiniCardSize.hero
-                                : MiniCardSize.tiny,
-                          ),
-                        ],
-                      ),
+                  ),
+                if (features.stats && !player.isHero)
+                  Text(
+                    '${player.vpip.toStringAsFixed(0)}/'
+                    '${player.pfr.toStringAsFixed(0)}',
+                    maxLines: 1,
+                    style: GoogleFonts.jetBrainsMono(
+                      fontSize: (compact ? 8 : 8.5) * s,
+                      height: 1.2,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.slate,
                     ),
                   ),
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Generic player icon in a ring colored by player type.
+class _SeatIcon extends StatelessWidget {
+  const _SeatIcon({required this.color, required this.size});
+
+  final Color color;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color.withValues(alpha: 0.2),
+        border: Border.all(color: color, width: 1.6),
+      ),
+      child: Icon(Icons.person_rounded, size: size * 0.72, color: color),
+    );
+  }
+}
+
+/// Player-type word on the seat box's top edge.
+class _TypeTag extends StatelessWidget {
+  const _TypeTag({required this.archetype, required this.scale});
+
+  final PlayerArchetype archetype;
+  final double scale;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 4 * scale, vertical: 1),
+      decoration: BoxDecoration(
+        color: archetype.color,
+        borderRadius: BorderRadius.circular(4 * scale),
+      ),
+      child: Text(
+        archetype.shortLabel,
+        maxLines: 1,
+        style: GoogleFonts.jetBrainsMono(
+          fontSize: 8 * scale,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 0.2,
+          color: AppColors.bgDark,
         ),
       ),
     );
   }
 }
 
-/// Committed chips for the current street (seat HUD or hero rail).
+/// Dealer, small-blind, or big-blind puck beside a seat box.
+class SeatPuck extends StatelessWidget {
+  /// Creates a puck reading [label] (`D`, `SB`, or `BB`).
+  const SeatPuck({super.key, required this.label, this.scale = 1});
+
+  final String label;
+  final double scale;
+
+  /// Diameter at scale 1.
+  static const double diameter = 18;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = switch (label) {
+      'D' => AppColors.cream,
+      'SB' => AppColors.goldMuted,
+      _ => AppColors.goldBright,
+    };
+    final d = diameter * scale;
+    return Container(
+      key: ValueKey<String>('puck-$label'),
+      width: d,
+      height: d,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+        border: Border.all(color: AppColors.bgDark.withValues(alpha: 0.5)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.4),
+            blurRadius: 3,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+      child: Text(
+        label,
+        style: GoogleFonts.jetBrainsMono(
+          fontSize: (label.length > 1 ? 7.5 : 9.5) * scale,
+          fontWeight: FontWeight.w800,
+          color: AppColors.bgDark,
+        ),
+      ),
+    );
+  }
+}
+
+/// Committed chips for the current street.
 class StreetBetPill extends StatelessWidget {
   /// Creates a street-commitment chip pill.
   const StreetBetPill({super.key, required this.label, this.compact = false});
 
+  /// Amount text style.
+  static TextStyle textStyle({required bool compact}) =>
+      GoogleFonts.jetBrainsMono(
+        fontSize: compact ? 10 : 11,
+        fontWeight: FontWeight.w800,
+        color: AppColors.cream,
+      );
+
+  /// Pill size for [label], measured the way it paints.
+  static Size sizeFor(String label, {required bool compact}) {
+    final text = TextPainter(
+      text: TextSpan(text: label, style: textStyle(compact: compact)),
+      textDirection: TextDirection.ltr,
+      maxLines: 1,
+    )..layout();
+    final pad = compact ? 5.0 : 7.0;
+    return Size(text.width + pad * 2 + 8 + 4 + 2, math.max(text.height, 8) + 6);
+  }
+
   /// Formatted chip amount for the current street.
   final String label;
 
-  /// Tighter padding/type for nine-handed seats.
+  /// Tighter padding and type for nine-handed seats.
   final bool compact;
 
   @override
   Widget build(BuildContext context) {
-    // Lay out at natural size, then scale down when a seat or the hero rail
-    // is narrower than a four-figure amount (FittedBox child is unbounded).
     return FittedBox(
       fit: BoxFit.scaleDown,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: compact ? 5 : 6, vertical: 1),
+        padding: EdgeInsets.symmetric(horizontal: compact ? 5 : 7, vertical: 2),
         decoration: BoxDecoration(
-          color: AppColors.bgDark.withValues(alpha: 0.94),
-          borderRadius: BorderRadius.circular(8),
+          color: AppColors.bgDark.withValues(alpha: 0.9),
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: AppColors.gold.withValues(alpha: 0.85),
             width: 1,
@@ -255,11 +493,12 @@ class StreetBetPill extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 6,
-              height: 6,
-              decoration: const BoxDecoration(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.gold,
+                color: AppColors.danger,
+                border: Border.all(color: AppColors.cream, width: 1.2),
               ),
             ),
             const SizedBox(width: 4),
@@ -267,131 +506,10 @@ class StreetBetPill extends StatelessWidget {
               label,
               maxLines: 1,
               softWrap: false,
-              style: GoogleFonts.jetBrainsMono(
-                fontSize: compact ? 9 : 10,
-                fontWeight: FontWeight.w800,
-                color: AppColors.cream,
-              ),
+              style: textStyle(compact: compact),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-/// Archetype pill: colored ring, archetype word, name, and VPIP/PFR.
-class _ArchetypeCard extends StatelessWidget {
-  const _ArchetypeCard({
-    required this.player,
-    required this.accent,
-    required this.isActive,
-    required this.isWinner,
-    required this.compact,
-    this.isWaitingOnLlm = false,
-  });
-
-  final PlayerModel player;
-  final Color accent;
-  final bool isActive;
-  final bool isWinner;
-  final bool compact;
-  final bool isWaitingOnLlm;
-
-  @override
-  Widget build(BuildContext context) {
-    final archetype = player.archetype;
-    final highlight = isWinner || isActive;
-    final ring =
-        isWinner
-            ? AppColors.goldBright
-            : isWaitingOnLlm
-            ? AppColors.warning
-            : isActive
-            ? AppColors.goldBright
-            : accent.withValues(alpha: 0.9);
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.easeOutCubic,
-      padding: EdgeInsets.symmetric(
-        horizontal: compact ? 5 : 7,
-        vertical: compact ? 3 : 4,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.bgDark.withValues(alpha: 0.88),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: ring, width: highlight ? 2 : 1.2),
-        boxShadow:
-            highlight
-                ? [
-                  BoxShadow(
-                    color: (isWaitingOnLlm
-                            ? AppColors.warning
-                            : AppColors.goldBright)
-                        .withValues(alpha: isWinner ? 0.42 : 0.28),
-                    blurRadius: isWinner ? 14 : 10,
-                  ),
-                ]
-                : null,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-            decoration: BoxDecoration(
-              color: accent.withValues(alpha: 0.9),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Text(
-              archetype.shortLabel,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.clip,
-              style: GoogleFonts.jetBrainsMono(
-                fontSize: compact ? 8.5 : 10,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 0.2,
-                color: AppColors.bgDark,
-              ),
-            ),
-          ),
-          const SizedBox(height: 2),
-          SizedBox(
-            width: double.infinity,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    player.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.manrope(
-                      fontSize: compact ? 9.5 : 11,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.cream,
-                    ),
-                  ),
-                ),
-                if (isWaitingOnLlm) ...[
-                  const SizedBox(width: 4),
-                  _SeatWaitTimer(compact: compact),
-                ],
-              ],
-            ),
-          ),
-          if (!player.isHero)
-            Text(
-              '${player.vpip.toStringAsFixed(0)}/${player.pfr.toStringAsFixed(0)}',
-              maxLines: 1,
-              style: GoogleFonts.jetBrainsMono(
-                fontSize: compact ? 7.5 : 8.5,
-                fontWeight: FontWeight.w600,
-                color: AppColors.slate,
-              ),
-            ),
-        ],
       ),
     );
   }
@@ -445,37 +563,7 @@ class _SeatWaitTimerState extends State<_SeatWaitTimer> {
   }
 }
 
-class _Puck extends StatelessWidget {
-  const _Puck({required this.label, required this.color});
-
-  final String label;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    final wide = label.length > 1;
-    return Container(
-      width: wide ? 20 : 15,
-      height: 15,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(wide ? 7 : 15),
-        border: Border.all(color: AppColors.bgDark.withValues(alpha: 0.45)),
-      ),
-      child: Text(
-        label,
-        style: GoogleFonts.jetBrainsMono(
-          fontSize: wide ? 7.5 : 8.5,
-          fontWeight: FontWeight.w800,
-          color: AppColors.bgDark,
-        ),
-      ),
-    );
-  }
-}
-
-/// Card back used for villains who still hold live cards.
+/// Card back used by lesson widgets that draw [MiniCard] rows.
 class CardBack extends StatelessWidget {
   /// Creates a card back.
   const CardBack({super.key, this.size = MiniCardSize.tiny});
