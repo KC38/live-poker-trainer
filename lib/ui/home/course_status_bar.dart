@@ -1,4 +1,4 @@
-/// Home status bar: streak, XP, accepted accuracy — Duolingo-style strip.
+/// Home status bar: streak, XP, gems — Duolingo-style strip.
 library;
 
 import 'package:flutter/material.dart';
@@ -12,23 +12,25 @@ class CourseStatusBar extends StatelessWidget {
     super.key,
     required this.streak,
     required this.lifetimeXp,
-    required this.acceptedAccuracy,
+    required this.gems,
+    this.acceptedAccuracy,
     this.onCourseTap,
   });
 
   final int streak;
   final int lifetimeXp;
-  final double acceptedAccuracy;
+  final int gems;
+
+  /// Kept for callers that still pass accuracy; gems replace it in the strip.
+  final double? acceptedAccuracy;
 
   /// Opens the section picker (course map).
   final VoidCallback? onCourseTap;
 
   @override
   Widget build(BuildContext context) {
-    final accuracyPct = (acceptedAccuracy * 100).clamp(0, 100).round();
     return Semantics(
-      label:
-          'Streak $streak days, $lifetimeXp XP, $accuracyPct percent accepted accuracy',
+      label: 'Streak $streak days, $lifetimeXp XP, $gems gems',
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
         child: Row(
@@ -59,11 +61,11 @@ class CourseStatusBar extends StatelessWidget {
                     ),
                     const SizedBox(width: 14),
                     _StatIcon(
-                      icon: Icons.favorite_rounded,
-                      iconColor: AppColors.danger,
-                      label: 'Accepted',
-                      value: '$accuracyPct%',
-                      valueColor: AppColors.danger,
+                      icon: Icons.diamond_rounded,
+                      iconColor: const Color(0xFF5EC8FF),
+                      label: 'Gems',
+                      value: '$gems',
+                      valueColor: const Color(0xFF5EC8FF),
                     ),
                   ],
                 ),

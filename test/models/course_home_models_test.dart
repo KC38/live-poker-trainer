@@ -138,6 +138,7 @@ void main() {
       available: true,
       profile: const CourseProfileView(
         lifetimeXp: 0,
+        gems: 0,
         currentStreak: 0,
         acceptedAccuracy: 0,
         completedLessonIds: [],
@@ -162,6 +163,7 @@ void main() {
       available: true,
       profile: const CourseProfileView(
         lifetimeXp: 20,
+        gems: 0,
         currentStreak: 2,
         acceptedAccuracy: 0.8,
         completedLessonIds: ['lesson-a'],
@@ -196,6 +198,7 @@ void main() {
       available: true,
       profile: const CourseProfileView(
         lifetimeXp: 40,
+        gems: 0,
         currentStreak: 3,
         acceptedAccuracy: 0.7,
         completedLessonIds: ['lesson-a', 'lesson-b'],
@@ -215,6 +218,7 @@ void main() {
       available: true,
       profile: const CourseProfileView(
         lifetimeXp: 40,
+        gems: 0,
         currentStreak: 3,
         acceptedAccuracy: 0.9,
         completedLessonIds: ['lesson-a', 'lesson-b'],
@@ -272,6 +276,7 @@ void main() {
       available: true,
       profile: const CourseProfileView(
         lifetimeXp: 0,
+        gems: 0,
         currentStreak: 0,
         acceptedAccuracy: 0,
         completedLessonIds: [],
@@ -292,6 +297,7 @@ void main() {
       available: true,
       profile: const CourseProfileView(
         lifetimeXp: 0,
+        gems: 0,
         currentStreak: 0,
         acceptedAccuracy: 0,
         completedLessonIds: [],
@@ -311,6 +317,7 @@ void main() {
       available: true,
       profile: const CourseProfileView(
         lifetimeXp: 20,
+        gems: 0,
         currentStreak: 2,
         acceptedAccuracy: 0.8,
         completedLessonIds: ['lesson-a'],

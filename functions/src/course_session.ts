@@ -34,6 +34,9 @@ import {resolveLiveAccessForUser} from "./live_access";
 export const DEFAULT_LESSON_LIVES = 3;
 export const XP_PER_ACCEPTED_STEP = 10;
 export const XP_LESSON_COMPLETE = 25;
+
+/** Gems granted the first time a learner studies on a local calendar day. */
+export const GEMS_DAILY_QUEST = 5;
 export const REVIEW_DELAY_MS = 24 * 60 * 60 * 1000;
 
 /**
@@ -85,6 +88,7 @@ export type CourseGateMode = "read" | "mutate" | "start" | "placement";
 export interface CourseProfile {
   catalogVersion: string;
   lifetimeXp: number;
+  gems: number;
   currentStreak: number;
   longestStreak: number;
   lastStudyLocalDate: string | null;
@@ -98,6 +102,7 @@ export interface CourseProfile {
   resume: CourseResumePointer | null;
   experienceBand?: string | null;
   dailyGoalMinutes?: number | null;
+  streakGoalDays?: number | null;
   recommendedLessonId?: string | null;
   firstLessonCompletedAtMs?: number | null;
   /** Labeled academy XP. Never added to lifetimeXp or unlocks. */
@@ -178,6 +183,10 @@ export interface CompleteCourseLessonResult {
   resume: CourseResumePointer | null;
   /** Step XP plus the completion bonus. Absent on receipts written before this field. */
   lessonXpAwarded?: number;
+  /** Gems granted for today's daily quest (0 when already claimed today). */
+  gemsAwarded?: number;
+  /** Wallet balance after this completion. */
+  gems?: number;
 }
 
 /** Parses course flags; missing/invalid docs fail closed (course disabled). */
@@ -475,6 +484,7 @@ export async function initializeCourseProfileForUser(options: {
     optionalString(input.experienceBand),
   );
   const dailyGoalMinutes = sanitizeDailyGoalMinutes(input.dailyGoalMinutes);
+  const streakGoalDays = sanitizeStreakGoalDays(input.streakGoalDays);
   const recommendedLessonId = optionalString(input.recommendedLessonId) ?? null;
   const flags = await assertCourseAvailable({
     db,
@@ -517,6 +527,13 @@ export async function initializeCourseProfileForUser(options: {
         patch.dailyGoalMinutes = dailyGoalMinutes;
         changed = true;
       }
+      if (
+        streakGoalDays != null &&
+        !Number.isFinite(Number(existing.streakGoalDays))
+      ) {
+        patch.streakGoalDays = streakGoalDays;
+        changed = true;
+      }
       if (recommendedLessonId && !optionalString(existing.recommendedLessonId)) {
         patch.recommendedLessonId = recommendedLessonId;
         changed = true;
@@ -533,6 +550,7 @@ export async function initializeCourseProfileForUser(options: {
       nowMs,
       experienceBand,
       dailyGoalMinutes,
+      streakGoalDays,
       recommendedLessonId,
     });
     tx.set(profileRef, {
@@ -1082,6 +1100,8 @@ export async function completeCourseLessonForUser(options: {
           entitlementSnap.data()?.unrestrictedAccess === true,
         duplicate: true,
         resume: null,
+        gemsAwarded: 0,
+        gems: profile.gems,
       };
     }
     if (attempt.status === "remediation") {
@@ -1113,6 +1133,8 @@ export async function completeCourseLessonForUser(options: {
         null,
       todayLocalDate: today,
     });
+    const gemsAwarded = streak.credited ? GEMS_DAILY_QUEST : 0;
+    const gemsBalance = Number(profileSnap.data()?.gems ?? 0) + gemsAwarded;
 
     const shouldGrantLive = lessonGrantsLiveTrainingEntitlement(located) &&
       attempt.jumpTestPassed;
@@ -1196,6 +1218,7 @@ export async function completeCourseLessonForUser(options: {
       (completedLessonIds.length === 1 ? nowMs : null);
     tx.set(profileRef, {
       lifetimeXp: FieldValue.increment(xpAwarded),
+      ...(gemsAwarded > 0 ? {gems: FieldValue.increment(gemsAwarded)} : {}),
       currentStreak: streak.currentStreak,
       longestStreak: streak.longestStreak,
       lastStudyLocalDate: streak.lastStudyLocalDate,
@@ -1221,6 +1244,8 @@ export async function completeCourseLessonForUser(options: {
       liveTrainingGranted,
       duplicate: false,
       resume: null,
+      gemsAwarded,
+      gems: gemsBalance,
     };
     tx.create(receiptRef, {
       idempotencyKey,
@@ -1541,6 +1566,7 @@ const EXPERIENCE_BANDS = new Set([
 ]);
 
 const DAILY_GOAL_MINUTES = new Set([5, 10, 15, 20]);
+const STREAK_GOAL_DAYS = new Set([7, 14, 30, 50]);
 
 function sanitizeExperienceBand(value: string | undefined): string | null {
   if (!value) return null;
@@ -1553,17 +1579,25 @@ function sanitizeDailyGoalMinutes(value: unknown): number | null {
   return DAILY_GOAL_MINUTES.has(n) ? n : null;
 }
 
+function sanitizeStreakGoalDays(value: unknown): number | null {
+  const n = typeof value === "number" ? value : Number(value);
+  if (!Number.isFinite(n)) return null;
+  return STREAK_GOAL_DAYS.has(n) ? n : null;
+}
+
 function emptyProfile(options: {
   catalogVersion: string;
   timezone: string;
   nowMs: number;
   experienceBand?: string | null;
   dailyGoalMinutes?: number | null;
+  streakGoalDays?: number | null;
   recommendedLessonId?: string | null;
 }): CourseProfile {
   return {
     catalogVersion: options.catalogVersion,
     lifetimeXp: 0,
+    gems: 0,
     currentStreak: 0,
     longestStreak: 0,
     lastStudyLocalDate: null,
@@ -1577,6 +1611,7 @@ function emptyProfile(options: {
     resume: null,
     experienceBand: options.experienceBand ?? null,
     dailyGoalMinutes: options.dailyGoalMinutes ?? null,
+    streakGoalDays: options.streakGoalDays ?? null,
     recommendedLessonId: options.recommendedLessonId ?? null,
     firstLessonCompletedAtMs: null,
     legacyLifetimeXp: null,
@@ -1591,6 +1626,7 @@ function profileToFirestore(profile: CourseProfile): DocumentData {
   return {
     catalogVersion: profile.catalogVersion,
     lifetimeXp: profile.lifetimeXp,
+    gems: profile.gems,
     currentStreak: profile.currentStreak,
     longestStreak: profile.longestStreak,
     lastStudyLocalDate: profile.lastStudyLocalDate,
@@ -1604,6 +1640,7 @@ function profileToFirestore(profile: CourseProfile): DocumentData {
     resume: profile.resume,
     experienceBand: profile.experienceBand ?? null,
     dailyGoalMinutes: profile.dailyGoalMinutes ?? null,
+    streakGoalDays: profile.streakGoalDays ?? null,
     recommendedLessonId: profile.recommendedLessonId ?? null,
     firstLessonCompletedAtMs: profile.firstLessonCompletedAtMs ?? null,
     legacyLifetimeXp: profile.legacyLifetimeXp ?? null,
@@ -1618,6 +1655,7 @@ function profileFromData(data: DocumentData): CourseProfile {
   return {
     catalogVersion: String(data.catalogVersion ?? courseBank.catalogVersion),
     lifetimeXp: Number(data.lifetimeXp ?? 0),
+    gems: Number(data.gems ?? 0),
     currentStreak: Number(data.currentStreak ?? 0),
     longestStreak: Number(data.longestStreak ?? 0),
     lastStudyLocalDate: optionalString(data.lastStudyLocalDate) ?? null,
@@ -1644,6 +1682,7 @@ function profileFromData(data: DocumentData): CourseProfile {
     dailyGoalMinutes: Number.isFinite(Number(data.dailyGoalMinutes)) ?
       Number(data.dailyGoalMinutes) :
       null,
+    streakGoalDays: sanitizeStreakGoalDays(data.streakGoalDays),
     recommendedLessonId: optionalString(data.recommendedLessonId) ?? null,
     firstLessonCompletedAtMs: optionalNumber(data.firstLessonCompletedAtMs) ??
       null,

@@ -347,6 +347,43 @@ void main() {
     );
   });
 
+  test('post-lesson celebration beats stay on guest course before save', () {
+    for (final step in [
+      OnboardingStep.dayStreak,
+      OnboardingStep.streakGoal,
+      OnboardingStep.dailyQuests,
+      OnboardingStep.gemsReward,
+    ]) {
+      final draft = OnboardingDraft(
+        step: step,
+        firstLessonCompleted: true,
+        pendingSaveProgress: false,
+        lastStreak: 1,
+        lastGemsAwarded: 5,
+        gems: 5,
+      );
+      expect(draft.isPostLessonCelebration, isTrue);
+      expect(
+        resolveAppRoot(
+          signedIn: true,
+          anonymous: true,
+          flagsReady: true,
+          flags: enabled,
+          onboarding: draft,
+        ),
+        AppRootDestination.guestCourse,
+      );
+      expect(
+        rootStackToken(
+          destination: AppRootDestination.guestCourse,
+          onboarding: draft,
+          anonymous: true,
+        ),
+        '-celebrate',
+      );
+    }
+  });
+
   test('guest stack token drops welcome routes without restoring them', () {
     const welcome = OnboardingDraft();
     const start = OnboardingDraft(step: OnboardingStep.recommendedStart);

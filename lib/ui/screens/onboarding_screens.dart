@@ -1,4 +1,5 @@
-/// Guest welcome, coach intro, experience, goal, motivation, and start screens.
+/// Guest welcome, coach intro, experience, goal, motivation, post-lesson
+/// streak/quest/gem beats, and start screens.
 library;
 
 import 'dart:async';
@@ -520,6 +521,264 @@ class RecommendedStartScreen extends ConsumerWidget {
   }
 }
 
+/// Flame + weekday streak celebration after the first lesson.
+class DayStreakScreen extends ConsumerWidget {
+  /// Creates the day-streak celebration screen.
+  const DayStreakScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final draft = ref.watch(onboardingControllerProvider);
+    final streak = (draft.lastStreak ?? 1).clamp(1, 9999);
+    return _OnboardingScaffold(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.local_fire_department_rounded,
+                          size: 96,
+                          color: AppColors.warning,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          '$streak',
+                          style: GoogleFonts.manrope(
+                            color: AppColors.warning,
+                            fontSize: 72,
+                            fontWeight: FontWeight.w800,
+                            height: 1,
+                          ),
+                        ),
+                        Text(
+                          streak == 1 ? 'day streak' : 'day streak',
+                          style: GoogleFonts.manrope(
+                            color: AppColors.warning,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        const SizedBox(height: 28),
+                        _WeekdayStreakCard(streakDays: streak),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          FilledButton(
+            onPressed: () {
+              unawaited(
+                ref
+                    .read(analyticsServiceProvider)
+                    .logOnboardingStep(step: 'day_streak'),
+              );
+              unawaited(
+                ref.read(onboardingControllerProvider.notifier).advanceDayStreak(),
+              );
+            },
+            style: _primaryButton,
+            child: const Text('CONTINUE'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Choose a multi-day streak commitment (Good → Unstoppable).
+class StreakGoalScreen extends ConsumerStatefulWidget {
+  /// Creates the streak-goal picker.
+  const StreakGoalScreen({super.key});
+
+  @override
+  ConsumerState<StreakGoalScreen> createState() => _StreakGoalScreenState();
+}
+
+class _StreakGoalScreenState extends ConsumerState<StreakGoalScreen> {
+  int? _selectedDays;
+
+  @override
+  Widget build(BuildContext context) {
+    final draftDays = ref.watch(onboardingControllerProvider).streakGoalDays;
+    final selected = _selectedDays ?? draftDays;
+    final speech = selected == null
+        ? "Let's commit to learning with a Streak Goal!"
+        : "You'll be 5x more likely to complete the course!";
+    return _OnboardingScaffold(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _OnboardingCoachPrompt(speech: speech),
+          const SizedBox(height: 12),
+          Center(
+            child: _StreakGoalCalendarBadge(days: selected ?? 7),
+          ),
+          const SizedBox(height: 20),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                for (final days in kStreakGoalChoices) ...[
+                  _ChoiceTile(
+                    label: '$days day streak',
+                    trailingLabel: streakGoalIntensityLabel(days),
+                    selected: selected == days,
+                    onTap: () => setState(() => _selectedDays = days),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ],
+            ),
+          ),
+          _ContinueBar(
+            enabled: selected != null,
+            label: 'I CAN DO IT!',
+            onPressed: () async {
+              final days = selected;
+              if (days == null) return;
+              unawaited(
+                ref
+                    .read(analyticsServiceProvider)
+                    .logOnboardingStep(step: 'streak_goal'),
+              );
+              await ref
+                  .read(onboardingControllerProvider.notifier)
+                  .setStreakGoal(days);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Daily quest complete card; Continue opens the gem reward.
+class DailyQuestsCompleteScreen extends ConsumerWidget {
+  /// Creates the daily-quests complete screen.
+  const DailyQuestsCompleteScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final draft = ref.watch(onboardingControllerProvider);
+    final earned = (draft.lastXpAwarded ?? kDailyQuestXpTarget)
+        .clamp(kDailyQuestXpTarget, 9999);
+    final progressXp = earned >= kDailyQuestXpTarget
+        ? kDailyQuestXpTarget
+        : earned;
+    return _OnboardingScaffold(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Spacer(flex: 2),
+          Text(
+            'All Daily Quests complete!',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.manrope(
+              color: AppColors.goldBright,
+              fontSize: 26,
+              fontWeight: FontWeight.w800,
+              height: 1.2,
+            ),
+          ),
+          const SizedBox(height: 28),
+          _DailyQuestCard(
+            title: 'Earn $kDailyQuestXpTarget XP',
+            current: progressXp,
+            target: kDailyQuestXpTarget,
+          ),
+          const Spacer(flex: 3),
+          FilledButton(
+            onPressed: () {
+              unawaited(
+                ref
+                    .read(analyticsServiceProvider)
+                    .logOnboardingStep(step: 'daily_quests'),
+              );
+              unawaited(
+                ref
+                    .read(onboardingControllerProvider.notifier)
+                    .advanceDailyQuests(),
+              );
+            },
+            style: _primaryButton,
+            child: const Text('CONTINUE'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Gem wallet reveal after the daily-quest chest.
+class GemsRewardScreen extends ConsumerWidget {
+  /// Creates the gems reward screen.
+  const GemsRewardScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final draft = ref.watch(onboardingControllerProvider);
+    final awarded = draft.lastGemsAwarded ?? kDailyQuestGemReward;
+    return _OnboardingScaffold(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Spacer(flex: 2),
+          const _OpenGemChest(),
+          const SizedBox(height: 28),
+          Text(
+            'You earned $awarded gems!',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.manrope(
+              color: AppColors.cream,
+              fontSize: 28,
+              fontWeight: FontWeight.w800,
+              height: 1.2,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'Nice job reaching your daily goal!',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              height: 1.35,
+            ),
+          ),
+          const Spacer(flex: 3),
+          FilledButton(
+            onPressed: () {
+              unawaited(
+                ref
+                    .read(analyticsServiceProvider)
+                    .logOnboardingStep(step: 'gems_reward'),
+              );
+              unawaited(
+                ref
+                    .read(onboardingControllerProvider.notifier)
+                    .advanceGemsReward(),
+              );
+            },
+            style: _primaryButton,
+            child: const Text('CONTINUE'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// Post-lesson celebration + create-account CTA (brand theme).
 class SaveProgressScreen extends ConsumerWidget {
   /// Creates the save-progress screen.
@@ -652,6 +911,307 @@ class SaveProgressScreen extends ConsumerWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _WeekdayStreakCard extends StatelessWidget {
+  const _WeekdayStreakCard({required this.streakDays});
+
+  final int streakDays;
+
+  static const _labels = <String>['M', 'Tu', 'W', 'Th', 'F'];
+
+  @override
+  Widget build(BuildContext context) {
+    final today = DateTime.now();
+    // Monday=1 … Friday=5. Weekend maps to Friday so the card still reads.
+    final todayIndex = (today.weekday.clamp(1, 5) - 1);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
+      decoration: BoxDecoration(
+        color: AppColors.bgElevated,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.slateDark),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              for (var i = 0; i < _labels.length; i++)
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text(
+                        _labels[i],
+                        style: GoogleFonts.manrope(
+                          color: i == todayIndex
+                              ? AppColors.warning
+                              : AppColors.slate,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      _StreakDayDot(
+                        filled: i == todayIndex && streakDays > 0,
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          const Divider(height: 1, color: AppColors.slateDark),
+          const SizedBox(height: 14),
+          Text(
+            'Practicing daily grows your streak, but skipping a day resets it!',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.manrope(
+              color: AppColors.cream,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              height: 1.35,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StreakDayDot extends StatelessWidget {
+  const _StreakDayDot({required this.filled});
+
+  final bool filled;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 34,
+      height: 34,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: filled ? AppColors.warning : Colors.transparent,
+        border: Border.all(
+          color: filled ? AppColors.warning : AppColors.slateDark,
+          width: 2,
+        ),
+      ),
+      child: filled
+          ? const Icon(Icons.check, size: 18, color: AppColors.bgDark)
+          : null,
+    );
+  }
+}
+
+class _StreakGoalCalendarBadge extends StatelessWidget {
+  const _StreakGoalCalendarBadge({required this.days});
+
+  final int days;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 120,
+      child: Stack(
+        alignment: Alignment.center,
+        clipBehavior: Clip.none,
+        children: [
+          Positioned(
+            left: 24,
+            child: RexMascot(size: 88, mood: RexMood.celebrate),
+          ),
+          Positioned(
+            right: 36,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.local_fire_department_rounded,
+                  color: AppColors.warning,
+                  size: 28,
+                ),
+                Container(
+                  width: 64,
+                  height: 72,
+                  decoration: BoxDecoration(
+                    color: AppColors.cream,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: AppColors.gold, width: 2),
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 16,
+                        decoration: const BoxDecoration(
+                          color: AppColors.danger,
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(8),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            '$days',
+                            style: GoogleFonts.manrope(
+                              color: AppColors.danger,
+                              fontSize: 28,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DailyQuestCard extends StatelessWidget {
+  const _DailyQuestCard({
+    required this.title,
+    required this.current,
+    required this.target,
+  });
+
+  final String title;
+  final int current;
+  final int target;
+
+  @override
+  Widget build(BuildContext context) {
+    final ratio = target <= 0 ? 0.0 : (current / target).clamp(0.0, 1.0);
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 18),
+      decoration: BoxDecoration(
+        color: AppColors.bgElevated,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.slateDark),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(
+            Icons.bolt_rounded,
+            color: AppColors.goldBright,
+            size: 32,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.cream,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(999),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            LinearProgressIndicator(
+                              value: ratio,
+                              minHeight: 22,
+                              backgroundColor: AppColors.slateDark,
+                              color: AppColors.goldBright,
+                            ),
+                            Text(
+                              '$current / $target',
+                              style: GoogleFonts.jetBrainsMono(
+                                color: AppColors.bgDark,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    const Icon(
+                      Icons.inventory_2_rounded,
+                      color: AppColors.gold,
+                      size: 28,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _OpenGemChest extends StatelessWidget {
+  const _OpenGemChest();
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 140,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            width: 120,
+            height: 88,
+            decoration: BoxDecoration(
+              color: const Color(0xFF8B5A2B),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: AppColors.gold, width: 3),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.gold.withValues(alpha: 0.25),
+                  blurRadius: 24,
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
+            child: const Align(
+              alignment: Alignment(0, 0.35),
+              child: Icon(
+                Icons.lock_open_rounded,
+                color: AppColors.goldBright,
+                size: 28,
+              ),
+            ),
+          ),
+          const Positioned(
+            top: 18,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.diamond, color: Color(0xFF5EC8FF), size: 36),
+                SizedBox(width: 4),
+                Icon(Icons.diamond, color: Color(0xFF7AD4FF), size: 44),
+                SizedBox(width: 4),
+                Icon(Icons.diamond, color: Color(0xFF5EC8FF), size: 32),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -1338,10 +1898,12 @@ class _ContinueBar extends StatelessWidget {
   const _ContinueBar({
     required this.enabled,
     required this.onPressed,
+    this.label = 'Continue',
   });
 
   final bool enabled;
   final VoidCallback onPressed;
+  final String label;
 
   @override
   Widget build(BuildContext context) {
@@ -1353,7 +1915,7 @@ class _ContinueBar extends StatelessWidget {
         FilledButton(
           onPressed: enabled ? onPressed : null,
           style: _primaryButton,
-          child: const Text('Continue'),
+          child: Text(label),
         ),
       ],
     );

@@ -4800,6 +4800,9 @@ void main() {
       expect(service.completeCalls, 1);
       expect(onboarding.state.lastXpAwarded, 35);
       expect(onboarding.state.lastStreak, 1);
+      expect(onboarding.state.step, OnboardingStep.dayStreak);
+      expect(onboarding.state.pendingSaveProgress, isFalse);
+      expect(onboarding.state.gems, greaterThan(0));
       expect(find.byType(LessonResultScreen), findsNothing);
     },
   );

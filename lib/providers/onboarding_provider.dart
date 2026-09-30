@@ -94,14 +94,49 @@ class OnboardingController extends StateNotifier<OnboardingDraft> {
     required String lessonTitle,
     required CompleteCourseLessonResult result,
   }) async {
+    final gemsAwarded = result.gemsAwarded > 0
+        ? result.gemsAwarded
+        : kDailyQuestGemReward;
     state = state.copyWith(
-      step: OnboardingStep.saveProgress,
+      step: OnboardingStep.dayStreak,
       firstLessonCompleted: true,
-      pendingSaveProgress: true,
+      pendingSaveProgress: false,
       lastLessonTitle: lessonTitle,
       lastXpAwarded: result.xpAwarded,
       lastMastery: result.mastery,
       lastStreak: result.streak,
+      lastGemsAwarded: gemsAwarded,
+      gems: result.gems > 0 ? result.gems : state.gems + gemsAwarded,
+    );
+    await _persist();
+  }
+
+  /// Advances from the day-streak celebration to streak-goal selection.
+  Future<void> advanceDayStreak() async {
+    state = state.copyWith(step: OnboardingStep.streakGoal);
+    await _persist();
+  }
+
+  /// Stores the streak commitment and opens the daily-quest beat.
+  Future<void> setStreakGoal(int days) async {
+    state = state.copyWith(
+      streakGoalDays: days,
+      step: OnboardingStep.dailyQuests,
+    );
+    await _persist();
+  }
+
+  /// Opens the gem reward reveal after the daily-quest card.
+  Future<void> advanceDailyQuests() async {
+    state = state.copyWith(step: OnboardingStep.gemsReward);
+    await _persist();
+  }
+
+  /// Ends the celebration chain on the create-profile / save-progress prompt.
+  Future<void> advanceGemsReward() async {
+    state = state.copyWith(
+      step: OnboardingStep.saveProgress,
+      pendingSaveProgress: true,
     );
     await _persist();
   }

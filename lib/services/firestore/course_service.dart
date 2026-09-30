@@ -43,6 +43,7 @@ class CourseService {
     String timezone = 'UTC',
     String? experienceBand,
     int? dailyGoalMinutes,
+    int? streakGoalDays,
     String? recommendedLessonId,
   }) async {
     _requireAuth();
@@ -52,6 +53,7 @@ class CourseService {
       'timezone': timezone,
       if (experienceBand != null) 'experienceBand': experienceBand,
       if (dailyGoalMinutes != null) 'dailyGoalMinutes': dailyGoalMinutes,
+      if (streakGoalDays != null) 'streakGoalDays': streakGoalDays,
       if (recommendedLessonId != null)
         'recommendedLessonId': recommendedLessonId,
     });

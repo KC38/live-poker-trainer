@@ -45,9 +45,10 @@ String rootNavigatorKeyFor({
 /// Welcome pushes (coach intro, experience, daily goal) share `guest`. Changing
 /// `home` to Your start / motivation does not pop that stack, so the prior
 /// screen stayed on. `-course` is a new navigator for Your start and the first
-/// lesson, and it stays stable across anonymous sign-in. `-save` and `-home`
-/// are new again so returning to `guest` cannot restore the lesson over Save
-/// progress or Home.
+/// lesson, and it stays stable across anonymous sign-in. `-celebrate` drops the
+/// lesson stack onto the streak / quest / gem beat. `-save` and `-home` are new
+/// again so returning to `guest` cannot restore the lesson over Save progress
+/// or Home.
 String rootStackToken({
   required AppRootDestination destination,
   required OnboardingDraft onboarding,
@@ -56,6 +57,9 @@ String rootStackToken({
   if (destination == AppRootDestination.saveProgress ||
       onboarding.pendingSaveProgress) {
     return '-save';
+  }
+  if (onboarding.isPostLessonCelebration) {
+    return '-celebrate';
   }
   if (destination == AppRootDestination.shell && anonymous) {
     return '-home';
@@ -115,6 +119,9 @@ AppRootDestination resolveAppRoot({
     if (onboarding.pendingSaveProgress) {
       return AppRootDestination.saveProgress;
     }
+    if (onboarding.isPostLessonCelebration) {
+      return AppRootDestination.guestCourse;
+    }
     // Your start, the first lesson, and the steps Back returns to stay on the
     // guest course root. A fresh navigator per step shows Daily goal or Your
     // experience. Welcome itself stays the signed-out home.
@@ -136,6 +143,9 @@ AppRootDestination resolveAppRoot({
     // learning on Home without linking yet.
     if (onboarding.pendingSaveProgress) {
       return AppRootDestination.saveProgress;
+    }
+    if (onboarding.isPostLessonCelebration) {
+      return AppRootDestination.guestCourse;
     }
     if (onboarding.step == OnboardingStep.done ||
         onboarding.firstLessonCompleted) {

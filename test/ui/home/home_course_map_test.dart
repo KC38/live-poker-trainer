@@ -139,7 +139,7 @@ class _FixedHome extends CourseHomeController {
 }
 
 void _expectHomeThemeMetrics(WidgetTester tester) {
-  for (final value in ['2', '40', '75%']) {
+  for (final value in ['2', '40', '0']) {
     expect(
       tester.widget<Text>(find.text(value)).style?.fontFamily,
       contains('JetBrains'),

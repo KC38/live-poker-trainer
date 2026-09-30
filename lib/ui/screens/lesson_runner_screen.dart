@@ -202,6 +202,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       catalogVersion: catalog.catalogVersion,
       experienceBand: draft.experienceBand?.wireValue,
       dailyGoalMinutes: draft.dailyGoalMinutes,
+      streakGoalDays: draft.streakGoalDays,
       recommendedLessonId: draft.recommendedLessonId ?? lessonId,
     );
     final started = await _service.startLesson(
@@ -677,9 +678,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
               result: shown,
             )
             .timeout(const Duration(seconds: 8));
-        // AppRoot remounts onto SaveProgressScreen. If this route is still
-        // mounted, the prompt did not replace us — do not open the
-        // lesson-complete screen, whose CONTINUE pops onto a stale Home.
+        // AppRoot remounts onto the post-lesson streak celebration. If this
+        // route is still mounted, the prompt did not replace us — do not open
+        // the lesson-complete screen, whose CONTINUE pops onto a stale Home.
         await Future<void>.delayed(const Duration(milliseconds: 400));
         if (!mounted) return;
         if (mounted) {

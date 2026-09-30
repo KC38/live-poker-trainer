@@ -246,6 +246,15 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
       case AppRootDestination.saveProgress:
         return const SaveProgressScreen();
       case AppRootDestination.guestCourse:
+        if (onboarding.isPostLessonCelebration) {
+          return switch (onboarding.step) {
+            OnboardingStep.dayStreak => const DayStreakScreen(),
+            OnboardingStep.streakGoal => const StreakGoalScreen(),
+            OnboardingStep.dailyQuests => const DailyQuestsCompleteScreen(),
+            OnboardingStep.gemsReward => const GemsRewardScreen(),
+            _ => const DayStreakScreen(),
+          };
+        }
         if (onboarding.step == OnboardingStep.motivationHook) {
           return const MotivationHookScreen();
         }
