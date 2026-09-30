@@ -1962,7 +1962,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('spr commitment uses the lesson frame and the spr tiles', (
+  testWidgets('spr commitment uses the lesson frame and the full table', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -1996,6 +1996,8 @@ void main() {
     expect(find.textContaining('Tap SPR'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('spr-depth-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('SPR'), findsOneWidget);
     expect(find.text('LOW'), findsOneWidget);
     expect(find.text('HIGH'), findsOneWidget);
