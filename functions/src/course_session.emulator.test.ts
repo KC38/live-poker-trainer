@@ -208,6 +208,37 @@ describe("course session integration", () => {
     expect(clearMistake.grade).toBe("clear_mistake");
     expect(clearMistake.lifeLost).toBe(true);
     expect(clearMistake.livesRemaining).toBe(2);
+
+    const profileAfterLoss = await db.doc("users/life-user/course/main").get();
+    expect(profileAfterLoss.data()?.livesRemaining).toBe(2);
+  });
+
+  test("new lesson starts carry profile hearts (not a fresh set)", async () => {
+    await seedFlags();
+    await initializeCourseProfileForUser({
+      uid: "hearts-user",
+      raw: {clientVersion: "2.0.0", timezone: "UTC"},
+      db,
+    });
+    await db.doc("users/hearts-user/course/main").set({
+      livesRemaining: 1,
+      livesMax: 3,
+    }, {merge: true});
+
+    const started = await startCourseLessonForUser({
+      uid: "hearts-user",
+      raw: {
+        clientVersion: "2.0.0",
+        lessonId: "lesson-01-01-01-your-two-cards",
+        startRequestId: "start_hearts_carry",
+      },
+      db,
+    });
+    expect(started.attempt.livesRemaining).toBe(1);
+    expect(started.attempt.livesMax).toBe(3);
+
+    const profile = await db.doc("users/hearts-user/course/main").get();
+    expect(profile.data()?.livesRemaining).toBe(1);
   });
 
   test("rejects client-submitted grades and disabled course starts", async () => {
