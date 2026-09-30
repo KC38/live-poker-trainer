@@ -96,6 +96,7 @@ class CourseHomeSnapshot {
     this.streak = 0,
     this.lifetimeXp = 0,
     this.gems = 0,
+    this.hearts = 3,
     this.acceptedAccuracy = 0,
     this.nextLessonId,
     this.resume,
@@ -112,6 +113,9 @@ class CourseHomeSnapshot {
   final int streak;
   final int lifetimeXp;
   final int gems;
+
+  /// Remaining course hearts from the learner profile.
+  final int hearts;
   final double acceptedAccuracy;
   final String? nextLessonId;
   final CourseResumePointer? resume;
@@ -145,6 +149,8 @@ class CourseProfileView {
     required this.completedLessonIds,
     required this.masteryByLessonId,
     required this.catalogVersion,
+    this.livesRemaining = 3,
+    this.livesMax = 3,
     this.resume,
     this.recommendedLessonId,
   });
@@ -153,6 +159,12 @@ class CourseProfileView {
   final int gems;
   final int currentStreak;
   final double acceptedAccuracy;
+
+  /// Hearts left on the course profile.
+  final int livesRemaining;
+
+  /// Heart ceiling on the course profile.
+  final int livesMax;
   final List<String> completedLessonIds;
   final Map<String, double> masteryByLessonId;
   final String catalogVersion;
@@ -190,6 +202,9 @@ class CourseProfileView {
         );
       }
     }
+    final livesMax = (json['livesMax'] as num?)?.toInt() ?? 3;
+    final livesRemainingRaw = (json['livesRemaining'] as num?)?.toInt() ?? livesMax;
+    final livesRemaining = livesRemainingRaw.clamp(0, livesMax > 0 ? livesMax : 3);
     return CourseProfileView(
       lifetimeXp: (json['lifetimeXp'] as num?)?.toInt() ?? 0,
       gems: (json['gems'] as num?)?.toInt() ?? 0,
@@ -198,6 +213,8 @@ class CourseProfileView {
       completedLessonIds: List.unmodifiable(completed),
       masteryByLessonId: Map.unmodifiable(mastery),
       catalogVersion: json['catalogVersion']?.toString() ?? '',
+      livesRemaining: livesRemaining,
+      livesMax: livesMax > 0 ? livesMax : 3,
       resume: resume,
       recommendedLessonId: json['recommendedLessonId']?.toString(),
     );
@@ -370,6 +387,7 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
       streak: profile?.currentStreak ?? 0,
       lifetimeXp: profile?.lifetimeXp ?? 0,
       gems: profile?.gems ?? 0,
+      hearts: profile?.livesRemaining ?? 3,
       acceptedAccuracy: profile?.acceptedAccuracy ?? 0,
       rexLine:
           'No lessons published yet. Check back after the next content wave.',
@@ -425,6 +443,7 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
     streak: profile?.currentStreak ?? 0,
     lifetimeXp: profile?.lifetimeXp ?? 0,
     gems: profile?.gems ?? 0,
+    hearts: profile?.livesRemaining ?? 3,
     acceptedAccuracy: profile?.acceptedAccuracy ?? 0,
     nextLessonId: nextId,
     resume: resume,
