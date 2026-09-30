@@ -1,4 +1,4 @@
-/// Winding lesson path with Duolingo-style unit banners and circular nodes.
+/// Winding lesson path with Duolingo-style sticky unit banners and circular nodes.
 library;
 
 import 'package:flutter/material.dart';
@@ -22,97 +22,55 @@ Color unitBannerColorForSection(int sectionOrder) {
   return palette[(sectionOrder - 1) % palette.length];
 }
 
-/// Vertical winding path of course nodes.
-class CoursePathView extends StatelessWidget {
-  /// Creates the path.
-  const CoursePathView({
-    super.key,
-    required this.nodes,
-    required this.onNodeTap,
-    this.onUnitBannerTap,
-    this.sectionOrders = const {},
-    this.sectionKeys = const {},
+/// One unit along the Home path, used by the sticky banner.
+class CoursePathUnit {
+  /// Creates a path unit descriptor.
+  const CoursePathUnit({
+    required this.unitId,
+    required this.unitTitle,
+    required this.sectionId,
+    required this.sectionTitle,
+    required this.sectionOrder,
   });
 
-  final List<CourseMapNode> nodes;
-  final void Function(CourseMapNode node) onNodeTap;
+  final String unitId;
+  final String unitTitle;
+  final String sectionId;
+  final String sectionTitle;
+  final int sectionOrder;
 
-  /// Opens the section picker when a unit banner is tapped.
-  final void Function(CourseMapNode node)? onUnitBannerTap;
-
-  /// Catalog `order` for each [CourseMapNode.sectionId], used for banner color.
-  final Map<String, int> sectionOrders;
-
-  /// Scroll anchors for each section id.
-  final Map<String, GlobalKey> sectionKeys;
-
-  @override
-  Widget build(BuildContext context) {
-    if (nodes.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
-    final children = <Widget>[];
-    String? lastSectionId;
-    String? lastUnitId;
-    var pathIndex = 0;
-
-    for (var i = 0; i < nodes.length; i++) {
-      final node = nodes[i];
-      final sectionOrder = sectionOrders[node.sectionId] ?? 1;
-      final bannerColor = unitBannerColorForSection(sectionOrder);
-
-      if (node.sectionId != lastSectionId) {
-        lastSectionId = node.sectionId;
-        lastUnitId = null;
-        children.add(
-          KeyedSubtree(
-            key: sectionKeys[node.sectionId],
-            child: const SizedBox(height: 4),
-          ),
-        );
-      }
-
-      if (node.unitId != lastUnitId) {
-        lastUnitId = node.unitId;
-        children.add(
-          Padding(
-            padding: EdgeInsets.only(top: i == 0 ? 0 : 28, bottom: 18),
-            child: _UnitBanner(
-              sectionOrder: sectionOrder,
-              unitTitle: node.unitTitle,
-              sectionTitle: node.sectionTitle,
-              color: bannerColor,
-              onTap: onUnitBannerTap == null
-                  ? null
-                  : () => onUnitBannerTap!(node),
-            ),
-          ),
-        );
-      }
-
-      children.add(
-        _PathNodeRow(
-          node: node,
-          pathIndex: pathIndex,
-          accent: bannerColor,
-          showConnector: i < nodes.length - 1 &&
-              nodes[i + 1].unitId == node.unitId,
-          onTap: () => onNodeTap(node),
-        ),
-      );
-      pathIndex += 1;
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: children,
-    );
-  }
+  /// Accent for this unit's sticky banner and path nodes.
+  Color get bannerColor => unitBannerColorForSection(sectionOrder);
 }
 
-class _UnitBanner extends StatelessWidget {
-  const _UnitBanner({
+/// Collects unique units in path order from [nodes].
+List<CoursePathUnit> coursePathUnits({
+  required List<CourseMapNode> nodes,
+  required Map<String, int> sectionOrders,
+}) {
+  final units = <CoursePathUnit>[];
+  String? lastUnitId;
+  for (final node in nodes) {
+    if (node.unitId == lastUnitId) continue;
+    lastUnitId = node.unitId;
+    units.add(
+      CoursePathUnit(
+        unitId: node.unitId,
+        unitTitle: node.unitTitle,
+        sectionId: node.sectionId,
+        sectionTitle: node.sectionTitle,
+        sectionOrder: sectionOrders[node.sectionId] ?? 1,
+      ),
+    );
+  }
+  return units;
+}
+
+/// Sticky unit / section header pinned above the scrolling path.
+class CourseUnitBanner extends StatelessWidget {
+  /// Creates the unit banner.
+  const CourseUnitBanner({
+    super.key,
     required this.sectionOrder,
     required this.unitTitle,
     required this.sectionTitle,
@@ -197,6 +155,132 @@ class _UnitBanner extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Vertical winding path of course nodes.
+class CoursePathView extends StatelessWidget {
+  /// Creates the path.
+  const CoursePathView({
+    super.key,
+    required this.nodes,
+    required this.onNodeTap,
+    this.sectionOrders = const {},
+    this.sectionKeys = const {},
+    this.unitKeys = const {},
+  });
+
+  final List<CourseMapNode> nodes;
+  final void Function(CourseMapNode node) onNodeTap;
+
+  /// Catalog `order` for each [CourseMapNode.sectionId], used for node accents.
+  final Map<String, int> sectionOrders;
+
+  /// Scroll anchors for each section id.
+  final Map<String, GlobalKey> sectionKeys;
+
+  /// Scroll / visibility anchors for each unit id (sticky banner).
+  final Map<String, GlobalKey> unitKeys;
+
+  @override
+  Widget build(BuildContext context) {
+    if (nodes.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    final children = <Widget>[];
+    String? lastSectionId;
+    String? lastUnitId;
+    var pathIndex = 0;
+    var isFirstUnit = true;
+
+    for (var i = 0; i < nodes.length; i++) {
+      final node = nodes[i];
+      final sectionOrder = sectionOrders[node.sectionId] ?? 1;
+      final bannerColor = unitBannerColorForSection(sectionOrder);
+
+      if (node.sectionId != lastSectionId) {
+        lastSectionId = node.sectionId;
+        lastUnitId = null;
+        children.add(
+          KeyedSubtree(
+            key: sectionKeys[node.sectionId],
+            child: const SizedBox(height: 4),
+          ),
+        );
+      }
+
+      if (node.unitId != lastUnitId) {
+        lastUnitId = node.unitId;
+        final showDivider = !isFirstUnit;
+        isFirstUnit = false;
+        children.add(
+          KeyedSubtree(
+            key: unitKeys[node.unitId],
+            child: showDivider
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 28, bottom: 18),
+                    child: _UnitPathMarker(title: node.unitTitle),
+                  )
+                : const SizedBox(height: 4),
+          ),
+        );
+      }
+
+      children.add(
+        _PathNodeRow(
+          node: node,
+          pathIndex: pathIndex,
+          accent: bannerColor,
+          showConnector: i < nodes.length - 1 &&
+              nodes[i + 1].unitId == node.unitId,
+          onTap: () => onNodeTap(node),
+        ),
+      );
+      pathIndex += 1;
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: children,
+    );
+  }
+}
+
+/// Subtle in-path unit label (Duolingo-style divider, not a second banner).
+class _UnitPathMarker extends StatelessWidget {
+  const _UnitPathMarker({required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    final line = Expanded(
+      child: Container(
+        height: 1,
+        color: AppColors.slateDark.withValues(alpha: 0.85),
+      ),
+    );
+
+    return Row(
+      children: [
+        line,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Text(
+            title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.manrope(
+              color: AppColors.slate,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+        line,
+      ],
     );
   }
 }

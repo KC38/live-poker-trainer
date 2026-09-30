@@ -271,7 +271,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 }
 
-class _HomeBody extends StatelessWidget {
+class _HomeBody extends StatefulWidget {
   const _HomeBody({
     required this.snapshot,
     required this.onRetry,
@@ -289,9 +289,80 @@ class _HomeBody extends StatelessWidget {
   final VoidCallback onOpenSections;
 
   static final Map<String, GlobalKey> _sectionKeys = <String, GlobalKey>{};
+  static final Map<String, GlobalKey> _unitKeys = <String, GlobalKey>{};
 
   static GlobalKey sectionKeyFor(String sectionId) {
     return _sectionKeys.putIfAbsent(sectionId, GlobalKey.new);
+  }
+
+  static GlobalKey unitKeyFor(String unitId) {
+    return _unitKeys.putIfAbsent(unitId, GlobalKey.new);
+  }
+
+  @override
+  State<_HomeBody> createState() => _HomeBodyState();
+}
+
+class _HomeBodyState extends State<_HomeBody> {
+  final GlobalKey _bannerKey = GlobalKey();
+  final ScrollController _scrollController = ScrollController();
+  int _activeUnitIndex = 0;
+  String? _unitsSignature;
+  List<CoursePathUnit> _units = const [];
+
+  CourseHomeSnapshot get snapshot => widget.snapshot;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _reconcileUnits();
+  }
+
+  @override
+  void didUpdateWidget(covariant _HomeBody oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.snapshot.nodes, snapshot.nodes) ||
+        !identical(oldWidget.snapshot.sections, snapshot.sections)) {
+      _reconcileUnits();
+    }
+  }
+
+  void _reconcileUnits() {
+    final sectionOrders = <String, int>{
+      for (final section in snapshot.sections) section.id: section.order,
+    };
+    final units = coursePathUnits(
+      nodes: snapshot.nodes,
+      sectionOrders: sectionOrders,
+    );
+    final signature = units.map((u) => u.unitId).join('|');
+    if (_unitsSignature == signature) {
+      _units = units;
+      return;
+    }
+    _unitsSignature = signature;
+    _units = units;
+    _activeUnitIndex = _initialUnitIndex(units, snapshot.nodes);
+  }
+
+  void _onScroll() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _syncActiveUnit(_units);
+    });
   }
 
   @override
@@ -306,7 +377,9 @@ class _HomeBody extends StatelessWidget {
         actionLabel:
             snapshot.status == CourseHomeLoadStatus.disabled ? null : 'Retry',
         onAction:
-            snapshot.status == CourseHomeLoadStatus.disabled ? null : onRetry,
+            snapshot.status == CourseHomeLoadStatus.disabled
+                ? null
+                : widget.onRetry,
         rexLine: snapshot.rexLine,
       );
     }
@@ -325,92 +398,166 @@ class _HomeBody extends StatelessWidget {
     };
     final sectionKeys = <String, GlobalKey>{
       for (final section in snapshot.sections)
-        section.id: sectionKeyFor(section.id),
+        section.id: _HomeBody.sectionKeyFor(section.id),
     };
+    final units = _units;
+    final unitKeys = <String, GlobalKey>{
+      for (final unit in units) unit.unitId: _HomeBody.unitKeyFor(unit.unitId),
+    };
+    final activeIndex =
+        units.isEmpty ? 0 : _activeUnitIndex.clamp(0, units.length - 1);
+    final activeUnit = units.isEmpty ? null : units[activeIndex];
 
-    return CustomScrollView(
-      key: const PageStorageKey<String>('home_course_scroll'),
-      physics: const BouncingScrollPhysics(),
-      slivers: [
-        SliverPadding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-          sliver: SliverList(
-            delegate: SliverChildListDelegate([
-              CourseStatusBar(
-                streak: snapshot.streak,
-                lifetimeXp: snapshot.lifetimeXp,
-                gems: snapshot.gems,
-                acceptedAccuracy: snapshot.acceptedAccuracy,
-                onCourseTap: onOpenSections,
-              ),
-              if (guestSession) ...[
-                const SizedBox(height: 10),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    foregroundColor: AppColors.slate,
-                    padding: EdgeInsets.zero,
-                    minimumSize: Size.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    alignment: Alignment.centerLeft,
-                  ),
-                  onPressed: () => pushSaveProgressAuth(context),
-                  child: Text(
-                    'Guest progress stays on this device until you create an account.',
-                    style: GoogleFonts.manrope(
-                      color: AppColors.slate,
-                      fontSize: 13,
-                      height: 1.35,
-                    ),
-                  ),
-                ),
-              ],
-              if (snapshot.rexLine != null &&
-                  !snapshot.nodes.any((node) => node.isNext)) ...[
-                const SizedBox(height: 14),
-                RexCoachCard(
-                  line: snapshot.rexLine!,
-                  // The resume card is the one Resume control. Rex still says
-                  // what to do, without a second button for the same lesson.
-                  onContinue:
-                      snapshot.resume != null
-                          ? null
-                          : (snapshot.nextLessonId == null ||
-                                  !snapshot.startsEnabled
-                              ? null
-                              : () {
-                                final next = snapshot.nextNode;
-                                if (next == null) return;
-                                onNodeTap(next);
-                              }),
-                  continueLabel: 'Start',
-                ),
-              ],
-              if (snapshot.resume != null && resumeLessonTitle != null) ...[
-                const SizedBox(height: 12),
-                CourseResumeCard(
-                  resume: snapshot.resume!,
-                  lessonTitle: resumeLessonTitle,
-                  onResume: onResume,
-                ),
-              ],
-              const SizedBox(height: 12),
-            ]),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+          child: CourseStatusBar(
+            streak: snapshot.streak,
+            lifetimeXp: snapshot.lifetimeXp,
+            gems: snapshot.gems,
+            acceptedAccuracy: snapshot.acceptedAccuracy,
+            onCourseTap: widget.onOpenSections,
           ),
         ),
-        SliverPadding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
-          sliver: SliverToBoxAdapter(
-            child: CoursePathView(
-              nodes: snapshot.nodes,
-              onNodeTap: onNodeTap,
-              onUnitBannerTap: (_) => onOpenSections(),
-              sectionOrders: sectionOrders,
-              sectionKeys: sectionKeys,
+        if (activeUnit != null)
+          Padding(
+            key: _bannerKey,
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 220),
+              switchInCurve: Curves.easeOut,
+              switchOutCurve: Curves.easeIn,
+              child: CourseUnitBanner(
+                key: ValueKey<String>(activeUnit.unitId),
+                sectionOrder: activeUnit.sectionOrder,
+                unitTitle: activeUnit.unitTitle,
+                sectionTitle: activeUnit.sectionTitle,
+                color: activeUnit.bannerColor,
+                onTap: widget.onOpenSections,
+              ),
             ),
+          ),
+        Expanded(
+          child: CustomScrollView(
+            controller: _scrollController,
+            key: const PageStorageKey<String>('home_course_scroll'),
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                    if (widget.guestSession) ...[
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.slate,
+                          padding: EdgeInsets.zero,
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          alignment: Alignment.centerLeft,
+                        ),
+                        onPressed: () => pushSaveProgressAuth(context),
+                        child: Text(
+                          'Guest progress stays on this device until you create an account.',
+                          style: GoogleFonts.manrope(
+                            color: AppColors.slate,
+                            fontSize: 13,
+                            height: 1.35,
+                          ),
+                        ),
+                      ),
+                    ],
+                    if (snapshot.rexLine != null &&
+                        !snapshot.nodes.any((node) => node.isNext)) ...[
+                      const SizedBox(height: 2),
+                      RexCoachCard(
+                        line: snapshot.rexLine!,
+                        // The resume card is the one Resume control. Rex still
+                        // says what to do, without a second button for the
+                        // same lesson.
+                        onContinue:
+                            snapshot.resume != null
+                                ? null
+                                : (snapshot.nextLessonId == null ||
+                                        !snapshot.startsEnabled
+                                    ? null
+                                    : () {
+                                      final next = snapshot.nextNode;
+                                      if (next == null) return;
+                                      widget.onNodeTap(next);
+                                    }),
+                        continueLabel: 'Start',
+                      ),
+                    ],
+                    if (snapshot.resume != null &&
+                        resumeLessonTitle != null) ...[
+                      const SizedBox(height: 12),
+                      CourseResumeCard(
+                        resume: snapshot.resume!,
+                        lessonTitle: resumeLessonTitle,
+                        onResume: widget.onResume,
+                      ),
+                    ],
+                    const SizedBox(height: 4),
+                  ]),
+                ),
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 280),
+                sliver: SliverToBoxAdapter(
+                  child: CoursePathView(
+                    nodes: snapshot.nodes,
+                    onNodeTap: widget.onNodeTap,
+                    sectionOrders: sectionOrders,
+                    sectionKeys: sectionKeys,
+                    unitKeys: unitKeys,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ],
     );
+  }
+
+  int _initialUnitIndex(
+    List<CoursePathUnit> units,
+    List<CourseMapNode> nodes,
+  ) {
+    for (final node in nodes) {
+      if (!node.isNext) continue;
+      final index = units.indexWhere((unit) => unit.unitId == node.unitId);
+      if (index >= 0) return index;
+    }
+    return 0;
+  }
+
+  void _syncActiveUnit(List<CoursePathUnit> units) {
+    if (units.isEmpty) return;
+    final bannerContext = _bannerKey.currentContext;
+    final bannerBox = bannerContext?.findRenderObject() as RenderBox?;
+    if (bannerBox == null || !bannerBox.hasSize) return;
+
+    final threshold =
+        bannerBox.localToGlobal(Offset(0, bannerBox.size.height)).dy + 12;
+
+    var active = 0;
+    for (var i = 0; i < units.length; i++) {
+      final key = _HomeBody.unitKeyFor(units[i].unitId);
+      final box = key.currentContext?.findRenderObject() as RenderBox?;
+      if (box == null || !box.hasSize) continue;
+      final top = box.localToGlobal(Offset.zero).dy;
+      if (top <= threshold) {
+        active = i;
+      }
+    }
+
+    if (active != _activeUnitIndex) {
+      setState(() => _activeUnitIndex = active);
+    }
   }
 
   static String _titleFor(CourseHomeLoadStatus status) {

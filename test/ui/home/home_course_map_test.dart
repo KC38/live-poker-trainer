@@ -366,6 +366,7 @@ void main() {
       analytics: analytics,
     );
 
+    expect(find.byType(CourseUnitBanner), findsOneWidget);
     expect(find.textContaining('SECTION 1'), findsOneWidget);
     await tester.tap(find.textContaining('SECTION 1'));
     await tester.pumpAndSettle();
@@ -374,6 +375,99 @@ void main() {
     expect(find.text('LOCKED'), findsOneWidget);
     expect(find.textContaining('NEVER PLAYED'), findsOneWidget);
     expect(find.textContaining('RULES KNOWN'), findsOneWidget);
+  });
+
+  testWidgets('sticky unit banner replaces instead of stacking', (tester) async {
+    final analytics = _RecordingAnalytics();
+    final sections = [
+      const CourseSection(
+        id: 'sec-1',
+        order: 1,
+        title: 'Section One',
+        summary: 'Learn the basics.',
+        experienceBand: 'never_played',
+        units: [],
+      ),
+    ];
+    final nodes = <CourseMapNode>[
+      for (var i = 0; i < 4; i++)
+        CourseMapNode(
+          lessonId: 'lesson-a-$i',
+          title: 'Lesson A$i',
+          summary: 'Unit one lesson',
+          kind: CourseNodeKind.lesson,
+          state: i == 0 ? CourseNodeState.available : CourseNodeState.locked,
+          sectionId: 'sec-1',
+          sectionTitle: 'Section One',
+          unitId: 'unit-1',
+          unitTitle: 'Unit One',
+          isNext: i == 0,
+          lockReason: i == 0 ? null : 'Finish prior lesson first.',
+        ),
+      for (var i = 0; i < 6; i++)
+        CourseMapNode(
+          lessonId: 'lesson-b-$i',
+          title: 'Lesson B$i',
+          summary: 'Unit two lesson',
+          kind: CourseNodeKind.lesson,
+          state: CourseNodeState.locked,
+          sectionId: 'sec-1',
+          sectionTitle: 'Section One',
+          unitId: 'unit-2',
+          unitTitle: 'Unit Two',
+          isNext: false,
+          lockReason: 'Finish prior lesson first.',
+        ),
+    ];
+
+    await _pumpHome(
+      tester,
+      snapshot: CourseHomeSnapshot(
+        status: CourseHomeLoadStatus.ready,
+        nodes: nodes,
+        sections: sections,
+        streak: 1,
+        lifetimeXp: 10,
+        acceptedAccuracy: 0.5,
+        nextLessonId: 'lesson-a-0',
+        rexLine: 'Keep going.',
+      ),
+      analytics: analytics,
+    );
+
+    expect(find.byType(CourseUnitBanner), findsOneWidget);
+    expect(find.textContaining('SECTION 1'), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(CourseUnitBanner),
+        matching: find.text('Unit One'),
+      ),
+      findsOneWidget,
+    );
+    // Second unit appears only as a path divider, not a second colored banner.
+    expect(find.text('Unit Two'), findsOneWidget);
+    expect(find.byType(CourseUnitBanner), findsOneWidget);
+
+    final position = tester.state<ScrollableState>(find.byType(Scrollable)).position;
+    expect(position.maxScrollExtent, greaterThan(100));
+    position.jumpTo(position.maxScrollExtent);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(CourseUnitBanner), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(CourseUnitBanner),
+        matching: find.text('Unit Two'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byType(CourseUnitBanner),
+        matching: find.text('Unit One'),
+      ),
+      findsNothing,
+    );
   });
 
   test('enabled flags helper still parses for snapshot mapper', () {
