@@ -1,6 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+
+/// Polar/merged explain: POLAR / MERGED / SIZE under the full poker table.
+class LessonPolarMergedExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonPolarMergedExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonPolarMergedExplainTable> createState() =>
+      _LessonPolarMergedExplainTableState();
+}
+
+class _LessonPolarMergedExplainTableState
+    extends State<LessonPolarMergedExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= PolarMergedDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('polar-merged-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < PolarMergedDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _PolarSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        PolarMergedDemo.points[i].label,
+                      ) &&
+                      PolarMergedDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _PolarTile(
+                    label: PolarMergedDemo.points[i].label,
+                    caption: PolarMergedDemo.points[i].caption,
+                    color: PolarMergedDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      PolarMergedDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  PolarMergedDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
 /// Polar / merged / size tiles for polar-vs-merged explain demos.
 class PolarMergedDemo extends StatefulWidget {
