@@ -19,6 +19,7 @@ import 'package:live_poker_trainer/ui/screens/onboarding_screens.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/action_dock_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/community_cards_view.dart';
+import 'package:live_poker_trainer/ui/widgets/brand_logo.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
@@ -124,10 +125,7 @@ void main() {
       findsNothing,
     );
     expect(find.byType(RexMascot), findsOneWidget);
-    expect(
-      find.image(const AssetImage('assets/brand/logo_mark.png')),
-      findsOneWidget,
-    );
+    expect(find.byType(BrandLogo), findsOneWidget);
     _expectElevatedMetrics(tester, 'Get started');
     _expectOutlinedMetrics(tester, 'I already have an account');
   });

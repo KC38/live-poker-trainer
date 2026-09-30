@@ -16,6 +16,7 @@ import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/ui/screens/live_training_screen.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/ui/widgets/brand_logo.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -62,7 +63,7 @@ void main() {
     expect(find.text('Start training'), findsNothing);
     expect(find.byType(PokerTableScreen), findsNothing);
     expect(find.text('Start Rex warm-up'), findsNothing);
-    expect(_logoMark(), findsOneWidget);
+    expect(find.byType(BrandLogo), findsOneWidget);
     expect(
       find.text(
         'Live Training is advanced. Finish Baseline jump check on Home '
@@ -106,19 +107,10 @@ void main() {
     await tester.pump();
 
     expect(find.text('Start Rex warm-up'), findsOneWidget);
-    expect(_logoMark(), findsOneWidget);
+    expect(find.byType(BrandLogo), findsOneWidget);
     expect(find.text('Start training'), findsNothing);
     expect(find.byType(PokerTableScreen), findsNothing);
     expect(find.textContaining('Rex warm-ups are open'), findsOneWidget);
     expect(find.textContaining('Section 2 jump check'), findsNothing);
   });
-}
-
-Finder _logoMark() {
-  return find.byWidgetPredicate(
-    (widget) =>
-        widget is Image &&
-        widget.image is AssetImage &&
-        (widget.image as AssetImage).assetName == 'assets/brand/logo_mark.png',
-  );
 }

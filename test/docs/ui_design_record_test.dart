@@ -38,11 +38,11 @@ void main() {
     expect(text, contains('ActionDockWidget'));
     expect(text, contains('LessonActionSpot'));
     expect(text, contains('LessonTableScene'));
-    expect(text, contains('assets/brand/logo_mark.png'));
+    expect(text, contains('assets/brand/logo_mark.svg'));
     expect(
       text,
       contains(
-        'The Live Training hub shows `assets/brand/logo_mark.png` above the lock or the table entry.',
+        'The Live Training hub shows `assets/brand/logo_mark.svg` above the lock or the table entry.',
       ),
     );
     expect(text, contains('lounge_ambient.mp3'));
