@@ -2837,6 +2837,8 @@ void main() {
     expect(find.textContaining('Tap Stuck'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('tables-change-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('STUCK'), findsOneWidget);
     expect(find.text('TILTED'), findsOneWidget);
     expect(find.text('GEARS'), findsOneWidget);
